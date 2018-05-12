@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigationBar renders correctly 1`] = `
+"<Blueprint2.Navbar className=\\"NavigationBar pt-dark\\">
+  <Blueprint2.NavbarGroup align=\\"left\\">
+    <Blueprint2.NavbarHeading>
+      Cadet
+    </Blueprint2.NavbarHeading>
+    <Blueprint2.NavbarDivider />
+    <NavLink to=\\"/dashboard\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"dashboard\\" />
+      Dashboard
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+</Blueprint2.Navbar>"
+`;

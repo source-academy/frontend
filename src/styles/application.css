@@ -1,0 +1,9 @@
+.Application {
+    display: flex;
+    flex-direction: column;
+}
+
+.Application__main {
+    margin-top: 1rem;
+    margin-left: 1rem;
+}

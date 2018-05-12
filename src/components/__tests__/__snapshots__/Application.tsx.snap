@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Application renders correctly 1`] = `
+"<div className=\\"Application\\">
+  <NavigationBar title=\\"Cadet\\" />
+  <div className=\\"Application__main\\">
+    <Switch>
+      <Route path=\\"/dashboard\\" component={[Function: Connect]} />
+      <Route exact={true} path=\\"/\\" component={[Function: redirectToDashboard]} />
+      <Route component={[Function: NotFound]} />
+    </Switch>
+  </div>
+</div>"
+`;
