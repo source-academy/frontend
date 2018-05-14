@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import DashboardContainer from '../containers/DashboardContainer'
+import PlaygroundContainer from '../containers/PlaygroundContainer'
 import { IApplicationState } from '../reducers/application'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
@@ -20,6 +21,7 @@ const Application: React.SFC<IApplicationProps> = ({ application }) => {
       <div className="Application__main">
         <Switch>
           <Route path="/dashboard" component={DashboardContainer} />
+          <Route path="/playground" component={PlaygroundContainer} />
           <Route exact={true} path="/" component={redirectToDashboard} />
           <Route component={NotFound} />
         </Switch>
