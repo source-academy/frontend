@@ -21,6 +21,17 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         Dashboard
       </NavLink>
     </NavbarGroup>
+
+    <NavbarGroup className="pt-align-right">
+      <NavLink
+        to="/playground"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon="dashboard" />
+        Playground
+      </NavLink>
+    </NavbarGroup>
   </Navbar>
 )
 
