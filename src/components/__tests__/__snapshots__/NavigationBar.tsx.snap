@@ -2,7 +2,7 @@
 
 exports[`NavigationBar renders correctly 1`] = `
 "<Blueprint2.Navbar className=\\"NavigationBar pt-dark\\">
-  <Blueprint2.NavbarGroup align=\\"left\\">
+  <Blueprint2.NavbarGroup className=\\"pt-align-left\\" align=\\"left\\">
     <Blueprint2.NavbarHeading>
       Cadet
     </Blueprint2.NavbarHeading>
@@ -10,6 +10,12 @@ exports[`NavigationBar renders correctly 1`] = `
     <NavLink to=\\"/dashboard\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"dashboard\\" />
       Dashboard
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+  <Blueprint2.NavbarGroup className=\\"pt-align-right\\" align=\\"left\\">
+    <NavLink to=\\"/playground\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"code\\" />
+      Playground
     </NavLink>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
