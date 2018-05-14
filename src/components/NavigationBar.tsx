@@ -9,7 +9,7 @@ export interface INavigationBarProps {
 
 const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
   <Navbar className="NavigationBar pt-dark">
-    <NavbarGroup>
+    <NavbarGroup className="pt-align-left">
       <NavbarHeading>{title}</NavbarHeading>
       <NavbarDivider />
       <NavLink
