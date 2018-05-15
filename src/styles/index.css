@@ -2,4 +2,5 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "./blueprint.css";
 @import "./application.css";
+@import "./playground.css";
 @import "./navigationBar.css";
