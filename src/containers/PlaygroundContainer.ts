@@ -7,12 +7,12 @@ import { IPlaygroundProps as PlaygroundProps} from '../components/Playground';
 import { IState } from '../reducers';
 
 
-type StateProps = Pick<PlaygroundProps, 'initialCode'>;
+type StateProps = Pick<PlaygroundProps, 'editorValue'>;
 type DispatchProps = Pick<PlaygroundProps, 'updateCode'>;
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    initialCode: state.application.playgroundCode
+    editorValue: state.application.playgroundCode
   }
 }
 

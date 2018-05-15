@@ -2,7 +2,7 @@ import * as React from 'react'
 import AceEditor from 'react-ace'
 
 export interface IPlaygroundProps {
-  initialCode: string;
+  editorValue: string;
   updateCode: (newCode: string) => void;
 };
 
@@ -14,7 +14,7 @@ export default class Playground extends React.Component<IPlaygroundProps, {}> {
         <AceEditor 
           mode="java"
           theme="github"
-          value={this.props.initialCode}
+          value={this.props.editorValue}
           onChange={this.props.updateCode}
         />
       </div>
