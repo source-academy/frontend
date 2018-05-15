@@ -7,7 +7,7 @@ import { IPlaygroundProps as PlaygroundProps } from '../Playground'
 
 test('Playground renders correctly', () => {
   const props: PlaygroundProps = {
-    editorValue: 'Hello the world',
+    editorValue: '',
     updateCode: (newCode: string) => {
       return
     }
