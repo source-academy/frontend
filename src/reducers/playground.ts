@@ -16,7 +16,6 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultState, action:
         ...state,
         editorValue: (action as IUpdateEditorValue).newEditorValue
       }
-
     default:
       return state
   }
