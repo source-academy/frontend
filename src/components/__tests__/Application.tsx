@@ -11,7 +11,8 @@ test('Application renders correctly', () => {
     ...mockRouterProps('/dashboard', {}),
     application: {
       title: 'Cadet',
-      environment: ApplicationEnvironment.Development
+      environment: ApplicationEnvironment.Development,
+      playgroundCode: ''
     }
   }
   const app = <Application {...props} />

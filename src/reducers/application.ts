@@ -9,6 +9,7 @@ export enum ApplicationEnvironment {
 export interface IApplicationState {
   title: string
   environment: ApplicationEnvironment
+  playgroundCode: string
 }
 
 const currentEnvironment = (): ApplicationEnvironment => {
@@ -24,7 +25,8 @@ const currentEnvironment = (): ApplicationEnvironment => {
 
 const defaultState: IApplicationState = {
   title: 'Cadet',
-  environment: currentEnvironment()
+  environment: currentEnvironment(),
+  playgroundCode: 'Hello the world'
 }
 
 export const reducer: Reducer<IApplicationState> = (state = defaultState, action: Action) => {

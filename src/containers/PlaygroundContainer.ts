@@ -1,12 +1,14 @@
 import { connect, MapStateToProps } from 'react-redux'
 
-import { IApplicationProps } from '../components/Application'
-import { IState } from '../reducers'
+import { IPlaygroundProps as PlaygroundProps } from '../components/Playground';
+import PlaygroundComponent from '../components/Playground';
+import { IState } from '../reducers';
 
-import Playground from '../components/Playground'
+const mapStateToProps: MapStateToProps<PlaygroundProps, {}, IState> = state => {
+  console.log('MapStateToProps with inittialCode ' + state.application.playgroundCode)
+  return {
+  initialCode: state.application.playgroundCode
+}
+}
 
-const mapStateToProps: MapStateToProps<IState, {}, IApplicationProps> = state => ({
-  application: state.application
-})
-
-export default connect(mapStateToProps)(Playground)
+export default connect(mapStateToProps)(PlaygroundComponent)
