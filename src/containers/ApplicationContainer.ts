@@ -5,7 +5,8 @@ import Application, { IApplicationProps } from '../components/Application'
 import { IState } from '../reducers'
 
 const mapStateToProps: MapStateToProps<IState, {}, IApplicationProps> = state => ({
-  application: state.application
+  application: state.application,
+  playground: state.playground
 })
 
 export default withRouter(connect(mapStateToProps)(Application))

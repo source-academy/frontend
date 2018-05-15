@@ -5,11 +5,13 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 import DashboardContainer from '../containers/DashboardContainer'
 import PlaygroundContainer from '../containers/PlaygroundContainer'
 import { IApplicationState } from '../reducers/application'
+import { IPlaygroundState } from '../reducers/playground'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
 export interface IApplicationProps extends RouteComponentProps<{}> {
   application: IApplicationState
+  playground: IPlaygroundState
 }
 
 const Application: React.SFC<IApplicationProps> = ({ application }) => {

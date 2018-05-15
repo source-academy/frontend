@@ -24,9 +24,9 @@ const currentEnvironment = (): ApplicationEnvironment => {
 
 const defaultState: IApplicationState = {
   title: 'Cadet',
-  environment: currentEnvironment(),
+  environment: currentEnvironment()
 }
 
 export const reducer: Reducer<IApplicationState> = (state = defaultState, action: Action) => {
-  return state;
-};
+  return state
+}

@@ -12,6 +12,9 @@ test('Application renders correctly', () => {
     application: {
       title: 'Cadet',
       environment: ApplicationEnvironment.Development
+    },
+    playground: {
+      editorValue: ''
     }
   }
   const app = <Application {...props} />

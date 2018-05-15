@@ -9,8 +9,10 @@ export function mockInitialStore<P>(): Store<IState> {
   const state: IState = {
     application: {
       title: 'Cadet',
-      environment: ApplicationEnvironment.Development,
-      playgroundCode: 'Hello World'
+      environment: ApplicationEnvironment.Development
+    },
+    playground: {
+      editorValue: ''
     }
   }
   return createStore(state)

@@ -11,14 +11,13 @@ const defaultState: IPlaygroundState = {
 
 export const reducer: Reducer<IPlaygroundState> = (state = defaultState, action: Action) => {
   switch (action.type) {
+    case UPDATE_EDITOR_VALUE:
+      return {
+        ...state,
+        editorValue: (action as IUpdateEditorValue).newEditorValue
+      }
 
-  case UPDATE_EDITOR_VALUE:
-    return {
-      ...state,
-      editorValue : (<IUpdateEditorValue> action).newEditorValue
-    };
-
-  default:
-    return state;
+    default:
+      return state
   }
-};
+}

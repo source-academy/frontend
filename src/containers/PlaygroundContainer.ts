@@ -2,7 +2,10 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { Dispatch } from 'redux'
 
 import { updateEditorValue } from '../actions/playground'
-import { default as PlaygroundComponent, IPlaygroundProps as PlaygroundProps} from '../components/Playground'
+import {
+  default as PlaygroundComponent,
+  IPlaygroundProps as PlaygroundProps
+} from '../components/Playground'
 import { IState } from '../reducers'
 
 type StateProps = Pick<PlaygroundProps, 'editorValue'>
@@ -14,11 +17,11 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   }
 }
 
-const mapDispatchToProps : MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) => {
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) => {
   return {
     updateCode: (newCode: string) => {
-      dispatch(updateEditorValue(newCode));
-    },
+      dispatch(updateEditorValue(newCode))
+    }
   }
 }
 
