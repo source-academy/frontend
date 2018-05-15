@@ -10,7 +10,7 @@ type DispatchProps = Pick<PlaygroundProps, 'updateCode'>
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    editorValue: state.application.playgroundCode
+    editorValue: state.playground.editorValue
   }
 }
 
