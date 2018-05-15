@@ -11,12 +11,19 @@ import { IState } from '../reducers'
 type StateProps = Pick<PlaygroundProps, 'editorValue'>
 type DispatchProps = Pick<PlaygroundProps, 'updateCode'>
 
+/** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
+ * `StateProps` to the Playground component
+ */
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
     editorValue: state.playground.editorValue
   }
 }
 
+/** Provides a callback function `updateCode` which supplies the `Action`
+ * `updateEditorValue` with `newCode`, the updated contents of the react-ace
+ * editor.
+ */
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) => {
   return {
     updateCode: (newCode: string) => {

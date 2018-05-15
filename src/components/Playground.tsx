@@ -4,11 +4,19 @@ import AceEditor from 'react-ace'
 import 'brace/mode/javascript'
 import 'brace/theme/github'
 
+/**
+ * A prop that is passed to the Playground
+ * @property editorValue - The string content of the react-ace editor
+ * @property updateCode  - A callback function for the react-ace editor's `onChange`
+ */
 export interface IPlaygroundProps {
   editorValue: string
   updateCode: (newCode: string) => void
 }
 
+/**
+ * A component representing the Playground
+ */
 export default class Playground extends React.Component<IPlaygroundProps, {}> {
   public render() {
     return (
