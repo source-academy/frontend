@@ -1,5 +1,4 @@
-import { Reducer } from 'redux'
-import { IUpdatePlaygroundCodeAction as UpdatePlaygroundCodeAction, UPDATE_PLAYGROUND_CODE } from '../actions/index'
+import { Action, Reducer } from 'redux'
 
 export enum ApplicationEnvironment {
   Development = 'development',
@@ -10,7 +9,6 @@ export enum ApplicationEnvironment {
 export interface IApplicationState {
   title: string
   environment: ApplicationEnvironment
-  playgroundCode: string
 }
 
 const currentEnvironment = (): ApplicationEnvironment => {
@@ -27,22 +25,8 @@ const currentEnvironment = (): ApplicationEnvironment => {
 const defaultState: IApplicationState = {
   title: 'Cadet',
   environment: currentEnvironment(),
-  playgroundCode: 'Hello the world'
 }
 
-type Action = UpdatePlaygroundCodeAction;
-
-
 export const reducer: Reducer<IApplicationState> = (state = defaultState, action: Action) => {
-  switch (action.type) {
-
-  case UPDATE_PLAYGROUND_CODE:
-    return {
-      ...state,
-      playgroundCode : action.playgroundCode
-    };
-
-  default:
-    return state;
-  }
+  return state;
 };
