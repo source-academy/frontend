@@ -4,22 +4,19 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import DashboardContainer from '../containers/DashboardContainer'
 import PlaygroundContainer from '../containers/PlaygroundContainer'
-import { IApplicationState } from '../reducers/application'
-import { IPlaygroundState } from '../reducers/playground'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
 export interface IApplicationProps extends RouteComponentProps<{}> {
-  application: IApplicationState
-  playground: IPlaygroundState
+  title: string
 }
 
-const Application: React.SFC<IApplicationProps> = ({ application }) => {
+const Application: React.SFC<IApplicationProps> = (props: IApplicationProps) => {
   const redirectToDashboard = () => <Redirect to="/dashboard" />
 
   return (
     <div className="Application">
-      <NavigationBar title={application.title} />
+      <NavigationBar title={props.title} />
       <div className="Application__main">
         <Switch>
           <Route path="/dashboard" component={DashboardContainer} />
