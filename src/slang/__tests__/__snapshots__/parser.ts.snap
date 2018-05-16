@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Empty parse returns empty Program Node 1`] = `
+Node {
+  "__id": "node_1",
+  "body": Array [],
+  "end": 0,
+  "loc": SourceLocation {
+    "end": Position {
+      "column": 0,
+      "line": 1,
+    },
+    "start": Position {
+      "column": 0,
+      "line": 1,
+    },
+  },
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Parse a single number 1`] = `
+Node {
+  "__id": "node_7",
+  "body": Array [
+    Node {
+      "__id": "node_6",
+      "end": 3,
+      "expression": Node {
+        "__id": "node_5",
+        "end": 2,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 2,
+            "line": 1,
+          },
+          "start": Position {
+            "column": 0,
+            "line": 1,
+          },
+        },
+        "raw": "42",
+        "start": 0,
+        "type": "Literal",
+        "value": 42,
+      },
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 3,
+          "line": 1,
+        },
+        "start": Position {
+          "column": 0,
+          "line": 1,
+        },
+      },
+      "start": 0,
+      "type": "ExpressionStatement",
+    },
+  ],
+  "end": 3,
+  "loc": SourceLocation {
+    "end": Position {
+      "column": 3,
+      "line": 1,
+    },
+    "start": Position {
+      "column": 0,
+      "line": 1,
+    },
+  },
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
+
+exports[`Parse a single string 1`] = `
+Node {
+  "__id": "node_4",
+  "body": Array [
+    Node {
+      "__id": "node_3",
+      "directive": "42",
+      "end": 5,
+      "expression": Node {
+        "__id": "node_2",
+        "end": 4,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 4,
+            "line": 1,
+          },
+          "start": Position {
+            "column": 0,
+            "line": 1,
+          },
+        },
+        "raw": "'42'",
+        "start": 0,
+        "type": "Literal",
+        "value": "42",
+      },
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 5,
+          "line": 1,
+        },
+        "start": Position {
+          "column": 0,
+          "line": 1,
+        },
+      },
+      "start": 0,
+      "type": "ExpressionStatement",
+    },
+  ],
+  "end": 5,
+  "loc": SourceLocation {
+    "end": Position {
+      "column": 5,
+      "line": 1,
+    },
+    "start": Position {
+      "column": 0,
+      "line": 1,
+    },
+  },
+  "sourceType": "script",
+  "start": 0,
+  "type": "Program",
+}
+`;
