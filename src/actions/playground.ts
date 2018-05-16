@@ -8,7 +8,7 @@ export const UPDATE_EDITOR_VALUE: string = 'UPDATE_EDITOR_VALUE'
 
 /**
  * Represents an `Action` which updates the `editorValue` of a
- * `IPlaygroundState` 
+ * `IPlaygroundState`
  * @property type           - Unique string identifier for this `Action`
  * @property newEditorValue - The new string value for `editorValue`
  */
@@ -18,7 +18,7 @@ export interface IUpdateEditorValue extends Action {
 }
 
 /**
- * An `ActionCreator` returning an `IUpdateEditorValue` `Action` 
+ * An `ActionCreator` returning an `IUpdateEditorValue` `Action`
  * @param newEditorValue - The new string value for `editorValue`
  */
 export const updateEditorValue: ActionCreator<IUpdateEditorValue> = (newEditorValue: string) => ({

@@ -22,14 +22,14 @@ export default class Playground extends React.Component<IPlaygroundProps, {}> {
     return (
       <div className="Playground">
         <h2>Playground</h2>
-          <AceEditor
-            height='90%'
-            width='90%'
-            mode="javascript"
-            theme="github"
-            value={this.props.editorValue}
-            onChange={this.props.updateCode}
-          />
+        <AceEditor
+          height="90%"
+          width="90%"
+          mode="javascript"
+          theme="github"
+          value={this.props.editorValue}
+          onChange={this.props.updateCode}
+        />
       </div>
     )
   }
