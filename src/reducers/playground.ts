@@ -1,5 +1,6 @@
 import { Action, Reducer } from 'redux'
-import { IUpdateEditorValue, UPDATE_EDITOR_VALUE } from '../actions'
+import { IUpdateEditorValue } from '../actions'
+import { UPDATE_EDITOR_VALUE } from '../actions/actionTypes'
 
 /**
  * A state for the playground container
