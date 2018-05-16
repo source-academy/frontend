@@ -1,5 +1,6 @@
 /** Playground */
 export const UPDATE_EDITOR_VALUE: string = 'UPDATE_EDITOR_VALUE'
+export const EVAL_EDITOR = 'EVAL_EDITOR'
 
 /** Interpreter */
 export const EVAL_INTERPRETER = 'EVAL_INTERPRETER'
