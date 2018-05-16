@@ -1,10 +1,5 @@
 import { Action, ActionCreator } from 'redux'
-
-/**
- * The `type` attribute for an `Action` which updates the `IPlaygroundState`
- * `editorValue`
- */
-export const UPDATE_EDITOR_VALUE: string = 'UPDATE_EDITOR_VALUE'
+import * as actionTypes from './actionTypes'
 
 /**
  * Represents an `Action` which updates the `editorValue` of a
@@ -22,6 +17,6 @@ export interface IUpdateEditorValue extends Action {
  * @param newEditorValue - The new string value for `editorValue`
  */
 export const updateEditorValue: ActionCreator<IUpdateEditorValue> = (newEditorValue: string) => ({
-  type: UPDATE_EDITOR_VALUE,
+  type: actionTypes.UPDATE_EDITOR_VALUE,
   newEditorValue
 })
