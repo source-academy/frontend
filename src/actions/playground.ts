@@ -4,7 +4,7 @@ import { Action, ActionCreator } from 'redux'
  * The `type` attribute for an `Action` which updates the `IPlaygroundState`
  * `editorValue`
  */
-export const UPDATE_EDITOR_VALUE: string = 'UPDATE_EDITOR_VALUE'
+export const UPDATE_EDITOR_VALUE = 'UPDATE_EDITOR_VALUE'
 
 /**
  * Represents an `Action` which updates the `editorValue` of a
@@ -13,8 +13,7 @@ export const UPDATE_EDITOR_VALUE: string = 'UPDATE_EDITOR_VALUE'
  * @property newEditorValue - The new string value for `editorValue`
  */
 export interface IUpdateEditorValue extends Action {
-  type: string
-  newEditorValue: string
+  payload: string
 }
 
 /**
@@ -23,5 +22,5 @@ export interface IUpdateEditorValue extends Action {
  */
 export const updateEditorValue: ActionCreator<IUpdateEditorValue> = (newEditorValue: string) => ({
   type: UPDATE_EDITOR_VALUE,
-  newEditorValue
+  payload: newEditorValue
 })

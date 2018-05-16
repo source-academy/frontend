@@ -9,7 +9,7 @@ import {
 import { IState } from '../reducers'
 
 type StateProps = Pick<PlaygroundProps, 'editorValue'>
-type DispatchProps = Pick<PlaygroundProps, 'updateCode'>
+type DispatchProps = Pick<PlaygroundProps, 'handleEditorChange'>
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
@@ -26,7 +26,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
  */
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) => {
   return {
-    updateCode: (newCode: string) => {
+    handleEditorChange: (newCode: string) => {
       dispatch(updateEditorValue(newCode))
     }
   }

@@ -11,7 +11,7 @@ import 'brace/theme/github'
  */
 export interface IPlaygroundProps {
   editorValue: string
-  updateCode: (newCode: string) => void
+  handleEditorChange: (newCode: string) => void
 }
 
 /**
@@ -28,7 +28,7 @@ export default class Playground extends React.Component<IPlaygroundProps, {}> {
           mode="javascript"
           theme="github"
           value={this.props.editorValue}
-          onChange={this.props.updateCode}
+          onChange={this.props.handleEditorChange}
         />
       </div>
     )

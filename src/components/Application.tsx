@@ -11,7 +11,7 @@ export interface IApplicationProps extends RouteComponentProps<{}> {
   title: string
 }
 
-const Application: React.SFC<IApplicationProps> = (props: IApplicationProps) => {
+const Application: React.SFC<IApplicationProps> = (props) => {
   const redirectToDashboard = () => <Redirect to="/dashboard" />
 
   return (
