@@ -1,5 +1,5 @@
-/**
- * The `type` attribute for an `Action` which updates the `IPlaygroundState`
- * `editorValue`
- */
+/** Playground */
 export const UPDATE_EDITOR_VALUE: string = 'UPDATE_EDITOR_VALUE'
+
+/** Interpreter */
+export const INTERRUPT_EXECUTION: string = 'INTERRUPT_EXECUTION'
