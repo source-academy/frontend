@@ -20,11 +20,7 @@ declare module 'acorn/dist/walk' {
       base?: SimpleWalkers<S>,
       state?: S
     ): void
-    export function recursive<S>(
-      node: es.Node,
-      state: S,
-      functions: Walkers<S>
-    ): void
+    export function recursive<S>(node: es.Node, state: S, functions: Walkers<S>): void
     export function findNodeAt<S>(
       node: es.Node,
       start: null | number,

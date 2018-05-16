@@ -1,7 +1,7 @@
-import { SagaIterator, delay } from 'redux-saga'
+import { SagaIterator } from 'redux-saga'
 import { takeEvery, select, call, put, take, race } from 'redux-saga/effects'
-import { showSuccessMessage, showWarningMessage } from '../notification'
-
+import { showWarningMessage } from '../notification'
+import { IState } from '../reducers'
 
 // import { Shape } from '../shape'
 import { Context, createContext, runInContext, interrupt } from '../slang'
@@ -10,7 +10,7 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 
 function* evalCode(code: string, context: Context) {
-  const {result, interrupted} = yield race({
+  const { result, interrupted } = yield race({
     result: call(runInContext, code, context),
     interrupted: take(actionTypes.INTERRUPT_EXECUTION)
   })
@@ -31,9 +31,9 @@ function* interpreterSaga(): SagaIterator {
   let context: Context
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*() {
-    const code = yield select((state: IState) => state.playground.editorValue)
+    const code: string = yield select((state: IState) => state.playground.editorValue)
     // context = createContext(library.week, library.externals)
-    context = createContext(3, "")
+    context = createContext()
     yield* evalCode(code, context)
   })
 }

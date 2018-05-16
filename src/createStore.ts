@@ -23,17 +23,14 @@ function createStore(history: History): Store<IState> {
   if (typeof __REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function') {
     composeEnhancers = __REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   }
-  
+
   const rootReducer = combineReducers({
     ...reducers,
     router: routerReducer
   })
   const enchancers = composeEnhancers(applyMiddleware(...middleware))
 
-  return _createStore(
-    rootReducer,
-    enchancers
-  )
+  return _createStore(rootReducer, enchancers)
 }
 
 export default createStore

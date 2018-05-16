@@ -112,8 +112,8 @@ export const importBuiltins = (context: Context) => {
     defineSymbol(context, 'enum_list', list.enum_list)
     defineSymbol(context, 'list_ref', list.list_ref)
     defineSymbol(context, 'accumulate', list.accumulate)
-    if (window.ListVisualizer) {
-      defineSymbol(context, 'draw', window.ListVisualizer.draw)
+    if (window.hasOwnProperty('ListVisualizer')) {
+      defineSymbol(context, 'draw', (window as any).ListVisualizer.draw)
     } else {
       defineSymbol(context, 'draw', function() {
         throw new Error('List visualizer is not enabled')

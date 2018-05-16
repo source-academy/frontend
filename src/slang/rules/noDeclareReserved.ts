@@ -61,7 +61,9 @@ export class noDeclareReservedError implements SourceError {
   }
 
   explain() {
-    return `Reserved word '${this.node.declarations[0].id.name}'` + ' is not allowed as a name'
+    return (
+      `Reserved word '${(this.node.declarations[0].id as any).name}'` + ' is not allowed as a name'
+    )
   }
 
   elaborate() {
@@ -74,7 +76,7 @@ const noDeclareReserved: Rule<es.VariableDeclaration> = {
 
   checkers: {
     VariableDeclaration(node: es.VariableDeclaration) {
-      if (reservedNames.includes(node.declarations[0].id.name)) {
+      if (reservedNames.includes((node.declarations[0].id as any).name)) {
         return [new noDeclareReservedError(node)]
       } else {
         return []

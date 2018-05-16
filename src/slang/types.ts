@@ -172,7 +172,7 @@ type Error = {
   status: 'error'
 }
 
-type Finished = {
+export type Finished = {
   status: 'finished'
   value: Value
 }
