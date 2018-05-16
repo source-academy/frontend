@@ -164,10 +164,7 @@ rules.forEach(rule => {
   const keys = Object.keys(rule.checkers)
   keys.forEach(key => {
     walkers[key] = compose(walkers[key], (node, context) => {
-      if (
-        typeof rule.disableOn !== 'undefined' &&
-        context.week >= rule.disableOn
-      ) {
+      if (typeof rule.disableOn !== 'undefined' && context.week >= rule.disableOn) {
         return
       }
       const checker = rule.checkers[key]

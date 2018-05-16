@@ -45,9 +45,7 @@ export class PreemptiveScheduler implements Scheduler {
             for (let i = 1; i <= 3; i++) {
               stacks.push(context.runtime.frames[i - 1].callExpression!)
             }
-            context.errors.push(
-              new MaximumStackLimitExceeded(context.runtime.nodes[0], stacks)
-            )
+            context.errors.push(new MaximumStackLimitExceeded(context.runtime.nodes[0], stacks))
           }
           context.runtime.isRunning = false
           clearInterval(interval)

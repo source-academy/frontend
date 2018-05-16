@@ -27,11 +27,7 @@ export class MultipleDeclarationsError implements SourceError {
 
   elaborate() {
     const fixs = this.fixs.map(n => '\t' + generate(n)).join('\n')
-    return (
-      'Split the variable declaration into multiple lines as follows\n\n' +
-      fixs +
-      '\n'
-    )
+    return 'Split the variable declaration into multiple lines as follows\n\n' + fixs + '\n'
   }
 }
 

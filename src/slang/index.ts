@@ -7,7 +7,7 @@ import { AsyncScheduler, PreemptiveScheduler } from './schedulers'
 import { toString } from './interop'
 
 export type Options = {
-  scheduler: 'preemptive' | 'async',
+  scheduler: 'preemptive' | 'async'
   steps: number
 }
 
@@ -17,15 +17,15 @@ const DEFAULT_OPTIONS: Options = {
 }
 
 export class ParseError {
-  constructor(public errors: SourceError[]) {
-  }
+  constructor(public errors: SourceError[]) {}
 }
 
 export function runInContext(
   code: string,
   context: Context,
-  options: Partial<Options> = {}): Promise<Result> {
-  const theOptions: Options = {...options, ...DEFAULT_OPTIONS}
+  options: Partial<Options> = {}
+): Promise<Result> {
+  const theOptions: Options = { ...options, ...DEFAULT_OPTIONS }
   context.errors = []
   const program = parse(code, context)
   if (program) {

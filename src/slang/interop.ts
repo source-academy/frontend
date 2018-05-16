@@ -50,10 +50,7 @@ const arrayToString = (value: Value[], length: number) => {
   } else if (value.length === 0) {
     return '[]'
   } else {
-    return `[${toString(value[0], length + 1)}, ${toString(
-      value[1],
-      length + 1
-    )}]`
+    return `[${toString(value[0], length + 1)}, ${toString(value[1], length + 1)}]`
   }
 }
 

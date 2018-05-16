@@ -47,11 +47,7 @@ export function head(xs: List) {
   if (is_pair(xs)) {
     return xs[0]
   } else {
-    throw new Error(
-      'head(xs) expects a pair as ' +
-        'argument xs, but encountered ' +
-        toString(xs)
-    )
+    throw new Error('head(xs) expects a pair as ' + 'argument xs, but encountered ' + toString(xs))
   }
 }
 head.__SOURCE__ = 'head(xs)'
@@ -63,11 +59,7 @@ export function tail(xs: List) {
   if (is_pair(xs)) {
     return xs[1]
   } else {
-    throw new Error(
-      'tail(xs) expects a pair as ' +
-        'argument xs, but encountered ' +
-        toString(xs)
-    )
+    throw new Error('tail(xs) expects a pair as ' + 'argument xs, but encountered ' + toString(xs))
   }
 }
 tail.__SOURCE__ = 'tail(xs)'
@@ -192,9 +184,7 @@ build_list.__SOURCE__ = 'build_list(n, fun)'
 // first argument is not a function.
 export function for_each(fun: Function, xs: List) {
   if (!is_list(xs)) {
-    throw new Error(
-      'for_each expects a list as argument xs, but ' + 'encountered ' + xs
-    )
+    throw new Error('for_each expects a list as argument xs, but ' + 'encountered ' + xs)
   }
   for (; !is_empty_list(xs); xs = tail(xs)) {
     fun(head(xs))
@@ -215,9 +205,7 @@ list_to_string.__SOURCE__ = 'list_to_string(xs)'
 // reverse throws an exception if the argument is not a list.
 export function reverse(xs: List) {
   if (!is_list(xs)) {
-    throw new Error(
-      'reverse(xs) expects a list as argument xs, but ' + 'encountered ' + xs
-    )
+    throw new Error('reverse(xs) expects a list as argument xs, but ' + 'encountered ' + xs)
   }
   var result = []
   for (; !is_empty_list(xs); xs = tail(xs)) {
@@ -291,12 +279,7 @@ export const removeAll = remove_all
 export function equal(item1: Value, item2: Value): boolean {
   if (is_pair(item1) && is_pair(item2)) {
     return equal(head(item1), head(item2)) && equal(tail(item1), tail(item2))
-  } else if (
-    array_test(item1) &&
-    item1.length === 0 &&
-    array_test(item2) &&
-    item2.length === 0
-  ) {
+  } else if (array_test(item1) && item1.length === 0 && array_test(item2) && item2.length === 0) {
     return true
   } else {
     return item1 === item2
@@ -352,9 +335,7 @@ enum_list.__SOURCE__ = 'enum_list(start, end)'
 export function list_ref(xs: List, n: number) {
   if (n < 0) {
     throw new Error(
-      'list_ref(xs, n) expects a positive integer as ' +
-        'argument n, but encountered ' +
-        n
+      'list_ref(xs, n) expects a positive integer as ' + 'argument n, but encountered ' + n
     )
   }
 
@@ -374,11 +355,7 @@ list_ref.__SOURCE__ = 'list_ref(xs, n)'
 // accumulate(op,zero,list(1,2,3)) results in
 // op(1, op(2, op(3, zero)))
 
-export function accumulate<T>(
-  op: (value: Value, acc: T) => T,
-  initial: T,
-  sequence: List
-): T {
+export function accumulate<T>(op: (value: Value, acc: T) => T, initial: T, sequence: List): T {
   if (is_empty_list(sequence)) {
     return initial
   } else {
@@ -397,9 +374,7 @@ export function set_head(xs: List, x: Value) {
     return undefined
   } else {
     throw new Error(
-      'set_head(xs,x) expects a pair as ' +
-        'argument xs, but encountered ' +
-        toString(xs)
+      'set_head(xs,x) expects a pair as ' + 'argument xs, but encountered ' + toString(xs)
     )
   }
 }
@@ -415,9 +390,7 @@ export function set_tail(xs: List, x: Value) {
     return undefined
   } else {
     throw new Error(
-      'set_tail(xs,x) expects a pair as ' +
-        'argument xs, but encountered ' +
-        toString(xs)
+      'set_tail(xs,x) expects a pair as ' + 'argument xs, but encountered ' + toString(xs)
     )
   }
 }

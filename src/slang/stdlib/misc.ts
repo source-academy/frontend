@@ -53,9 +53,7 @@ export function parse_int(inputString: string, radix: number) {
     // the two arguments are provided, and parsed is not NaN
     return parsed
   } else {
-    throw new Error(
-      'parseInt expects two arguments a string s, and a positive integer i'
-    )
+    throw new Error('parseInt expects two arguments a string s, and a positive integer i')
   }
 }
 parse_int.__SOURCE__ = 'parse_int(s, i)'

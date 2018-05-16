@@ -50,9 +50,7 @@ export class MaximumStackLimitExceeded implements SourceError {
   explain() {
     return `
       Infinite recursion
-      ${generate(this.calls[0])}..${generate(this.calls[1])}..${generate(
-      this.calls[2]
-    )}..
+      ${generate(this.calls[0])}..${generate(this.calls[1])}..${generate(this.calls[2])}..
     `
   }
 

@@ -16,9 +16,7 @@ export class noDeclareMutableError implements SourceError {
 
   explain() {
     return (
-      'Mutable variable declaration using keyword ' +
-      `'${this.node.kind}'` +
-      ' is not allowed.'
+      'Mutable variable declaration using keyword ' + `'${this.node.kind}'` + ' is not allowed.'
     )
   }
 

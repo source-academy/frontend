@@ -36,9 +36,7 @@ const noImplicitDeclareUndefined: Rule<es.VariableDeclaration> = {
       const errors: SourceError[] = []
       for (const decl of node.declarations) {
         if (!decl.init) {
-          errors.push(
-            new NoImplicitDeclareUndefinedError(decl.id as es.Identifier)
-          )
+          errors.push(new NoImplicitDeclareUndefinedError(decl.id as es.Identifier))
         }
       }
       return errors

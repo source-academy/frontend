@@ -61,10 +61,7 @@ export const replaceAST = (node: es.Node, before: es.Node, after: es.Node) => {
       }
     } else if (n.type === 'UnaryExpression') {
       return { ...n, argument: go(n.argument) }
-    } else if (
-      n.type === 'BinaryExpression' ||
-      n.type === 'LogicalExpression'
-    ) {
+    } else if (n.type === 'BinaryExpression' || n.type === 'LogicalExpression') {
       return { ...n, left: go(n.left), right: go(n.right) }
     } else {
       return n
@@ -113,10 +110,7 @@ export const createNode = (value: Value): es.Node => {
   return createLiteralNode(value)
 }
 
-export const composeWalker = <S, T extends es.Node>(
-  w1: Walker<T, S>,
-  w2: Walker<T, S>
-) => {
+export const composeWalker = <S, T extends es.Node>(w1: Walker<T, S>, w2: Walker<T, S>) => {
   return (node: T, state: S, recurse: SimpleWalker<S>) => {
     w1(node, state, recurse)
     w2(node, state, recurse)

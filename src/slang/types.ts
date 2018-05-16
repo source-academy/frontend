@@ -136,11 +136,7 @@ export class Closure {
   /** Fake closure function */
   public fun: Function
 
-  constructor(
-    public node: es.FunctionExpression,
-    public frame: Frame,
-    context: Context
-  ) {
+  constructor(public node: es.FunctionExpression, public frame: Frame, context: Context) {
     this.node = node
     try {
       if (this.node.id) {
