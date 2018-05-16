@@ -130,19 +130,9 @@
   dependencies:
     csstype "^2.2.0"
 
-"@types/react@~15":
-  version "15.6.15"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.6.15.tgz#1856f932120311aa566f91e6d0c6e613d6448236"
-
 "@types/redux-mock-store@^0.0.13":
   version "0.0.13"
   resolved "https://registry.yarnpkg.com/@types/redux-mock-store/-/redux-mock-store-0.0.13.tgz#f7ec160214b854f2d976ca12525997a21512b2ea"
-  dependencies:
-    redux "^3.6.0"
-
-"@types/redux-saga@^0.9.31":
-  version "0.9.31"
-  resolved "https://registry.yarnpkg.com/@types/redux-saga/-/redux-saga-0.9.31.tgz#6b8de326835e179037a3bbcf658a10f60542bafc"
   dependencies:
     redux "^3.6.0"
 
@@ -3791,10 +3781,6 @@ is-generator-fn@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-generator-fn/-/is-generator-fn-1.0.0.tgz#969d49e1bb3329f6bb7f09089be26578b2ddd46a"
 
-is-generator-function@^1.0.3:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/is-generator-function/-/is-generator-function-1.0.7.tgz#d2132e529bb0000a7f80794d4bdf5cd5e5813522"
-
 is-glob@^2.0.0, is-glob@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/is-glob/-/is-glob-2.0.1.tgz#d096f926a3ded5600f3fdfd91198cb0888c2d863"
@@ -6115,14 +6101,6 @@ react-router@^4.2.0:
     prop-types "^15.5.4"
     warning "^3.0.0"
 
-react-saga@^0.2.6:
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/react-saga/-/react-saga-0.2.6.tgz#52968cc0b60f351d4958fc2c3abc17af59953dee"
-  dependencies:
-    "@types/react" "~15"
-    "@types/redux-saga" "^0.9.31"
-    is-generator-function "^1.0.3"
-
 react-scripts-ts@^2.15.1:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/react-scripts-ts/-/react-scripts-ts-2.15.1.tgz#98032840e61faff65e59047036a7fa236568d503"
@@ -6300,6 +6278,10 @@ redux-mock-store@^1.5.1:
   resolved "https://registry.yarnpkg.com/redux-mock-store/-/redux-mock-store-1.5.1.tgz#fca4335392e66605420b5559fe02fc5b8bb6d63c"
   dependencies:
     lodash.isplainobject "^4.0.6"
+
+redux-saga@^0.15.6:
+  version "0.15.6"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.15.6.tgz#8638dc522de6c6c0a496fe8b2b5466287ac2dc4d"
 
 redux@^3.6.0, redux@^3.7.2:
   version "3.7.2"
