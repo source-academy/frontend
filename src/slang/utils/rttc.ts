@@ -1,20 +1,20 @@
 import * as es from 'estree'
-import { SourceError, Value, Context, ErrorSeverity, ErrorType } from '../types'
+import { Context, ErrorSeverity, ErrorType, SourceError, Value } from '../types'
 
 class TypeError implements SourceError {
-  type: ErrorType.RUNTIME
-  severity: ErrorSeverity.WARNING
-  location: es.SourceLocation
+  public type: ErrorType.RUNTIME
+  public severity: ErrorSeverity.WARNING
+  public location: es.SourceLocation
 
   constructor(node: es.Node, public context: string, public expected: string, public got: string) {
     this.location = node.loc!
   }
 
-  explain() {
+  public explain() {
     return `TypeError: Expected ${this.expected} in ${this.context}, got ${this.got}.`
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }
