@@ -1,19 +1,20 @@
-import * as es from 'estree'
-import { parse as acornParse, Options as AcornOptions, Position } from 'acorn'
-import { stripIndent } from 'common-tags'
+import { Options as AcornOptions, parse as acornParse, Position } from 'acorn'
 import { simple } from 'acorn/dist/walk'
-import { SourceError, ErrorType, ErrorSeverity, Context } from './types'
-import syntaxTypes from './syntaxTypes'
+import { stripIndent } from 'common-tags'
+import * as es from 'estree'
+
 import rules from './rules'
+import syntaxTypes from './syntaxTypes'
+import { Context, ErrorSeverity, ErrorType, SourceError } from './types'
 
 export type ParserOptions = {
   week: number
 }
 
 export class DisallowedConstructError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
-  nodeType: string
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
+  public nodeType: string
 
   constructor(public node: es.Node) {
     this.nodeType = this.splitNodeType()
@@ -51,9 +52,9 @@ export class DisallowedConstructError implements SourceError {
 }
 
 export class FatalSyntaxError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
-  constructor(public location: es.SourceLocation, public message: string) {}
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
+  public constructor(public location: es.SourceLocation, public message: string) {}
 
   explain() {
     return this.message
@@ -65,9 +66,9 @@ export class FatalSyntaxError implements SourceError {
 }
 
 export class MissingSemicolonError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
-  constructor(public location: es.SourceLocation) {}
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
+  public constructor(public location: es.SourceLocation) {}
 
   explain() {
     return 'Missing semicolon at the end of statement'
@@ -79,9 +80,9 @@ export class MissingSemicolonError implements SourceError {
 }
 
 export class TrailingCommaError implements SourceError {
-  type: ErrorType.SYNTAX
-  severity: ErrorSeverity.WARNING
-  constructor(public location: es.SourceLocation) {}
+  public type: ErrorType.SYNTAX
+  public severity: ErrorSeverity.WARNING
+  public constructor(public location: es.SourceLocation) {}
 
   explain() {
     return 'Trailing comma'
