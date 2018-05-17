@@ -19,3 +19,7 @@ export const updateEditorValue: ActionCreator<IUpdateEditorValue> = (newEditorVa
   type: actionTypes.UPDATE_EDITOR_VALUE,
   payload: newEditorValue
 })
+
+export const evalEditor = () => ({
+  type: actionTypes.EVAL_EDITOR
+})
