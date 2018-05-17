@@ -8,7 +8,7 @@ import rules from './rules'
 import syntaxTypes from './syntaxTypes'
 import { Context, ErrorSeverity, ErrorType, SourceError } from './types'
 
-/* tslint:disable:interface-name */
+// tslint:disable-next-line:interface-name
 export interface ParserOptions {
   week: number
 }

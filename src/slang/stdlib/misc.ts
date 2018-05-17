@@ -1,5 +1,6 @@
-import { Value } from '../types'
+/* tslint:disable: ban-types*/
 import { toString } from '../interop'
+import { Value } from '../types'
 
 export function display(value: Value) {
   const output = toString(value)
@@ -27,13 +28,13 @@ error_message.__SOURCE__ = 'error(a)'
 
 // tslint:disable-next-line:no-any
 export function timed(this: any, f: Function) {
-  var self = this
-  var timerType = Date
+  const self = this
+  const timerType = Date
 
-  return function() {
-    var start = timerType.now()
-    var result = f.apply(self, arguments)
-    var diff = timerType.now() - start
+  return () => {
+    const start = timerType.now()
+    const result = f.apply(self, arguments)
+    const diff = timerType.now() - start
     display('Duration: ' + Math.round(diff) + 'ms')
     return result
   }

@@ -2,6 +2,7 @@ import { toString } from '../interop'
 import { Value } from '../types'
 
 declare global {
+// tslint:disable-next-line:interface-name
   interface Function {
     __SOURCE__?: string
   }
