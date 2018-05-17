@@ -150,7 +150,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   *CallExpression(node: es.CallExpression, context: Context) {
     const callee = yield* evaluate(node.callee, context)
     const args = yield* getArgs(context, node)
-    let thisContext = undefined
+    let thisContext;
     if (node.callee.type === 'MemberExpression') {
       thisContext = yield* evaluate(node.callee.object, context)
     }
@@ -301,7 +301,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   *AssignmentExpression(node: es.AssignmentExpression, context: Context) {
     if (node.left.type === 'MemberExpression') {
       const left = node.left
-      let obj = yield* evaluate(left.object, context)
+      const obj = yield* evaluate(left.object, context)
       let prop
       if (left.computed) {
         prop = yield* evaluate(left.property, context)
@@ -355,6 +355,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     let value: any // tslint:disable-line
     let test
     while (
+      // tslint:disable-next-line
       (test = yield* evaluate(node.test, context)) &&
       !(value instanceof ReturnValue) &&
       !(value instanceof BreakValue) &&
@@ -369,7 +370,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   },
   *ObjectExpression(node: es.ObjectExpression, context: Context) {
     const obj = {}
-    for (let prop of node.properties) {
+    for (const prop of node.properties) {
       let key
       if (prop.key.type === 'Identifier') {
         key = prop.key.name
