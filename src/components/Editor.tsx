@@ -13,7 +13,7 @@ export interface IEditorProps {
   handleEditorChange: (newCode: string) => void
 }
 
-export class Editor extends React.Component<IEditorProps, {}> {
+class Editor extends React.Component<IEditorProps, {}> {
   public render() {
     return (
       <AceEditor
@@ -27,3 +27,5 @@ export class Editor extends React.Component<IEditorProps, {}> {
     )
   }
 }
+
+export default Editor

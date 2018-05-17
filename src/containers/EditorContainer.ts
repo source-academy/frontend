@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { Dispatch } from 'redux'
 
 import { updateEditorValue } from '../actions/playground'
-import { Editor, IEditorProps } from '../components/Editor'
+import Editor, { IEditorProps } from '../components/Editor'
 import { IState } from '../reducers'
 
 type StateProps = Pick<IEditorProps, 'editorValue'>
