@@ -1,12 +1,12 @@
 import * as React from 'react'
+import AceEditor from 'react-ace'
 
 import 'brace/mode/javascript'
 import 'brace/theme/github'
-import AceEditor from 'react-ace'
 
-import {
-  Button, IconName, Intent
-} from '@blueprintjs/core'
+// import {
+//   Button, IconName, Intent
+// } from '@blueprintjs/core'
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -25,36 +25,32 @@ export interface IEditorProps {
 class Editor extends React.Component<IEditorProps, {}> {
   public render() {
 
-    const genericButton = (
-      label: string,
-      icon: IconName,
-      handleClick = () => { },
-      intent = Intent.NONE,
-      notMinimal = false
-    ) =>
-      (<Button
-        onClick={handleClick}
-        className={notMinimal ? "" : "pt-minimal"}
-        intent={intent}
-        icon={icon}
-      >
-        {label}
-      </Button>
-      )
-    const runButton = genericButton('Run', 'play', this.props.handleEvalEditor)
-
+    // const genericButton = (
+    //   label: string,
+    //   icon: IconName,
+    //   handleClick = () => { },
+    //   intent = Intent.NONE,
+    //   notMinimal = false
+    // ) =>
+    //   (<Button
+    //     onClick={handleClick}
+    //     className={notMinimal ? "" : "pt-minimal"}
+    //     intent={intent}
+    //     icon={icon}
+    //   >
+    //     {label}
+    //   </Button>
+    //   )
+    // const runButton = genericButton('Run', 'play', this.props.handleEvalEditor)
     return (
-      <div>
-        <AceEditor
-          height="90%"
-          width="90%"
-          mode="javascript"
-          theme="github"
-          value={this.props.editorValue}
-          onChange={this.props.handleEditorChange}
-        />
-        {runButton}
-      </div>
+      <AceEditor
+        height="90%"
+        width="90%"
+        mode="javascript"
+        theme="github"
+        value={this.props.editorValue}
+        onChange={this.props.handleEditorChange}
+      />
     )
   }
 }
