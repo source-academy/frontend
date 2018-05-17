@@ -1,3 +1,4 @@
+/* tslint:disable: max-classes-per-file */
 import * as es from 'estree'
 import * as constants from './constants'
 import { toJS } from './interop'

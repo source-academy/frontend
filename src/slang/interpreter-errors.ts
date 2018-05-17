@@ -1,3 +1,4 @@
+/* tslint:disable: max-classes-per-file */
 import { generate } from 'astring'
 import * as es from 'estree'
 import { UNKNOWN_LOCATION } from './constants'
