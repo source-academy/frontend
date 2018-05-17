@@ -1,5 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
-import { Dispatch } from 'redux'
+import { bindActionCreators, Dispatch } from 'redux'
 
 import { evalEditor, updateEditorValue } from '../actions/playground'
 import Editor, { IEditorProps } from '../components/Editor'
@@ -22,11 +22,13 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
  * `updateEditorValue` with `newCode`, the updated contents of the react-ace
  * editor.
  */
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) => {
-  return {
-    handleEditorChange: (newCode: string) => dispatch(updateEditorValue(newCode)),
-    handleEvalEditor: () => dispatch(evalEditor())
-  }
-}
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
+  bindActionCreators(
+    {
+      handleEditorChange: updateEditorValue,
+      handleEvalEditor: evalEditor
+    },
+    dispatch
+  )
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor)
