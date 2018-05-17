@@ -1,7 +1,7 @@
 import { SagaIterator } from 'redux-saga'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { showWarningMessage } from '../notification'
-import { IState } from '../reducers'
+import { IState } from '../reducers/states'
 
 // import { Shape } from '../shape'
 import { Context, createContext, interrupt, runInContext } from '../slang'
