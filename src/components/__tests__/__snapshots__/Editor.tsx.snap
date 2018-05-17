@@ -1,3 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Editor renders correctly 1`] = `"<ReactAce height=\\"90%\\" width=\\"90%\\" mode=\\"javascript\\" theme=\\"github\\" value=\\"\\" onChange={[Function: handleEditorChange]} name=\\"brace-editor\\" focus={false} fontSize={12} showGutter={true} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} maxLines={{...}} readOnly={false} highlightActiveLine={true} showPrintMargin={true} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} setOptions={{...}} wrapEnabled={false} enableBasicAutocompletion={false} enableLiveAutocompletion={false} />"`;
+exports[`Editor renders correctly 1`] = `
+"<Symbol(react.fragment)>
+  <Blueprint2.Button onClick={[Function: handleEvalEditor]} className=\\"pt-minimal\\" intent=\\"none\\" icon=\\"play\\">
+    Run
+  </Blueprint2.Button>
+  <ReactAce height=\\"90%\\" width=\\"90%\\" mode=\\"javascript\\" theme=\\"github\\" value=\\"\\" onChange={[Function: handleEditorChange]} name=\\"brace-editor\\" focus={false} fontSize={12} showGutter={true} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} maxLines={{...}} readOnly={false} highlightActiveLine={true} showPrintMargin={true} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} setOptions={{...}} wrapEnabled={false} enableBasicAutocompletion={false} enableLiveAutocompletion={false} />
+</Symbol(react.fragment)>"
+`;
