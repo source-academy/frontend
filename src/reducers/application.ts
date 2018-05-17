@@ -22,7 +22,7 @@ const currentEnvironment = (): ApplicationEnvironment => {
   }
 }
 
-const defaultState: IApplicationState = {
+export const defaultState: IApplicationState = {
   title: 'Cadet',
   environment: currentEnvironment()
 }
