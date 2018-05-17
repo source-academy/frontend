@@ -19,7 +19,6 @@ function createStore(history: History): Store<IState> {
   let composeEnhancers: any = compose
   const sagaMiddleware = createSagaMiddleware()
   const middleware = [sagaMiddleware, routerMiddleware(history)]
-  sagaMiddleware.run(mainSaga)
 
   if (typeof __REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function') {
     composeEnhancers = __REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -30,8 +29,10 @@ function createStore(history: History): Store<IState> {
     router: routerReducer
   })
   const enchancers = composeEnhancers(applyMiddleware(...middleware))
+  const createdStore =  _createStore(rootReducer, enchancers)
 
-  return _createStore(rootReducer, enchancers)
+  sagaMiddleware.run(mainSaga)
+  return createdStore
 }
 
 export default createStore
