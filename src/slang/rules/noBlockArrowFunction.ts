@@ -1,21 +1,22 @@
 import * as es from 'estree'
 
-import { SourceError, Rule, ErrorSeverity, ErrorType } from '../types'
+import { ErrorSeverity, ErrorType, Rule, SourceError } from '../types'
 
 export class NoBlockArrowFunction implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
+
   constructor(public node: es.ArrowFunctionExpression) {}
 
   get location() {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     return 'Function definition expressions may only end with an expression.'
   }
 
-  elaborate() {
+  public elaborate() {
     return this.explain()
   }
 }

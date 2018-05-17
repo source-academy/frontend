@@ -1,11 +1,11 @@
-import * as es from 'estree'
 import { stripIndent } from 'common-tags'
+import * as es from 'estree'
 
-import { SourceError, Rule, ErrorSeverity, ErrorType } from '../types'
+import { ErrorSeverity, ErrorType, Rule, SourceError } from '../types'
 
 export class NoImplicitReturnUndefinedError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
 
   constructor(public node: es.ReturnStatement) {}
 
@@ -13,11 +13,11 @@ export class NoImplicitReturnUndefinedError implements SourceError {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     return 'Missing value in return statement'
   }
 
-  elaborate() {
+  public elaborate() {
     return stripIndent`
       This return statement is missing a value.
       For instance, to return the value 42, you can write

@@ -1,6 +1,6 @@
 import * as es from 'estree'
 
-import { SourceError, Rule, ErrorSeverity, ErrorType } from '../types'
+import { ErrorSeverity, ErrorType, Rule, SourceError } from '../types'
 
 const reservedNames = [
   'break',
@@ -50,9 +50,9 @@ const reservedNames = [
   'false'
 ]
 
-export class noDeclareReservedError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
+export class NoDeclareReservedError implements SourceError {
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
 
   constructor(public node: es.VariableDeclaration) {}
 
@@ -60,13 +60,13 @@ export class noDeclareReservedError implements SourceError {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     return (
       `Reserved word '${(this.node.declarations[0].id as any).name}'` + ' is not allowed as a name'
     )
   }
 
-  elaborate() {
+  public elaborate() {
     return this.explain()
   }
 }
@@ -77,7 +77,7 @@ const noDeclareReserved: Rule<es.VariableDeclaration> = {
   checkers: {
     VariableDeclaration(node: es.VariableDeclaration) {
       if (reservedNames.includes((node.declarations[0].id as any).name)) {
-        return [new noDeclareReservedError(node)]
+        return [new NoDeclareReservedError(node)]
       } else {
         return []
       }

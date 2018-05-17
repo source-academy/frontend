@@ -1,10 +1,10 @@
 import * as es from 'estree'
 
-import { SourceError, Rule, ErrorSeverity, ErrorType } from '../types'
+import { ErrorSeverity, ErrorType, Rule, SourceError } from '../types'
 
 export class StrictEqualityError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
 
   constructor(public node: es.BinaryExpression) {}
 
@@ -12,7 +12,7 @@ export class StrictEqualityError implements SourceError {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     if (this.node.operator === '==') {
       return 'Use === instead of =='
     } else {
@@ -20,7 +20,7 @@ export class StrictEqualityError implements SourceError {
     }
   }
 
-  elaborate() {
+  public elaborate() {
     return '== and != is not a valid operator'
   }
 }

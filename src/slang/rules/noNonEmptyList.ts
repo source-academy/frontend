@@ -1,10 +1,10 @@
 import * as es from 'estree'
 
-import { SourceError, Rule, ErrorSeverity, ErrorType } from '../types'
+import { ErrorSeverity, ErrorType, Rule, SourceError } from '../types'
 
 export class NoNonEmptyListError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
 
   constructor(public node: es.ArrayExpression) {}
 
@@ -12,11 +12,11 @@ export class NoNonEmptyListError implements SourceError {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     return 'Only empty list notation ([]) is allowed'
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }

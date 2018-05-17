@@ -1,10 +1,10 @@
 import * as es from 'estree'
 
-import { SourceError, Rule, ErrorSeverity, ErrorType } from '../types'
+import { ErrorSeverity, ErrorType, Rule, SourceError } from '../types'
 
 export class BracesAroundWhileError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
 
   constructor(public node: es.WhileStatement) {}
 
@@ -12,11 +12,11 @@ export class BracesAroundWhileError implements SourceError {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     return 'Missing curly braces around "while" block'
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }

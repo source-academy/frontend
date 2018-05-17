@@ -1,11 +1,11 @@
-import * as es from 'estree'
 import { generate } from 'astring'
+import * as es from 'estree'
 
-import { SourceError, Rule, ErrorSeverity, ErrorType } from '../types'
+import { ErrorSeverity, ErrorType, Rule, SourceError } from '../types'
 
 export class MultipleDeclarationsError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
   private fixs: es.VariableDeclaration[]
 
   constructor(public node: es.VariableDeclaration) {
@@ -21,11 +21,11 @@ export class MultipleDeclarationsError implements SourceError {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     return 'Multiple declaration in a single statement'
   }
 
-  elaborate() {
+  public elaborate() {
     const fixs = this.fixs.map(n => '\t' + generate(n)).join('\n')
     return 'Split the variable declaration into multiple lines as follows\n\n' + fixs + '\n'
   }

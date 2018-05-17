@@ -1,12 +1,12 @@
 import * as es from 'estree'
 
-import { SourceError, Rule, ErrorSeverity, ErrorType } from '../types'
+import { ErrorSeverity, ErrorType, Rule, SourceError } from '../types'
 
 const mutableDeclarators = ['let', 'var']
 
-export class noDeclareMutableError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
+export class NoDeclareMutableError implements SourceError {
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
 
   constructor(public node: es.VariableDeclaration) {}
 
@@ -14,13 +14,13 @@ export class noDeclareMutableError implements SourceError {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     return (
       'Mutable variable declaration using keyword ' + `'${this.node.kind}'` + ' is not allowed.'
     )
   }
 
-  elaborate() {
+  public elaborate() {
     return this.explain()
   }
 }
@@ -31,7 +31,7 @@ const noDeclareMutable: Rule<es.VariableDeclaration> = {
   checkers: {
     VariableDeclaration(node: es.VariableDeclaration) {
       if (mutableDeclarators.includes(node.kind)) {
-        return [new noDeclareMutableError(node)]
+        return [new NoDeclareMutableError(node)]
       } else {
         return []
       }

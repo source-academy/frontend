@@ -1,23 +1,24 @@
+import { generate } from 'astring'
 import { stripIndent } from 'common-tags'
 import * as es from 'estree'
-import { generate } from 'astring'
 
-import { SourceError, Rule, ErrorSeverity, ErrorType } from '../types'
+import { ErrorSeverity, ErrorType, Rule, SourceError } from '../types'
 
 export class NoIfWithoutElseError implements SourceError {
-  type = ErrorType.SYNTAX
-  severity = ErrorSeverity.ERROR
+  public type = ErrorType.SYNTAX
+  public severity = ErrorSeverity.ERROR
+
   constructor(public node: es.IfStatement) {}
 
   get location() {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     return 'Missing "else" in "if-else" statement'
   }
 
-  elaborate() {
+  public elaborate() {
     return stripIndent`
       This "if" block requires corresponding "else" block which will be
       evaluated when ${generate(this.node.test)} expression evaluates to false.
