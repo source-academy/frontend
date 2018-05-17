@@ -29,7 +29,7 @@ function createStore(history: History): Store<IState> {
     router: routerReducer
   })
   const enchancers = composeEnhancers(applyMiddleware(...middleware))
-  const createdStore =  _createStore(rootReducer, enchancers)
+  const createdStore = _createStore(rootReducer, enchancers)
 
   sagaMiddleware.run(mainSaga)
   return createdStore

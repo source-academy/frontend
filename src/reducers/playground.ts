@@ -2,10 +2,6 @@ import { Action, Reducer } from 'redux'
 import { IUpdateEditorValue } from '../actions'
 import { UPDATE_EDITOR_VALUE } from '../actions/actionTypes'
 
-/**
- * A state for the playground container
- * @property editorValue - The string content of the react-ace editor
- */
 export interface IPlaygroundState {
   editorValue: string
 }
@@ -27,7 +23,7 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultState, action:
     case UPDATE_EDITOR_VALUE:
       return {
         ...state,
-        editorValue: (action as IUpdateEditorValue).newEditorValue
+        editorValue: (action as IUpdateEditorValue).payload
       }
     default:
       return state

@@ -114,7 +114,9 @@ export interface Context {
 }
 
 // tslint:disable:no-any
-export interface Environment{ [name: string]: any }
+export interface Environment {
+  [name: string]: any
+}
 export type Value = any
 // tslint:enable:no-any
 

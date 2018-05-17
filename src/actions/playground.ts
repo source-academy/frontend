@@ -8,8 +8,7 @@ import * as actionTypes from './actionTypes'
  * @property newEditorValue - The new string value for `editorValue`
  */
 export interface IUpdateEditorValue extends Action {
-  type: string
-  newEditorValue: string
+  payload: string
 }
 
 /**
@@ -18,5 +17,5 @@ export interface IUpdateEditorValue extends Action {
  */
 export const updateEditorValue: ActionCreator<IUpdateEditorValue> = (newEditorValue: string) => ({
   type: actionTypes.UPDATE_EDITOR_VALUE,
-  newEditorValue
+  payload: newEditorValue
 })
