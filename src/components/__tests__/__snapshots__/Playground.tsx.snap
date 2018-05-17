@@ -5,6 +5,6 @@ exports[`Playground renders correctly 1`] = `
   <h2>
     Playground
   </h2>
-  <ReactAce height=\\"90%\\" width=\\"90%\\" mode=\\"javascript\\" theme=\\"github\\" value=\\"\\" onChange={[Function: handleEditorChange]} name=\\"brace-editor\\" focus={false} fontSize={12} showGutter={true} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} maxLines={{...}} readOnly={false} highlightActiveLine={true} showPrintMargin={true} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} setOptions={{...}} wrapEnabled={false} enableBasicAutocompletion={false} enableLiveAutocompletion={false} />
+  <Connect(Editor) />
 </div>"
 `;

@@ -6,7 +6,7 @@ exports[`Application renders correctly 1`] = `
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/dashboard\\" component={[Function: Connect]} />
-      <Route path=\\"/playground\\" component={[Function: Connect]} />
+      <Route path=\\"/playground\\" component={[Function: Playground]} />
       <Route exact={true} path=\\"/\\" component={[Function: redirectToDashboard]} />
       <Route component={[Function: NotFound]} />
     </Switch>
