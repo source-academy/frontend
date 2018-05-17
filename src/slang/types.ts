@@ -1,5 +1,7 @@
-import * as es from 'estree'
+/* tslint:disable:interface-name max-classes-per-file */
+
 import { SourceLocation } from 'acorn'
+import * as es from 'estree'
 
 import { closureToJS } from './interop'
 
@@ -30,9 +32,10 @@ export interface Rule<T extends es.Node> {
   }
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace CFG {
   // tslint:disable-next-line:no-shadowed-variable
-  export type Scope = {
+  export interface Scope {
     name: string
     parent?: Scope
     entry?: Vertex
@@ -45,14 +48,14 @@ export namespace CFG {
     }
   }
 
-  export type Vertex = {
+  export interface Vertex {
     id: string
     node: es.Node
     scope?: Scope
     usages: Sym[]
   }
 
-  export type Sym = {
+  export interface Sym {
     name: string
     defined?: boolean
     definedAt?: es.SourceLocation
@@ -60,7 +63,7 @@ export namespace CFG {
     proof?: es.Node
   }
 
-  export type Type = {
+  export interface Type {
     name: 'number' | 'string' | 'boolean' | 'function' | 'undefined' | 'any'
     params?: Type[]
     returnType?: Type
@@ -68,13 +71,13 @@ export namespace CFG {
 
   export type EdgeLabel = 'next' | 'alternate' | 'consequent'
 
-  export type Edge = {
+  export interface Edge {
     type: EdgeLabel
     to: Vertex
   }
 }
 
-export type Comment = {
+export interface Comment {
   type: 'Line' | 'Block'
   value: string
   start: number
@@ -88,7 +91,7 @@ export interface TypeError extends SourceError {
   proof?: es.Node
 }
 
-export type Context = {
+export interface Context {
   /** The source version used */
   week: number
 
@@ -111,7 +114,7 @@ export type Context = {
 }
 
 // tslint:disable:no-any
-export type Environment = { [name: string]: any }
+export interface Environment{ [name: string]: any }
 export type Value = any
 // tslint:enable:no-any
 
@@ -134,6 +137,7 @@ export class Closure {
   public name: string
 
   /** Fake closure function */
+  // tslint:disable-next-line:ban-types
   public fun: Function
 
   constructor(public node: es.FunctionExpression, public frame: Frame, context: Context) {
@@ -160,6 +164,7 @@ export class ArrowClosure {
   public name: string
 
   /** Fake closure function */
+  // tslint:disable-next-line:ban-types
   public fun: Function
 
   constructor(public node: es.Function, public frame: Frame, context: Context) {
@@ -168,16 +173,16 @@ export class ArrowClosure {
   }
 }
 
-type Error = {
+interface Error {
   status: 'error'
 }
 
-export type Finished = {
+export interface Finished {
   status: 'finished'
   value: Value
 }
 
-type Suspended = {
+interface Suspended {
   status: 'suspended'
   it: IterableIterator<Value>
   scheduler: Scheduler
