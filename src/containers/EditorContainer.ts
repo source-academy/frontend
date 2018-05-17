@@ -3,7 +3,7 @@ import { Dispatch } from 'redux'
 
 import { evalEditor, updateEditorValue } from '../actions/playground'
 import Editor, { IEditorProps } from '../components/Editor'
-import { IState } from '../reducers'
+import { IState } from '../reducers/states'
 
 type StateProps = Pick<IEditorProps, 'editorValue'>
 type DispatchProps = Pick<IEditorProps, 'handleEditorChange'> &

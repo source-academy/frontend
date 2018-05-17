@@ -8,7 +8,8 @@ import {
   Store,
   StoreEnhancer
 } from 'redux'
-import reducers, { IState } from './reducers'
+import reducers from './reducers'
+import { IState } from './reducers/states'
 
 import createSagaMiddleware from 'redux-saga'
 import mainSaga from './sagas'

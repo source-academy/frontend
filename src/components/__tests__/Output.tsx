@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import { ResultOutput } from '../../reducers/playground'
+import { ResultOutput } from '../../reducers/states'
 import Output from '../Output'
 
 test('Output renders correctly', () => {
