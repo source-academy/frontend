@@ -1,3 +1,4 @@
+/* tslint:disable: max-classes-per-file */
 import { Options as AcornOptions, parse as acornParse, Position } from 'acorn'
 import { simple } from 'acorn/dist/walk'
 import { stripIndent } from 'common-tags'
@@ -7,7 +8,8 @@ import rules from './rules'
 import syntaxTypes from './syntaxTypes'
 import { Context, ErrorSeverity, ErrorType, SourceError } from './types'
 
-export type ParserOptions = {
+/* tslint:disable:interface-name */
+export interface ParserOptions {
   week: number
 }
 
@@ -24,11 +26,11 @@ export class DisallowedConstructError implements SourceError {
     return this.node.loc!
   }
 
-  explain() {
+  public explain() {
     return `${this.nodeType} is not allowed`
   }
 
-  elaborate() {
+  public elaborate() {
     return stripIndent`
       You are trying to use ${this.nodeType}, which is not yet allowed (yet).
     `
@@ -56,11 +58,11 @@ export class FatalSyntaxError implements SourceError {
   public severity = ErrorSeverity.ERROR
   public constructor(public location: es.SourceLocation, public message: string) {}
 
-  explain() {
+  public explain() {
     return this.message
   }
 
-  elaborate() {
+  public elaborate() {
     return 'There is a syntax error in your program'
   }
 }
@@ -70,11 +72,11 @@ export class MissingSemicolonError implements SourceError {
   public severity = ErrorSeverity.ERROR
   public constructor(public location: es.SourceLocation) {}
 
-  explain() {
+  public explain() {
     return 'Missing semicolon at the end of statement'
   }
 
-  elaborate() {
+  public elaborate() {
     return 'Every statement must be terminated by a semicolon.'
   }
 }
@@ -84,11 +86,11 @@ export class TrailingCommaError implements SourceError {
   public severity: ErrorSeverity.WARNING
   public constructor(public location: es.SourceLocation) {}
 
-  explain() {
+  public explain() {
     return 'Trailing comma'
   }
 
-  elaborate() {
+  public elaborate() {
     return 'Please remove the trailing comma'
   }
 }
@@ -176,7 +178,7 @@ rules.forEach(rule => {
 })
 
 export const parse = (source: string, context: Context) => {
-  let program: es.Program | undefined = undefined
+  let program: es.Program | undefined
   try {
     program = acornParse(source, createAcornParserOptions(context))
     simple(program, walkers, undefined, context)
