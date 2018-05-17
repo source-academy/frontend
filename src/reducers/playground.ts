@@ -15,7 +15,7 @@ export interface IPlaygroundState {
 export const defaultState: IPlaygroundState = {
   editorValue: '',
   context: createContext(),
-  output: []
+  output: ['Default output text']
 }
 
 /**
