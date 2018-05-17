@@ -1,8 +1,8 @@
 /**
  * Utility functions to work with the AST (Abstract Syntax Tree)
  */
+import { SimpleWalker, Walker } from 'acorn/dist/walk'
 import * as es from 'estree'
-import { Walker, SimpleWalker } from 'acorn/dist/walk'
 import { Closure, Value } from '../types'
 
 /**
