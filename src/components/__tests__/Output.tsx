@@ -1,12 +1,12 @@
+import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import { shallow } from 'enzyme'
-
+import { ResultOutput } from '../../reducers/playground'
 import Output from '../Output'
 
 test('Output renders correctly', () => {
   const props = {
-    output: ['abc', 'def', 'ghi']
+    output: [{ type: 'result', value: 'abc' } as ResultOutput]
   }
   const app = <Output {...props} />
   const tree = shallow(app)

@@ -6,10 +6,34 @@ import {
 } from '../actions/actionTypes'
 import { Context, createContext } from '../slang'
 
+export type CodeOutput = {
+  type: 'code'
+  value: string
+}
+
+export type ResultOutput = {
+  type: 'result'
+  value: any
+  runtime?: number
+  isProgram?: boolean
+}
+
+export type ErrorOutput = {
+  type: 'errors'
+  errors: any[]
+}
+
+export type LogOutput = {
+  type: 'log'
+  value: string
+}
+
+export type InterpreterOutput = CodeOutput | ResultOutput | ErrorOutput | LogOutput
+
 export interface IPlaygroundState {
   editorValue: string
   context: Context
-  output: string[]
+  output: InterpreterOutput[]
 }
 
 /**
@@ -18,7 +42,7 @@ export interface IPlaygroundState {
 export const defaultState: IPlaygroundState = {
   editorValue: '',
   context: createContext(),
-  output: ['Default output text']
+  output: [{ type: 'result', value: 'Default output text' }]
 }
 
 /**
@@ -35,7 +59,7 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultState, action:
       }
     case EVAL_INTERPRETER_SUCCESS:
       const outputClone = state.output.slice(0)
-      outputClone.push(action.payload as string)
+      outputClone.push(action.payload as InterpreterOutput)
       return {
         ...state,
         output: outputClone

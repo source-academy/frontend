@@ -6,12 +6,12 @@ export const evalInterpreter = (code: string) => ({
   payload: code
 })
 
-export const evalInterpreterSuccess = (value: Value) => ({
+export const evalInterpreterSuccess = (val: Value) => ({
   type: actionTypes.EVAL_INTERPRETER_SUCCESS,
-  payload: value
+  payload: { type: 'result', value: val }
 })
 
 export const evalInterpreterError = (errors: SourceError[]) => ({
   type: actionTypes.EVAL_INTERPRETER_ERROR,
-  payload: errors
+  payload: { type: 'errors', errors: errors.map(e => e.explain()).concat() }
 })
