@@ -2,17 +2,10 @@ import * as React from 'react'
 
 import { shallow } from 'enzyme'
 
-import Playground from '../Playground'
-import { IPlaygroundProps as PlaygroundProps } from '../Playground'
+import { Playground } from '../Playground'
 
 test('Playground renders correctly', () => {
-  const props: PlaygroundProps = {
-    editorValue: '',
-    handleEditorChange: (newCode: string) => {
-      return
-    }
-  }
-  const app = <Playground {...props} />
+  const app = <Playground />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })

@@ -2,19 +2,16 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { Dispatch } from 'redux'
 
 import { updateEditorValue } from '../actions/playground'
-import {
-  default as PlaygroundComponent,
-  IPlaygroundProps as PlaygroundProps
-} from '../components/Playground'
+import { Editor, IEditorProps, Playground } from '../components/Playground'
 import { IState } from '../reducers'
 
-type StateProps = Pick<PlaygroundProps, 'editorValue'>
-type DispatchProps = Pick<PlaygroundProps, 'handleEditorChange'>
+type StateProps = Pick<IEditorProps, 'editorValue'>
+type DispatchProps = Pick<IEditorProps, 'handleEditorChange'>
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
  */
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
+const mapEditorStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
     editorValue: state.playground.editorValue
   }
@@ -24,7 +21,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
  * `updateEditorValue` with `newCode`, the updated contents of the react-ace
  * editor.
  */
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) => {
+const mapEditorDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) => {
   return {
     handleEditorChange: (newCode: string) => {
       dispatch(updateEditorValue(newCode))
@@ -32,4 +29,5 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlaygroundComponent)
+export default connect()(Playground)
+export const EditorContainer =  connect(mapEditorStateToProps, mapEditorDispatchToProps)(Editor)
