@@ -1,6 +1,9 @@
-import { Action, Reducer } from 'redux'
-import { IUpdateEditorValue } from '../actions'
-import { UPDATE_EDITOR_VALUE } from '../actions/actionTypes'
+import { Reducer } from 'redux'
+import {
+  EVAL_INTERPRETER_SUCCESS,
+  ILoadedAction,
+  UPDATE_EDITOR_VALUE
+} from '../actions/actionTypes'
 import { Context, createContext } from '../slang'
 
 export interface IPlaygroundState {
@@ -23,12 +26,19 @@ export const defaultState: IPlaygroundState = {
  *
  * UPDATE_EDITOR_VALUE: Update the `editorValue` property
  */
-export const reducer: Reducer<IPlaygroundState> = (state = defaultState, action: Action) => {
+export const reducer: Reducer<IPlaygroundState> = (state = defaultState, action: ILoadedAction) => {
   switch (action.type) {
     case UPDATE_EDITOR_VALUE:
       return {
         ...state,
-        editorValue: (action as IUpdateEditorValue).payload
+        editorValue: action.payload
+      }
+    case EVAL_INTERPRETER_SUCCESS:
+      const outputClone = state.output.slice(0)
+      outputClone.push(action.payload as string)
+      return {
+        ...state,
+        output: outputClone
       }
     default:
       return state

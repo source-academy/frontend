@@ -4,9 +4,7 @@ import AceEditor from 'react-ace'
 import 'brace/mode/javascript'
 import 'brace/theme/github'
 
-import {
-  Button, IconName, Intent
-} from '@blueprintjs/core'
+import { Button, IconName, Intent } from '@blueprintjs/core'
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -26,22 +24,22 @@ class Editor extends React.Component<IEditorProps, {}> {
     const genericButton = (
       label: string,
       icon: IconName,
-      handleClick = () => { },
+      handleClick = () => {},
       intent = Intent.NONE,
       notMinimal = false
-    ) =>
-      (<Button
+    ) => (
+      <Button
         onClick={handleClick}
-        className={notMinimal ? "" : "pt-minimal"}
+        className={notMinimal ? '' : 'pt-minimal'}
         intent={intent}
         icon={icon}
       >
         {label}
       </Button>
-      )
+    )
     const runButton = genericButton('Run', 'play', this.props.handleEvalEditor)
     return (
-      <> 
+      <>
         {runButton}
         <AceEditor
           height="90%"
