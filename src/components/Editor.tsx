@@ -10,9 +10,9 @@ import 'brace/theme/github'
 
 /**
  * @property editorValue - The string content of the react-ace editor
- * @property handleEditorChange  - A callback function 
+ * @property handleEditorChange  - A callback function
  *           for the react-ace editor's `onChange`
- * @property handleEvalEditor  - A callback function for evaluation 
+ * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
  */
 export interface IEditorProps {
@@ -21,10 +21,8 @@ export interface IEditorProps {
   handleEvalEditor: () => void
 }
 
-
 class Editor extends React.Component<IEditorProps, {}> {
   public render() {
-
     // const genericButton = (
     //   label: string,
     //   icon: IconName,

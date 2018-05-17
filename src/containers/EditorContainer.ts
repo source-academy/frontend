@@ -6,8 +6,8 @@ import Editor, { IEditorProps } from '../components/Editor'
 import { IState } from '../reducers'
 
 type StateProps = Pick<IEditorProps, 'editorValue'>
-type DispatchProps = Pick<IEditorProps, 'handleEditorChange'> 
-  & Pick<IEditorProps, 'handleEvalEditor'>
+type DispatchProps = Pick<IEditorProps, 'handleEditorChange'> &
+  Pick<IEditorProps, 'handleEvalEditor'>
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
