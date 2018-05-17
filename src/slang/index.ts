@@ -1,17 +1,17 @@
-import { Context, Scheduler, SourceError, Result } from './types'
 import createContext from './createContext'
+import { toString } from './interop'
 import { evaluate } from './interpreter'
 import { InterruptedError } from './interpreter-errors'
 import { parse } from './parser'
 import { AsyncScheduler, PreemptiveScheduler } from './schedulers'
-import { toString } from './interop'
+import { Context, Result, Scheduler, SourceError } from './types'
 
-export type Options = {
+export interface IOptions {
   scheduler: 'preemptive' | 'async'
   steps: number
 }
 
-const DEFAULT_OPTIONS: Options = {
+const DEFAULT_OPTIONS: IOptions = {
   scheduler: 'async',
   steps: 1000
 }
@@ -23,9 +23,9 @@ export class ParseError {
 export function runInContext(
   code: string,
   context: Context,
-  options: Partial<Options> = {}
+  options: Partial<IOptions> = {}
 ): Promise<Result> {
-  const theOptions: Options = { ...options, ...DEFAULT_OPTIONS }
+  const theOptions: IOptions = { ...options, ...DEFAULT_OPTIONS }
   context.errors = []
   const program = parse(code, context)
   if (program) {

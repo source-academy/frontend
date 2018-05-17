@@ -1,7 +1,7 @@
 import { generate } from 'astring'
-import { Closure, Context, Value } from './types'
-import { apply } from './interpreter'
 import { MAX_LIST_DISPLAY_LENGTH } from './constants'
+import { apply } from './interpreter'
+import { Closure, Context, Value } from './types'
 
 export const closureToJS = (value: Value, context: Context, klass: string) => {
   function DummyClass(this: Value) {
@@ -23,7 +23,7 @@ export const closureToJS = (value: Value, context: Context, klass: string) => {
       DummyClass.prototype.constructor = DummyClass
     }
   })
-  DummyClass.call = function(thisArg: Value, ...args: Value[]) {
+  DummyClass.call = (thisArg: Value, ...args: Value[]) => {
     return DummyClass.apply(thisArg, args)
   }
   return DummyClass

@@ -3,6 +3,7 @@ import { toString } from '../interop'
 
 export function display(value: Value) {
   const output = toString(value)
+  /* TODO: implement display for the playground
   if (typeof window.__REDUX_STORE__ !== 'undefined') {
     window.__REDUX_STORE__.dispatch({
       type: 'CREATE_INTERPRETER_OUTPUT',
@@ -11,9 +12,11 @@ export function display(value: Value) {
   } else {
     // tslint:disable-next-line:no-console
     console.log(output)
-  }
+  } */
+  // tslint:disable-next-line:no-console
+  console.log(output)
 }
-window.display = display
+// window.display = display
 display.__SOURCE__ = 'display(a)'
 
 export function error_message(value: Value) {

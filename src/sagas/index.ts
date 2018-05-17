@@ -1,10 +1,10 @@
 import { SagaIterator } from 'redux-saga'
-import { takeEvery, select, call, put, take, race } from 'redux-saga/effects'
+import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { showWarningMessage } from '../notification'
 import { IState } from '../reducers'
 
 // import { Shape } from '../shape'
-import { Context, createContext, runInContext, interrupt } from '../slang'
+import { Context, createContext, interrupt, runInContext } from '../slang'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'

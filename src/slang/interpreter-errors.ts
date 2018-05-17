@@ -1,68 +1,67 @@
-import * as es from 'estree'
 import { generate } from 'astring'
-import { Value, SourceError, ErrorType, ErrorSeverity } from './types'
-import { toString } from './interop'
+import * as es from 'estree'
 import { UNKNOWN_LOCATION } from './constants'
+import { toString } from './interop'
+import { ErrorSeverity, ErrorType, SourceError, Value } from './types'
 
 export class InterruptedError implements SourceError {
-  type = ErrorType.RUNTIME
-  severity = ErrorSeverity.ERROR
-  location: es.SourceLocation
+  public type = ErrorType.RUNTIME
+  public severity = ErrorSeverity.ERROR
+  public location: es.SourceLocation
 
   constructor(node: es.Node) {
     this.location = node.loc!
   }
 
-  explain() {
+  public explain() {
     return 'Execution aborted by user.'
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }
 
 export class ExceptionError implements SourceError {
-  type = ErrorType.RUNTIME
-  severity = ErrorSeverity.ERROR
+  public type = ErrorType.RUNTIME
+  public severity = ErrorSeverity.ERROR
 
   constructor(public error: Error, public location: es.SourceLocation) {}
 
-  explain() {
+  public explain() {
     return this.error.toString()
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }
 
 export class MaximumStackLimitExceeded implements SourceError {
-  type = ErrorType.RUNTIME
-  severity = ErrorSeverity.ERROR
-
-  location: es.SourceLocation
+  public type = ErrorType.RUNTIME
+  public severity = ErrorSeverity.ERROR
+  public location: es.SourceLocation
 
   constructor(node: es.Node, private calls: es.CallExpression[]) {
     this.location = node ? node.loc! : UNKNOWN_LOCATION
   }
 
-  explain() {
+  public explain() {
     return `
       Infinite recursion
       ${generate(this.calls[0])}..${generate(this.calls[1])}..${generate(this.calls[2])}..
     `
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }
 
 export class CallingNonFunctionValue implements SourceError {
-  type = ErrorType.RUNTIME
-  severity = ErrorSeverity.ERROR
-  location: es.SourceLocation
+  public type = ErrorType.RUNTIME
+  public severity = ErrorSeverity.ERROR
+  public location: es.SourceLocation
 
   constructor(private callee: Value, node?: es.Node) {
     if (node) {
@@ -72,65 +71,65 @@ export class CallingNonFunctionValue implements SourceError {
     }
   }
 
-  explain() {
+  public explain() {
     return `Calling non-function value ${toString(this.callee)}`
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }
 
 export class UndefinedVariable implements SourceError {
-  type = ErrorType.RUNTIME
-  severity = ErrorSeverity.ERROR
-  location: es.SourceLocation
+  public type = ErrorType.RUNTIME
+  public severity = ErrorSeverity.ERROR
+  public location: es.SourceLocation
 
   constructor(public name: string, node: es.Node) {
     this.location = node.loc!
   }
 
-  explain() {
+  public explain() {
     return `Undefined Variable ${this.name}`
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }
 
 export class InvalidNumberOfArguments implements SourceError {
-  type = ErrorType.RUNTIME
-  severity = ErrorSeverity.ERROR
-  location: es.SourceLocation
+  public type = ErrorType.RUNTIME
+  public severity = ErrorSeverity.ERROR
+  public location: es.SourceLocation
 
   constructor(node: es.Node, private expected: number, private got: number) {
     this.location = node.loc!
   }
 
-  explain() {
+  public explain() {
     return `Expected ${this.expected} arguments, but got ${this.got}`
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }
 
 export class VariableRedeclaration implements SourceError {
-  type = ErrorType.RUNTIME
-  severity = ErrorSeverity.ERROR
-  location: es.SourceLocation
+  public type = ErrorType.RUNTIME
+  public severity = ErrorSeverity.ERROR
+  public location: es.SourceLocation
 
   constructor(node: es.Node, private name: string) {
     this.location = node.loc!
   }
 
-  explain() {
+  public explain() {
     return `Redeclaring variable ${this.name}`
   }
 
-  elaborate() {
+  public elaborate() {
     return 'TODO'
   }
 }

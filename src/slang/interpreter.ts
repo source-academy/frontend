@@ -1,10 +1,10 @@
 import * as es from 'estree'
-import { ArrowClosure, Closure, Frame, Value, Context, SourceError, ErrorSeverity } from './types'
-import { toJS } from './interop'
-import { createNode } from './utils/node'
 import * as constants from './constants'
-import * as rttc from './utils/rttc'
+import { toJS } from './interop'
 import * as errors from './interpreter-errors'
+import { ArrowClosure, Closure, Context, ErrorSeverity, Frame, SourceError, Value } from './types'
+import { createNode } from './utils/node'
+import * as rttc from './utils/rttc'
 
 class ReturnValue {
   constructor(public value: Value) {}
@@ -125,7 +125,7 @@ export type Evaluator<T extends es.Node> = (node: T, context: Context) => Iterab
 
 export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   /** Simple Values */
-  Literal: function*(node: es.Literal, context: Context) {
+  Literal*(node: es.Literal, context: Context) {
     return node.value
   },
   ThisExpression: function*(node: es.ThisExpression, context: Context) {

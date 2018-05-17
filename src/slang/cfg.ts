@@ -1,10 +1,10 @@
-import * as invariant from 'invariant'
+import { base, recursive, Walker, Walkers } from 'acorn/dist/walk'
 import * as es from 'estree'
-import { recursive, Walkers, Walker, base } from 'acorn/dist/walk'
+import * as invariant from 'invariant'
 
-import { composeWalker } from './utils/node'
-import { Context, CFG } from './types'
 import { Types } from './constants'
+import { CFG, Context } from './types'
+import { composeWalker } from './utils/node'
 
 const freshLambda = (() => {
   let id = 0
@@ -16,7 +16,7 @@ const freshLambda = (() => {
 
 const walkers: Walkers<{}> = {}
 
-let nodeStack: Array<es.Node> = []
+let nodeStack: es.Node[] = []
 let scopeQueue: CFG.Scope[] = []
 let edgeLabel: CFG.EdgeLabel = 'next'
 

@@ -1,4 +1,4 @@
-import estree from 'estree'
+import * as estree from 'estree'
 
 declare module 'estree' {
   interface BaseNode {

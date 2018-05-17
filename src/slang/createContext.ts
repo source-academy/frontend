@@ -1,6 +1,6 @@
-import { Context, Value } from './types'
 import * as list from './stdlib/list'
 import * as misc from './stdlib/misc'
+import { Context, Value } from './types'
 
 const GLOBAL = typeof window === 'undefined' ? global : window
 
@@ -75,8 +75,8 @@ export const importBuiltins = (context: Context) => {
     defineSymbol(context, 'timed', misc.timed)
 
     // Define all Math libraries
-    let objs = Object.getOwnPropertyNames(Math)
-    for (let i in objs) {
+    const objs = Object.getOwnPropertyNames(Math)
+    for (const i in objs) {
       if (objs.hasOwnProperty(i)) {
         const val = objs[i]
         if (typeof Math[val] === 'function') {
@@ -115,7 +115,7 @@ export const importBuiltins = (context: Context) => {
     if (window.hasOwnProperty('ListVisualizer')) {
       defineSymbol(context, 'draw', (window as any).ListVisualizer.draw)
     } else {
-      defineSymbol(context, 'draw', function() {
+      defineSymbol(context, 'draw', () => {
         throw new Error('List visualizer is not enabled')
       })
     }

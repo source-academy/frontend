@@ -84,7 +84,7 @@ const createLiteralNode = (value: {}): es.Node => {
       value,
       raw: value,
       __id: freshId()
-    }
+    } as es.SimpleLiteral
   }
 }
 

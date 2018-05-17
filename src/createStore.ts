@@ -8,9 +8,10 @@ import {
   Store,
   StoreEnhancer
 } from 'redux'
+import reducers, { IState } from './reducers'
+
 import createSagaMiddleware from 'redux-saga'
 import mainSaga from './sagas'
-import reducers, { IState } from './reducers'
 
 declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>
 
