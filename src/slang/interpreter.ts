@@ -151,7 +151,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   *CallExpression(node: es.CallExpression, context: Context) {
     const callee = yield* evaluate(node.callee, context)
     const args = yield* getArgs(context, node)
-    let thisContext;
+    let thisContext
     if (node.callee.type === 'MemberExpression') {
       thisContext = yield* evaluate(node.callee.object, context)
     }
