@@ -5,7 +5,7 @@ import OutputContainer from '../containers/OutputContainer'
 
 const Playground: React.SFC<{}> = () => {
   return (
-    <div className="Playground">
+    <div className="Playground row">
       <h2>Playground</h2>
       <EditorContainer />
       <OutputContainer />
