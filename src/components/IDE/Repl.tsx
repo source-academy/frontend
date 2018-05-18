@@ -4,11 +4,11 @@ import { TextArea } from '@blueprintjs/core'
 
 import { InterpreterOutput, ResultOutput } from '../../reducers/states'
 
-export interface IOutputProps {
+export interface IReplProps {
   output: InterpreterOutput[]
 }
 
-const Output: React.SFC<IOutputProps> = props => (
+const Repl: React.SFC<IReplProps> = props => (
   <TextArea
     value={JSON.stringify((props.output.slice(-1)[0] as ResultOutput).value)}
     disabled={true}
@@ -16,4 +16,4 @@ const Output: React.SFC<IOutputProps> = props => (
   />
 )
 
-export default Output
+export default Repl

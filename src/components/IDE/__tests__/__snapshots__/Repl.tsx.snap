@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Repl renders correctly 1`] = `"<Blueprint2.TextArea value=\\"\\"abc\\"\\" disabled={true} className=\\"col-xs-6\\" />"`;

@@ -2,13 +2,13 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import { ResultOutput } from '../../../reducers/states'
-import Output from '../Output'
+import Repl from '../Repl'
 
-test('Output renders correctly', () => {
+test('Repl renders correctly', () => {
   const props = {
     output: [{ type: 'result', value: 'abc' } as ResultOutput]
   }
-  const app = <Output {...props} />
+  const app = <Repl {...props} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })

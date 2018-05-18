@@ -1,12 +1,12 @@
 import * as React from 'react'
 
 import EditorContainer from '../../containers/IDE/EditorContainer'
-import OutputContainer from '../../containers/IDE/OutputContainer'
+import ReplContainer from '../../containers/IDE/ReplContainer'
 
 const IDE: React.SFC<{}> = () => (
   <div className="IDE row">
     <EditorContainer />
-    <OutputContainer />
+    <ReplContainer />
   </div>
 )
 
