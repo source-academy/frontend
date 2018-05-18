@@ -30,7 +30,7 @@ class Editor extends React.Component<IEditorProps, {}> {
     ) => (
       <Button
         onClick={handleClick}
-        className={notMinimal ? '' : 'pt-minimal'}
+        className={(notMinimal ? '' : 'pt-minimal') + ' col-xs-12'}
         intent={intent}
         icon={icon}
       >

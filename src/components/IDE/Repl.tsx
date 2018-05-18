@@ -15,11 +15,11 @@ export interface IOutputProps {
 const Repl: React.SFC<IReplProps> = props => {
   let keyOutput = 0
   const cards = props.output.map(slice => <Output {...slice as ResultOutput} key={keyOutput++} />)
-  return <div>{cards}</div>
+  return <div className="col-xs-6">{cards}</div>
 }
 
 const Output: React.SFC<IOutputProps> = props => (
-  <Card className="col-xs-6">
+  <Card>
     <code>{props.value}</code>
   </Card>
 )
