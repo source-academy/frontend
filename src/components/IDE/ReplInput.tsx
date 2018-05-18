@@ -20,14 +20,16 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
         height="1px"
         value={this.props.replValue}
         onChange={this.props.handleReplChange}
-        commands={[{
-          name: 'evaluate',
-          bindKey: {
-            win: 'Shift-Enter',
-            mac: 'Shift-Enter'
-          },
-          exec: this.props.handleReplEval
-        }]}
+        commands={[
+          {
+            name: 'evaluate',
+            bindKey: {
+              win: 'Shift-Enter',
+              mac: 'Shift-Enter'
+            },
+            exec: this.props.handleReplEval
+          }
+        ]}
         minLines={1}
         maxLines={20}
         showGutter={false}
