@@ -3,6 +3,8 @@
 exports[`Repl renders correctly 1`] = `
 "<div className=\\"col-xs-12\\">
   <Output type=\\"result\\" value=\\"abc\\" />
-  <Connect(ReplInput) />
+  <div className=\\"row\\">
+    <Connect(ReplInput) />
+  </div>
 </div>"
 `;
