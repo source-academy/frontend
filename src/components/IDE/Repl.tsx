@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { Card } from '@blueprintjs/core'
+import ReplInputContainer from '../../containers/IDE/ReplInputContainer'
 import { InterpreterOutput, ResultOutput } from '../../reducers/states'
 import { toString } from '../../slang'
 
@@ -16,7 +17,12 @@ export interface IOutputProps {
 const Repl: React.SFC<IReplProps> = props => {
   let keyOutput = 0
   const cards = props.output.map(slice => <Output {...slice as ResultOutput} key={keyOutput++} />)
-  return <div className="col-xs-12">{cards}</div>
+  return (
+    <div className="col-xs-12">
+      {cards}
+      <ReplInputContainer key={keyOutput++} />
+    </div>
+  )
 }
 
 const Output: React.SFC<IOutputProps> = props => (
