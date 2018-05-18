@@ -3,7 +3,7 @@ import * as React from 'react'
 import AceEditor from 'react-ace'
 
 import 'brace/mode/javascript'
-import 'brace/theme/github'
+import 'brace/theme/terminal'
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -20,7 +20,7 @@ class Editor extends React.Component<IEditorProps, {}> {
     return (
       <AceEditor
         mode="javascript"
-        theme="github"
+        theme="terminal"
         value={this.props.editorValue}
         onChange={this.props.handleEditorChange}
         width="100%"
