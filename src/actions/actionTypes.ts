@@ -5,13 +5,14 @@ export interface IAction extends ReduxAction {
 }
 
 /** Playground */
-export const UPDATE_EDITOR_VALUE: string = 'UPDATE_EDITOR_VALUE'
-export const UPDATE_REPL_VALUE: string = 'UPDATE_REPL_VALUE'
+export const UPDATE_EDITOR_VALUE = 'UPDATE_EDITOR_VALUE'
+export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE'
 export const EVAL_EDITOR = 'EVAL_EDITOR'
 export const EVAL_REPL = 'EVAL_REPL'
+export const CLEAR_REPL = 'CLEAR_REPL'
 
 /** Interpreter */
 export const EVAL_INTERPRETER = 'EVAL_INTERPRETER'
 export const EVAL_INTERPRETER_SUCCESS = 'EVAL_INTERPRETER_SUCCESS'
 export const EVAL_INTERPRETER_ERROR = 'EVAL_INTERPRETER_ERROR'
-export const INTERRUPT_EXECUTION: string = 'INTERRUPT_EXECUTION'
+export const INTERRUPT_EXECUTION = 'INTERRUPT_EXECUTION'

@@ -18,3 +18,7 @@ export const evalEditor = () => ({
 export const evalRepl = () => ({
   type: actionTypes.EVAL_REPL
 })
+
+export const clearRepl = () => ({
+  type: actionTypes.CLEAR_REPL
+})
