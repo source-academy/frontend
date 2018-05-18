@@ -21,7 +21,7 @@ const Repl: React.SFC<IReplProps> = props => {
     <div className="col-xs-12">
       {cards}
       <div className="row">
-        <ReplInputContainer key={keyOutput++} />
+        <ReplInputContainer />
       </div>
     </div>
   )

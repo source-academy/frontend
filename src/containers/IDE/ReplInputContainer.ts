@@ -1,14 +1,19 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { default as ReplInput, IInputProps } from '../../components/IDE/ReplInput'
+import ReplInput, { IReplInputProps } from '../../components/IDE/ReplInput'
 import { IState } from '../../reducers/states'
 
-const mapStateToProps: MapStateToProps<{}, {}, IState> = state => {
-  return {}
+type StateProps = Pick<IReplInputProps, 'replValue'>
+type DispatchProps = Pick<IReplInputProps, 'handleEvalReplInput'>
+
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
+  return {
+    replValue: state.playground.replValue
+  }
 }
 
-const mapDispatchToProps: MapDispatchToProps<IInputProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
       handleEvalReplInput: (newCode: string) => {} // TODO: fill in
