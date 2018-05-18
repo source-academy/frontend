@@ -31,6 +31,7 @@ export type InterpreterOutput = CodeOutput | ResultOutput | ErrorOutput | LogOut
 
 export interface IPlaygroundState {
   readonly editorValue: string
+  readonly replValue: string
   readonly context: Context
   readonly output: InterpreterOutput[]
 }
@@ -64,6 +65,7 @@ export const defaultApplication: IApplicationState = {
 
 export const defaultPlayground: IPlaygroundState = {
   editorValue: '',
+  replValue: '',
   context: createContext(),
   output: [{ type: 'result', value: 'Default text' }]
 }
