@@ -30,9 +30,9 @@ export type LogOutput = {
 export type InterpreterOutput = CodeOutput | ResultOutput | ErrorOutput | LogOutput
 
 export interface IPlaygroundState {
-  editorValue: string
-  context: Context
-  output: InterpreterOutput[]
+  readonly editorValue: string
+  readonly context: Context
+  readonly output: InterpreterOutput[]
 }
 
 export interface IApplicationState {
