@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { Card } from '@blueprintjs/core'
 import { InterpreterOutput, ResultOutput } from '../../reducers/states'
+import { toString } from '../../slang'
 
 export interface IReplProps {
   output: InterpreterOutput[]
@@ -20,7 +21,7 @@ const Repl: React.SFC<IReplProps> = props => {
 
 const Output: React.SFC<IOutputProps> = props => (
   <Card>
-    <code>{props.value}</code>
+    <code>{toString(props.value)}</code>
   </Card>
 )
 
