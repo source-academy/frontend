@@ -10,7 +10,6 @@ export const UPDATE_REPL_VALUE: string = 'UPDATE_REPL_VALUE'
 export const EVAL_EDITOR = 'EVAL_EDITOR'
 export const EVAL_REPL = 'EVAL_REPL'
 
-
 /** Interpreter */
 export const EVAL_INTERPRETER = 'EVAL_INTERPRETER'
 export const EVAL_INTERPRETER_SUCCESS = 'EVAL_INTERPRETER_SUCCESS'
