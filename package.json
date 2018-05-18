@@ -15,7 +15,14 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
+    "coverage": "./scripts/coverage-fix.sh do && react-scripts-ts test --env=jsdom --coverage && ./scripts/coverage-fix.sh undo",
     "update-ui-snapshots": "jest --updateSnapshot"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format && CI=true yarn test",
+      "pre-push": "yarn format && CI=true yarn test"
+    }
   },
   "dependencies": {
     "@blueprintjs/core": "^2.1.1",
@@ -48,6 +55,7 @@
     "@types/redux-mock-store": "^0.0.13",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "husky": "^1.0.0-rc.6",
     "prettier": "^1.12.0",
     "react-scripts-ts": "^2.15.1",
     "react-test-renderer": "^16.3.1",
