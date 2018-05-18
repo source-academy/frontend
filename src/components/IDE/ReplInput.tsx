@@ -8,11 +8,7 @@ export interface IInputProps {
 
 class ReplInput extends React.Component<IInputProps, {}> {
   public render() {
-    return (
-      <EditableText
-        onConfirm={this.props.handleEvalReplInput}
-      />
-    )
+    return <EditableText onConfirm={this.props.handleEvalReplInput} />
   }
 }
 
