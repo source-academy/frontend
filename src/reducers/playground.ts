@@ -1,5 +1,6 @@
 import { Reducer } from 'redux'
 import {
+  CLEAR_REPL,
   EVAL_INTERPRETER_SUCCESS,
   IAction,
   UPDATE_EDITOR_VALUE,
@@ -18,6 +19,11 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         replValue: action.payload
+      }
+    case CLEAR_REPL:
+      return {
+        ...state,
+        replValue: ''
       }
     case EVAL_INTERPRETER_SUCCESS:
       const outputClone = state.output.slice(0)
