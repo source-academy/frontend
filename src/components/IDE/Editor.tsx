@@ -46,7 +46,7 @@ class Editor extends React.Component<IEditorProps, {}> {
           theme="github"
           value={this.props.editorValue}
           onChange={this.props.handleEditorChange}
-          className="col-xs-6"
+          width="100%"
         />
       </>
     )
