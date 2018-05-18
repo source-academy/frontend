@@ -9,7 +9,7 @@ export interface INavigationBarProps {
 
 const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
   <Navbar className="NavigationBar pt-dark">
-    <NavbarGroup>
+    <NavbarGroup className="pt-align-left">
       <NavbarHeading>{title}</NavbarHeading>
       <NavbarDivider />
       <NavLink
@@ -19,6 +19,17 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
       >
         <Icon icon="dashboard" />
         Dashboard
+      </NavLink>
+    </NavbarGroup>
+
+    <NavbarGroup className="pt-align-right">
+      <NavLink
+        to="/playground"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon="code" />
+        Playground
       </NavLink>
     </NavbarGroup>
   </Navbar>

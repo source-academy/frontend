@@ -10,6 +10,9 @@ export function mockInitialStore<P>(): Store<IState> {
     application: {
       title: 'Cadet',
       environment: ApplicationEnvironment.Development
+    },
+    playground: {
+      editorValue: ''
     }
   }
   return createStore(state)
