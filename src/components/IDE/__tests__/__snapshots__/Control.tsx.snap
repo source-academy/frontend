@@ -1,7 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Control renders correctly 1`] = `
-"<Blueprint2.Button onClick={[Function: handleEvalEditor]} className=\\"pt-minimal col-xs-12\\" intent=\\"none\\" icon=\\"play\\">
-  Run
-</Blueprint2.Button>"
+"<div className=\\"row between-xs\\">
+  <div className=\\"col-xs-1\\">
+    <Blueprint2.Button onClick={[Function: handleEvalEditor]} className=\\"pt-minimal col-xs-12\\" intent=\\"none\\" icon=\\"play\\">
+      Run
+    </Blueprint2.Button>
+  </div>
+  <div className=\\"col-xs-1\\">
+    <Blueprint2.Button onClick={[Function: handleEvalRepl]} className=\\"pt-minimal col-xs-12\\" intent=\\"none\\" icon=\\"play\\">
+      Eval
+    </Blueprint2.Button>
+  </div>
+</div>"
 `;
