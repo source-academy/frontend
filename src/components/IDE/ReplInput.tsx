@@ -6,6 +6,7 @@ import 'brace/theme/terminal'
 
 export interface IReplInputProps {
   replValue: string
+  handleReplChange: (newCode: string) => void
   handleEvalReplInput: (newCode: string) => void
 }
 
@@ -18,6 +19,7 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
         theme="terminal"
         height="1px"
         value={this.props.replValue}
+        onChange={this.props.handleReplChange}
         minLines={1}
         maxLines={20}
         showGutter={false}

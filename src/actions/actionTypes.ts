@@ -1,11 +1,12 @@
-import { Action } from 'redux'
+import { Action as ReduxAction } from 'redux'
 
-export interface ILoadedAction extends Action {
+export interface IAction extends ReduxAction {
   payload: any
 }
 
 /** Playground */
 export const UPDATE_EDITOR_VALUE: string = 'UPDATE_EDITOR_VALUE'
+export const UPDATE_REPL_VALUE: string = 'UPDATE_REPL_VALUE'
 export const EVAL_EDITOR = 'EVAL_EDITOR'
 export const EVAL_REPL = 'EVAL_REPL'
 
