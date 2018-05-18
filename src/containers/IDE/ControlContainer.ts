@@ -1,11 +1,12 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { evalEditor } from '../../actions/playground'
+import { evalEditor, evalRepl } from '../../actions/playground'
 import Control, { IControlProps } from '../../components/IDE/Control'
 import { IState } from '../../reducers/states'
 
 type DispatchProps = Pick<IControlProps, 'handleEvalEditor'>
+  & Pick<IControlProps, 'handleEvalRepl'>
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
@@ -18,7 +19,8 @@ const mapStateToProps: MapStateToProps<{}, {}, IState> = state => ({})
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleEvalEditor: evalEditor
+      handleEvalEditor: evalEditor,
+      handleEvalRepl: evalRepl
     },
     dispatch
   )

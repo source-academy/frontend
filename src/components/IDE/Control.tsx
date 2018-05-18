@@ -7,7 +7,8 @@ import { Button, IconName, Intent } from '@blueprintjs/core'
  *           of the editor's content, using `slang`
  */
 export interface IControlProps {
-  handleEvalEditor: () => void
+  handleEvalEditor: () => void,
+  handleEvalRepl: () => void
 }
 
 class Control extends React.Component<IControlProps, {}> {
@@ -28,7 +29,18 @@ class Control extends React.Component<IControlProps, {}> {
         {label}
       </Button>
     )
-    return genericButton('Run', 'play', this.props.handleEvalEditor)
+    const runButton = genericButton('Run', 'play', this.props.handleEvalEditor)
+    const evalButton = genericButton('Eval', 'play', this.props.handleEvalRepl)
+    return (
+      <div className="row between-xs">
+        <div className="col-xs-1">
+          { runButton }
+        </div>
+        <div className="col-xs-1">
+          { evalButton }
+        </div>
+      </div>
+    )
   }
 }
 

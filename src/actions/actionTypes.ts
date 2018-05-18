@@ -7,6 +7,8 @@ export interface ILoadedAction extends Action {
 /** Playground */
 export const UPDATE_EDITOR_VALUE: string = 'UPDATE_EDITOR_VALUE'
 export const EVAL_EDITOR = 'EVAL_EDITOR'
+export const EVAL_REPL = 'EVAL_REPL'
+
 
 /** Interpreter */
 export const EVAL_INTERPRETER = 'EVAL_INTERPRETER'

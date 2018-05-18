@@ -6,7 +6,8 @@ import Control, { IControlProps } from '../Control'
 
 test('Control renders correctly', () => {
   const props: IControlProps = {
-    handleEvalEditor: () => {}
+    handleEvalEditor: () => {},
+    handleEvalRepl: () => {}
   }
   const app = <Control {...props} />
   const tree = shallow(app)

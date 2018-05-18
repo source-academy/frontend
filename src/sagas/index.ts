@@ -36,6 +36,13 @@ function* interpreterSaga(): SagaIterator {
     context = createContext()
     yield* evalCode(code, context)
   })
+
+  yield takeEvery(actionTypes.EVAL_REPL, function*() {
+    const code: string = yield select((state: IState) => state.playground.replValue)
+    // context = createContext(library.week, library.externals)
+    context = createContext()
+    yield* evalCode(code, context)
+  })
 }
 
 function* mainSaga() {
