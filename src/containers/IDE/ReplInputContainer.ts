@@ -1,12 +1,12 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { updateReplValue } from '../../actions/playground'
+import { evalRepl, updateReplValue } from '../../actions/playground'
 import ReplInput, { IReplInputProps } from '../../components/IDE/ReplInput'
 import { IState } from '../../reducers/states'
 
 type StateProps = Pick<IReplInputProps, 'replValue'>
-type DispatchProps = Pick<IReplInputProps, 'handleEvalReplInput'> &
+type DispatchProps = Pick<IReplInputProps, 'handleReplEval'> &
   Pick<IReplInputProps, 'handleReplChange'>
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
@@ -19,7 +19,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleReplChange: updateReplValue,
-      handleEvalReplInput: (newCode: string) => {} // TODO: fill in
+      handleReplEval: evalRepl
     },
     dispatch
   )
