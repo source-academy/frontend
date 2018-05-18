@@ -1,14 +1,12 @@
 import * as React from 'react'
 
-import EditorContainer from '../containers/EditorContainer'
-import OutputContainer from '../containers/OutputContainer'
+import IDE from './IDE'
 
 const Playground: React.SFC<{}> = () => {
   return (
-    <div className="Playground row">
+    <div className="Playground">
       <h2>Playground</h2>
-      <EditorContainer />
-      <OutputContainer />
+      <IDE />
     </div>
   )
 }

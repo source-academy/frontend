@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { TextArea } from '@blueprintjs/core'
 
-import { InterpreterOutput, ResultOutput } from '../reducers/states'
+import { InterpreterOutput, ResultOutput } from '../../reducers/states'
 
 export interface IOutputProps {
   output: InterpreterOutput[]

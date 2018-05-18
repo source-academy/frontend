@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Editor renders correctly 1`] = `
+"<Symbol(react.fragment)>
+  <Blueprint2.Button onClick={[Function: handleEvalEditor]} className=\\"pt-minimal\\" intent=\\"none\\" icon=\\"play\\">
+    Run
+  </Blueprint2.Button>
+  <ReactAce mode=\\"javascript\\" theme=\\"github\\" value=\\"\\" onChange={[Function: handleEditorChange]} className=\\"col-xs-6\\" name=\\"brace-editor\\" focus={false} height=\\"500px\\" width=\\"500px\\" fontSize={12} showGutter={true} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} maxLines={{...}} readOnly={false} highlightActiveLine={true} showPrintMargin={true} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} setOptions={{...}} wrapEnabled={false} enableBasicAutocompletion={false} enableLiveAutocompletion={false} />
+</Symbol(react.fragment)>"
+`;

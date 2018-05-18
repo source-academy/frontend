@@ -1,7 +1,7 @@
 import { connect, MapStateToProps } from 'react-redux'
 
-import Output, { IOutputProps } from '../components/Output'
-import { IState } from '../reducers/states'
+import Output, { IOutputProps } from '../../components/IDE/Output'
+import { IState } from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<IOutputProps, {}, IState> = state => {
   return {

@@ -42,8 +42,6 @@ class Editor extends React.Component<IEditorProps, {}> {
       <>
         {runButton}
         <AceEditor
-          height="90%"
-          width="90%"
           mode="javascript"
           theme="github"
           value={this.props.editorValue}

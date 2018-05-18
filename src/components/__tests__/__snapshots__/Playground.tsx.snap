@@ -1,11 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Playground renders correctly 1`] = `
-"<div className=\\"Playground row\\">
+"<div className=\\"Playground\\">
   <h2>
     Playground
   </h2>
-  <Connect(Editor) />
-  <Connect(Output) />
+  <IDE />
 </div>"
 `;
