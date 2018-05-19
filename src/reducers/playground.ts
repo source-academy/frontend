@@ -1,5 +1,6 @@
 import { Reducer } from 'redux'
 import {
+  CLEAR_CONTEXT,
   CLEAR_REPL,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
@@ -7,6 +8,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
+import { createContext } from '../slang'
 import { defaultPlayground, ErrorOutput, IPlaygroundState, ResultOutput } from './states'
 
 export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, action: IAction) => {
@@ -26,6 +28,11 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         replValue: ''
+      }
+    case CLEAR_CONTEXT:
+      return {
+        ...state,
+        context: createContext()
       }
     case EVAL_INTERPRETER_SUCCESS:
       outputClone = state.output.slice(0)

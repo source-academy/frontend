@@ -4,7 +4,7 @@ import { showWarningMessage } from '../notification'
 import { IState } from '../reducers/states'
 
 // import { Shape } from '../shape'
-import { Context, createContext, interrupt, runInContext } from '../slang'
+import { Context, interrupt, runInContext } from '../slang'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
@@ -32,8 +32,8 @@ function* interpreterSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*() {
     const code: string = yield select((state: IState) => state.playground.editorValue)
-    // context = createContext(library.week, library.externals)
-    context = createContext()
+    yield put(actions.clearContext())
+    context = yield select((state: IState) => state.playground.context)
     yield* evalCode(code, context)
   })
 
