@@ -10,4 +10,5 @@
 
 .IDE .pt-card {
     font-family: Monospace;
+    white-space: pre-line;
 }
