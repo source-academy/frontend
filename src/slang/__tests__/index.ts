@@ -1,6 +1,6 @@
 import { stripIndent } from 'common-tags'
 import { mockContext } from '../../mocks/context'
-import { runInContext } from '../index'
+import { ParseError, runInContext } from '../index'
 import { Finished } from '../types'
 
 test('Empty code returns undefined', () => {
@@ -69,5 +69,16 @@ test('Factorial arrow function', () => {
     expect(obj).toMatchSnapshot()
     expect(obj.status).toBe('finished')
     expect((obj as Finished).value).toBe(120)
+  })
+})
+
+test('ParseError for missing semicolon', () => {
+  const code = '42'
+  const context = mockContext()
+  const promise = runInContext(code, context)
+  return promise.then(obj => {
+    const errors = new ParseError(context.errors)
+    expect(errors).toMatchSnapshot()
+    expect(errors.errorMessages).toMatchSnapshot()
   })
 })

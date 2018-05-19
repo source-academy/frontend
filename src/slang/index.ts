@@ -17,7 +17,16 @@ const DEFAULT_OPTIONS: IOptions = {
 }
 
 export class ParseError {
-  constructor(public errors: SourceError[]) {}
+  public errorMessages: string
+
+  constructor(public errors: SourceError[]) {
+    const errorMessagesArr = errors.map(error => {
+      const line = error.location ? error.location.start.line : '<unknown>'
+      const explanation = error.explain()
+      return `Line ${line}: ${explanation}`
+    })
+    this.errorMessages = errorMessagesArr.join('\n')
+  }
 }
 
 export function runInContext(
