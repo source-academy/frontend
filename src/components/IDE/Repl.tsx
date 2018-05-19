@@ -29,23 +29,11 @@ const Repl: React.SFC<IReplProps> = props => {
 export const Output: React.SFC<IOutputProps> = props => {
   switch (props.output.type) {
     case 'result':
-      return (
-        <Card>
-          <code>{toString(props.output.value)}</code>
-        </Card>
-      )
+      return <Card>{toString(props.output.value)}</Card>
     case 'errors':
-      return (
-        <Card>
-          <code>{new ParseError(props.output.errors).errorMessages}</code>
-        </Card>
-      )
+      return <Card>{new ParseError(props.output.errors).errorMessages}</Card>
     default:
-      return (
-        <Card>
-          <code>''</code>
-        </Card>
-      )
+      return <Card>''</Card>
   }
 }
 
