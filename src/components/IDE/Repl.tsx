@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Card } from '@blueprintjs/core'
 import ReplInputContainer from '../../containers/IDE/ReplInputContainer'
-import { InterpreterOutput, ResultOutput } from '../../reducers/states'
+import { InterpreterOutput } from '../../reducers/states'
 import { toString } from '../../slang'
 
 export interface IReplProps {
@@ -10,13 +10,12 @@ export interface IReplProps {
 }
 
 export interface IOutputProps {
-  type: string
-  value: string
+  output: InterpreterOutput
 }
 
 const Repl: React.SFC<IReplProps> = props => {
   let keyOutput = 0
-  const cards = props.output.map(slice => <Output {...slice as ResultOutput} key={keyOutput++} />)
+  const cards = props.output.map(slice => <Output {...{ output: slice }} key={keyOutput++} />)
   return (
     <div className="col-xs-12">
       {cards}
@@ -27,10 +26,27 @@ const Repl: React.SFC<IReplProps> = props => {
   )
 }
 
-const Output: React.SFC<IOutputProps> = props => (
-  <Card>
-    <code>{toString(props.value)}</code>
-  </Card>
-)
+export const Output: React.SFC<IOutputProps> = props => {
+  switch (props.output.type) {
+    case 'result':
+      return (
+        <Card>
+          <code>{toString(props.output.value)}</code>
+        </Card>
+      )
+    case 'errors':
+      return (
+        <Card>
+          <code>'Error'</code>
+        </Card>
+      )
+    default:
+      return (
+        <Card>
+          <code>''</code>
+        </Card>
+      )
+  }
+}
 
 export default Repl

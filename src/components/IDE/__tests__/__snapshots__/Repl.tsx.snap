@@ -1,8 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Output renders correctly for InterpreterOutput.type === 'result' 1`] = `
+"<Blueprint2.Card elevation={0} interactive={false}>
+  <code>
+    &quot;def&quot;
+  </code>
+</Blueprint2.Card>"
+`;
+
 exports[`Repl renders correctly 1`] = `
 "<div className=\\"col-xs-12\\">
-  <Output type=\\"result\\" value=\\"abc\\" />
+  <Component output={{...}} />
   <div className=\\"row\\">
     <Connect(ReplInput) />
   </div>
