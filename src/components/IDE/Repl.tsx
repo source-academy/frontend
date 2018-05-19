@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Card } from '@blueprintjs/core'
 import ReplInputContainer from '../../containers/IDE/ReplInputContainer'
 import { InterpreterOutput } from '../../reducers/states'
-import { toString } from '../../slang'
+import { ParseError, toString } from '../../slang'
 
 export interface IReplProps {
   output: InterpreterOutput[]
@@ -37,7 +37,7 @@ export const Output: React.SFC<IOutputProps> = props => {
     case 'errors':
       return (
         <Card>
-          <code>'Error'</code>
+          <code>{new ParseError(props.output.errors).errorMessages}</code>
         </Card>
       )
     default:

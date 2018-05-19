@@ -1,4 +1,5 @@
 import { Context, createContext } from '../slang'
+import { SourceError } from '../slang/types'
 
 export interface IState {
   readonly application: IApplicationState
@@ -19,7 +20,7 @@ export type ResultOutput = {
 
 export type ErrorOutput = {
   type: 'errors'
-  errors: any[]
+  errors: SourceError[]
 }
 
 export type LogOutput = {

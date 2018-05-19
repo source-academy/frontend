@@ -13,5 +13,5 @@ export const evalInterpreterSuccess = (val: Value) => ({
 
 export const evalInterpreterError = (errors: SourceError[]) => ({
   type: actionTypes.EVAL_INTERPRETER_ERROR,
-  payload: { type: 'errors', errors: errors.map(e => e.explain()).concat() }
+  payload: { type: 'errors', errors }
 })
