@@ -1,7 +1,7 @@
 import { Reducer } from 'redux'
 import {
   CLEAR_CONTEXT,
-  CLEAR_REPL,
+  CLEAR_REPL_INPUT,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   IAction,
@@ -24,7 +24,7 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
         ...state,
         replValue: action.payload
       }
-    case CLEAR_REPL:
+    case CLEAR_REPL_INPUT:
       return {
         ...state,
         replValue: ''

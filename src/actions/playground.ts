@@ -19,8 +19,8 @@ export const evalRepl = () => ({
   type: actionTypes.EVAL_REPL
 })
 
-export const clearRepl = () => ({
-  type: actionTypes.CLEAR_REPL
+export const clearReplInput = () => ({
+  type: actionTypes.CLEAR_REPL_INPUT
 })
 
 export const clearContext = () => ({

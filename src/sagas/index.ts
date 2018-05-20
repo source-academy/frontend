@@ -40,7 +40,7 @@ function* interpreterSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_REPL, function*() {
     const code: string = yield select((state: IState) => state.playground.replValue)
     context = yield select((state: IState) => state.playground.context)
-    yield put(actions.clearRepl())
+    yield put(actions.clearReplInput())
     yield* evalCode(code, context)
   })
 }
