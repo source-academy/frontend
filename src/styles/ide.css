@@ -1,9 +1,9 @@
-.Playground {
+.IDE {
     display: flex;
     flex-direction: column;
 }
 
-.Playground__main {
+.IDE_main {
     margin-top: 1rem;
     margin-left: 1rem;
 }
