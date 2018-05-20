@@ -43,6 +43,10 @@ function* interpreterSaga(): SagaIterator {
     yield put(actions.clearReplInput())
     yield* evalCode(code, context)
   })
+
+  yield takeEvery(actionTypes.CLEAR_REPL_OUTPUT, function*() {
+    yield put(actions.clearContext())
+  })
 }
 
 function* mainSaga() {
