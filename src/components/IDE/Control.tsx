@@ -9,6 +9,7 @@ import { Button, IconName, Intent } from '@blueprintjs/core'
 export interface IControlProps {
   handleEvalEditor: () => void
   handleEvalRepl: () => void
+  handleClearReplOutput: () => void
 }
 
 class Control extends React.Component<IControlProps, {}> {
@@ -31,10 +32,16 @@ class Control extends React.Component<IControlProps, {}> {
     )
     const runButton = genericButton('Run', 'play', this.props.handleEvalEditor)
     const evalButton = genericButton('Eval', 'play', this.props.handleEvalRepl)
+    const clearButton = genericButton('Clear', 'remove', this.props.handleClearReplOutput)
     return (
       <div className="row between-xs">
-        <div className="col-xs-1">{runButton}</div>
-        <div className="col-xs-1">{evalButton}</div>
+        <div className="col-xs-2">{runButton}</div>
+        <div className="col-xs-4">
+          <div className="row">
+            <div className="col-xs-6">{evalButton}</div>
+            <div className="col-xs-6">{clearButton}</div>
+          </div>
+        </div>
       </div>
     )
   }

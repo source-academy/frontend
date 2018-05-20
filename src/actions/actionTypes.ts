@@ -10,6 +10,7 @@ export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE'
 export const EVAL_EDITOR = 'EVAL_EDITOR'
 export const EVAL_REPL = 'EVAL_REPL'
 export const CLEAR_REPL_INPUT = 'CLEAR_REPL_INPUT'
+export const CLEAR_REPL_OUTPUT = 'CLEAR_REPL_OUTPUT'
 export const CLEAR_CONTEXT = 'CLEAR_CONTEXT'
 
 /** Interpreter */

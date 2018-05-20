@@ -2,6 +2,7 @@ import { Reducer } from 'redux'
 import {
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
+  CLEAR_REPL_OUTPUT,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   IAction,
@@ -28,6 +29,11 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         replValue: ''
+      }
+    case CLEAR_REPL_OUTPUT:
+      return {
+        ...state,
+        output: []
       }
     case CLEAR_CONTEXT:
       return {

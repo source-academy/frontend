@@ -23,6 +23,10 @@ export const clearReplInput = () => ({
   type: actionTypes.CLEAR_REPL_INPUT
 })
 
+export const clearReplOutput = () => ({
+  type: actionTypes.CLEAR_REPL_OUTPUT
+})
+
 export const clearContext = () => ({
   type: actionTypes.CLEAR_CONTEXT
 })
