@@ -14,8 +14,7 @@ export interface IOutputProps {
 }
 
 const Repl: React.SFC<IReplProps> = props => {
-  let keyOutput = 0
-  const cards = props.output.map(slice => <Output {...{ output: slice }} key={keyOutput++} />)
+  const cards = props.output.map((slice, index) => <Output output={slice} key={index} />)
   return (
     <div className="col-xs-12">
       {cards}
