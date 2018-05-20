@@ -16,17 +16,13 @@ const DEFAULT_OPTIONS: IOptions = {
   steps: 1000
 }
 
-export class ParseError {
-  public errorMessages: string
-
-  constructor(public errors: SourceError[]) {
-    const errorMessagesArr = errors.map(error => {
-      const line = error.location ? error.location.start.line : '<unknown>'
-      const explanation = error.explain()
-      return `Line ${line}: ${explanation}`
-    })
-    this.errorMessages = errorMessagesArr.join('\n')
-  }
+export function parseError(errors: SourceError[]): string {
+  const errorMessagesArr = errors.map(error => {
+    const line = error.location ? error.location.start.line : '<unknown>'
+    const explanation = error.explain()
+    return `Line ${line}: ${explanation}`
+  })
+  return errorMessagesArr.join('\n')
 }
 
 export function runInContext(

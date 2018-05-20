@@ -135,30 +135,6 @@ Object {
 }
 `;
 
-exports[`ParseError for missing semicolon 1`] = `
-ParseError {
-  "errorMessages": "Line 1: Missing semicolon at the end of statement",
-  "errors": Array [
-    MissingSemicolonError {
-      "location": Object {
-        "end": Object {
-          "column": 3,
-          "line": 1,
-        },
-        "start": Position {
-          "column": 2,
-          "line": 1,
-        },
-      },
-      "severity": "Error",
-      "type": "Syntax",
-    },
-  ],
-}
-`;
-
-exports[`ParseError for missing semicolon 2`] = `"Line 1: Missing semicolon at the end of statement"`;
-
 exports[`Single boolean self-evaluates to itself 1`] = `
 Object {
   "status": "finished",
@@ -179,3 +155,5 @@ Object {
   "value": "42",
 }
 `;
+
+exports[`parseError for missing semicolon 1`] = `"Line 1: Missing semicolon at the end of statement"`;
