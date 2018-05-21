@@ -31,6 +31,8 @@ export const Output: React.SFC<IOutputProps> = props => {
       return <Card>{toString(props.output.value)}</Card>
     case 'errors':
       return <Card>{parseError(props.output.errors)}</Card>
+    case 'code':
+      return <Card>{props.output.value}</Card>
     default:
       return <Card>''</Card>
   }

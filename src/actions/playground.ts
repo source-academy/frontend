@@ -11,6 +11,14 @@ export const updateReplValue: ActionCreator<actionTypes.IAction> = (newReplValue
   payload: newReplValue
 })
 
+export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (newOutput: string) => ({
+  type: actionTypes.SEND_REPL_INPUT_TO_OUTPUT,
+  payload: {
+    type: 'code',
+    value: newOutput
+  }
+})
+
 export const evalEditor = () => ({
   type: actionTypes.EVAL_EDITOR
 })

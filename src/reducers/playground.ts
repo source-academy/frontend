@@ -6,11 +6,18 @@ import {
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   IAction,
+  SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
 import { createContext } from '../slang'
-import { defaultPlayground, ErrorOutput, IPlaygroundState, ResultOutput } from './states'
+import {
+  CodeOutput,
+  defaultPlayground,
+  ErrorOutput,
+  IPlaygroundState,
+  ResultOutput
+} from './states'
 
 export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, action: IAction) => {
   let outputClone
@@ -39,6 +46,13 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         context: createContext()
+      }
+    case SEND_REPL_INPUT_TO_OUTPUT:
+      outputClone = state.output.slice(0)
+      outputClone.push(action.payload as CodeOutput)
+      return {
+        ...state,
+        output: outputClone
       }
     case EVAL_INTERPRETER_SUCCESS:
       outputClone = state.output.slice(0)
