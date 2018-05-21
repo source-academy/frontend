@@ -24,6 +24,7 @@ class Editor extends React.Component<IEditorProps, {}> {
         value={this.props.editorValue}
         onChange={this.props.handleEditorChange}
         width="100%"
+        height="100%"
         fontSize={14}
       />
     )

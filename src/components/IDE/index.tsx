@@ -6,12 +6,12 @@ import ReplContainer from '../../containers/IDE/ReplContainer'
 
 const IDE: React.SFC<{}> = () => (
   <div className="IDE">
-    <div className="row">
+    <div className="row button-parent">
       <div className="col-xs-12">
         <ControlContainer />
       </div>
     </div>
-    <div className="row">
+    <div className="row ide-content-parent">
       <div className="col-xs-6 editor-parent">
         <EditorContainer />
       </div>

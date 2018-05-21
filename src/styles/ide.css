@@ -8,6 +8,10 @@
     margin-left: 1rem;
 }
 
+.IDE > .ide-content-parent {
+    height: 85vh;
+}
+
 .IDE > .repl-parent {
     padding-right: 0px;
     padding-left: 0px;
