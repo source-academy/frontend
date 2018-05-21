@@ -19,7 +19,6 @@ class Editor extends React.Component<IEditorProps, {}> {
   public render() {
     return (
       <AceEditor
-        className="Editor col-xs-6"
         mode="javascript"
         theme="terminal"
         value={this.props.editorValue}

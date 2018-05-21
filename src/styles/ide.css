@@ -8,9 +8,15 @@
     margin-left: 1rem;
 }
 
+.IDE > .repl-parent {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
 .Repl > .pt-card {
     font-family: Monospace;
     white-space: pre-line;
+    padding: 0.7rem;
 }
 
 .IDE > .row {

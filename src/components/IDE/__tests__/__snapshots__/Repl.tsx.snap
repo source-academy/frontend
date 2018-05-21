@@ -7,10 +7,8 @@ exports[`Output renders correctly for InterpreterOutput.type === 'result' 1`] = 
 `;
 
 exports[`Repl renders correctly 1`] = `
-"<div className=\\"Repl col-xs-6\\">
+"<div className=\\"Repl\\">
   <Component output={{...}} />
-  <div className=\\"row\\">
-    <Connect(ReplInput) />
-  </div>
+  <Connect(ReplInput) />
 </div>"
 `;
