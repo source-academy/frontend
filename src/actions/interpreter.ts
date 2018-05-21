@@ -1,10 +1,6 @@
 import { SourceError, Value } from '../slang/types'
 import * as actionTypes from './actionTypes'
 
-export const makeRunningOutput = () => ({
-  type: actionTypes.MAKE_RUNNING_OUTPUT
-})
-
 export const handleConsoleLog = (log: string) => ({
   type: actionTypes.HANDLE_CONSOLE_LOG,
   payload: log
