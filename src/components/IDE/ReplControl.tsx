@@ -29,12 +29,12 @@ class ReplControl extends React.Component<IReplControlProps, {}> {
         {label}
       </Button>
     )
-    const evalButton = genericButton('Eval', 'play', this.props.handleEvalRepl)
-    const clearButton = genericButton('Clear', 'remove', this.props.handleClearReplOutput)
+    const evalButton = genericButton('', 'code', this.props.handleEvalRepl)
+    const clearButton = genericButton('', 'remove', this.props.handleClearReplOutput)
     return (
       <div className="row end-xs">
-        <div className="col-xs-6">{evalButton}</div>
-        <div className="col-xs-6">{clearButton}</div>
+        <div className="col-xs-1">{evalButton}</div>
+        <div className="col-xs-1">{clearButton}</div>
       </div>
     )
   }

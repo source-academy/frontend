@@ -38,10 +38,12 @@ class Editor extends React.Component<IEditorProps, {}> {
         {label}
       </Button>
     )
-    const runButton = genericButton('Run', 'play', this.props.handleEvalEditor)
+    const runButton = genericButton('', 'play', this.props.handleEvalEditor)
     return (
       <>
-        {runButton}
+        <div className="row end-xs">
+          <div className="col-xs-1">{runButton}</div>
+        </div>
         <AceEditor
           mode="javascript"
           theme="terminal"
