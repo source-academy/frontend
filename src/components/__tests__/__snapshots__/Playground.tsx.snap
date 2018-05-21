@@ -2,9 +2,6 @@
 
 exports[`Playground renders correctly 1`] = `
 "<div className=\\"Playground\\">
-  <h2>
-    Playground
-  </h2>
   <IDE />
 </div>"
 `;
