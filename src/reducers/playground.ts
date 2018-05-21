@@ -15,12 +15,13 @@ import {
   CodeOutput,
   defaultPlayground,
   ErrorOutput,
+  InterpreterOutput,
   IPlaygroundState,
   ResultOutput
 } from './states'
 
 export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, action: IAction) => {
-  let outputClone
+  let newOutput: InterpreterOutput[]
   switch (action.type) {
     case UPDATE_EDITOR_VALUE:
       return {
@@ -48,25 +49,22 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
         context: createContext()
       }
     case SEND_REPL_INPUT_TO_OUTPUT:
-      outputClone = state.output.slice(0)
-      outputClone.push(action.payload as CodeOutput)
+      newOutput = state.output.concat(action.payload as CodeOutput)
       return {
         ...state,
-        output: outputClone
+        output: newOutput
       }
     case EVAL_INTERPRETER_SUCCESS:
-      outputClone = state.output.slice(0)
-      outputClone.push(action.payload as ResultOutput)
+      newOutput = state.output.concat(action.payload as ResultOutput)
       return {
         ...state,
-        output: outputClone
+        output: newOutput
       }
     case EVAL_INTERPRETER_ERROR:
-      outputClone = state.output.slice(0)
-      outputClone.push(action.payload as ErrorOutput)
+      newOutput = state.output.concat(action.payload as ErrorOutput)
       return {
         ...state,
-        output: outputClone
+        output: newOutput
       }
     default:
       return state

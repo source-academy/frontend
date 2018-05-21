@@ -6,6 +6,18 @@ export interface IState {
   readonly playground: IPlaygroundState
 }
 
+export interface IApplicationState {
+  readonly title: string
+  readonly environment: ApplicationEnvironment
+}
+
+export interface IPlaygroundState {
+  readonly editorValue: string
+  readonly replValue: string
+  readonly context: Context
+  readonly output: InterpreterOutput[]
+}
+
 export type CodeOutput = {
   type: 'code'
   value: string
@@ -29,18 +41,6 @@ export type LogOutput = {
 }
 
 export type InterpreterOutput = CodeOutput | ResultOutput | ErrorOutput | LogOutput
-
-export interface IPlaygroundState {
-  readonly editorValue: string
-  readonly replValue: string
-  readonly context: Context
-  readonly output: InterpreterOutput[]
-}
-
-export interface IApplicationState {
-  readonly title: string
-  readonly environment: ApplicationEnvironment
-}
 
 export enum ApplicationEnvironment {
   Development = 'development',
