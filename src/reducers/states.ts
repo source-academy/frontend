@@ -68,5 +68,5 @@ export const defaultPlayground: IPlaygroundState = {
   editorValue: '',
   replValue: '',
   context: createContext(),
-  output: [{ type: 'result', value: 'Default text' }]
+  output: []
 }
