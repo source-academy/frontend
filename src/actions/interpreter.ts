@@ -24,3 +24,7 @@ export const evalInterpreterError = (errors: SourceError[]) => ({
   type: actionTypes.EVAL_INTERPRETER_ERROR,
   payload: { type: 'errors', errors }
 })
+
+export const handleInterruptExecution = () => ({
+  type: actionTypes.INTERRUPT_EXECUTION
+})
