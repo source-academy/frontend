@@ -8,7 +8,12 @@
     margin-left: 1rem;
 }
 
-.IDE .pt-card {
+.Repl > .pt-card {
     font-family: Monospace;
     white-space: pre-line;
+}
+
+.IDE > .row {
+    margin-right: 0px;
+    margin-left: 0px;
 }

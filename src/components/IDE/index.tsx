@@ -12,12 +12,8 @@ const IDE: React.SFC<{}> = () => (
       </div>
     </div>
     <div className="row">
-      <div className="col-xs-6">
-        <EditorContainer />
-      </div>
-      <div className="col-xs-6">
-        <ReplContainer />
-      </div>
+      <EditorContainer />
+      <ReplContainer />
     </div>
   </div>
 )
