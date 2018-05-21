@@ -1,29 +1,24 @@
 .IDE {
-    display: flex;
-    flex-direction: column;
-}
+  display: flex;
+  flex-direction: column;
 
-.IDE_main {
-    margin-top: 1rem;
-    margin-left: 1rem;
-}
-
-.IDE > .ide-content-parent {
+  .ide-content-parent {
     height: 85vh;
-}
+  }
 
-.IDE > .repl-parent {
+  .repl-parent {
     padding-right: 0px;
     padding-left: 0px;
-}
+  }
 
-.Repl > .pt-card {
+  .pt-card {
     font-family: Monospace;
     white-space: pre-line;
     padding: 0.7rem;
-}
+  }
 
-.IDE > .row {
+  .row {
     margin-right: 0px;
     margin-left: 0px;
+  }
 }
