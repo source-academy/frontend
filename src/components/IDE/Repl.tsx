@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { Card } from '@blueprintjs/core'
 import ReplInputContainer from '../../containers/IDE/ReplInputContainer'
+import ReplControlContainer from '../../containers/IDE/ReplControlContainer'
 import { InterpreterOutput } from '../../reducers/states'
 import { parseError, toString } from '../../slang'
 
@@ -17,6 +18,9 @@ const Repl: React.SFC<IReplProps> = props => {
   const cards = props.output.map((slice, index) => <Output output={slice} key={index} />)
   return (
     <div className="Repl col-xs-6">
+      <div className="row">
+        <ReplControlContainer />
+      </div>
       {cards}
       <div className="row">
         <ReplInputContainer />
