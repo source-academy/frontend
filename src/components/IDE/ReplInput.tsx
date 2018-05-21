@@ -32,6 +32,7 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
         ]}
         minLines={1}
         maxLines={20}
+        fontSize={14}
         showGutter={false}
       />
     )
