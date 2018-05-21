@@ -3,11 +3,13 @@ import { toString } from '../interop'
 import { Value } from '../types'
 
 import { handleConsoleLog } from '../../actions'
-import { store } from '../../index'
 
 export function display(value: Value) {
   const output = toString(value)
-  store.dispatch(handleConsoleLog(output))
+  // TODO in 2019: fix this hack
+  if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
+    ;(window as any).__REDUX_STORE__.dispatch(handleConsoleLog(output))
+  }
 }
 display.__SOURCE__ = 'display(a)'
 
