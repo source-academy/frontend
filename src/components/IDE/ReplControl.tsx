@@ -6,12 +6,12 @@ import { Button, IconName, Intent } from '@blueprintjs/core'
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
  */
-export interface IControlProps {
+export interface IReplControlProps {
   handleEvalRepl: () => void
   handleClearReplOutput: () => void
 }
 
-class Control extends React.Component<IControlProps, {}> {
+class ReplControl extends React.Component<IReplControlProps, {}> {
   public render() {
     const genericButton = (
       label: string,
@@ -29,21 +29,15 @@ class Control extends React.Component<IControlProps, {}> {
         {label}
       </Button>
     )
-    const runButton = genericButton('Run', 'play', this.props.handleEvalEditor)
     const evalButton = genericButton('Eval', 'play', this.props.handleEvalRepl)
     const clearButton = genericButton('Clear', 'remove', this.props.handleClearReplOutput)
     return (
-      <div className="row between-xs">
-        <div className="col-xs-2">{runButton}</div>
-        <div className="col-xs-4">
-          <div className="row">
-            <div className="col-xs-6">{evalButton}</div>
-            <div className="col-xs-6">{clearButton}</div>
-          </div>
-        </div>
+      <div className="row end-xs">
+        <div className="col-xs-6">{evalButton}</div>
+        <div className="col-xs-6">{clearButton}</div>
       </div>
     )
   }
 }
 
-export default Control
+export default ReplControl
