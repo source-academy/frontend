@@ -1,4 +1,7 @@
+@import "node_modules/@blueprintjs/core/lib/scss/variables.scss";
+
 .Application {
+    background: $dark-gray1;
     display: flex;
     flex-direction: column;
 }

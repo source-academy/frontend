@@ -1,0 +1,25 @@
+.IDE {
+  display: flex;
+  flex-direction: column;
+
+  .row {
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+
+  .ide-content-parent {
+    height: 85vh;
+  }
+
+  .Repl {
+    height: 100%;
+    overflow-y: auto;
+
+    .pt-card {
+      font-family: Monospace;
+      white-space: pre-line;
+      padding: 0.7rem;
+      margin: 0.3rem;
+    }
+  }
+}

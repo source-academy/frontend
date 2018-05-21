@@ -18,6 +18,7 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
         mode="javascript"
         theme="terminal"
         height="1px"
+        width="100%"
         value={this.props.replValue}
         onChange={this.props.handleReplChange}
         commands={[
@@ -32,6 +33,7 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
         ]}
         minLines={1}
         maxLines={20}
+        fontSize={14}
         showGutter={false}
       />
     )

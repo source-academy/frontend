@@ -12,8 +12,6 @@ exports[`Repl renders correctly 1`] = `
     <Connect(ReplControl) />
   </div>
   <Component output={{...}} />
-  <div className=\\"row\\">
-    <Connect(ReplInput) />
-  </div>
+  <Connect(ReplInput) />
 </div>"
 `;

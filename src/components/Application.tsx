@@ -16,7 +16,7 @@ const Application: React.SFC<IApplicationProps> = props => {
   const redirectToDashboard = () => <Redirect to="/dashboard" />
 
   return (
-    <div className="Application">
+    <div className="Application pt-dark">
       <NavigationBar title={props.title} />
       <div className="Application__main">
         <Switch>
