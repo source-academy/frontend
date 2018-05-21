@@ -13,7 +13,7 @@ import './styles/index.css'
 
 const rootContainer = document.getElementById('root') as HTMLElement
 const history = createBrowserHistory()
-const store = createStore(history)
+export const store = createStore(history)
 
 render(
   <Provider store={store}>

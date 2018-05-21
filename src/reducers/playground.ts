@@ -5,7 +5,9 @@ import {
   CLEAR_REPL_OUTPUT,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
+  HANDLE_CONSOLE_LOG,
   IAction,
+  MAKE_RUNNING_OUTPUT,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
@@ -17,11 +19,13 @@ import {
   ErrorOutput,
   InterpreterOutput,
   IPlaygroundState,
-  ResultOutput
+  ResultOutput,
+  RunningOutput
 } from './states'
 
 export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, action: IAction) => {
   let newOutput: InterpreterOutput[]
+  let lastOutput: RunningOutput
   switch (action.type) {
     case UPDATE_EDITOR_VALUE:
       return {
@@ -48,6 +52,22 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
         ...state,
         context: createContext()
       }
+    case MAKE_RUNNING_OUTPUT:
+      return {
+        ...state,
+        output: state.output.concat({
+          type: 'running',
+          consoleLogs: []
+        } as RunningOutput)
+      }
+    case HANDLE_CONSOLE_LOG:
+      lastOutput = state.output.slice(-1)[0] as RunningOutput
+      lastOutput.consoleLogs = lastOutput.consoleLogs.concat(action.payload)
+      newOutput = state.output.slice(0, -1).concat(lastOutput)
+      return {
+        ...state,
+        output: newOutput
+      }
     case SEND_REPL_INPUT_TO_OUTPUT:
       newOutput = state.output.concat(action.payload as CodeOutput)
       return {
@@ -55,13 +75,21 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
         output: newOutput
       }
     case EVAL_INTERPRETER_SUCCESS:
-      newOutput = state.output.concat(action.payload as ResultOutput)
+      lastOutput = state.output.slice(-1)[0] as RunningOutput
+      newOutput = state.output.slice(0, -1).concat({
+        ...action.payload,
+        consoleLogs: lastOutput.consoleLogs
+      } as ResultOutput)
       return {
         ...state,
         output: newOutput
       }
     case EVAL_INTERPRETER_ERROR:
-      newOutput = state.output.concat(action.payload as ErrorOutput)
+      lastOutput = state.output.slice(-1)[0] as RunningOutput
+      newOutput = state.output.slice(0, -1).concat({
+        ...action.payload,
+        consoleLogs: lastOutput.consoleLogs
+      } as ErrorOutput)
       return {
         ...state,
         output: newOutput

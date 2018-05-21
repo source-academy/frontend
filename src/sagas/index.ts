@@ -10,6 +10,7 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 
 function* evalCode(code: string, context: Context) {
+  yield put(actions.makeRunningOutput())
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context),
     interrupted: take(actionTypes.INTERRUPT_EXECUTION)

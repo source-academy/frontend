@@ -27,12 +27,22 @@ const Repl: React.SFC<IReplProps> = props => {
 
 export const Output: React.SFC<IOutputProps> = props => {
   switch (props.output.type) {
-    case 'result':
-      return <Card>{toString(props.output.value)}</Card>
-    case 'errors':
-      return <Card>{parseError(props.output.errors)}</Card>
     case 'code':
       return <Card>{props.output.value}</Card>
+    case 'running':
+      return <Card>{props.output.consoleLogs.join('\n')}</Card>
+    case 'result':
+      return (
+        <Card>
+          {[props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')}
+        </Card>
+      )
+    case 'errors':
+      return (
+        <Card>
+          {[props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')}
+        </Card>
+      )
     default:
       return <Card>''</Card>
   }
