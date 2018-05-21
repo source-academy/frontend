@@ -7,7 +7,6 @@ import { Button, IconName, Intent } from '@blueprintjs/core'
  *           of the editor's content, using `slang`
  */
 export interface IControlProps {
-  handleEvalEditor: () => void
   handleEvalRepl: () => void
   handleClearReplOutput: () => void
 }
