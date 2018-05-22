@@ -95,8 +95,8 @@ export const checkBinaryExpression = (
         return new TypeError(node, LHS, 'string or number', typeOf(left))
       }
     case '+':
-      if (isNumber(left) && !isNumber(right)) {
-        return new TypeError(node, RHS, 'number', typeOf(right))
+      if (isNumber(left)) {
+        return isNumber(right) ? undefined : new TypeError(node, RHS, 'number', typeOf(right))
       } else if (!isString(left) || !isString(right)) {
         // must have at least one side that is a string
         return new TypeError(node, LHS, 'string', typeOf(left))
