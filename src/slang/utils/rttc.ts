@@ -1,6 +1,9 @@
 import * as es from 'estree'
 import { Context, ErrorSeverity, ErrorType, SourceError, Value } from '../types'
 
+const LHS = ' on left hand side of operation'
+const RHS = ' on right hand side of operation'
+
 class TypeError implements SourceError {
   public type = ErrorType.RUNTIME
   public severity = ErrorSeverity.ERROR
@@ -22,47 +25,7 @@ class TypeError implements SourceError {
 const isNumber = (v: Value) => typeof v === 'number'
 const isString = (v: Value) => typeof v === 'string'
 const isBool = (v: Value) => typeof v === 'boolean'
-// const isAny = (v: Value) => true
-
-const checkAdditionAndComparison = (context: Context, left: Value, right: Value) => {
-  if (!(isNumber(left) || isString(left))) {
-    return new TypeError(
-      context.runtime.nodes[0],
-      ' in left hand side of operation',
-      'number or string',
-      typeof left
-    )
-  }
-  if (!(isNumber(right) || isString(right))) {
-    return new TypeError(
-      context.runtime.nodes[0],
-      ' in right hand side of operation',
-      'number or string',
-      typeof right
-    )
-  }
-  return
-}
-
-const checkBinaryArithmetic = (context: Context, left: Value, right: Value) => {
-  if (!isNumber(left)) {
-    return new TypeError(
-      context.runtime.nodes[0],
-      ' in left hand side of operation',
-      'number',
-      typeof left
-    )
-  }
-  if (!isNumber(left)) {
-    return new TypeError(
-      context.runtime.nodes[0],
-      ' in right hand side of operation',
-      'number',
-      typeof right
-    )
-  }
-  return
-}
+const isFunc = (v: Value) => typeof v === 'function'
 
 export const checkUnaryExpression = (
   context: Context,
@@ -88,20 +51,52 @@ export const checkBinaryExpression = (
   left: Value,
   right: Value
 ) => {
+  const node = context.runtime.nodes[0]
   switch (operator) {
     case '-':
     case '*':
     case '/':
     case '%':
-      return checkBinaryArithmetic(context, left, right)
+      if (!isNumber(left)) {
+        return new TypeError(node, LHS, 'number', typeof left)
+      } else if (!isNumber(right)) {
+        return new TypeError(node, RHS, 'number', typeof right)
+      } else {
+        return
+      }
     case '<':
     case '<=':
     case '>':
     case '>=':
+      if (isNumber(left) && !isNumber(right)) {
+        return new TypeError(node, RHS, 'number', typeof right)
+      } else if (isString(left) && !isString(right)) {
+        return new TypeError(node, RHS, 'string', typeof right)
+      } else {
+        return new TypeError(node, LHS, 'string or number', typeof left)
+      }
     case '+':
-      return checkAdditionAndComparison(context, left, right)
+      if (isNumber(left) && !isNumber(right)) {
+        return new TypeError(node, RHS, 'number', typeof right)
+      } else if (!isString(left) || !isString(right)) {
+        // must have at least one side that is a string
+        return new TypeError(node, LHS, 'string', typeof left)
+      } else {
+        return
+      }
     case '!==':
     case '===':
+      if (isNumber(left) && !isNumber(right)) {
+        return new TypeError(node, RHS, 'number', typeof right)
+      } else if (isBool(left) && !isBool(right)) {
+        return new TypeError(node, RHS, 'boolean', typeof right)
+      } else if (isString(left) && !isString(right)) {
+        return new TypeError(node, RHS, 'string', typeof right)
+      } else if (isFunc(left) && !isFunc(right)) {
+        return new TypeError(node, RHS, 'function', typeof right)
+      } else {
+        return
+      }
     default:
       return
   }
