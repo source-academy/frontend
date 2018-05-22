@@ -176,6 +176,13 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   },
   *UnaryExpression(node: es.UnaryExpression, context: Context) {
     const value = yield* evaluate(node.argument, context)
+
+    const error = rttc.checkUnaryExpression(context, node.operator, value)
+    if (error) {
+      handleError(context, error)
+      return undefined
+    }
+
     if (node.operator === '!') {
       return !value
     } else if (node.operator === '-') {
@@ -188,7 +195,11 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     const left = yield* evaluate(node.left, context)
     const right = yield* evaluate(node.right, context)
 
-    rttc.checkBinaryExpression(context, node.operator, left, right)
+    const error = rttc.checkBinaryExpression(context, node.operator, left, right)
+    if (error) {
+      handleError(context, error)
+      return undefined
+    }
 
     let result
     switch (node.operator) {
