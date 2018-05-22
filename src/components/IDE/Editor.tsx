@@ -5,7 +5,7 @@ import AceEditor from 'react-ace'
 import { Button, IconName, Intent } from '@blueprintjs/core'
 
 import 'brace/mode/javascript'
-import 'brace/theme/terminal'
+import 'brace/theme/cobalt'
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -47,7 +47,7 @@ class Editor extends React.Component<IEditorProps, {}> {
         <div className="row editor-react-ace">
           <AceEditor
             mode="javascript"
-            theme="terminal"
+            theme="cobalt"
             value={this.props.editorValue}
             onChange={this.props.handleEditorChange}
             width="100%"

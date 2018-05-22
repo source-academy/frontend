@@ -16,7 +16,7 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
       <AceEditor
         className="repl-react-ace"
         mode="javascript"
-        theme="terminal"
+        theme="cobalt"
         height="1px"
         width="100%"
         value={this.props.replValue}
