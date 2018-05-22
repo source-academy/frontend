@@ -40,20 +40,22 @@ class Editor extends React.Component<IEditorProps, {}> {
     )
     const runButton = genericButton('', 'play', this.props.handleEvalEditor)
     return (
-      <>
-        <div className="row end-xs">
+      <div className="Editor">
+        <div className="row editor-control end-xs">
           <div className="col-xs-1">{runButton}</div>
         </div>
-        <AceEditor
-          mode="javascript"
-          theme="terminal"
-          value={this.props.editorValue}
-          onChange={this.props.handleEditorChange}
-          width="100%"
-          height="100%"
-          fontSize={14}
-        />
-      </>
+        <div className="row react-ace">
+          <AceEditor
+            mode="javascript"
+            theme="terminal"
+            value={this.props.editorValue}
+            onChange={this.props.handleEditorChange}
+            width="100%"
+            height="100%"
+            fontSize={14}
+          />
+        </div>
+      </div>
     )
   }
 }
