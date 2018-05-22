@@ -1,5 +1,13 @@
 import * as es from 'estree'
-import { Context, ErrorSeverity, ErrorType, SourceError, Value } from '../types'
+import {
+  ArrowClosure,
+  Closure,
+  Context,
+  ErrorSeverity,
+  ErrorType,
+  SourceError,
+  Value
+} from '../types'
 
 const LHS = ' on left hand side of operation'
 const RHS = ' on right hand side of operation'
@@ -22,10 +30,21 @@ class TypeError implements SourceError {
   }
 }
 
-const isNumber = (v: Value) => typeof v === 'number'
-const isString = (v: Value) => typeof v === 'string'
-const isBool = (v: Value) => typeof v === 'boolean'
-const isFunc = (v: Value) => typeof v === 'function'
+/**
+ * We need to define our own typeof in order for source functions to be
+ * identifed as functions
+ */
+const typeOf = (v: Value) => {
+  if (v instanceof Closure || v instanceof ArrowClosure || typeof v === 'function') {
+    return 'function'
+  } else {
+    return typeof v
+  }
+}
+const isNumber = (v: Value) => typeOf(v) === 'number'
+const isString = (v: Value) => typeOf(v) === 'string'
+const isBool = (v: Value) => typeOf(v) === 'boolean'
+const isFunc = (v: Value) => typeOf(v) === 'function'
 
 export const checkUnaryExpression = (
   context: Context,
@@ -35,11 +54,11 @@ export const checkUnaryExpression = (
   const node = context.runtime.nodes[0]
   switch (operator) {
     case '+':
-      return isNumber(value) ? undefined : new TypeError(node, '', 'number', typeof value)
+      return isNumber(value) ? undefined : new TypeError(node, '', 'number', typeOf(value))
     case '-':
-      return isNumber(value) ? undefined : new TypeError(node, '', 'number', typeof value)
+      return isNumber(value) ? undefined : new TypeError(node, '', 'number', typeOf(value))
     case '!':
-      return isBool(value) ? undefined : new TypeError(node, '', 'boolean', typeof value)
+      return isBool(value) ? undefined : new TypeError(node, '', 'boolean', typeOf(value))
     default:
       return
   }
@@ -58,9 +77,9 @@ export const checkBinaryExpression = (
     case '/':
     case '%':
       if (!isNumber(left)) {
-        return new TypeError(node, LHS, 'number', typeof left)
+        return new TypeError(node, LHS, 'number', typeOf(left))
       } else if (!isNumber(right)) {
-        return new TypeError(node, RHS, 'number', typeof right)
+        return new TypeError(node, RHS, 'number', typeOf(right))
       } else {
         return
       }
@@ -69,31 +88,31 @@ export const checkBinaryExpression = (
     case '>':
     case '>=':
       if (isNumber(left) && !isNumber(right)) {
-        return new TypeError(node, RHS, 'number', typeof right)
+        return new TypeError(node, RHS, 'number', typeOf(right))
       } else if (isString(left) && !isString(right)) {
-        return new TypeError(node, RHS, 'string', typeof right)
+        return new TypeError(node, RHS, 'string', typeOf(right))
       } else {
-        return new TypeError(node, LHS, 'string or number', typeof left)
+        return new TypeError(node, LHS, 'string or number', typeOf(left))
       }
     case '+':
       if (isNumber(left) && !isNumber(right)) {
-        return new TypeError(node, RHS, 'number', typeof right)
+        return new TypeError(node, RHS, 'number', typeOf(right))
       } else if (!isString(left) || !isString(right)) {
         // must have at least one side that is a string
-        return new TypeError(node, LHS, 'string', typeof left)
+        return new TypeError(node, LHS, 'string', typeOf(left))
       } else {
         return
       }
     case '!==':
     case '===':
       if (isNumber(left) && !isNumber(right)) {
-        return new TypeError(node, RHS, 'number', typeof right)
+        return new TypeError(node, RHS, 'number', typeOf(right))
       } else if (isBool(left) && !isBool(right)) {
-        return new TypeError(node, RHS, 'boolean', typeof right)
+        return new TypeError(node, RHS, 'boolean', typeOf(right))
       } else if (isString(left) && !isString(right)) {
-        return new TypeError(node, RHS, 'string', typeof right)
+        return new TypeError(node, RHS, 'string', typeOf(right))
       } else if (isFunc(left) && !isFunc(right)) {
-        return new TypeError(node, RHS, 'function', typeof right)
+        return new TypeError(node, RHS, 'function', typeOf(right))
       } else {
         return
       }
