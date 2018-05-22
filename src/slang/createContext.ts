@@ -57,23 +57,14 @@ export const importBuiltins = (context: Context) => {
   ensureGlobalEnvironmentExist(context)
 
   if (context.week >= 3) {
-    defineSymbol(context, 'math_PI', Math.PI)
-    defineSymbol(context, 'math_sqrt', Math.sqrt)
     defineSymbol(context, 'runtime', misc.runtime)
     defineSymbol(context, 'display', misc.display)
     defineSymbol(context, 'error', misc.error_message)
     defineSymbol(context, 'prompt', prompt)
     defineSymbol(context, 'parse_int', misc.parse_int)
     defineSymbol(context, 'undefined', undefined)
-  }
-
-  if (context.week >= 4) {
-    defineSymbol(context, 'math_log', Math.log)
-    defineSymbol(context, 'math_exp', Math.exp)
-    defineSymbol(context, 'alert', alert)
-    defineSymbol(context, 'math_floor', Math.floor)
-    defineSymbol(context, 'timed', misc.timed)
-
+    defineSymbol(context, 'NaN', NaN)
+    defineSymbol(context, 'Infinity', Infinity)
     // Define all Math libraries
     const objs = Object.getOwnPropertyNames(Math)
     for (const i in objs) {
@@ -86,6 +77,14 @@ export const importBuiltins = (context: Context) => {
         }
       }
     }
+  }
+
+  if (context.week >= 4) {
+    defineSymbol(context, 'math_log', Math.log)
+    defineSymbol(context, 'math_exp', Math.exp)
+    defineSymbol(context, 'alert', alert)
+    defineSymbol(context, 'math_floor', Math.floor)
+    defineSymbol(context, 'timed', misc.timed)
   }
 
   if (context.week >= 5) {
