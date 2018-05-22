@@ -20,6 +20,8 @@
     }
     .editor-react-ace {
       flex: 1;
+      // to align with the repl output cards
+      margin-top: 0.3rem;
     }
   }
 
