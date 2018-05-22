@@ -42,7 +42,6 @@ function* interpreterSaga(): SagaIterator {
     yield put(actions.handleInterruptExecution())
     yield put(actions.clearReplInput())
     yield put(actions.sendReplInputToOutput(code))
-    yield put(actions.makeRunningOutput())
     yield* evalCode(code, context)
   })
 }

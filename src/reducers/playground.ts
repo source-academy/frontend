@@ -7,25 +7,16 @@ import {
   EVAL_INTERPRETER_SUCCESS,
   HANDLE_CONSOLE_LOG,
   IAction,
-  MAKE_RUNNING_OUTPUT,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
 import { createContext } from '../slang'
-import {
-  CodeOutput,
-  defaultPlayground,
-  ErrorOutput,
-  InterpreterOutput,
-  IPlaygroundState,
-  ResultOutput,
-  RunningOutput
-} from './states'
+import { CodeOutput, defaultPlayground, InterpreterOutput, IPlaygroundState } from './states'
 
 export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, action: IAction) => {
   let newOutput: InterpreterOutput[]
-  let lastOutput: RunningOutput
+  let lastOutput: InterpreterOutput
   switch (action.type) {
     case UPDATE_EDITOR_VALUE:
       return {
@@ -52,22 +43,21 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
         ...state,
         context: createContext()
       }
-    case MAKE_RUNNING_OUTPUT:
-      return {
-        ...state,
-        output: state.output.concat({
-          type: 'running',
-          consoleLogs: []
-        } as RunningOutput)
-      }
     case HANDLE_CONSOLE_LOG:
-      lastOutput = state.output.slice(-1)[0] as RunningOutput
-      if (lastOutput === undefined) {
-        // if state.output is empty, initialise a new RunningOutput
-        lastOutput = { type: 'running', consoleLogs: [] } as RunningOutput
+      /* Possible cases:
+       * (1) state.output === [], i.e. state.output[-1] === undefined
+       * (2) state.output[-1] is not RunningOutput
+       * (3) state.output[-1] is RunningOutput */
+      lastOutput = state.output.slice(-1)[0]
+      if (lastOutput === undefined || lastOutput.type !== 'running') {
+        newOutput = state.output.concat({
+          type: 'running',
+          consoleLogs: [action.payload]
+        })
+      } else {
+        lastOutput.consoleLogs = lastOutput.consoleLogs.concat(action.payload)
+        newOutput = state.output.slice(0, -1).concat(lastOutput)
       }
-      lastOutput.consoleLogs = lastOutput.consoleLogs.concat(action.payload)
-      newOutput = state.output.slice(0, -1).concat(lastOutput)
       return {
         ...state,
         output: newOutput
@@ -79,29 +69,35 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
         output: newOutput
       }
     case EVAL_INTERPRETER_SUCCESS:
-      lastOutput = state.output.slice(-1)[0] as RunningOutput
-      if (lastOutput === undefined) {
-        // if state.output is empty, initialise a new RunningOutput
-        lastOutput = { type: 'running', consoleLogs: [] } as RunningOutput
+      lastOutput = state.output.slice(-1)[0]
+      if (lastOutput !== undefined && lastOutput.type === 'running') {
+        newOutput = state.output.slice(0, -1).concat({
+          ...action.payload,
+          consoleLogs: lastOutput.consoleLogs
+        })
+      } else {
+        newOutput = state.output.concat({
+          ...action.payload,
+          consoleLogs: []
+        })
       }
-      newOutput = state.output.slice(0, -1).concat({
-        ...action.payload,
-        consoleLogs: lastOutput.consoleLogs
-      } as ResultOutput)
       return {
         ...state,
         output: newOutput
       }
     case EVAL_INTERPRETER_ERROR:
-      lastOutput = state.output.slice(-1)[0] as RunningOutput
-      if (lastOutput === undefined) {
-        // if state.output is empty, initialise a new RunningOutput
-        lastOutput = { type: 'running', consoleLogs: [] } as RunningOutput
+      lastOutput = state.output.slice(-1)[0]
+      if (lastOutput !== undefined && lastOutput.type === 'running') {
+        newOutput = state.output.slice(0, -1).concat({
+          ...action.payload,
+          consoleLogs: lastOutput.consoleLogs
+        })
+      } else {
+        newOutput = state.output.concat({
+          ...action.payload,
+          consoleLogs: []
+        })
       }
-      newOutput = state.output.slice(0, -1).concat({
-        ...action.payload,
-        consoleLogs: lastOutput.consoleLogs
-      } as ErrorOutput)
       return {
         ...state,
         output: newOutput

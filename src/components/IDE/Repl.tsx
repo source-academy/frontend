@@ -32,17 +32,25 @@ export const Output: React.SFC<IOutputProps> = props => {
     case 'running':
       return <Card>{props.output.consoleLogs.join('\n')}</Card>
     case 'result':
-      return (
-        <Card>
-          {[props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')}
-        </Card>
-      )
+      if (props.output.consoleLogs.length === 0) {
+        return <Card>{toString(props.output.value)}</Card>
+      } else {
+        return (
+          <Card>
+            {[props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')}
+          </Card>
+        )
+      }
     case 'errors':
-      return (
-        <Card>
-          {[props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')}
-        </Card>
-      )
+      if (props.output.consoleLogs.length === 0) {
+        return <Card>{parseError(props.output.errors)}</Card>
+      } else {
+        return (
+          <Card>
+            {[props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')}
+          </Card>
+        )
+      }
     default:
       return <Card>''</Card>
   }
