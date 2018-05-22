@@ -31,7 +31,7 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
             exec: this.props.handleReplEval
           }
         ]}
-        minLines={1}
+        minLines={2}
         maxLines={20}
         fontSize={14}
         showGutter={false}
