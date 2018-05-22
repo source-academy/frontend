@@ -5,6 +5,6 @@ exports[`Playground renders correctly 1`] = `
   <h2>
     Playground
   </h2>
-  <Connect(Editor) />
+  <IDE />
 </div>"
 `;

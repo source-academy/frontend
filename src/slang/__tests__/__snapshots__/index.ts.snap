@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Arrow function definition returns itself 1`] = `
+Object {
+  "status": "finished",
+  "value": ArrowClosure {
+    "frame": Object {
+      "environment": Object {
+        "display": [Function],
+        "error": [Function],
+        "math_PI": 3.141592653589793,
+        "math_sqrt": [Function],
+        "parse_int": [Function],
+        "prompt": [Function],
+        "runtime": [Function],
+        "undefined": undefined,
+      },
+      "name": "global",
+      "parent": null,
+    },
+    "fun": [Function],
+    "name": "Anonymous1",
+    "node": Node {
+      "__id": "node_12",
+      "body": Node {
+        "__id": "node_11",
+        "end": 8,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 8,
+            "line": 1,
+          },
+          "start": Position {
+            "column": 6,
+            "line": 1,
+          },
+        },
+        "raw": "42",
+        "start": 6,
+        "type": "Literal",
+        "value": 42,
+      },
+      "end": 8,
+      "expression": true,
+      "generator": false,
+      "id": null,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 8,
+          "line": 1,
+        },
+        "start": Position {
+          "column": 0,
+          "line": 1,
+        },
+      },
+      "params": Array [],
+      "start": 0,
+      "type": "ArrowFunctionExpression",
+    },
+  },
+}
+`;
+
+exports[`Arrow function definition returns itself 2`] = `
+ArrowClosure {
+  "frame": Object {
+    "environment": Object {
+      "display": [Function],
+      "error": [Function],
+      "math_PI": 3.141592653589793,
+      "math_sqrt": [Function],
+      "parse_int": [Function],
+      "prompt": [Function],
+      "runtime": [Function],
+      "undefined": undefined,
+    },
+    "name": "global",
+    "parent": null,
+  },
+  "fun": [Function],
+  "name": "Anonymous1",
+  "node": Node {
+    "__id": "node_12",
+    "body": Node {
+      "__id": "node_11",
+      "end": 8,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 8,
+          "line": 1,
+        },
+        "start": Position {
+          "column": 6,
+          "line": 1,
+        },
+      },
+      "raw": "42",
+      "start": 6,
+      "type": "Literal",
+      "value": 42,
+    },
+    "end": 8,
+    "expression": true,
+    "generator": false,
+    "id": null,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 8,
+        "line": 1,
+      },
+      "start": Position {
+        "column": 0,
+        "line": 1,
+      },
+    },
+    "params": Array [],
+    "start": 0,
+    "type": "ArrowFunctionExpression",
+  },
+}
+`;
+
+exports[`Empty code returns undefined 1`] = `
+Object {
+  "status": "finished",
+  "value": undefined,
+}
+`;
+
+exports[`Factorial arrow function 1`] = `
+Object {
+  "status": "finished",
+  "value": 120,
+}
+`;
+
+exports[`Single boolean self-evaluates to itself 1`] = `
+Object {
+  "status": "finished",
+  "value": true,
+}
+`;
+
+exports[`Single number self-evaluates to itself 1`] = `
+Object {
+  "status": "finished",
+  "value": 42,
+}
+`;
+
+exports[`Single string self-evaluates to itself 1`] = `
+Object {
+  "status": "finished",
+  "value": "42",
+}
+`;
+
+exports[`parseError for missing semicolon 1`] = `"Line 1: Missing semicolon at the end of statement"`;

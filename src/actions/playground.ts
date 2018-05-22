@@ -1,26 +1,40 @@
-import { Action, ActionCreator } from 'redux'
+import { ActionCreator } from 'redux'
+import * as actionTypes from './actionTypes'
 
-/**
- * The `type` attribute for an `Action` which updates the `IPlaygroundState`
- * `editorValue`
- */
-export const UPDATE_EDITOR_VALUE = 'UPDATE_EDITOR_VALUE'
-
-/**
- * Represents an `Action` which updates the `editorValue` of a
- * `IPlaygroundState`
- * @property type           - Unique string identifier for this `Action`
- * @property newEditorValue - The new string value for `editorValue`
- */
-export interface IUpdateEditorValue extends Action {
-  payload: string
-}
-
-/**
- * An `ActionCreator` returning an `IUpdateEditorValue` `Action`
- * @param newEditorValue - The new string value for `editorValue`
- */
-export const updateEditorValue: ActionCreator<IUpdateEditorValue> = (newEditorValue: string) => ({
-  type: UPDATE_EDITOR_VALUE,
+export const updateEditorValue: ActionCreator<actionTypes.IAction> = (newEditorValue: string) => ({
+  type: actionTypes.UPDATE_EDITOR_VALUE,
   payload: newEditorValue
+})
+
+export const updateReplValue: ActionCreator<actionTypes.IAction> = (newReplValue: string) => ({
+  type: actionTypes.UPDATE_REPL_VALUE,
+  payload: newReplValue
+})
+
+export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (newOutput: string) => ({
+  type: actionTypes.SEND_REPL_INPUT_TO_OUTPUT,
+  payload: {
+    type: 'code',
+    value: newOutput
+  }
+})
+
+export const evalEditor = () => ({
+  type: actionTypes.EVAL_EDITOR
+})
+
+export const evalRepl = () => ({
+  type: actionTypes.EVAL_REPL
+})
+
+export const clearReplInput = () => ({
+  type: actionTypes.CLEAR_REPL_INPUT
+})
+
+export const clearReplOutput = () => ({
+  type: actionTypes.CLEAR_REPL_OUTPUT
+})
+
+export const clearContext = () => ({
+  type: actionTypes.CLEAR_CONTEXT
 })

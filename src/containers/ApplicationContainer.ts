@@ -1,7 +1,7 @@
 import { connect, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
 import Application from '../components/Application'
-import { IState } from '../reducers'
+import { IState } from '../reducers/states'
 
 /**
  * Provides the title of the application for display.
