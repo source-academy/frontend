@@ -2,22 +2,15 @@
 import { toString } from '../interop'
 import { Value } from '../types'
 
+import { handleConsoleLog } from '../../actions'
+
 export function display(value: Value) {
   const output = toString(value)
-  /* TODO: implement display for the playground
-  if (typeof window.__REDUX_STORE__ !== 'undefined') {
-    window.__REDUX_STORE__.dispatch({
-      type: 'CREATE_INTERPRETER_OUTPUT',
-      payload: output
-    })
-  } else {
-    // tslint:disable-next-line:no-console
-    console.log(output)
-  } */
-  // tslint:disable-next-line:no-console
-  console.log(output)
+  // TODO in 2019: fix this hack
+  if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
+    ;(window as any).__REDUX_STORE__.dispatch(handleConsoleLog(output))
+  }
 }
-// window.display = display
 display.__SOURCE__ = 'display(a)'
 
 export function error_message(value: Value) {

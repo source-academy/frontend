@@ -6,7 +6,7 @@ import Repl, { Output } from '../Repl'
 
 test('Repl renders correctly', () => {
   const props = {
-    output: [{ type: 'result', value: 'abc' } as ResultOutput]
+    output: [{ type: 'result', value: 'abc', consoleLogs: [] } as ResultOutput]
   }
   const app = <Repl {...props} />
   const tree = shallow(app)
@@ -14,7 +14,7 @@ test('Repl renders correctly', () => {
 })
 
 test("Output renders correctly for InterpreterOutput.type === 'result'", () => {
-  const props: ResultOutput = { type: 'result', value: 'def' }
+  const props: ResultOutput = { type: 'result', value: 'def', consoleLogs: [] }
   const app = <Output {...{ output: props }} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
