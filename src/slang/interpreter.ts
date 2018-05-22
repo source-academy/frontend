@@ -246,8 +246,20 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   },
   *LogicalExpression(node: es.LogicalExpression, context: Context) {
     const left = yield* evaluate(node.left, context)
-    if ((node.operator === '&&' && left) || (node.operator === '||' && !left)) {
-      return yield* evaluate(node.right, context)
+    let error = rttc.checkLogicalExpression(context, left, true)
+    if (error) {
+      handleError(context, error)
+      return undefined
+    } else if ((node.operator === '&&' && left) || (node.operator === '||' && !left)) {
+      // only evaluate right if required (lazy); but when we do, check typeof right
+      const right = yield* evaluate(node.right, context)
+      error = rttc.checkLogicalExpression(context, left, right)
+      if (error) {
+        handleError(context, error)
+        return undefined
+      } else {
+        return right
+      }
     } else {
       return left
     }
