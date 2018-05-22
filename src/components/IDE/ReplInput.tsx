@@ -14,7 +14,7 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
   public render() {
     return (
       <AceEditor
-        className="col-xs-12"
+        className="repl-react-ace"
         mode="javascript"
         theme="terminal"
         height="1px"

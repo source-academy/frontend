@@ -18,7 +18,7 @@
     .editor-control {
       flex: initial;
     }
-    .react-ace {
+    .editor-react-ace {
       flex: 1;
     }
   }
@@ -31,6 +31,10 @@
       font-family: Monospace;
       white-space: pre-line;
       padding: 0.7rem;
+      margin: 0.3rem;
+    }
+
+    .repl-react-ace {
       margin: 0.3rem;
     }
   }

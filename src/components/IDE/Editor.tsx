@@ -44,7 +44,7 @@ class Editor extends React.Component<IEditorProps, {}> {
         <div className="row editor-control end-xs">
           <div className="col-xs-1">{runButton}</div>
         </div>
-        <div className="row react-ace">
+        <div className="row editor-react-ace">
           <AceEditor
             mode="javascript"
             theme="terminal"

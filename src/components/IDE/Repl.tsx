@@ -18,9 +18,13 @@ const Repl: React.SFC<IReplProps> = props => {
   const cards = props.output.map((slice, index) => <Output output={slice} key={index} />)
   return (
     <div className="Repl">
-      <ReplControlContainer />
-      {cards}
-      <ReplInputContainer />
+      <div className="repl-control-parent">
+        <ReplControlContainer />
+      </div>
+      <div className="repl-output-parent">{cards}</div>
+      <div className="repl-input-parent row">
+        <ReplInputContainer />
+      </div>
     </div>
   )
 }
