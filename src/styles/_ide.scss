@@ -40,4 +40,12 @@
       margin: 0.3rem;
     }
   }
+
+  .react-ace {
+    background-color: $cadet-primary;
+    .ace_gutter {
+      background: $cadet-primary;
+      color: rgb(128,145,160);
+    }
+  }
 }

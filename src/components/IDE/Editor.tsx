@@ -46,6 +46,7 @@ class Editor extends React.Component<IEditorProps, {}> {
         </div>
         <div className="row editor-react-ace">
           <AceEditor
+            className="react-ace"
             mode="javascript"
             theme="cobalt"
             value={this.props.editorValue}
@@ -53,6 +54,7 @@ class Editor extends React.Component<IEditorProps, {}> {
             width="100%"
             height="100%"
             fontSize={14}
+            highlightActiveLine={false}
           />
         </div>
       </div>
