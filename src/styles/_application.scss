@@ -1,8 +1,10 @@
 @import "node_modules/@blueprintjs/core/lib/scss/variables.scss";
 
+$cadet-background : #14243c;
+
 .Application {
     height: 100vh;
-    background: $dark-gray1;
+    background: $cadet-background;
     display: flex;
     flex-direction: column;
 }
