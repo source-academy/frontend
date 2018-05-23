@@ -351,6 +351,12 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   },
   *IfStatement(node: es.IfStatement, context: Context) {
     const test = yield* evaluate(node.test, context)
+    const error = rttc.checkIfStatement(context, test)
+    if (error) {
+      handleError(context, error)
+      return undefined
+    }
+
     if (test) {
       return yield* evaluate(node.consequent, context)
     } else if (node.alternate) {

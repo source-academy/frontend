@@ -133,3 +133,10 @@ export const checkLogicalExpression = (context: Context, left: Value, right: Val
     return
   }
 }
+
+export const checkIfStatement = (context: Context, test: Value) => {
+  const node = context.runtime.nodes[0]
+  return isBool(test)
+    ? undefined
+    : new TypeError(node, ' as condition', 'boolean', typeOf(test))
+}
