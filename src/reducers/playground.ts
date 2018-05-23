@@ -55,8 +55,11 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
           consoleLogs: [action.payload]
         })
       } else {
-        lastOutput.consoleLogs = lastOutput.consoleLogs.concat(action.payload)
-        newOutput = state.output.slice(0, -1).concat(lastOutput)
+        const updatedLastOutput = {
+          type: lastOutput.type,
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload)
+        }
+        newOutput = state.output.slice(0, -1).concat(updatedLastOutput)
       }
       return {
         ...state,
