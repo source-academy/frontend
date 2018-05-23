@@ -32,26 +32,46 @@ const Repl: React.SFC<IReplProps> = props => {
 export const Output: React.SFC<IOutputProps> = props => {
   switch (props.output.type) {
     case 'code':
-      return <Card>{props.output.value}</Card>
+      return (
+        <Card>
+          <code>{props.output.value}</code>
+        </Card>
+      )
     case 'running':
-      return <Card>{props.output.consoleLogs.join('\n')}</Card>
+      return (
+        <Card>
+          <code>{props.output.consoleLogs.join('\n')}</code>
+        </Card>
+      )
     case 'result':
       if (props.output.consoleLogs.length === 0) {
-        return <Card>{toString(props.output.value)}</Card>
+        return (
+          <Card>
+            <code>{toString(props.output.value)}</code>
+          </Card>
+        )
       } else {
         return (
           <Card>
-            {[props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')}
+            <code>{
+              [props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')
+            }</code>
           </Card>
         )
       }
     case 'errors':
       if (props.output.consoleLogs.length === 0) {
-        return <Card>{parseError(props.output.errors)}</Card>
+        return (
+          <Card>
+            <code>{parseError(props.output.errors)}</code>
+          </Card>
+        )
       } else {
         return (
           <Card>
-            {[props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')}
+            <code>{
+              [props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')
+            }</code>
           </Card>
         )
       }
