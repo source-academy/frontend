@@ -21,9 +21,11 @@ const Repl: React.SFC<IReplProps> = props => {
       <div className="repl-control-parent">
         <ReplControlContainer />
       </div>
-      <div className="repl-output-parent">{cards}</div>
-      <div className="repl-input-parent row">
-        <ReplInputContainer />
+      <div className="repl-output-parent">
+        {cards}
+        <div className="repl-input-parent row">
+          <ReplInputContainer />
+        </div>
       </div>
     </div>
   )

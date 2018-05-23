@@ -15,9 +15,9 @@ exports[`Repl renders correctly 1`] = `
   </div>
   <div className=\\"repl-output-parent\\">
     <Component output={{...}} />
-  </div>
-  <div className=\\"repl-input-parent row\\">
-    <Connect(ReplInput) />
+    <div className=\\"repl-input-parent row\\">
+      <Connect(ReplInput) />
+    </div>
   </div>
 </div>"
 `;

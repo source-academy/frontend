@@ -27,10 +27,11 @@
 
   .Repl {
     height: 100%;
-    overflow-y: auto;
 
     .repl-output-parent {
+      height: 100%;
       margin-top: 0.3rem;
+      overflow-y: auto;
     }
 
     .pt-card {
