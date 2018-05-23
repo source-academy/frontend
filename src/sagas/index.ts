@@ -6,6 +6,7 @@ import { Context, interrupt, runInContext } from '../slang'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
+import { showWarningMessage } from '../notification'
 
 function* evalCode(code: string, context: Context) {
   const { result, interrupted } = yield race({
@@ -20,6 +21,7 @@ function* evalCode(code: string, context: Context) {
     }
   } else if (interrupted) {
     interrupt(context)
+    yield call(showWarningMessage, 'Execution aborted by user')
   }
 }
 
