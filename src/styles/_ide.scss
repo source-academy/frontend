@@ -28,7 +28,10 @@
   .Repl {
     height: 100%;
     overflow-y: auto;
-    margin-top: 0.3rem;
+
+    .repl-output-parent {
+      margin-top: 0.3rem;
+    }
 
     .pt-card {
       background-color: $cadet-color-2;
