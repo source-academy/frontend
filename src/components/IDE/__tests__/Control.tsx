@@ -6,6 +6,7 @@ import Control, { IControlProps } from '../Control'
 
 test('Control renders correctly', () => {
   const props: IControlProps = {
+    isRunning: false,
     handleEvalEditor: () => {},
     handleEvalRepl: () => {},
     handleClearReplOutput: () => {},

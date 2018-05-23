@@ -6,13 +6,17 @@ import { clearReplOutput, evalEditor, evalRepl } from '../../actions/playground'
 import Control, { IControlProps } from '../../components/IDE/Control'
 import { IState } from '../../reducers/states'
 
+type StateProps = Pick<IControlProps, 'isRunning'>
+
 type DispatchProps = Pick<IControlProps, 'handleEvalEditor'> &
   Pick<IControlProps, 'handleEvalRepl'> &
   Pick<IControlProps, 'handleClearReplOutput'> &
   Pick<IControlProps, 'handleInterruptEval'>
 
 /** No-op mapStateToProps */
-const mapStateToProps: MapStateToProps<{}, {}, IState> = state => ({})
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+  isRunning: state.playground.isRunning
+})
 
 /** Provides a callback function `handleEvalEditor`
  *  to evaluate code in the Editor.

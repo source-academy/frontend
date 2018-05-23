@@ -31,7 +31,6 @@ function* interpreterSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*() {
     const code: string = yield select((state: IState) => state.playground.editorValue)
-    yield put(actions.handleInterruptExecution())
     yield put(actions.clearContext())
     yield put(actions.clearReplOutput())
     context = yield select((state: IState) => state.playground.context)
@@ -41,7 +40,6 @@ function* interpreterSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_REPL, function*() {
     const code: string = yield select((state: IState) => state.playground.replValue)
     context = yield select((state: IState) => state.playground.context)
-    yield put(actions.handleInterruptExecution())
     yield put(actions.clearReplInput())
     yield put(actions.sendReplInputToOutput(code))
     yield* evalCode(code, context)
