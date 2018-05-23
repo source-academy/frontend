@@ -53,9 +53,9 @@ export const Output: React.SFC<IOutputProps> = props => {
       } else {
         return (
           <Card>
-            <code>{
-              [props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')
-            }</code>
+            <code>
+              {[props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')}
+            </code>
           </Card>
         )
       }
@@ -69,9 +69,9 @@ export const Output: React.SFC<IOutputProps> = props => {
       } else {
         return (
           <Card>
-            <code>{
-              [props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')
-            }</code>
+            <code>
+              {[props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')}
+            </code>
           </Card>
         )
       }

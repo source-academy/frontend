@@ -2,7 +2,9 @@
 
 exports[`Output renders correctly for InterpreterOutput.type === 'result' 1`] = `
 "<Blueprint2.Card elevation={0} interactive={false}>
-  &quot;def&quot;
+  <code>
+    &quot;def&quot;
+  </code>
 </Blueprint2.Card>"
 `;
 
