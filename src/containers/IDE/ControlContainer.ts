@@ -1,13 +1,15 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
+import { handleInterruptExecution } from '../../actions/interpreter'
 import { clearReplOutput, evalEditor, evalRepl } from '../../actions/playground'
 import Control, { IControlProps } from '../../components/IDE/Control'
 import { IState } from '../../reducers/states'
 
 type DispatchProps = Pick<IControlProps, 'handleEvalEditor'> &
   Pick<IControlProps, 'handleEvalRepl'> &
-  Pick<IControlProps, 'handleClearReplOutput'>
+  Pick<IControlProps, 'handleClearReplOutput'> &
+  Pick<IControlProps, 'handleInterruptEval'>
 
 /** No-op mapStateToProps */
 const mapStateToProps: MapStateToProps<{}, {}, IState> = state => ({})
@@ -20,7 +22,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleEvalEditor: evalEditor,
       handleEvalRepl: evalRepl,
-      handleClearReplOutput: clearReplOutput
+      handleClearReplOutput: clearReplOutput,
+      handleInterruptEval: handleInterruptExecution
     },
     dispatch
   )

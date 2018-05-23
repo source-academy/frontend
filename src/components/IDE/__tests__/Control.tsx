@@ -8,7 +8,8 @@ test('Control renders correctly', () => {
   const props: IControlProps = {
     handleEvalEditor: () => {},
     handleEvalRepl: () => {},
-    handleClearReplOutput: () => {}
+    handleClearReplOutput: () => {},
+    handleInterruptEval: () => {}
   }
   const app = <Control {...props} />
   const tree = shallow(app)
