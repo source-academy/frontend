@@ -13,13 +13,11 @@ import noImplicitReturnUndefined from './noImplicitReturnUndefined'
 import noNonEmptyList from './noNonEmptyList'
 import noUnspecifiedOperator from './noUnspecifiedOperator'
 import singleVariableDeclaration from './singleVariableDeclaration'
-import strictEquality from './strictEquality'
 
 const rules: Array<Rule<es.Node>> = [
   bracesAroundIfElse,
   bracesAroundWhile,
   singleVariableDeclaration,
-  strictEquality,
   noIfWithoutElse,
   noImplicitDeclareUndefined,
   noImplicitReturnUndefined,
