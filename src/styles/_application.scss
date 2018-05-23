@@ -1,8 +1,6 @@
-$cadet-background : #182844;
-
 .Application {
     height: 100vh;
-    background: $cadet-background;
+    background: $cadet-color-1;
     display: flex;
     flex-direction: column;
 }
