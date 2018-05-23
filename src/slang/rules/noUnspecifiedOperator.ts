@@ -16,7 +16,7 @@ export class NoUnspecifiedOperatorError implements SourceError {
   }
 
   public explain() {
-    return `Unspecified operator '${this.unspecifiedOperator}' used.`
+    return `Operator '${this.unspecifiedOperator}' is not allowed.`
   }
 
   public elaborate() {
