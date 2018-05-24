@@ -89,6 +89,6 @@ export const defaultApplication: IApplicationState = {
 export const defaultPlayground: IPlaygroundState = {
   editorValue: '',
   replValue: '',
-  context: createContext(2),
+  context: createContext(),
   output: []
 }

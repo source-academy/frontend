@@ -41,7 +41,7 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
     case CLEAR_CONTEXT:
       return {
         ...state,
-        context: createContext(2)
+        context: createContext()
       }
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:
