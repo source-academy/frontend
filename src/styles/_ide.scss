@@ -9,7 +9,11 @@
 
   .ide-content-parent {
     height: 85vh;
+    > div {
+      height: inherit; // Fix for Firefox not autoscrolling when repl overflows
+    }
   }
+
 
   .Editor {
     height: 100%;
