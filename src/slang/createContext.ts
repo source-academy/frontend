@@ -17,8 +17,8 @@ const createEmptyRuntime = () => ({
   nodes: []
 })
 
-export const createEmptyContext = (week: number): Context => ({
-  week,
+export const createEmptyContext = (chapter: number): Context => ({
+  chapter,
   errors: [],
   cfg: createEmptyCFG(),
   runtime: createEmptyRuntime()
@@ -56,7 +56,7 @@ export const importExternals = (context: Context, externals: string[]) => {
 export const importBuiltins = (context: Context) => {
   ensureGlobalEnvironmentExist(context)
 
-  if (context.week >= 3) {
+  if (context.chapter >= 1) {
     defineSymbol(context, 'runtime', misc.runtime)
     defineSymbol(context, 'display', misc.display)
     defineSymbol(context, 'error', misc.error_message)
@@ -79,7 +79,7 @@ export const importBuiltins = (context: Context) => {
     }
   }
 
-  if (context.week >= 4) {
+  if (context.chapter >= 4) {
     defineSymbol(context, 'math_log', Math.log)
     defineSymbol(context, 'math_exp', Math.exp)
     defineSymbol(context, 'alert', alert)
@@ -87,7 +87,7 @@ export const importBuiltins = (context: Context) => {
     defineSymbol(context, 'timed', misc.timed)
   }
 
-  if (context.week >= 5) {
+  if (context.chapter >= 5) {
     defineSymbol(context, 'list', list.list)
     defineSymbol(context, 'pair', list.pair)
     defineSymbol(context, 'is_pair', list.is_pair)
@@ -119,21 +119,21 @@ export const importBuiltins = (context: Context) => {
       })
     }
   }
-  if (context.week >= 6) {
+  if (context.chapter >= 6) {
     defineSymbol(context, 'is_number', misc.is_number)
   }
-  if (context.week >= 8) {
+  if (context.chapter >= 8) {
     defineSymbol(context, 'undefined', undefined)
     defineSymbol(context, 'set_head', list.set_head)
     defineSymbol(context, 'set_tail', list.set_tail)
   }
-  if (context.week >= 9) {
+  if (context.chapter >= 9) {
     defineSymbol(context, 'array_length', misc.array_length)
   }
 }
 
-const createContext = (week = 3, externals = []) => {
-  const context = createEmptyContext(week)
+const createContext = (chapter = 1, externals = []) => {
+  const context = createEmptyContext(chapter)
 
   importBuiltins(context)
   importExternals(context, externals)

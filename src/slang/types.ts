@@ -93,7 +93,7 @@ export interface TypeError extends SourceError {
 
 export interface Context {
   /** The source version used */
-  week: number
+  chapter: number
 
   /** All the errors gathered */
   errors: SourceError[]
