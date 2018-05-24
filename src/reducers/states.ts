@@ -13,6 +13,7 @@ export interface IApplicationState {
 
 export interface IPlaygroundState {
   readonly editorValue: string
+  readonly editorWidth: number
   readonly replValue: string
   readonly context: Context
   readonly output: InterpreterOutput[]
@@ -88,6 +89,7 @@ export const defaultApplication: IApplicationState = {
 
 export const defaultPlayground: IPlaygroundState = {
   editorValue: '',
+  editorWidth: 500,
   replValue: '',
   context: createContext(),
   output: []

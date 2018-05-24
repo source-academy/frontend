@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import Resizable from 're-resizable'
 import AceEditor from 'react-ace'
 
 import { Button, IconName, Intent } from '@blueprintjs/core'
@@ -16,7 +17,9 @@ import 'brace/theme/cobalt'
  */
 export interface IEditorProps {
   editorValue: string
-  handleEditorChange: (newCode: string) => void
+  editorWidth: number
+  handleEditorValueChange: (newCode: string) => void
+  handleEditorWidthChange: (widthChange: number) => void
   handleEvalEditor: () => void
 }
 
@@ -40,7 +43,24 @@ class Editor extends React.Component<IEditorProps, {}> {
     )
     const runButton = genericButton('', 'play', this.props.handleEvalEditor)
     return (
-      <div className="Editor">
+      <Resizable
+        className="Editor"
+        size={{ width: this.props.editorWidth, height: '100%' }}
+        // tslint:disable-next-line jsx-no-lambda
+        onResizeStop={(e, direction, ref, d) => {
+          this.props.handleEditorWidthChange(d.width)
+        }}
+        enable={{
+          top: false,
+          right: true,
+          bottom: false,
+          left: false,
+          topRight: false,
+          bottomRight: false,
+          bottomLeft: false,
+          topLeft: false
+        }}
+      >
         <div className="row editor-control end-xs">
           <div className="col-xs-1">{runButton}</div>
         </div>
@@ -50,14 +70,14 @@ class Editor extends React.Component<IEditorProps, {}> {
             mode="javascript"
             theme="cobalt"
             value={this.props.editorValue}
-            onChange={this.props.handleEditorChange}
+            onChange={this.props.handleEditorValueChange}
             width="100%"
             height="100%"
             fontSize={14}
             highlightActiveLine={false}
           />
         </div>
-      </div>
+      </Resizable>
     )
   }
 }

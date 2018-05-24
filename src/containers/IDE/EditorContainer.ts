@@ -1,12 +1,13 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { evalEditor, updateEditorValue } from '../../actions/playground'
+import { evalEditor, updateEditorValue, updateEditorWidth } from '../../actions/playground'
 import Editor, { IEditorProps } from '../../components/IDE/Editor'
 import { IState } from '../../reducers/states'
 
-type StateProps = Pick<IEditorProps, 'editorValue'>
-type DispatchProps = Pick<IEditorProps, 'handleEditorChange'> &
+type StateProps = Pick<IEditorProps, 'editorValue'> & Pick<IEditorProps, 'editorWidth'>
+type DispatchProps = Pick<IEditorProps, 'handleEditorValueChange'> &
+  Pick<IEditorProps, 'handleEditorWidthChange'> &
   Pick<IEditorProps, 'handleEvalEditor'>
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
@@ -14,14 +15,16 @@ type DispatchProps = Pick<IEditorProps, 'handleEditorChange'> &
  */
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    editorValue: state.playground.editorValue
+    editorValue: state.playground.editorValue,
+    editorWidth: state.playground.editorWidth
   }
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleEditorChange: updateEditorValue,
+      handleEditorValueChange: updateEditorValue,
+      handleEditorWidthChange: updateEditorWidth,
       handleEvalEditor: evalEditor
     },
     dispatch
