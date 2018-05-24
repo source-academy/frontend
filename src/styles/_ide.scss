@@ -12,11 +12,8 @@
     display: flex;
     flex-direction: row;
     overflow: hidden;
-    // > div {
-    //   height: inherit; // Fix for Firefox not autoscrolling when repl overflows
-    // }
-    .editor-parent {
-      height: 100%;
+    > div {
+      height: inherit; // Fix for Firefox not autoscrolling when repl overflows
     }
     .repl-parent {
       flex: 1 1;

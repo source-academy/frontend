@@ -9,14 +9,13 @@ const IDE: React.SFC<{}> = () => (
   <div className="IDE">
     <div className="row ide-content-parent">
       <Resizable
+        className="editor-parent"
         defaultSize={{
           width: '50%',
           height: '100%'
         }}
       >
-        <div className="editor-parent">
-          <EditorContainer />
-        </div>
+        <EditorContainer />
       </Resizable>
       <div className="repl-parent">
         <ReplContainer />
