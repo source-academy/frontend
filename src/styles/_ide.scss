@@ -9,8 +9,17 @@
 
   .ide-content-parent {
     height: 85vh;
-    > div {
-      height: inherit; // Fix for Firefox not autoscrolling when repl overflows
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    // > div {
+    //   height: inherit; // Fix for Firefox not autoscrolling when repl overflows
+    // }
+    .editor-parent {
+      height: 100%;
+    }
+    .repl-parent {
+      flex: 1 1;
     }
   }
 
