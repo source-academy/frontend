@@ -1,3 +1,8 @@
+$code-color-code: #CED9E0;
+$code-color-log: #DD8C60;
+$code-color-result: #FFFFFF;
+$code-color-error: #FF4444;
+
 .IDE {
   display: flex;
   flex-direction: column;
@@ -51,6 +56,22 @@
         color: inherit;
         padding: 0px;
         white-space: pre;
+      }
+
+      .codeOutput {
+        color: $code-color-code;
+      }
+
+      .logOutput {
+        color: $code-color-log;
+      }
+
+      .resultOutput {
+        color: $code-color-result;
+      }
+
+      .errorOutput  {
+        color: $code-color-error;
       }
     }
 

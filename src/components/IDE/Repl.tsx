@@ -36,28 +36,28 @@ export const Output: React.SFC<IOutputProps> = props => {
     case 'code':
       return (
         <Card>
-          <code>{props.output.value}</code>
+          <code className="codeOutput">{props.output.value}</code>
         </Card>
       )
     case 'running':
       return (
         <Card>
-          <code>{props.output.consoleLogs.join('\n')}</code>
+          <code className="logOutput">{props.output.consoleLogs.join('\n')}</code>
         </Card>
       )
     case 'result':
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <code>{toString(props.output.value)}</code>
+            <code className="resultOutput">{toString(props.output.value)}</code>
           </Card>
         )
       } else {
         return (
           <Card>
-            <code>
-              {[props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')}
-            </code>
+            <code className="logOutput">{props.output.consoleLogs.join('\n')}</code>
+            <br />
+            <code className="resultOutput">{toString(props.output.value)}</code>
           </Card>
         )
       }
@@ -65,15 +65,15 @@ export const Output: React.SFC<IOutputProps> = props => {
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <code>{parseError(props.output.errors)}</code>
+            <code className="errorOutput">{parseError(props.output.errors)}</code>
           </Card>
         )
       } else {
         return (
           <Card>
-            <code>
-              {[props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')}
-            </code>
+            <code className="logOutput">{props.output.consoleLogs.join('\n')}</code>
+            <br />
+            <code className="errorOutput">{parseError(props.output.errors)}</code>
           </Card>
         )
       }
