@@ -11,6 +11,7 @@ export interface IControlProps {
   handleEvalEditor: () => void
   handleEvalRepl: () => void
   handleClearReplOutput: () => void
+  handleChapterSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 const genericButton = (
@@ -30,9 +31,9 @@ const genericButton = (
   </Button>
 )
 
-const chapterSelect = (
+const chapterSelect = (handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {}) => (
   <div className="col-xs-4 pt-select pt-select">
-    <select defaultValue={sourceChapters.slice(-1)[0].toString()}>
+    <select defaultValue={sourceChapters.slice(-1)[0].toString()} onChange={handleSelect}>
       {sourceChapters.map(chap => (
         <option key={chap} value={chap}>
           {`Source ${chap}`}
@@ -52,7 +53,7 @@ class Control extends React.Component<IControlProps, {}> {
         <div className="col-xs-2">{runButton}</div>
         <div className="col-xs-4">
           <div className="row">
-            {chapterSelect}
+            {chapterSelect(this.props.handleChapterSelect)}
             <div className="col-xs-4">{evalButton}</div>
             <div className="col-xs-4">{clearButton}</div>
           </div>

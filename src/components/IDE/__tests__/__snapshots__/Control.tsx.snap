@@ -10,7 +10,7 @@ exports[`Control renders correctly 1`] = `
   <div className=\\"col-xs-4\\">
     <div className=\\"row\\">
       <div className=\\"col-xs-4 pt-select pt-select\\">
-        <select defaultValue=\\"2\\">
+        <select defaultValue=\\"2\\" onChange={[Function: handleChapterSelect]}>
           <option value={1}>
             Source 1
           </option>
