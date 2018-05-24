@@ -79,22 +79,15 @@ export const importBuiltins = (context: Context) => {
     }
   }
 
-  if (context.chapter >= 4) {
-    defineSymbol(context, 'math_log', Math.log)
-    defineSymbol(context, 'math_exp', Math.exp)
-    defineSymbol(context, 'alert', alert)
-    defineSymbol(context, 'math_floor', Math.floor)
-    defineSymbol(context, 'timed', misc.timed)
-  }
-
-  if (context.chapter >= 5) {
-    defineSymbol(context, 'list', list.list)
+  if (context.chapter >= 2) {
+    // List library
     defineSymbol(context, 'pair', list.pair)
     defineSymbol(context, 'is_pair', list.is_pair)
-    defineSymbol(context, 'is_list', list.is_list)
-    defineSymbol(context, 'is_empty_list', list.is_empty_list)
     defineSymbol(context, 'head', list.head)
     defineSymbol(context, 'tail', list.tail)
+    defineSymbol(context, 'is_empty_list', list.is_empty_list)
+    defineSymbol(context, 'is_list', list.is_list)
+    defineSymbol(context, 'list', list.list)
     defineSymbol(context, 'length', list.length)
     defineSymbol(context, 'map', list.map)
     defineSymbol(context, 'build_list', list.build_list)
@@ -105,12 +98,20 @@ export const importBuiltins = (context: Context) => {
     defineSymbol(context, 'member', list.member)
     defineSymbol(context, 'remove', list.remove)
     defineSymbol(context, 'remove_all', list.remove_all)
-    defineSymbol(context, 'equal', list.equal)
-    defineSymbol(context, 'assoc', list.assoc)
     defineSymbol(context, 'filter', list.filter)
     defineSymbol(context, 'enum_list', list.enum_list)
     defineSymbol(context, 'list_ref', list.list_ref)
     defineSymbol(context, 'accumulate', list.accumulate)
+  }
+
+  if (context.chapter >= Infinity) {
+    // previously week 4
+    defineSymbol(context, 'alert', alert)
+    defineSymbol(context, 'math_floor', Math.floor)
+    defineSymbol(context, 'timed', misc.timed)
+    // previously week 5
+    defineSymbol(context, 'equal', list.equal)
+    defineSymbol(context, 'assoc', list.assoc)
     if (window.hasOwnProperty('ListVisualizer')) {
       defineSymbol(context, 'draw', (window as any).ListVisualizer.draw)
     } else {
@@ -118,16 +119,13 @@ export const importBuiltins = (context: Context) => {
         throw new Error('List visualizer is not enabled')
       })
     }
-  }
-  if (context.chapter >= 6) {
+    // previously week 6
     defineSymbol(context, 'is_number', misc.is_number)
-  }
-  if (context.chapter >= 8) {
+    // previously week 8
     defineSymbol(context, 'undefined', undefined)
     defineSymbol(context, 'set_head', list.set_head)
     defineSymbol(context, 'set_tail', list.set_tail)
-  }
-  if (context.chapter >= 9) {
+    // previously week 9
     defineSymbol(context, 'array_length', misc.array_length)
   }
 }

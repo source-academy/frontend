@@ -16,27 +16,25 @@ const syntaxTypes: { [nodeName: string]: number } = {
   Identifier: 1,
   Literal: 1,
 
+  // Chapter 2
+  ArrayExpression: 2,
+
   // Week 5
   EmptyStatement: 5,
-  ArrayExpression: 5,
-
-  // Week 8
+  // preivously Week 8
   AssignmentExpression: 8,
   WhileStatement: 8,
-
-  // Week 9
+  // previously Week 9
   ForStatement: 9,
   BreakStatement: 9,
   ContinueStatement: 9,
   MemberExpression: 9,
-
-  // Week 10
+  // previously Week 10
   ThisExpression: 10,
   ObjectExpression: 10,
   Property: 10,
   UpdateExpression: 10,
   NewExpression: 10,
-
   // Disallowed Forever
   SwitchStatement: Infinity,
   DebuggerStatement: Infinity,
