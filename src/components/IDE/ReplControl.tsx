@@ -34,8 +34,8 @@ class ReplControl extends React.Component<IReplControlProps, {}> {
     return (
       <div className="row end-xs">
         <div className="pt-control-group pt-fill">
-            {evalButton}
-            {clearButton}
+          {evalButton}
+          {clearButton}
         </div>
       </div>
     )

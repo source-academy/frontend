@@ -55,12 +55,12 @@
       margin: 0.5rem;
       margin-top: 0rem;
 
-      code {
+      pre {
         background-color: transparent;
         box-shadow: none;
         color: inherit;
         padding: 0px;
-        white-space: pre;
+        white-space: pre-wrap;
       }
     }
 

@@ -36,28 +36,28 @@ export const Output: React.SFC<IOutputProps> = props => {
     case 'code':
       return (
         <Card>
-          <code>{props.output.value}</code>
+          <pre>{props.output.value}</pre>
         </Card>
       )
     case 'running':
       return (
         <Card>
-          <code>{props.output.consoleLogs.join('\n')}</code>
+          <pre>{props.output.consoleLogs.join('\n')}</pre>
         </Card>
       )
     case 'result':
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <code>{toString(props.output.value)}</code>
+            <pre>{toString(props.output.value)}</pre>
           </Card>
         )
       } else {
         return (
           <Card>
-            <code>
+            <pre>
               {[props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')}
-            </code>
+            </pre>
           </Card>
         )
       }
@@ -65,15 +65,15 @@ export const Output: React.SFC<IOutputProps> = props => {
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <code>{parseError(props.output.errors)}</code>
+            <pre>{parseError(props.output.errors)}</pre>
           </Card>
         )
       } else {
         return (
           <Card>
-            <code>
+            <pre>
               {[props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')}
-            </code>
+            </pre>
           </Card>
         )
       }
