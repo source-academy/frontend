@@ -6,8 +6,8 @@ import EditorContainer from '../../containers/IDE/EditorContainer'
 import ReplContainer from '../../containers/IDE/ReplContainer'
 
 export interface IIDEProps {
-  editorWidth: number
-  handleEditorWidthChange: (widthChange: number) => void
+  editorWidth: string
+  handleEditorWidthChange: (widthChange: number) => void // TODO
 }
 
 class IDE extends React.Component<IIDEProps, {}> {
@@ -20,7 +20,7 @@ class IDE extends React.Component<IIDEProps, {}> {
             size={{ width: this.props.editorWidth, height: '100%' }}
             // tslint:disable-next-line jsx-no-lambda
             onResizeStop={(e, direction, ref, d) => {
-              this.props.handleEditorWidthChange(d.width)
+              this.props.handleEditorWidthChange(d.width * 100 / window.innerWidth)
             }}
             enable={{
               top: false,

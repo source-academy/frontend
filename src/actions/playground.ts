@@ -6,7 +6,7 @@ export const updateEditorValue: ActionCreator<actionTypes.IAction> = (newEditorV
   payload: newEditorValue
 })
 
-export const updateEditorWidth: ActionCreator<actionTypes.IAction> = (widthChange: number) => ({
+export const updateEditorWidth: ActionCreator<actionTypes.IAction> = (widthChange: string) => ({
   type: actionTypes.CHANGE_EDITOR_WIDTH,
   payload: widthChange
 })

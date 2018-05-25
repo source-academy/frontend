@@ -32,7 +32,7 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
     case CHANGE_EDITOR_WIDTH:
       return {
         ...state,
-        editorWidth: action.payload + state.editorWidth
+        editorWidth: (parseFloat(state.editorWidth.slice(0, -1)) + action.payload).toString() + '%'
       }
     case CLEAR_REPL_INPUT:
       return {
