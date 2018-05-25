@@ -7,8 +7,6 @@ import Editor, { IEditorProps } from '../Editor'
 test('Editor renders correctly', () => {
   const props: IEditorProps = {
     editorValue: '',
-    editorWidth: 500,
-    handleEditorWidthChange: widthChange => {},
     handleEditorValueChange: newCode => {},
     handleEvalEditor: () => {}
   }

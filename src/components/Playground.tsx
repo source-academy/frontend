@@ -1,11 +1,11 @@
 import * as React from 'react'
 
-import IDE from './IDE'
+import IDEContainer from '../containers/IDE'
 
 const Playground: React.SFC<{}> = () => {
   return (
     <div className="Playground">
-      <IDE />
+      <IDEContainer />
     </div>
   )
 }

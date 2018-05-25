@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Editor renders correctly 1`] = `
-"<undefined className=\\"Editor\\" size={{...}} onResizeStop={[Function: onResizeStop]} enable={{...}}>
+"<div className=\\"Editor\\">
   <div className=\\"row editor-control end-xs\\">
     <div className=\\"col-xs-1\\">
       <Blueprint2.Button onClick={[Function: handleEvalEditor]} className=\\"pt-minimal col-xs-12\\" intent=\\"none\\" icon=\\"play\\" />
@@ -10,5 +10,5 @@ exports[`Editor renders correctly 1`] = `
   <div className=\\"row editor-react-ace\\">
     <ReactAce className=\\"react-ace\\" mode=\\"javascript\\" theme=\\"cobalt\\" value=\\"\\" onChange={[Function: handleEditorValueChange]} width=\\"100%\\" height=\\"100%\\" fontSize={14} highlightActiveLine={false} name=\\"brace-editor\\" focus={false} showGutter={true} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} maxLines={{...}} readOnly={false} showPrintMargin={true} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} setOptions={{...}} wrapEnabled={false} enableBasicAutocompletion={false} enableLiveAutocompletion={false} />
   </div>
-</undefined>"
+</div>"
 `;
