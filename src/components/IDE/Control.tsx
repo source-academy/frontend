@@ -36,7 +36,7 @@ const chapterSelect = (handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) 
     <select defaultValue={sourceChapters.slice(-1)[0].toString()} onChange={handleSelect}>
       {sourceChapters.map(chap => (
         <option key={chap} value={chap}>
-          {`Source ${chap}`}
+          {`Source \xa7${chap}`}
         </option>
       ))}
     </select>
