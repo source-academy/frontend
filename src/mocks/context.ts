@@ -1,6 +1,5 @@
 import { createContext } from '../slang'
-import { Context } from '../slang/types'
-import { Closure } from '../slang/types'
+import { Closure, Context } from '../slang/types'
 
 export function mockContext(): Context {
   return createContext()
