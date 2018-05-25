@@ -7,7 +7,7 @@ import Editor, { IEditorProps } from '../Editor'
 test('Editor renders correctly', () => {
   const props: IEditorProps = {
     editorValue: '',
-    handleEditorChange: newCode => {},
+    handleEditorValueChange: newCode => {},
     handleEvalEditor: () => {}
   }
   const app = <Editor {...props} />

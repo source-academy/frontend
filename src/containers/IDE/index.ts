@@ -1,30 +1,28 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { evalEditor, updateEditorValue } from '../../actions/playground'
-import Editor, { IEditorProps } from '../../components/IDE/Editor'
+import { updateEditorWidth } from '../../actions/playground'
+import IDE, { IIDEProps } from '../../components/IDE/'
 import { IState } from '../../reducers/states'
 
-type StateProps = Pick<IEditorProps, 'editorValue'>
-type DispatchProps = Pick<IEditorProps, 'handleEditorValueChange'> &
-  Pick<IEditorProps, 'handleEvalEditor'>
+type StateProps = Pick<IIDEProps, 'editorWidth'>
+type DispatchProps = Pick<IIDEProps, 'handleEditorWidthChange'>
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
  */
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    editorValue: state.playground.editorValue
+    editorWidth: state.playground.editorWidth
   }
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleEditorValueChange: updateEditorValue,
-      handleEvalEditor: evalEditor
+      handleEditorWidthChange: updateEditorWidth
     },
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor)
+export default connect(mapStateToProps, mapDispatchToProps)(IDE)

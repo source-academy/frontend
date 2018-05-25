@@ -36,28 +36,28 @@ export const Output: React.SFC<IOutputProps> = props => {
     case 'code':
       return (
         <Card>
-          <code className="codeOutput">{props.output.value}</code>
+          <pre className="codeOutput">{props.output.value}</pre>
         </Card>
       )
     case 'running':
       return (
         <Card>
-          <code className="logOutput">{props.output.consoleLogs.join('\n')}</code>
+          <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
         </Card>
       )
     case 'result':
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <code className="resultOutput">{toString(props.output.value)}</code>
+            <pre className="resultOutput">{toString(props.output.value)}</pre>
           </Card>
         )
       } else {
         return (
           <Card>
-            <code className="logOutput">{props.output.consoleLogs.join('\n')}</code>
+            <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
             <br />
-            <code className="resultOutput">{toString(props.output.value)}</code>
+            <pre className="resultOutput">{toString(props.output.value)}</pre>
           </Card>
         )
       }
@@ -65,15 +65,15 @@ export const Output: React.SFC<IOutputProps> = props => {
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <code className="errorOutput">{parseError(props.output.errors)}</code>
+            <pre className="errorOutput">{parseError(props.output.errors)}</pre>
           </Card>
         )
       } else {
         return (
           <Card>
-            <code className="logOutput">{props.output.consoleLogs.join('\n')}</code>
+            <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
             <br />
-            <code className="errorOutput">{parseError(props.output.errors)}</code>
+            <pre className="errorOutput">{parseError(props.output.errors)}</pre>
           </Card>
         )
       }

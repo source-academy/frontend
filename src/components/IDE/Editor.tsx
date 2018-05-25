@@ -16,7 +16,7 @@ import 'brace/theme/cobalt'
  */
 export interface IEditorProps {
   editorValue: string
-  handleEditorChange: (newCode: string) => void
+  handleEditorValueChange: (newCode: string) => void
   handleEvalEditor: () => void
 }
 
@@ -50,7 +50,7 @@ class Editor extends React.Component<IEditorProps, {}> {
             mode="javascript"
             theme="cobalt"
             value={this.props.editorValue}
-            onChange={this.props.handleEditorChange}
+            onChange={this.props.handleEditorValueChange}
             width="100%"
             height="100%"
             fontSize={14}
