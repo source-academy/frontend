@@ -18,6 +18,7 @@ class IDE extends React.Component<IIDEProps, {}> {
           <Resizable
             className="editor-parent"
             size={{ width: this.props.editorWidth, height: '100%' }}
+            maxWidth={window.innerWidth - 10}
             // tslint:disable-next-line jsx-no-lambda
             onResizeStop={(e, direction, ref, d) => {
               this.props.handleEditorWidthChange(d.width * 100 / window.innerWidth)
