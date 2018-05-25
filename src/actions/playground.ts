@@ -27,6 +27,11 @@ export const chapterSelect: ActionCreator<actionTypes.IAction> = (
   payload: e.currentTarget.value
 })
 
+export const changeChapter: ActionCreator<actionTypes.IAction> = (newChapter: number) => ({
+  type: actionTypes.CHANGE_CHAPTER,
+  payload: newChapter
+})
+
 export const evalEditor = () => ({
   type: actionTypes.EVAL_EDITOR
 })

@@ -1,5 +1,6 @@
 import { Reducer } from 'redux'
 import {
+  CHANGE_CHAPTER,
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -42,6 +43,11 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         context: createContext(state.sourceChapter)
+      }
+    case CHANGE_CHAPTER:
+      return {
+        ...state,
+        sourceChapter: action.payload
       }
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:

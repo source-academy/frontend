@@ -44,6 +44,19 @@ function* interpreterSaga(): SagaIterator {
     yield put(actions.sendReplInputToOutput(code))
     yield* evalCode(code, context)
   })
+
+  yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
+    const newChapter = parseInt((action as actionTypes.IAction).payload, 10)
+    const oldChapter = yield select((state: IState) => state.playground.sourceChapter)
+    if (newChapter !== oldChapter) {
+      yield put(actions.changeChapter(newChapter))
+      yield put(actions.handleInterruptExecution())
+      yield put(actions.clearContext())
+      yield put(actions.clearReplOutput())
+    } else {
+      yield undefined
+    }
+  })
 }
 
 function* mainSaga() {
