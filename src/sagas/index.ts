@@ -31,6 +31,7 @@ function* interpreterSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*() {
     const code: string = yield select((state: IState) => state.playground.editorValue)
+    yield put(actions.handleInterruptExecution())
     yield put(actions.clearContext())
     yield put(actions.clearReplOutput())
     context = yield select((state: IState) => state.playground.context)
