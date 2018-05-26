@@ -176,6 +176,13 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   },
   *UnaryExpression(node: es.UnaryExpression, context: Context) {
     const value = yield* evaluate(node.argument, context)
+
+    const error = rttc.checkUnaryExpression(context, node.operator, value)
+    if (error) {
+      handleError(context, error)
+      return undefined
+    }
+
     if (node.operator === '!') {
       return !value
     } else if (node.operator === '-') {
@@ -188,7 +195,11 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     const left = yield* evaluate(node.left, context)
     const right = yield* evaluate(node.right, context)
 
-    rttc.checkBinaryExpression(context, node.operator, left, right)
+    const error = rttc.checkBinaryExpression(context, node.operator, left, right)
+    if (error) {
+      handleError(context, error)
+      return undefined
+    }
 
     let result
     switch (node.operator) {
@@ -235,8 +246,20 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   },
   *LogicalExpression(node: es.LogicalExpression, context: Context) {
     const left = yield* evaluate(node.left, context)
-    if ((node.operator === '&&' && left) || (node.operator === '||' && !left)) {
-      return yield* evaluate(node.right, context)
+    let error = rttc.checkLogicalExpression(context, left, true)
+    if (error) {
+      handleError(context, error)
+      return undefined
+    } else if ((node.operator === '&&' && left) || (node.operator === '||' && !left)) {
+      // only evaluate right if required (lazy); but when we do, check typeof right
+      const right = yield* evaluate(node.right, context)
+      error = rttc.checkLogicalExpression(context, left, right)
+      if (error) {
+        handleError(context, error)
+        return undefined
+      } else {
+        return right
+      }
     } else {
       return left
     }
@@ -328,6 +351,13 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   },
   *IfStatement(node: es.IfStatement, context: Context) {
     const test = yield* evaluate(node.test, context)
+
+    const error = rttc.checkIfStatement(context, test)
+    if (error) {
+      handleError(context, error)
+      return undefined
+    }
+
     if (test) {
       return yield* evaluate(node.consequent, context)
     } else if (node.alternate) {

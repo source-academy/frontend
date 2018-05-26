@@ -1,17 +1,28 @@
 import * as es from 'estree'
-import { Context, ErrorSeverity, ErrorType, SourceError, Value } from '../types'
+import {
+  ArrowClosure,
+  Closure,
+  Context,
+  ErrorSeverity,
+  ErrorType,
+  SourceError,
+  Value
+} from '../types'
+
+const LHS = ' on left hand side of operation'
+const RHS = ' on right hand side of operation'
 
 class TypeError implements SourceError {
-  public type: ErrorType.RUNTIME
-  public severity: ErrorSeverity.WARNING
+  public type = ErrorType.RUNTIME
+  public severity = ErrorSeverity.ERROR
   public location: es.SourceLocation
 
-  constructor(node: es.Node, public context: string, public expected: string, public got: string) {
+  constructor(node: es.Node, public side: string, public expected: string, public got: string) {
     this.location = node.loc!
   }
 
   public explain() {
-    return `TypeError: Expected ${this.expected} in ${this.context}, got ${this.got}.`
+    return `Expected ${this.expected}${this.side}, got ${this.got}.`
   }
 
   public elaborate() {
@@ -19,47 +30,36 @@ class TypeError implements SourceError {
   }
 }
 
-const isNumber = (v: Value) => typeof v === 'number'
-const isString = (v: Value) => typeof v === 'string'
-
-const checkAdditionAndComparison = (context: Context, left: Value, right: Value) => {
-  if (!(isNumber(left) || isString(left))) {
-    context.errors.push(
-      new TypeError(
-        context.runtime.nodes[0],
-        'left hand side of operation',
-        'number or string',
-        typeof left
-      )
-    )
-  }
-  if (!(isNumber(right) || isString(right))) {
-    context.errors.push(
-      new TypeError(
-        context.runtime.nodes[0],
-        'right hand side of operation',
-        'number or string',
-        typeof right
-      )
-    )
+/**
+ * We need to define our own typeof in order for source functions to be
+ * identifed as functions
+ */
+const typeOf = (v: Value) => {
+  if (v instanceof Closure || v instanceof ArrowClosure || typeof v === 'function') {
+    return 'function'
+  } else {
+    return typeof v
   }
 }
+const isNumber = (v: Value) => typeOf(v) === 'number'
+const isString = (v: Value) => typeOf(v) === 'string'
+const isBool = (v: Value) => typeOf(v) === 'boolean'
 
-const checkBinaryArithmetic = (context: Context, left: Value, right: Value) => {
-  if (!isNumber(left)) {
-    context.errors.push(
-      new TypeError(context.runtime.nodes[0], 'left hand side of operation', 'number', typeof left)
-    )
-  }
-  if (!isNumber(left)) {
-    context.errors.push(
-      new TypeError(
-        context.runtime.nodes[0],
-        'right hand side of operation',
-        'number',
-        typeof right
-      )
-    )
+export const checkUnaryExpression = (
+  context: Context,
+  operator: es.UnaryOperator,
+  value: Value
+) => {
+  const node = context.runtime.nodes[0]
+  switch (operator) {
+    case '+':
+      return isNumber(value) ? undefined : new TypeError(node, '', 'number', typeOf(value))
+    case '-':
+      return isNumber(value) ? undefined : new TypeError(node, '', 'number', typeOf(value))
+    case '!':
+      return isBool(value) ? undefined : new TypeError(node, '', 'boolean', typeOf(value))
+    default:
+      return
   }
 }
 
@@ -69,21 +69,60 @@ export const checkBinaryExpression = (
   left: Value,
   right: Value
 ) => {
+  const node = context.runtime.nodes[0]
   switch (operator) {
     case '-':
     case '*':
     case '/':
     case '%':
-      return checkBinaryArithmetic(context, left, right)
+      if (!isNumber(left)) {
+        return new TypeError(node, LHS, 'number', typeOf(left))
+      } else if (!isNumber(right)) {
+        return new TypeError(node, RHS, 'number', typeOf(right))
+      } else {
+        return
+      }
     case '<':
     case '<=':
     case '>':
     case '>=':
+      if (isNumber(left)) {
+        return isNumber(right) ? undefined : new TypeError(node, RHS, 'number', typeOf(right))
+      } else if (isString(left)) {
+        return isString(right) ? undefined : new TypeError(node, RHS, 'string', typeOf(right))
+      } else {
+        return new TypeError(node, LHS, 'string or number', typeOf(left))
+      }
     case '+':
-      return checkAdditionAndComparison(context, left, right)
+      if (isNumber(left)) {
+        return isNumber(right) || isString(right)
+          ? undefined
+          : new TypeError(node, RHS, 'number', typeOf(right))
+      } else if (!isString(left) && !isString(right)) {
+        // must have at least one side that is a string
+        return new TypeError(node, LHS, 'string', typeOf(left))
+      } else {
+        return
+      }
     case '!==':
     case '===':
     default:
       return
   }
+}
+
+export const checkLogicalExpression = (context: Context, left: Value, right: Value) => {
+  const node = context.runtime.nodes[0]
+  if (!isBool(left)) {
+    return new TypeError(node, LHS, 'boolean', typeOf(left))
+  } else if (!isBool(right)) {
+    return new TypeError(node, RHS, 'boolean', typeOf(right))
+  } else {
+    return
+  }
+}
+
+export const checkIfStatement = (context: Context, test: Value) => {
+  const node = context.runtime.nodes[0]
+  return isBool(test) ? undefined : new TypeError(node, ' as condition', 'boolean', typeOf(test))
 }
