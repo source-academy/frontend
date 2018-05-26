@@ -4,10 +4,13 @@ import {
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
+  EVAL_EDITOR,
+  EVAL_INTERPRETER,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   HANDLE_CONSOLE_LOG,
   IAction,
+  INTERRUPT_EXECUTION,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
@@ -61,8 +64,11 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
           consoleLogs: [action.payload]
         })
       } else {
-        lastOutput.consoleLogs = lastOutput.consoleLogs.concat(action.payload)
-        newOutput = state.output.slice(0, -1).concat(lastOutput)
+        const updatedLastOutput = {
+          type: lastOutput.type,
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload)
+        }
+        newOutput = state.output.slice(0, -1).concat(updatedLastOutput)
       }
       return {
         ...state,
@@ -73,6 +79,16 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         output: newOutput
+      }
+    case EVAL_EDITOR:
+      return {
+        ...state,
+        isRunning: true
+      }
+    case EVAL_INTERPRETER:
+      return {
+        ...state,
+        isRunning: true
       }
     case EVAL_INTERPRETER_SUCCESS:
       lastOutput = state.output.slice(-1)[0]
@@ -89,7 +105,8 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       }
       return {
         ...state,
-        output: newOutput
+        output: newOutput,
+        isRunning: false
       }
     case EVAL_INTERPRETER_ERROR:
       lastOutput = state.output.slice(-1)[0]
@@ -106,7 +123,13 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       }
       return {
         ...state,
-        output: newOutput
+        output: newOutput,
+        isRunning: false
+      }
+    case INTERRUPT_EXECUTION:
+      return {
+        ...state,
+        isRunning: false
       }
     default:
       return state

@@ -6,7 +6,7 @@ import { Context, interrupt, runInContext } from '../slang'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
-import { showSuccessMessage } from '../notification'
+import { showSuccessMessage, showWarningMessage } from '../notification'
 
 function* evalCode(code: string, context: Context) {
   const { result, interrupted } = yield race({
@@ -21,6 +21,7 @@ function* evalCode(code: string, context: Context) {
     }
   } else if (interrupted) {
     interrupt(context)
+    yield call(showWarningMessage, 'Execution aborted by user')
   }
 }
 
@@ -30,7 +31,6 @@ function* interpreterSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*() {
     const code: string = yield select((state: IState) => state.playground.editorValue)
-    yield put(actions.handleInterruptExecution())
     yield put(actions.clearContext())
     yield put(actions.clearReplOutput())
     context = yield select((state: IState) => state.playground.context)
@@ -40,7 +40,6 @@ function* interpreterSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_REPL, function*() {
     const code: string = yield select((state: IState) => state.playground.replValue)
     context = yield select((state: IState) => state.playground.context)
-    yield put(actions.handleInterruptExecution())
     yield put(actions.clearReplInput())
     yield put(actions.sendReplInputToOutput(code))
     yield* evalCode(code, context)
