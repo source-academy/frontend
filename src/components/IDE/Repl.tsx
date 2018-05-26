@@ -56,7 +56,6 @@ export const Output: React.SFC<IOutputProps> = props => {
         return (
           <Card>
             <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
-            <br />
             <pre className="resultOutput">{toString(props.output.value)}</pre>
           </Card>
         )
