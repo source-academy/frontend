@@ -102,6 +102,7 @@ export const importBuiltins = (context: Context) => {
     defineSymbol(context, 'enum_list', list.enum_list)
     defineSymbol(context, 'list_ref', list.list_ref)
     defineSymbol(context, 'accumulate', list.accumulate)
+    defineSymbol(context, 'equal', list.equal)
   }
 
   if (context.chapter >= Infinity) {
@@ -110,7 +111,6 @@ export const importBuiltins = (context: Context) => {
     defineSymbol(context, 'math_floor', Math.floor)
     defineSymbol(context, 'timed', misc.timed)
     // previously week 5
-    defineSymbol(context, 'equal', list.equal)
     defineSymbol(context, 'assoc', list.assoc)
     if (window.hasOwnProperty('ListVisualizer')) {
       defineSymbol(context, 'draw', (window as any).ListVisualizer.draw)
