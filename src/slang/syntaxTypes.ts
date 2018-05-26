@@ -1,42 +1,40 @@
 const syntaxTypes: { [nodeName: string]: number } = {
-  // Week 3
-  Program: 3,
-  ExpressionStatement: 3,
-  IfStatement: 3,
-  FunctionDeclaration: 3,
-  VariableDeclaration: 3,
-  ReturnStatement: 3,
-  CallExpression: 3,
-  UnaryExpression: 3,
-  BinaryExpression: 3,
-  LogicalExpression: 3,
-  ConditionalExpression: 3,
-  FunctionExpression: 3,
-  ArrowFunctionExpression: 3,
-  Identifier: 3,
-  Literal: 3,
+  // Chapter 1
+  Program: 1,
+  ExpressionStatement: 1,
+  IfStatement: 1,
+  FunctionDeclaration: 1,
+  VariableDeclaration: 1,
+  ReturnStatement: 1,
+  CallExpression: 1,
+  UnaryExpression: 1,
+  BinaryExpression: 1,
+  LogicalExpression: 1,
+  ConditionalExpression: 1,
+  FunctionExpression: 1,
+  ArrowFunctionExpression: 1,
+  Identifier: 1,
+  Literal: 1,
+
+  // Chapter 2
+  ArrayExpression: 2,
 
   // Week 5
   EmptyStatement: 5,
-  ArrayExpression: 5,
-
-  // Week 8
+  // preivously Week 8
   AssignmentExpression: 8,
   WhileStatement: 8,
-
-  // Week 9
+  // previously Week 9
   ForStatement: 9,
   BreakStatement: 9,
   ContinueStatement: 9,
   MemberExpression: 9,
-
-  // Week 10
+  // previously Week 10
   ThisExpression: 10,
   ObjectExpression: 10,
   Property: 10,
   UpdateExpression: 10,
   NewExpression: 10,
-
   // Disallowed Forever
   SwitchStatement: Infinity,
   DebuggerStatement: Infinity,
