@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { Card } from '@blueprintjs/core'
+import ReplControlContainer from '../../containers/IDE/ReplControlContainer'
 import ReplInputContainer from '../../containers/IDE/ReplInputContainer'
 import { InterpreterOutput } from '../../reducers/states'
 import { parseError, toString } from '../../slang'
@@ -16,10 +17,15 @@ export interface IOutputProps {
 const Repl: React.SFC<IReplProps> = props => {
   const cards = props.output.map((slice, index) => <Output output={slice} key={index} />)
   return (
-    <div className="Repl col-xs-6">
-      {cards}
-      <div className="row">
-        <ReplInputContainer />
+    <div className="Repl">
+      <div className="repl-control-parent">
+        <ReplControlContainer />
+      </div>
+      <div className="repl-output-parent">
+        {cards}
+        <div className="repl-input-parent row">
+          <ReplInputContainer />
+        </div>
       </div>
     </div>
   )
@@ -28,26 +34,45 @@ const Repl: React.SFC<IReplProps> = props => {
 export const Output: React.SFC<IOutputProps> = props => {
   switch (props.output.type) {
     case 'code':
-      return <Card>{props.output.value}</Card>
+      return (
+        <Card>
+          <pre className="codeOutput">{props.output.value}</pre>
+        </Card>
+      )
     case 'running':
-      return <Card>{props.output.consoleLogs.join('\n')}</Card>
+      return (
+        <Card>
+          <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
+        </Card>
+      )
     case 'result':
       if (props.output.consoleLogs.length === 0) {
-        return <Card>{toString(props.output.value)}</Card>
+        return (
+          <Card>
+            <pre className="resultOutput">{toString(props.output.value)}</pre>
+          </Card>
+        )
       } else {
         return (
           <Card>
-            {[props.output.consoleLogs.join('\n'), toString(props.output.value)].join('\n')}
+            <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
+            <pre className="resultOutput">{toString(props.output.value)}</pre>
           </Card>
         )
       }
     case 'errors':
       if (props.output.consoleLogs.length === 0) {
-        return <Card>{parseError(props.output.errors)}</Card>
+        return (
+          <Card>
+            <pre className="errorOutput">{parseError(props.output.errors)}</pre>
+          </Card>
+        )
       } else {
         return (
           <Card>
-            {[props.output.consoleLogs.join('\n'), parseError(props.output.errors)].join('\n')}
+            <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
+            <br />
+            <pre className="errorOutput">{parseError(props.output.errors)}</pre>
           </Card>
         )
       }

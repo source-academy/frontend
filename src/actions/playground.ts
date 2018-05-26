@@ -7,6 +7,11 @@ export const updateEditorValue: ActionCreator<actionTypes.IAction> = (newEditorV
   payload: newEditorValue
 })
 
+export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (widthChange: string) => ({
+  type: actionTypes.CHANGE_EDITOR_WIDTH,
+  payload: widthChange
+})
+
 export const updateReplValue: ActionCreator<actionTypes.IAction> = (newReplValue: string) => ({
   type: actionTypes.UPDATE_REPL_VALUE,
   payload: newReplValue

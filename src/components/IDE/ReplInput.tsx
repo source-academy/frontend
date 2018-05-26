@@ -14,10 +14,11 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
   public render() {
     return (
       <AceEditor
-        className="col-xs-12"
+        className="repl-react-ace react-ace"
         mode="javascript"
-        theme="terminal"
+        theme="cobalt"
         height="1px"
+        width="100%"
         value={this.props.replValue}
         onChange={this.props.handleReplChange}
         commands={[
@@ -32,6 +33,8 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
         ]}
         minLines={1}
         maxLines={20}
+        fontSize={14}
+        highlightActiveLine={false}
         showGutter={false}
       />
     )

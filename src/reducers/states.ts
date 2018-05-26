@@ -15,12 +15,13 @@ export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
 
 export interface IPlaygroundState {
-  readonly sourceChapter: number
-  readonly editorValue: string
-  readonly replValue: string
   readonly context: Context
-  readonly output: InterpreterOutput[]
+  readonly editorValue: string
+  readonly editorWidth: string
   readonly isRunning: boolean
+  readonly output: InterpreterOutput[]
+  readonly replValue: string
+  readonly sourceChapter: number
 }
 
 /**
@@ -92,10 +93,11 @@ export const defaultApplication: IApplicationState = {
 }
 
 export const defaultPlayground: IPlaygroundState = {
-  sourceChapter: latestSourceChapter,
-  editorValue: '',
-  replValue: '',
   context: createContext(latestSourceChapter),
+  editorValue: '',
+  editorWidth: '50%',
+  isRunning: false,
   output: [],
-  isRunning: false
+  replValue: '',
+  sourceChapter: latestSourceChapter
 }

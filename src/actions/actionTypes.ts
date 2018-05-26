@@ -7,6 +7,7 @@ export interface IAction extends ReduxAction {
 /** Playground */
 export const UPDATE_EDITOR_VALUE = 'UPDATE_EDITOR_VALUE'
 export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE'
+export const CHANGE_EDITOR_WIDTH = 'CHANGE_EDITOR_WIDTH'
 export const EVAL_EDITOR = 'EVAL_EDITOR'
 export const EVAL_REPL = 'EVAL_REPL'
 export const CLEAR_REPL_INPUT = 'CLEAR_REPL_INPUT'

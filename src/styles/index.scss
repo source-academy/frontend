@@ -1,7 +1,10 @@
 @import "~normalize.css/normalize.css";
 @import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "./blueprint.css";
 @import "~flexboxgrid/dist/flexboxgrid.css";
-@import "./application.css";
-@import "./ide.css";
-@import "./navigationBar.css";
+
+@import "global";
+@import "application";
+@import "blueprint";
+@import "ide";
+@import "navigationBar";
+@import "playground";

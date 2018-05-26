@@ -1,9 +1,13 @@
+html {
+    background: $cadet-color-1;
+}
+
 .Application {
+    height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 .Application__main {
-    margin-top: 1rem;
-    margin-left: 1rem;
+    margin-top: 0.5rem;
 }

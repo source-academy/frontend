@@ -1,0 +1,103 @@
+$code-color-code: #CED9E0;
+$code-color-log: #DD8C60;
+$code-color-result: #FFFFFF;
+$code-color-error: #FF4444;
+
+.IDE {
+  display: flex;
+  flex-direction: column;
+
+  .row {
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+
+  .ide-content-parent {
+    height: 85vh;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    > div {
+      height: inherit; // Fix for Firefox not autoscrolling when repl overflows
+    }
+    .repl-parent {
+      flex: 1 1;
+    }
+  }
+
+  .Editor {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .editor-control {
+      flex: initial;
+    }
+    .editor-react-ace {
+      flex: 1;
+      // to align with the repl output cards
+      margin-top: 0.3rem;
+    }
+  }
+
+  .Repl {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .repl-control-parent {
+      flex: initial;
+    }
+    .repl-output-parent {
+      flex: 1 1;
+      margin-top: 0.3rem;
+      overflow-y: auto;
+    }
+
+    .pt-card {
+      background-color: $cadet-color-2;
+      padding: 0.4rem;
+      padding-left: 0.6rem;
+      margin: 0.5rem;
+      margin-top: 0rem;
+
+      pre {
+        background-color: transparent;
+        box-shadow: none;
+        color: inherit;
+        padding: 0px;
+        margin: 0px;
+        white-space: pre-wrap;
+      }
+
+      .codeOutput {
+        color: $code-color-code;
+      }
+
+      .logOutput {
+        color: $code-color-log;
+      }
+
+      .resultOutput {
+        color: $code-color-result;
+      }
+
+      .errorOutput  {
+        color: $code-color-error;
+      }
+    }
+
+    .repl-react-ace {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      margin-top: 0rem;
+    }
+  }
+
+  .react-ace {
+    background-color: $cadet-color-2;
+    border-radius: 3px;
+    .ace_gutter {
+      background: $cadet-color-3;
+      color: rgb(128,145,160);
+    }
+  }
+}

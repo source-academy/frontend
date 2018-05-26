@@ -31,7 +31,6 @@ function* interpreterSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*() {
     const code: string = yield select((state: IState) => state.playground.editorValue)
-    yield put(actions.handleInterruptExecution())
     yield put(actions.clearContext())
     yield put(actions.clearReplOutput())
     context = yield select((state: IState) => state.playground.context)
@@ -51,7 +50,6 @@ function* interpreterSaga(): SagaIterator {
     const oldChapter = yield select((state: IState) => state.playground.sourceChapter)
     if (newChapter !== oldChapter) {
       yield put(actions.changeChapter(newChapter))
-      yield put(actions.handleInterruptExecution())
       yield put(actions.clearContext())
       yield put(actions.clearReplOutput())
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)

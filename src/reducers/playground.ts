@@ -1,6 +1,7 @@
 import { Reducer } from 'redux'
 import {
   CHANGE_CHAPTER,
+  CHANGE_EDITOR_WIDTH,
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -31,6 +32,11 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         replValue: action.payload
+      }
+    case CHANGE_EDITOR_WIDTH:
+      return {
+        ...state,
+        editorWidth: (parseFloat(state.editorWidth.slice(0, -1)) + action.payload).toString() + '%'
       }
     case CLEAR_REPL_INPUT:
       return {
