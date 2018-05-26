@@ -12,7 +12,7 @@ import {
 const LHS = ' on left hand side of operation'
 const RHS = ' on right hand side of operation'
 
-class TypeError implements SourceError {
+export class TypeError implements SourceError {
   public type = ErrorType.RUNTIME
   public severity = ErrorSeverity.ERROR
   public location: es.SourceLocation
@@ -26,7 +26,7 @@ class TypeError implements SourceError {
   }
 
   public elaborate() {
-    return 'TODO'
+    return this.explain()
   }
 }
 
@@ -51,15 +51,12 @@ export const checkUnaryExpression = (
   value: Value
 ) => {
   const node = context.runtime.nodes[0]
-  switch (operator) {
-    case '+':
-      return isNumber(value) ? undefined : new TypeError(node, '', 'number', typeOf(value))
-    case '-':
-      return isNumber(value) ? undefined : new TypeError(node, '', 'number', typeOf(value))
-    case '!':
-      return isBool(value) ? undefined : new TypeError(node, '', 'boolean', typeOf(value))
-    default:
-      return
+  if ((operator === '+' || operator === '-') && !isNumber(value)) {
+    return new TypeError(node, '', 'number', typeOf(value))
+  } else if (operator === '!' && !isBool(value)) {
+    return new TypeError(node, '', 'boolean', typeOf(value))
+  } else {
+    return undefined
   }
 }
 

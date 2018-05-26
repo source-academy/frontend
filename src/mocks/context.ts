@@ -1,5 +1,7 @@
+import * as es from 'estree'
+
 import { createContext } from '../slang'
-import { Closure, Context } from '../slang/types'
+import { Closure, Context, Frame } from '../slang/types'
 
 export function mockContext(chapter = 1): Context {
   return createContext(chapter)
@@ -27,5 +29,5 @@ export function mockRuntimeContext(): Context {
 }
 
 export function mockClosure(): Closure {
-  return {} as Closure
+  return new Closure({} as es.FunctionExpression, {} as Frame, {} as Context)
 }

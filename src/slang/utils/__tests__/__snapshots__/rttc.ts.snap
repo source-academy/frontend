@@ -1,0 +1,333 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 1`] = `"Expected string or number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 2`] = `"Expected string on right hand side of operation, got number."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 3`] = `"Expected string on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 4`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 5`] = `"Expected string or number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 6`] = `"Expected string or number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 7`] = `"Expected string or number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 8`] = `"Expected string on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 9`] = `"Expected string on right hand side of operation, got number."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 10`] = `"Expected string or number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 11`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 12`] = `"Expected string or number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 13`] = `"Expected string or number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 14`] = `"Expected string on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 15`] = `"Expected string or number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 16`] = `"Expected string on right hand side of operation, got number."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 17`] = `"Expected string on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 18`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 19`] = `"Expected string or number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 20`] = `"Expected string or number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 21`] = `"Expected string or number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 22`] = `"Expected string on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 23`] = `"Expected string on right hand side of operation, got number."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 24`] = `"Expected string or number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 25`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 26`] = `"Expected string or number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 27`] = `"Expected string or number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (<|>|<=|>=) return TypeError 28`] = `"Expected string on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 1`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 2`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 3`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 4`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 5`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 6`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 7`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 8`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 9`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 10`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 11`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 12`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 13`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 14`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 15`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 16`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 17`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 18`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 19`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 20`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 21`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 22`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 23`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 24`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 25`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 26`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 27`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 28`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 29`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 30`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 31`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 32`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 33`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 34`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 35`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 36`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 37`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 38`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 39`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 40`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 41`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 42`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 43`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 44`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 45`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 46`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 47`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 48`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 49`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 50`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 51`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 52`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 53`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 54`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 55`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 56`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 57`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 58`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 59`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 60`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 61`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 62`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 63`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 64`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 65`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 66`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 67`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 68`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 69`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 70`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 71`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 72`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 73`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 74`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 75`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 76`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 77`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 78`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 79`] = `"Expected number on right hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 80`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 81`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 82`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 83`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 84`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 85`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 86`] = `"Expected number on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 87`] = `"Expected number on left hand side of operation, got string."`;
+
+exports[`Invalid binary type combinations for (-|*|/|%) return TypeError 88`] = `"Expected number on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for + return TypeError 1`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for + return TypeError 2`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for + return TypeError 3`] = `"Expected string on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for + return TypeError 4`] = `"Expected string on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for + return TypeError 5`] = `"Expected string on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for + return TypeError 6`] = `"Expected string on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for + return TypeError 7`] = `"Expected number on right hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for + return TypeError 8`] = `"Expected number on right hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for + return TypeError 9`] = `"Expected string on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for + return TypeError 10`] = `"Expected string on left hand side of operation, got boolean."`;
+
+exports[`Invalid binary type combinations for + return TypeError 11`] = `"Expected string on left hand side of operation, got function."`;
+
+exports[`Invalid binary type combinations for + return TypeError 12`] = `"Expected string on left hand side of operation, got function."`;
+
+exports[`Invalid logical type combinations return TypeError 1`] = `"Expected boolean on left hand side of operation, got number."`;
+
+exports[`Invalid logical type combinations return TypeError 2`] = `"Expected boolean on right hand side of operation, got number."`;
+
+exports[`Invalid logical type combinations return TypeError 3`] = `"Expected boolean on left hand side of operation, got function."`;
+
+exports[`Invalid logical type combinations return TypeError 4`] = `"Expected boolean on right hand side of operation, got function."`;
+
+exports[`Invalid logical type combinations return TypeError 5`] = `"Expected boolean on left hand side of operation, got function."`;
+
+exports[`Invalid logical type combinations return TypeError 6`] = `"Expected boolean on left hand side of operation, got number."`;
+
+exports[`Invalid logical type combinations return TypeError 7`] = `"Expected boolean on left hand side of operation, got string."`;
+
+exports[`Invalid logical type combinations return TypeError 8`] = `"Expected boolean on left hand side of operation, got number."`;
+
+exports[`Invalid logical type combinations return TypeError 9`] = `"Expected boolean on right hand side of operation, got number."`;
+
+exports[`Invalid logical type combinations return TypeError 10`] = `"Expected boolean on left hand side of operation, got function."`;
+
+exports[`Invalid logical type combinations return TypeError 11`] = `"Expected boolean on right hand side of operation, got function."`;
+
+exports[`Invalid logical type combinations return TypeError 12`] = `"Expected boolean on left hand side of operation, got function."`;
+
+exports[`Invalid logical type combinations return TypeError 13`] = `"Expected boolean on left hand side of operation, got number."`;
+
+exports[`Invalid logical type combinations return TypeError 14`] = `"Expected boolean on left hand side of operation, got string."`;
+
+exports[`Invalid ternary/if test expressions return TypeError 1`] = `"Expected boolean as condition, got number."`;
+
+exports[`Invalid ternary/if test expressions return TypeError 2`] = `"Expected boolean as condition, got string."`;
+
+exports[`Invalid ternary/if test expressions return TypeError 3`] = `"Expected boolean as condition, got function."`;
+
+exports[`Invalid ternary/if test expressions return TypeError 4`] = `"Expected boolean as condition, got number."`;
+
+exports[`Invalid ternary/if test expressions return TypeError 5`] = `"Expected boolean as condition, got string."`;
+
+exports[`Invalid ternary/if test expressions return TypeError 6`] = `"Expected boolean as condition, got function."`;
+
+exports[`Invalid unary type combinations return TypeError 1`] = `"Expected boolean, got number."`;
+
+exports[`Invalid unary type combinations return TypeError 2`] = `"Expected boolean, got string."`;
+
+exports[`Invalid unary type combinations return TypeError 3`] = `"Expected boolean, got function."`;
+
+exports[`Invalid unary type combinations return TypeError 4`] = `"Expected number, got boolean."`;
+
+exports[`Invalid unary type combinations return TypeError 5`] = `"Expected number, got string."`;
+
+exports[`Invalid unary type combinations return TypeError 6`] = `"Expected number, got function."`;
+
+exports[`Invalid unary type combinations return TypeError 7`] = `"Expected number, got boolean."`;
+
+exports[`Invalid unary type combinations return TypeError 8`] = `"Expected number, got string."`;
+
+exports[`Invalid unary type combinations return TypeError 9`] = `"Expected number, got function."`;
+
+exports[`Invalid unary type combinations return TypeError 10`] = `"Expected boolean, got number."`;
+
+exports[`Invalid unary type combinations return TypeError 11`] = `"Expected boolean, got string."`;
+
+exports[`Invalid unary type combinations return TypeError 12`] = `"Expected boolean, got function."`;
+
+exports[`Invalid unary type combinations return TypeError 13`] = `"Expected number, got boolean."`;
+
+exports[`Invalid unary type combinations return TypeError 14`] = `"Expected number, got string."`;
+
+exports[`Invalid unary type combinations return TypeError 15`] = `"Expected number, got function."`;
+
+exports[`Invalid unary type combinations return TypeError 16`] = `"Expected number, got boolean."`;
+
+exports[`Invalid unary type combinations return TypeError 17`] = `"Expected number, got string."`;
+
+exports[`Invalid unary type combinations return TypeError 18`] = `"Expected number, got function."`;
