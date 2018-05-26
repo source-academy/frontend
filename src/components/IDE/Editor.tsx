@@ -16,8 +16,10 @@ import 'brace/theme/cobalt'
  */
 export interface IEditorProps {
   editorValue: string
+  isRunning: boolean
   handleEditorValueChange: (newCode: string) => void
   handleEvalEditor: () => void
+  handleInterruptEval: () => void
 }
 
 class Editor extends React.Component<IEditorProps, {}> {
@@ -38,11 +40,19 @@ class Editor extends React.Component<IEditorProps, {}> {
         {label}
       </Button>
     )
-    const runButton = genericButton('', 'play', this.props.handleEvalEditor)
+    const runButton = this.props.isRunning
+      ? null
+      : genericButton('', 'play', this.props.handleEvalEditor)
+    const stopButton = this.props.isRunning
+      ? genericButton('', 'stop', this.props.handleInterruptEval)
+      : null
     return (
       <div className="Editor">
         <div className="row editor-control start-xs">
-          <div className="col-xs-1">{runButton}</div>
+          <div className="col-xs-1">
+            {runButton}
+            {stopButton}
+          </div>
         </div>
         <div className="row editor-react-ace">
           <AceEditor

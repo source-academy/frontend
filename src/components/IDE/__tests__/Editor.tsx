@@ -7,8 +7,10 @@ import Editor, { IEditorProps } from '../Editor'
 test('Editor renders correctly', () => {
   const props: IEditorProps = {
     editorValue: '',
+    isRunning: false,
     handleEditorValueChange: newCode => {},
-    handleEvalEditor: () => {}
+    handleEvalEditor: () => {},
+    handleInterruptEval: () => {}
   }
   const app = <Editor {...props} />
   const tree = shallow(app)

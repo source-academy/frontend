@@ -12,11 +12,12 @@ export interface IApplicationState {
 }
 
 export interface IPlaygroundState {
+  readonly context: Context
   readonly editorValue: string
   readonly editorWidth: string
-  readonly replValue: string
-  readonly context: Context
+  readonly isRunning: boolean
   readonly output: InterpreterOutput[]
+  readonly replValue: string
 }
 
 /**
@@ -90,7 +91,8 @@ export const defaultApplication: IApplicationState = {
 export const defaultPlayground: IPlaygroundState = {
   editorValue: '',
   editorWidth: '50%',
-  replValue: '',
   context: createContext(),
-  output: []
+  isRunning: false,
+  output: [],
+  replValue: ''
 }
