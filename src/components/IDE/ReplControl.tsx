@@ -48,7 +48,7 @@ class ReplControl extends React.Component<IReplControlProps, {}> {
     const clearButton = genericButton('', 'remove', this.props.handleClearReplOutput)
     return (
       <div className="row end-xs">
-       <div className="pt-control-group pt-fill">
+        <div className="pt-control-group pt-fill">
           {chapterSelect(this.props.handleChapterSelect)}
           {evalButton}
           {clearButton}
