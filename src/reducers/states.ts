@@ -16,6 +16,7 @@ export interface IPlaygroundState {
   readonly replValue: string
   readonly context: Context
   readonly output: InterpreterOutput[]
+  readonly isRunning: boolean
 }
 
 /**
@@ -90,5 +91,6 @@ export const defaultPlayground: IPlaygroundState = {
   editorValue: '',
   replValue: '',
   context: createContext(),
-  output: []
+  output: [],
+  isRunning: false
 }
