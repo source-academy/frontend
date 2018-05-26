@@ -10,6 +10,7 @@ test('Control renders correctly', () => {
     handleEvalEditor: () => {},
     handleEvalRepl: () => {},
     handleClearReplOutput: () => {},
+    handleChapterSelect: (e: React.ChangeEvent<HTMLSelectElement>) => {},
     handleInterruptEval: () => {}
   }
   const app = <Control {...props} />

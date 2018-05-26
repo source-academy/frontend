@@ -1,7 +1,7 @@
 import { generate } from 'astring'
 import { MAX_LIST_DISPLAY_LENGTH } from './constants'
 import { apply } from './interpreter'
-import { Closure, Context, Value } from './types'
+import { ArrowClosure, Closure, Context, Value } from './types'
 
 export const closureToJS = (value: Value, context: Context, klass: string) => {
   function DummyClass(this: Value) {
@@ -30,7 +30,7 @@ export const closureToJS = (value: Value, context: Context, klass: string) => {
 }
 
 export const toJS = (value: Value, context: Context, klass?: string) => {
-  if (value instanceof Closure) {
+  if (value instanceof Closure || value instanceof ArrowClosure) {
     return value.fun
   } else {
     return value
