@@ -58,7 +58,7 @@ const arrayToString = (value: Value[], length: number) => {
 }
 
 export const toString = (value: Value, length = 0): string => {
-  if (value instanceof Closure) {
+  if (value instanceof ArrowClosure || value instanceof Closure) {
     return generate(value.node)
   } else if (Array.isArray(value)) {
     if (length > MAX_LIST_DISPLAY_LENGTH) {
