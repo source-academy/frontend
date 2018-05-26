@@ -2,6 +2,8 @@ import * as React from 'react'
 
 import { Button, IconName, Intent } from '@blueprintjs/core'
 
+import { sourceChapters } from '../../reducers/states'
+
 /**
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
@@ -9,7 +11,20 @@ import { Button, IconName, Intent } from '@blueprintjs/core'
 export interface IReplControlProps {
   handleEvalRepl: () => void
   handleClearReplOutput: () => void
+  handleChapterSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
+
+const chapterSelect = (handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {}) => (
+  <div className="pt-select pt-select">
+    <select defaultValue={sourceChapters.slice(-1)[0].toString()} onChange={handleSelect}>
+      {sourceChapters.map(chap => (
+        <option key={chap} value={chap}>
+          {`Source \xa7${chap}`}
+        </option>
+      ))}
+    </select>
+  </div>
+)
 
 class ReplControl extends React.Component<IReplControlProps, {}> {
   public render() {
@@ -33,7 +48,8 @@ class ReplControl extends React.Component<IReplControlProps, {}> {
     const clearButton = genericButton('', 'remove', this.props.handleClearReplOutput)
     return (
       <div className="row end-xs">
-        <div className="pt-control-group pt-fill">
+       <div className="pt-control-group pt-fill">
+          {chapterSelect(this.props.handleChapterSelect)}
           {evalButton}
           {clearButton}
         </div>
