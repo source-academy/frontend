@@ -44,7 +44,6 @@ const typeOf = (v: Value) => {
 const isNumber = (v: Value) => typeOf(v) === 'number'
 const isString = (v: Value) => typeOf(v) === 'string'
 const isBool = (v: Value) => typeOf(v) === 'boolean'
-const isFunc = (v: Value) => typeOf(v) === 'function'
 
 export const checkUnaryExpression = (
   context: Context,
@@ -107,17 +106,6 @@ export const checkBinaryExpression = (
       }
     case '!==':
     case '===':
-      if (isNumber(left) && !isNumber(right)) {
-        return new TypeError(node, RHS, 'number', typeOf(right))
-      } else if (isBool(left) && !isBool(right)) {
-        return new TypeError(node, RHS, 'boolean', typeOf(right))
-      } else if (isString(left) && !isString(right)) {
-        return new TypeError(node, RHS, 'string', typeOf(right))
-      } else if (isFunc(left) && !isFunc(right)) {
-        return new TypeError(node, RHS, 'function', typeOf(right))
-      } else {
-        return
-      }
     default:
       return
   }

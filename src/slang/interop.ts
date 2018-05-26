@@ -30,7 +30,7 @@ export const closureToJS = (value: Value, context: Context, klass: string) => {
 }
 
 export const toJS = (value: Value, context: Context, klass?: string) => {
-  if (value instanceof Closure) {
+  if (value instanceof Closure || value instanceof ArrowClosure) {
     return value.fun
   } else {
     return value

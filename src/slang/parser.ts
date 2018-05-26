@@ -10,7 +10,7 @@ import { Context, ErrorSeverity, ErrorType, SourceError } from './types'
 
 // tslint:disable-next-line:interface-name
 export interface ParserOptions {
-  week: number
+  chapter: number
 }
 
 export class DisallowedConstructError implements SourceError {
@@ -133,7 +133,7 @@ for (const type of Object.keys(syntaxTypes)) {
       usages: []
     }
     context.cfg.edges[id] = []
-    if (syntaxTypes[node.type] > context.week) {
+    if (syntaxTypes[node.type] > context.chapter) {
       context.errors.push(new DisallowedConstructError(node))
     }
   }
@@ -167,7 +167,7 @@ rules.forEach(rule => {
   const keys = Object.keys(rule.checkers)
   keys.forEach(key => {
     walkers[key] = compose(walkers[key], (node, context) => {
-      if (typeof rule.disableOn !== 'undefined' && context.week >= rule.disableOn) {
+      if (typeof rule.disableOn !== 'undefined' && context.chapter >= rule.disableOn) {
         return
       }
       const checker = rule.checkers[key]
