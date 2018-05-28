@@ -6,7 +6,7 @@ import 'brace/theme/terminal'
 
 export interface IReplInputProps {
   replValue: string
-  handleReplChange: (newCode: string) => void
+  handleReplValueChange: (newCode: string) => void
   handleReplEval: () => void
 }
 
@@ -20,7 +20,7 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
         height="1px"
         width="100%"
         value={this.props.replValue}
-        onChange={this.props.handleReplChange}
+        onChange={this.props.handleReplValueChange}
         commands={[
           {
             name: 'evaluate',

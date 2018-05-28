@@ -11,12 +11,12 @@ exports[`Output renders correctly for InterpreterOutput.type === 'result' 1`] = 
 exports[`Repl renders correctly 1`] = `
 "<div className=\\"Repl\\">
   <div className=\\"repl-control-parent\\">
-    <Connect(ReplControl) />
+    <ReplControl output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} handleChapterSelect={[Function: handleChapterSelect]} />
   </div>
   <div className=\\"repl-output-parent\\">
     <Component output={{...}} />
     <div className=\\"repl-input-parent row\\">
-      <Connect(ReplInput) />
+      <ReplInput output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} handleChapterSelect={[Function: handleChapterSelect]} />
     </div>
   </div>
 </div>"

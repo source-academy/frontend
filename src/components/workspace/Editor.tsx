@@ -18,7 +18,7 @@ export interface IEditorProps {
   editorValue: string
   isRunning: boolean
   handleEditorValueChange: (newCode: string) => void
-  handleEvalEditor: () => void
+  handleEditorEval: () => void
   handleInterruptEval: () => void
 }
 
@@ -42,7 +42,7 @@ class Editor extends React.Component<IEditorProps, {}> {
     )
     const runButton = this.props.isRunning
       ? null
-      : genericButton('', 'play', this.props.handleEvalEditor)
+      : genericButton('', 'play', this.props.handleEditorEval)
     const stopButton = this.props.isRunning
       ? genericButton('', 'stop', this.props.handleInterruptEval)
       : null

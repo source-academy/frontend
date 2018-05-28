@@ -9,7 +9,7 @@ test('Editor renders correctly', () => {
     editorValue: '',
     isRunning: false,
     handleEditorValueChange: newCode => {},
-    handleEvalEditor: () => {},
+    handleEditorEval: () => {},
     handleInterruptEval: () => {}
   }
   const app = <Editor {...props} />

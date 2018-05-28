@@ -9,8 +9,8 @@ import { sourceChapters } from '../../reducers/states'
  *           of the editor's content, using `slang`
  */
 export interface IReplControlProps {
-  handleEvalRepl: () => void
-  handleClearReplOutput: () => void
+  handleReplEval: () => void
+  handleReplOutputClear: () => void
   handleChapterSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
@@ -44,8 +44,8 @@ class ReplControl extends React.Component<IReplControlProps, {}> {
         {label}
       </Button>
     )
-    const evalButton = genericButton('', 'code', this.props.handleEvalRepl)
-    const clearButton = genericButton('', 'remove', this.props.handleClearReplOutput)
+    const evalButton = genericButton('', 'code', this.props.handleReplEval)
+    const clearButton = genericButton('', 'remove', this.props.handleReplOutputClear)
     return (
       <div className="row end-xs">
         <div className="pt-control-group pt-fill">
