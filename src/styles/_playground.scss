@@ -1,6 +1,8 @@
 .Playground {
     display: flex;
     flex-direction: column;
+    margin-top: 0.5rem;
+    flex: 1 1 100%
 }
 
 .Playground__main {

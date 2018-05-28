@@ -13,12 +13,12 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
       <NavbarHeading>{title}</NavbarHeading>
       <NavbarDivider />
       <NavLink
-        to="/dashboard"
+        to="/device"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon="dashboard" />
-        Dashboard
+        Device
       </NavLink>
     </NavbarGroup>
 

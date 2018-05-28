@@ -7,9 +7,9 @@ exports[`NavigationBar renders correctly 1`] = `
       Cadet
     </Blueprint2.NavbarHeading>
     <Blueprint2.NavbarDivider />
-    <NavLink to=\\"/dashboard\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/device\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"dashboard\\" />
-      Dashboard
+      Device
     </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup className=\\"pt-align-right\\" align=\\"left\\">

@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
-import DashboardContainer from '../containers/DashboardContainer'
+import DeviceContainer from '../containers/DeviceContainer'
 
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
@@ -13,16 +13,16 @@ export interface IApplicationProps extends RouteComponentProps<{}> {
 }
 
 const Application: React.SFC<IApplicationProps> = props => {
-  const redirectToDashboard = () => <Redirect to="/dashboard" />
+  const redirectToDevice = () => <Redirect to="/device" />
 
   return (
     <div className="Application pt-dark">
       <NavigationBar title={props.title} />
       <div className="Application__main">
         <Switch>
-          <Route path="/dashboard" component={DashboardContainer} />
+          <Route path="/device" component={DeviceContainer} />
           <Route path="/playground" component={Playground} />
-          <Route exact={true} path="/" component={redirectToDashboard} />
+          <Route exact={true} path="/" component={redirectToDevice} />
           <Route component={NotFound} />
         </Switch>
       </div>

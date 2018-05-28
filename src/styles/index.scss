@@ -3,8 +3,11 @@
 @import "~flexboxgrid/dist/flexboxgrid.css";
 
 @import "global";
-@import "application";
 @import "blueprint";
-@import "workspace";
+
+@import "application";
+@import "device";
+@import "login";
 @import "navigationBar";
 @import "playground";
+@import "workspace";

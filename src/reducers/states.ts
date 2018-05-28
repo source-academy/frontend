@@ -4,6 +4,7 @@ import { SourceError } from '../slang/types'
 export interface IState {
   readonly application: IApplicationState
   readonly playground: IPlaygroundState
+  readonly session: ISessionState
 }
 
 export interface IApplicationState {
@@ -22,6 +23,10 @@ export interface IPlaygroundState {
   readonly output: InterpreterOutput[]
   readonly replValue: string
   readonly sourceChapter: number
+}
+
+export interface ISessionState {
+  readonly token?: string
 }
 
 /**
@@ -100,4 +105,8 @@ export const defaultPlayground: IPlaygroundState = {
   output: [],
   replValue: '',
   sourceChapter: latestSourceChapter
+}
+
+export const defaultSession: ISessionState = {
+  token: undefined
 }
