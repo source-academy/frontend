@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import DeviceContainer from '../containers/device'
-
+import Game from './Game'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 import Playground from './Playground'
@@ -13,7 +13,7 @@ export interface IApplicationProps extends RouteComponentProps<{}> {
 }
 
 const Application: React.SFC<IApplicationProps> = props => {
-  const redirectToDevice = () => <Redirect to="/device" />
+  const redirectToGame = () => <Redirect to="/game" />
 
   return (
     <div className="Application">
@@ -22,7 +22,8 @@ const Application: React.SFC<IApplicationProps> = props => {
         <Switch>
           <Route path="/device" component={DeviceContainer} />
           <Route path="/playground" component={Playground} />
-          <Route exact={true} path="/" component={redirectToDevice} />
+          <Route path="/game" component={Game} />
+          <Route exact={true} path="/" component={redirectToGame} />
           <Route component={NotFound} />
         </Switch>
       </div>

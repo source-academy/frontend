@@ -13,6 +13,14 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
       <NavbarHeading>{title}</NavbarHeading>
       <NavbarDivider />
       <NavLink
+        to="/game"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon="star" />
+        Game
+      </NavLink>
+      <NavLink
         to="/device"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"

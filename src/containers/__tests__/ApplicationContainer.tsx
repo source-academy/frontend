@@ -17,8 +17,8 @@ test('ApplicationContainer redirects from / to /device', () => {
     </Provider>
   )
   const tree = mount(app)
-  expect(tree.find('.Device').length).toBe(1)
-  expect(tree.find('.NavigationBar__link.pt-active').contains('Device')).toBe(true)
+  expect(tree.find('.Game').length).toBe(1)
+  expect(tree.find('.NavigationBar__link.pt-active').contains('Game')).toBe(true)
 })
 
 test('ApplicationContainer renders NotFound on unknown routes', () => {
