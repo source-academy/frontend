@@ -1,13 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import {
-  chapterSelect,
-  clearReplOutput,
-  evalEditor,
-  evalRepl,
-  updateReplValue
-} from '../../actions/playground'
+import { chapterSelect, clearReplOutput, evalRepl, updateReplValue } from '../../actions/playground'
 import Repl, { IReplProps } from '../../components/workspace/Repl'
 import { IState } from '../../reducers/states'
 

@@ -1,34 +1,44 @@
 import * as React from 'react'
 
 import { Card } from '@blueprintjs/core'
-import ReplControlContainer from '../../containers/workspace/ReplControlContainer'
-import ReplInputContainer from '../../containers/workspace/ReplInputContainer'
 import { InterpreterOutput } from '../../reducers/states'
 import { parseError, toString } from '../../slang'
 
+import ReplControl, { IReplControlProps } from './ReplControl'
+import ReplInput, { IReplInputProps } from './ReplInput'
+
 export interface IReplProps {
   output: InterpreterOutput[]
+  replValue: string
+  handleReplValueChange: (newCode: string) => void
+  handleReplEval: () => void
+  handleReplOutputClear: () => void
+  handleChapterSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void
+}
+
+class Repl extends React.Component<IReplProps, {}> {
+  public render() {
+    const cards = this.props.output.map((slice, index) => <Output output={slice} key={index} />)
+    const controlProps: IReplControlProps = this.props as IReplControlProps
+    const inputProps: IReplInputProps = this.props as IReplInputProps
+    return (
+      <div className="Repl">
+        <div className="repl-control-parent">
+          <ReplControl {...controlProps} />
+        </div>
+        <div className="repl-output-parent">
+          {cards}
+          <div className="repl-input-parent row">
+            <ReplInput {...inputProps} />
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
 export interface IOutputProps {
   output: InterpreterOutput
-}
-
-const Repl: React.SFC<IReplProps> = props => {
-  const cards = props.output.map((slice, index) => <Output output={slice} key={index} />)
-  return (
-    <div className="Repl">
-      <div className="repl-control-parent">
-        <ReplControlContainer />
-      </div>
-      <div className="repl-output-parent">
-        {cards}
-        <div className="repl-input-parent row">
-          <ReplInputContainer />
-        </div>
-      </div>
-    </div>
-  )
 }
 
 export const Output: React.SFC<IOutputProps> = props => {

@@ -6,7 +6,12 @@ import Repl, { Output } from '../Repl'
 
 test('Repl renders correctly', () => {
   const props = {
-    output: [{ type: 'result', value: 'abc', consoleLogs: [] } as ResultOutput]
+    output: [{ type: 'result', value: 'abc', consoleLogs: [] } as ResultOutput],
+    replValue: '',
+    handleReplValueChange: (newCode: string) => {},
+    handleReplEval: () => {},
+    handleReplOutputClear: () => {},
+    handleChapterSelect: (e: React.ChangeEvent<HTMLSelectElement>) => {}
   }
   const app = <Repl {...props} />
   const tree = shallow(app)
