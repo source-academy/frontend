@@ -4,7 +4,7 @@ exports[`Editor renders correctly 1`] = `
 "<div className=\\"Editor\\">
   <div className=\\"row editor-control start-xs\\">
     <div className=\\"col-xs-1\\">
-      <Blueprint2.Button onClick={[Function: handleEvalEditor]} className=\\"pt-minimal col-xs-12\\" intent=\\"none\\" icon=\\"play\\" />
+      <Blueprint2.Button onClick={[Function: handleEditorEval]} className=\\"pt-minimal col-xs-12\\" intent=\\"none\\" icon=\\"play\\" />
     </div>
   </div>
   <div className=\\"row editor-react-ace\\">
