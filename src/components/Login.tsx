@@ -2,6 +2,10 @@ import { Button, ButtonGroup, Dialog } from '@blueprintjs/core'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
+export interface ILoginProps {
+  token?: string
+}
+
 const loginButton = (
   <Button className="pt-large" rightIcon="log-in">
     Log in with IVLE
@@ -16,11 +20,11 @@ const playgroundButton = (
   </NavLink>
 )
 
-const LoginDialog: React.SFC<{}> = () => (
+const LoginDialog: React.SFC<ILoginProps> = props => (
   <div>
     <Dialog
       icon="lock"
-      isOpen={true}
+      isOpen={props.token === undefined ? true : false}
       title="LOGIN"
       isCloseButtonShown={false}
       className="login pt-dark"

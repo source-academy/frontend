@@ -1,10 +1,5 @@
-import { connect, MapStateToProps } from 'react-redux'
+import { connect } from 'react-redux'
 
-import Device, { IDeviceProps } from '../components/Device'
-import { IState } from '../reducers/states'
+import Device from '../components/Device'
 
-const mapStateToProps: MapStateToProps<IDeviceProps, {}, IState> = state => ({
-  token: state.session.token
-})
-
-export default connect(mapStateToProps)(Device)
+export default connect()(Device)
