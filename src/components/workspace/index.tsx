@@ -2,8 +2,8 @@ import * as React from 'react'
 
 import Resizable from 're-resizable'
 
-import EditorContainer from '../../containers/IDE/EditorContainer'
-import ReplContainer from '../../containers/IDE/ReplContainer'
+import EditorContainer from '../../containers/workspace/EditorContainer'
+import ReplContainer from '../../containers/workspace/ReplContainer'
 
 export interface IIDEProps {
   editorWidth: string

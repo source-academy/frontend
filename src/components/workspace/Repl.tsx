@@ -1,8 +1,8 @@
 import * as React from 'react'
 
 import { Card } from '@blueprintjs/core'
-import ReplControlContainer from '../../containers/IDE/ReplControlContainer'
-import ReplInputContainer from '../../containers/IDE/ReplInputContainer'
+import ReplControlContainer from '../../containers/workspace/ReplControlContainer'
+import ReplInputContainer from '../../containers/workspace/ReplInputContainer'
 import { InterpreterOutput } from '../../reducers/states'
 import { parseError, toString } from '../../slang'
 

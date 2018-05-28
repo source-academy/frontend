@@ -1,6 +1,6 @@
 import { connect, MapStateToProps } from 'react-redux'
 
-import Repl, { IReplProps } from '../../components/IDE/Repl'
+import Repl, { IReplProps } from '../../components/workspace/Repl'
 import { IState } from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<IReplProps, {}, IState> = state => {

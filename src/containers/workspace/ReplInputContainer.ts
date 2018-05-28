@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { evalRepl, updateReplValue } from '../../actions/playground'
-import ReplInput, { IReplInputProps } from '../../components/IDE/ReplInput'
+import ReplInput, { IReplInputProps } from '../../components/workspace/ReplInput'
 import { IState } from '../../reducers/states'
 
 type StateProps = Pick<IReplInputProps, 'replValue'>

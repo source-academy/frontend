@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 
 import { handleInterruptExecution } from '../../actions/interpreter'
 import { evalEditor, updateEditorValue } from '../../actions/playground'
-import Editor, { IEditorProps } from '../../components/IDE/Editor'
+import Editor, { IEditorProps } from '../../components/workspace/Editor'
 import { IState } from '../../reducers/states'
 
 type StateProps = Pick<IEditorProps, 'editorValue'> & Pick<IEditorProps, 'isRunning'>

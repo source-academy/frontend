@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import IDEContainer from '../containers/IDE'
+import IDEContainer from '../containers/workspace'
 
 const Playground: React.SFC<{}> = () => {
   return (

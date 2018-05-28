@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { changeEditorWidth } from '../../actions/playground'
-import IDE, { IIDEProps } from '../../components/IDE/'
+import IDE, { IIDEProps } from '../../components/workspace/'
 import { IState } from '../../reducers/states'
 
 type StateProps = Pick<IIDEProps, 'editorWidth'>
