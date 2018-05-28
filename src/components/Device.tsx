@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+import LoginDialog from './Login'
+
 import deviceBackground from '../assets/device_background.png'
 
 const deviceStyle = {
@@ -8,7 +10,7 @@ const deviceStyle = {
 
 const Device: React.SFC<{}> = () => (
   <div className="Device" style={deviceStyle}>
-    <h2>Device</h2>
+    <LoginDialog />
   </div>
 )
 
