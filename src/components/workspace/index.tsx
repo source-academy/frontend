@@ -13,7 +13,7 @@ export interface IIDEProps {
 class IDE extends React.Component<IIDEProps, {}> {
   public render() {
     return (
-      <div className="IDE">
+      <div className="workspace">
         <div className="row ide-content-parent">
           <Resizable
             className="editor-parent"
