@@ -4,10 +4,11 @@ import { NavLink } from 'react-router-dom'
 
 export interface ILoginProps {
   token?: string
+  handleChangeToken: (s: string) => void
 }
 
-const loginButton = (
-  <Button className="pt-large" rightIcon="log-in">
+const loginButton = (handleClick: () => void) => (
+  <Button className="pt-large" rightIcon="log-in" onClick={handleClick}>
     Log in with IVLE
   </Button>
 )
@@ -31,7 +32,7 @@ const LoginDialog: React.SFC<ILoginProps> = props => (
     >
       <div className="pt-dialog-body">
         <ButtonGroup fill={true} vertical={true}>
-          {loginButton}
+          {loginButton(() => props.handleChangeToken('TODO'))}
           {playgroundButton}
         </ButtonGroup>
       </div>
