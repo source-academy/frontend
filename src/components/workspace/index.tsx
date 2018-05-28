@@ -5,12 +5,12 @@ import Resizable from 're-resizable'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 
-export interface IIDEProps {
+export interface IWorkspaceProps {
   editorWidth: string
   handleEditorWidthChange: (widthChange: number) => void // TODO
 }
 
-class IDE extends React.Component<IIDEProps, {}> {
+class Workspace extends React.Component<IWorkspaceProps, {}> {
   public render() {
     return (
       <div className="workspace">
@@ -45,4 +45,4 @@ class IDE extends React.Component<IIDEProps, {}> {
   }
 }
 
-export default IDE
+export default Workspace

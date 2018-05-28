@@ -2,11 +2,11 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { changeEditorWidth } from '../../actions/playground'
-import IDE, { IIDEProps } from '../../components/workspace/'
+import Workspace, { IWorkspaceProps } from '../../components/workspace/'
 import { IState } from '../../reducers/states'
 
-type StateProps = Pick<IIDEProps, 'editorWidth'>
-type DispatchProps = Pick<IIDEProps, 'handleEditorWidthChange'>
+type StateProps = Pick<IWorkspaceProps, 'editorWidth'>
+type DispatchProps = Pick<IWorkspaceProps, 'handleEditorWidthChange'>
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
@@ -25,4 +25,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(IDE)
+export default connect(mapStateToProps, mapDispatchToProps)(Workspace)
