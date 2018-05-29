@@ -7,7 +7,7 @@ import { MemoryRouter } from 'react-router'
 import { mockInitialStore } from '../../mocks/store'
 import ApplicationContainer from '../ApplicationContainer'
 
-test('ApplicationContainer redirects from / to /dashboard', () => {
+test('ApplicationContainer redirects from / to /device', () => {
   const store = mockInitialStore()
   const app = (
     <Provider store={store}>
