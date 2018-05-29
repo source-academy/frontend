@@ -1,10 +1,13 @@
-import * as React from 'react'
-
 import { NonIdealState } from '@blueprintjs/core'
+import * as React from 'react'
 
 const NotFound: React.SFC<{}> = () => (
   <div className="NotFound">
-    <NonIdealState title="404 Not Found" description="The requested resource cannot be found" />
+    <NonIdealState
+      visual="error"
+      title="404 Not Found"
+      description="The requested resource could not be found"
+    />
   </div>
 )
 
