@@ -12,11 +12,35 @@ const Device: React.SFC<{}> = () => (
     <Navbar className="NavigationBar pt-dark row">
       <NavbarGroup className="pt-align-left">
         <NavLink
+          to="/device/inbox"
+          activeClassName="pt-active"
+          className="NavigationBar__link pt-button pt-minimal"
+        >
+          <Icon icon="inbox" />
+          Inox
+        </NavLink>
+        <NavLink
           to="/device/journal"
           activeClassName="pt-active"
           className="NavigationBar__link pt-button pt-minimal"
         >
           <Icon icon="book" />
+          Journal
+        </NavLink>
+        <NavLink
+          to="/device/materials"
+          activeClassName="pt-active"
+          className="NavigationBar__link pt-button pt-minimal"
+        >
+          <Icon icon="folder-open" />
+          Materials
+        </NavLink>
+        <NavLink
+          to="/device/status"
+          activeClassName="pt-active"
+          className="NavigationBar__link pt-button pt-minimal"
+        >
+          <Icon icon="user" />
           Journal
         </NavLink>
       </NavbarGroup>
@@ -25,7 +49,10 @@ const Device: React.SFC<{}> = () => (
       <div className="col-xs-10 device-content-parent">
         <Card className="device-content" elevation={1}>
           <Switch>
+            <Route path="/device/inbox" component={JournalContainer} />
             <Route path="/device/journal" component={JournalContainer} />
+            <Route path="/device/materials" component={JournalContainer} />
+            <Route path="/device/status" component={JournalContainer} />
             <Route exact={true} path="/device" component={redirectToJournal} />
             <Route component={NotFound} />
           </Switch>
