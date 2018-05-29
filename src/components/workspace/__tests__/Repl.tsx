@@ -1,12 +1,34 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import { ResultOutput } from '../../../reducers/states'
+import { mockTypeError } from '../../../mocks/context'
 import Repl, { Output } from '../Repl'
+
+const mockRunningOutput = {
+  type: 'running',
+  consoleLogs: ['a', 'bb', 'cccccccccccccccccccccccccccccccc', 'd']
+}
+
+const mockCodeOutput = {
+  type: 'code',
+  value: "display('');"
+}
+
+const mockResultOutput = {
+  type: 'result',
+  value: 42,
+  consoleLogs: []
+}
+
+const mockErrorOutput = {
+  type: 'errors',
+  errors: [mockTypeError()],
+  consoleLogs: []
+}
 
 test('Repl renders correctly', () => {
   const props = {
-    output: [{ type: 'result', value: 'abc', consoleLogs: [] } as ResultOutput],
+    output: [mockResultOutput, mockCodeOutput, mockErrorOutput, mockRunningOutput],
     replValue: '',
     handleReplValueChange: (newCode: string) => {},
     handleReplEval: () => {},
@@ -18,9 +40,52 @@ test('Repl renders correctly', () => {
   expect(tree.debug()).toMatchSnapshot()
 })
 
-test("Output renders correctly for InterpreterOutput.type === 'result'", () => {
-  const props: ResultOutput = { type: 'result', value: 'def', consoleLogs: [] }
+test('Code output renders correctly', () => {
+  const app = <Output {...{ output: mockCodeOutput }} />
+  const tree = shallow(app)
+  expect(tree.debug()).toMatchSnapshot()
+})
+
+test('Running output renders correctly', () => {
+  const app = <Output {...{ output: mockRunningOutput }} />
+  const tree = shallow(app)
+  expect(tree.debug()).toMatchSnapshot()
+})
+
+test('Result output (no consoleLogs) renders correctly', () => {
+  const app = <Output {...{ output: mockResultOutput }} />
+  const tree = shallow(app)
+  expect(tree.debug()).toMatchSnapshot()
+})
+
+test('Result output (with consoleLogs) renders correctly', () => {
+  const props = {
+    ...mockResultOutput,
+    consoleLogs: mockRunningOutput.consoleLogs
+  }
   const app = <Output {...{ output: props }} />
+  const tree = shallow(app)
+  expect(tree.debug()).toMatchSnapshot()
+})
+
+test('Error output (no consoleLogs) renders correctly', () => {
+  const app = <Output {...{ output: mockErrorOutput }} />
+  const tree = shallow(app)
+  expect(tree.debug()).toMatchSnapshot()
+})
+
+test('Error output (with consoleLogs) renders correctly', () => {
+  const props = {
+    ...mockErrorOutput,
+    consoleLogs: mockRunningOutput.consoleLogs
+  }
+  const app = <Output {...{ output: props }} />
+  const tree = shallow(app)
+  expect(tree.debug()).toMatchSnapshot()
+})
+
+test('Empty output renders an empty card', () => {
+  const app = <Output {...{ output: {} }} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
