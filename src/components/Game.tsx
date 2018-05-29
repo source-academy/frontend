@@ -41,9 +41,9 @@ export class Game extends React.Component<{}, {}> {
           this.gameCanvas = thisDiv as HTMLDivElement
         }}
         className="sa-game"
-        data-story="<%= @story_override || @story %>"
-        data-attempted-all="<%= @attempted_all %>"
-        data-username="<%= @username %>"
+        data-story="spaceship"
+        data-attempted-all="true"
+        data-username="mockUsername"
       />
     )
   }
