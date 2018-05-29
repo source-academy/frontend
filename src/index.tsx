@@ -9,7 +9,7 @@ import { Store } from 'redux'
 import ApplicationContainer from './containers/ApplicationContainer'
 import createStore from './createStore'
 import { IState } from './reducers/states'
-import registerServiceWorker from './registerServiceWorker'
+import registerServiceWorker from './utils/registerServiceWorker'
 
 import './styles/index.css'
 
