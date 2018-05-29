@@ -8,7 +8,7 @@ import NotFound from '../NotFound'
 const redirectToJournal = () => <Redirect to="/device/journal" />
 
 const Device: React.SFC<{}> = () => (
-  <div className="device">
+  <div className="Device">
     <Navbar className="NavigationBar pt-dark">
       <NavbarGroup className="pt-align-left">
         <NavLink
