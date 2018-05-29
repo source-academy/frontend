@@ -2,8 +2,8 @@ import { Icon, Navbar, NavbarGroup } from '@blueprintjs/core'
 import * as React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { NavLink } from 'react-router-dom'
-import JournalContainer from '../containers/JournalContainer'
-import NotFound from './NotFound'
+import JournalContainer from '../../containers/device/JournalContainer'
+import NotFound from '../NotFound'
 
 const redirectToJournal = () => <Redirect to="/device/journal" />
 

@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
-import DeviceContainer from '../containers/DeviceContainer'
+import DeviceContainer from '../containers/device'
 
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
