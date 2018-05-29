@@ -4,7 +4,7 @@ import WorkspaceContainer from '../containers/workspace'
 
 const Playground: React.SFC<{}> = () => {
   return (
-    <div className="Playground">
+    <div className="Playground pt-dark">
       <WorkspaceContainer />
     </div>
   )
