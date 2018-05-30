@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 
 import { chapterSelect, clearReplOutput, evalRepl, updateReplValue } from '../../actions/playground'
 import Repl, { IReplProps } from '../../components/workspace/Repl'
-import { IState } from '../../reducers/states'
+import { IPlaygroundState } from '../../reducers/states'
 
 type StateProps = Pick<IReplProps, 'output'> & Pick<IReplProps, 'replValue'>
 
@@ -12,10 +12,10 @@ type DispatchProps = Pick<IReplProps, 'handleChapterSelect'> &
   Pick<IReplProps, 'handleReplOutputClear'> &
   Pick<IReplProps, 'handleReplValueChange'>
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
+const mapStateToProps: MapStateToProps<StateProps, {}, IPlaygroundState> = state => {
   return {
-    output: state.playground.output,
-    replValue: state.playground.replValue
+    output: state.output,
+    replValue: state.replValue
   }
 }
 
