@@ -1,14 +1,14 @@
-@import "~normalize.css/normalize.css";
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~flexboxgrid/dist/flexboxgrid.css";
+@import '~normalize.css/normalize.css';
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~flexboxgrid/dist/flexboxgrid.css';
 
-@import "global";
-@import "blueprint";
+@import 'global';
+@import 'blueprint';
 
-@import "application";
-@import "device";
-@import "login";
-@import "navigationBar";
-@import "notfound";
-@import "playground";
-@import "workspace";
+@import 'application';
+@import 'device';
+@import 'login';
+@import 'navigationBar';
+@import 'notfound';
+@import 'playground';
+@import 'workspace';

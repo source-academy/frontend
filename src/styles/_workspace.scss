@@ -1,7 +1,7 @@
-$code-color-code: #CED9E0;
-$code-color-log: #DD8C60;
-$code-color-result: #FFFFFF;
-$code-color-error: #FF4444;
+$code-color-code: #ced9e0;
+$code-color-log: #dd8c60;
+$code-color-result: #ffffff;
+$code-color-error: #ff4444;
 
 .workspace {
   display: flex;
@@ -80,7 +80,7 @@ $code-color-error: #FF4444;
         color: $code-color-result;
       }
 
-      .errorOutput  {
+      .errorOutput {
         color: $code-color-error;
       }
     }
@@ -97,7 +97,7 @@ $code-color-error: #FF4444;
     border-radius: 3px;
     .ace_gutter {
       background: $cadet-color-3;
-      color: rgb(128,145,160);
+      color: rgb(128, 145, 160);
     }
   }
 }

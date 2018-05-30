@@ -1,14 +1,14 @@
 .NavigationBar {
-    width: 100%;
-    flex: 0 0 auto;
+  width: 100%;
+  flex: 0 0 auto;
 }
 
 .NavigationBar__link :first-child {
-    margin-left: 0.1rem !important;
-    margin-right: 0.3rem !important;
+  margin-left: 0.1rem !important;
+  margin-right: 0.3rem !important;
 }
 
 .NavigationBar .pt-button {
-    text-transform: uppercase;
-    font-weight: 500;
+  text-transform: uppercase;
+  font-weight: 500;
 }
