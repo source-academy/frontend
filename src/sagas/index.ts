@@ -6,7 +6,7 @@ import { Context, interrupt, runInContext } from '../slang'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
-import { showSuccessMessage, showWarningMessage } from '../notification'
+import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 
 function* evalCode(code: string, context: Context) {
   const { result, interrupted } = yield race({
@@ -53,8 +53,6 @@ function* interpreterSaga(): SagaIterator {
       yield put(actions.clearContext())
       yield put(actions.clearReplOutput())
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
-    } else {
-      yield undefined
     }
   })
 }

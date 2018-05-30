@@ -1,9 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Output renders correctly for InterpreterOutput.type === 'result' 1`] = `
+exports[`Code output renders correctly 1`] = `
 "<Blueprint2.Card elevation={0} interactive={false}>
-  <pre className=\\"resultOutput\\">
-    &quot;def&quot;
+  <pre className=\\"codeOutput\\">
+    display(&#39;&#39;);
+  </pre>
+</Blueprint2.Card>"
+`;
+
+exports[`Empty output renders an empty card 1`] = `
+"<Blueprint2.Card elevation={0} interactive={false}>
+  &#39;&#39;
+</Blueprint2.Card>"
+`;
+
+exports[`Error output (no consoleLogs) renders correctly 1`] = `
+"<Blueprint2.Card elevation={0} interactive={false}>
+  <pre className=\\"errorOutput\\">
+    Line &lt;unknown&gt;: Expected , got .
+  </pre>
+</Blueprint2.Card>"
+`;
+
+exports[`Error output (with consoleLogs) renders correctly 1`] = `
+"<Blueprint2.Card elevation={0} interactive={false}>
+  <pre className=\\"logOutput\\">
+    a
+    bb
+    cccccccccccccccccccccccccccccccc
+    d
+  </pre>
+  <br />
+  <pre className=\\"errorOutput\\">
+    Line &lt;unknown&gt;: Expected , got .
   </pre>
 </Blueprint2.Card>"
 `;
@@ -15,10 +44,46 @@ exports[`Repl renders correctly 1`] = `
   </div>
   <div className=\\"repl-output-parent\\">
     <Component output={{...}} />
+    <Component output={{...}} />
+    <Component output={{...}} />
+    <Component output={{...}} />
     <div className=\\"repl-input-parent row pt-card pt-elevation-0\\">
       <ReplInput output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} handleChapterSelect={[Function: handleChapterSelect]} />
     </div>
     <div />
   </div>
 </div>"
+`;
+
+exports[`Result output (no consoleLogs) renders correctly 1`] = `
+"<Blueprint2.Card elevation={0} interactive={false}>
+  <pre className=\\"resultOutput\\">
+    42
+  </pre>
+</Blueprint2.Card>"
+`;
+
+exports[`Result output (with consoleLogs) renders correctly 1`] = `
+"<Blueprint2.Card elevation={0} interactive={false}>
+  <pre className=\\"logOutput\\">
+    a
+    bb
+    cccccccccccccccccccccccccccccccc
+    d
+  </pre>
+  <pre className=\\"resultOutput\\">
+    42
+  </pre>
+</Blueprint2.Card>"
+`;
+
+exports[`Running output renders correctly 1`] = `
+"<Blueprint2.Card elevation={0} interactive={false}>
+  <pre className=\\"logOutput\\">
+    a
+    bb
+    cccccccccccccccccccccccccccccccc
+    d
+  </pre>
+</Blueprint2.Card>"
 `;
