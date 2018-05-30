@@ -1,4 +1,4 @@
-import { Card, Icon, Navbar, NavbarGroup } from '@blueprintjs/core'
+import { Card, Icon, Navbar, NavbarDivider, NavbarGroup } from '@blueprintjs/core'
 import * as React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { NavLink } from 'react-router-dom'
@@ -21,17 +21,43 @@ const Device: React.SFC<{}> = () => {
             activeClassName="pt-active"
             className="NavigationBar__link pt-button pt-minimal"
           >
-            <Icon icon="inbox" />
+            <Icon icon="feed" />
             Announcements
           </NavLink>
+          <NavbarDivider />
           <NavLink
-            to="/device/quests"
+            to="/device/missions"
             activeClassName="pt-active"
             className="NavigationBar__link pt-button pt-minimal"
           >
-            <Icon icon="book" />
-            Quests
+            <Icon icon="flame" />
+            Missions
           </NavLink>
+          <NavLink
+            to="/device/sidequests"
+            activeClassName="pt-active"
+            className="NavigationBar__link pt-button pt-minimal"
+          >
+            <Icon icon="lightbulb" />
+            Sidequests
+          </NavLink>
+          <NavLink
+            to="/device/paths"
+            activeClassName="pt-active"
+            className="NavigationBar__link pt-button pt-minimal"
+          >
+            <Icon icon="predictive-analysis" />
+            Paths
+          </NavLink>
+          <NavLink
+            to="/device/contests"
+            activeClassName="pt-active"
+            className="NavigationBar__link pt-button pt-minimal"
+          >
+            <Icon icon="comparison" />
+            Contests
+          </NavLink>
+          <NavbarDivider />
           <NavLink
             to="/device/materials"
             activeClassName="pt-active"
@@ -40,6 +66,7 @@ const Device: React.SFC<{}> = () => {
             <Icon icon="folder-open" />
             Materials
           </NavLink>
+          <NavbarDivider />
           <NavLink
             to="/device/status"
             activeClassName="pt-active"
@@ -55,7 +82,10 @@ const Device: React.SFC<{}> = () => {
           <Card className="device-content" elevation={1}>
             <Switch>
               <Route path="/device/announcements" component={AnnouncementsContainer} />
-              <Route path="/device/quests" component={AnnouncementsContainer} />
+              <Route path="/device/missions" component={AnnouncementsContainer} />
+              <Route path="/device/sidequests" component={AnnouncementsContainer} />
+              <Route path="/device/paths" component={AnnouncementsContainer} />
+              <Route path="/device/contests" component={AnnouncementsContainer} />
               <Route path="/device/materials" component={AnnouncementsContainer} />
               <Route path="/device/status" component={AnnouncementsContainer} />
               <Route exact={true} path="/device" component={redirectToAnnouncements} />
