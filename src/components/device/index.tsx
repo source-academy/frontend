@@ -3,12 +3,14 @@ import * as React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { NavLink } from 'react-router-dom'
 import JournalContainer from '../../containers/device/JournalContainer'
+import LoginContainer from '../../containers/LoginContainer'
 import NotFound from '../NotFound'
 
 const redirectToJournal = () => <Redirect to="/device/journal" />
 
 const Device: React.SFC<{}> = () => (
   <div className="Device">
+    <LoginContainer />
     <Navbar className="NavigationBar pt-dark row">
       <NavbarGroup className="pt-align-left">
         <NavLink
