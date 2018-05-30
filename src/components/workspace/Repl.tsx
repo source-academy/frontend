@@ -20,7 +20,7 @@ class Repl extends React.Component<IReplProps, {}> {
   private replBottom: HTMLDivElement
 
   public componentDidUpdate() {
-    this.replBottom.scrollIntoView()
+    setTimeout(() => this.replBottom.scrollIntoView(), 10)
   }
 
   public render() {
