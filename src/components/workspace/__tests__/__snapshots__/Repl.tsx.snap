@@ -18,6 +18,7 @@ exports[`Repl renders correctly 1`] = `
     <div className=\\"repl-input-parent row\\">
       <ReplInput output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} handleChapterSelect={[Function: handleChapterSelect]} />
     </div>
+    <div />
   </div>
 </div>"
 `;

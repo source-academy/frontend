@@ -17,6 +17,12 @@ export interface IReplProps {
 }
 
 class Repl extends React.Component<IReplProps, {}> {
+  private replBottom: HTMLDivElement
+
+  public componentDidUpdate() {
+    this.replBottom.scrollIntoView()
+  }
+
   public render() {
     const cards = this.props.output.map((slice, index) => <Output output={slice} key={index} />)
     const controlProps: IReplControlProps = this.props as IReplControlProps
@@ -31,6 +37,11 @@ class Repl extends React.Component<IReplProps, {}> {
           <div className="repl-input-parent row">
             <ReplInput {...inputProps} />
           </div>
+          <div
+            ref={el => {
+              this.replBottom = el as HTMLDivElement
+            }}
+          />
         </div>
       </div>
     )
