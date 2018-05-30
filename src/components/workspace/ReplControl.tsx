@@ -1,7 +1,7 @@
-import { Button, IconName, Intent } from '@blueprintjs/core'
 import * as React from 'react'
 
 import { sourceChapters } from '../../reducers/states'
+import { controlButton } from '../commons'
 
 /**
  * @property handleEvalEditor  - A callback function for evaluation
@@ -26,23 +26,6 @@ class ReplControl extends React.Component<IReplControlProps, {}> {
     )
   }
 }
-
-const controlButton = (
-  label: string,
-  icon: IconName,
-  handleClick = () => {},
-  intent = Intent.NONE,
-  minimal = true
-) => (
-  <Button
-    onClick={handleClick}
-    className={(minimal ? 'pt-minimal' : '') + ' col-xs-12'}
-    intent={intent}
-    icon={icon}
-  >
-    {label}
-  </Button>
-)
 
 const chapterSelect = (handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {}) => (
   <div className="pt-select pt-select">

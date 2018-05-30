@@ -2,25 +2,32 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import { mockTypeError } from '../../../mocks/context'
+import {
+  CodeOutput,
+  ErrorOutput,
+  InterpreterOutput,
+  ResultOutput,
+  RunningOutput
+} from '../../../reducers/states'
 import Repl, { Output } from '../Repl'
 
-const mockRunningOutput = {
+const mockRunningOutput: RunningOutput = {
   type: 'running',
   consoleLogs: ['a', 'bb', 'cccccccccccccccccccccccccccccccc', 'd']
 }
 
-const mockCodeOutput = {
+const mockCodeOutput: CodeOutput = {
   type: 'code',
   value: "display('');"
 }
 
-const mockResultOutput = {
+const mockResultOutput: ResultOutput = {
   type: 'result',
   value: 42,
   consoleLogs: []
 }
 
-const mockErrorOutput = {
+const mockErrorOutput: ErrorOutput = {
   type: 'errors',
   errors: [mockTypeError()],
   consoleLogs: []
@@ -85,7 +92,7 @@ test('Error output (with consoleLogs) renders correctly', () => {
 })
 
 test('Empty output renders an empty card', () => {
-  const app = <Output {...{ output: {} }} />
+  const app = <Output {...{ output: {} as InterpreterOutput }} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })

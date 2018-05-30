@@ -1,3 +1,4 @@
+import { parse } from 'acorn'
 import * as es from 'estree'
 
 import { createContext } from '../slang'
@@ -34,5 +35,5 @@ export function mockClosure(): Closure {
 }
 
 export function mockTypeError(): TypeError {
-  return new TypeError({ loc: 0 } as es.Node, '', '', '')
+  return new TypeError(parse(''), '', '', '')
 }

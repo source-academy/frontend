@@ -1,8 +1,7 @@
 import * as React from 'react'
-
 import AceEditor from 'react-ace'
 
-import { Button, IconName, Intent } from '@blueprintjs/core'
+import { controlButton } from '../commons'
 
 import 'brace/mode/javascript'
 import 'brace/theme/cobalt'
@@ -24,27 +23,11 @@ export interface IEditorProps {
 
 class Editor extends React.Component<IEditorProps, {}> {
   public render() {
-    const genericButton = (
-      label: string,
-      icon: IconName,
-      handleClick = () => {},
-      intent = Intent.NONE,
-      notMinimal = false
-    ) => (
-      <Button
-        onClick={handleClick}
-        className={(notMinimal ? '' : 'pt-minimal') + ' col-xs-12'}
-        intent={intent}
-        icon={icon}
-      >
-        {label}
-      </Button>
-    )
     const runButton = this.props.isRunning
       ? null
-      : genericButton('', 'play', this.props.handleEditorEval)
+      : controlButton('', 'play', this.props.handleEditorEval)
     const stopButton = this.props.isRunning
-      ? genericButton('', 'stop', this.props.handleInterruptEval)
+      ? controlButton('', 'stop', this.props.handleInterruptEval)
       : null
     return (
       <div className="Editor">
