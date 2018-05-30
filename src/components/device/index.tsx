@@ -3,10 +3,10 @@ import * as React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
-import JournalContainer from '../../containers/device/JournalContainer'
+import AnnouncementsContainer from '../../containers/device/AnnouncementsContainer'
 import LoginContainer from '../../containers/LoginContainer'
 
-const redirectToJournal = () => <Redirect to="/device/announcements" />
+const redirectToAnnouncements = () => <Redirect to="/device/announcements" />
 
 const Device: React.SFC<{}> = () => {
   const redirectTo404 = () => <Redirect to="/404" />
@@ -54,11 +54,11 @@ const Device: React.SFC<{}> = () => {
         <div className="col-xs-10 device-content-parent">
           <Card className="device-content" elevation={1}>
             <Switch>
-              <Route path="/device/announcements" component={JournalContainer} />
-              <Route path="/device/quests" component={JournalContainer} />
-              <Route path="/device/materials" component={JournalContainer} />
-              <Route path="/device/status" component={JournalContainer} />
-              <Route exact={true} path="/device" component={redirectToJournal} />
+              <Route path="/device/announcements" component={AnnouncementsContainer} />
+              <Route path="/device/quests" component={AnnouncementsContainer} />
+              <Route path="/device/materials" component={AnnouncementsContainer} />
+              <Route path="/device/status" component={AnnouncementsContainer} />
+              <Route exact={true} path="/device" component={redirectToAnnouncements} />
               <Route component={redirectTo404} />
             </Switch>
           </Card>
