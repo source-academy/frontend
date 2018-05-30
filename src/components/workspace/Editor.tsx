@@ -44,8 +44,8 @@ class Editor extends React.Component<IEditorProps, {}> {
             theme="cobalt"
             value={this.props.editorValue}
             onChange={this.props.handleEditorValueChange}
-            width="100%"
             height="100%"
+            width="100%"
             fontSize={14}
             highlightActiveLine={false}
           />
