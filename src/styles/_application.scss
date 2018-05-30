@@ -1,14 +1,14 @@
 html {
-    background: $cadet-color-1;
+  background: $cadet-color-1;
 }
 
 .Application {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .Application__main {
-    display: flex;
-    flex: 1 1 100%
+  display: flex;
+  flex: 1 1 100%;
 }
