@@ -34,7 +34,7 @@ class Repl extends React.Component<IReplProps, {}> {
         </div>
         <div className="repl-output-parent">
           {cards}
-          <div className="repl-input-parent row">
+          <div className="repl-input-parent row pt-card pt-elevation-0">
             <ReplInput {...inputProps} />
           </div>
           <div
