@@ -4,17 +4,17 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { handleInterruptExecution } from '../../actions/interpreter'
 import { evalEditor, updateEditorValue } from '../../actions/playground'
 import Editor, { IEditorProps } from '../../components/workspace/Editor'
-import { IState } from '../../reducers/states'
+import { IPlaygroundState } from '../../reducers/states'
 
 type StateProps = Pick<IEditorProps, 'editorValue'> & Pick<IEditorProps, 'isRunning'>
 type DispatchProps = Pick<IEditorProps, 'handleEditorValueChange'> &
   Pick<IEditorProps, 'handleEditorEval'> &
   Pick<IEditorProps, 'handleInterruptEval'>
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
+const mapStateToProps: MapStateToProps<StateProps, {}, IPlaygroundState> = state => {
   return {
-    editorValue: state.playground.editorValue,
-    isRunning: state.playground.isRunning
+    editorValue: state.editorValue,
+    isRunning: state.isRunning
   }
 }
 
