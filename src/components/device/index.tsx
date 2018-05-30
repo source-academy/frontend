@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 import JournalContainer from '../../containers/device/JournalContainer'
 import LoginContainer from '../../containers/LoginContainer'
 
-const redirectToJournal = () => <Redirect to="/device/journal" />
+const redirectToJournal = () => <Redirect to="/device/announcements" />
 
 const Device: React.SFC<{}> = () => {
   const redirectTo404 = () => <Redirect to="/404" />
@@ -17,20 +17,20 @@ const Device: React.SFC<{}> = () => {
       <Navbar className="NavigationBar pt-dark row">
         <NavbarGroup className="pt-align-left">
           <NavLink
-            to="/device/inbox"
+            to="/device/announcements"
             activeClassName="pt-active"
             className="NavigationBar__link pt-button pt-minimal"
           >
             <Icon icon="inbox" />
-            Inox
+            Announcements
           </NavLink>
           <NavLink
-            to="/device/journal"
+            to="/device/quests"
             activeClassName="pt-active"
             className="NavigationBar__link pt-button pt-minimal"
           >
             <Icon icon="book" />
-            Journal
+            Quests
           </NavLink>
           <NavLink
             to="/device/materials"
@@ -46,7 +46,7 @@ const Device: React.SFC<{}> = () => {
             className="NavigationBar__link pt-button pt-minimal"
           >
             <Icon icon="user" />
-            Journal
+            Status
           </NavLink>
         </NavbarGroup>
       </Navbar>
@@ -54,8 +54,8 @@ const Device: React.SFC<{}> = () => {
         <div className="col-xs-10 device-content-parent">
           <Card className="device-content" elevation={1}>
             <Switch>
-              <Route path="/device/inbox" component={JournalContainer} />
-              <Route path="/device/journal" component={JournalContainer} />
+              <Route path="/device/announcements" component={JournalContainer} />
+              <Route path="/device/quests" component={JournalContainer} />
               <Route path="/device/materials" component={JournalContainer} />
               <Route path="/device/status" component={JournalContainer} />
               <Route exact={true} path="/device" component={redirectToJournal} />
