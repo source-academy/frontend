@@ -15,9 +15,10 @@ exports[`Repl renders correctly 1`] = `
   </div>
   <div className=\\"repl-output-parent\\">
     <Component output={{...}} />
-    <div className=\\"repl-input-parent row\\">
+    <div className=\\"repl-input-parent row pt-card pt-elevation-0\\">
       <ReplInput output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} handleChapterSelect={[Function: handleChapterSelect]} />
     </div>
+    <div />
   </div>
 </div>"
 `;
