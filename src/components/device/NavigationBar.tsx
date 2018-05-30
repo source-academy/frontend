@@ -4,7 +4,7 @@ import { Icon, Navbar, NavbarDivider, NavbarGroup } from '@blueprintjs/core'
 import { NavLink } from 'react-router-dom'
 
 const NavigationBar: React.SFC<{}> = () => (
-  <Navbar className="NavigationBar pt-dark row">
+  <Navbar className="NavigationBar row">
     <NavbarGroup className="pt-align-left">
       <NavLink
         to="/device/announcements"
