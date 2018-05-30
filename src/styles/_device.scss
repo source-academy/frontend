@@ -5,4 +5,15 @@
     height: 100%;
     width: 100%;
     flex: 1 1 100%;
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+    .device-content-parent {
+        .device-content {
+            margin-top: 20px;
+            background-color: white;
+            height: 100%;
+        }
+    }
 }

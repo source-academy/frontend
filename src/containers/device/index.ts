@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
 
-import Device from '../components/Device'
+import Device from '../../components/device'
 
 export default connect()(Device)
