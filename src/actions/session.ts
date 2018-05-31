@@ -5,3 +5,7 @@ export const changeToken: ActionCreator<actionTypes.IAction> = (newToken: string
   type: actionTypes.CHANGE_TOKEN,
   payload: newToken
 })
+
+export const fetchAnnouncements = () => ({
+  type: actionTypes.FETCH_ANNOUNCEMENTS
+})

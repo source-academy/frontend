@@ -10,6 +10,7 @@ export type Announcement = {
 
 export interface IAnnouncementsProps {
   announcements?: Announcement[]
+  handleAnnouncementsFetch: () => void
 }
 
 class Announcements extends React.Component<IAnnouncementsProps, {}> {
