@@ -13,6 +13,7 @@ import 'brace/theme/cobalt'
  */
 export interface IEditorProps {
   editorValue: string
+  handleEditorEval: () => void
   handleEditorValueChange: (newCode: string) => void
 }
 
@@ -28,6 +29,16 @@ class Editor extends React.Component<IEditorProps, {}> {
             value={this.props.editorValue}
             onChange={this.props.handleEditorValueChange}
             height="100%"
+            commands={[
+              {
+                name: 'evaluate',
+                bindKey: {
+                  win: 'Shift-Enter',
+                  mac: 'Shift-Enter'
+                },
+                exec: this.props.handleEditorEval
+              }
+            ]}
             width="100%"
             fontSize={14}
             highlightActiveLine={false}

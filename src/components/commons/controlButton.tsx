@@ -8,12 +8,7 @@ export const controlButton = (
   intent = Intent.NONE,
   minimal = true
 ) => (
-  <Button
-    onClick={handleClick}
-    className={(minimal ? 'pt-minimal' : '') + ' col-xs-12'}
-    intent={intent}
-    icon={icon}
-  >
+  <Button onClick={handleClick} className={minimal ? 'pt-minimal' : ''} intent={intent} icon={icon}>
     {label}
   </Button>
 )
