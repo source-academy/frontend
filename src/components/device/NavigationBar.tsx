@@ -63,7 +63,7 @@ const NavigationBar: React.SFC<{}> = () => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon="user" />
-        Status
+        Profile
       </NavLink>
     </NavbarGroup>
   </Navbar>
