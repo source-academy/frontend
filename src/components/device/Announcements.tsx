@@ -1,4 +1,4 @@
-import { Card, Text } from '@blueprintjs/core'
+import { Card, Spinner, Text } from '@blueprintjs/core'
 import * as React from 'react'
 
 export type Announcement = {
@@ -13,16 +13,28 @@ export interface IAnnouncementsProps {
 }
 
 class Announcements extends React.Component<IAnnouncementsProps, {}> {
+  public onComponentDidMount() {
+    if (this.props.announcements === undefined) {
+      // API call here
+    }
+  }
   public render() {
-    const announcements = this.props.announcements === undefined ? [] : this.props.announcements
-    // make an API call here if no announcements
-    const cards = announcements.map((ann, index) => (
-      <Card className="col-xs-8" key={index}>
-        <h4>{ann.title}</h4>
-        <Text>{ann.content}</Text>
-      </Card>
-    ))
-    return <div className="Announcements row center-xs">{cards}</div>
+    const announcements =
+      this.props.announcements === undefined ? (
+        <Spinner />
+      ) : (
+        this.props.announcements.map((ann, index) => (
+          <Card key={index}>
+            <h4>{ann.title}</h4>
+            <Text>{ann.content}</Text>
+          </Card>
+        ))
+      )
+    return (
+      <div className="Announcements row center-xs">
+        <div className="col-xs-10">{announcements}</div>
+      </div>
+    )
   }
 }
 export default Announcements
