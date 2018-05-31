@@ -33,10 +33,10 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
   }
 }
 
-const AnnouncementCard: React.SFC<{ ann: Announcement; key: number }> = props => (
-  <Card key={props.key}>
-    <h4>{props.ann.title}</h4>
-    <Text>{props.ann.content}</Text>
+const AnnouncementCard: React.SFC<Announcement> = ann => (
+  <Card>
+    <h4>{ann.title}</h4>
+    <Text>{ann.content}</Text>
   </Card>
 )
 
