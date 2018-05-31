@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 
 import AnnouncementsContainer from '../../containers/device/AnnouncementsContainer'
+import MissionsContainer from '../../containers/device/MissionsContainer'
 import LoginContainer from '../../containers/LoginContainer'
 import DeviceNavigationBar from './NavigationBar'
 
@@ -20,7 +21,7 @@ const Device: React.SFC<{}> = () => {
           <Card className="device-content" elevation={1}>
             <Switch>
               <Route path="/device/announcements" component={AnnouncementsContainer} />
-              <Route path="/device/missions" component={AnnouncementsContainer} />
+              <Route path="/device/missions" component={MissionsContainer} />
               <Route path="/device/sidequests" component={AnnouncementsContainer} />
               <Route path="/device/paths" component={AnnouncementsContainer} />
               <Route path="/device/contests" component={AnnouncementsContainer} />
