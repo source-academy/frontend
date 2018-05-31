@@ -1,4 +1,3 @@
-import { ChangeEvent } from 'react'
 import { ActionCreator } from 'redux'
 import * as actionTypes from './actionTypes'
 
@@ -25,11 +24,9 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (newOut
   }
 })
 
-export const chapterSelect: ActionCreator<actionTypes.IAction> = (
-  e: ChangeEvent<HTMLSelectElement>
-) => ({
+export const chapterSelect: ActionCreator<actionTypes.IAction> = (chapter, changeEvent) => ({
   type: actionTypes.CHAPTER_SELECT,
-  payload: e.currentTarget.value
+  payload: chapter.chapter
 })
 
 export const changeChapter: ActionCreator<actionTypes.IAction> = (newChapter: number) => ({

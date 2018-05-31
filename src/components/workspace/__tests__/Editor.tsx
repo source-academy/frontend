@@ -8,6 +8,8 @@ test('Editor renders correctly', () => {
   const props: IEditorProps = {
     editorValue: '',
     isRunning: false,
+    sourceChapter: 2,
+    handleChapterSelect: (i, e) => {},
     handleEditorValueChange: newCode => {},
     handleEditorEval: () => {},
     handleInterruptEval: () => {}

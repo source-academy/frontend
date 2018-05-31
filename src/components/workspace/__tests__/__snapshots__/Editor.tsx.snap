@@ -3,7 +3,10 @@
 exports[`Editor renders correctly 1`] = `
 "<div className=\\"Editor\\">
   <div className=\\"row editor-control start-xs\\">
-    <div className=\\"col-xs-1\\">
+    <div className=\\"col-xs-6\\">
+      <Blueprint2.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function: chapterRenderer]} filterable={false}>
+        <Blueprint2.Button text=\\"Source §2\\" rightIcon=\\"double-caret-vertical\\" />
+      </Blueprint2.Select>
       <Blueprint2.Button onClick={[Function: handleEditorEval]} className=\\"pt-minimal col-xs-12\\" intent=\\"none\\" icon=\\"play\\" />
     </div>
   </div>

@@ -40,7 +40,7 @@ exports[`Error output (with consoleLogs) renders correctly 1`] = `
 exports[`Repl renders correctly 1`] = `
 "<div className=\\"Repl\\">
   <div className=\\"repl-control-parent\\">
-    <ReplControl output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} handleChapterSelect={[Function: handleChapterSelect]} />
+    <ReplControl output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} />
   </div>
   <div className=\\"repl-output-parent\\">
     <Component output={{...}} />
@@ -48,7 +48,7 @@ exports[`Repl renders correctly 1`] = `
     <Component output={{...}} />
     <Component output={{...}} />
     <div className=\\"repl-input-parent row pt-card pt-elevation-0\\">
-      <ReplInput output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} handleChapterSelect={[Function: handleChapterSelect]} />
+      <ReplInput output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} />
     </div>
     <div />
   </div>

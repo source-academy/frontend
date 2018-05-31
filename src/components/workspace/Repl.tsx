@@ -13,7 +13,6 @@ export interface IReplProps {
   handleReplValueChange: (newCode: string) => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
-  handleChapterSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 class Repl extends React.Component<IReplProps, {}> {
