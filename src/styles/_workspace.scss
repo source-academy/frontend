@@ -4,7 +4,9 @@ $code-color-result: #ffffff;
 $code-color-error: #ff4444;
 
 .workspace {
+  height: 100%;
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
 
   .row {
@@ -13,29 +15,48 @@ $code-color-error: #ff4444;
   }
 
   .ide-content-parent {
-    height: 85vh;
+    height: 100%;
+    width: 100%;
     display: flex;
+    flex: 1 1 100%;
     flex-direction: row;
     overflow: hidden;
+    margin-bottom: 0.5rem;
+
     > div {
       height: inherit; // Fix for Firefox not autoscrolling when repl overflows
     }
+
+    .editor-parent {
+      flex: 0 0 auto;
+      height: 100%;
+    }
+
     .repl-parent {
       flex: 1 1;
+      height: 100%;
     }
   }
 
   .Editor {
     height: 100%;
+    padding-left: 0.4rem;
     display: flex;
     flex-direction: column;
+
     .editor-control {
       flex: initial;
     }
+
     .editor-react-ace {
       flex: 1;
+      height: 100%;
       // to align with the repl output cards
-      margin-top: 0.3rem;
+      margin-top: 0.5rem;
+
+      #brace-editor {
+        height: 100%;
+      }
     }
   }
 
@@ -48,7 +69,7 @@ $code-color-error: #ff4444;
     }
     .repl-output-parent {
       flex: 1 1;
-      margin-top: 0.3rem;
+      margin-top: 0.5rem;
       overflow-y: auto;
     }
 
