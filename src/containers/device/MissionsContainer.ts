@@ -1,23 +1,23 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { fetchMissions } from '../../actions/session'
-import Missions, { IMissionsProps } from '../../components/device/Announcements'
+import { fetchMissionsInfo } from '../../actions/session'
+import Missions, { IMissionsProps } from '../../components/device/Missions'
 import { IState } from '../../reducers/states'
 
-type StateProps = Pick<IMissionsProps, 'missions'>
-type DispatchProps = Pick<IMissionsProps, 'handleMissionsFetch'>
+type StateProps = Pick<IMissionsProps, 'missionsInfo'>
+type DispatchProps = Pick<IMissionsProps, 'handleMissionsInfoFetch'>
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    missions: state.session.missions
+    missionsInfo: state.session.missionsInfo
   }
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleMissionsFetch: fetchMissions
+      handleMissionsInfoFetch: fetchMissionsInfo
     },
     dispatch
   )
