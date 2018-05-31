@@ -20,7 +20,7 @@ $code-color-error: #ff4444;
     justify-content: space-between;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
   }
 
   .ide-content-parent {
@@ -52,10 +52,6 @@ $code-color-error: #ff4444;
     padding-left: 0.4rem;
     display: flex;
     flex-direction: column;
-
-    .editor-control {
-      flex: initial;
-    }
 
     .editor-react-ace {
       flex: 1;

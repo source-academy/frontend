@@ -39,9 +39,6 @@ exports[`Error output (with consoleLogs) renders correctly 1`] = `
 
 exports[`Repl renders correctly 1`] = `
 "<div className=\\"Repl\\">
-  <div className=\\"repl-control-parent\\">
-    <ReplControl output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} />
-  </div>
   <div className=\\"repl-output-parent\\">
     <Component output={{...}} />
     <Component output={{...}} />
