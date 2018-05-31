@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^2.1.1",
+    "@blueprintjs/select": "^2.0.1",
     "@types/acorn": "^4.0.3",
     "astring": "^1.3.0",
     "common-tags": "^1.7.2",

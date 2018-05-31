@@ -1,29 +1,25 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { handleInterruptExecution } from '../../actions/interpreter'
 import { evalEditor, updateEditorValue } from '../../actions/playground'
 import Editor, { IEditorProps } from '../../components/workspace/Editor'
 import { IState } from '../../reducers/states'
 
-type StateProps = Pick<IEditorProps, 'editorValue'> & Pick<IEditorProps, 'isRunning'>
+type StateProps = Pick<IEditorProps, 'editorValue'>
 type DispatchProps = Pick<IEditorProps, 'handleEditorValueChange'> &
-  Pick<IEditorProps, 'handleEditorEval'> &
-  Pick<IEditorProps, 'handleInterruptEval'>
+  Pick<IEditorProps, 'handleEditorEval'>
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    editorValue: state.playground.editorValue,
-    isRunning: state.playground.isRunning
+    editorValue: state.playground.editorValue
   }
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleEditorValueChange: updateEditorValue,
       handleEditorEval: evalEditor,
-      handleInterruptEval: handleInterruptExecution
+      handleEditorValueChange: updateEditorValue
     },
     dispatch
   )

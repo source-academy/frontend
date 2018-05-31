@@ -1,16 +1,12 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { chapterSelect, clearReplOutput, evalRepl, updateReplValue } from '../../actions/playground'
+import { evalRepl, updateReplValue } from '../../actions/playground'
 import Repl, { IReplProps } from '../../components/workspace/Repl'
 import { IState } from '../../reducers/states'
 
 type StateProps = Pick<IReplProps, 'output'> & Pick<IReplProps, 'replValue'>
-
-type DispatchProps = Pick<IReplProps, 'handleChapterSelect'> &
-  Pick<IReplProps, 'handleReplEval'> &
-  Pick<IReplProps, 'handleReplOutputClear'> &
-  Pick<IReplProps, 'handleReplValueChange'>
+type DispatchProps = Pick<IReplProps, 'handleReplValueChange'> & Pick<IReplProps, 'handleReplEval'>
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
@@ -22,9 +18,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleChapterSelect: chapterSelect,
       handleReplEval: evalRepl,
-      handleReplOutputClear: clearReplOutput,
       handleReplValueChange: updateReplValue
     },
     dispatch

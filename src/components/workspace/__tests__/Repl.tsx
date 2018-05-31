@@ -39,8 +39,7 @@ test('Repl renders correctly', () => {
     replValue: '',
     handleReplValueChange: (newCode: string) => {},
     handleReplEval: () => {},
-    handleReplOutputClear: () => {},
-    handleChapterSelect: (e: React.ChangeEvent<HTMLSelectElement>) => {}
+    handleReplOutputClear: () => {}
   }
   const app = <Repl {...props} />
   const tree = shallow(app)

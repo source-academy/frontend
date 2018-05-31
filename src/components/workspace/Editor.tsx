@@ -1,8 +1,6 @@
 import * as React from 'react'
 import AceEditor from 'react-ace'
 
-import { controlButton } from '../commons'
-
 import 'brace/mode/javascript'
 import 'brace/theme/cobalt'
 
@@ -15,28 +13,14 @@ import 'brace/theme/cobalt'
  */
 export interface IEditorProps {
   editorValue: string
-  isRunning: boolean
-  handleEditorValueChange: (newCode: string) => void
   handleEditorEval: () => void
-  handleInterruptEval: () => void
+  handleEditorValueChange: (newCode: string) => void
 }
 
 class Editor extends React.Component<IEditorProps, {}> {
   public render() {
-    const runButton = this.props.isRunning
-      ? null
-      : controlButton('', 'play', this.props.handleEditorEval)
-    const stopButton = this.props.isRunning
-      ? controlButton('', 'stop', this.props.handleInterruptEval)
-      : null
     return (
       <div className="Editor">
-        <div className="row editor-control start-xs">
-          <div className="col-xs-1">
-            {runButton}
-            {stopButton}
-          </div>
-        </div>
         <div className="row editor-react-ace">
           <AceEditor
             className="react-ace"
@@ -45,6 +29,16 @@ class Editor extends React.Component<IEditorProps, {}> {
             value={this.props.editorValue}
             onChange={this.props.handleEditorValueChange}
             height="100%"
+            commands={[
+              {
+                name: 'evaluate',
+                bindKey: {
+                  win: 'Shift-Enter',
+                  mac: 'Shift-Enter'
+                },
+                exec: this.props.handleEditorEval
+              }
+            ]}
             width="100%"
             fontSize={14}
             highlightActiveLine={false}
