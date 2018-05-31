@@ -1,3 +1,4 @@
+import { Announcement } from '../components/device/Announcements'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 
@@ -27,6 +28,7 @@ export interface IPlaygroundState {
 
 export interface ISessionState {
   readonly token?: string
+  readonly announcements?: Announcement[]
 }
 
 /**
@@ -108,5 +110,13 @@ export const defaultPlayground: IPlaygroundState = {
 }
 
 export const defaultSession: ISessionState = {
-  token: undefined
+  token: undefined,
+  announcements: [
+    {
+      author: 'Bob the builder',
+      title: 'Can We Fix It? A curious study -',
+      content: 'Turns out, we can!',
+      pinned: true
+    }
+  ]
 }

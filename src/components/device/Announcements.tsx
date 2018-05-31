@@ -9,11 +9,13 @@ export type Announcement = {
 }
 
 export interface IAnnouncementsProps {
-  announcements: Announcement[]
+  announcements?: Announcement[]
 }
 
 const Announcements: React.SFC<IAnnouncementsProps> = props => {
-  const cards = props.announcements.map((ann, index) => (
+  const announcements = props.announcements === undefined ? [] : props.announcements
+  // make an API call here if no announcements
+  const cards = announcements.map((ann, index) => (
     <Card className="col-xs-8" key={index}>
       <h4>{ann.title}</h4>
       <Text>{ann.content}</Text>
