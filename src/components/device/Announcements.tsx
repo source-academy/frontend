@@ -14,11 +14,10 @@ export interface IAnnouncementsProps {
 }
 
 class Announcements extends React.Component<IAnnouncementsProps, {}> {
-  public onComponentDidMount() {
-    if (this.props.announcements === undefined) {
-      // API call here
-    }
+  public componentDidMount() {
+    this.props.handleAnnouncementsFetch()
   }
+
   public render() {
     const announcements =
       this.props.announcements === undefined ? (
@@ -38,4 +37,5 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
     )
   }
 }
+
 export default Announcements
