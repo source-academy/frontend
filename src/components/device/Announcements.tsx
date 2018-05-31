@@ -23,7 +23,11 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
       this.props.announcements === undefined ? (
         <Spinner />
       ) : (
-        this.props.announcements.map((ann, index) => <AnnouncementCard ann={ann} key={index} />)
+        this.props.announcements.map((ann, index) => (
+          <div key={index}>
+            <AnnouncementCard {...ann} />
+          </div>
+        ))
       )
     return (
       <div className="Announcements row center-xs">
