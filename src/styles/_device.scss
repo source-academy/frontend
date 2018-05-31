@@ -1,7 +1,5 @@
 .Device {
   top: 50px;
-  background-size: cover;
-  background-image: url('#{$images-path}/device_background.png');
   height: 100%;
   width: 100%;
   flex: 1 1 100%;
@@ -12,8 +10,8 @@
   .device-content-parent {
     .device-content {
       margin-top: 20px;
+      margin-bottom: 20px;
       background-color: white;
-      height: 100%;
     }
   }
 }
