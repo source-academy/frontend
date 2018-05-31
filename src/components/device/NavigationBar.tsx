@@ -1,20 +1,11 @@
 import * as React from 'react'
 
-import { Icon, Navbar, NavbarDivider, NavbarGroup } from '@blueprintjs/core'
+import { Alignment, Icon, Navbar, NavbarGroup } from '@blueprintjs/core'
 import { NavLink } from 'react-router-dom'
 
 const NavigationBar: React.SFC<{}> = () => (
-  <Navbar className="NavigationBar row">
-    <NavbarGroup className="pt-align-left">
-      <NavLink
-        to="/device/announcements"
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon="feed" />
-        Announcements
-      </NavLink>
-      <NavbarDivider />
+  <Navbar className="NavigationBar">
+    <NavbarGroup align={Alignment.LEFT}>
       <NavLink
         to="/device/missions"
         activeClassName="pt-active"
@@ -47,7 +38,17 @@ const NavigationBar: React.SFC<{}> = () => (
         <Icon icon="comparison" />
         Contests
       </NavLink>
-      <NavbarDivider />
+    </NavbarGroup>
+
+    <NavbarGroup align={Alignment.RIGHT}>
+      <NavLink
+        to="/device/announcements"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon="feed" />
+        Announcements
+      </NavLink>
       <NavLink
         to="/device/materials"
         activeClassName="pt-active"
@@ -56,7 +57,6 @@ const NavigationBar: React.SFC<{}> = () => (
         <Icon icon="folder-open" />
         Materials
       </NavLink>
-      <NavbarDivider />
       <NavLink
         to="/device/status"
         activeClassName="pt-active"
