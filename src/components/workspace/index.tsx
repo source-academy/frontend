@@ -2,9 +2,9 @@ import * as React from 'react'
 
 import Resizable from 're-resizable'
 
+import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
-import ControlBar from './ControlBar'
 
 export interface IWorkspaceProps {
   editorWidth: string
@@ -15,7 +15,7 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
   public render() {
     return (
       <div className="workspace">
-        <ControlBar />
+        <ControlBarContainer />
         <div className="row ide-content-parent">
           <Resizable
             className="editor-parent"
