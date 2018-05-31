@@ -23,12 +23,7 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
       this.props.announcements === undefined ? (
         <Spinner />
       ) : (
-        this.props.announcements.map((ann, index) => (
-          <Card key={index}>
-            <h4>{ann.title}</h4>
-            <Text>{ann.content}</Text>
-          </Card>
-        ))
+        this.props.announcements.map((ann, index) => <AnnouncementCard ann={ann} key={index} />)
       )
     return (
       <div className="Announcements row center-xs">
@@ -37,5 +32,14 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
     )
   }
 }
+
+
+const AnnouncementCard: React.SFC<{ann : Announcement, key : number}> = props => (
+  <Card key={props.key}>
+    <h4>{props.ann.title}</h4>
+    <Text>{props.ann.content}</Text>
+  </Card>
+)
+
 
 export default Announcements
