@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Announcements page "loading" content renders correctly 1`] = `
+"<div className=\\"Announcements row center-xs\\">
+  <div className=\\"col-xs-10\\">
+    <Blueprint2.Spinner />
+  </div>
+</div>"
+`;
+
+exports[`Announcements page with 0 announcements renders correctly 1`] = `
+"<div className=\\"Announcements row center-xs\\">
+  <div className=\\"col-xs-10\\">
+    <Component announcements={{...}} />
+  </div>
+</div>"
+`;
+
+exports[`Announcements page with multiple loaded announcements renders correctly 1`] = `
+"<div className=\\"Announcements row center-xs\\">
+  <div className=\\"col-xs-10\\">
+    <Component announcements={{...}} />
+  </div>
+</div>"
+`;

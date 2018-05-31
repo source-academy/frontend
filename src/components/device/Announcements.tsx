@@ -22,15 +22,10 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
     let output
     if (this.props.announcements === undefined) {
       output = <Spinner />
-    } else if (this.props.announcements.length === 0) {
-      output = <h4>There are no announcements.</h4>
     } else {
-      output = this.props.announcements.map((ann, index) => (
-        <div key={index}>
-          <AnnouncementCard {...ann} />
-        </div>
-      ))
+      output = <AnnouncementCard announcements={this.props.announcements} />
     }
+
     return (
       <div className="Announcements row center-xs">
         <div className="col-xs-10">{output}</div>
@@ -39,11 +34,28 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
   }
 }
 
-const AnnouncementCard: React.SFC<Announcement> = ann => (
-  <Card>
-    <h4>{ann.title}</h4>
-    <Text>{ann.content}</Text>
-  </Card>
-)
+interface IAnnouncementCardProps {
+  announcements: Announcement[]
+}
+
+export const AnnouncementCard: React.SFC<IAnnouncementCardProps> = props => {
+  if (props.announcements.length === 0) {
+    return (
+      <>
+        <h4>There are no announcements.</h4>
+      </>
+    )
+  } else {
+    const cards = props.announcements.map((ann, index) => (
+      <div key={index}>
+        <Card>
+          <h4>{ann.title}</h4>
+          <Text>{ann.content}</Text>
+        </Card>
+      </div>
+    ))
+    return <>{cards}</>
+  }
+}
 
 export default Announcements
