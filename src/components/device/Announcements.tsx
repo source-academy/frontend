@@ -1,37 +1,24 @@
-import { Card, Text } from '@blueprintjs/core';
+import { Card, Text } from '@blueprintjs/core'
 import * as React from 'react'
 
-type Announcement = {
+export type Announcement = {
   author: string
-  title : string
-  content : string
-  pinned : boolean
-  date: Date
+  title: string
+  content: string
+  pinned: boolean
 }
 
-interface IAnnouncementsProps  {
+export interface IAnnouncementsProps {
   announcements: Announcement[]
 }
 
 const Announcements: React.SFC<IAnnouncementsProps> = props => {
-  const cards = props.announcements.map((ann, index) => 
-    <Card
-    className="col-xs-8"
-    key={index}> 
-      <h4>
-         {ann.title}
-      </h4>
-      <Text>
-         {ann.content}
-      </Text>
-      <Text>
-         {ann.date.toString()}
-      </Text>
-    </Card>)
-  return (
-    <div className="Announcements row center-xs">
-      {cards}
-    </div>
-  )
+  const cards = props.announcements.map((ann, index) => (
+    <Card className="col-xs-8" key={index}>
+      <h4>{ann.title}</h4>
+      <Text>{ann.content}</Text>
+    </Card>
+  ))
+  return <div className="Announcements row center-xs">{cards}</div>
 }
 export default Announcements
