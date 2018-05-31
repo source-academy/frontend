@@ -1,4 +1,4 @@
-module.exports =  function story() {
+export default function() {
   window.ASSETS_HOST =
     'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/';
   var StoryXMLPlayer = require('./story-xml-player');
