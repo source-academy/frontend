@@ -1,0 +1,27 @@
+$pure-green: #00ff00;
+$dark-green: #00f000;
+
+.NavigationBar {
+  display: none !important;
+}
+
+.Application {
+  background: $pure-green !important;
+}
+
+#brace-editor {
+  background: $dark-green !important;
+}
+
+.ace_gutter {
+  background: $dark-green !important;
+}
+
+.ace_gutter-layer {
+  background: $dark-green !important;
+}
+
+.pt-card {
+  background: $dark-green !important;
+  box-shadow: none !important;
+}

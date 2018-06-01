@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { HotKeys } from 'react-hotkeys'
 
 import Resizable from 're-resizable'
 
@@ -14,7 +15,7 @@ export interface IWorkspaceProps {
 class Workspace extends React.Component<IWorkspaceProps, {}> {
   public render() {
     return (
-      <div className="workspace">
+      <HotKeys className="workspace" handlers={handlers}>
         <ControlBarContainer />
         <div className="row ide-content-parent">
           <Resizable
@@ -42,9 +43,13 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
             <ReplContainer />
           </div>
         </div>
-      </div>
+      </HotKeys>
     )
   }
+}
+
+const handlers = {
+  goGreen: () => require('../../styles/workspace-green.css')
 }
 
 export default Workspace

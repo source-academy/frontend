@@ -128,3 +128,8 @@ $code-color-error: #ff4444;
     }
   }
 }
+
+/* otherwise, a think outline will show on click due to react-hotkeys */
+.workspace:focus {
+  outline: 0;
+}
