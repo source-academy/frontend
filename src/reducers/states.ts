@@ -1,3 +1,4 @@
+import { Announcement } from '../components/device/Announcements'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 
@@ -27,6 +28,7 @@ export interface IPlaygroundState {
 
 export interface ISessionState {
   readonly token?: string
+  readonly announcements?: Announcement[]
 }
 
 /**
@@ -108,5 +110,15 @@ export const defaultPlayground: IPlaygroundState = {
 }
 
 export const defaultSession: ISessionState = {
-  token: undefined
+  token: undefined,
+  announcements: [
+    {
+      author: 'Aministrator',
+      title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non tellus non ligula consectetur feugiat a at mauris. Ut sagittis, urna id suscipit dictum, ipsum diam sollicitudin enim, sed ultricies diam turpis vel libero. Maecenas finibus nisl ac lobortis ultricies. Integer molestie urna vitae nisi pharetra porttitor. Vestibulum massa diam, tristique quis ante a, posuere placerat magna. Pellentesque at lobortis purus, vitae imperdiet diam. Nulla eu rutrum neque. Aliquam efficitur consectetur ullamcorper. Pellentesque ultricies, diam ut vestibulum pellentesque, metus arcu laoreet ex, at mattis quam est non neque. Nam velit ipsum, posuere non porttitor commodo, lobortis in urna.\
+      Nulla facilisi. Donec mollis id nibh a luctus. Mauris vitae orci id velit pulvinar pellentesque non ut sapien. Curabitur eu consequat lorem. Proin pretium blandit scelerisque. Morbi ultricies, tellus non posuere pretium, felis sem convallis magna, ut sagittis elit felis et sem. Aliquam auctor suscipit condimentum. Nam posuere nulla dolor, in maximus risus feugiat vel. Phasellus vestibulum odio nec leo vehicula condimentum. Ut et semper libero. Cras fermentum mauris quis ex sodales, sit amet hendrerit augue lobortis. Maecenas eu dapibus enim, nec auctor est. Quisque quis erat erat. Curabitur sed rutrum felis, non venenatis diam. Fusce maximus rhoncus neque, in maximus velit semper eu. Fusce tempus lorem ut sodales pulvinar.',
+      pinned: true
+    }
+  ]
 }

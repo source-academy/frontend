@@ -1,5 +1,8 @@
 html {
-  background: $cadet-color-1;
+  background-size: cover;
+  background-image: url('#{$images-path}/device_background.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .Application {

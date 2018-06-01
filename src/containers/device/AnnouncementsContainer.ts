@@ -1,5 +1,25 @@
-import { connect } from 'react-redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
 
-import Announcements from '../../components/device/Announcements'
+import { fetchAnnouncements } from '../../actions/session'
+import Announcements, { IAnnouncementsProps } from '../../components/device/Announcements'
+import { IState } from '../../reducers/states'
 
-export default connect()(Announcements)
+type StateProps = Pick<IAnnouncementsProps, 'announcements'>
+type DispatchProps = Pick<IAnnouncementsProps, 'handleAnnouncementsFetch'>
+
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
+  return {
+    announcements: state.session.announcements
+  }
+}
+
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
+  bindActionCreators(
+    {
+      handleAnnouncementsFetch: fetchAnnouncements
+    },
+    dispatch
+  )
+
+export default connect(mapStateToProps, mapDispatchToProps)(Announcements)
