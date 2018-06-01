@@ -21,5 +21,11 @@
 }
 
 .pt-non-ideal-state {
-  margin-top: 0.4rem;
+  .pt-non-ideal-state-visual {
+    margin-bottom: 0.5rem;
+  }
+
+  .pt-non-ideal-state-title {
+    padding: 0.5rem 0 0 0;
+  }
 }

@@ -3,7 +3,7 @@
 exports[`Announcements page "loading" content renders correctly 1`] = `
 "<div className=\\"Announcements row center-xs\\">
   <div className=\\"col-xs-10\\">
-    <Blueprint2.Spinner />
+    <NonIdealState description=\\"Give it a second...\\" visual={{...}} />
   </div>
 </div>"
 `;

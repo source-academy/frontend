@@ -13,6 +13,10 @@ export interface IAnnouncementsProps {
   handleAnnouncementsFetch: () => void
 }
 
+interface IAnnouncementCardProps {
+  announcements: Announcement[]
+}
+
 class Announcements extends React.Component<IAnnouncementsProps, {}> {
   public componentDidMount() {
     this.props.handleAnnouncementsFetch()
@@ -21,7 +25,7 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
   public render() {
     let output
     if (this.props.announcements === undefined) {
-      output = <Spinner />
+      output = loadingSpinner
     } else {
       output = <AnnouncementCard announcements={this.props.announcements} />
     }
@@ -34,9 +38,7 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
   }
 }
 
-interface IAnnouncementCardProps {
-  announcements: Announcement[]
-}
+const loadingSpinner = <NonIdealState description="Give it a second..." visual={<Spinner />} />
 
 export const AnnouncementCard: React.SFC<IAnnouncementCardProps> = props => {
   if (props.announcements.length === 0) {
