@@ -1,5 +1,6 @@
 import { Card } from '@blueprintjs/core'
 import * as React from 'react'
+import { HotKeys } from 'react-hotkeys'
 
 import { InterpreterOutput } from '../../reducers/states'
 import { parseError, toString } from '../../slang'
@@ -42,9 +43,9 @@ class Repl extends React.Component<IReplProps, {}> {
       <div className="Repl">
         <div className="repl-output-parent">
           {cards}
-          <div className="repl-input-parent row pt-card pt-elevation-0">
+          <HotKeys className="repl-input-parent row pt-card pt-elevation-0" handlers={handlers}>
             <ReplInput {...inputProps} />
-          </div>
+          </HotKeys>
           <div
             ref={el => {
               this.replBottom = el as HTMLDivElement
@@ -104,6 +105,11 @@ export const Output: React.SFC<IOutputProps> = props => {
     default:
       return <Card>''</Card>
   }
+}
+
+/* Override handler, so does not trigger when focus is in editor */
+const handlers = {
+  goGreen: () => {}
 }
 
 export default Repl
