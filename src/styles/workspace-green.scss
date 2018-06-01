@@ -9,12 +9,17 @@ $dark-green: #00e000;
   background: $pure-green !important;
 }
 
-.editor-react-ace {
-  border: 0.1rem solid $dark-green !important;
-}
-
 #brace-editor {
   background: $pure-green !important;
+}
+
+.ace_print-margin {
+  background: $dark-green !important;
+}
+
+/* editor specific */
+.editor-react-ace {
+  border: 0.1rem solid $dark-green !important;
 }
 
 .ace_gutter {
@@ -25,6 +30,7 @@ $dark-green: #00e000;
   background: $pure-green !important;
 }
 
+/* repl specific */
 .pt-card {
   background: $pure-green !important;
   box-shadow: none !important;
