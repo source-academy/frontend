@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 
 import Announcements, { IAnnouncementsProps } from '../Announcements'
 
@@ -35,18 +35,18 @@ const mockPresentAnnouncements: IAnnouncementsProps = {
 
 test('Announcements page "loading" content renders correctly', () => {
   const app = <Announcements {...mockUndefinedAnnouncements} />
-  const tree = shallow(app)
+  const tree = mount(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
 test('Announcements page with 0 announcements renders correctly', () => {
   const app = <Announcements {...mockEmptyAnnouncements} />
-  const tree = shallow(app)
+  const tree = mount(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
 test('Announcements page with multiple loaded announcements renders correctly', () => {
   const app = <Announcements {...mockPresentAnnouncements} />
-  const tree = shallow(app)
+  const tree = mount(app)
   expect(tree.debug()).toMatchSnapshot()
 })

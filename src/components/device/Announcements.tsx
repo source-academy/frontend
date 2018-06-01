@@ -25,7 +25,7 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
   public render() {
     let output
     if (this.props.announcements === undefined) {
-      output = loadingSpinner
+      output = <NonIdealState description="Give it a second..." visual={<Spinner />} />
     } else {
       output = <AnnouncementCard announcements={this.props.announcements} />
     }
@@ -37,8 +37,6 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
     )
   }
 }
-
-const loadingSpinner = <NonIdealState description="Give it a second..." visual={<Spinner />} />
 
 export const AnnouncementCard: React.SFC<IAnnouncementCardProps> = props => {
   if (props.announcements.length === 0) {
