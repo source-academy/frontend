@@ -29,3 +29,21 @@
     padding: 0.5rem 0 0 0;
   }
 }
+
+.Missions {
+  color: $cadet-color-3;
+  .mission-info {
+    background-color: $cadet-color-5;
+    .mission-info-description {
+      text-align: justify;
+    }
+    .mission-info-due-date-parent {
+      padding-top: 15px;
+      text-align: left;
+      .mission-info-due-icon {
+        padding-top: 2px;
+        margin-right: 5px;
+      }
+    }
+  }
+}
