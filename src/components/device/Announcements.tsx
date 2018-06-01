@@ -1,4 +1,4 @@
-import { Card, Spinner, Text } from '@blueprintjs/core'
+import { Card, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import * as React from 'react'
 
 export type Announcement = {
@@ -40,11 +40,7 @@ interface IAnnouncementCardProps {
 
 export const AnnouncementCard: React.SFC<IAnnouncementCardProps> = props => {
   if (props.announcements.length === 0) {
-    return (
-      <>
-        <h4>There are no announcements.</h4>
-      </>
-    )
+    return <NonIdealState title="There are no announcements." visual="feed" />
   } else {
     const cards = props.announcements.map((ann, index) => (
       <div key={index}>
