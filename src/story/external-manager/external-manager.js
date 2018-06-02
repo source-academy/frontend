@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js'
+
 var externalHooks;
 
 var externalOverlay;

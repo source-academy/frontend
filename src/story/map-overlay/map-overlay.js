@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js'
+
 var Constants = require('../constants/constants.js');
 
 var hasNotification;

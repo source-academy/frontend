@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js'
+
 var Constants = require('../constants/constants.js');
 var QuestManager = require('../quest-manager/quest-manager.js');
 var LocationManager = require('../location-manager/location-manager.js');

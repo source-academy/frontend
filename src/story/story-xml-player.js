@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js'
+
 // CommonJS Imports
 var Constants = require('./constants/constants.js');
 var LocationManager = require('./location-manager/location-manager.js');

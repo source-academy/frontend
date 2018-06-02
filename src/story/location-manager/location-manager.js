@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js'
+
 var Constants = require('../constants/constants.js');
 var MapManager = require('../map-manager/map-manager.js');
 var ObjectManager = require('../object-manager/object-manager.js');
