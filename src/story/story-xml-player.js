@@ -20,7 +20,7 @@ var stage;
 // options contains the following properties:
 // saveData, hookHandlers, saveFunc, wristDeviceFunc
 // changeLocationHook, playerImageCanvas, playerName
-module.exports.init = function(container, options, callback) {
+export function init(container, options, callback) {
   renderer = PIXI.autoDetectRenderer(
     Constants.screenWidth,
     Constants.screenHeight,
@@ -57,19 +57,8 @@ module.exports.init = function(container, options, callback) {
   stage.addChild(ExternalManager.init(options.hookHandlers));
 };
 
-module.exports.getExternalOverlay = ExternalManager.getExternalOverlay;
-
-module.exports.changeStartLocation = LocationManager.changeStartLocation;
-module.exports.gotoStartLocation = LocationManager.gotoStartLocation;
-module.exports.gotoLocation = LocationManager.gotoLocation;
-
-module.exports.loadStory = StoryManager.loadStory;
-module.exports.loadStoryWithoutFirstQuest =
-  StoryManager.loadStoryWithoutFirstQuest;
-
-module.exports.unlockQuest = QuestManager.unlockQuest;
-module.exports.completeQuest = QuestManager.completeQuest;
-module.exports.unlockLastQuest = QuestManager.unlockLastQuest;
-
-module.exports.sendNotification = MapOverlay.sendNotification;
-module.exports.changeWristDeviceFunction = MapOverlay.changeWristDeviceFunction;
+export { getExternalOverlay } from './external-manager/external-manager.js'
+export { changeStartLocation, gotoStartLocation, gotoLocation } from './location-manager/location-manager.js'
+export { loadStory, loadStoryWithoutFirstQuest } from './story-manager/story-manager.js'
+export { unlockQuest, completeQuest, unlockLastQuest } from './quest-manager/quest-manager.js'
+export { sendNotification, changeWristDeviceFunction } from './map-overlay/map-overlay.js'

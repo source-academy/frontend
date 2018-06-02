@@ -25,7 +25,7 @@ var leftAvatar;
 var rightAvatar;
 var dialogOverlay;
 
-module.exports.init = function(playerName_parameter, playerImageCanvas) {
+export function init(playerName_parameter, playerImageCanvas) {
   playerName = playerName_parameter;
   var avatarTotalSize =
     Constants.playerAvatarSize + Constants.playerAvatarLineWidth;
@@ -420,7 +420,7 @@ function advanceSequence(node, callback) {
   }
 }
 
-function playSequence(node, callback) {
+export function playSequence(node, callback) {
   if (node.tagName != 'SEQUENCE') {
     return;
   }
@@ -450,4 +450,3 @@ function playSequence(node, callback) {
     callback();
   });
 }
-module.exports.playSequence = playSequence;

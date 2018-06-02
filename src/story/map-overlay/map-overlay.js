@@ -8,7 +8,7 @@ var wristDeviceFunction;
 var mapOverlay;
 var wristDeviceButton;
 
-module.exports.init = function(wristDeviceFunc) {
+export function init(wristDeviceFunc) {
   // map overlay, always appear in roaming mode
   mapOverlay = new PIXI.Container();
   wristDeviceButton = new PIXI.Sprite.fromImage(
@@ -29,7 +29,7 @@ module.exports.init = function(wristDeviceFunc) {
   return mapOverlay;
 };
 
-function sendNotification(callback) {
+export function sendNotification(callback) {
   var oldFunction = wristDeviceFunction;
   changeWristDeviceFunction(function() {
     changeWristDeviceFunction(oldFunction);
@@ -61,14 +61,11 @@ function sendNotification(callback) {
   }
   blink();
 }
-module.exports.sendNotification = sendNotification;
 
-function changeWristDeviceFunction(newFunc) {
+export function changeWristDeviceFunction(newFunc) {
   wristDeviceFunction = newFunc;
 }
-module.exports.changeWristDeviceFunction = changeWristDeviceFunction;
 
-function setVisibility(value) {
+export function setVisibility(value) {
   mapOverlay.visible = value;
 }
-module.exports.setVisibility = setVisibility;

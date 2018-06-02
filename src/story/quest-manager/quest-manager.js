@@ -10,7 +10,7 @@ var ExternalManager = require('../external-manager/external-manager.js');
 var loadedQuests = {};
 var activeQuests = {};
 
-function loadQuests(story) {
+export function loadQuests(story) {
   if (story.tagName !== 'STORY') {
     return;
   }
@@ -25,33 +25,29 @@ function loadQuests(story) {
     child = child.nextElementSibling;
   }
 }
-module.exports.loadQuests = loadQuests;
 
-function unloadQuests(storyId) {
+export function unloadQuests(storyId) {
   loadedQuests[storyId] = null;
   activeQuests[storyId] = null;
 }
-module.exports.unloadQuests = unloadQuests;
 
-function playCompleteQuest(node, callback) {
+export function playCompleteQuest(node, callback) {
   if (node.tagName != 'COMPLETE_QUEST') {
     return;
   }
   var storyAncestor = Utils.getStoryAncestor(node);
   completeQuest(storyAncestor.id, node.textContent, callback);
 }
-module.exports.playCompleteQuest = playCompleteQuest;
 
-function playUnlockQuest(node, callback) {
+export function playUnlockQuest(node, callback) {
   if (node.tagName != 'UNLOCK_QUEST') {
     return;
   }
   var storyAncestor = Utils.getStoryAncestor(node);
   unlockQuest(storyAncestor.id, node.textContent, callback);
 }
-module.exports.playUnlockQuest = playUnlockQuest;
 
-function unlockQuest(storyId, questId, callback) {
+export function unlockQuest(storyId, questId, callback) {
   callback = callback || Constants.nullFunction;
   var quests = loadedQuests[storyId];
   if (!quests) {
@@ -76,9 +72,8 @@ function unlockQuest(storyId, questId, callback) {
   // play the opening sequence
   playOpening(storyId, questId, callback);
 }
-module.exports.unlockQuest = unlockQuest;
 
-function playOpening(storyId, questId, callback) {
+export function playOpening(storyId, questId, callback) {
   if (!activeQuests[storyId][questId]) {
     return;
   }
@@ -113,9 +108,8 @@ function playOpening(storyId, questId, callback) {
     nextAction(child);
   });
 }
-module.exports.playOpening = playOpening;
 
-function completeQuest(storyId, questId, callback) {
+export function completeQuest(storyId, questId, callback) {
   callback = callback || Constants.nullFunction;
   if (!activeQuests[storyId] || !activeQuests[storyId][questId]) {
     return;
@@ -137,9 +131,8 @@ function completeQuest(storyId, questId, callback) {
     callback();
   }
 }
-module.exports.completeQuest = completeQuest;
 
-function unlockLastQuest(storyId, callback) {
+export function unlockLastQuest(storyId, callback) {
   callback = callback || Constants.nullFunction;
   var story = StoryManager.getLoadedStory(storyId);
   if (!story) {
@@ -150,9 +143,8 @@ function unlockLastQuest(storyId, callback) {
     unlockQuest(storyId, lastChild.id, callback);
   }
 }
-module.exports.unlockLastQuest = unlockLastQuest;
 
-function applyEffects(node) {
+export function applyEffects(node) {
   if (node.tagName != 'EFFECTS') {
     return;
   }
@@ -167,11 +159,10 @@ function applyEffects(node) {
 }
 
 // this is for when loading saved game or updating game state, it does not trigger opening sequence like unlockQuest
-function activateQuest(storyId, questId) {
+export function activateQuest(storyId, questId) {
   var quest = loadedQuests[storyId][questId];
   // register this quest as active
   activeQuests[storyId] = activeQuests[storyId] || {};
   activeQuests[storyId][questId] = quest;
   applyEffects(quest.children[0]);
 }
-module.exports.activateQuest = activateQuest;

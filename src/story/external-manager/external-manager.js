@@ -4,7 +4,7 @@ var externalHooks;
 
 var externalOverlay;
 
-module.exports.init = function(hookHandlers) {
+export function init(hookHandlers) {
   externalHooks = hookHandlers;
 
   externalOverlay = new PIXI.Container();
@@ -12,12 +12,11 @@ module.exports.init = function(hookHandlers) {
   return externalOverlay;
 };
 
-function getExternalOverlay() {
+export function getExternalOverlay() {
   return externalOverlay;
 }
-module.exports.getExternalOverlay = getExternalOverlay;
 
-function playExternalAction(node) {
+export function playExternalAction(node) {
   if (node.tagName != 'EXTERNAL_ACTION') {
     return;
   }
@@ -36,4 +35,3 @@ function playExternalAction(node) {
   }
   externalHooks[node.getAttribute('name')].apply(this, argList);
 }
-module.exports.playExternalAction = playExternalAction;

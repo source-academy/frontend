@@ -1,16 +1,17 @@
-function getStoryAncestor(node) {
+export function getStoryAncestor(node) {
   var storyAncestor = node.parentElement;
   while (storyAncestor && storyAncestor.tagName != 'STORY') {
     storyAncestor = storyAncestor.parentElement;
   }
   return storyAncestor;
 }
-module.exports.getStoryAncestor = getStoryAncestor;
 
 var renderer;
-module.exports.saveRenderer = function(aRenderer) {
+
+export function saveRenderer(aRenderer) {
   renderer = aRenderer;
 };
-module.exports.getRenderer = function() {
+
+export function getRenderer() {
   return renderer;
 };

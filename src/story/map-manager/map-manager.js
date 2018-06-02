@@ -5,7 +5,7 @@ var LocationManager = require('../location-manager/location-manager.js');
 
 var gameMap = {};
 
-function processMap(map) {
+export function processMap(map) {
   for (var i = 0; i < map.children.length; i++) {
     var rawLocation = map.children[i];
     processMapLocation(rawLocation);
@@ -14,7 +14,6 @@ function processMap(map) {
     LocationManager.changeStartLocation(map.children[0].getAttribute('name'));
   }
 }
-module.exports.processMap = processMap;
 
 function createGameLocation(name, skin, objects) {
   return { name: name, skin: skin, objects: objects, sequence: null };
@@ -50,7 +49,7 @@ function processMapLocation(node) {
   return gameLocation;
 }
 
-function processEffectsLocation(node) {
+export function processEffectsLocation(node) {
   if (node.tagName != 'LOCATION' || node.parentElement.tagName != 'EFFECTS') {
     return;
   }
@@ -66,21 +65,17 @@ function processEffectsLocation(node) {
   addSeqAndObjects(child, gameLocation);
   return gameLocation;
 }
-module.exports.processEffectsLocation = processEffectsLocation;
 
-function clearMap() {
+export function clearMap() {
   gameMap = {};
 }
-module.exports.clearMap = clearMap;
 
-function getGameLocation(locName) {
+export function getGameLocation(locName) {
   if (locationExist(locName)) {
     return gameMap[locName];
   }
 }
-module.exports.getGameLocation = getGameLocation;
 
-function locationExist(locName) {
+export function locationExist(locName) {
   return !!gameMap[locName];
 }
-module.exports.locationExist = locationExist;

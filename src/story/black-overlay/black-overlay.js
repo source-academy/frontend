@@ -5,7 +5,7 @@ var Constants = require('../constants/constants.js');
 var blackOverlay;
 var tween;
 
-module.exports.init = function() {
+export function init() {
   blackOverlay = new PIXI.Graphics();
   blackOverlay.beginFill(0, 1);
   blackOverlay.drawRect(0, 0, Constants.screenWidth, Constants.screenHeight);
@@ -36,7 +36,7 @@ function fadeIn(displayObject, cb) {
   });
 }
 
-function blackTransition(middleSynchronous, callback) {
+export function blackTransition(middleSynchronous, callback) {
   callback = callback || Constants.nullFunction;
   blackScreen(function() {
     middleSynchronous();
@@ -45,10 +45,8 @@ function blackTransition(middleSynchronous, callback) {
     }, 400);
   });
 }
-module.exports.blackTransition = blackTransition;
 
-function blackScreen(callback) {
+export function blackScreen(callback) {
   callback = callback || Constants.nullFunction;
   fadeIn(blackOverlay, callback);
 }
-module.exports.blackScreen = blackScreen;

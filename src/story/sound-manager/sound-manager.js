@@ -3,7 +3,7 @@ var Constants = require('../constants/constants.js');
 var soundAssets = {};
 var soundsToLoad = {};
 
-function markSoundsToLoad(story) {
+export function markSoundsToLoad(story) {
   var nodes = story.getElementsByTagName('SOUND');
   for (var i = 0; i < nodes.length; i++) {
     var node = nodes[i];
@@ -13,9 +13,8 @@ function markSoundsToLoad(story) {
     }
   }
 }
-module.exports.markSoundsToLoad = markSoundsToLoad;
 
-function preloadSounds() {
+export function preloadSounds() {
   var sounds = Object.keys(soundsToLoad);
 
   if (sounds.length > 0) {
@@ -27,11 +26,9 @@ function preloadSounds() {
     // TODO: For real version, need to load the audios here
   }
 }
-module.exports.preloadSounds = preloadSounds;
 
-function playAsyncSound(name) {
+export function playAsyncSound(name) {
   if (soundAssets[name]) {
     soundAssets[name].play();
   }
 }
-module.exports.playAsyncSound = playAsyncSound;

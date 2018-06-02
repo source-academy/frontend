@@ -12,9 +12,9 @@ var loadedStories = {};
 var loadingOverlay;
 var loadingText;
 
-module.exports.init = function() {
+export function init() {
   loadingOverlay = new PIXI.Container();
-  blackOverlay = new PIXI.Graphics();
+  let blackOverlay = new PIXI.Graphics();
   blackOverlay.beginFill(0, 1);
   blackOverlay.drawRect(0, 0, Constants.screenWidth, Constants.screenHeight);
   blackOverlay.endFill();
@@ -42,12 +42,11 @@ module.exports.init = function() {
   return loadingOverlay;
 };
 
-function getLoadedStory(storyId) {
+export function getLoadedStory(storyId) {
   return loadedStories[storyId];
 }
-module.exports.getLoadedStory = getLoadedStory;
 
-function unlockFirstQuest(storyId, callback) {
+export function unlockFirstQuest(storyId, callback) {
   var story = loadedStories[storyId];
   if (!story) {
     return;
@@ -66,9 +65,8 @@ function unlockFirstQuest(storyId, callback) {
     callback();
   }
 }
-module.exports.unlockFirstQuest = unlockFirstQuest;
 
-function loadStory(storyXML, callback, startLocation) {
+export function loadStory(storyXML, callback, startLocation) {
   if (loadedStories[storyXML]) {
     return;
   }
@@ -79,9 +77,8 @@ function loadStory(storyXML, callback, startLocation) {
     unlockFirstQuest(storyXML, LocationManager.verifyGotoStart(callback));
   });
 }
-module.exports.loadStory = loadStory;
 
-function loadStoryWithoutFirstQuest(storyXML, callback, startLocation) {
+export function loadStoryWithoutFirstQuest(storyXML, callback, startLocation) {
   if (loadedStories[storyXML]) {
     return;
   }
@@ -92,7 +89,6 @@ function loadStoryWithoutFirstQuest(storyXML, callback, startLocation) {
     LocationManager.verifyGotoStart(callback)();
   });
 }
-module.exports.loadStoryWithoutFirstQuest = loadStoryWithoutFirstQuest;
 
 function processStory(story) {
   if (loadedStories[story.id]) {
@@ -103,7 +99,7 @@ function processStory(story) {
   QuestManager.loadQuests(story);
 }
 
-function loadStoryXML(storyXMLs, willSave, callback) {
+export function loadStoryXML(storyXMLs, willSave, callback) {
   callback = callback || Constants.nullFunction;
   loadingOverlay.visible = true;
   var downloaded = {};
@@ -208,9 +204,8 @@ function loadStoryXML(storyXMLs, willSave, callback) {
     });
   });
 }
-module.exports.loadStoryXML = loadStoryXML;
 
-function closeStory(storyId, callback) {
+export function closeStory(storyId, callback) {
   if (!loadedStories[storyId]) {
     return;
   }
@@ -223,7 +218,6 @@ function closeStory(storyId, callback) {
     LocationManager.goBackToCurCamLocation(callback);
   });
 }
-module.exports.closeStory = closeStory;
 
 function preloadAssets(assetsToLoadTable, callback) {
   var assets = Object.keys(assetsToLoadTable);

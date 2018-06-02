@@ -16,7 +16,7 @@ var curCameraLocation;
 var startLocation;
 var changeLocationFunc;
 
-module.exports.init = function(changeLocationHook) {
+export function init(changeLocationHook) {
   changeLocationFunc = changeLocationHook || Constants.nullFunction;
   // background
   gameBackground = new PIXI.Sprite();
@@ -29,7 +29,7 @@ module.exports.init = function(changeLocationHook) {
 };
 
 // change the location when playing a sequence
-function changeSeqLocation(node, callback) {
+export function changeSeqLocation(node, callback) {
   if (node.tagName != 'LOCATION' || node.parentElement.tagName != 'SEQUENCE') {
     return;
   }
@@ -55,7 +55,6 @@ function changeSeqLocation(node, callback) {
     curCameraLocation = name;
   }, callback);
 }
-module.exports.changeSeqLocation = changeSeqLocation;
 
 function changeMapLocation(name, callback, middleSynchronous) {
   if (!MapManager.locationExist(name)) {
@@ -79,7 +78,7 @@ function changeMapLocation(name, callback, middleSynchronous) {
 }
 
 // change the location in roaming mode
-function gotoLocation(name, callback, middleSynchronous) {
+export function gotoLocation(name, callback, middleSynchronous) {
   if (!MapManager.locationExist(name)) {
     return;
   }
@@ -129,16 +128,15 @@ function gotoLocation(name, callback, middleSynchronous) {
     middleSynchronous
   );
 }
-module.exports.gotoLocation = gotoLocation;
 
-module.exports.goBackToCurCamLocation = function(callback, middleSynchronous) {
+export function goBackToCurCamLocation(callback, middleSynchronous) {
   verifyCurCamLocation();
   gotoLocation(curCameraLocation, callback, middleSynchronous);
 };
 
 // close a story, need to verify whether curCameraLocation is still valid
 // return whether current camera location is valid
-verifyCurCamLocation = function() {
+export function verifyCurCamLocation() {
   var valid = MapManager.locationExist(curCameraLocation);
   curCameraLocation = valid ? curCameraLocation : startLocation;
   if (!MapManager.locationExist(curCameraLocation)) {
@@ -147,27 +145,23 @@ verifyCurCamLocation = function() {
   }
   return valid;
 };
-module.exports.verifyCurCamLocation = verifyCurCamLocation;
 
-function changeStartLocation(loc) {
+export function changeStartLocation(loc) {
   if (loc && MapManager.locationExist(loc)) {
     startLocation = loc;
   }
 }
-module.exports.changeStartLocation = changeStartLocation;
 
-function getStartLocation(loc) {
+export function getStartLocation(loc) {
   return startLocation;
 }
-module.exports.getStartLocation = getStartLocation;
 
-gotoStartLocation = function(callback, middleSynchronous) {
+export function gotoStartLocation(callback, middleSynchronous) {
   gotoLocation(startLocation, callback, middleSynchronous);
 };
-module.exports.gotoStartLocation = gotoStartLocation;
 
 // return a callback function that check ensure valid current location before proceeding
-function verifyGotoStart(callback) {
+export function verifyGotoStart(callback) {
   return function() {
     if (!verifyCurCamLocation()) {
       gotoStartLocation(callback, function() {
@@ -178,4 +172,3 @@ function verifyGotoStart(callback) {
     }
   };
 }
-module.exports.verifyGotoStart = verifyGotoStart;

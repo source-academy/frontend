@@ -16,7 +16,8 @@ var sequenceObjects;
 var objectOverlay;
 
 var removeTempObjFuncs = {};
-module.exports.init = function() {
+
+export function init() {
   var container = new PIXI.Container();
   // map objects
   mapObjects = new PIXI.Container();
@@ -106,13 +107,12 @@ function parseInteractivity(node, object, callback) {
   return object;
 }
 
-function parseObject(node) {
+export function parseObject(node) {
   if (node.tagName != 'OBJECT') {
     return;
   }
   return parseInteractivity(node, parseStaticObject(node));
 }
-module.exports.parseObject = parseObject;
 
 function createGameObject(texture, x, y, scale) {
   var object = new PIXI.Sprite(texture);
@@ -123,7 +123,7 @@ function createGameObject(texture, x, y, scale) {
   return object;
 }
 
-function parseStaticObject(node) {
+export function parseStaticObject(node) {
   var name = node.getAttribute('name');
   var skin = node.getAttribute('skin') || 'normal';
   var texture = PIXI.Texture.fromImage(
@@ -134,9 +134,8 @@ function parseStaticObject(node) {
   scale = parseInt(node.getAttribute('scale')) || 1;
   return createGameObject(texture, x, y, scale);
 }
-module.exports.parseStaticObject = parseStaticObject;
 
-function parsePauseObject(node, onClick) {
+export function parsePauseObject(node, onClick) {
   var object = parseStaticObject(node);
   if (node.children.length > 0 && node.children[0].tagName == 'CONTINUE') {
     object.interactive = true;
@@ -158,9 +157,8 @@ function parsePauseObject(node, onClick) {
   }
   return object;
 }
-module.exports.parsePauseObject = parsePauseObject;
 
-function processTempObject(gameLocation, node) {
+export function processTempObject(gameLocation, node) {
   if (node.tagName != 'TEMP_OBJECT') {
     return;
   }
@@ -179,47 +177,39 @@ function processTempObject(gameLocation, node) {
     })
   );
 }
-module.exports.processTempObject = processTempObject;
 
-function removeTempObject(storyId, objectId) {
+export function removeTempObject(storyId, objectId) {
   if (removeTempObjFuncs[storyId][objectId]) {
     removeTempObjFuncs[storyId][objectId]();
   }
 }
-module.exports.removeTempObject = removeTempObject;
 
-function clearMapObjects() {
+export function clearMapObjects() {
   mapObjects.removeChildren();
 }
-module.exports.clearMapObjects = clearMapObjects;
 
-function changeMapObjects(locName, willClear) {
+export function changeMapObjects(locName, willClear) {
   if (MapManager.locationExist(locName) && !willClear) {
     mapObjects.addChild(MapManager.getGameLocation(locName).objects);
   }
 }
-module.exports.changeMapObjects = changeMapObjects;
 
-function setSeqObjectsVisibility(flag) {
+export function setSeqObjectsVisibility(flag) {
   sequenceObjects.visible = flag;
 }
-module.exports.setSeqObjectsVisibility = setSeqObjectsVisibility;
 
-function clearSeqObjects() {
+export function clearSeqObjects() {
   sequenceObjects.removeChildren();
 }
-module.exports.clearSeqObjects = clearSeqObjects;
 
-function addSeqObject(node) {
+export function addSeqObject(node) {
   if (node.tagName != 'OBJECT') {
     return;
   }
   sequenceObjects.addChild(parseStaticObject(node));
 }
-module.exports.addSeqObject = addSeqObject;
 
-function setMapObjectsInteractivity(flag) {
+export function setMapObjectsInteractivity(flag) {
   objectOverlay.visible = !flag;
   MapOverlay.setVisibility(flag);
 }
-module.exports.setMapObjectsInteractivity = setMapObjectsInteractivity;

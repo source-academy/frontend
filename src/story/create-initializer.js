@@ -1,4 +1,4 @@
-module.exports = function (StoryXMLPlayer, story, username, attemptedAll) {
+export default function (StoryXMLPlayer, story, username, attemptedAll) {
   function saveToServer() { }
 
   function loadFromServer() { }

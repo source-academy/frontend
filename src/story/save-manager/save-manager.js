@@ -9,7 +9,7 @@ var Utils = require('../utils/utils.js');
 var actionSequence = [];
 var saveFunction;
 
-module.exports.init = function(saveFunc, saveData, callback) {
+export function init(saveFunc, saveData, callback) {
   saveFunction = saveFunc;
   if (saveData) {
     saveData = JSON.parse(saveData);
@@ -56,21 +56,19 @@ function markPending() {
   actionSequence.push({ type: 'pending' });
 }
 
-function unmarkPending() {
+export function unmarkPending() {
   var last = actionSequence.pop();
   if (last.type !== 'pending') {
     console.error('The pending logic is wrong');
   }
   saveGame();
 }
-module.exports.unmarkPending = unmarkPending;
 
-function hasPending() {
+export function hasPending() {
   return actionSequence[actionSequence.length - 1].type === 'pending';
 }
-module.exports.hasPending = hasPending;
 
-function removeActions(filters, willUpdate) {
+export function removeActions(filters, willUpdate) {
   var properties = Object.keys(filters);
   var newActionSequence = [];
   for (var i = 0; i < actionSequence.length; i++) {
@@ -92,9 +90,8 @@ function removeActions(filters, willUpdate) {
   }
   saveGame();
 }
-module.exports.removeActions = removeActions;
 
-function saveUnlockQuest(storyId, questId) {
+export function saveUnlockQuest(storyId, questId) {
   actionSequence.push({
     type: 'unlockQuest',
     storyId: storyId,
@@ -103,16 +100,14 @@ function saveUnlockQuest(storyId, questId) {
   markPending();
   saveGame();
 }
-module.exports.saveUnlockQuest = saveUnlockQuest;
 
-function saveLoadStories(stories) {
+export function saveLoadStories(stories) {
   stories.forEach(function(storyId) {
     actionSequence.push({ type: 'loadStory', storyId: storyId });
   });
   markPending();
   saveGame();
 }
-module.exports.saveLoadStories = saveLoadStories;
 
 function saveGame() {
   saveFunction(
@@ -123,7 +118,7 @@ function saveGame() {
   );
 }
 
-function updateGameMap() {
+export function updateGameMap() {
   // a rather expensive operation
   // using naive solution
   MapManager.clearMap();
@@ -147,9 +142,8 @@ function updateGameMap() {
     }
   }
 }
-module.exports.updateGameMap = updateGameMap;
 
-function saveSeeDisplayOnceSeq(node, locName) {
+export function saveSeeDisplayOnceSeq(node, locName) {
   if (node.tagName != 'SEQUENCE') {
     return;
   }
@@ -166,9 +160,8 @@ function saveSeeDisplayOnceSeq(node, locName) {
   actionSequence.push(action);
   saveGame();
 }
-module.exports.saveSeeDisplayOnceSeq = saveSeeDisplayOnceSeq;
 
-function saveClickTempObject(node, storyId) {
+export function saveClickTempObject(node, storyId) {
   if (node.tagName != 'TEMP_OBJECT') {
     return;
   }
@@ -179,4 +172,3 @@ function saveClickTempObject(node, storyId) {
   actionSequence.push(action);
   saveGame();
 }
-module.exports.saveClickTempObject = saveClickTempObject;
