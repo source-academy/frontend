@@ -124,14 +124,14 @@ function createGameObject(texture, x, y, scale) {
 }
 
 export function parseStaticObject(node) {
-  var name = node.getAttribute('name');
-  var skin = node.getAttribute('skin') || 'normal';
-  var texture = PIXI.Texture.fromImage(
+  const name = node.getAttribute('name');
+  const skin = node.getAttribute('skin') || 'normal';
+  const texture = PIXI.Texture.fromImage(
     Constants.objectPath + name + '/' + skin + '.png'
   );
-  x = parseInt(node.getAttribute('x'));
-  y = parseInt(node.getAttribute('y'));
-  scale = parseInt(node.getAttribute('scale')) || 1;
+  const x = parseInt(node.getAttribute('x'));
+  const y = parseInt(node.getAttribute('y'));
+  const scale = parseInt(node.getAttribute('scale')) || 1;
   return createGameObject(texture, x, y, scale);
 }
 
