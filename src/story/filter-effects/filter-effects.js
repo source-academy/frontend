@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js'
+import * as Filters from 'pixi-filters'
 
 var Constants = require('../constants/constants.js');
 var Utils = require('../utils/utils.js');
@@ -25,9 +26,7 @@ export function createGlowTexture(displayObject) {
   displayObject.position.y = height / 2;
   var container = new PIXI.Container();
   container.addChild(displayObject);
-  var glowFilter = new PIXI.filters.GlowFilter(
-    width,
-    height,
+  var glowFilter = new Filters.GlowFilter(
     Constants.glowDistance,
     2.5,
     0,
