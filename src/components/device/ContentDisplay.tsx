@@ -12,7 +12,7 @@ class ContentDisplay extends React.Component<IContentDisplayProps, {}> {
 
   public render() {
     return (
-      <div className="Announcements row center-xs">
+      <div className="ContentDisplay row center-xs">
         <div className="col-xs-10">{this.props.displayStream()}</div>
       </div>
     )
