@@ -1,13 +1,18 @@
 import * as React from 'react'
+import { HotKeys } from 'react-hotkeys'
 
 import WorkspaceContainer from '../containers/workspace'
 
 const Playground: React.SFC<{}> = () => {
   return (
-    <div className="Playground pt-dark">
+    <HotKeys className="Playground pt-dark" keyMap={keyMap}>
       <WorkspaceContainer />
-    </div>
+    </HotKeys>
   )
+}
+
+const keyMap = {
+  goGreen: 'h u l k'
 }
 
 export default Playground

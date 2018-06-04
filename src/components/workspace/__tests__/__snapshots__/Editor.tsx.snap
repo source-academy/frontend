@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Editor renders correctly 1`] = `
-"<div className=\\"Editor\\">
+"<HotKeys className=\\"Editor\\" handlers={{...}}>
   <div className=\\"row editor-react-ace\\">
     <ReactAce className=\\"react-ace\\" mode=\\"javascript\\" theme=\\"cobalt\\" value=\\"\\" onChange={[Function: handleEditorValueChange]} height=\\"100%\\" commands={{...}} width=\\"100%\\" fontSize={14} highlightActiveLine={false} name=\\"brace-editor\\" focus={false} showGutter={true} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} maxLines={{...}} readOnly={false} showPrintMargin={true} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} setOptions={{...}} wrapEnabled={false} enableBasicAutocompletion={false} enableLiveAutocompletion={false} />
   </div>
-</div>"
+</HotKeys>"
 `;

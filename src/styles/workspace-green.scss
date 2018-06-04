@@ -1,0 +1,38 @@
+$pure-green: #00ff00;
+$dark-green: #00e000;
+
+.NavigationBar {
+  display: none !important;
+}
+
+.Application {
+  background: $pure-green !important;
+}
+
+#brace-editor {
+  background: $pure-green !important;
+}
+
+.ace_print-margin {
+  background: $dark-green !important;
+}
+
+/* editor specific */
+.editor-react-ace {
+  border: 0.1rem solid $dark-green !important;
+}
+
+.ace_gutter {
+  background: $pure-green !important;
+}
+
+.ace_gutter-layer {
+  background: $pure-green !important;
+}
+
+/* repl specific */
+.pt-card {
+  background: $pure-green !important;
+  box-shadow: none !important;
+  border: 0.1rem solid $dark-green !important;
+}

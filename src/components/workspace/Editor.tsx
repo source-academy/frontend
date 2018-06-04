@@ -1,5 +1,6 @@
 import * as React from 'react'
 import AceEditor from 'react-ace'
+import { HotKeys } from 'react-hotkeys'
 
 import 'brace/mode/javascript'
 import 'brace/theme/cobalt'
@@ -20,7 +21,7 @@ export interface IEditorProps {
 class Editor extends React.Component<IEditorProps, {}> {
   public render() {
     return (
-      <div className="Editor">
+      <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor
             className="react-ace"
@@ -44,9 +45,14 @@ class Editor extends React.Component<IEditorProps, {}> {
             highlightActiveLine={false}
           />
         </div>
-      </div>
+      </HotKeys>
     )
   }
+}
+
+/* Override handler, so does not trigger when focus is in editor */
+const handlers = {
+  goGreen: () => {}
 }
 
 export default Editor
