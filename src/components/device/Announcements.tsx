@@ -21,7 +21,7 @@ interface IAnnouncementCardProps {
 class Announcements extends React.Component<IAnnouncementsProps, {}> {
   public render() {
     const props: IContentDisplayProps = {
-      displayStream: () => <AnnouncementCard announcements={this.props.announcements} />,
+      display: <AnnouncementCard announcements={this.props.announcements} />,
       loadContentDispatch: this.props.handleAnnouncementsFetch
     }
     return <ContentDisplay {...props} />

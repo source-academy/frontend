@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 export interface IContentDisplayProps {
-  displayStream: () => JSX.Element
+  display: JSX.Element
   loadContentDispatch: () => void
 }
 
@@ -13,7 +13,7 @@ class ContentDisplay extends React.Component<IContentDisplayProps, {}> {
   public render() {
     return (
       <div className="ContentDisplay row center-xs">
-        <div className="col-xs-10">{this.props.displayStream()}</div>
+        <div className="col-xs-10">{this.props.display}</div>
       </div>
     )
   }

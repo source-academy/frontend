@@ -2,7 +2,7 @@
 
 exports[`Announcements page "loading" content renders correctly 1`] = `
 "<Announcements handleAnnouncementsFetch={[Function: handleAnnouncementsFetch]}>
-  <ContentDisplay displayStream={[Function: displayStream]} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
+  <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
     <div className=\\"ContentDisplay row center-xs\\">
       <div className=\\"col-xs-10\\">
         <Component announcements={[undefined]}>
@@ -34,7 +34,7 @@ exports[`Announcements page "loading" content renders correctly 1`] = `
 
 exports[`Announcements page with 0 announcements renders correctly 1`] = `
 "<Announcements announcements={{...}} handleAnnouncementsFetch={[Function: handleAnnouncementsFetch]}>
-  <ContentDisplay displayStream={[Function: displayStream]} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
+  <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
     <div className=\\"ContentDisplay row center-xs\\">
       <div className=\\"col-xs-10\\">
         <Component announcements={{...}}>
@@ -64,7 +64,7 @@ exports[`Announcements page with 0 announcements renders correctly 1`] = `
 
 exports[`Announcements page with multiple loaded announcements renders correctly 1`] = `
 "<Announcements announcements={{...}} handleAnnouncementsFetch={[Function: handleAnnouncementsFetch]}>
-  <ContentDisplay displayStream={[Function: displayStream]} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
+  <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
     <div className=\\"ContentDisplay row center-xs\\">
       <div className=\\"col-xs-10\\">
         <Component announcements={{...}}>
