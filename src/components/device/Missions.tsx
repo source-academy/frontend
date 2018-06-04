@@ -15,7 +15,7 @@ export interface IMissionsProps {
 class Missions extends React.Component<IMissionsProps, {}> {
   public render() {
     const props: IContentDisplayProps = {
-      displayStream: () => <MissionInfoCard missionsInfo={this.props.missionsInfo} />,
+      display: <MissionInfoCard missionsInfo={this.props.missionsInfo} />,
       loadContentDispatch: this.props.handleMissionsInfoFetch
     }
     return <ContentDisplay {...props} />
