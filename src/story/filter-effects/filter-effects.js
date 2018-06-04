@@ -8,9 +8,10 @@ var darkFilter = new PIXI.filters.ColorMatrixFilter();
 darkFilter.brightness(0.6);
 
 function createTexture(displayObject, filters, width, height) {
-  var texture = new PIXI.RenderTexture(Utils.getRenderer(), width, height);
+  const renderer = Utils.getRenderer()
+  var texture = new PIXI.RenderTexture(renderer, width, height);
   displayObject.filters = filters;
-  texture.render(displayObject);
+  renderer.render(displayObject, texture);
   return texture;
 }
 
