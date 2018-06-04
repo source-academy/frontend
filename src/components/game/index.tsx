@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import story from '../story/index'
+import story from './game.js'
 
 export class Game extends React.Component<{}, {}> {
   public componentDidMount() {

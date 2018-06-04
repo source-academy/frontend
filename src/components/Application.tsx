@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import DeviceContainer from '../containers/device'
-import Game from './Game'
+import Game from './game'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 import Playground from './Playground'
