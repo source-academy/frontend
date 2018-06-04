@@ -43,9 +43,9 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     window.location.replace('/inbox/feed');
   }
 
-  function startGame(container, saveData) {
+  function startGame(div, canvas, saveData) {
     saveData = saveData || loadFromServer();
-    StoryXMLPlayer.init(container, {
+    StoryXMLPlayer.init(div, canvas, {
       saveData: saveData,
       hookHandlers: hookHandlers,
       saveFunc: saveToServer,
@@ -61,8 +61,8 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     });
   }
 
-  function initialize(ref) {
-    startGame(ref);
+  function initialize(div, canvas) {
+    startGame(div, canvas);
     var willPlayOpening = !attemptedAll;
     var savedLocation;
     if (typeof Storage !== 'undefined') {

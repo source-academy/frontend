@@ -20,13 +20,13 @@ var stage;
 // options contains the following properties:
 // saveData, hookHandlers, saveFunc, wristDeviceFunc
 // changeLocationHook, playerImageCanvas, playerName
-export function init(container, options, callback) {
+export function init(div, canvas, options, callback) {
   renderer = PIXI.autoDetectRenderer(
     Constants.screenWidth,
     Constants.screenHeight,
-    { backgroundColor: 0x000000 }
+    { backgroundColor: 0x000000, view: canvas }
   );
-  container.append(renderer.view);
+  div.append(renderer.view);
   Utils.saveRenderer(renderer);
 
   // create the root of the scene graph
