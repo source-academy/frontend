@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js'
+import Text from './Text'
 
 var Constants = require('../constants/constants.js');
 var LocationManager = require('../location-manager/location-manager.js');
@@ -127,16 +128,7 @@ export function init(playerName_parameter, playerImageCanvas) {
   dialogBox.endFill();
   dialogBox.alpha = 0.87;
   dialogContainer.addChild(dialogBox);
-  // dialog text
-  /* word wrapping not working
-    dialogText = new PIXI.MultiStyleText("", {
-        def: {font: Constants.fontSize + "px Ubuntu Mono"}
-    }, {
-        wordWrap: true,
-        wordWrapWidth: Constants.screenWidth - 2*Constants.dialogBoxPadding - 2*Constants.innerDialogPadding
-    });
-    */
-  dialogText = new PIXI.Text('', {
+  dialogText = new Text('', {
     font: Constants.fontSize + 'px Ubuntu Mono',
     wordWrap: true,
     wordWrapWidth: Constants.dialogBoxWidth - 2 * Constants.innerDialogPadding,
