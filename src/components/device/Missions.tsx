@@ -54,7 +54,7 @@ export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
           <div className="row mission-info-description">
             <p className="col-xs-12">{ann.description}</p>
           </div>
-          <div className="row between-xs mission-info-controls">
+          <div className="row between-xs middle-xs mission-info-controls">
             <div className="col-xs-8 mission-info-due-date-parent">
               <Text className="mission-info-due-date">
                 {' '}
