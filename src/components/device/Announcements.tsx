@@ -1,6 +1,6 @@
 import { Card, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import * as React from 'react'
-import ContentDisplay, { IContentDisplayProps } from './ContentDisplay'
+import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export type Announcement = {
   author: string
