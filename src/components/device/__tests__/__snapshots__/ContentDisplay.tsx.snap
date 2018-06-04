@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContentDisplay page renders correctly 1`] = `
+"<ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
+  <div className=\\"ContentDisplay row center-xs\\">
+    <div className=\\"col-xs-10\\">
+      <div>
+         Test Content 
+      </div>
+    </div>
+  </div>
+</ContentDisplay>"
+`;
