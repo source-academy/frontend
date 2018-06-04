@@ -61,8 +61,8 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     });
   }
 
-  function initialize() {
-    startGame($('#game-display'));
+  function initialize(ref) {
+    startGame(ref);
     var willPlayOpening = !attemptedAll;
     var savedLocation;
     if (typeof Storage !== 'undefined') {

@@ -3,8 +3,10 @@ import * as React from 'react'
 import story from './game.js'
 
 export class Game extends React.Component<{}, {}> {
+  private ref: HTMLDivElement
+
   public componentDidMount() {
-    story()
+    story(this.ref)
   }
 
   public render() {
@@ -15,6 +17,7 @@ export class Game extends React.Component<{}, {}> {
         data-story="spaceship"
         data-attempted-all="true"
         data-username="mockUsername"
+        ref={e => (this.ref = e as HTMLDivElement)}
       />
     )
   }
