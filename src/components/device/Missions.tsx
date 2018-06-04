@@ -1,6 +1,6 @@
 import { Button, Card, Icon, Intent, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import * as React from 'react'
-import ContentDisplay, { IContentDisplayProps } from './ContentDisplay'
+import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export type MissionInfo = {
   title: string
