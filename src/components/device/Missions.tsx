@@ -18,7 +18,11 @@ class Missions extends React.Component<IMissionsProps, {}> {
       display: <MissionInfoCard missionsInfo={this.props.missionsInfo} />,
       loadContentDispatch: this.props.handleMissionsInfoFetch
     }
-    return <ContentDisplay {...props} />
+    return (
+      <div className="Missions">
+        <ContentDisplay {...props} />
+      </div>
+    )
   }
 }
 
