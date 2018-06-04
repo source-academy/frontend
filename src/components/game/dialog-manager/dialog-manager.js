@@ -27,11 +27,11 @@ var rightAvatar;
 var dialogOverlay;
 
 export function init(playerName_parameter, playerImageCanvas) {
+  const renderer = Utils.getRenderer()
   playerName = playerName_parameter;
   var avatarTotalSize =
     Constants.playerAvatarSize + Constants.playerAvatarLineWidth;
-  playerAvatar = new PIXI.RenderTexture(
-    Utils.getRenderer(),
+  playerAvatar = PIXI.RenderTexture.create(
     avatarTotalSize + Constants.playerAvatarOffset,
     avatarTotalSize
   );
@@ -60,8 +60,8 @@ export function init(playerName_parameter, playerImageCanvas) {
     avatar.mask = circleMask;
     var temp = new PIXI.Container();
     temp.addChild(avatar);
-    playerAvatar.render(temp);
-    playerAvatar.render(circle);
+    renderer.render(temp, playerAvatar);
+    renderer.render(circle, playerAvatar);
     Avatar.setPlayerInfo(playerName, playerAvatar);
   });
 
@@ -129,7 +129,8 @@ export function init(playerName_parameter, playerImageCanvas) {
   dialogBox.alpha = 0.87;
   dialogContainer.addChild(dialogBox);
   dialogText = new Text('', {
-    font: Constants.fontSize + 'px Ubuntu Mono',
+    fontFamily:'Ubuntu Mono',
+    fontSize: Constants.fontSize,
     wordWrap: true,
     wordWrapWidth: Constants.dialogBoxWidth - 2 * Constants.innerDialogPadding,
     lineHeight: Constants.fontSize * 1.3

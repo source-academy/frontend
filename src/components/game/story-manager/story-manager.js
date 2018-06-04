@@ -28,7 +28,8 @@ export function init() {
   blackOverlay.alpha = 0.8;
   loadingOverlay.addChild(blackOverlay);
   loadingText = new PIXI.Text('Loading...', {
-    font: 2 * Constants.fontSize + 'px Arial',
+    fontFamily: 'Arial',
+    fontSize: 2 * Constants.fontSize,
     fill: 'white'
   });
   loadingText.anchor.set(0.5, 0.5);

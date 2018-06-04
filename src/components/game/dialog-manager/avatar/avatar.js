@@ -12,7 +12,8 @@ function Avatar() {
   container.addChild(image);
 
   var nameText = new PIXI.Text('', {
-    font: Constants.fontSize * 1.1 + 'px Fredoka One'
+    fontFamily: 'Fredoka One',
+    fontSize: Constants.fontSize
   });
   nameText.anchor.set(0, 1);
   nameText.position.set(Constants.nameBoxXPadding, 0);
