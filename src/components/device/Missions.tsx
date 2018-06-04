@@ -1,5 +1,6 @@
-import { Button, Card, Icon, Intent, Spinner, Text } from '@blueprintjs/core'
+import { Button, Card, Icon, Intent, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import * as React from 'react'
+import ContentDisplay, { IContentDisplayProps } from './ContentDisplay'
 
 export type MissionInfo = {
   title: string
@@ -12,32 +13,23 @@ export interface IMissionsProps {
 }
 
 class Missions extends React.Component<IMissionsProps, {}> {
-  public componentDidMount() {
-    this.props.handleMissionsInfoFetch()
-  }
-
   public render() {
-    let output
-    if (this.props.missionsInfo === undefined) {
-      output = <Spinner />
-    } else {
-      output = <MissionInfoCard missionsInfo={this.props.missionsInfo} />
+    const props: IContentDisplayProps = {
+      displayStream: () => <MissionInfoCard missionsInfo={this.props.missionsInfo} />,
+      loadContentDispatch: this.props.handleMissionsInfoFetch
     }
-
-    return (
-      <div className="Missions row center-xs">
-        <div className="col-xs-10">{output}</div>
-      </div>
-    )
+    return <ContentDisplay {...props} />
   }
 }
 
 interface IMissionInfoCardProps {
-  missionsInfo: MissionInfo[]
+  missionsInfo?: MissionInfo[]
 }
 
 export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
-  if (props.missionsInfo.length === 0) {
+  if (props.missionsInfo === undefined) {
+    return <NonIdealState description="Fetching missions..." visual={<Spinner />} />
+  } else if (props.missionsInfo.length === 0) {
     return (
       <>
         <h4>There are no Missions.</h4>
