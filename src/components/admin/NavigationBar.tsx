@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { Alignment, Icon, Navbar, NavbarGroup } from '@blueprintjs/core'
+import { IconNames } from '@blueprintjs/icons'
 import { NavLink } from 'react-router-dom'
 
 const NavigationBar: React.SFC<{}> = () => (
@@ -11,7 +12,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="feed" />
+        <Icon icon={IconNames.FEED} />
         Announcements
       </NavLink>
       <NavLink
@@ -19,7 +20,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="tick" />
+        <Icon icon={IconNames.TICK} />
         Assessments
       </NavLink>
       <NavLink
@@ -27,7 +28,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="folder-open" />
+        <Icon icon={IconNames.FOLDER_OPEN} />
         Materials
       </NavLink>
     </NavbarGroup>
