@@ -23,20 +23,19 @@ $code-color-error: #ff4444;
     margin-bottom: 0.6rem;
   }
 
-  .left-parent {
+  .workspace-parent {
     height: 100%;
     width: 100%;
     display: flex;
     flex: 1 1 100%;
     flex-direction: row;
     overflow: hidden;
-    margin-bottom: 0.5rem;
 
     > div {
       height: inherit; // Fix for Firefox not autoscrolling when repl overflows
     }
 
-    .editor-parent {
+    .left-parent {
       flex: 0 0 auto;
       height: 100%;
     }
@@ -47,13 +46,15 @@ $code-color-error: #ff4444;
     flex-direction: column;
     flex: 1 1;
     height: 100%;
+    padding-bottom: 0.6rem;
   }
 
   .Editor {
-    height: 100%;
-    padding-left: 0.4rem;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    padding-bottom: 0.6rem;
+    padding-left: 0.6rem;
 
     .editor-react-ace {
       flex: 1;
@@ -65,32 +66,39 @@ $code-color-error: #ff4444;
     }
   }
 
-  .side-content-divider {
-    height: 0.6rem;
-  }
+  .resize-side-content {
+    display: flex;
+    flex-direction: column;
 
-  .side-content {
-    height: 100%;
-    text-align: justify;
-    overflow-y: auto;
+    .side-content-divider {
+      height: 0.6rem;
+      flex: initial;
+    }
 
-    .pt-card {
-      background-color: $cadet-color-2;
-      color: $code-color-result;
+    .side-content {
+      flex: 1 1 auto;
       height: 100%;
-      padding: 0;
-      margin: 0 0.5rem 0 0.5rem;
+      text-align: justify;
+      overflow-y: auto;
 
-      .side-content-text {
+      .pt-card {
+        background-color: $cadet-color-2;
+        color: $code-color-result;
         height: 100%;
-        padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+        padding: 0;
+        margin: 0 0.5rem 0 0.5rem;
+
+        .side-content-text {
+          height: 100%;
+          padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+        }
       }
     }
   }
 
   .Repl {
-    flex: 1 1;
     display: flex;
+    flex: 1 1;
     flex-direction: column;
 
     .repl-output-parent {
@@ -101,8 +109,7 @@ $code-color-error: #ff4444;
 
     .pt-card {
       background-color: $cadet-color-2;
-      padding: 0.4rem;
-      padding-left: 0.6rem;
+      padding: 0.4rem 0.6rem 0.4rem 0.6rem;
       margin: 0.5rem;
       margin-top: 0rem;
 

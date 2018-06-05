@@ -34,13 +34,19 @@ class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
     window.removeEventListener('resize', this.updateMaxSideHeight.bind(this))
   }
 
+  /**
+   * side-content-divider gives the side content a bottom margin. I use a div
+   * element instead of CSS so that when the user resizes the side-content all
+   * the way up in order to hide it, there won't be a padding there to stop the
+   * REPL from being flush with the top of the editor
+   */
   public render() {
     return (
       <HotKeys className="workspace" handlers={handlers}>
         <ControlBarContainer />
-        <div className="row left-parent">
+        <div className="row workspace-parent">
           <Resizable
-            className="editor-parent"
+            className="left-parent"
             size={{ width: this.props.editorWidth, height: '100%' }}
             maxWidth={window.innerWidth - 10}
             // tslint:disable-next-line jsx-no-lambda
@@ -64,6 +70,7 @@ class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
             <Resizable
               className="resize-side-content"
               maxHeight={this.state.maxSideHeight}
+              minHeight={0}
               enable={{
                 top: false,
                 right: false,
@@ -76,8 +83,8 @@ class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
               }}
             >
               <SideContent />
+              <div className="side-content-divider" />
             </Resizable>
-            <div className="side-content-divider" />
             <ReplContainer />
           </div>
         </div>
