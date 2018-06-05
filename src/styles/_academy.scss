@@ -4,24 +4,6 @@
   flex: 1 1 100%;
 }
 
-.ContentDisplay {
-  height: 100%;
-  width: 100%;
-
-  .row {
-    margin-right: 0px;
-    margin-left: 0px;
-  }
-
-  .contentdisplay-content-parent {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    .contentdisplay-content {
-      background-color: white;
-    }
-  }
-}
-
 .pt-non-ideal-state {
   padding-top: 0.7rem;
 
