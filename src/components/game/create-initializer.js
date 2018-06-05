@@ -1,3 +1,5 @@
+import { history } from '../../utils/history'
+
 export default function (StoryXMLPlayer, story, username, attemptedAll) {
   function saveToServer() { }
 
@@ -8,27 +10,24 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
       document.getElementById('attempt').click()
     },
     openTemplate: function (name) {
-      var renamed = name;
-      if (name === 'textbook') {
-        window.open('https://www.comp.nus.edu.sg/~cs1101s/sicp/', '_blank');
-        return;
+      switch (name) {
+        case 'textbook':
+          return window.open('https://www.comp.nus.edu.sg/~cs1101s/sicp/', '_blank');
+        case 'announcements':
+          return history.push('/device/announcements');
+        case 'lesson_plan':
+          return history.push('/device/missions');
+        case 'students':
+          return history.push('/device/profile');
+        case 'materials':
+          return history.push('/device/materials');
+        case 'IDE':
+          return history.push('/playground');
+        case 'path':
+          return history.push('/device/paths');
+        default:
+          return history.push('/device/announcements');
       }
-      if (!name) {
-        renamed = '/inbox/feed';
-      } else if (name === 'announcements') {
-        renamed = '/inbox/announcements';
-      } else if (name === 'lesson_plan') {
-        renamed = '/journal';
-      } else if (name === 'students') {
-        renamed = '/status';
-      } else if (name === 'materials') {
-        renamed = '/materials';
-      } else if (name === 'IDE') {
-        renamed = '/playground';
-      } else if (name === 'path') {
-        renamed = '/journal?tab=Paths';
-      }
-      location.replace(renamed)
     },
     pickUpCollectible: function () { },
     playSound: function (name) {
@@ -40,7 +39,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
   };
 
   function openWristDevice() {
-    window.location.replace('/inbox/feed');
+    history.push('/device/announements')
   }
 
   function startGame(div, canvas, saveData) {
