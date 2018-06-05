@@ -15,6 +15,10 @@ exports[`NavigationBar renders correctly 1`] = `
       <Blueprint2.Icon icon=\\"dashboard\\" />
       Device
     </NavLink>
+    <NavLink to=\\"/admin\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"eye-open\\" />
+      Admin
+    </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup className=\\"pt-align-right\\" align=\\"left\\">
     <NavLink to=\\"/playground\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
