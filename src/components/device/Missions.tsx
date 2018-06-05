@@ -34,11 +34,7 @@ export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
   if (props.missionsInfo === undefined) {
     return <NonIdealState description="Fetching missions..." visual={<Spinner />} />
   } else if (props.missionsInfo.length === 0) {
-    return (
-      <>
-        <h4>There are no Missions.</h4>
-      </>
-    )
+    return <NonIdealState title="There are no missions." visual="flame" />
   }
   const cards = props.missionsInfo.map((ann, index) => (
     <div key={index}>
