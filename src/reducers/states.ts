@@ -1,4 +1,4 @@
-import { Announcement } from '../components/device/Announcements'
+import { Announcement } from '../components/Announcements'
 import { MissionInfo } from '../components/device/Missions'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
