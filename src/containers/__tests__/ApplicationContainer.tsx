@@ -8,7 +8,7 @@ import { mockInitialStore } from '../../mocks/store'
 import ApplicationContainer from '../ApplicationContainer'
 
 /* TODO: currently crashes w/ ReferenceError---PIXI libraries are not loaded in this test
-test('ApplicationContainer redirects from / to /device', () => {
+test('ApplicationContainer redirects from / to /academy', () => {
   const store = mockInitialStore()
   const app = (
     <Provider store={store}>

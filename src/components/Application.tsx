@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
+import Academy from '../containers/academy'
 import AdminContainer from '../containers/admin'
 import Announcements from '../containers/AnnouncementsContainer'
-import Academy from '../containers/device'
 import Game from '../containers/GameContainer'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'

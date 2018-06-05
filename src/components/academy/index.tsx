@@ -2,7 +2,7 @@ import { Card } from '@blueprintjs/core'
 import * as React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 
-import MissionsContainer from '../../containers/device/MissionsContainer'
+import MissionsContainer from '../../containers/academy/MissionsContainer'
 import LoginContainer from '../../containers/LoginContainer'
 import DeviceNavigationBar from './NavigationBar'
 
