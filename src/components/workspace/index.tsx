@@ -6,6 +6,7 @@ import Resizable from 're-resizable'
 import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
+import SideContent from './side-content'
 
 export interface IWorkspaceProps {
   editorWidth: string
@@ -41,6 +42,7 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
           </Resizable>
           <div className="right-parent">
             <ReplContainer />
+            <SideContent />
           </div>
         </div>
       </HotKeys>
