@@ -66,6 +66,7 @@ $code-color-error: #ff4444;
   }
 
   .Repl {
+    margin-top: 0.4rem;
     height: 50%;
     display: flex;
     flex-direction: column;
@@ -74,7 +75,6 @@ $code-color-error: #ff4444;
     }
     .repl-output-parent {
       flex: 1 1;
-      margin-top: 0.5rem;
       overflow-y: auto;
       overflow-x: visible;
     }
@@ -129,13 +129,21 @@ $code-color-error: #ff4444;
   }
 
   .side-content {
+    height: 100%;
+    margin-top: 0.5rem;
+    text-align: justify;
+
     .pt-card {
       background-color: $cadet-color-2;
       color: $code-color-result;
-      padding: 0.4rem;
-      padding-left: 0.6rem;
-      margin: 0.5rem;
-      margin-top: 0rem;
+      height: 100%;
+      padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+      margin: 0 0.5rem 0 0.5rem;
+      overflow-y: auto;
+
+      .side-content-text {
+        height: 100%;
+      }
     }
   }
 }

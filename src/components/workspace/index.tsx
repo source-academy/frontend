@@ -41,8 +41,23 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
             <EditorContainer />
           </Resizable>
           <div className="right-parent">
+            <Resizable
+              className="resize-side-content"
+              maxHeight={window.innerHeight - 110}
+              enable={{
+                top: false,
+                right: false,
+                bottom: true,
+                left: false,
+                topRight: false,
+                bottomRight: false,
+                bottomLeft: false,
+                topLeft: false
+              }}
+            >
+              <SideContent />
+            </Resizable>
             <ReplContainer />
-            <SideContent />
           </div>
         </div>
       </HotKeys>
