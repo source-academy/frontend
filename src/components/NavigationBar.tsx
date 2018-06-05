@@ -12,9 +12,10 @@ import { NavLink } from 'react-router-dom'
 
 export interface INavigationBarProps {
   title: string
+  username?: string
 }
 
-const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
+const NavigationBar: React.SFC<INavigationBarProps> = props => (
   <Navbar className="NavigationBar pt-dark">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
@@ -75,7 +76,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.USER} />
-        Profile
+        {props.username === undefined ? 'Not Logged In' : props.username}
       </NavLink>
     </NavbarGroup>
   </Navbar>

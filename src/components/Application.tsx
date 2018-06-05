@@ -11,6 +11,7 @@ import Playground from './Playground'
 
 export interface IApplicationProps extends RouteComponentProps<{}> {
   title: string
+  username?: string
 }
 
 const Application: React.SFC<IApplicationProps> = props => {
@@ -18,7 +19,7 @@ const Application: React.SFC<IApplicationProps> = props => {
 
   return (
     <div className="Application">
-      <NavigationBar title={props.title} />
+      <NavigationBar title={props.title} username={props.username} />
       <div className="Application__main">
         <Switch>
           <Route path="/academy" component={Academy} />

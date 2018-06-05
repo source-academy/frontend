@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NavigationBar renders correctly 1`] = `
+exports[`NavigationBar renders "Not logged in" correctly 1`] = `
 "<Blueprint2.Navbar className=\\"NavigationBar pt-dark\\">
   <Blueprint2.NavbarGroup align=\\"left\\">
     <NavLink to=\\"/academy\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
@@ -34,7 +34,47 @@ exports[`NavigationBar renders correctly 1`] = `
     <Blueprint2.NavbarDivider />
     <NavLink to=\\"/status\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"user\\" />
-      Profile
+      Not Logged In
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+</Blueprint2.Navbar>"
+`;
+
+exports[`NavigationBar renders correctly with username 1`] = `
+"<Blueprint2.Navbar className=\\"NavigationBar pt-dark\\">
+  <Blueprint2.NavbarGroup align=\\"left\\">
+    <NavLink to=\\"/academy\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"symbol-diamond\\" />
+      <Blueprint2.NavbarHeading>
+        Source Academy
+      </Blueprint2.NavbarHeading>
+    </NavLink>
+    <NavLink to=\\"/announcements\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"feed\\" />
+      News
+    </NavLink>
+    <NavLink to=\\"/material\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"folder-open\\" />
+      Material
+    </NavLink>
+    <NavLink to=\\"/game\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"star-empty\\" />
+      Game
+    </NavLink>
+    <NavLink to=\\"/admin\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"eye-open\\" />
+      Admin
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+  <Blueprint2.NavbarGroup align=\\"right\\">
+    <NavLink to=\\"/playground\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"code\\" />
+      Playground
+    </NavLink>
+    <Blueprint2.NavbarDivider />
+    <NavLink to=\\"/status\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"user\\" />
+      Evis Rucer
     </NavLink>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"

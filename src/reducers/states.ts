@@ -36,6 +36,7 @@ export interface ISessionState {
   readonly token?: string
   readonly announcements?: Announcement[]
   readonly missionsInfo?: MissionInfo[]
+  readonly username?: string
 }
 
 /**
@@ -137,5 +138,6 @@ export const defaultSession: ISessionState = {
       description:
         'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in'
     }
-  ]
+  ],
+  username: 'Evis Rucer'
 }
