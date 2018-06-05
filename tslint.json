@@ -9,7 +9,7 @@
     "exclude": [
       "config/**/*.js",
       "node_modules/**/*.ts",
-      "src/components/game/**/*.js"
+      "src/components/academy/game/**/*.js"
     ]
   }
 }

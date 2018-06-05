@@ -1,4 +1,4 @@
-import { history } from '../../utils/history'
+import { history } from '../../../utils/history'
 
 export default function (StoryXMLPlayer, story, username, attemptedAll) {
   function saveToServer() { }
