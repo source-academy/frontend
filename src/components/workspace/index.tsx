@@ -13,7 +13,27 @@ export interface IWorkspaceProps {
   handleEditorWidthChange: (widthChange: number) => void // TODO
 }
 
-class Workspace extends React.Component<IWorkspaceProps, {}> {
+type WorkspaceState = {
+  maxSideHeight?: number
+}
+
+class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
+  private rightParentDiv: HTMLDivElement
+
+  public constructor(props: IWorkspaceProps) {
+    // use local state to keep track of max height of side-content
+    super(props)
+    this.state = { maxSideHeight: undefined }
+  }
+
+  public componentDidMount() {
+    window.addEventListener('resize', this.updateMaxSideHeight.bind(this))
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('resize', this.updateMaxSideHeight.bind(this))
+  }
+
   public render() {
     return (
       <HotKeys className="workspace" handlers={handlers}>
@@ -40,10 +60,10 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
           >
             <EditorContainer />
           </Resizable>
-          <div className="right-parent">
+          <div className="right-parent" ref={e => (this.rightParentDiv = e as HTMLDivElement)}>
             <Resizable
               className="resize-side-content"
-              maxHeight={window.innerHeight - 110}
+              maxHeight={this.state.maxSideHeight}
               enable={{
                 top: false,
                 right: false,
@@ -62,6 +82,10 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
         </div>
       </HotKeys>
     )
+  }
+
+  private updateMaxSideHeight() {
+    this.setState({ maxSideHeight: this.rightParentDiv.clientHeight - 10 })
   }
 }
 
