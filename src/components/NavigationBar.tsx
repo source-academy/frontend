@@ -1,4 +1,11 @@
-import { Icon, Navbar, NavbarDivider, NavbarGroup, NavbarHeading } from '@blueprintjs/core'
+import {
+  Alignment,
+  Icon,
+  Navbar,
+  NavbarDivider,
+  NavbarGroup,
+  NavbarHeading
+} from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
@@ -9,9 +16,31 @@ export interface INavigationBarProps {
 
 const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
   <Navbar className="NavigationBar pt-dark">
-    <NavbarGroup className="pt-align-left">
-      <NavbarHeading>{title}</NavbarHeading>
-      <NavbarDivider />
+    <NavbarGroup align={Alignment.LEFT}>
+      <NavLink
+        to="/device"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon={IconNames.SYMBOL_DIAMOND} />
+        <NavbarHeading>Source Academy</NavbarHeading>
+      </NavLink>
+      <NavLink
+        to="/device/announcements"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon={IconNames.FEED} />
+        News
+      </NavLink>
+      <NavLink
+        to="/device/materials"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon={IconNames.FOLDER_OPEN} />
+        Material
+      </NavLink>
       <NavLink
         to="/game"
         activeClassName="pt-active"
@@ -19,14 +48,6 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
       >
         <Icon icon={IconNames.STAR_EMPTY} />
         Game
-      </NavLink>
-      <NavLink
-        to="/device"
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon={IconNames.DASHBOARD} />
-        Device
       </NavLink>
       <NavLink
         to="/admin"
@@ -38,7 +59,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
       </NavLink>
     </NavbarGroup>
 
-    <NavbarGroup className="pt-align-right">
+    <NavbarGroup align={Alignment.RIGHT}>
       <NavLink
         to="/playground"
         activeClassName="pt-active"
@@ -46,6 +67,15 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
       >
         <Icon icon={IconNames.CODE} />
         Playground
+      </NavLink>
+      <NavbarDivider />
+      <NavLink
+        to="/device/status"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon={IconNames.USER} />
+        Profile
       </NavLink>
     </NavbarGroup>
   </Navbar>

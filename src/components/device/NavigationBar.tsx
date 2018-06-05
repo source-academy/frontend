@@ -39,33 +39,6 @@ const NavigationBar: React.SFC<{}> = () => (
         Contests
       </NavLink>
     </NavbarGroup>
-
-    <NavbarGroup align={Alignment.RIGHT}>
-      <NavLink
-        to="/device/announcements"
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon={IconNames.FEED} />
-        Announcements
-      </NavLink>
-      <NavLink
-        to="/device/materials"
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon={IconNames.FOLDER_OPEN} />
-        Materials
-      </NavLink>
-      <NavLink
-        to="/device/status"
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon={IconNames.USER} />
-        Profile
-      </NavLink>
-    </NavbarGroup>
   </Navbar>
 )
 
