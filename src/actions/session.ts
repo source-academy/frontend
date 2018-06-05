@@ -9,3 +9,7 @@ export const changeToken: ActionCreator<actionTypes.IAction> = (newToken: string
 export const fetchAnnouncements = () => ({
   type: actionTypes.FETCH_ANNOUNCEMENTS
 })
+
+export const fetchMissionsInfo = () => ({
+  type: actionTypes.FETCH_MISSIONS_INFO
+})
