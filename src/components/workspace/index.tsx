@@ -77,6 +77,7 @@ class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
             >
               <SideContent />
             </Resizable>
+            <div className="side-content-divider" />
             <ReplContainer />
           </div>
         </div>

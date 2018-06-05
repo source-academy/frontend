@@ -20,7 +20,7 @@ $code-color-error: #ff4444;
     justify-content: space-between;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.6rem;
   }
 
   .left-parent {
@@ -40,11 +40,13 @@ $code-color-error: #ff4444;
       flex: 0 0 auto;
       height: 100%;
     }
+  }
 
-    .right-parent {
-      flex: 1 1;
-      height: 100%;
-    }
+  .right-parent {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+    height: 100%;
   }
 
   .Editor {
@@ -56,8 +58,6 @@ $code-color-error: #ff4444;
     .editor-react-ace {
       flex: 1;
       height: 100%;
-      // to align with the repl output cards
-      margin-top: 0.5rem;
 
       #brace-editor {
         height: 100%;
@@ -65,14 +65,34 @@ $code-color-error: #ff4444;
     }
   }
 
+  .side-content-divider {
+    height: 0.6rem;
+  }
+
+  .side-content {
+    height: 100%;
+    text-align: justify;
+    overflow-y: auto;
+
+    .pt-card {
+      background-color: $cadet-color-2;
+      color: $code-color-result;
+      height: 100%;
+      padding: 0;
+      margin: 0 0.5rem 0 0.5rem;
+
+      .side-content-text {
+        height: 100%;
+        padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+      }
+    }
+  }
+
   .Repl {
-    margin-top: 0.4rem;
-    height: 50%;
+    flex: 1 1;
     display: flex;
     flex-direction: column;
-    .repl-control-parent {
-      flex: initial;
-    }
+
     .repl-output-parent {
       flex: 1 1;
       overflow-y: auto;
@@ -112,10 +132,14 @@ $code-color-error: #ff4444;
       }
     }
 
+    /* flush to align with editor bottom */
+    .repl-input-parent {
+      padding: 0;
+      margin-bottom: 0rem;
+    }
+
     .repl-react-ace {
-      margin-left: -0.2rem;
-      margin-right: 0.5rem;
-      margin-top: 0rem;
+      margin: 0.4rem 0.6rem 0.4rem 0.6rem;
     }
   }
 
@@ -125,25 +149,6 @@ $code-color-error: #ff4444;
     .ace_gutter {
       background: $cadet-color-3;
       color: rgb(128, 145, 160);
-    }
-  }
-
-  .side-content {
-    height: 100%;
-    margin-top: 0.5rem;
-    text-align: justify;
-
-    .pt-card {
-      background-color: $cadet-color-2;
-      color: $code-color-result;
-      height: 100%;
-      padding: 0.4rem 0.6rem 0.4rem 0.6rem;
-      margin: 0 0.5rem 0 0.5rem;
-      overflow-y: auto;
-
-      .side-content-text {
-        height: 100%;
-      }
     }
   }
 }
