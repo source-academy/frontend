@@ -2,28 +2,39 @@
 
 exports[`NavigationBar renders correctly 1`] = `
 "<Blueprint2.Navbar className=\\"NavigationBar pt-dark\\">
-  <Blueprint2.NavbarGroup className=\\"pt-align-left\\" align=\\"left\\">
-    <Blueprint2.NavbarHeading>
-      Cadet
-    </Blueprint2.NavbarHeading>
-    <Blueprint2.NavbarDivider />
+  <Blueprint2.NavbarGroup align=\\"left\\">
+    <NavLink to=\\"/device\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"symbol-diamond\\" />
+      <Blueprint2.NavbarHeading>
+        Source Academy
+      </Blueprint2.NavbarHeading>
+    </NavLink>
+    <NavLink to=\\"/device/announcements\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"feed\\" />
+      News
+    </NavLink>
+    <NavLink to=\\"/device/materials\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"folder-open\\" />
+      Material
+    </NavLink>
     <NavLink to=\\"/game\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"star-empty\\" />
       Game
-    </NavLink>
-    <NavLink to=\\"/device\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
-      <Blueprint2.Icon icon=\\"dashboard\\" />
-      Device
     </NavLink>
     <NavLink to=\\"/admin\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"eye-open\\" />
       Admin
     </NavLink>
   </Blueprint2.NavbarGroup>
-  <Blueprint2.NavbarGroup className=\\"pt-align-right\\" align=\\"left\\">
+  <Blueprint2.NavbarGroup align=\\"right\\">
     <NavLink to=\\"/playground\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"code\\" />
       Playground
+    </NavLink>
+    <Blueprint2.NavbarDivider />
+    <NavLink to=\\"/device/status\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"user\\" />
+      Profile
     </NavLink>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
