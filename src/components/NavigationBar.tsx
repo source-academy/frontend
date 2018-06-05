@@ -1,6 +1,6 @@
-import * as React from 'react'
-
 import { Icon, Navbar, NavbarDivider, NavbarGroup, NavbarHeading } from '@blueprintjs/core'
+import { IconNames } from '@blueprintjs/icons'
+import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
 export interface INavigationBarProps {
@@ -17,7 +17,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="star" />
+        <Icon icon={IconNames.STAR_EMPTY} />
         Game
       </NavLink>
       <NavLink
@@ -25,7 +25,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="dashboard" />
+        <Icon icon={IconNames.DASHBOARD} />
         Device
       </NavLink>
     </NavbarGroup>
@@ -36,7 +36,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="code" />
+        <Icon icon={IconNames.CODE} />
         Playground
       </NavLink>
     </NavbarGroup>
