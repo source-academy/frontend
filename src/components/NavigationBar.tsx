@@ -33,7 +33,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="eye-open" />
+        <Icon icon={IconNames.EYE_OPEN} />
         Admin
       </NavLink>
     </NavbarGroup>
