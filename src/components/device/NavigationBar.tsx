@@ -1,6 +1,6 @@
-import * as React from 'react'
-
 import { Alignment, Icon, Navbar, NavbarGroup } from '@blueprintjs/core'
+import { IconNames } from '@blueprintjs/icons'
+import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
 const NavigationBar: React.SFC<{}> = () => (
@@ -11,7 +11,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="flame" />
+        <Icon icon={IconNames.FLAME} />
         Missions
       </NavLink>
       <NavLink
@@ -19,7 +19,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="lightbulb" />
+        <Icon icon={IconNames.LIGHTBULB} />
         Sidequests
       </NavLink>
       <NavLink
@@ -27,7 +27,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="predictive-analysis" />
+        <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
         Paths
       </NavLink>
       <NavLink
@@ -35,7 +35,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="comparison" />
+        <Icon icon={IconNames.COMPARISON} />
         Contests
       </NavLink>
     </NavbarGroup>
@@ -46,7 +46,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="feed" />
+        <Icon icon={IconNames.FEED} />
         Announcements
       </NavLink>
       <NavLink
@@ -54,7 +54,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="folder-open" />
+        <Icon icon={IconNames.FOLDER_OPEN} />
         Materials
       </NavLink>
       <NavLink
@@ -62,7 +62,7 @@ const NavigationBar: React.SFC<{}> = () => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon="user" />
+        <Icon icon={IconNames.USER} />
         Profile
       </NavLink>
     </NavbarGroup>

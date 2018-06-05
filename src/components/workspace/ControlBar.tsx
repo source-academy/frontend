@@ -1,4 +1,5 @@
 import { Button, MenuItem, Tooltip } from '@blueprintjs/core'
+import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
 
@@ -35,15 +36,15 @@ class ControlBar extends React.Component<IControlBarProps, {}> {
       <div className="ControlBar">
         <div className="ControlBar_editor pt-button-group">
           <Tooltip content="...or press shift-enter in the editor">
-            {controlButton('Run', 'play', this.props.handleEditorEval)}
+            {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
           </Tooltip>
           {chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)}
         </div>
         <div className="ControlBar_repl pt-button-group">
           <Tooltip content="...or press shift-enter in the REPL">
-            {controlButton('Eval', 'code', this.props.handleReplEval)}
+            {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}
           </Tooltip>
-          {controlButton('Clear', 'remove', this.props.handleReplOutputClear)}
+          {controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear)}
         </div>
       </div>
     )

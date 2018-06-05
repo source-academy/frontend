@@ -1,4 +1,5 @@
 import { Card, NonIdealState, Spinner, Text } from '@blueprintjs/core'
+import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
@@ -32,7 +33,7 @@ export const AnnouncementCard: React.SFC<IAnnouncementCardProps> = props => {
   if (props.announcements === undefined) {
     return <NonIdealState description="Fetching announcements..." visual={<Spinner />} />
   } else if (props.announcements.length === 0) {
-    return <NonIdealState title="There are no announcements." visual="feed" />
+    return <NonIdealState title="There are no announcements." visual={IconNames.FEED} />
   } else {
     const cards = props.announcements.map((ann, index) => (
       <div key={index}>

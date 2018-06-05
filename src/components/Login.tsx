@@ -1,4 +1,5 @@
 import { Button, ButtonGroup, Dialog } from '@blueprintjs/core'
+import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
@@ -24,7 +25,7 @@ const playgroundButton = (
 const LoginDialog: React.SFC<ILoginProps> = props => (
   <div>
     <Dialog
-      icon="lock"
+      icon={IconNames.LOCK}
       isOpen={props.token === undefined ? true : false}
       title="LOGIN"
       isCloseButtonShown={false}

@@ -1,4 +1,5 @@
 import { Button, Card, Icon, Intent, NonIdealState, Spinner, Text } from '@blueprintjs/core'
+import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
@@ -34,7 +35,7 @@ export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
   if (props.missionsInfo === undefined) {
     return <NonIdealState description="Fetching missions..." visual={<Spinner />} />
   } else if (props.missionsInfo.length === 0) {
-    return <NonIdealState title="There are no missions." visual="flame" />
+    return <NonIdealState title="There are no missions." visual={IconNames.FLAME} />
   }
   const cards = props.missionsInfo.map((ann, index) => (
     <div key={index}>
@@ -53,8 +54,8 @@ export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
           <div className="row between-xs middle-xs mission-info-controls">
             <div className="col-xs-8 mission-info-due-date-parent">
               <Text className="mission-info-due-date">
-                {' '}
-                <Icon className="mission-info-due-icon" iconSize={14} icon="time" /> Due: 12/12/12{' '}
+                <Icon className="mission-info-due-icon" iconSize={14} icon={IconNames.TIME} />
+                Due: 12/12/12
               </Text>
             </div>
             <div className="col-xs">
@@ -62,7 +63,7 @@ export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
                 className="mission-info-skip-button"
                 minimal={true}
                 intent={Intent.PRIMARY}
-                icon="flame"
+                icon={IconNames.FLAME}
               >
                 Skip Story & Attempt
               </Button>
