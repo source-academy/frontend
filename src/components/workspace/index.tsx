@@ -17,7 +17,7 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
     return (
       <HotKeys className="workspace" handlers={handlers}>
         <ControlBarContainer />
-        <div className="row ide-content-parent">
+        <div className="row left-parent">
           <Resizable
             className="editor-parent"
             size={{ width: this.props.editorWidth, height: '100%' }}
@@ -39,7 +39,7 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
           >
             <EditorContainer />
           </Resizable>
-          <div className="repl-parent">
+          <div className="right-parent">
             <ReplContainer />
           </div>
         </div>

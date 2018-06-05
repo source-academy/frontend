@@ -23,7 +23,7 @@ $code-color-error: #ff4444;
     margin-bottom: 0.2rem;
   }
 
-  .ide-content-parent {
+  .left-parent {
     height: 100%;
     width: 100%;
     display: flex;
@@ -41,7 +41,7 @@ $code-color-error: #ff4444;
       height: 100%;
     }
 
-    .repl-parent {
+    .right-parent {
       flex: 1 1;
       height: 100%;
     }
