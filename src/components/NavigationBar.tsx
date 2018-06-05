@@ -28,6 +28,14 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         <Icon icon={IconNames.DASHBOARD} />
         Device
       </NavLink>
+      <NavLink
+        to="/admin"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon="eye-open" />
+        Admin
+      </NavLink>
     </NavbarGroup>
 
     <NavbarGroup className="pt-align-right">
