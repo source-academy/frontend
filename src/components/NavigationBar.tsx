@@ -18,7 +18,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
   <Navbar className="NavigationBar pt-dark">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
-        to="/device"
+        to="/academy"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -26,7 +26,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         <NavbarHeading>Source Academy</NavbarHeading>
       </NavLink>
       <NavLink
-        to="/device/announcements"
+        to="/announcements"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -34,7 +34,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         News
       </NavLink>
       <NavLink
-        to="/device/materials"
+        to="/material"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -70,7 +70,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
       </NavLink>
       <NavbarDivider />
       <NavLink
-        to="/device/status"
+        to="/status"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >

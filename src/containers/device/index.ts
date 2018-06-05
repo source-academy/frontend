@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
 
-import Device from '../../components/device'
+import Academy from '../../components/device'
 
-export default connect()(Device)
+export default connect()(Academy)

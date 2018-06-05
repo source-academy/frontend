@@ -2,7 +2,8 @@ import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import AdminContainer from '../containers/admin'
-import Device from '../containers/device'
+import Academy from '../containers/device'
+import Announcements from '../containers/device/AnnouncementsContainer'
 import Game from '../containers/GameContainer'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
@@ -20,10 +21,13 @@ const Application: React.SFC<IApplicationProps> = props => {
       <NavigationBar title={props.title} />
       <div className="Application__main">
         <Switch>
-          <Route path="/device" component={Device} />
+          <Route path="/academy" component={Academy} />
+          <Route path="/announcements" component={Announcements} />
           <Route path="/admin" component={AdminContainer} />
+          <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
           <Route path="/game" component={Game} />
+          <Route path="/status" component={Announcements} />
           <Route exact={true} path="/" component={redirectToGame} />
           <Route component={NotFound} />
         </Switch>

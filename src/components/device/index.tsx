@@ -2,14 +2,13 @@ import { Card } from '@blueprintjs/core'
 import * as React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 
-import AnnouncementsContainer from '../../containers/device/AnnouncementsContainer'
 import MissionsContainer from '../../containers/device/MissionsContainer'
 import LoginContainer from '../../containers/LoginContainer'
 import DeviceNavigationBar from './NavigationBar'
 
-const redirectToAnnouncements = () => <Redirect to="/device/announcements" />
+const redirectToMissions = () => <Redirect to="/academy/missions" />
 
-const Device: React.SFC<{}> = () => {
+const Academy: React.SFC<{}> = () => {
   const redirectTo404 = () => <Redirect to="/404" />
 
   return (
@@ -20,14 +19,11 @@ const Device: React.SFC<{}> = () => {
         <div className="col-xs-10 device-content-parent">
           <Card className="device-content" elevation={1}>
             <Switch>
-              <Route path="/device/announcements" component={AnnouncementsContainer} />
-              <Route path="/device/missions" component={MissionsContainer} />
-              <Route path="/device/sidequests" component={AnnouncementsContainer} />
-              <Route path="/device/paths" component={AnnouncementsContainer} />
-              <Route path="/device/contests" component={AnnouncementsContainer} />
-              <Route path="/device/materials" component={AnnouncementsContainer} />
-              <Route path="/device/status" component={AnnouncementsContainer} />
-              <Route exact={true} path="/device" component={redirectToAnnouncements} />
+              <Route path="/academy/missions" component={MissionsContainer} />
+              <Route path="/academy/sidequests" component={MissionsContainer} />
+              <Route path="/academy/paths" component={MissionsContainer} />
+              <Route path="/academy/contests" component={MissionsContainer} />
+              <Route exact={true} path="/academy" component={redirectToMissions} />
               <Route component={redirectTo404} />
             </Switch>
           </Card>
@@ -37,4 +33,4 @@ const Device: React.SFC<{}> = () => {
   )
 }
 
-export default Device
+export default Academy

@@ -7,7 +7,7 @@ const NavigationBar: React.SFC<{}> = () => (
   <Navbar className="NavigationBar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
-        to="/device/missions"
+        to="/academy/missions"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -15,7 +15,7 @@ const NavigationBar: React.SFC<{}> = () => (
         Missions
       </NavLink>
       <NavLink
-        to="/device/sidequests"
+        to="/academy/sidequests"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -23,7 +23,7 @@ const NavigationBar: React.SFC<{}> = () => (
         Sidequests
       </NavLink>
       <NavLink
-        to="/device/paths"
+        to="/academy/paths"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -31,7 +31,7 @@ const NavigationBar: React.SFC<{}> = () => (
         Paths
       </NavLink>
       <NavLink
-        to="/device/contests"
+        to="/academy/contests"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
