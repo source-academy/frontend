@@ -43,14 +43,6 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         Material
       </NavLink>
       <NavLink
-        to="/game"
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon={IconNames.STAR_EMPTY} />
-        Game
-      </NavLink>
-      <NavLink
         to="/admin"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"

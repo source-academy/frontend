@@ -4,7 +4,6 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 import Academy from '../containers/academy'
 import AdminContainer from '../containers/admin'
 import Announcements from '../containers/AnnouncementsContainer'
-import Game from '../containers/GameContainer'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 import Playground from './Playground'
@@ -15,7 +14,7 @@ export interface IApplicationProps extends RouteComponentProps<{}> {
 }
 
 const Application: React.SFC<IApplicationProps> = props => {
-  const redirectToGame = () => <Redirect to="/game" />
+  const redirectToAcademy = () => <Redirect to="/academy" />
 
   return (
     <div className="Application">
@@ -27,9 +26,8 @@ const Application: React.SFC<IApplicationProps> = props => {
           <Route path="/admin" component={AdminContainer} />
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
-          <Route path="/game" component={Game} />
           <Route path="/status" component={Announcements} />
-          <Route exact={true} path="/" component={redirectToGame} />
+          <Route exact={true} path="/" component={redirectToAcademy} />
           <Route component={NotFound} />
         </Switch>
       </div>
