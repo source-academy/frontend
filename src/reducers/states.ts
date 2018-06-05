@@ -4,6 +4,7 @@ import { SourceError } from '../slang/types'
 
 export interface IState {
   readonly application: IApplicationState
+  readonly game: IGameState
   readonly playground: IPlaygroundState
   readonly session: ISessionState
 }
@@ -15,6 +16,10 @@ export interface IApplicationState {
 
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
+
+export interface IGameState {
+  readonly canvas?: HTMLCanvasElement
+}
 
 export interface IPlaygroundState {
   readonly context: Context
@@ -97,6 +102,10 @@ const currentEnvironment = (): ApplicationEnvironment => {
 export const defaultApplication: IApplicationState = {
   title: 'Cadet',
   environment: currentEnvironment()
+}
+
+export const defaultGame: IGameState = {
+  canvas: undefined
 }
 
 export const defaultPlayground: IPlaygroundState = {

@@ -4,6 +4,9 @@ export interface IAction extends ReduxAction {
   payload: any
 }
 
+/** Game */
+export const SAVE_CANVAS = 'SAVE_CANVAS'
+
 /** Playground */
 export const UPDATE_EDITOR_VALUE = 'UPDATE_EDITOR_VALUE'
 export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE'

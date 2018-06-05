@@ -8,7 +8,8 @@
   "linterOptions": {
     "exclude": [
       "config/**/*.js",
-      "node_modules/**/*.ts"
+      "node_modules/**/*.ts",
+      "src/components/game/**/*.js"
     ]
   }
 }
