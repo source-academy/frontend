@@ -1,5 +1,6 @@
 import { Card, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import * as React from 'react'
+import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export type Announcement = {
   author: string
@@ -14,32 +15,23 @@ export interface IAnnouncementsProps {
 }
 
 interface IAnnouncementCardProps {
-  announcements: Announcement[]
+  announcements?: Announcement[]
 }
 
 class Announcements extends React.Component<IAnnouncementsProps, {}> {
-  public componentDidMount() {
-    this.props.handleAnnouncementsFetch()
-  }
-
   public render() {
-    let output
-    if (this.props.announcements === undefined) {
-      output = <NonIdealState description="Give it a second..." visual={<Spinner />} />
-    } else {
-      output = <AnnouncementCard announcements={this.props.announcements} />
+    const props: IContentDisplayProps = {
+      display: <AnnouncementCard announcements={this.props.announcements} />,
+      loadContentDispatch: this.props.handleAnnouncementsFetch
     }
-
-    return (
-      <div className="Announcements row center-xs">
-        <div className="col-xs-10">{output}</div>
-      </div>
-    )
+    return <ContentDisplay {...props} />
   }
 }
 
 export const AnnouncementCard: React.SFC<IAnnouncementCardProps> = props => {
-  if (props.announcements.length === 0) {
+  if (props.announcements === undefined) {
+    return <NonIdealState description="Fetching announcements..." visual={<Spinner />} />
+  } else if (props.announcements.length === 0) {
     return <NonIdealState title="There are no announcements." visual="feed" />
   } else {
     const cards = props.announcements.map((ann, index) => (

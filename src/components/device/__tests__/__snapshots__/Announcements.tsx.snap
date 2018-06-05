@@ -2,95 +2,103 @@
 
 exports[`Announcements page "loading" content renders correctly 1`] = `
 "<Announcements handleAnnouncementsFetch={[Function: handleAnnouncementsFetch]}>
-  <div className=\\"Announcements row center-xs\\">
-    <div className=\\"col-xs-10\\">
-      <NonIdealState description=\\"Give it a second...\\" visual={{...}}>
-        <div className=\\"pt-non-ideal-state\\">
-          <div className=\\"pt-non-ideal-state-visual\\">
-            <Blueprint2.Spinner>
-              <div className=\\"pt-spinner\\">
-                <div className=\\"pt-spinner-svg-container\\">
-                  <svg viewBox=\\"0 0 100 100\\">
-                    <path className=\\"pt-spinner-track\\" d=\\"M 50,50 m 0,-44.5 a 44.5,44.5 0 1 1 0,89 a 44.5,44.5 0 1 1 0,-89\\" />
-                    <path className=\\"pt-spinner-head\\" d=\\"M 50,50 m 0,-44.5 a 44.5,44.5 0 1 1 0,89 a 44.5,44.5 0 1 1 0,-89\\" pathLength={280} style={{...}} />
-                  </svg>
-                </div>
+  <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
+    <div className=\\"ContentDisplay row center-xs\\">
+      <div className=\\"col-xs-10\\">
+        <Component announcements={[undefined]}>
+          <NonIdealState description=\\"Fetching announcements...\\" visual={{...}}>
+            <div className=\\"pt-non-ideal-state\\">
+              <div className=\\"pt-non-ideal-state-visual\\">
+                <Blueprint2.Spinner>
+                  <div className=\\"pt-spinner\\">
+                    <div className=\\"pt-spinner-svg-container\\">
+                      <svg viewBox=\\"0 0 100 100\\">
+                        <path className=\\"pt-spinner-track\\" d=\\"M 50,50 m 0,-44.5 a 44.5,44.5 0 1 1 0,89 a 44.5,44.5 0 1 1 0,-89\\" />
+                        <path className=\\"pt-spinner-head\\" d=\\"M 50,50 m 0,-44.5 a 44.5,44.5 0 1 1 0,89 a 44.5,44.5 0 1 1 0,-89\\" pathLength={280} style={{...}} />
+                      </svg>
+                    </div>
+                  </div>
+                </Blueprint2.Spinner>
               </div>
-            </Blueprint2.Spinner>
-          </div>
-          <div className=\\"pt-non-ideal-state-description\\">
-            Give it a second...
-          </div>
-        </div>
-      </NonIdealState>
+              <div className=\\"pt-non-ideal-state-description\\">
+                Fetching announcements...
+              </div>
+            </div>
+          </NonIdealState>
+        </Component>
+      </div>
     </div>
-  </div>
+  </ContentDisplay>
 </Announcements>"
 `;
 
 exports[`Announcements page with 0 announcements renders correctly 1`] = `
 "<Announcements announcements={{...}} handleAnnouncementsFetch={[Function: handleAnnouncementsFetch]}>
-  <div className=\\"Announcements row center-xs\\">
-    <div className=\\"col-xs-10\\">
-      <Component announcements={{...}}>
-        <NonIdealState title=\\"There are no announcements.\\" visual=\\"feed\\">
-          <div className=\\"pt-non-ideal-state\\">
-            <div className=\\"pt-non-ideal-state-visual pt-non-ideal-state-icon\\">
-              <Blueprint2.Icon icon=\\"feed\\" iconSize={60}>
-                <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"feed\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
-                  <title>
-                    feed
-                  </title>
-                  <path d=\\"M2.5 15a2.5 2.5 0 0 0 0 5 2.5 2.5 0 0 0 0-5zm.5-5c-.55 0-1 .45-1 1s.45 1 1 1c2.76 0 5 2.24 5 5 0 .55.45 1 1 1s1-.45 1-1c0-3.87-3.13-7-7-7zM3 0c-.55 0-1 .45-1 1s.45 1 1 1c8.28 0 15 6.72 15 15 0 .55.45 1 1 1s1-.45 1-1C20 7.61 12.39 0 3 0zm0 5c-.55 0-1 .45-1 1s.45 1 1 1c5.52 0 10 4.48 10 10 0 .55.45 1 1 1s1-.45 1-1C15 10.37 9.63 5 3 5z\\" fillRule=\\"evenodd\\" />
-                </svg>
-              </Blueprint2.Icon>
+  <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
+    <div className=\\"ContentDisplay row center-xs\\">
+      <div className=\\"col-xs-10\\">
+        <Component announcements={{...}}>
+          <NonIdealState title=\\"There are no announcements.\\" visual=\\"feed\\">
+            <div className=\\"pt-non-ideal-state\\">
+              <div className=\\"pt-non-ideal-state-visual pt-non-ideal-state-icon\\">
+                <Blueprint2.Icon icon=\\"feed\\" iconSize={60}>
+                  <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"feed\\" width={60} height={60} viewBox=\\"0 0 20 20\\">
+                    <title>
+                      feed
+                    </title>
+                    <path d=\\"M2.5 15a2.5 2.5 0 0 0 0 5 2.5 2.5 0 0 0 0-5zm.5-5c-.55 0-1 .45-1 1s.45 1 1 1c2.76 0 5 2.24 5 5 0 .55.45 1 1 1s1-.45 1-1c0-3.87-3.13-7-7-7zM3 0c-.55 0-1 .45-1 1s.45 1 1 1c8.28 0 15 6.72 15 15 0 .55.45 1 1 1s1-.45 1-1C20 7.61 12.39 0 3 0zm0 5c-.55 0-1 .45-1 1s.45 1 1 1c5.52 0 10 4.48 10 10 0 .55.45 1 1 1s1-.45 1-1C15 10.37 9.63 5 3 5z\\" fillRule=\\"evenodd\\" />
+                  </svg>
+                </Blueprint2.Icon>
+              </div>
+              <h4 className=\\"pt-non-ideal-state-title\\">
+                There are no announcements.
+              </h4>
             </div>
-            <h4 className=\\"pt-non-ideal-state-title\\">
-              There are no announcements.
-            </h4>
-          </div>
-        </NonIdealState>
-      </Component>
+          </NonIdealState>
+        </Component>
+      </div>
     </div>
-  </div>
+  </ContentDisplay>
 </Announcements>"
 `;
 
 exports[`Announcements page with multiple loaded announcements renders correctly 1`] = `
 "<Announcements announcements={{...}} handleAnnouncementsFetch={[Function: handleAnnouncementsFetch]}>
-  <div className=\\"Announcements row center-xs\\">
-    <div className=\\"col-xs-10\\">
-      <Component announcements={{...}}>
-        <div>
-          <Blueprint2.Card elevation={0} interactive={false}>
-            <div className=\\"pt-card pt-elevation-0\\">
-              <h4>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-              </h4>
-              <Text>
-                <div className=\\"\\" title={[undefined]}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non tellus non ligula consectetur feugiat a at mauris. Ut sagittis, urna id suscipit dictum, ipsum diam sollicitudin enim, sed ultricies diam turpis vel libero. Maecenas finibus nisl ac lobortis ultricies. Integer molestie urna vitae nisi pharetra porttitor. Vestibulum massa diam, tristique quis ante a, posuere placerat magna. Pellentesque at lobortis purus, vitae imperdiet diam. Nulla eu rutrum neque. Aliquam efficitur consectetur ullamcorper. Pellentesque ultricies, diam ut vestibulum pellentesque, metus arcu laoreet ex, at mattis quam est non neque. Nam velit ipsum, posuere non porttitor commodo, lobortis in urna.Nulla facilisi. Donec mollis id nibh a luctus. Mauris vitae orci id velit pulvinar pellentesque non ut sapien. Curabitur eu consequat lorem. Proin pretium blandit scelerisque. Morbi ultricies, tellus non posuere pretium, felis sem convallis magna, ut sagittis elit felis et sem. Aliquam auctor suscipit condimentum. Nam posuere nulla dolor, in maximus risus feugiat vel. Phasellus vestibulum odio nec leo vehicula condimentum. Ut et semper libero. Cras fermentum mauris quis ex sodales, sit amet hendrerit augue lobortis. Maecenas eu dapibus enim, nec auctor est. Quisque quis erat erat. Curabitur sed rutrum felis, non venenatis diam. Fusce maximus rhoncus neque, in maximus velit semper eu. Fusce tempus lorem ut sodales pulvinar.
-                </div>
-              </Text>
-            </div>
-          </Blueprint2.Card>
-        </div>
-        <div>
-          <Blueprint2.Card elevation={0} interactive={false}>
-            <div className=\\"pt-card pt-elevation-0\\">
-              <h4>
-                Can we fix it? A study forged by inquiry.
-              </h4>
-              <Text>
-                <div className=\\"\\" title={[undefined]}>
-                  Bob the Builder is a British children&#39;s animated television show created by Keith Chapman. In the original series, Bob appears in a stop motion animated programme as a building contractor, specialising in masonry, along with his colleague Wendy, various neighbours and friends, and their gang of anthropomorphised work-vehicles and equipment. The show is broadcast in many countries, but originates from the United Kingdom where Bob is voiced by English actor Neil Morrissey. The show was later created using CGI animation starting with the spin-off series Ready, Steady, Build!.
-                </div>
-              </Text>
-            </div>
-          </Blueprint2.Card>
-        </div>
-      </Component>
+  <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
+    <div className=\\"ContentDisplay row center-xs\\">
+      <div className=\\"col-xs-10\\">
+        <Component announcements={{...}}>
+          <div>
+            <Blueprint2.Card elevation={0} interactive={false}>
+              <div className=\\"pt-card pt-elevation-0\\">
+                <h4>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                </h4>
+                <Text>
+                  <div className=\\"\\" title={[undefined]}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non tellus non ligula consectetur feugiat a at mauris. Ut sagittis, urna id suscipit dictum, ipsum diam sollicitudin enim, sed ultricies diam turpis vel libero. Maecenas finibus nisl ac lobortis ultricies. Integer molestie urna vitae nisi pharetra porttitor. Vestibulum massa diam, tristique quis ante a, posuere placerat magna. Pellentesque at lobortis purus, vitae imperdiet diam. Nulla eu rutrum neque. Aliquam efficitur consectetur ullamcorper. Pellentesque ultricies, diam ut vestibulum pellentesque, metus arcu laoreet ex, at mattis quam est non neque. Nam velit ipsum, posuere non porttitor commodo, lobortis in urna.Nulla facilisi. Donec mollis id nibh a luctus. Mauris vitae orci id velit pulvinar pellentesque non ut sapien. Curabitur eu consequat lorem. Proin pretium blandit scelerisque. Morbi ultricies, tellus non posuere pretium, felis sem convallis magna, ut sagittis elit felis et sem. Aliquam auctor suscipit condimentum. Nam posuere nulla dolor, in maximus risus feugiat vel. Phasellus vestibulum odio nec leo vehicula condimentum. Ut et semper libero. Cras fermentum mauris quis ex sodales, sit amet hendrerit augue lobortis. Maecenas eu dapibus enim, nec auctor est. Quisque quis erat erat. Curabitur sed rutrum felis, non venenatis diam. Fusce maximus rhoncus neque, in maximus velit semper eu. Fusce tempus lorem ut sodales pulvinar.
+                  </div>
+                </Text>
+              </div>
+            </Blueprint2.Card>
+          </div>
+          <div>
+            <Blueprint2.Card elevation={0} interactive={false}>
+              <div className=\\"pt-card pt-elevation-0\\">
+                <h4>
+                  Can we fix it? A study forged by inquiry.
+                </h4>
+                <Text>
+                  <div className=\\"\\" title={[undefined]}>
+                    Bob the Builder is a British children&#39;s animated television show created by Keith Chapman. In the original series, Bob appears in a stop motion animated programme as a building contractor, specialising in masonry, along with his colleague Wendy, various neighbours and friends, and their gang of anthropomorphised work-vehicles and equipment. The show is broadcast in many countries, but originates from the United Kingdom where Bob is voiced by English actor Neil Morrissey. The show was later created using CGI animation starting with the spin-off series Ready, Steady, Build!.
+                  </div>
+                </Text>
+              </div>
+            </Blueprint2.Card>
+          </div>
+        </Component>
+      </div>
     </div>
-  </div>
+  </ContentDisplay>
 </Announcements>"
 `;
