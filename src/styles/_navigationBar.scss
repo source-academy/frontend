@@ -13,17 +13,13 @@
   font-weight: 500;
 }
 
-.Device {
+.Academy {
   .NavigationBar {
     height: 40px;
 
     .pt-navbar-group {
       height: 40px;
     }
-  }
-
-  .NavigationBar__link :first-child {
-    // to override using specificity
   }
 
   .NavigationBar .pt-button {

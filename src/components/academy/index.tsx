@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from 'react-router'
 
 import MissionsContainer from '../../containers/academy/MissionsContainer'
 import LoginContainer from '../../containers/LoginContainer'
-import DeviceNavigationBar from './NavigationBar'
+import AcademyNavigationBar from './NavigationBar'
 
 const redirectToMissions = () => <Redirect to="/academy/missions" />
 
@@ -12,12 +12,12 @@ const Academy: React.SFC<{}> = () => {
   const redirectTo404 = () => <Redirect to="/404" />
 
   return (
-    <div className="Device">
+    <div className="Academy">
       <LoginContainer />
-      <DeviceNavigationBar />
+      <AcademyNavigationBar />
       <div className="row center-xs">
-        <div className="col-xs-10 device-content-parent">
-          <Card className="device-content" elevation={1}>
+        <div className="col-xs-10 academy-content-parent">
+          <Card className="academy-content" elevation={1}>
             <Switch>
               <Route path="/academy/missions" component={MissionsContainer} />
               <Route path="/academy/sidequests" component={MissionsContainer} />
