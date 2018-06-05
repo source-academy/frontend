@@ -8,7 +8,7 @@ exports[`NavigationBar renders correctly 1`] = `
     </Blueprint2.NavbarHeading>
     <Blueprint2.NavbarDivider />
     <NavLink to=\\"/game\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
-      <Blueprint2.Icon icon=\\"star\\" />
+      <Blueprint2.Icon icon=\\"star-empty\\" />
       Game
     </NavLink>
     <NavLink to=\\"/device\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">

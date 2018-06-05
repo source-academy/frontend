@@ -17,7 +17,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = ({ title }) => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon={IconNames.STAR} />
+        <Icon icon={IconNames.STAR_EMPTY} />
         Game
       </NavLink>
       <NavLink
