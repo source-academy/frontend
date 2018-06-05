@@ -30,6 +30,7 @@ export interface IPlaygroundState {
   readonly output: InterpreterOutput[]
   readonly replValue: string
   readonly sourceChapter: number
+  readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
 }
 
@@ -119,6 +120,7 @@ export const defaultPlayground: IPlaygroundState = {
   isRunning: false,
   output: [],
   replValue: '',
+  sideContentActiveTab: 0,
   sideContentHeight: undefined,
   sourceChapter: latestSourceChapter
 }

@@ -5,11 +5,13 @@ import { HotKeys } from 'react-hotkeys'
 import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
-import SideContent from './side-content'
+import SideContent from '../../containers/workspace/SideContentContainer'
+import { SideContentTab } from './side-content'
 
 export interface IWorkspaceProps {
   editorWidth: string
   sideContentHeight?: number
+  sideContentTabs: SideContentTab[]
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
 }
@@ -70,7 +72,7 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
               }}
               enable={bottomResizeOnly}
             >
-              <SideContent />
+              <SideContent {...{ tabs: this.props.sideContentTabs }} />
               <div
                 className="side-content-divider"
                 ref={e => (this.sideDividerDiv = e as HTMLDivElement)}

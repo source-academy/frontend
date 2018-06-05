@@ -1,5 +1,6 @@
 import { Reducer } from 'redux'
 import {
+  CHANGE_ACTIVE_TAB,
   CHANGE_CHAPTER,
   CHANGE_EDITOR_WIDTH,
   CHANGE_SIDE_CONTENT_HEIGHT,
@@ -33,6 +34,11 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         replValue: action.payload
+      }
+    case CHANGE_ACTIVE_TAB:
+      return {
+        ...state,
+        sideContentActiveTab: action.payload
       }
     case CHANGE_EDITOR_WIDTH:
       return {

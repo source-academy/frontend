@@ -60,6 +60,9 @@ $code-color-error: #ff4444;
     flex-direction: column;
     height: 100%;
     margin: 0 0.6rem 0.6rem 0.6rem;
+    padding-bottom: 0.6rem;
+    padding-left: 0.6rem;
+
     .editor-react-ace {
       flex: 1;
       height: 100%;
@@ -89,12 +92,11 @@ $code-color-error: #ff4444;
         background-color: $cadet-color-2;
         color: $code-color-result;
         height: 100%;
-        padding: 0;
+        padding: 0.4rem 0.6rem 0.4rem 0.6rem;
         margin: 0 0.5rem 0 0;
 
         .side-content-text {
           height: 100%;
-          padding: 0.4rem 0.6rem 0.4rem 0.6rem;
         }
       }
     }
@@ -106,7 +108,20 @@ $code-color-error: #ff4444;
 
     .Editor {
       flex: 1 1 auto;
+      margin: 0 0.5rem 0 0.5rem;
+      padding: 0;
     }
+  }
+
+  .side-content-header {
+    display: flex;
+    padding-bottom: 0.2rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  hr {
+    margin: 0 0 0.5rem 0;
   }
 
   .Repl {
