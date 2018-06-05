@@ -15,6 +15,14 @@ const NavigationBar: React.SFC<{}> = () => (
         Announcements
       </NavLink>
       <NavLink
+        to="/admin/assessments"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon="tick" />
+        Assessments
+      </NavLink>
+      <NavLink
         to="/admin/materials"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
