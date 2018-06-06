@@ -14,7 +14,7 @@
   margin-right: 0.3rem !important;
 }
 
-.Academy {
+%thin-navbar {
   .NavigationBar {
     height: 40px;
 
@@ -27,4 +27,12 @@
     text-transform: initial;
     font-weight: 250;
   }
+}
+
+.Academy {
+  @extend %thin-navbar;
+}
+
+.Admin {
+  @extend %thin-navbar;
 }
