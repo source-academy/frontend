@@ -1,3 +1,4 @@
+import { Card } from '@blueprintjs/core'
 import * as React from 'react'
 
 export interface IContentDisplayProps {
@@ -13,10 +14,18 @@ class ContentDisplay extends React.Component<IContentDisplayProps, {}> {
   public render() {
     return (
       <div className="ContentDisplay row center-xs">
-        <div className="col-xs-10">{this.props.display}</div>
+        <div className="col-xs-10 contentdisplay-content-parent">
+          <Card className="contentdisplay-content" elevation={1}>
+            {this.props.display}
+          </Card>
+        </div>
       </div>
     )
   }
 }
+
+// <div className="ContentDisplay row center-xs">
+//   <div className="col-xs-10">{this.props.display}</div>
+// </div>
 
 export default ContentDisplay

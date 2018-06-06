@@ -1,5 +1,5 @@
-import { Announcement } from '../components/device/Announcements'
-import { MissionInfo } from '../components/device/Missions'
+import { MissionInfo } from '../components/academy/Missions'
+import { Announcement } from '../components/Announcements'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 
@@ -36,6 +36,7 @@ export interface ISessionState {
   readonly token?: string
   readonly announcements?: Announcement[]
   readonly missionsInfo?: MissionInfo[]
+  readonly username?: string
 }
 
 /**
@@ -137,5 +138,6 @@ export const defaultSession: ISessionState = {
       description:
         'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in'
     }
-  ]
+  ],
+  username: undefined
 }

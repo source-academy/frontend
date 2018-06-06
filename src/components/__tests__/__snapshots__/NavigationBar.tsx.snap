@@ -1,30 +1,70 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NavigationBar renders correctly 1`] = `
+exports[`NavigationBar renders "Not logged in" correctly 1`] = `
 "<Blueprint2.Navbar className=\\"NavigationBar pt-dark\\">
-  <Blueprint2.NavbarGroup className=\\"pt-align-left\\" align=\\"left\\">
-    <Blueprint2.NavbarHeading>
-      Cadet
-    </Blueprint2.NavbarHeading>
-    <Blueprint2.NavbarDivider />
-    <NavLink to=\\"/game\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
-      <Blueprint2.Icon icon=\\"star-empty\\" />
-      Game
+  <Blueprint2.NavbarGroup align=\\"left\\">
+    <NavLink to=\\"/academy\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"symbol-diamond\\" />
+      <Blueprint2.NavbarHeading>
+        Source Academy
+      </Blueprint2.NavbarHeading>
     </NavLink>
-    <NavLink to=\\"/device\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
-      <Blueprint2.Icon icon=\\"dashboard\\" />
-      Device
+    <NavLink to=\\"/news\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"feed\\" />
+      News
+    </NavLink>
+    <NavLink to=\\"/material\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"folder-open\\" />
+      Material
     </NavLink>
     <NavLink to=\\"/admin\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"eye-open\\" />
       Admin
     </NavLink>
   </Blueprint2.NavbarGroup>
-  <Blueprint2.NavbarGroup className=\\"pt-align-right\\" align=\\"left\\">
+  <Blueprint2.NavbarGroup align=\\"right\\">
     <NavLink to=\\"/playground\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"code\\" />
       Playground
     </NavLink>
+  </Blueprint2.NavbarGroup>
+</Blueprint2.Navbar>"
+`;
+
+exports[`NavigationBar renders correctly with username 1`] = `
+"<Blueprint2.Navbar className=\\"NavigationBar pt-dark\\">
+  <Blueprint2.NavbarGroup align=\\"left\\">
+    <NavLink to=\\"/academy\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"symbol-diamond\\" />
+      <Blueprint2.NavbarHeading>
+        Source Academy
+      </Blueprint2.NavbarHeading>
+    </NavLink>
+    <NavLink to=\\"/news\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"feed\\" />
+      News
+    </NavLink>
+    <NavLink to=\\"/material\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"folder-open\\" />
+      Material
+    </NavLink>
+    <NavLink to=\\"/admin\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"eye-open\\" />
+      Admin
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+  <Blueprint2.NavbarGroup align=\\"right\\">
+    <NavLink to=\\"/playground\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"code\\" />
+      Playground
+    </NavLink>
+    <Symbol(react.fragment)>
+      <Blueprint2.NavbarDivider />
+      <NavLink to=\\"/status\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+        <Blueprint2.Icon icon=\\"user\\" />
+        Evis Rucer
+      </NavLink>
+    </Symbol(react.fragment)>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;

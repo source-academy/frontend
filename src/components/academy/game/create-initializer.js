@@ -1,4 +1,4 @@
-import { history } from '../../utils/history'
+import { history } from '../../../utils/history'
 
 export default function (StoryXMLPlayer, story, username, attemptedAll) {
   function saveToServer() { }
@@ -14,19 +14,19 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
         case 'textbook':
           return window.open('https://www.comp.nus.edu.sg/~cs1101s/sicp/', '_blank');
         case 'announcements':
-          return history.push('/device/announcements');
+          return history.push('/announcements');
         case 'lesson_plan':
-          return history.push('/device/missions');
+          return history.push('/academy/missions');
         case 'students':
-          return history.push('/device/profile');
+          return history.push('/profile');
         case 'materials':
-          return history.push('/device/materials');
+          return history.push('/material');
         case 'IDE':
           return history.push('/playground');
         case 'path':
-          return history.push('/device/paths');
+          return history.push('/academy/paths');
         default:
-          return history.push('/device/announcements');
+          return history.push('/announcements');
       }
     },
     pickUpCollectible: function () { },
@@ -39,7 +39,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
   };
 
   function openWristDevice() {
-    history.push('/device/announements')
+    history.push('/academy/announements')
   }
 
   function startGame(div, canvas, saveData) {

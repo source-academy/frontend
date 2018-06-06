@@ -1,9 +1,9 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { fetchAnnouncements } from '../../actions/session'
-import Announcements, { IAnnouncementsProps } from '../../components/device/Announcements'
-import { IState } from '../../reducers/states'
+import { fetchAnnouncements } from '../actions/session'
+import Announcements, { IAnnouncementsProps } from '../components/Announcements'
+import { IState } from '../reducers/states'
 
 type StateProps = Pick<IAnnouncementsProps, 'announcements'>
 type DispatchProps = Pick<IAnnouncementsProps, 'handleAnnouncementsFetch'>

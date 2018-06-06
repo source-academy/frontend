@@ -11,7 +11,8 @@ import { IState } from '../reducers/states'
  * provided using the withRouter() method below.
  */
 const mapStateToProps: MapStateToProps<{ title: string }, {}, IState> = state => ({
-  title: state.application.title
+  title: state.application.title,
+  username: state.session.username
 })
 
 export default withRouter(connect(mapStateToProps)(Application))

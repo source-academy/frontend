@@ -1,6 +1,12 @@
 .NavigationBar {
   width: 100%;
   flex: 0 0 auto;
+  .pt-button {
+    font-weight: 500;
+  }
+  .pt-navbar-heading {
+    text-transform: uppercase;
+  }
 }
 
 .NavigationBar__link :first-child {
@@ -8,12 +14,7 @@
   margin-right: 0.3rem !important;
 }
 
-.NavigationBar .pt-button {
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-.Device {
+%thin-navbar {
   .NavigationBar {
     height: 40px;
 
@@ -22,12 +23,16 @@
     }
   }
 
-  .NavigationBar__link :first-child {
-    // to override using specificity
-  }
-
   .NavigationBar .pt-button {
     text-transform: initial;
     font-weight: 250;
   }
+}
+
+.Academy {
+  @extend %thin-navbar;
+}
+
+.Admin {
+  @extend %thin-navbar;
 }

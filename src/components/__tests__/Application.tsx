@@ -7,7 +7,7 @@ import Application, { IApplicationProps } from '../Application'
 
 test('Application renders correctly', () => {
   const props: IApplicationProps = {
-    ...mockRouterProps('/device', {}),
+    ...mockRouterProps('/academy', {}),
     title: 'Cadet'
   }
   const app = <Application {...props} />

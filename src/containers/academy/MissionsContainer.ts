@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchMissionsInfo } from '../../actions/session'
-import Missions, { IMissionsProps } from '../../components/device/Missions'
+import Missions, { IMissionsProps } from '../../components/academy/Missions'
 import { IState } from '../../reducers/states'
 
 type StateProps = Pick<IMissionsProps, 'missionsInfo'>

@@ -1,0 +1,27 @@
+.Academy {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 100%;
+}
+
+.pt-non-ideal-state {
+  padding-top: 0.7rem;
+
+  .pt-non-ideal-state-visual {
+    margin-bottom: 0.5rem;
+  }
+
+  .pt-non-ideal-state-title {
+    padding: 0.5rem 0 0 0;
+  }
+}
+
+.Missions {
+  color: $cadet-color-3;
+  .mission-info {
+    background-color: $cadet-color-5;
+    text-align: justify;
+  }
+}

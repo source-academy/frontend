@@ -1,7 +1,7 @@
 import { Card, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
-import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
+import ContentDisplay, { IContentDisplayProps } from './commons/ContentDisplay'
 
 export type Announcement = {
   author: string
