@@ -61,15 +61,21 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <Icon icon={IconNames.CODE} />
         Playground
       </NavLink>
-      <NavbarDivider />
-      <NavLink
-        to="/status"
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon={IconNames.USER} />
-        {props.username === undefined ? 'Not Logged In' : props.username}
-      </NavLink>
+      {props.username === undefined ? (
+        undefined
+      ) : (
+        <>
+          <NavbarDivider />
+          <NavLink
+            to="/status"
+            activeClassName="pt-active"
+            className="NavigationBar__link pt-button pt-minimal"
+          >
+            <Icon icon={IconNames.USER} />
+            {props.username}
+          </NavLink>
+        </>
+      )}
     </NavbarGroup>
   </Navbar>
 )

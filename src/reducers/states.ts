@@ -139,5 +139,5 @@ export const defaultSession: ISessionState = {
         'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in'
     }
   ],
-  username: 'Evis Rucer'
+  username: undefined
 }

@@ -27,11 +27,6 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
       <Blueprint2.Icon icon=\\"code\\" />
       Playground
     </NavLink>
-    <Blueprint2.NavbarDivider />
-    <NavLink to=\\"/status\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
-      <Blueprint2.Icon icon=\\"user\\" />
-      Not Logged In
-    </NavLink>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;
@@ -63,11 +58,13 @@ exports[`NavigationBar renders correctly with username 1`] = `
       <Blueprint2.Icon icon=\\"code\\" />
       Playground
     </NavLink>
-    <Blueprint2.NavbarDivider />
-    <NavLink to=\\"/status\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
-      <Blueprint2.Icon icon=\\"user\\" />
-      Evis Rucer
-    </NavLink>
+    <Symbol(react.fragment)>
+      <Blueprint2.NavbarDivider />
+      <NavLink to=\\"/status\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+        <Blueprint2.Icon icon=\\"user\\" />
+        Evis Rucer
+      </NavLink>
+    </Symbol(react.fragment)>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;
