@@ -12,31 +12,34 @@ const NavigationBar: React.SFC<{}> = () => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.FLAME} />
-        Missions
+        <div className="navbar-button-text hidden-xs">Missions</div>
       </NavLink>
+
       <NavLink
         to="/academy/sidequests"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.LIGHTBULB} />
-        Sidequests
+        <div className="navbar-button-text hidden-xs">Sidequests</div>
       </NavLink>
+
       <NavLink
         to="/academy/paths"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
-        Paths
+        <div className="navbar-button-text hidden-xs">Paths</div>
       </NavLink>
+
       <NavLink
         to="/academy/contests"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.COMPARISON} />
-        Contests
+        <div className="navbar-button-text hidden-xs">Contests</div>
       </NavLink>
     </NavbarGroup>
   </Navbar>
