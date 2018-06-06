@@ -4,7 +4,7 @@ import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
 const NavigationBar: React.SFC<{}> = () => (
-  <Navbar className="NavigationBar">
+  <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
         to="/academy/missions"

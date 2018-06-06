@@ -5,7 +5,7 @@ import { IconNames } from '@blueprintjs/icons'
 import { NavLink } from 'react-router-dom'
 
 const NavigationBar: React.SFC<{}> = () => (
-  <Navbar className="NavigationBar">
+  <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
         to="/admin/announcements"

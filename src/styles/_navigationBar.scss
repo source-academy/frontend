@@ -1,6 +1,14 @@
 .NavigationBar {
   width: 100%;
   flex: 0 0 auto;
+}
+
+.NavigationBar__link :first-child {
+  margin-left: 0.1rem !important;
+  margin-right: 0.3rem !important;
+}
+
+.primary-navbar {
   .pt-button {
     font-weight: 500;
   }
@@ -17,13 +25,8 @@
 %thin-navbar {
   .NavigationBar {
     height: 40px;
-
-    .pt-navbar-group {
-      height: 40px;
-    }
   }
-
-  .NavigationBar .pt-button {
+  .pt-button {
     text-transform: initial;
     font-weight: 250;
   }

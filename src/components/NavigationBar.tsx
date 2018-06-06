@@ -16,7 +16,7 @@ export interface INavigationBarProps {
 }
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
-  <Navbar className="NavigationBar pt-dark">
+  <Navbar className="NavigationBar primary-navbar pt-dark">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
         to="/academy"
