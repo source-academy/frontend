@@ -51,12 +51,15 @@ $code-color-error: #ff4444;
     padding-bottom: 0.6rem;
   }
 
+  .editor-divider {
+    flex: initial;
+  }
+
   .Editor {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding-bottom: 0.6rem;
-
+    margin: 0 0.6rem 0.6rem 0.6rem;
     .editor-react-ace {
       flex: 1;
       height: 100%;
@@ -87,7 +90,7 @@ $code-color-error: #ff4444;
         color: $code-color-result;
         height: 100%;
         padding: 0;
-        margin: 0 0.5rem 0 0.5rem;
+        margin: 0 0.5rem 0 0;
 
         .side-content-text {
           height: 100%;
@@ -100,11 +103,6 @@ $code-color-error: #ff4444;
   .resize-editor {
     display: flex;
     flex-direction: row;
-
-    .editor-divider {
-      width: 0.6rem;
-      flex: initial;
-    }
 
     .Editor {
       flex: 1 1 auto;
@@ -125,8 +123,7 @@ $code-color-error: #ff4444;
     .pt-card {
       background-color: $cadet-color-2;
       padding: 0.4rem 0.6rem 0.4rem 0.6rem;
-      margin: 0.5rem;
-      margin-top: 0rem;
+      margin: 0 0.5rem 0.5rem 0;
 
       pre {
         background-color: transparent;

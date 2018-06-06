@@ -18,6 +18,7 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
   private sideDividerDiv: HTMLDivElement
   private maxDividerHeight: number
   private leftParentResizable: Resizable
+  private editorDividerDiv: HTMLDivElement
 
   public componentDidMount() {
     this.maxDividerHeight = this.sideDividerDiv.clientHeight
@@ -34,6 +35,10 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
       <HotKeys className="workspace" handlers={handlers}>
         <ControlBarContainer />
         <div className="row workspace-parent">
+          <div
+            className="editor-divider"
+            ref={e => (this.editorDividerDiv = e as HTMLDivElement)}
+          />
           <Resizable
             className="resize-editor left-parent"
             size={{ width: this.props.editorWidth, height: '100%' }}
@@ -80,14 +85,22 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
 
   /**
    * Snaps the left-parent resizable to 100% or 0% when percentage width goes
-   * above 95% or below 5% respectively.
+   * above 95% or below 5% respectively. Also changes the editor divider width
+   * in the case of < 5%.
    */
   private toggleEditorDividerDisplay: ResizeCallback = (e, dir, ref) => {
     const editorWidthPercentage = (ref as HTMLDivElement).clientWidth / window.innerWidth * 100
+    // update resizable size
     if (editorWidthPercentage > 95) {
       this.leftParentResizable.updateSize({ width: '100%', height: '100%' })
     } else if (editorWidthPercentage < 5) {
       this.leftParentResizable.updateSize({ width: '0%', height: '100%' })
+    }
+    // Update divider margin
+    if (editorWidthPercentage < 5) {
+      this.editorDividerDiv.style.marginRight = '0.6rem'
+    } else {
+      this.editorDividerDiv.style.marginRight = '0'
     }
   }
 
