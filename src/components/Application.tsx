@@ -14,7 +14,7 @@ export interface IApplicationProps extends RouteComponentProps<{}> {
 }
 
 const Application: React.SFC<IApplicationProps> = props => {
-  const redirectToAcademy = () => <Redirect to="/academy" />
+  const redirectToNews = () => <Redirect to="/news" />
 
   return (
     <div className="Application">
@@ -22,12 +22,12 @@ const Application: React.SFC<IApplicationProps> = props => {
       <div className="Application__main">
         <Switch>
           <Route path="/academy" component={Academy} />
-          <Route path="/announcements" component={Announcements} />
+          <Route path="/news" component={Announcements} />
           <Route path="/admin" component={AdminContainer} />
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
           <Route path="/status" component={Announcements} />
-          <Route exact={true} path="/" component={redirectToAcademy} />
+          <Route exact={true} path="/" component={redirectToNews} />
           <Route component={NotFound} />
         </Switch>
       </div>

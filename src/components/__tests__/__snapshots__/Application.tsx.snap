@@ -6,12 +6,12 @@ exports[`Application renders correctly 1`] = `
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/academy\\" component={[Function: Connect]} />
-      <Route path=\\"/announcements\\" component={[Function: Connect]} />
+      <Route path=\\"/news\\" component={[Function: Connect]} />
       <Route path=\\"/admin\\" component={[Function: Connect]} />
       <Route path=\\"/material\\" component={[Function: Connect]} />
       <Route path=\\"/playground\\" component={[Function: Playground]} />
       <Route path=\\"/status\\" component={[Function: Connect]} />
-      <Route exact={true} path=\\"/\\" component={[Function: redirectToAcademy]} />
+      <Route exact={true} path=\\"/\\" component={[Function: redirectToNews]} />
       <Route component={[Function: NotFound]} />
     </Switch>
   </div>

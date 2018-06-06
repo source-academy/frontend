@@ -27,7 +27,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <NavbarHeading>Source Academy</NavbarHeading>
       </NavLink>
       <NavLink
-        to="/announcements"
+        to="/news"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >

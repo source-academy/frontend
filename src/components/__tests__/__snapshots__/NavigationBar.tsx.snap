@@ -9,7 +9,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Source Academy
       </Blueprint2.NavbarHeading>
     </NavLink>
-    <NavLink to=\\"/announcements\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/news\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"feed\\" />
       News
     </NavLink>
@@ -40,7 +40,7 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Source Academy
       </Blueprint2.NavbarHeading>
     </NavLink>
-    <NavLink to=\\"/announcements\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/news\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"feed\\" />
       News
     </NavLink>
