@@ -7,14 +7,6 @@ const NavigationBar: React.SFC<{}> = () => (
   <Navbar className="NavigationBar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
-        to="/academy/game"
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon={IconNames.STAR_EMPTY} />
-        Game
-      </NavLink>
-      <NavLink
         to="/academy/missions"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
