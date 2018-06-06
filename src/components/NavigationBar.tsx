@@ -81,7 +81,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
             className="NavigationBar__link pt-button pt-minimal"
           >
             <Icon icon={IconNames.USER} />
-            {props.username}
+            <div className="navbar-button-text hidden-xs">{props.username}</div>
           </NavLink>
         </>
       )}

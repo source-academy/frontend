@@ -9,9 +9,6 @@
     margin-left: 0px;
     margin-right: 0px;
   }
-  .pt-icon {
-    // margin-right: 1.6px;
-  }
   .navbar-button-text {
     /* This provides some space between the icon and the text on larger displays. */
     margin-left: 0.2rem;
@@ -42,8 +39,9 @@
  * Style for the navigation bar of particular sections (e.g Admin). This is the
  * "nested" navigation bar under the primary one.
  */
-%thin-navbar {
-  .NavigationBar {
+.secondary-navbar {
+  height: 40px;
+  .pt-navbar-group {
     height: 40px;
   }
   /* Create less emphasis on secondary navbar buttons */
@@ -51,12 +49,4 @@
     text-transform: initial;
     font-weight: 250;
   }
-}
-
-.Academy {
-  @extend %thin-navbar;
-}
-
-.Admin {
-  @extend %thin-navbar;
 }
