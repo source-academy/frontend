@@ -34,11 +34,6 @@ $code-color-error: #ff4444;
     > div {
       height: inherit; // Fix for Firefox not autoscrolling when repl overflows
     }
-
-    .left-parent {
-      flex: 0 0 auto;
-      height: 100%;
-    }
   }
 
   .right-parent {
@@ -49,12 +44,18 @@ $code-color-error: #ff4444;
     padding-bottom: 0.6rem;
   }
 
+  .left-parent {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    padding-bottom: 0.6rem;
+  }
+
   .Editor {
     display: flex;
     flex-direction: column;
     height: 100%;
     padding-bottom: 0.6rem;
-    padding-left: 0.6rem;
 
     .editor-react-ace {
       flex: 1;
@@ -93,6 +94,20 @@ $code-color-error: #ff4444;
           padding: 0.4rem 0.6rem 0.4rem 0.6rem;
         }
       }
+    }
+  }
+
+  .resize-editor {
+    display: flex;
+    flex-direction: row;
+
+    .editor-divider {
+      width: 0.6rem;
+      flex: initial;
+    }
+
+    .Editor {
+      flex: 1 1 auto;
     }
   }
 
@@ -160,7 +175,7 @@ $code-color-error: #ff4444;
   }
 }
 
-/* otherwise, a think outline will show on click due to react-hotkeys */
+/* otherwise, a thick outline will show on click due to react-hotkeys */
 .workspace:focus {
   outline: 0;
 }
