@@ -15,31 +15,7 @@ export interface IWorkspaceProps {
   handleSideContentHeightChange: (height: number) => void
 }
 
-type WorkspaceState = {
-  maxSideHeight?: number
-}
-
-class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
-  private rightParentDiv: HTMLDivElement
-  private sideHeightListener: () => void
-
-  public constructor(props: IWorkspaceProps) {
-    // use local state to keep track of max height of side-content
-    super(props)
-    this.state = { maxSideHeight: undefined }
-  }
-
-  public componentDidMount() {
-    // need to bind this to the callback, otherwise it find the reference rightParentDiv
-    // need to save a reference as instance variable, to removeEventListener
-    this.sideHeightListener = this.updateMaxSideHeight.bind(this)
-    window.addEventListener('resize', this.sideHeightListener)
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener('resize', this.sideHeightListener)
-  }
-
+class Workspace extends React.Component<IWorkspaceProps, {}> {
   /**
    * side-content-divider gives the side content a bottom margin. I use a div
    * element instead of CSS so that when the user resizes the side-content all
@@ -72,10 +48,10 @@ class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
           >
             <EditorContainer />
           </Resizable>
-          <div className="right-parent" ref={e => (this.rightParentDiv = e as HTMLDivElement)}>
+          <div className="right-parent">
             <Resizable
+              bounds="parent"
               className="resize-side-content"
-              maxHeight={this.state.maxSideHeight}
               minHeight={0}
               size={
                 this.props.sideContentHeight === undefined
@@ -105,10 +81,6 @@ class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
         </div>
       </HotKeys>
     )
-  }
-
-  private updateMaxSideHeight() {
-    this.setState({ maxSideHeight: this.rightParentDiv.clientHeight - 10 })
   }
 }
 
