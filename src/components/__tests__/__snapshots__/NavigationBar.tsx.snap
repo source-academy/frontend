@@ -1,68 +1,91 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`NavigationBar renders "Not logged in" correctly 1`] = `
-"<Blueprint2.Navbar className=\\"NavigationBar pt-dark\\">
+"<Blueprint2.Navbar className=\\"NavigationBar primary-navbar pt-dark\\">
   <Blueprint2.NavbarGroup align=\\"left\\">
     <NavLink to=\\"/academy\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"symbol-diamond\\" />
-      <Blueprint2.NavbarHeading>
+      <Blueprint2.NavbarHeading className=\\"hidden-xs\\">
         Source Academy
       </Blueprint2.NavbarHeading>
     </NavLink>
     <NavLink to=\\"/news\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"feed\\" />
-      News
+      <div className=\\"navbar-button-text hidden-xs\\">
+        News
+      </div>
     </NavLink>
     <NavLink to=\\"/material\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"folder-open\\" />
-      Material
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Material
+      </div>
     </NavLink>
     <NavLink to=\\"/admin\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"eye-open\\" />
-      Admin
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Admin
+      </div>
     </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup align=\\"right\\">
     <NavLink to=\\"/playground\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"code\\" />
-      Playground
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Playground
+      </div>
     </NavLink>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;
 
 exports[`NavigationBar renders correctly with username 1`] = `
-"<Blueprint2.Navbar className=\\"NavigationBar pt-dark\\">
+"<Blueprint2.Navbar className=\\"NavigationBar primary-navbar pt-dark\\">
   <Blueprint2.NavbarGroup align=\\"left\\">
     <NavLink to=\\"/academy\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"symbol-diamond\\" />
-      <Blueprint2.NavbarHeading>
+      <Blueprint2.NavbarHeading className=\\"hidden-xs\\">
         Source Academy
       </Blueprint2.NavbarHeading>
     </NavLink>
     <NavLink to=\\"/news\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"feed\\" />
-      News
+      <div className=\\"navbar-button-text hidden-xs\\">
+        News
+      </div>
     </NavLink>
     <NavLink to=\\"/material\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"folder-open\\" />
-      Material
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Material
+      </div>
     </NavLink>
     <NavLink to=\\"/admin\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"eye-open\\" />
-      Admin
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Admin
+      </div>
     </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup align=\\"right\\">
     <NavLink to=\\"/playground\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"code\\" />
-      Playground
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Playground
+      </div>
     </NavLink>
     <Symbol(react.fragment)>
-      <Blueprint2.NavbarDivider />
+      <div className=\\"visible-xs\\">
+        <Blueprint2.NavbarDivider className=\\"thin-divider\\" />
+      </div>
+      <div className=\\"hidden-xs\\">
+        <Blueprint2.NavbarDivider className=\\"default-divider\\" />
+      </div>
       <NavLink to=\\"/status\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
         <Blueprint2.Icon icon=\\"user\\" />
-        Evis Rucer
+        <div className=\\"navbar-button-text hidden-xs\\">
+          Evis Rucer
+        </div>
       </NavLink>
     </Symbol(react.fragment)>
   </Blueprint2.NavbarGroup>
