@@ -24,31 +24,34 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
-        <NavbarHeading>Source Academy</NavbarHeading>
+        <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
       </NavLink>
+
       <NavLink
         to="/news"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.FEED} />
-        News
+        <div className="navbar-button hidden-xs">News</div>
       </NavLink>
+
       <NavLink
         to="/material"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.FOLDER_OPEN} />
-        Material
+        <div className="navbar-button hidden-xs">Material</div>
       </NavLink>
+
       <NavLink
         to="/admin"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.EYE_OPEN} />
-        Admin
+        <div className="navbar-button hidden-xs">Admin</div>
       </NavLink>
     </NavbarGroup>
 
@@ -59,13 +62,20 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.CODE} />
-        Playground
+        <div className="navbar-button hidden-xs">Playground</div>
       </NavLink>
+
+      <div className="visible-xs">
+        <NavbarDivider className="thin-divider" />
+      </div>
+
       {props.username === undefined ? (
         undefined
       ) : (
         <>
-          <NavbarDivider />
+          <div className="hidden-xs">
+            <NavbarDivider className="default-divider" />
+          </div>
           <NavLink
             to="/status"
             activeClassName="pt-active"

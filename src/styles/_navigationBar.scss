@@ -1,6 +1,10 @@
 .NavigationBar {
   width: 100%;
   flex: 0 0 auto;
+  .thin-divider {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 }
 
 .NavigationBar__link :first-child {
