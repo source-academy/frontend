@@ -9,23 +9,27 @@ const SideContent: React.SFC<{}> = () => (
   </div>
 )
 
+const SICP_SITE = 'http://www.comp.nus.edu.sg/~henz/sicp_js/'
+const CHAP = '\xa7'
+
 const welcome = (
   <>
-    Welcome to the playground!
+    Welcome to the source-academy playground!
     <br />
     <br />
-    Customise the horizontal layout of the playground by dragging the right border of the editor
-    left or right; similarly, you can control the layout of the side content by dragging the bottom
-    border of this text box up and down.
+    The language <i>Source</i> is the official language of the textbook{' '}
+    <i>Structure and Interpretation of Computer Programs, JavaScript Adaptation</i>. You have never
+    heard of Source? No worries! It was invented just for the purpose of the book. Source is a
+    sublanguage of ECMAScript 2016 (7th Edition) and defined in{' '}
+    <a href={SICP_SITE}>
+      the documents titled <i>"Source {CHAP}x"</i>
+    </a>, where x refers to the respective textbook chapter. For example, Source {CHAP}3 is suitable
+    for textbook Chapter 3 and the preceeding chapters.
     <br />
     <br />
-    The <i>Source</i> is the official language of the text book{' '}
-    <i>Structure and Interpretation of Coputer Programs, Javascript Adaptation</i>. It was invented
-    just for the purposes of the book. Source is a sublanguage of ECMAScript 2016.
-    <br />
-    <br />
-    You can find the specifications for the Source{' '}
-    <a href="http://www.comp.nus.edu.sg/~henz/sicp_js/source_1.pdf">here</a>.
+    The playground comes with an editor and a REPL, on the left and right of the screen,
+    respectively. You may customimse the layout of the playground by clicking and dragging on the
+    right border of the editor, or the top border of the REPL.
   </>
 )
 
