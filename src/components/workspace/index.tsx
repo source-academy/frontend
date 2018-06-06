@@ -1,7 +1,6 @@
+import Resizable, { ResizeCallback } from 're-resizable'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
-
-import Resizable from 're-resizable'
 
 import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
@@ -16,6 +15,13 @@ export interface IWorkspaceProps {
 }
 
 class Workspace extends React.Component<IWorkspaceProps, {}> {
+  private dividerDiv: HTMLDivElement
+  private maxDividerHeight: number
+
+  public componentDidMount() {
+    this.maxDividerHeight = this.dividerDiv.clientHeight
+  }
+
   /**
    * side-content-divider gives the side content a bottom margin. I use a div
    * element instead of CSS so that when the user resizes the side-content all
@@ -35,16 +41,7 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
             onResizeStop={(e, dir, ref, diff) => {
               this.props.handleEditorWidthChange(diff.width * 100 / window.innerWidth)
             }}
-            enable={{
-              top: false,
-              right: true,
-              bottom: false,
-              left: false,
-              topRight: false,
-              bottomRight: false,
-              bottomLeft: false,
-              topLeft: false
-            }}
+            enable={rightResizeOnly}
           >
             <EditorContainer />
           </Resizable>
@@ -58,23 +55,18 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
                   ? undefined
                   : { height: this.props.sideContentHeight, width: '100%' }
               }
+              onResize={this.toggleDividerDisplay}
               // tslint:disable-next-line jsx-no-lambda
               onResizeStop={(e, dir, ref, diff) => {
                 this.props.handleSideContentHeightChange(ref.clientHeight)
               }}
-              enable={{
-                top: false,
-                right: false,
-                bottom: true,
-                left: false,
-                topRight: false,
-                bottomRight: false,
-                bottomLeft: false,
-                topLeft: false
-              }}
+              enable={bottomResizeOnly}
             >
               <SideContent />
-              <div className="side-content-divider" />
+              <div
+                className="side-content-divider"
+                ref={e => (this.dividerDiv = e as HTMLDivElement)}
+              />
             </Resizable>
             <ReplContainer />
           </div>
@@ -82,10 +74,50 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
       </HotKeys>
     )
   }
+
+  /**
+   * Hides the side-content-divider div when side-content is resized downwards
+   * so that it's bottom border snaps flush with editor's bottom border
+   */
+  private toggleDividerDisplay: ResizeCallback = (e, dir, ref) => {
+    this.maxDividerHeight =
+      this.dividerDiv.clientHeight > this.maxDividerHeight
+        ? this.dividerDiv.clientHeight
+        : this.maxDividerHeight
+    const resizableHeight = (ref as HTMLDivElement).clientHeight
+    const rightParentHeight = (ref.parentNode as HTMLDivElement).clientHeight
+    if (resizableHeight + this.maxDividerHeight + 2 > rightParentHeight) {
+      this.dividerDiv.style.display = 'none'
+    } else {
+      this.dividerDiv.style.display = 'initial'
+    }
+  }
 }
 
 const handlers = {
   goGreen: () => require('../../styles/workspace-green.css')
+}
+
+const rightResizeOnly = {
+  top: false,
+  right: true,
+  bottom: false,
+  left: false,
+  topRight: false,
+  bottomRight: false,
+  bottomLeft: false,
+  topLeft: false
+}
+
+const bottomResizeOnly = {
+  top: false,
+  right: false,
+  bottom: true,
+  left: false,
+  topRight: false,
+  bottomRight: false,
+  bottomLeft: false,
+  topLeft: false
 }
 
 export default Workspace
