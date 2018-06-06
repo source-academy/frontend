@@ -33,7 +33,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.FEED} />
-        <div className="navbar-button hidden-xs">News</div>
+        <div className="navbar-button-text hidden-xs">News</div>
       </NavLink>
 
       <NavLink
@@ -42,7 +42,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.FOLDER_OPEN} />
-        <div className="navbar-button hidden-xs">Material</div>
+        <div className="navbar-button-text hidden-xs">Material</div>
       </NavLink>
 
       <NavLink
@@ -51,7 +51,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.EYE_OPEN} />
-        <div className="navbar-button hidden-xs">Admin</div>
+        <div className="navbar-button-text hidden-xs">Admin</div>
       </NavLink>
     </NavbarGroup>
 
@@ -62,17 +62,16 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.CODE} />
-        <div className="navbar-button hidden-xs">Playground</div>
+        <div className="navbar-button-text hidden-xs">Playground</div>
       </NavLink>
-
-      <div className="visible-xs">
-        <NavbarDivider className="thin-divider" />
-      </div>
 
       {props.username === undefined ? (
         undefined
       ) : (
         <>
+          <div className="visible-xs">
+            <NavbarDivider className="thin-divider" />
+          </div>
           <div className="hidden-xs">
             <NavbarDivider className="default-divider" />
           </div>

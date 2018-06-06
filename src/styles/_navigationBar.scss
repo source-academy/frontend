@@ -1,17 +1,34 @@
+/*
+ * Style for all navigation bars.
+ */
 .NavigationBar {
   width: 100%;
   flex: 0 0 auto;
   .thin-divider {
+    /* Used to lessen the space between icon-only buttons (on small displays). */
     margin-left: 0px;
     margin-right: 0px;
+  }
+  .pt-icon {
+    // margin-right: 1.6px;
+  }
+  .navbar-button-text {
+    /* This provides some space between the icon and the text on larger displays. */
+    margin-left: 0.2rem;
   }
 }
 
 .NavigationBar__link :first-child {
+  /* An even margin is kept (instead of the right side having a higher margin)
+   * to allow for even spacing when viewed on mobile.
+   */
   margin-left: 0.1rem !important;
-  margin-right: 0.3rem !important;
+  margin-right: 0.1rem !important;
 }
 
+/*
+ * Style for the navigation bar of the entire site (used in Application)
+ */
 .primary-navbar {
   .pt-button {
     font-weight: 500;
@@ -21,15 +38,15 @@
   }
 }
 
-.NavigationBar__link :first-child {
-  margin-left: 0.1rem !important;
-  margin-right: 0.3rem !important;
-}
-
+/*
+ * Style for the navigation bar of particular sections (e.g Admin). This is the
+ * "nested" navigation bar under the primary one.
+ */
 %thin-navbar {
   .NavigationBar {
     height: 40px;
   }
+  /* Create less emphasis on secondary navbar buttons */
   .pt-button {
     text-transform: initial;
     font-weight: 250;
