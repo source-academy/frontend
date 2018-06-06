@@ -13,23 +13,25 @@ const NavigationBar: React.SFC<{}> = () => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.FEED} />
-        Announcements
+        <div className="navbar-button-text hidden-xs">Announcements</div>
       </NavLink>
+
       <NavLink
         to="/admin/assessments"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.TICK} />
-        Assessments
+        <div className="navbar-button-text hidden-xs">Assessments</div>
       </NavLink>
+
       <NavLink
         to="/admin/materials"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.FOLDER_OPEN} />
-        Materials
+        <div className="navbar-button-text hidden-xs">Materials</div>
       </NavLink>
     </NavbarGroup>
   </Navbar>
