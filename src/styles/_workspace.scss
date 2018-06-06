@@ -20,44 +20,49 @@ $code-color-error: #ff4444;
     justify-content: space-between;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.6rem;
   }
 
-  .ide-content-parent {
+  .workspace-parent {
     height: 100%;
     width: 100%;
     display: flex;
     flex: 1 1 100%;
     flex-direction: row;
     overflow: hidden;
-    margin-bottom: 0.5rem;
 
     > div {
       height: inherit; // Fix for Firefox not autoscrolling when repl overflows
     }
+  }
 
-    .editor-parent {
-      flex: 0 0 auto;
-      height: 100%;
-    }
+  .right-parent {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+    height: 100%;
+    padding-bottom: 0.6rem;
+  }
 
-    .repl-parent {
-      flex: 1 1;
-      height: 100%;
-    }
+  .left-parent {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    padding-bottom: 0.6rem;
+  }
+
+  .editor-divider {
+    flex: initial;
   }
 
   .Editor {
-    height: 100%;
-    padding-left: 0.4rem;
     display: flex;
     flex-direction: column;
-
+    height: 100%;
+    margin: 0 0.6rem 0.6rem 0.6rem;
     .editor-react-ace {
       flex: 1;
       height: 100%;
-      // to align with the repl output cards
-      margin-top: 0.5rem;
 
       #brace-editor {
         height: 100%;
@@ -65,26 +70,60 @@ $code-color-error: #ff4444;
     }
   }
 
-  .Repl {
-    height: 100%;
+  .resize-side-content {
     display: flex;
     flex-direction: column;
-    .repl-control-parent {
+
+    .side-content-divider {
+      height: 0.6rem;
       flex: initial;
     }
+
+    .side-content {
+      flex: 1 1 auto;
+      height: 100%;
+      text-align: justify;
+      overflow-y: auto;
+
+      .pt-card {
+        background-color: $cadet-color-2;
+        color: $code-color-result;
+        height: 100%;
+        padding: 0;
+        margin: 0 0.5rem 0 0;
+
+        .side-content-text {
+          height: 100%;
+          padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+        }
+      }
+    }
+  }
+
+  .resize-editor {
+    display: flex;
+    flex-direction: row;
+
+    .Editor {
+      flex: 1 1 auto;
+    }
+  }
+
+  .Repl {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+
     .repl-output-parent {
       flex: 1 1;
-      margin-top: 0.5rem;
       overflow-y: auto;
       overflow-x: visible;
     }
 
     .pt-card {
       background-color: $cadet-color-2;
-      padding: 0.4rem;
-      padding-left: 0.6rem;
-      margin: 0.5rem;
-      margin-top: 0rem;
+      padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+      margin: 0 0.5rem 0.5rem 0;
 
       pre {
         background-color: transparent;
@@ -112,10 +151,14 @@ $code-color-error: #ff4444;
       }
     }
 
+    /* flush to align with editor bottom */
+    .repl-input-parent {
+      padding: 0;
+      margin-bottom: 0rem;
+    }
+
     .repl-react-ace {
-      margin-left: -0.2rem;
-      margin-right: 0.5rem;
-      margin-top: 0rem;
+      margin: 0.4rem 0.6rem 0.4rem 0.6rem;
     }
   }
 
@@ -129,7 +172,7 @@ $code-color-error: #ff4444;
   }
 }
 
-/* otherwise, a think outline will show on click due to react-hotkeys */
+/* otherwise, a thick outline will show on click due to react-hotkeys */
 .workspace:focus {
   outline: 0;
 }
