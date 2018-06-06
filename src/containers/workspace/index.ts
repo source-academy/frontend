@@ -1,26 +1,29 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { changeEditorWidth } from '../../actions/playground'
+import { changeEditorWidth, changeSideContentHeight } from '../../actions/playground'
 import Workspace, { IWorkspaceProps } from '../../components/workspace/'
 import { IState } from '../../reducers/states'
 
-type StateProps = Pick<IWorkspaceProps, 'editorWidth'>
-type DispatchProps = Pick<IWorkspaceProps, 'handleEditorWidthChange'>
+type StateProps = Pick<IWorkspaceProps, 'editorWidth'> & Pick<IWorkspaceProps, 'sideContentHeight'>
+type DispatchProps = Pick<IWorkspaceProps, 'handleEditorWidthChange'> &
+  Pick<IWorkspaceProps, 'handleSideContentHeightChange'>
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
  */
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    editorWidth: state.playground.editorWidth
+    editorWidth: state.playground.editorWidth,
+    sideContentHeight: state.playground.sideContentHeight
   }
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleEditorWidthChange: changeEditorWidth
+      handleEditorWidthChange: changeEditorWidth,
+      handleSideContentHeightChange: changeSideContentHeight
     },
     dispatch
   )

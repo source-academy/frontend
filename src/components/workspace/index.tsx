@@ -10,7 +10,9 @@ import SideContent from './side-content'
 
 export interface IWorkspaceProps {
   editorWidth: string
-  handleEditorWidthChange: (widthChange: number) => void // TODO
+  sideContentHeight?: number
+  handleEditorWidthChange: (widthChange: number) => void
+  handleSideContentHeightChange: (height: number) => void
 }
 
 type WorkspaceState = {
@@ -19,6 +21,7 @@ type WorkspaceState = {
 
 class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
   private rightParentDiv: HTMLDivElement
+  private sideHeightListener: () => void
 
   public constructor(props: IWorkspaceProps) {
     // use local state to keep track of max height of side-content
@@ -27,11 +30,14 @@ class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
   }
 
   public componentDidMount() {
-    window.addEventListener('resize', this.updateMaxSideHeight.bind(this))
+    // need to bind this to the callback, otherwise it find the reference rightParentDiv
+    // need to save a reference as instance variable, to removeEventListener
+    this.sideHeightListener = this.updateMaxSideHeight.bind(this)
+    window.addEventListener('resize', this.sideHeightListener)
   }
 
   public componentWillUnmount() {
-    window.removeEventListener('resize', this.updateMaxSideHeight.bind(this))
+    window.removeEventListener('resize', this.sideHeightListener)
   }
 
   /**
@@ -50,8 +56,8 @@ class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
             size={{ width: this.props.editorWidth, height: '100%' }}
             maxWidth={window.innerWidth - 10}
             // tslint:disable-next-line jsx-no-lambda
-            onResizeStop={(e, direction, ref, d) => {
-              this.props.handleEditorWidthChange(d.width * 100 / window.innerWidth)
+            onResizeStop={(e, dir, ref, diff) => {
+              this.props.handleEditorWidthChange(diff.width * 100 / window.innerWidth)
             }}
             enable={{
               top: false,
@@ -71,6 +77,15 @@ class Workspace extends React.Component<IWorkspaceProps, WorkspaceState> {
               className="resize-side-content"
               maxHeight={this.state.maxSideHeight}
               minHeight={0}
+              size={
+                this.props.sideContentHeight === undefined
+                  ? undefined
+                  : { height: this.props.sideContentHeight, width: '100%' }
+              }
+              // tslint:disable-next-line jsx-no-lambda
+              onResizeStop={(e, dir, ref, diff) => {
+                this.props.handleSideContentHeightChange(ref.clientHeight)
+              }}
               enable={{
                 top: false,
                 right: false,

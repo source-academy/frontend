@@ -11,6 +11,11 @@ export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (widthChang
   payload: widthChange
 })
 
+export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (height: number) => ({
+  type: actionTypes.CHANGE_SIDE_CONTENT_HEIGHT,
+  payload: height
+})
+
 export const updateReplValue: ActionCreator<actionTypes.IAction> = (newReplValue: string) => ({
   type: actionTypes.UPDATE_REPL_VALUE,
   payload: newReplValue
