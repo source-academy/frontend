@@ -99,15 +99,17 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
    * in the case of < 5%.
    */
   private toggleEditorDividerDisplay: ResizeCallback = (e, dir, ref) => {
+    const leftThreshold = 2
+    const rightThreshold = 95
     const editorWidthPercentage = (ref as HTMLDivElement).clientWidth / window.innerWidth * 100
     // update resizable size
-    if (editorWidthPercentage > 95) {
+    if (editorWidthPercentage > rightThreshold) {
       this.leftParentResizable.updateSize({ width: '100%', height: '100%' })
-    } else if (editorWidthPercentage < 5) {
+    } else if (editorWidthPercentage < leftThreshold) {
       this.leftParentResizable.updateSize({ width: '0%', height: '100%' })
     }
     // Update divider margin
-    if (editorWidthPercentage < 5) {
+    if (editorWidthPercentage < leftThreshold) {
       this.editorDividerDiv.style.marginRight = '0.6rem'
     } else {
       this.editorDividerDiv.style.marginRight = '0'
