@@ -1,14 +1,28 @@
-import { Button, IconName, Intent } from '@blueprintjs/core'
+import { Button, IButtonProps, IconName, Intent } from '@blueprintjs/core'
 import * as React from 'react'
 
-export const controlButton = (
+type controlButtonOptionals = {
+  iconOnRight?: boolean
+  intent?: Intent
+  minimal?: boolean
+}
+
+const defaultOptions = {
+  iconOnRight: false,
+  intent: Intent.NONE,
+  minimal: true
+}
+
+export function controlButton(
   label: string,
   icon: IconName,
-  handleClick = () => {},
-  intent = Intent.NONE,
-  minimal = true
-) => (
-  <Button onClick={handleClick} className={minimal ? 'pt-minimal' : ''} intent={intent} icon={icon}>
-    {label}
-  </Button>
-)
+  onClick = () => {},
+  options: controlButtonOptionals = {}
+) {
+  const opts: controlButtonOptionals = { ...defaultOptions, ...options }
+  const props: IButtonProps = { onClick }
+  props.intent = opts.intent === undefined ? Intent.NONE : opts.intent
+  props.className = opts.minimal ? 'pt-minimal' : undefined
+  opts.iconOnRight ? (props.rightIcon = icon) : (props.icon = icon)
+  return <Button {...props}>{label}</Button>
+}
