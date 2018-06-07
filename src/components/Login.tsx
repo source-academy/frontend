@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
-type LoginProps = DispatchProps
+export type LoginProps = DispatchProps
 
 export type DispatchProps = {
   handleLogin: () => void

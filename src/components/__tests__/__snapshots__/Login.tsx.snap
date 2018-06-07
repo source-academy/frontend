@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login renders correctly 1`] = `
+"<HotKeys className=\\"Playground pt-dark\\" keyMap={{...}}>
+  <Connect(Workspace) sideContentTabs={{...}} />
+</HotKeys>"
+`;
