@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Dialog } from '@blueprintjs/core'
+import { Button, ButtonGroup, Card, Icon } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
@@ -25,6 +25,25 @@ const playgroundButton = (
 
 const Login: React.SFC<LoginProps> = props => (
   <div className="Login pt-dark">
+    <Card className="login-card pt-elevation-4">
+      <div className="login-header">
+        <h4>
+          <Icon icon={IconNames.LOCK} />LOGIN
+        </h4>
+      </div>
+      <div className="login-body">
+        <ButtonGroup fill={true} vertical={true}>
+          {loginButton(() => props.handleLogin())}
+          {playgroundButton}
+        </ButtonGroup>
+      </div>
+    </Card>
+  </div>
+)
+
+/*
+const Login: React.SFC<LoginProps> = props => (
+  <div className="Login pt-dark">
     <Dialog
       icon={IconNames.LOCK}
       isOpen={true}
@@ -40,6 +59,6 @@ const Login: React.SFC<LoginProps> = props => (
       </div>
     </Dialog>
   </div>
-)
+) */
 
 export default Login
