@@ -25,7 +25,7 @@ class SideContent extends React.Component<ISideContentProps, {}> {
       <div className="side-content">
         <Card>
           {this.renderHeader()}
-          {this.props.tabs[this.props.activeTab].body}
+          <div className="side-content-text">{this.props.tabs[this.props.activeTab].body}</div>
         </Card>
       </div>
     )
