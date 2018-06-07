@@ -11,6 +11,7 @@ import Playground from './Playground'
 
 export interface IApplicationProps extends RouteComponentProps<{}> {
   title: string
+  token?: string
   username?: string
 }
 
