@@ -1,28 +1,23 @@
 import { SagaIterator } from 'redux-saga'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
-import { IState } from '../reducers/states'
-
-import { Context, interrupt, runInContext } from '../slang'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
+import { IState } from '../reducers/states'
+import { Context, interrupt, runInContext } from '../slang'
+import { history } from '../utils/history'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 
-function* evalCode(code: string, context: Context) {
-  const { result, interrupted } = yield race({
-    result: call(runInContext, code, context),
-    interrupted: take(actionTypes.INTERRUPT_EXECUTION)
+function* mainSaga() {
+  yield* loginSaga()
+  yield* interpreterSaga()
+}
+
+function* loginSaga(): SagaIterator {
+  yield takeEvery(actionTypes.LOGIN, function*() {
+    yield put(actions.changeToken('TODO'))
+    history.push('/academy')
   })
-  if (result) {
-    if (result.status === 'finished') {
-      yield put(actions.evalInterpreterSuccess(result.value))
-    } else {
-      yield put(actions.evalInterpreterError(context.errors))
-    }
-  } else if (interrupted) {
-    interrupt(context)
-    yield call(showWarningMessage, 'Execution aborted by user')
-  }
 }
 
 function* interpreterSaga(): SagaIterator {
@@ -57,8 +52,21 @@ function* interpreterSaga(): SagaIterator {
   })
 }
 
-function* mainSaga() {
-  yield* interpreterSaga()
+function* evalCode(code: string, context: Context) {
+  const { result, interrupted } = yield race({
+    result: call(runInContext, code, context),
+    interrupted: take(actionTypes.INTERRUPT_EXECUTION)
+  })
+  if (result) {
+    if (result.status === 'finished') {
+      yield put(actions.evalInterpreterSuccess(result.value))
+    } else {
+      yield put(actions.evalInterpreterError(context.errors))
+    }
+  } else if (interrupted) {
+    interrupt(context)
+    yield call(showWarningMessage, 'Execution aborted by user')
+  }
 }
 
 export default mainSaga

@@ -3,9 +3,10 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
-export interface ILoginProps {
-  token?: string
-  handleChangeToken: (s: string) => void
+type LoginProps = DispatchProps
+
+export type DispatchProps = {
+  handleLogin: () => void
 }
 
 const loginButton = (handleClick: () => void) => (
@@ -22,18 +23,18 @@ const playgroundButton = (
   </NavLink>
 )
 
-const LoginDialog: React.SFC<ILoginProps> = props => (
-  <div>
+const Login: React.SFC<LoginProps> = props => (
+  <div className="Login pt-dark">
     <Dialog
       icon={IconNames.LOCK}
-      isOpen={props.token === undefined ? true : false}
+      isOpen={true}
       title="LOGIN"
       isCloseButtonShown={false}
-      className="login pt-dark"
+      className="login-dialog pt-dark"
     >
       <div className="pt-dialog-body">
         <ButtonGroup fill={true} vertical={true}>
-          {loginButton(() => props.handleChangeToken('TODO'))}
+          {loginButton(() => props.handleLogin())}
           {playgroundButton}
         </ButtonGroup>
       </div>
@@ -41,4 +42,4 @@ const LoginDialog: React.SFC<ILoginProps> = props => (
   </div>
 )
 
-export default LoginDialog
+export default Login

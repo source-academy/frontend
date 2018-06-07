@@ -4,6 +4,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 import Academy from '../containers/academy'
 import AdminContainer from '../containers/admin'
 import Announcements from '../containers/AnnouncementsContainer'
+import Login from '../containers/LoginContainer'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 import Playground from './Playground'
@@ -27,6 +28,7 @@ const Application: React.SFC<IApplicationProps> = props => {
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
           <Route path="/status" component={Announcements} />
+          <Route path="/login" component={Login} />
           <Route exact={true} path="/" component={redirectToNews} />
           <Route component={NotFound} />
         </Switch>

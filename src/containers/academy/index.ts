@@ -1,5 +1,10 @@
-import { connect } from 'react-redux'
+import { connect, MapStateToProps } from 'react-redux'
 
-import Academy from '../../components/academy'
+import Academy, { StateProps } from '../../components/academy'
+import { IState } from '../../reducers/states'
 
-export default connect()(Academy)
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+  token: state.session.token
+})
+
+export default connect(mapStateToProps)(Academy)
