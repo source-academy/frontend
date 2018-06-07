@@ -1,6 +1,11 @@
 import { ActionCreator } from 'redux'
 import * as actionTypes from './actionTypes'
 
+export const changeActiveTab: ActionCreator<actionTypes.IAction> = (activeTab: number) => ({
+  type: actionTypes.CHANGE_ACTIVE_TAB,
+  payload: activeTab
+})
+
 export const updateEditorValue: ActionCreator<actionTypes.IAction> = (newEditorValue: string) => ({
   type: actionTypes.UPDATE_EDITOR_VALUE,
   payload: newEditorValue

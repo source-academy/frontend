@@ -1,36 +1,54 @@
-import { Card, Text } from '@blueprintjs/core'
+import { Button, Card, IconName, Tooltip } from '@blueprintjs/core'
 import * as React from 'react'
 
-const SideContent: React.SFC<{}> = () => (
-  <div className="side-content">
-    <Card>
-      <Text className="side-content-text">{welcome}</Text>
-    </Card>
-  </div>
-)
+interface ISideContentProps {
+  activeTab: number
+  handleChangeActiveTab: (aT: number) => void
+  tabs: SideContentTab[]
+}
 
-const SICP_SITE = 'http://www.comp.nus.edu.sg/~henz/sicp_js/'
-const CHAP = '\xa7'
+export type DispatchProps = Pick<ISideContentProps, 'handleChangeActiveTab'>
 
-const welcome = (
-  <>
-    Welcome to the source-academy playground!
-    <br />
-    <br />
-    The language <i>Source</i> is the official language of the textbook{' '}
-    <i>Structure and Interpretation of Computer Programs, JavaScript Adaptation</i>. You have never
-    heard of Source? No worries! It was invented just for the purpose of the book. Source is a
-    sublanguage of ECMAScript 2016 (7th Edition) and defined in{' '}
-    <a href={SICP_SITE}>
-      the documents titled <i>"Source {CHAP}x"</i>
-    </a>, where x refers to the respective textbook chapter. For example, Source {CHAP}3 is suitable
-    for textbook Chapter 3 and the preceeding chapters.
-    <br />
-    <br />
-    The playground comes with an editor and a REPL, on the left and right of the screen,
-    respectively. You may customimse the layout of the playground by clicking and dragging on the
-    right border of the editor, or the top border of the REPL.
-  </>
-)
+export type OwnProps = Pick<ISideContentProps, 'tabs'>
+
+export type StateProps = Pick<ISideContentProps, 'activeTab'>
+
+export type SideContentTab = {
+  label: string
+  icon: string
+  body: JSX.Element
+}
+
+class SideContent extends React.Component<ISideContentProps, {}> {
+  public render() {
+    return (
+      <div className="side-content">
+        <Card>
+          {this.renderHeader()}
+          {this.props.tabs[this.props.activeTab].body}
+        </Card>
+      </div>
+    )
+  }
+
+  private renderHeader() {
+    if (this.props.tabs.length < 2) {
+      return <></>
+    } else {
+      const click = (i: number) => () => this.props.handleChangeActiveTab(i)
+      const buttons = this.props.tabs.map((tab, i) => (
+        <Tooltip key={i} content={tab.label}>
+          <Button icon={tab.icon as IconName} className="pt-minimal" onClick={click(i)} />
+        </Tooltip>
+      ))
+      return (
+        <>
+          <div className="side-content-header">{buttons}</div>
+          <hr />
+        </>
+      )
+    }
+  }
+}
 
 export default SideContent
