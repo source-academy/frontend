@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
-export type LoginProps = DispatchProps
+type LoginProps = DispatchProps
 
 export type DispatchProps = {
   handleLogin: () => void
@@ -40,25 +40,5 @@ const Login: React.SFC<LoginProps> = props => (
     </Card>
   </div>
 )
-
-/*
-const Login: React.SFC<LoginProps> = props => (
-  <div className="Login pt-dark">
-    <Dialog
-      icon={IconNames.LOCK}
-      isOpen={true}
-      title="LOGIN"
-      isCloseButtonShown={false}
-      className="login-dialog pt-dark"
-    >
-      <div className="pt-dialog-body">
-        <ButtonGroup fill={true} vertical={true}>
-          {loginButton(() => props.handleLogin())}
-          {playgroundButton}
-        </ButtonGroup>
-      </div>
-    </Dialog>
-  </div>
-) */
 
 export default Login
