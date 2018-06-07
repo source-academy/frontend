@@ -11,6 +11,7 @@ import { IState } from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
+    ...props,
     activeTab: state.playground.sideContentActiveTab
   }
 }

@@ -8,13 +8,21 @@ import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
 import { SideContentTab } from './side-content'
 
-export interface IWorkspaceProps {
+interface IWorkspaceProps {
   editorWidth: string
   sideContentHeight?: number
   sideContentTabs: SideContentTab[]
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
 }
+
+export type DispatchProps = Pick<IWorkspaceProps, 'handleEditorWidthChange'> &
+  Pick<IWorkspaceProps, 'handleSideContentHeightChange'>
+
+export type OwnProps = Pick<IWorkspaceProps, 'sideContentTabs'>
+
+export type StateProps = Pick<IWorkspaceProps, 'editorWidth'> &
+  Pick<IWorkspaceProps, 'sideContentHeight'>
 
 class Workspace extends React.Component<IWorkspaceProps, {}> {
   private sideDividerDiv: HTMLDivElement
