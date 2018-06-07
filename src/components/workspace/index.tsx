@@ -6,25 +6,27 @@ import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
+import { OwnProps as ControlBarOwnProps } from './ControlBar'
 import { SideContentTab } from './side-content'
 
-interface IWorkspaceProps {
-  editorWidth: string
-  sideContentHeight?: number
-  sideContentTabs: SideContentTab[]
+type WorkspaceProps = DispatchProps & OwnProps & StateProps
+
+export type DispatchProps = {
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
 }
 
-export type DispatchProps = Pick<IWorkspaceProps, 'handleEditorWidthChange'> &
-  Pick<IWorkspaceProps, 'handleSideContentHeightChange'>
+export type OwnProps = {
+  controlBarOptions?: ControlBarOwnProps
+  sideContentTabs: SideContentTab[]
+}
 
-export type OwnProps = Pick<IWorkspaceProps, 'sideContentTabs'>
+export type StateProps = {
+  editorWidth: string
+  sideContentHeight?: number
+}
 
-export type StateProps = Pick<IWorkspaceProps, 'editorWidth'> &
-  Pick<IWorkspaceProps, 'sideContentHeight'>
-
-class Workspace extends React.Component<IWorkspaceProps, {}> {
+class Workspace extends React.Component<WorkspaceProps, {}> {
   private editorDividerDiv: HTMLDivElement
   private leftParentResizable: Resizable
   private maxDividerHeight: number
@@ -43,7 +45,7 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
   public render() {
     return (
       <HotKeys className="workspace" handlers={handlers}>
-        <ControlBarContainer />
+        <ControlBarContainer {...this.props.controlBarOptions} />
         <div className="row workspace-parent">
           <div
             className="editor-divider"
