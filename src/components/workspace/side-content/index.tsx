@@ -9,6 +9,8 @@ interface ISideContentProps {
 
 export type DispatchProps = Pick<ISideContentProps, 'handleChangeActiveTab'>
 
+export type OwnProps = Pick<ISideContentProps, 'tabs'>
+
 export type StateProps = Pick<ISideContentProps, 'activeTab'>
 
 export type SideContentTab = {
