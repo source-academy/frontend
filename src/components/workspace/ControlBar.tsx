@@ -6,7 +6,7 @@ import * as React from 'react'
 import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
-type ControlBarProps = DispatchProps & StateProps
+type ControlBarProps = DispatchProps & OwnProps & StateProps
 
 export type DispatchProps = {
   handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
@@ -14,6 +14,16 @@ export type DispatchProps = {
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
+}
+
+export type OwnProps = {
+  hasChapterSelect?: boolean
+  hasNextButton?: boolean
+  hasPreviousButton?: boolean
+  hasSaveButton?: boolean
+  onClickNext?(): any
+  onClickPrevious?(): any
+  onClickSave?(): any
 }
 
 export type StateProps = {
@@ -27,6 +37,16 @@ interface IChapter {
 }
 
 class ControlBar extends React.Component<ControlBarProps, {}> {
+  public static defaultProps: OwnProps = {
+    hasChapterSelect: true,
+    hasNextButton: false,
+    hasPreviousButton: false,
+    hasSaveButton: false,
+    onClickNext: () => {},
+    onClickPrevious: () => {},
+    onClickSave: () => {}
+  }
+
   public render() {
     return (
       <div className="ControlBar">
@@ -38,22 +58,34 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
   }
 
   private editorControl() {
+    const runButton = (
+      <Tooltip content="...or press shift-enter in the editor">
+        {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
+      </Tooltip>
+    )
+    const saveButton = this.props.hasSaveButton
+      ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
+      : undefined
+    const chapterSelectButton = this.props.hasChapterSelect
+      ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
+      : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
-        <Tooltip content="...or press shift-enter in the editor">
-          {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
-        </Tooltip>
-        {controlButton('Save', IconNames.FLOPPY_DISK, () => {})}
-        {chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)}
+        {runButton} {saveButton} {chapterSelectButton}
       </div>
     )
   }
 
   private flowControl() {
+    const previousButton = this.props.hasPreviousButton
+      ? controlButton('Previous', IconNames.ARROW_LEFT, this.props.onClickPrevious)
+      : undefined
+    const nextButton = this.props.hasNextButton
+      ? controlButton('Next', IconNames.ARROW_RIGHT, this.props.onClickNext, { iconOnRight: true })
+      : undefined
     return (
       <div className="ControlBar_flow pt-button-group">
-        {controlButton('Previous', IconNames.ARROW_LEFT, () => {})}
-        {controlButton('Next', IconNames.ARROW_RIGHT, () => {}, { iconOnRight: true })}
+        {previousButton} {nextButton}
       </div>
     )
   }
