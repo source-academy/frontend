@@ -4,6 +4,7 @@ import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 
 import WorkspaceContainer from '../containers/workspace'
+import { SideContentTab } from './workspace/side-content'
 
 const Playground: React.SFC<{}> = () => {
   return (
@@ -19,7 +20,7 @@ const keyMap = {
 
 const SICP_SITE = 'http://www.comp.nus.edu.sg/~henz/sicp_js/'
 const CHAP = '\xa7'
-const playgroundIntroduction = {
+const playgroundIntroduction: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
   body: (
