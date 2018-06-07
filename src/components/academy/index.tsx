@@ -11,34 +11,30 @@ export type StateProps = {
   token?: string
 }
 
-export class Academy extends React.Component<AcademyProps, {}> {
-  public render() {
-    return (
-      <div className="Academy">
-        <AcademyNavigationBar />
-        <Switch>
-          {this.checkLoggedIn()}
-          <Route path="/academy/contests" component={MissionsContainer} />
-          <Route path="/academy/game" component={Game} />
-          <Route path="/academy/missions" component={MissionsContainer} />
-          <Route path="/academy/paths" component={MissionsContainer} />
-          <Route path="/academy/sidequests" component={MissionsContainer} />
-          <Route exact={true} path="/academy" component={this.redirectToGame} />
-          <Route component={this.redirectTo404} />
-        </Switch>
-      </div>
-    )
-  }
+// export class Academy extends React.Component<AcademyProps, {}> {
+export const Academy: React.SFC<AcademyProps> = props => (
+  <div className="Academy">
+    <AcademyNavigationBar />
+    <Switch>
+      {checkLoggedIn(props)}
+      <Route path="/academy/contests" component={MissionsContainer} />
+      <Route path="/academy/game" component={Game} />
+      <Route path="/academy/missions" component={MissionsContainer} />
+      <Route path="/academy/paths" component={MissionsContainer} />
+      <Route path="/academy/sidequests" component={MissionsContainer} />
+      <Route exact={true} path="/academy" component={redirectToGame} />
+      <Route component={redirectTo404} />
+    </Switch>
+  </div>
+)
 
-  private checkLoggedIn() {
-    return this.props.token === undefined ? <Route component={this.redirectToLogin} /> : undefined
-  }
+const checkLoggedIn = (props: AcademyProps) =>
+  props.token === undefined ? <Route component={redirectToLogin} /> : undefined
 
-  private redirectTo404 = () => <Redirect to="/404" />
+const redirectTo404 = () => <Redirect to="/404" />
 
-  private redirectToLogin = () => <Redirect to="/login" />
+const redirectToLogin = () => <Redirect to="/login" />
 
-  private redirectToGame = () => <Redirect to="/academy/game" />
-}
+const redirectToGame = () => <Redirect to="/academy/game" />
 
 export default Academy
