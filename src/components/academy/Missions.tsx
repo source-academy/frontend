@@ -1,6 +1,8 @@
 import { Button, Card, Icon, Intent, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
+
+import Assessment from '../../containers/AssessmentContainer'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export type MissionInfo = {
@@ -9,21 +11,30 @@ export type MissionInfo = {
 }
 
 export interface IMissionsProps {
+  missionId?: number
   missionsInfo?: MissionInfo[]
   handleMissionsInfoFetch: () => void
 }
 
+export type StateProps = Pick<IMissionsProps, 'missionsInfo'>
+export type DispatchProps = Pick<IMissionsProps, 'handleMissionsInfoFetch'>
+
 class Missions extends React.Component<IMissionsProps, {}> {
   public render() {
-    const props: IContentDisplayProps = {
-      display: <MissionInfoCard missionsInfo={this.props.missionsInfo} />,
-      loadContentDispatch: this.props.handleMissionsInfoFetch
+    // if there is no mission specified, Render only information.
+    if (this.props.missionId === undefined) {
+      const props: IContentDisplayProps = {
+        display: <MissionInfoCard missionsInfo={this.props.missionsInfo} />,
+        loadContentDispatch: this.props.handleMissionsInfoFetch
+      }
+      return (
+        <div className="Missions">
+          <ContentDisplay {...props} />
+        </div>
+      )
+    } else {
+      return <Assessment />
     }
-    return (
-      <div className="Missions">
-        <ContentDisplay {...props} />
-      </div>
-    )
   }
 }
 
@@ -37,19 +48,19 @@ export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
   } else if (props.missionsInfo.length === 0) {
     return <NonIdealState title="There are no missions." visual={IconNames.FLAME} />
   }
-  const cards = props.missionsInfo.map((ann, index) => (
+  const cards = props.missionsInfo.map((mission, index) => (
     <div key={index}>
       <Card className="row mission-info">
         <div className="col-xs-3 mission-info-picture">PICTURE</div>
         <div className="col-xs-9 mission-info-text">
           <div className="row mission-info-title">
-            <h4>{ann.title}</h4>
+            <h4>{mission.title}</h4>
           </div>
           <div className="row mission-info-order">
             <h6>Mission 0 : 123123 XP (hardcoded)</h6>
           </div>
           <div className="row mission-info-description">
-            <p className="col-xs-12">{ann.description}</p>
+            <p className="col-xs-12">{mission.description}</p>
           </div>
           <div className="row between-xs middle-xs mission-info-controls">
             <div className="col-xs-8 mission-info-due-date-parent">

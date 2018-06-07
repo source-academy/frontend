@@ -10,6 +10,11 @@ export const fetchAnnouncements = () => ({
   type: actionTypes.FETCH_ANNOUNCEMENTS
 })
 
+export const fetchAssessment = () => ({
+  type: actionTypes.FETCH_ASSESSMENT
+  // TODO payload of mission UID
+})
+
 export const fetchMissionsInfo = () => ({
   type: actionTypes.FETCH_MISSIONS_INFO
 })
