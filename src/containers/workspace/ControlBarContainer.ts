@@ -3,10 +3,15 @@ import { bindActionCreators, Dispatch } from 'redux'
 
 import { handleInterruptExecution } from '../../actions/interpreter'
 import { chapterSelect, clearReplOutput, evalEditor, evalRepl } from '../../actions/playground'
-import ControlBar, { DispatchProps, StateProps } from '../../components/workspace/ControlBar'
+import ControlBar, {
+  DispatchProps,
+  OwnProps,
+  StateProps
+} from '../../components/workspace/ControlBar'
 import { IState } from '../../reducers/states'
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => ({
+  ...props,
   isRunning: state.playground.isRunning,
   sourceChapter: state.playground.sourceChapter
 })

@@ -6,9 +6,9 @@ import * as React from 'react'
 import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
-interface IControlBarProps {
-  isRunning: boolean
-  sourceChapter: number
+type ControlBarProps = DispatchProps & OwnProps & StateProps
+
+export type DispatchProps = {
   handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
   handleInterruptEval: () => void
@@ -16,36 +16,87 @@ interface IControlBarProps {
   handleReplOutputClear: () => void
 }
 
-export type DispatchProps = Pick<IControlBarProps, 'handleChapterSelect'> &
-  Pick<IControlBarProps, 'handleEditorEval'> &
-  Pick<IControlBarProps, 'handleInterruptEval'> &
-  Pick<IControlBarProps, 'handleReplEval'> &
-  Pick<IControlBarProps, 'handleReplOutputClear'>
+export type OwnProps = {
+  hasChapterSelect?: boolean
+  hasNextButton?: boolean
+  hasPreviousButton?: boolean
+  hasSaveButton?: boolean
+  onClickNext?(): any
+  onClickPrevious?(): any
+  onClickSave?(): any
+}
 
-export type StateProps = Pick<IControlBarProps, 'isRunning'> &
-  Pick<IControlBarProps, 'sourceChapter'>
+export type StateProps = {
+  isRunning: boolean
+  sourceChapter: number
+}
 
 interface IChapter {
   displayName: string
   chapter: number
 }
 
-class ControlBar extends React.Component<IControlBarProps, {}> {
+class ControlBar extends React.Component<ControlBarProps, {}> {
+  public static defaultProps: OwnProps = {
+    hasChapterSelect: true,
+    hasNextButton: false,
+    hasPreviousButton: false,
+    hasSaveButton: false,
+    onClickNext: () => {},
+    onClickPrevious: () => {},
+    onClickSave: () => {}
+  }
+
   public render() {
     return (
       <div className="ControlBar">
-        <div className="ControlBar_editor pt-button-group">
-          <Tooltip content="...or press shift-enter in the editor">
-            {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
-          </Tooltip>
-          {chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)}
-        </div>
-        <div className="ControlBar_repl pt-button-group">
-          <Tooltip content="...or press shift-enter in the REPL">
-            {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}
-          </Tooltip>
-          {controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear)}
-        </div>
+        {this.editorControl()}
+        {this.flowControl()}
+        {this.replControl()}
+      </div>
+    )
+  }
+
+  private editorControl() {
+    const runButton = (
+      <Tooltip content="...or press shift-enter in the editor">
+        {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
+      </Tooltip>
+    )
+    const saveButton = this.props.hasSaveButton
+      ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
+      : undefined
+    const chapterSelectButton = this.props.hasChapterSelect
+      ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
+      : undefined
+    return (
+      <div className="ControlBar_editor pt-button-group">
+        {runButton} {saveButton} {chapterSelectButton}
+      </div>
+    )
+  }
+
+  private flowControl() {
+    const previousButton = this.props.hasPreviousButton
+      ? controlButton('Previous', IconNames.ARROW_LEFT, this.props.onClickPrevious)
+      : undefined
+    const nextButton = this.props.hasNextButton
+      ? controlButton('Next', IconNames.ARROW_RIGHT, this.props.onClickNext, { iconOnRight: true })
+      : undefined
+    return (
+      <div className="ControlBar_flow pt-button-group">
+        {previousButton} {nextButton}
+      </div>
+    )
+  }
+
+  private replControl() {
+    return (
+      <div className="ControlBar_repl pt-button-group">
+        <Tooltip content="...or press shift-enter in the REPL">
+          {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}
+        </Tooltip>
+        {controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear)}
       </div>
     )
   }

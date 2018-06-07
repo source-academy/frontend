@@ -9,7 +9,7 @@ import { SideContentTab } from './workspace/side-content'
 const Playground: React.SFC<{}> = () => {
   return (
     <HotKeys className="Playground pt-dark" keyMap={keyMap}>
-      <WorkspaceContainer {...{ sideContentTabs: [playgroundIntroduction] }} />
+      <WorkspaceContainer sideContentTabs={[playgroundIntroduction]} />
     </HotKeys>
   )
 }
