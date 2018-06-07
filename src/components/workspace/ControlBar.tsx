@@ -34,18 +34,41 @@ class ControlBar extends React.Component<IControlBarProps, {}> {
   public render() {
     return (
       <div className="ControlBar">
-        <div className="ControlBar_editor pt-button-group">
-          <Tooltip content="...or press shift-enter in the editor">
-            {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
-          </Tooltip>
-          {chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)}
-        </div>
-        <div className="ControlBar_repl pt-button-group">
-          <Tooltip content="...or press shift-enter in the REPL">
-            {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}
-          </Tooltip>
-          {controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear)}
-        </div>
+        {this.editorControl()}
+        {this.flowControl()}
+        {this.replControl()}
+      </div>
+    )
+  }
+
+  private editorControl() {
+    return (
+      <div className="ControlBar_editor pt-button-group">
+        <Tooltip content="...or press shift-enter in the editor">
+          {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
+        </Tooltip>
+        {controlButton('Save', IconNames.FLOPPY_DISK, () => {})}
+        {chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)}
+      </div>
+    )
+  }
+
+  private flowControl() {
+    return (
+      <div className="ControlBar_flow pt-button-group">
+        {controlButton('Previous', IconNames.ARROW_LEFT, () => {})}
+        {controlButton('Next', IconNames.ARROW_RIGHT, () => {}, { iconOnRight: true })}
+      </div>
+    )
+  }
+
+  private replControl() {
+    return (
+      <div className="ControlBar_repl pt-button-group">
+        <Tooltip content="...or press shift-enter in the REPL">
+          {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}
+        </Tooltip>
+        {controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear)}
       </div>
     )
   }
