@@ -21,9 +21,11 @@ export type OwnProps = {
   hasNextButton?: boolean
   hasPreviousButton?: boolean
   hasSaveButton?: boolean
+  hasShareButton?: boolean
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
+  onClickShare?(): any
 }
 
 export type StateProps = {
@@ -42,9 +44,11 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasNextButton: false,
     hasPreviousButton: false,
     hasSaveButton: false,
+    hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {}
+    onClickSave: () => {},
+    onClickShare: () => {}
   }
 
   public render() {
@@ -67,12 +71,16 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     const saveButton = this.props.hasSaveButton
       ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
       : undefined
+    const shareButton = this.props.hasShareButton
+      ? controlButton('Share', IconNames.SHARE, this.props.onClickShare)
+      : undefined
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
-        {this.props.isRunning ? stopButton : runButton} {saveButton} {chapterSelectButton}
+        {this.props.isRunning ? stopButton : runButton} {saveButton}
+        {shareButton} {chapterSelectButton}
       </div>
     )
   }
