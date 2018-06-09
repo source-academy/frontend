@@ -1,4 +1,4 @@
-import { Button, MenuItem, Tooltip } from '@blueprintjs/core'
+import { Button, MenuItem, Popover, Tooltip } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
@@ -7,6 +7,10 @@ import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
 type ControlBarProps = DispatchProps & OwnProps & StateProps
+
+type ControlBarState = {
+  isShareOpen: boolean
+}
 
 export type DispatchProps = {
   handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
@@ -25,7 +29,6 @@ export type OwnProps = {
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
-  onClickShare?(): any
 }
 
 export type StateProps = {
@@ -38,7 +41,7 @@ interface IChapter {
   chapter: number
 }
 
-class ControlBar extends React.Component<ControlBarProps, {}> {
+class ControlBar extends React.Component<ControlBarProps, ControlBarState> {
   public static defaultProps: OwnProps = {
     hasChapterSelect: true,
     hasNextButton: false,
@@ -47,8 +50,13 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {},
-    onClickShare: () => {}
+    onClickSave: () => {}
+  }
+
+  constructor(props: ControlBarProps) {
+    super(props)
+    this.state = { isShareOpen: false }
+    this.onClickShare = this.onClickShare.bind(this)
   }
 
   public render() {
@@ -71,9 +79,14 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     const saveButton = this.props.hasSaveButton
       ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
       : undefined
-    const shareButton = this.props.hasShareButton
-      ? controlButton('Share', IconNames.SHARE, this.props.onClickShare)
-      : undefined
+    const shareButton = this.props.hasShareButton ? (
+      <Popover>
+        {controlButton('Share', IconNames.SHARE, this.onClickShare)}
+        The URL with hash goes here.
+      </Popover>
+    ) : (
+      undefined
+    )
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined
@@ -112,6 +125,8 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
       </div>
     )
   }
+
+  private onClickShare() {}
 }
 
 const chapters = sourceChapters.map(chap => ({ displayName: styliseChapter(chap), chapter: chap }))
