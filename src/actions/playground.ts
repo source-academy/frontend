@@ -16,14 +16,19 @@ export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (widthChang
   payload: widthChange
 })
 
-export const chapterSelect: ActionCreator<actionTypes.IAction> = (chapter, changeEvent) => ({
-  type: actionTypes.CHAPTER_SELECT,
-  payload: chapter.chapter
+export const changeLzString: ActionCreator<actionTypes.IAction> = (lzString: string) => ({
+  type: actionTypes.CHANGE_LZ_STRING,
+  payload: lzString
 })
 
 export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (height: number) => ({
   type: actionTypes.CHANGE_SIDE_CONTENT_HEIGHT,
   payload: height
+})
+
+export const chapterSelect: ActionCreator<actionTypes.IAction> = (chapter, changeEvent) => ({
+  type: actionTypes.CHAPTER_SELECT,
+  payload: chapter.chapter
 })
 
 export const clearContext = () => ({

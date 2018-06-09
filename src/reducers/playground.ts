@@ -3,6 +3,7 @@ import {
   CHANGE_ACTIVE_TAB,
   CHANGE_CHAPTER,
   CHANGE_EDITOR_WIDTH,
+  CHANGE_LZ_STRING,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
@@ -25,16 +26,6 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
   let newOutput: InterpreterOutput[]
   let lastOutput: InterpreterOutput
   switch (action.type) {
-    case UPDATE_EDITOR_VALUE:
-      return {
-        ...state,
-        editorValue: action.payload
-      }
-    case UPDATE_REPL_VALUE:
-      return {
-        ...state,
-        replValue: action.payload
-      }
     case CHANGE_ACTIVE_TAB:
       return {
         ...state,
@@ -44,6 +35,11 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         editorWidth: (parseFloat(state.editorWidth.slice(0, -1)) + action.payload).toString() + '%'
+      }
+    case CHANGE_LZ_STRING:
+      return {
+        ...state,
+        lzString: action.payload
       }
     case CHANGE_SIDE_CONTENT_HEIGHT:
       return {
@@ -148,6 +144,16 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
       return {
         ...state,
         isRunning: false
+      }
+    case UPDATE_EDITOR_VALUE:
+      return {
+        ...state,
+        editorValue: action.payload
+      }
+    case UPDATE_REPL_VALUE:
+      return {
+        ...state,
+        replValue: action.payload
       }
     default:
       return state
