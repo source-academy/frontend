@@ -9,10 +9,6 @@ import { controlButton } from '../commons'
 
 type ControlBarProps = DispatchProps & OwnProps & StateProps
 
-type ControlBarState = {
-  isShareOpen: boolean
-}
-
 export type DispatchProps = {
   handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
@@ -44,7 +40,7 @@ interface IChapter {
   chapter: number
 }
 
-class ControlBar extends React.Component<ControlBarProps, ControlBarState> {
+class ControlBar extends React.Component<ControlBarProps, {}> {
   public static defaultProps: OwnProps = {
     hasChapterSelect: true,
     hasNextButton: false,
