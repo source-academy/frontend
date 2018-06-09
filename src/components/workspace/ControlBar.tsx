@@ -53,6 +53,8 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     onClickSave: () => {}
   }
 
+  private shareInputElem: HTMLInputElement
+
   public render() {
     return (
       <div className="ControlBar">
@@ -83,9 +85,15 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
           </Text>
         ) : (
           <>
-            <input placeholder={`${HOST}playground?prgrm=${this.props.lzString}`} readOnly={true} />
+            <input
+              defaultValue={`${HOST}playground?prgrm=${this.props.lzString}`}
+              readOnly={true}
+              ref={e => (this.shareInputElem = e!)}
+              // tslint:disable-next-line:jsx-no-bind
+              onFocus={this.selectShareInputText.bind(this)}
+            />
             <CopyToClipboard text={`${HOST}playground?prgrm=${this.props.lzString}`}>
-              {controlButton('', IconNames.DUPLICATE)}
+              {controlButton('', IconNames.DUPLICATE, this.selectShareInputText.bind(this))}
             </CopyToClipboard>
           </>
         )}
@@ -130,6 +138,11 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
         {this.props.isRunning ? null : evalButton} {clearButton}
       </div>
     )
+  }
+
+  private selectShareInputText() {
+    this.shareInputElem.focus()
+    this.shareInputElem.select()
   }
 }
 
