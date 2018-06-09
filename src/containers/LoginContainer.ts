@@ -1,23 +1,15 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
+import { connect, MapDispatchToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { changeToken } from '../actions/session'
-import Login, { ILoginProps } from '../components/Login'
-import { IState } from '../reducers/states'
+import { login } from '../actions/session'
+import Login, { DispatchProps } from '../components/Login'
 
-type stateProps = Pick<ILoginProps, 'token'>
-type dispatchProps = Pick<ILoginProps, 'handleChangeToken'>
-
-const mapStateToProps: MapStateToProps<stateProps, {}, IState> = state => ({
-  token: state.session.token
-})
-
-const mapDispatchToProps: MapDispatchToProps<dispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleChangeToken: changeToken
+      handleLogin: login
     },
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(undefined, mapDispatchToProps)(Login)

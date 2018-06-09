@@ -1,3 +1,24 @@
-.pt-dialog.login {
-  padding: 0;
+.Login {
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.3)
+    ),
+    url('#{$images-path}/login_background.png');
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .pt-icon {
+    margin: 0.1rem 0.5rem 0.5rem 0;
+  }
 }

@@ -5,12 +5,14 @@ exports[`Application renders correctly 1`] = `
   <NavigationBar title=\\"Cadet\\" username={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
-      <Route path=\\"/academy\\" component={[Function: Connect]} />
+      // tslint: disable-next-line
+      <Route path=\\"/academy\\" component={[Function: toAcademy]} />
       <Route path=\\"/news\\" component={[Function: Connect]} />
-      <Route path=\\"/admin\\" component={[Function: Connect]} />
+      <Route path=\\"/admin\\" component={[Function: toAdmin]} />
       <Route path=\\"/material\\" component={[Function: Connect]} />
       <Route path=\\"/playground\\" component={[Function: Playground]} />
       <Route path=\\"/status\\" component={[Function: Connect]} />
+      <Route path=\\"/login\\" component={[Function: Connect]} />
       <Route exact={true} path=\\"/\\" component={[Function: redirectToNews]} />
       <Route component={[Function: NotFound]} />
     </Switch>

@@ -13,3 +13,7 @@ export const fetchAnnouncements = () => ({
 export const fetchMissionsInfo = () => ({
   type: actionTypes.FETCH_MISSIONS_INFO
 })
+
+export const login = () => ({
+  type: actionTypes.LOGIN
+})
