@@ -114,6 +114,8 @@ test('Inifinite recursion with different args represents CallExpression well', (
   const promise = runInContext(code, context)
   return promise.then(obj => {
     const errors = parseError(context.errors)
-    expect(errors).toMatchSnapshot()
+    expect(errors).toEqual(
+      expect.stringMatching(/^Line 2: Infinite recursion\n\ *(f\(\d*\)[^f]{2,4}){3}/)
+    )
   })
 })
