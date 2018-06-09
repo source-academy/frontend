@@ -6,11 +6,6 @@ export const handleConsoleLog = (log: string) => ({
   payload: log
 })
 
-export const evalInterpreter = (code: string) => ({
-  type: actionTypes.EVAL_INTERPRETER,
-  payload: code
-})
-
 export const evalInterpreterSuccess = (value: Value) => ({
   type: actionTypes.EVAL_INTERPRETER_SUCCESS,
   payload: { type: 'result', value }

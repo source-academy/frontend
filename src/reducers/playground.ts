@@ -8,9 +8,9 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   EVAL_EDITOR,
-  EVAL_INTERPRETER,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
+  EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
   INTERRUPT_EXECUTION,
@@ -103,7 +103,7 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
         ...state,
         isRunning: true
       }
-    case EVAL_INTERPRETER:
+    case EVAL_REPL:
       return {
         ...state,
         isRunning: true
