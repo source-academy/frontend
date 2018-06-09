@@ -9,6 +9,10 @@ import { controlButton } from '../commons'
 
 type ControlBarProps = DispatchProps & OwnProps & StateProps
 
+type ControlBarState = {
+  isShareOpen: boolean
+}
+
 export type DispatchProps = {
   handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
@@ -27,7 +31,6 @@ export type OwnProps = {
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
-  onClickShare?(): any
 }
 
 export type StateProps = {
@@ -41,7 +44,7 @@ interface IChapter {
   chapter: number
 }
 
-class ControlBar extends React.Component<ControlBarProps, {}> {
+class ControlBar extends React.Component<ControlBarProps, ControlBarState> {
   public static defaultProps: OwnProps = {
     hasChapterSelect: true,
     hasNextButton: false,
@@ -50,8 +53,7 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {},
-    onClickShare: () => {}
+    onClickSave: () => {}
   }
 
   private shareInputElem: HTMLInputElement
