@@ -1,6 +1,8 @@
 /* tslint:disable: max-classes-per-file */
-import { generate } from 'astring'
+import { baseGenerator, generate } from 'astring'
+import { stripIndent } from 'common-tags'
 import * as es from 'estree'
+
 import { UNKNOWN_LOCATION } from './constants'
 import { toString } from './interop'
 import { ErrorSeverity, ErrorType, SourceError, Value } from './types'
@@ -43,14 +45,26 @@ export class MaximumStackLimitExceeded implements SourceError {
   public severity = ErrorSeverity.ERROR
   public location: es.SourceLocation
 
+  private customGenerator = {
+    ...baseGenerator,
+    CallExpression(node: any, state: any) {
+      state.write(node.callee.name)
+      state.write('(')
+      const argsRepr = node.arguments.map((args: any) => toString(args.value))
+      state.write(argsRepr.join(', '))
+      state.write(')')
+    }
+  }
+
   constructor(node: es.Node, private calls: es.CallExpression[]) {
     this.location = node ? node.loc! : UNKNOWN_LOCATION
   }
 
   public explain() {
-    return `
+    const repr = (call: es.CallExpression) => generate(call, { generator: this.customGenerator })
+    return stripIndent`
       Infinite recursion
-      ${generate(this.calls[0])}..${generate(this.calls[1])}..${generate(this.calls[2])}..
+        ${repr(this.calls[2])}..  ${repr(this.calls[1])}..  ${repr(this.calls[0])}..
     `
   }
 

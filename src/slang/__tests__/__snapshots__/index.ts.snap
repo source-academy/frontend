@@ -221,6 +221,21 @@ Object {
 }
 `;
 
+exports[`Inifinite recursion with different args represents CallExpression well 1`] = `
+"Line 2: Infinite recursion
+  f(1264)..  f(1265)..  f(1266).."
+`;
+
+exports[`Inifinite recursion with list args represents CallExpression well 1`] = `
+"Line 2: Infinite recursion
+  f([1, [2, []]])..  f([1, [2, []]])..  f([1, [2, []]]).."
+`;
+
+exports[`Simple inifinite recursion represents CallExpression well 1`] = `
+"Line 1: Infinite recursion
+  x(x => x(x))..  x(x => x(x))..  x(x => x(x)).."
+`;
+
 exports[`Single boolean self-evaluates to itself 1`] = `
 Object {
   "status": "finished",
