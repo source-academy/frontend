@@ -46,11 +46,7 @@ class Repl extends React.Component<IReplProps, {}> {
           <HotKeys className="repl-input-parent row pt-card pt-elevation-0" handlers={handlers}>
             <ReplInput {...inputProps} />
           </HotKeys>
-          <div
-            ref={el => {
-              this.replBottom = el as HTMLDivElement
-            }}
-          />
+          <div ref={e => (this.replBottom = e!)} />
         </div>
       </div>
     )

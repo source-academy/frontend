@@ -45,9 +45,9 @@ export class Game extends React.Component<IGameProps, {}> {
         data-story="spaceship"
         data-attempted-all="true"
         data-username="mockUsername"
-        ref={e => (this.div = e as HTMLDivElement)}
+        ref={e => (this.div = e!)}
       >
-        <canvas ref={e => (this.canvas = e as HTMLCanvasElement)} />
+        <canvas ref={e => (this.canvas = e!)} />
       </div>
     )
   }

@@ -47,20 +47,14 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       <HotKeys className="workspace" handlers={handlers}>
         <ControlBarContainer {...this.props.controlBarOptions} />
         <div className="row workspace-parent">
-          <div
-            className="editor-divider"
-            ref={e => (this.editorDividerDiv = e as HTMLDivElement)}
-          />
+          <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
           <Resizable {...this.editorResizableProps()}>
             <EditorContainer />
           </Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
               <SideContent {...{ tabs: this.props.sideContentTabs }} />
-              <div
-                className="side-content-divider"
-                ref={e => (this.sideDividerDiv = e as HTMLDivElement)}
-              />
+              <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
             </Resizable>
             <ReplContainer />
           </div>
