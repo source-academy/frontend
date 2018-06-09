@@ -2,18 +2,22 @@ import * as React from 'react'
 
 import { mount } from 'enzyme'
 
+import { mockRouterProps } from '../../../mocks/components'
 import Missions, { IMissionsProps } from '../Missions'
 
 const mockUndefinedMissions: IMissionsProps = {
+  ...mockRouterProps('/academy/missions', {}),
   handleMissionsInfoFetch: () => {}
 }
 
 const mockEmptyMissions: IMissionsProps = {
+  ...mockRouterProps('/academy/missions', {}),
   missionsInfo: [],
   handleMissionsInfoFetch: () => {}
 }
 
 const mockPresentMissions: IMissionsProps = {
+  ...mockRouterProps('/academy/missions', {}),
   missionsInfo: [
     {
       title: 'An Odessey to Runes',

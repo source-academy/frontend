@@ -1,8 +1,11 @@
 import { Button, Card, Icon, Intent, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
+import { RouteComponentProps } from 'react-router'
 
-import Assessment from '../../containers/AssessmentContainer'
+import AssessmentContainer, {
+  OwnProps as AssessmentProps
+} from '../../containers/AssessmentContainer'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export type MissionInfo = {
@@ -10,8 +13,11 @@ export type MissionInfo = {
   description: string
 }
 
-export interface IMissionsProps {
-  missionId?: number
+export interface IMissionParams {
+  missionId?: string
+}
+
+export interface IMissionsProps extends RouteComponentProps<IMissionParams> {
   missionsInfo?: MissionInfo[]
   handleMissionsInfoFetch: () => void
 }
@@ -21,8 +27,16 @@ export type DispatchProps = Pick<IMissionsProps, 'handleMissionsInfoFetch'>
 
 class Missions extends React.Component<IMissionsProps, {}> {
   public render() {
+    // make missionIdParam a number
+    let missionIdParam: number | null =
+      this.props.match.params.missionId === undefined
+        ? NaN
+        : parseInt(this.props.match.params.missionId, 10)
+    // set as null if the parsing failed
+    missionIdParam = Number.isInteger(missionIdParam) ? missionIdParam : null
+
     // if there is no mission specified, Render only information.
-    if (this.props.missionId === undefined) {
+    if (missionIdParam === null) {
       const props: IContentDisplayProps = {
         display: <MissionInfoCard missionsInfo={this.props.missionsInfo} />,
         loadContentDispatch: this.props.handleMissionsInfoFetch
@@ -33,7 +47,10 @@ class Missions extends React.Component<IMissionsProps, {}> {
         </div>
       )
     } else {
-      return <Assessment />
+      const props: AssessmentProps = {
+        missionId: missionIdParam
+      }
+      return <AssessmentContainer {...props} />
     }
   }
 }

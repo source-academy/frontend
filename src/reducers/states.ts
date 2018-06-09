@@ -41,7 +41,7 @@ export interface ISessionState {
   readonly announcements?: Announcement[]
   readonly missionsInfo?: MissionInfo[]
   readonly username?: string
-  readonly assessmentInfos?: AssessmentInfo[]
+  readonly assessmentInfos: AssessmentInfo[]
 }
 
 /**
@@ -147,5 +147,11 @@ export const defaultSession: ISessionState = {
     }
   ],
   username: undefined,
-  assessmentInfos: undefined
+  assessmentInfos: [
+    {
+      longSummary: 'This is a dummy summary, to be displayed as part of the briefing.',
+      dueDate: '12/12/12',
+      studentBriefed: false
+    }
+  ]
 }

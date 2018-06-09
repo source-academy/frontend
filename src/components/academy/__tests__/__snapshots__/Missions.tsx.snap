@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Missions page "loading" content renders correctly 1`] = `
-"<Missions handleMissionsInfoFetch={[Function: handleMissionsInfoFetch]}>
+"<Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} handleMissionsInfoFetch={[Function: handleMissionsInfoFetch]}>
   <div className=\\"Missions\\">
     <ContentDisplay display={{...}} loadContentDispatch={[Function: handleMissionsInfoFetch]}>
       <div className=\\"ContentDisplay row center-xs\\">
@@ -39,7 +39,7 @@ exports[`Missions page "loading" content renders correctly 1`] = `
 `;
 
 exports[`Missions page with 0 missions renders correctly 1`] = `
-"<Missions missionsInfo={{...}} handleMissionsInfoFetch={[Function: handleMissionsInfoFetch]}>
+"<Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} missionsInfo={{...}} handleMissionsInfoFetch={[Function: handleMissionsInfoFetch]}>
   <div className=\\"Missions\\">
     <ContentDisplay display={{...}} loadContentDispatch={[Function: handleMissionsInfoFetch]}>
       <div className=\\"ContentDisplay row center-xs\\">
@@ -75,7 +75,7 @@ exports[`Missions page with 0 missions renders correctly 1`] = `
 `;
 
 exports[`Missions page with multiple loaded missions renders correctly 1`] = `
-"<Missions missionsInfo={{...}} handleMissionsInfoFetch={[Function: handleMissionsInfoFetch]}>
+"<Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} missionsInfo={{...}} handleMissionsInfoFetch={[Function: handleMissionsInfoFetch]}>
   <div className=\\"Missions\\">
     <ContentDisplay display={{...}} loadContentDispatch={[Function: handleMissionsInfoFetch]}>
       <div className=\\"ContentDisplay row center-xs\\">

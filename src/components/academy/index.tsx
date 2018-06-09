@@ -24,7 +24,8 @@ export const Academy: React.SFC<IAcademyProps> = props => (
       {checkLoggedIn(props)}
       <Route path="/academy/contests" component={MissionsContainer} />
       <Route path="/academy/game" component={Game} />
-      <Route path="/academy/missions" component={MissionsContainer} />
+      <Route exact={true} path="/academy/missions" component={MissionsContainer} />
+      <Route path="/academy/missions/:missionId" component={MissionsContainer} />
       <Route path="/academy/paths" component={MissionsContainer} />
       <Route path="/academy/sidequests" component={MissionsContainer} />
       <Route exact={true} path="/academy" component={redirectToGame} />

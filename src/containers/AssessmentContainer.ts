@@ -1,13 +1,14 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { briefStudent, fetchAssessment } from '../actions/session'
-import Assessment, { DispatchProps, OwnProps, StateProps } from '../components/Assessment'
+import { fetchAssessment } from '../actions/session'
+import Assessment, { DispatchProps, StateProps } from '../components/Assessment'
 import { IState } from '../reducers/states'
 
+export type OwnProps = { missionId: number }
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
-    ...props,
+    missionId: props.missionId,
     assessmentInfo:
       state.session.assessmentInfos === undefined
         ? undefined
@@ -16,12 +17,13 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
-  bindActionCreators(
+  bindActionCreators<DispatchProps>(
     {
-      handleAssessmentInfoFetch: fetchAssessment,
-      hanldeBriefStudent: briefStudent
+      handleAssessmentInfoFetch: fetchAssessment
     },
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(Assessment)
+export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(
+  Assessment
+)
