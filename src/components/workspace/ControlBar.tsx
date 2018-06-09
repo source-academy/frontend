@@ -2,6 +2,7 @@ import { Button, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
+import * as CopyToClipboard from 'react-copy-to-clipboard'
 
 import { sourceChapters } from '../../reducers/states'
 import { HOST } from '../../utils/constants'
@@ -81,7 +82,12 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
             again.
           </Text>
         ) : (
-          <input placeholder={`${HOST}playground?prgrm=${this.props.lzString}`} readOnly={true} />
+          <>
+            <input placeholder={`${HOST}playground?prgrm=${this.props.lzString}`} readOnly={true} />
+            <CopyToClipboard text={`${HOST}playground?prgrm=${this.props.lzString}`}>
+              {controlButton('', IconNames.DUPLICATE)}
+            </CopyToClipboard>
+          </>
         )}
       </Popover>
     ) : (
