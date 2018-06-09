@@ -55,6 +55,11 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
 
   private shareInputElem: HTMLInputElement
 
+  constructor(props: ControlBarProps) {
+    super(props)
+    this.selectShareInputText = this.selectShareInputText.bind(this)
+  }
+
   public render() {
     return (
       <div className="ControlBar">
@@ -89,11 +94,10 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
               defaultValue={`${HOST}playground?prgrm=${this.props.lzString}`}
               readOnly={true}
               ref={e => (this.shareInputElem = e!)}
-              // tslint:disable-next-line:jsx-no-bind
-              onFocus={this.selectShareInputText.bind(this)}
+              onFocus={this.selectShareInputText}
             />
             <CopyToClipboard text={`${HOST}playground?prgrm=${this.props.lzString}`}>
-              {controlButton('', IconNames.DUPLICATE, this.selectShareInputText.bind(this))}
+              {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
             </CopyToClipboard>
           </>
         )}
