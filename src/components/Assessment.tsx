@@ -52,10 +52,10 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       body: briefing
     }
     return (
-      <>
+      <div className="Assessment pt-dark">
         {overlay}
         <Workspace sideContentTabs={[briefingTab]} />
-      </>
+      </div>
     )
   }
 }

@@ -5,7 +5,9 @@ $code-color-error: #ff4444;
 
 .workspace {
   height: 100%;
+  background-color: $cadet-color-1;
   display: flex;
+  padding-top: 0.5rem;
   flex: 1 1 auto;
   flex-direction: column;
 
