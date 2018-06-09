@@ -27,6 +27,7 @@ export type OwnProps = {
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
+  onClickShare?(): any
 }
 
 export type StateProps = {
@@ -49,7 +50,8 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {}
+    onClickSave: () => {},
+    onClickShare: () => {}
   }
 
   private shareInputElem: HTMLInputElement
