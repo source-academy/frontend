@@ -63,6 +63,7 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
         {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
       </Tooltip>
     )
+    const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval)
     const saveButton = this.props.hasSaveButton
       ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
       : undefined
@@ -71,7 +72,7 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
       : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
-        {runButton} {saveButton} {chapterSelectButton}
+        {this.props.isRunning ? stopButton : runButton} {saveButton} {chapterSelectButton}
       </div>
     )
   }
@@ -91,12 +92,15 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
   }
 
   private replControl() {
+    const evalButton = (
+      <Tooltip content="...or press shift-enter in the REPL">
+        {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}
+      </Tooltip>
+    )
+    const clearButton = controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear)
     return (
       <div className="ControlBar_repl pt-button-group">
-        <Tooltip content="...or press shift-enter in the REPL">
-          {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}
-        </Tooltip>
-        {controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear)}
+        {this.props.isRunning ? null : evalButton} {clearButton}
       </div>
     )
   }
