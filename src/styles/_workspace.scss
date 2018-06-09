@@ -196,11 +196,18 @@ $code-color-error: #ff4444;
   }
 }
 
-.pt-popover-content {
-  padding: 0.8rem;
+.pt-popover .pt-popover-arrow-fill {
+  fill: $gray5;
+}
 
-  .pt-label {
-    margin: 0;
+.pt-popover .pt-popover-content {
+  background: $gray5;
+  display: flex;
+  padding: 0.4rem 0.4rem 0.4rem 0.8rem;
+
+  input {
+    width: 25rem;
+    margin-right: 0.58em;
   }
 }
 
