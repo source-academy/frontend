@@ -15,6 +15,7 @@ type ControlBarState = {
 export type DispatchProps = {
   handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
+  handleGenerateLz: () => void
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
@@ -56,7 +57,6 @@ class ControlBar extends React.Component<ControlBarProps, ControlBarState> {
   constructor(props: ControlBarProps) {
     super(props)
     this.state = { isShareOpen: false }
-    this.onClickShare = this.onClickShare.bind(this)
   }
 
   public render() {
@@ -81,7 +81,7 @@ class ControlBar extends React.Component<ControlBarProps, ControlBarState> {
       : undefined
     const shareButton = this.props.hasShareButton ? (
       <Popover>
-        {controlButton('Share', IconNames.SHARE, this.onClickShare)}
+        {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
         The URL with hash goes here.
       </Popover>
     ) : (
@@ -125,8 +125,6 @@ class ControlBar extends React.Component<ControlBarProps, ControlBarState> {
       </div>
     )
   }
-
-  private onClickShare() {}
 }
 
 const chapters = sourceChapters.map(chap => ({ displayName: styliseChapter(chap), chapter: chap }))

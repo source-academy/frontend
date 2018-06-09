@@ -2,7 +2,13 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { handleInterruptExecution } from '../../actions/interpreter'
-import { chapterSelect, clearReplOutput, evalEditor, evalRepl } from '../../actions/playground'
+import {
+  chapterSelect,
+  clearReplOutput,
+  evalEditor,
+  evalRepl,
+  generateLzString
+} from '../../actions/playground'
 import ControlBar, {
   DispatchProps,
   OwnProps,
@@ -21,6 +27,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleChapterSelect: chapterSelect,
       handleEditorEval: evalEditor,
+      handleGenerateLz: generateLzString,
       handleInterruptEval: handleInterruptExecution,
       handleReplEval: evalRepl,
       handleReplOutputClear: clearReplOutput

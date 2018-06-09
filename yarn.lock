@@ -250,6 +250,10 @@
   version "22.2.3"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.2.3.tgz#0157c0316dc3722c43a7b71de3fdf3acbccef10d"
 
+"@types/lz-string@^1.3.32":
+  version "1.3.32"
+  resolved "https://registry.yarnpkg.com/@types/lz-string/-/lz-string-1.3.32.tgz#60e26d0f70daa6bf385b9437bb02f661a5713f81"
+
 "@types/node@*", "@types/node@^9.6.5":
   version "9.6.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.5.tgz#ee700810fdf49ac1c399fc5980b7559b3e5a381d"
@@ -5051,6 +5055,10 @@ lru-cache@^4.0.1, lru-cache@^4.1.1:
   dependencies:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
+
+lz-string@^1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.4.4.tgz#c0d8eaf36059f705796e1e344811cf4c498d3a26"
 
 macaddress@^0.2.8:
   version "0.2.8"
