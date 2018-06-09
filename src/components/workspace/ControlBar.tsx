@@ -1,9 +1,10 @@
-import { Button, MenuItem, Popover, Tooltip } from '@blueprintjs/core'
+import { Button, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
 
 import { sourceChapters } from '../../reducers/states'
+import { HOST } from '../../utils/constants'
 import { controlButton } from '../commons'
 
 type ControlBarProps = DispatchProps & OwnProps & StateProps
@@ -74,7 +75,14 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     const shareButton = this.props.hasShareButton ? (
       <Popover>
         {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
-        {this.props.lzString}
+        {this.props.lzString === undefined ? (
+          <Text>
+            Share your programs! Type something into the editor (left), then click on this button
+            again.
+          </Text>
+        ) : (
+          <input placeholder={`${HOST}playground?prgrm=${this.props.lzString}`} readOnly={true} />
+        )}
       </Popover>
     ) : (
       undefined

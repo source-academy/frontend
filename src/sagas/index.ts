@@ -57,7 +57,8 @@ function* loginSaga(): SagaIterator {
 function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
     const code = yield select((state: IState) => state.playground.editorValue)
-    yield put(actions.changeLzString(compressToEncodedURIComponent(code)))
+    const newLzString = code === '' ? undefined : compressToEncodedURIComponent(code)
+    yield put(actions.changeLzString(newLzString))
   })
 }
 
