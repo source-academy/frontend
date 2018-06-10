@@ -91,12 +91,12 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
         ) : (
           <>
             <input
-              defaultValue={`${HOST}playground?prgrm=${this.props.lzString}`}
+              defaultValue={`${HOST}playground?${this.props.lzString}`}
               readOnly={true}
               ref={e => (this.shareInputElem = e!)}
               onFocus={this.selectShareInputText}
             />
-            <CopyToClipboard text={`${HOST}playground?prgrm=${this.props.lzString}`}>
+            <CopyToClipboard text={`${HOST}playground?${this.props.lzString}`}>
               {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
             </CopyToClipboard>
           </>

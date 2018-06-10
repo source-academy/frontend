@@ -1,4 +1,5 @@
 import { compressToEncodedURIComponent } from 'lz-string'
+import * as qs from 'query-string'
 import { SagaIterator } from 'redux-saga'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
@@ -57,7 +58,14 @@ function* loginSaga(): SagaIterator {
 function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
     const code = yield select((state: IState) => state.playground.editorValue)
-    const newLzString = code === '' ? undefined : compressToEncodedURIComponent(code)
+    const lib = yield select((state: IState) => state.playground.sourceChapter)
+    const newLzString =
+      code === ''
+        ? undefined
+        : qs.stringify({
+            prgrm: compressToEncodedURIComponent(code),
+            lib
+          })
     yield put(actions.changeLzString(newLzString))
   })
 }
