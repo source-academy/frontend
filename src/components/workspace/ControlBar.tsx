@@ -5,7 +5,6 @@ import * as React from 'react'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 
 import { sourceChapters } from '../../reducers/states'
-import { HOST } from '../../utils/constants'
 import { controlButton } from '../commons'
 
 type ControlBarProps = DispatchProps & OwnProps & StateProps
@@ -80,6 +79,9 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     const saveButton = this.props.hasSaveButton
       ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
       : undefined
+    const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
+      this.props.queryString
+    }`
     const shareButton = this.props.hasShareButton ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
@@ -91,12 +93,12 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
         ) : (
           <>
             <input
-              defaultValue={`${HOST}playground#${this.props.queryString}`}
+              defaultValue={shareUrl}
               readOnly={true}
               ref={e => (this.shareInputElem = e!)}
               onFocus={this.selectShareInputText}
             />
-            <CopyToClipboard text={`${HOST}playground#${this.props.queryString}`}>
+            <CopyToClipboard text={shareUrl}>
               {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
             </CopyToClipboard>
           </>
