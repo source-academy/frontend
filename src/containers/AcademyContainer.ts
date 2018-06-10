@@ -1,5 +1,16 @@
+import { connect, MapDispatchToProps } from 'react-redux'
 import { withRouter } from 'react-router'
+import { bindActionCreators, Dispatch } from 'redux'
 
-import Academy from '../components/academy'
+import { changeToken } from '../actions/session'
+import Academy, { IDispatchProps } from '../components/academy'
 
-export default withRouter(Academy)
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+  bindActionCreators(
+    {
+      changeToken
+    },
+    dispatch
+  )
+
+export default withRouter(connect(null, mapDispatchToProps)(Academy))
