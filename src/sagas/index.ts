@@ -7,7 +7,6 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
-// import { history } from '../utils/history'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import { IVLE_API_KEY } from '../utils/secrets'
 

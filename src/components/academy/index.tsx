@@ -1,18 +1,17 @@
 import * as React from 'react'
-import { Redirect, Route, Switch } from 'react-router'
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import MissionsContainer from '../../containers/academy/MissionsContainer'
 import Game from '../../containers/GameContainer'
 import AcademyNavigationBar from './NavigationBar'
 
-type AcademyProps = StateProps
+interface IAcademyProps extends RouteComponentProps<{}>, StateProps {}
 
 export type StateProps = {
   token?: string
 }
 
-// export class Academy extends React.Component<AcademyProps, {}> {
-export const Academy: React.SFC<AcademyProps> = props => (
+export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
     <AcademyNavigationBar />
     <Switch>
@@ -28,8 +27,10 @@ export const Academy: React.SFC<AcademyProps> = props => (
   </div>
 )
 
-const checkLoggedIn = (props: AcademyProps) =>
-  props.token === undefined ? <Route component={redirectToLogin} /> : undefined
+const checkLoggedIn = (props: IAcademyProps) => {
+  alert(props.location.search)
+  return props.token === undefined ? <Route component={redirectToLogin} /> : undefined
+}
 
 const redirectTo404 = () => <Redirect to="/404" />
 
