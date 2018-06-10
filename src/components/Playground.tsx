@@ -22,10 +22,15 @@ const Playground: React.SFC<PlaygroundProps> = props => {
   )
 }
 
-const parsePrgrm = (props: PlaygroundProps) => qs.parse(props.location.search).prgrm
+const parsePrgrm = (props: PlaygroundProps) => {
+  const qsParsed = qs.parse(props.location.hash)
+  return qsParsed.lz !== undefined // legacy support
+    ? qsParsed.lz
+    : qsParsed.prgrm
+}
 
 const parseLibrary = (props: PlaygroundProps) => {
-  const libQuery = qs.parse(props.location.search).lib
+  const libQuery = qs.parse(props.location.hash).lib
   return libQuery === undefined ? undefined : parseInt(libQuery, 10)
 }
 
