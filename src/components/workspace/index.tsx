@@ -13,6 +13,7 @@ import { SideContentTab } from './side-content'
 type WorkspaceProps = DispatchProps & OwnProps & StateProps
 
 export type DispatchProps = {
+  changeChapter: (newChapter: number) => void
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
   updateEditorValue: (newEditorValue: string) => void
@@ -20,6 +21,7 @@ export type DispatchProps = {
 
 export type OwnProps = {
   controlBarOptions?: ControlBarOwnProps
+  libQuery?: number
   sideContentTabs: SideContentTab[]
   prgrmQuery?: string
 }
@@ -36,11 +38,14 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private sideDividerDiv: HTMLDivElement
 
   public componentDidMount() {
+    this.maxDividerHeight = this.sideDividerDiv.clientHeight
     if (this.props.prgrmQuery !== undefined) {
       const prgrmParsed = decompressFromEncodedURIComponent(this.props.prgrmQuery)
       this.props.updateEditorValue(prgrmParsed)
     }
-    this.maxDividerHeight = this.sideDividerDiv.clientHeight
+    if (this.props.libQuery !== undefined) {
+      this.props.changeChapter(this.props.libQuery)
+    }
   }
 
   /**

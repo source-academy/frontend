@@ -2,6 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import {
+  changeChapter,
   changeEditorWidth,
   changeSideContentHeight,
   updateEditorValue
@@ -23,6 +24,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
+      changeChapter,
       handleEditorWidthChange: changeEditorWidth,
       handleSideContentHeightChange: changeSideContentHeight,
       updateEditorValue

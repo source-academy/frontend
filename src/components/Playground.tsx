@@ -14,6 +14,7 @@ const Playground: React.SFC<PlaygroundProps> = props => {
   return (
     <HotKeys className="Playground pt-dark" keyMap={keyMap}>
       <WorkspaceContainer
+        libQuery={parseLibrary(props)}
         prgrmQuery={parsePrgrm(props)}
         sideContentTabs={[playgroundIntroduction]}
       />
@@ -22,6 +23,11 @@ const Playground: React.SFC<PlaygroundProps> = props => {
 }
 
 const parsePrgrm = (props: PlaygroundProps) => qs.parse(props.location.search).prgrm
+
+const parseLibrary = (props: PlaygroundProps) => {
+  const libQuery = qs.parse(props.location.search).lib
+  return libQuery === undefined ? undefined : parseInt(libQuery, 10)
+}
 
 const keyMap = {
   goGreen: 'h u l k'
