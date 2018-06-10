@@ -19,7 +19,7 @@ import { IState } from '../../reducers/states'
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => ({
   ...props,
   isRunning: state.playground.isRunning,
-  lzString: state.playground.lzString,
+  queryString: state.playground.queryString,
   sourceChapter: state.playground.sourceChapter
 })
 

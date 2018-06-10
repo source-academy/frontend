@@ -3,7 +3,7 @@ import {
   CHANGE_ACTIVE_TAB,
   CHANGE_CHAPTER,
   CHANGE_EDITOR_WIDTH,
-  CHANGE_LZ_STRING,
+  CHANGE_QUERY_STRING,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
@@ -36,10 +36,10 @@ export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, ac
         ...state,
         editorWidth: (parseFloat(state.editorWidth.slice(0, -1)) + action.payload).toString() + '%'
       }
-    case CHANGE_LZ_STRING:
+    case CHANGE_QUERY_STRING:
       return {
         ...state,
-        lzString: action.payload
+        queryString: action.payload
       }
     case CHANGE_SIDE_CONTENT_HEIGHT:
       return {

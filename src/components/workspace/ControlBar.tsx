@@ -32,7 +32,7 @@ export type OwnProps = {
 
 export type StateProps = {
   isRunning: boolean
-  lzString?: string
+  queryString?: string
   sourceChapter: number
 }
 
@@ -83,7 +83,7 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     const shareButton = this.props.hasShareButton ? (
       <Popover inheritDarkTheme={false}>
         {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
-        {this.props.lzString === undefined ? (
+        {this.props.queryString === undefined ? (
           <Text>
             Share your programs! Type something into the editor (left), then click on this button
             again.
@@ -91,12 +91,12 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
         ) : (
           <>
             <input
-              defaultValue={`${HOST}playground?${this.props.lzString}`}
+              defaultValue={`${HOST}playground?${this.props.queryString}`}
               readOnly={true}
               ref={e => (this.shareInputElem = e!)}
               onFocus={this.selectShareInputText}
             />
-            <CopyToClipboard text={`${HOST}playground?${this.props.lzString}`}>
+            <CopyToClipboard text={`${HOST}playground?${this.props.queryString}`}>
               {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
             </CopyToClipboard>
           </>

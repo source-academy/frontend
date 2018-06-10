@@ -16,9 +16,9 @@ export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (widthChang
   payload: widthChange
 })
 
-export const changeLzString: ActionCreator<actionTypes.IAction> = (lzString: string) => ({
-  type: actionTypes.CHANGE_LZ_STRING,
-  payload: lzString
+export const changeQueryString: ActionCreator<actionTypes.IAction> = (queryString: string) => ({
+  type: actionTypes.CHANGE_QUERY_STRING,
+  payload: queryString
 })
 
 export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (height: number) => ({

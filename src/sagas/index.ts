@@ -59,14 +59,14 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
     const code = yield select((state: IState) => state.playground.editorValue)
     const lib = yield select((state: IState) => state.playground.sourceChapter)
-    const newLzString =
+    const newQueryString =
       code === ''
         ? undefined
         : qs.stringify({
             prgrm: compressToEncodedURIComponent(code),
             lib
           })
-    yield put(actions.changeLzString(newLzString))
+    yield put(actions.changeQueryString(newQueryString))
   })
 }
 
