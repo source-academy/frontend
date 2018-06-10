@@ -6,6 +6,7 @@ import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
 import WorkspaceContainer from '../containers/workspace'
+import { sourceChapters } from '../reducers/states'
 import { SideContentTab } from './workspace/side-content'
 
 export type PlaygroundProps = RouteComponentProps<{}>
@@ -24,14 +25,14 @@ const Playground: React.SFC<PlaygroundProps> = props => {
 
 const parsePrgrm = (props: PlaygroundProps) => {
   const qsParsed = qs.parse(props.location.hash)
-  return qsParsed.lz !== undefined // legacy support
-    ? qsParsed.lz
-    : qsParsed.prgrm
+  // legacy support
+  return qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm
 }
 
 const parseLibrary = (props: PlaygroundProps) => {
   const libQuery = qs.parse(props.location.hash).lib
-  return libQuery === undefined ? undefined : parseInt(libQuery, 10)
+  const lib = libQuery === undefined ? NaN : parseInt(libQuery, 10)
+  return sourceChapters.includes(lib) ? lib : undefined
 }
 
 const keyMap = {
