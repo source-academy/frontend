@@ -81,7 +81,7 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
       ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
       : undefined
     const shareButton = this.props.hasShareButton ? (
-      <Popover inheritDarkTheme={false}>
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
         {this.props.queryString === undefined ? (
           <Text>
