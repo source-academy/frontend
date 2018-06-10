@@ -35,6 +35,11 @@ const parseLibrary = (props: PlaygroundProps) => {
   return sourceChapters.includes(lib) ? lib : undefined
 }
 
+const parseLibrary = (props: PlaygroundProps) => {
+  const libQuery = qs.parse(props.location.search).lib
+  return libQuery === undefined ? undefined : parseInt(libQuery, 10)
+}
+
 const keyMap = {
   goGreen: 'h u l k'
 }
