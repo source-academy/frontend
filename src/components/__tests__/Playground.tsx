@@ -1,11 +1,14 @@
+import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import { shallow } from 'enzyme'
-
+import { mockRouterProps } from '../../mocks/components'
 import Playground from '../Playground'
 
 test('Playground renders correctly', () => {
-  const app = <Playground />
+  const props = {
+    ...mockRouterProps('/academy', {})
+  }
+  const app = <Playground {...props} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })

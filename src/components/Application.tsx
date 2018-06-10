@@ -3,11 +3,11 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import Announcements from '../containers/AnnouncementsContainer'
 import Login from '../containers/LoginContainer'
+import Playground from '../containers/PlaygroundContainer'
 import Academy from './academy'
 import Admin from './admin'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
-import Playground from './Playground'
 
 export interface IApplicationProps extends RouteComponentProps<{}> {
   title: string

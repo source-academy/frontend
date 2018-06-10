@@ -1,3 +1,4 @@
+import { decompressFromEncodedURIComponent } from 'lz-string'
 import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
@@ -14,11 +15,13 @@ type WorkspaceProps = DispatchProps & OwnProps & StateProps
 export type DispatchProps = {
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
+  updateEditorValue: (newEditorValue: string) => void
 }
 
 export type OwnProps = {
   controlBarOptions?: ControlBarOwnProps
   sideContentTabs: SideContentTab[]
+  prgrmQuery?: string
 }
 
 export type StateProps = {
@@ -33,6 +36,10 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private sideDividerDiv: HTMLDivElement
 
   public componentDidMount() {
+    if (this.props.prgrmQuery !== undefined) {
+      const prgrmParsed = decompressFromEncodedURIComponent(this.props.prgrmQuery)
+      this.props.updateEditorValue(prgrmParsed)
+    }
     this.maxDividerHeight = this.sideDividerDiv.clientHeight
   }
 

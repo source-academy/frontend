@@ -1,7 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Login renders correctly 1`] = `
-"<HotKeys className=\\"Playground pt-dark\\" keyMap={{...}}>
-  <Connect(Workspace) sideContentTabs={{...}} />
-</HotKeys>"
+"<div className=\\"Login pt-dark\\">
+  <Blueprint2.Card className=\\"login-card pt-elevation-4\\" elevation={0} interactive={false}>
+    <div className=\\"login-header\\">
+      <h4>
+        <Blueprint2.Icon icon=\\"lock\\" />
+        LOGIN
+      </h4>
+    </div>
+    <div className=\\"login-body\\">
+      <Blueprint2.ButtonGroup fill={true} vertical={true}>
+        <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"log-in\\" onClick={[Function]}>
+          Log in with IVLE
+        </Blueprint2.Button>
+        <NavLink to=\\"/playground\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+          <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"code\\">
+            Try out the playground
+          </Blueprint2.Button>
+        </NavLink>
+      </Blueprint2.ButtonGroup>
+    </div>
+  </Blueprint2.Card>
+</div>"
 `;
