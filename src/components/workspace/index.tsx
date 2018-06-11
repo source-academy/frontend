@@ -3,7 +3,6 @@ import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 
-import { OwnProps } from '../../containers/workspace'
 import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
@@ -16,6 +15,13 @@ export type DispatchProps = {
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
   updateEditorValue: (newEditorValue: string) => void
+}
+
+export type OwnProps = {
+  controlBarOptions?: ControlBarOwnProps
+  libQuery?: number
+  sideContentTabs: SideContentTab[]
+  prgrmQuery?: string
 }
 
 export type StateProps = {

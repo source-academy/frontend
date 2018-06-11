@@ -5,11 +5,8 @@ import { fetchAssessment } from '../actions/session'
 import Assessment, { DispatchProps, StateProps } from '../components/Assessment'
 import { IState } from '../reducers/states'
 
-export type OwnProps = { missionId: number }
-
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    missionId: props.missionId,
     assessmentInfo:
       state.session.assessmentInfos === undefined
         ? undefined
@@ -25,6 +22,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(
-  Assessment
-)
+export default connect(mapStateToProps, mapDispatchToProps)(Assessment)

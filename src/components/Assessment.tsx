@@ -12,12 +12,13 @@ export type AssessmentInfo = {
   studentBriefed: boolean
 }
 
-export type AssessmentProps = DispatchProps & StateProps
+export type AssessmentProps = DispatchProps & OwnProps & StateProps
 
 export type StateProps = {
-  missionId: number
   assessmentInfo?: AssessmentInfo
 }
+
+export type OwnProps = { missionId: number }
 
 export type DispatchProps = {
   handleAssessmentInfoFetch: (missionId: number) => void

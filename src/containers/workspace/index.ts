@@ -12,19 +12,11 @@ import { SideContentTab } from '../../components/workspace/side-content'
 import { IState } from '../../reducers/states'
 import { OwnProps as ControlBarOwnProps } from './ControlBarContainer'
 
-export type OwnProps = {
-  controlBarOptions?: ControlBarOwnProps
-  libQuery?: number
-  sideContentTabs: SideContentTab[]
-  prgrmQuery?: string
-}
-
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
  */
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    ...props,
     editorWidth: state.playground.editorWidth,
     sideContentHeight: state.playground.sideContentHeight
   }
@@ -41,6 +33,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(
-  Workspace
-)
+export default connect(mapStateToProps, mapDispatchToProps)(Workspace)
