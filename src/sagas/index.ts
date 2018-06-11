@@ -50,11 +50,21 @@ function* interpreterSaga(): SagaIterator {
 
 function* loginSaga(): SagaIterator {
   yield takeEvery(actionTypes.LOGIN, function*() {
-    const api = 'https://ivle.nus.edu.sg/api/login/'
+    const apiLogin = 'https://ivle.nus.edu.sg/api/login/'
     const key = IVLE_API_KEY
     const callback = `${window.location.protocol}//${window.location.hostname}/academy`
-    window.location.href = `${api}?apikey=${key}&url=${callback}`
+    window.location.href = `${apiLogin}?apikey=${key}&url=${callback}`
     yield undefined
+  })
+
+  yield takeEvery(actionTypes.START_CHANGE_USERNAME, function*() {
+    const apiUsername = 'https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get'
+    const key = IVLE_API_KEY
+    const token = yield select((state: IState) => state.session.token)
+    const username = yield call(() =>
+      fetch(`${apiUsername}?APIKey=${key}&Token=${token}`).then(response => response.json())
+    )
+    yield put(actions.changeUsername(username))
   })
 }
 

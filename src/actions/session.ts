@@ -1,9 +1,14 @@
 import { ActionCreator } from 'redux'
 import * as actionTypes from './actionTypes'
 
-export const changeToken: ActionCreator<actionTypes.IAction> = (newToken: string) => ({
+export const changeToken: ActionCreator<actionTypes.IAction> = (token: string) => ({
   type: actionTypes.CHANGE_TOKEN,
-  payload: newToken
+  payload: token
+})
+
+export const changeUsername: ActionCreator<actionTypes.IAction> = (username: string) => ({
+  type: actionTypes.CHANGE_USERNAME,
+  payload: username
 })
 
 export const fetchAnnouncements = () => ({
@@ -16,4 +21,8 @@ export const fetchMissionsInfo = () => ({
 
 export const login = () => ({
   type: actionTypes.LOGIN
+})
+
+export const startChangeUsername = () => ({
+  type: actionTypes.START_CHANGE_USERNAME
 })

@@ -10,6 +10,7 @@ interface IAcademyProps extends IDispatchProps, RouteComponentProps<{}>, IStateP
 
 export interface IDispatchProps {
   changeToken: (token: string) => void
+  startChangeUsername: () => void
 }
 
 export interface IStateProps {
@@ -36,6 +37,7 @@ const checkLoggedIn = (props: IAcademyProps) => {
   const token = qs.parse(props.location.search).token
   if (token !== undefined) {
     props.changeToken(token) // just received a callback from IVLE
+    props.startChangeUsername()
     return
   } else if (props.token === undefined) {
     return <Route component={redirectToLogin} />
