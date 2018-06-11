@@ -6,6 +6,7 @@ import Assessment, { DispatchProps, StateProps } from '../components/Assessment'
 import { IState } from '../reducers/states'
 
 export type OwnProps = { missionId: number }
+
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     missionId: props.missionId,
