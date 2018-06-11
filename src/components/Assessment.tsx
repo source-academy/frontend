@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import Workspace from '../containers/workspace'
-import { OwnProps as ControlBarOwnProps } from './workspace/ControlBar'
+import { OwnProps as ControlBarOwnProps } from '../containers/workspace/ControlBarContainer'
 import { SideContentTab } from './workspace/side-content'
 
 export type AssessmentInfo = {

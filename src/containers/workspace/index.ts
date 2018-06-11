@@ -8,9 +8,9 @@ import {
   updateEditorValue
 } from '../../actions/playground'
 import Workspace, { DispatchProps, StateProps } from '../../components/workspace/'
-import { OwnProps as ControlBarOwnProps } from '../../components/workspace/ControlBar'
 import { SideContentTab } from '../../components/workspace/side-content'
 import { IState } from '../../reducers/states'
+import { OwnProps as ControlBarOwnProps } from './ControlBarContainer'
 
 export type OwnProps = {
   controlBarOptions?: ControlBarOwnProps

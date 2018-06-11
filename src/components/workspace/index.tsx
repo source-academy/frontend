@@ -3,14 +3,13 @@ import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 
+import { OwnProps } from '../../containers/workspace'
 import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
-import { OwnProps as ControlBarOwnProps } from './ControlBar'
-import { SideContentTab } from './side-content'
 
-type WorkspaceProps = DispatchProps & StateProps
+type WorkspaceProps = DispatchProps & StateProps & OwnProps
 
 export type DispatchProps = {
   changeChapter: (newChapter: number) => void
@@ -20,12 +19,8 @@ export type DispatchProps = {
 }
 
 export type StateProps = {
-  controlBarOptions?: ControlBarOwnProps
   editorWidth: string
-  libQuery?: number
-  prgrmQuery?: string
   sideContentHeight?: number
-  sideContentTabs: SideContentTab[]
 }
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
