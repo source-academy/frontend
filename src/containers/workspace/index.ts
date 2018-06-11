@@ -7,15 +7,14 @@ import {
   changeSideContentHeight,
   updateEditorValue
 } from '../../actions/playground'
-import Workspace, { DispatchProps, OwnProps, StateProps } from '../../components/workspace/'
+import Workspace, { DispatchProps, StateProps } from '../../components/workspace/'
 import { IState } from '../../reducers/states'
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
  */
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    ...props,
     editorWidth: state.playground.editorWidth,
     sideContentHeight: state.playground.sideContentHeight
   }

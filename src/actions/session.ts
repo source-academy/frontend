@@ -10,6 +10,11 @@ export const fetchAnnouncements = () => ({
   type: actionTypes.FETCH_ANNOUNCEMENTS
 })
 
+export const fetchAssessment = (missionId: number) => ({
+  type: actionTypes.FETCH_ASSESSMENT,
+  paylod: missionId
+})
+
 export const fetchMissionsInfo = () => ({
   type: actionTypes.FETCH_MISSIONS_INFO
 })

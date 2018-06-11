@@ -1,5 +1,6 @@
 import { MissionInfo } from '../components/academy/Missions'
 import { Announcement } from '../components/Announcements'
+import { AssessmentInfo } from '../components/Assessment'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 
@@ -40,6 +41,7 @@ export interface ISessionState {
   readonly announcements?: Announcement[]
   readonly missionsInfo?: MissionInfo[]
   readonly username?: string
+  readonly assessmentInfos: AssessmentInfo[]
 }
 
 /**
@@ -139,10 +141,24 @@ export const defaultSession: ISessionState = {
   ],
   missionsInfo: [
     {
+      id: 0,
       title: 'An Odessey to Runes',
       description:
         'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in'
+    },
+    {
+      id: 1,
+      title: 'The Secret to Streams',
+      description:
+        'Once upon a time, () => { Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in }'
     }
   ],
-  username: undefined
+  username: undefined,
+  assessmentInfos: [
+    {
+      longSummary: 'This is a dummy summary, to be displayed as part of the briefing.',
+      dueDate: '12/12/12',
+      studentBriefed: false
+    }
+  ]
 }

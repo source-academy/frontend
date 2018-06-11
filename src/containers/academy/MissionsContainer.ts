@@ -1,12 +1,10 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
+import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchMissionsInfo } from '../../actions/session'
-import Missions, { IMissionsProps } from '../../components/academy/Missions'
+import Missions, { DispatchProps, StateProps } from '../../components/academy/Missions'
 import { IState } from '../../reducers/states'
-
-type StateProps = Pick<IMissionsProps, 'missionsInfo'>
-type DispatchProps = Pick<IMissionsProps, 'handleMissionsInfoFetch'>
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
@@ -22,4 +20,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(Missions)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Missions))
