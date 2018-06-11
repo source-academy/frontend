@@ -3,3 +3,10 @@
   flex-direction: column;
   height: 100%;
 }
+
+.mission-briefing {
+  padding-bottom: 0;
+  .mission-briefing-button {
+    margin-top: 1rem;
+  }
+}
