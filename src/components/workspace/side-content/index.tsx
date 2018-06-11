@@ -1,17 +1,19 @@
 import { Button, Card, IconName, Tooltip } from '@blueprintjs/core'
 import * as React from 'react'
 
-interface ISideContentProps {
-  activeTab: number
+type SideContentProps = DispatchProps & OwnProps & StateProps
+
+export type DispatchProps = {
   handleChangeActiveTab: (aT: number) => void
+}
+
+export type OwnProps = {
   tabs: SideContentTab[]
 }
 
-export type DispatchProps = Pick<ISideContentProps, 'handleChangeActiveTab'>
-
-export type OwnProps = Pick<ISideContentProps, 'tabs'>
-
-export type StateProps = Pick<ISideContentProps, 'activeTab'>
+export type StateProps = {
+  activeTab: number
+}
 
 export type SideContentTab = {
   label: string
@@ -19,7 +21,7 @@ export type SideContentTab = {
   body: JSX.Element
 }
 
-class SideContent extends React.Component<ISideContentProps, {}> {
+class SideContent extends React.Component<SideContentProps, {}> {
   public render() {
     return (
       <div className="side-content">
