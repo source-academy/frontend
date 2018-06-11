@@ -9,7 +9,7 @@ import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
 
-type WorkspaceProps = DispatchProps & StateProps & OwnProps
+type WorkspaceProps = DispatchProps & OwnProps & StateProps 
 
 export type DispatchProps = {
   changeChapter: (newChapter: number) => void
