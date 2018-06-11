@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
+import Academy from '../containers/academy'
 import Announcements from '../containers/AnnouncementsContainer'
 import Login from '../containers/LoginContainer'
 import Playground from '../containers/PlaygroundContainer'
-import Academy from './academy'
 import Admin from './admin'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'

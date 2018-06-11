@@ -1,18 +1,23 @@
+import * as qs from 'query-string'
 import * as React from 'react'
-import { Redirect, Route, Switch } from 'react-router'
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import MissionsContainer from '../../containers/academy/MissionsContainer'
 import Game from '../../containers/GameContainer'
 import AcademyNavigationBar from './NavigationBar'
 
-type AcademyProps = StateProps
+interface IAcademyProps extends IDispatchProps, RouteComponentProps<{}>, IStateProps {}
 
-export type StateProps = {
+export interface IDispatchProps {
+  changeToken: (token: string) => void
+  fetchUsername: () => void
+}
+
+export interface IStateProps {
   token?: string
 }
 
-// export class Academy extends React.Component<AcademyProps, {}> {
-export const Academy: React.SFC<AcademyProps> = props => (
+export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
     <AcademyNavigationBar />
     <Switch>
@@ -28,8 +33,18 @@ export const Academy: React.SFC<AcademyProps> = props => (
   </div>
 )
 
-const checkLoggedIn = (props: AcademyProps) =>
-  props.token === undefined ? <Route component={redirectToLogin} /> : undefined
+const checkLoggedIn = (props: IAcademyProps) => {
+  const token = qs.parse(props.location.search).token
+  if (token !== undefined) {
+    props.changeToken(token) // just received a callback from IVLE
+    props.fetchUsername()
+    return
+  } else if (props.token === undefined) {
+    return <Route component={redirectToLogin} />
+  } else {
+    return
+  }
+}
 
 const redirectTo404 = () => <Redirect to="/404" />
 

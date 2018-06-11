@@ -7,8 +7,8 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
-import { history } from '../utils/history'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
+import { IVLE_API_KEY } from '../utils/secrets'
 
 function* mainSaga() {
   yield* interpreterSaga()
@@ -50,8 +50,21 @@ function* interpreterSaga(): SagaIterator {
 
 function* loginSaga(): SagaIterator {
   yield takeEvery(actionTypes.LOGIN, function*() {
-    yield put(actions.changeToken('TODO'))
-    history.push('/academy')
+    const apiLogin = 'https://ivle.nus.edu.sg/api/login/'
+    const key = IVLE_API_KEY
+    const callback = `${window.location.protocol}//${window.location.hostname}/academy`
+    window.location.href = `${apiLogin}?apikey=${key}&url=${callback}`
+    yield undefined
+  })
+
+  yield takeEvery(actionTypes.FETCH_USERNAME, function*() {
+    const apiUsername = 'https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get'
+    const key = IVLE_API_KEY
+    const token = yield select((state: IState) => state.session.token)
+    const username = yield call(() =>
+      fetch(`${apiUsername}?APIKey=${key}&Token=${token}`).then(response => response.json())
+    )
+    yield put(actions.setUsername(username))
   })
 }
 
