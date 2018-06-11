@@ -4,9 +4,8 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
-import AssessmentContainer, {
-  OwnProps as AssessmentProps
-} from '../../containers/AssessmentContainer'
+import AssessmentContainer from '../../containers/AssessmentContainer'
+import { OwnProps as AssessmentProps } from '../Assessment'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export type MissionInfo = {

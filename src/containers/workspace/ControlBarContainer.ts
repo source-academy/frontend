@@ -9,19 +9,12 @@ import {
   evalRepl,
   generateLzString
 } from '../../actions/playground'
-import ControlBar, { DispatchProps, StateProps } from '../../components/workspace/ControlBar'
+import ControlBar, {
+  DispatchProps,
+  OwnProps,
+  StateProps
+} from '../../components/workspace/ControlBar'
 import { IState } from '../../reducers/states'
-
-export type OwnProps = {
-  hasChapterSelect?: boolean
-  hasNextButton?: boolean
-  hasPreviousButton?: boolean
-  hasSaveButton?: boolean
-  hasShareButton?: boolean
-  onClickNext?(): any
-  onClickPrevious?(): any
-  onClickSave?(): any
-}
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => ({
   ...props,

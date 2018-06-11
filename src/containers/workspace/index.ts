@@ -8,9 +8,7 @@ import {
   updateEditorValue
 } from '../../actions/playground'
 import Workspace, { DispatchProps, StateProps } from '../../components/workspace/'
-import { SideContentTab } from '../../components/workspace/side-content'
 import { IState } from '../../reducers/states'
-import { OwnProps as ControlBarOwnProps } from './ControlBarContainer'
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component

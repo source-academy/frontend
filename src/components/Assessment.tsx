@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import Workspace from '../containers/workspace'
-import { OwnProps as ControlBarOwnProps } from '../containers/workspace/ControlBarContainer'
+import { OwnProps as ControlBarOwnProps } from './workspace/ControlBar'
 import { SideContentTab } from './workspace/side-content'
 
 export type AssessmentInfo = {
@@ -23,7 +23,6 @@ export type OwnProps = { missionId: number }
 export type DispatchProps = {
   handleAssessmentInfoFetch: (missionId: number) => void
 }
-
 
 class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
   public state = { showOverlay: true }

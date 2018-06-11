@@ -4,7 +4,6 @@ import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 
-import { OwnProps } from '../../containers/workspace/ControlBarContainer'
 import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
@@ -17,6 +16,17 @@ export type DispatchProps = {
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
+}
+
+export type OwnProps = {
+  hasChapterSelect?: boolean
+  hasNextButton?: boolean
+  hasPreviousButton?: boolean
+  hasSaveButton?: boolean
+  hasShareButton?: boolean
+  onClickNext?(): any
+  onClickPrevious?(): any
+  onClickSave?(): any
 }
 
 export type StateProps = {

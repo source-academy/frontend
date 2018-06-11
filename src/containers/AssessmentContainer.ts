@@ -2,10 +2,10 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchAssessment } from '../actions/session'
-import Assessment, { DispatchProps, StateProps } from '../components/Assessment'
+import Assessment, { DispatchProps, OwnProps, StateProps } from '../components/Assessment'
 import { IState } from '../reducers/states'
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     assessmentInfo:
       state.session.assessmentInfos === undefined
