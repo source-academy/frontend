@@ -1,6 +1,6 @@
 import { Reducer } from 'redux'
 
-import { CHANGE_TOKEN, CHANGE_USERNAME, IAction } from '../actions/actionTypes'
+import { CHANGE_TOKEN, IAction, SET_USERNAME } from '../actions/actionTypes'
 import { defaultSession, ISessionState } from './states'
 
 export const reducer: Reducer<ISessionState> = (state = defaultSession, action: IAction) => {
@@ -10,7 +10,7 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
         ...state,
         token: action.payload
       }
-    case CHANGE_USERNAME:
+    case SET_USERNAME:
       return {
         ...state,
         username: action.payload

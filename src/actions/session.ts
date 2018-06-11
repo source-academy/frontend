@@ -6,11 +6,6 @@ export const changeToken: ActionCreator<actionTypes.IAction> = (token: string) =
   payload: token
 })
 
-export const changeUsername: ActionCreator<actionTypes.IAction> = (username: string) => ({
-  type: actionTypes.CHANGE_USERNAME,
-  payload: username
-})
-
 export const fetchAnnouncements = () => ({
   type: actionTypes.FETCH_ANNOUNCEMENTS
 })
@@ -19,10 +14,15 @@ export const fetchMissionsInfo = () => ({
   type: actionTypes.FETCH_MISSIONS_INFO
 })
 
+export const fetchUsername = () => ({
+  type: actionTypes.FETCH_USERNAME
+})
+
 export const login = () => ({
   type: actionTypes.LOGIN
 })
 
-export const startChangeUsername = () => ({
-  type: actionTypes.START_CHANGE_USERNAME
+export const setUsername: ActionCreator<actionTypes.IAction> = (username: string) => ({
+  type: actionTypes.SET_USERNAME,
+  payload: username
 })

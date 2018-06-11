@@ -2,14 +2,14 @@ import { connect, MapDispatchToProps } from 'react-redux'
 import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { changeToken, startChangeUsername } from '../actions/session'
+import { changeToken, fetchUsername } from '../actions/session'
 import Academy, { IDispatchProps } from '../components/academy'
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
       changeToken,
-      startChangeUsername
+      fetchUsername
     },
     dispatch
   )
