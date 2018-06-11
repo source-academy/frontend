@@ -1,4 +1,4 @@
-import { Button, Card, Dialog, NonIdealState, Spinner } from '@blueprintjs/core'
+import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
@@ -38,7 +38,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         />
       )
     }
-    const briefing = <> ({this.props.assessmentInfo.longSummary}) </>
+    const briefing = <Text> {this.props.assessmentInfo.longSummary} </Text>
     const overlay = (
       <Dialog
         className="mission-briefing"
