@@ -12,6 +12,8 @@ export type AssessmentInfo = {
   studentBriefed: boolean
 }
 
+export type AssessmentProps = DispatchProps & StateProps
+
 export type StateProps = {
   missionId: number
   assessmentInfo?: AssessmentInfo
@@ -21,7 +23,6 @@ export type DispatchProps = {
   handleAssessmentInfoFetch: (missionId: number) => void
 }
 
-export type AssessmentProps = StateProps & DispatchProps
 
 class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
   public state = { showOverlay: true }
