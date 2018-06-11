@@ -2,6 +2,7 @@ import { Button, Card, Icon, Intent, NonIdealState, Spinner, Text } from '@bluep
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
+import { NavLink } from 'react-router-dom'
 
 import AssessmentContainer, {
   OwnProps as AssessmentProps
@@ -9,6 +10,7 @@ import AssessmentContainer, {
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export type MissionInfo = {
+  id: number
   title: string
   description: string
 }
@@ -87,14 +89,16 @@ export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
               </Text>
             </div>
             <div className="col-xs">
-              <Button
-                className="mission-info-skip-button"
-                minimal={true}
-                intent={Intent.PRIMARY}
-                icon={IconNames.FLAME}
-              >
-                Skip Story & Attempt
-              </Button>
+              <NavLink to={'/academy/missions/' + mission.id.toString()}>
+                <Button
+                  className="mission-info-skip-button"
+                  minimal={true}
+                  intent={Intent.PRIMARY}
+                  icon={IconNames.FLAME}
+                >
+                  Skip Story & Attempt
+                </Button>
+              </NavLink>
             </div>
           </div>
         </div>

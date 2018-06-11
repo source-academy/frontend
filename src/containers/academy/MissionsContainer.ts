@@ -1,4 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
+import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchMissionsInfo } from '../../actions/session'
@@ -19,4 +20,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(Missions)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Missions))
