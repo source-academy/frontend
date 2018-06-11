@@ -89,7 +89,7 @@ export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
               </Text>
             </div>
             <div className="col-xs">
-              <NavLink to={'/academy/missions/' + mission.id.toString()}>
+              <NavLink to={`/academy/missions/${mission.id.toString()}`}>
                 <Button
                   className="mission-info-skip-button"
                   minimal={true}
