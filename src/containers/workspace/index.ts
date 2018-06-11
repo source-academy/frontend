@@ -7,8 +7,17 @@ import {
   changeSideContentHeight,
   updateEditorValue
 } from '../../actions/playground'
-import Workspace, { DispatchProps, OwnProps, StateProps } from '../../components/workspace/'
+import Workspace, { DispatchProps, StateProps } from '../../components/workspace/'
+import { OwnProps as ControlBarOwnProps } from '../../components/workspace/ControlBar'
+import { SideContentTab } from '../../components/workspace/side-content'
 import { IState } from '../../reducers/states'
+
+export type OwnProps = {
+  controlBarOptions?: ControlBarOwnProps
+  libQuery?: number
+  sideContentTabs: SideContentTab[]
+  prgrmQuery?: string
+}
 
 /** Provides the editorValue of the `IPlaygroundState` of the `IState` as a
  * `StateProps` to the Playground component
@@ -32,4 +41,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(Workspace)
+export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(
+  Workspace
+)

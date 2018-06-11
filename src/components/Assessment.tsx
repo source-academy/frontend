@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import Workspace from '../containers/workspace'
+import { OwnProps as ControlBarOwnProps } from './workspace/ControlBar'
 import { SideContentTab } from './workspace/side-content'
 
 export type AssessmentInfo = {
@@ -51,10 +52,17 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       icon: IconNames.BRIEFCASE,
       body: briefing
     }
+    const controlBarOptions: ControlBarOwnProps = {
+      hasChapterSelect: false,
+      hasNextButton: true,
+      hasPreviousButton: true,
+      hasSaveButton: true,
+      hasShareButton: false
+    }
     return (
       <div className="Assessment pt-dark">
         {overlay}
-        <Workspace sideContentTabs={[briefingTab]} />
+        <Workspace controlBarOptions={controlBarOptions} sideContentTabs={[briefingTab]} />
       </div>
     )
   }

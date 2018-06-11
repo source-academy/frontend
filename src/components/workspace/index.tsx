@@ -10,7 +10,7 @@ import SideContent from '../../containers/workspace/SideContentContainer'
 import { OwnProps as ControlBarOwnProps } from './ControlBar'
 import { SideContentTab } from './side-content'
 
-type WorkspaceProps = DispatchProps & OwnProps & StateProps
+type WorkspaceProps = DispatchProps & StateProps
 
 export type DispatchProps = {
   changeChapter: (newChapter: number) => void
@@ -19,16 +19,13 @@ export type DispatchProps = {
   updateEditorValue: (newEditorValue: string) => void
 }
 
-export type OwnProps = {
-  controlBarOptions?: ControlBarOwnProps
-  libQuery?: number
-  sideContentTabs: SideContentTab[]
-  prgrmQuery?: string
-}
-
 export type StateProps = {
+  controlBarOptions?: ControlBarOwnProps
   editorWidth: string
+  libQuery?: number
+  prgrmQuery?: string
   sideContentHeight?: number
+  sideContentTabs: SideContentTab[]
 }
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
