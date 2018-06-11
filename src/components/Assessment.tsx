@@ -29,7 +29,13 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
   public render() {
     if (this.props.assessmentInfo === undefined) {
       this.props.handleAssessmentInfoFetch(this.props.missionId)
-      return <NonIdealState description="Getting mission ready..." visual={<Spinner />} />
+      return (
+        <NonIdealState
+          className="Assessment pt-dark"
+          description="Getting mission ready..."
+          visual={<Spinner large={true} />}
+        />
+      )
     }
     const briefing = <> ({this.props.assessmentInfo.longSummary}) </>
     const overlay = (

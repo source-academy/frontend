@@ -145,6 +145,12 @@ export const defaultSession: ISessionState = {
       title: 'An Odessey to Runes',
       description:
         'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in'
+    },
+    {
+      id: 1,
+      title: 'The Secret to Streams',
+      description:
+        'Once upon a time, () => { Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in }'
     }
   ],
   username: undefined,
