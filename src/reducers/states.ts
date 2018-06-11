@@ -27,6 +27,7 @@ export interface IPlaygroundState {
   readonly editorValue: string
   readonly editorWidth: string
   readonly isRunning: boolean
+  readonly queryString?: string
   readonly output: InterpreterOutput[]
   readonly replValue: string
   readonly sourceChapter: number

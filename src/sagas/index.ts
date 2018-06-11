@@ -1,3 +1,5 @@
+import { compressToEncodedURIComponent } from 'lz-string'
+import * as qs from 'query-string'
 import { SagaIterator } from 'redux-saga'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
@@ -9,15 +11,9 @@ import { history } from '../utils/history'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 
 function* mainSaga() {
-  yield* loginSaga()
   yield* interpreterSaga()
-}
-
-function* loginSaga(): SagaIterator {
-  yield takeEvery(actionTypes.LOGIN, function*() {
-    yield put(actions.changeToken('TODO'))
-    history.push('/academy')
-  })
+  yield* loginSaga()
+  yield* workspaceSaga()
 }
 
 function* interpreterSaga(): SagaIterator {
@@ -49,6 +45,28 @@ function* interpreterSaga(): SagaIterator {
       yield put(actions.clearReplOutput())
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
+  })
+}
+
+function* loginSaga(): SagaIterator {
+  yield takeEvery(actionTypes.LOGIN, function*() {
+    yield put(actions.changeToken('TODO'))
+    history.push('/academy')
+  })
+}
+
+function* workspaceSaga(): SagaIterator {
+  yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
+    const code = yield select((state: IState) => state.playground.editorValue)
+    const lib = yield select((state: IState) => state.playground.sourceChapter)
+    const newQueryString =
+      code === ''
+        ? undefined
+        : qs.stringify({
+            prgrm: compressToEncodedURIComponent(code),
+            lib
+          })
+    yield put(actions.changeQueryString(newQueryString))
   })
 }
 

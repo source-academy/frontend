@@ -221,11 +221,6 @@ Object {
 }
 `;
 
-exports[`Inifinite recursion with different args represents CallExpression well 1`] = `
-"Line 2: Infinite recursion
-  f(1264)..  f(1265)..  f(1266).."
-`;
-
 exports[`Inifinite recursion with list args represents CallExpression well 1`] = `
 "Line 2: Infinite recursion
   f([1, [2, []]])..  f([1, [2, []]])..  f([1, [2, []]]).."

@@ -82,38 +82,52 @@ test('parseError for missing semicolon', () => {
   })
 })
 
-test('Simple inifinite recursion represents CallExpression well', () => {
-  const code = '(x => x(x))(x => x(x));'
-  const context = mockContext()
-  const promise = runInContext(code, context)
-  return promise.then(obj => {
-    const errors = parseError(context.errors)
-    expect(errors).toMatchSnapshot()
-  })
-})
+test(
+  'Simple inifinite recursion represents CallExpression well',
+  () => {
+    const code = '(x => x(x))(x => x(x));'
+    const context = mockContext()
+    const promise = runInContext(code, context)
+    return promise.then(obj => {
+      const errors = parseError(context.errors)
+      expect(errors).toMatchSnapshot()
+    })
+  },
+  30000
+)
 
-test('Inifinite recursion with list args represents CallExpression well', () => {
-  const code = `
+test(
+  'Inifinite recursion with list args represents CallExpression well',
+  () => {
+    const code = `
     const f = xs => f(xs);
     f(list(1, 2 ));
   `
-  const context = mockContext(2)
-  const promise = runInContext(code, context)
-  return promise.then(obj => {
-    const errors = parseError(context.errors)
-    expect(errors).toMatchSnapshot()
-  })
-})
+    const context = mockContext(2)
+    const promise = runInContext(code, context)
+    return promise.then(obj => {
+      const errors = parseError(context.errors)
+      expect(errors).toMatchSnapshot()
+    })
+  },
+  30000
+)
 
-test('Inifinite recursion with different args represents CallExpression well', () => {
-  const code = `
+test(
+  'Inifinite recursion with different args represents CallExpression well',
+  () => {
+    const code = `
     const f = i => f(i+1);
     f(0);
   `
-  const context = mockContext()
-  const promise = runInContext(code, context)
-  return promise.then(obj => {
-    const errors = parseError(context.errors)
-    expect(errors).toMatchSnapshot()
-  })
-})
+    const context = mockContext()
+    const promise = runInContext(code, context)
+    return promise.then(obj => {
+      const errors = parseError(context.errors)
+      expect(errors).toEqual(
+        expect.stringMatching(/^Line 2: Infinite recursion\n\ *(f\(\d*\)[^f]{2,4}){3}/)
+      )
+    })
+  },
+  30000
+)

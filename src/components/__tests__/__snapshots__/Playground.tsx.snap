@@ -2,6 +2,6 @@
 
 exports[`Playground renders correctly 1`] = `
 "<HotKeys className=\\"Playground pt-dark\\" keyMap={{...}}>
-  <Connect(Workspace) sideContentTabs={{...}} />
+  <Connect(Workspace) libQuery={[undefined]} prgrmQuery={[undefined]} sideContentTabs={{...}} />
 </HotKeys>"
 `;

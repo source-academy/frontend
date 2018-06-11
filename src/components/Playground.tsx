@@ -1,17 +1,38 @@
 import { Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
+import * as qs from 'query-string'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
+import { RouteComponentProps } from 'react-router'
 
 import WorkspaceContainer from '../containers/workspace'
+import { sourceChapters } from '../reducers/states'
 import { SideContentTab } from './workspace/side-content'
 
-const Playground: React.SFC<{}> = () => {
+export type PlaygroundProps = RouteComponentProps<{}>
+
+const Playground: React.SFC<PlaygroundProps> = props => {
   return (
     <HotKeys className="Playground pt-dark" keyMap={keyMap}>
-      <WorkspaceContainer sideContentTabs={[playgroundIntroduction]} />
+      <WorkspaceContainer
+        libQuery={parseLibrary(props)}
+        prgrmQuery={parsePrgrm(props)}
+        sideContentTabs={[playgroundIntroduction]}
+      />
     </HotKeys>
   )
+}
+
+const parsePrgrm = (props: PlaygroundProps) => {
+  const qsParsed = qs.parse(props.location.hash)
+  // legacy support
+  return qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm
+}
+
+const parseLibrary = (props: PlaygroundProps) => {
+  const libQuery = qs.parse(props.location.hash).lib
+  const lib = libQuery === undefined ? NaN : parseInt(libQuery, 10)
+  return sourceChapters.includes(lib) ? lib : undefined
 }
 
 const keyMap = {

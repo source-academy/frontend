@@ -6,9 +6,9 @@ export const changeActiveTab: ActionCreator<actionTypes.IAction> = (activeTab: n
   payload: activeTab
 })
 
-export const updateEditorValue: ActionCreator<actionTypes.IAction> = (newEditorValue: string) => ({
-  type: actionTypes.UPDATE_EDITOR_VALUE,
-  payload: newEditorValue
+export const changeChapter: ActionCreator<actionTypes.IAction> = (newChapter: number) => ({
+  type: actionTypes.CHANGE_CHAPTER,
+  payload: newChapter
 })
 
 export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (widthChange: string) => ({
@@ -16,9 +16,48 @@ export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (widthChang
   payload: widthChange
 })
 
+export const changeQueryString: ActionCreator<actionTypes.IAction> = (queryString: string) => ({
+  type: actionTypes.CHANGE_QUERY_STRING,
+  payload: queryString
+})
+
 export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (height: number) => ({
   type: actionTypes.CHANGE_SIDE_CONTENT_HEIGHT,
   payload: height
+})
+
+export const chapterSelect: ActionCreator<actionTypes.IAction> = (chapter, changeEvent) => ({
+  type: actionTypes.CHAPTER_SELECT,
+  payload: chapter.chapter
+})
+
+export const clearContext = () => ({
+  type: actionTypes.CLEAR_CONTEXT
+})
+
+export const clearReplInput = () => ({
+  type: actionTypes.CLEAR_REPL_INPUT
+})
+
+export const clearReplOutput = () => ({
+  type: actionTypes.CLEAR_REPL_OUTPUT
+})
+
+export const evalEditor = () => ({
+  type: actionTypes.EVAL_EDITOR
+})
+
+export const evalRepl = () => ({
+  type: actionTypes.EVAL_REPL
+})
+
+export const generateLzString = () => ({
+  type: actionTypes.GENERATE_LZ_STRING
+})
+
+export const updateEditorValue: ActionCreator<actionTypes.IAction> = (newEditorValue: string) => ({
+  type: actionTypes.UPDATE_EDITOR_VALUE,
+  payload: newEditorValue
 })
 
 export const updateReplValue: ActionCreator<actionTypes.IAction> = (newReplValue: string) => ({
@@ -32,34 +71,4 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (newOut
     type: 'code',
     value: newOutput
   }
-})
-
-export const chapterSelect: ActionCreator<actionTypes.IAction> = (chapter, changeEvent) => ({
-  type: actionTypes.CHAPTER_SELECT,
-  payload: chapter.chapter
-})
-
-export const changeChapter: ActionCreator<actionTypes.IAction> = (newChapter: number) => ({
-  type: actionTypes.CHANGE_CHAPTER,
-  payload: newChapter
-})
-
-export const evalEditor = () => ({
-  type: actionTypes.EVAL_EDITOR
-})
-
-export const evalRepl = () => ({
-  type: actionTypes.EVAL_REPL
-})
-
-export const clearReplInput = () => ({
-  type: actionTypes.CLEAR_REPL_INPUT
-})
-
-export const clearReplOutput = () => ({
-  type: actionTypes.CLEAR_REPL_OUTPUT
-})
-
-export const clearContext = () => ({
-  type: actionTypes.CLEAR_CONTEXT
 })

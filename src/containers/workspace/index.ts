@@ -1,7 +1,12 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { changeEditorWidth, changeSideContentHeight } from '../../actions/playground'
+import {
+  changeChapter,
+  changeEditorWidth,
+  changeSideContentHeight,
+  updateEditorValue
+} from '../../actions/playground'
 import Workspace, { DispatchProps, OwnProps, StateProps } from '../../components/workspace/'
 import { IState } from '../../reducers/states'
 
@@ -19,8 +24,10 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
+      changeChapter,
       handleEditorWidthChange: changeEditorWidth,
-      handleSideContentHeightChange: changeSideContentHeight
+      handleSideContentHeightChange: changeSideContentHeight,
+      updateEditorValue
     },
     dispatch
   )

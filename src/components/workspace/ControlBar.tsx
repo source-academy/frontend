@@ -1,7 +1,8 @@
-import { Button, MenuItem, Tooltip } from '@blueprintjs/core'
+import { Button, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
+import * as CopyToClipboard from 'react-copy-to-clipboard'
 
 import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
@@ -11,6 +12,7 @@ type ControlBarProps = DispatchProps & OwnProps & StateProps
 export type DispatchProps = {
   handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
+  handleGenerateLz: () => void
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
@@ -21,6 +23,7 @@ export type OwnProps = {
   hasNextButton?: boolean
   hasPreviousButton?: boolean
   hasSaveButton?: boolean
+  hasShareButton?: boolean
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
@@ -28,6 +31,7 @@ export type OwnProps = {
 
 export type StateProps = {
   isRunning: boolean
+  queryString?: string
   sourceChapter: number
 }
 
@@ -42,9 +46,17 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasNextButton: false,
     hasPreviousButton: false,
     hasSaveButton: false,
+    hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
     onClickSave: () => {}
+  }
+
+  private shareInputElem: HTMLInputElement
+
+  constructor(props: ControlBarProps) {
+    super(props)
+    this.selectShareInputText = this.selectShareInputText.bind(this)
   }
 
   public render() {
@@ -67,12 +79,41 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     const saveButton = this.props.hasSaveButton
       ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
       : undefined
+    const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
+      this.props.queryString
+    }`
+    const shareButton = this.props.hasShareButton ? (
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+        {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
+        {this.props.queryString === undefined ? (
+          <Text>
+            Share your programs! Type something into the editor (left), then click on this button
+            again.
+          </Text>
+        ) : (
+          <>
+            <input
+              defaultValue={shareUrl}
+              readOnly={true}
+              ref={e => (this.shareInputElem = e!)}
+              onFocus={this.selectShareInputText}
+            />
+            <CopyToClipboard text={shareUrl}>
+              {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
+            </CopyToClipboard>
+          </>
+        )}
+      </Popover>
+    ) : (
+      undefined
+    )
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
-        {this.props.isRunning ? stopButton : runButton} {saveButton} {chapterSelectButton}
+        {this.props.isRunning ? stopButton : runButton} {saveButton}
+        {shareButton} {chapterSelectButton}
       </div>
     )
   }
@@ -103,6 +144,11 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
         {this.props.isRunning ? null : evalButton} {clearButton}
       </div>
     )
+  }
+
+  private selectShareInputText() {
+    this.shareInputElem.focus()
+    this.shareInputElem.select()
   }
 }
 

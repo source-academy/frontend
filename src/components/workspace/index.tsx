@@ -1,3 +1,4 @@
+import { decompressFromEncodedURIComponent } from 'lz-string'
 import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
@@ -12,13 +13,17 @@ import { SideContentTab } from './side-content'
 type WorkspaceProps = DispatchProps & OwnProps & StateProps
 
 export type DispatchProps = {
+  changeChapter: (newChapter: number) => void
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
+  updateEditorValue: (newEditorValue: string) => void
 }
 
 export type OwnProps = {
   controlBarOptions?: ControlBarOwnProps
+  libQuery?: number
   sideContentTabs: SideContentTab[]
+  prgrmQuery?: string
 }
 
 export type StateProps = {
@@ -33,7 +38,18 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private sideDividerDiv: HTMLDivElement
 
   public componentDidMount() {
+    this.componentDidUpdate()
     this.maxDividerHeight = this.sideDividerDiv.clientHeight
+  }
+
+  public componentDidUpdate() {
+    if (this.props.prgrmQuery !== undefined) {
+      const prgrmParsed = decompressFromEncodedURIComponent(this.props.prgrmQuery)
+      this.props.updateEditorValue(prgrmParsed)
+    }
+    if (this.props.libQuery !== undefined) {
+      this.props.changeChapter(this.props.libQuery)
+    }
   }
 
   /**
@@ -47,20 +63,14 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       <HotKeys className="workspace" handlers={handlers}>
         <ControlBarContainer {...this.props.controlBarOptions} />
         <div className="row workspace-parent">
-          <div
-            className="editor-divider"
-            ref={e => (this.editorDividerDiv = e as HTMLDivElement)}
-          />
+          <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
           <Resizable {...this.editorResizableProps()}>
             <EditorContainer />
           </Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
               <SideContent {...{ tabs: this.props.sideContentTabs }} />
-              <div
-                className="side-content-divider"
-                ref={e => (this.sideDividerDiv = e as HTMLDivElement)}
-              />
+              <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
             </Resizable>
             <ReplContainer />
           </div>

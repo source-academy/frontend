@@ -10,7 +10,7 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/news\\" component={[Function: Connect]} />
       <Route path=\\"/admin\\" component={[Function: toAdmin]} />
       <Route path=\\"/material\\" component={[Function: Connect]} />
-      <Route path=\\"/playground\\" component={[Function: Playground]} />
+      <Route path=\\"/playground\\" component={[Function: C]} />
       <Route path=\\"/status\\" component={[Function: Connect]} />
       <Route path=\\"/login\\" component={[Function: Connect]} />
       <Route exact={true} path=\\"/\\" component={[Function: redirectToNews]} />
