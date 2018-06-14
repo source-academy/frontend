@@ -4,7 +4,7 @@ export CI=true
 
 main() {
     run_cmd "git stash save --keep-index"
-    echo "  If you cancel this pre-commit hook, use \`git stash pop\` to retrieve your"
+    echo "  If you cancel this pre-push hook, use \`git stash pop\` to retrieve your"
     echo "  unstaged changes."
 
     prettier_ts="yarn prettier --list-different src/**/*.{ts,tsx}"

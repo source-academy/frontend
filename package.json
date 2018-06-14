@@ -24,7 +24,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "yarn format:ci && CI=true yarn test"
+      "pre-push": "bash scripts/test.sh"
     }
   },
   "dependencies": {
