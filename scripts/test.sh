@@ -31,8 +31,11 @@ main() {
 run_cmd() {
     echo_cyan "> $1"
 
-    $1 2>&1 1> /dev/null | sed 's/^/  /'
+    print=$($1 2>&1 1> /dev/null)
     exit_status=$?
+    if [[ ! -z "${print}" ]]; then
+        echo "${print}" | sed 's/^/  /'
+    fi
 
     return "${exit_status}"
 }
@@ -41,8 +44,9 @@ run_cmd_jest() {
     # modified run_cmd for jest, because jest prints all messages to stderr
     echo_cyan "> $1"
 
-    $1 2>&1 1> /dev/null | grep -v PASS | grep -v -E ^$ | sed 's/^/  /'
+    print=$($1 2>&1 1> /dev/null)
     exit_status=$?
+    echo -n "${print}" | grep -v PASS | grep -v -E ^$ | sed 's/^/  /'
 
     return "${exit_status}"
 }
