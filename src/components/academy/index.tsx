@@ -28,6 +28,7 @@ export const Academy: React.SFC<IAcademyProps> = props => (
     <AcademyNavigationBar />
     <Switch>
       {checkLoggedIn(props)}
+      {alreadyInAcademy(props)}
       <Route path="/academy/contests" component={MissionsContainer} />
       <Route path="/academy/game" component={Game} />
       <Route exact={true} path="/academy/missions" component={MissionsContainer} />
