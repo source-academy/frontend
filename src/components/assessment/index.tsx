@@ -2,9 +2,9 @@ import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import Workspace from '../containers/workspace'
-import { OwnProps as ControlBarOwnProps } from './workspace/ControlBar'
-import { SideContentTab } from './workspace/side-content'
+import Workspace from '../../containers/workspace'
+import { OwnProps as ControlBarOwnProps } from '../workspace/ControlBar'
+import { SideContentTab } from '../workspace/side-content'
 
 export type AssessmentInfo = {
   longSummary: string

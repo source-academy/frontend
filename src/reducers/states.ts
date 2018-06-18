@@ -1,6 +1,6 @@
 import { MissionInfo } from '../components/academy/Missions'
 import { Announcement } from '../components/Announcements'
-import { AssessmentInfo } from '../components/Assessment'
+import { AssessmentInfo } from '../components/assessment'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
