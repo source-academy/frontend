@@ -8,11 +8,12 @@ import {
   Store,
   StoreEnhancer
 } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+
 import reducers from './reducers'
 import { IState } from './reducers/states'
-
-import createSagaMiddleware from 'redux-saga'
 import mainSaga from './sagas'
+import { history as appHistory } from './utils/history'
 
 declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>
 
@@ -36,4 +37,4 @@ function createStore(history: History): Store<IState> {
   return createdStore
 }
 
-export default createStore
+export const store = createStore(appHistory) as Store<IState>
