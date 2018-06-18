@@ -17,7 +17,6 @@ function* mainSaga() {
 }
 
 function* interpreterSaga(): SagaIterator {
-  // let library = yield select((state: Shape) => state.config.library)
   let context: Context
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*() {
@@ -53,7 +52,6 @@ function* loginSaga(): SagaIterator {
     const apiLogin = 'https://ivle.nus.edu.sg/api/login/'
     const key = IVLE_KEY
     const callback = `${window.location.protocol}//${window.location.hostname}/academy`
-    alert(`${apiLogin}?apikey=${key}&url=${callback}`)
     window.location.href = `${apiLogin}?apikey=${key}&url=${callback}`
     yield undefined
   })

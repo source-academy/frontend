@@ -4,10 +4,10 @@
 
 1. Install a stable version of Yarn and NodeJS.
 2. Run `yarn` to install dependencies.
-3. Set the environment variable `REACT_APP_IVLE_KEY` to contain your IVLE Lapi
-   key.
-4. Run desired script in `package.json`. `yarn start` starts the development
-   server.
+3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_IVLE_KEY`
+   to contain your IVLE Lapi key.
+4. Run `yarn start` to start the server at `localhost:80`. Admin permissions may
+   be required for your OS to serve at port 80.
 
 ## Application Structure
 
