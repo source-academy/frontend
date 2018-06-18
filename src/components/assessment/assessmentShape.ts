@@ -56,22 +56,24 @@ type AssessmentCategory = 'Mission' | 'Sidequest' | 'Path' | 'Contest'
 
 export interface IProgrammingQuestion extends IQuestion {
   type: 'programming'
+  solutionTemplate: string
+  library: Library
 }
+
 export interface IMCQQuestion extends IQuestion {
   type: 'mcq'
+  choices?: MCQChoice[]
+}
+
+export interface IQuestion {
+  id: number
+  content: string
+  type: QuestionType
 }
 
 type MCQChoice = {
   hint: string
   content: string
-}
-export interface IQuestion {
-  id: number
-  solutionTemplate?: string
-  library?: Library
-  content: string
-  type: QuestionType
-  choices?: MCQChoice[]
 }
 
 /* The two kinds of Questions available */

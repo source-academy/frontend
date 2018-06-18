@@ -1,7 +1,8 @@
 import {
   IAssessment,
   IAssessmentOverview,
-  IQuestion,
+  IMCQQuestion,
+  IProgrammingQuestion,
   Library
 } from '../components/assessment/assessmentShape'
 
@@ -83,7 +84,7 @@ const mockLibrary: Library = {
   chapter: 1
 }
 
-export const mockAssessmentQuestions: IQuestion[] = [
+export const mockAssessmentQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
   {
     type: 'programming',
     solutionTemplate: '0th question mock solution template',
