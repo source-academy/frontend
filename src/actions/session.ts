@@ -12,7 +12,7 @@ export const fetchAnnouncements = () => ({
 
 export const fetchAssessment = (missionId: number) => ({
   type: actionTypes.FETCH_ASSESSMENT,
-  paylod: missionId
+  payload: missionId
 })
 
 export const fetchMissionsInfo = () => ({
@@ -30,4 +30,9 @@ export const login = () => ({
 export const setUsername: ActionCreator<actionTypes.IAction> = (username: string) => ({
   type: actionTypes.SET_USERNAME,
   payload: username
+})
+
+export const updateHistoryHelpers: ActionCreator<actionTypes.IAction>  = (loc: string) => ({
+  type: actionTypes.UPDATE_HISTORY_HELPERS,
+  payload: loc
 })

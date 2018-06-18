@@ -2,6 +2,8 @@
  * would otherwise throw an error. See: https://stackoverflow.com/a/42611909/6910451
  */
 import { createBrowserHistory } from 'history'
+import { updateHistoryHelpers } from '../actions/session'
+import { store } from '../createStore'
 
 /**
  * HistoryHelper is a slice of the session property of the application redux
@@ -21,9 +23,6 @@ export const history = createBrowserHistory()
 
 history.listen((location, action) => {
   // tslint:disable-next-line
-  console.log(
-    `The current URL is ${location.pathname}${location.search}${location.hash}`
-  )
-  // tslint:disable-next-line
-  console.log(`The last navigation action was ${action}`)
+  console.log(`src/utils/history.ts: location.pathname == ${location.pathname}`)
+  store.dispatch(updateHistoryHelpers(location.pathname))
 })

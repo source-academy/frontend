@@ -4,17 +4,22 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import MissionsContainer from '../../containers/academy/MissionsContainer'
 import Game from '../../containers/GameContainer'
+import { HistoryHelper } from '../../utils/history'
 import AcademyNavigationBar from './NavigationBar'
 
-interface IAcademyProps extends IDispatchProps, RouteComponentProps<{}>, IStateProps {}
+interface IAcademyProps extends IDispatchProps, IOwnProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IDispatchProps {
   changeToken: (token: string) => void
   fetchUsername: () => void
 }
 
-export interface IStateProps {
+export interface IOwnProps {
   token?: string
+}
+
+export interface IStateProps {
+  historyHelper: HistoryHelper
 }
 
 export const Academy: React.SFC<IAcademyProps> = props => (
@@ -48,9 +53,10 @@ const checkLoggedIn = (props: IAcademyProps) => {
   }
 }
 
-const alreadyInAcademy = (props: RouteComponentProps<{}>) => {
+const alreadyInAcademy = (props: IStateProps) => {
+  const clickedFrom = props.historyHelper.lastGeneralLocations[0]
   // tslint:disable-next-line
-  console.log("academy:index.tsx")
+  console.log(`Clicked on SOURCE ACADEMY from ${clickedFrom}`)
   return
 }
 
