@@ -83,3 +83,50 @@ const mockClosedAssessments = [
 ]
 
 export const mockAssessmentsResult = [...mockOpenAssessmentsResult, ...mockClosedAssessments]
+
+const mockLibrary = {
+  globals: ['mockLibraryGlobal'],
+  files: ['mockLibraryFile'],
+  externals: ['mockLibraryExternal'],
+  chapter: 1
+}
+
+export const mockAssessmentQuestionsResult = [
+  {
+    type: 'programming',
+    solution_template: '0th question mock solution template',
+    questionId: 0,
+    library: mockLibrary,
+    content: 'Hello and welcome to this assessment! This is the 0th question.'
+  },
+  {
+    type: 'programming',
+    solution_template: '1st question mock solution template',
+    questionId: 1,
+    library: mockLibrary,
+    content: 'Hello and welcome to this assessment! This is the 1st question.'
+  },
+  {
+    type: 'mcq',
+    content:
+      'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
+    choices: [
+      {
+        hint: 'hint A',
+        content: 'A'
+      },
+      {
+        hint: 'hint B',
+        content: 'B'
+      },
+      {
+        hint: 'hint C',
+        content: 'C'
+      },
+      {
+        hint: 'hint D',
+        content: 'D'
+      }
+    ]
+  }
+]
