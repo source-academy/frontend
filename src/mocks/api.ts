@@ -1,112 +1,105 @@
-let i = 0
-const mockId = () => i++
+import {
+  IAssessment,
+  IAssessmentOverview,
+  IQuestion,
+  Library
+} from '../components/assessment/assessmentShape'
 
-export const mockOpenAssessmentsResult = [
+const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {
-    title: 'An Odessey to Runes',
-    summary_short:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    summary_long:
-      'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    category: 'Mission',
+    coverImage: 'www.imgur.com',
+    closeAt: '2048-06-18T05:24:26.026Z',
+    id: 0,
+    maximumEXP: 3000,
+    openAt: '2018-06-18T05:24:26.026Z',
     order: 0,
-    open_at: '2018-06-18T05:24:26.026Z',
-    mission_pdf: 'www.google.com',
-    max_xp: 3000,
-    id: mockId(),
-    cover_picture: 'www.imgur.com',
-    close_at: '2048-06-18T05:24:26.026Z',
-    category: 'mission'
+    shortSummary:
+      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    title: 'An Odessey to Runes'
   },
   {
-    title: 'The Secret to Streams',
-    summary_short:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    summary_long:
-      'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    category: 'Mission',
+    coverImage: 'www.imgur.com',
+    closeAt: '2048-06-18T05:24:26.026Z',
+    id: 1,
+    maximumEXP: 3000,
+    openAt: '2018-07-18T05:24:26.026Z',
     order: 1,
-    open_at: '2018-07-18T05:24:26.026Z',
-    mission_pdf: 'www.google.com',
-    max_xp: 3000,
-    id: mockId(),
-    cover_picture: 'www.imgur.com',
-    close_at: '2048-06-18T05:24:26.026Z',
-    category: 'mission'
+    shortSummary:
+      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    title: 'The Secret to Streams'
   },
   {
-    title: 'A sample Sidequest',
-    summary_short:
+    category: 'Mission',
+    coverImage: 'www.imgur.com',
+    closeAt: '2048-06-18T05:24:26.026Z',
+    id: 2,
+    maximumEXP: 3000,
+    openAt: '2018-07-18T05:24:26.026Z',
+    order: 2,
+    shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    summary_long:
-      'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
-    order: 0,
-    open_at: '2018-07-18T05:24:26.026Z',
-    mission_pdf: 'www.google.com',
-    max_xp: 3000,
-    id: mockId(),
-    cover_picture: 'www.imgur.com',
-    close_at: '2048-06-18T05:24:26.026Z',
-    category: 'sidequest'
+    title: 'A sample Sidequest'
   }
 ]
 
-const mockClosedAssessments = [
+const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
   {
-    title: 'A closed Mission',
-    summary_short:
+    category: 'Mission',
+    coverImage: 'www.imgur.com',
+    closeAt: '2008-06-18T05:24:26.026Z',
+    id: 3,
+    order: 5,
+    openAt: '2007-07-18T05:24:26.026Z',
+    maximumEXP: 3000,
+    shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    summary_long:
-      'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
-    order: 0,
-    open_at: '2007-07-18T05:24:26.026Z',
-    mission_pdf: 'www.google.com',
-    max_xp: 3000,
-    id: mockId(),
-    cover_picture: 'www.imgur.com',
-    close_at: '2008-06-18T05:24:26.026Z',
-    category: 'mission'
+    title: 'A closed Mission'
   },
   {
     title: 'A closed sidequest',
-    summary_short:
+    shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    summary_long:
-      'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
-    order: 0,
-    open_at: '2007-07-18T05:24:26.026Z',
-    mission_pdf: 'www.google.com',
-    max_xp: 3000,
-    id: mockId(),
-    cover_picture: 'www.imgur.com',
-    close_at: '2008-06-18T05:24:26.026Z',
-    category: 'sidequest'
+    order: 4,
+    openAt: '2007-07-18T05:24:26.026Z',
+    maximumEXP: 3000,
+    id: 4,
+    coverImage: 'www.imgur.com',
+    closeAt: '2008-06-18T05:24:26.026Z',
+    category: 'Sidequest'
   }
 ]
 
-export const mockAssessmentsResult = [...mockOpenAssessmentsResult, ...mockClosedAssessments]
+export const mockAssessmentOverviews = [
+  ...mockOpenAssessmentsOverviews,
+  ...mockClosedAssessmentOverviews
+]
 
-const mockLibrary = {
+const mockLibrary: Library = {
   globals: ['mockLibraryGlobal'],
   files: ['mockLibraryFile'],
   externals: ['mockLibraryExternal'],
   chapter: 1
 }
 
-export const mockAssessmentQuestionsResult = [
+export const mockAssessmentQuestions: IQuestion[] = [
   {
     type: 'programming',
-    solution_template: '0th question mock solution template',
-    questionId: 0,
+    solutionTemplate: '0th question mock solution template',
+    id: 0,
     library: mockLibrary,
     content: 'Hello and welcome to this assessment! This is the 0th question.'
   },
   {
     type: 'programming',
-    solution_template: '1st question mock solution template',
-    questionId: 1,
+    solutionTemplate: '1st question mock solution template',
+    id: 1,
     library: mockLibrary,
     content: 'Hello and welcome to this assessment! This is the 1st question.'
   },
   {
+    id: 2,
     type: 'mcq',
     content:
       'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
@@ -128,5 +121,38 @@ export const mockAssessmentQuestionsResult = [
         content: 'D'
       }
     ]
+  }
+]
+
+/*
+ * A few Assessments to try out in workspaces.
+ */
+export const mockAssessments: IAssessment[] = [
+  {
+    title: 'An Odessey to Runes',
+    longSummary:
+      'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    id: 0,
+    category: 'Mission',
+    questions: mockAssessmentQuestions
+  },
+  {
+    title: 'The Secret to Streams',
+    longSummary:
+      'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    id: 1,
+    category: 'Mission',
+    questions: mockAssessmentQuestions
+  },
+  {
+    title: 'A sample Sidequest',
+    longSummary:
+      'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    id: 2,
+    category: 'Sidequest',
+    questions: mockAssessmentQuestions
   }
 ]

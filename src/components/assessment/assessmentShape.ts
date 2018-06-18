@@ -14,15 +14,15 @@ export interface IContestOverview extends IAssessmentOverview {
 /*
  * Used to display information regarding an assessment in the UI.
  */
-interface IAssessmentOverview {
+export interface IAssessmentOverview {
   category: AssessmentCategory
   coverImage: string
-  close_at: Date
+  closeAt: string
   id: number
   maximumEXP: number
-  open_at: Date
+  openAt: string
   order: number
-  summary_short: string
+  shortSummary: string
   title: string
 }
 
@@ -42,12 +42,12 @@ export interface IContest extends IAssessment {
 /*
  * Used when an assessment is being actively attempted/graded.
  */
-interface IAssessment extends IAssessmentOverview {
+export interface IAssessment {
   category: AssessmentCategory
   id: number
   missionPDF: string
-  questions: Question[]
-  summary_long: string
+  questions: IQuestion[]
+  longSummary: string
   title: string
 }
 
@@ -61,18 +61,23 @@ export interface IMCQQuestion extends IQuestion {
   type: 'mcq'
 }
 
-interface IQuestion {
+type MCQChoice = {
+  hint: string
+  content: string
+}
+export interface IQuestion {
   id: number
-  solutionTemplate: string
-  library: Library
+  solutionTemplate?: string
+  library?: Library
   content: string
   type: QuestionType
+  choices?: MCQChoice[]
 }
 
 /* The two kinds of Questions available */
 type QuestionType = 'programming' | 'mcq'
 
-type Library = {
+export type Library = {
   chapter: number
   externals: string[]
   files: string[]
