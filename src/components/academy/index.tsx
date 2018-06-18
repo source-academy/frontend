@@ -4,6 +4,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import MissionsContainer from '../../containers/academy/MissionsContainer'
 import Game from '../../containers/GameContainer'
+import { isAcademyRe } from '../../reducers/session'
 import { HistoryHelper } from '../../utils/history'
 import AcademyNavigationBar from './NavigationBar'
 
@@ -27,14 +28,13 @@ export const Academy: React.SFC<IAcademyProps> = props => (
     <AcademyNavigationBar />
     <Switch>
       {checkLoggedIn(props)}
-      {alreadyInAcademy(props)}
       <Route path="/academy/contests" component={MissionsContainer} />
       <Route path="/academy/game" component={Game} />
       <Route exact={true} path="/academy/missions" component={MissionsContainer} />
       <Route path="/academy/missions/:missionId" component={MissionsContainer} />
       <Route path="/academy/paths" component={MissionsContainer} />
       <Route path="/academy/sidequests" component={MissionsContainer} />
-      <Route exact={true} path="/academy" component={redirectToGame} />
+      <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
       <Route component={redirectTo404} />
     </Switch>
   </div>
@@ -53,11 +53,19 @@ const checkLoggedIn = (props: IAcademyProps) => {
   }
 }
 
-const alreadyInAcademy = (props: IStateProps) => {
+/**
+ * 1. If user is in /academy.*, redirect to game
+ * 2. If not, redirect to the last /acdaemy.* route the user was in
+ * See src/utils/history.ts for more details
+ */
+const dynamicRedirect = (props: IStateProps) => {
   const clickedFrom = props.historyHelper.lastGeneralLocations[0]
-  // tslint:disable-next-line
-  console.log(`Clicked on SOURCE ACADEMY from ${clickedFrom}`)
-  return
+  const lastAcademy = props.historyHelper.lastAcademyLocations[0]
+  if (clickedFrom != null && isAcademyRe.exec(clickedFrom!) == null && lastAcademy != null) {
+    return () => <Redirect to={lastAcademy!} />
+  } else {
+    return redirectToGame
+  }
 }
 
 const redirectTo404 = () => <Redirect to="/404" />

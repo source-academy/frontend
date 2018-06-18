@@ -22,7 +22,5 @@ type lastLocation = string | null
 export const history = createBrowserHistory()
 
 history.listen((location, action) => {
-  // tslint:disable-next-line
-  console.log(`src/utils/history.ts: location.pathname == ${location.pathname}`)
   store.dispatch(updateHistoryHelpers(location.pathname))
 })

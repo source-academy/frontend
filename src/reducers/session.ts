@@ -16,15 +16,12 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
         username: action.payload
       }
     case UPDATE_HISTORY_HELPERS:
-      // /^\/academy.*/i
       const helper = state.historyHelper
       const isAcademy = isAcademyRe.exec(action.payload) != null
       const newAcademyLocations = isAcademy
         ? [helper.lastAcademyLocations[1], action.payload]
         : [...helper.lastAcademyLocations]
       const newGeneralLocations = [helper.lastGeneralLocations[1], action.payload]
-      // tslint:disable-next-line
-      console.log(`src/reducers/sessions.ts: newGeneralLocations == ${newGeneralLocations}`)
       return {
         ...state,
         historyHelper: {
@@ -37,4 +34,4 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
   }
 }
 
-const isAcademyRe = new RegExp('^/academy.*', 'i')
+export const isAcademyRe = new RegExp('^/academy.*', 'i')
