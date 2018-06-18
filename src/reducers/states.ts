@@ -3,6 +3,7 @@ import { Announcement } from '../components/Announcements'
 import { AssessmentInfo } from '../components/Assessment'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
+import { HistoryHelper } from '../utils/history'
 
 export interface IState {
   readonly application: IApplicationState
@@ -37,11 +38,12 @@ export interface IPlaygroundState {
 }
 
 export interface ISessionState {
-  readonly token?: string
   readonly announcements?: Announcement[]
-  readonly missionsInfo?: MissionInfo[]
-  readonly username?: string
   readonly assessmentInfos: AssessmentInfo[]
+  readonly historyHelper: HistoryHelper
+  readonly missionsInfo?: MissionInfo[]
+  readonly token?: string
+  readonly username?: string
 }
 
 /**
@@ -129,7 +131,6 @@ export const defaultPlayground: IPlaygroundState = {
 }
 
 export const defaultSession: ISessionState = {
-  token: undefined,
   announcements: [
     {
       author: 'Aministrator',
@@ -139,6 +140,17 @@ export const defaultSession: ISessionState = {
       pinned: true
     }
   ],
+  assessmentInfos: [
+    {
+      longSummary: 'This is a dummy summary, to be displayed as part of the briefing.',
+      dueDate: '12/12/12',
+      studentBriefed: false
+    }
+  ],
+  historyHelper: {
+    lastAcademyLocations: [null, null],
+    lastGeneralLocations: [null, null]
+  },
   missionsInfo: [
     {
       id: 0,
@@ -153,12 +165,6 @@ export const defaultSession: ISessionState = {
         'Once upon a time, () => { Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in }'
     }
   ],
-  username: undefined,
-  assessmentInfos: [
-    {
-      longSummary: 'This is a dummy summary, to be displayed as part of the briefing.',
-      dueDate: '12/12/12',
-      studentBriefed: false
-    }
-  ]
+  token: undefined,
+  username: undefined
 }

@@ -22,6 +22,7 @@ export const Academy: React.SFC<IAcademyProps> = props => (
     <AcademyNavigationBar />
     <Switch>
       {checkLoggedIn(props)}
+      {alreadyInAcademy(props)}
       <Route path="/academy/contests" component={MissionsContainer} />
       <Route path="/academy/game" component={Game} />
       <Route exact={true} path="/academy/missions" component={MissionsContainer} />
@@ -45,6 +46,12 @@ const checkLoggedIn = (props: IAcademyProps) => {
   } else {
     return
   }
+}
+
+const alreadyInAcademy = (props: RouteComponentProps<{}>) => {
+  // tslint:disable-next-line
+  console.log("academy:index.tsx")
+  return
 }
 
 const redirectTo404 = () => <Redirect to="/404" />
