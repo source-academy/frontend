@@ -1,0 +1,10 @@
+language: node_js
+cache: yarn
+branches:
+  except:
+    - /^no-ci.*$/
+script:
+  - yarn format:ci
+  - yarn build-js
+  - CI=true yarn test
+  - yarn build-css
