@@ -5,19 +5,19 @@ import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
 
 export interface IState {
+  readonly academy: IAcademyState
   readonly application: IApplicationState
-  readonly game: IGameState
   readonly playground: IPlaygroundState
   readonly session: ISessionState
+}
+
+export interface IAcademyState {
+  readonly gameCanvas?: HTMLCanvasElement
 }
 
 export interface IApplicationState {
   readonly title: string
   readonly environment: ApplicationEnvironment
-}
-
-export interface IGameState {
-  readonly canvas?: HTMLCanvasElement
 }
 
 export interface IPlaygroundState extends IWorkspaceState {
@@ -37,11 +37,11 @@ interface IWorkspaceState {
 }
 
 export interface ISessionState {
+  readonly assessmentOverviews?: IAssessmentOverview[]
+  readonly assessments: Map<number, IAssessment>
   readonly announcements?: Announcement[]
   readonly historyHelper: HistoryHelper
   readonly token?: string
-  readonly assessments: Map<number, IAssessment>
-  readonly assessmentOverviews?: IAssessmentOverview[]
   readonly username?: string
 }
 
@@ -111,13 +111,13 @@ const currentEnvironment = (): ApplicationEnvironment => {
   }
 }
 
+export const defaultAcademy: IAcademyState = {
+  gameCanvas: undefined
+}
+
 export const defaultApplication: IApplicationState = {
   title: 'Cadet',
   environment: currentEnvironment()
-}
-
-export const defaultGame: IGameState = {
-  canvas: undefined
 }
 
 export const defaultPlayground: IPlaygroundState = {
