@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { fetchAssessmentOverview } from '../../actions/session'
+import { fetchAssessmentOverviews } from '../../actions/session'
 import Missions, { DispatchProps, StateProps } from '../../components/academy/Missions'
 import {
   IAssessmentOverview,
@@ -21,7 +21,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleAssessmentOverviewFetch: fetchAssessmentOverview
+      handleAssessmentOverviewFetch: fetchAssessmentOverviews
     },
     dispatch
   )
