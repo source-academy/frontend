@@ -16,7 +16,7 @@ export type StateProps = {
 export type OwnProps = { missionId: number }
 
 export type DispatchProps = {
-  handleAssessmentInfoFetch: (missionId: number) => void
+  handleAssessmentFetch: (missionId: number) => void
 }
 
 class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
@@ -24,7 +24,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
 
   public render() {
     if (this.props.assessment === undefined) {
-      this.props.handleAssessmentInfoFetch(this.props.missionId)
+      this.props.handleAssessmentFetch(this.props.missionId)
       return (
         <NonIdealState
           className="Assessment pt-dark"
