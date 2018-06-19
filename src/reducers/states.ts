@@ -1,6 +1,6 @@
 import { Announcement } from '../components/Announcements'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
-import { mockAssessmentOverviews, mockAssessments } from '../mocks/api'
+import { mockAssessments } from '../mocks/api'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
@@ -140,8 +140,8 @@ export const defaultSession: ISessionState = {
       pinned: true
     }
   ],
-  assessmentOverviews: mockAssessmentOverviews,
+  assessmentOverviews: undefined,
   assessments: mockAssessments
   token: undefined,
-  username: undefined,
+  username: undefined
 }

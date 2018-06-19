@@ -19,7 +19,7 @@ function* mainSaga() {
 }
 
 function* apiFetchSaga(): SagaIterator {
-  yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function*(action) {
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function*() {
     const newContent = mockAssessmentOverviews
     const oldContent = yield select((state: IState) => state.session.assessmentOverviews)
     if (newContent !== oldContent) {
