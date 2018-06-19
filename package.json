@@ -19,7 +19,7 @@
     "start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",
     "start": "npm-run-all -p watch-css start-js",
     "test": "react-scripts-ts test --env=jsdom",
-    "test-coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "test-coveralls": "react-scripts-ts test --env=jsdom --coverage --coverageReporters=text-lcov | coveralls",
     "update-ui-snapshots": "jest --updateSnapshot",
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive"
   },
