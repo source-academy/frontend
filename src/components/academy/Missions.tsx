@@ -7,8 +7,6 @@ import { NavLink } from 'react-router-dom'
 import AssessmentContainer from '../../containers/AssessmentContainer'
 import { OwnProps as AssessmentProps } from '../assessment'
 import {
-  AssessmentCategories,
-  AssessmentCategory,
   IAssessmentOverview
 } from '../assessment/assessmentShape'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
@@ -19,7 +17,7 @@ export interface IMissionParams {
 
 export interface IMissionsProps extends RouteComponentProps<IMissionParams> {
   assessmentOverviews?: IAssessmentOverview[]
-  handleAssessmentOverviewFetch: (category: AssessmentCategory) => void
+  handleAssessmentOverviewFetch: () => void
 }
 
 export type StateProps = Pick<IMissionsProps, 'assessmentOverviews'>
@@ -39,8 +37,7 @@ class Missions extends React.Component<IMissionsProps, {}> {
     if (missionIdParam === null) {
       const props: IContentDisplayProps = {
         display: <AssessmentOverviewCard assessmentOverviews={this.props.assessmentOverviews} />,
-        loadContentDispatch: () =>
-          this.props.handleAssessmentOverviewFetch(AssessmentCategories.MISSION)
+        loadContentDispatch: this.props.handleAssessmentOverviewFetch
       }
       return (
         <div className="Missions">

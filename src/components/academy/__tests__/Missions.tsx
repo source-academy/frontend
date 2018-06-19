@@ -4,7 +4,6 @@ import { MemoryRouter } from 'react-router'
 
 import { mockAssessmentOverviews } from '../../../mocks/api'
 import { mockRouterProps } from '../../../mocks/components'
-import { AssessmentCategory } from '../../assessment/assessmentShape'
 import Missions, { IMissionsProps } from '../Missions'
 
 const mockUndefinedMissions: IMissionsProps = {
@@ -15,13 +14,13 @@ const mockUndefinedMissions: IMissionsProps = {
 const mockEmptyMissions: IMissionsProps = {
   ...mockRouterProps('/academy/missions', {}),
   assessmentOverviews: [],
-  handleAssessmentOverviewFetch: (category: AssessmentCategory) => {}
+  handleAssessmentOverviewFetch: () => {}
 }
 
 const mockPresentMissions: IMissionsProps = {
   ...mockRouterProps('/academy/missions', {}),
   assessmentOverviews: mockAssessmentOverviews,
-  handleAssessmentOverviewFetch: (category: AssessmentCategory) => {}
+  handleAssessmentOverviewFetch: () => {}
 }
 
 test('Missions page "loading" content renders correctly', () => {
