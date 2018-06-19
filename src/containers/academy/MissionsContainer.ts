@@ -5,8 +5,8 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { fetchAssessmentOverviews } from '../../actions/session'
 import Missions, { DispatchProps, StateProps } from '../../components/academy/Missions'
 import {
-  IAssessmentOverview,
-  AssessmentCategories
+  AssessmentCategories,
+  IAssessmentOverview
 } from '../../components/assessment/assessmentShape'
 import { IState } from '../../reducers/states'
 

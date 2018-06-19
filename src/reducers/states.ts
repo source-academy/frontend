@@ -1,6 +1,6 @@
 import { Announcement } from '../components/Announcements'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
-import { mockAssessments, mockAssessmentOverviews } from '../mocks/api'
+import { mockAssessmentOverviews, mockAssessments } from '../mocks/api'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'

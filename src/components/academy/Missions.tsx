@@ -56,11 +56,11 @@ class Missions extends React.Component<IMissionsProps, {}> {
   }
 }
 
-interface AssessmentOverviewCardProps {
+interface IAssessmentOverviewCardProps {
   assessmentOverviews?: IAssessmentOverview[]
 }
 
-export const AssessmentOverviewCard: React.SFC<AssessmentOverviewCardProps> = props => {
+export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = props => {
   if (props.assessmentOverviews === undefined) {
     return <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
   } else if (props.assessmentOverviews.length === 0) {
@@ -78,7 +78,7 @@ export const AssessmentOverviewCard: React.SFC<AssessmentOverviewCardProps> = pr
             <h6>Mission 0 : 123123 XP (hardcoded)</h6>
           </div>
           <div className="row mission-info-description">
-            <p className="col-xs-12">{mission.description}</p>
+            <p className="col-xs-12">{mission.shortSummary}</p>
           </div>
           <div className="row between-xs middle-xs mission-info-controls">
             <div className="col-xs-8 mission-info-due-date-parent">

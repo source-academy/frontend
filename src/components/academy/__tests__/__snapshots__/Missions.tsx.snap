@@ -3,15 +3,15 @@
 exports[`Missions page "loading" content renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} handleMissionsInfoFetch={[Function: handleMissionsInfoFetch]}>
+    <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
       <div className=\\"Missions\\">
-        <ContentDisplay display={{...}} loadContentDispatch={[Function: handleMissionsInfoFetch]}>
+        <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
                 <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
-                  <Component missionsInfo={[undefined]}>
-                    <NonIdealState description=\\"Fetching missions...\\" visual={{...}}>
+                  <Component assessmentOverviews={[undefined]}>
+                    <NonIdealState description=\\"Fetching assessment...\\" visual={{...}}>
                       <div className=\\"pt-non-ideal-state\\">
                         <div className=\\"pt-non-ideal-state-visual\\">
                           <Blueprint2.Spinner>
@@ -26,7 +26,7 @@ exports[`Missions page "loading" content renders correctly 1`] = `
                           </Blueprint2.Spinner>
                         </div>
                         <div className=\\"pt-non-ideal-state-description\\">
-                          Fetching missions...
+                          Fetching assessment...
                         </div>
                       </div>
                     </NonIdealState>
@@ -45,15 +45,15 @@ exports[`Missions page "loading" content renders correctly 1`] = `
 exports[`Missions page with 0 missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} missionsInfo={{...}} handleMissionsInfoFetch={[Function: handleMissionsInfoFetch]}>
+    <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
       <div className=\\"Missions\\">
-        <ContentDisplay display={{...}} loadContentDispatch={[Function: handleMissionsInfoFetch]}>
+        <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
                 <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
-                  <Component missionsInfo={{...}}>
-                    <NonIdealState title=\\"There are no missions.\\" visual=\\"flame\\">
+                  <Component assessmentOverviews={{...}}>
+                    <NonIdealState title=\\"There are no assessments.\\" visual=\\"flame\\">
                       <div className=\\"pt-non-ideal-state\\">
                         <div className=\\"pt-non-ideal-state-visual pt-non-ideal-state-icon\\">
                           <Blueprint2.Icon icon=\\"flame\\" iconSize={60}>
@@ -66,7 +66,7 @@ exports[`Missions page with 0 missions renders correctly 1`] = `
                           </Blueprint2.Icon>
                         </div>
                         <h4 className=\\"pt-non-ideal-state-title\\">
-                          There are no missions.
+                          There are no assessments.
                         </h4>
                       </div>
                     </NonIdealState>
@@ -85,14 +85,14 @@ exports[`Missions page with 0 missions renders correctly 1`] = `
 exports[`Missions page with multiple loaded missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} missionsInfo={{...}} handleMissionsInfoFetch={[Function: handleMissionsInfoFetch]}>
+    <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
       <div className=\\"Missions\\">
-        <ContentDisplay display={{...}} loadContentDispatch={[Function: handleMissionsInfoFetch]}>
+        <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
                 <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
-                  <Component missionsInfo={{...}}>
+                  <Component assessmentOverviews={{...}}>
                     <div>
                       <Blueprint2.Card className=\\"row mission-info\\" elevation={0} interactive={false}>
                         <div className=\\"pt-card pt-elevation-0 row mission-info\\">
@@ -112,7 +112,7 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                             </div>
                             <div className=\\"row mission-info-description\\">
                               <p className=\\"col-xs-12\\">
-                                Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in
+                                Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
                               </p>
                             </div>
                             <div className=\\"row between-xs middle-xs mission-info-controls\\">
@@ -181,7 +181,7 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                             </div>
                             <div className=\\"row mission-info-description\\">
                               <p className=\\"col-xs-12\\">
-                                Once upon a time, () =&gt; { Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in }
+                                Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
                               </p>
                             </div>
                             <div className=\\"row between-xs middle-xs mission-info-controls\\">
@@ -205,6 +205,213 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                                   <Route path=\\"/academy/missions/1\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                     <Link to=\\"/academy/missions/1\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                       <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/1\\">
+                                        <Blueprint2.Button className=\\"mission-info-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
+                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary mission-info-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                            <Blueprint2.Icon icon=\\"flame\\">
+                                              <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                <title>
+                                                  flame
+                                                </title>
+                                                <path d=\\"M9.217 0c0 1.368.368 2.462 1.104 3.282C12.774 5.197 14 7.385 14 9.846c0 2.735-1.472 4.786-4.415 6.154 2.165-2.4 1.84-3.385-.368-6.4-2.342 1.2-1.967 2-1.592 3.6-.786 0-1.5 0-1.875-.4 0 .547.898 2 1.464 3.2-2.943-.82-6.092-5.744-4.988-6.154.736-.273 1.594-.137 2.575.41C3.575 5.333 5.047 1.915 9.217 0z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </Blueprint2.Icon>
+                                            <span className=\\"pt-button-text\\">
+                                              Skip Story &amp; Attempt
+                                            </span>
+                                            <Blueprint2.Icon icon={[undefined]} />
+                                          </button>
+                                        </Blueprint2.Button>
+                                      </a>
+                                    </Link>
+                                  </Route>
+                                </NavLink>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Blueprint2.Card>
+                    </div>
+                    <div>
+                      <Blueprint2.Card className=\\"row mission-info\\" elevation={0} interactive={false}>
+                        <div className=\\"pt-card pt-elevation-0 row mission-info\\">
+                          <div className=\\"col-xs-3 mission-info-picture\\">
+                            PICTURE
+                          </div>
+                          <div className=\\"col-xs-9 mission-info-text\\">
+                            <div className=\\"row mission-info-title\\">
+                              <h4>
+                                A sample Sidequest
+                              </h4>
+                            </div>
+                            <div className=\\"row mission-info-order\\">
+                              <h6>
+                                Mission 0 : 123123 XP (hardcoded)
+                              </h6>
+                            </div>
+                            <div className=\\"row mission-info-description\\">
+                              <p className=\\"col-xs-12\\">
+                                Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
+                              </p>
+                            </div>
+                            <div className=\\"row between-xs middle-xs mission-info-controls\\">
+                              <div className=\\"col-xs-8 mission-info-due-date-parent\\">
+                                <Text className=\\"mission-info-due-date\\">
+                                  <div className=\\"mission-info-due-date\\" title={[undefined]}>
+                                    <Blueprint2.Icon className=\\"mission-info-due-icon\\" iconSize={14} icon=\\"time\\">
+                                      <svg className=\\"pt-icon mission-info-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
+                                        <title>
+                                          time
+                                        </title>
+                                        <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
+                                      </svg>
+                                    </Blueprint2.Icon>
+                                    Due: 12/12/12
+                                  </div>
+                                </Text>
+                              </div>
+                              <div className=\\"col-xs\\">
+                                <NavLink to=\\"/academy/missions/2\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+                                  <Route path=\\"/academy/missions/2\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                    <Link to=\\"/academy/missions/2\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
+                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/2\\">
+                                        <Blueprint2.Button className=\\"mission-info-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
+                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary mission-info-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                            <Blueprint2.Icon icon=\\"flame\\">
+                                              <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                <title>
+                                                  flame
+                                                </title>
+                                                <path d=\\"M9.217 0c0 1.368.368 2.462 1.104 3.282C12.774 5.197 14 7.385 14 9.846c0 2.735-1.472 4.786-4.415 6.154 2.165-2.4 1.84-3.385-.368-6.4-2.342 1.2-1.967 2-1.592 3.6-.786 0-1.5 0-1.875-.4 0 .547.898 2 1.464 3.2-2.943-.82-6.092-5.744-4.988-6.154.736-.273 1.594-.137 2.575.41C3.575 5.333 5.047 1.915 9.217 0z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </Blueprint2.Icon>
+                                            <span className=\\"pt-button-text\\">
+                                              Skip Story &amp; Attempt
+                                            </span>
+                                            <Blueprint2.Icon icon={[undefined]} />
+                                          </button>
+                                        </Blueprint2.Button>
+                                      </a>
+                                    </Link>
+                                  </Route>
+                                </NavLink>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Blueprint2.Card>
+                    </div>
+                    <div>
+                      <Blueprint2.Card className=\\"row mission-info\\" elevation={0} interactive={false}>
+                        <div className=\\"pt-card pt-elevation-0 row mission-info\\">
+                          <div className=\\"col-xs-3 mission-info-picture\\">
+                            PICTURE
+                          </div>
+                          <div className=\\"col-xs-9 mission-info-text\\">
+                            <div className=\\"row mission-info-title\\">
+                              <h4>
+                                A closed Mission
+                              </h4>
+                            </div>
+                            <div className=\\"row mission-info-order\\">
+                              <h6>
+                                Mission 0 : 123123 XP (hardcoded)
+                              </h6>
+                            </div>
+                            <div className=\\"row mission-info-description\\">
+                              <p className=\\"col-xs-12\\">
+                                Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
+                              </p>
+                            </div>
+                            <div className=\\"row between-xs middle-xs mission-info-controls\\">
+                              <div className=\\"col-xs-8 mission-info-due-date-parent\\">
+                                <Text className=\\"mission-info-due-date\\">
+                                  <div className=\\"mission-info-due-date\\" title={[undefined]}>
+                                    <Blueprint2.Icon className=\\"mission-info-due-icon\\" iconSize={14} icon=\\"time\\">
+                                      <svg className=\\"pt-icon mission-info-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
+                                        <title>
+                                          time
+                                        </title>
+                                        <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
+                                      </svg>
+                                    </Blueprint2.Icon>
+                                    Due: 12/12/12
+                                  </div>
+                                </Text>
+                              </div>
+                              <div className=\\"col-xs\\">
+                                <NavLink to=\\"/academy/missions/3\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+                                  <Route path=\\"/academy/missions/3\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                    <Link to=\\"/academy/missions/3\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
+                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/3\\">
+                                        <Blueprint2.Button className=\\"mission-info-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
+                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary mission-info-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                            <Blueprint2.Icon icon=\\"flame\\">
+                                              <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                <title>
+                                                  flame
+                                                </title>
+                                                <path d=\\"M9.217 0c0 1.368.368 2.462 1.104 3.282C12.774 5.197 14 7.385 14 9.846c0 2.735-1.472 4.786-4.415 6.154 2.165-2.4 1.84-3.385-.368-6.4-2.342 1.2-1.967 2-1.592 3.6-.786 0-1.5 0-1.875-.4 0 .547.898 2 1.464 3.2-2.943-.82-6.092-5.744-4.988-6.154.736-.273 1.594-.137 2.575.41C3.575 5.333 5.047 1.915 9.217 0z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </Blueprint2.Icon>
+                                            <span className=\\"pt-button-text\\">
+                                              Skip Story &amp; Attempt
+                                            </span>
+                                            <Blueprint2.Icon icon={[undefined]} />
+                                          </button>
+                                        </Blueprint2.Button>
+                                      </a>
+                                    </Link>
+                                  </Route>
+                                </NavLink>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Blueprint2.Card>
+                    </div>
+                    <div>
+                      <Blueprint2.Card className=\\"row mission-info\\" elevation={0} interactive={false}>
+                        <div className=\\"pt-card pt-elevation-0 row mission-info\\">
+                          <div className=\\"col-xs-3 mission-info-picture\\">
+                            PICTURE
+                          </div>
+                          <div className=\\"col-xs-9 mission-info-text\\">
+                            <div className=\\"row mission-info-title\\">
+                              <h4>
+                                A closed sidequest
+                              </h4>
+                            </div>
+                            <div className=\\"row mission-info-order\\">
+                              <h6>
+                                Mission 0 : 123123 XP (hardcoded)
+                              </h6>
+                            </div>
+                            <div className=\\"row mission-info-description\\">
+                              <p className=\\"col-xs-12\\">
+                                Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
+                              </p>
+                            </div>
+                            <div className=\\"row between-xs middle-xs mission-info-controls\\">
+                              <div className=\\"col-xs-8 mission-info-due-date-parent\\">
+                                <Text className=\\"mission-info-due-date\\">
+                                  <div className=\\"mission-info-due-date\\" title={[undefined]}>
+                                    <Blueprint2.Icon className=\\"mission-info-due-icon\\" iconSize={14} icon=\\"time\\">
+                                      <svg className=\\"pt-icon mission-info-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
+                                        <title>
+                                          time
+                                        </title>
+                                        <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
+                                      </svg>
+                                    </Blueprint2.Icon>
+                                    Due: 12/12/12
+                                  </div>
+                                </Text>
+                              </div>
+                              <div className=\\"col-xs\\">
+                                <NavLink to=\\"/academy/missions/4\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+                                  <Route path=\\"/academy/missions/4\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                    <Link to=\\"/academy/missions/4\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
+                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/4\\">
                                         <Blueprint2.Button className=\\"mission-info-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
                                           <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary mission-info-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
