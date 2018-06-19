@@ -7,6 +7,6 @@ branches:
     - /^no-ci.*$/
 script:
   - yarn format:ci
+  - yarn build-css
   - yarn build-js
   - CI=true yarn test
-  - yarn build-css
