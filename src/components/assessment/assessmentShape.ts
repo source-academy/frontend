@@ -3,8 +3,8 @@
  */
 export interface IAssessmentOverview {
   category: AssessmentCategory
-  coverImage: string
   closeAt: string
+  coverImage: string
   id: number
   maximumEXP: number
   openAt: string
@@ -19,41 +19,41 @@ export interface IAssessmentOverview {
 export interface IAssessment {
   category: AssessmentCategory
   id: number
+  longSummary: string
   missionPDF: string
   questions: IQuestion[]
-  longSummary: string
   title: string
 }
 
 /* The different kinds of Assessments available */
-export type AssessmentCategory = 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+export type AssessmentCategory = 'Contest' | 'Mission' | 'Path' | 'Sidequest'
 export enum AssessmentCategories {
+  CONTEST = 'Contest',
   MISSION = 'Mission',
-  SIDEQUEST = 'Sidequest',
   PATH = 'Path',
-  CONTEST = 'Contest'
+  SIDEQUEST = 'Sidequest'
 }
 
 export interface IProgrammingQuestion extends IQuestion {
-  type: 'programming'
-  solutionTemplate: string
   library: Library
+  solutionTemplate: string
+  type: 'programming'
 }
 
 export interface IMCQQuestion extends IQuestion {
-  type: 'mcq'
   choices?: MCQChoice[]
+  type: 'mcq'
 }
 
 export interface IQuestion {
-  id: number
   content: string
+  id: number
   type: QuestionType
 }
 
 type MCQChoice = {
-  hint: string
   content: string
+  hint: string
 }
 
 /* The two kinds of Questions available */

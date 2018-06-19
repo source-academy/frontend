@@ -10,8 +10,8 @@ import {
 const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {
     category: AssessmentCategories.MISSION,
-    coverImage: 'www.imgur.com',
     closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'www.imgur.com',
     id: 0,
     maximumEXP: 3000,
     openAt: '2018-06-18T05:24:26.026Z',
@@ -22,8 +22,8 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   },
   {
     category: AssessmentCategories.MISSION,
-    coverImage: 'www.imgur.com',
     closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'www.imgur.com',
     id: 1,
     maximumEXP: 3000,
     openAt: '2018-07-18T05:24:26.026Z',
@@ -34,8 +34,8 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   },
   {
     category: AssessmentCategories.SIDEQUEST,
-    coverImage: 'www.imgur.com',
     closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'www.imgur.com',
     id: 2,
     maximumEXP: 3000,
     openAt: '2018-07-18T05:24:26.026Z',
@@ -49,27 +49,27 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
 const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
   {
     category: AssessmentCategories.MISSION,
-    coverImage: 'www.imgur.com',
     closeAt: '2008-06-18T05:24:26.026Z',
+    coverImage: 'www.imgur.com',
     id: 3,
-    order: 5,
-    openAt: '2007-07-18T05:24:26.026Z',
     maximumEXP: 3000,
+    openAt: '2007-07-18T05:24:26.026Z',
+    order: 5,
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     title: 'A closed Mission'
   },
   {
-    title: 'A closed sidequest',
-    shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    order: 4,
-    openAt: '2007-07-18T05:24:26.026Z',
-    maximumEXP: 3000,
-    id: 4,
-    coverImage: 'www.imgur.com',
+    category: AssessmentCategories.SIDEQUEST,
     closeAt: '2008-06-18T05:24:26.026Z',
-    category: AssessmentCategories.SIDEQUEST
+    coverImage: 'www.imgur.com',
+    id: 4,
+    maximumEXP: 3000,
+    openAt: '2007-07-18T05:24:26.026Z',
+    order: 4,
+    shortSummary: 
+    'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    title: 'A closed sidequest'
   }
 ]
 
@@ -79,50 +79,49 @@ export const mockAssessmentOverviews = [
 ]
 
 const mockLibrary: Library = {
-  globals: ['mockLibraryGlobal'],
-  files: ['mockLibraryFile'],
+  chapter: 1,
   externals: ['mockLibraryExternal'],
-  chapter: 1
+  files: ['mockLibraryFile'],
+  globals: ['mockLibraryGlobal']
 }
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
-    type: 'programming',
-    solutionTemplate: '0th question mock solution template',
+    content: 'Hello and welcome to this assessment! This is the 0th question.',
     id: 0,
     library: mockLibrary,
-    content: 'Hello and welcome to this assessment! This is the 0th question.'
+    solutionTemplate: '0th question mock solution template',
+    type: 'programming'
   },
   {
-    type: 'programming',
-    solutionTemplate: '1st question mock solution template',
+    content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mockLibrary,
-    content: 'Hello and welcome to this assessment! This is the 1st question.'
+    solutionTemplate: '1st question mock solution template',
+    type: 'programming'
   },
   {
-    id: 2,
-    type: 'mcq',
-    content:
-      'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
+    content: 'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
     choices: [
       {
-        hint: 'hint A',
-        content: 'A'
+        content: 'A',
+        hint: 'hint A'
       },
       {
-        hint: 'hint B',
-        content: 'B'
+        content: 'B',
+        hint: 'hint B'
       },
       {
-        hint: 'hint C',
-        content: 'C'
+        content: 'C',
+        hint: 'hint C'
       },
       {
-        hint: 'hint D',
-        content: 'D'
+        content: 'D',
+        hint: 'hint D'
       }
-    ]
+    ],
+    id: 2,
+    type: 'mcq'
   }
 ]
 
@@ -131,30 +130,27 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
  */
 export const mockAssessments: IAssessment[] = [
   {
-    title: 'An Odessey to Runes',
-    longSummary:
-      'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
-    missionPDF: 'www.google.com',
+    category: 'Mission',
     id: 0,
-    category: 'Mission',
-    questions: mockAssessmentQuestions
+    longSummary: 'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    questions: mockAssessmentQuestions,
+    title: 'An Odessey to Runes'
   },
   {
-    title: 'The Secret to Streams',
-    longSummary:
-      'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
-    missionPDF: 'www.google.com',
+    category: 'Mission',
     id: 1,
-    category: 'Mission',
-    questions: mockAssessmentQuestions
+    longSummary:'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    questions: mockAssessmentQuestions,
+    title: 'The Secret to Streams'
   },
   {
-    title: 'A sample Sidequest',
-    longSummary:
-      'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
-    missionPDF: 'www.google.com',
-    id: 2,
     category: AssessmentCategories.SIDEQUEST,
-    questions: mockAssessmentQuestions
+    id: 2,
+    longSummary:'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    questions: mockAssessmentQuestions,
+    title: 'A sample Sidequest'
   }
 ]
