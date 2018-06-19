@@ -8,7 +8,7 @@ import AssessmentContainer from '../../containers/AssessmentContainer'
 import { OwnProps as AssessmentProps } from '../assessment'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
-export type MissionInfo = {
+export type IAssessmentOverview = {
   id: number
   title: string
   description: string
@@ -19,11 +19,11 @@ export interface IMissionParams {
 }
 
 export interface IMissionsProps extends RouteComponentProps<IMissionParams> {
-  missionsInfo?: MissionInfo[]
+  assessmentOverviews?: IAssessmentOverview[]
   handleMissionsInfoFetch: () => void
 }
 
-export type StateProps = Pick<IMissionsProps, 'missionsInfo'>
+export type StateProps = Pick<IMissionsProps, 'assessmentOverviews'>
 export type DispatchProps = Pick<IMissionsProps, 'handleMissionsInfoFetch'>
 
 class Missions extends React.Component<IMissionsProps, {}> {
@@ -39,7 +39,7 @@ class Missions extends React.Component<IMissionsProps, {}> {
     // if there is no mission specified, Render only information.
     if (missionIdParam === null) {
       const props: IContentDisplayProps = {
-        display: <MissionInfoCard missionsInfo={this.props.missionsInfo} />,
+        display: <AssessmentOverviewCard assessmentOverviews={this.props.assessmentOverviews} />,
         loadContentDispatch: this.props.handleMissionsInfoFetch
       }
       return (
@@ -56,17 +56,17 @@ class Missions extends React.Component<IMissionsProps, {}> {
   }
 }
 
-interface IMissionInfoCardProps {
-  missionsInfo?: MissionInfo[]
+interface IAssessmentOverviewCardProps {
+  assessmentOverviews?: IAssessmentOverview[]
 }
 
-export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
-  if (props.missionsInfo === undefined) {
+export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = props => {
+  if (props.assessmentOverviews === undefined) {
     return <NonIdealState description="Fetching missions..." visual={<Spinner />} />
-  } else if (props.missionsInfo.length === 0) {
+  } else if (props.assessmentOverviews.length === 0) {
     return <NonIdealState title="There are no missions." visual={IconNames.FLAME} />
   }
-  const cards = props.missionsInfo.map((mission, index) => (
+  const cards = props.assessmentOverviews.map((mission, index) => (
     <div key={index}>
       <Card className="row mission-info">
         <div className="col-xs-3 mission-info-picture">PICTURE</div>

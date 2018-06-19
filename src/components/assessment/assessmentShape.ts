@@ -1,16 +1,3 @@
-export interface IMissionOverview extends IAssessmentOverview {
-  category: 'Mission'
-}
-export interface ISidequestOverview extends IAssessmentOverview {
-  category: 'Sidequest'
-}
-export interface IPathOverview extends IAssessmentOverview {
-  category: 'Path'
-}
-export interface IContestOverview extends IAssessmentOverview {
-  category: 'Contest'
-}
-
 /*
  * Used to display information regarding an assessment in the UI.
  */
@@ -24,19 +11,6 @@ export interface IAssessmentOverview {
   order: number
   shortSummary: string
   title: string
-}
-
-export interface IMission extends IAssessment {
-  category: 'Mission'
-}
-export interface ISidequest extends IAssessment {
-  category: 'Sidequest'
-}
-export interface IPath extends IAssessment {
-  category: 'Path'
-}
-export interface IContest extends IAssessment {
-  category: 'Contest'
 }
 
 /*
