@@ -32,7 +32,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'The Secret to Streams'
   },
   {
-    category: 'Mission',
+    category: 'Sidequest',
     coverImage: 'www.imgur.com',
     closeAt: '2048-06-18T05:24:26.026Z',
     id: 2,

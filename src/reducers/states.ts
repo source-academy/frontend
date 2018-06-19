@@ -39,10 +39,10 @@ export interface IPlaygroundState {
 
 export interface ISessionState {
   readonly announcements?: Announcement[]
-  readonly assessmentOverviews: IAssessmentOverview[]
-  readonly assessments: IAssessment[]
   readonly historyHelper: HistoryHelper
   readonly token?: string
+  readonly assessments: IAssessment[]
+  readonly assessmentOverviews?: IAssessmentOverview[]
   readonly username?: string
 }
 

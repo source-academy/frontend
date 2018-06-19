@@ -14,7 +14,9 @@ const isMission = (x: IAssessmentOverview) => x.category === AssessmentCategorie
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    assessmentOverviews: state.session.assessmentOverviews.filter(isMission)
+    assessmentOverviews: state.session.assessmentOverviews
+      ? state.session.assessmentOverviews.filter(isMission)
+      : undefined
   }
 }
 
