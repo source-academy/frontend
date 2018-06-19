@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux'
 
-import { IAssessmentOverview } from '../components/assessment/assessmentShape';
+import { IAssessmentOverview } from '../components/assessment/assessmentShape'
 import * as actionTypes from './actionTypes'
 
 export const changeToken: ActionCreator<actionTypes.IAction> = (token: string) => ({
@@ -18,7 +18,7 @@ export const fetchAssessment = (missionId: number) => ({
 })
 
 export const fetchAssessmentOverviews = () => ({
-  type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS,
+  type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS
 })
 
 export const fetchUsername = () => ({

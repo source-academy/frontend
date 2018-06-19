@@ -6,9 +6,7 @@ import { NavLink } from 'react-router-dom'
 
 import AssessmentContainer from '../../containers/AssessmentContainer'
 import { OwnProps as AssessmentProps } from '../assessment'
-import {
-  IAssessmentOverview
-} from '../assessment/assessmentShape'
+import { IAssessmentOverview } from '../assessment/assessmentShape'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export interface IMissionParams {
