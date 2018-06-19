@@ -16,19 +16,19 @@ export interface IApplicationState {
   readonly environment: ApplicationEnvironment
 }
 
-export const sourceChapters = [1, 2]
-const latestSourceChapter = sourceChapters.slice(-1)[0]
-
 export interface IGameState {
   readonly canvas?: HTMLCanvasElement
 }
 
-export interface IPlaygroundState {
+export interface IPlaygroundState extends IWorkspaceState {
+  readonly queryString?: string
+}
+
+interface IWorkspaceState {
   readonly context: Context
   readonly editorValue: string
   readonly editorWidth: string
   readonly isRunning: boolean
-  readonly queryString?: string
   readonly output: InterpreterOutput[]
   readonly replValue: string
   readonly sourceChapter: number
@@ -96,6 +96,9 @@ export enum ApplicationEnvironment {
   Production = 'production',
   Test = 'test'
 }
+
+export const sourceChapters = [1, 2]
+const latestSourceChapter = sourceChapters.slice(-1)[0]
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
