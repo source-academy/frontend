@@ -1,4 +1,5 @@
 import {
+  AssessmentCategories,
   IAssessment,
   IAssessmentOverview,
   IMCQQuestion,
@@ -8,7 +9,7 @@ import {
 
 const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {
-    category: 'Mission',
+    category: AssessmentCategories.MISSION,
     coverImage: 'www.imgur.com',
     closeAt: '2048-06-18T05:24:26.026Z',
     id: 0,
@@ -20,7 +21,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'An Odessey to Runes'
   },
   {
-    category: 'Mission',
+    category: AssessmentCategories.MISSION,
     coverImage: 'www.imgur.com',
     closeAt: '2048-06-18T05:24:26.026Z',
     id: 1,
@@ -32,7 +33,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'The Secret to Streams'
   },
   {
-    category: 'Sidequest',
+    category: AssessmentCategories.SIDEQUEST,
     coverImage: 'www.imgur.com',
     closeAt: '2048-06-18T05:24:26.026Z',
     id: 2,
@@ -47,7 +48,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
 
 const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
   {
-    category: 'Mission',
+    category: AssessmentCategories.MISSION,
     coverImage: 'www.imgur.com',
     closeAt: '2008-06-18T05:24:26.026Z',
     id: 3,
@@ -68,7 +69,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     id: 4,
     coverImage: 'www.imgur.com',
     closeAt: '2008-06-18T05:24:26.026Z',
-    category: 'Sidequest'
+    category: AssessmentCategories.SIDEQUEST
   }
 ]
 
@@ -153,7 +154,7 @@ export const mockAssessments: IAssessment[] = [
       'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     id: 2,
-    category: 'Sidequest',
+    category: AssessmentCategories.SIDEQUEST,
     questions: mockAssessmentQuestions
   }
 ]
