@@ -1,7 +1,6 @@
-import { MissionInfo } from '../components/academy/Missions'
 import { Announcement } from '../components/Announcements'
-import { IAssessment } from '../components/assessment/assessmentShape'
-import { mockAssessments } from '../mocks/api'
+import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
+import { mockAssessments, mockAssessmentOverviews } from '../mocks/api'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
@@ -40,12 +39,11 @@ export interface IPlaygroundState {
 
 export interface ISessionState {
   readonly announcements?: Announcement[]
-  readonly assessmentInfos: AssessmentInfo[]
+  readonly assessmentOverviews: IAssessmentOverview[]
+  readonly assessments: IAssessment[]
   readonly historyHelper: HistoryHelper
-  readonly missionsInfo?: MissionInfo[]
   readonly token?: string
   readonly username?: string
-  readonly assessments: IAssessment[]
 }
 
 /**
@@ -142,32 +140,8 @@ export const defaultSession: ISessionState = {
       pinned: true
     }
   ],
-  assessmentInfos: [
-    {
-      longSummary: 'This is a dummy summary, to be displayed as part of the briefing.',
-      dueDate: '12/12/12',
-      studentBriefed: false
-    }
-  ],
-  historyHelper: {
-    lastAcademyLocations: [null, null],
-    lastGeneralLocations: [null, null]
-  },
-  missionsInfo: [
-    {
-      id: 0,
-      title: 'An Odessey to Runes',
-      description:
-        'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in'
-    },
-    {
-      id: 1,
-      title: 'The Secret to Streams',
-      description:
-        'Once upon a time, () => { Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum in }'
-    }
-  ],
+  assessmentOverviews: mockAssessmentOverviews,
+  assessments: mockAssessments
   token: undefined,
   username: undefined,
-  assessments: mockAssessments
 }
