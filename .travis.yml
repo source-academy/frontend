@@ -9,4 +9,4 @@ script:
   - yarn format:ci
   - yarn build-css
   - yarn build-js
-  - CI=true yarn test
+  - yarn test-coveralls
