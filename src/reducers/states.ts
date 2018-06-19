@@ -1,6 +1,7 @@
 import { MissionInfo } from '../components/academy/Missions'
 import { Announcement } from '../components/Announcements'
-import { AssessmentInfo } from '../components/assessment'
+import { IAssessment } from '../components/assessment/assessmentShape'
+import { mockAssessments } from '../mocks/api'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
@@ -44,6 +45,7 @@ export interface ISessionState {
   readonly missionsInfo?: MissionInfo[]
   readonly token?: string
   readonly username?: string
+  readonly assessments: IAssessment[]
 }
 
 /**
@@ -166,5 +168,6 @@ export const defaultSession: ISessionState = {
     }
   ],
   token: undefined,
-  username: undefined
+  username: undefined,
+  assessments: mockAssessments
 }

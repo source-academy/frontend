@@ -7,8 +7,7 @@ import { IState } from '../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
-    assessment:
-      state.session.assessments[props.missionId]
+    assessment: state.session.assessments[props.missionId]
   }
 }
 

@@ -84,7 +84,7 @@ const mockLibrary: Library = {
   chapter: 1
 }
 
-export const mockAssessmentQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
+export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     type: 'programming',
     solutionTemplate: '0th question mock solution template',
