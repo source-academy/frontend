@@ -26,7 +26,7 @@ export interface IAssessment {
 }
 
 /* The different kinds of Assessments available */
-export type AssessmentCategory = 'Mission'| 'Sidequest' | 'Path' | 'Contest'
+export type AssessmentCategory = 'Mission' | 'Sidequest' | 'Path' | 'Contest'
 export enum AssessmentCategories {
   MISSION = 'Mission',
   SIDEQUEST = 'Sidequest',

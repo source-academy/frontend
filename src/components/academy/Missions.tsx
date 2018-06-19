@@ -6,14 +6,12 @@ import { NavLink } from 'react-router-dom'
 
 import AssessmentContainer from '../../containers/AssessmentContainer'
 import { OwnProps as AssessmentProps } from '../assessment'
-import { AssessmentCategories, AssessmentCategory  } from '../assessment/assessmentShape'
+import {
+  AssessmentCategories,
+  AssessmentCategory,
+  IAssessmentOverview
+} from '../assessment/assessmentShape'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
-
-export type IAssessmentOverview = {
-  id: number
-  title: string
-  description: string
-}
 
 export interface IMissionParams {
   missionId?: string
@@ -41,7 +39,8 @@ class Missions extends React.Component<IMissionsProps, {}> {
     if (missionIdParam === null) {
       const props: IContentDisplayProps = {
         display: <AssessmentOverviewCard assessmentOverviews={this.props.assessmentOverviews} />,
-        loadContentDispatch: () => this.props.handleAssessmentOverviewFetch(AssessmentCategories.MISSION)
+        loadContentDispatch: () =>
+          this.props.handleAssessmentOverviewFetch(AssessmentCategories.MISSION)
       }
       return (
         <div className="Missions">
