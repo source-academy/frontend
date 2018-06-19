@@ -5,7 +5,6 @@ import Academy from '../containers/academy'
 import Announcements from '../containers/AnnouncementsContainer'
 import Login from '../containers/LoginContainer'
 import Playground from '../containers/PlaygroundContainer'
-import Admin from './admin'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
@@ -18,7 +17,6 @@ export interface IApplicationProps extends RouteComponentProps<{}> {
 const Application: React.SFC<IApplicationProps> = props => {
   const redirectToNews = () => <Redirect to="/news" />
   const toAcademy = () => <Academy token={props.token} />
-  const toAdmin = () => <Admin token={props.token} />
 
   return (
     <div className="Application">
@@ -28,7 +26,6 @@ const Application: React.SFC<IApplicationProps> = props => {
           // tslint: disable-next-line
           <Route path="/academy" component={toAcademy} />
           <Route path="/news" component={Announcements} />
-          <Route path="/admin" component={toAdmin} />
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
           <Route path="/status" component={Announcements} />
