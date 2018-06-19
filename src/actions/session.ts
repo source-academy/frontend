@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux'
 
-import { IAssessmentOverview } from '../components/assessment/assessmentShape'
+import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import * as actionTypes from './actionTypes'
 
 export const changeToken: ActionCreator<actionTypes.IAction> = (token: string) => ({
@@ -12,9 +12,9 @@ export const fetchAnnouncements = () => ({
   type: actionTypes.FETCH_ANNOUNCEMENTS
 })
 
-export const fetchAssessment = (missionId: number) => ({
+export const fetchAssessment = (id: number) => ({
   type: actionTypes.FETCH_ASSESSMENT,
-  payload: missionId
+  payload: id
 })
 
 export const fetchAssessmentOverviews = () => ({
@@ -42,4 +42,9 @@ export const updateHistoryHelpers: ActionCreator<actionTypes.IAction> = (loc: st
 export const updateAssessmentOverviews = (overviews: IAssessmentOverview[]) => ({
   type: actionTypes.UPDATE_ASSESSMENT_OVERVIEWS,
   payload: overviews
+})
+
+export const updateAssessment = (assessment: IAssessment) => ({
+  type: actionTypes.UPDATE_ASSESSMENT,
+  payload: assessment
 })

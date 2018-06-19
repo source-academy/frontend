@@ -5,7 +5,7 @@ import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
-import { mockAssessmentOverviews } from '../mocks/api'
+import { mockAssessmentOverviews, mockAssessments} from '../mocks/api'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
@@ -24,6 +24,15 @@ function* apiFetchSaga(): SagaIterator {
     const oldContent = yield select((state: IState) => state.session.assessmentOverviews)
     if (newContent !== oldContent) {
       yield put(actions.updateAssessmentOverviews(newContent))
+    }
+  })
+
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
+    const id = (action as actionTypes.IAction).payload
+    const newContent = mockAssessments[id]
+    const oldContent = yield select((state: IState) => state.session.assessments[id])
+    if (newContent !== oldContent) {
+      yield put(actions.updateAssessment(newContent))
     }
   })
 }

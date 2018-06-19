@@ -4,6 +4,7 @@ import {
   CHANGE_TOKEN,
   IAction,
   SET_USERNAME,
+  UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_HISTORY_HELPERS
 } from '../actions/actionTypes'
@@ -39,6 +40,13 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
       return {
         ...state,
         assessmentOverviews: action.payload
+      }
+    case UPDATE_ASSESSMENT:
+      const newAssessments = state.assessments.slice()
+      newAssessments[action.payload.id] = action.payload
+      return {
+        ...state,
+        assessments: newAssessments
       }
     default:
       return state

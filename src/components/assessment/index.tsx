@@ -22,9 +22,12 @@ export type DispatchProps = {
 class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
   public state = { showOverlay: true }
 
+  public componentWillMount() {
+    this.props.handleAssessmentFetch(this.props.missionId)
+  }
+
   public render() {
     if (this.props.assessment === undefined) {
-      this.props.handleAssessmentFetch(this.props.missionId)
       return (
         <NonIdealState
           className="Assessment pt-dark"
