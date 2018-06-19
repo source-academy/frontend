@@ -1,5 +1,6 @@
 import { ActionCreator } from 'redux'
 
+import { IAssessmentOverview } from '../components/assessment/assessmentShape';
 import * as actionTypes from './actionTypes'
 
 export const changeToken: ActionCreator<actionTypes.IAction> = (token: string) => ({
@@ -36,4 +37,9 @@ export const setUsername: ActionCreator<actionTypes.IAction> = (username: string
 export const updateHistoryHelpers: ActionCreator<actionTypes.IAction> = (loc: string) => ({
   type: actionTypes.UPDATE_HISTORY_HELPERS,
   payload: loc
+})
+
+export const updateAssessmentOverviews = (overviews: IAssessmentOverview[]) => ({
+  type: actionTypes.UPDATE_ASSESSMENT_OVERVIEWS,
+  payload: overviews
 })

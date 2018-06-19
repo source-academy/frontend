@@ -5,15 +5,27 @@ import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
+import { mockAssessmentOverviews } from '../mocks/api'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import { IVLE_KEY } from '../utils/secrets'
 
 function* mainSaga() {
+  yield* apiFetchSaga()
   yield* interpreterSaga()
   yield* loginSaga()
   yield* workspaceSaga()
+}
+
+function* apiFetchSaga(): SagaIterator {
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function*(action) {
+    const newContent = mockAssessmentOverviews
+    const oldContent = yield select((state: IState) => state.session.assessmentOverviews)
+    if (newContent !== oldContent) {
+      yield put(actions.updateAssessmentOverviews(newContent))
+    }
+  })
 }
 
 function* interpreterSaga(): SagaIterator {
