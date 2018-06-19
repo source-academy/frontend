@@ -5,7 +5,7 @@ exports[`Missions page "loading" content renders correctly 1`] = `
   <Router history={{...}}>
     <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
       <div className=\\"Missions\\">
-        <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
+        <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
@@ -47,7 +47,7 @@ exports[`Missions page with 0 missions renders correctly 1`] = `
   <Router history={{...}}>
     <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
       <div className=\\"Missions\\">
-        <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
+        <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
@@ -87,7 +87,7 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
   <Router history={{...}}>
     <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
       <div className=\\"Missions\\">
-        <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
+        <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>

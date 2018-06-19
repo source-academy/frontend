@@ -5,7 +5,7 @@ import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
-import { mockAssessmentOverviews, mockAssessments} from '../mocks/api'
+import { mockAssessmentOverviews, mockAssessments } from '../mocks/api'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
