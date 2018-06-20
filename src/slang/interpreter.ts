@@ -366,9 +366,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
       return undefined
     }
   },
-  *ExpressionStatement(node: es.ExpressionStatement, context: Context) {
-    return yield* evaluate(node.expression, context)
-  },
+  ExpressionStatement: expressionStatementEvaluator,
   *ReturnStatement(node: es.ReturnStatement, context: Context) {
     if (node.argument) {
       if (node.argument.type === 'CallExpression') {
@@ -436,6 +434,15 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     }
     return result
   }
+}
+
+/**
+ * This is used as part of the evaluators object in this file, but must be
+ * defined outside, otherwise webpack parses it wrongly, resulting in a fatal
+ * syntax error: https://github.com/webpack/webpack/issues/7566
+ */
+function* expressionStatementEvaluator(node: es.ExpressionStatement, context: Context) {
+  return yield* evaluate(node.expression, context)
 }
 
 export function* evaluate(node: es.Node, context: Context) {
