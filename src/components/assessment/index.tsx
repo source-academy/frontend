@@ -2,34 +2,32 @@ import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import Workspace from '../containers/workspace'
-import { OwnProps as ControlBarOwnProps } from './workspace/ControlBar'
-import { SideContentTab } from './workspace/side-content'
-
-export type AssessmentInfo = {
-  longSummary: string
-  dueDate: string
-  studentBriefed: boolean
-}
+import Workspace from '../../containers/workspace'
+import { OwnProps as ControlBarOwnProps } from '../workspace/ControlBar'
+import { SideContentTab } from '../workspace/side-content'
+import { IAssessment } from './assessmentShape'
 
 export type AssessmentProps = DispatchProps & OwnProps & StateProps
 
 export type StateProps = {
-  assessmentInfo?: AssessmentInfo
+  assessment?: IAssessment
 }
 
 export type OwnProps = { missionId: number }
 
 export type DispatchProps = {
-  handleAssessmentInfoFetch: (missionId: number) => void
+  handleAssessmentFetch: (missionId: number) => void
 }
 
 class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
   public state = { showOverlay: true }
 
+  public componentWillMount() {
+    this.props.handleAssessmentFetch(this.props.missionId)
+  }
+
   public render() {
-    if (this.props.assessmentInfo === undefined) {
-      this.props.handleAssessmentInfoFetch(this.props.missionId)
+    if (this.props.assessment === undefined) {
       return (
         <NonIdealState
           className="Assessment pt-dark"
@@ -38,12 +36,9 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         />
       )
     }
-    const briefing = <Text> {this.props.assessmentInfo.longSummary} </Text>
+    const briefing = <Text> {this.props.assessment.longSummary} </Text>
     const overlay = (
-      <Dialog
-        className="mission-briefing"
-        isOpen={this.state.showOverlay && !this.props.assessmentInfo.studentBriefed}
-      >
+      <Dialog className="mission-briefing" isOpen={this.state.showOverlay}>
         <Card>
           {briefing}
           <Button

@@ -5,26 +5,21 @@ import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 import AssessmentContainer from '../../containers/AssessmentContainer'
-import { OwnProps as AssessmentProps } from '../Assessment'
+import { OwnProps as AssessmentProps } from '../assessment'
+import { IAssessmentOverview } from '../assessment/assessmentShape'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
-
-export type MissionInfo = {
-  id: number
-  title: string
-  description: string
-}
 
 export interface IMissionParams {
   missionId?: string
 }
 
 export interface IMissionsProps extends RouteComponentProps<IMissionParams> {
-  missionsInfo?: MissionInfo[]
-  handleMissionsInfoFetch: () => void
+  assessmentOverviews?: IAssessmentOverview[]
+  handleAssessmentOverviewFetch: () => void
 }
 
-export type StateProps = Pick<IMissionsProps, 'missionsInfo'>
-export type DispatchProps = Pick<IMissionsProps, 'handleMissionsInfoFetch'>
+export type StateProps = Pick<IMissionsProps, 'assessmentOverviews'>
+export type DispatchProps = Pick<IMissionsProps, 'handleAssessmentOverviewFetch'>
 
 class Missions extends React.Component<IMissionsProps, {}> {
   public render() {
@@ -39,8 +34,8 @@ class Missions extends React.Component<IMissionsProps, {}> {
     // if there is no mission specified, Render only information.
     if (missionIdParam === null) {
       const props: IContentDisplayProps = {
-        display: <MissionInfoCard missionsInfo={this.props.missionsInfo} />,
-        loadContentDispatch: this.props.handleMissionsInfoFetch
+        display: <AssessmentOverviewCard assessmentOverviews={this.props.assessmentOverviews} />,
+        loadContentDispatch: this.props.handleAssessmentOverviewFetch
       }
       return (
         <div className="Missions">
@@ -56,17 +51,17 @@ class Missions extends React.Component<IMissionsProps, {}> {
   }
 }
 
-interface IMissionInfoCardProps {
-  missionsInfo?: MissionInfo[]
+interface IAssessmentOverviewCardProps {
+  assessmentOverviews?: IAssessmentOverview[]
 }
 
-export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
-  if (props.missionsInfo === undefined) {
-    return <NonIdealState description="Fetching missions..." visual={<Spinner />} />
-  } else if (props.missionsInfo.length === 0) {
-    return <NonIdealState title="There are no missions." visual={IconNames.FLAME} />
+export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = props => {
+  if (props.assessmentOverviews === undefined) {
+    return <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
+  } else if (props.assessmentOverviews.length === 0) {
+    return <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
   }
-  const cards = props.missionsInfo.map((mission, index) => (
+  const cards = props.assessmentOverviews.map((mission, index) => (
     <div key={index}>
       <Card className="row mission-info">
         <div className="col-xs-3 mission-info-picture">PICTURE</div>
@@ -78,7 +73,7 @@ export const MissionInfoCard: React.SFC<IMissionInfoCardProps> = props => {
             <h6>Mission 0 : 123123 XP (hardcoded)</h6>
           </div>
           <div className="row mission-info-description">
-            <p className="col-xs-12">{mission.description}</p>
+            <p className="col-xs-12">{mission.shortSummary}</p>
           </div>
           <div className="row between-xs middle-xs mission-info-controls">
             <div className="col-xs-8 mission-info-due-date-parent">

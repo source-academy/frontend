@@ -1,6 +1,13 @@
 import { Reducer } from 'redux'
 
-import { CHANGE_TOKEN, IAction, SET_USERNAME, UPDATE_HISTORY_HELPERS } from '../actions/actionTypes'
+import {
+  CHANGE_TOKEN,
+  IAction,
+  SET_USERNAME,
+  UPDATE_ASSESSMENT,
+  UPDATE_ASSESSMENT_OVERVIEWS,
+  UPDATE_HISTORY_HELPERS
+} from '../actions/actionTypes'
 import { defaultSession, ISessionState } from './states'
 
 export const reducer: Reducer<ISessionState> = (state = defaultSession, action: IAction) => {
@@ -28,6 +35,18 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
           lastAcademyLocations: newAcademyLocations,
           lastGeneralLocations: newGeneralLocations
         }
+      }
+    case UPDATE_ASSESSMENT_OVERVIEWS:
+      return {
+        ...state,
+        assessmentOverviews: action.payload
+      }
+    case UPDATE_ASSESSMENT:
+      const newAssessments = new Map(state.assessments)
+      newAssessments.set(action.payload.id, action.payload)
+      return {
+        ...state,
+        assessments: newAssessments
       }
     default:
       return state
