@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router'
 
 import { mockAssessmentOverviews } from '../../../mocks/api'
 import { mockRouterProps } from '../../../mocks/components'
-import AssessmentListing, { IAssessmentListingProps } from '../Missions'
+import AssessmentListing, { IAssessmentListingProps } from '../AssessmentListing'
 
 const mockUndefinedMissions: IAssessmentListingProps = {
   ...mockRouterProps('/academy/missions', {}),

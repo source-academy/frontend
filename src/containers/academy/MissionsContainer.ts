@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchAssessmentOverviews } from '../../actions/session'
-import AssessmentListing, { DispatchProps, StateProps } from '../../components/academy/Missions'
+import AssessmentListing, { DispatchProps, StateProps } from '../../components/assessment/AssessmentListing'
 import {
   AssessmentCategories,
   IAssessmentOverview
