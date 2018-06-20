@@ -2,7 +2,7 @@ import * as qs from 'query-string'
 import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
-import MissionsContainer from '../../containers/academy/MissionsContainer'
+import AssessmentListingContainer from '../../containers/AssessmentListingContainer'
 import Game from '../../containers/GameContainer'
 import { isAcademyRe } from '../../reducers/session'
 import { HistoryHelper } from '../../utils/history'
@@ -28,12 +28,12 @@ export const Academy: React.SFC<IAcademyProps> = props => (
     <AcademyNavigationBar />
     <Switch>
       {checkLoggedIn(props)}
-      <Route path="/academy/contests" component={MissionsContainer} />
+      <Route path="/academy/contests" component={AssessmentListingContainer} />
       <Route path="/academy/game" component={Game} />
-      <Route exact={true} path="/academy/missions" component={MissionsContainer} />
-      <Route path="/academy/missions/:missionId" component={MissionsContainer} />
-      <Route path="/academy/paths" component={MissionsContainer} />
-      <Route path="/academy/sidequests" component={MissionsContainer} />
+      <Route exact={true} path="/academy/missions" component={AssessmentListingContainer} />
+      <Route path="/academy/missions/:missionId" component={AssessmentListingContainer} />
+      <Route path="/academy/paths" component={AssessmentListingContainer} />
+      <Route path="/academy/sidequests" component={AssessmentListingContainer} />
       <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
       <Route component={redirectTo404} />
     </Switch>

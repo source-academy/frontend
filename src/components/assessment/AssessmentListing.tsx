@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom'
 
 import AssessmentContainer from '../../containers/AssessmentContainer'
 import { OwnProps as AssessmentProps } from '../assessment'
+import { AssessmentCategory } from '../assessment/assessmentShape'
 import { IAssessmentOverview } from '../assessment/assessmentShape'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
@@ -15,11 +16,13 @@ export interface IAssessmentParams {
 
 export interface IAssessmentListingProps extends RouteComponentProps<IAssessmentParams> {
   assessmentOverviews?: IAssessmentOverview[]
+  assessmentCategory: AssessmentCategory
   handleAssessmentOverviewFetch: () => void
 }
 
-export type StateProps = Pick<IAssessmentListingProps, 'assessmentOverviews'>
 export type DispatchProps = Pick<IAssessmentListingProps, 'handleAssessmentOverviewFetch'>
+export type OwnProps = Pick<IAssessmentListingProps, 'assessmentCategory'>
+export type StateProps = Pick<IAssessmentListingProps, 'assessmentOverviews'>
 
 class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
   public render() {

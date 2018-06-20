@@ -5,22 +5,26 @@ import { MemoryRouter } from 'react-router'
 import { mockAssessmentOverviews } from '../../../mocks/api'
 import { mockRouterProps } from '../../../mocks/components'
 import AssessmentListing, { IAssessmentListingProps } from '../AssessmentListing'
+import { AssessmentCategories } from '../assessmentShape'
 
 const mockUndefinedAssessmentListing: IAssessmentListingProps = {
   ...mockRouterProps('/academy/missions', {}),
-  handleAssessmentOverviewFetch: () => {}
+  handleAssessmentOverviewFetch: () => {},
+  assessmentCategory: AssessmentCategories.MISSION
 }
 
 const mockEmptyAssessmentListing: IAssessmentListingProps = {
   ...mockRouterProps('/academy/missions', {}),
   assessmentOverviews: [],
-  handleAssessmentOverviewFetch: () => {}
+  handleAssessmentOverviewFetch: () => {},
+  assessmentCategory: AssessmentCategories.MISSION
 }
 
 const mockPresentAssessmentListing: IAssessmentListingProps = {
   ...mockRouterProps('/academy/missions', {}),
   assessmentOverviews: mockAssessmentOverviews,
-  handleAssessmentOverviewFetch: () => {}
+  handleAssessmentOverviewFetch: () => {},
+  assessmentCategory: AssessmentCategories.MISSION
 }
 
 test('AssessmentListing page "loading" content renders correctly', () => {
