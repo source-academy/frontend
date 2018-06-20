@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Missions page "loading" content renders correctly 1`] = `
+exports[`AssessmentListing page "loading" content renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
-      <div className=\\"Missions\\">
+    <AssessmentListing match={{...}} location={{...}} history={{...}} staticContext={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
+      <div className=\\"AssessmentListing\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
@@ -37,16 +37,16 @@ exports[`Missions page "loading" content renders correctly 1`] = `
           </div>
         </ContentDisplay>
       </div>
-    </Missions>
+    </AssessmentListing>
   </Router>
 </MemoryRouter>"
 `;
 
-exports[`Missions page with 0 missions renders correctly 1`] = `
+exports[`AssessmentListing page with 0 missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
-      <div className=\\"Missions\\">
+    <AssessmentListing match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
+      <div className=\\"AssessmentListing\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
@@ -77,16 +77,16 @@ exports[`Missions page with 0 missions renders correctly 1`] = `
           </div>
         </ContentDisplay>
       </div>
-    </Missions>
+    </AssessmentListing>
   </Router>
 </MemoryRouter>"
 `;
 
-exports[`Missions page with multiple loaded missions renders correctly 1`] = `
+exports[`AssessmentListing page with multiple loaded missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Missions match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
-      <div className=\\"Missions\\">
+    <AssessmentListing match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]}>
+      <div className=\\"AssessmentListing\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
@@ -94,33 +94,33 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                 <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
                   <Component assessmentOverviews={{...}}>
                     <div>
-                      <Blueprint2.Card className=\\"row mission-info\\" elevation={0} interactive={false}>
-                        <div className=\\"pt-card pt-elevation-0 row mission-info\\">
-                          <div className=\\"col-xs-3 mission-info-picture\\">
+                      <Blueprint2.Card className=\\"row listing\\" elevation={0} interactive={false}>
+                        <div className=\\"pt-card pt-elevation-0 row listing\\">
+                          <div className=\\"col-xs-3 listing-picture\\">
                             PICTURE
                           </div>
-                          <div className=\\"col-xs-9 mission-info-text\\">
-                            <div className=\\"row mission-info-title\\">
+                          <div className=\\"col-xs-9 listing-text\\">
+                            <div className=\\"row listing-title\\">
                               <h4>
                                 An Odessey to Runes
                               </h4>
                             </div>
-                            <div className=\\"row mission-info-order\\">
+                            <div className=\\"row listing-order\\">
                               <h6>
                                 Mission 0 : 123123 XP (hardcoded)
                               </h6>
                             </div>
-                            <div className=\\"row mission-info-description\\">
+                            <div className=\\"row listing-description\\">
                               <p className=\\"col-xs-12\\">
                                 Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
                               </p>
                             </div>
-                            <div className=\\"row between-xs middle-xs mission-info-controls\\">
-                              <div className=\\"col-xs-8 mission-info-due-date-parent\\">
-                                <Text className=\\"mission-info-due-date\\">
-                                  <div className=\\"mission-info-due-date\\" title={[undefined]}>
-                                    <Blueprint2.Icon className=\\"mission-info-due-icon\\" iconSize={14} icon=\\"time\\">
-                                      <svg className=\\"pt-icon mission-info-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
+                            <div className=\\"row between-xs middle-xs listing-controls\\">
+                              <div className=\\"col-xs-8 listing-due-date-parent\\">
+                                <Text className=\\"listing-due-date\\">
+                                  <div className=\\"listing-due-date\\" title={[undefined]}>
+                                    <Blueprint2.Icon className=\\"listing-due-icon\\" iconSize={14} icon=\\"time\\">
+                                      <svg className=\\"pt-icon listing-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
                                         <title>
                                           time
                                         </title>
@@ -136,8 +136,8 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                                   <Route path=\\"/academy/missions/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                     <Link to=\\"/academy/missions/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                       <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/0\\">
-                                        <Blueprint2.Button className=\\"mission-info-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
-                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary mission-info-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                        <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
+                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
                                               <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <title>
@@ -163,33 +163,33 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                       </Blueprint2.Card>
                     </div>
                     <div>
-                      <Blueprint2.Card className=\\"row mission-info\\" elevation={0} interactive={false}>
-                        <div className=\\"pt-card pt-elevation-0 row mission-info\\">
-                          <div className=\\"col-xs-3 mission-info-picture\\">
+                      <Blueprint2.Card className=\\"row listing\\" elevation={0} interactive={false}>
+                        <div className=\\"pt-card pt-elevation-0 row listing\\">
+                          <div className=\\"col-xs-3 listing-picture\\">
                             PICTURE
                           </div>
-                          <div className=\\"col-xs-9 mission-info-text\\">
-                            <div className=\\"row mission-info-title\\">
+                          <div className=\\"col-xs-9 listing-text\\">
+                            <div className=\\"row listing-title\\">
                               <h4>
                                 The Secret to Streams
                               </h4>
                             </div>
-                            <div className=\\"row mission-info-order\\">
+                            <div className=\\"row listing-order\\">
                               <h6>
                                 Mission 0 : 123123 XP (hardcoded)
                               </h6>
                             </div>
-                            <div className=\\"row mission-info-description\\">
+                            <div className=\\"row listing-description\\">
                               <p className=\\"col-xs-12\\">
                                 Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
                               </p>
                             </div>
-                            <div className=\\"row between-xs middle-xs mission-info-controls\\">
-                              <div className=\\"col-xs-8 mission-info-due-date-parent\\">
-                                <Text className=\\"mission-info-due-date\\">
-                                  <div className=\\"mission-info-due-date\\" title={[undefined]}>
-                                    <Blueprint2.Icon className=\\"mission-info-due-icon\\" iconSize={14} icon=\\"time\\">
-                                      <svg className=\\"pt-icon mission-info-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
+                            <div className=\\"row between-xs middle-xs listing-controls\\">
+                              <div className=\\"col-xs-8 listing-due-date-parent\\">
+                                <Text className=\\"listing-due-date\\">
+                                  <div className=\\"listing-due-date\\" title={[undefined]}>
+                                    <Blueprint2.Icon className=\\"listing-due-icon\\" iconSize={14} icon=\\"time\\">
+                                      <svg className=\\"pt-icon listing-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
                                         <title>
                                           time
                                         </title>
@@ -205,8 +205,8 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                                   <Route path=\\"/academy/missions/1\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                     <Link to=\\"/academy/missions/1\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                       <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/1\\">
-                                        <Blueprint2.Button className=\\"mission-info-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
-                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary mission-info-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                        <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
+                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
                                               <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <title>
@@ -232,33 +232,33 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                       </Blueprint2.Card>
                     </div>
                     <div>
-                      <Blueprint2.Card className=\\"row mission-info\\" elevation={0} interactive={false}>
-                        <div className=\\"pt-card pt-elevation-0 row mission-info\\">
-                          <div className=\\"col-xs-3 mission-info-picture\\">
+                      <Blueprint2.Card className=\\"row listing\\" elevation={0} interactive={false}>
+                        <div className=\\"pt-card pt-elevation-0 row listing\\">
+                          <div className=\\"col-xs-3 listing-picture\\">
                             PICTURE
                           </div>
-                          <div className=\\"col-xs-9 mission-info-text\\">
-                            <div className=\\"row mission-info-title\\">
+                          <div className=\\"col-xs-9 listing-text\\">
+                            <div className=\\"row listing-title\\">
                               <h4>
                                 A sample Sidequest
                               </h4>
                             </div>
-                            <div className=\\"row mission-info-order\\">
+                            <div className=\\"row listing-order\\">
                               <h6>
                                 Mission 0 : 123123 XP (hardcoded)
                               </h6>
                             </div>
-                            <div className=\\"row mission-info-description\\">
+                            <div className=\\"row listing-description\\">
                               <p className=\\"col-xs-12\\">
                                 Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
                               </p>
                             </div>
-                            <div className=\\"row between-xs middle-xs mission-info-controls\\">
-                              <div className=\\"col-xs-8 mission-info-due-date-parent\\">
-                                <Text className=\\"mission-info-due-date\\">
-                                  <div className=\\"mission-info-due-date\\" title={[undefined]}>
-                                    <Blueprint2.Icon className=\\"mission-info-due-icon\\" iconSize={14} icon=\\"time\\">
-                                      <svg className=\\"pt-icon mission-info-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
+                            <div className=\\"row between-xs middle-xs listing-controls\\">
+                              <div className=\\"col-xs-8 listing-due-date-parent\\">
+                                <Text className=\\"listing-due-date\\">
+                                  <div className=\\"listing-due-date\\" title={[undefined]}>
+                                    <Blueprint2.Icon className=\\"listing-due-icon\\" iconSize={14} icon=\\"time\\">
+                                      <svg className=\\"pt-icon listing-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
                                         <title>
                                           time
                                         </title>
@@ -274,8 +274,8 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                                   <Route path=\\"/academy/missions/2\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                     <Link to=\\"/academy/missions/2\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                       <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/2\\">
-                                        <Blueprint2.Button className=\\"mission-info-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
-                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary mission-info-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                        <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
+                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
                                               <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <title>
@@ -301,33 +301,33 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                       </Blueprint2.Card>
                     </div>
                     <div>
-                      <Blueprint2.Card className=\\"row mission-info\\" elevation={0} interactive={false}>
-                        <div className=\\"pt-card pt-elevation-0 row mission-info\\">
-                          <div className=\\"col-xs-3 mission-info-picture\\">
+                      <Blueprint2.Card className=\\"row listing\\" elevation={0} interactive={false}>
+                        <div className=\\"pt-card pt-elevation-0 row listing\\">
+                          <div className=\\"col-xs-3 listing-picture\\">
                             PICTURE
                           </div>
-                          <div className=\\"col-xs-9 mission-info-text\\">
-                            <div className=\\"row mission-info-title\\">
+                          <div className=\\"col-xs-9 listing-text\\">
+                            <div className=\\"row listing-title\\">
                               <h4>
                                 A closed Mission
                               </h4>
                             </div>
-                            <div className=\\"row mission-info-order\\">
+                            <div className=\\"row listing-order\\">
                               <h6>
                                 Mission 0 : 123123 XP (hardcoded)
                               </h6>
                             </div>
-                            <div className=\\"row mission-info-description\\">
+                            <div className=\\"row listing-description\\">
                               <p className=\\"col-xs-12\\">
                                 Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
                               </p>
                             </div>
-                            <div className=\\"row between-xs middle-xs mission-info-controls\\">
-                              <div className=\\"col-xs-8 mission-info-due-date-parent\\">
-                                <Text className=\\"mission-info-due-date\\">
-                                  <div className=\\"mission-info-due-date\\" title={[undefined]}>
-                                    <Blueprint2.Icon className=\\"mission-info-due-icon\\" iconSize={14} icon=\\"time\\">
-                                      <svg className=\\"pt-icon mission-info-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
+                            <div className=\\"row between-xs middle-xs listing-controls\\">
+                              <div className=\\"col-xs-8 listing-due-date-parent\\">
+                                <Text className=\\"listing-due-date\\">
+                                  <div className=\\"listing-due-date\\" title={[undefined]}>
+                                    <Blueprint2.Icon className=\\"listing-due-icon\\" iconSize={14} icon=\\"time\\">
+                                      <svg className=\\"pt-icon listing-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
                                         <title>
                                           time
                                         </title>
@@ -343,8 +343,8 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                                   <Route path=\\"/academy/missions/3\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                     <Link to=\\"/academy/missions/3\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                       <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/3\\">
-                                        <Blueprint2.Button className=\\"mission-info-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
-                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary mission-info-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                        <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
+                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
                                               <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <title>
@@ -370,33 +370,33 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                       </Blueprint2.Card>
                     </div>
                     <div>
-                      <Blueprint2.Card className=\\"row mission-info\\" elevation={0} interactive={false}>
-                        <div className=\\"pt-card pt-elevation-0 row mission-info\\">
-                          <div className=\\"col-xs-3 mission-info-picture\\">
+                      <Blueprint2.Card className=\\"row listing\\" elevation={0} interactive={false}>
+                        <div className=\\"pt-card pt-elevation-0 row listing\\">
+                          <div className=\\"col-xs-3 listing-picture\\">
                             PICTURE
                           </div>
-                          <div className=\\"col-xs-9 mission-info-text\\">
-                            <div className=\\"row mission-info-title\\">
+                          <div className=\\"col-xs-9 listing-text\\">
+                            <div className=\\"row listing-title\\">
                               <h4>
                                 A closed sidequest
                               </h4>
                             </div>
-                            <div className=\\"row mission-info-order\\">
+                            <div className=\\"row listing-order\\">
                               <h6>
                                 Mission 0 : 123123 XP (hardcoded)
                               </h6>
                             </div>
-                            <div className=\\"row mission-info-description\\">
+                            <div className=\\"row listing-description\\">
                               <p className=\\"col-xs-12\\">
                                 Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
                               </p>
                             </div>
-                            <div className=\\"row between-xs middle-xs mission-info-controls\\">
-                              <div className=\\"col-xs-8 mission-info-due-date-parent\\">
-                                <Text className=\\"mission-info-due-date\\">
-                                  <div className=\\"mission-info-due-date\\" title={[undefined]}>
-                                    <Blueprint2.Icon className=\\"mission-info-due-icon\\" iconSize={14} icon=\\"time\\">
-                                      <svg className=\\"pt-icon mission-info-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
+                            <div className=\\"row between-xs middle-xs listing-controls\\">
+                              <div className=\\"col-xs-8 listing-due-date-parent\\">
+                                <Text className=\\"listing-due-date\\">
+                                  <div className=\\"listing-due-date\\" title={[undefined]}>
+                                    <Blueprint2.Icon className=\\"listing-due-icon\\" iconSize={14} icon=\\"time\\">
+                                      <svg className=\\"pt-icon listing-due-icon\\" style={{...}} data-icon=\\"time\\" width={14} height={14} viewBox=\\"0 0 16 16\\">
                                         <title>
                                           time
                                         </title>
@@ -412,8 +412,8 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
                                   <Route path=\\"/academy/missions/4\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                     <Link to=\\"/academy/missions/4\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                       <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/4\\">
-                                        <Blueprint2.Button className=\\"mission-info-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
-                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary mission-info-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                        <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
+                                          <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
                                               <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                 <title>
@@ -445,7 +445,7 @@ exports[`Missions page with multiple loaded missions renders correctly 1`] = `
           </div>
         </ContentDisplay>
       </div>
-    </Missions>
+    </AssessmentListing>
   </Router>
 </MemoryRouter>"
 `;
