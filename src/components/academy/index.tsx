@@ -1,3 +1,5 @@
+/* tslint:disable: jsx-no-lambda */
+
 import * as qs from 'query-string'
 import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
@@ -6,6 +8,7 @@ import AssessmentListingContainer from '../../containers/AssessmentListingContai
 import Game from '../../containers/GameContainer'
 import { isAcademyRe } from '../../reducers/session'
 import { HistoryHelper } from '../../utils/history'
+import { AssessmentCategories } from '../assessment/assessmentShape'
 import AcademyNavigationBar from './NavigationBar'
 
 interface IAcademyProps extends IDispatchProps, IOwnProps, IStateProps, RouteComponentProps<{}> {}
@@ -30,7 +33,7 @@ export const Academy: React.SFC<IAcademyProps> = props => (
       {checkLoggedIn(props)}
       <Route path="/academy/contests" component={AssessmentListingContainer} />
       <Route path="/academy/game" component={Game} />
-      <Route exact={true} path="/academy/missions" component={AssessmentListingContainer} />
+      <Route exact={true} path="/academy/missions" render={routeProps => <AssessmentListingContainer assessmentCategory={AssessmentCategories.MISSION} />} />
       <Route path="/academy/missions/:missionId" component={AssessmentListingContainer} />
       <Route path="/academy/paths" component={AssessmentListingContainer} />
       <Route path="/academy/sidequests" component={AssessmentListingContainer} />
