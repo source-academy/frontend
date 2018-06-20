@@ -10,3 +10,11 @@
     margin-top: 1rem;
   }
 }
+
+.AssessmentListing {
+  color: $cadet-color-3;
+  .listing {
+    background-color: $cadet-color-5;
+    text-align: justify;
+  }
+}
