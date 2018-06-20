@@ -44,15 +44,6 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <Icon icon={IconNames.FOLDER_OPEN} />
         <div className="navbar-button-text hidden-xs">Material</div>
       </NavLink>
-
-      <NavLink
-        to="/admin"
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon={IconNames.EYE_OPEN} />
-        <div className="navbar-button-text hidden-xs">Admin</div>
-      </NavLink>
     </NavbarGroup>
 
     <NavbarGroup align={Alignment.RIGHT}>
