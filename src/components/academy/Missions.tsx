@@ -44,7 +44,7 @@ class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
       )
     } else {
       const props: AssessmentProps = {
-        missionId: assessmentIdParam
+        assessmentId: assessmentIdParam
       }
       return <AssessmentContainer {...props} />
     }
