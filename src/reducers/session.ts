@@ -42,8 +42,8 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
         assessmentOverviews: action.payload
       }
     case UPDATE_ASSESSMENT:
-      const newAssessments = state.assessments.slice()
-      newAssessments[action.payload.id] = action.payload
+      const newAssessments = new Map(state.assessments)
+      newAssessments.set(action.payload.id, action.payload)
       return {
         ...state,
         assessments: newAssessments

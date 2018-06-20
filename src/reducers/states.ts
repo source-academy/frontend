@@ -40,7 +40,7 @@ export interface ISessionState {
   readonly announcements?: Announcement[]
   readonly historyHelper: HistoryHelper
   readonly token?: string
-  readonly assessments: IAssessment[]
+  readonly assessments: Map<number, IAssessment>
   readonly assessmentOverviews?: IAssessmentOverview[]
   readonly username?: string
 }
@@ -140,7 +140,7 @@ export const defaultSession: ISessionState = {
     }
   ],
   assessmentOverviews: undefined,
-  assessments: [],
+  assessments: new Map<number, IAssessment>(),
   historyHelper: {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
