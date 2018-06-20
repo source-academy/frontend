@@ -4,20 +4,20 @@ import { MemoryRouter } from 'react-router'
 
 import { mockAssessmentOverviews } from '../../../mocks/api'
 import { mockRouterProps } from '../../../mocks/components'
-import Missions, { IMissionsProps } from '../Missions'
+import AssessmentViewer, { IAssessmentViewerProps } from '../Missions'
 
-const mockUndefinedMissions: IMissionsProps = {
+const mockUndefinedMissions: IAssessmentViewerProps = {
   ...mockRouterProps('/academy/missions', {}),
   handleAssessmentOverviewFetch: () => {}
 }
 
-const mockEmptyMissions: IMissionsProps = {
+const mockEmptyMissions: IAssessmentViewerProps = {
   ...mockRouterProps('/academy/missions', {}),
   assessmentOverviews: [],
   handleAssessmentOverviewFetch: () => {}
 }
 
-const mockPresentMissions: IMissionsProps = {
+const mockPresentMissions: IAssessmentViewerProps = {
   ...mockRouterProps('/academy/missions', {}),
   assessmentOverviews: mockAssessmentOverviews,
   handleAssessmentOverviewFetch: () => {}
@@ -26,7 +26,7 @@ const mockPresentMissions: IMissionsProps = {
 test('Missions page "loading" content renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
-      <Missions {...mockUndefinedMissions} />
+      <AssessmentViewer {...mockUndefinedMissions} />
     </MemoryRouter>
   )
   const tree = mount(app)
@@ -36,7 +36,7 @@ test('Missions page "loading" content renders correctly', () => {
 test('Missions page with 0 missions renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
-      <Missions {...mockEmptyMissions} />
+      <AssessmentViewer {...mockEmptyMissions} />
     </MemoryRouter>
   )
   const tree = mount(app)
@@ -46,7 +46,7 @@ test('Missions page with 0 missions renders correctly', () => {
 test('Missions page with multiple loaded missions renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
-      <Missions {...mockPresentMissions} />
+      <AssessmentViewer {...mockPresentMissions} />
     </MemoryRouter>
   )
   const tree = mount(app)

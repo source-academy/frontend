@@ -9,30 +9,30 @@ import { OwnProps as AssessmentProps } from '../assessment'
 import { IAssessmentOverview } from '../assessment/assessmentShape'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
-export interface IMissionParams {
-  missionId?: string
+export interface IAssessmentParams {
+  assessmentId?: string
 }
 
-export interface IMissionsProps extends RouteComponentProps<IMissionParams> {
+export interface IAssessmentViewerProps extends RouteComponentProps<IAssessmentParams> {
   assessmentOverviews?: IAssessmentOverview[]
   handleAssessmentOverviewFetch: () => void
 }
 
-export type StateProps = Pick<IMissionsProps, 'assessmentOverviews'>
-export type DispatchProps = Pick<IMissionsProps, 'handleAssessmentOverviewFetch'>
+export type StateProps = Pick<IAssessmentViewerProps, 'assessmentOverviews'>
+export type DispatchProps = Pick<IAssessmentViewerProps, 'handleAssessmentOverviewFetch'>
 
-class Missions extends React.Component<IMissionsProps, {}> {
+class AssessmentViewer extends React.Component<IAssessmentViewerProps, {}> {
   public render() {
-    // make missionIdParam a number
-    let missionIdParam: number | null =
-      this.props.match.params.missionId === undefined
+    // make assessmentId a number
+    let assessmentIdParam: number | null =
+      this.props.match.params.assessmentId === undefined
         ? NaN
-        : parseInt(this.props.match.params.missionId, 10)
+        : parseInt(this.props.match.params.assessmentId, 10)
     // set as null if the parsing failed
-    missionIdParam = Number.isInteger(missionIdParam) ? missionIdParam : null
+    assessmentIdParam = Number.isInteger(assessmentIdParam) ? assessmentIdParam : null
 
-    // if there is no mission specified, Render only information.
-    if (missionIdParam === null) {
+    // if there is no assessmentId specified, Render only information.
+    if (assessmentIdParam === null) {
       const props: IContentDisplayProps = {
         display: <AssessmentOverviewCard assessmentOverviews={this.props.assessmentOverviews} />,
         loadContentDispatch: this.props.handleAssessmentOverviewFetch
@@ -44,7 +44,7 @@ class Missions extends React.Component<IMissionsProps, {}> {
       )
     } else {
       const props: AssessmentProps = {
-        missionId: missionIdParam
+        missionId: assessmentIdParam
       }
       return <AssessmentContainer {...props} />
     }
@@ -102,4 +102,4 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
   return <>{cards}</>
 }
 
-export default Missions
+export default AssessmentViewer
