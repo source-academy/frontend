@@ -10,6 +10,9 @@
 /build
 src/styles/*.css
 
+# deployment
+terraform*
+
 # misc
 .DS_Store
 .env.local
