@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchAssessmentOverviews } from '../../actions/session'
-import Missions, { DispatchProps, StateProps } from '../../components/academy/Missions'
+import AssessmentListing, { DispatchProps, StateProps } from '../../components/academy/Missions'
 import {
   AssessmentCategories,
   IAssessmentOverview
@@ -28,4 +28,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Missions))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AssessmentListing))
