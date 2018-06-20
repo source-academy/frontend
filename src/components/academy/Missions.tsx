@@ -13,15 +13,15 @@ export interface IAssessmentParams {
   assessmentId?: string
 }
 
-export interface IAssessmentViewerProps extends RouteComponentProps<IAssessmentParams> {
+export interface IAssessmentListingProps extends RouteComponentProps<IAssessmentParams> {
   assessmentOverviews?: IAssessmentOverview[]
   handleAssessmentOverviewFetch: () => void
 }
 
-export type StateProps = Pick<IAssessmentViewerProps, 'assessmentOverviews'>
-export type DispatchProps = Pick<IAssessmentViewerProps, 'handleAssessmentOverviewFetch'>
+export type StateProps = Pick<IAssessmentListingProps, 'assessmentOverviews'>
+export type DispatchProps = Pick<IAssessmentListingProps, 'handleAssessmentOverviewFetch'>
 
-class AssessmentViewer extends React.Component<IAssessmentViewerProps, {}> {
+class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
   public render() {
     // make assessmentId a number
     let assessmentIdParam: number | null =
@@ -102,4 +102,4 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
   return <>{cards}</>
 }
 
-export default AssessmentViewer
+export default AssessmentListing
