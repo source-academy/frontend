@@ -1,3 +1,10 @@
 #! /usr/bin/env bash
 
-aws s3 sync ../build s3://cadet-frontend-stg
+main() {
+    if [ ! -z "$1" ]; then
+        profile="--profile $1"
+    fi
+    aws s3 sync ../build s3://stg-cadet-frontend ${profile}
+}
+
+main $1

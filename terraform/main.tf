@@ -1,9 +1,11 @@
 variable "bucket_name" {
-  default = "cadet-frontend-stg"
+  default = "stg-cadet-frontend"
 }
+variable "credentials-profile" {}
 
 provider "aws" {
   region = "ap-southeast-1"
+  profile = "${var.credentials-profile}"
 }
 
 resource "aws_s3_bucket" "stg-site" {
@@ -31,6 +33,6 @@ resource "aws_s3_bucket" "stg-site" {
 }
 EOF
   provisioner "local-exec" {
-    command = "yarn build && ./sync-build.sh"
+    command = "yarn build && ./sync-build.sh ${var.credentials-profile}"
   }
 }
