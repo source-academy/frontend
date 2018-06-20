@@ -61,19 +61,19 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
   } else if (props.assessmentOverviews.length === 0) {
     return <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
   }
-  const cards = props.assessmentOverviews.map((mission, index) => (
+  const cards = props.assessmentOverviews.map((overview, index) => (
     <div key={index}>
       <Card className="row mission-info">
         <div className="col-xs-3 mission-info-picture">PICTURE</div>
         <div className="col-xs-9 mission-info-text">
           <div className="row mission-info-title">
-            <h4>{mission.title}</h4>
+            <h4>{overview.title}</h4>
           </div>
           <div className="row mission-info-order">
             <h6>Mission 0 : 123123 XP (hardcoded)</h6>
           </div>
           <div className="row mission-info-description">
-            <p className="col-xs-12">{mission.shortSummary}</p>
+            <p className="col-xs-12">{overview.shortSummary}</p>
           </div>
           <div className="row between-xs middle-xs mission-info-controls">
             <div className="col-xs-8 mission-info-due-date-parent">
@@ -83,7 +83,7 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
               </Text>
             </div>
             <div className="col-xs">
-              <NavLink to={`/academy/missions/${mission.id.toString()}`}>
+              <NavLink to={`/academy/missions/${overview.id.toString()}`}>
                 <Button
                   className="mission-info-skip-button"
                   minimal={true}
