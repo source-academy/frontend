@@ -141,6 +141,10 @@ export const defaultSession: ISessionState = {
   ],
   assessmentOverviews: undefined,
   assessments: [],
+  historyHelper: {
+    lastAcademyLocations: [null, null],
+    lastGeneralLocations: [null, null]
+  },
   token: undefined,
   username: undefined
 }
