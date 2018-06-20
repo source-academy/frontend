@@ -105,7 +105,7 @@ function* workspaceSaga(): SagaIterator {
 
 function* evalCode(code: string, context: Context) {
   const { result, interrupted } = yield race({
-    result: call(runInContext, code, context),
+    result: call(runInContext, code, context, {scheduler: 'async'}),
     interrupted: take(actionTypes.INTERRUPT_EXECUTION)
   })
   if (result) {
