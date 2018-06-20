@@ -5,10 +5,14 @@ import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
 
 export interface IState {
+  readonly academy: IAcademyState
   readonly application: IApplicationState
-  readonly game: IGameState
   readonly playground: IPlaygroundState
   readonly session: ISessionState
+}
+
+export interface IAcademyState {
+  readonly gameCanvas?: HTMLCanvasElement
 }
 
 export interface IApplicationState {
@@ -16,19 +20,15 @@ export interface IApplicationState {
   readonly environment: ApplicationEnvironment
 }
 
-export const sourceChapters = [1, 2]
-const latestSourceChapter = sourceChapters.slice(-1)[0]
-
-export interface IGameState {
-  readonly canvas?: HTMLCanvasElement
+export interface IPlaygroundState extends IWorkspaceState {
+  readonly queryString?: string
 }
 
-export interface IPlaygroundState {
+interface IWorkspaceState {
   readonly context: Context
   readonly editorValue: string
   readonly editorWidth: string
   readonly isRunning: boolean
-  readonly queryString?: string
   readonly output: InterpreterOutput[]
   readonly replValue: string
   readonly sourceChapter: number
@@ -37,11 +37,11 @@ export interface IPlaygroundState {
 }
 
 export interface ISessionState {
+  readonly assessmentOverviews?: IAssessmentOverview[]
+  readonly assessments: Map<number, IAssessment>
   readonly announcements?: Announcement[]
   readonly historyHelper: HistoryHelper
   readonly token?: string
-  readonly assessments: Map<number, IAssessment>
-  readonly assessmentOverviews?: IAssessmentOverview[]
   readonly username?: string
 }
 
@@ -97,6 +97,9 @@ export enum ApplicationEnvironment {
   Test = 'test'
 }
 
+export const sourceChapters = [1, 2]
+const latestSourceChapter = sourceChapters.slice(-1)[0]
+
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
     case 'development':
@@ -108,13 +111,13 @@ const currentEnvironment = (): ApplicationEnvironment => {
   }
 }
 
+export const defaultAcademy: IAcademyState = {
+  gameCanvas: undefined
+}
+
 export const defaultApplication: IApplicationState = {
   title: 'Cadet',
   environment: currentEnvironment()
-}
-
-export const defaultGame: IGameState = {
-  canvas: undefined
 }
 
 export const defaultPlayground: IPlaygroundState = {

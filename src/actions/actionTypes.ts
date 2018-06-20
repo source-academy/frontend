@@ -4,7 +4,7 @@ export interface IAction extends ReduxAction {
   payload: any
 }
 
-/** Game */
+/** Academy */
 export const SAVE_CANVAS = 'SAVE_CANVAS'
 
 /** Playground */

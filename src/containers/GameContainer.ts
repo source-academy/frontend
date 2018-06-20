@@ -14,7 +14,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   )
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
-  canvas: state.game.canvas
+  canvas: state.academy.gameCanvas
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game)
