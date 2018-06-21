@@ -95,7 +95,7 @@ export class TrailingCommaError implements SourceError {
   }
 }
 
-export function parse (source: string, context: Context) {
+export function parse(source: string, context: Context) {
   let program: es.Program | undefined
   try {
     program = acornParse(source, createAcornParserOptions(context))
@@ -147,8 +147,8 @@ const createAcornParserOptions = (context: Context): AcornOptions => ({
 })
 
 function createWalkers(
-    allowedSyntaxes: { [nodeName: string]: number },
-    parserRules: Array<Rule<es.Node>>
+  allowedSyntaxes: { [nodeName: string]: number },
+  parserRules: Array<Rule<es.Node>>
 ) {
   const newWalkers: { [name: string]: (node: es.Node, ctxt: Context) => void } = {}
 
@@ -172,7 +172,7 @@ function createWalkers(
         usages: []
       }
       context.cfg.edges[id] = []
-      if (context.chapter <= allowedChap) {
+      if (context.chapter < allowedChap) {
         context.errors.push(new DisallowedConstructError(node))
       }
     }
@@ -211,5 +211,7 @@ export const freshId = (() => {
   }
 })()
 
-
-const walkers: { [name: string]: (node: es.Node, ctxt: Context) => void } = createWalkers(syntaxTypes, rules)
+const walkers: { [name: string]: (node: es.Node, ctxt: Context) => void } = createWalkers(
+  syntaxTypes,
+  rules
+)
