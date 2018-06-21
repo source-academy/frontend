@@ -4,6 +4,7 @@ import * as React from 'react'
 
 import Workspace from '../../containers/workspace'
 import { history } from '../../utils/history'
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { OwnProps as ControlBarOwnProps } from '../workspace/ControlBar'
 import { SideContentTab } from '../workspace/side-content'
 import { IAssessment } from './assessmentShape'
@@ -62,7 +63,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       icon: IconNames.BRIEFCASE,
       body: briefing
     }
-    const listingPath = `/academy/${this.props.assessment.category.toLowerCase().concat('s')}`
+    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment.category)}`
     const assessmentPath = listingPath + `/${this.props.assessment.id.toString()}`
     const controlBarOptions: ControlBarOwnProps = {
       hasChapterSelect: false,

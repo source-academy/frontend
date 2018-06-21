@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 import AssessmentContainer from '../../containers/assessment'
-import { stringParamToInt } from '../../utils/paramParseHelpers'
+import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { OwnProps as AssessmentProps } from '../assessment'
 import { AssessmentCategory } from '../assessment/assessmentShape'
 import { IAssessmentOverview } from '../assessment/assessmentShape'
@@ -93,9 +93,7 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
             </div>
             <div className="col-xs">
               <NavLink
-                to={`/academy/${overview.category
-                  .toLowerCase()
-                  .concat('s')}/${overview.id.toString()}/${questionId.toString()}`}
+                to={`/academy/${assessmentCategoryLink(overview.category)}/${overview.id.toString()}/${questionId.toString()}`}
               >
                 <Button
                   className="listing-skip-button"
