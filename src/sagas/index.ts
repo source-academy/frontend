@@ -78,12 +78,10 @@ function* loginSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.FETCH_USERNAME, function*() {
-    const apiUsername = 'https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get'
-    const key = IVLE_KEY
-    const token = yield select((state: IState) => state.session.token)
-    const username = yield call(() =>
-      fetch(`${apiUsername}?APIKey=${key}&Token=${token}`).then(response => response.json())
-    )
+    // TODO: use an API call to the backend; an api call to IVLE raises an
+    // uncaught error due to restrictive Access-Control-Allow-Origin headers,
+    // causing the staging server to bug out
+    const username = yield call(() => 'IVLE USER')
     yield put(actions.setUsername(username))
   })
 }
