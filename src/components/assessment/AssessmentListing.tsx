@@ -5,11 +5,11 @@ import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 import AssessmentContainer from '../../containers/assessment'
+import { stringParamToInt } from '../../utils/paramParseHelpers'
 import { OwnProps as AssessmentProps } from '../assessment'
 import { AssessmentCategory } from '../assessment/assessmentShape'
 import { IAssessmentOverview } from '../assessment/assessmentShape'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
-import { stringParamToInt } from '../../utils/paramParseHelpers'
 
 export interface IAssessmentParams {
   assessmentId?: string
