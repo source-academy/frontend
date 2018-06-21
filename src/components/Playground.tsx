@@ -11,16 +11,40 @@ import { SideContentTab } from './workspace/side-content'
 
 export type PlaygroundProps = RouteComponentProps<{}>
 
-const Playground: React.SFC<PlaygroundProps> = props => {
-  return (
-    <HotKeys className="Playground pt-dark" keyMap={keyMap}>
-      <WorkspaceContainer
-        libQuery={parseLibrary(props)}
-        prgrmQuery={parsePrgrm(props)}
-        sideContentTabs={[playgroundIntroduction]}
-      />
-    </HotKeys>
-  )
+type PlaygroundState = {
+  isGreen: boolean
+}
+
+class Playground extends React.Component<PlaygroundProps, PlaygroundState> {
+  private keyMap = { goGreen: 'h u l k' }
+
+  private handlers = { goGreen: () => {} }
+
+  constructor(props: PlaygroundProps) {
+    super(props)
+    this.state = { isGreen: false }
+    this.handlers.goGreen = this.toggleIsGreen.bind(this)
+  }
+
+  public render() {
+    return (
+      <HotKeys
+        className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
+        keyMap={this.keyMap}
+        handlers={this.handlers}
+      >
+        <WorkspaceContainer
+          libQuery={parseLibrary(this.props)}
+          prgrmQuery={parsePrgrm(this.props)}
+          sideContentTabs={[playgroundIntroduction]}
+        />
+      </HotKeys>
+    )
+  }
+
+  private toggleIsGreen() {
+    this.setState({ isGreen: !this.state.isGreen })
+  }
 }
 
 const parsePrgrm = (props: PlaygroundProps) => {
@@ -33,10 +57,6 @@ const parseLibrary = (props: PlaygroundProps) => {
   const libQuery = qs.parse(props.location.hash).lib
   const lib = libQuery === undefined ? NaN : parseInt(libQuery, 10)
   return sourceChapters.includes(lib) ? lib : undefined
-}
-
-const keyMap = {
-  goGreen: 'h u l k'
 }
 
 const SICP_SITE = 'http://www.comp.nus.edu.sg/~henz/sicp_js/'

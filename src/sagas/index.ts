@@ -8,8 +8,8 @@ import * as actionTypes from '../actions/actionTypes'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/api'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
+import { IVLE_KEY } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
-import { IVLE_KEY } from '../utils/secrets'
 
 function* mainSaga() {
   yield* apiFetchSaga()
@@ -105,7 +105,7 @@ function* workspaceSaga(): SagaIterator {
 
 function* evalCode(code: string, context: Context) {
   const { result, interrupted } = yield race({
-    result: call(runInContext, code, context),
+    result: call(runInContext, code, context, { scheduler: 'async' }),
     interrupted: take(actionTypes.INTERRUPT_EXECUTION)
   })
   if (result) {

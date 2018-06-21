@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Playground renders correctly 1`] = `
-"<HotKeys className=\\"Playground pt-dark\\" keyMap={{...}}>
+"<HotKeys className=\\"Playground pt-dark\\" keyMap={{...}} handlers={{...}}>
   <Connect(Workspace) libQuery={[undefined]} prgrmQuery={[undefined]} sideContentTabs={{...}} />
 </HotKeys>"
 `;

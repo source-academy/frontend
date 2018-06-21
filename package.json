@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "cadet-frontend",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts-info": {
     "format": "Format source code",
     "start": "Start the Webpack development server",
@@ -10,7 +10,7 @@
     "update-ui-snapshots": "Update UI test snapshots"
   },
   "scripts": {
-    "build": "build-css && build-js",
+    "build": "node-sass-chokidar src/ -o src/ && react-scripts-ts build",
     "build-css": "node-sass-chokidar src/ -o src/",
     "build-js": "react-scripts-ts build",
     "coverage": "./scripts/coverage-fix.sh do && react-scripts-ts test --env=jsdom --coverage && ./scripts/coverage-fix.sh undo",
@@ -83,12 +83,14 @@
     "@types/react-router-redux": "^5.0.13",
     "@types/react-test-renderer": "^16.0.1",
     "@types/redux-mock-store": "^0.0.13",
+    "babel-core": "6",
+    "babel-runtime": "^6.23.0",
     "coveralls": "^3.0.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "husky": "^1.0.0-rc.6",
     "prettier": "^1.12.0",
-    "react-scripts-ts": "^2.15.1",
+    "react-scripts-ts": "^2.16.0",
     "react-test-renderer": "^16.3.1",
     "typescript": "^2.8.1"
   }

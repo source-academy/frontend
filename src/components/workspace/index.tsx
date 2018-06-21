@@ -1,7 +1,6 @@
 import { decompressFromEncodedURIComponent } from 'lz-string'
 import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
-import { HotKeys } from 'react-hotkeys'
 
 import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
@@ -60,7 +59,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    */
   public render() {
     return (
-      <HotKeys className="workspace" handlers={handlers}>
+      <div className="workspace">
         <ControlBarContainer {...this.props.controlBarOptions} />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
@@ -75,7 +74,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
             <ReplContainer />
           </div>
         </div>
-      </HotKeys>
+      </div>
     )
   }
 
@@ -152,10 +151,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       this.sideDividerDiv.style.display = 'initial'
     }
   }
-}
-
-const handlers = {
-  goGreen: () => require('../../styles/workspace-green.css')
 }
 
 const rightResizeOnly = {
