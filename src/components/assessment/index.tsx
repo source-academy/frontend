@@ -13,7 +13,10 @@ export type StateProps = {
   assessment?: IAssessment
 }
 
-export type OwnProps = { assessmentId: number }
+export type OwnProps = {
+  assessmentId: number
+  questionId: number
+}
 
 export type DispatchProps = {
   handleAssessmentFetch: (assessmentId: number) => void
@@ -27,7 +30,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
   }
 
   public render() {
-    if (this.props.assessment === undefined) {
+    if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
       return (
         <NonIdealState
           className="Assessment pt-dark"
@@ -57,8 +60,8 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     }
     const controlBarOptions: ControlBarOwnProps = {
       hasChapterSelect: false,
-      hasNextButton: true,
-      hasPreviousButton: true,
+      hasNextButton: this.props.questionId < this.props.assessment.questions.length - 1,
+      hasPreviousButton: this.props.questionId > 0,
       hasSaveButton: true,
       hasShareButton: false
     }
