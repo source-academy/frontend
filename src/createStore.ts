@@ -1,6 +1,7 @@
 import { History } from 'history'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
 import {
+  AnyAction,
   applyMiddleware,
   combineReducers,
   compose,
@@ -8,6 +9,8 @@ import {
   Store,
   StoreEnhancer
 } from 'redux'
+import { Persistor, persistReducer, persistStore } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage 
 import createSagaMiddleware from 'redux-saga'
 
 import reducers from './reducers'
@@ -17,7 +20,7 @@ import { history as appHistory } from './utils/history'
 
 declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>
 
-function createStore(history: History): Store<IState> {
+function createStore(history: History): { store: Store<IState>, persistor: Persistor } {
   let composeEnhancers: any = compose
   const sagaMiddleware = createSagaMiddleware()
   const middleware = [sagaMiddleware, routerMiddleware(history)]
@@ -30,11 +33,20 @@ function createStore(history: History): Store<IState> {
     ...reducers,
     router: routerReducer
   })
-  const enchancers = composeEnhancers(applyMiddleware(...middleware))
-  const createdStore = _createStore(rootReducer, enchancers)
 
+  const persistConfig = {
+    key: 'root',
+    storage,
+  }
+  const persistedReducer: (state: {}, action: AnyAction) => {} = persistReducer(persistConfig, rootReducer)
+
+  const enchancers = composeEnhancers(applyMiddleware(...middleware))
+  const createdStore = _createStore(persistedReducer, enchancers) as Store<IState>
+  const createdPersistor = persistStore(createdStore)
   sagaMiddleware.run(mainSaga)
-  return createdStore
+  return { store: createdStore, persistor: createdPersistor }
 }
 
-export const store = createStore(appHistory) as Store<IState>
+const storeAndPersistor = createStore(appHistory) 
+export const persistor = storeAndPersistor.persistor
+export const store = storeAndPersistor.store
