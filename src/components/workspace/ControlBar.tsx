@@ -130,7 +130,9 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
       ? controlButton('Next', IconNames.ARROW_RIGHT, this.props.onClickNext, { iconOnRight: true })
       : undefined
     const submitButton = this.props.hasSubmitButton
-      ? controlButton('Submit', IconNames.TICK_CIRCLE, this.props.onClickSubmit, { iconOnRight: true })
+      ? controlButton('Submit', IconNames.TICK_CIRCLE, this.props.onClickSubmit, {
+          iconOnRight: true
+        })
       : undefined
 
     return (
