@@ -35,7 +35,12 @@ class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
     // if there is no assessmentId specified, Render only information.
     if (assessmentIdParam === null) {
       const props: IContentDisplayProps = {
-        display: <AssessmentOverviewCard assessmentOverviews={this.props.assessmentOverviews} questionId={questionIdParam}/>,
+        display: (
+          <AssessmentOverviewCard
+            assessmentOverviews={this.props.assessmentOverviews}
+            questionId={questionIdParam}
+          />
+        ),
         loadContentDispatch: this.props.handleAssessmentOverviewFetch
       }
       return (
@@ -86,7 +91,11 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
               </Text>
             </div>
             <div className="col-xs">
-              <NavLink to={`/academy/${overview.category.toLowerCase().concat('s')}/${overview.id.toString()}/${questionId.toString()}`}>
+              <NavLink
+                to={`/academy/${overview.category
+                  .toLowerCase()
+                  .concat('s')}/${overview.id.toString()}/${questionId.toString()}`}
+              >
                 <Button
                   className="listing-skip-button"
                   minimal={true}

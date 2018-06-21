@@ -4,7 +4,7 @@
  * if the integer could not be parsed, or if the parameter was undefined.
  */
 export const stringParamToInt = (param?: string): number | null => {
-  if(param === undefined) {
+  if (param === undefined) {
     return null
   }
   const num: number = parseInt(param, 10)
