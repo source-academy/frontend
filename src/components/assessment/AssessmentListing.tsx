@@ -12,6 +12,7 @@ import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export interface IAssessmentParams {
   assessmentId?: string
+  questionId?: string
 }
 
 export interface IAssessmentListingProps extends RouteComponentProps<IAssessmentParams> {
@@ -56,9 +57,11 @@ class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
 
 interface IAssessmentOverviewCardProps {
   assessmentOverviews?: IAssessmentOverview[]
+  questionId?: number
 }
 
 export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = props => {
+  const questionId = props.questionId === undefined ? 0 : props.questionId
   if (props.assessmentOverviews === undefined) {
     return <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
   } else if (props.assessmentOverviews.length === 0) {
@@ -86,7 +89,7 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
               </Text>
             </div>
             <div className="col-xs">
-              <NavLink to={`/academy/missions/${overview.id.toString()}`}>
+              <NavLink to={`/academy/${overview.category.toLowerCase().concat('s')}/${overview.id.toString()}/${questionId.toString()}`}>
                 <Button
                   className="listing-skip-button"
                   minimal={true}

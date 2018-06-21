@@ -41,12 +41,7 @@ export const Academy: React.SFC<IAcademyProps> = props => (
       />
       <Route path="/academy/game" component={Game} />
       <Route
-        exact={true}
-        path="/academy/missions"
-        render={assessmentListingRenderFactory(AssessmentCategories.MISSION)}
-      />
-      <Route
-        path="/academy/missions/:assessmentId"
+        path="/academy/missions/:assessmentId?/:questionId?"
         render={assessmentListingRenderFactory(AssessmentCategories.MISSION)}
       />
       <Route
