@@ -36,7 +36,7 @@ export const Academy: React.SFC<IAcademyProps> = props => (
     <Switch>
       {checkLoggedIn(props)}
       <Route
-        path="/academy/contests"
+        path="/academy/contests/:assessmentId?/:questionId?"
         render={assessmentListingRenderFactory(AssessmentCategories.CONTEST)}
       />
       <Route path="/academy/game" component={Game} />
@@ -45,11 +45,11 @@ export const Academy: React.SFC<IAcademyProps> = props => (
         render={assessmentListingRenderFactory(AssessmentCategories.MISSION)}
       />
       <Route
-        path="/academy/paths"
+        path="/academy/paths/:assessmentId?/:questionId?"
         render={assessmentListingRenderFactory(AssessmentCategories.PATH)}
       />
       <Route
-        path="/academy/sidequests"
+        path="/academy/sidequests/:assessmentId?/:questionId?"
         render={assessmentListingRenderFactory(AssessmentCategories.SIDEQUEST)}
       />
       <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
