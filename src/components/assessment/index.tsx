@@ -24,10 +24,13 @@ export type DispatchProps = {
 }
 
 class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
-  public state = { showOverlay: true }
+  public state = { showOverlay: false }
 
   public componentWillMount() {
     this.props.handleAssessmentFetch(this.props.assessmentId)
+    if (this.props.questionId === 0) {
+      this.setState({ showOverlay: true })
+    }
   }
 
   public render() {
