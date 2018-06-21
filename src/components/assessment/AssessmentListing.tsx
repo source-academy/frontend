@@ -4,7 +4,7 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
-import AssessmentContainer from '../../containers/AssessmentContainer'
+import AssessmentContainer from '../../containers/assessment'
 import { OwnProps as AssessmentProps } from '../assessment'
 import { AssessmentCategory } from '../assessment/assessmentShape'
 import { IAssessmentOverview } from '../assessment/assessmentShape'

@@ -4,7 +4,7 @@ import * as qs from 'query-string'
 import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
-import AssessmentListingContainer from '../../containers/AssessmentListingContainer'
+import AssessmentListingContainer from '../../containers/assessment/AssessmentListingContainer'
 import Game from '../../containers/GameContainer'
 import { isAcademyRe } from '../../reducers/session'
 import { HistoryHelper } from '../../utils/history'

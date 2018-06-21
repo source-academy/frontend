@@ -2,14 +2,14 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { fetchAssessmentOverviews } from '../actions/session'
+import { fetchAssessmentOverviews } from '../../actions/session'
 import AssessmentListing, {
   DispatchProps,
   OwnProps,
   StateProps
-} from '../components/assessment/AssessmentListing'
-import { IAssessmentOverview } from '../components/assessment/assessmentShape'
-import { IState } from '../reducers/states'
+} from '../../components/assessment/AssessmentListing'
+import { IAssessmentOverview } from '../../components/assessment/assessmentShape'
+import { IState } from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   const categoryFilter = (overview: IAssessmentOverview) =>
