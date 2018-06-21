@@ -13,17 +13,17 @@ export type StateProps = {
   assessment?: IAssessment
 }
 
-export type OwnProps = { missionId: number }
+export type OwnProps = { assessmentId: number }
 
 export type DispatchProps = {
-  handleAssessmentFetch: (missionId: number) => void
+  handleAssessmentFetch: (assessmentId: number) => void
 }
 
 class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
   public state = { showOverlay: true }
 
   public componentWillMount() {
-    this.props.handleAssessmentFetch(this.props.missionId)
+    this.props.handleAssessmentFetch(this.props.assessmentId)
   }
 
   public render() {

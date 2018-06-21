@@ -3,19 +3,20 @@ import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchAssessmentOverviews } from '../../actions/session'
-import Missions, { DispatchProps, StateProps } from '../../components/academy/Missions'
-import {
-  AssessmentCategories,
-  IAssessmentOverview
-} from '../../components/assessment/assessmentShape'
+import AssessmentListing, {
+  DispatchProps,
+  OwnProps,
+  StateProps
+} from '../../components/assessment/AssessmentListing'
+import { IAssessmentOverview } from '../../components/assessment/assessmentShape'
 import { IState } from '../../reducers/states'
 
-const isMission = (x: IAssessmentOverview) => x.category === AssessmentCategories.MISSION
-
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+  const categoryFilter = (overview: IAssessmentOverview) =>
+    overview.category === props.assessmentCategory
   return {
     assessmentOverviews: state.session.assessmentOverviews
-      ? state.session.assessmentOverviews.filter(isMission)
+      ? state.session.assessmentOverviews.filter(categoryFilter)
       : undefined
   }
 }
@@ -28,4 +29,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Missions))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AssessmentListing))

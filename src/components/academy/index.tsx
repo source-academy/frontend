@@ -1,11 +1,14 @@
+/* tslint:disable: jsx-no-lambda */
+
 import * as qs from 'query-string'
 import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
-import MissionsContainer from '../../containers/academy/MissionsContainer'
+import AssessmentListingContainer from '../../containers/assessment/AssessmentListingContainer'
 import Game from '../../containers/GameContainer'
 import { isAcademyRe } from '../../reducers/session'
 import { HistoryHelper } from '../../utils/history'
+import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape'
 import AcademyNavigationBar from './NavigationBar'
 
 interface IAcademyProps extends IDispatchProps, IOwnProps, IStateProps, RouteComponentProps<{}> {}
@@ -23,17 +26,37 @@ export interface IStateProps {
   historyHelper: HistoryHelper
 }
 
+const assessmentListingRenderFactory = (cat: AssessmentCategory) => (
+  routerProps: RouteComponentProps<any>
+) => <AssessmentListingContainer assessmentCategory={cat} />
+
 export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
     <AcademyNavigationBar />
     <Switch>
       {checkLoggedIn(props)}
-      <Route path="/academy/contests" component={MissionsContainer} />
+      <Route
+        path="/academy/contests"
+        render={assessmentListingRenderFactory(AssessmentCategories.CONTEST)}
+      />
       <Route path="/academy/game" component={Game} />
-      <Route exact={true} path="/academy/missions" component={MissionsContainer} />
-      <Route path="/academy/missions/:missionId" component={MissionsContainer} />
-      <Route path="/academy/paths" component={MissionsContainer} />
-      <Route path="/academy/sidequests" component={MissionsContainer} />
+      <Route
+        exact={true}
+        path="/academy/missions"
+        render={assessmentListingRenderFactory(AssessmentCategories.MISSION)}
+      />
+      <Route
+        path="/academy/missions/:assessmentId"
+        render={assessmentListingRenderFactory(AssessmentCategories.MISSION)}
+      />
+      <Route
+        path="/academy/paths"
+        render={assessmentListingRenderFactory(AssessmentCategories.PATH)}
+      />
+      <Route
+        path="/academy/sidequests"
+        render={assessmentListingRenderFactory(AssessmentCategories.SIDEQUEST)}
+      />
       <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
       <Route component={redirectTo404} />
     </Switch>

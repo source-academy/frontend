@@ -4,47 +4,50 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
-import AssessmentContainer from '../../containers/AssessmentContainer'
+import AssessmentContainer from '../../containers/assessment'
 import { OwnProps as AssessmentProps } from '../assessment'
+import { AssessmentCategory } from '../assessment/assessmentShape'
 import { IAssessmentOverview } from '../assessment/assessmentShape'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
-export interface IMissionParams {
-  missionId?: string
+export interface IAssessmentParams {
+  assessmentId?: string
 }
 
-export interface IMissionsProps extends RouteComponentProps<IMissionParams> {
+export interface IAssessmentListingProps extends RouteComponentProps<IAssessmentParams> {
   assessmentOverviews?: IAssessmentOverview[]
+  assessmentCategory: AssessmentCategory
   handleAssessmentOverviewFetch: () => void
 }
 
-export type StateProps = Pick<IMissionsProps, 'assessmentOverviews'>
-export type DispatchProps = Pick<IMissionsProps, 'handleAssessmentOverviewFetch'>
+export type DispatchProps = Pick<IAssessmentListingProps, 'handleAssessmentOverviewFetch'>
+export type OwnProps = Pick<IAssessmentListingProps, 'assessmentCategory'>
+export type StateProps = Pick<IAssessmentListingProps, 'assessmentOverviews'>
 
-class Missions extends React.Component<IMissionsProps, {}> {
+class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
   public render() {
-    // make missionIdParam a number
-    let missionIdParam: number | null =
-      this.props.match.params.missionId === undefined
+    // make assessmentId a number
+    let assessmentIdParam: number | null =
+      this.props.match.params.assessmentId === undefined
         ? NaN
-        : parseInt(this.props.match.params.missionId, 10)
+        : parseInt(this.props.match.params.assessmentId, 10)
     // set as null if the parsing failed
-    missionIdParam = Number.isInteger(missionIdParam) ? missionIdParam : null
+    assessmentIdParam = Number.isInteger(assessmentIdParam) ? assessmentIdParam : null
 
-    // if there is no mission specified, Render only information.
-    if (missionIdParam === null) {
+    // if there is no assessmentId specified, Render only information.
+    if (assessmentIdParam === null) {
       const props: IContentDisplayProps = {
         display: <AssessmentOverviewCard assessmentOverviews={this.props.assessmentOverviews} />,
         loadContentDispatch: this.props.handleAssessmentOverviewFetch
       }
       return (
-        <div className="Missions">
+        <div className="AssessmentListing">
           <ContentDisplay {...props} />
         </div>
       )
     } else {
       const props: AssessmentProps = {
-        missionId: missionIdParam
+        assessmentId: assessmentIdParam
       }
       return <AssessmentContainer {...props} />
     }
@@ -61,31 +64,31 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
   } else if (props.assessmentOverviews.length === 0) {
     return <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
   }
-  const cards = props.assessmentOverviews.map((mission, index) => (
+  const cards = props.assessmentOverviews.map((overview, index) => (
     <div key={index}>
-      <Card className="row mission-info">
-        <div className="col-xs-3 mission-info-picture">PICTURE</div>
-        <div className="col-xs-9 mission-info-text">
-          <div className="row mission-info-title">
-            <h4>{mission.title}</h4>
+      <Card className="row listing">
+        <div className="col-xs-3 listing-picture">PICTURE</div>
+        <div className="col-xs-9 listing-text">
+          <div className="row listing-title">
+            <h4>{overview.title}</h4>
           </div>
-          <div className="row mission-info-order">
+          <div className="row listing-order">
             <h6>Mission 0 : 123123 XP (hardcoded)</h6>
           </div>
-          <div className="row mission-info-description">
-            <p className="col-xs-12">{mission.shortSummary}</p>
+          <div className="row listing-description">
+            <p className="col-xs-12">{overview.shortSummary}</p>
           </div>
-          <div className="row between-xs middle-xs mission-info-controls">
-            <div className="col-xs-8 mission-info-due-date-parent">
-              <Text className="mission-info-due-date">
-                <Icon className="mission-info-due-icon" iconSize={14} icon={IconNames.TIME} />
+          <div className="row between-xs middle-xs listing-controls">
+            <div className="col-xs-8 listing-due-date-parent">
+              <Text className="listing-due-date">
+                <Icon className="listing-due-icon" iconSize={14} icon={IconNames.TIME} />
                 Due: 12/12/12
               </Text>
             </div>
             <div className="col-xs">
-              <NavLink to={`/academy/missions/${mission.id.toString()}`}>
+              <NavLink to={`/academy/missions/${overview.id.toString()}`}>
                 <Button
-                  className="mission-info-skip-button"
+                  className="listing-skip-button"
                   minimal={true}
                   intent={Intent.PRIMARY}
                   icon={IconNames.FLAME}
@@ -102,4 +105,4 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
   return <>{cards}</>
 }
 
-export default Missions
+export default AssessmentListing
