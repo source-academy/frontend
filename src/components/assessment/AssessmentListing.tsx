@@ -93,7 +93,9 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
             </div>
             <div className="col-xs">
               <NavLink
-                to={`/academy/${assessmentCategoryLink(overview.category)}/${overview.id.toString()}/${questionId.toString()}`}
+                to={`/academy/${assessmentCategoryLink(
+                  overview.category
+                )}/${overview.id.toString()}/${questionId.toString()}`}
               >
                 <Button
                   className="listing-skip-button"

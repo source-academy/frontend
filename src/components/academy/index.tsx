@@ -39,12 +39,16 @@ export const Academy: React.SFC<IAcademyProps> = props => (
     <Switch>
       {checkLoggedIn(props)}
       <Route
-        path={`/academy/${assessmentCategoryLink(AssessmentCategories.CONTEST)}/${assessmentRegExp}`}
+        path={`/academy/${assessmentCategoryLink(
+          AssessmentCategories.CONTEST
+        )}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.CONTEST)}
       />
-      <Route path='/academy/game' component={Game} />
+      <Route path="/academy/game" component={Game} />
       <Route
-        path={`/academy/${assessmentCategoryLink(AssessmentCategories.MISSION)}/${assessmentRegExp}`}
+        path={`/academy/${assessmentCategoryLink(
+          AssessmentCategories.MISSION
+        )}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.MISSION)}
       />
       <Route
@@ -52,10 +56,12 @@ export const Academy: React.SFC<IAcademyProps> = props => (
         render={assessmentListingRenderFactory(AssessmentCategories.PATH)}
       />
       <Route
-        path={`/academy/${assessmentCategoryLink(AssessmentCategories.SIDEQUEST)}/${assessmentRegExp}`}
+        path={`/academy/${assessmentCategoryLink(
+          AssessmentCategories.SIDEQUEST
+        )}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.SIDEQUEST)}
       />
-      <Route exact={true} path='/academy' component={dynamicRedirect(props)} />
+      <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
       <Route component={redirectTo404} />
     </Switch>
   </div>

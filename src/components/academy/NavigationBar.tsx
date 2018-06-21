@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
-import { AssessmentCategories } from '../assessment/assessmentShape';
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
+import { AssessmentCategories } from '../assessment/assessmentShape'
 
 const NavigationBar: React.SFC<{}> = () => (
   <Navbar className="NavigationBar secondary-navbar">
