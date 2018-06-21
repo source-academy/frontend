@@ -1,4 +1,5 @@
 /* tslint:disable: max-classes-per-file */
+/* tslint:disable: object-literal-shorthand*/
 import * as es from 'estree'
 import * as constants from './constants'
 import { toJS } from './interop'
@@ -124,31 +125,41 @@ function* getArgs(context: Context, call: es.CallExpression) {
 
 export type Evaluator<T extends es.Node> = (node: T, context: Context) => IterableIterator<Value>
 
+/**
+ * WARNING: Do not use object literal shorthands, e.g.
+ *   {
+ *     *Literal(node: es.Literal, ...) {...},
+ *     *ThisExpression(node: es.ThisExpression, ..._ {...},
+ *     ...
+ *   }
+ * They do not minify well, raising uncaught syntax errors in production.
+ * See: https://github.com/webpack/webpack/issues/7566
+ */
 export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
   /** Simple Values */
-  *Literal(node: es.Literal, context: Context) {
+  Literal: function*(node: es.Literal, context: Context) {
     return node.value
   },
-  *ThisExpression(node: es.ThisExpression, context: Context) {
+  ThisExpression: function*(node: es.ThisExpression, context: Context) {
     return context.runtime.frames[0].thisContext
   },
-  *ArrayExpression(node: es.ArrayExpression, context: Context) {
+  ArrayExpression: function*(node: es.ArrayExpression, context: Context) {
     const res = []
     for (const n of node.elements) {
       res.push(yield* evaluate(n, context))
     }
     return res
   },
-  *FunctionExpression(node: es.FunctionExpression, context: Context) {
+  FunctionExpression: function*(node: es.FunctionExpression, context: Context) {
     return new Closure(node, currentFrame(context), context)
   },
-  *ArrowFunctionExpression(node: es.Function, context: Context) {
+  ArrowFunctionExpression: function*(node: es.Function, context: Context) {
     return new ArrowClosure(node, currentFrame(context), context)
   },
-  *Identifier(node: es.Identifier, context: Context) {
+  Identifier: function*(node: es.Identifier, context: Context) {
     return getVariable(context, node.name)
   },
-  *CallExpression(node: es.CallExpression, context: Context) {
+  CallExpression: function*(node: es.CallExpression, context: Context) {
     const callee = yield* evaluate(node.callee, context)
     const args = yield* getArgs(context, node)
     let thisContext
@@ -158,7 +169,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     const result = yield* apply(context, callee, args, node, thisContext)
     return result
   },
-  *NewExpression(node: es.NewExpression, context: Context) {
+  NewExpression: function*(node: es.NewExpression, context: Context) {
     const callee = yield* evaluate(node.callee, context)
     const args = []
     for (const arg of node.arguments) {
@@ -174,7 +185,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     }
     return obj
   },
-  *UnaryExpression(node: es.UnaryExpression, context: Context) {
+  UnaryExpression: function*(node: es.UnaryExpression, context: Context) {
     const value = yield* evaluate(node.argument, context)
 
     const error = rttc.checkUnaryExpression(context, node.operator, value)
@@ -191,7 +202,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
       return +value
     }
   },
-  *BinaryExpression(node: es.BinaryExpression, context: Context) {
+  BinaryExpression: function*(node: es.BinaryExpression, context: Context) {
     const left = yield* evaluate(node.left, context)
     const right = yield* evaluate(node.right, context)
 
@@ -241,10 +252,10 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     }
     return result
   },
-  *ConditionalExpression(node: es.ConditionalExpression, context: Context) {
+  ConditionalExpression: function*(node: es.ConditionalExpression, context: Context) {
     return yield* this.IfStatement(node, context)
   },
-  *LogicalExpression(node: es.LogicalExpression, context: Context) {
+  LogicalExpression: function*(node: es.LogicalExpression, context: Context) {
     const left = yield* evaluate(node.left, context)
     let error = rttc.checkLogicalExpression(context, left, true)
     if (error) {
@@ -264,20 +275,20 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
       return left
     }
   },
-  *VariableDeclaration(node: es.VariableDeclaration, context: Context) {
+  VariableDeclaration: function*(node: es.VariableDeclaration, context: Context) {
     const declaration = node.declarations[0]
     const id = declaration.id as es.Identifier
     const value = yield* evaluate(declaration.init!, context)
     defineVariable(context, id.name, value)
     return undefined
   },
-  *ContinueStatement(node: es.ContinueStatement, context: Context) {
+  ContinueStatement: function*(node: es.ContinueStatement, context: Context) {
     return new ContinueValue()
   },
-  *BreakStatement(node: es.BreakStatement, context: Context) {
+  BreakStatement: function*(node: es.BreakStatement, context: Context) {
     return new BreakValue()
   },
-  *ForStatement(node: es.ForStatement, context: Context) {
+  ForStatement: function*(node: es.ForStatement, context: Context) {
     if (node.init) {
       yield* evaluate(node.init, context)
     }
@@ -305,7 +316,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     }
     return value
   },
-  *MemberExpression(node: es.MemberExpression, context: Context) {
+  MemberExpression: function*(node: es.MemberExpression, context: Context) {
     let obj = yield* evaluate(node.object, context)
     if (obj instanceof Closure) {
       obj = obj.fun
@@ -322,7 +333,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
       }
     }
   },
-  *AssignmentExpression(node: es.AssignmentExpression, context: Context) {
+  AssignmentExpression: function*(node: es.AssignmentExpression, context: Context) {
     if (node.left.type === 'MemberExpression') {
       const left = node.left
       const obj = yield* evaluate(left.object, context)
@@ -342,7 +353,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     setVariable(context, id.name, value)
     return value
   },
-  *FunctionDeclaration(node: es.FunctionDeclaration, context: Context) {
+  FunctionDeclaration: function*(node: es.FunctionDeclaration, context: Context) {
     const id = node.id as es.Identifier
     // tslint:disable-next-line:no-any
     const closure = new Closure(node as any, currentFrame(context), context)
@@ -366,7 +377,9 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
       return undefined
     }
   },
-  ExpressionStatement: expressionStatementEvaluator,
+  ExpressionStatement: function*(node: es.ExpressionStatement, context: Context) {
+    return yield* evaluate(node.expression, context)
+  },
   *ReturnStatement(node: es.ReturnStatement, context: Context) {
     if (node.argument) {
       if (node.argument.type === 'CallExpression') {
@@ -380,7 +393,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
       return new ReturnValue(undefined)
     }
   },
-  *WhileStatement(node: es.WhileStatement, context: Context) {
+  WhileStatement: function*(node: es.WhileStatement, context: Context) {
     let value: any // tslint:disable-line
     let test
     while (
@@ -397,7 +410,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     }
     return value
   },
-  *ObjectExpression(node: es.ObjectExpression, context: Context) {
+  ObjectExpression: function*(node: es.ObjectExpression, context: Context) {
     const obj = {}
     for (const prop of node.properties) {
       let key
@@ -410,7 +423,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     }
     return obj
   },
-  *BlockStatement(node: es.BlockStatement, context: Context) {
+  BlockStatement: function*(node: es.BlockStatement, context: Context) {
     let result: Value
     for (const statement of node.body) {
       result = yield* evaluate(statement, context)
@@ -424,7 +437,7 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     }
     return result
   },
-  *Program(node: es.BlockStatement, context: Context) {
+  Program: function*(node: es.BlockStatement, context: Context) {
     let result: Value
     for (const statement of node.body) {
       result = yield* evaluate(statement, context)
@@ -434,15 +447,6 @@ export const evaluators: { [nodeType: string]: Evaluator<es.Node> } = {
     }
     return result
   }
-}
-
-/**
- * This is used as part of the evaluators object in this file, but must be
- * defined outside, otherwise webpack parses it wrongly, resulting in a fatal
- * syntax error: https://github.com/webpack/webpack/issues/7566
- */
-function* expressionStatementEvaluator(node: es.ExpressionStatement, context: Context) {
-  return yield* evaluate(node.expression, context)
 }
 
 export function* evaluate(node: es.Node, context: Context) {
