@@ -1,12 +1,18 @@
+import { AssessmentCategory } from '../components/assessment/assessmentShape'
+
 /*
- * A helper function for parsing possibly optional string parameters 
- * (pasesed by react-router) into integers. A null value is returned
- * if the integer could not be parsed, or if the parameter was undefined.
+ * Converts an AssessmentCategory into a string for use in URLs.
+ * E.g Mission -> missions
  */
-export const stringParamToInt = (param?: string): number | null => {
-  if (param === undefined) {
+export const assessmentCategoryLink = (cat: AssessmentCategory): string => cat.toLowerCase().concat('s')
+
+/* Converts an optinal string parameter into an integer or null value. */
+export const stringParamToInt = (str?: string): number | null => {
+  if(str === undefined) {
     return null
-  }
-  const num: number = parseInt(param, 10)
-  return Number.isInteger(num) ? num : null
+  } 
+  const num = parseInt(str, 10)
+  return Number.isInteger(num) 
+    ? num
+    : null
 }

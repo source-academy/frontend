@@ -8,6 +8,7 @@ import AssessmentListingContainer from '../../containers/assessment/AssessmentLi
 import Game from '../../containers/GameContainer'
 import { isAcademyRe } from '../../reducers/session'
 import { HistoryHelper } from '../../utils/history'
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape'
 import AcademyNavigationBar from './NavigationBar'
 
@@ -31,7 +32,6 @@ const assessmentListingRenderFactory = (cat: AssessmentCategory) => (
 ) => <AssessmentListingContainer assessmentCategory={cat} />
 
 const assessmentRegExp = '/:assessmentId?(\\d+)/:questionId?(\\d+)'
-const categoryToLink = (cat: AssessmentCategory): string => cat.toLowerCase().concat('s')
 
 export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
@@ -39,20 +39,20 @@ export const Academy: React.SFC<IAcademyProps> = props => (
     <Switch>
       {checkLoggedIn(props)}
       <Route
-        path={`/academy/${categoryToLink(AssessmentCategories.CONTEST)}/${assessmentRegExp}`}
+        path={`/academy/${assessmentCategoryLink(AssessmentCategories.CONTEST)}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.CONTEST)}
       />
       <Route path='/academy/game' component={Game} />
       <Route
-        path={`/academy/${categoryToLink(AssessmentCategories.MISSION)}/${assessmentRegExp}`}
+        path={`/academy/${assessmentCategoryLink(AssessmentCategories.MISSION)}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.MISSION)}
       />
       <Route
-        path={`/academy/${categoryToLink(AssessmentCategories.PATH)}/${assessmentRegExp}`}
+        path={`/academy/${assessmentCategoryLink(AssessmentCategories.PATH)}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.PATH)}
       />
       <Route
-        path={`/academy/${categoryToLink(AssessmentCategories.SIDEQUEST)}/${assessmentRegExp}`}
+        path={`/academy/${assessmentCategoryLink(AssessmentCategories.SIDEQUEST)}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.SIDEQUEST)}
       />
       <Route exact={true} path='/academy' component={dynamicRedirect(props)} />
