@@ -62,13 +62,16 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       icon: IconNames.BRIEFCASE,
       body: briefing
     }
-    const currentLink = `/academy/${this.props.assessment.category.toLowerCase().concat('s')}/${this.props.assessment.id.toString()}`
+    const currentLink = `/academy/${this.props.assessment.category
+      .toLowerCase()
+      .concat('s')}/${this.props.assessment.id.toString()}`
     const controlBarOptions: ControlBarOwnProps = {
       hasChapterSelect: false,
       hasNextButton: this.props.questionId < this.props.assessment.questions.length - 1,
       onClickNext: () => history.push(currentLink + `/${(this.props.questionId + 1).toString()}`),
       hasPreviousButton: this.props.questionId > 0,
-      onClickPrevious: () => history.push(currentLink + `/${(this.props.questionId - 1).toString()}`),
+      onClickPrevious: () =>
+        history.push(currentLink + `/${(this.props.questionId - 1).toString()}`),
       hasSaveButton: true,
       hasShareButton: false
     }
