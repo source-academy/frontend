@@ -28,7 +28,11 @@ class Playground extends React.Component<PlaygroundProps, PlaygroundState> {
 
   public render() {
     return (
-      <HotKeys className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')} keyMap={this.keyMap} handlers={this.handlers}>
+      <HotKeys
+        className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
+        keyMap={this.keyMap}
+        handlers={this.handlers}
+      >
         <WorkspaceContainer
           libQuery={parseLibrary(this.props)}
           prgrmQuery={parsePrgrm(this.props)}
