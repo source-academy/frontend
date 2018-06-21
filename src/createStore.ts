@@ -18,6 +18,7 @@ import { IState } from './reducers/states'
 import mainSaga from './sagas'
 import { history as appHistory } from './utils/history'
 
+
 declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>
 
 function createStore(history: History): { store: Store<IState>, persistor: Persistor } {
@@ -36,7 +37,7 @@ function createStore(history: History): { store: Store<IState>, persistor: Persi
 
   const persistConfig = {
     key: 'root',
-    storage,
+    storage
   }
   const persistedReducer: (state: {}, action: AnyAction) => {} = persistReducer(persistConfig, rootReducer)
 
