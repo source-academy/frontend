@@ -30,29 +30,32 @@ const assessmentListingRenderFactory = (cat: AssessmentCategory) => (
   routerProps: RouteComponentProps<any>
 ) => <AssessmentListingContainer assessmentCategory={cat} />
 
+const assessmentRegExp = '/:assessmentId?(\\d+)/:questionId?(\\d+)'
+const categoryToLink = (cat: AssessmentCategory): string => cat.toLowerCase().concat('s')
+
 export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
     <AcademyNavigationBar />
     <Switch>
       {checkLoggedIn(props)}
       <Route
-        path="/academy/contests/:assessmentId?/:questionId?"
+        path={`/academy/${categoryToLink(AssessmentCategories.CONTEST)}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.CONTEST)}
       />
-      <Route path="/academy/game" component={Game} />
+      <Route path='/academy/game' component={Game} />
       <Route
-        path="/academy/missions/:assessmentId?/:questionId?"
+        path={`/academy/${categoryToLink(AssessmentCategories.MISSION)}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.MISSION)}
       />
       <Route
-        path="/academy/paths/:assessmentId?/:questionId?"
+        path={`/academy/${categoryToLink(AssessmentCategories.PATH)}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.PATH)}
       />
       <Route
-        path="/academy/sidequests/:assessmentId?/:questionId?"
+        path={`/academy/${categoryToLink(AssessmentCategories.SIDEQUEST)}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.SIDEQUEST)}
       />
-      <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
+      <Route exact={true} path='/academy' component={dynamicRedirect(props)} />
       <Route component={redirectTo404} />
     </Switch>
   </div>
