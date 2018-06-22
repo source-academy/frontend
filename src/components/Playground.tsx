@@ -38,6 +38,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         <WorkspaceContainer
           libQuery={parseLibrary(this.props)}
           prgrmQuery={parsePrgrm(this.props)}
+          editorValue={this.props.editorValue}
           sideContentTabs={[playgroundIntroduction]}
         />
       </HotKeys>

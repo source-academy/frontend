@@ -7,7 +7,7 @@ import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { OwnProps as ControlBarOwnProps } from '../workspace/ControlBar'
 import { SideContentTab } from '../workspace/side-content'
-import { IAssessment } from './assessmentShape'
+import { IAssessment, IMCQQuestion, IProgrammingQuestion, } from './assessmentShape'
 
 export type AssessmentProps = DispatchProps & OwnProps & StateProps
 
@@ -61,7 +61,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     const shortSummaryElement = (
       <Text> {this.props.assessment.questions[this.props.questionId].content} </Text>
     )
-    const tabs: SideContentTab[] = [
+    const sideContentTabs: SideContentTab[] = [
       {
         label: `Task ${this.props.questionId}`,
         icon: IconNames.NINJA,
@@ -88,10 +88,17 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       hasSaveButton: true,
       hasShareButton: false
     }
+    const workspaceProps = {
+      controlBarOptions,
+      sideContentTabs,
+      editorValue: (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion).solutionTemplate,
+      mcqChoices: (this.props.assessment.questions[this.props.questionId] as IMCQQuestion).choices
+     
+    }
     return (
       <div className="Assessment pt-dark">
         {overlay}
-        <Workspace controlBarOptions={controlBarOptions} sideContentTabs={tabs} question={this.props.assessment.questions[this.props.questionId]}/>
+        <Workspace {...workspaceProps}/>
       </div>
     )
   }

@@ -6,7 +6,7 @@ import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
-import { IProgrammingQuestion, IQuestion } from '../assessment/assessmentShape'
+import { MCQChoice } from '../assessment/assessmentShape'
 import { OwnProps as ControlBarOwnProps } from './ControlBar'
 import { SideContentTab } from './side-content'
 
@@ -21,9 +21,10 @@ export type DispatchProps = {
 
 export type OwnProps = {
   controlBarOptions?: ControlBarOwnProps
-  question?: IQuestion
   libQuery?: number
   prgrmQuery?: string
+  editorValue?: string
+  mcqChoices?: MCQChoice[]
   sideContentTabs: SideContentTab[]
 }
 
@@ -66,7 +67,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
           <Resizable {...this.editorResizableProps()}>
-            { this.workspaceInput(this.props.question) }
+            { this.workspaceInput(this.props) }
           </Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
@@ -154,16 +155,11 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     }
   }
 
-  private workspaceInput = (question?: IQuestion) => {
-    if (question === undefined) {
-      return (<EditorContainer editorValue={"undefined boi"}/>)
-    } else if (question.type === 'programming') {
-      const template = (question as IProgrammingQuestion).solutionTemplate
-      return (<EditorContainer editorValue={template}/>)
-    } else if (question.type === 'mcq') {
-      return (<h2> MCQ QUESTION </h2>)
+  private workspaceInput = (props: WorkspaceProps) => {
+    if (props.editorValue !== undefined) {
+      return (<EditorContainer editorValue={props.editorValue}/>)
     } else {
-      return <></>
+      return (<h2> MCQ QUESTION </h2>)
     }
   }
 }
