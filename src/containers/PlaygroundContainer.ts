@@ -6,8 +6,8 @@ import { IState } from '../reducers/states'
 
 type StateProps = Pick<IPlaygroundProps, 'editorValue'>
 
-  const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
-    editorValue: state.playground.editorValue
-  })
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+  editorValue: state.playground.editorValue
+})
 
 export default withRouter(connect(mapStateToProps)(Playground))

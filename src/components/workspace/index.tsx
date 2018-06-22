@@ -67,9 +67,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         <ControlBarContainer {...this.props.controlBarOptions} />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
-          <Resizable {...this.editorResizableProps()}>
-            { this.workspaceInput(this.props) }
-          </Resizable>
+          <Resizable {...this.editorResizableProps()}>{this.workspaceInput(this.props)}</Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
               <SideContent {...{ tabs: this.props.sideContentTabs }} />
@@ -158,9 +156,9 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
 
   private workspaceInput = (props: WorkspaceProps) => {
     if (props.editorValue !== undefined) {
-      return (<EditorContainer editorValue={props.editorValue}/>)
+      return <EditorContainer editorValue={props.editorValue} />
     } else {
-      return (<MCQChooserContainer mcq={this.props.mcq!} />)
+      return <MCQChooserContainer mcq={this.props.mcq!} />
     }
   }
 }

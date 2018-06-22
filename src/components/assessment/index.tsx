@@ -8,7 +8,7 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { OwnProps as WorkspaceProps } from '../workspace'
 import { OwnProps as ControlBarOwnProps } from '../workspace/ControlBar'
 import { SideContentTab } from '../workspace/side-content'
-import { IAssessment, IMCQQuestion, IProgrammingQuestion, } from './assessmentShape'
+import { IAssessment, IMCQQuestion, IProgrammingQuestion } from './assessmentShape'
 
 export type AssessmentProps = DispatchProps & OwnProps & StateProps
 
@@ -92,13 +92,14 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     const workspaceProps: WorkspaceProps = {
       controlBarOptions,
       sideContentTabs,
-      editorValue: (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion).solutionTemplate,
+      editorValue: (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion)
+        .solutionTemplate,
       mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion
     }
     return (
       <div className="Assessment pt-dark">
         {overlay}
-        <Workspace {...workspaceProps}/>
+        <Workspace {...workspaceProps} />
       </div>
     )
   }
