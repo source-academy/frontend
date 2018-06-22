@@ -4,6 +4,7 @@ import * as React from 'react'
 
 import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
+import MCQChooserContainer from '../../containers/workspace/MCQChooserContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
 import { MCQChoice } from '../assessment/assessmentShape'
@@ -159,7 +160,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     if (props.editorValue !== undefined) {
       return (<EditorContainer editorValue={props.editorValue}/>)
     } else {
-      return (<h2> MCQ QUESTION </h2>)
+      return (<MCQChooserContainer choices={this.props.mcqChoices!} />)
     }
   }
 }
