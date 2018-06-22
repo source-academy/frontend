@@ -1,0 +1,11 @@
+.MCQChooser {
+  flex: 1 1;
+  margin: 0 0.5rem 0 0.5rem;
+  .mcq-content-parent {
+    margin-bottom: 20px;
+  }
+  .pt-card {
+    background-color: $cadet-color-2;
+  }
+}
+
