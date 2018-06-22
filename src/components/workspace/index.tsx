@@ -6,6 +6,7 @@ import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
+import { IMCQQuestion, IProgrammingQuestion } from '../assessment/assessmentShape'
 import { OwnProps as ControlBarOwnProps } from './ControlBar'
 import { SideContentTab } from './side-content'
 
@@ -20,9 +21,10 @@ export type DispatchProps = {
 
 export type OwnProps = {
   controlBarOptions?: ControlBarOwnProps
+  question?: IProgrammingQuestion | IMCQQuestion
   libQuery?: number
-  sideContentTabs: SideContentTab[]
   prgrmQuery?: string
+  sideContentTabs: SideContentTab[]
 }
 
 export type StateProps = {
