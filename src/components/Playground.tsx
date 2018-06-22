@@ -9,18 +9,20 @@ import WorkspaceContainer from '../containers/workspace'
 import { sourceChapters } from '../reducers/states'
 import { SideContentTab } from './workspace/side-content'
 
-export type PlaygroundProps = RouteComponentProps<{}>
+export interface IPlaygroundProps extends RouteComponentProps<{}> {
+  editorValue: string
+}
 
 type PlaygroundState = {
   isGreen: boolean
 }
 
-class Playground extends React.Component<PlaygroundProps, PlaygroundState> {
+class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   private keyMap = { goGreen: 'h u l k' }
 
   private handlers = { goGreen: () => {} }
 
-  constructor(props: PlaygroundProps) {
+  constructor(props: IPlaygroundProps) {
     super(props)
     this.state = { isGreen: false }
     this.handlers.goGreen = this.toggleIsGreen.bind(this)
@@ -47,13 +49,13 @@ class Playground extends React.Component<PlaygroundProps, PlaygroundState> {
   }
 }
 
-const parsePrgrm = (props: PlaygroundProps) => {
+const parsePrgrm = (props: IPlaygroundProps) => {
   const qsParsed = qs.parse(props.location.hash)
   // legacy support
   return qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm
 }
 
-const parseLibrary = (props: PlaygroundProps) => {
+const parseLibrary = (props: IPlaygroundProps) => {
   const libQuery = qs.parse(props.location.hash).lib
   const lib = libQuery === undefined ? NaN : parseInt(libQuery, 10)
   return sourceChapters.includes(lib) ? lib : undefined

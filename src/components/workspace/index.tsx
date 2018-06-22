@@ -6,7 +6,7 @@ import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
-import { IQuestion } from '../assessment/assessmentShape'
+import { IProgrammingQuestion, IQuestion } from '../assessment/assessmentShape'
 import { OwnProps as ControlBarOwnProps } from './ControlBar'
 import { SideContentTab } from './side-content'
 
@@ -156,9 +156,10 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
 
   private workspaceInput = (question?: IQuestion) => {
     if (question === undefined) {
-      return (<EditorContainer />)
+      return (<EditorContainer editorValue={"undefined boi"}/>)
     } else if (question.type === 'programming') {
-      return (<EditorContainer />)
+      const template = (question as IProgrammingQuestion).solutionTemplate
+      return (<EditorContainer editorValue={template}/>)
     } else if (question.type === 'mcq') {
       return (<h2> MCQ QUESTION </h2>)
     } else {
