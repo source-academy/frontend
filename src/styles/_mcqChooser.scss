@@ -2,7 +2,20 @@
   flex: 1 1;
   margin: 0 0.5rem 0 0.5rem;
   .mcq-content-parent {
+    height: 100%;
+    overflow: scroll;
+  }
+  .mcq-options-parent {
     margin-bottom: 20px;
+  }
+  .mcq-option {
+    padding: 20px;
+  }
+  .mcq-task-parent {
+    margin-bottom: 20px;
+    .pt-card {
+      background-color: $cadet-color-3;
+    }
   }
   .pt-card {
     background-color: $cadet-color-2;
