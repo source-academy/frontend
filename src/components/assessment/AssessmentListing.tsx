@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 import AssessmentContainer from '../../containers/assessment'
+import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { OwnProps as AssessmentProps } from '../assessment'
 import { AssessmentCategory } from '../assessment/assessmentShape'
 import { IAssessmentOverview } from '../assessment/assessmentShape'
@@ -12,6 +13,7 @@ import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export interface IAssessmentParams {
   assessmentId?: string
+  questionId?: string
 }
 
 export interface IAssessmentListingProps extends RouteComponentProps<IAssessmentParams> {
@@ -26,18 +28,19 @@ export type StateProps = Pick<IAssessmentListingProps, 'assessmentOverviews'>
 
 class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
   public render() {
-    // make assessmentId a number
-    let assessmentIdParam: number | null =
-      this.props.match.params.assessmentId === undefined
-        ? NaN
-        : parseInt(this.props.match.params.assessmentId, 10)
-    // set as null if the parsing failed
-    assessmentIdParam = Number.isInteger(assessmentIdParam) ? assessmentIdParam : null
+    const assessmentIdParam: number | null = stringParamToInt(this.props.match.params.assessmentId)
+    // default questionId is 0 (the first question)
+    const questionIdParam: number = stringParamToInt(this.props.match.params.questionId) || 0
 
     // if there is no assessmentId specified, Render only information.
     if (assessmentIdParam === null) {
       const props: IContentDisplayProps = {
-        display: <AssessmentOverviewCard assessmentOverviews={this.props.assessmentOverviews} />,
+        display: (
+          <AssessmentOverviewCard
+            assessmentOverviews={this.props.assessmentOverviews}
+            questionId={questionIdParam}
+          />
+        ),
         loadContentDispatch: this.props.handleAssessmentOverviewFetch
       }
       return (
@@ -47,7 +50,8 @@ class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
       )
     } else {
       const props: AssessmentProps = {
-        assessmentId: assessmentIdParam
+        assessmentId: assessmentIdParam,
+        questionId: questionIdParam
       }
       return <AssessmentContainer {...props} />
     }
@@ -56,9 +60,11 @@ class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
 
 interface IAssessmentOverviewCardProps {
   assessmentOverviews?: IAssessmentOverview[]
+  questionId: number
 }
 
 export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = props => {
+  const questionId = props.questionId === undefined ? 0 : props.questionId
   if (props.assessmentOverviews === undefined) {
     return <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
   } else if (props.assessmentOverviews.length === 0) {
@@ -86,7 +92,11 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
               </Text>
             </div>
             <div className="col-xs">
-              <NavLink to={`/academy/missions/${overview.id.toString()}`}>
+              <NavLink
+                to={`/academy/${assessmentCategoryLink(
+                  overview.category
+                )}/${overview.id.toString()}/${questionId.toString()}`}
+              >
                 <Button
                   className="listing-skip-button"
                   minimal={true}

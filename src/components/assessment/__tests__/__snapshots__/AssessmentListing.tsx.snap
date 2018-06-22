@@ -10,7 +10,7 @@ exports[`AssessmentListing page "loading" content renders correctly 1`] = `
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
                 <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
-                  <Component assessmentOverviews={[undefined]}>
+                  <Component assessmentOverviews={[undefined]} questionId={0}>
                     <NonIdealState description=\\"Fetching assessment...\\" visual={{...}}>
                       <div className=\\"pt-non-ideal-state\\">
                         <div className=\\"pt-non-ideal-state-visual\\">
@@ -52,7 +52,7 @@ exports[`AssessmentListing page with 0 missions renders correctly 1`] = `
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
                 <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
-                  <Component assessmentOverviews={{...}}>
+                  <Component assessmentOverviews={{...}} questionId={0}>
                     <NonIdealState title=\\"There are no assessments.\\" visual=\\"flame\\">
                       <div className=\\"pt-non-ideal-state\\">
                         <div className=\\"pt-non-ideal-state-visual pt-non-ideal-state-icon\\">
@@ -92,7 +92,7 @@ exports[`AssessmentListing page with multiple loaded missions renders correctly 
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
                 <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
-                  <Component assessmentOverviews={{...}}>
+                  <Component assessmentOverviews={{...}} questionId={0}>
                     <div>
                       <Blueprint2.Card className=\\"row listing\\" elevation={0} interactive={false}>
                         <div className=\\"pt-card pt-elevation-0 row listing\\">
@@ -132,10 +132,10 @@ exports[`AssessmentListing page with multiple loaded missions renders correctly 
                                 </Text>
                               </div>
                               <div className=\\"col-xs\\">
-                                <NavLink to=\\"/academy/missions/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
-                                  <Route path=\\"/academy/missions/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                    <Link to=\\"/academy/missions/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
-                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/0\\">
+                                <NavLink to=\\"/academy/missions/0/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+                                  <Route path=\\"/academy/missions/0/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                    <Link to=\\"/academy/missions/0/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
+                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/0/0\\">
                                         <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
                                           <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
@@ -201,10 +201,10 @@ exports[`AssessmentListing page with multiple loaded missions renders correctly 
                                 </Text>
                               </div>
                               <div className=\\"col-xs\\">
-                                <NavLink to=\\"/academy/missions/1\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
-                                  <Route path=\\"/academy/missions/1\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                    <Link to=\\"/academy/missions/1\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
-                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/1\\">
+                                <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+                                  <Route path=\\"/academy/missions/1/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                    <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
+                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/1/0\\">
                                         <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
                                           <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
@@ -270,10 +270,10 @@ exports[`AssessmentListing page with multiple loaded missions renders correctly 
                                 </Text>
                               </div>
                               <div className=\\"col-xs\\">
-                                <NavLink to=\\"/academy/missions/2\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
-                                  <Route path=\\"/academy/missions/2\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                    <Link to=\\"/academy/missions/2\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
-                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/2\\">
+                                <NavLink to=\\"/academy/sidequests/2/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+                                  <Route path=\\"/academy/sidequests/2/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                    <Link to=\\"/academy/sidequests/2/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
+                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/sidequests/2/0\\">
                                         <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
                                           <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
@@ -339,10 +339,10 @@ exports[`AssessmentListing page with multiple loaded missions renders correctly 
                                 </Text>
                               </div>
                               <div className=\\"col-xs\\">
-                                <NavLink to=\\"/academy/missions/3\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
-                                  <Route path=\\"/academy/missions/3\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                    <Link to=\\"/academy/missions/3\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
-                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/3\\">
+                                <NavLink to=\\"/academy/missions/3/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+                                  <Route path=\\"/academy/missions/3/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                    <Link to=\\"/academy/missions/3/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
+                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/3/0\\">
                                         <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
                                           <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">
@@ -408,10 +408,10 @@ exports[`AssessmentListing page with multiple loaded missions renders correctly 
                                 </Text>
                               </div>
                               <div className=\\"col-xs\\">
-                                <NavLink to=\\"/academy/missions/4\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
-                                  <Route path=\\"/academy/missions/4\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                    <Link to=\\"/academy/missions/4\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
-                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/4\\">
+                                <NavLink to=\\"/academy/sidequests/4/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+                                  <Route path=\\"/academy/sidequests/4/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                    <Link to=\\"/academy/sidequests/4/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
+                                      <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/sidequests/4/0\\">
                                         <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
                                           <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                             <Blueprint2.Icon icon=\\"flame\\">

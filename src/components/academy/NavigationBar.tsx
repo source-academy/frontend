@@ -3,11 +3,14 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
+import { AssessmentCategories } from '../assessment/assessmentShape'
+
 const NavigationBar: React.SFC<{}> = () => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
-        to="/academy/missions"
+        to={`/academy/${assessmentCategoryLink(AssessmentCategories.MISSION)}`}
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -16,7 +19,7 @@ const NavigationBar: React.SFC<{}> = () => (
       </NavLink>
 
       <NavLink
-        to="/academy/sidequests"
+        to={`/academy/${assessmentCategoryLink(AssessmentCategories.SIDEQUEST)}`}
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -25,7 +28,7 @@ const NavigationBar: React.SFC<{}> = () => (
       </NavLink>
 
       <NavLink
-        to="/academy/paths"
+        to={`/academy/${assessmentCategoryLink(AssessmentCategories.PATH)}`}
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -34,7 +37,7 @@ const NavigationBar: React.SFC<{}> = () => (
       </NavLink>
 
       <NavLink
-        to="/academy/contests"
+        to={`/academy/${assessmentCategoryLink(AssessmentCategories.CONTEST)}`}
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >

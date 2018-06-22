@@ -3,6 +3,8 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import Workspace from '../../containers/workspace'
+import { history } from '../../utils/history'
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { OwnProps as ControlBarOwnProps } from '../workspace/ControlBar'
 import { SideContentTab } from '../workspace/side-content'
 import { IAssessment } from './assessmentShape'
@@ -13,21 +15,27 @@ export type StateProps = {
   assessment?: IAssessment
 }
 
-export type OwnProps = { assessmentId: number }
+export type OwnProps = {
+  assessmentId: number
+  questionId: number
+}
 
 export type DispatchProps = {
   handleAssessmentFetch: (assessmentId: number) => void
 }
 
 class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
-  public state = { showOverlay: true }
+  public state = { showOverlay: false }
 
   public componentWillMount() {
     this.props.handleAssessmentFetch(this.props.assessmentId)
+    if (this.props.questionId === 0) {
+      this.setState({ showOverlay: true })
+    }
   }
 
   public render() {
-    if (this.props.assessment === undefined) {
+    if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
       return (
         <NonIdealState
           className="Assessment pt-dark"
@@ -55,10 +63,18 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       icon: IconNames.BRIEFCASE,
       body: briefing
     }
+    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment.category)}`
+    const assessmentPath = listingPath + `/${this.props.assessment.id.toString()}`
     const controlBarOptions: ControlBarOwnProps = {
       hasChapterSelect: false,
-      hasNextButton: true,
-      hasPreviousButton: true,
+      hasNextButton: this.props.questionId < this.props.assessment.questions.length - 1,
+      hasPreviousButton: this.props.questionId > 0,
+      hasSubmitButton: this.props.questionId === this.props.assessment.questions.length - 1,
+      onClickNext: () =>
+        history.push(assessmentPath + `/${(this.props.questionId + 1).toString()}`),
+      onClickPrevious: () =>
+        history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
+      onClickSubmit: () => history.push(listingPath),
       hasSaveButton: true,
       hasShareButton: false
     }

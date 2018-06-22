@@ -22,11 +22,13 @@ export type OwnProps = {
   hasChapterSelect?: boolean
   hasNextButton?: boolean
   hasPreviousButton?: boolean
+  hasSubmitButton?: boolean
   hasSaveButton?: boolean
   hasShareButton?: boolean
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
+  onClickSubmit?(): any
 }
 
 export type StateProps = {
@@ -45,11 +47,13 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasChapterSelect: true,
     hasNextButton: false,
     hasPreviousButton: false,
+    hasSubmitButton: false,
     hasSaveButton: false,
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {}
+    onClickSave: () => {},
+    onClickSubmit: () => {}
   }
 
   private shareInputElem: HTMLInputElement
@@ -125,9 +129,15 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     const nextButton = this.props.hasNextButton
       ? controlButton('Next', IconNames.ARROW_RIGHT, this.props.onClickNext, { iconOnRight: true })
       : undefined
+    const submitButton = this.props.hasSubmitButton
+      ? controlButton('Submit', IconNames.TICK_CIRCLE, this.props.onClickSubmit, {
+          iconOnRight: true
+        })
+      : undefined
+
     return (
       <div className="ControlBar_flow pt-button-group">
-        {previousButton} {nextButton}
+        {previousButton} {nextButton} {submitButton}
       </div>
     )
   }
