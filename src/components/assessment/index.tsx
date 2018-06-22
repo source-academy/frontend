@@ -44,11 +44,11 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         />
       )
     }
-    const briefing = <Text> {this.props.assessment.longSummary} </Text>
+    const longSummaryElement = <Text> {this.props.assessment.longSummary} </Text>
     const overlay = (
       <Dialog className="mission-briefing" isOpen={this.state.showOverlay}>
         <Card>
-          {briefing}
+          {longSummaryElement}
           <Button
             className="mission-briefing-button"
             // tslint:disable-next-line jsx-no-lambda
@@ -58,11 +58,21 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         </Card>
       </Dialog>
     )
-    const briefingTab: SideContentTab = {
-      label: 'Briefing',
-      icon: IconNames.BRIEFCASE,
-      body: briefing
-    }
+    const shortSummaryElement = (
+      <Text> {this.props.assessment.questions[this.props.questionId].content} </Text>
+    )
+    const tabs: SideContentTab[] = [
+      {
+        label: `Task ${this.props.questionId}`,
+        icon: IconNames.NINJA,
+        body: shortSummaryElement
+      },
+      {
+        label: `${this.props.assessment.category} Briefing`,
+        icon: IconNames.BRIEFCASE,
+        body: longSummaryElement
+      }
+    ]
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment.category)}`
     const assessmentPath = listingPath + `/${this.props.assessment.id.toString()}`
     const controlBarOptions: ControlBarOwnProps = {
@@ -81,7 +91,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     return (
       <div className="Assessment pt-dark">
         {overlay}
-        <Workspace controlBarOptions={controlBarOptions} sideContentTabs={[briefingTab]} />
+        <Workspace controlBarOptions={controlBarOptions} sideContentTabs={tabs} />
       </div>
     )
   }
