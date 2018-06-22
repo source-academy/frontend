@@ -7,15 +7,17 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage
 import createSagaMiddleware from 'redux-saga'
 
 import reducers from './reducers'
-import { IState } from './reducers/states'
+import { IApplicationState, IPlaygroundState, ISessionState, IState } from './reducers/states'
 import mainSaga from './sagas'
 import { history as appHistory } from './utils/history'
 
 declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>
 
-interface IPersistState {
-  token?: string
-}
+type IPersistState =
+  Pick<IApplicationState, 'environment'>
+  & Pick<IPlaygroundState, 'editorValue'>
+  & Pick<ISessionState, 'token'>
+  & Pick<ISessionState, 'username'>
 
 function createStore(history: History): { store: Store<IState>; persistor: Persistor } {
   let composeEnhancers: any = compose
@@ -25,13 +27,18 @@ function createStore(history: History): { store: Store<IState>; persistor: Persi
   if (typeof __REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function') {
     composeEnhancers = __REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   }
+  
+  const transforms = [
+    createFilter<IState, IPersistState>('application', ['environment']),
+    createFilter<IState, IPersistState>('playground', ['editorValue']),
+    createFilter<IState, IPersistState>('session', ['token', 'username'])
+  ]
 
-  const transform = createFilter<IState, IPersistState>('session', ['token'])
 
   const persistConfig: PersistConfig = {
     key: 'root',
     storage,
-    transforms: [transform]
+    transforms: [...transforms]
   }
 
   const persistedReducer = persistCombineReducers<IState>(persistConfig, {
