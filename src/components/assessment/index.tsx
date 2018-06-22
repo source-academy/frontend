@@ -91,7 +91,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     return (
       <div className="Assessment pt-dark">
         {overlay}
-        <Workspace controlBarOptions={controlBarOptions} sideContentTabs={tabs} />
+        <Workspace controlBarOptions={controlBarOptions} sideContentTabs={tabs} question={this.props.assessment.questions[this.props.questionId]}/>
       </div>
     )
   }

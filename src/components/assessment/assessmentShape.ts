@@ -21,7 +21,7 @@ export interface IAssessment {
   id: number
   longSummary: string
   missionPDF: string
-  questions: Array<IProgrammingQuestion | IMCQQuestion>
+  questions: IQuestion[]
   title: string
 }
 

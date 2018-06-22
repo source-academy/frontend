@@ -6,7 +6,7 @@ import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
-import { IMCQQuestion, IProgrammingQuestion } from '../assessment/assessmentShape'
+import { IQuestion } from '../assessment/assessmentShape'
 import { OwnProps as ControlBarOwnProps } from './ControlBar'
 import { SideContentTab } from './side-content'
 
@@ -21,7 +21,7 @@ export type DispatchProps = {
 
 export type OwnProps = {
   controlBarOptions?: ControlBarOwnProps
-  question?: IProgrammingQuestion | IMCQQuestion
+  question?: IQuestion
   libQuery?: number
   prgrmQuery?: string
   sideContentTabs: SideContentTab[]
@@ -66,7 +66,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
           <Resizable {...this.editorResizableProps()}>
-            <EditorContainer />
+            { this.workspaceInput(this.props.question) }
           </Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
@@ -151,6 +151,18 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       this.sideDividerDiv.style.display = 'none'
     } else {
       this.sideDividerDiv.style.display = 'initial'
+    }
+  }
+
+  private workspaceInput = (question?: IQuestion) => {
+    if (question === undefined) {
+      return (<EditorContainer />)
+    } else if (question.type === 'programming') {
+      return (<EditorContainer />)
+    } else if (question.type === 'mcq') {
+      return (<h2> MCQ QUESTION </h2>)
+    } else {
+      return <></>
     }
   }
 }
