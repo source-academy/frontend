@@ -94,7 +94,6 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       sideContentTabs,
       editorValue: (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion).solutionTemplate,
       mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion
-     
     }
     return (
       <div className="Assessment pt-dark">

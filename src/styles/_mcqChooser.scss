@@ -1,6 +1,7 @@
 .MCQChooser {
   flex: 1 1;
   margin: 0 0.5rem 0 0.5rem;
+  overflow: hidden;
   .mcq-content-parent {
     height: 100%;
     overflow: scroll;
@@ -19,6 +20,10 @@
   }
   .pt-card {
     background-color: $cadet-color-2;
+  }
+  .Text {
+    word-break: break-word;
+    word-wrap: break-word;
   }
 }
 
