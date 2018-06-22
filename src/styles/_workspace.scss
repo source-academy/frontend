@@ -74,6 +74,37 @@ $code-color-error: #ff4444;
       }
     }
   }
+  
+  .MCQChooser {
+    flex: 1 1;
+    margin: 0 0.5rem 0 0.5rem;
+    overflow: hidden;
+    .mcq-content-parent {
+      height: 100%;
+      overflow: scroll;
+    }
+    .mcq-options-parent {
+      margin-bottom: 20px;
+    }
+    .mcq-option {
+      // use of !important to override a 'not' selector by BluePrint
+      background-color: $cadet-color-3 !important;
+      padding: 20px;
+    }
+    .mcq-task-parent {
+      margin-bottom: 20px;
+      .pt-card {
+        background-color: $cadet-color-3;
+      }
+    }
+    .pt-card {
+      background-color: $cadet-color-2;
+    }
+    .Text {
+      word-break: break-word;
+      word-wrap: break-word;
+    }
+  }
 
   .resize-side-content {
     display: flex;
