@@ -51,7 +51,7 @@ export interface IQuestion {
   type: QuestionType
 }
 
-export type MCQChoice = {
+type MCQChoice = {
   content: string
   hint: string
 }

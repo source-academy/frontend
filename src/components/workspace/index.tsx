@@ -7,7 +7,7 @@ import EditorContainer from '../../containers/workspace/EditorContainer'
 import MCQChooserContainer from '../../containers/workspace/MCQChooserContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
-import { MCQChoice } from '../assessment/assessmentShape'
+import { IMCQQuestion } from '../assessment/assessmentShape'
 import { OwnProps as ControlBarOwnProps } from './ControlBar'
 import { SideContentTab } from './side-content'
 
@@ -25,7 +25,7 @@ export type OwnProps = {
   libQuery?: number
   prgrmQuery?: string
   editorValue?: string
-  mcqChoices?: MCQChoice[]
+  mcq?: IMCQQuestion
   sideContentTabs: SideContentTab[]
 }
 
@@ -160,7 +160,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     if (props.editorValue !== undefined) {
       return (<EditorContainer editorValue={props.editorValue}/>)
     } else {
-      return (<MCQChooserContainer choices={this.props.mcqChoices!} />)
+      return (<MCQChooserContainer mcq={this.props.mcq!} />)
     }
   }
 }

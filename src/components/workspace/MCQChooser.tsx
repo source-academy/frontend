@@ -1,15 +1,15 @@
 import { Button, Card, Tooltip } from '@blueprintjs/core'
 import * as React from 'react'
 
-import { MCQChoice } from '../assessment/assessmentShape'
+import { IMCQQuestion } from '../assessment/assessmentShape'
 
 export interface IMCQChooserProps {
-  choices: MCQChoice[]
+  mcq: IMCQQuestion
 }
 
 class MCQChooser extends React.Component<IMCQChooserProps, {}> {
   public render() {
-    const options = this.props.choices.map((choice, i) => (
+    const options = this.props.mcq.choices.map((choice, i) => (
       <Button className="mcq-option col-xs-6">
         <Tooltip key={i} content={choice.hint}>
           { choice.content }
@@ -22,7 +22,7 @@ class MCQChooser extends React.Component<IMCQChooserProps, {}> {
             <div className="col-xs-10">
               <div className="mcq-task-parent row center-xs ">
                 <Card className="mcq-task col-xs-12" elevation={2}>
-                    MCQ QUESTION
+                  {this.props.mcq.content}
                 </ Card>
               </div>
               <div className="row mcq-options-parent center-xs">
