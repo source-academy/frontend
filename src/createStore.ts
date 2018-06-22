@@ -16,6 +16,7 @@ declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>
 type IPersistState =
   Pick<IApplicationState, 'environment'>
   & Pick<IPlaygroundState, 'editorValue'>
+  & Pick<ISessionState, 'historyHelper'>
   & Pick<ISessionState, 'token'>
   & Pick<ISessionState, 'username'>
 
@@ -31,7 +32,7 @@ function createStore(history: History): { store: Store<IState>; persistor: Persi
   const transforms = [
     createFilter<IState, IPersistState>('application', ['environment']),
     createFilter<IState, IPersistState>('playground', ['editorValue']),
-    createFilter<IState, IPersistState>('session', ['token', 'username'])
+    createFilter<IState, IPersistState>('session', ['token', 'username', 'historyHelper'])
   ]
 
 
