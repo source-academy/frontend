@@ -5,12 +5,14 @@ import { IMCQQuestion } from '../assessment/assessmentShape'
 
 export interface IMCQChooserProps {
   mcq: IMCQQuestion
+  mcqSubmit?: (choiceId: number) => void
 }
 
 class MCQChooser extends React.Component<IMCQChooserProps, {}> {
   public render() {
+    const mockMcqSubmit = (i: number) => () => {} 
     const options = this.props.mcq.choices.map((choice, i) => (
-      <Button className="mcq-option col-xs-6">
+      <Button className="mcq-option col-xs-6" onClick={mockMcqSubmit(i)}>
         <Tooltip key={i} content={choice.hint}>
           <Text className="Text"> { choice.content } </Text>
         </Tooltip>
