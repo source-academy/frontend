@@ -1,25 +1,29 @@
 import { History } from 'history'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
 import {
-  AnyAction,
   applyMiddleware,
-  combineReducers,
   compose,
   createStore as _createStore,
   Store,
   StoreEnhancer
 } from 'redux'
-import { Persistor, persistReducer, persistStore } from 'redux-persist'
+import { persistCombineReducers, PersistConfig, Persistor, persistStore } from 'redux-persist'
+import { createFilter } from 'redux-persist-transform-filter';
 import storage from 'redux-persist/lib/storage' // defaults to localStorage 
 import createSagaMiddleware from 'redux-saga'
 
+
 import reducers from './reducers'
-import { IState } from './reducers/states'
+import {IState } from './reducers/states'
 import mainSaga from './sagas'
 import { history as appHistory } from './utils/history'
 
 
 declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>
+
+interface IPersistState {
+  token?: string
+}
 
 function createStore(history: History): { store: Store<IState>, persistor: Persistor } {
   let composeEnhancers: any = compose
@@ -30,16 +34,40 @@ function createStore(history: History): { store: Store<IState>, persistor: Persi
     composeEnhancers = __REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   }
 
-  const rootReducer = combineReducers({
+  const saveAndloadSubsetFilter = createFilter<IState, IPersistState>(
+    'session',
+    ['token']
+  );
+
+
+  // const transIn: TransformIn<IState, IPersistState> = state => { 
+  //   // tslint:disable-next-line:no-console
+  //   console.log(state)
+  //   return {
+  //     token: state.session.token
+  //  } 
+  // }
+  // const transOut: TransformOut<IPersistState, IState> = persistState => (
+  //   {
+  //     academy: defaultAcademy,
+  //     application: defaultApplication,
+  //     playground: defaultPlayground,
+  //     session: {...defaultSession, ...persistState}
+  //   }
+  // )
+
+  const persistConfig: PersistConfig = {
+    key: 'root',
+    storage,
+    transforms: [saveAndloadSubsetFilter]
+  }
+
+  // const rootReducer = combineReducers<IState>()
+
+  const persistedReducer = persistCombineReducers<IState>(persistConfig, {
     ...reducers,
     router: routerReducer
   })
-
-  const persistConfig = {
-    key: 'root',
-    storage
-  }
-  const persistedReducer: (state: {}, action: AnyAction) => {} = persistReducer(persistConfig, rootReducer)
 
   const enchancers = composeEnhancers(applyMiddleware(...middleware))
   const createdStore = _createStore(persistedReducer, enchancers) as Store<IState>
