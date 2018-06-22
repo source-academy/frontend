@@ -19,7 +19,7 @@ export class DisallowedConstructError implements SourceError {
   public nodeType: string
 
   constructor(public node: es.Node) {
-    this.nodeType = this.splitNodeType()
+    this.nodeType = this.formatNodeType(this.node.type)
   }
 
   get location() {
@@ -27,7 +27,7 @@ export class DisallowedConstructError implements SourceError {
   }
 
   public explain() {
-    return `${this.nodeType} is not allowed`
+    return `${this.nodeType} are not allowed`
   }
 
   public elaborate() {
@@ -36,20 +36,22 @@ export class DisallowedConstructError implements SourceError {
     `
   }
 
-  private splitNodeType() {
-    const nodeType = this.node.type
-    const tokens: string[] = []
-    let soFar = ''
-    for (let i = 0; i < nodeType.length; i++) {
-      const isUppercase = nodeType[i] === nodeType[i].toUpperCase()
-      if (isUppercase && i > 0) {
-        tokens.push(soFar)
-        soFar = ''
-      } else {
-        soFar += nodeType[i]
-      }
+  /**
+   * Converts estree node.type into english
+   * e.g. ThisExpression -> 'this' expressions
+   *      Property -> Properties
+   *      EmptyStatement -> Empty Statements
+   */
+  private formatNodeType(nodeType: string) {
+    switch (nodeType) {
+      case 'ThisExpression':
+        return "'this' expressions"
+      case 'Property':
+        return 'Properties'
+      default:
+        const words = nodeType.split(/(?=[A-Z])/)
+        return words.map((word, i) => (i === 0 ? word : word.toLowerCase())).join(' ') + 's'
     }
-    return tokens.join(' ')
   }
 }
 
@@ -150,14 +152,15 @@ function createWalkers(
   allowedSyntaxes: { [nodeName: string]: number },
   parserRules: Array<Rule<es.Node>>
 ) {
-  const newWalkers: { [name: string]: (node: es.Node, ctxt: Context) => void } = {}
+  // const newWalkers: Map<string, (n: es.Node, c: Context) => void> = new Map()
+  const newWalkers = new Map<string, (n: es.Node, c: Context) => void>()
 
   // Provide callbacks checking for disallowed syntaxes, such as case, switch...
   const syntaxPairs = Object.entries(allowedSyntaxes)
   syntaxPairs.map(pair => {
     const syntax = pair[0]
     const allowedChap = pair[1]
-    newWalkers[syntax] = (node: es.Node, context: Context) => {
+    newWalkers.set(syntax, (node: es.Node, context: Context) => {
       const id = freshId()
       Object.defineProperty(node, '__id', {
         enumerable: true,
@@ -175,7 +178,7 @@ function createWalkers(
       if (context.chapter < allowedChap) {
         context.errors.push(new DisallowedConstructError(node))
       }
-    }
+    })
   })
 
   // Provide callbacks checking for rule violations, e.g. no block arrow funcs, non-empty lists...
@@ -185,7 +188,7 @@ function createWalkers(
     syntaxCheckerPair.forEach(pair => {
       const syntax = pair[0]
       const checker = pair[1]
-      const oldCheck = newWalkers[syntax]
+      const oldCheck = newWalkers.get(syntax)
       const newCheck = (node: es.Node, context: Context) => {
         if (typeof rule.disableOn !== 'undefined' && context.chapter >= rule.disableOn) {
           return
@@ -193,14 +196,16 @@ function createWalkers(
         const errors = checker(node)
         errors.forEach(e => context.errors.push(e))
       }
-      newWalkers[syntax] = (node, context) => {
-        oldCheck(node, context)
+      newWalkers.set(syntax, (node, context) => {
+        if (oldCheck) {
+          oldCheck(node, context)
+        }
         newCheck(node, context)
-      }
+      })
     })
   })
 
-  return newWalkers
+  return mapToObj(newWalkers)
 }
 
 export const freshId = (() => {
@@ -210,6 +215,9 @@ export const freshId = (() => {
     return 'node_' + id
   }
 })()
+
+const mapToObj = (map: Map<string, any>) =>
+  Array.from(map).reduce((obj, [k, v]) => Object.assign(obj, { [k]: v }), {})
 
 const walkers: { [name: string]: (node: es.Node, ctxt: Context) => void } = createWalkers(
   syntaxTypes,
