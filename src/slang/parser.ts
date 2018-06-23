@@ -152,7 +152,6 @@ function createWalkers(
   allowedSyntaxes: { [nodeName: string]: number },
   parserRules: Array<Rule<es.Node>>
 ) {
-  // const newWalkers: Map<string, (n: es.Node, c: Context) => void> = new Map()
   const newWalkers = new Map<string, (n: es.Node, c: Context) => void>()
 
   // Provide callbacks checking for disallowed syntaxes, such as case, switch...
