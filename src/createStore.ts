@@ -1,7 +1,7 @@
 import { History } from 'history'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
 import { applyMiddleware, compose, createStore as _createStore, Store, StoreEnhancer } from 'redux'
-import { persistCombineReducers, PersistConfig, Persistor, persistStore } from 'redux-persist'
+import { persistCombineReducers, PersistConfig, persistStore } from 'redux-persist'
 import { createFilter } from 'redux-persist-transform-filter'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage
 import createSagaMiddleware from 'redux-saga'
@@ -19,7 +19,7 @@ type IPersistState = Pick<IApplicationState, 'environment'> &
   Pick<ISessionState, 'token'> &
   Pick<ISessionState, 'username'>
 
-function createStore(history: History): { store: Store<IState>; persistor: Persistor } {
+function createStore(history: History) {
   let composeEnhancers: any = compose
   const sagaMiddleware = createSagaMiddleware()
   const middleware = [sagaMiddleware, routerMiddleware(history)]
@@ -47,11 +47,13 @@ function createStore(history: History): { store: Store<IState>; persistor: Persi
 
   const enchancers = composeEnhancers(applyMiddleware(...middleware))
   const createdStore = _createStore(persistedReducer, enchancers) as Store<IState>
-  const createdPersistor = persistStore(createdStore)
   sagaMiddleware.run(mainSaga)
-  return { store: createdStore, persistor: createdPersistor }
+  return createdStore
 }
 
-const storeAndPersistor = createStore(appHistory)
-export const persistor = storeAndPersistor.persistor
-export const store = storeAndPersistor.store
+function createPersistor(createdStore: Store<IState>) {
+  return persistStore(createdStore)
+}
+
+export const store = createStore(appHistory)
+export const persistor = createPersistor(store)
