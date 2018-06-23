@@ -81,7 +81,7 @@ $code-color-error: #ff4444;
     overflow: hidden;
     .mcq-content-parent {
       height: 100%;
-      overflow: scroll;
+      overflow: auto;
     }
     .mcq-options-parent {
       margin-bottom: 20px;
@@ -122,6 +122,8 @@ $code-color-error: #ff4444;
       overflow-y: auto;
 
       .pt-card {
+        display: flex;
+        flex-direction: column;
         background-color: $cadet-color-2;
         color: $code-color-result;
         height: 100%;
