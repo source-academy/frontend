@@ -5,15 +5,10 @@ import { evalEditor, updateEditorValue } from '../../actions/playground'
 import Editor, { IEditorProps } from '../../components/workspace/Editor'
 import { IState } from '../../reducers/states'
 
-type StateProps = Pick<IEditorProps, 'editorValue'>
 type DispatchProps = Pick<IEditorProps, 'handleEditorValueChange'> &
   Pick<IEditorProps, 'handleEditorEval'>
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
-  return {
-    editorValue: state.playground.editorValue
-  }
-}
+const mapStateToProps: MapStateToProps<{}, {}, IState> = state => ({})
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(

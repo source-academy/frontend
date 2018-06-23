@@ -41,7 +41,7 @@ export interface IProgrammingQuestion extends IQuestion {
 }
 
 export interface IMCQQuestion extends IQuestion {
-  choices?: MCQChoice[]
+  choices: MCQChoice[]
   type: 'mcq'
 }
 

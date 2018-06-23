@@ -4,8 +4,10 @@ import * as React from 'react'
 
 import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
 import EditorContainer from '../../containers/workspace/EditorContainer'
+import MCQChooserContainer from '../../containers/workspace/MCQChooserContainer'
 import ReplContainer from '../../containers/workspace/ReplContainer'
 import SideContent from '../../containers/workspace/SideContentContainer'
+import { IMCQQuestion } from '../assessment/assessmentShape'
 import { OwnProps as ControlBarOwnProps } from './ControlBar'
 import { SideContentTab } from './side-content'
 
@@ -21,8 +23,10 @@ export type DispatchProps = {
 export type OwnProps = {
   controlBarOptions?: ControlBarOwnProps
   libQuery?: number
-  sideContentTabs: SideContentTab[]
   prgrmQuery?: string
+  editorValue?: string
+  mcq?: IMCQQuestion
+  sideContentTabs: SideContentTab[]
 }
 
 export type StateProps = {
@@ -63,9 +67,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         <ControlBarContainer {...this.props.controlBarOptions} />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
-          <Resizable {...this.editorResizableProps()}>
-            <EditorContainer />
-          </Resizable>
+          <Resizable {...this.editorResizableProps()}>{this.workspaceInput(this.props)}</Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
               <SideContent {...{ tabs: this.props.sideContentTabs }} />
@@ -149,6 +151,14 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       this.sideDividerDiv.style.display = 'none'
     } else {
       this.sideDividerDiv.style.display = 'initial'
+    }
+  }
+
+  private workspaceInput = (props: WorkspaceProps) => {
+    if (props.editorValue !== undefined) {
+      return <EditorContainer editorValue={props.editorValue} />
+    } else {
+      return <MCQChooserContainer mcq={this.props.mcq!} />
     }
   }
 }
