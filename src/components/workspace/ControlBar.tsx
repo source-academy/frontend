@@ -45,7 +45,6 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    isRunning: false,
     onClickSave: () => {}
   }
 
