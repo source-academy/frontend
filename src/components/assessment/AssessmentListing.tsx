@@ -28,17 +28,17 @@ export type StateProps = Pick<IAssessmentListingProps, 'assessmentOverviews'>
 
 class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
   public render() {
-    const assessmentIdParam: number | null = stringParamToInt(this.props.match.params.assessmentId)
+    const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId)
     // default questionId is 0 (the first question)
-    const questionIdParam: number = stringParamToInt(this.props.match.params.questionId) || 0
+    const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0
 
     // if there is no assessmentId specified, Render only information.
-    if (assessmentIdParam === null) {
+    if (assessmentId === null) {
       const props: IContentDisplayProps = {
         display: (
           <AssessmentOverviewCard
             assessmentOverviews={this.props.assessmentOverviews}
-            questionId={questionIdParam}
+            questionId={questionId}
           />
         ),
         loadContentDispatch: this.props.handleAssessmentOverviewFetch
@@ -50,8 +50,8 @@ class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
       )
     } else {
       const props: AssessmentProps = {
-        assessmentId: assessmentIdParam,
-        questionId: questionIdParam
+        assessmentId,
+        questionId
       }
       return <AssessmentContainer {...props} />
     }
