@@ -1,5 +1,6 @@
 import { Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
+import { decompressFromEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
@@ -36,9 +37,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handlers={this.handlers}
       >
         <WorkspaceContainer
-          libQuery={parseLibrary(this.props)}
-          prgrmQuery={parsePrgrm(this.props)}
-          editorValue={this.props.editorValue}
+          library={parseLibrary(this.props)}
+          editorValue={parsePrgrm(this.props) || this.props.editorValue}
           sideContentTabs={[playgroundIntroduction]}
         />
       </HotKeys>
@@ -53,7 +53,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 const parsePrgrm = (props: IPlaygroundProps) => {
   const qsParsed = qs.parse(props.location.hash)
   // legacy support
-  return qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm
+  const program = qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm
+  return program !== undefined ? decompressFromEncodedURIComponent(program) : undefined
 }
 
 const parseLibrary = (props: IPlaygroundProps) => {

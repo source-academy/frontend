@@ -1,4 +1,3 @@
-import { decompressFromEncodedURIComponent } from 'lz-string'
 import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
 
@@ -22,8 +21,7 @@ export type DispatchProps = {
 
 export type OwnProps = {
   controlBarOptions?: ControlBarOwnProps
-  libQuery?: number
-  prgrmQuery?: string
+  library?: number
   editorValue?: string
   mcq?: IMCQQuestion
   sideContentTabs: SideContentTab[]
@@ -41,18 +39,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private sideDividerDiv: HTMLDivElement
 
   public componentDidMount() {
-    this.componentDidUpdate()
     this.maxDividerHeight = this.sideDividerDiv.clientHeight
-  }
-
-  public componentDidUpdate() {
-    if (this.props.prgrmQuery !== undefined) {
-      const prgrmParsed = decompressFromEncodedURIComponent(this.props.prgrmQuery)
-      this.props.updateEditorValue(prgrmParsed)
-    }
-    if (this.props.libQuery !== undefined) {
-      this.props.changeChapter(this.props.libQuery)
-    }
   }
 
   /**
