@@ -16,7 +16,6 @@ export type DispatchProps = {
   changeChapter: (newChapter: number) => void
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
-  updateEditorValue: (newEditorValue: string) => void
 }
 
 export type OwnProps = {

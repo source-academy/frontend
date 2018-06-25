@@ -4,8 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 import {
   changeChapter,
   changeEditorWidth,
-  changeSideContentHeight,
-  updateEditorValue
+  changeSideContentHeight
 } from '../../actions/playground'
 import Workspace, { DispatchProps, StateProps } from '../../components/workspace/'
 import { IState } from '../../reducers/states'
@@ -25,8 +24,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       changeChapter,
       handleEditorWidthChange: changeEditorWidth,
-      handleSideContentHeightChange: changeSideContentHeight,
-      updateEditorValue
+      handleSideContentHeightChange: changeSideContentHeight
     },
     dispatch
   )
