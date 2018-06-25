@@ -40,29 +40,32 @@ function* apiFetchSaga(): SagaIterator {
 function* interpreterSaga(): SagaIterator {
   let context: Context
 
-  yield takeEvery(actionTypes.EVAL_EDITOR, function*() {
+  yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
+    const location = (action as actionTypes.IAction).payload.location
     const code: string = yield select((state: IState) => state.playground.editorValue)
-    yield put(actions.clearContext())
-    yield put(actions.clearReplOutput())
+    yield put(actions.clearContext(location))
+    yield put(actions.clearReplOutput(location))
     context = yield select((state: IState) => state.playground.context)
     yield* evalCode(code, context)
   })
 
-  yield takeEvery(actionTypes.EVAL_REPL, function*() {
+  yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
+    const location = (action as actionTypes.IAction).payload.location
     const code: string = yield select((state: IState) => state.playground.replValue)
     context = yield select((state: IState) => state.playground.context)
-    yield put(actions.clearReplInput())
-    yield put(actions.sendReplInputToOutput(code))
+    yield put(actions.clearReplInput(location))
+    yield put(actions.sendReplInputToOutput(code, location))
     yield* evalCode(code, context)
   })
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
+    const location = (action as actionTypes.IAction).payload.location
     const newChapter = parseInt((action as actionTypes.IAction).payload, 10)
     const oldChapter = yield select((state: IState) => state.playground.sourceChapter)
     if (newChapter !== oldChapter) {
-      yield put(actions.changeChapter(newChapter))
-      yield put(actions.clearContext())
-      yield put(actions.clearReplOutput())
+      yield put(actions.changeChapter(newChapter, location))
+      yield put(actions.clearContext(location))
+      yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
   })
