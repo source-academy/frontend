@@ -15,7 +15,7 @@ function* mainSaga() {
   yield* apiFetchSaga()
   yield* interpreterSaga()
   yield* loginSaga()
-  yield* workspaceSaga()
+  yield* playgroundSaga()
 }
 
 function* apiFetchSaga(): SagaIterator {
@@ -86,7 +86,7 @@ function* loginSaga(): SagaIterator {
   })
 }
 
-function* workspaceSaga(): SagaIterator {
+function* playgroundSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
     const code = yield select((state: IState) => state.playground.editorValue)
     const lib = yield select((state: IState) => state.playground.sourceChapter)
