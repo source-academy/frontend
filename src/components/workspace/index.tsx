@@ -41,6 +41,11 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private sideDividerDiv: HTMLDivElement
 
   public componentDidMount() {
+    this.componentDidUpdate()
+    this.maxDividerHeight = this.sideDividerDiv.clientHeight
+  }
+
+  public componentDidUpdate() {
     if (this.props.prgrmQuery !== undefined) {
       const prgrmParsed = decompressFromEncodedURIComponent(this.props.prgrmQuery)
       this.props.updateEditorValue(prgrmParsed)
@@ -48,7 +53,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     if (this.props.libQuery !== undefined) {
       this.props.changeChapter(this.props.libQuery)
     }
-    this.maxDividerHeight = this.sideDividerDiv.clientHeight
   }
 
   /**
