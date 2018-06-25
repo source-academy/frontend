@@ -7,18 +7,12 @@ import * as CopyToClipboard from 'react-copy-to-clipboard'
 import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
-type ControlBarProps = DispatchProps & OwnProps & StateProps
-
-export type DispatchProps = {
+export type ControlBarProps = {
   handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
-  handleGenerateLz: () => void
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
-}
-
-export type OwnProps = {
   hasChapterSelect?: boolean
   hasNextButton?: boolean
   hasPreviousButton?: boolean
@@ -29,12 +23,10 @@ export type OwnProps = {
   onClickPrevious?(): any
   onClickSave?(): any
   onClickSubmit?(): any
-}
-
-export type StateProps = {
   isRunning: boolean
   queryString?: string
   sourceChapter: number
+  handleGenerateLz?: () => void
 }
 
 interface IChapter {
@@ -43,7 +35,7 @@ interface IChapter {
 }
 
 class ControlBar extends React.Component<ControlBarProps, {}> {
-  public static defaultProps: OwnProps = {
+  public static defaultProps: ControlBarProps = {
     hasChapterSelect: true,
     hasNextButton: false,
     hasPreviousButton: false,
