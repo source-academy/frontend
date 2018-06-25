@@ -13,3 +13,13 @@ test('Playground renders correctly', () => {
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
+
+test('Playground with link renders correctly', () => {
+  const props = {
+    ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {}),
+    editorValue: 'This should not show up'
+  }
+  const app = <Playground {...props} />
+  const tree = shallow(app)
+  expect(tree.debug()).toMatchSnapshot()
+})
