@@ -5,13 +5,12 @@ import ControlBar, { ControlBarProps } from './ControlBar'
 import Editor, { IEditorProps } from './Editor'
 import MCQChooser from './MCQChooser'
 import Repl, { IReplProps } from './Repl'
-import SideContent, { SideContentProps } from './side-content'
+import SideContent, { SideContentTab } from './side-content'
 import { IMCQQuestion } from '../assessment/assessmentShape'
-import { SideContentTab } from './side-content'
 
 export type WorkspaceProps = {
   // Either editorProps or mcq must be provided
-  controlBarProps?: ControlBarProps
+  controlBarProps: ControlBarProps
   editorProps?: IEditorProps
   editorWidth: string
   handleEditorWidthChange: (widthChange: number) => void
@@ -50,7 +49,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
               <SideContent {...{ tabs: this.props.sideContentTabs }} />
               <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
             </Resizable>
-            <Repl { ...replProps } />
+            <Repl { ...this.props.replProps } />
           </div>
         </div>
       </div>
@@ -132,8 +131,8 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   private workspaceInput = (props: WorkspaceProps) => {
-    if (props.editorValue !== undefined) {
-      return <Editor { ...this.props.editorProps } />
+    if (props.editorProps !== undefined) {
+      return <Editor { ...props.editorProps } />
     } else {
       return <MCQChooser mcq={this.props.mcq!} />
     }

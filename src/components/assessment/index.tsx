@@ -60,9 +60,21 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props),
       sideContentTabs: this.sideContentTabs(this.props),
-      editorValue: (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion)
-        .solutionTemplate,
-      mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion
+      editorProps: {
+        editorValue: (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion).solutionTemplate,
+        handleEditorEval: () => {}, // TODO 
+        handleEditorValueChange: (str: string) => {} // TODO
+      },
+      editorWidth: "0", // TODO
+      handleEditorWidthChange: (n: number) => {}, // TODO 
+      handleSideContentHeightChange: (h: number) => {}, //TODO
+      mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion,
+      replProps: { //TODO
+        output: [],
+        replValue: "",
+        handleReplEval: () => {},
+        handleReplValueChange: (code: string) => {}
+      }
     }
     return (
       <div className="Assessment pt-dark">
@@ -101,7 +113,14 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
       onClickSubmit: () => history.push(listingPath),
       hasSaveButton: true,
-      hasShareButton: false
+      hasShareButton: false,
+      handleChapterSelect: (i: any, e: any) => {}, // TODO,
+      handleEditorEval: () => {}, // TODO
+      handleReplEval: () => {}, // TODO
+      handleReplOutputClear: () => {}, // TODO
+      handleInterruptEval: () => {}, // TODO 
+      isRunning: false, // TODO 
+      sourceChapter: 2, // TODO 
     }
   }
 }

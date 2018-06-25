@@ -8,7 +8,7 @@ import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
 export type ControlBarProps = {
-  handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
   handleGenerateLz?: () => void
   handleInterruptEval: () => void
@@ -35,8 +35,8 @@ interface IChapter {
 }
 
 class ControlBar extends React.Component<ControlBarProps, {}> {
-  public static defaultProps: ControlBarProps = {
-    hasChapterSelect: true,
+  public static defaultProps: Partial<ControlBarProps> = {
+    hasChapterSelect: false,
     hasNextButton: false,
     hasPreviousButton: false,
     hasSubmitButton: false,
@@ -44,8 +44,7 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {},
-    onClickSubmit: () => {}
+    onClickSave: () => {}
   }
 
   private shareInputElem: HTMLInputElement

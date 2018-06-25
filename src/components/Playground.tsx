@@ -6,7 +6,7 @@ import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
-import Workspace from './workspace'
+import Workspace, { WorkspaceProps } from './workspace'
 import { sourceChapters } from '../reducers/states'
 import { SideContentTab } from './workspace/side-content'
 
@@ -30,17 +30,42 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 
   public render() {
+    const workspaceProps: WorkspaceProps = {
+      editorProps: {
+        editorValue: parsePrgrm(this.props) || this.props.editorValue,
+        handleEditorEval: () => {}, // TODO
+        handleEditorValueChange: () => {} // TODO
+      },
+      controlBarProps: {
+        sourceChapter: parseLibrary(this.props) || 2,
+        handleChapterSelect: (i: any, e: any) => {}, // TODO,
+        handleEditorEval: () => {}, // TODO
+        handleReplEval: () => {}, // TODO
+        handleReplOutputClear: () => {}, // TODO
+        handleInterruptEval: () => {}, // TODO 
+        isRunning: false, // TODO 
+        hasNextButton: false,
+        hasPreviousButton: false,
+        hasSubmitButton: false
+      },
+      sideContentTabs: [playgroundIntroduction],
+      editorWidth: "0", // TODO
+      handleEditorWidthChange: (n: number) => {}, // TODO 
+      handleSideContentHeightChange: (h: number) => {}, //TODO
+      replProps: { //TODO
+        output: [],
+        replValue: "",
+        handleReplEval: () => {},
+        handleReplValueChange: (code: string) => {}
+      }
+    }
     return (
       <HotKeys
         className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
         keyMap={this.keyMap}
         handlers={this.handlers}
       >
-        <Workspace
-          library={parseLibrary(this.props)}
-          editorValue={parsePrgrm(this.props) || this.props.editorValue}
-          sideContentTabs={[playgroundIntroduction]}
-        />
+        <Workspace {...workspaceProps } />
       </HotKeys>
     )
   }
