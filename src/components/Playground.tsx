@@ -48,7 +48,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         hasPreviousButton: false,
         hasSubmitButton: false
       },
-      sideContentTabs: [playgroundIntroduction],
+      sideContentProps: {
+        activeTab: 0,
+        tabs: [playgroundIntroduction],
+        handleChangeActiveTab: (aT: number) => {}
+      },
       editorWidth: "0", // TODO
       handleEditorWidthChange: (n: number) => {}, // TODO 
       handleSideContentHeightChange: (h: number) => {}, //TODO

@@ -5,7 +5,7 @@ import ControlBar, { ControlBarProps } from './ControlBar'
 import Editor, { IEditorProps } from './Editor'
 import MCQChooser from './MCQChooser'
 import Repl, { IReplProps } from './Repl'
-import SideContent, { SideContentTab } from './side-content'
+import SideContent, { SideContentProps } from './side-content'
 import { IMCQQuestion } from '../assessment/assessmentShape'
 
 export type WorkspaceProps = {
@@ -18,7 +18,7 @@ export type WorkspaceProps = {
   mcq?: IMCQQuestion
   replProps: IReplProps
   sideContentHeight?: number
-  sideContentTabs: SideContentTab[]
+  sideContentProps: SideContentProps
 }
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
@@ -46,7 +46,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
           <Resizable {...this.editorResizableProps()}>{this.workspaceInput(this.props)}</Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
-              <SideContent {...{ tabs: this.props.sideContentTabs }} />
+              <SideContent {...this.props.sideContentProps } />
               <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
             </Resizable>
             <Repl { ...this.props.replProps } />

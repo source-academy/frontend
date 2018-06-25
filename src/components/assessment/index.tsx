@@ -6,7 +6,7 @@ import Workspace, { WorkspaceProps } from '../workspace'
 import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { ControlBarProps } from '../workspace/ControlBar'
-import { SideContentTab } from '../workspace/side-content'
+import { SideContentProps } from '../workspace/side-content'
 import { IAssessment, IMCQQuestion, IProgrammingQuestion } from './assessmentShape'
 
 export type AssessmentProps = DispatchProps & OwnProps & StateProps
@@ -59,7 +59,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     )
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props),
-      sideContentTabs: this.sideContentTabs(this.props),
+      sideContentProps: this.sideContentProps(this.props),
       editorProps: {
         editorValue: (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion).solutionTemplate,
         handleEditorEval: () => {}, // TODO 
@@ -85,18 +85,23 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
   }
 
   /** Pre-condition: IAssessment has been loaded */
-  private sideContentTabs: (p: AssessmentProps) => SideContentTab[] = (props: AssessmentProps) => [
-    {
-      label: `Task ${props.questionId}`,
-      icon: IconNames.NINJA,
-      body: (<Text> {props.assessment!.questions[props.questionId].content} </Text>)
-    },
-    {
-      label: `${props.assessment!.category} Briefing`,
-      icon: IconNames.BRIEFCASE,
-      body: (<Text> {props.assessment!.longSummary} </Text>)
-    }
-  ]
+  private sideContentProps: (p: AssessmentProps) => SideContentProps = (props: AssessmentProps) => ({
+    tabs: [
+      {
+        label: `Task ${props.questionId}`,
+        icon: IconNames.NINJA,
+        body: (<Text> {props.assessment!.questions[props.questionId].content} </Text>)
+      },
+      {
+        label: `${props.assessment!.category} Briefing`,
+        icon: IconNames.BRIEFCASE,
+        body: (<Text> {props.assessment!.longSummary} </Text>)
+      }
+    ],
+    activeTab: 0,
+    handleChangeActiveTab: (aT: number) => {}
+
+  })
   
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentProps) => ControlBarProps = (props: AssessmentProps) => {
