@@ -10,17 +10,16 @@ import { IMCQQuestion } from '../assessment/assessmentShape'
 import { SideContentTab } from './side-content'
 
 export type WorkspaceProps = {
+  // Either editorProps or mcq must be provided
+  controlBarProps?: ControlBarProps
+  editorProps?: IEditorProps
   editorWidth: string
-  sideContentHeight?: number
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
-  controlBarProps?: ControlBarProps
-  library?: number
-  // Either editorProps or mcq must be provided
-  editorProps?: IEditorProps
   mcq?: IMCQQuestion
-  sideContentTabs: SideContentTab[]
   replProps: IReplProps
+  sideContentHeight?: number
+  sideContentTabs: SideContentTab[]
 }
 
 class Workspace extends React.Component<WorkspaceProps, {}> {

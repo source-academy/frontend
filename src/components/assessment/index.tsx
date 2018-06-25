@@ -2,11 +2,10 @@ import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import Workspace from '../../containers/workspace'
+import Workspace, { WorkspaceProps } from '../workspace'
 import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
-import { OwnProps as WorkspaceProps } from '../workspace'
-import { OwnProps as ControlBarOwnProps } from '../workspace/ControlBar'
+import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentTab } from '../workspace/side-content'
 import { IAssessment, IMCQQuestion, IProgrammingQuestion } from './assessmentShape'
 
@@ -45,11 +44,10 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         />
       )
     }
-    const longSummaryElement = <Text> {this.props.assessment.longSummary} </Text>
     const overlay = (
       <Dialog className="mission-briefing" isOpen={this.state.showOverlay}>
         <Card>
-          {longSummaryElement}
+          <Text> {this.props.assessment.longSummary} </Text>
           <Button
             className="mission-briefing-button"
             // tslint:disable-next-line jsx-no-lambda
@@ -59,39 +57,9 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         </Card>
       </Dialog>
     )
-    const shortSummaryElement = (
-      <Text> {this.props.assessment.questions[this.props.questionId].content} </Text>
-    )
-    const sideContentTabs: SideContentTab[] = [
-      {
-        label: `Task ${this.props.questionId}`,
-        icon: IconNames.NINJA,
-        body: shortSummaryElement
-      },
-      {
-        label: `${this.props.assessment.category} Briefing`,
-        icon: IconNames.BRIEFCASE,
-        body: longSummaryElement
-      }
-    ]
-    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment.category)}`
-    const assessmentPath = listingPath + `/${this.props.assessment.id.toString()}`
-    const controlBarOptions: ControlBarOwnProps = {
-      hasChapterSelect: false,
-      hasNextButton: this.props.questionId < this.props.assessment.questions.length - 1,
-      hasPreviousButton: this.props.questionId > 0,
-      hasSubmitButton: this.props.questionId === this.props.assessment.questions.length - 1,
-      onClickNext: () =>
-        history.push(assessmentPath + `/${(this.props.questionId + 1).toString()}`),
-      onClickPrevious: () =>
-        history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
-      onClickSubmit: () => history.push(listingPath),
-      hasSaveButton: true,
-      hasShareButton: false
-    }
     const workspaceProps: WorkspaceProps = {
-      controlBarOptions,
-      sideContentTabs,
+      controlBarProps: this.controlBarProps(this.props),
+      sideContentTabs: this.sideContentTabs(this.props),
       editorValue: (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion)
         .solutionTemplate,
       mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion
@@ -102,6 +70,39 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         <Workspace {...workspaceProps} />
       </div>
     )
+  }
+
+  /** Pre-condition: IAssessment has been loaded */
+  private sideContentTabs: (p: AssessmentProps) => SideContentTab[] = (props: AssessmentProps) => [
+    {
+      label: `Task ${props.questionId}`,
+      icon: IconNames.NINJA,
+      body: (<Text> {props.assessment!.questions[props.questionId].content} </Text>)
+    },
+    {
+      label: `${props.assessment!.category} Briefing`,
+      icon: IconNames.BRIEFCASE,
+      body: (<Text> {props.assessment!.longSummary} </Text>)
+    }
+  ]
+  
+  /** Pre-condition: IAssessment has been loaded */
+  private controlBarProps: (p: AssessmentProps) => ControlBarProps = (props: AssessmentProps) => {
+    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
+    const assessmentPath = listingPath + `/${this.props.assessment!.id.toString()}`
+    return {
+      hasChapterSelect: false,
+      hasNextButton: this.props.questionId < this.props.assessment!.questions.length - 1,
+      hasPreviousButton: this.props.questionId > 0,
+      hasSubmitButton: this.props.questionId === this.props.assessment!.questions.length - 1,
+      onClickNext: () =>
+        history.push(assessmentPath + `/${(this.props.questionId + 1).toString()}`),
+      onClickPrevious: () =>
+        history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
+      onClickSubmit: () => history.push(listingPath),
+      hasSaveButton: true,
+      hasShareButton: false
+    }
   }
 }
 

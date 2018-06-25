@@ -6,7 +6,7 @@ import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
-import WorkspaceContainer from '../containers/workspace'
+import Workspace from './workspace'
 import { sourceChapters } from '../reducers/states'
 import { SideContentTab } from './workspace/side-content'
 
@@ -36,7 +36,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         keyMap={this.keyMap}
         handlers={this.handlers}
       >
-        <WorkspaceContainer
+        <Workspace
           library={parseLibrary(this.props)}
           editorValue={parsePrgrm(this.props) || this.props.editorValue}
           sideContentTabs={[playgroundIntroduction]}

@@ -10,23 +10,23 @@ import { controlButton } from '../commons'
 export type ControlBarProps = {
   handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
+  handleGenerateLz?: () => void
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
   hasChapterSelect?: boolean
   hasNextButton?: boolean
   hasPreviousButton?: boolean
-  hasSubmitButton?: boolean
   hasSaveButton?: boolean
   hasShareButton?: boolean
+  hasSubmitButton?: boolean
+  isRunning: boolean
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
   onClickSubmit?(): any
-  isRunning: boolean
   queryString?: string
   sourceChapter: number
-  handleGenerateLz?: () => void
 }
 
 interface IChapter {
