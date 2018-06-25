@@ -6,8 +6,8 @@ import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
-import Workspace, { WorkspaceProps } from './workspace'
 import { sourceChapters } from '../reducers/states'
+import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
 
 export interface IPlaygroundProps extends RouteComponentProps<{}> {
@@ -55,8 +55,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       },
       editorWidth: "0", // TODO
       handleEditorWidthChange: (n: number) => {}, // TODO 
-      handleSideContentHeightChange: (h: number) => {}, //TODO
-      replProps: { //TODO
+      handleSideContentHeightChange: (h: number) => {}, // TODO
+      replProps: { // TODO
         output: [],
         replValue: "",
         handleReplEval: () => {},

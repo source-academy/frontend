@@ -2,9 +2,9 @@ import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import Workspace, { WorkspaceProps } from '../workspace'
 import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
+import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
 import { IAssessment, IMCQQuestion, IProgrammingQuestion } from './assessmentShape'
@@ -67,9 +67,9 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       },
       editorWidth: "0", // TODO
       handleEditorWidthChange: (n: number) => {}, // TODO 
-      handleSideContentHeightChange: (h: number) => {}, //TODO
+      handleSideContentHeightChange: (h: number) => {}, // TODO
       mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion,
-      replProps: { //TODO
+      replProps: { // TODO
         output: [],
         replValue: "",
         handleReplEval: () => {},

@@ -1,12 +1,12 @@
 import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
 
+import { IMCQQuestion } from '../assessment/assessmentShape'
 import ControlBar, { ControlBarProps } from './ControlBar'
 import Editor, { IEditorProps } from './Editor'
 import MCQChooser from './MCQChooser'
 import Repl, { IReplProps } from './Repl'
 import SideContent, { SideContentProps } from './side-content'
-import { IMCQQuestion } from '../assessment/assessmentShape'
 
 export type WorkspaceProps = {
   // Either editorProps or mcq must be provided

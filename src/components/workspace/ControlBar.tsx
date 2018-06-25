@@ -1,3 +1,4 @@
+/* tslint:disable:member-ordering */
 import { Button, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
@@ -44,10 +45,9 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
+    isRunning: false,
     onClickSave: () => {}
   }
-
-  private shareInputElem: HTMLInputElement
 
   constructor(props: ControlBarProps) {
     super(props)
@@ -63,6 +63,8 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
       </div>
     )
   }
+
+  private shareInputElem: HTMLInputElement
 
   private editorControl() {
     const runButton = (
