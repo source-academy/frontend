@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { evalRepl, updateReplValue } from '../../actions/playground'
+import { evalRepl, updateReplValue } from '../../actions/workspace'
 import Repl, { IReplProps } from '../../components/workspace/Repl'
 import { IState } from '../../reducers/states'
 

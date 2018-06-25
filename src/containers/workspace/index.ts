@@ -5,7 +5,7 @@ import {
   changeChapter,
   changeEditorWidth,
   changeSideContentHeight
-} from '../../actions/playground'
+} from '../../actions/workspace'
 import Workspace, { DispatchProps, StateProps } from '../../components/workspace/'
 import { IState } from '../../reducers/states'
 

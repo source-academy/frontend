@@ -3,12 +3,14 @@ import { bindActionCreators, Dispatch } from 'redux'
 
 import { handleInterruptExecution } from '../../actions/interpreter'
 import {
+  generateLzString
+} from '../../actions/playground'
+import {
   chapterSelect,
   clearReplOutput,
   evalEditor,
-  evalRepl,
-  generateLzString
-} from '../../actions/playground'
+  evalRepl
+} from '../../actions/workspace'
 import ControlBar, {
   DispatchProps,
   OwnProps,

@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { evalEditor, updateEditorValue } from '../../actions/playground'
+import { evalEditor, updateEditorValue } from '../../actions/workspace'
 import Editor, { IEditorProps } from '../../components/workspace/Editor'
 import { IState } from '../../reducers/states'
 

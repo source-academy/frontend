@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { changeActiveTab } from '../../actions/playground'
+import { changeActiveTab } from '../../actions/workspace'
 import SideContent, { DispatchProps, StateProps } from '../../components/workspace/side-content'
 import { IState } from '../../reducers/states'
 
