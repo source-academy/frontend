@@ -10,8 +10,24 @@ import { sourceChapters } from '../reducers/states'
 import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
 
-export interface IPlaygroundProps extends RouteComponentProps<{}> {
+interface IPlaygroundProps extends DispatchProps, StateProps, RouteComponentProps<{}> {}
+
+export interface StateProps {
   editorValue: string
+}
+
+export interface DispatchProps {
+  handleEditorEval: () => void,
+  handleEditorValueChange: () => void 
+  handleChapterSelect: (i: any, e: any) => void,
+  handleEditorEval: () => void, 
+  handleReplEval: () => void, 
+  handleReplOutputClear: () => void,
+  handleInterruptEval: () => void, 
+  handleEditorWidthChange: (n: number) => void, 
+  handleSideContentHeightChange: (h: number) => void, 
+  handleReplEval: () => void,
+  handleReplValueChange: (code: string) => void
 }
 
 type PlaygroundState = {

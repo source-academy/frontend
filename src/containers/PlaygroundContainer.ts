@@ -1,13 +1,20 @@
-import { connect, MapStateToProps } from 'react-redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
+import { bindActionCreators, Dispatch } from 'redux'
 
-import Playground, { IPlaygroundProps } from '../components/Playground'
+import Playground, { DispatchProps, StateProps } from '../components/Playground'
 import { IState } from '../reducers/states'
-
-type StateProps = Pick<IPlaygroundProps, 'editorValue'>
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   editorValue: state.workspaces.playground.editorValue
 })
 
-export default withRouter(connect(mapStateToProps)(Playground))
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
+  bindActionCreators<DispatchProps>(
+    {
+      handleAssessmentFetch: fetchAssessment
+    },
+    dispatch
+  )
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground))
