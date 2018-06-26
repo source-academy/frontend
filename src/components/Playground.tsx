@@ -6,18 +6,22 @@ import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
-import { sourceChapters } from '../reducers/states'
+import { InterpreterOutput, sourceChapters } from '../reducers/states'
 import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
 
-interface IPlaygroundProps extends DispatchProps, StateProps, RouteComponentProps<{}> {}
+export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
-export interface StateProps {
-  editorValue: string
+export interface IStateProps {
+  editorValue: string,
+  isRunning: boolean,
+  activeTab: number,
+  editorWidth: string,
+  output: InterpreterOutput[], // TODO
+  replValue: string
 }
 
-export interface DispatchProps {
-  handleEditorEval: () => void,
+export interface IDispatchProps {
   handleEditorValueChange: () => void 
   handleChapterSelect: (i: any, e: any) => void,
   handleEditorEval: () => void, 
@@ -26,7 +30,6 @@ export interface DispatchProps {
   handleInterruptEval: () => void, 
   handleEditorWidthChange: (n: number) => void, 
   handleSideContentHeightChange: (h: number) => void, 
-  handleReplEval: () => void,
   handleReplValueChange: (code: string) => void
 }
 
