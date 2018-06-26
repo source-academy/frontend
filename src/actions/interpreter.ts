@@ -1,21 +1,25 @@
 import { SourceError, Value } from '../slang/types'
 import * as actionTypes from './actionTypes'
+import { WorkspaceLocation } from './workspace'
 
-export const handleConsoleLog = (log: string) => ({
+// TODO fix this immediately after location 
+// is implemented completely
+export const handleConsoleLog = (log: string, workspaceLocation: WorkspaceLocation = 'assessment') => ({
   type: actionTypes.HANDLE_CONSOLE_LOG,
-  payload: log
+  payload: { log, workspaceLocation }
 })
 
-export const evalInterpreterSuccess = (value: Value) => ({
+export const evalInterpreterSuccess = (value: Value, workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.EVAL_INTERPRETER_SUCCESS,
-  payload: { type: 'result', value }
+  payload: { type: 'result', value, workspaceLocation }
 })
 
-export const evalInterpreterError = (errors: SourceError[]) => ({
+export const evalInterpreterError = (errors: SourceError[], workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.EVAL_INTERPRETER_ERROR,
-  payload: { type: 'errors', errors }
+  payload: { type: 'errors', errors, workspaceLocation }
 })
 
-export const handleInterruptExecution = () => ({
-  type: actionTypes.INTERRUPT_EXECUTION
+export const handleInterruptExecution = (workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.INTERRUPT_EXECUTION,
+  payload: { workspaceLocation }
 })

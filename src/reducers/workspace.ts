@@ -23,13 +23,17 @@ import { WorkspaceLocation } from '../actions/workspace'
 import { createContext } from '../slang'
 import { CodeOutput, defaultWorkspaceManager, InterpreterOutput, IWorkspaceManagerState } from './states'
 
+/**
+ * Takes in a IWorkspaceManagerState and maps it to a new state. The pre-conditions are that 
+ *   - There exists an IWorkspaceState in the IWorkspaceManagerState of the key `location`.
+ *   - `location` is defined (and exists) as a property 'workspaceLocation' in the action's payload.
+ */
 export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspaceManager, action: IAction) => {
+  const location: WorkspaceLocation = action.payload.workspaceLocation
   let newOutput: InterpreterOutput[]
   let lastOutput: InterpreterOutput
   switch (action.type) {
     case CHANGE_ACTIVE_TAB:
-      const location: WorkspaceLocation = action.payload
-        .workspaceLocation
       return {
         ...state,
         [location]: { 
@@ -40,126 +44,179 @@ export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspac
     case CHANGE_EDITOR_WIDTH:
       return {
         ...state,
-        editorWidth: (parseFloat(state.editorWidth.slice(0, -1)) + action.payload).toString() + '%'
+        [location]: { 
+          ...state[location], 
+          editorWidth: (parseFloat(state[location].editorWidth.slice(0, -1)) + action.payload.widthChange).toString() + '%'
+        }
       }
     case CHANGE_QUERY_STRING:
       return {
         ...state,
-        queryString: action.payload
+        [location]: { 
+          ...state[location], 
+          queryString: action.payload.queryString
+        }
       }
     case CHANGE_SIDE_CONTENT_HEIGHT:
       return {
         ...state,
-        sideContentHeight: action.payload
+        [location]: { 
+          ...state[location], 
+          sideContentHeight: action.payload.height
+        }
       }
     case CLEAR_REPL_INPUT:
       return {
         ...state,
-        replValue: ''
+        [location]: { 
+          ...state[location], 
+          replValue: ''
+        }
       }
     case CLEAR_REPL_OUTPUT:
       return {
         ...state,
-        output: []
+        [location]: { 
+          ...state[location], 
+          output: []
+        }
       }
     case CLEAR_CONTEXT:
       return {
         ...state,
-        context: createContext(state.sourceChapter)
+        [location]: { 
+          ...state[location], 
+          context: createContext(state[location].sourceChapter)
+        }
       }
     case CHANGE_CHAPTER:
       return {
         ...state,
-        sourceChapter: action.payload
+        [location]: { 
+          ...state[location], 
+          sourceChapter: action.payload.newChapter
+        }
       }
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:
-       * (1) state.output === [], i.e. state.output[-1] === undefined
-       * (2) state.output[-1] is not RunningOutput
-       * (3) state.output[-1] is RunningOutput */
-      lastOutput = state.output.slice(-1)[0]
+       * (1) state[location].output === [], i.e. state[location].output[-1] === undefined
+       * (2) state[location].output[-1] is not RunningOutput
+       * (3) state[location].output[-1] is RunningOutput */
+      lastOutput = state[location].output.slice(-1)[0]
       if (lastOutput === undefined || lastOutput.type !== 'running') {
-        newOutput = state.output.concat({
+        newOutput = state[location].output.concat({
           type: 'running',
-          consoleLogs: [action.payload]
+          consoleLogs: [action.payload.log]
         })
       } else {
         const updatedLastOutput = {
           type: lastOutput.type,
-          consoleLogs: lastOutput.consoleLogs.concat(action.payload)
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload.log)
         }
-        newOutput = state.output.slice(0, -1).concat(updatedLastOutput)
+        newOutput = state[location].output.slice(0, -1).concat(updatedLastOutput)
       }
       return {
         ...state,
-        output: newOutput
+        [location]: { 
+          ...state[location], 
+          output: newOutput
+        }
       }
     case SEND_REPL_INPUT_TO_OUTPUT:
-      newOutput = state.output.concat(action.payload as CodeOutput)
+      // CodeOutput properties exist in parallel with workspaceLocation
+      newOutput = state[location].output.concat(action.payload as CodeOutput)
       return {
         ...state,
-        output: newOutput
+        [location]: { 
+          ...state[location], 
+          output: newOutput
+        }
       }
     case EVAL_EDITOR:
       return {
         ...state,
-        isRunning: true
+        [location]: { 
+          ...state[location], 
+          isRunning: true
+        }
       }
     case EVAL_REPL:
       return {
         ...state,
-        isRunning: true
+        [location]: { 
+          ...state[location], 
+          isRunning: true
+        }
       }
     case EVAL_INTERPRETER_SUCCESS:
-      lastOutput = state.output.slice(-1)[0]
+      lastOutput = state[location].output.slice(-1)[0]
       if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state.output.slice(0, -1).concat({
+        newOutput = state[location].output.slice(0, -1).concat({
           ...action.payload,
+          workspaceLocation: undefined,
           consoleLogs: lastOutput.consoleLogs
         })
       } else {
-        newOutput = state.output.concat({
+        newOutput = state[location].output.concat({
           ...action.payload,
+          workspaceLocation: undefined,
           consoleLogs: []
         })
       }
       return {
         ...state,
-        output: newOutput,
-        isRunning: false
+        [location]: { 
+          ...state[location], 
+          output: newOutput,
+          isRunning: false
+        }
       }
     case EVAL_INTERPRETER_ERROR:
-      lastOutput = state.output.slice(-1)[0]
+      lastOutput = state[location].output.slice(-1)[0]
       if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state.output.slice(0, -1).concat({
+        newOutput = state[location].output.slice(0, -1).concat({
           ...action.payload,
+          workspaceLocation: undefined,
           consoleLogs: lastOutput.consoleLogs
         })
       } else {
-        newOutput = state.output.concat({
+        newOutput = state[location].output.concat({
           ...action.payload,
+          workspaceLocation: undefined,
           consoleLogs: []
         })
       }
       return {
         ...state,
-        output: newOutput,
-        isRunning: false
+        [location]: { 
+          ...state[location], 
+          output: newOutput,
+          isRunning: false
+        }
       }
     case INTERRUPT_EXECUTION:
       return {
         ...state,
-        isRunning: false
+        [location]: { 
+          ...state[location], 
+          isRunning: false
+        }
       }
     case UPDATE_EDITOR_VALUE:
       return {
         ...state,
-        editorValue: action.payload
+        [location]: { 
+          ...state[location], 
+          editorValue: action.payload.newEditorValue
+        }
       }
     case UPDATE_REPL_VALUE:
       return {
         ...state,
-        replValue: action.payload
+        [location]: { 
+          ...state[location], 
+          replValue: action.payload.newReplValue
+        }
       }
     default:
       return state
