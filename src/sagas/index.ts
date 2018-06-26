@@ -42,7 +42,7 @@ function* interpreterSaga(): SagaIterator {
   let context: Context
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
-    const location = (action as actionTypes.IAction).payload.location
+    const location = (action as actionTypes.IAction).payload.workspaceLocation
     const code: string = yield select((state: IState) => state.workspaces[location].editorValue)
     yield put(actions.clearContext(location))
     yield put(actions.clearReplOutput(location))
@@ -51,7 +51,7 @@ function* interpreterSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
-    const location = (action as actionTypes.IAction).payload.location
+    const location = (action as actionTypes.IAction).payload.workspaceLocation
     const code: string = yield select((state: IState) => state.workspaces[location].replValue)
     context = yield select((state: IState) => state.workspaces[location].context)
     yield put(actions.clearReplInput(location))
@@ -60,7 +60,7 @@ function* interpreterSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
-    const location = (action as actionTypes.IAction).payload.location
+    const location = (action as actionTypes.IAction).payload.workspaceLocation
     const newChapter = parseInt((action as actionTypes.IAction).payload, 10)
     const oldChapter = yield select((state: IState) => state.workspaces[location].sourceChapter)
     if (newChapter !== oldChapter) {
