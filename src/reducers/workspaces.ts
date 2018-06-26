@@ -29,7 +29,7 @@ import { CodeOutput, defaultWorkspaceManager, InterpreterOutput, IWorkspaceManag
  *   - `location` is defined (and exists) as a property 'workspaceLocation' in the action's payload.
  */
 export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspaceManager, action: IAction) => {
-  const location: WorkspaceLocation | undefined = action.payload !== undefined 
+  const location: WorkspaceLocation = action.payload !== undefined 
     ? action.payload.workspaceLocation
     : undefined 
   let newOutput: InterpreterOutput[]
