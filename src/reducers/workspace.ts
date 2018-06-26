@@ -38,7 +38,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspac
         ...state,
         [location]: { 
           ...state[location], 
-          sideContentActiveTab: actions.payload
+          sideContentActiveTab: action.payload
         }
       }
     case CHANGE_EDITOR_WIDTH:

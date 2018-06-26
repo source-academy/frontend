@@ -9,7 +9,7 @@ export interface IState {
   readonly application: IApplicationState
   readonly playground: IPlaygroundState
   readonly session: ISessionState
-  readonly workspace: IWorkspaceManagerState
+  readonly workspaces: IWorkspaceManagerState
 }
 
 export interface IAcademyState {
@@ -25,7 +25,7 @@ export interface IPlaygroundState {
   readonly queryString?: string
 }
 
-interface IWorkspaceManagerState {
+export interface IWorkspaceManagerState {
   readonly playground: IWorkspaceState
   readonly assessment: IWorkspaceState
 }
@@ -41,7 +41,6 @@ interface IWorkspaceState {
   readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
 }
-
 
 export interface ISessionState {
   readonly assessmentOverviews?: IAssessmentOverview[]

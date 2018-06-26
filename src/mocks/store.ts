@@ -6,6 +6,7 @@ import {
   defaultApplication,
   defaultPlayground,
   defaultSession,
+  defaultWorkspaceManager,
   IState
 } from '../reducers/states'
 
@@ -15,6 +16,7 @@ export function mockInitialStore<P>(): Store<IState> {
     academy: defaultAcademy,
     application: defaultApplication,
     playground: defaultPlayground,
+    workspaces: defaultWorkspaceManager,
     session: defaultSession
   }
   return createStore(state)
