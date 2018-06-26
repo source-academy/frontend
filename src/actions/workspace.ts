@@ -7,11 +7,14 @@ import * as actionTypes from './actionTypes'
  * or add more instances of `Workspace`s, one can add a string,
  * and call the actions with the respective string (taken
  * from the below enum).
+ *
+ * Note that the names must correspond with the name of the 
+ * object in IWorkspaceManagerState.
  */
-export type WorkspaceLocation = 'Assessment' | 'Playground'
+export type WorkspaceLocation = 'assessment' | 'playground'
 export enum WorkspaceLocations {
-  ASSESSMENT = 'Assessment',
-  PLAYGROUND = 'Playground'
+  ASSESSMENT = 'assessment',
+  PLAYGROUND = 'playground'
 }
 
 export const changeActiveTab: ActionCreator<actionTypes.IAction> = (activeTab: number, workspaceLocation: WorkspaceLocation) => ({

@@ -19,17 +19,23 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
+import { WorkspaceLocation } from '../actions/workspace'
 import { createContext } from '../slang'
-import { CodeOutput, defaultPlayground, InterpreterOutput, IPlaygroundState } from './states'
+import { CodeOutput, defaultWorkspaceManager, InterpreterOutput, IWorkspaceManagerState } from './states'
 
-export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, action: IAction) => {
+export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspaceManager, action: IAction) => {
   let newOutput: InterpreterOutput[]
   let lastOutput: InterpreterOutput
   switch (action.type) {
     case CHANGE_ACTIVE_TAB:
+      const location: WorkspaceLocation = action.payload
+        .workspaceLocation
       return {
         ...state,
-        sideContentActiveTab: action.payload
+        [location]: { 
+          ...state[location], 
+          sideContentActiveTab: actions.payload
+        }
       }
     case CHANGE_EDITOR_WIDTH:
       return {

@@ -9,6 +9,7 @@ export interface IState {
   readonly application: IApplicationState
   readonly playground: IPlaygroundState
   readonly session: ISessionState
+  readonly workspace: IWorkspaceManagerState
 }
 
 export interface IAcademyState {
@@ -20,8 +21,13 @@ export interface IApplicationState {
   readonly environment: ApplicationEnvironment
 }
 
-export interface IPlaygroundState extends IWorkspaceState {
+export interface IPlaygroundState {
   readonly queryString?: string
+}
+
+interface IWorkspaceManagerState {
+  readonly playground: IWorkspaceState
+  readonly assessment: IWorkspaceState
 }
 
 interface IWorkspaceState {
@@ -35,6 +41,7 @@ interface IWorkspaceState {
   readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
 }
+
 
 export interface ISessionState {
   readonly assessmentOverviews?: IAssessmentOverview[]
@@ -120,7 +127,9 @@ export const defaultApplication: IApplicationState = {
   environment: currentEnvironment()
 }
 
-export const defaultPlayground: IPlaygroundState = {
+export const defaultPlayground: IPlaygroundState = {}
+
+const defaultWorkspace: IWorkspaceState = {
   context: createContext(latestSourceChapter),
   editorValue: '',
   editorWidth: '50%',
@@ -130,6 +139,11 @@ export const defaultPlayground: IPlaygroundState = {
   sideContentActiveTab: 0,
   sideContentHeight: undefined,
   sourceChapter: latestSourceChapter
+}
+
+export const defaultWorkspaceManager: IWorkspaceManagerState = {
+  assessment: defaultWorkspace,
+  playground: defaultWorkspace
 }
 
 export const defaultSession: ISessionState = {
