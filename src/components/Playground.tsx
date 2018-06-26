@@ -23,16 +23,16 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-  handleEditorValueChange: () => void 
-  handleChapterSelect: (i: any, e: any) => void,
-  handleChangeActiveTab: (n: number) => void
+  handleChangeActiveTab: (activeTab: number) => void,
+  handleChapterSelect: (chapter: any, changeEvent: any) => void,
   handleEditorEval: () => void, 
+  handleEditorValueChange: (val: string) => void ,
+  handleEditorWidthChange: (widthChange: number) => void, 
+  handleInterruptEval: () => void, 
   handleReplEval: () => void, 
   handleReplOutputClear: () => void,
-  handleInterruptEval: () => void, 
-  handleEditorWidthChange: (n: number) => void, 
-  handleSideContentHeightChange: (h: number) => void, 
-  handleReplValueChange: (code: string) => void
+  handleReplValueChange: (newValue: string) => void,
+  handleSideContentHeightChange: (heightChange: number) => void
 }
 
 type PlaygroundState = {

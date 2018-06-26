@@ -19,7 +19,7 @@ const baseProps = {
   handleReplEval: () => {}, 
   handleReplOutputClear: () => {},
   handleInterruptEval: () => {}, 
-  handleEditorWidthChange: (n: number) => {}, 
+  handleEditorWidthChange: (widthChange: number) => {}, 
   handleSideContentHeightChange: (h: number) => {}, 
   handleReplValueChange: (code: string) => {}
 }
