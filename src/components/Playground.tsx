@@ -14,10 +14,11 @@ export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComp
 
 export interface IStateProps {
   editorValue: string,
+  sideContentHeight: number,
   isRunning: boolean,
   activeTab: number,
   editorWidth: string,
-  output: InterpreterOutput[], // TODO
+  output: InterpreterOutput[], 
   replValue: string
 }
 
@@ -74,6 +75,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleChangeActiveTab: this.props.handleChangeActiveTab
       },
       editorWidth: this.props.editorWidth,
+      sideContentHeight: this.props.sideContentHeight,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: { 

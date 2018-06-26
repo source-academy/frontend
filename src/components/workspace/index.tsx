@@ -17,7 +17,7 @@ export type WorkspaceProps = {
   handleSideContentHeightChange: (height: number) => void
   mcq?: IMCQQuestion
   replProps: IReplProps
-  sideContentHeight?: number
+  sideContentHeight: number
   sideContentProps: SideContentProps
 }
 
@@ -72,10 +72,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   private sideContentResizableProps() {
-    const size =
-      this.props.sideContentHeight === undefined
-        ? undefined
-        : { height: this.props.sideContentHeight, width: '100%' }
     const onResizeStop: ResizeCallback = ({}, {}, ref, {}) =>
       this.props.handleSideContentHeightChange(ref.clientHeight)
     return {
@@ -85,7 +81,10 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       minHeight: 0,
       onResize: this.toggleDividerDisplay,
       onResizeStop,
-      size
+      size: {
+        height: this.props.sideContentHeight,
+        width: '100%' 
+      }
     } as ResizableProps
   }
 

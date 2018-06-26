@@ -66,6 +66,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         handleEditorValueChange: (str: string) => {} // TODO
       },
       editorWidth: "0", // TODO
+      sideContentHeight: 0, // TODO
       handleEditorWidthChange: (n: number) => {}, // TODO 
       handleSideContentHeightChange: (h: number) => {}, // TODO
       mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion,

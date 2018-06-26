@@ -39,7 +39,7 @@ interface IWorkspaceState {
   readonly replValue: string
   readonly sourceChapter: number
   readonly sideContentActiveTab: number
-  readonly sideContentHeight?: number
+  readonly sideContentHeight: number
 }
 
 export interface ISessionState {
@@ -136,7 +136,7 @@ const defaultWorkspace: IWorkspaceState = {
   output: [],
   replValue: '',
   sideContentActiveTab: 0,
-  sideContentHeight: undefined,
+  sideContentHeight: 60,
   sourceChapter: latestSourceChapter
 }
 

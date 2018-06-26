@@ -11,12 +11,14 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   isRunning: state.workspaces.playground.isRunning,
   activeTab: state.workspaces.playground.sideContentActiveTab,
   editorWidth: state.workspaces.playground.editorWidth,
+  sideContentHeight: state.workspaces.playground.sideContentHeight,
   output: state.workspaces.playground.output,
   replValue: state.workspaces.playground.replValue,
 })
 
-const withLocation = (f: (...args: any[]) => void) => 
-  (...args: any[]) => f(...args, WorkspaceLocations.PLAYGROUND)
+function withLocation(f: (...args: any[]) => void) {
+  return (...args: any[]) => f(...args, ...[WorkspaceLocations.PLAYGROUND])
+}
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(

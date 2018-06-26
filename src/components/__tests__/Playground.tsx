@@ -8,7 +8,8 @@ const baseProps = {
   editorValue: "",
   isRunning: false,
   activeTab: 0,
-  editorWidth: "500px",
+  editorWidth: "50%",
+  sideContentHeight: 40,
   output: [],
   replValue: "",
   handleEditorValueChange: () => {} 
