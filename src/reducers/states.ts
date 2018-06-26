@@ -128,7 +128,7 @@ export const defaultApplication: IApplicationState = {
 
 export const defaultPlayground: IPlaygroundState = {}
 
-const defaultWorkspace: IWorkspaceState = {
+const makeDefaultWorkspace: () => IWorkspaceState = () => ({
   context: createContext(latestSourceChapter),
   editorValue: '',
   editorWidth: '50%',
@@ -138,11 +138,11 @@ const defaultWorkspace: IWorkspaceState = {
   sideContentActiveTab: 0,
   sideContentHeight: 60,
   sourceChapter: latestSourceChapter
-}
+})
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
-  assessment: {...defaultWorkspace},
-  playground: {...defaultWorkspace}
+  assessment: {...makeDefaultWorkspace()},
+  playground: {...makeDefaultWorkspace()}
 }
 
 export const defaultSession: ISessionState = {
