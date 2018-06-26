@@ -13,6 +13,7 @@ const baseProps = {
   replValue: "",
   handleEditorValueChange: () => {} 
   handleChapterSelect: (i: any, e: any) => {},
+  handleChangeActiveTab: (n: number) => {},
   handleEditorEval: () => {}, 
   handleReplEval: () => {}, 
   handleReplOutputClear: () => {},

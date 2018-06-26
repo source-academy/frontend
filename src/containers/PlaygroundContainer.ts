@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { changeEditorWidth, changeSideContentHeight, chapterSelect, clearReplOutput, evalEditor, evalRepl, handleInterruptExecution, updateEditorValue, updateReplValue, WorkspaceLocations } from '../actions';
+import { changeActiveTab, changeEditorWidth, changeSideContentHeight, chapterSelect, clearReplOutput, evalEditor, evalRepl, handleInterruptExecution, updateEditorValue, updateReplValue, WorkspaceLocations } from '../actions';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground'
 import { IState } from '../reducers/states'
 
@@ -29,7 +29,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleInterruptEval: withLocation(handleInterruptExecution), 
       handleEditorWidthChange: withLocation(changeEditorWidth), 
       handleSideContentHeightChange: withLocation(changeSideContentHeight),
-      handleReplValueChange: withLocation(updateReplValue)
+      handleReplValueChange: withLocation(updateReplValue),
+      handleChangeActiveTab: withLocation(changeActiveTab)
     },
     dispatch
   )

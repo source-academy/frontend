@@ -24,6 +24,7 @@ export interface IStateProps {
 export interface IDispatchProps {
   handleEditorValueChange: () => void 
   handleChapterSelect: (i: any, e: any) => void,
+  handleChangeActiveTab: (n: number) => void
   handleEditorEval: () => void, 
   handleReplEval: () => void, 
   handleReplOutputClear: () => void,
@@ -52,34 +53,34 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     const workspaceProps: WorkspaceProps = {
       editorProps: {
         editorValue: parsePrgrm(this.props) || this.props.editorValue,
-        handleEditorEval: () => {}, // TODO
-        handleEditorValueChange: () => {} // TODO
+        handleEditorEval: this.props.handleEditorEval,
+        handleEditorValueChange: this.props.handleEditorValueChange
       },
       controlBarProps: {
         sourceChapter: parseLibrary(this.props) || 2,
-        handleChapterSelect: (i: any, e: any) => {}, // TODO,
-        handleEditorEval: () => {}, // TODO
-        handleReplEval: () => {}, // TODO
-        handleReplOutputClear: () => {}, // TODO
-        handleInterruptEval: () => {}, // TODO 
-        isRunning: false, // TODO 
+        handleChapterSelect: this.props.handleChapterSelect, 
+        handleEditorEval: this.props.handleEditorEval,
+        handleReplEval: this.props.handleReplEval,
+        handleReplOutputClear: this.props.handleReplOutputClear,
+        handleInterruptEval: this.props.handleInterruptEval,
+        isRunning: this.props.isRunning, 
         hasNextButton: false,
         hasPreviousButton: false,
         hasSubmitButton: false
       },
       sideContentProps: {
-        activeTab: 0,
+        activeTab: this.props.activeTab,
         tabs: [playgroundIntroduction],
-        handleChangeActiveTab: (aT: number) => {}
+        handleChangeActiveTab: this.props.handleChangeActiveTab
       },
-      editorWidth: "0", // TODO
-      handleEditorWidthChange: (n: number) => {}, // TODO 
-      handleSideContentHeightChange: (h: number) => {}, // TODO
-      replProps: { // TODO
-        output: [],
-        replValue: "",
-        handleReplEval: () => {},
-        handleReplValueChange: (code: string) => {}
+      editorWidth: this.props.editorWidth,
+      handleEditorWidthChange: this.props.handleEditorWidthChange,
+      handleSideContentHeightChange: this.props.handleSideContentHeightChange,
+      replProps: { 
+        output: this.props.output,
+        replValue: this.props.replValue,
+        handleReplEval: this.props.handleReplEval,
+        handleReplValueChange: this.props.handleReplValueChange
       }
     }
     return (
