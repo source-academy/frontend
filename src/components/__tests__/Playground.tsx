@@ -5,22 +5,22 @@ import { mockRouterProps } from '../../mocks/components'
 import Playground, { IPlaygroundProps } from '../Playground'
 
 const baseProps = {
-  editorValue: "",
+  editorValue: '',
   isRunning: false,
   activeTab: 0,
-  editorWidth: "50%",
+  editorWidth: '50%',
   sideContentHeight: 40,
   output: [],
-  replValue: "",
-  handleEditorValueChange: () => {} 
+  replValue: '',
+  handleEditorValueChange: () => {},
   handleChapterSelect: (i: any, e: any) => {},
   handleChangeActiveTab: (n: number) => {},
-  handleEditorEval: () => {}, 
-  handleReplEval: () => {}, 
+  handleEditorEval: () => {},
+  handleReplEval: () => {},
   handleReplOutputClear: () => {},
-  handleInterruptEval: () => {}, 
-  handleEditorWidthChange: (widthChange: number) => {}, 
-  handleSideContentHeightChange: (h: number) => {}, 
+  handleInterruptEval: () => {},
+  handleEditorWidthChange: (widthChange: number) => {},
+  handleSideContentHeightChange: (h: number) => {},
   handleReplValueChange: (code: string) => {}
 }
 

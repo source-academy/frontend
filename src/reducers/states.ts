@@ -141,8 +141,8 @@ const makeDefaultWorkspace: () => IWorkspaceState = () => ({
 })
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
-  assessment: {...makeDefaultWorkspace()},
-  playground: {...makeDefaultWorkspace()}
+  assessment: { ...makeDefaultWorkspace() },
+  playground: { ...makeDefaultWorkspace() }
 }
 
 export const defaultSession: ISessionState = {

@@ -30,15 +30,15 @@ export type OwnProps = {
 
 export type DispatchProps = {
   handleAssessmentFetch: (assessmentId: number) => void
-  handleChangeActiveTab: (activeTab: number) => void,
-  handleChapterSelect: (chapter: any, changeEvent: any) => void,
-  handleEditorEval: () => void, 
-  handleEditorValueChange: (val: string) => void ,
-  handleEditorWidthChange: (widthChange: number) => void, 
-  handleInterruptEval: () => void, 
-  handleReplEval: () => void, 
-  handleReplOutputClear: () => void,
-  handleReplValueChange: (newValue: string) => void,
+  handleChangeActiveTab: (activeTab: number) => void
+  handleChapterSelect: (chapter: any, changeEvent: any) => void
+  handleEditorEval: () => void
+  handleEditorValueChange: (val: string) => void
+  handleEditorWidthChange: (widthChange: number) => void
+  handleInterruptEval: () => void
+  handleReplEval: () => void
+  handleReplOutputClear: () => void
+  handleReplValueChange: (newValue: string) => void
   handleSideContentHeightChange: (heightChange: number) => void
 }
 
@@ -79,7 +79,9 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       controlBarProps: this.controlBarProps(this.props),
       sideContentProps: this.sideContentProps(this.props),
       editorProps: {
-        editorValue: (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion).solutionTemplate,
+        editorValue: (this.props.assessment.questions[
+          this.props.questionId
+        ] as IProgrammingQuestion).solutionTemplate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange
       },
@@ -88,7 +90,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion,
-      replProps: { 
+      replProps: {
         output: this.props.output,
         replValue: this.props.replValue,
         handleReplEval: this.props.handleReplEval,
@@ -104,24 +106,25 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
   }
 
   /** Pre-condition: IAssessment has been loaded */
-  private sideContentProps: (p: AssessmentProps) => SideContentProps = (props: AssessmentProps) => ({
+  private sideContentProps: (p: AssessmentProps) => SideContentProps = (
+    props: AssessmentProps
+  ) => ({
     tabs: [
       {
         label: `Task ${props.questionId}`,
         icon: IconNames.NINJA,
-        body: (<Text> {props.assessment!.questions[props.questionId].content} </Text>)
+        body: <Text> {props.assessment!.questions[props.questionId].content} </Text>
       },
       {
         label: `${props.assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
-        body: (<Text> {props.assessment!.longSummary} </Text>)
+        body: <Text> {props.assessment!.longSummary} </Text>
       }
     ],
     activeTab: 0,
     handleChangeActiveTab: (aT: number) => {}
-
   })
-  
+
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentProps) => ControlBarProps = (props: AssessmentProps) => {
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
@@ -138,13 +141,13 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       onClickSubmit: () => history.push(listingPath),
       hasSaveButton: true,
       hasShareButton: false,
-      handleChapterSelect: this.props.handleChapterSelect, 
+      handleChapterSelect: this.props.handleChapterSelect,
       handleEditorEval: this.props.handleEditorEval,
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleInterruptEval: this.props.handleInterruptEval,
-      isRunning: this.props.isRunning, 
-      sourceChapter: 2, // TODO dynamic library changing
+      isRunning: this.props.isRunning,
+      sourceChapter: 2 // TODO dynamic library changing
     }
   }
 }

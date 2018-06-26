@@ -46,10 +46,10 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
           <Resizable {...this.editorResizableProps()}>{this.workspaceInput(this.props)}</Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
-              <SideContent {...this.props.sideContentProps } />
+              <SideContent {...this.props.sideContentProps} />
               <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
             </Resizable>
-            <Repl { ...this.props.replProps } />
+            <Repl {...this.props.replProps} />
           </div>
         </div>
       </div>
@@ -83,7 +83,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       onResizeStop,
       size: {
         height: this.props.sideContentHeight,
-        width: '100%' 
+        width: '100%'
       }
     } as ResizableProps
   }
@@ -131,7 +131,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
 
   private workspaceInput = (props: WorkspaceProps) => {
     if (props.editorProps !== undefined) {
-      return <Editor { ...props.editorProps } />
+      return <Editor {...props.editorProps} />
     } else {
       return <MCQChooser mcq={this.props.mcq!} />
     }

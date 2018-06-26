@@ -1,7 +1,20 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { changeActiveTab, changeEditorWidth, changeSideContentHeight, chapterSelect, clearReplOutput, evalEditor, evalRepl, fetchAssessment, handleInterruptExecution, updateEditorValue, updateReplValue, WorkspaceLocation } from '../../actions';
+import {
+  changeActiveTab,
+  changeEditorWidth,
+  changeSideContentHeight,
+  chapterSelect,
+  clearReplOutput,
+  evalEditor,
+  evalRepl,
+  fetchAssessment,
+  handleInterruptExecution,
+  updateEditorValue,
+  updateReplValue,
+  WorkspaceLocation
+} from '../../actions'
 import Assessment, { DispatchProps, OwnProps, StateProps } from '../../components/assessment'
 import { IState } from '../../reducers/states'
 
@@ -14,7 +27,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     editorWidth: state.workspaces.assessment.editorWidth,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     output: state.workspaces.assessment.output,
-    replValue: state.workspaces.assessment.replValue,
+    replValue: state.workspaces.assessment.replValue
   }
 }
 
@@ -25,15 +38,17 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleAssessmentFetch: fetchAssessment,
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
-      handleChapterSelect: (chapter: any, changeEvent: any) => chapterSelect(chapter, changeEvent, location),
-      handleEditorEval: () => evalEditor(location), 
+      handleChapterSelect: (chapter: any, changeEvent: any) =>
+        chapterSelect(chapter, changeEvent, location),
+      handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
-      handleInterruptEval: () => handleInterruptExecution(location), 
-      handleReplEval: () => evalRepl(location), 
+      handleInterruptEval: () => handleInterruptExecution(location),
+      handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSideContentHeightChange: (heightChange: number) => changeSideContentHeight(heightChange, location)
+      handleSideContentHeightChange: (heightChange: number) =>
+        changeSideContentHeight(heightChange, location)
     },
     dispatch
   )

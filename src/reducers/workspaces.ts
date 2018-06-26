@@ -21,81 +21,91 @@ import {
 } from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspace'
 import { createContext } from '../slang'
-import { CodeOutput, defaultWorkspaceManager, InterpreterOutput, IWorkspaceManagerState } from './states'
+import {
+  CodeOutput,
+  defaultWorkspaceManager,
+  InterpreterOutput,
+  IWorkspaceManagerState
+} from './states'
 
 /**
- * Takes in a IWorkspaceManagerState and maps it to a new state. The pre-conditions are that 
+ * Takes in a IWorkspaceManagerState and maps it to a new state. The pre-conditions are that
  *   - There exists an IWorkspaceState in the IWorkspaceManagerState of the key `location`.
  *   - `location` is defined (and exists) as a property 'workspaceLocation' in the action's payload.
  */
-export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspaceManager, action: IAction) => {
-  const location: WorkspaceLocation = action.payload !== undefined 
-    ? action.payload.workspaceLocation
-    : undefined 
+export const reducer: Reducer<IWorkspaceManagerState> = (
+  state = defaultWorkspaceManager,
+  action: IAction
+) => {
+  const location: WorkspaceLocation =
+    action.payload !== undefined ? action.payload.workspaceLocation : undefined
   let newOutput: InterpreterOutput[]
   let lastOutput: InterpreterOutput
   switch (action.type) {
     case CHANGE_ACTIVE_TAB:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           sideContentActiveTab: action.payload
         }
       }
     case CHANGE_EDITOR_WIDTH:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
-          editorWidth: (parseFloat(state[location].editorWidth.slice(0, -1)) + action.payload.widthChange).toString() + '%'
+        [location]: {
+          ...state[location],
+          editorWidth:
+            (
+              parseFloat(state[location].editorWidth.slice(0, -1)) + action.payload.widthChange
+            ).toString() + '%'
         }
       }
     case CHANGE_QUERY_STRING:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           queryString: action.payload.queryString
         }
       }
     case CHANGE_SIDE_CONTENT_HEIGHT:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           sideContentHeight: action.payload.height
         }
       }
     case CLEAR_REPL_INPUT:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           replValue: ''
         }
       }
     case CLEAR_REPL_OUTPUT:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           output: []
         }
       }
     case CLEAR_CONTEXT:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           context: createContext(state[location].sourceChapter)
         }
       }
     case CHANGE_CHAPTER:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           sourceChapter: action.payload.newChapter
         }
       }
@@ -119,8 +129,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspac
       }
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           output: newOutput
         }
       }
@@ -129,24 +139,24 @@ export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspac
       newOutput = state[location].output.concat(action.payload as CodeOutput)
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           output: newOutput
         }
       }
     case EVAL_EDITOR:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           isRunning: true
         }
       }
     case EVAL_REPL:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           isRunning: true
         }
       }
@@ -167,8 +177,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspac
       }
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           output: newOutput,
           isRunning: false
         }
@@ -190,8 +200,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspac
       }
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           output: newOutput,
           isRunning: false
         }
@@ -199,24 +209,24 @@ export const reducer: Reducer<IWorkspaceManagerState> = (state = defaultWorkspac
     case INTERRUPT_EXECUTION:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           isRunning: false
         }
       }
     case UPDATE_EDITOR_VALUE:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           editorValue: action.payload.newEditorValue
         }
       }
     case UPDATE_REPL_VALUE:
       return {
         ...state,
-        [location]: { 
-          ...state[location], 
+        [location]: {
+          ...state[location],
           replValue: action.payload.newReplValue
         }
       }

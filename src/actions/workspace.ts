@@ -2,13 +2,13 @@ import { ActionCreator } from 'redux'
 import * as actionTypes from './actionTypes'
 
 /**
- * Used to differenciate between the sources of actions, as 
+ * Used to differenciate between the sources of actions, as
  * two workspaces can work at the same time. To generalise this
  * or add more instances of `Workspace`s, one can add a string,
  * and call the actions with the respective string (taken
  * from the below enum).
  *
- * Note that the names must correspond with the name of the 
+ * Note that the names must correspond with the name of the
  * object in IWorkspaceManagerState.
  */
 export type WorkspaceLocation = 'assessment' | 'playground'
@@ -17,32 +17,51 @@ export enum WorkspaceLocations {
   PLAYGROUND = 'playground'
 }
 
-export const changeActiveTab: ActionCreator<actionTypes.IAction> = (activeTab: number, workspaceLocation: WorkspaceLocation) => ({
+export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
+  activeTab: number,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.CHANGE_ACTIVE_TAB,
   payload: { activeTab, workspaceLocation }
 })
 
-export const changeChapter: ActionCreator<actionTypes.IAction> = (newChapter: number, workspaceLocation: WorkspaceLocation) => ({
+export const changeChapter: ActionCreator<actionTypes.IAction> = (
+  newChapter: number,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.CHANGE_CHAPTER,
   payload: { newChapter, workspaceLocation }
 })
 
-export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (widthChange: string, workspaceLocation: WorkspaceLocation) => ({
+export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
+  widthChange: string,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.CHANGE_EDITOR_WIDTH,
   payload: { widthChange, workspaceLocation }
 })
 
-export const changeQueryString: ActionCreator<actionTypes.IAction> = (queryString: string, workspaceLocation: WorkspaceLocation) => ({
+export const changeQueryString: ActionCreator<actionTypes.IAction> = (
+  queryString: string,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.CHANGE_QUERY_STRING,
   payload: { queryString, workspaceLocation }
 })
 
-export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (height: number, workspaceLocation: WorkspaceLocation) => ({
+export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (
+  height: number,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.CHANGE_SIDE_CONTENT_HEIGHT,
   payload: { height, workspaceLocation }
 })
 
-export const chapterSelect: ActionCreator<actionTypes.IAction> = (chapter, changeEvent, workspaceLocation: WorkspaceLocation) => ({
+export const chapterSelect: ActionCreator<actionTypes.IAction> = (
+  chapter,
+  changeEvent,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.CHAPTER_SELECT,
   payload: {
     chapter: chapter.chapter,
@@ -75,17 +94,26 @@ export const evalRepl = (workspaceLocation: WorkspaceLocation) => ({
   payload: { workspaceLocation }
 })
 
-export const updateEditorValue: ActionCreator<actionTypes.IAction> = (newEditorValue: string, workspaceLocation: WorkspaceLocation) => ({
+export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
+  newEditorValue: string,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.UPDATE_EDITOR_VALUE,
   payload: { newEditorValue, workspaceLocation }
 })
 
-export const updateReplValue: ActionCreator<actionTypes.IAction> = (newReplValue: string, workspaceLocation: WorkspaceLocation) => ({
+export const updateReplValue: ActionCreator<actionTypes.IAction> = (
+  newReplValue: string,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.UPDATE_REPL_VALUE,
   payload: { newReplValue, workspaceLocation }
 })
 
-export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (newOutput: string, workspaceLocation: WorkspaceLocation) => ({
+export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
+  newOutput: string,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.SEND_REPL_INPUT_TO_OUTPUT,
   payload: {
     type: 'code',

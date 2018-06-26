@@ -13,25 +13,25 @@ import { SideContentTab } from './workspace/side-content'
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
-  editorValue: string,
-  sideContentHeight: number,
-  isRunning: boolean,
-  activeTab: number,
-  editorWidth: string,
-  output: InterpreterOutput[], 
+  editorValue: string
+  sideContentHeight: number
+  isRunning: boolean
+  activeTab: number
+  editorWidth: string
+  output: InterpreterOutput[]
   replValue: string
 }
 
 export interface IDispatchProps {
-  handleChangeActiveTab: (activeTab: number) => void,
-  handleChapterSelect: (chapter: any, changeEvent: any) => void,
-  handleEditorEval: () => void, 
-  handleEditorValueChange: (val: string) => void ,
-  handleEditorWidthChange: (widthChange: number) => void, 
-  handleInterruptEval: () => void, 
-  handleReplEval: () => void, 
-  handleReplOutputClear: () => void,
-  handleReplValueChange: (newValue: string) => void,
+  handleChangeActiveTab: (activeTab: number) => void
+  handleChapterSelect: (chapter: any, changeEvent: any) => void
+  handleEditorEval: () => void
+  handleEditorValueChange: (val: string) => void
+  handleEditorWidthChange: (widthChange: number) => void
+  handleInterruptEval: () => void
+  handleReplEval: () => void
+  handleReplOutputClear: () => void
+  handleReplValueChange: (newValue: string) => void
   handleSideContentHeightChange: (heightChange: number) => void
 }
 
@@ -59,12 +59,12 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       },
       controlBarProps: {
         sourceChapter: parseLibrary(this.props) || 2,
-        handleChapterSelect: this.props.handleChapterSelect, 
+        handleChapterSelect: this.props.handleChapterSelect,
         handleEditorEval: this.props.handleEditorEval,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
         handleInterruptEval: this.props.handleInterruptEval,
-        isRunning: this.props.isRunning, 
+        isRunning: this.props.isRunning,
         hasNextButton: false,
         hasPreviousButton: false,
         hasSubmitButton: false
@@ -78,7 +78,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentHeight: this.props.sideContentHeight,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      replProps: { 
+      replProps: {
         output: this.props.output,
         replValue: this.props.replValue,
         handleReplEval: this.props.handleReplEval,
@@ -91,7 +91,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         keyMap={this.keyMap}
         handlers={this.handlers}
       >
-        <Workspace {...workspaceProps } />
+        <Workspace {...workspaceProps} />
       </HotKeys>
     )
   }
