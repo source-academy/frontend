@@ -5,6 +5,7 @@ import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
+import { WorkspaceLocation } from '../actions/workspace'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/api'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
@@ -42,26 +43,26 @@ function* interpreterSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.location
-    const code: string = yield select((state: IState) => state.playground.editorValue)
+    const code: string = yield select((state: IState) => state.workspaces[location].editorValue)
     yield put(actions.clearContext(location))
     yield put(actions.clearReplOutput(location))
-    context = yield select((state: IState) => state.playground.context)
-    yield* evalCode(code, context)
+    context = yield select((state: IState) => state.workspaces[location].context)
+    yield* evalCode(code, context, location)
   })
 
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
     const location = (action as actionTypes.IAction).payload.location
-    const code: string = yield select((state: IState) => state.playground.replValue)
-    context = yield select((state: IState) => state.playground.context)
+    const code: string = yield select((state: IState) => state.workspaces[location].replValue)
+    context = yield select((state: IState) => state.workspaces[location].context)
     yield put(actions.clearReplInput(location))
     yield put(actions.sendReplInputToOutput(code, location))
-    yield* evalCode(code, context)
+    yield* evalCode(code, context, location)
   })
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.location
     const newChapter = parseInt((action as actionTypes.IAction).payload, 10)
-    const oldChapter = yield select((state: IState) => state.playground.sourceChapter)
+    const oldChapter = yield select((state: IState) => state.workspaces[location].sourceChapter)
     if (newChapter !== oldChapter) {
       yield put(actions.changeChapter(newChapter, location))
       yield put(actions.clearContext(location))
@@ -91,8 +92,8 @@ function* loginSaga(): SagaIterator {
 
 function* playgroundSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
-    const code = yield select((state: IState) => state.playground.editorValue)
-    const lib = yield select((state: IState) => state.playground.sourceChapter)
+    const code = yield select((state: IState) => state.workspaces.playground.editorValue)
+    const lib = yield select((state: IState) => state.workspaces.playground.sourceChapter)
     const newQueryString =
       code === ''
         ? undefined
@@ -104,16 +105,16 @@ function* playgroundSaga(): SagaIterator {
   })
 }
 
-function* evalCode(code: string, context: Context) {
+function* evalCode(code: string, context: Context, location: WorkspaceLocation) {
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, { scheduler: 'async' }),
     interrupted: take(actionTypes.INTERRUPT_EXECUTION)
   })
   if (result) {
     if (result.status === 'finished') {
-      yield put(actions.evalInterpreterSuccess(result.value))
+      yield put(actions.evalInterpreterSuccess(result.value, location))
     } else {
-      yield put(actions.evalInterpreterError(context.errors))
+      yield put(actions.evalInterpreterError(context.errors, location))
     }
   } else if (interrupted) {
     interrupt(context)
