@@ -26,13 +26,13 @@ export interface IAssessment {
 }
 
 /* The different kinds of Assessments available */
-export type AssessmentCategory = 'Contest' | 'Mission' | 'Path' | 'Sidequest'
 export enum AssessmentCategories {
-  CONTEST = 'Contest',
-  MISSION = 'Mission',
-  PATH = 'Path',
-  SIDEQUEST = 'Sidequest'
+  Contest = 'Contest',
+  Mission = 'Mission',
+  Path = 'Path',
+  Sidequest = 'Sidequest'
 }
+export type AssessmentCategory = keyof typeof AssessmentCategories
 
 export interface IProgrammingQuestion extends IQuestion {
   library: Library

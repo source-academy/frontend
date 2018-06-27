@@ -10,7 +10,7 @@ const NavigationBar: React.SFC<{}> = () => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
-        to={`/academy/${assessmentCategoryLink(AssessmentCategories.MISSION)}`}
+        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Mission)}`}
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -19,7 +19,7 @@ const NavigationBar: React.SFC<{}> = () => (
       </NavLink>
 
       <NavLink
-        to={`/academy/${assessmentCategoryLink(AssessmentCategories.SIDEQUEST)}`}
+        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Sidequest)}`}
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -28,7 +28,7 @@ const NavigationBar: React.SFC<{}> = () => (
       </NavLink>
 
       <NavLink
-        to={`/academy/${assessmentCategoryLink(AssessmentCategories.PATH)}`}
+        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Path)}`}
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
@@ -37,7 +37,7 @@ const NavigationBar: React.SFC<{}> = () => (
       </NavLink>
 
       <NavLink
-        to={`/academy/${assessmentCategoryLink(AssessmentCategories.CONTEST)}`}
+        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Contest)}`}
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >

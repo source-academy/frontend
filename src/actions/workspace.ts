@@ -11,11 +11,11 @@ import * as actionTypes from './actionTypes'
  * Note that the names must correspond with the name of the
  * object in IWorkspaceManagerState.
  */
-export type WorkspaceLocation = 'assessment' | 'playground'
 export enum WorkspaceLocations {
-  ASSESSMENT = 'assessment',
-  PLAYGROUND = 'playground'
+  assessment,
+  playground
 }
+export type WorkspaceLocation = keyof typeof WorkspaceLocations
 
 export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
   activeTab: number,

@@ -9,7 +9,7 @@ import {
 
 const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {
-    category: AssessmentCategories.MISSION,
+    category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 0,
@@ -21,7 +21,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'An Odessey to Runes'
   },
   {
-    category: AssessmentCategories.MISSION,
+    category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 1,
@@ -33,7 +33,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'The Secret to Streams'
   },
   {
-    category: AssessmentCategories.SIDEQUEST,
+    category: AssessmentCategories.Sidequest,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 2,
@@ -48,7 +48,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
 
 const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
   {
-    category: AssessmentCategories.MISSION,
+    category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 3,
@@ -60,7 +60,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     title: 'A closed Mission'
   },
   {
-    category: AssessmentCategories.SIDEQUEST,
+    category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 4,
@@ -149,7 +149,7 @@ export const mockAssessments: IAssessment[] = [
     title: 'The Secret to Streams'
   },
   {
-    category: AssessmentCategories.SIDEQUEST,
+    category: AssessmentCategories.Sidequest,
     id: 2,
     longSummary:
       'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',

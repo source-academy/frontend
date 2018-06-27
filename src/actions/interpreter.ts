@@ -5,11 +5,11 @@ import { WorkspaceLocation } from './workspace'
 // TODO fix this immediately after location
 // is implemented completely
 export const handleConsoleLog = (
-  log: string,
+  logString: string,
   workspaceLocation: WorkspaceLocation = 'assessment'
 ) => ({
   type: actionTypes.HANDLE_CONSOLE_LOG,
-  payload: { log, workspaceLocation }
+  payload: { logString, workspaceLocation }
 })
 
 export const evalInterpreterSuccess = (value: Value, workspaceLocation: WorkspaceLocation) => ({

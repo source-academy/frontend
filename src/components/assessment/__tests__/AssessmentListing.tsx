@@ -10,21 +10,21 @@ import { AssessmentCategories } from '../assessmentShape'
 const mockUndefinedAssessmentListing: IAssessmentListingProps = {
   ...mockRouterProps('/academy/missions', {}),
   handleAssessmentOverviewFetch: () => {},
-  assessmentCategory: AssessmentCategories.MISSION
+  assessmentCategory: AssessmentCategories.Mission
 }
 
 const mockEmptyAssessmentListing: IAssessmentListingProps = {
   ...mockRouterProps('/academy/missions', {}),
   assessmentOverviews: [],
   handleAssessmentOverviewFetch: () => {},
-  assessmentCategory: AssessmentCategories.MISSION
+  assessmentCategory: AssessmentCategories.Mission
 }
 
 const mockPresentAssessmentListing: IAssessmentListingProps = {
   ...mockRouterProps('/academy/missions', {}),
   assessmentOverviews: mockAssessmentOverviews,
   handleAssessmentOverviewFetch: () => {},
-  assessmentCategory: AssessmentCategories.MISSION
+  assessmentCategory: AssessmentCategories.Mission
 }
 
 test('AssessmentListing page "loading" content renders correctly', () => {
