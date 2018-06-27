@@ -121,3 +121,7 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
     value: newOutput
   }
 })
+
+export const resetAssessmentWorkspace = () => ({
+  type: actionTypes.RESET_ASSESSMENT_WORKSPACE
+})

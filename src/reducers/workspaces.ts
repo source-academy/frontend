@@ -15,6 +15,7 @@ import {
   HANDLE_CONSOLE_LOG,
   IAction,
   INTERRUPT_EXECUTION,
+  RESET_ASSESSMENT_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
@@ -23,6 +24,7 @@ import { WorkspaceLocation } from '../actions/workspace'
 import { createContext } from '../slang'
 import {
   CodeOutput,
+  createDefaultWorkspace,
   defaultWorkspaceManager,
   InterpreterOutput,
   IWorkspaceManagerState
@@ -213,6 +215,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           isRunning: false
         }
+      }
+    case RESET_ASSESSMENT_WORKSPACE:
+      return {
+        ...state,
+        assessment: createDefaultWorkspace()
       }
     case UPDATE_EDITOR_VALUE:
       return {
