@@ -65,7 +65,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         sourceChapter: parseLibrary(this.props) || 2
       },
       editorProps: {
-        editorValue: parsePrgrm(this.props) || this.props.editorValue || defaultPlaygroundText,
+        editorValue: this.chooseEditorValue(this.props),
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange
       },
@@ -94,6 +94,13 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         <Workspace {...workspaceProps} />
       </HotKeys>
     )
+  }
+
+  private chooseEditorValue(props: IPlaygroundProps): string {
+    return parsePrgrm(this.props) || 
+      this.props.editorValue === undefined
+        ? defaultPlaygroundText
+        : this.props.editorValue
   }
 
   private toggleIsGreen() {
