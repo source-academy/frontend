@@ -36,11 +36,11 @@ export interface IStateProps {
 
 class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
   public componentWillMount() {
-    if (this.props.match.params.assessmentId === undefined || this.props.match.params.questionId === undefined){
+    const assessmentId = stringParamToInt(this.props.match.params.assessmentId)
+    const questionId = stringParamToInt(this.props.match.params.questionId)
+    if (assessmentId === null || questionId === null ) {
       return
     }
-    const assessmentId = stringParamToInt(this.props.match.params.assessmentId)!
-    const questionId = stringParamToInt(this.props.match.params.questionId)!
 
     if ((this.props.storedAssessmentId === undefined || this.props.storedQuestionId === undefined)
     || (this.props.storedAssessmentId !== assessmentId || this.props.storedQuestionId !== questionId)) {
