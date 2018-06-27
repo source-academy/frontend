@@ -13,7 +13,7 @@ import * as actionTypes from './actionTypes'
  */
 export enum WorkspaceLocations {
   assessment = 'assessment',
-  playground = 'playground',
+  playground = 'playground'
 }
 export type WorkspaceLocation = keyof typeof WorkspaceLocations
 

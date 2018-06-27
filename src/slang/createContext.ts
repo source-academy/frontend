@@ -61,7 +61,7 @@ export const importBuiltins = (context: Context) => {
     defineSymbol(context, 'runtime', misc.runtime)
     defineSymbol(context, 'display', (value: Value) => misc.display(value, context.externalContext))
     // tslint:disable-next-line:ban-types
-    defineSymbol(context, 'timed', (f: Function) => misc.timed(context, f, context.externalContext)) // TODO move this back to Infinity (not assigned a chapter)
+    defineSymbol(context, 'timed', (f: Function) => misc.timed(context, f, context.externalContext))
     defineSymbol(context, 'error', misc.error_message)
     defineSymbol(context, 'prompt', prompt)
     defineSymbol(context, 'parse_int', misc.parse_int)

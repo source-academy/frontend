@@ -101,7 +101,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          context: createContext<WorkspaceLocation>(state[location].sourceChapter, undefined, location)
+          context: createContext<WorkspaceLocation>(
+            state[location].sourceChapter,
+            undefined,
+            location
+          )
         }
       }
     case CHANGE_CHAPTER:
