@@ -60,8 +60,6 @@ export const importBuiltins = (context: Context) => {
   if (context.chapter >= 1) {
     defineSymbol(context, 'runtime', misc.runtime)
     defineSymbol(context, 'display', (value: Value) => misc.display(value, context.externalContext))
-    // tslint:disable-next-line:ban-types
-    defineSymbol(context, 'timed', (f: Function) => misc.timed(context, f, context.externalContext))
     defineSymbol(context, 'error', misc.error_message)
     defineSymbol(context, 'prompt', prompt)
     defineSymbol(context, 'parse_int', misc.parse_int)
@@ -112,6 +110,8 @@ export const importBuiltins = (context: Context) => {
     // previously week 4
     defineSymbol(context, 'alert', alert)
     defineSymbol(context, 'math_floor', Math.floor)
+    // tslint:disable-next-line:ban-types
+    defineSymbol(context, 'timed', (f: Function) => misc.timed(context, f, context.externalContext)) 
     // previously week 5
     defineSymbol(context, 'assoc', list.assoc)
     if (window.hasOwnProperty('ListVisualizer')) {
