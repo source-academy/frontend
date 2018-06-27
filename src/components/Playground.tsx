@@ -97,10 +97,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 
   private chooseEditorValue(props: IPlaygroundProps): string {
-    return parsePrgrm(this.props) || 
-      this.props.editorValue === undefined
-        ? defaultPlaygroundText
-        : this.props.editorValue
+    return parsePrgrm(this.props) || this.props.editorValue === undefined
+      ? defaultPlaygroundText
+      : this.props.editorValue
   }
 
   private toggleIsGreen() {

@@ -81,12 +81,13 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       minHeight: 0,
       onResize: this.toggleDividerDisplay,
       onResizeStop,
-      size: this.props.sideContentHeight === undefined 
-      ? undefined
-      : {
-        height: this.props.sideContentHeight,
-        width: '100%'
-      }
+      size:
+        this.props.sideContentHeight === undefined
+          ? undefined
+          : {
+              height: this.props.sideContentHeight,
+              width: '100%'
+            }
     } as ResizableProps
   }
 
