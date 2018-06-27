@@ -1,3 +1,4 @@
+import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspace'
 import { Announcement } from '../components/Announcements'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import { Context, createContext } from '../slang'
@@ -130,8 +131,8 @@ export const defaultApplication: IApplicationState = {
 
 export const defaultPlayground: IPlaygroundState = {}
 
-export const createDefaultWorkspace: () => IWorkspaceState = () => ({
-  context: createContext(latestSourceChapter),
+export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
+  context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
   editorValue: undefined,
   editorWidth: '50%',
   isRunning: false,
@@ -144,8 +145,8 @@ export const createDefaultWorkspace: () => IWorkspaceState = () => ({
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
   currentAssessment: undefined,
   currentQuestion: undefined,
-  assessment: { ...createDefaultWorkspace() },
-  playground: { ...createDefaultWorkspace() }
+  assessment: { ...createDefaultWorkspace(WorkspaceLocations.assessment) },
+  playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) }
 }
 
 export const defaultSession: ISessionState = {

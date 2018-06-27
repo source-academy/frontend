@@ -21,7 +21,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
-import { WorkspaceLocation } from '../actions/workspaces'
+import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspace'
 import { createContext } from '../slang'
 import {
   CodeOutput,
@@ -101,7 +101,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          context: createContext(state[location].sourceChapter)
+          context: createContext<WorkspaceLocation>(state[location].sourceChapter, undefined, location)
         }
       }
     case CHANGE_CHAPTER:
@@ -220,7 +220,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case RESET_ASSESSMENT_WORKSPACE:
       return {
         ...state,
-        assessment: createDefaultWorkspace()
+        assessment: createDefaultWorkspace(WorkspaceLocations.assessment)
       }
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
