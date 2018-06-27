@@ -78,9 +78,11 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props),
       editorProps: {
-        editorValue: (this.props.assessment.questions[
-          this.props.questionId
-        ] as IProgrammingQuestion).solutionTemplate,
+        editorValue: this.props.editorValue.length === 0 
+          ? (this.props.assessment.questions[
+              this.props.questionId
+            ] as IProgrammingQuestion).solutionTemplate
+          : this.props.editorValue,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange
       },
