@@ -4,11 +4,11 @@ import { Value } from '../types'
 
 import { handleConsoleLog } from '../../actions'
 
-export function display(value: Value) {
+export function display(value: Value, location: any) {
   const output = toString(value)
   // TODO in 2019: fix this hack
   if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
-    ;(window as any).__REDUX_STORE__.dispatch(handleConsoleLog(output))
+    ;(window as any).__REDUX_STORE__.dispatch(handleConsoleLog(output, location))
   }
 }
 display.__SOURCE__ = 'display(a)'
@@ -20,7 +20,7 @@ export function error_message(value: Value) {
 error_message.__SOURCE__ = 'error(a)'
 
 // tslint:disable-next-line:no-any
-export function timed(this: any, f: Function) {
+export function timed(this: any, f: Function, location: any) {
   const self = this
   const timerType = Date
 
@@ -28,7 +28,7 @@ export function timed(this: any, f: Function) {
     const start = timerType.now()
     const result = f.apply(self, arguments)
     const diff = timerType.now() - start
-    display('Duration: ' + Math.round(diff) + 'ms')
+    display('Duration: ' + Math.round(diff) + 'ms', location)
     return result
   }
 }
