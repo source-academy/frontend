@@ -7,24 +7,28 @@ import { mockRouterProps } from '../../../mocks/components'
 import AssessmentListing, { IAssessmentListingProps } from '../AssessmentListing'
 import { AssessmentCategories } from '../assessmentShape'
 
-const mockUndefinedAssessmentListing: IAssessmentListingProps = {
-  ...mockRouterProps('/academy/missions', {}),
+const defaultProps: IAssessmentListingProps = {
+  assessmentCategory: AssessmentCategories.Mission,
+  assessmentOverviews: undefined,
   handleAssessmentOverviewFetch: () => {},
-  assessmentCategory: AssessmentCategories.Mission
+  handleResetAssessmentWorkspace:() => {},
+  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => {},
+  ...mockRouterProps('/academy/missions', {})
+}
+
+const mockUndefinedAssessmentListing: IAssessmentListingProps = {
+  ...defaultProps,
+  assessmentOverviews: undefined,
 }
 
 const mockEmptyAssessmentListing: IAssessmentListingProps = {
-  ...mockRouterProps('/academy/missions', {}),
+  ...defaultProps,
   assessmentOverviews: [],
-  handleAssessmentOverviewFetch: () => {},
-  assessmentCategory: AssessmentCategories.Mission
 }
 
 const mockPresentAssessmentListing: IAssessmentListingProps = {
-  ...mockRouterProps('/academy/missions', {}),
+  ...defaultProps,
   assessmentOverviews: mockAssessmentOverviews,
-  handleAssessmentOverviewFetch: () => {},
-  assessmentCategory: AssessmentCategories.Mission
 }
 
 test('AssessmentListing page "loading" content renders correctly', () => {

@@ -17,6 +17,7 @@ import {
   INTERRUPT_EXECUTION,
   RESET_ASSESSMENT_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
@@ -220,6 +221,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       return {
         ...state,
         assessment: createDefaultWorkspace()
+      }
+    case UPDATE_CURRENT_ASSESSMENT_ID:
+      return {
+        ...state,
+        ...action.payload
       }
     case UPDATE_EDITOR_VALUE:
       return {

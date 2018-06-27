@@ -125,3 +125,11 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
 export const resetAssessmentWorkspace = () => ({
   type: actionTypes.RESET_ASSESSMENT_WORKSPACE
 })
+
+export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
+  type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
+  payload: {
+    assessmentId,
+    questionId
+  }
+})

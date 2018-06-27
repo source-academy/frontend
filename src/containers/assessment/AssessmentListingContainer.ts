@@ -3,6 +3,7 @@ import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchAssessmentOverviews } from '../../actions/session'
+import { resetAssessmentWorkspace, updateCurrentAssessmentId } from '../../actions/workspace'
 import AssessmentListing, {
   IDispatchProps,
   IOwnProps,
@@ -26,7 +27,9 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state,
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleAssessmentOverviewFetch: fetchAssessmentOverviews
+      handleAssessmentOverviewFetch: fetchAssessmentOverviews,
+      handleResetAssessmentWorkspace: resetAssessmentWorkspace,
+      handleUpdateCurrentAssessmentId: updateCurrentAssessmentId
     },
     dispatch
   )

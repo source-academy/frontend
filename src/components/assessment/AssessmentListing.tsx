@@ -19,7 +19,9 @@ export interface IAssessmentParams {
 export interface IAssessmentListingProps extends IDispatchProps, IOwnProps, RouteComponentProps<IAssessmentParams>, IStateProps {}
 
 export interface IDispatchProps {
-  handleAssessmentOverviewFetch: () => void
+  handleAssessmentOverviewFetch: () => void,
+  handleResetAssessmentWorkspace:() => void,
+  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
 }
 
 export interface IOwnProps {
@@ -33,6 +35,20 @@ export interface IStateProps {
 }
 
 class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
+  public componentWillMount() {
+    if (this.props.match.params.assessmentId === undefined || this.props.match.params.questionId === undefined){
+      return
+    }
+    const assessmentId = stringParamToInt(this.props.match.params.assessmentId)!
+    const questionId = stringParamToInt(this.props.match.params.questionId)!
+
+    if ((this.props.storedAssessmentId === undefined || this.props.storedQuestionId === undefined)
+    || (this.props.storedAssessmentId !== assessmentId || this.props.storedQuestionId !== questionId)) {
+      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
+      this.props.handleResetAssessmentWorkspace()
+    } 
+  }
+
   public render() {
     const assessmentIdParam: number | null = stringParamToInt(this.props.match.params.assessmentId)
     // default questionId is 0 (the first question)
@@ -54,8 +70,6 @@ class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
           <ContentDisplay {...props} />
         </div>
       )
-    } else if (false) {
-
     } else {
       const props: AssessmentProps = {
         assessmentId: assessmentIdParam,
