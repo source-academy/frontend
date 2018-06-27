@@ -19,7 +19,7 @@ export interface IStateProps {
   isRunning: boolean
   output: InterpreterOutput[]
   replValue: string
-  sideContentHeight: number
+  sideContentHeight?: number
 }
 
 export interface IDispatchProps {

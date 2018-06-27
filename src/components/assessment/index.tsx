@@ -20,7 +20,7 @@ export type StateProps = {
   isRunning: boolean
   output: InterpreterOutput[]
   replValue: string
-  sideContentHeight: number
+  sideContentHeight?: number
 }
 
 export type OwnProps = {
