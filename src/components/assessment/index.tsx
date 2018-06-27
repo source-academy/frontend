@@ -13,14 +13,14 @@ import { IAssessment, IMCQQuestion, IProgrammingQuestion } from './assessmentSha
 export type AssessmentProps = DispatchProps & OwnProps & StateProps
 
 export type StateProps = {
+  activeTab: number
   assessment?: IAssessment
   editorValue: string
-  sideContentHeight: number
-  isRunning: boolean
-  activeTab: number
   editorWidth: string
+  isRunning: boolean
   output: InterpreterOutput[]
   replValue: string
+  sideContentHeight: number
 }
 
 export type OwnProps = {
@@ -77,7 +77,6 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     )
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props),
-      sideContentProps: this.sideContentProps(this.props),
       editorProps: {
         editorValue: (this.props.assessment.questions[
           this.props.questionId
@@ -86,10 +85,11 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         handleEditorValueChange: this.props.handleEditorValueChange
       },
       editorWidth: this.props.editorWidth,
-      sideContentHeight: this.props.sideContentHeight,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion,
+      sideContentHeight: this.props.sideContentHeight,
+      sideContentProps: this.sideContentProps(this.props),
       replProps: {
         output: this.props.output,
         replValue: this.props.replValue,
@@ -109,6 +109,8 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
   private sideContentProps: (p: AssessmentProps) => SideContentProps = (
     props: AssessmentProps
   ) => ({
+    activeTab: 0,
+    handleChangeActiveTab: (aT: number) => {},
     tabs: [
       {
         label: `Task ${props.questionId}`,
@@ -120,9 +122,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         icon: IconNames.BRIEFCASE,
         body: <Text> {props.assessment!.longSummary} </Text>
       }
-    ],
-    activeTab: 0,
-    handleChangeActiveTab: (aT: number) => {}
+    ]
   })
 
   /** Pre-condition: IAssessment has been loaded */
@@ -130,23 +130,21 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
     const assessmentPath = listingPath + `/${this.props.assessment!.id.toString()}`
     return {
+      handleChapterSelect: this.props.handleChapterSelect,
+      handleEditorEval: this.props.handleEditorEval,
+      handleInterruptEval: this.props.handleInterruptEval,
+      handleReplEval: this.props.handleReplEval,
+      handleReplOutputClear: this.props.handleReplOutputClear,
       hasChapterSelect: false,
       hasNextButton: this.props.questionId < this.props.assessment!.questions.length - 1,
       hasPreviousButton: this.props.questionId > 0,
-      hasSubmitButton: this.props.questionId === this.props.assessment!.questions.length - 1,
-      onClickNext: () =>
-        history.push(assessmentPath + `/${(this.props.questionId + 1).toString()}`),
-      onClickPrevious: () =>
-        history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
-      onClickSubmit: () => history.push(listingPath),
       hasSaveButton: true,
       hasShareButton: false,
-      handleChapterSelect: this.props.handleChapterSelect,
-      handleEditorEval: this.props.handleEditorEval,
-      handleReplEval: this.props.handleReplEval,
-      handleReplOutputClear: this.props.handleReplOutputClear,
-      handleInterruptEval: this.props.handleInterruptEval,
+      hasSubmitButton: this.props.questionId === this.props.assessment!.questions.length - 1,
       isRunning: this.props.isRunning,
+      onClickNext: () =>history.push(assessmentPath + `/${(this.props.questionId + 1).toString()}`),
+      onClickPrevious: () =>history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
+      onClickSubmit: () => history.push(listingPath),
       sourceChapter: 2 // TODO dynamic library changing
     }
   }

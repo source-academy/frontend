@@ -13,13 +13,13 @@ import { SideContentTab } from './workspace/side-content'
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
-  editorValue: string
-  sideContentHeight: number
-  isRunning: boolean
   activeTab: number
+  editorValue: string
   editorWidth: string
+  isRunning: boolean
   output: InterpreterOutput[]
   replValue: string
+  sideContentHeight: number
 }
 
 export interface IDispatchProps {
@@ -52,30 +52,24 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 
   public render() {
     const workspaceProps: WorkspaceProps = {
+      controlBarProps: {
+        handleChapterSelect: this.props.handleChapterSelect,
+        handleEditorEval: this.props.handleEditorEval,
+        handleInterruptEval: this.props.handleInterruptEval,
+        handleReplEval: this.props.handleReplEval,
+        handleReplOutputClear: this.props.handleReplOutputClear,
+        hasNextButton: false,
+        hasPreviousButton: false,
+        hasSubmitButton: false,
+        isRunning: this.props.isRunning,
+        sourceChapter: parseLibrary(this.props) || 2
+      },
       editorProps: {
         editorValue: parsePrgrm(this.props) || this.props.editorValue,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange
       },
-      controlBarProps: {
-        sourceChapter: parseLibrary(this.props) || 2,
-        handleChapterSelect: this.props.handleChapterSelect,
-        handleEditorEval: this.props.handleEditorEval,
-        handleReplEval: this.props.handleReplEval,
-        handleReplOutputClear: this.props.handleReplOutputClear,
-        handleInterruptEval: this.props.handleInterruptEval,
-        isRunning: this.props.isRunning,
-        hasNextButton: false,
-        hasPreviousButton: false,
-        hasSubmitButton: false
-      },
-      sideContentProps: {
-        activeTab: this.props.activeTab,
-        tabs: [playgroundIntroduction],
-        handleChangeActiveTab: this.props.handleChangeActiveTab
-      },
       editorWidth: this.props.editorWidth,
-      sideContentHeight: this.props.sideContentHeight,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {
@@ -83,6 +77,12 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         replValue: this.props.replValue,
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange
+      },
+      sideContentHeight: this.props.sideContentHeight,
+      sideContentProps: {
+        activeTab: this.props.activeTab,
+        handleChangeActiveTab: this.props.handleChangeActiveTab,
+        tabs: [playgroundIntroduction]
       }
     }
     return (
