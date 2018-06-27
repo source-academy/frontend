@@ -117,7 +117,7 @@ export interface Context<T = any> {
    * For e.g, this can be used to store some application-related 
    * context for use in your own built-in functions (like `display(a)`)
    */
-  externalContext: T 
+  externalContext?: T 
 }
 
 // tslint:disable:no-any

@@ -17,9 +17,10 @@ const createEmptyRuntime = () => ({
   nodes: []
 })
 
-export const createEmptyContext = (chapter: number): Context => ({
+export const createEmptyContext = <T>(chapter: number, externalContext?: T): Context<T> => ({
   chapter,
   errors: [],
+  externalContext,
   cfg: createEmptyCFG(),
   runtime: createEmptyRuntime()
 })
@@ -130,8 +131,8 @@ export const importBuiltins = (context: Context) => {
   }
 }
 
-const createContext = (chapter = 1, externals = []) => {
-  const context = createEmptyContext(chapter)
+const createContext = <T>(chapter = 1, externals = [], externalContext?: T) => {
+  const context = createEmptyContext(chapter, externalContext)
 
   importBuiltins(context)
   importExternals(context, externals)
