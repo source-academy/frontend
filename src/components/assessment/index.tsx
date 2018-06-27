@@ -15,7 +15,7 @@ export type AssessmentProps = DispatchProps & OwnProps & StateProps
 export type StateProps = {
   activeTab: number
   assessment?: IAssessment
-  editorValue: string
+  editorValue?: string
   editorWidth: string
   isRunning: boolean
   output: InterpreterOutput[]
@@ -78,11 +78,12 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props),
       editorProps: {
-        editorValue: this.props.editorValue.length === 0 
-          ? (this.props.assessment.questions[
+        editorValue: this.props.editorValue !== undefined 
+          ? this.props.editorValue
+          :
+          (this.props.assessment.questions[
               this.props.questionId
-            ] as IProgrammingQuestion).solutionTemplate
-          : this.props.editorValue,
+            ] as IProgrammingQuestion).solutionTemplate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange
       },

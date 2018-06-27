@@ -14,7 +14,7 @@ export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComp
 
 export interface IStateProps {
   activeTab: number
-  editorValue: string
+  editorValue?: string
   editorWidth: string
   isRunning: boolean
   output: InterpreterOutput[]
@@ -65,7 +65,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         sourceChapter: parseLibrary(this.props) || 2
       },
       editorProps: {
-        editorValue: parsePrgrm(this.props) || this.props.editorValue,
+        editorValue: parsePrgrm(this.props) || this.props.editorValue || defaultPlaygroundText,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange
       },
@@ -116,6 +116,7 @@ const parseLibrary = (props: IPlaygroundProps) => {
 
 const SICP_SITE = 'http://www.comp.nus.edu.sg/~henz/sicp_js/'
 const CHAP = '\xa7'
+const defaultPlaygroundText = '// Type your code here!'
 const playgroundIntroduction: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
