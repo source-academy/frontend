@@ -113,11 +113,11 @@ export interface Context<T = any> {
   }
 
   /** 
-   * Used for storing external properties,
-   * e.g for interaction between slang and the 
-   * main application 
+   * Used for storing external properties.
+   * For e.g, this can be used to store some application-related 
+   * context for use in your own built-in functions (like `display(a)`)
    */
-  external: T 
+  externalContext: T 
 }
 
 // tslint:disable:no-any
