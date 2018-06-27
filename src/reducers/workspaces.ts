@@ -225,7 +225,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
         ...state,
-        ...action.payload
+        currentAssessment: action.payload.assessmentId,
+        currentQuestion: action.payload.questionId
       }
     case UPDATE_EDITOR_VALUE:
       return {

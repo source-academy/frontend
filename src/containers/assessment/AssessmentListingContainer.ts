@@ -15,13 +15,14 @@ import { IState } from '../../reducers/states'
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state, props) => {
   const categoryFilter = (overview: IAssessmentOverview) =>
     overview.category === props.assessmentCategory
-  return {
+  const stateProps: IStateProps = {
     assessmentOverviews: state.session.assessmentOverviews
       ? state.session.assessmentOverviews.filter(categoryFilter)
       : undefined,
-    storedAssesmentId: state.workspaces.currentAssessment,
+    storedAssessmentId: state.workspaces.currentAssessment,
     storedQuestionId: state.workspaces.currentQuestion
   }
+  return stateProps
 }
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>

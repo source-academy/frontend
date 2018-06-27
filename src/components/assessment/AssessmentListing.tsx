@@ -42,8 +42,7 @@ class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
       return
     }
 
-    if ((this.props.storedAssessmentId === undefined || this.props.storedQuestionId === undefined)
-    || (this.props.storedAssessmentId !== assessmentId || this.props.storedQuestionId !== questionId)) {
+    if (this.props.storedAssessmentId !== assessmentId || this.props.storedQuestionId !== questionId) {
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetAssessmentWorkspace()
     } 
