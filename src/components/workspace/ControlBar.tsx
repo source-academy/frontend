@@ -1,4 +1,3 @@
-/* tslint:disable:member-ordering */
 import { Button, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
@@ -9,12 +8,6 @@ import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
 export type ControlBarProps = {
-  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
-  handleEditorEval: () => void
-  handleGenerateLz?: () => void
-  handleInterruptEval: () => void
-  handleReplEval: () => void
-  handleReplOutputClear: () => void
   hasChapterSelect?: boolean
   hasNextButton?: boolean
   hasPreviousButton?: boolean
@@ -22,17 +15,23 @@ export type ControlBarProps = {
   hasShareButton?: boolean
   hasSubmitButton?: boolean
   isRunning: boolean
+  queryString?: string
+  sourceChapter: number
+  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleEditorEval: () => void
+  handleGenerateLz?: () => void
+  handleInterruptEval: () => void
+  handleReplEval: () => void
+  handleReplOutputClear: () => void
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
   onClickSubmit?(): any
-  queryString?: string
-  sourceChapter: number
 }
 
 interface IChapter {
-  displayName: string
   chapter: number
+  displayName: string
 }
 
 class ControlBar extends React.Component<ControlBarProps, {}> {
@@ -40,13 +39,15 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
     hasChapterSelect: false,
     hasNextButton: false,
     hasPreviousButton: false,
-    hasSubmitButton: false,
     hasSaveButton: false,
     hasShareButton: true,
+    hasSubmitButton: false,
     onClickNext: () => {},
     onClickPrevious: () => {},
     onClickSave: () => {}
   }
+
+  private shareInputElem: HTMLInputElement
 
   constructor(props: ControlBarProps) {
     super(props)
@@ -62,8 +63,6 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
       </div>
     )
   }
-
-  private shareInputElem: HTMLInputElement
 
   private editorControl() {
     const runButton = (
@@ -154,6 +153,10 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
   }
 }
 
+function styliseChapter(chap: number) {
+  return `Source \xa7${chap}`
+}
+
 const chapters = sourceChapters.map(chap => ({ displayName: styliseChapter(chap), chapter: chap }))
 
 const chapterSelect = (
@@ -180,9 +183,5 @@ const ChapterSelectComponent = Select.ofType<IChapter>()
 const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
 )
-
-function styliseChapter(chap: number) {
-  return `Source \xa7${chap}`
-}
 
 export default ControlBar
