@@ -111,7 +111,7 @@ export const importBuiltins = (context: Context) => {
     defineSymbol(context, 'alert', alert)
     defineSymbol(context, 'math_floor', Math.floor)
     // tslint:disable-next-line:ban-types
-    defineSymbol(context, 'timed', (f: Function) => misc.timed(context, f, context.externalContext)) 
+    defineSymbol(context, 'timed', (f: Function) => misc.timed(context, f, context.externalContext))
     // previously week 5
     defineSymbol(context, 'assoc', list.assoc)
     if (window.hasOwnProperty('ListVisualizer')) {
