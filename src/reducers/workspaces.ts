@@ -21,7 +21,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
-import { WorkspaceLocation } from '../actions/workspace'
+import { WorkspaceLocation } from '../actions/workspaces'
 import { createContext } from '../slang'
 import {
   CodeOutput,

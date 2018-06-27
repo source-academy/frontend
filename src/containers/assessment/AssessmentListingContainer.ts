@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchAssessmentOverviews } from '../../actions/session'
-import { resetAssessmentWorkspace, updateCurrentAssessmentId } from '../../actions/workspace'
+import { resetAssessmentWorkspace, updateCurrentAssessmentId } from '../../actions/workspaces'
 import AssessmentListing, {
   IDispatchProps,
   IOwnProps,

@@ -1,6 +1,6 @@
 import { SourceError, Value } from '../slang/types'
 import * as actionTypes from './actionTypes'
-import { WorkspaceLocation } from './workspace'
+import { WorkspaceLocation } from './workspaces'
 
 // TODO fix this immediately after location
 // is implemented completely
