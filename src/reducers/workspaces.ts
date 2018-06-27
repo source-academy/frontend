@@ -121,12 +121,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       if (lastOutput === undefined || lastOutput.type !== 'running') {
         newOutput = state[location].output.concat({
           type: 'running',
-          consoleLogs: [action.payload.log]
+          consoleLogs: [action.payload.logString]
         })
       } else {
         const updatedLastOutput = {
           type: lastOutput.type,
-          consoleLogs: lastOutput.consoleLogs.concat(action.payload.log)
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
         }
         newOutput = state[location].output.slice(0, -1).concat(updatedLastOutput)
       }
