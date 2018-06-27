@@ -14,7 +14,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 
 function* mainSaga() {
   yield* apiFetchSaga()
-  yield* interpreterSaga()
+  yield* workspaceSaga()
   yield* loginSaga()
   yield* playgroundSaga()
 }
@@ -38,7 +38,7 @@ function* apiFetchSaga(): SagaIterator {
   })
 }
 
-function* interpreterSaga(): SagaIterator {
+function* workspaceSaga(): SagaIterator {
   let context: Context
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
