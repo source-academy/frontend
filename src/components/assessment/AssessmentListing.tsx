@@ -16,15 +16,21 @@ export interface IAssessmentParams {
   questionId?: string
 }
 
-export interface IAssessmentListingProps extends RouteComponentProps<IAssessmentParams> {
-  assessmentOverviews?: IAssessmentOverview[]
-  assessmentCategory: AssessmentCategory
+export interface IAssessmentListingProps extends IDispatchProps, IOwnProps, RouteComponentProps<IAssessmentParams>, IStateProps {}
+
+export interface IDispatchProps {
   handleAssessmentOverviewFetch: () => void
 }
 
-export type DispatchProps = Pick<IAssessmentListingProps, 'handleAssessmentOverviewFetch'>
-export type OwnProps = Pick<IAssessmentListingProps, 'assessmentCategory'>
-export type StateProps = Pick<IAssessmentListingProps, 'assessmentOverviews'>
+export interface IOwnProps {
+  assessmentCategory: AssessmentCategory
+}
+
+export interface IStateProps {
+  assessmentOverviews?: IAssessmentOverview[],
+  storedAssessmentId?: number,
+  storedQuestionId?: number
+}
 
 class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
   public render() {
@@ -48,6 +54,8 @@ class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
           <ContentDisplay {...props} />
         </div>
       )
+    } else if (false) {
+
     } else {
       const props: AssessmentProps = {
         assessmentId: assessmentIdParam,
