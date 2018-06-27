@@ -142,8 +142,10 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
       hasShareButton: false,
       hasSubmitButton: this.props.questionId === this.props.assessment!.questions.length - 1,
       isRunning: this.props.isRunning,
-      onClickNext: () =>history.push(assessmentPath + `/${(this.props.questionId + 1).toString()}`),
-      onClickPrevious: () =>history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
+      onClickNext: () =>
+        history.push(assessmentPath + `/${(this.props.questionId + 1).toString()}`),
+      onClickPrevious: () =>
+        history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
       onClickSubmit: () => history.push(listingPath),
       sourceChapter: 2 // TODO dynamic library changing
     }
