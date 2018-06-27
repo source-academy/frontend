@@ -11,24 +11,24 @@ const defaultProps: IAssessmentListingProps = {
   assessmentCategory: AssessmentCategories.Mission,
   assessmentOverviews: undefined,
   handleAssessmentOverviewFetch: () => {},
-  handleResetAssessmentWorkspace:() => {},
+  handleResetAssessmentWorkspace: () => {},
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => {},
   ...mockRouterProps('/academy/missions', {})
 }
 
 const mockUndefinedAssessmentListing: IAssessmentListingProps = {
   ...defaultProps,
-  assessmentOverviews: undefined,
+  assessmentOverviews: undefined
 }
 
 const mockEmptyAssessmentListing: IAssessmentListingProps = {
   ...defaultProps,
-  assessmentOverviews: [],
+  assessmentOverviews: []
 }
 
 const mockPresentAssessmentListing: IAssessmentListingProps = {
   ...defaultProps,
-  assessmentOverviews: mockAssessmentOverviews,
+  assessmentOverviews: mockAssessmentOverviews
 }
 
 test('AssessmentListing page "loading" content renders correctly', () => {
