@@ -26,8 +26,10 @@ export interface IPlaygroundState {
 }
 
 export interface IWorkspaceManagerState {
-  readonly playground: IWorkspaceState
   readonly assessment: IWorkspaceState
+  readonly currentAssessment?: number
+  readonly playground: IWorkspaceState
+  readonly currentQuestion?: number
 }
 
 interface IWorkspaceState {
@@ -141,6 +143,8 @@ export const createDefaultWorkspace: () => IWorkspaceState = () => ({
 })
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
+  currentAssessment: undefined,
+  currentQuestion: undefined,
   assessment: { ...createDefaultWorkspace() },
   playground: { ...createDefaultWorkspace() }
 }
