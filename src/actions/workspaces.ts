@@ -12,8 +12,8 @@ import * as actionTypes from './actionTypes'
  * object in IWorkspaceManagerState.
  */
 export enum WorkspaceLocations {
-  assessment,
-  playground
+  assessment = 'assessment',
+  playground = 'playground'
 }
 export type WorkspaceLocation = keyof typeof WorkspaceLocations
 
