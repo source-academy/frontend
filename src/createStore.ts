@@ -32,10 +32,17 @@ function createStore(history: History): Store<IState> {
     router: routerReducer
   })
   const enchancers = composeEnhancers(applyMiddleware(...middleware))
-  const loadedStore = loadStoredState() || defaultState
-  // tslint:disable-next-line
-  console.log("Loading: \n" + JSON.stringify(loadedStore))
-  const createdStore = _createStore(rootReducer, loadedStore, enchancers)
+  const loadedStore = loadStoredState() 
+  const initialStore: IState = loadedStore === undefined
+    ? defaultState
+    : {
+      ...defaultState,
+      session: {
+        ...defaultState.session,
+        ...loadedStore
+      }
+    }
+  const createdStore = _createStore<IState>(rootReducer, initialStore, enchancers)
 
   sagaMiddleware.run(mainSaga)
   return createdStore
