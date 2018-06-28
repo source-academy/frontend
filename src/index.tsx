@@ -1,11 +1,11 @@
 import * as React from 'react'
+
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'react-router-redux'
-import { PersistGate } from 'redux-persist/integration/react'
 
 import ApplicationContainer from './containers/ApplicationContainer'
-import { persistor, store } from './createStore'
+import { store } from './createStore'
 import { VERSION } from './utils/constants'
 import { history } from './utils/history'
 import registerServiceWorker from './utils/registerServiceWorker'
@@ -23,11 +23,9 @@ console.log(
 
 render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <ConnectedRouter history={history}>
-        <ApplicationContainer />
-      </ConnectedRouter>
-    </PersistGate>
+    <ConnectedRouter history={history}>
+      <ApplicationContainer />
+    </ConnectedRouter>
   </Provider>,
   rootContainer
 )
