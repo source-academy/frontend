@@ -22,7 +22,7 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
         width="100%"
         value={this.props.replValue}
         onChange={throttle(this.props.handleReplValueChange, 2000, {
-          leading: false, 
+          leading: false,
           trailing: true
         })}
         commands={[

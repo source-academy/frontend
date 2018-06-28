@@ -30,7 +30,7 @@ class Editor extends React.Component<IEditorProps, {}> {
             theme="cobalt"
             value={this.props.editorValue}
             onChange={throttle(this.props.handleEditorValueChange, 800, {
-              leading: false, 
+              leading: false,
               trailing: true
             })}
             height="100%"
