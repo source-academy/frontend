@@ -1,4 +1,5 @@
 import { History } from 'history'
+import { throttle } from 'lodash'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
 import {
   applyMiddleware,
@@ -47,9 +48,9 @@ function createStore(history: History): Store<IState> {
 
   sagaMiddleware.run(mainSaga)
 
-  createdStore.subscribe(() => {
+  createdStore.subscribe(throttle(() => {
     saveState(store.getState())
-  })
+  }, 1000))
 
   return createdStore
 }
