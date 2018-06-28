@@ -1,4 +1,4 @@
-import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspace'
+import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { Announcement } from '../components/Announcements'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import { Context, createContext } from '../slang'
