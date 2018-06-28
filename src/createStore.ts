@@ -10,7 +10,7 @@ import {
 } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 
-import { loadStoredState } from './localStorage'
+import { loadStoredState, saveState } from './localStorage'
 import reducers from './reducers'
 import { defaultState, IState } from './reducers/states'
 import mainSaga from './sagas'
@@ -46,7 +46,13 @@ function createStore(history: History): Store<IState> {
   const createdStore = _createStore<IState>(rootReducer, initialStore, enchancers)
 
   sagaMiddleware.run(mainSaga)
+
+  createdStore.subscribe(() => {
+    saveState(store.getState())
+  })
+
   return createdStore
 }
 
 export const store = createStore(appHistory) as Store<IState>
+
