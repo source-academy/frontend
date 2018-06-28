@@ -22,11 +22,11 @@ const defaultProps: AssessmentProps = {
   isRunning: false,
   output: [],
   questionId: 0,
-  replValue: "",
+  replValue: ''
 }
 
 const mockUndefinedAssessmentProps: AssessmentProps = {
-  ...defaultProps,
+  ...defaultProps
 }
 
 const mockProgrammingAssessmentProps: AssessmentProps = {
@@ -44,9 +44,7 @@ const mockMcqAssessmentProps: AssessmentProps = {
 }
 
 test('Assessment page "loading" content renders correctly', () => {
-  const app = (
-    <Assessment {...mockUndefinedAssessmentProps} />
-  )
+  const app = <Assessment {...mockUndefinedAssessmentProps} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
@@ -58,9 +56,7 @@ test('Assessment page with programming question renders correctly', () => {
 })
 
 test('Assessment page with MCQ question renders correctly', () => {
-  const app = (
-    <Assessment {...mockMcqAssessmentProps} />
-  )
+  const app = <Assessment {...mockMcqAssessmentProps} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
