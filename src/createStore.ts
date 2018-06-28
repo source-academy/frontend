@@ -48,12 +48,13 @@ function createStore(history: History): Store<IState> {
 
   sagaMiddleware.run(mainSaga)
 
-  createdStore.subscribe(throttle(() => {
-    saveState(store.getState())
-  }, 1000))
+  createdStore.subscribe(
+    throttle(() => {
+      saveState(store.getState())
+    }, 1000)
+  )
 
   return createdStore
 }
 
 export const store = createStore(appHistory) as Store<IState>
-
