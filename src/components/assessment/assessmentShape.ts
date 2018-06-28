@@ -56,7 +56,6 @@ type MCQChoice = {
   hint: string
 }
 
-
 /* The two kinds of Questions available */
 export enum QuestionTypes {
   programming = 'programming',

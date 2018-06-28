@@ -8,7 +8,13 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
-import { IAssessment, IMCQQuestion, IProgrammingQuestion, IQuestion, QuestionTypes } from './assessmentShape'
+import {
+  IAssessment,
+  IMCQQuestion,
+  IProgrammingQuestion,
+  IQuestion,
+  QuestionTypes
+} from './assessmentShape'
 
 export type AssessmentProps = DispatchProps & OwnProps & StateProps
 
@@ -78,14 +84,17 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
     const question: IQuestion = this.props.assessment.questions[this.props.questionId]
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props),
-      editorProps: question.type === QuestionTypes.programming ? {
-        editorValue:
-          this.props.editorValue !== undefined
-            ? this.props.editorValue
-            : (question as IProgrammingQuestion).solutionTemplate,
-        handleEditorEval: this.props.handleEditorEval,
-        handleEditorValueChange: this.props.handleEditorValueChange
-      } : undefined,
+      editorProps:
+        question.type === QuestionTypes.programming
+          ? {
+              editorValue:
+                this.props.editorValue !== undefined
+                  ? this.props.editorValue
+                  : (question as IProgrammingQuestion).solutionTemplate,
+              handleEditorEval: this.props.handleEditorEval,
+              handleEditorValueChange: this.props.handleEditorValueChange
+            }
+          : undefined,
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
