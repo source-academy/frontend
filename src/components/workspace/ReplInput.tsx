@@ -1,3 +1,4 @@
+import { throttle } from 'lodash'
 import * as React from 'react'
 import AceEditor from 'react-ace'
 
@@ -20,7 +21,10 @@ class ReplInput extends React.Component<IReplInputProps, {}> {
         height="1px"
         width="100%"
         value={this.props.replValue}
-        onChange={this.props.handleReplValueChange}
+        onChange={throttle(this.props.handleReplValueChange, 2000, {
+          leading: false, 
+          trailing: true
+        })}
         commands={[
           {
             name: 'evaluate',
