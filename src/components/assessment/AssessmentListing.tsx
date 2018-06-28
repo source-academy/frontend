@@ -16,17 +16,45 @@ export interface IAssessmentParams {
   questionId?: string
 }
 
-export interface IAssessmentListingProps extends RouteComponentProps<IAssessmentParams> {
-  assessmentOverviews?: IAssessmentOverview[]
-  assessmentCategory: AssessmentCategory
+export interface IAssessmentListingProps
+  extends IDispatchProps,
+    IOwnProps,
+    RouteComponentProps<IAssessmentParams>,
+    IStateProps {}
+
+export interface IDispatchProps {
   handleAssessmentOverviewFetch: () => void
+  handleResetAssessmentWorkspace: () => void
+  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
 }
 
-export type DispatchProps = Pick<IAssessmentListingProps, 'handleAssessmentOverviewFetch'>
-export type OwnProps = Pick<IAssessmentListingProps, 'assessmentCategory'>
-export type StateProps = Pick<IAssessmentListingProps, 'assessmentOverviews'>
+export interface IOwnProps {
+  assessmentCategory: AssessmentCategory
+}
+
+export interface IStateProps {
+  assessmentOverviews?: IAssessmentOverview[]
+  storedAssessmentId?: number
+  storedQuestionId?: number
+}
 
 class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
+  public componentWillMount() {
+    const assessmentId = stringParamToInt(this.props.match.params.assessmentId)
+    const questionId = stringParamToInt(this.props.match.params.questionId)
+    if (assessmentId === null || questionId === null) {
+      return
+    }
+
+    if (
+      this.props.storedAssessmentId !== assessmentId ||
+      this.props.storedQuestionId !== questionId
+    ) {
+      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
+      this.props.handleResetAssessmentWorkspace()
+    }
+  }
+
   public render() {
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId)
     // default questionId is 0 (the first question)

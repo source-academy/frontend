@@ -7,53 +7,44 @@ import * as CopyToClipboard from 'react-copy-to-clipboard'
 import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
-type ControlBarProps = DispatchProps & OwnProps & StateProps
-
-export type DispatchProps = {
-  handleChapterSelect: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
-  handleEditorEval: () => void
-  handleGenerateLz: () => void
-  handleInterruptEval: () => void
-  handleReplEval: () => void
-  handleReplOutputClear: () => void
-}
-
-export type OwnProps = {
+export type ControlBarProps = {
   hasChapterSelect?: boolean
   hasNextButton?: boolean
   hasPreviousButton?: boolean
-  hasSubmitButton?: boolean
   hasSaveButton?: boolean
   hasShareButton?: boolean
+  hasSubmitButton?: boolean
+  isRunning: boolean
+  queryString?: string
+  sourceChapter: number
+  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleEditorEval: () => void
+  handleGenerateLz?: () => void
+  handleInterruptEval: () => void
+  handleReplEval: () => void
+  handleReplOutputClear: () => void
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
   onClickSubmit?(): any
 }
 
-export type StateProps = {
-  isRunning: boolean
-  queryString?: string
-  sourceChapter: number
-}
-
 interface IChapter {
-  displayName: string
   chapter: number
+  displayName: string
 }
 
 class ControlBar extends React.Component<ControlBarProps, {}> {
-  public static defaultProps: OwnProps = {
-    hasChapterSelect: true,
+  public static defaultProps: Partial<ControlBarProps> = {
+    hasChapterSelect: false,
     hasNextButton: false,
     hasPreviousButton: false,
-    hasSubmitButton: false,
     hasSaveButton: false,
     hasShareButton: true,
+    hasSubmitButton: false,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {},
-    onClickSubmit: () => {}
+    onClickSave: () => {}
   }
 
   private shareInputElem: HTMLInputElement
@@ -162,6 +153,10 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
   }
 }
 
+function styliseChapter(chap: number) {
+  return `Source \xa7${chap}`
+}
+
 const chapters = sourceChapters.map(chap => ({ displayName: styliseChapter(chap), chapter: chap }))
 
 const chapterSelect = (
@@ -188,9 +183,5 @@ const ChapterSelectComponent = Select.ofType<IChapter>()
 const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
 )
-
-function styliseChapter(chap: number) {
-  return `Source \xa7${chap}`
-}
 
 export default ControlBar

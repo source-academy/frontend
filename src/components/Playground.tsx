@@ -6,12 +6,33 @@ import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
-import WorkspaceContainer from '../containers/workspace'
-import { sourceChapters } from '../reducers/states'
+import { InterpreterOutput, sourceChapters } from '../reducers/states'
+import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
 
-export interface IPlaygroundProps extends RouteComponentProps<{}> {
-  editorValue: string
+export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
+
+export interface IStateProps {
+  activeTab: number
+  editorValue?: string
+  editorWidth: string
+  isRunning: boolean
+  output: InterpreterOutput[]
+  replValue: string
+  sideContentHeight?: number
+}
+
+export interface IDispatchProps {
+  handleChangeActiveTab: (activeTab: number) => void
+  handleChapterSelect: (chapter: any, changeEvent: any) => void
+  handleEditorEval: () => void
+  handleEditorValueChange: (val: string) => void
+  handleEditorWidthChange: (widthChange: number) => void
+  handleInterruptEval: () => void
+  handleReplEval: () => void
+  handleReplOutputClear: () => void
+  handleReplValueChange: (newValue: string) => void
+  handleSideContentHeightChange: (heightChange: number) => void
 }
 
 type PlaygroundState = {
@@ -30,19 +51,55 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 
   public render() {
+    const workspaceProps: WorkspaceProps = {
+      controlBarProps: {
+        handleChapterSelect: this.props.handleChapterSelect,
+        handleEditorEval: this.props.handleEditorEval,
+        handleInterruptEval: this.props.handleInterruptEval,
+        handleReplEval: this.props.handleReplEval,
+        handleReplOutputClear: this.props.handleReplOutputClear,
+        hasNextButton: false,
+        hasPreviousButton: false,
+        hasSubmitButton: false,
+        isRunning: this.props.isRunning,
+        sourceChapter: parseLibrary(this.props) || 2
+      },
+      editorProps: {
+        editorValue: this.chooseEditorValue(this.props),
+        handleEditorEval: this.props.handleEditorEval,
+        handleEditorValueChange: this.props.handleEditorValueChange
+      },
+      editorWidth: this.props.editorWidth,
+      handleEditorWidthChange: this.props.handleEditorWidthChange,
+      handleSideContentHeightChange: this.props.handleSideContentHeightChange,
+      replProps: {
+        output: this.props.output,
+        replValue: this.props.replValue,
+        handleReplEval: this.props.handleReplEval,
+        handleReplValueChange: this.props.handleReplValueChange
+      },
+      sideContentHeight: this.props.sideContentHeight,
+      sideContentProps: {
+        activeTab: this.props.activeTab,
+        handleChangeActiveTab: this.props.handleChangeActiveTab,
+        tabs: [playgroundIntroduction]
+      }
+    }
     return (
       <HotKeys
         className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
         keyMap={this.keyMap}
         handlers={this.handlers}
       >
-        <WorkspaceContainer
-          library={parseLibrary(this.props)}
-          editorValue={parsePrgrm(this.props) || this.props.editorValue}
-          sideContentTabs={[playgroundIntroduction]}
-        />
+        <Workspace {...workspaceProps} />
       </HotKeys>
     )
+  }
+
+  private chooseEditorValue(props: IPlaygroundProps): string {
+    return parsePrgrm(this.props) || this.props.editorValue === undefined
+      ? defaultPlaygroundText
+      : this.props.editorValue
   }
 
   private toggleIsGreen() {
@@ -65,6 +122,7 @@ const parseLibrary = (props: IPlaygroundProps) => {
 
 const SICP_SITE = 'http://www.comp.nus.edu.sg/~henz/sicp_js/'
 const CHAP = '\xa7'
+const defaultPlaygroundText = '// Type your code here!'
 const playgroundIntroduction: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,

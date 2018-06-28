@@ -5,6 +5,7 @@ import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
+import { WorkspaceLocation } from '../actions/workspaces'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/api'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
@@ -13,9 +14,9 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 
 function* mainSaga() {
   yield* apiFetchSaga()
-  yield* interpreterSaga()
-  yield* loginSaga()
   yield* workspaceSaga()
+  yield* loginSaga()
+  yield* playgroundSaga()
 }
 
 function* apiFetchSaga(): SagaIterator {
@@ -37,32 +38,35 @@ function* apiFetchSaga(): SagaIterator {
   })
 }
 
-function* interpreterSaga(): SagaIterator {
+function* workspaceSaga(): SagaIterator {
   let context: Context
 
-  yield takeEvery(actionTypes.EVAL_EDITOR, function*() {
-    const code: string = yield select((state: IState) => state.playground.editorValue)
-    yield put(actions.clearContext())
-    yield put(actions.clearReplOutput())
-    context = yield select((state: IState) => state.playground.context)
-    yield* evalCode(code, context)
+  yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
+    const location = (action as actionTypes.IAction).payload.workspaceLocation
+    const code: string = yield select((state: IState) => state.workspaces[location].editorValue)
+    yield put(actions.clearContext(location))
+    yield put(actions.clearReplOutput(location))
+    context = yield select((state: IState) => state.workspaces[location].context)
+    yield* evalCode(code, context, location)
   })
 
-  yield takeEvery(actionTypes.EVAL_REPL, function*() {
-    const code: string = yield select((state: IState) => state.playground.replValue)
-    context = yield select((state: IState) => state.playground.context)
-    yield put(actions.clearReplInput())
-    yield put(actions.sendReplInputToOutput(code))
-    yield* evalCode(code, context)
+  yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
+    const location = (action as actionTypes.IAction).payload.workspaceLocation
+    const code: string = yield select((state: IState) => state.workspaces[location].replValue)
+    context = yield select((state: IState) => state.workspaces[location].context)
+    yield put(actions.clearReplInput(location))
+    yield put(actions.sendReplInputToOutput(code, location))
+    yield* evalCode(code, context, location)
   })
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
+    const location = (action as actionTypes.IAction).payload.workspaceLocation
     const newChapter = parseInt((action as actionTypes.IAction).payload, 10)
-    const oldChapter = yield select((state: IState) => state.playground.sourceChapter)
+    const oldChapter = yield select((state: IState) => state.workspaces[location].sourceChapter)
     if (newChapter !== oldChapter) {
-      yield put(actions.changeChapter(newChapter))
-      yield put(actions.clearContext())
-      yield put(actions.clearReplOutput())
+      yield put(actions.changeChapter(newChapter, location))
+      yield put(actions.clearContext(location))
+      yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
   })
@@ -86,10 +90,10 @@ function* loginSaga(): SagaIterator {
   })
 }
 
-function* workspaceSaga(): SagaIterator {
+function* playgroundSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
-    const code = yield select((state: IState) => state.playground.editorValue)
-    const lib = yield select((state: IState) => state.playground.sourceChapter)
+    const code = yield select((state: IState) => state.workspaces.playground.editorValue)
+    const lib = yield select((state: IState) => state.workspaces.playground.sourceChapter)
     const newQueryString =
       code === ''
         ? undefined
@@ -101,16 +105,16 @@ function* workspaceSaga(): SagaIterator {
   })
 }
 
-function* evalCode(code: string, context: Context) {
+function* evalCode(code: string, context: Context, location: WorkspaceLocation) {
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, { scheduler: 'async' }),
     interrupted: take(actionTypes.INTERRUPT_EXECUTION)
   })
   if (result) {
     if (result.status === 'finished') {
-      yield put(actions.evalInterpreterSuccess(result.value))
+      yield put(actions.evalInterpreterSuccess(result.value, location))
     } else {
-      yield put(actions.evalInterpreterError(context.errors))
+      yield put(actions.evalInterpreterError(context.errors, location))
     }
   } else if (interrupted) {
     interrupt(context)

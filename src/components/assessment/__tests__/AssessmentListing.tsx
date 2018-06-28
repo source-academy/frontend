@@ -7,24 +7,28 @@ import { mockRouterProps } from '../../../mocks/components'
 import AssessmentListing, { IAssessmentListingProps } from '../AssessmentListing'
 import { AssessmentCategories } from '../assessmentShape'
 
-const mockUndefinedAssessmentListing: IAssessmentListingProps = {
-  ...mockRouterProps('/academy/missions', {}),
+const defaultProps: IAssessmentListingProps = {
+  assessmentCategory: AssessmentCategories.Mission,
+  assessmentOverviews: undefined,
   handleAssessmentOverviewFetch: () => {},
-  assessmentCategory: AssessmentCategories.MISSION
+  handleResetAssessmentWorkspace: () => {},
+  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => {},
+  ...mockRouterProps('/academy/missions', {})
+}
+
+const mockUndefinedAssessmentListing: IAssessmentListingProps = {
+  ...defaultProps,
+  assessmentOverviews: undefined
 }
 
 const mockEmptyAssessmentListing: IAssessmentListingProps = {
-  ...mockRouterProps('/academy/missions', {}),
-  assessmentOverviews: [],
-  handleAssessmentOverviewFetch: () => {},
-  assessmentCategory: AssessmentCategories.MISSION
+  ...defaultProps,
+  assessmentOverviews: []
 }
 
 const mockPresentAssessmentListing: IAssessmentListingProps = {
-  ...mockRouterProps('/academy/missions', {}),
-  assessmentOverviews: mockAssessmentOverviews,
-  handleAssessmentOverviewFetch: () => {},
-  assessmentCategory: AssessmentCategories.MISSION
+  ...defaultProps,
+  assessmentOverviews: mockAssessmentOverviews
 }
 
 test('AssessmentListing page "loading" content renders correctly', () => {

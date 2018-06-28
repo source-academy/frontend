@@ -1,35 +1,24 @@
 import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
 
-import ControlBarContainer from '../../containers/workspace/ControlBarContainer'
-import EditorContainer from '../../containers/workspace/EditorContainer'
-import MCQChooserContainer from '../../containers/workspace/MCQChooserContainer'
-import ReplContainer from '../../containers/workspace/ReplContainer'
-import SideContent from '../../containers/workspace/SideContentContainer'
 import { IMCQQuestion } from '../assessment/assessmentShape'
-import { OwnProps as ControlBarOwnProps } from './ControlBar'
-import { SideContentTab } from './side-content'
+import ControlBar, { ControlBarProps } from './ControlBar'
+import Editor, { IEditorProps } from './Editor'
+import MCQChooser from './MCQChooser'
+import Repl, { IReplProps } from './Repl'
+import SideContent, { SideContentProps } from './side-content'
 
-type WorkspaceProps = DispatchProps & OwnProps & StateProps
-
-export type DispatchProps = {
-  changeChapter: (newChapter: number) => void
+export type WorkspaceProps = {
+  // Either editorProps or mcq must be provided
+  controlBarProps: ControlBarProps
+  editorProps?: IEditorProps
+  editorWidth: string
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
-  updateEditorValue: (newEditorValue: string) => void
-}
-
-export type OwnProps = {
-  controlBarOptions?: ControlBarOwnProps
-  library?: number
-  editorValue?: string
   mcq?: IMCQQuestion
-  sideContentTabs: SideContentTab[]
-}
-
-export type StateProps = {
-  editorWidth: string
+  replProps: IReplProps
   sideContentHeight?: number
+  sideContentProps: SideContentProps
 }
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
@@ -51,16 +40,16 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   public render() {
     return (
       <div className="workspace">
-        <ControlBarContainer {...this.props.controlBarOptions} />
+        <ControlBar {...this.props.controlBarProps} />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
           <Resizable {...this.editorResizableProps()}>{this.workspaceInput(this.props)}</Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
-              <SideContent {...{ tabs: this.props.sideContentTabs }} />
+              <SideContent {...this.props.sideContentProps} />
               <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
             </Resizable>
-            <ReplContainer />
+            <Repl {...this.props.replProps} />
           </div>
         </div>
       </div>
@@ -83,10 +72,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   private sideContentResizableProps() {
-    const size =
-      this.props.sideContentHeight === undefined
-        ? undefined
-        : { height: this.props.sideContentHeight, width: '100%' }
     const onResizeStop: ResizeCallback = ({}, {}, ref, {}) =>
       this.props.handleSideContentHeightChange(ref.clientHeight)
     return {
@@ -96,7 +81,13 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       minHeight: 0,
       onResize: this.toggleDividerDisplay,
       onResizeStop,
-      size
+      size:
+        this.props.sideContentHeight === undefined
+          ? undefined
+          : {
+              height: this.props.sideContentHeight,
+              width: '100%'
+            }
     } as ResizableProps
   }
 
@@ -142,10 +133,10 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   private workspaceInput = (props: WorkspaceProps) => {
-    if (props.editorValue !== undefined) {
-      return <EditorContainer editorValue={props.editorValue} />
+    if (props.editorProps !== undefined) {
+      return <Editor {...props.editorProps} />
     } else {
-      return <MCQChooserContainer mcq={this.props.mcq!} />
+      return <MCQChooser mcq={this.props.mcq!} />
     }
   }
 }

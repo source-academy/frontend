@@ -1,18 +1,10 @@
 import { Button, Card, IconName, Tooltip } from '@blueprintjs/core'
 import * as React from 'react'
 
-type SideContentProps = DispatchProps & OwnProps & StateProps
-
-export type DispatchProps = {
-  handleChangeActiveTab: (aT: number) => void
-}
-
-export type OwnProps = {
-  tabs: SideContentTab[]
-}
-
-export type StateProps = {
+export type SideContentProps = {
   activeTab: number
+  tabs: SideContentTab[]
+  handleChangeActiveTab: (aT: number) => void
 }
 
 export type SideContentTab = {

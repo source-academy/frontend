@@ -3,7 +3,7 @@
 exports[`AssessmentListing page "loading" content renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <AssessmentListing match={{...}} location={{...}} history={{...}} staticContext={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} assessmentCategory=\\"Mission\\">
+    <AssessmentListing assessmentCategory=\\"Mission\\" assessmentOverviews={[undefined]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleResetAssessmentWorkspace={[Function: handleResetAssessmentWorkspace]} handleUpdateCurrentAssessmentId={[Function: handleUpdateCurrentAssessmentId]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
       <div className=\\"AssessmentListing\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
@@ -45,7 +45,7 @@ exports[`AssessmentListing page "loading" content renders correctly 1`] = `
 exports[`AssessmentListing page with 0 missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <AssessmentListing match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} assessmentCategory=\\"Mission\\">
+    <AssessmentListing assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleResetAssessmentWorkspace={[Function: handleResetAssessmentWorkspace]} handleUpdateCurrentAssessmentId={[Function: handleUpdateCurrentAssessmentId]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
       <div className=\\"AssessmentListing\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
@@ -85,7 +85,7 @@ exports[`AssessmentListing page with 0 missions renders correctly 1`] = `
 exports[`AssessmentListing page with multiple loaded missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <AssessmentListing match={{...}} location={{...}} history={{...}} staticContext={{...}} assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} assessmentCategory=\\"Mission\\">
+    <AssessmentListing assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleResetAssessmentWorkspace={[Function: handleResetAssessmentWorkspace]} handleUpdateCurrentAssessmentId={[Function: handleUpdateCurrentAssessmentId]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
       <div className=\\"AssessmentListing\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">

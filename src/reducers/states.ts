@@ -9,6 +9,7 @@ export interface IState {
   readonly application: IApplicationState
   readonly playground: IPlaygroundState
   readonly session: ISessionState
+  readonly workspaces: IWorkspaceManagerState
 }
 
 export interface IAcademyState {
@@ -20,13 +21,20 @@ export interface IApplicationState {
   readonly environment: ApplicationEnvironment
 }
 
-export interface IPlaygroundState extends IWorkspaceState {
+export interface IPlaygroundState {
   readonly queryString?: string
+}
+
+export interface IWorkspaceManagerState {
+  readonly assessment: IWorkspaceState
+  readonly currentAssessment?: number
+  readonly playground: IWorkspaceState
+  readonly currentQuestion?: number
 }
 
 interface IWorkspaceState {
   readonly context: Context
-  readonly editorValue: string
+  readonly editorValue?: string
   readonly editorWidth: string
   readonly isRunning: boolean
   readonly output: InterpreterOutput[]
@@ -120,16 +128,24 @@ export const defaultApplication: IApplicationState = {
   environment: currentEnvironment()
 }
 
-export const defaultPlayground: IPlaygroundState = {
+export const defaultPlayground: IPlaygroundState = {}
+
+export const createDefaultWorkspace: () => IWorkspaceState = () => ({
   context: createContext(latestSourceChapter),
-  editorValue: '',
+  editorValue: undefined,
   editorWidth: '50%',
   isRunning: false,
   output: [],
   replValue: '',
   sideContentActiveTab: 0,
-  sideContentHeight: undefined,
   sourceChapter: latestSourceChapter
+})
+
+export const defaultWorkspaceManager: IWorkspaceManagerState = {
+  currentAssessment: undefined,
+  currentQuestion: undefined,
+  assessment: { ...createDefaultWorkspace() },
+  playground: { ...createDefaultWorkspace() }
 }
 
 export const defaultSession: ISessionState = {
