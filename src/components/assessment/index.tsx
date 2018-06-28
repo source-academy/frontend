@@ -8,7 +8,7 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
-import { IAssessment, IMCQQuestion, IProgrammingQuestion } from './assessmentShape'
+import { IAssessment, IMCQQuestion, IProgrammingQuestion, IQuestion, QuestionTypes } from './assessmentShape'
 
 export type AssessmentProps = DispatchProps & OwnProps & StateProps
 
@@ -75,21 +75,21 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
         </Card>
       </Dialog>
     )
+    const question: IQuestion = this.props.assessment.questions[this.props.questionId]
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props),
-      editorProps: {
+      editorProps: question.type === QuestionTypes.programming ? {
         editorValue:
           this.props.editorValue !== undefined
             ? this.props.editorValue
-            : (this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion)
-                .solutionTemplate,
+            : (question as IProgrammingQuestion).solutionTemplate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange
-      },
+      } : undefined,
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      mcq: this.props.assessment.questions[this.props.questionId] as IMCQQuestion,
+      mcq: question as IMCQQuestion,
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props),
       replProps: {

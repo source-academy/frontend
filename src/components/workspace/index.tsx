@@ -131,7 +131,11 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       this.sideDividerDiv.style.display = 'initial'
     }
   }
-
+  
+  /** 
+   * Pre-condition: `this.props.editorProps` 
+   * XOR `this.props.mcq` are defined.
+   */
   private workspaceInput = (props: WorkspaceProps) => {
     if (props.editorProps !== undefined) {
       return <Editor {...props.editorProps} />

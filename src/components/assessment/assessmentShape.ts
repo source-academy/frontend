@@ -56,8 +56,13 @@ type MCQChoice = {
   hint: string
 }
 
+
 /* The two kinds of Questions available */
-type QuestionType = 'programming' | 'mcq'
+export enum QuestionTypes {
+  programming = 'programming',
+  mcq = 'mcq'
+}
+type QuestionType = keyof typeof QuestionTypes
 
 export type Library = {
   chapter: number
