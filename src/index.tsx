@@ -1,11 +1,11 @@
 import * as React from 'react'
-
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'react-router-redux'
 
 import ApplicationContainer from './containers/ApplicationContainer'
 import { store } from './createStore'
+import { saveState as _saveState } from './localStorage'
 import { VERSION } from './utils/constants'
 import { history } from './utils/history'
 import registerServiceWorker from './utils/registerServiceWorker'
@@ -20,6 +20,18 @@ console.log(
     'Please visit https://github.com/source-academy/cadet-frontend/issues to report bugs or issues.',
   'font-weight: bold;'
 )
+
+const saveState = (state: any) => {
+  // tslint:disable-next-line
+  console.log("Saving State: \n" + JSON.stringify(state))
+  _saveState(
+    state
+  )
+}
+
+store.subscribe(() => {
+  saveState(store.getState())
+});
 
 render(
   <Provider store={store}>

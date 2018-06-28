@@ -119,6 +119,7 @@ const currentEnvironment = (): ApplicationEnvironment => {
   }
 }
 
+
 export const defaultAcademy: IAcademyState = {
   gameCanvas: undefined
 }
@@ -166,4 +167,12 @@ export const defaultSession: ISessionState = {
   },
   token: undefined,
   username: undefined
+}
+
+export const defaultState: IState = {
+  academy: defaultAcademy,
+  application: defaultApplication,
+  playground: defaultPlayground,
+  session: defaultSession,
+  workspaces: defaultWorkspaceManager
 }

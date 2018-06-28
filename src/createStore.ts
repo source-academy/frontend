@@ -10,8 +10,9 @@ import {
 } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 
+import { loadStoredState } from './localStorage'
 import reducers from './reducers'
-import { IState } from './reducers/states'
+import { defaultState , IState } from './reducers/states'
 import mainSaga from './sagas'
 import { history as appHistory } from './utils/history'
 
@@ -26,12 +27,15 @@ function createStore(history: History): Store<IState> {
     composeEnhancers = __REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   }
 
-  const rootReducer = combineReducers({
+  const rootReducer = combineReducers<IState>({
     ...reducers,
     router: routerReducer
   })
   const enchancers = composeEnhancers(applyMiddleware(...middleware))
-  const createdStore = _createStore(rootReducer, enchancers)
+  const loadedStore = loadStoredState() || defaultState
+  // tslint:disable-next-line
+  console.log("Loading: \n" + JSON.stringify(loadedStore))
+  const createdStore = _createStore(rootReducer, loadedStore, enchancers)
 
   sagaMiddleware.run(mainSaga)
   return createdStore
