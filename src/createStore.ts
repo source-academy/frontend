@@ -12,7 +12,7 @@ import createSagaMiddleware from 'redux-saga'
 
 import { loadStoredState } from './localStorage'
 import reducers from './reducers'
-import { defaultState , IState } from './reducers/states'
+import { defaultState, IState } from './reducers/states'
 import mainSaga from './sagas'
 import { history as appHistory } from './utils/history'
 
@@ -32,16 +32,17 @@ function createStore(history: History): Store<IState> {
     router: routerReducer
   })
   const enchancers = composeEnhancers(applyMiddleware(...middleware))
-  const loadedStore = loadStoredState() 
-  const initialStore: IState = loadedStore === undefined
-    ? defaultState
-    : {
-      ...defaultState,
-      session: {
-        ...defaultState.session,
-        ...loadedStore
-      }
-    }
+  const loadedStore = loadStoredState()
+  const initialStore: IState =
+    loadedStore === undefined
+      ? defaultState
+      : {
+          ...defaultState,
+          session: {
+            ...defaultState.session,
+            ...loadedStore
+          }
+        }
   const createdStore = _createStore<IState>(rootReducer, initialStore, enchancers)
 
   sagaMiddleware.run(mainSaga)

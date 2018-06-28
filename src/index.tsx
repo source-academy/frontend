@@ -23,7 +23,7 @@ console.log(
 
 store.subscribe(() => {
   saveState(store.getState())
-});
+})
 
 render(
   <Provider store={store}>

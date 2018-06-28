@@ -119,7 +119,6 @@ const currentEnvironment = (): ApplicationEnvironment => {
   }
 }
 
-
 export const defaultAcademy: IAcademyState = {
   gameCanvas: undefined
 }

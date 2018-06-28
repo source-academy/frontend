@@ -2,8 +2,8 @@ import { IState } from './reducers/states'
 import { HistoryHelper } from './utils/history'
 
 export interface ISavedState {
-  historyHelper: HistoryHelper,
-  token?: string,
+  historyHelper: HistoryHelper
+  token?: string
   username?: string
 }
 
@@ -14,7 +14,7 @@ export const loadStoredState = (): ISavedState | undefined => {
       return undefined
     } else {
       // tslint:disable-next-line
-      console.log("Loading State: \n" + serializedState)
+      console.log('Loading State: \n' + serializedState)
       return JSON.parse(serializedState) as ISavedState
     }
   } catch (err) {
@@ -30,7 +30,7 @@ export const saveState = (state: IState) => {
       historyHelper: state.session.historyHelper
     }
     // tslint:disable-next-line
-    console.log("Saving State: \n" + JSON.stringify(stateToBeSaved))
+    console.log('Saving State: \n' + JSON.stringify(stateToBeSaved))
     const serialized = JSON.stringify(stateToBeSaved)
     localStorage.setItem('storedState', serialized)
   } catch (err) {
