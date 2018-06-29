@@ -15,12 +15,12 @@ import AcademyNavigationBar from './NavigationBar'
 interface IAcademyProps extends IDispatchProps, IOwnProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IDispatchProps {
-  changeToken: (token: string) => void
+  fetchToken: (ivleToken: string) => void
   fetchUsername: () => void
 }
 
 export interface IOwnProps {
-  token?: string
+  ivleToken?: string
 }
 
 export interface IStateProps {
@@ -68,12 +68,12 @@ export const Academy: React.SFC<IAcademyProps> = props => (
 )
 
 const checkLoggedIn = (props: IAcademyProps) => {
-  const token = qs.parse(props.location.search).token
-  if (token !== undefined) {
-    props.changeToken(token) // just received a callback from IVLE
+  const ivleToken = qs.parse(props.location.search).token
+  if (ivleToken !== undefined) {
+    props.fetchToken(ivleToken) // just received a callback from IVLE
     props.fetchUsername()
     return
-  } else if (props.token === undefined) {
+  } else if (props.ivleToken === undefined) {
     return <Route component={redirectToLogin} />
   } else {
     return
