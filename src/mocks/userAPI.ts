@@ -1,4 +1,4 @@
-export enum Roles = {
+export enum Roles {
   student = 'student',
   trainer = 'trainer',
   admin = 'admin'
@@ -54,10 +54,11 @@ const mockStudentInfo = [
  *
  * @param accessToken a valid access token for the cadet backend.
  */
-const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null => {
+export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null => {
   // mocks backend role fetching
-  const permittedRoles = [Roles.admin, Roles.trainer]
-  if (!permittedRoles.includes(mockFetchRole(accessToken))) {
+  const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
+  const role: Role | null = mockFetchRole(accessToken)
+  if (role === null || !permittedRoles.includes(role)) {
     return null
   } else {
     return mockStudentInfo   
@@ -104,10 +105,11 @@ export const mockGradingInfo = [
  *
  * @param accessToken a valid access token for the cadet backend.
  */
-const mockFetchGradingInfo = (accessToken: string): StudentInfo[] | null => {
+export const mockFetchGradingInfo = (accessToken: string): GradingInfo[] | null => {
   // mocks backend role fetching
-  const permittedRoles = [Roles.admin, Roles.trainer]
-  if (!permittedRoles.includes(mockFetchRole(accessToken))) {
+  const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
+  const role: Role | null = mockFetchRole(accessToken)
+  if (role === null || !permittedRoles.includes(role)) {
     return null
   } else {
     return mockGradingInfo   
