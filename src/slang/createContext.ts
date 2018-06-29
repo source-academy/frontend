@@ -17,9 +17,10 @@ const createEmptyRuntime = () => ({
   nodes: []
 })
 
-export const createEmptyContext = (chapter: number): Context => ({
+export const createEmptyContext = <T>(chapter: number, externalContext?: T): Context<T> => ({
   chapter,
   errors: [],
+  externalContext,
   cfg: createEmptyCFG(),
   runtime: createEmptyRuntime()
 })
@@ -58,7 +59,7 @@ export const importBuiltins = (context: Context) => {
 
   if (context.chapter >= 1) {
     defineSymbol(context, 'runtime', misc.runtime)
-    defineSymbol(context, 'display', misc.display)
+    defineSymbol(context, 'display', (value: Value) => misc.display(value, context.externalContext))
     defineSymbol(context, 'error', misc.error_message)
     defineSymbol(context, 'prompt', prompt)
     defineSymbol(context, 'parse_int', misc.parse_int)
@@ -109,7 +110,8 @@ export const importBuiltins = (context: Context) => {
     // previously week 4
     defineSymbol(context, 'alert', alert)
     defineSymbol(context, 'math_floor', Math.floor)
-    defineSymbol(context, 'timed', misc.timed)
+    // tslint:disable-next-line:ban-types
+    defineSymbol(context, 'timed', (f: Function) => misc.timed(context, f, context.externalContext))
     // previously week 5
     defineSymbol(context, 'assoc', list.assoc)
     if (window.hasOwnProperty('ListVisualizer')) {
@@ -130,8 +132,8 @@ export const importBuiltins = (context: Context) => {
   }
 }
 
-const createContext = (chapter = 1, externals = []) => {
-  const context = createEmptyContext(chapter)
+const createContext = <T>(chapter = 1, externals = [], externalContext?: T) => {
+  const context = createEmptyContext(chapter, externalContext)
 
   importBuiltins(context)
   importExternals(context, externals)

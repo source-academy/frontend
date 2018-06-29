@@ -1,14 +1,14 @@
 /* tslint:disable: ban-types*/
 import { toString } from '../interop'
-import { Value } from '../types'
+import { Context, Value } from '../types'
 
 import { handleConsoleLog } from '../../actions'
 
-export function display(value: Value) {
+export function display(value: Value, location: any) {
   const output = toString(value)
   // TODO in 2019: fix this hack
   if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
-    ;(window as any).__REDUX_STORE__.dispatch(handleConsoleLog(output))
+    ;(window as any).__REDUX_STORE__.dispatch(handleConsoleLog(output, location))
   }
 }
 display.__SOURCE__ = 'display(a)'
@@ -20,15 +20,12 @@ export function error_message(value: Value) {
 error_message.__SOURCE__ = 'error(a)'
 
 // tslint:disable-next-line:no-any
-export function timed(this: any, f: Function) {
-  const self = this
-  const timerType = Date
-
-  return () => {
-    const start = timerType.now()
-    const result = f.apply(self, arguments)
-    const diff = timerType.now() - start
-    display('Duration: ' + Math.round(diff) + 'ms')
+export function timed(context: Context, f: Function, location: any) {
+  return (...args: any[]) => {
+    const start = runtime()
+    const result = f(...args)
+    const diff = runtime() - start
+    display('Duration: ' + Math.round(diff) + 'ms', location)
     return result
   }
 }

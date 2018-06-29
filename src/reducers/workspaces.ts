@@ -21,7 +21,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
-import { WorkspaceLocation } from '../actions/workspaces'
+import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { createContext } from '../slang'
 import {
   CodeOutput,
@@ -101,7 +101,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          context: createContext(state[location].sourceChapter)
+          context: createContext<WorkspaceLocation>(
+            state[location].sourceChapter,
+            undefined,
+            location
+          )
         }
       }
     case CHANGE_CHAPTER:
@@ -121,12 +125,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       if (lastOutput === undefined || lastOutput.type !== 'running') {
         newOutput = state[location].output.concat({
           type: 'running',
-          consoleLogs: [action.payload.log]
+          consoleLogs: [action.payload.logString]
         })
       } else {
         const updatedLastOutput = {
           type: lastOutput.type,
-          consoleLogs: lastOutput.consoleLogs.concat(action.payload.log)
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
         }
         newOutput = state[location].output.slice(0, -1).concat(updatedLastOutput)
       }
@@ -220,7 +224,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case RESET_ASSESSMENT_WORKSPACE:
       return {
         ...state,
-        assessment: createDefaultWorkspace()
+        assessment: createDefaultWorkspace(WorkspaceLocations.assessment)
       }
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {

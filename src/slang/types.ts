@@ -91,7 +91,7 @@ export interface TypeError extends SourceError {
   proof?: es.Node
 }
 
-export interface Context {
+export interface Context<T = any> {
   /** The source version used */
   chapter: number
 
@@ -111,6 +111,13 @@ export interface Context {
     frames: Frame[]
     nodes: es.Node[]
   }
+
+  /**
+   * Used for storing external properties.
+   * For e.g, this can be used to store some application-related
+   * context for use in your own built-in functions (like `display(a)`)
+   */
+  externalContext?: T
 }
 
 // tslint:disable:no-any
