@@ -15,7 +15,6 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     id: 0,
     maximumEXP: 3000,
     openAt: '2018-06-18T05:24:26.026Z',
-    order: 0,
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     title: 'An Odessey to Runes'
@@ -27,7 +26,6 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     id: 1,
     maximumEXP: 3000,
     openAt: '2018-07-18T05:24:26.026Z',
-    order: 1,
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     title: 'The Secret to Streams'
@@ -39,7 +37,6 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     id: 2,
     maximumEXP: 3000,
     openAt: '2018-07-18T05:24:26.026Z',
-    order: 2,
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     title: 'A sample Sidequest'
@@ -54,7 +51,6 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     id: 3,
     maximumEXP: 3000,
     openAt: '2007-07-18T05:24:26.026Z',
-    order: 5,
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     title: 'A closed Mission'
@@ -66,7 +62,6 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     id: 4,
     maximumEXP: 3000,
     openAt: '2007-07-18T05:24:26.026Z',
-    order: 4,
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     title: 'A closed sidequest'
