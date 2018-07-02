@@ -2,7 +2,7 @@ import { mount } from 'enzyme'
 import * as React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { mockAssessmentOverviews } from '../../../mocks/api'
+import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI'
 import { mockRouterProps } from '../../../mocks/components'
 import AssessmentListing, { IAssessmentListingProps } from '../AssessmentListing'
 import { AssessmentCategories } from '../assessmentShape'

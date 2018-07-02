@@ -6,7 +6,7 @@ import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
-import { mockAssessmentOverviews, mockAssessments } from '../mocks/api'
+import { mockAssessmentOverviews, mockAssessments } from '../mocks/assessmentAPI'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { IVLE_KEY } from '../utils/constants'
@@ -79,6 +79,16 @@ function* loginSaga(): SagaIterator {
     const callback = `${window.location.protocol}//${window.location.hostname}/academy`
     window.location.href = `${apiLogin}?apikey=${key}&url=${callback}`
     yield undefined
+  })
+
+  yield takeEvery(actionTypes.FETCH_TOKENS, function*(action) {
+    // TODO: use an API call to the backend; to retrieve access
+    // and refresh tokens using the IVLE token (in the action payload)
+    const tokens = yield call(() => ({
+      accessToken: 'ACC3SS T0K3N',
+      refreshToken: 'R3FRE5H T0K4N'
+    }))
+    yield put(actions.setTokens(tokens))
   })
 
   yield takeEvery(actionTypes.FETCH_USERNAME, function*() {

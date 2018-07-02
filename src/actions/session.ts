@@ -3,9 +3,9 @@ import { ActionCreator } from 'redux'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import * as actionTypes from './actionTypes'
 
-export const changeToken: ActionCreator<actionTypes.IAction> = (token: string) => ({
-  type: actionTypes.CHANGE_TOKEN,
-  payload: token
+export const fetchTokens: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
+  type: actionTypes.FETCH_TOKENS,
+  payload: ivleToken
 })
 
 export const fetchAnnouncements = () => ({
@@ -27,6 +27,17 @@ export const fetchUsername = () => ({
 
 export const login = () => ({
   type: actionTypes.LOGIN
+})
+
+export const setTokens: ActionCreator<actionTypes.IAction> = (
+  accessToken: string,
+  refreshToken: string
+) => ({
+  type: actionTypes.SET_TOKENS,
+  payload: {
+    accessToken,
+    refreshToken
+  }
 })
 
 export const setUsername: ActionCreator<actionTypes.IAction> = (username: string) => ({

@@ -3,7 +3,8 @@ import { HistoryHelper } from './utils/history'
 
 export interface ISavedState {
   historyHelper: HistoryHelper
-  token?: string
+  accessToken?: string
+  refreshToken?: string
   username?: string
 }
 
@@ -23,9 +24,10 @@ export const loadStoredState = (): ISavedState | undefined => {
 export const saveState = (state: IState) => {
   try {
     const stateToBeSaved: ISavedState = {
-      token: state.session.token,
-      username: state.session.username,
-      historyHelper: state.session.historyHelper
+      accessToken: state.session.accessToken,
+      historyHelper: state.session.historyHelper,
+      refreshToken: state.session.refreshToken,
+      username: state.session.username
     }
     const serialized = JSON.stringify(stateToBeSaved)
     localStorage.setItem('storedState', serialized)

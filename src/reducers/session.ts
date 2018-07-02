@@ -1,8 +1,8 @@
 import { Reducer } from 'redux'
 
 import {
-  CHANGE_TOKEN,
   IAction,
+  SET_TOKENS,
   SET_USERNAME,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
@@ -12,10 +12,11 @@ import { defaultSession, ISessionState } from './states'
 
 export const reducer: Reducer<ISessionState> = (state = defaultSession, action: IAction) => {
   switch (action.type) {
-    case CHANGE_TOKEN:
+    case SET_TOKENS:
       return {
         ...state,
-        token: action.payload
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken
       }
     case SET_USERNAME:
       return {
