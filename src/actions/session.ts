@@ -3,8 +3,8 @@ import { ActionCreator } from 'redux'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import * as actionTypes from './actionTypes'
 
-export const fetchToken: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
-  type: actionTypes.FETCH_TOKEN,
+export const fetchTokens: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
+  type: actionTypes.FETCH_TOKENS,
   payload: ivleToken
 })
 

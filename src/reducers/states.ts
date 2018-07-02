@@ -46,11 +46,12 @@ interface IWorkspaceState {
 }
 
 export interface ISessionState {
+  readonly accessToken?: string
   readonly assessmentOverviews?: IAssessmentOverview[]
   readonly assessments: Map<number, IAssessment>
   readonly announcements?: Announcement[]
   readonly historyHelper: HistoryHelper
-  readonly token?: string
+  readonly refreshToken?: string
   readonly username?: string
 }
 
@@ -165,7 +166,8 @@ export const defaultSession: ISessionState = {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
   },
-  token: undefined,
+  accessToken: undefined,
+  refreshToken: undefined,
   username: undefined
 }
 
