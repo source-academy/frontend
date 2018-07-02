@@ -6,6 +6,7 @@ import {
   SET_USERNAME,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
+  UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS
 } from '../actions/actionTypes'
 import { defaultSession, ISessionState } from './states'
@@ -48,6 +49,11 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
       return {
         ...state,
         assessments: newAssessments
+      }
+    case UPDATE_GRADING_OVERVIEWS:
+      return {
+        ...state,
+        gradingOverviews: action.payload
       }
     default:
       return state
