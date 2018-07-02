@@ -56,6 +56,17 @@ export interface ISessionState {
 }
 
 /**
+ * Information on a Grading, for a particular student submission
+ * for a particular assessment.
+ */
+export type GradingInfo = {
+  submissionId: number
+  studentId: number
+  assessmentId: number
+  xp: number
+}
+
+/**
  * An output while the program is still being run in the interpreter. As a
  * result, there are no return values or SourceErrors yet. However, there could
  * have been calls to display (console.log) that need to be printed out.

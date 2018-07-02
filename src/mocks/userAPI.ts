@@ -1,3 +1,6 @@
+import { GradingInfo } from '../reducers/states'
+
+
 export enum Roles {
   student = 'student',
   trainer = 'trainer',
@@ -65,19 +68,7 @@ export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null 
   }
 }
 
-/**
- * Information on a Grading, for a particular student submission
- * for a particular assessment.
- * TODO move this
- */
-export type GradingInfo = {
-  submissionId: number
-  studentId: number
-  assessmentId: number
-  xp: number
-}
-
-export const mockGradingInfo = [
+export const mockGradingInfo: GradingInfo[] = [
   {
     submissionId: 0,
     studentId: 0,

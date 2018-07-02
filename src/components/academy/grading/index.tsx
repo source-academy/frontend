@@ -1,16 +1,27 @@
 import { ColDef } from 'ag-grid'
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid/dist/styles/ag-grid.css';
-import 'ag-grid/dist/styles/ag-theme-balham.css';
+import 'ag-grid/dist/styles/ag-grid.css'; import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react'
+
+import { GradingInfo } from '../../../reducers/states'
 
 type State = {
   columnDefs: ColDef[]
   rowData: any[]
 }
 
-class App extends React.Component<{}, State> {
-  public constructor(props: any) {
+type GradingProps = DispatchProps & StateProps
+
+export type DispatchProps = {
+  handleFetchStudents: () => void
+}
+
+export type StateProps = {
+  gradings: GradingInfo[]
+}
+
+class Grading extends React.Component<GradingProps, State> {
+  public constructor(props: GradingProps) {
     super(props);
 
     this.state = {
@@ -26,6 +37,10 @@ class App extends React.Component<{}, State> {
         {make: "Porsche", model: "Boxter", price: 72000}
       ]
     }
+  }
+
+  public componentWillMount() {
+
   }
 
   public render() {
@@ -44,4 +59,4 @@ class App extends React.Component<{}, State> {
   }
 }
 
-export default App;
+export default Grading;
