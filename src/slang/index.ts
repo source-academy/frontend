@@ -30,13 +30,13 @@ export function runInContext(
   context: Context,
   options: Partial<IOptions> = {}
 ): Promise<Result> {
-  const theOptions: IOptions = { ...options, ...DEFAULT_OPTIONS }
+  const theOptions: IOptions = { ...DEFAULT_OPTIONS, ...options }
   context.errors = []
   const program = parse(code, context)
   if (program) {
     const it = evaluate(program, context)
     let scheduler: Scheduler
-    if (options.scheduler === 'async') {
+    if (theOptions.scheduler === 'async') {
       scheduler = new AsyncScheduler()
     } else {
       scheduler = new PreemptiveScheduler(theOptions.steps)
