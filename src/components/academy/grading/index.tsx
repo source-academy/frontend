@@ -1,3 +1,4 @@
+import { NonIdealState, Spinner } from '@blueprintjs/core'
 import { ColDef } from 'ag-grid'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid/dist/styles/ag-grid.css'; import 'ag-grid/dist/styles/ag-theme-balham.css';
@@ -44,6 +45,14 @@ class Grading extends React.Component<GradingProps, State> {
   }
 
   public render() {
+    if (this.props.gradingOverviews === undefined) {
+      return (
+        <NonIdealState
+          description="Fetching submissions..."
+          visual={<Spinner large={true} />}
+        />
+      )
+    }
     return (
       <div 
       className="ag-theme-balham"
