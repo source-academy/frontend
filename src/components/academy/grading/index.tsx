@@ -80,7 +80,6 @@ class Grading extends React.Component<GradingProps, State> {
           <AgGridReact
             gridAutoHeight={true}
             enableColResize={true}
-            suppressExcelExport={false}
             enableSorting={true}
             enableFilter={true}
             columnDefs={this.state.columnDefs}
