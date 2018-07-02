@@ -43,7 +43,7 @@ class Grading extends React.Component<GradingProps, State> {
         {headerName: "Current XP", field: "currentXP"},
         {headerName: "Maximum XP", field: "maximumXP"},
         {headerName: "Graded", field: "graded", cellRenderer: ({data}: {data: GradingOverview}) => {
-            return `<a href='${window.location.href}/${data.submissionId}'>${data.graded ? 'Done' : 'Not Graded'}</a>`
+            return `<a href='${window.location.origin}/academy/grading/${data.submissionId}'>${data.graded ? 'Done' : 'Not Graded'}</a>`
           }
         }
       ]
