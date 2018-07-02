@@ -13,7 +13,7 @@ type State = {
 type GradingProps = DispatchProps & StateProps
 
 export type DispatchProps = {
-  handleFetchGradingListing: () => void
+  handleFetchGradingOverviews: () => void
 }
 
 export type StateProps = {

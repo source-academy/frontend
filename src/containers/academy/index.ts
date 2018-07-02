@@ -13,8 +13,8 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      fetchTokens,
-      fetchUsername
+      handleFetchTokens: fetchTokens,
+      handleFetchUsername: fetchUsername
     },
     dispatch
   )
