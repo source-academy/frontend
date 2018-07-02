@@ -50,6 +50,7 @@ export interface ISessionState {
   readonly assessmentOverviews?: IAssessmentOverview[]
   readonly assessments: Map<number, IAssessment>
   readonly announcements?: Announcement[]
+  readonly gradingInfos?: GradingInfo[]
   readonly historyHelper: HistoryHelper
   readonly refreshToken?: string
   readonly username?: string

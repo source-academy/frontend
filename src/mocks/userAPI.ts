@@ -1,6 +1,5 @@
 import { GradingInfo } from '../reducers/states'
 
-
 export enum Roles {
   student = 'student',
   trainer = 'trainer',
