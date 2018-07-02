@@ -117,7 +117,7 @@ function* playgroundSaga(): SagaIterator {
 
 function* evalCode(code: string, context: Context, location: WorkspaceLocation) {
   const { result, interrupted } = yield race({
-    result: call(runInContext, code, context, { scheduler: 'async' }),
+    result: call(runInContext, code, context),
     interrupted: take(actionTypes.INTERRUPT_EXECUTION)
   })
   if (result) {
