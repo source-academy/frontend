@@ -34,7 +34,7 @@ const mockFetchRole = (accessToken: string): Role | null => {
  */
 export type StudentInfo = {
   id: number
-  totalXP: number 
+  totalXP: number
 }
 
 const mockStudentInfo = [
@@ -61,20 +61,19 @@ export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null 
   if (role === null || !permittedRoles.includes(role)) {
     return null
   } else {
-    return mockStudentInfo   
+    return mockStudentInfo
   }
 }
 
-
 /**
- * Information on a Grading, for a particular student submission 
+ * Information on a Grading, for a particular student submission
  * for a particular assessment.
- * TODO move this 
+ * TODO move this
  */
 export type GradingInfo = {
   submissionId: number
-  studentId: number 
-  assessmentId: number 
+  studentId: number
+  assessmentId: number
   xp: number
 }
 
@@ -100,7 +99,7 @@ export const mockGradingInfo = [
 ]
 
 /**
- * Mock for fetching a trainer/admin's student grading information. 
+ * Mock for fetching a trainer/admin's student grading information.
  * A null value is returned for invalid token or role.
  *
  * @param accessToken a valid access token for the cadet backend.
@@ -112,6 +111,6 @@ export const mockFetchGradingInfo = (accessToken: string): GradingInfo[] | null 
   if (role === null || !permittedRoles.includes(role)) {
     return null
   } else {
-    return mockGradingInfo   
+    return mockGradingInfo
   }
 }

@@ -16,7 +16,7 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
       return {
         ...state,
         accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken,
+        refreshToken: action.payload.refreshToken
       }
     case SET_USERNAME:
       return {
