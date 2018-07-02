@@ -29,6 +29,14 @@ export const login = () => ({
   type: actionTypes.LOGIN
 })
 
+export const setTokens: ActionCreator<actionTypes.IAction> = (accessToken: string, refreshToken: string) => ({
+  type: actionTypes.SET_USERNAME,
+  payload: {
+    accessToken,
+    refreshToken
+  }
+})
+
 export const setUsername: ActionCreator<actionTypes.IAction> = (username: string) => ({
   type: actionTypes.SET_USERNAME,
   payload: username
