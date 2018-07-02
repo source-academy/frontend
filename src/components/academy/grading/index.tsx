@@ -1,6 +1,6 @@
 import { NonIdealState, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid'
+import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid/dist/styles/ag-grid.css'; import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react'
@@ -29,6 +29,7 @@ export type StateProps = {
 
 class Grading extends React.Component<GradingProps, State> {
   private gridApi? : GridApi
+  private columnApi? : ColumnApi
 
   public constructor(props: GradingProps) {
     super(props);
@@ -68,6 +69,7 @@ class Grading extends React.Component<GradingProps, State> {
         <div className="ag-grid-parent ag-theme-balham">
           <AgGridReact
             gridAutoHeight={true}
+            enableColResize={true}
             suppressExcelExport={false}
             enableSorting={true}
             enableFilter={true}
@@ -85,6 +87,8 @@ class Grading extends React.Component<GradingProps, State> {
 
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
+    this.columnApi = params.columnApi;
+    this.columnApi.autoSizeAllColumns()
   }
 
   private exportCSV = () => {
