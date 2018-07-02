@@ -81,6 +81,16 @@ function* loginSaga(): SagaIterator {
     yield undefined
   })
 
+  yield takeEvery(actionTypes.FETCH_TOKENS, function*(action) {
+    // TODO: use an API call to the backend; to retrieve access
+    // and refresh tokens using the IVLE token (in the action payload)
+    const tokens = yield call(() => ({
+      accessToken: "ACC3SS T0K3N",
+      refreshToken: "R3FRE5H T0K4N",
+    }))
+    yield put(actions.setTokens(tokens))
+  })
+
   yield takeEvery(actionTypes.FETCH_USERNAME, function*() {
     // TODO: use an API call to the backend; an api call to IVLE raises an
     // uncaught error due to restrictive Access-Control-Allow-Origin headers,

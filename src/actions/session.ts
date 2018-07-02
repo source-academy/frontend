@@ -30,7 +30,7 @@ export const login = () => ({
 })
 
 export const setTokens: ActionCreator<actionTypes.IAction> = (accessToken: string, refreshToken: string) => ({
-  type: actionTypes.SET_USERNAME,
+  type: actionTypes.SET_TOKENS,
   payload: {
     accessToken,
     refreshToken
