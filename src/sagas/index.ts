@@ -42,7 +42,6 @@ function* apiFetchSaga(): SagaIterator {
     const gradingOverviews = yield call(() => mockGradingOverviews)
     yield put(actions.updateGradingOverviews(gradingOverviews))
   })
-
 }
 
 function* workspaceSaga(): SagaIterator {

@@ -72,34 +72,34 @@ export const mockGradingOverviews: GradingOverview[] = [
     submissionId: 0,
     studentId: 0,
     assessmentId: 0,
-    assessmentName: "Mission 0 ",
-    assessmentCategory: "Mission",
+    assessmentName: 'Mission 0 ',
+    assessmentCategory: 'Mission',
     currentXP: 69,
     graded: false,
     maximumXP: 100,
-    studentName: "Al Gorithm"
+    studentName: 'Al Gorithm'
   },
   {
     submissionId: 1,
     studentId: 0,
     assessmentId: 1,
-    assessmentName: "Mission 1",
-    assessmentCategory: "Mission",
+    assessmentName: 'Mission 1',
+    assessmentCategory: 'Mission',
     currentXP: 0,
     graded: false,
     maximumXP: 400,
-    studentName: "Dee Sign"
+    studentName: 'Dee Sign'
   },
   {
     submissionId: 2,
     studentId: 1,
     assessmentId: 0,
-    assessmentName: "Mission 0",
-    assessmentCategory: "Mission",
+    assessmentName: 'Mission 0',
+    assessmentCategory: 'Mission',
     currentXP: 1000,
     graded: true,
     maximumXP: 1000,
-    studentName: "May Trix"
+    studentName: 'May Trix'
   }
 ]
 

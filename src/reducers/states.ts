@@ -1,6 +1,10 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { Announcement } from '../components/Announcements'
-import { AssessmentCategory, IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
+import {
+  AssessmentCategory,
+  IAssessment,
+  IAssessmentOverview
+} from '../components/assessment/assessmentShape'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
