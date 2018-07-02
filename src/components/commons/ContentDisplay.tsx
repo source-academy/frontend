@@ -24,8 +24,4 @@ class ContentDisplay extends React.Component<IContentDisplayProps, {}> {
   }
 }
 
-// <div className="ContentDisplay row center-xs">
-//   <div className="col-xs-10">{this.props.display}</div>
-// </div>
-
 export default ContentDisplay

@@ -7,6 +7,7 @@ import * as React from 'react'
 
 import { GradingOverview } from '../../../reducers/states'
 import { controlButton } from '../../commons'
+import ContentDisplay from '../../commons/ContentDisplay'
 
 /**
  * Column Definitions are defined within the state, so that data 
@@ -50,38 +51,34 @@ class Grading extends React.Component<GradingProps, State> {
     }
   }
 
-  public componentWillMount() {
-    this.props.handleFetchGradingOverviews()
-  }
-
   public render() {
     if (this.props.gradingOverviews === undefined) {
-      return (
+      const loadingDisplay = (
         <NonIdealState
+          className='GradingListing'
           description="Fetching submissions..."
           visual={<Spinner large={true} />}
         />
       )
+      return <ContentDisplay loadContentDispatch={this.props.handleFetchGradingOverviews} display={loadingDisplay} />
     }
-    return (
-      <>
-      <div 
-      className="ag-theme-balham"
-      style={{ 
-        height: '500px', 
-          width: '600px' }} 
-      >
-      <AgGridReact
-        suppressExcelExport={false}
-        enableSorting={true}
-        enableFilter={true}
-        columnDefs={this.state.columnDefs}
-        onGridReady={this.onGridReady}
-        rowData={this.props.gradingOverviews} />
+    const grid = 
+    (
+      <div className='GradingListing'>
+        <div className="ag-grid-parent ag-theme-balham">
+          <AgGridReact
+            gridAutoHeight={true}
+            suppressExcelExport={false}
+            enableSorting={true}
+            enableFilter={true}
+            columnDefs={this.state.columnDefs}
+            onGridReady={this.onGridReady}
+            rowData={this.props.gradingOverviews} />
+        </div>
+        { controlButton('Export to CSV', IconNames.EXPORT, this.exportCSV)}
       </div>
-      { controlButton('Export to CSV', IconNames.EXPORT, this.exportCSV)}
-      </>
-    );
+    )
+    return <ContentDisplay loadContentDispatch={this.props.handleFetchGradingOverviews} display={grid} />
   }
 
   private onGridReady = (params: GridReadyEvent) => {
