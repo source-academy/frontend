@@ -6,7 +6,7 @@ import { Finished } from '../types'
 test('Empty code returns undefined', () => {
   const code = ''
   const context = mockContext()
-  const promise = runInContext(code, context)
+  const promise = runInContext(code, context, { scheduler: 'preemptive' })
   return promise.then(obj => {
     expect(obj).toMatchSnapshot()
     expect(obj.status).toBe('finished')
@@ -17,7 +17,7 @@ test('Empty code returns undefined', () => {
 test('Single string self-evaluates to itself', () => {
   const code = "'42';"
   const context = mockContext()
-  const promise = runInContext(code, context)
+  const promise = runInContext(code, context, { scheduler: 'preemptive' })
   return promise.then(obj => {
     expect(obj).toMatchSnapshot()
     expect(obj.status).toBe('finished')
@@ -28,7 +28,7 @@ test('Single string self-evaluates to itself', () => {
 test('Single number self-evaluates to itself', () => {
   const code = '42;'
   const context = mockContext()
-  const promise = runInContext(code, context)
+  const promise = runInContext(code, context, { scheduler: 'preemptive' })
   return promise.then(obj => {
     expect(obj).toMatchSnapshot()
     expect(obj.status).toBe('finished')
@@ -39,7 +39,7 @@ test('Single number self-evaluates to itself', () => {
 test('Single boolean self-evaluates to itself', () => {
   const code = 'true;'
   const context = mockContext()
-  const promise = runInContext(code, context)
+  const promise = runInContext(code, context, { scheduler: 'preemptive' })
   return promise.then(obj => {
     expect(obj).toMatchSnapshot()
     expect(obj.status).toBe('finished')
@@ -50,7 +50,7 @@ test('Single boolean self-evaluates to itself', () => {
 test('Arrow function definition returns itself', () => {
   const code = '() => 42;'
   const context = mockContext()
-  const promise = runInContext(code, context)
+  const promise = runInContext(code, context, { scheduler: 'preemptive' })
   return promise.then(obj => {
     expect(obj).toMatchSnapshot()
     expect(obj.status).toBe('finished')
@@ -64,7 +64,7 @@ test('Factorial arrow function', () => {
     fac(5);
   `
   const context = mockContext()
-  const promise = runInContext(code, context)
+  const promise = runInContext(code, context, { scheduler: 'preemptive' })
   return promise.then(obj => {
     expect(obj).toMatchSnapshot()
     expect(obj.status).toBe('finished')
@@ -75,7 +75,7 @@ test('Factorial arrow function', () => {
 test('parseError for missing semicolon', () => {
   const code = '42'
   const context = mockContext()
-  const promise = runInContext(code, context)
+  const promise = runInContext(code, context, { scheduler: 'preemptive' })
   return promise.then(obj => {
     const errors = parseError(context.errors)
     expect(errors).toMatchSnapshot()
@@ -87,7 +87,7 @@ test(
   () => {
     const code = '(x => x(x))(x => x(x));'
     const context = mockContext()
-    const promise = runInContext(code, context)
+    const promise = runInContext(code, context, { scheduler: 'preemptive' })
     return promise.then(obj => {
       const errors = parseError(context.errors)
       expect(errors).toMatchSnapshot()
@@ -104,7 +104,7 @@ test(
     f(list(1, 2 ));
   `
     const context = mockContext(2)
-    const promise = runInContext(code, context)
+    const promise = runInContext(code, context, { scheduler: 'preemptive' })
     return promise.then(obj => {
       const errors = parseError(context.errors)
       expect(errors).toMatchSnapshot()
@@ -121,7 +121,7 @@ test(
     f(0);
   `
     const context = mockContext()
-    const promise = runInContext(code, context)
+    const promise = runInContext(code, context, { scheduler: 'preemptive' })
     return promise.then(obj => {
       const errors = parseError(context.errors)
       expect(errors).toEqual(
