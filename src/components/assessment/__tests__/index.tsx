@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import { mockAssessments } from '../../../mocks/api'
+import { mockAssessments } from '../../../mocks/assessmentAPI'
 import Assessment, { AssessmentProps } from '../index'
 
 const defaultProps: AssessmentProps = {
