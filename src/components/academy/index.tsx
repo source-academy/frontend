@@ -10,6 +10,7 @@ import { isAcademyRe } from '../../reducers/session'
 import { HistoryHelper } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape'
+import Grading from './grading'
 import AcademyNavigationBar from './NavigationBar'
 
 interface IAcademyProps extends IDispatchProps, IOwnProps, IStateProps, RouteComponentProps<{}> {}
@@ -61,6 +62,7 @@ export const Academy: React.SFC<IAcademyProps> = props => (
         )}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.Sidequest)}
       />
+      <Route path="/academy/grading" component={Grading} />
       <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
       <Route component={redirectTo404} />
     </Switch>
