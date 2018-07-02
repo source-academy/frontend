@@ -21,6 +21,10 @@ export const fetchAssessmentOverviews = () => ({
   type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS
 })
 
+export const fetchGradingOverviews = () => ({
+  type: actionTypes.FETCH_GRADING_OVERVIEWS
+})
+
 export const fetchUsername = () => ({
   type: actionTypes.FETCH_USERNAME
 })
