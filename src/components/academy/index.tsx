@@ -20,7 +20,7 @@ export interface IDispatchProps {
 }
 
 export interface IOwnProps {
-  ivleToken?: string
+  token?: string
 }
 
 export interface IStateProps {
@@ -73,7 +73,7 @@ const checkLoggedIn = (props: IAcademyProps) => {
     props.fetchToken(ivleToken) // just received a callback from IVLE
     props.fetchUsername()
     return
-  } else if (props.ivleToken === undefined) {
+  } else if (props.token === undefined) {
     return <Route component={redirectToLogin} />
   } else {
     return

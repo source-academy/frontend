@@ -10,13 +10,13 @@ import NotFound from './NotFound'
 
 export interface IApplicationProps extends RouteComponentProps<{}> {
   title: string
-  ivleToken?: string
+  token?: string
   username?: string
 }
 
 const Application: React.SFC<IApplicationProps> = props => {
   const redirectToNews = () => <Redirect to="/news" />
-  const toAcademy = () => <Academy ivleToken={props.ivleToken} />
+  const toAcademy = () => <Academy token={props.token} />
 
   return (
     <div className="Application">
