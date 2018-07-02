@@ -3,7 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid/dist/styles/ag-grid.css'; import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react'
 
-import { GradingInfo } from '../../../reducers/states'
+import { GradingOverview } from '../../../reducers/states'
 
 type State = {
   columnDefs: ColDef[]
@@ -13,11 +13,11 @@ type State = {
 type GradingProps = DispatchProps & StateProps
 
 export type DispatchProps = {
-  handleFetchStudents: () => void
+  handleFetchGradingListing: () => void
 }
 
 export type StateProps = {
-  gradings: GradingInfo[]
+  gradingOverviews: GradingOverview[]
 }
 
 class Grading extends React.Component<GradingProps, State> {

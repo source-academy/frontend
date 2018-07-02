@@ -50,7 +50,7 @@ export interface ISessionState {
   readonly assessmentOverviews?: IAssessmentOverview[]
   readonly assessments: Map<number, IAssessment>
   readonly announcements?: Announcement[]
-  readonly gradingInfos?: GradingInfo[]
+  readonly gradingOverviews?: GradingOverview[]
   readonly historyHelper: HistoryHelper
   readonly refreshToken?: string
   readonly username?: string
@@ -60,7 +60,7 @@ export interface ISessionState {
  * Information on a Grading, for a particular student submission
  * for a particular assessment.
  */
-export type GradingInfo = {
+export type GradingOverview = {
   submissionId: number
   studentId: number
   assessmentId: number

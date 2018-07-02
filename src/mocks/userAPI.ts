@@ -1,4 +1,4 @@
-import { GradingInfo } from '../reducers/states'
+import { GradingOverview } from '../reducers/states'
 
 export enum Roles {
   student = 'student',
@@ -67,7 +67,7 @@ export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null 
   }
 }
 
-export const mockGradingInfo: GradingInfo[] = [
+export const mockGradingOverviews: GradingOverview[] = [
   {
     submissionId: 0,
     studentId: 0,
@@ -94,13 +94,13 @@ export const mockGradingInfo: GradingInfo[] = [
  *
  * @param accessToken a valid access token for the cadet backend.
  */
-export const mockFetchGradingInfo = (accessToken: string): GradingInfo[] | null => {
+export const mockFetchGradingOverview = (accessToken: string): GradingOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
   const role: Role | null = mockFetchRole(accessToken)
   if (role === null || !permittedRoles.includes(role)) {
     return null
   } else {
-    return mockGradingInfo
+    return mockGradingOverviews
   }
 }
