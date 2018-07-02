@@ -75,10 +75,12 @@ class Grading extends React.Component<GradingProps, State> {
             onGridReady={this.onGridReady}
             rowData={this.props.gradingOverviews} />
         </div>
-        { controlButton('Export to CSV', IconNames.EXPORT, this.exportCSV)}
+        <div className='ag-grid-export-button'>
+          { controlButton('Export to CSV', IconNames.EXPORT, this.exportCSV) }
+        </div>
       </div>
     )
-    return <ContentDisplay loadContentDispatch={this.props.handleFetchGradingOverviews} display={grid} />
+    return <ContentDisplay loadContentDispatch={this.props.handleFetchGradingOverviews} display={grid} fullWidth={true}/>
   }
 
   private onGridReady = (params: GridReadyEvent) => {
