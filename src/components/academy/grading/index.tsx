@@ -41,7 +41,7 @@ class Grading extends React.Component<GradingProps, State> {
   }
 
   public componentWillMount() {
-
+    this.props.handleFetchGradingOverviews()
   }
 
   public render() {
