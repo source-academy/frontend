@@ -17,7 +17,7 @@ export type DispatchProps = {
 }
 
 export type StateProps = {
-  gradingOverviews: GradingOverview[]
+  gradingOverviews?: GradingOverview[]
 }
 
 class Grading extends React.Component<GradingProps, State> {
