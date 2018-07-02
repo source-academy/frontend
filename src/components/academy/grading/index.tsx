@@ -40,10 +40,10 @@ class Grading extends React.Component<GradingProps, State> {
         {headerName: "Assessment Category", field: "assessmentCategory"},
         {headerName: "Student ID", field: "studentId"},
         {headerName: "Student Name", field: "studentName"},
-        {headerName: "Current XP", field: "xp"},
-        {headerName: "Maximum XP", field: "max_xp"},
+        {headerName: "Current XP", field: "currentXP"},
+        {headerName: "Maximum XP", field: "maximumXP"},
         {headerName: "Graded", field: "graded", cellRenderer: ({data}: {data: GradingOverview}) => {
-            return `<a href='${window.location.href}/${data.submissionId}'>${data.xp ? 'Done' : 'Not Graded'}</a>`
+            return `<a href='${window.location.href}/${data.submissionId}'>${data.graded ? 'Done' : 'Not Graded'}</a>`
           }
         }
       ]

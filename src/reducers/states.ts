@@ -1,6 +1,6 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { Announcement } from '../components/Announcements'
-import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
+import { AssessmentCategory, IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
@@ -61,10 +61,15 @@ export interface ISessionState {
  * for a particular assessment.
  */
 export type GradingOverview = {
-  submissionId: number
-  studentId: number
   assessmentId: number
-  xp: number
+  assessmentName: string
+  assessmentCategory: AssessmentCategory
+  currentXP: number
+  graded: boolean
+  maximumXP: number
+  studentId: number
+  studentName: string
+  submissionId: number
 }
 
 /**
