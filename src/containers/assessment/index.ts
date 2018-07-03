@@ -4,11 +4,11 @@ import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchAssessmentOverviews } from '../../actions/session'
 import { resetAssessmentWorkspace, updateCurrentAssessmentId } from '../../actions/workspaces'
-import AssessmentListing, {
+import Assessment, {
   IDispatchProps,
   IOwnProps,
   IStateProps
-} from '../../components/assessment/AssessmentListing'
+} from '../../components/assessment'
 import { IAssessmentOverview } from '../../components/assessment/assessmentShape'
 import { IState } from '../../reducers/states'
 
@@ -35,4 +35,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     dispatch
   )
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AssessmentListing))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Assessment))

@@ -15,7 +15,7 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from '../../actions'
-import Assessment, { DispatchProps, OwnProps, StateProps } from '../../components/assessment'
+import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from '../../components/assessment/AssessmentWorkspace'
 import { IState } from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
@@ -53,4 +53,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(Assessment)
+export default connect(mapStateToProps, mapDispatchToProps)(AssessmentWorkspace)
