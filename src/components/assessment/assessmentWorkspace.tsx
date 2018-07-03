@@ -16,7 +16,7 @@ import {
   QuestionTypes
 } from './assessmentShape'
 
-export type AssessmentProps = DispatchProps & OwnProps & StateProps
+export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
 
 export type StateProps = {
   activeTab: number
@@ -48,7 +48,7 @@ export type DispatchProps = {
   handleSideContentHeightChange: (heightChange: number) => void
 }
 
-class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
+class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, { showOverlay: boolean }> {
   public state = { showOverlay: false }
 
   public componentWillMount() {
@@ -117,8 +117,8 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
   }
 
   /** Pre-condition: IAssessment has been loaded */
-  private sideContentProps: (p: AssessmentProps) => SideContentProps = (
-    props: AssessmentProps
+  private sideContentProps: (p: AssessmentWorkspaceProps) => SideContentProps = (
+    props: AssessmentWorkspaceProps
   ) => ({
     activeTab: 0,
     handleChangeActiveTab: (aT: number) => {},
@@ -137,7 +137,7 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
   })
 
   /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (p: AssessmentProps) => ControlBarProps = (props: AssessmentProps) => {
+  private controlBarProps: (p: AssessmentWorkspaceProps) => ControlBarProps = (props: AssessmentWorkspaceProps) => {
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
     const assessmentPath = listingPath + `/${this.props.assessment!.id.toString()}`
     return {
@@ -163,4 +163,4 @@ class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean
   }
 }
 
-export default Assessment
+export default AssessmentWorkspace

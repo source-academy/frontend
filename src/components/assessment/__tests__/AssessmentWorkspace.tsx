@@ -2,9 +2,9 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import { mockAssessments } from '../../../mocks/assessmentAPI'
-import AssessmentWorkspace, { AssessmentProps } from '../AssessmentWorkspace'
+import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace'
 
-const defaultProps: AssessmentProps = {
+const defaultProps: AssessmentWorkspaceProps = {
   activeTab: 0,
   assessmentId: 0,
   editorWidth: '50%',
@@ -25,38 +25,38 @@ const defaultProps: AssessmentProps = {
   replValue: ''
 }
 
-const mockUndefinedAssessmentProps: AssessmentProps = {
+const mockUndefinedAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps
 }
 
-const mockProgrammingAssessmentProps: AssessmentProps = {
+const mockProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessment: mockAssessments[0],
   assessmentId: 0,
   questionId: 0
 }
 
-const mockMcqAssessmentProps: AssessmentProps = {
+const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessment: mockAssessments[0],
   assessmentId: 0,
   questionId: 2
 }
 
-test('Assessment page "loading" content renders correctly', () => {
-  const app = <AssessmentWorkspace {...mockUndefinedAssessmentProps} />
+test('AssessmentWorkspace page "loading" content renders correctly', () => {
+  const app = <AssessmentWorkspace {...mockUndefinedAssessmentWorkspaceProps} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
-test('Assessment page with programming question renders correctly', () => {
-  const app = <AssessmentWorkspace {...mockProgrammingAssessmentProps} />
+test('AssessmentWorkspace page with programming question renders correctly', () => {
+  const app = <AssessmentWorkspace {...mockProgrammingAssessmentWorkspaceProps} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
-test('Assessment page with MCQ question renders correctly', () => {
-  const app = <AssessmentWorkspace {...mockMcqAssessmentProps} />
+test('AssessmentWorkspace page with MCQ question renders correctly', () => {
+  const app = <AssessmentWorkspace {...mockMcqAssessmentWorkspaceProps} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
