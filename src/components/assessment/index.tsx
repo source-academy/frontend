@@ -10,7 +10,7 @@ import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmen
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
-export interface IAssessmentParams {
+export interface IAssessmentWorkspaceParams {
   assessmentId?: string
   questionId?: string
 }
@@ -18,7 +18,7 @@ export interface IAssessmentParams {
 export interface IAssessmentListingProps
   extends IDispatchProps,
     IOwnProps,
-    RouteComponentProps<IAssessmentParams>,
+    RouteComponentProps<IAssessmentWorkspaceParams>,
     IStateProps {}
 
 export interface IDispatchProps {
