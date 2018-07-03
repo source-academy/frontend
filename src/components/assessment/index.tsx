@@ -38,6 +38,10 @@ export interface IStateProps {
 }
 
 class Assessment extends React.Component<IAssessmentProps, {}> {
+  /**
+   * If the current AssessmentId/QuestionId has changed, update it
+   * in the store and reset the workspace.
+   */
   public componentWillMount() {
     const assessmentId = stringParamToInt(this.props.match.params.assessmentId)
     const questionId = stringParamToInt(this.props.match.params.questionId)

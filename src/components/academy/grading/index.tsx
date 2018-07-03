@@ -8,7 +8,7 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 
 import { GradingOverview } from '../../../reducers/states'
-import { IAssessmentWorkspaceParams } from '../../assessment'
+import { stringParamToInt } from '../../../utils/paramParseHelpers'
 import { controlButton } from '../../commons'
 import ContentDisplay from '../../commons/ContentDisplay'
 
@@ -20,7 +20,12 @@ type State = {
   columnDefs: ColDef[]
 }
 
-interface IGradingProps extends IDispatchProps, IStateProps, RouteComponentProps<IAssessmentWorkspaceParams> {}
+interface IGradingProps extends IDispatchProps, IStateProps, RouteComponentProps<IGradingWorkspaceParams> {}
+
+export interface IGradingWorkspaceParams {
+  submissionId?: string,
+  questionId?: string
+}
 
 export interface IDispatchProps {
   handleFetchGradingOverviews: () => void
@@ -59,8 +64,25 @@ class Grading extends React.Component<IGradingProps, State> {
       ]
     }
   }
-
+  
   public render() {
+    const submissionId: number | null = stringParamToInt(this.props.match.params.submissionId)
+    // default questionId is 0 (the first question)
+    const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0
+
+    // TODO flip the logic, make the display then pass to contentdisp
+    if (submissionId !== null) {
+      const props: GradingWorkspaceProps = {
+        submissionId,
+        questionId
+      }
+      return <GradingWorkspaceContainer {...props} />
+    }
+
+    /** 
+     * Try to render Grading Listing since 
+     * no URL parameters were found 
+     */
     if (this.props.gradingOverviews === undefined) {
       const loadingDisplay = (
         <NonIdealState
