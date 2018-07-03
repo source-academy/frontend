@@ -8,7 +8,6 @@ export interface IAssessmentOverview {
   id: number
   maximumEXP: number
   openAt: string
-  order: number
   shortSummary: string
   title: string
 }

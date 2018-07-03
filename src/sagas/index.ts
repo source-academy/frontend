@@ -7,6 +7,7 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/assessmentAPI'
+import { mockGradingOverviews } from '../mocks/userAPI'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { IVLE_KEY } from '../utils/constants'
@@ -35,6 +36,11 @@ function* apiFetchSaga(): SagaIterator {
     if (newContent !== oldContent) {
       yield put(actions.updateAssessment(newContent))
     }
+  })
+
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
+    const gradingOverviews = yield call(() => mockGradingOverviews)
+    yield put(actions.updateGradingOverviews(gradingOverviews))
   })
 }
 

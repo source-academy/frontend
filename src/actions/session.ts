@@ -1,6 +1,7 @@
 import { ActionCreator } from 'redux'
 
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
+import { GradingOverview } from '../reducers/states'
 import * as actionTypes from './actionTypes'
 
 export const fetchTokens: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
@@ -19,6 +20,10 @@ export const fetchAssessment = (id: number) => ({
 
 export const fetchAssessmentOverviews = () => ({
   type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS
+})
+
+export const fetchGradingOverviews = () => ({
+  type: actionTypes.FETCH_GRADING_OVERVIEWS
 })
 
 export const fetchUsername = () => ({
@@ -58,4 +63,9 @@ export const updateAssessmentOverviews = (overviews: IAssessmentOverview[]) => (
 export const updateAssessment = (assessment: IAssessment) => ({
   type: actionTypes.UPDATE_ASSESSMENT,
   payload: assessment
+})
+
+export const updateGradingOverviews = (overviews: GradingOverview[]) => ({
+  type: actionTypes.UPDATE_GRADING_OVERVIEWS,
+  payload: overviews
 })

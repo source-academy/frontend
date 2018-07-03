@@ -17,3 +17,19 @@
     padding: 0.5rem 0 0 0;
   }
 }
+
+.GradingListing {
+  /* To show the table borders that get cut out by a Card  */
+  padding: 1px;
+  /** 
+   *  To prevent misalignment of column header and content 
+   *  for large displays. This effectively flushes the content left.
+   *  See https://github.com/source-academy/cadet-frontend/pull/148
+   */
+  .ag-body-container {
+    display: block;
+  }
+  .ag-grid-export-button {
+    margin-top: 20px;
+  }
+}

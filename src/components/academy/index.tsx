@@ -1,9 +1,9 @@
 /* tslint:disable: jsx-no-lambda */
-
 import * as qs from 'query-string'
 import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
+import Grading from '../../containers/academy/grading'
 import AssessmentListingContainer from '../../containers/assessment/AssessmentListingContainer'
 import Game from '../../containers/GameContainer'
 import { isAcademyRe } from '../../reducers/session'
@@ -15,8 +15,8 @@ import AcademyNavigationBar from './NavigationBar'
 interface IAcademyProps extends IDispatchProps, IOwnProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IDispatchProps {
-  fetchTokens: (ivleToken: string) => void
-  fetchUsername: () => void
+  handleFetchTokens: (ivleToken: string) => void
+  handleFetchUsername: () => void
 }
 
 export interface IOwnProps {
@@ -61,6 +61,7 @@ export const Academy: React.SFC<IAcademyProps> = props => (
         )}/${assessmentRegExp}`}
         render={assessmentListingRenderFactory(AssessmentCategories.Sidequest)}
       />
+      <Route path="/academy/grading" component={Grading} />
       <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
       <Route component={redirectTo404} />
     </Switch>
@@ -70,8 +71,8 @@ export const Academy: React.SFC<IAcademyProps> = props => (
 const checkLoggedIn = (props: IAcademyProps) => {
   const ivleToken = qs.parse(props.location.search).token
   if (ivleToken !== undefined) {
-    props.fetchTokens(ivleToken) // just received a callback from IVLE
-    props.fetchUsername()
+    props.handleFetchTokens(ivleToken) // just received a callback from IVLE
+    props.handleFetchUsername()
     return
   } else if (props.accessToken === undefined) {
     return <Route component={redirectToLogin} />

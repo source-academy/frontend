@@ -2,7 +2,7 @@
   height: 100%;
   width: 100%;
 
-  .row {
+  &.row {
     margin-right: 0px;
     margin-left: 0px;
   }
@@ -10,6 +10,7 @@
   .contentdisplay-content-parent {
     margin-top: 20px;
     margin-bottom: 20px;
+    padding: 0px;
 
     .contentdisplay-content {
       background-color: white;

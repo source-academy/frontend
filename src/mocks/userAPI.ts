@@ -1,3 +1,5 @@
+import { GradingOverview } from '../reducers/states'
+
 export enum Roles {
   student = 'student',
   trainer = 'trainer',
@@ -65,36 +67,39 @@ export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null 
   }
 }
 
-/**
- * Information on a Grading, for a particular student submission
- * for a particular assessment.
- * TODO move this
- */
-export type GradingInfo = {
-  submissionId: number
-  studentId: number
-  assessmentId: number
-  xp: number
-}
-
-export const mockGradingInfo = [
+export const mockGradingOverviews: GradingOverview[] = [
   {
     submissionId: 0,
     studentId: 0,
     assessmentId: 0,
-    xp: 69
+    assessmentName: 'Mission 0 ',
+    assessmentCategory: 'Mission',
+    currentXP: 69,
+    graded: false,
+    maximumXP: 100,
+    studentName: 'Al Gorithm'
   },
   {
     submissionId: 1,
     studentId: 0,
     assessmentId: 1,
-    xp: 0
+    assessmentName: 'Mission 1',
+    assessmentCategory: 'Mission',
+    currentXP: 0,
+    graded: false,
+    maximumXP: 400,
+    studentName: 'Dee Sign'
   },
   {
     submissionId: 2,
     studentId: 1,
     assessmentId: 0,
-    xp: 1000
+    assessmentName: 'Mission 0',
+    assessmentCategory: 'Mission',
+    currentXP: 1000,
+    graded: true,
+    maximumXP: 1000,
+    studentName: 'May Trix'
   }
 ]
 
@@ -104,13 +109,13 @@ export const mockGradingInfo = [
  *
  * @param accessToken a valid access token for the cadet backend.
  */
-export const mockFetchGradingInfo = (accessToken: string): GradingInfo[] | null => {
+export const mockFetchGradingOverview = (accessToken: string): GradingOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
   const role: Role | null = mockFetchRole(accessToken)
   if (role === null || !permittedRoles.includes(role)) {
     return null
   } else {
-    return mockGradingInfo
+    return mockGradingOverviews
   }
 }

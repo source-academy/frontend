@@ -45,6 +45,16 @@ const NavigationBar: React.SFC<{}> = () => (
         <div className="navbar-button-text hidden-xs">Contests</div>
       </NavLink>
     </NavbarGroup>
+    <NavbarGroup align={Alignment.RIGHT}>
+      <NavLink
+        to={`/academy/grading`}
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+      >
+        <Icon icon={IconNames.ENDORSED} />
+        <div className="navbar-button-text hidden-xs">Grading</div>
+      </NavLink>
+    </NavbarGroup>
   </Navbar>
 )
 
