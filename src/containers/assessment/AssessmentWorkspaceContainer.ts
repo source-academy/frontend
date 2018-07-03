@@ -15,7 +15,11 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from '../../actions'
-import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from '../../components/assessment/AssessmentWorkspace'
+import AssessmentWorkspace, {
+  DispatchProps,
+  OwnProps,
+  StateProps
+} from '../../components/assessment/AssessmentWorkspace'
 import { IState } from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {

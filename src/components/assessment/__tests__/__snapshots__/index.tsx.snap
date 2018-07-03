@@ -3,8 +3,8 @@
 exports[`Assessment page "loading" content renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <AssessmentListing assessmentCategory=\\"Mission\\" assessmentOverviews={[undefined]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleResetAssessmentWorkspace={[Function: handleResetAssessmentWorkspace]} handleUpdateCurrentAssessmentId={[Function: handleUpdateCurrentAssessmentId]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
-      <div className=\\"AssessmentListing\\">
+    <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={[undefined]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleResetAssessmentWorkspace={[Function: handleResetAssessmentWorkspace]} handleUpdateCurrentAssessmentId={[Function: handleUpdateCurrentAssessmentId]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <div className=\\"Assessment\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
@@ -37,7 +37,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
           </div>
         </ContentDisplay>
       </div>
-    </AssessmentListing>
+    </Assessment>
   </Router>
 </MemoryRouter>"
 `;
@@ -45,8 +45,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
 exports[`Assessment page with 0 missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <AssessmentListing assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleResetAssessmentWorkspace={[Function: handleResetAssessmentWorkspace]} handleUpdateCurrentAssessmentId={[Function: handleUpdateCurrentAssessmentId]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
-      <div className=\\"AssessmentListing\\">
+    <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleResetAssessmentWorkspace={[Function: handleResetAssessmentWorkspace]} handleUpdateCurrentAssessmentId={[Function: handleUpdateCurrentAssessmentId]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <div className=\\"Assessment\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
@@ -77,7 +77,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
           </div>
         </ContentDisplay>
       </div>
-    </AssessmentListing>
+    </Assessment>
   </Router>
 </MemoryRouter>"
 `;
@@ -85,8 +85,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
 exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <AssessmentListing assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleResetAssessmentWorkspace={[Function: handleResetAssessmentWorkspace]} handleUpdateCurrentAssessmentId={[Function: handleUpdateCurrentAssessmentId]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
-      <div className=\\"AssessmentListing\\">
+    <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleResetAssessmentWorkspace={[Function: handleResetAssessmentWorkspace]} handleUpdateCurrentAssessmentId={[Function: handleUpdateCurrentAssessmentId]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <div className=\\"Assessment\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
@@ -445,7 +445,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
           </div>
         </ContentDisplay>
       </div>
-    </AssessmentListing>
+    </Assessment>
   </Router>
 </MemoryRouter>"
 `;

@@ -48,7 +48,10 @@ export type DispatchProps = {
   handleSideContentHeightChange: (heightChange: number) => void
 }
 
-class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, { showOverlay: boolean }> {
+class AssessmentWorkspace extends React.Component<
+  AssessmentWorkspaceProps,
+  { showOverlay: boolean }
+> {
   public state = { showOverlay: false }
 
   public componentWillMount() {
@@ -137,7 +140,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, { sh
   })
 
   /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (p: AssessmentWorkspaceProps) => ControlBarProps = (props: AssessmentWorkspaceProps) => {
+  private controlBarProps: (p: AssessmentWorkspaceProps) => ControlBarProps = (
+    props: AssessmentWorkspaceProps
+  ) => {
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
     const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`
     return {
