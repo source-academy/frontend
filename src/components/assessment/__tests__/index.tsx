@@ -2,12 +2,12 @@ import { mount } from 'enzyme'
 import * as React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import Assessment, { IAssessmentListingProps } from '../'
+import Assessment, { IAssessmentProps } from '../'
 import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI'
 import { mockRouterProps } from '../../../mocks/components'
 import { AssessmentCategories } from '../assessmentShape'
 
-const defaultProps: IAssessmentListingProps = {
+const defaultProps: IAssessmentProps = {
   assessmentCategory: AssessmentCategories.Mission,
   assessmentOverviews: undefined,
   handleAssessmentOverviewFetch: () => {},
@@ -16,17 +16,17 @@ const defaultProps: IAssessmentListingProps = {
   ...mockRouterProps('/academy/missions', {})
 }
 
-const mockUndefinedAssessmentListing: IAssessmentListingProps = {
+const mockUndefinedAssessment: IAssessmentProps = {
   ...defaultProps,
   assessmentOverviews: undefined
 }
 
-const mockEmptyAssessmentListing: IAssessmentListingProps = {
+const mockEmptyAssessment: IAssessmentProps = {
   ...defaultProps,
   assessmentOverviews: []
 }
 
-const mockPresentAssessmentListing: IAssessmentListingProps = {
+const mockPresentAssessment: IAssessmentProps = {
   ...defaultProps,
   assessmentOverviews: mockAssessmentOverviews
 }
@@ -34,7 +34,7 @@ const mockPresentAssessmentListing: IAssessmentListingProps = {
 test('Assessment page "loading" content renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
-      <Assessment {...mockUndefinedAssessmentListing} />
+      <Assessment {...mockUndefinedAssessment} />
     </MemoryRouter>
   )
   const tree = mount(app)
@@ -44,7 +44,7 @@ test('Assessment page "loading" content renders correctly', () => {
 test('Assessment page with 0 missions renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
-      <Assessment {...mockEmptyAssessmentListing} />
+      <Assessment {...mockEmptyAssessment} />
     </MemoryRouter>
   )
   const tree = mount(app)
@@ -54,7 +54,7 @@ test('Assessment page with 0 missions renders correctly', () => {
 test('Assessment page with multiple loaded missions renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
-      <Assessment {...mockPresentAssessmentListing} />
+      <Assessment {...mockPresentAssessment} />
     </MemoryRouter>
   )
   const tree = mount(app)

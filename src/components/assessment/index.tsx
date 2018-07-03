@@ -15,7 +15,7 @@ export interface IAssessmentWorkspaceParams {
   questionId?: string
 }
 
-export interface IAssessmentListingProps
+export interface IAssessmentProps
   extends IDispatchProps,
     IOwnProps,
     RouteComponentProps<IAssessmentWorkspaceParams>,
@@ -37,7 +37,7 @@ export interface IStateProps {
   storedQuestionId?: number
 }
 
-class AssessmentListing extends React.Component<IAssessmentListingProps, {}> {
+class AssessmentListing extends React.Component<IAssessmentProps, {}> {
   public componentWillMount() {
     const assessmentId = stringParamToInt(this.props.match.params.assessmentId)
     const questionId = stringParamToInt(this.props.match.params.questionId)
