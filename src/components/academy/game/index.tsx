@@ -2,16 +2,18 @@ import * as React from 'react'
 
 import story from './game.js'
 
-interface IGameProps {
-  canvas?: HTMLCanvasElement
+type GameProps = DispatchProps & StateProps
+
+export type DispatchProps = {
   handleSaveCanvas: (c: HTMLCanvasElement) => void
 }
 
-export type DispatchProps = Pick<IGameProps, 'handleSaveCanvas'>
+export type StateProps = {
+  canvas?: HTMLCanvasElement
+  storyAct: string
+}
 
-export type StateProps = Pick<IGameProps, 'canvas'>
-
-export class Game extends React.Component<IGameProps, {}> {
+export class Game extends React.Component<GameProps, {}> {
   private canvas: HTMLCanvasElement
   private div: HTMLDivElement
 
@@ -29,7 +31,7 @@ export class Game extends React.Component<IGameProps, {}> {
      * react, but it also prevents excessive loading of the game
      */
     if (this.props.canvas === undefined) {
-      story(this.div, this.canvas, 'mission-1')
+      story(this.div, this.canvas, this.props.storyAct)
       this.props.handleSaveCanvas(this.canvas)
     } else {
       this.div.innerHTML = ''
