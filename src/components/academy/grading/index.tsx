@@ -62,7 +62,7 @@ class Grading extends React.Component<GradingProps, State> {
     if (this.props.gradingOverviews === undefined) {
       const loadingDisplay = (
         <NonIdealState
-          className="GradingListing"
+          className="Grading"
           description="Fetching submissions..."
           visual={<Spinner large={true} />}
         />
@@ -75,7 +75,7 @@ class Grading extends React.Component<GradingProps, State> {
       )
     }
     const grid = (
-      <div className="GradingListing">
+      <div className="Grading">
         <div className="ag-grid-parent ag-theme-balham">
           <AgGridReact
             gridAutoHeight={true}
