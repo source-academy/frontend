@@ -2,7 +2,7 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import { mockAssessments } from '../../../mocks/assessmentAPI'
-import Assessment, { AssessmentProps } from '../index'
+import AssessmentWorkspace, { AssessmentProps } from '../AssessmentWorkspace'
 
 const defaultProps: AssessmentProps = {
   activeTab: 0,
@@ -44,19 +44,19 @@ const mockMcqAssessmentProps: AssessmentProps = {
 }
 
 test('Assessment page "loading" content renders correctly', () => {
-  const app = <Assessment {...mockUndefinedAssessmentProps} />
+  const app = <AssessmentWorkspace {...mockUndefinedAssessmentProps} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
 test('Assessment page with programming question renders correctly', () => {
-  const app = <Assessment {...mockProgrammingAssessmentProps} />
+  const app = <AssessmentWorkspace {...mockProgrammingAssessmentProps} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
 test('Assessment page with MCQ question renders correctly', () => {
-  const app = <Assessment {...mockMcqAssessmentProps} />
+  const app = <AssessmentWorkspace {...mockMcqAssessmentProps} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })

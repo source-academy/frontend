@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router'
 
 import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI'
 import { mockRouterProps } from '../../../mocks/components'
-import AssessmentListing, { IAssessmentListingProps } from '../AssessmentListing'
+import Assessment, { IAssessmentListingProps } from '../'
 import { AssessmentCategories } from '../assessmentShape'
 
 const defaultProps: IAssessmentListingProps = {
@@ -31,30 +31,30 @@ const mockPresentAssessmentListing: IAssessmentListingProps = {
   assessmentOverviews: mockAssessmentOverviews
 }
 
-test('AssessmentListing page "loading" content renders correctly', () => {
+test('Assessment page "loading" content renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
-      <AssessmentListing {...mockUndefinedAssessmentListing} />
+      <Assessment {...mockUndefinedAssessmentListing} />
     </MemoryRouter>
   )
   const tree = mount(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
-test('AssessmentListing page with 0 missions renders correctly', () => {
+test('Assessment page with 0 missions renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
-      <AssessmentListing {...mockEmptyAssessmentListing} />
+      <Assessment {...mockEmptyAssessmentListing} />
     </MemoryRouter>
   )
   const tree = mount(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
-test('AssessmentListing page with multiple loaded missions renders correctly', () => {
+test('Assessment page with multiple loaded missions renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
-      <AssessmentListing {...mockPresentAssessmentListing} />
+      <Assessment {...mockPresentAssessmentListing} />
     </MemoryRouter>
   )
   const tree = mount(app)
