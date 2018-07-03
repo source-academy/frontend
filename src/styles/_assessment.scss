@@ -1,20 +1,21 @@
-.Assessment {
+.AssessmentWorkspace {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.mission-briefing {
+.assessment-briefing {
   padding-bottom: 0;
-  .mission-briefing-button {
+  .assessment-briefing-button {
     margin-top: 1rem;
   }
 }
 
-.AssessmentListing {
+.Assessment {
   color: $cadet-color-3;
   .listing {
     background-color: $cadet-color-5;
+    margin: 0px;
     text-align: justify;
   }
 }

@@ -1,166 +1,145 @@
-import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs/core'
+import { Button, Card, Icon, Intent, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
+import { RouteComponentProps } from 'react-router'
+import { NavLink } from 'react-router-dom'
 
-import { InterpreterOutput } from '../../reducers/states'
-import { history } from '../../utils/history'
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
-import Workspace, { WorkspaceProps } from '../workspace'
-import { ControlBarProps } from '../workspace/ControlBar'
-import { SideContentProps } from '../workspace/side-content'
-import {
-  IAssessment,
-  IMCQQuestion,
-  IProgrammingQuestion,
-  IQuestion,
-  QuestionTypes
-} from './assessmentShape'
+import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
+import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
+import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape'
+import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
+import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
-export type AssessmentProps = DispatchProps & OwnProps & StateProps
-
-export type StateProps = {
-  activeTab: number
-  assessment?: IAssessment
-  editorValue?: string
-  editorWidth: string
-  isRunning: boolean
-  output: InterpreterOutput[]
-  replValue: string
-  sideContentHeight?: number
+export interface IAssessmentWorkspaceParams {
+  assessmentId?: string
+  questionId?: string
 }
 
-export type OwnProps = {
-  assessmentId: number
-  questionId: number
+export interface IAssessmentProps
+  extends IDispatchProps,
+    IOwnProps,
+    RouteComponentProps<IAssessmentWorkspaceParams>,
+    IStateProps {}
+
+export interface IDispatchProps {
+  handleAssessmentOverviewFetch: () => void
+  handleResetAssessmentWorkspace: () => void
+  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
 }
 
-export type DispatchProps = {
-  handleAssessmentFetch: (assessmentId: number) => void
-  handleChangeActiveTab: (activeTab: number) => void
-  handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleEditorEval: () => void
-  handleEditorValueChange: (val: string) => void
-  handleEditorWidthChange: (widthChange: number) => void
-  handleInterruptEval: () => void
-  handleReplEval: () => void
-  handleReplOutputClear: () => void
-  handleReplValueChange: (newValue: string) => void
-  handleSideContentHeightChange: (heightChange: number) => void
+export interface IOwnProps {
+  assessmentCategory: AssessmentCategory
 }
 
-class Assessment extends React.Component<AssessmentProps, { showOverlay: boolean }> {
-  public state = { showOverlay: false }
+export interface IStateProps {
+  assessmentOverviews?: IAssessmentOverview[]
+  storedAssessmentId?: number
+  storedQuestionId?: number
+}
 
+class Assessment extends React.Component<IAssessmentProps, {}> {
   public componentWillMount() {
-    this.props.handleAssessmentFetch(this.props.assessmentId)
-    if (this.props.questionId === 0) {
-      this.setState({ showOverlay: true })
+    const assessmentId = stringParamToInt(this.props.match.params.assessmentId)
+    const questionId = stringParamToInt(this.props.match.params.questionId)
+    if (assessmentId === null || questionId === null) {
+      return
+    }
+
+    if (
+      this.props.storedAssessmentId !== assessmentId ||
+      this.props.storedQuestionId !== questionId
+    ) {
+      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
+      this.props.handleResetAssessmentWorkspace()
     }
   }
 
   public render() {
-    if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
-      return (
-        <NonIdealState
-          className="Assessment pt-dark"
-          description="Getting mission ready..."
-          visual={<Spinner large={true} />}
-        />
-      )
-    }
-    const overlay = (
-      <Dialog className="mission-briefing" isOpen={this.state.showOverlay}>
-        <Card>
-          <Text> {this.props.assessment.longSummary} </Text>
-          <Button
-            className="mission-briefing-button"
-            // tslint:disable-next-line jsx-no-lambda
-            onClick={() => this.setState({ showOverlay: false })}
-            text="Continue"
+    const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId)
+    // default questionId is 0 (the first question)
+    const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0
+
+    // if there is no assessmentId specified, Render only information.
+    if (assessmentId === null) {
+      const props: IContentDisplayProps = {
+        display: (
+          <AssessmentOverviewCard
+            assessmentOverviews={this.props.assessmentOverviews}
+            questionId={questionId}
           />
-        </Card>
-      </Dialog>
-    )
-    const question: IQuestion = this.props.assessment.questions[this.props.questionId]
-    const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props),
-      editorProps:
-        question.type === QuestionTypes.programming
-          ? {
-              editorValue:
-                this.props.editorValue !== undefined
-                  ? this.props.editorValue
-                  : (question as IProgrammingQuestion).solutionTemplate,
-              handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange
-            }
-          : undefined,
-      editorWidth: this.props.editorWidth,
-      handleEditorWidthChange: this.props.handleEditorWidthChange,
-      handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      mcq: question as IMCQQuestion,
-      sideContentHeight: this.props.sideContentHeight,
-      sideContentProps: this.sideContentProps(this.props),
-      replProps: {
-        output: this.props.output,
-        replValue: this.props.replValue,
-        handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        ),
+        loadContentDispatch: this.props.handleAssessmentOverviewFetch
       }
-    }
-    return (
-      <div className="Assessment pt-dark">
-        {overlay}
-        <Workspace {...workspaceProps} />
-      </div>
-    )
-  }
-
-  /** Pre-condition: IAssessment has been loaded */
-  private sideContentProps: (p: AssessmentProps) => SideContentProps = (
-    props: AssessmentProps
-  ) => ({
-    activeTab: 0,
-    handleChangeActiveTab: (aT: number) => {},
-    tabs: [
-      {
-        label: `Task ${props.questionId}`,
-        icon: IconNames.NINJA,
-        body: <Text> {props.assessment!.questions[props.questionId].content} </Text>
-      },
-      {
-        label: `${props.assessment!.category} Briefing`,
-        icon: IconNames.BRIEFCASE,
-        body: <Text> {props.assessment!.longSummary} </Text>
+      return (
+        <div className="Assessment">
+          <ContentDisplay {...props} />
+        </div>
+      )
+    } else {
+      const props: AssessmentProps = {
+        assessmentId,
+        questionId
       }
-    ]
-  })
-
-  /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (p: AssessmentProps) => ControlBarProps = (props: AssessmentProps) => {
-    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
-    const assessmentPath = listingPath + `/${this.props.assessment!.id.toString()}`
-    return {
-      handleChapterSelect: this.props.handleChapterSelect,
-      handleEditorEval: this.props.handleEditorEval,
-      handleInterruptEval: this.props.handleInterruptEval,
-      handleReplEval: this.props.handleReplEval,
-      handleReplOutputClear: this.props.handleReplOutputClear,
-      hasChapterSelect: false,
-      hasNextButton: this.props.questionId < this.props.assessment!.questions.length - 1,
-      hasPreviousButton: this.props.questionId > 0,
-      hasSaveButton: true,
-      hasShareButton: false,
-      hasSubmitButton: this.props.questionId === this.props.assessment!.questions.length - 1,
-      isRunning: this.props.isRunning,
-      onClickNext: () =>
-        history.push(assessmentPath + `/${(this.props.questionId + 1).toString()}`),
-      onClickPrevious: () =>
-        history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
-      onClickSubmit: () => history.push(listingPath),
-      sourceChapter: 2 // TODO dynamic library changing
+      return <AssessmentWorkspaceContainer {...props} />
     }
   }
+}
+
+interface IAssessmentOverviewCardProps {
+  assessmentOverviews?: IAssessmentOverview[]
+  questionId: number
+}
+
+export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = props => {
+  const questionId = props.questionId === undefined ? 0 : props.questionId
+  if (props.assessmentOverviews === undefined) {
+    return <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
+  } else if (props.assessmentOverviews.length === 0) {
+    return <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
+  }
+  const cards = props.assessmentOverviews.map((overview, index) => (
+    <div key={index}>
+      <Card className="row listing">
+        <div className="col-xs-3 listing-picture">PICTURE</div>
+        <div className="col-xs-9 listing-text">
+          <div className="row listing-title">
+            <h4>{overview.title}</h4>
+          </div>
+          <div className="row listing-order">
+            <h6>Mission 0 : 123123 XP (hardcoded)</h6>
+          </div>
+          <div className="row listing-description">
+            <p className="col-xs-12">{overview.shortSummary}</p>
+          </div>
+          <div className="row between-xs middle-xs listing-controls">
+            <div className="col-xs-8 listing-due-date-parent">
+              <Text className="listing-due-date">
+                <Icon className="listing-due-icon" iconSize={14} icon={IconNames.TIME} />
+                Due: 12/12/12
+              </Text>
+            </div>
+            <div className="col-xs">
+              <NavLink
+                to={`/academy/${assessmentCategoryLink(
+                  overview.category
+                )}/${overview.id.toString()}/${questionId.toString()}`}
+              >
+                <Button
+                  className="listing-skip-button"
+                  minimal={true}
+                  intent={Intent.PRIMARY}
+                  icon={IconNames.FLAME}
+                >
+                  Skip Story & Attempt
+                </Button>
+              </NavLink>
+            </div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  ))
+  return <>{cards}</>
 }
 
 export default Assessment

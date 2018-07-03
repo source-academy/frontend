@@ -1,62 +1,62 @@
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import * as React from 'react'
+import { MemoryRouter } from 'react-router'
 
-import { mockAssessments } from '../../../mocks/assessmentAPI'
-import Assessment, { AssessmentProps } from '../index'
+import Assessment, { IAssessmentProps } from '../'
+import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI'
+import { mockRouterProps } from '../../../mocks/components'
+import { AssessmentCategories } from '../assessmentShape'
 
-const defaultProps: AssessmentProps = {
-  activeTab: 0,
-  assessmentId: 0,
-  editorWidth: '50%',
-  handleAssessmentFetch: (assessmentId: number) => {},
-  handleChangeActiveTab: (activeTab: number) => {},
-  handleChapterSelect: (chapter: any, changeEvent: any) => {},
-  handleEditorEval: () => {},
-  handleEditorValueChange: (val: string) => {},
-  handleEditorWidthChange: (widthChange: number) => {},
-  handleInterruptEval: () => {},
-  handleReplEval: () => {},
-  handleReplOutputClear: () => {},
-  handleReplValueChange: (newValue: string) => {},
-  handleSideContentHeightChange: (heightChange: number) => {},
-  isRunning: false,
-  output: [],
-  questionId: 0,
-  replValue: ''
+const defaultProps: IAssessmentProps = {
+  assessmentCategory: AssessmentCategories.Mission,
+  assessmentOverviews: undefined,
+  handleAssessmentOverviewFetch: () => {},
+  handleResetAssessmentWorkspace: () => {},
+  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => {},
+  ...mockRouterProps('/academy/missions', {})
 }
 
-const mockUndefinedAssessmentProps: AssessmentProps = {
-  ...defaultProps
-}
-
-const mockProgrammingAssessmentProps: AssessmentProps = {
+const mockUndefinedAssessment: IAssessmentProps = {
   ...defaultProps,
-  assessment: mockAssessments[0],
-  assessmentId: 0,
-  questionId: 0
+  assessmentOverviews: undefined
 }
 
-const mockMcqAssessmentProps: AssessmentProps = {
+const mockEmptyAssessment: IAssessmentProps = {
   ...defaultProps,
-  assessment: mockAssessments[0],
-  assessmentId: 0,
-  questionId: 2
+  assessmentOverviews: []
+}
+
+const mockPresentAssessment: IAssessmentProps = {
+  ...defaultProps,
+  assessmentOverviews: mockAssessmentOverviews
 }
 
 test('Assessment page "loading" content renders correctly', () => {
-  const app = <Assessment {...mockUndefinedAssessmentProps} />
-  const tree = shallow(app)
+  const app = (
+    <MemoryRouter initialEntries={['/unknown']}>
+      <Assessment {...mockUndefinedAssessment} />
+    </MemoryRouter>
+  )
+  const tree = mount(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
-test('Assessment page with programming question renders correctly', () => {
-  const app = <Assessment {...mockProgrammingAssessmentProps} />
-  const tree = shallow(app)
+test('Assessment page with 0 missions renders correctly', () => {
+  const app = (
+    <MemoryRouter initialEntries={['/unknown']}>
+      <Assessment {...mockEmptyAssessment} />
+    </MemoryRouter>
+  )
+  const tree = mount(app)
   expect(tree.debug()).toMatchSnapshot()
 })
 
-test('Assessment page with MCQ question renders correctly', () => {
-  const app = <Assessment {...mockMcqAssessmentProps} />
-  const tree = shallow(app)
+test('Assessment page with multiple loaded missions renders correctly', () => {
+  const app = (
+    <MemoryRouter initialEntries={['/unknown']}>
+      <Assessment {...mockPresentAssessment} />
+    </MemoryRouter>
+  )
+  const tree = mount(app)
   expect(tree.debug()).toMatchSnapshot()
 })
