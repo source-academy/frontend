@@ -2,9 +2,9 @@ import { mount } from 'enzyme'
 import * as React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import Assessment, { IAssessmentListingProps } from '../'
 import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI'
 import { mockRouterProps } from '../../../mocks/components'
-import Assessment, { IAssessmentListingProps } from '../'
 import { AssessmentCategories } from '../assessmentShape'
 
 const defaultProps: IAssessmentListingProps = {

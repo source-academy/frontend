@@ -6,9 +6,8 @@ import { NavLink } from 'react-router-dom'
 
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
-import { OwnProps as AssessmentProps } from '../assessment'
-import { AssessmentCategory } from '../assessment/assessmentShape'
-import { IAssessmentOverview } from '../assessment/assessmentShape'
+import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape'
+import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
 export interface IAssessmentParams {
