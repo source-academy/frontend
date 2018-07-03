@@ -62,18 +62,18 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, { sh
     if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
       return (
         <NonIdealState
-          className="Assessment pt-dark"
+          className="AssessmentWorkspace pt-dark"
           description="Getting mission ready..."
           visual={<Spinner large={true} />}
         />
       )
     }
     const overlay = (
-      <Dialog className="mission-briefing" isOpen={this.state.showOverlay}>
+      <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
         <Card>
           <Text> {this.props.assessment.longSummary} </Text>
           <Button
-            className="mission-briefing-button"
+            className="assessment-briefing-button"
             // tslint:disable-next-line jsx-no-lambda
             onClick={() => this.setState({ showOverlay: false })}
             text="Continue"
@@ -109,7 +109,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, { sh
       }
     }
     return (
-      <div className="Assessment pt-dark">
+      <div className="AssessmentWorkspace pt-dark">
         {overlay}
         <Workspace {...workspaceProps} />
       </div>

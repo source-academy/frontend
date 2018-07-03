@@ -37,7 +37,7 @@ export interface IStateProps {
   storedQuestionId?: number
 }
 
-class AssessmentListing extends React.Component<IAssessmentProps, {}> {
+class Assessment extends React.Component<IAssessmentProps, {}> {
   public componentWillMount() {
     const assessmentId = stringParamToInt(this.props.match.params.assessmentId)
     const questionId = stringParamToInt(this.props.match.params.questionId)
@@ -71,7 +71,7 @@ class AssessmentListing extends React.Component<IAssessmentProps, {}> {
         loadContentDispatch: this.props.handleAssessmentOverviewFetch
       }
       return (
-        <div className="AssessmentListing">
+        <div className="Assessment">
           <ContentDisplay {...props} />
         </div>
       )
@@ -142,4 +142,4 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
   return <>{cards}</>
 }
 
-export default AssessmentListing
+export default Assessment
