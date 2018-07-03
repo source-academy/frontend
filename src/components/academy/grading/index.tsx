@@ -5,8 +5,10 @@ import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid/dist/styles/ag-grid.css'
 import 'ag-grid/dist/styles/ag-theme-balham.css'
 import * as React from 'react'
+import { RouteComponentProps } from 'react-router'
 
 import { GradingOverview } from '../../../reducers/states'
+import { IAssessmentWorkspaceParams } from '../../assessment'
 import { controlButton } from '../../commons'
 import ContentDisplay from '../../commons/ContentDisplay'
 
@@ -18,21 +20,21 @@ type State = {
   columnDefs: ColDef[]
 }
 
-type GradingProps = DispatchProps & StateProps
+interface IGradingProps extends IDispatchProps, IStateProps, RouteComponentProps<IAssessmentWorkspaceParams> {}
 
-export type DispatchProps = {
+export interface IDispatchProps {
   handleFetchGradingOverviews: () => void
 }
 
-export type StateProps = {
+export interface IStateProps {
   gradingOverviews?: GradingOverview[]
 }
 
-class Grading extends React.Component<GradingProps, State> {
+class Grading extends React.Component<IGradingProps, State> {
   private gridApi?: GridApi
   private columnApi?: ColumnApi
 
-  public constructor(props: GradingProps) {
+  public constructor(props: IGradingProps) {
     super(props)
 
     this.state = {
