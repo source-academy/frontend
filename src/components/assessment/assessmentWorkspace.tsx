@@ -139,7 +139,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, { sh
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentWorkspaceProps) => ControlBarProps = (props: AssessmentWorkspaceProps) => {
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
-    const assessmentPath = listingPath + `/${this.props.assessment!.id.toString()}`
+    const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`
     return {
       handleChapterSelect: this.props.handleChapterSelect,
       handleEditorEval: this.props.handleEditorEval,
@@ -154,9 +154,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, { sh
       hasSubmitButton: this.props.questionId === this.props.assessment!.questions.length - 1,
       isRunning: this.props.isRunning,
       onClickNext: () =>
-        history.push(assessmentPath + `/${(this.props.questionId + 1).toString()}`),
+        history.push(assessmentWorkspacePath + `/${(this.props.questionId + 1).toString()}`),
       onClickPrevious: () =>
-        history.push(assessmentPath + `/${(this.props.questionId - 1).toString()}`),
+        history.push(assessmentWorkspacePath + `/${(this.props.questionId - 1).toString()}`),
       onClickSubmit: () => history.push(listingPath),
       sourceChapter: 2 // TODO dynamic library changing
     }
