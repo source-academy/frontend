@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import Grading from '../../containers/academy/grading'
-import AssessmentListingContainer from '../../containers/assessment/AssessmentListingContainer'
+import AssessmentContainer from '../../containers/assessment'
 import Game from '../../containers/GameContainer'
 import { isAcademyRe } from '../../reducers/session'
 import { HistoryHelper } from '../../utils/history'
@@ -27,9 +27,9 @@ export interface IStateProps {
   historyHelper: HistoryHelper
 }
 
-const assessmentListingRenderFactory = (cat: AssessmentCategory) => (
+const assessmentRenderFactory = (cat: AssessmentCategory) => (
   routerProps: RouteComponentProps<any>
-) => <AssessmentListingContainer assessmentCategory={cat} />
+) => <AssessmentContainer assessmentCategory={cat} />
 
 const assessmentRegExp = ':assessmentId(\\d+)?/:questionId(\\d+)?'
 
@@ -42,24 +42,24 @@ export const Academy: React.SFC<IAcademyProps> = props => (
         path={`/academy/${assessmentCategoryLink(
           AssessmentCategories.Contest
         )}/${assessmentRegExp}`}
-        render={assessmentListingRenderFactory(AssessmentCategories.Contest)}
+        render={assessmentRenderFactory(AssessmentCategories.Contest)}
       />
       <Route path="/academy/game" component={Game} />
       <Route
         path={`/academy/${assessmentCategoryLink(
           AssessmentCategories.Mission
         )}/${assessmentRegExp}`}
-        render={assessmentListingRenderFactory(AssessmentCategories.Mission)}
+        render={assessmentRenderFactory(AssessmentCategories.Mission)}
       />
       <Route
         path={`/academy/${assessmentCategoryLink(AssessmentCategories.Path)}/${assessmentRegExp}`}
-        render={assessmentListingRenderFactory(AssessmentCategories.Path)}
+        render={assessmentRenderFactory(AssessmentCategories.Path)}
       />
       <Route
         path={`/academy/${assessmentCategoryLink(
           AssessmentCategories.Sidequest
         )}/${assessmentRegExp}`}
-        render={assessmentListingRenderFactory(AssessmentCategories.Sidequest)}
+        render={assessmentRenderFactory(AssessmentCategories.Sidequest)}
       />
       <Route path="/academy/grading" component={Grading} />
       <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
