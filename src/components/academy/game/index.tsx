@@ -29,7 +29,7 @@ export class Game extends React.Component<IGameProps, {}> {
      * react, but it also prevents excessive loading of the game
      */
     if (this.props.canvas === undefined) {
-      story(this.div, this.canvas)
+      story(this.div, this.canvas, 'mission-1')
       this.props.handleSaveCanvas(this.canvas)
     } else {
       this.div.innerHTML = ''
