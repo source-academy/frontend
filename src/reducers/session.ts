@@ -53,7 +53,7 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
       }
     case UPDATE_GRADING:
       const newGradings = new Map(state.gradings)
-      newGradings.set(action.payload.submissionId, action.payload)
+      newGradings.set(action.payload.submissionId, action.payload.grading)
       return {
         ...state,
         gradings: newGradings
