@@ -94,7 +94,7 @@ function* loginSaga(): SagaIterator {
     // TODO: use an API call to the backend; to retrieve access
     // and refresh tokens using the IVLE token (in the action payload)
     const tokens = yield call(() => ({
-      accessToken: 'TRAINER_ACCESS_TOKEN',
+      accessToken: 'TRAINER_ACCESS_TOKEN', // Used to mock a role
       refreshToken: 'R3FRE5H T0K4N'
     }))
     yield put(actions.setTokens(tokens))

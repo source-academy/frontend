@@ -73,7 +73,7 @@ export const mockAssessmentOverviews = [
   ...mockClosedAssessmentOverviews
 ]
 
-const mockLibrary: Library = {
+export const mockLibrary: Library = {
   chapter: 1,
   externals: ['mockLibraryExternal'],
   files: ['mockLibraryFile'],

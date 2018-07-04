@@ -31,15 +31,21 @@ export type GradingQuestion = {
   maximumXP: number,
   grade: {
     xp: number,
-    comment: "string"
+    comment: string
   }
 }
 
+/**
+ * A Question to be shown when a trainer is 
+ * grading a submission. This means that 
+ * either of (library & solutionTemplate) xor (choices) must 
+ * be present, and either of (solution) xor (answer) must be present.
+ */
 interface IAnsweredQuestion extends IQuestion {
-  solution: number,
-  answer: string | number
-  library: Library
-  solutionTemplate: string
-  choices: MCQChoice[]
+  solution?: number,
+  answer?: string | number
+  library?: Library
+  solutionTemplate?: string
+  choices?: MCQChoice[]
 }
 
