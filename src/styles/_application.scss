@@ -1,11 +1,8 @@
-html {
+.Application {
   background-size: cover;
-  background-image: url('#{$images-path}/academy_background.png');
+  background-image: url('#{$images-path}/academy_background.jpg');
   background-repeat: no-repeat;
   background-attachment: fixed;
-}
-
-.Application {
   height: 100vh;
   display: flex;
   flex-direction: column;
