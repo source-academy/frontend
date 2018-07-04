@@ -1,4 +1,4 @@
-import { GradingOverview } from '../reducers/states'
+import { GradingOverview } from '../components/academy/grading/gradingShape'
 
 export enum Roles {
   student = 'student',

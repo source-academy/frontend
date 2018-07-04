@@ -2,7 +2,6 @@ import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { GradingOverview } from '../components/academy/grading/gradingShape'
 import { Announcement } from '../components/Announcements'
 import {
-  AssessmentCategory,
   IAssessment,
   IAssessmentOverview
 } from '../components/assessment/assessmentShape'
