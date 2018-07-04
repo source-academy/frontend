@@ -62,30 +62,29 @@ class Assessment extends React.Component<IAssessmentProps, {}> {
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId)
     // default questionId is 0 (the first question)
     const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0
-
-    // if there is no assessmentId specified, Render only information.
-    if (assessmentId === null) {
-      const props: IContentDisplayProps = {
-        display: (
-          <AssessmentOverviewCard
-            assessmentOverviews={this.props.assessmentOverviews}
-            questionId={questionId}
-          />
-        ),
-        loadContentDispatch: this.props.handleAssessmentOverviewFetch
-      }
-      return (
-        <div className="Assessment">
-          <ContentDisplay {...props} />
-        </div>
-      )
-    } else {
-      const props: AssessmentProps = {
+    if (assessmentId !== null) {
+      const assessmentProps: AssessmentProps = {
         assessmentId,
         questionId
       }
-      return <AssessmentWorkspaceContainer {...props} />
+      return <AssessmentWorkspaceContainer {...assessmentProps} />
     }
+
+    // if there is no assessmentId specified, Render only information.
+    const displayProps: IContentDisplayProps = {
+      display: (
+        <AssessmentOverviewCard
+          assessmentOverviews={this.props.assessmentOverviews}
+          questionId={questionId}
+        />
+      ),
+      loadContentDispatch: this.props.handleAssessmentOverviewFetch
+    }
+    return (
+      <div className="Assessment">
+        <ContentDisplay {...displayProps} />
+      </div>
+    )
   }
 }
 
