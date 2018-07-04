@@ -7,7 +7,7 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/assessmentAPI'
-import { mockFetchGradingOverview } from '../mocks/gradingAPI'
+import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { IVLE_KEY } from '../utils/constants'
@@ -47,10 +47,10 @@ function* apiFetchSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
-    const submissionId = (action as IAction).payload
+    const submissionId = (action as actionTypes.IAction).payload
     const accessToken = yield select((state: IState) => state.session.accessToken)
     const grading = yield call(() => mockFetchGrading(accessToken, submissionId))
-    if (gradingOverviews !== null) {
+    if (grading !== null) {
       yield put(actions.updateGrading(grading))
     }
   })

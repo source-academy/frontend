@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux'
 
-import { GradingOverview } from '../components/academy/grading/gradingShape'
+import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import * as actionTypes from './actionTypes'
 
@@ -73,4 +73,9 @@ export const updateAssessment = (assessment: IAssessment) => ({
 export const updateGradingOverviews = (overviews: GradingOverview[]) => ({
   type: actionTypes.UPDATE_GRADING_OVERVIEWS,
   payload: overviews
+})
+
+export const updateGrading = (grading: Grading) => ({
+  type: actionTypes.UPDATE_GRADING,
+  payload: grading
 })
