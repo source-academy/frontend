@@ -129,6 +129,8 @@ $code-color-error: #ff4444;
         height: 100%;
         padding: 0.4rem 0.6rem 0.4rem 0.6rem;
         margin: 0 0.5rem 0 0;
+        /* For react-mde editor (grading comments) */
+        overflow: scroll; 
 
         .side-content-text {
           height: 100%;
