@@ -1,25 +1,25 @@
-import { Button, Card, NonIdealState, Spinner, Text } from '@blueprintjs/core'
+import { NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import { InterpreterOutput } from '../../reducers/states'
-import { history } from '../../utils/history'
-import Workspace, { WorkspaceProps } from '../workspace'
-import { ControlBarProps } from '../workspace/ControlBar'
-import { SideContentProps } from '../workspace/side-content'
+import { InterpreterOutput } from '../../../reducers/states'
+import { history } from '../../../utils/history'
 import {
-  // TODO Grading,
-  IMCQQuestion,
-  IProgrammingQuestion,
-  IQuestion,
-  QuestionTypes
-} from './assessmentShape'
+IMCQQuestion,
+IProgrammingQuestion
+} from '../../assessment/assessmentShape'
+import Workspace, { WorkspaceProps } from '../../workspace'
+import { ControlBarProps } from '../../workspace/ControlBar'
+import { SideContentProps } from '../../workspace/side-content'
+import {
+Grading
+} from './gradingShape'
 
 export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps
 
 export type StateProps = {
   activeTab: number
-  // TODO grading?: Grading
+  grading?: Grading
   editorValue?: string
   editorWidth: string
   isRunning: boolean
@@ -34,7 +34,7 @@ export type OwnProps = {
 }
 
 export type DispatchProps = {
-  // TODO handleSubmissionFetch: (assessmentId: number) => void
+  handleGradingFetch: (submissionId: number) => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
   handleEditorEval: () => void
@@ -48,13 +48,9 @@ export type DispatchProps = {
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
-  public state = { showOverlay: false }
 
   public componentWillMount() {
-    this.props.handleAssessmentFetch(this.props.assessmentId)
-    if (this.props.questionId === 0) {
-      this.setState({ showOverlay: true })
-    }
+    this.props.handleGradingFetch(this.props.submissionId)
   }
 
   public render() {
@@ -67,6 +63,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         />
       )
     }
+
     /* Get the question to be graded */
     const question: IQuestion = this.props.grading[this.props.questionId]
     const workspaceProps: WorkspaceProps = {
@@ -103,7 +100,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     )
   }
 
-  /** TODO Pre-condition: Grading has been loaded */
+  /** Pre-condition: Grading has been loaded */
   private sideContentProps: (p: GradingWorkspaceProps) => SideContentProps = (
     props: GradingWorkspaceProps
   ) => ({
@@ -113,13 +110,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       {
         label: `Grading: Question ${props.questionId}`,
         icon: IconNames.NINJA,
-        // TODO
+        // TODO add grading component here
         body: <Text> {props.grading![props.questionId].content} </Text>
       }
     ]
   })
 
-  /** TODO Pre-condition: Grading has been loaded */
+  /** Pre-condition: Grading has been loaded */
   private controlBarProps: (p: GradingWorkspaceProps) => ControlBarProps = (
     props: GradingWorkspaceProps
   ) => {
