@@ -75,7 +75,7 @@ class Grading extends React.Component<IGradingProps, State> {
     // default questionId is 0 (the first question)
     const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0
 
-    // TODO flip the logic, make the display then pass to contentdisp
+    /* Create a workspace to grade a submission. */
     if (submissionId !== null) {
       const props: GradingWorkspaceProps = {
         submissionId,
@@ -84,25 +84,15 @@ class Grading extends React.Component<IGradingProps, State> {
       return <GradingWorkspaceContainer {...props} />
     }
 
-    /**
-     * Try to render Grading Listing since
-     * no URL parameters were found
-     */
-    if (this.props.gradingOverviews === undefined) {
-      const loadingDisplay = (
+    /* Display either a loading screen or a table with overviews. */
+    const loadingDisplay = 
+      (
         <NonIdealState
           className="Grading"
           description="Fetching submissions..."
           visual={<Spinner large={true} />}
         />
       )
-      return (
-        <ContentDisplay
-          loadContentDispatch={this.props.handleFetchGradingOverviews}
-          display={loadingDisplay}
-        />
-      )
-    }
     const grid = (
       <div className="Grading">
         <div className="ag-grid-parent ag-theme-balham">
@@ -124,7 +114,7 @@ class Grading extends React.Component<IGradingProps, State> {
     return (
       <ContentDisplay
         loadContentDispatch={this.props.handleFetchGradingOverviews}
-        display={grid}
+        display={this.props.gradingOverviews === undefined ? loadingDisplay : grid }
         fullWidth={true}
       />
     )
