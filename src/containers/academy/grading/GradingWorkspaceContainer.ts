@@ -31,7 +31,7 @@ const location: WorkspaceLocation = 'assessment'
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
-    // TODO add to state for fetching.  submission: state.session.submissions.get(props.submissionId),
+    grading: state.session.gradings.get(props.submissionId),
     editorValue: state.workspaces.assessment.editorValue,
     isRunning: state.workspaces.assessment.isRunning,
     activeTab: state.workspaces.assessment.sideContentActiveTab,

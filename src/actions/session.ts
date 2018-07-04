@@ -75,7 +75,14 @@ export const updateGradingOverviews = (overviews: GradingOverview[]) => ({
   payload: overviews
 })
 
-export const updateGrading = (grading: Grading) => ({
+/**
+ * An extra id parameter is included here because of 
+ * no id for Grading.
+ */
+export const updateGrading = (submissionId: number, grading: Grading) => ({
   type: actionTypes.UPDATE_GRADING,
-  payload: grading
+  payload: {
+    submissionId,
+    grading
+  }
 })

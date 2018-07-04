@@ -51,7 +51,7 @@ function* apiFetchSaga(): SagaIterator {
     const accessToken = yield select((state: IState) => state.session.accessToken)
     const grading = yield call(() => mockFetchGrading(accessToken, submissionId))
     if (grading !== null) {
-      yield put(actions.updateGrading(grading))
+      yield put(actions.updateGrading(submissionId, grading))
     }
   })
 }
