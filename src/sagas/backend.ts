@@ -10,7 +10,6 @@ function* backendSaga(): SagaIterator {
     const ivleToken = (action as actionTypes.IAction).payload
     const resp = yield call(request, 'auth', {
       method: 'POST',
-      credentials: 'include',
       body: JSON.stringify({ login: { ivle_token: ivleToken } })
     })
     const tokens = {
