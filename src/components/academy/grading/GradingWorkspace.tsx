@@ -110,8 +110,12 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     tabs: [
       {
         label: `Grading: Question ${props.questionId}`,
+        icon: IconNames.TICK,
+        body: this.gradingTab(props)
+      },
+      {
+        label: `Task ${props.questionId}`,
         icon: IconNames.NINJA,
-        // TODO add grading component here
         body: <Text> {props.grading![props.questionId].question.content} </Text>
       }
     ]
@@ -144,6 +148,12 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       sourceChapter: 2 // TODO dynamic library changing
     }
   }
+
+  private gradingTab = (
+    props: GradingWorkspaceProps
+  ) => (
+    <h2> Grading </h2>
+  )
 }
 
 export default GradingWorkspace
