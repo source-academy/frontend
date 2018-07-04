@@ -47,8 +47,7 @@ export type DispatchProps = {
   handleSideContentHeightChange: (heightChange: number) => void
 }
 
-class GradingWorkspace extends React.Component<
-  GradingWorkspaceProps> {
+class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   public state = { showOverlay: false }
 
   public componentWillMount() {

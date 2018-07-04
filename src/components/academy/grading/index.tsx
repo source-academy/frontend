@@ -20,10 +20,13 @@ type State = {
   columnDefs: ColDef[]
 }
 
-interface IGradingProps extends IDispatchProps, IStateProps, RouteComponentProps<IGradingWorkspaceParams> {}
+interface IGradingProps
+  extends IDispatchProps,
+    IStateProps,
+    RouteComponentProps<IGradingWorkspaceParams> {}
 
 export interface IGradingWorkspaceParams {
-  submissionId?: string,
+  submissionId?: string
   questionId?: string
 }
 
@@ -64,7 +67,7 @@ class Grading extends React.Component<IGradingProps, State> {
       ]
     }
   }
-  
+
   public render() {
     const submissionId: number | null = stringParamToInt(this.props.match.params.submissionId)
     // default questionId is 0 (the first question)
@@ -79,9 +82,9 @@ class Grading extends React.Component<IGradingProps, State> {
       return <GradingWorkspaceContainer {...props} />
     }
 
-    /** 
-     * Try to render Grading Listing since 
-     * no URL parameters were found 
+    /**
+     * Try to render Grading Listing since
+     * no URL parameters were found
      */
     if (this.props.gradingOverviews === undefined) {
       const loadingDisplay = (
