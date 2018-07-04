@@ -7,10 +7,12 @@ import 'ag-grid/dist/styles/ag-theme-balham.css'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 
-import { GradingOverview } from '../../../reducers/states'
+import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer'
 import { stringParamToInt } from '../../../utils/paramParseHelpers'
 import { controlButton } from '../../commons'
 import ContentDisplay from '../../commons/ContentDisplay'
+import { GradingOverview } from './gradingShape'
+import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace'
 
 /**
  * Column Definitions are defined within the state, so that data
