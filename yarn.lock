@@ -220,6 +220,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/draft-js@^0.10.23":
+  version "0.10.23"
+  resolved "https://registry.yarnpkg.com/@types/draft-js/-/draft-js-0.10.23.tgz#c313e5e2d6d1b707c18317882b9415975890f3bd"
+  dependencies:
+    "@types/react" "*"
+    immutable "^3.8.1"
+
 "@types/enzyme-adapter-react-16@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@types/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.0.2.tgz#15ae37c64d6221a6f4b3a4aacc357cf773859de4"
@@ -4249,6 +4256,10 @@ ignore-walk@^3.0.1:
   resolved "https://registry.yarnpkg.com/ignore-walk/-/ignore-walk-3.0.1.tgz#a83e62e7d272ac0e3b551aaa82831a19b69f82f8"
   dependencies:
     minimatch "^3.0.4"
+
+immutable@^3.8.1:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
 
 immutable@~3.7.4:
   version "3.7.6"
