@@ -39,10 +39,10 @@ export const login = () => ({
   type: actionTypes.LOGIN
 })
 
-export const setTokens: ActionCreator<actionTypes.IAction> = (
-  accessToken: string,
-  refreshToken: string
-) => ({
+export const setTokens: ActionCreator<actionTypes.IAction> = ({
+  accessToken,
+  refreshToken
+}) => ({
   type: actionTypes.SET_TOKENS,
   payload: {
     accessToken,
