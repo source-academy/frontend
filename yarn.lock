@@ -345,6 +345,10 @@
   dependencies:
     redux "^3.6.0"
 
+"@types/showdown@^1.7.5":
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/@types/showdown/-/showdown-1.7.5.tgz#91061f2f16d5bdf66b186185999ed675a8908b6a"
+
 JSONStream@^1.3.2:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/JSONStream/-/JSONStream-1.3.3.tgz#27b4b8fbbfeab4e71bcf551e7f27be8d952239bf"
