@@ -7,7 +7,8 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/assessmentAPI'
-import { mockGradingOverviews } from '../mocks/userAPI'
+import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
+import { MOCK_TRAINER_ACCESS_TOKEN } from '../mocks/userAPI'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { IVLE_KEY } from '../utils/constants'
@@ -39,8 +40,20 @@ function* apiFetchSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
-    const gradingOverviews = yield call(() => mockGradingOverviews)
-    yield put(actions.updateGradingOverviews(gradingOverviews))
+    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const gradingOverviews = yield call(() => mockFetchGradingOverview(accessToken))
+    if (gradingOverviews !== null) {
+      yield put(actions.updateGradingOverviews(gradingOverviews))
+    }
+  })
+
+  yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
+    const submissionId = (action as actionTypes.IAction).payload
+    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const grading = yield call(() => mockFetchGrading(accessToken, submissionId))
+    if (grading !== null) {
+      yield put(actions.updateGrading(submissionId, grading))
+    }
   })
 }
 
@@ -91,7 +104,7 @@ function* loginSaga(): SagaIterator {
     // TODO: use an API call to the backend; to retrieve access
     // and refresh tokens using the IVLE token (in the action payload)
     const tokens = yield call(() => ({
-      accessToken: 'ACC3SS T0K3N',
+      accessToken: MOCK_TRAINER_ACCESS_TOKEN,
       refreshToken: 'R3FRE5H T0K4N'
     }))
     yield put(actions.setTokens(tokens))

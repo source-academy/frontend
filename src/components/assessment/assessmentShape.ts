@@ -50,7 +50,7 @@ export interface IQuestion {
   type: QuestionType
 }
 
-type MCQChoice = {
+export type MCQChoice = {
   content: string
   hint: string
 }
@@ -60,7 +60,7 @@ export enum QuestionTypes {
   programming = 'programming',
   mcq = 'mcq'
 }
-type QuestionType = keyof typeof QuestionTypes
+export type QuestionType = keyof typeof QuestionTypes
 
 export type Library = {
   chapter: number

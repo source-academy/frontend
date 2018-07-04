@@ -1,10 +1,7 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
+import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
 import { Announcement } from '../components/Announcements'
-import {
-  AssessmentCategory,
-  IAssessment,
-  IAssessmentOverview
-} from '../components/assessment/assessmentShape'
+import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
@@ -55,26 +52,11 @@ export interface ISessionState {
   readonly assessments: Map<number, IAssessment>
   readonly announcements?: Announcement[]
   readonly gradingOverviews?: GradingOverview[]
+  readonly gradings: Map<number, Grading>
   readonly historyHelper: HistoryHelper
   readonly refreshToken?: string
   readonly storyAct: string
   readonly username?: string
-}
-
-/**
- * Information on a Grading, for a particular student submission
- * for a particular assessment.
- */
-export type GradingOverview = {
-  assessmentId: number
-  assessmentName: string
-  assessmentCategory: AssessmentCategory
-  currentXP: number
-  graded: boolean
-  maximumXP: number
-  studentId: number
-  studentName: string
-  submissionId: number
 }
 
 /**
@@ -185,6 +167,8 @@ export const defaultSession: ISessionState = {
   ],
   assessments: new Map<number, IAssessment>(),
   assessmentOverviews: undefined,
+  gradingOverviews: undefined,
+  gradings: new Map<number, Grading>(),
   historyHelper: {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]

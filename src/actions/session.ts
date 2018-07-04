@@ -1,7 +1,7 @@
 import { ActionCreator } from 'redux'
 
+import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
-import { GradingOverview } from '../reducers/states'
 import * as actionTypes from './actionTypes'
 
 export const fetchTokens: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
@@ -22,6 +22,11 @@ export const fetchAssessmentOverviews = () => ({
   type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS
 })
 
+export const fetchGrading = (submissionId: number) => ({
+  type: actionTypes.FETCH_GRADING,
+  payload: submissionId
+})
+
 export const fetchGradingOverviews = () => ({
   type: actionTypes.FETCH_GRADING_OVERVIEWS
 })
@@ -34,10 +39,7 @@ export const login = () => ({
   type: actionTypes.LOGIN
 })
 
-export const setTokens: ActionCreator<actionTypes.IAction> = (
-  accessToken: string,
-  refreshToken: string
-) => ({
+export const setTokens: ActionCreator<actionTypes.IAction> = ({ accessToken, refreshToken }) => ({
   type: actionTypes.SET_TOKENS,
   payload: {
     accessToken,
@@ -68,4 +70,16 @@ export const updateAssessment = (assessment: IAssessment) => ({
 export const updateGradingOverviews = (overviews: GradingOverview[]) => ({
   type: actionTypes.UPDATE_GRADING_OVERVIEWS,
   payload: overviews
+})
+
+/**
+ * An extra id parameter is included here because of
+ * no id for Grading.
+ */
+export const updateGrading = (submissionId: number, grading: Grading) => ({
+  type: actionTypes.UPDATE_GRADING,
+  payload: {
+    submissionId,
+    grading
+  }
 })

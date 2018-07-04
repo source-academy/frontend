@@ -6,6 +6,7 @@ import {
   SET_USERNAME,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
+  UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS
 } from '../actions/actionTypes'
@@ -38,17 +39,24 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
           lastGeneralLocations: newGeneralLocations
         }
       }
-    case UPDATE_ASSESSMENT_OVERVIEWS:
-      return {
-        ...state,
-        assessmentOverviews: action.payload
-      }
     case UPDATE_ASSESSMENT:
       const newAssessments = new Map(state.assessments)
       newAssessments.set(action.payload.id, action.payload)
       return {
         ...state,
         assessments: newAssessments
+      }
+    case UPDATE_ASSESSMENT_OVERVIEWS:
+      return {
+        ...state,
+        assessmentOverviews: action.payload
+      }
+    case UPDATE_GRADING:
+      const newGradings = new Map(state.gradings)
+      newGradings.set(action.payload.submissionId, action.payload.grading)
+      return {
+        ...state,
+        gradings: newGradings
       }
     case UPDATE_GRADING_OVERVIEWS:
       return {

@@ -32,6 +32,7 @@ const assessmentRenderFactory = (cat: AssessmentCategory) => (
 ) => <AssessmentContainer assessmentCategory={cat} />
 
 const assessmentRegExp = ':assessmentId(\\d+)?/:questionId(\\d+)?'
+const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?'
 
 export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
@@ -61,7 +62,7 @@ export const Academy: React.SFC<IAcademyProps> = props => (
         )}/${assessmentRegExp}`}
         render={assessmentRenderFactory(AssessmentCategories.Sidequest)}
       />
-      <Route path="/academy/grading" component={Grading} />
+      <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
       <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
       <Route component={redirectTo404} />
     </Switch>

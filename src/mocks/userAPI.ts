@@ -1,5 +1,3 @@
-import { GradingOverview } from '../reducers/states'
-
 export enum Roles {
   student = 'student',
   trainer = 'trainer',
@@ -7,8 +5,11 @@ export enum Roles {
 }
 export type Role = keyof typeof Roles
 
+/* Used to mock student access, i.e only attempt missions */
 export const MOCK_STUDENT_ACCESS_TOKEN = 'STUDENT_ACCESS_TOKEN'
+/* Used to mock trainer access, i.e only grade missions*/
 export const MOCK_TRAINER_ACCESS_TOKEN = 'TRAINER_ACCESS_TOKEN'
+/* Used to mock admin access */
 export const MOCK_ADMIN_ACCESS_TOKEN = 'ADMIN_ACCESS_TOKEN'
 
 /**
@@ -17,7 +18,7 @@ export const MOCK_ADMIN_ACCESS_TOKEN = 'ADMIN_ACCESS_TOKEN'
  *
  * @param accessToken a valid access token for the cadet backend.
  */
-const mockFetchRole = (accessToken: string): Role | null => {
+export const mockFetchRole = (accessToken: string): Role | null => {
   switch (accessToken) {
     case MOCK_STUDENT_ACCESS_TOKEN:
       return Roles.student
@@ -64,58 +65,5 @@ export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null 
     return null
   } else {
     return mockStudentInfo
-  }
-}
-
-export const mockGradingOverviews: GradingOverview[] = [
-  {
-    submissionId: 0,
-    studentId: 0,
-    assessmentId: 0,
-    assessmentName: 'Mission 0 ',
-    assessmentCategory: 'Mission',
-    currentXP: 69,
-    graded: false,
-    maximumXP: 100,
-    studentName: 'Al Gorithm'
-  },
-  {
-    submissionId: 1,
-    studentId: 0,
-    assessmentId: 1,
-    assessmentName: 'Mission 1',
-    assessmentCategory: 'Mission',
-    currentXP: 0,
-    graded: false,
-    maximumXP: 400,
-    studentName: 'Dee Sign'
-  },
-  {
-    submissionId: 2,
-    studentId: 1,
-    assessmentId: 0,
-    assessmentName: 'Mission 0',
-    assessmentCategory: 'Mission',
-    currentXP: 1000,
-    graded: true,
-    maximumXP: 1000,
-    studentName: 'May Trix'
-  }
-]
-
-/**
- * Mock for fetching a trainer/admin's student grading information.
- * A null value is returned for invalid token or role.
- *
- * @param accessToken a valid access token for the cadet backend.
- */
-export const mockFetchGradingOverview = (accessToken: string): GradingOverview[] | null => {
-  // mocks backend role fetching
-  const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
-  const role: Role | null = mockFetchRole(accessToken)
-  if (role === null || !permittedRoles.includes(role)) {
-    return null
-  } else {
-    return mockGradingOverviews
   }
 }
