@@ -7,14 +7,15 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
   var hookHandlers = {
     startMission: function (number) {
-      document.getElementById('attempt').click()
+      const assessmentType = story.split('-')[0] + 's'
+      history.push(`/academy/#{assessmentType}/#{number}`)
     },
     openTemplate: function (name) {
       switch (name) {
         case 'textbook':
           return window.open('https://www.comp.nus.edu.sg/~cs1101s/sicp/', '_blank');
         case 'announcements':
-          return history.push('/announcements');
+          return history.push('/news');
         case 'lesson_plan':
           return history.push('/academy/missions');
         case 'students':
@@ -26,7 +27,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
         case 'path':
           return history.push('/academy/paths');
         default:
-          return history.push('/announcements');
+          return history.push('/news');
       }
     },
     pickUpCollectible: function () { },

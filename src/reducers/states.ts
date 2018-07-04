@@ -57,6 +57,7 @@ export interface ISessionState {
   readonly gradingOverviews?: GradingOverview[]
   readonly historyHelper: HistoryHelper
   readonly refreshToken?: string
+  readonly storyAct: string
   readonly username?: string
 }
 
@@ -172,6 +173,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
 }
 
 export const defaultSession: ISessionState = {
+  accessToken: undefined,
   announcements: [
     {
       author: 'Aministrator',
@@ -181,14 +183,14 @@ export const defaultSession: ISessionState = {
       pinned: true
     }
   ],
-  assessmentOverviews: undefined,
   assessments: new Map<number, IAssessment>(),
+  assessmentOverviews: undefined,
   historyHelper: {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
   },
-  accessToken: undefined,
   refreshToken: undefined,
+  storyAct: 'mission-1',
   username: undefined
 }
 
