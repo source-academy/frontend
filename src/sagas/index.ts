@@ -45,6 +45,15 @@ function* apiFetchSaga(): SagaIterator {
       yield put(actions.updateGradingOverviews(gradingOverviews))
     }
   })
+
+  yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
+    const submissionId = (action as IAction).payload
+    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const grading = yield call(() => mockFetchGrading(accessToken, submissionId))
+    if (gradingOverviews !== null) {
+      yield put(actions.updateGrading(grading))
+    }
+  })
 }
 
 function* workspaceSaga(): SagaIterator {
