@@ -1,7 +1,7 @@
 import { ActionCreator } from 'redux'
 
+import { GradingOverview } from '../components/academy/grading/gradingShape'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
-import { GradingOverview } from '../reducers/states'
 import * as actionTypes from './actionTypes'
 
 export const fetchTokens: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
