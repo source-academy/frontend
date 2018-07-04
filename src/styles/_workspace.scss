@@ -137,6 +137,16 @@ $code-color-error: #ff4444;
           /* word-wrap and word-break are added to make text wrap. */
           word-wrap: break-word;
           word-break: break-word;
+          .react-mde {
+            /** 
+             * This margin preserves the 0.4rem padding of .pt-card
+             * when the resizable component is resized. There are 
+             * alternatives to this method, but this preserves the 
+             * desired growing and scrolling behavior best thus far.
+             */
+            margin-bottom: 0.4rem;
+            border-radius: 3px;
+          }
         }
       }
     }
