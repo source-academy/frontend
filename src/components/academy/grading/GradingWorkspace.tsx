@@ -13,6 +13,7 @@ import {
 import Workspace, { WorkspaceProps } from '../../workspace'
 import { ControlBarProps } from '../../workspace/ControlBar'
 import { SideContentProps } from '../../workspace/side-content'
+import GradingEditor from './GradingEditor'
 import { Grading } from './gradingShape'
 
 export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps
@@ -48,6 +49,7 @@ export type DispatchProps = {
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
+
   public componentWillMount() {
     this.props.handleGradingFetch(this.props.submissionId)
   }
@@ -108,7 +110,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       {
         label: `Grading: Question ${props.questionId}`,
         icon: IconNames.TICK,
-        body: this.gradingTab(props)
+        body: <GradingEditor />
       },
       {
         label: `Task ${props.questionId}`,
@@ -146,7 +148,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     }
   }
 
-  private gradingTab = (props: GradingWorkspaceProps) => <h2> Grading </h2>
 }
 
 export default GradingWorkspace
