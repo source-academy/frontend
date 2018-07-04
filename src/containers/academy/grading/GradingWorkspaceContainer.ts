@@ -19,7 +19,7 @@ import GradingWorkspace, {
   DispatchProps,
   OwnProps,
   StateProps
-} from '../../../components/grading/'
+} from '../../../components/grading/GradingWorkspace'
 import { IState } from '../../reducers/states'
 
 /**
