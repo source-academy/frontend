@@ -1,5 +1,5 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
-import { GradingOverview } from '../components/academy/grading/gradingShape'
+import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
 import { Announcement } from '../components/Announcements'
 import {
   IAssessment,
@@ -55,6 +55,7 @@ export interface ISessionState {
   readonly assessments: Map<number, IAssessment>
   readonly announcements?: Announcement[]
   readonly gradingOverviews?: GradingOverview[]
+  readonly gradings: Map<number, Grading>
   readonly historyHelper: HistoryHelper
   readonly refreshToken?: string
   readonly storyAct: string
@@ -170,6 +171,8 @@ export const defaultSession: ISessionState = {
   ],
   assessments: new Map<number, IAssessment>(),
   assessmentOverviews: undefined,
+  gradingOverviews: undefined,
+  gradings: new Map<number, Grading>(),
   historyHelper: {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
