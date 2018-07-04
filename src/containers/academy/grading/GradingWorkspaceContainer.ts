@@ -9,7 +9,7 @@ import {
   clearReplOutput,
   evalEditor,
   evalRepl,
-  // TODO fetchSubmission,
+  fetchGrading,
   handleInterruptExecution,
   updateEditorValue,
   updateReplValue,
@@ -45,7 +45,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
-      // TODO handleSubmissionFetch: fetchSubmission,
+      handleGradingFetch: fetchGrading,
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, changeEvent, location),

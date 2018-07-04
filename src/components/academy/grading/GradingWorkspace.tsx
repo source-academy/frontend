@@ -6,7 +6,9 @@ import { InterpreterOutput } from '../../../reducers/states'
 import { history } from '../../../utils/history'
 import {
 IMCQQuestion,
-IProgrammingQuestion
+IProgrammingQuestion,
+IQuestion,
+QuestionTypes
 } from '../../assessment/assessmentShape'
 import Workspace, { WorkspaceProps } from '../../workspace'
 import { ControlBarProps } from '../../workspace/ControlBar'
@@ -65,7 +67,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     }
 
     /* Get the question to be graded */
-    const question: IQuestion = this.props.grading[this.props.questionId]
+    const question = this.props.grading[this.props.questionId].question as IQuestion
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props),
       editorProps:
@@ -94,7 +96,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     }
     return (
       <div className="GradingWorkspace pt-dark">
-        {overlay}
         <Workspace {...workspaceProps} />
       </div>
     )
@@ -111,7 +112,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         label: `Grading: Question ${props.questionId}`,
         icon: IconNames.NINJA,
         // TODO add grading component here
-        body: <Text> {props.grading![props.questionId].content} </Text>
+        body: <Text> {props.grading![props.questionId].question.content} </Text>
       }
     ]
   })
