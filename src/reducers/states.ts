@@ -1,4 +1,5 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
+import { GradingOverview } from '../components/academy/grading/gradingShape'
 import { Announcement } from '../components/Announcements'
 import {
   AssessmentCategory,
@@ -61,21 +62,6 @@ export interface ISessionState {
   readonly username?: string
 }
 
-/**
- * Information on a Grading, for a particular student submission
- * for a particular assessment.
- */
-export type GradingOverview = {
-  assessmentId: number
-  assessmentName: string
-  assessmentCategory: AssessmentCategory
-  currentXP: number
-  graded: boolean
-  maximumXP: number
-  studentId: number
-  studentName: string
-  submissionId: number
-}
 
 /**
  * An output while the program is still being run in the interpreter. As a
