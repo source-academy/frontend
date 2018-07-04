@@ -85,14 +85,13 @@ class Grading extends React.Component<IGradingProps, State> {
     }
 
     /* Display either a loading screen or a table with overviews. */
-    const loadingDisplay = 
-      (
-        <NonIdealState
-          className="Grading"
-          description="Fetching submissions..."
-          visual={<Spinner large={true} />}
-        />
-      )
+    const loadingDisplay = (
+      <NonIdealState
+        className="Grading"
+        description="Fetching submissions..."
+        visual={<Spinner large={true} />}
+      />
+    )
     const grid = (
       <div className="Grading">
         <div className="ag-grid-parent ag-theme-balham">
@@ -114,7 +113,7 @@ class Grading extends React.Component<IGradingProps, State> {
     return (
       <ContentDisplay
         loadContentDispatch={this.props.handleFetchGradingOverviews}
-        display={this.props.gradingOverviews === undefined ? loadingDisplay : grid }
+        display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
         fullWidth={true}
       />
     )
