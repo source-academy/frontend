@@ -8,6 +8,7 @@ import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/assessmentAPI'
 import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
+import { MOCK_TRAINER_ACCESS_TOKEN } from '../mocks/userAPI'
 import { IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { IVLE_KEY } from '../utils/constants'
@@ -103,7 +104,7 @@ function* loginSaga(): SagaIterator {
     // TODO: use an API call to the backend; to retrieve access
     // and refresh tokens using the IVLE token (in the action payload)
     const tokens = yield call(() => ({
-      accessToken: 'TRAINER_ACCESS_TOKEN', // Used to mock a role
+      accessToken: MOCK_TRAINER_ACCESS_TOKEN,
       refreshToken: 'R3FRE5H T0K4N'
     }))
     yield put(actions.setTokens(tokens))

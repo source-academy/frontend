@@ -5,8 +5,11 @@ export enum Roles {
 }
 export type Role = keyof typeof Roles
 
+/* Used to mock student access, i.e only attempt missions */
 export const MOCK_STUDENT_ACCESS_TOKEN = 'STUDENT_ACCESS_TOKEN'
+/* Used to mock trainer access, i.e only grade missions*/
 export const MOCK_TRAINER_ACCESS_TOKEN = 'TRAINER_ACCESS_TOKEN'
+/* Used to mock admin access */
 export const MOCK_ADMIN_ACCESS_TOKEN = 'ADMIN_ACCESS_TOKEN'
 
 /**
