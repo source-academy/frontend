@@ -145,7 +145,23 @@ $code-color-error: #ff4444;
              * desired growing and scrolling behavior best thus far.
              */
             margin-bottom: 0.4rem;
+            /* Color the borders */
+            border-color: $cadet-color-5;
             border-radius: 3px;
+            /* Color the toolbar */
+            .mde-header {
+              background-color: $cadet-color-5
+            }
+            /**
+             * Color code blocks. style is forced due to deep nesting,
+             * and no access to the generated html to place classes.
+             */
+            .mde-preview .mde-preview-content pre {
+              background-color: $cadet-color-5 !important;
+              code {
+                color: black !important;
+              }
+            }
           }
         }
       }
