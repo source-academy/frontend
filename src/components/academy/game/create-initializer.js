@@ -7,7 +7,8 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
   var hookHandlers = {
     startMission: function (number) {
-      history.push(`/academy/#{number}`)
+      const assessmentType = story.split('-')[0] + 's'
+      history.push(`/academy/#{assessmentType}/#{number}`)
     },
     openTemplate: function (name) {
       switch (name) {
