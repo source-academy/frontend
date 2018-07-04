@@ -19,8 +19,8 @@ import GradingWorkspace, {
   DispatchProps,
   OwnProps,
   StateProps
-} from '../../../components/grading/GradingWorkspace'
-import { IState } from '../../reducers/states'
+} from '../../../components/academy/grading/GradingWorkspace'
+import { IState } from '../../../reducers/states'
 
 /**
  * Grading will use the assessment slice of IWorkspaceManagerState, as there is no reason to be

@@ -22,6 +22,11 @@ export const fetchAssessmentOverviews = () => ({
   type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS
 })
 
+export const fetchGrading = (submissionId: number) => ({
+  type: actionTypes.FETCH_GRADING,
+  payload: submissionId
+})
+
 export const fetchGradingOverviews = () => ({
   type: actionTypes.FETCH_GRADING_OVERVIEWS
 })
