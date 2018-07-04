@@ -1,10 +1,7 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
 import { Announcement } from '../components/Announcements'
-import {
-  IAssessment,
-  IAssessmentOverview
-} from '../components/assessment/assessmentShape'
+import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import { Context, createContext } from '../slang'
 import { SourceError } from '../slang/types'
 import { HistoryHelper } from '../utils/history'
@@ -61,7 +58,6 @@ export interface ISessionState {
   readonly storyAct: string
   readonly username?: string
 }
-
 
 /**
  * An output while the program is still being run in the interpreter. As a

@@ -39,10 +39,7 @@ export const login = () => ({
   type: actionTypes.LOGIN
 })
 
-export const setTokens: ActionCreator<actionTypes.IAction> = ({
-  accessToken,
-  refreshToken
-}) => ({
+export const setTokens: ActionCreator<actionTypes.IAction> = ({ accessToken, refreshToken }) => ({
   type: actionTypes.SET_TOKENS,
   payload: {
     accessToken,
@@ -76,7 +73,7 @@ export const updateGradingOverviews = (overviews: GradingOverview[]) => ({
 })
 
 /**
- * An extra id parameter is included here because of 
+ * An extra id parameter is included here because of
  * no id for Grading.
  */
 export const updateGrading = (submissionId: number, grading: Grading) => ({

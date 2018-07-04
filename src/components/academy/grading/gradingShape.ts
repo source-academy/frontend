@@ -17,35 +17,34 @@ export type GradingOverview = {
 }
 
 /**
- * The information fetched before 
+ * The information fetched before
  * grading a submission.
  */
 export type Grading = GradingQuestion[]
 
 /**
- * Encapsulates information regarding grading a 
+ * Encapsulates information regarding grading a
  * particular question in a submission.
  */
 export type GradingQuestion = {
-  question: IAnsweredQuestion, 
-  maximumXP: number,
+  question: IAnsweredQuestion
+  maximumXP: number
   grade: {
-    xp: number,
+    xp: number
     comment: string
   }
 }
 
 /**
- * A Question to be shown when a trainer is 
- * grading a submission. This means that 
- * either of (library & solutionTemplate) xor (choices) must 
+ * A Question to be shown when a trainer is
+ * grading a submission. This means that
+ * either of (library & solutionTemplate) xor (choices) must
  * be present, and either of (solution) xor (answer) must be present.
  */
 interface IAnsweredQuestion extends IQuestion {
-  solution?: number,
+  solution?: number
   answer?: string | number
   library?: Library
   solutionTemplate?: string
   choices?: MCQChoice[]
 }
-

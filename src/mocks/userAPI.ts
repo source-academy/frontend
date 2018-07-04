@@ -1,4 +1,3 @@
-
 export enum Roles {
   student = 'student',
   trainer = 'trainer',
@@ -65,4 +64,3 @@ export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null 
     return mockStudentInfo
   }
 }
-
