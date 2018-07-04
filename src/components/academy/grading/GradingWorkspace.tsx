@@ -59,7 +59,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     if (this.props.grading === undefined) {
       return (
         <NonIdealState
-          className="GradingWorkspace pt-dark"
+          className="AssessmentWorkspace pt-dark"
           description="Getting assessment ready..."
           visual={<Spinner large={true} />}
         />
@@ -95,7 +95,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       }
     }
     return (
-      <div className="GradingWorkspace pt-dark">
+      <div className="AssessmentWorkspace pt-dark">
         <Workspace {...workspaceProps} />
       </div>
     )
@@ -132,7 +132,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       hasChapterSelect: false,
       hasNextButton: this.props.questionId < this.props.grading!.length - 1,
       hasPreviousButton: this.props.questionId > 0,
-      hasSaveButton: true,
+      hasSaveButton: false,
       hasShareButton: false,
       hasSubmitButton: this.props.questionId === this.props.grading!.length - 1,
       isRunning: this.props.isRunning,
