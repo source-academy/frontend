@@ -3,7 +3,6 @@ import {
   CHANGE_ACTIVE_TAB,
   CHANGE_CHAPTER,
   CHANGE_EDITOR_WIDTH,
-  CHANGE_QUERY_STRING,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
@@ -62,14 +61,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             (
               parseFloat(state[location].editorWidth.slice(0, -1)) + action.payload.widthChange
             ).toString() + '%'
-        }
-      }
-    case CHANGE_QUERY_STRING:
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          queryString: action.payload.queryString
         }
       }
     case CHANGE_SIDE_CONTENT_HEIGHT:

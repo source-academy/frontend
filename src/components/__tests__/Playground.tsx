@@ -12,16 +12,17 @@ const baseProps = {
   sideContentHeight: 40,
   output: [],
   replValue: '',
-  handleEditorValueChange: () => {},
   handleChapterSelect: (i: any, e: any) => {},
   handleChangeActiveTab: (n: number) => {},
   handleEditorEval: () => {},
+  handleEditorValueChange: () => {},
+  handleEditorWidthChange: (widthChange: number) => {},
+  handleGenerateLz: () => {},
+  handleInterruptEval: () => {},
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
-  handleInterruptEval: () => {},
-  handleEditorWidthChange: (widthChange: number) => {},
-  handleSideContentHeightChange: (h: number) => {},
-  handleReplValueChange: (code: string) => {}
+  handleReplValueChange: (code: string) => {},
+  handleSideContentHeightChange: (h: number) => {}
 }
 
 const testValueProps: IPlaygroundProps = {

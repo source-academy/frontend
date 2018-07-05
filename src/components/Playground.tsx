@@ -18,6 +18,7 @@ export interface IStateProps {
   editorWidth: string
   isRunning: boolean
   output: InterpreterOutput[]
+  queryString?: string
   replValue: string
   sideContentHeight?: number
 }
@@ -28,6 +29,7 @@ export interface IDispatchProps {
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
+  handleGenerateLz: () => void
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
@@ -55,6 +57,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       controlBarProps: {
         handleChapterSelect: this.props.handleChapterSelect,
         handleEditorEval: this.props.handleEditorEval,
+        handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
@@ -62,6 +65,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         hasPreviousButton: false,
         hasSubmitButton: false,
         isRunning: this.props.isRunning,
+        queryString: this.props.queryString,
         sourceChapter: parseLibrary(this.props) || 2
       },
       editorProps: {

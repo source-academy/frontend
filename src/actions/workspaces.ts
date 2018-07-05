@@ -41,14 +41,6 @@ export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
   payload: { widthChange, workspaceLocation }
 })
 
-export const changeQueryString: ActionCreator<actionTypes.IAction> = (
-  queryString: string,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHANGE_QUERY_STRING,
-  payload: { queryString, workspaceLocation }
-})
-
 export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (
   height: number,
   workspaceLocation: WorkspaceLocation
