@@ -19,9 +19,14 @@ export type StateProps = {
   gradingCommentsValue: string
 }
 
+type State = { 
+  mdeState: ReactMdeTypes.MdeState
+  XPInput: number | undefined
+}
+
 class GradingEditor extends React.Component<
   GradingEditorProps,
-  { mdeState: ReactMdeTypes.MdeState }
+ State 
 > {
   private converter: Showdown.Converter
 
@@ -30,7 +35,8 @@ class GradingEditor extends React.Component<
     this.state = {
       mdeState: {
         markdown: this.props.gradingCommentsValue
-      }
+      },
+      XPInput: undefined
     }
     this.converter = new Showdown.Converter({
       tables: true,
@@ -55,6 +61,8 @@ class GradingEditor extends React.Component<
         <div className='grading-editor-input-parent'>
           <ButtonGroup fill={true}>
           <NumericInput 
+            onValueChange={this.onXPInputChange}
+            value={this.state.XPInput}
             buttonPosition={Position.LEFT} 
             placeholder='XP here'
             min={0} 
@@ -72,6 +80,13 @@ class GradingEditor extends React.Component<
         </div>
       </>
     )
+  }
+
+  private onXPInputChange = (newValue: number) => {
+    this.setState({
+      ...this.state,
+      XPInput: newValue
+    })
   }
 
   private handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
