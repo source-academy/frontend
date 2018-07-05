@@ -135,7 +135,7 @@ export const updateCurrentSubmissionId = (submissionId: number, questionId: numb
 })
 
 export const updateGradingCommentsValue: ActionCreator<actionTypes.IAction> = (
-  newComments: string,
+  newComments: string
 ) => ({
   type: actionTypes.UPDATE_GRADING_COMMENTS_VALUE,
   payload: newComments

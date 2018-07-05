@@ -13,19 +13,16 @@ type GradingNavLinkProps = {
  */
 class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
   constructor(props: GradingNavLinkProps) {
-    super(props);
+    super(props)
   }
 
   public render() {
     return (
-      <NavLink
-        to={`/academy/grading/${this.props.data.submissionId}`}
-        activeClassName="pt-active"
-      >
+      <NavLink to={`/academy/grading/${this.props.data.submissionId}`} activeClassName="pt-active">
         {this.props.data.graded ? 'Done' : 'Not Graded'}
       </NavLink>
-    );
+    )
   }
-};
+}
 
 export default GradingNavLink

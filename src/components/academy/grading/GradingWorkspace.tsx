@@ -49,7 +49,6 @@ export type DispatchProps = {
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
-
   public componentWillMount() {
     this.props.handleGradingFetch(this.props.submissionId)
   }
@@ -147,7 +146,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       sourceChapter: 2 // TODO dynamic library changing
     }
   }
-
 }
 
 export default GradingWorkspace

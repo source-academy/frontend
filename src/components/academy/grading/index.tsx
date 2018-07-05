@@ -65,7 +65,7 @@ class Grading extends React.Component<IGradingProps, State> {
         {
           headerName: 'Graded',
           field: 'graded',
-          cellRendererFramework: GradingNavLink,
+          cellRendererFramework: GradingNavLink
         }
       ]
     }

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import ReactMde, { ReactMdeTypes } from 'react-mde'
-import * as Showdown from 'showdown';
+import * as Showdown from 'showdown'
 
 type GradingEditorProps = DispatchProps & StateProps
 
@@ -12,14 +12,17 @@ export type StateProps = {
   gradingCommentsValue: string
 }
 
-class GradingEditor extends React.Component<GradingEditorProps, { mdeState: ReactMdeTypes.MdeState }> {
-  private converter: Showdown.Converter;
+class GradingEditor extends React.Component<
+  GradingEditorProps,
+  { mdeState: ReactMdeTypes.MdeState }
+> {
+  private converter: Showdown.Converter
 
   constructor(props: GradingEditorProps) {
-    super(props);
+    super(props)
     this.state = {
       mdeState: {
-        markdown: this.props.gradingCommentsValue 
+        markdown: this.props.gradingCommentsValue
       }
     }
     this.converter = new Showdown.Converter({
@@ -28,7 +31,7 @@ class GradingEditor extends React.Component<GradingEditorProps, { mdeState: Reac
       strikethrough: true,
       tasklists: true,
       openLinksInNewWindow: true
-    });
+    })
   }
 
   /**
@@ -41,9 +44,9 @@ class GradingEditor extends React.Component<GradingEditorProps, { mdeState: Reac
 
   public render() {
     return (
-      <div> 
+      <div>
         <ReactMde
-          layout={"vertical"}
+          layout={'vertical'}
           onChange={this.handleValueChange}
           editorState={this.state.mdeState}
           generateMarkdownPreview={this.generateMarkdownPreview}
@@ -53,11 +56,11 @@ class GradingEditor extends React.Component<GradingEditorProps, { mdeState: Reac
   }
 
   private handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
-    this.setState({ mdeState });
-  };
+    this.setState({ mdeState })
+  }
 
-  private generateMarkdownPreview = (markdown: string) => Promise.resolve(this.converter.makeHtml(markdown))
+  private generateMarkdownPreview = (markdown: string) =>
+    Promise.resolve(this.converter.makeHtml(markdown))
 }
-
 
 export default GradingEditor

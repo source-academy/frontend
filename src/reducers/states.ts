@@ -32,7 +32,7 @@ export interface IWorkspaceManagerState {
   readonly currentAssessment?: number
   readonly currentSubmission?: number
   readonly currentQuestion?: number
-  readonly gradingCommentsValue: string 
+  readonly gradingCommentsValue: string
   readonly playground: IWorkspaceState
 }
 

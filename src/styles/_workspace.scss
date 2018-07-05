@@ -130,7 +130,7 @@ $code-color-error: #ff4444;
         padding: 0.4rem 0.6rem 0.4rem 0.6rem;
         margin: 0 0.5rem 0 0;
         /* For react-mde editor (grading comments) */
-        overflow: scroll; 
+        overflow: scroll;
 
         .side-content-text {
           height: 100%;
@@ -150,7 +150,7 @@ $code-color-error: #ff4444;
             border-radius: 3px;
             /* Color the toolbar */
             .mde-header {
-              background-color: $cadet-color-5
+              background-color: $cadet-color-5;
             }
             /**
              * Color code blocks. style is forced due to deep nesting,
