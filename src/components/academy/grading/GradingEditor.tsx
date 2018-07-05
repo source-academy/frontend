@@ -1,11 +1,16 @@
+import { NumericInput, Position } from '@blueprintjs/core';
 import * as React from 'react'
 import ReactMde, { ReactMdeTypes } from 'react-mde'
 import * as Showdown from 'showdown'
 
-type GradingEditorProps = DispatchProps & StateProps
+type GradingEditorProps = DispatchProps & OwnProps & StateProps
 
 export type DispatchProps = {
   handleGradingCommentsChange: (s: string) => void
+}
+
+export type OwnProps = {
+  maximumXP: number
 }
 
 export type StateProps = {
@@ -44,14 +49,23 @@ class GradingEditor extends React.Component<
 
   public render() {
     return (
-      <div>
-        <ReactMde
-          layout={'vertical'}
-          onChange={this.handleValueChange}
-          editorState={this.state.mdeState}
-          generateMarkdownPreview={this.generateMarkdownPreview}
-        />
-      </div>
+      <>
+        <div className='grading-editor-input-parent'>
+          <NumericInput 
+            buttonPosition={Position.LEFT} 
+            placeholder={'XP here'} 
+            min={0} 
+            max={this.props.maximumXP}/>
+        </div>
+        <div className='react-mde-parent'>
+          <ReactMde
+            layout={'vertical'}
+            onChange={this.handleValueChange}
+            editorState={this.state.mdeState}
+            generateMarkdownPreview={this.generateMarkdownPreview}
+          />
+        </div>
+      </>
     )
   }
 
