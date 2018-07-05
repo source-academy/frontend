@@ -126,6 +126,14 @@ export const updateCurrentAssessmentId = (assessmentId: number, questionId: numb
   }
 })
 
+export const updateCurrentSubmissionId = (submissionId: number, questionId: number) => ({
+  type: actionTypes.UPDATE_CURRENT_SUBMISSION_ID,
+  payload: {
+    submissionId,
+    questionId
+  }
+})
+
 export const updateGradingCommentsValue: ActionCreator<actionTypes.IAction> = (
   newComments: string,
 ) => ({
