@@ -97,8 +97,8 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   /**
-   * A custom icons provider. It uses a bulky mapping function 
-   * defined below. 
+   * A custom icons provider. It uses a bulky mapping function
+   * defined below.
    *
    * See {@link https://github.com/andrerpena/react-mde}
    */
@@ -127,7 +127,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
 
 /**
  * Maps FontAwesome5 icon names to blueprintjs counterparts.
- * This is to reduce the number of dependencies on icons, and 
+ * This is to reduce the number of dependencies on icons, and
  * keep a more consistent look.
  */
 const faToBlueprintIconMapping = (name: string) => {
