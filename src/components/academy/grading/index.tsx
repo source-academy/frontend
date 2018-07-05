@@ -11,6 +11,7 @@ import GradingWorkspaceContainer from '../../../containers/academy/grading/Gradi
 import { stringParamToInt } from '../../../utils/paramParseHelpers'
 import { controlButton } from '../../commons'
 import ContentDisplay from '../../commons/ContentDisplay'
+import GradingNavLink from './GradingNavLink'
 import { GradingOverview } from './gradingShape'
 import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace'
 
@@ -60,11 +61,12 @@ class Grading extends React.Component<IGradingProps, State> {
         {
           headerName: 'Graded',
           field: 'graded',
-          cellRenderer: ({ data }: { data: GradingOverview }) => {
-            return `<a href='${window.location.origin}/academy/grading/${data.submissionId}'>${
-              data.graded ? 'Done' : 'Not Graded'
-            }</a>`
-          }
+          cellRendererFramework: GradingNavLink,
+          // cellRenderer: ({ data }: { data: GradingOverview }) => {
+          //   return `<a href='${window.location.origin}/academy/grading/${data.submissionId}'>${
+          //     data.graded ? 'Done' : 'Not Graded'
+          //   }</a>`
+          // }
         }
       ]
     }
