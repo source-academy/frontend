@@ -37,7 +37,7 @@ class GradingEditor extends React.Component<GradingEditorProps, { mdeState: Reac
    */
   public componentWillUnmount() {
     // TODO force non-null
-    this.props.handleGradingCommentsChange(this.state.mdeState.markdown || "THIS SHOULD NOT SHOW UP")
+    this.props.handleGradingCommentsChange(this.state.mdeState.markdown !== undefined ?  this.state.mdeState.markdown : "THIS SHOULD NOT SHOW UP" )
   }
 
   public render() {
