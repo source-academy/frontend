@@ -75,7 +75,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         <div className="react-mde-parent">
           <ReactMde
             buttonContentOptions={{
-              iconProvider: this.blueprintIconProvider 
+              iconProvider: this.blueprintIconProvider
             }}
             layout={'vertical'}
             onChange={this.handleValueChange}
@@ -92,7 +92,6 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     console.log(name)
     return <Icon icon={faToBlueprintIconMapping(name)} />
   }
-
 
   private onClickSaveButton = () => {
     this.props.handleGradingInputSave(this.state.mdeState.markdown!, this.state.XPInput)
@@ -114,33 +113,32 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
 }
 
 const faToBlueprintIconMapping = (name: string) => {
-    switch (name) {
-      case 'heading':
-        return IconNames.HEADER
-      case 'bold':
-        return IconNames.BOLD
-      case 'italic':
-        return IconNames.ITALIC
-      case 'strikethrough':
-        return IconNames.STRIKETHROUGH
-      case 'link':
-        return IconNames.LINK
-      case 'quote-right':
-        return IconNames.CITATION
-      case 'code':
-        return IconNames.CODE
-      case 'image':
-        return IconNames.MEDIA
-      case 'list-ul':
-        return IconNames.PROPERTIES
-      case 'list-ol':
-        return IconNames.NUMBERED_LIST
-      case 'tasks':
-        return IconNames.TICK
-      default:
-        return IconNames.HELP;
-    }
+  switch (name) {
+    case 'heading':
+      return IconNames.HEADER
+    case 'bold':
+      return IconNames.BOLD
+    case 'italic':
+      return IconNames.ITALIC
+    case 'strikethrough':
+      return IconNames.STRIKETHROUGH
+    case 'link':
+      return IconNames.LINK
+    case 'quote-right':
+      return IconNames.CITATION
+    case 'code':
+      return IconNames.CODE
+    case 'image':
+      return IconNames.MEDIA
+    case 'list-ul':
+      return IconNames.PROPERTIES
+    case 'list-ol':
+      return IconNames.NUMBERED_LIST
+    case 'tasks':
+      return IconNames.TICK
+    default:
+      return IconNames.HELP
   }
-
+}
 
 export default GradingEditor
