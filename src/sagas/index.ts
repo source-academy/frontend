@@ -80,7 +80,7 @@ function* workspaceSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
-    const newChapter = parseInt((action as actionTypes.IAction).payload, 10)
+    const newChapter = (action as actionTypes.IAction).payload.chapter
     const oldChapter = yield select((state: IState) => state.workspaces[location].sourceChapter)
     if (newChapter !== oldChapter) {
       yield put(actions.changeChapter(newChapter, location))
