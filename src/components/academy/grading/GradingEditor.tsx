@@ -1,7 +1,9 @@
-import { NumericInput, Position } from '@blueprintjs/core';
+import { ButtonGroup, NumericInput, Position } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react'
 import ReactMde, { ReactMdeTypes } from 'react-mde'
 import * as Showdown from 'showdown'
+import { controlButton } from '../../commons';
 
 type GradingEditorProps = DispatchProps & OwnProps & StateProps
 
@@ -51,11 +53,14 @@ class GradingEditor extends React.Component<
     return (
       <>
         <div className='grading-editor-input-parent'>
+          <ButtonGroup fill={true}>
           <NumericInput 
             buttonPosition={Position.LEFT} 
-            placeholder={'XP here'} 
+            placeholder='XP here'
             min={0} 
             max={this.props.maximumXP}/>
+            {controlButton('Save', IconNames.FLOPPY_DISK, () => {})}
+          </ButtonGroup>
         </div>
         <div className='react-mde-parent'>
           <ReactMde

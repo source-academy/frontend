@@ -137,6 +137,15 @@ $code-color-error: #ff4444;
           /* word-wrap and word-break are added to make text wrap. */
           word-wrap: break-word;
           word-break: break-word;
+          .grading-editor-input-parent {
+            /* Position the editor away from the buttons */
+            margin-bottom: 0.5rem;
+            .pt-numeric-input {
+              .pt-button {
+                background-color: $cadet-color-2;
+              }
+            }
+          }
           .react-mde {
             /** 
              * This margin preserves the 0.4rem padding of .pt-card
