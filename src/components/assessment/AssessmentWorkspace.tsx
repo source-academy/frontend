@@ -84,9 +84,13 @@ class AssessmentWorkspace extends React.Component<
         </Card>
       </Dialog>
     )
-    const question: IQuestion = this.props.assessment.questions[this.props.questionId]
+    /* If questionId is out of bounds, set it to the max. */
+    const questionId = (this.props.questionId >= this.props.assessment.questions.length) 
+      ? this.props.assessment.questions.length - 1 
+      : this.props.questionId
+    const question: IQuestion = this.props.assessment.questions[questionId]
     const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props),
+      controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
@@ -103,7 +107,7 @@ class AssessmentWorkspace extends React.Component<
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcq: question as IMCQQuestion,
       sideContentHeight: this.props.sideContentHeight,
-      sideContentProps: this.sideContentProps(this.props),
+      sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {
         output: this.props.output,
         replValue: this.props.replValue,
@@ -120,16 +124,16 @@ class AssessmentWorkspace extends React.Component<
   }
 
   /** Pre-condition: IAssessment has been loaded */
-  private sideContentProps: (p: AssessmentWorkspaceProps) => SideContentProps = (
-    props: AssessmentWorkspaceProps
+  private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
+    props: AssessmentWorkspaceProps, questionId: number
   ) => ({
     activeTab: props.activeTab,
     handleChangeActiveTab: props.handleChangeActiveTab,
     tabs: [
       {
-        label: `Task ${props.questionId}`,
+        label: `Task ${questionId}`,
         icon: IconNames.NINJA,
-        body: <Text> {props.assessment!.questions[props.questionId].content} </Text>
+        body: <Text> {props.assessment!.questions[questionId].content} </Text>
       },
       {
         label: `${props.assessment!.category} Briefing`,
@@ -140,8 +144,8 @@ class AssessmentWorkspace extends React.Component<
   })
 
   /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (p: AssessmentWorkspaceProps) => ControlBarProps = (
-    props: AssessmentWorkspaceProps
+  private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
+    props: AssessmentWorkspaceProps, questionId: number
   ) => {
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
     const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`
@@ -152,16 +156,16 @@ class AssessmentWorkspace extends React.Component<
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       hasChapterSelect: false,
-      hasNextButton: this.props.questionId < this.props.assessment!.questions.length - 1,
-      hasPreviousButton: this.props.questionId > 0,
+      hasNextButton: questionId < this.props.assessment!.questions.length - 1,
+      hasPreviousButton: questionId > 0,
       hasSaveButton: true,
       hasShareButton: false,
-      hasSubmitButton: this.props.questionId === this.props.assessment!.questions.length - 1,
+      hasSubmitButton: questionId === this.props.assessment!.questions.length - 1,
       isRunning: this.props.isRunning,
       onClickNext: () =>
-        history.push(assessmentWorkspacePath + `/${(this.props.questionId + 1).toString()}`),
+        history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
-        history.push(assessmentWorkspacePath + `/${(this.props.questionId - 1).toString()}`),
+        history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
       onClickSubmit: () => history.push(listingPath),
       sourceChapter: 2 // TODO dynamic library changing
     }
