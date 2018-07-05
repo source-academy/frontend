@@ -90,6 +90,11 @@ function* workspaceSaga(): SagaIterator {
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
   })
+
+  yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {
+    // TODO api call here
+    yield call(showSuccessMessage, 'Saved grading')
+  })
 }
 
 function* loginSaga(): SagaIterator {
