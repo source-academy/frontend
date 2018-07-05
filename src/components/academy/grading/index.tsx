@@ -45,6 +45,26 @@ class Grading extends React.Component<IGradingProps, State> {
   private gridApi?: GridApi
   private columnApi?: ColumnApi
 
+  /**
+   * If the current SubmissionId/QuestionId has changed, update it
+   * in the store and reset the workspace.
+   */
+  public componentWillMount() {
+    const submissionId = stringParamToInt(this.props.match.params.submissionId)
+    const questionId = stringParamToInt(this.props.match.params.questionId)
+    if (submissionId === null || questionId === null) {
+      return
+    }
+
+    if (
+      this.props.storedSubmissionId !== submissionId ||
+      this.props.storedQuestionId !== questionId
+    ) {
+      this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
+      this.props.handleResetAssessmentWorkspace()
+    }
+  }
+
   public constructor(props: IGradingProps) {
     super(props)
 
