@@ -141,9 +141,7 @@ export const updateGradingCommentsValue: ActionCreator<actionTypes.IAction> = (
   payload: newComments
 })
 
-export const updateGradingXP: ActionCreator<actionTypes.IAction> = (
-  newXP: number
-) => ({
+export const updateGradingXP: ActionCreator<actionTypes.IAction> = (newXP: number) => ({
   type: actionTypes.UPDATE_GRADING_XP,
   payload: newXP
 })

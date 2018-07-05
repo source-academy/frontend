@@ -1,9 +1,9 @@
-import { ButtonGroup, NumericInput, Position } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { ButtonGroup, NumericInput, Position } from '@blueprintjs/core'
+import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import ReactMde, { ReactMdeTypes } from 'react-mde'
 import * as Showdown from 'showdown'
-import { controlButton } from '../../commons';
+import { controlButton } from '../../commons'
 
 type GradingEditorProps = DispatchProps & OwnProps & StateProps
 
@@ -22,15 +22,12 @@ export type StateProps = {
   gradingXP: number | undefined
 }
 
-type State = { 
+type State = {
   mdeState: ReactMdeTypes.MdeState
   XPInput: number | undefined
 }
 
-class GradingEditor extends React.Component<
-  GradingEditorProps,
- State 
-> {
+class GradingEditor extends React.Component<GradingEditorProps, State> {
   private converter: Showdown.Converter
 
   constructor(props: GradingEditorProps) {
@@ -62,19 +59,20 @@ class GradingEditor extends React.Component<
   public render() {
     return (
       <>
-        <div className='grading-editor-input-parent'>
+        <div className="grading-editor-input-parent">
           <ButtonGroup fill={true}>
-            <NumericInput 
+            <NumericInput
               onValueChange={this.onXPInputChange}
               value={this.state.XPInput}
-              buttonPosition={Position.LEFT} 
-              placeholder='XP here'
-              min={0} 
-              max={this.props.maximumXP}/>
+              buttonPosition={Position.LEFT}
+              placeholder="XP here"
+              min={0}
+              max={this.props.maximumXP}
+            />
             {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton)}
           </ButtonGroup>
         </div>
-        <div className='react-mde-parent'>
+        <div className="react-mde-parent">
           <ReactMde
             layout={'vertical'}
             onChange={this.handleValueChange}
