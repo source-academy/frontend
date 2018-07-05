@@ -18,7 +18,8 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_EDITOR_VALUE,
-  UPDATE_REPL_VALUE
+  UPDATE_REPL_VALUE,
+  UPDATE_GRADING_COMMENTS_VALUE
 } from '../actions/actionTypes'
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { createContext } from '../slang'
@@ -238,6 +239,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           replValue: action.payload.newReplValue
         }
+      }
+    case UPDATE_GRADING_COMMENTS_VALUE:
+      return {
+        ...state,
+        gradingCommentsValue: action.payload
       }
     default:
       return state
