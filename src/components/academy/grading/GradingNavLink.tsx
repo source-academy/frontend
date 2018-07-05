@@ -8,8 +8,11 @@ type GradingNavLinkProps = {
 }
 
 /**
- * Used to render a button in the table that displays GradingOverviews.
- * This is a fully fledged component (not SFC) by specification in ag-grid.
+ * Used to render a link in the table that displays GradingOverviews.
+ * This is a fully fledged component (not SFC) by specification in 
+ * ag-grid. 
+ *
+ * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
 class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
   constructor(props: GradingNavLinkProps) {

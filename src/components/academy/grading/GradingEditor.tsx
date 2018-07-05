@@ -22,6 +22,12 @@ export type StateProps = {
   gradingXP: number | undefined
 }
 
+/**
+ * Keeps track of the current editor state,
+ * as well as the XP in the numeric input.
+ *
+ * XP can be undefined to show the hint text.
+ */
 type State = {
   mdeState: ReactMdeTypes.MdeState
   XPInput: number | undefined
@@ -38,6 +44,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       },
       XPInput: this.props.gradingXP
     }
+    /**
+     * The markdown-to-html converter for the editor.
+     */
     this.converter = new Showdown.Converter({
       tables: true,
       simplifiedAutoLink: true,
@@ -87,9 +96,13 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     )
   }
 
+  /**
+   * A custom icons provider. It uses a bulky mapping function 
+   * defined below. 
+   *
+   * See {@link https://github.com/andrerpena/react-mde}
+   */
   private blueprintIconProvider(name: string) {
-    // tslint:disable-next-line
-    console.log(name)
     return <Icon icon={faToBlueprintIconMapping(name)} />
   }
 
@@ -112,6 +125,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     Promise.resolve(this.converter.makeHtml(markdown))
 }
 
+/**
+ * Maps FontAwesome5 icon names to blueprintjs counterparts.
+ * This is to reduce the number of dependencies on icons, and 
+ * keep a more consistent look.
+ */
 const faToBlueprintIconMapping = (name: string) => {
   switch (name) {
     case 'heading':

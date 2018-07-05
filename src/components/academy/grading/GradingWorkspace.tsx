@@ -109,6 +109,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       {
         label: `Grading: Question ${props.questionId}`,
         icon: IconNames.TICK,
+        /* Render an editor with the xp given to the current question. */
         body: <GradingEditor maximumXP={props.grading![props.questionId].maximumXP} />
       },
       {
