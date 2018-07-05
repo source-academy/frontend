@@ -9,6 +9,7 @@ type GradingEditorProps = DispatchProps & OwnProps & StateProps
 
 export type DispatchProps = {
   handleGradingCommentsChange: (s: string) => void
+  handleGradingXPChange: (i: number | undefined) => void
 }
 
 export type OwnProps = {
@@ -17,6 +18,7 @@ export type OwnProps = {
 
 export type StateProps = {
   gradingCommentsValue: string
+  gradingXP: number | undefined
 }
 
 type State = { 
@@ -36,7 +38,7 @@ class GradingEditor extends React.Component<
       mdeState: {
         markdown: this.props.gradingCommentsValue
       },
-      XPInput: undefined
+      XPInput: this.props.gradingXP
     }
     this.converter = new Showdown.Converter({
       tables: true,
@@ -53,6 +55,7 @@ class GradingEditor extends React.Component<
    */
   public componentWillUnmount() {
     this.props.handleGradingCommentsChange(this.state.mdeState.markdown!)
+    this.props.handleGradingXPChange(this.state.XPInput)
   }
 
   public render() {
@@ -60,13 +63,13 @@ class GradingEditor extends React.Component<
       <>
         <div className='grading-editor-input-parent'>
           <ButtonGroup fill={true}>
-          <NumericInput 
-            onValueChange={this.onXPInputChange}
-            value={this.state.XPInput}
-            buttonPosition={Position.LEFT} 
-            placeholder='XP here'
-            min={0} 
-            max={this.props.maximumXP}/>
+            <NumericInput 
+              onValueChange={this.onXPInputChange}
+              value={this.state.XPInput}
+              buttonPosition={Position.LEFT} 
+              placeholder='XP here'
+              min={0} 
+              max={this.props.maximumXP}/>
             {controlButton('Save', IconNames.FLOPPY_DISK, () => {})}
           </ButtonGroup>
         </div>

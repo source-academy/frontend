@@ -20,6 +20,7 @@ import {
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_GRADING_COMMENTS_VALUE,
+  UPDATE_GRADING_XP,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
@@ -255,6 +256,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       return {
         ...state,
         gradingCommentsValue: action.payload
+      }
+    case UPDATE_GRADING_XP:
+      return {
+        ...state,
+        gradingXP: action.payload
       }
     default:
       return state

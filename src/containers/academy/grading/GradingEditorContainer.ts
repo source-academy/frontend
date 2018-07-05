@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { updateGradingCommentsValue } from '../../../actions'
+import { updateGradingCommentsValue, updateGradingXP } from '../../../actions'
 import GradingEditor, {
   DispatchProps,
   StateProps
@@ -10,14 +10,16 @@ import { IState } from '../../../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    gradingCommentsValue: state.workspaces.gradingCommentsValue
+    gradingCommentsValue: state.workspaces.gradingCommentsValue,
+    gradingXP: state.workspaces.gradingXP
   }
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
-      handleGradingCommentsChange: updateGradingCommentsValue
+      handleGradingCommentsChange: updateGradingCommentsValue,
+      handleGradingXPChange: updateGradingXP
     },
     dispatch
   )
