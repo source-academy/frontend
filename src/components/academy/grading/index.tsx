@@ -35,10 +35,14 @@ export interface IGradingWorkspaceParams {
 
 export interface IDispatchProps {
   handleFetchGradingOverviews: () => void
+  handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
+  handleResetAssessmentWorkspace: () => void
 }
 
 export interface IStateProps {
   gradingOverviews?: GradingOverview[]
+  storedSubmissionId?: number
+  storedQuestionId?: number
 }
 
 class Grading extends React.Component<IGradingProps, State> {
