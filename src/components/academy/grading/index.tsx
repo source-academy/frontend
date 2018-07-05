@@ -62,11 +62,6 @@ class Grading extends React.Component<IGradingProps, State> {
           headerName: 'Graded',
           field: 'graded',
           cellRendererFramework: GradingNavLink,
-          // cellRenderer: ({ data }: { data: GradingOverview }) => {
-          //   return `<a href='${window.location.origin}/academy/grading/${data.submissionId}'>${
-          //     data.graded ? 'Done' : 'Not Graded'
-          //   }</a>`
-          // }
         }
       ]
     }
