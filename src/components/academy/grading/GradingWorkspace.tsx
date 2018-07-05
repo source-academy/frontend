@@ -2,6 +2,7 @@ import { NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
+import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer'
 import { InterpreterOutput } from '../../../reducers/states'
 import { history } from '../../../utils/history'
 import {
@@ -13,7 +14,6 @@ import {
 import Workspace, { WorkspaceProps } from '../../workspace'
 import { ControlBarProps } from '../../workspace/ControlBar'
 import { SideContentProps } from '../../workspace/side-content'
-import GradingEditor from './GradingEditor'
 import { Grading } from './gradingShape'
 
 export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps

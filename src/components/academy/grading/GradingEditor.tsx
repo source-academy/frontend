@@ -4,22 +4,22 @@ import * as Showdown from 'showdown';
 
 type GradingEditorProps = DispatchProps & StateProps
 
-type DispatchProps = {
-  handleGradingEditorValueChange: (s: string) => void
+export type DispatchProps = {
+  handleGradingCommentsChange: (s: string | undefined) => void
 }
 
-type StateProps = {
-  gradingEditorValue: string
+export type StateProps = {
+  gradingCommentsValue: string | undefined
 }
 
 class GradingEditor extends React.Component<GradingEditorProps, { mdeState: ReactMdeTypes.MdeState }> {
   private converter: Showdown.Converter;
 
-  constructor(props: {}) {
+  constructor(props: GradingEditorProps) {
     super(props);
     this.state = {
       mdeState: {
-        markdown: 'Write your comments **here**. Feel free to use `markdown`!'
+        markdown: undefined 
       }
     }
     this.converter = new Showdown.Converter({
@@ -32,17 +32,18 @@ class GradingEditor extends React.Component<GradingEditorProps, { mdeState: Reac
   }
 
   /**
-   * Update the redux state's gradingEditorValue upon creation.
+   * Update the local state's comments value upon creation.
    */
   public componentDidMount() {
-    this.setState({mdeState: {markdown: this.props.gradingEditorValue}})
+    this.setState({mdeState: {markdown: this.props.gradingCommentsValue}})
   }
 
   /**
-   * Update the redux state's gradingEditorValue for retrival later.
+   * Update the redux state's grading comments value, using the latest
+   * value in the local state.
    */
   public componentWillUnmount() {
-    this.props.handleGradingEditorValueChange(this.state.mdeState.markdown)
+    this.props.handleGradingCommentsChange(this.state.mdeState.markdown)
   }
 
   public render() {
