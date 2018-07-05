@@ -19,12 +19,13 @@ export interface IApplicationProps extends IDispatchProps, RouteComponentProps<{
 
 export interface IDispatchProps {
   handleChangeChapter: (chapter: number) => void
+  handleFetchTokens: (ivleToken: string) => void
+  handleFetchUsername: () => void
   handleEditorValueChange: (val: string) => void
 }
 
 const Application: React.SFC<IApplicationProps> = props => {
   const redirectToNews = () => <Redirect to="/news" />
-  const toAcademy = () => <Academy accessToken={props.accessToken} />
 
   parsePlayground(props)
 
@@ -33,7 +34,7 @@ const Application: React.SFC<IApplicationProps> = props => {
       <NavigationBar title={props.title} username={props.username} />
       <div className="Application__main">
         <Switch>
-          <Route path="/academy" component={toAcademy} />
+          <Route path="/academy" component={toAcademy(props)} />
           <Route path="/news" component={Announcements} />
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
@@ -47,7 +48,20 @@ const Application: React.SFC<IApplicationProps> = props => {
   )
 }
 
-export const parsePlayground = (props: IApplicationProps) => {
+const toAcademy = (props: IApplicationProps) => {
+  const ivleToken = qs.parse(props.location.search).token
+  if (ivleToken !== undefined) {
+    props.handleFetchTokens(ivleToken) // just received a callback from IVLE
+    props.handleFetchUsername()
+    return () => <Redirect to="/playground" /> // TODO: spawn loading
+  } else if (props.accessToken === undefined) {
+    return () => <Redirect to="/login" />
+  } else {
+    return () => <Academy accessToken={props.accessToken} />
+  }
+}
+
+const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props)
   const lib = parseLib(props)
   if (prgrm) {

@@ -5,7 +5,7 @@ exports[`Application renders correctly 1`] = `
   <NavigationBar title=\\"Cadet\\" username={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
-      <Route path=\\"/academy\\" component={[Function: toAcademy]} />
+      <Route path=\\"/academy\\" component={[Function]} />
       <Route path=\\"/news\\" component={[Function: Connect]} />
       <Route path=\\"/material\\" component={[Function: Connect]} />
       <Route path=\\"/playground\\" component={[Function: C]} />

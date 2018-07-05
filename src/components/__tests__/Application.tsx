@@ -9,7 +9,9 @@ test('Application renders correctly', () => {
     ...mockRouterProps('/academy', {}),
     title: 'Cadet',
     handleChangeChapter: (chp: any) => {},
-    handleEditorValueChange: (val: string) => {}
+    handleEditorValueChange: (val: string) => {},
+    handleFetchTokens: (ivleToken: string) => {},
+    handleFetchUsername: () => {}
   }
   const app = <Application {...props} />
   const tree = shallow(app)

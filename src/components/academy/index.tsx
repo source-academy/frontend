@@ -1,5 +1,3 @@
-/* tslint:disable: jsx-no-lambda */
-import * as qs from 'query-string'
 import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
@@ -12,12 +10,7 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape'
 import AcademyNavigationBar from './NavigationBar'
 
-interface IAcademyProps extends IDispatchProps, IOwnProps, IStateProps, RouteComponentProps<{}> {}
-
-export interface IDispatchProps {
-  handleFetchTokens: (ivleToken: string) => void
-  handleFetchUsername: () => void
-}
+interface IAcademyProps extends IOwnProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IOwnProps {
   accessToken?: string
@@ -38,7 +31,6 @@ export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
     <AcademyNavigationBar />
     <Switch>
-      {checkLoggedIn(props)}
       <Route
         path={`/academy/${assessmentCategoryLink(
           AssessmentCategories.Contest
@@ -69,19 +61,6 @@ export const Academy: React.SFC<IAcademyProps> = props => (
   </div>
 )
 
-const checkLoggedIn = (props: IAcademyProps) => {
-  const ivleToken = qs.parse(props.location.search).token
-  if (ivleToken !== undefined) {
-    props.handleFetchTokens(ivleToken) // just received a callback from IVLE
-    props.handleFetchUsername()
-    return
-  } else if (props.accessToken === undefined) {
-    return <Route component={redirectToLogin} />
-  } else {
-    return
-  }
-}
-
 /**
  * 1. If user is in /academy.*, redirect to game
  * 2. If not, redirect to the last /acdaemy.* route the user was in
@@ -98,8 +77,6 @@ const dynamicRedirect = (props: IStateProps) => {
 }
 
 const redirectTo404 = () => <Redirect to="/404" />
-
-const redirectToLogin = () => <Redirect to="/login" />
 
 const redirectToGame = () => <Redirect to="/academy/game" />
 
