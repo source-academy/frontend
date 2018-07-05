@@ -36,7 +36,7 @@ export interface IWorkspaceManagerState {
 
 interface IWorkspaceState {
   readonly context: Context
-  readonly editorValue?: string
+  readonly editorValue: string
   readonly editorWidth: string
   readonly isRunning: boolean
   readonly output: InterpreterOutput[]
@@ -138,7 +138,7 @@ export const defaultPlayground: IPlaygroundState = {}
 
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
-  editorValue: undefined,
+  editorValue: '// Type your program in here!',
   editorWidth: '50%',
   isRunning: false,
   output: [],
