@@ -13,7 +13,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     openTemplate: function (name) {
       switch (name) {
         case 'textbook':
-          return window.open('https://www.comp.nus.edu.sg/~cs1101s/sicp/', '_blank');
+          return window.open('http://www.comp.nus.edu.sg/~cs1101s/sicp/', '_blank');
         case 'announcements':
           return history.push('/news');
         case 'lesson_plan':
