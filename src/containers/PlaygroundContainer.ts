@@ -10,6 +10,7 @@ import {
   clearReplOutput,
   evalEditor,
   evalRepl,
+  generateLzString,
   handleInterruptExecution,
   updateEditorValue,
   updateReplValue,
@@ -19,13 +20,15 @@ import Playground, { IDispatchProps, IStateProps } from '../components/Playgroun
 import { IState } from '../reducers/states'
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  editorValue: state.workspaces.playground.editorValue,
-  isRunning: state.workspaces.playground.isRunning,
   activeTab: state.workspaces.playground.sideContentActiveTab,
   editorWidth: state.workspaces.playground.editorWidth,
-  sideContentHeight: state.workspaces.playground.sideContentHeight,
+  editorValue: state.workspaces.playground.editorValue,
+  isRunning: state.workspaces.playground.isRunning,
   output: state.workspaces.playground.output,
-  replValue: state.workspaces.playground.replValue
+  queryString: state.playground.queryString,
+  replValue: state.workspaces.playground.replValue,
+  sideContentHeight: state.workspaces.playground.sideContentHeight,
+  sourceChapter: state.workspaces.playground.sourceChapter
 })
 
 const location: WorkspaceLocation = 'playground'
@@ -39,6 +42,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
+      handleGenerateLz: generateLzString,
       handleInterruptEval: () => handleInterruptExecution(location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),

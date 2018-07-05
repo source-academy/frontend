@@ -1,6 +1,9 @@
-import { connect, MapStateToProps } from 'react-redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
-import Application from '../components/Application'
+import { bindActionCreators, Dispatch } from 'redux'
+
+import { changeChapter, updateEditorValue } from '../actions'
+import Application, { IDispatchProps } from '../components/Application'
 import { IState } from '../reducers/states'
 
 /**
@@ -16,4 +19,13 @@ const mapStateToProps: MapStateToProps<{ title: string }, {}, IState> = state =>
   username: state.session.username
 })
 
-export default withRouter(connect(mapStateToProps)(Application))
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+  bindActionCreators(
+    {
+      handleChangeChapter: (chapter: number) => changeChapter(chapter, 'playground'),
+      handleEditorValueChange: (val: string) => updateEditorValue(val, 'playground')
+    },
+    dispatch
+  )
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Application))

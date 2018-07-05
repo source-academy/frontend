@@ -9,7 +9,7 @@ import { WorkspaceLocation } from '../actions/workspaces'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/assessmentAPI'
 import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
 import { MOCK_TRAINER_ACCESS_TOKEN } from '../mocks/userAPI'
-import { IState } from '../reducers/states'
+import { defaultEditorValue, IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { IVLE_KEY } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
@@ -80,7 +80,7 @@ function* workspaceSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
-    const newChapter = parseInt((action as actionTypes.IAction).payload, 10)
+    const newChapter = (action as actionTypes.IAction).payload.chapter
     const oldChapter = yield select((state: IState) => state.workspaces[location].sourceChapter)
     if (newChapter !== oldChapter) {
       yield put(actions.changeChapter(newChapter, location))
@@ -124,7 +124,7 @@ function* playgroundSaga(): SagaIterator {
     const code = yield select((state: IState) => state.workspaces.playground.editorValue)
     const lib = yield select((state: IState) => state.workspaces.playground.sourceChapter)
     const newQueryString =
-      code === ''
+      code === '' || code === defaultEditorValue
         ? undefined
         : qs.stringify({
             prgrm: compressToEncodedURIComponent(code),

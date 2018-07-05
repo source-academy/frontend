@@ -1,4 +1,3 @@
-import { throttle } from 'lodash'
 import * as React from 'react'
 import AceEditor from 'react-ace'
 import { HotKeys } from 'react-hotkeys'
@@ -29,10 +28,7 @@ class Editor extends React.Component<IEditorProps, {}> {
             mode="javascript"
             theme="cobalt"
             value={this.props.editorValue}
-            onChange={throttle(this.props.handleEditorValueChange, 800, {
-              leading: false,
-              trailing: true
-            })}
+            onChange={this.props.handleEditorValueChange}
             height="100%"
             commands={[
               {

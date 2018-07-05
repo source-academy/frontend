@@ -10,18 +10,20 @@ const baseProps = {
   activeTab: 0,
   editorWidth: '50%',
   sideContentHeight: 40,
+  sourceChapter: 2,
   output: [],
   replValue: '',
-  handleEditorValueChange: () => {},
   handleChapterSelect: (i: any, e: any) => {},
   handleChangeActiveTab: (n: number) => {},
   handleEditorEval: () => {},
+  handleEditorValueChange: () => {},
+  handleEditorWidthChange: (widthChange: number) => {},
+  handleGenerateLz: () => {},
+  handleInterruptEval: () => {},
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
-  handleInterruptEval: () => {},
-  handleEditorWidthChange: (widthChange: number) => {},
-  handleSideContentHeightChange: (h: number) => {},
-  handleReplValueChange: (code: string) => {}
+  handleReplValueChange: (code: string) => {},
+  handleSideContentHeightChange: (h: number) => {}
 }
 
 const testValueProps: IPlaygroundProps = {
