@@ -138,6 +138,8 @@ export const defaultApplication: IApplicationState = {
 
 export const defaultPlayground: IPlaygroundState = {}
 
+export const defaultEditorValue = '// Type your program in here!'
+
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
   editorValue: defaultEditorValue,
@@ -149,13 +151,13 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   sourceChapter: latestSourceChapter
 })
 
-export const defaultEditorValue = '// Type your program in here!'
+export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
   assessment: { ...createDefaultWorkspace(WorkspaceLocations.assessment) },
   currentAssessment: undefined,
   currentQuestion: undefined,
-  gradingCommentsValue: 'Welcome to the epic food battles of history~~',
+  gradingCommentsValue: defaultComments,
   playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) }
 }
 
