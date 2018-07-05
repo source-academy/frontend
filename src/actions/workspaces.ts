@@ -147,3 +147,14 @@ export const updateGradingXP: ActionCreator<actionTypes.IAction> = (
   type: actionTypes.UPDATE_GRADING_XP,
   payload: newXP
 })
+
+export const saveGradingInput: ActionCreator<actionTypes.IAction> = (
+  gradingCommentsValue: string,
+  gradingXP: number | undefined
+) => ({
+  type: actionTypes.SAVE_GRADING_INPUT,
+  payload: {
+    gradingCommentsValue,
+    gradingXP
+  }
+})

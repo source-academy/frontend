@@ -10,6 +10,7 @@ type GradingEditorProps = DispatchProps & OwnProps & StateProps
 export type DispatchProps = {
   handleGradingCommentsChange: (s: string) => void
   handleGradingXPChange: (i: number | undefined) => void
+  handleGradingInputSave: (s: string, i: number | undefined) => void
 }
 
 export type OwnProps = {
@@ -70,7 +71,7 @@ class GradingEditor extends React.Component<
               placeholder='XP here'
               min={0} 
               max={this.props.maximumXP}/>
-            {controlButton('Save', IconNames.FLOPPY_DISK, () => {})}
+            {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton)}
           </ButtonGroup>
         </div>
         <div className='react-mde-parent'>
@@ -83,6 +84,10 @@ class GradingEditor extends React.Component<
         </div>
       </>
     )
+  }
+
+  private onClickSaveButton = () => {
+    this.props.handleGradingInputSave(this.state.mdeState.markdown!, this.state.XPInput)
   }
 
   private onXPInputChange = (newValue: number) => {

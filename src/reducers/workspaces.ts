@@ -219,7 +219,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case RESET_ASSESSMENT_WORKSPACE:
       return {
         ...state,
-        assessment: createDefaultWorkspace(WorkspaceLocations.assessment)
+        assessment: createDefaultWorkspace(WorkspaceLocations.assessment),
+        gradingCommentsValue: defaultComments,
+        gradingXP: undefined
       }
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
@@ -233,8 +235,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         currentAssessment: undefined,
         currentQuestion: action.payload.questionId,
-        currentSubmission: action.payload.submissionId,
-        gradingCommentsValue: defaultComments
+        currentSubmission: action.payload.submissionId
       }
     case UPDATE_EDITOR_VALUE:
       return {
