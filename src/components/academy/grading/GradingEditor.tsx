@@ -2,7 +2,17 @@ import * as React from 'react'
 import ReactMde, { ReactMdeTypes } from 'react-mde'
 import * as Showdown from 'showdown';
 
-class GradingEditor extends React.Component<{}, { mdeState: ReactMdeTypes.MdeState }> {
+type GradingEditorProps = DispatchProps & StateProps
+
+type DispatchProps = {
+  handleGradingEditorValueChange: (s: string) => void
+}
+
+type StateProps = {
+  gradingEditorValue: string
+}
+
+class GradingEditor extends React.Component<GradingEditorProps, { mdeState: ReactMdeTypes.MdeState }> {
   private converter: Showdown.Converter;
 
   constructor(props: {}) {
@@ -19,6 +29,20 @@ class GradingEditor extends React.Component<{}, { mdeState: ReactMdeTypes.MdeSta
       tasklists: true,
       openLinksInNewWindow: true
     });
+  }
+
+  /**
+   * Update the redux state's gradingEditorValue upon creation.
+   */
+  public componentDidMount() {
+    this.setState({mdeState: {markdown: this.props.gradingEditorValue}})
+  }
+
+  /**
+   * Update the redux state's gradingEditorValue for retrival later.
+   */
+  public componentWillUnmount() {
+    this.props.handleGradingEditorValueChange(this.state.mdeState.markdown)
   }
 
   public render() {
