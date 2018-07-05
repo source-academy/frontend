@@ -31,7 +31,7 @@ export interface IWorkspaceManagerState {
   readonly assessment: IWorkspaceState
   readonly currentAssessment?: number
   readonly currentQuestion?: number
-  readonly gradingCommentsValue: string | undefined
+  readonly gradingCommentsValue: string 
   readonly playground: IWorkspaceState
 }
 
@@ -154,7 +154,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   assessment: { ...createDefaultWorkspace(WorkspaceLocations.assessment) },
   currentAssessment: undefined,
   currentQuestion: undefined,
-  gradingCommentsValue: undefined,
+  gradingCommentsValue: 'Welcome to the epic food battles of history~~',
   playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) }
 }
 

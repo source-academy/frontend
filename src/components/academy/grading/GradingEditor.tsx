@@ -5,11 +5,11 @@ import * as Showdown from 'showdown';
 type GradingEditorProps = DispatchProps & StateProps
 
 export type DispatchProps = {
-  handleGradingCommentsChange: (s: string | undefined) => void
+  handleGradingCommentsChange: (s: string) => void
 }
 
 export type StateProps = {
-  gradingCommentsValue: string | undefined
+  gradingCommentsValue: string
 }
 
 class GradingEditor extends React.Component<GradingEditorProps, { mdeState: ReactMdeTypes.MdeState }> {
@@ -19,7 +19,7 @@ class GradingEditor extends React.Component<GradingEditorProps, { mdeState: Reac
     super(props);
     this.state = {
       mdeState: {
-        markdown: undefined 
+        markdown: this.props.gradingCommentsValue 
       }
     }
     this.converter = new Showdown.Converter({
@@ -32,18 +32,12 @@ class GradingEditor extends React.Component<GradingEditorProps, { mdeState: Reac
   }
 
   /**
-   * Update the local state's comments value upon creation.
-   */
-  public componentDidMount() {
-    this.setState({mdeState: {markdown: this.props.gradingCommentsValue}})
-  }
-
-  /**
    * Update the redux state's grading comments value, using the latest
    * value in the local state.
    */
   public componentWillUnmount() {
-    this.props.handleGradingCommentsChange(this.state.mdeState.markdown)
+    // TODO force non-null
+    this.props.handleGradingCommentsChange(this.state.mdeState.markdown || "THIS SHOULD NOT SHOW UP")
   }
 
   public render() {
