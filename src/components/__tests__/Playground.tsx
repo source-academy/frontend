@@ -10,6 +10,7 @@ const baseProps = {
   activeTab: 0,
   editorWidth: '50%',
   sideContentHeight: 40,
+  sourceChapter: 2,
   output: [],
   replValue: '',
   handleChapterSelect: (i: any, e: any) => {},

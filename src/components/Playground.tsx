@@ -1,12 +1,10 @@
 import { Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
-import { decompressFromEncodedURIComponent } from 'lz-string'
-import * as qs from 'query-string'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
-import { InterpreterOutput, sourceChapters } from '../reducers/states'
+import { InterpreterOutput } from '../reducers/states'
 import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
 
@@ -21,6 +19,7 @@ export interface IStateProps {
   queryString?: string
   replValue: string
   sideContentHeight?: number
+  sourceChapter: number
 }
 
 export interface IDispatchProps {
@@ -66,10 +65,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         hasSubmitButton: false,
         isRunning: this.props.isRunning,
         queryString: this.props.queryString,
-        sourceChapter: parseLibrary(this.props) || 2
+        sourceChapter: this.props.sourceChapter
       },
       editorProps: {
-        editorValue: this.chooseEditorValue(this.props),
+        editorValue: this.props.editorValue,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange
       },
@@ -100,26 +99,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     )
   }
 
-  private chooseEditorValue(props: IPlaygroundProps): string {
-    return parsePrgrm(this.props) || this.props.editorValue
-  }
-
   private toggleIsGreen() {
     this.setState({ isGreen: !this.state.isGreen })
   }
-}
-
-const parsePrgrm = (props: IPlaygroundProps) => {
-  const qsParsed = qs.parse(props.location.hash)
-  // legacy support
-  const program = qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm
-  return program !== undefined ? decompressFromEncodedURIComponent(program) : undefined
-}
-
-const parseLibrary = (props: IPlaygroundProps) => {
-  const libQuery = qs.parse(props.location.hash).lib
-  const lib = libQuery === undefined ? NaN : parseInt(libQuery, 10)
-  return sourceChapters.includes(lib) ? lib : undefined
 }
 
 const SICP_SITE = 'http://www.comp.nus.edu.sg/~henz/sicp_js/'

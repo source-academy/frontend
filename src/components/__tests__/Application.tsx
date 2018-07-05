@@ -7,7 +7,9 @@ import Application, { IApplicationProps } from '../Application'
 test('Application renders correctly', () => {
   const props: IApplicationProps = {
     ...mockRouterProps('/academy', {}),
-    title: 'Cadet'
+    title: 'Cadet',
+    handleChangeChapter: (chp: any) => {},
+    handleEditorValueChange: (val: string) => {}
   }
   const app = <Application {...props} />
   const tree = shallow(app)

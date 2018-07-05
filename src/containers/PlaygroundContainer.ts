@@ -27,7 +27,8 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
   replValue: state.workspaces.playground.replValue,
-  sideContentHeight: state.workspaces.playground.sideContentHeight
+  sideContentHeight: state.workspaces.playground.sideContentHeight,
+  sourceChapter: state.workspaces.playground.sourceChapter
 })
 
 const location: WorkspaceLocation = 'playground'
