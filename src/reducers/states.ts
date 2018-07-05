@@ -30,6 +30,7 @@ export interface IPlaygroundState {
 export interface IWorkspaceManagerState {
   readonly assessment: IWorkspaceState
   readonly currentAssessment?: number
+  readonly currentSubmission?: number
   readonly currentQuestion?: number
   readonly gradingCommentsValue: string 
   readonly playground: IWorkspaceState

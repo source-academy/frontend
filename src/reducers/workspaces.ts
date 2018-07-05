@@ -17,6 +17,7 @@ import {
   RESET_ASSESSMENT_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_CURRENT_ASSESSMENT_ID,
+  UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_GRADING_COMMENTS_VALUE,
   UPDATE_REPL_VALUE
@@ -26,6 +27,7 @@ import { createContext } from '../slang'
 import {
   CodeOutput,
   createDefaultWorkspace,
+  defaultComments,
   defaultWorkspaceManager,
   InterpreterOutput,
   IWorkspaceManagerState
@@ -222,7 +224,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       return {
         ...state,
         currentAssessment: action.payload.assessmentId,
-        currentQuestion: action.payload.questionId
+        currentQuestion: action.payload.questionId,
+        currentSubmission: undefined
+      }
+    case UPDATE_CURRENT_SUBMISSION_ID:
+      return {
+        ...state,
+        currentAssessment: undefined,
+        currentQuestion: action.payload.questionId,
+        currentSubmission: action.payload.submissionId,
+        gradingCommentsValue: defaultComments
       }
     case UPDATE_EDITOR_VALUE:
       return {
