@@ -130,5 +130,5 @@ export const updateGradingCommentsValue: ActionCreator<actionTypes.IAction> = (
   newComments: string,
 ) => ({
   type: actionTypes.UPDATE_GRADING_COMMENTS_VALUE,
-  payload: newComment
+  payload: newComments
 })
