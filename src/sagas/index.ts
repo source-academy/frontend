@@ -8,14 +8,15 @@ import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/assessmentAPI'
 import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
-import { MOCK_TRAINER_ACCESS_TOKEN } from '../mocks/userAPI'
 import { defaultEditorValue, IState } from '../reducers/states'
 import { Context, interrupt, runInContext } from '../slang'
 import { IVLE_KEY } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
+import backendSaga from './backend'
 
 function* mainSaga() {
   yield* apiFetchSaga()
+  yield* backendSaga()
   yield* workspaceSaga()
   yield* loginSaga()
   yield* playgroundSaga()
@@ -95,27 +96,9 @@ function* loginSaga(): SagaIterator {
   yield takeEvery(actionTypes.LOGIN, function*() {
     const apiLogin = 'https://ivle.nus.edu.sg/api/login/'
     const key = IVLE_KEY
-    const callback = `${window.location.protocol}//${window.location.hostname}/academy`
+    const callback = `${window.location.protocol}//${window.location.hostname}/login`
     window.location.href = `${apiLogin}?apikey=${key}&url=${callback}`
     yield undefined
-  })
-
-  yield takeEvery(actionTypes.FETCH_TOKENS, function*(action) {
-    // TODO: use an API call to the backend; to retrieve access
-    // and refresh tokens using the IVLE token (in the action payload)
-    const tokens = yield call(() => ({
-      accessToken: MOCK_TRAINER_ACCESS_TOKEN,
-      refreshToken: 'R3FRE5H T0K4N'
-    }))
-    yield put(actions.setTokens(tokens))
-  })
-
-  yield takeEvery(actionTypes.FETCH_USERNAME, function*() {
-    // TODO: use an API call to the backend; an api call to IVLE raises an
-    // uncaught error due to restrictive Access-Control-Allow-Origin headers,
-    // causing the staging server to bug out
-    const username = yield call(() => 'IVLE USER')
-    yield put(actions.setUsername(username))
   })
 }
 

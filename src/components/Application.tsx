@@ -24,7 +24,6 @@ export interface IDispatchProps {
 
 const Application: React.SFC<IApplicationProps> = props => {
   const redirectToNews = () => <Redirect to="/news" />
-  const toAcademy = () => <Academy accessToken={props.accessToken} />
 
   parsePlayground(props)
 
@@ -33,13 +32,13 @@ const Application: React.SFC<IApplicationProps> = props => {
       <NavigationBar title={props.title} username={props.username} />
       <div className="Application__main">
         <Switch>
-          <Route path="/academy" component={toAcademy} />
+          <Route path="/academy" component={toAcademy(props)} />
           <Route path="/news" component={Announcements} />
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
           <Route path="/status" component={Announcements} />
-          <Route path="/login" component={Login} />
-          <Route exact={true} path="/" component={redirectToNews} />
+          <Route path="/login" render={toLogin(props)} />
+          <Route exact={true} path="/" render={redirectToNews} />
           <Route component={NotFound} />
         </Switch>
       </div>
@@ -47,7 +46,21 @@ const Application: React.SFC<IApplicationProps> = props => {
   )
 }
 
-export const parsePlayground = (props: IApplicationProps) => {
+/**
+ * A user routes to /academy,
+ *  1. If the user is logged in, render the Academy component
+ *  2. If the user is not logged in, redirect to /login
+ */
+const toAcademy = (props: IApplicationProps) =>
+  props.accessToken === undefined
+    ? () => <Redirect to="/login" />
+    : () => <Academy accessToken={props.accessToken} />
+
+const toLogin = (props: IApplicationProps) => () => (
+  <Login ivleToken={qs.parse(props.location.search).token} />
+)
+
+const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props)
   const lib = parseLib(props)
   if (prgrm) {
