@@ -154,6 +154,8 @@ $code-color-error: #ff4444;
             /* Color the borders */
             border-color: $cadet-color-5;
             border-radius: 3px;
+            /* Override side-content's default text justify*/
+            text-align: initial;
             /* Color the toolbar */
             .mde-header {
               background-color: $cadet-color-5;
