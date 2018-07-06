@@ -13,8 +13,8 @@ function* backendSaga(): SagaIterator {
       method: 'POST',
       body: JSON.stringify({ login: { ivle_token: ivleToken } }),
       headers: new Headers({
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       })
     })
     const tokens = {
