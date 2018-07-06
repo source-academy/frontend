@@ -123,8 +123,8 @@ class AssessmentWorkspace extends React.Component<
   private sideContentProps: (p: AssessmentWorkspaceProps) => SideContentProps = (
     props: AssessmentWorkspaceProps
   ) => ({
-    activeTab: 0,
-    handleChangeActiveTab: (aT: number) => {},
+    activeTab: props.activeTab,
+    handleChangeActiveTab: props.handleChangeActiveTab,
     tabs: [
       {
         label: `Task ${props.questionId}`,
