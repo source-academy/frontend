@@ -34,7 +34,6 @@ export enum AssessmentCategories {
 export type AssessmentCategory = keyof typeof AssessmentCategories
 
 export interface IProgrammingQuestion extends IQuestion {
-  library: Library
   solutionTemplate: string
   type: 'programming'
 }
@@ -47,6 +46,7 @@ export interface IMCQQuestion extends IQuestion {
 export interface IQuestion {
   content: string
   id: number
+  library: Library
   type: QuestionType
 }
 
