@@ -14,7 +14,7 @@ export type Role = keyof typeof Roles
  * @param mockRole a role to mock retrieval for.
  */
 export const mockFetchRole = (accessToken: string, role: Role = Roles.trainer): Role | null => {
-      return role
+  return role
 }
 
 /**
