@@ -11,13 +11,17 @@ function* backendSaga(): SagaIterator {
     const ivleToken = (action as actionTypes.IAction).payload
     const resp = yield call(request, 'auth', {
       method: 'POST',
-      body: JSON.stringify({ login: { ivle_token: ivleToken } })
+      body: JSON.stringify({ login: { ivle_token: ivleToken } }),
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      })
     })
     const tokens = {
-      accessToken: resp.refresh_token,
-      refreshToken: resp.access_token
+      accessToken: resp.access_token,
+      refreshToken: resp.refresh_token
     }
-    const username = yield call(() => 'IVLE USER') // TODO: fetchUsername
+    const username = yield getUsername(tokens.accessToken)
     yield put(actions.setTokens(tokens))
     yield put(actions.setUsername(username))
     yield delay(2000)
@@ -25,15 +29,19 @@ function* backendSaga(): SagaIterator {
   })
 }
 
+function* getUsername(accessToken: string) {
+  const resp = yield call(request, 'user', {
+    method: 'GET',
+    headers: new Headers({
+      Authorization: `Bearer ${accessToken}`,
+      Accept: 'application/json'
+    })
+  })
+  return resp.name
+}
+
 function request(path: string, opts: {}) {
-  const defaultOpts = {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    }
-  }
-  const requestOpts = { ...defaultOpts, ...opts }
-  return fetch(`${BACKEND_URL}/v1/${path}`, requestOpts)
+  return fetch(`${BACKEND_URL}/v1/${path}`, opts)
     .then(data => data.json())
     .catch(err => err)
 }
