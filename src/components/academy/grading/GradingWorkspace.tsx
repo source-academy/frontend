@@ -137,13 +137,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       hasPreviousButton: this.props.questionId > 0,
       hasSaveButton: false,
       hasShareButton: false,
-      hasSubmitButton: this.props.questionId === this.props.grading!.length - 1,
+      hasDoneButton: this.props.questionId === this.props.grading!.length - 1,
       isRunning: this.props.isRunning,
       onClickNext: () =>
         history.push(gradingWorkspacePath + `/${(this.props.questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(gradingWorkspacePath + `/${(this.props.questionId - 1).toString()}`),
-      onClickSubmit: () => history.push(listingPath),
+      onClickDone: () => history.push(listingPath),
       sourceChapter: 2 // TODO dynamic library changing
     }
   }
