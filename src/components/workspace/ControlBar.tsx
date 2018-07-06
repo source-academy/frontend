@@ -41,7 +41,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     hasPreviousButton: false,
     hasSaveButton: false,
     hasShareButton: true,
-    hasSubmitButton: false,
+    hasDoneButton: false,
     onClickNext: () => {},
     onClickPrevious: () => {},
     onClickSave: () => {}
