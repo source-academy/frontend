@@ -163,12 +163,12 @@ class AssessmentWorkspace extends React.Component<
       hasPreviousButton: questionId > 0,
       hasSaveButton: true,
       hasShareButton: false,
-      hasSubmitButton: questionId === this.props.assessment!.questions.length - 1,
+      hasDoneButton: questionId === this.props.assessment!.questions.length - 1,
       isRunning: this.props.isRunning,
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
-      onClickSubmit: () => history.push(listingPath),
+      onClickDone: () => history.push(listingPath),
       sourceChapter: 2 // TODO dynamic library changing
     }
   }
