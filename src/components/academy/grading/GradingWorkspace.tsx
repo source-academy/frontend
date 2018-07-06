@@ -106,7 +106,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
   /** Pre-condition: Grading has been loaded */
   private sideContentProps: (p: GradingWorkspaceProps, q: number) => SideContentProps = (
-    props: GradingWorkspaceProps, questionId: number
+    props: GradingWorkspaceProps,
+    questionId: number
   ) => ({
     activeTab: props.activeTab,
     handleChangeActiveTab: props.handleChangeActiveTab,
@@ -127,7 +128,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
   /** Pre-condition: Grading has been loaded */
   private controlBarProps: (p: GradingWorkspaceProps, q: number) => ControlBarProps = (
-    props: GradingWorkspaceProps, questionId: number
+    props: GradingWorkspaceProps,
+    questionId: number
   ) => {
     const listingPath = `/academy/grading`
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`
@@ -145,10 +147,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       hasShareButton: false,
       isRunning: this.props.isRunning,
       onClickDone: () => history.push(listingPath),
-      onClickNext: () =>
-        history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
-      onClickPrevious: () =>
-        history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),
+      onClickNext: () => history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
+      onClickPrevious: () => history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),
       sourceChapter: this.props.grading![questionId].question.library.chapter
     }
   }
