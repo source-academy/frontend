@@ -103,8 +103,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   private sideContentProps: (p: GradingWorkspaceProps) => SideContentProps = (
     props: GradingWorkspaceProps
   ) => ({
-    activeTab: 0,
-    handleChangeActiveTab: (aT: number) => {},
+    activeTab: props.activeTab,
+    handleChangeActiveTab: props.handleChangeActiveTab,
     tabs: [
       {
         label: `Grading: Question ${props.questionId}`,
