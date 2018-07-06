@@ -11,6 +11,8 @@ import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmen
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
 
+const DEFAULT_QUESTION_ID: number = 0 
+
 export interface IAssessmentWorkspaceParams {
   assessmentId?: string
   questionId?: string
@@ -61,8 +63,7 @@ class Assessment extends React.Component<IAssessmentProps, {}> {
 
   public render() {
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId)
-    // default questionId is 0 (the first question)
-    const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0
+    const questionId: number = stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
     if (assessmentId !== null) {
       const assessmentProps: AssessmentProps = {
         assessmentId,
@@ -76,7 +77,6 @@ class Assessment extends React.Component<IAssessmentProps, {}> {
       display: (
         <AssessmentOverviewCard
           assessmentOverviews={this.props.assessmentOverviews}
-          questionId={questionId}
         />
       ),
       loadContentDispatch: this.props.handleAssessmentOverviewFetch
@@ -89,21 +89,31 @@ class Assessment extends React.Component<IAssessmentProps, {}> {
   }
 }
 
-interface IAssessmentOverviewCardProps {
-  assessmentOverviews?: IAssessmentOverview[]
-  questionId: number
-}
 
-export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = props => {
-  const questionId = props.questionId === undefined ? 0 : props.questionId
+export const AssessmentOverviewCard: React.SFC<{
+  assessmentOverviews?: IAssessmentOverview[]
+}> = props => {
   if (props.assessmentOverviews === undefined) {
     return <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
-  } else if (props.assessmentOverviews.length === 0) {
+  } else if (props.assessmentOverviews.length === DEFAULT_QUESTION_ID) {
     return <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
   }
-  const OpenCards = props.assessmentOverviews
+  const openCards = props.assessmentOverviews
     .filter((a) => !beforeNow(a.closeAt))
-    .map((overview, index) => (
+    .map((overview, index) => makeOverviewCard(overview, index))
+  const closedCards = props.assessmentOverviews
+    .filter((a) => beforeNow(a.closeAt))
+    .map((overview, index) => makeOverviewCard(overview, index))
+  return <>{openCards} {closedCards} </>
+}
+
+/**
+ * Create a series of cards to display IAssessmentOverviews.
+ * @param {IAssessmentOverview} overview the assessment overview to display
+ * @param {number} index a unique number for this card (required for sequential rendering).
+ *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
+ */
+const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
     <div key={index}>
       <Card className="row listing">
         <div className="col-xs-3 listing-picture">PICTURE</div>
@@ -128,7 +138,7 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
               <NavLink
                 to={`/academy/${assessmentCategoryLink(
                   overview.category
-                )}/${overview.id.toString()}/${questionId.toString()}`}
+                )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
               >
                 <Button
                   className="listing-skip-button"
@@ -144,8 +154,6 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
         </div>
       </Card>
     </div>
-  ))
-  return <>{OpenCards}</>
-}
+  )
 
 export default Assessment
