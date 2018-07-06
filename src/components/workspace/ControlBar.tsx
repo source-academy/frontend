@@ -13,7 +13,7 @@ export type ControlBarProps = {
   hasPreviousButton?: boolean
   hasSaveButton?: boolean
   hasShareButton?: boolean
-  hasSubmitButton?: boolean
+  hasDoneButton?: boolean
   isRunning: boolean
   queryString?: string
   sourceChapter: number
@@ -26,7 +26,7 @@ export type ControlBarProps = {
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
-  onClickSubmit?(): any
+  onClickDone?(): any
 }
 
 interface IChapter {
@@ -120,8 +120,8 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const nextButton = this.props.hasNextButton
       ? controlButton('Next', IconNames.ARROW_RIGHT, this.props.onClickNext, { iconOnRight: true })
       : undefined
-    const submitButton = this.props.hasSubmitButton
-      ? controlButton('Submit', IconNames.TICK_CIRCLE, this.props.onClickSubmit, {
+    const submitButton = this.props.hasDoneButton
+      ? controlButton('Done', IconNames.TICK_CIRCLE, this.props.onClickDone, {
           iconOnRight: true
         })
       : undefined
