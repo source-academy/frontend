@@ -96,7 +96,7 @@ function* loginSaga(): SagaIterator {
   yield takeEvery(actionTypes.LOGIN, function*() {
     const apiLogin = 'https://ivle.nus.edu.sg/api/login/'
     const key = IVLE_KEY
-    const callback = `${window.location.protocol}//${window.location.hostname}/academy`
+    const callback = `${window.location.protocol}//${window.location.hostname}/login`
     window.location.href = `${apiLogin}?apikey=${key}&url=${callback}`
     yield undefined
   })

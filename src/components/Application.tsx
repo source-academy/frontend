@@ -39,7 +39,7 @@ const Application: React.SFC<IApplicationProps> = props => {
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
           <Route path="/status" component={Announcements} />
-          <Route path="/login" component={Login} />
+          <Route path="/login" component={toLogin(props)} />
           <Route exact={true} path="/" component={redirectToNews} />
           <Route component={NotFound} />
         </Switch>
@@ -48,16 +48,32 @@ const Application: React.SFC<IApplicationProps> = props => {
   )
 }
 
-const toAcademy = (props: IApplicationProps) => {
+/**
+ * A user routes to /academy,
+ *  1. If the user is logged in, render the Academy component
+ *  2. If the user is not logged in, redirect to /login
+ */
+const toAcademy = (props: IApplicationProps) =>
+  props.accessToken === undefined
+    ? () => <Redirect to="/login" />
+    : () => <Academy accessToken={props.accessToken} />
+
+/**
+ * A user routes to /login,
+ *  1. If the user has not yet started the log in process, spawn a regular login
+ *  component
+ *  2. If the user has come to /login via IVLE's login callback URL and is in
+ *  the process of logging in, spawn the login component with a loading spinner
+ */
+const toLogin = (props: IApplicationProps) => {
   const ivleToken = qs.parse(props.location.search).token
-  if (ivleToken !== undefined) {
-    props.handleFetchTokens(ivleToken) // just received a callback from IVLE
-    props.handleFetchUsername()
-    return () => <Redirect to="/playground" /> // TODO: spawn loading
-  } else if (props.accessToken === undefined) {
-    return () => <Redirect to="/login" />
+  if (ivleToken === undefined) {
+    return () => <Login />
   } else {
-    return () => <Academy accessToken={props.accessToken} />
+    // just received a callback from IVLE
+    props.handleFetchTokens(ivleToken)
+    props.handleFetchUsername()
+    return () => <Login isLoading={true} />
   }
 }
 

@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Loading login renders correctly 1`] = `
+"<div className=\\"Login pt-dark\\">
+  <Blueprint2.Card className=\\"login-card pt-elevation-4\\" elevation={0} interactive={false}>
+    <div className=\\"login-body\\">
+      <NonIdealState description=\\"Logging In...\\" visual={{...}} />
+    </div>
+  </Blueprint2.Card>
+</div>"
+`;
+
 exports[`Login renders correctly 1`] = `
 "<div className=\\"Login pt-dark\\">
   <Blueprint2.Card className=\\"login-card pt-elevation-4\\" elevation={0} interactive={false}>
@@ -11,7 +21,7 @@ exports[`Login renders correctly 1`] = `
     </div>
     <div className=\\"login-body\\">
       <Blueprint2.ButtonGroup fill={true} vertical={true}>
-        <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"log-in\\" onClick={[Function]}>
+        <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"log-in\\" onClick={[Function: handleLogin]}>
           Log in with IVLE
         </Blueprint2.Button>
         <NavLink to=\\"/playground\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">

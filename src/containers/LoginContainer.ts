@@ -12,4 +12,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   )
 
-export default connect(undefined, mapDispatchToProps)(Login)
+export default connect(null, mapDispatchToProps)(Login)

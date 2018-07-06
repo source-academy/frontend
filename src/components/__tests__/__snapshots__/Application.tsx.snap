@@ -10,7 +10,7 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/material\\" component={[Function: Connect]} />
       <Route path=\\"/playground\\" component={[Function: C]} />
       <Route path=\\"/status\\" component={[Function: Connect]} />
-      <Route path=\\"/login\\" component={[Function: Connect]} />
+      <Route path=\\"/login\\" component={[Function]} />
       <Route exact={true} path=\\"/\\" component={[Function: redirectToNews]} />
       <Route component={[Function: NotFound]} />
     </Switch>
