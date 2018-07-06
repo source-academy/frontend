@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
+import { beforeNow } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
@@ -100,7 +101,9 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
   } else if (props.assessmentOverviews.length === 0) {
     return <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
   }
-  const cards = props.assessmentOverviews.map((overview, index) => (
+  const OpenCards = props.assessmentOverviews
+    .filter((a) => !beforeNow(a.closeAt))
+    .map((overview, index) => (
     <div key={index}>
       <Card className="row listing">
         <div className="col-xs-3 listing-picture">PICTURE</div>
@@ -133,7 +136,7 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
                   intent={Intent.PRIMARY}
                   icon={IconNames.FLAME}
                 >
-                  Skip Story & Attempt
+                  {'Skip Story & Attempt'}
                 </Button>
               </NavLink>
             </div>
@@ -142,7 +145,7 @@ export const AssessmentOverviewCard: React.SFC<IAssessmentOverviewCardProps> = p
       </Card>
     </div>
   ))
-  return <>{cards}</>
+  return <>{OpenCards}</>
 }
 
 export default Assessment
