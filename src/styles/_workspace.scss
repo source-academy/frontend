@@ -132,8 +132,6 @@ $code-color-error: #ff4444;
 
         .side-content-text {
           height: fit-content;
-          /* For react-mde editor (grading comments) */
-          overflow: scroll;
           /* word-wrap and word-break are added to make text wrap. */
           word-wrap: break-word;
           word-break: break-word;
