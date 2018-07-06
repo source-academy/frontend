@@ -39,7 +39,7 @@ const mockProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
 
 const mockClosedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...mockProgrammingAssessmentWorkspaceProps,
-  closeDate: '2008-06-18T05:24:26.026Z',
+  closeDate: '2008-06-18T05:24:26.026Z'
 }
 
 const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
