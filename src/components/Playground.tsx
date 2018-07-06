@@ -61,9 +61,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
         hasChapterSelect: true,
+        hasDoneButton: false,
         hasNextButton: false,
         hasPreviousButton: false,
-        hasDoneButton: false,
+        hasSaveButton: false,
+        hasShareButton: true,
         isRunning: this.props.isRunning,
         queryString: this.props.queryString,
         sourceChapter: this.props.sourceChapter
