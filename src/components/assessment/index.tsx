@@ -14,7 +14,7 @@ import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
-import { beforeNow } from '../../utils/dateHelpers'
+import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
@@ -182,7 +182,7 @@ const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
           <h4>{overview.title}</h4>
         </div>
         <div className="row listing-order">
-          <h6>Mission 0 : 123123 XP (hardcoded)</h6>
+          <h6>{`XP: ${overview.maximumEXP}`}</h6>
         </div>
         <div className="row listing-description">
           <p className="col-xs-12">{overview.shortSummary}</p>
@@ -190,8 +190,8 @@ const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
         <div className="row between-xs middle-xs listing-controls">
           <div className="col-xs-8 listing-due-date-parent">
             <Text className="listing-due-date">
-              <Icon className="listing-due-icon" iconSize={14} icon={IconNames.TIME} />
-              Due: 12/12/12
+              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+              {`Due: ${getPrettyDate(overview.closeAt)}`}
             </Text>
           </div>
           <div className="col-xs">
