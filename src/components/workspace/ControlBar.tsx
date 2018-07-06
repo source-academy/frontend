@@ -8,12 +8,12 @@ import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
 export type ControlBarProps = {
-  hasChapterSelect?: boolean
-  hasNextButton?: boolean
-  hasPreviousButton?: boolean
-  hasSaveButton?: boolean
-  hasShareButton?: boolean
-  hasDoneButton?: boolean
+  hasChapterSelect: boolean
+  hasNextButton: boolean
+  hasPreviousButton: boolean
+  hasSaveButton: boolean
+  hasShareButton: boolean
+  hasDoneButton: boolean
   isRunning: boolean
   queryString?: string
   sourceChapter: number
