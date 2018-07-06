@@ -32,34 +32,34 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
   public render() {
     return (
       <>
-      <AceEditor
-        className="repl-react-ace react-ace"
-        mode="javascript"
-        theme="cobalt"
-        height="1px"
-        width="100%"
-        value={this.props.replValue}
-        onChange={this.props.handleReplValueChange}
-        commands={[
-          {
-            name: 'evaluate',
-            bindKey: {
-              win: 'Shift-Enter',
-              mac: 'Shift-Enter'
-            },
-            exec: () => {
-              this.replInputBottom.scrollIntoView()
-              this.props.handleReplEval()
+        <AceEditor
+          className="repl-react-ace react-ace"
+          mode="javascript"
+          theme="cobalt"
+          height="1px"
+          width="100%"
+          value={this.props.replValue}
+          onChange={this.props.handleReplValueChange}
+          commands={[
+            {
+              name: 'evaluate',
+              bindKey: {
+                win: 'Shift-Enter',
+                mac: 'Shift-Enter'
+              },
+              exec: () => {
+                this.replInputBottom.scrollIntoView()
+                this.props.handleReplEval()
+              }
             }
-          }
-        ]}
-        minLines={1}
-        maxLines={20}
-        fontSize={14}
-        highlightActiveLine={false}
-        showGutter={false}
-      />
-      <div className='replInputBottom' ref={e => (this.replInputBottom = e!)} />
+          ]}
+          minLines={1}
+          maxLines={20}
+          fontSize={14}
+          highlightActiveLine={false}
+          showGutter={false}
+        />
+        <div className="replInputBottom" ref={e => (this.replInputBottom = e!)} />
       </>
     )
   }

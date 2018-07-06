@@ -85,9 +85,10 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     )
     /* If questionId is out of bounds, set it to the max. */
-    const questionId = (this.props.questionId >= this.props.assessment.questions.length) 
-      ? this.props.assessment.questions.length - 1 
-      : this.props.questionId
+    const questionId =
+      this.props.questionId >= this.props.assessment.questions.length
+        ? this.props.assessment.questions.length - 1
+        : this.props.questionId
     const question: IQuestion = this.props.assessment.questions[questionId]
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
@@ -125,7 +126,8 @@ class AssessmentWorkspace extends React.Component<
 
   /** Pre-condition: IAssessment has been loaded */
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
-    props: AssessmentWorkspaceProps, questionId: number
+    props: AssessmentWorkspaceProps,
+    questionId: number
   ) => ({
     activeTab: props.activeTab,
     handleChangeActiveTab: props.handleChangeActiveTab,
@@ -145,7 +147,8 @@ class AssessmentWorkspace extends React.Component<
 
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
-    props: AssessmentWorkspaceProps, questionId: number
+    props: AssessmentWorkspaceProps,
+    questionId: number
   ) => {
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
     const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`
@@ -162,8 +165,7 @@ class AssessmentWorkspace extends React.Component<
       hasShareButton: false,
       hasSubmitButton: questionId === this.props.assessment!.questions.length - 1,
       isRunning: this.props.isRunning,
-      onClickNext: () =>
-        history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
+      onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
       onClickSubmit: () => history.push(listingPath),
