@@ -110,16 +110,17 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         <>
           {
             this.state.showOpenAssessments 
-            ? controlButton('Due soon', IconNames.CARET_DOWN, this.toggleOpenAssessments, {minimal:true})
-            : controlButton('Due soon', IconNames.CARET_RIGHT, this.toggleOpenAssessments, {minimal:true})
+            ? controlButton('Due soon', IconNames.CARET_DOWN, this.toggleOpenAssessments, {minimal:true, className:'collapse-button'})
+            : controlButton('Due soon', IconNames.CARET_RIGHT, this.toggleOpenAssessments, {minimal:true, className:'collapse-button'})
           }
           <Collapse isOpen={this.state.showOpenAssessments}>
             {openCards}
           </Collapse>
           {
             this.state.showClosedAssessments 
-            ? controlButton('Closed', IconNames.CARET_DOWN, this.toggleClosedAssessments, {minimal:true})
-            : controlButton('Closed', IconNames.CARET_RIGHT, this.toggleClosedAssessments, {minimal:true})
+            ? controlButton('Closed', IconNames.CARET_DOWN, this.toggleClosedAssessments, {minimal:true, className:'collapse-button'})
+            : controlButton('Closed', IconNames.CARET_RIGHT, this.toggleClosedAssessments, {minimal:true, className:'collapse-button'})
+
           }
           <Collapse isOpen={this.state.showClosedAssessments}>
             {closedCards}
