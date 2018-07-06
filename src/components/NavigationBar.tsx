@@ -72,12 +72,15 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
             className="NavigationBar__link pt-button pt-minimal"
           >
             <Icon icon={IconNames.USER} />
-            <div className="navbar-button-text hidden-xs">{props.username}</div>
+            <div className="navbar-button-text hidden-xs">{titleCase(props.username)}</div>
           </NavLink>
         </>
       )}
     </NavbarGroup>
   </Navbar>
 )
+
+const titleCase = (str: string) =>
+  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase())
 
 export default NavigationBar
