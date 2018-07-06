@@ -122,13 +122,15 @@ $code-color-error: #ff4444;
       overflow-y: auto;
 
       .pt-card {
-        display: flex;
-        flex-direction: column;
         background-color: $cadet-color-2;
         color: $code-color-result;
+        display: flex;
+        flex-direction: column;
         height: 100%;
-        padding: 0.4rem 0.6rem 0.4rem 0.6rem;
         margin: 0 0.5rem 0 0;
+        /* Fix card not wrapping content on OSX, Chrome */
+        overflow-y: auto;
+        padding: 0.4rem 0.6rem 0.4rem 0.6rem;
 
         .side-content-text {
           height: fit-content;
