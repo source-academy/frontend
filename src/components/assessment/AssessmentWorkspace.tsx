@@ -159,11 +159,11 @@ class AssessmentWorkspace extends React.Component<
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       hasChapterSelect: false,
+      hasDoneButton: questionId === this.props.assessment!.questions.length - 1,
       hasNextButton: questionId < this.props.assessment!.questions.length - 1,
       hasPreviousButton: questionId > 0,
       hasSaveButton: true,
       hasShareButton: false,
-      hasDoneButton: questionId === this.props.assessment!.questions.length - 1,
       isRunning: this.props.isRunning,
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
