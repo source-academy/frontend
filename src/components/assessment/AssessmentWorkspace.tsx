@@ -169,7 +169,7 @@ class AssessmentWorkspace extends React.Component<
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
-      sourceChapter: 2 // TODO dynamic library changing
+      sourceChapter: this.props.assessment!.questions[questionId].library.chapter
     }
   }
 }
