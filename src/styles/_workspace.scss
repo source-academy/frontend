@@ -129,11 +129,11 @@ $code-color-error: #ff4444;
         height: 100%;
         padding: 0.4rem 0.6rem 0.4rem 0.6rem;
         margin: 0 0.5rem 0 0;
-        /* For react-mde editor (grading comments) */
-        overflow: scroll;
 
         .side-content-text {
-          height: 100%;
+          height: fit-content;
+          /* For react-mde editor (grading comments) */
+          overflow: scroll;
           /* word-wrap and word-break are added to make text wrap. */
           word-wrap: break-word;
           word-break: break-word;
@@ -151,13 +151,6 @@ $code-color-error: #ff4444;
             }
           }
           .react-mde {
-            /** 
-             * This margin preserves the 0.4rem padding of .pt-card
-             * when the resizable component is resized. There are 
-             * alternatives to this method, but this preserves the 
-             * desired growing and scrolling behavior best thus far.
-             */
-            margin-bottom: 0.4rem;
             /* Color the borders */
             border-color: $cadet-color-5;
             border-radius: 3px;
