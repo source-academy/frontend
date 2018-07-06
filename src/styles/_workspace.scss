@@ -110,6 +110,15 @@ $code-color-error: #ff4444;
     display: flex;
     flex-direction: column;
 
+    .side-content-header {
+      align-items: center;
+      display: flex;
+      flex: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-bottom: 0.2rem;
+    }
+
     .side-content-divider {
       height: 0.6rem;
       flex: initial;
@@ -187,13 +196,6 @@ $code-color-error: #ff4444;
     }
   }
 
-  .side-content-header {
-    display: flex;
-    padding-bottom: 0.2rem;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-  }
 
   hr {
     margin: 0 0 0.5rem 0;
