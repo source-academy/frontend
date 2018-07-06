@@ -13,10 +13,10 @@ export const beforeNow = (d: string): boolean => {
 }
 
 /**
- * Return a string representation of a date that is 
+ * Return a string representation of a date that is
  * nice to look at. To be used for displaying the date,
  * e.g when showing the assessment overview.
- * 
+ *
  * @param {string} date - Current date, in a parsable string format
  *   e.g 2018-07-06T10:20:09.961Z
  * @returns {string} A user-friendly readable date string,
