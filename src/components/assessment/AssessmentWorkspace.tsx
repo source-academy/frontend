@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import { InterpreterOutput } from '../../reducers/states'
+import { beforeNow } from '../../utils/dateHelpers'
 import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import Workspace, { WorkspaceProps } from '../workspace'
@@ -32,6 +33,7 @@ export type StateProps = {
 export type OwnProps = {
   assessmentId: number
   questionId: number
+  closeDate: string
 }
 
 export type DispatchProps = {
@@ -162,7 +164,7 @@ class AssessmentWorkspace extends React.Component<
       hasDoneButton: questionId === this.props.assessment!.questions.length - 1,
       hasNextButton: questionId < this.props.assessment!.questions.length - 1,
       hasPreviousButton: questionId > 0,
-      hasSaveButton: true,
+      hasSaveButton: !beforeNow(this.props.closeDate),
       hasShareButton: false,
       isRunning: this.props.isRunning,
       onClickDone: () => history.push(listingPath),

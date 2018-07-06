@@ -93,12 +93,15 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
 
     /**
-     * If there is an assessment to render, create a workspace.
+     * If there is an assessment to render, create a workspace. The assessment
+     * overviews must still be loaded for this, to send the due date.
      */
-    if (assessmentId !== null) {
+    if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
       const assessmentProps: AssessmentProps = {
         assessmentId,
-        questionId
+        questionId,
+        // get the closeDate of the assessment
+        closeDate: this.props.assessmentOverviews.filter(a => a.id === assessmentId)[0].closeAt
       }
       return <AssessmentWorkspaceContainer {...assessmentProps} />
     }
