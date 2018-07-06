@@ -6,15 +6,17 @@ import { NavLink } from 'react-router-dom'
 type LoginProps = DispatchProps & OwnProps
 
 export type DispatchProps = {
+  handleFetchAuth: (ivleToken: string) => void
   handleLogin: () => void
 }
 
 export type OwnProps = {
-  isLoading?: boolean
+  ivleToken?: string
 }
 
 const Login: React.SFC<LoginProps> = props => {
-  if (props.isLoading) {
+  if (props.ivleToken) {
+    startFetchAuth(props.ivleToken, props.handleFetchAuth)
     return (
       <div className="Login pt-dark">
         <Card className="login-card pt-elevation-4">
@@ -44,6 +46,9 @@ const Login: React.SFC<LoginProps> = props => {
     )
   }
 }
+
+const startFetchAuth = (ivleToken: string, handleFetchAuth: DispatchProps['handleFetchAuth']) =>
+  handleFetchAuth(ivleToken)
 
 const loginButton = (handleClick: () => void) => (
   <Button className="pt-large" rightIcon="log-in" onClick={handleClick}>

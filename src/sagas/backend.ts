@@ -1,12 +1,13 @@
-import { SagaIterator } from 'redux-saga'
+import { delay, SagaIterator } from 'redux-saga'
 import { call, put, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { BACKEND_URL } from '../utils/constants'
+import { history } from '../utils/history'
 
 function* backendSaga(): SagaIterator {
-  yield takeEvery(actionTypes.FETCH_TOKENS, function*(action) {
+  yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
     const ivleToken = (action as actionTypes.IAction).payload
     const resp = yield call(request, 'auth', {
       method: 'POST',
@@ -16,15 +17,11 @@ function* backendSaga(): SagaIterator {
       accessToken: resp.refresh_token,
       refreshToken: resp.access_token
     }
+    const username = yield call(() => 'IVLE USER') // TODO: fetchUsername
     yield put(actions.setTokens(tokens))
-  })
-
-  yield takeEvery(actionTypes.FETCH_USERNAME, function*() {
-    // TODO: use an API call to the backend; an api call to IVLE raises an
-    // uncaught error due to restrictive Access-Control-Allow-Origin headers,
-    // causing the staging server to bug out
-    const username = yield call(() => 'IVLE USER')
     yield put(actions.setUsername(username))
+    yield delay(2000)
+    yield history.push('/academy')
   })
 }
 

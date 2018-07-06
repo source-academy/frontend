@@ -4,8 +4,8 @@ import { Grading, GradingOverview } from '../components/academy/grading/gradingS
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import * as actionTypes from './actionTypes'
 
-export const fetchTokens: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
-  type: actionTypes.FETCH_TOKENS,
+export const fetchAuth: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
+  type: actionTypes.FETCH_AUTH,
   payload: ivleToken
 })
 
@@ -29,10 +29,6 @@ export const fetchGrading = (submissionId: number) => ({
 
 export const fetchGradingOverviews = () => ({
   type: actionTypes.FETCH_GRADING_OVERVIEWS
-})
-
-export const fetchUsername = () => ({
-  type: actionTypes.FETCH_USERNAME
 })
 
 export const login = () => ({

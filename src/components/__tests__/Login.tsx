@@ -5,7 +5,8 @@ import Login from '../Login'
 
 test('Login renders correctly', () => {
   const props = {
-    handleLogin: () => {}
+    handleLogin: () => {},
+    handleFetchAuth: (ivleToken: string) => {}
   }
   const app = <Login {...props} />
   const tree = shallow(app)
@@ -15,7 +16,8 @@ test('Login renders correctly', () => {
 test('Loading login renders correctly', () => {
   const props = {
     handleLogin: () => {},
-    isLoading: true
+    handleFetchAuth: (ivleToken: string) => {},
+    ivleToken: '1VL3 T0K3N'
   }
   const app = <Login {...props} />
   const tree = shallow(app)

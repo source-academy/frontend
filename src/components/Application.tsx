@@ -19,8 +19,6 @@ export interface IApplicationProps extends IDispatchProps, RouteComponentProps<{
 
 export interface IDispatchProps {
   handleChangeChapter: (chapter: number) => void
-  handleFetchTokens: (ivleToken: string) => void
-  handleFetchUsername: () => void
   handleEditorValueChange: (val: string) => void
 }
 
@@ -39,8 +37,8 @@ const Application: React.SFC<IApplicationProps> = props => {
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
           <Route path="/status" component={Announcements} />
-          <Route path="/login" component={toLogin(props)} />
-          <Route exact={true} path="/" component={redirectToNews} />
+          <Route path="/login" render={toLogin(props)} />
+          <Route exact={true} path="/" render={redirectToNews} />
           <Route component={NotFound} />
         </Switch>
       </div>
@@ -58,24 +56,9 @@ const toAcademy = (props: IApplicationProps) =>
     ? () => <Redirect to="/login" />
     : () => <Academy accessToken={props.accessToken} />
 
-/**
- * A user routes to /login,
- *  1. If the user has not yet started the log in process, spawn a regular login
- *  component
- *  2. If the user has come to /login via IVLE's login callback URL and is in
- *  the process of logging in, spawn the login component with a loading spinner
- */
-const toLogin = (props: IApplicationProps) => {
-  const ivleToken = qs.parse(props.location.search).token
-  if (ivleToken === undefined) {
-    return () => <Login />
-  } else {
-    // just received a callback from IVLE
-    props.handleFetchTokens(ivleToken)
-    props.handleFetchUsername()
-    return () => <Login isLoading={true} />
-  }
-}
+const toLogin = (props: IApplicationProps) => () => (
+  <Login ivleToken={qs.parse(props.location.search).token} />
+)
 
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props)

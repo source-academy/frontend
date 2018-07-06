@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { changeChapter, fetchTokens, fetchUsername, updateEditorValue } from '../actions'
+import { changeChapter, updateEditorValue } from '../actions'
 import Application, { IDispatchProps } from '../components/Application'
 import { IState } from '../reducers/states'
 
@@ -23,9 +23,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
   bindActionCreators(
     {
       handleChangeChapter: (chapter: number) => changeChapter(chapter, 'playground'),
-      handleEditorValueChange: (val: string) => updateEditorValue(val, 'playground'),
-      handleFetchTokens: fetchTokens,
-      handleFetchUsername: fetchUsername
+      handleEditorValueChange: (val: string) => updateEditorValue(val, 'playground')
     },
     dispatch
   )
