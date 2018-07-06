@@ -5,30 +5,16 @@ export enum Roles {
 }
 export type Role = keyof typeof Roles
 
-/* Used to mock student access, i.e only attempt missions */
-export const MOCK_STUDENT_ACCESS_TOKEN = 'STUDENT_ACCESS_TOKEN'
-/* Used to mock trainer access, i.e only grade missions*/
-export const MOCK_TRAINER_ACCESS_TOKEN = 'TRAINER_ACCESS_TOKEN'
-/* Used to mock admin access */
-export const MOCK_ADMIN_ACCESS_TOKEN = 'ADMIN_ACCESS_TOKEN'
-
 /**
  * Mock for fetching a role, given an access token. A null
- * value is returned for invalid tokens.
+ * value is returned for invalid tokens. Fetching a particular
+ * role can be simluated using an optional paramter.
  *
  * @param accessToken a valid access token for the cadet backend.
+ * @param mockRole a role to mock retrieval for.
  */
-export const mockFetchRole = (accessToken: string): Role | null => {
-  switch (accessToken) {
-    case MOCK_STUDENT_ACCESS_TOKEN:
-      return Roles.student
-    case MOCK_TRAINER_ACCESS_TOKEN:
-      return Roles.trainer
-    case MOCK_ADMIN_ACCESS_TOKEN:
-      return Roles.admin
-    default:
-      return null
-  }
+export const mockFetchRole = (accessToken: string, role: Role = Roles.trainer): Role | null => {
+      return role
 }
 
 /**
