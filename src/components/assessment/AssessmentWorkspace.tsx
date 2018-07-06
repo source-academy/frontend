@@ -159,17 +159,17 @@ class AssessmentWorkspace extends React.Component<
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       hasChapterSelect: false,
+      hasDoneButton: questionId === this.props.assessment!.questions.length - 1,
       hasNextButton: questionId < this.props.assessment!.questions.length - 1,
       hasPreviousButton: questionId > 0,
       hasSaveButton: true,
       hasShareButton: false,
-      hasSubmitButton: questionId === this.props.assessment!.questions.length - 1,
       isRunning: this.props.isRunning,
+      onClickDone: () => history.push(listingPath),
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
-      onClickSubmit: () => history.push(listingPath),
-      sourceChapter: 2 // TODO dynamic library changing
+      sourceChapter: this.props.assessment!.questions[questionId].library.chapter
     }
   }
 }

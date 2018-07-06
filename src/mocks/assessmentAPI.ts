@@ -117,6 +117,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
       }
     ],
     id: 2,
+    library: mockLibrary,
     type: 'mcq'
   }
 ]

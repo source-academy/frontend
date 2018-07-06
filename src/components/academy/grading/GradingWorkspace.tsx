@@ -64,10 +64,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       )
     }
 
+    /* If questionId is out of bounds, set it to the max. */
+    const questionId =
+      this.props.questionId >= this.props.grading.length
+        ? this.props.grading.length - 1
+        : this.props.questionId
     /* Get the question to be graded */
-    const question = this.props.grading[this.props.questionId].question as IQuestion
+    const question = this.props.grading[questionId].question as IQuestion
     const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props),
+      controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
@@ -84,7 +89,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcq: question as IMCQQuestion,
       sideContentHeight: this.props.sideContentHeight,
-      sideContentProps: this.sideContentProps(this.props),
+      sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {
         output: this.props.output,
         replValue: this.props.replValue,
@@ -100,29 +105,31 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   }
 
   /** Pre-condition: Grading has been loaded */
-  private sideContentProps: (p: GradingWorkspaceProps) => SideContentProps = (
-    props: GradingWorkspaceProps
+  private sideContentProps: (p: GradingWorkspaceProps, q: number) => SideContentProps = (
+    props: GradingWorkspaceProps,
+    questionId: number
   ) => ({
     activeTab: props.activeTab,
     handleChangeActiveTab: props.handleChangeActiveTab,
     tabs: [
       {
-        label: `Grading: Question ${props.questionId}`,
+        label: `Grading: Question ${questionId}`,
         icon: IconNames.TICK,
         /* Render an editor with the xp given to the current question. */
-        body: <GradingEditor maximumXP={props.grading![props.questionId].maximumXP} />
+        body: <GradingEditor maximumXP={props.grading![questionId].maximumXP} />
       },
       {
-        label: `Task ${props.questionId}`,
+        label: `Task ${questionId}`,
         icon: IconNames.NINJA,
-        body: <Text> {props.grading![props.questionId].question.content} </Text>
+        body: <Text> {props.grading![questionId].question.content} </Text>
       }
     ]
   })
 
   /** Pre-condition: Grading has been loaded */
-  private controlBarProps: (p: GradingWorkspaceProps) => ControlBarProps = (
-    props: GradingWorkspaceProps
+  private controlBarProps: (p: GradingWorkspaceProps, q: number) => ControlBarProps = (
+    props: GradingWorkspaceProps,
+    questionId: number
   ) => {
     const listingPath = `/academy/grading`
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`
@@ -133,18 +140,16 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       hasChapterSelect: false,
-      hasNextButton: this.props.questionId < this.props.grading!.length - 1,
-      hasPreviousButton: this.props.questionId > 0,
+      hasDoneButton: questionId === this.props.grading!.length - 1,
+      hasNextButton: questionId < this.props.grading!.length - 1,
+      hasPreviousButton: questionId > 0,
       hasSaveButton: false,
       hasShareButton: false,
-      hasSubmitButton: this.props.questionId === this.props.grading!.length - 1,
       isRunning: this.props.isRunning,
-      onClickNext: () =>
-        history.push(gradingWorkspacePath + `/${(this.props.questionId + 1).toString()}`),
-      onClickPrevious: () =>
-        history.push(gradingWorkspacePath + `/${(this.props.questionId - 1).toString()}`),
-      onClickSubmit: () => history.push(listingPath),
-      sourceChapter: 2 // TODO dynamic library changing
+      onClickDone: () => history.push(listingPath),
+      onClickNext: () => history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
+      onClickPrevious: () => history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),
+      sourceChapter: this.props.grading![questionId].question.library.chapter
     }
   }
 }

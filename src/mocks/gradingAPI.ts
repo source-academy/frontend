@@ -111,6 +111,7 @@ const mockGrading: Grading = [
         }
       ],
       id: 2,
+      library: mockLibrary,
       type: 'mcq'
     },
     maximumXP: 100,

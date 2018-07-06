@@ -1,4 +1,4 @@
-import { AssessmentCategory, IQuestion, Library, MCQChoice } from '../../assessment/assessmentShape'
+import { AssessmentCategory, IQuestion, MCQChoice } from '../../assessment/assessmentShape'
 
 /**
  * Information on a Grading, for a particular student submission
@@ -44,7 +44,6 @@ export type GradingQuestion = {
 interface IAnsweredQuestion extends IQuestion {
   solution?: number
   answer?: string | number
-  library?: Library
   solutionTemplate?: string
   choices?: MCQChoice[]
 }
