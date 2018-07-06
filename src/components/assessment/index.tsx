@@ -1,4 +1,4 @@
-import { Button, Card, Icon, Intent, NonIdealState, Spinner, Text } from '@blueprintjs/core'
+import { Button, Card, Collapse, Icon, Intent, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
@@ -9,7 +9,8 @@ import { beforeNow } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
-import ContentDisplay, { IContentDisplayProps } from '../commons/ContentDisplay'
+import { controlButton } from '../commons';
+import ContentDisplay from '../commons/ContentDisplay'
 
 const DEFAULT_QUESTION_ID: number = 0 
 
@@ -40,7 +41,23 @@ export interface IStateProps {
   storedQuestionId?: number
 }
 
-class Assessment extends React.Component<IAssessmentProps, {}> {
+type State = {
+  showOpenAssessments: boolean
+  showClosedAssessments: boolean
+}
+
+class Assessment extends React.Component<IAssessmentProps, State> {
+  /**
+   * Initialize state
+   */
+  public constructor(props: IAssessmentProps) {
+    super(props)
+    this.state = {
+      showOpenAssessments: true,
+      showClosedAssessments: false
+    }
+  }
+
   /**
    * If the current AssessmentId/QuestionId has changed, update it
    * in the store and reset the workspace.
@@ -64,6 +81,10 @@ class Assessment extends React.Component<IAssessmentProps, {}> {
   public render() {
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId)
     const questionId: number = stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
+
+    /**
+     * If there is an assessment to render, create a workspace.
+     */
     if (assessmentId !== null) {
       const assessmentProps: AssessmentProps = {
         assessmentId,
@@ -72,39 +93,63 @@ class Assessment extends React.Component<IAssessmentProps, {}> {
       return <AssessmentWorkspaceContainer {...assessmentProps} />
     }
 
-    // if there is no assessmentId specified, Render only information.
-    const displayProps: IContentDisplayProps = {
-      display: (
-        <AssessmentOverviewCard
-          assessmentOverviews={this.props.assessmentOverviews}
-        />
-      ),
-      loadContentDispatch: this.props.handleAssessmentOverviewFetch
+    // The item to be displayed in the ContentDisplay
+    let display
+    if (this.props.assessmentOverviews === undefined) {
+      display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
+    } else if (this.props.assessmentOverviews.length === 0) {
+      display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
+    } else {
+      const openCards = this.props.assessmentOverviews
+        .filter((a) => !beforeNow(a.closeAt))
+        .map((overview, index) => makeOverviewCard(overview, index))
+      const closedCards = this.props.assessmentOverviews
+        .filter((a) => beforeNow(a.closeAt))
+        .map((overview, index) => makeOverviewCard(overview, index))
+      display = (
+        <>
+          {
+            this.state.showOpenAssessments 
+            ? controlButton('Due soon', IconNames.CARET_DOWN, this.toggleOpenAssessments, {minimal:true})
+            : controlButton('Due soon', IconNames.CARET_RIGHT, this.toggleOpenAssessments, {minimal:true})
+          }
+          <Collapse isOpen={this.state.showOpenAssessments}>
+            {openCards}
+          </Collapse>
+          {
+            this.state.showClosedAssessments 
+            ? controlButton('Closed', IconNames.CARET_DOWN, this.toggleClosedAssessments, {minimal:true})
+            : controlButton('Closed', IconNames.CARET_RIGHT, this.toggleClosedAssessments, {minimal:true})
+          }
+          <Collapse isOpen={this.state.showClosedAssessments}>
+            {closedCards}
+          </Collapse>
+        </> 
+      )
     }
+    /**
+     * Finally, render the ContentDisplay.
+     */
     return (
       <div className="Assessment">
-        <ContentDisplay {...displayProps} />
+        <ContentDisplay 
+          display={display} 
+          loadContentDispatch={this.props.handleAssessmentOverviewFetch} />
       </div>
     )
   }
-}
 
+  private toggleOpenAssessments = () => 
+    this.setState({
+      ...this.state,
+      showOpenAssessments: !this.state.showOpenAssessments
+    })
 
-export const AssessmentOverviewCard: React.SFC<{
-  assessmentOverviews?: IAssessmentOverview[]
-}> = props => {
-  if (props.assessmentOverviews === undefined) {
-    return <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
-  } else if (props.assessmentOverviews.length === DEFAULT_QUESTION_ID) {
-    return <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
-  }
-  const openCards = props.assessmentOverviews
-    .filter((a) => !beforeNow(a.closeAt))
-    .map((overview, index) => makeOverviewCard(overview, index))
-  const closedCards = props.assessmentOverviews
-    .filter((a) => beforeNow(a.closeAt))
-    .map((overview, index) => makeOverviewCard(overview, index))
-  return <>{openCards} {closedCards} </>
+  private toggleClosedAssessments = () => 
+    this.setState({
+      ...this.state,
+      showClosedAssessments: !this.state.showClosedAssessments
+    })
 }
 
 /**
