@@ -144,7 +144,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         history.push(gradingWorkspacePath + `/${(this.props.questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(gradingWorkspacePath + `/${(this.props.questionId - 1).toString()}`),
-      sourceChapter: 2 // TODO dynamic library changing
+      sourceChapter: this.props.grading![this.props.questionId].question.library.chapter
     }
   }
 }
