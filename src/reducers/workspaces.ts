@@ -53,7 +53,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          sideContentActiveTab: action.payload
+          sideContentActiveTab: action.payload.activeTab
         }
       }
     case CHANGE_EDITOR_WIDTH:
