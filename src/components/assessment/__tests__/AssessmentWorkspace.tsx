@@ -37,6 +37,11 @@ const mockProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   questionId: 0
 }
 
+const mockClosedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
+  ...mockProgrammingAssessmentWorkspaceProps,
+  closeDate: '2008-06-18T05:24:26.026Z',
+}
+
 const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessment: mockAssessments[0],
@@ -52,6 +57,12 @@ test('AssessmentWorkspace page "loading" content renders correctly', () => {
 
 test('AssessmentWorkspace page with programming question renders correctly', () => {
   const app = <AssessmentWorkspace {...mockProgrammingAssessmentWorkspaceProps} />
+  const tree = shallow(app)
+  expect(tree.debug()).toMatchSnapshot()
+})
+
+test('AssessmentWorkspace page with overdue assessment renders correctly', () => {
+  const app = <AssessmentWorkspace {...mockClosedProgrammingAssessmentWorkspaceProps} />
   const tree = shallow(app)
   expect(tree.debug()).toMatchSnapshot()
 })
