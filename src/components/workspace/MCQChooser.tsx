@@ -8,7 +8,7 @@ export interface IMCQChooserProps {
   mcqSubmit?: (choiceId: number) => void
 }
 
-class MCQChooser extends React.Component<IMCQChooserProps, {}> {
+class MCQChooser extends React.PureComponent<IMCQChooserProps, {}> {
   public render() {
     const mockMcqSubmit = (i: number) => () => {}
     const options = this.props.mcq.choices.map((choice, i) => (

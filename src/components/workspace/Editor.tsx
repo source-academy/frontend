@@ -18,7 +18,7 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void
 }
 
-class Editor extends React.Component<IEditorProps, {}> {
+class Editor extends React.PureComponent<IEditorProps, {}> {
   public render() {
     return (
       <HotKeys className="Editor" handlers={handlers}>
