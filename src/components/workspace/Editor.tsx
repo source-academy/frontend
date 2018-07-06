@@ -18,18 +18,13 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void
 }
 
-class Editor extends React.Component<IEditorProps, {}> {
+class Editor extends React.PureComponent<IEditorProps, {}> {
   public render() {
     return (
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor
             className="react-ace"
-            mode="javascript"
-            theme="cobalt"
-            value={this.props.editorValue}
-            onChange={this.props.handleEditorValueChange}
-            height="100%"
             commands={[
               {
                 name: 'evaluate',
@@ -40,9 +35,17 @@ class Editor extends React.Component<IEditorProps, {}> {
                 exec: this.props.handleEditorEval
               }
             ]}
-            width="100%"
+            editorProps={{
+              $blockScrolling: Infinity
+            }}
             fontSize={14}
+            height="100%"
             highlightActiveLine={false}
+            mode="javascript"
+            onChange={this.props.handleEditorValueChange}
+            theme="cobalt"
+            value={this.props.editorValue}
+            width="100%"
           />
         </div>
       </HotKeys>

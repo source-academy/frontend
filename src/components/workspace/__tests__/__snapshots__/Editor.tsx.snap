@@ -3,7 +3,7 @@
 exports[`Editor renders correctly 1`] = `
 "<HotKeys className=\\"Editor\\" handlers={{...}}>
   <div className=\\"row editor-react-ace\\">
-    <ReactAce className=\\"react-ace\\" mode=\\"javascript\\" theme=\\"cobalt\\" value=\\"\\" onChange={[Function: handleEditorValueChange]} height=\\"100%\\" commands={{...}} width=\\"100%\\" fontSize={14} highlightActiveLine={false} name=\\"brace-editor\\" focus={false} showGutter={true} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} maxLines={{...}} readOnly={false} showPrintMargin={true} tabSize={4} cursorStart={1} editorProps={{...}} style={{...}} scrollMargin={{...}} setOptions={{...}} wrapEnabled={false} enableBasicAutocompletion={false} enableLiveAutocompletion={false} />
+    <ReactAce className=\\"react-ace\\" commands={{...}} editorProps={{...}} fontSize={14} height=\\"100%\\" highlightActiveLine={false} mode=\\"javascript\\" onChange={[Function: handleEditorValueChange]} theme=\\"cobalt\\" value=\\"\\" width=\\"100%\\" name=\\"brace-editor\\" focus={false} showGutter={true} onPaste={{...}} onLoad={{...}} onScroll={{...}} minLines={{...}} maxLines={{...}} readOnly={false} showPrintMargin={true} tabSize={4} cursorStart={1} style={{...}} scrollMargin={{...}} setOptions={{...}} wrapEnabled={false} enableBasicAutocompletion={false} enableLiveAutocompletion={false} />
   </div>
 </HotKeys>"
 `;

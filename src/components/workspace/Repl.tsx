@@ -17,25 +17,7 @@ export interface IOutputProps {
   output: InterpreterOutput
 }
 
-class Repl extends React.Component<IReplProps, {}> {
-  private replBottom: HTMLDivElement
-
-  public componentDidUpdate() {
-    if (this.replBottom.clientWidth >= window.innerWidth - 50) {
-      /* There is a bug where
-       *   if the workspace has been resized via re-resizable such that the
-       *   has disappeared off the screen, width 63
-       * then
-       *   calling scrollIntoView would cause the Repl to suddenly take up 100%
-       *   of the screen width. This pushes the editor off-screen so that the
-       *   user can no longer resize the workspace at all
-       * Fix: the if condition is true when the Repl has dissapeared off-screen.
-       *   (-15 to account for the scrollbar */
-    } else {
-      this.replBottom.scrollIntoView()
-    }
-  }
-
+class Repl extends React.PureComponent<IReplProps, {}> {
   public render() {
     const cards = this.props.output.map((slice, index) => <Output output={slice} key={index} />)
     const inputProps: IReplInputProps = this.props as IReplInputProps
@@ -46,7 +28,6 @@ class Repl extends React.Component<IReplProps, {}> {
           <HotKeys className="repl-input-parent row pt-card pt-elevation-0" handlers={handlers}>
             <ReplInput {...inputProps} />
           </HotKeys>
-          <div ref={e => (this.replBottom = e!)} />
         </div>
       </div>
     )

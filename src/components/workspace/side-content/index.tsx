@@ -13,7 +13,7 @@ export type SideContentTab = {
   body: JSX.Element
 }
 
-class SideContent extends React.Component<SideContentProps, {}> {
+class SideContent extends React.PureComponent<SideContentProps, {}> {
   public render() {
     return (
       <div className="side-content">

@@ -8,12 +8,12 @@ export interface IMCQChooserProps {
   mcqSubmit?: (choiceId: number) => void
 }
 
-class MCQChooser extends React.Component<IMCQChooserProps, {}> {
+class MCQChooser extends React.PureComponent<IMCQChooserProps, {}> {
   public render() {
     const mockMcqSubmit = (i: number) => () => {}
     const options = this.props.mcq.choices.map((choice, i) => (
-      <Button className="mcq-option col-xs-6" onClick={mockMcqSubmit(i)}>
-        <Tooltip key={i} content={choice.hint}>
+      <Button key={i} className="mcq-option col-xs-6" onClick={mockMcqSubmit(i)}>
+        <Tooltip content={choice.hint}>
           <Text className="Text"> {choice.content} </Text>
         </Tooltip>
       </Button>

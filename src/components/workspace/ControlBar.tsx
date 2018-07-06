@@ -34,7 +34,7 @@ interface IChapter {
   displayName: string
 }
 
-class ControlBar extends React.Component<ControlBarProps, {}> {
+class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   public static defaultProps: Partial<ControlBarProps> = {
     hasChapterSelect: false,
     hasNextButton: false,
