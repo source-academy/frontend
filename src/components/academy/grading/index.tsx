@@ -11,6 +11,7 @@ import GradingWorkspaceContainer from '../../../containers/academy/grading/Gradi
 import { stringParamToInt } from '../../../utils/paramParseHelpers'
 import { controlButton } from '../../commons'
 import ContentDisplay from '../../commons/ContentDisplay'
+import GradingNavLink from './GradingNavLink'
 import { GradingOverview } from './gradingShape'
 import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace'
 
@@ -34,10 +35,14 @@ export interface IGradingWorkspaceParams {
 
 export interface IDispatchProps {
   handleFetchGradingOverviews: () => void
+  handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
+  handleResetAssessmentWorkspace: () => void
 }
 
 export interface IStateProps {
   gradingOverviews?: GradingOverview[]
+  storedSubmissionId?: number
+  storedQuestionId?: number
 }
 
 class Grading extends React.Component<IGradingProps, State> {
@@ -60,13 +65,29 @@ class Grading extends React.Component<IGradingProps, State> {
         {
           headerName: 'Graded',
           field: 'graded',
-          cellRenderer: ({ data }: { data: GradingOverview }) => {
-            return `<a href='${window.location.origin}/academy/grading/${data.submissionId}'>${
-              data.graded ? 'Done' : 'Not Graded'
-            }</a>`
-          }
+          cellRendererFramework: GradingNavLink
         }
       ]
+    }
+  }
+
+  /**
+   * If the current SubmissionId/QuestionId has changed, update it
+   * in the store and reset the workspace.
+   */
+  public componentWillMount() {
+    const submissionId = stringParamToInt(this.props.match.params.submissionId)
+    if (submissionId === null) {
+      return
+    }
+    const questionId = stringParamToInt(this.props.match.params.questionId)!
+
+    if (
+      this.props.storedSubmissionId !== submissionId ||
+      this.props.storedQuestionId !== questionId
+    ) {
+      this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
+      this.props.handleResetAssessmentWorkspace()
     }
   }
 

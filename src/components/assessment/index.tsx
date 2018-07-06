@@ -44,10 +44,10 @@ class Assessment extends React.Component<IAssessmentProps, {}> {
    */
   public componentWillMount() {
     const assessmentId = stringParamToInt(this.props.match.params.assessmentId)
-    const questionId = stringParamToInt(this.props.match.params.questionId)
-    if (assessmentId === null || questionId === null) {
+    if (assessmentId === null) {
       return
     }
+    const questionId = stringParamToInt(this.props.match.params.questionId)!
 
     if (
       this.props.storedAssessmentId !== assessmentId ||

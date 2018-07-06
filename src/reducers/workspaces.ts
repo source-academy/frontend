@@ -17,7 +17,10 @@ import {
   RESET_ASSESSMENT_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_CURRENT_ASSESSMENT_ID,
+  UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
+  UPDATE_GRADING_COMMENTS_VALUE,
+  UPDATE_GRADING_XP,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
@@ -25,6 +28,7 @@ import { createContext } from '../slang'
 import {
   CodeOutput,
   createDefaultWorkspace,
+  defaultComments,
   defaultWorkspaceManager,
   InterpreterOutput,
   IWorkspaceManagerState
@@ -215,13 +219,23 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case RESET_ASSESSMENT_WORKSPACE:
       return {
         ...state,
-        assessment: createDefaultWorkspace(WorkspaceLocations.assessment)
+        assessment: createDefaultWorkspace(WorkspaceLocations.assessment),
+        gradingCommentsValue: defaultComments,
+        gradingXP: undefined
       }
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
         ...state,
         currentAssessment: action.payload.assessmentId,
-        currentQuestion: action.payload.questionId
+        currentQuestion: action.payload.questionId,
+        currentSubmission: undefined
+      }
+    case UPDATE_CURRENT_SUBMISSION_ID:
+      return {
+        ...state,
+        currentAssessment: undefined,
+        currentQuestion: action.payload.questionId,
+        currentSubmission: action.payload.submissionId
       }
     case UPDATE_EDITOR_VALUE:
       return {
@@ -238,6 +252,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           replValue: action.payload.newReplValue
         }
+      }
+    case UPDATE_GRADING_COMMENTS_VALUE:
+      return {
+        ...state,
+        gradingCommentsValue: action.payload
+      }
+    case UPDATE_GRADING_XP:
+      return {
+        ...state,
+        gradingXP: action.payload
       }
     default:
       return state

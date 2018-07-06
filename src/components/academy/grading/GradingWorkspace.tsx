@@ -2,6 +2,7 @@ import { NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
+import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer'
 import { InterpreterOutput } from '../../../reducers/states'
 import { history } from '../../../utils/history'
 import {
@@ -108,7 +109,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       {
         label: `Grading: Question ${props.questionId}`,
         icon: IconNames.TICK,
-        body: this.gradingTab(props)
+        /* Render an editor with the xp given to the current question. */
+        body: <GradingEditor maximumXP={props.grading![props.questionId].maximumXP} />
       },
       {
         label: `Task ${props.questionId}`,
@@ -145,8 +147,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       sourceChapter: 2 // TODO dynamic library changing
     }
   }
-
-  private gradingTab = (props: GradingWorkspaceProps) => <h2> Grading </h2>
 }
 
 export default GradingWorkspace

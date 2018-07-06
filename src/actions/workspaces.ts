@@ -125,3 +125,34 @@ export const updateCurrentAssessmentId = (assessmentId: number, questionId: numb
     questionId
   }
 })
+
+export const updateCurrentSubmissionId = (submissionId: number, questionId: number) => ({
+  type: actionTypes.UPDATE_CURRENT_SUBMISSION_ID,
+  payload: {
+    submissionId,
+    questionId
+  }
+})
+
+export const updateGradingCommentsValue: ActionCreator<actionTypes.IAction> = (
+  newComments: string
+) => ({
+  type: actionTypes.UPDATE_GRADING_COMMENTS_VALUE,
+  payload: newComments
+})
+
+export const updateGradingXP: ActionCreator<actionTypes.IAction> = (newXP: number) => ({
+  type: actionTypes.UPDATE_GRADING_XP,
+  payload: newXP
+})
+
+export const saveGradingInput: ActionCreator<actionTypes.IAction> = (
+  gradingCommentsValue: string,
+  gradingXP: number | undefined
+) => ({
+  type: actionTypes.SAVE_GRADING_INPUT,
+  payload: {
+    gradingCommentsValue,
+    gradingXP
+  }
+})
