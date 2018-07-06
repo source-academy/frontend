@@ -24,8 +24,8 @@ export function controlButton(
   const opts: controlButtonOptionals = { ...defaultOptions, ...options }
   const props: IButtonProps = { onClick }
   props.intent = opts.intent === undefined ? Intent.NONE : opts.intent
-  props.minimal = (opts.minimal !== undefined && opts.minimal) ? true : false
-  props.className = opts.className 
+  props.minimal = opts.minimal !== undefined && opts.minimal ? true : false
+  props.className = opts.className
   opts.iconOnRight ? (props.rightIcon = icon) : (props.icon = icon)
   return <Button {...props}>{label}</Button>
 }

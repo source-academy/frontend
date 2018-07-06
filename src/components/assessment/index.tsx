@@ -1,4 +1,13 @@
-import { Button, Card, Collapse, Icon, Intent, NonIdealState, Spinner, Text } from '@blueprintjs/core'
+import {
+  Button,
+  Card,
+  Collapse,
+  Icon,
+  Intent,
+  NonIdealState,
+  Spinner,
+  Text
+} from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
@@ -9,10 +18,10 @@ import { beforeNow } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
-import { controlButton } from '../commons';
+import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
 
-const DEFAULT_QUESTION_ID: number = 0 
+const DEFAULT_QUESTION_ID: number = 0
 
 export interface IAssessmentWorkspaceParams {
   assessmentId?: string
@@ -80,7 +89,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
 
   public render() {
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId)
-    const questionId: number = stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
+    const questionId: number =
+      stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
 
     /**
      * If there is an assessment to render, create a workspace.
@@ -101,31 +111,34 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
     } else {
       const openCards = this.props.assessmentOverviews
-        .filter((a) => !beforeNow(a.closeAt))
+        .filter(a => !beforeNow(a.closeAt))
         .map((overview, index) => makeOverviewCard(overview, index))
       const closedCards = this.props.assessmentOverviews
-        .filter((a) => beforeNow(a.closeAt))
+        .filter(a => beforeNow(a.closeAt))
         .map((overview, index) => makeOverviewCard(overview, index))
       display = (
         <>
-          {
-            this.state.showOpenAssessments 
-            ? controlButton('Due soon', IconNames.CARET_DOWN, this.toggleOpenAssessments, {minimal:true, className:'collapse-button'})
-            : controlButton('Due soon', IconNames.CARET_RIGHT, this.toggleOpenAssessments, {minimal:true, className:'collapse-button'})
-          }
-          <Collapse isOpen={this.state.showOpenAssessments}>
-            {openCards}
-          </Collapse>
-          {
-            this.state.showClosedAssessments 
-            ? controlButton('Closed', IconNames.CARET_DOWN, this.toggleClosedAssessments, {minimal:true, className:'collapse-button'})
-            : controlButton('Closed', IconNames.CARET_RIGHT, this.toggleClosedAssessments, {minimal:true, className:'collapse-button'})
-
-          }
-          <Collapse isOpen={this.state.showClosedAssessments}>
-            {closedCards}
-          </Collapse>
-        </> 
+          {this.state.showOpenAssessments
+            ? controlButton('Due soon', IconNames.CARET_DOWN, this.toggleOpenAssessments, {
+                minimal: true,
+                className: 'collapse-button'
+              })
+            : controlButton('Due soon', IconNames.CARET_RIGHT, this.toggleOpenAssessments, {
+                minimal: true,
+                className: 'collapse-button'
+              })}
+          <Collapse isOpen={this.state.showOpenAssessments}>{openCards}</Collapse>
+          {this.state.showClosedAssessments
+            ? controlButton('Closed', IconNames.CARET_DOWN, this.toggleClosedAssessments, {
+                minimal: true,
+                className: 'collapse-button'
+              })
+            : controlButton('Closed', IconNames.CARET_RIGHT, this.toggleClosedAssessments, {
+                minimal: true,
+                className: 'collapse-button'
+              })}
+          <Collapse isOpen={this.state.showClosedAssessments}>{closedCards}</Collapse>
+        </>
       )
     }
     /**
@@ -133,20 +146,21 @@ class Assessment extends React.Component<IAssessmentProps, State> {
      */
     return (
       <div className="Assessment">
-        <ContentDisplay 
-          display={display} 
-          loadContentDispatch={this.props.handleAssessmentOverviewFetch} />
+        <ContentDisplay
+          display={display}
+          loadContentDispatch={this.props.handleAssessmentOverviewFetch}
+        />
       </div>
     )
   }
 
-  private toggleOpenAssessments = () => 
+  private toggleOpenAssessments = () =>
     this.setState({
       ...this.state,
       showOpenAssessments: !this.state.showOpenAssessments
     })
 
-  private toggleClosedAssessments = () => 
+  private toggleClosedAssessments = () =>
     this.setState({
       ...this.state,
       showClosedAssessments: !this.state.showClosedAssessments
@@ -160,46 +174,46 @@ class Assessment extends React.Component<IAssessmentProps, State> {
  *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
  */
 const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
-    <div key={index}>
-      <Card className="row listing">
-        <div className="col-xs-3 listing-picture">PICTURE</div>
-        <div className="col-xs-9 listing-text">
-          <div className="row listing-title">
-            <h4>{overview.title}</h4>
+  <div key={index}>
+    <Card className="row listing">
+      <div className="col-xs-3 listing-picture">PICTURE</div>
+      <div className="col-xs-9 listing-text">
+        <div className="row listing-title">
+          <h4>{overview.title}</h4>
+        </div>
+        <div className="row listing-order">
+          <h6>Mission 0 : 123123 XP (hardcoded)</h6>
+        </div>
+        <div className="row listing-description">
+          <p className="col-xs-12">{overview.shortSummary}</p>
+        </div>
+        <div className="row between-xs middle-xs listing-controls">
+          <div className="col-xs-8 listing-due-date-parent">
+            <Text className="listing-due-date">
+              <Icon className="listing-due-icon" iconSize={14} icon={IconNames.TIME} />
+              Due: 12/12/12
+            </Text>
           </div>
-          <div className="row listing-order">
-            <h6>Mission 0 : 123123 XP (hardcoded)</h6>
-          </div>
-          <div className="row listing-description">
-            <p className="col-xs-12">{overview.shortSummary}</p>
-          </div>
-          <div className="row between-xs middle-xs listing-controls">
-            <div className="col-xs-8 listing-due-date-parent">
-              <Text className="listing-due-date">
-                <Icon className="listing-due-icon" iconSize={14} icon={IconNames.TIME} />
-                Due: 12/12/12
-              </Text>
-            </div>
-            <div className="col-xs">
-              <NavLink
-                to={`/academy/${assessmentCategoryLink(
-                  overview.category
-                )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+          <div className="col-xs">
+            <NavLink
+              to={`/academy/${assessmentCategoryLink(
+                overview.category
+              )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+            >
+              <Button
+                className="listing-skip-button"
+                minimal={true}
+                intent={Intent.PRIMARY}
+                icon={IconNames.FLAME}
               >
-                <Button
-                  className="listing-skip-button"
-                  minimal={true}
-                  intent={Intent.PRIMARY}
-                  icon={IconNames.FLAME}
-                >
-                  {'Skip Story & Attempt'}
-                </Button>
-              </NavLink>
-            </div>
+                {'Skip Story & Attempt'}
+              </Button>
+            </NavLink>
           </div>
         </div>
-      </Card>
-    </div>
-  )
+      </div>
+    </Card>
+  </div>
+)
 
 export default Assessment
