@@ -14,6 +14,10 @@
 .Assessment {
   color: $cadet-color-3;
   .listing {
+    .listing-due-icon {
+      vertical-align: baseline;
+      margin-right: 0.4rem;
+    }
     background-color: $cadet-color-5;
     margin: 0px;
     text-align: justify;

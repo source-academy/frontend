@@ -6,6 +6,11 @@
   flex: 1 1 100%;
 }
 
+.collapse-button {
+  /* To override the center-xs center alignment */
+  display: block;
+}
+
 .pt-non-ideal-state {
   padding-top: 0.7rem;
 
