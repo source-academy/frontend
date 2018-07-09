@@ -1,14 +1,10 @@
-import {
-  Alignment,
-  Icon,
-  Navbar,
-  NavbarDivider,
-  NavbarGroup,
-  NavbarHeading
-} from '@blueprintjs/core'
+import { Alignment, Icon, Navbar, NavbarGroup, NavbarHeading } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
+
+import { Role } from '../reducers/states'
+import Status from './academy/Status'
 
 export interface INavigationBarProps {
   title: string
@@ -59,22 +55,10 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       {props.username === undefined ? (
         undefined
       ) : (
-        <>
-          <div className="visible-xs">
-            <NavbarDivider className="thin-divider" />
-          </div>
-          <div className="hidden-xs">
-            <NavbarDivider className="default-divider" />
-          </div>
-          <Icon icon={IconNames.USER} />
-          <div className="navbar-button-text hidden-xs">{titleCase(props.username)}</div>
-        </>
+        <Status username={props.username} role={Role.Student} />
       )}
     </NavbarGroup>
   </Navbar>
 )
-
-const titleCase = (str: string) =>
-  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase())
 
 export default NavigationBar
