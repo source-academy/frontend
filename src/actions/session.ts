@@ -4,6 +4,8 @@ import { Grading, GradingOverview } from '../components/academy/grading/gradingS
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import * as actionTypes from './actionTypes'
 
+import { Role } from '../reducers/states'
+
 export const fetchAuth: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
   type: actionTypes.FETCH_AUTH,
   payload: ivleToken
@@ -33,6 +35,11 @@ export const fetchGradingOverviews = () => ({
 
 export const login = () => ({
   type: actionTypes.LOGIN
+})
+
+export const setRole: ActionCreator<actionTypes.IAction> = (role: Role) => ({
+  type: actionTypes.SET_ROLE,
+  payload: role
 })
 
 export const setTokens: ActionCreator<actionTypes.IAction> = ({ accessToken, refreshToken }) => ({

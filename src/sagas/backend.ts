@@ -21,15 +21,16 @@ function* backendSaga(): SagaIterator {
       accessToken: resp.access_token,
       refreshToken: resp.refresh_token
     }
-    const username = yield getUsername(tokens.accessToken)
+    const user = yield getUser(tokens.accessToken)
     yield put(actions.setTokens(tokens))
-    yield put(actions.setUsername(username))
+    yield put(actions.setRole(user.role))
+    yield put(actions.setUsername(user.name))
     yield delay(2000)
     yield history.push('/academy')
   })
 }
 
-function* getUsername(accessToken: string) {
+function* getUser(accessToken: string) {
   const resp = yield call(request, 'user', {
     method: 'GET',
     headers: new Headers({
@@ -37,7 +38,7 @@ function* getUsername(accessToken: string) {
       Accept: 'application/json'
     })
   })
-  return resp.name
+  return resp
 }
 
 function request(path: string, opts: {}) {
