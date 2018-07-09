@@ -36,7 +36,6 @@ const Application: React.SFC<IApplicationProps> = props => {
           <Route path="/news" component={Announcements} />
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
-          <Route path="/status" component={Announcements} />
           <Route path="/login" render={toLogin(props)} />
           <Route exact={true} path="/" render={redirectToNews} />
           <Route component={NotFound} />

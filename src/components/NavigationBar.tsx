@@ -66,14 +66,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
           <div className="hidden-xs">
             <NavbarDivider className="default-divider" />
           </div>
-          <NavLink
-            to="/status"
-            activeClassName="pt-active"
-            className="NavigationBar__link pt-button pt-minimal"
-          >
-            <Icon icon={IconNames.USER} />
-            <div className="navbar-button-text hidden-xs">{titleCase(props.username)}</div>
-          </NavLink>
+          <Icon icon={IconNames.USER} />
+          <div className="navbar-button-text hidden-xs">{titleCase(props.username)}</div>
         </>
       )}
     </NavbarGroup>
