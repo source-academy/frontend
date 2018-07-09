@@ -62,7 +62,6 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Playground
       </div>
     </NavLink>
-    <Status username=\\"Evis Rucer\\" role=\\"student\\" />
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;

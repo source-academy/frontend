@@ -9,6 +9,7 @@ import Status from './academy/Status'
 export interface INavigationBarProps {
   title: string
   username?: string
+  role?: Role
 }
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
@@ -52,10 +53,10 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <div className="navbar-button-text hidden-xs">Playground</div>
       </NavLink>
 
-      {props.username === undefined ? (
-        undefined
+      {props.username !== undefined && props.role !== undefined ? (
+        <Status username={props.username} role={props.role} />
       ) : (
-        <Status username={props.username} role={Role.Student} />
+        undefined
       )}
     </NavbarGroup>
   </Navbar>

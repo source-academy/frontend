@@ -16,6 +16,7 @@ import { IState } from '../reducers/states'
 const mapStateToProps: MapStateToProps<{ title: string }, {}, IState> = state => ({
   title: state.application.title,
   accessToken: state.session.accessToken,
+  role: state.session.role,
   username: state.session.username
 })
 

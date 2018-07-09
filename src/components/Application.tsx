@@ -7,13 +7,14 @@ import Academy from '../containers/academy'
 import Announcements from '../containers/AnnouncementsContainer'
 import Login from '../containers/LoginContainer'
 import Playground from '../containers/PlaygroundContainer'
-import { sourceChapters } from '../reducers/states'
+import { Role, sourceChapters } from '../reducers/states'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
 export interface IApplicationProps extends IDispatchProps, RouteComponentProps<{}> {
   title: string
   accessToken?: string
+  role?: Role
   username?: string
 }
 
@@ -29,7 +30,7 @@ const Application: React.SFC<IApplicationProps> = props => {
 
   return (
     <div className="Application">
-      <NavigationBar title={props.title} username={props.username} />
+      <NavigationBar title={props.title} username={props.username} role={props.role} />
       <div className="Application__main">
         <Switch>
           <Route path="/academy" component={toAcademy(props)} />

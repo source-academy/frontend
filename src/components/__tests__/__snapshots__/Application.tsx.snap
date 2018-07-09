@@ -2,7 +2,7 @@
 
 exports[`Application renders correctly 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar title=\\"Cadet\\" username={[undefined]} />
+  <NavigationBar title=\\"Cadet\\" username={[undefined]} role={[undefined]} />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/academy\\" component={[Function]} />
