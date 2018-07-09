@@ -1,8 +1,9 @@
-import { Icon, NavbarDivider } from '@blueprintjs/core'
+import { NavbarDivider, Popover, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import { Role } from '../../reducers/states'
+import { controlButton } from '../commons'
 
 type StatusProps = OwnProps
 
@@ -19,8 +20,14 @@ const Status: React.SFC<StatusProps> = props => (
     <div className="hidden-xs">
       <NavbarDivider className="default-divider" />
     </div>
-    <Icon icon={IconNames.USER} />
-    <div className="navbar-button-text hidden-xs navbar-username">{titleCase(props.username)}</div>
+    <Popover popoverClassName="Popover-share pt-dark" inheritDarkTheme={true}>
+      <div className="navbar-button-text hidden-xs">
+        {controlButton(titleCase(props.username), IconNames.USER)}
+      </div>
+      <Text>
+        <h4>{`Source Academy, ${titleCase(props.role)}`}</h4>
+      </Text>
+    </Popover>
   </>
 )
 
