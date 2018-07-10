@@ -1,4 +1,3 @@
-import { createContext } from '@source-academy/js-slang'
 import { Reducer } from 'redux'
 
 import {
@@ -26,6 +25,7 @@ import {
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
+import { createContext } from '../utils/slangHelper'
 import {
   CodeOutput,
   createDefaultWorkspace,

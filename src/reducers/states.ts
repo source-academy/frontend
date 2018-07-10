@@ -1,4 +1,4 @@
-import { Context, createContext } from '@source-academy/js-slang'
+import { Context } from '@source-academy/js-slang'
 import { SourceError } from '@source-academy/js-slang/dist/types'
 
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
@@ -6,6 +6,7 @@ import { Grading, GradingOverview } from '../components/academy/grading/gradingS
 import { Announcement } from '../components/Announcements'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import { HistoryHelper } from '../utils/history'
+import { createContext } from '../utils/slangHelper'
 
 export interface IState {
   readonly academy: IAcademyState
