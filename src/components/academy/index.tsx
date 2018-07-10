@@ -5,6 +5,7 @@ import Grading from '../../containers/academy/grading'
 import AssessmentContainer from '../../containers/assessment'
 import Game from '../../containers/GameContainer'
 import { isAcademyRe } from '../../reducers/session'
+import { Role } from '../../reducers/states'
 import { HistoryHelper } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape'
@@ -14,6 +15,7 @@ interface IAcademyProps extends IOwnProps, IStateProps, RouteComponentProps<{}> 
 
 export interface IOwnProps {
   accessToken?: string
+  role: Role
 }
 
 export interface IStateProps {
@@ -29,7 +31,7 @@ const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?'
 
 export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
-    <AcademyNavigationBar />
+    <AcademyNavigationBar role={props.role} />
     <Switch>
       <Route
         path={`/academy/${assessmentCategoryLink(

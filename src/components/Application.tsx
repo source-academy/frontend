@@ -52,9 +52,9 @@ const Application: React.SFC<IApplicationProps> = props => {
  *  2. If the user is not logged in, redirect to /login
  */
 const toAcademy = (props: IApplicationProps) =>
-  props.accessToken === undefined
+  props.accessToken === undefined || props.role === undefined
     ? () => <Redirect to="/login" />
-    : () => <Academy accessToken={props.accessToken} />
+    : () => <Academy accessToken={props.accessToken} role={props.role!} />
 
 const toLogin = (props: IApplicationProps) => () => (
   <Login ivleToken={qs.parse(props.location.search).token} />
