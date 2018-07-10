@@ -1,9 +1,9 @@
 import { Card } from '@blueprintjs/core'
+import { parseError, toString } from '@source-academy/js-slang'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 
 import { InterpreterOutput } from '../../reducers/states'
-import { parseError, toString } from '../../slang'
 import ReplInput, { IReplInputProps } from './ReplInput'
 
 export interface IReplProps {
