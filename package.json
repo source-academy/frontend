@@ -29,6 +29,7 @@
     }
   },
   "dependencies": {
+    "@source-academy/js-slang": "^0.1.0",
     "acorn": "^5.7.1",
     "ag-grid": "^18.0.1",
     "ag-grid-react": "^18.0.0",
