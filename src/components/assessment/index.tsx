@@ -107,7 +107,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     }
 
     // The item to be displayed in the ContentDisplay
-    let display
+    let display: JSX.Element
     if (this.props.assessmentOverviews === undefined) {
       display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
     } else if (this.props.assessmentOverviews.length === 0) {
@@ -119,28 +119,28 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const closedCards = this.props.assessmentOverviews
         .filter(a => beforeNow(a.closeAt))
         .map((overview, index) => makeOverviewCard(overview, index))
+      const openCardsCollapsible =
+        openCards.length > 0 ? (
+          <>
+            {collapseButton('Due soon', this.state.showOpenAssessments, this.toggleOpenAssessments)}
+            <Collapse isOpen={this.state.showOpenAssessments}>{openCards}</Collapse>
+          </>
+        ) : null
+      const closedCardsCollapsible =
+        closedCards.length > 0 ? (
+          <>
+            {collapseButton(
+              'Closed',
+              this.state.showClosedAssessments,
+              this.toggleClosedAssessments
+            )}
+            <Collapse isOpen={this.state.showClosedAssessments}>{closedCards}</Collapse>
+          </>
+        ) : null
       display = (
         <>
-          {this.state.showOpenAssessments
-            ? controlButton('Due soon', IconNames.CARET_DOWN, this.toggleOpenAssessments, {
-                minimal: true,
-                className: 'collapse-button'
-              })
-            : controlButton('Due soon', IconNames.CARET_RIGHT, this.toggleOpenAssessments, {
-                minimal: true,
-                className: 'collapse-button'
-              })}
-          <Collapse isOpen={this.state.showOpenAssessments}>{openCards}</Collapse>
-          {this.state.showClosedAssessments
-            ? controlButton('Closed', IconNames.CARET_DOWN, this.toggleClosedAssessments, {
-                minimal: true,
-                className: 'collapse-button'
-              })
-            : controlButton('Closed', IconNames.CARET_RIGHT, this.toggleClosedAssessments, {
-                minimal: true,
-                className: 'collapse-button'
-              })}
-          <Collapse isOpen={this.state.showClosedAssessments}>{closedCards}</Collapse>
+          {openCardsCollapsible}
+          {closedCardsCollapsible}
         </>
       )
     }
@@ -218,5 +218,11 @@ const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
     </Card>
   </div>
 )
+
+const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
+  controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
+    minimal: true,
+    className: 'collapse-button'
+  })
 
 export default Assessment
