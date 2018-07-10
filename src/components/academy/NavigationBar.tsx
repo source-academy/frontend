@@ -55,7 +55,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>
         <NavLink
-          to={`/academy/grading`}
+          to={'/academy/grading'}
           activeClassName="pt-active"
           className="NavigationBar__link pt-button pt-minimal"
         >
