@@ -1,7 +1,7 @@
 /* tslint:disable: ban-types*/
 import { createContext as createSlangContext } from '@source-academy/js-slang'
 import { toString } from '@source-academy/js-slang/dist/interop'
-import { Context, Value } from '@source-academy/js-slang/dist/types'
+import { Value } from '@source-academy/js-slang/dist/types'
 
 import { handleConsoleLog } from '../actions'
 
@@ -12,6 +12,17 @@ import { handleConsoleLog } from '../actions'
  * Use this file especially when attempting to create a slang Context.
  */
 
+/**
+ * Used to permit the declaration of the 
+ * __SOURCE__ property. The same declaration 
+ * exists in js-slang.
+ */
+declare global {
+  // tslint:disable-next-line:interface-name
+  interface Function {
+    __SOURCE__?: string
+  }
+}
 
 /**
  * Function that takes a value and displays it in the interpreter. 
