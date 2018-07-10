@@ -4,7 +4,6 @@ import { TypeError } from '@source-academy/js-slang/dist/utils/rttc'
 import { parse } from 'acorn'
 import * as es from 'estree'
 
-
 export function mockContext(chapter = 1): Context {
   return createContext(chapter)
 }
