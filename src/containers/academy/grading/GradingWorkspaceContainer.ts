@@ -33,7 +33,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
   return {
     grading: state.session.gradings.get(props.submissionId),
     editorValue: state.workspaces.assessment.editorValue,
-    isRunning: state.workspaces.assessment.isRunning,
+    isRunning: state.workspaces.assessment.context.runtime.isRunning,
     activeTab: state.workspaces.assessment.sideContentActiveTab,
     editorWidth: state.workspaces.assessment.editorWidth,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,

@@ -43,7 +43,6 @@ interface IWorkspaceState {
   readonly context: Context
   readonly editorValue: string
   readonly editorWidth: string
-  readonly isRunning: boolean
   readonly output: InterpreterOutput[]
   readonly replValue: string
   readonly sideContentActiveTab: number
@@ -154,7 +153,6 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
   editorValue: defaultEditorValue,
   editorWidth: '50%',
-  isRunning: false,
   output: [],
   replValue: '',
   sideContentActiveTab: 0

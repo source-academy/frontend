@@ -212,10 +212,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case INTERRUPT_EXECUTION:
       return {
         ...state,
-        [location]: {
-          ...state[location],
-          isRunning: false
-        }
       }
     case RESET_ASSESSMENT_WORKSPACE:
       return {

@@ -23,7 +23,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.playground.sideContentActiveTab,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue,
-  isRunning: state.workspaces.playground.isRunning,
+  isRunning: state.workspaces.playground.context.runtime.isRunning,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
   replValue: state.workspaces.playground.replValue,
