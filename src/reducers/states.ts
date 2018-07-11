@@ -122,6 +122,7 @@ export enum Role {
   Admin = 'admin'
 }
 
+/** Defines what chapters are available for usage. */
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
 
