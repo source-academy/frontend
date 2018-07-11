@@ -62,20 +62,6 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Playground
       </div>
     </NavLink>
-    <Symbol(react.fragment)>
-      <div className=\\"visible-xs\\">
-        <Blueprint2.NavbarDivider className=\\"thin-divider\\" />
-      </div>
-      <div className=\\"hidden-xs\\">
-        <Blueprint2.NavbarDivider className=\\"default-divider\\" />
-      </div>
-      <NavLink to=\\"/status\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
-        <Blueprint2.Icon icon=\\"user\\" />
-        <div className=\\"navbar-button-text hidden-xs\\">
-          Evis Rucer
-        </div>
-      </NavLink>
-    </Symbol(react.fragment)>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;

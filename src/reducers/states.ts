@@ -58,6 +58,7 @@ export interface ISessionState {
   readonly gradings: Map<number, Grading>
   readonly historyHelper: HistoryHelper
   readonly refreshToken?: string
+  readonly role?: Role
   readonly storyAct: string
   readonly username?: string
 }
@@ -112,6 +113,12 @@ export enum ApplicationEnvironment {
   Development = 'development',
   Production = 'production',
   Test = 'test'
+}
+
+export enum Role {
+  Student = 'student',
+  Staff = 'staff',
+  Admin = 'admin'
 }
 
 export const sourceChapters = [1, 2]

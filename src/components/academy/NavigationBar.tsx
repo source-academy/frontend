@@ -3,10 +3,17 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
+import { Role } from '../../reducers/states'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { AssessmentCategories } from '../assessment/assessmentShape'
 
-const NavigationBar: React.SFC<{}> = () => (
+type NavigationBarProps = OwnProps
+
+type OwnProps = {
+  role: Role
+}
+
+const NavigationBar: React.SFC<NavigationBarProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
@@ -45,16 +52,18 @@ const NavigationBar: React.SFC<{}> = () => (
         <div className="navbar-button-text hidden-xs">Contests</div>
       </NavLink>
     </NavbarGroup>
-    <NavbarGroup align={Alignment.RIGHT}>
-      <NavLink
-        to={`/academy/grading`}
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-      >
-        <Icon icon={IconNames.ENDORSED} />
-        <div className="navbar-button-text hidden-xs">Grading</div>
-      </NavLink>
-    </NavbarGroup>
+    {props.role === Role.Admin || props.role === Role.Staff ? (
+      <NavbarGroup align={Alignment.RIGHT}>
+        <NavLink
+          to={'/academy/grading'}
+          activeClassName="pt-active"
+          className="NavigationBar__link pt-button pt-minimal"
+        >
+          <Icon icon={IconNames.ENDORSED} />
+          <div className="navbar-button-text hidden-xs">Grading</div>
+        </NavLink>
+      </NavbarGroup>
+    ) : null}
   </Navbar>
 )
 

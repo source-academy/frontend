@@ -7,13 +7,14 @@ import Academy from '../containers/academy'
 import Announcements from '../containers/AnnouncementsContainer'
 import Login from '../containers/LoginContainer'
 import Playground from '../containers/PlaygroundContainer'
-import { sourceChapters } from '../reducers/states'
+import { Role, sourceChapters } from '../reducers/states'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
 export interface IApplicationProps extends IDispatchProps, RouteComponentProps<{}> {
   title: string
   accessToken?: string
+  role?: Role
   username?: string
 }
 
@@ -29,14 +30,13 @@ const Application: React.SFC<IApplicationProps> = props => {
 
   return (
     <div className="Application">
-      <NavigationBar title={props.title} username={props.username} />
+      <NavigationBar title={props.title} username={props.username} role={props.role} />
       <div className="Application__main">
         <Switch>
           <Route path="/academy" component={toAcademy(props)} />
           <Route path="/news" component={Announcements} />
           <Route path="/material" component={Announcements} />
           <Route path="/playground" component={Playground} />
-          <Route path="/status" component={Announcements} />
           <Route path="/login" render={toLogin(props)} />
           <Route exact={true} path="/" render={redirectToNews} />
           <Route component={NotFound} />
@@ -52,9 +52,9 @@ const Application: React.SFC<IApplicationProps> = props => {
  *  2. If the user is not logged in, redirect to /login
  */
 const toAcademy = (props: IApplicationProps) =>
-  props.accessToken === undefined
+  props.accessToken === undefined || props.role === undefined
     ? () => <Redirect to="/login" />
-    : () => <Academy accessToken={props.accessToken} />
+    : () => <Academy accessToken={props.accessToken} role={props.role!} />
 
 const toLogin = (props: IApplicationProps) => () => (
   <Login ivleToken={qs.parse(props.location.search).token} />

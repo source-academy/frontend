@@ -1,18 +1,15 @@
-import {
-  Alignment,
-  Icon,
-  Navbar,
-  NavbarDivider,
-  NavbarGroup,
-  NavbarHeading
-} from '@blueprintjs/core'
+import { Alignment, Icon, Navbar, NavbarGroup, NavbarHeading } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
+import { Role } from '../reducers/states'
+import Status from './academy/Status'
+
 export interface INavigationBarProps {
   title: string
   username?: string
+  role?: Role
 }
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
@@ -56,31 +53,13 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <div className="navbar-button-text hidden-xs">Playground</div>
       </NavLink>
 
-      {props.username === undefined ? (
-        undefined
+      {props.username !== undefined && props.role !== undefined ? (
+        <Status username={props.username} role={props.role} />
       ) : (
-        <>
-          <div className="visible-xs">
-            <NavbarDivider className="thin-divider" />
-          </div>
-          <div className="hidden-xs">
-            <NavbarDivider className="default-divider" />
-          </div>
-          <NavLink
-            to="/status"
-            activeClassName="pt-active"
-            className="NavigationBar__link pt-button pt-minimal"
-          >
-            <Icon icon={IconNames.USER} />
-            <div className="navbar-button-text hidden-xs">{titleCase(props.username)}</div>
-          </NavLink>
-        </>
+        undefined
       )}
     </NavbarGroup>
   </Navbar>
 )
-
-const titleCase = (str: string) =>
-  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase())
 
 export default NavigationBar

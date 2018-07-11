@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Grading NavLink does NOT renders for Role.Student 1`] = `
+"<Blueprint2.Navbar className=\\"NavigationBar secondary-navbar\\">
+  <Blueprint2.NavbarGroup align=\\"left\\">
+    <NavLink to=\\"/academy/missions\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"flame\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Missions
+      </div>
+    </NavLink>
+    <NavLink to=\\"/academy/sidequests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"lightbulb\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Sidequests
+      </div>
+    </NavLink>
+    <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"predictive-analysis\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Paths
+      </div>
+    </NavLink>
+    <NavLink to=\\"/academy/contests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"comparison\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Contests
+      </div>
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+</Blueprint2.Navbar>"
+`;
+
+exports[`Grading NavLink renders for Role.Admin 1`] = `
+"<Blueprint2.Navbar className=\\"NavigationBar secondary-navbar\\">
+  <Blueprint2.NavbarGroup align=\\"left\\">
+    <NavLink to=\\"/academy/missions\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"flame\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Missions
+      </div>
+    </NavLink>
+    <NavLink to=\\"/academy/sidequests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"lightbulb\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Sidequests
+      </div>
+    </NavLink>
+    <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"predictive-analysis\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Paths
+      </div>
+    </NavLink>
+    <NavLink to=\\"/academy/contests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"comparison\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Contests
+      </div>
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+  <Blueprint2.NavbarGroup align=\\"right\\">
+    <NavLink to=\\"/academy/grading\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"endorsed\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Grading
+      </div>
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+</Blueprint2.Navbar>"
+`;
+
+exports[`Grading NavLink renders for Role.Staff 1`] = `
+"<Blueprint2.Navbar className=\\"NavigationBar secondary-navbar\\">
+  <Blueprint2.NavbarGroup align=\\"left\\">
+    <NavLink to=\\"/academy/missions\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"flame\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Missions
+      </div>
+    </NavLink>
+    <NavLink to=\\"/academy/sidequests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"lightbulb\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Sidequests
+      </div>
+    </NavLink>
+    <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"predictive-analysis\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Paths
+      </div>
+    </NavLink>
+    <NavLink to=\\"/academy/contests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"comparison\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Contests
+      </div>
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+  <Blueprint2.NavbarGroup align=\\"right\\">
+    <NavLink to=\\"/academy/grading\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"endorsed\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Grading
+      </div>
+    </NavLink>
+  </Blueprint2.NavbarGroup>
+</Blueprint2.Navbar>"
+`;

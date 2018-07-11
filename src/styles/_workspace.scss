@@ -276,7 +276,7 @@ $code-color-error: #ff4444;
   .pt-popover-content {
     background: $cadet-color-4;
     display: flex;
-    padding: 0.4rem 0.4rem 0.4rem 0.8rem;
+    padding: 0.4rem 0.8rem 0.4rem 0.8rem;
 
     input {
       width: 25rem;
@@ -284,6 +284,10 @@ $code-color-error: #ff4444;
       &:focus {
         outline: none;
       }
+    }
+
+    button {
+      padding: 5px 5px 5px 10px;
     }
   }
 }
