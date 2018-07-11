@@ -82,10 +82,9 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const newChapter = (action as actionTypes.IAction).payload.chapter
-    const oldChapter = yield select((state: IState) => state.workspaces[location].sourceChapter)
+    const oldChapter = yield select((state: IState) => state.workspaces[location].context.chapter)
     if (newChapter !== oldChapter) {
       yield put(actions.changeChapter(newChapter, location))
-      yield put(actions.clearContext(location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
@@ -110,13 +109,13 @@ function* loginSaga(): SagaIterator {
 function* playgroundSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
     const code = yield select((state: IState) => state.workspaces.playground.editorValue)
-    const lib = yield select((state: IState) => state.workspaces.playground.sourceChapter)
+    const chapter = yield select((state: IState) => state.workspaces.playground.context.chapter)
     const newQueryString =
       code === '' || code === defaultEditorValue
         ? undefined
         : qs.stringify({
             prgrm: compressToEncodedURIComponent(code),
-            lib
+            lib: chapter
           })
     yield put(actions.changeQueryString(newQueryString))
   })
