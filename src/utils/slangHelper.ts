@@ -71,9 +71,7 @@ cadetAlert.__SOURCE__ = 'alert(a)'
  *
  * @param list the list to be visualised.
  */
-function visualiseList(list: any) {
-
-}
+function visualiseList(list: any) {}
 
 /**
  * A wrapper around js-slang's createContext. This
