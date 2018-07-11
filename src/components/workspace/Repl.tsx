@@ -1,5 +1,5 @@
 import { Card } from '@blueprintjs/core'
-import { parseError, toString } from '@source-academy/js-slang'
+import { parseError, toString } from 'js-slang'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 

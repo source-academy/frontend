@@ -1,8 +1,8 @@
-import { createContext } from '@source-academy/js-slang'
-import { Closure, Context, Frame } from '@source-academy/js-slang/dist/types'
-import { TypeError } from '@source-academy/js-slang/dist/utils/rttc'
 import { parse } from 'acorn'
 import * as es from 'estree'
+import { createContext } from 'js-slang'
+import { Closure, Context, Frame } from 'js-slang/dist/types'
+import { TypeError } from 'js-slang/dist/utils/rttc'
 
 export function mockContext(chapter = 1): Context {
   return createContext(chapter)

@@ -1,4 +1,4 @@
-import { Context, interrupt, runInContext } from '@source-academy/js-slang'
+import { Context, interrupt, runInContext } from 'js-slang'
 import { compressToEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
 import { SagaIterator } from 'redux-saga'

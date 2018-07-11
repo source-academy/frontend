@@ -1,7 +1,7 @@
 /* tslint:disable: ban-types*/
-import { createContext as createSlangContext } from '@source-academy/js-slang'
-import { toString } from '@source-academy/js-slang/dist/interop'
-import { Value } from '@source-academy/js-slang/dist/types'
+import { createContext as createSlangContext } from 'js-slang'
+import { toString } from 'js-slang/dist/interop'
+import { Value } from 'js-slang/dist/types'
 
 import { handleConsoleLog } from '../actions'
 
