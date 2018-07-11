@@ -3,6 +3,7 @@ import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import {
+  beginInterruptExecution,
   changeActiveTab,
   changeEditorWidth,
   changeSideContentHeight,
@@ -11,7 +12,6 @@ import {
   evalEditor,
   evalRepl,
   generateLzString,
-  handleInterruptExecution,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -43,7 +43,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleGenerateLz: generateLzString,
-      handleInterruptEval: () => handleInterruptExecution(location),
+      handleInterruptEval: () => beginInterruptExecution(location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

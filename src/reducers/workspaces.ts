@@ -8,13 +8,13 @@ import {
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
+  END_INTERRUPT_EXECUTION,
   EVAL_EDITOR,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
-  INTERRUPT_EXECUTION,
   RESET_ASSESSMENT_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_CURRENT_ASSESSMENT_ID,
@@ -209,7 +209,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isRunning: false
         }
       }
-    case INTERRUPT_EXECUTION:
+    case END_INTERRUPT_EXECUTION:
+      /** 
+       * Called to force a state change, which
+       * will cause a re-render
+       */
       return {
         ...state,
       }

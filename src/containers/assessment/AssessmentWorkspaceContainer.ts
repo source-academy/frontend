@@ -2,6 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import {
+  beginInterruptExecution,
   changeActiveTab,
   changeEditorWidth,
   changeSideContentHeight,
@@ -10,7 +11,6 @@ import {
   evalEditor,
   evalRepl,
   fetchAssessment,
-  handleInterruptExecution,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -50,7 +50,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
-      handleInterruptEval: () => handleInterruptExecution(location),
+      handleInterruptEval: () => beginInterruptExecution(location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

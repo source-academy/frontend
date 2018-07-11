@@ -124,7 +124,7 @@ function* playgroundSaga(): SagaIterator {
 function* evalCode(code: string, context: Context, location: WorkspaceLocation) {
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
-    interrupted: take(actionTypes.INTERRUPT_EXECUTION)
+    interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION)
   })
   if (result) {
     if (result.status === 'finished') {
@@ -134,6 +134,7 @@ function* evalCode(code: string, context: Context, location: WorkspaceLocation) 
     }
   } else if (interrupted) {
     interrupt(context)
+    yield put(actions.endInterruptExecution(location))
     yield call(showWarningMessage, 'Execution aborted by user')
   }
 }
