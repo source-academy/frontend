@@ -210,12 +210,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       }
     case END_INTERRUPT_EXECUTION:
-      /** 
+      /**
        * Called to force a state change, which
        * will cause a re-render
        */
       return {
-        ...state,
+        ...state
       }
     case RESET_ASSESSMENT_WORKSPACE:
       return {
