@@ -54,6 +54,28 @@ function cadetPrompt(value: any) {
 cadetPrompt.__SOURCE__ = 'prompt(a)'
 
 /**
+ * A function to alert the user using the browser's alert()
+ * function.
+ *
+ * @param value the value to alert the user with
+ */
+function cadetAlert(value: any) {
+  alert(toString(value))
+}
+cadetAlert.__SOURCE__ = 'alert(a)'
+
+/**
+ * A dummy function to pass into createContext.
+ * An actual implementation will have to be added
+ * with the list visualiser implementation. See #187
+ *
+ * @param list the list to be visualised.
+ */
+function visualiseList(list: any) {
+
+}
+
+/**
  * A wrapper around js-slang's createContext. This
  * provides the original function with the required
  * externalBuiltIns, such as display and prompt.
@@ -61,7 +83,9 @@ cadetPrompt.__SOURCE__ = 'prompt(a)'
 export function createContext<T>(chapter = 1, externals = [], externalContext?: T) {
   const externalBuiltIns = {
     display,
-    prompt: cadetPrompt
+    prompt: cadetPrompt,
+    alert: cadetAlert,
+    visualiseList
   }
   return createSlangContext<T>(chapter, externals, externalContext, externalBuiltIns)
 }
