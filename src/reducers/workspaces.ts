@@ -152,7 +152,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          isRunning: true
         }
       }
     case EVAL_REPL:
@@ -160,7 +159,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          isRunning: true
         }
       }
     case EVAL_INTERPRETER_SUCCESS:
@@ -183,7 +181,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           output: newOutput,
-          isRunning: false
         }
       }
     case EVAL_INTERPRETER_ERROR:
@@ -206,7 +203,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           output: newOutput,
-          isRunning: false
         }
       }
     case END_INTERRUPT_EXECUTION:
