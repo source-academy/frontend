@@ -109,11 +109,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          context: createContext<WorkspaceLocation>(
-            action.payload.newChapter,
-            undefined,
-            location
-          )
+          context: createContext<WorkspaceLocation>(action.payload.newChapter, undefined, location)
         }
       }
     case HANDLE_CONSOLE_LOG:

@@ -13,7 +13,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state,
   const stateProps: IStateProps = {
     assessmentOverviews: state.session.assessmentOverviews
       ? state.session.assessmentOverviews.filter(categoryFilter)
-      : undefined,
+      : undefined
   }
   return stateProps
 }
@@ -21,7 +21,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state,
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleAssessmentOverviewFetch: fetchAssessmentOverviews,
+      handleAssessmentOverviewFetch: fetchAssessmentOverviews
     },
     dispatch
   )

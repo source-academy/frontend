@@ -157,7 +157,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   isRunning: false,
   output: [],
   replValue: '',
-  sideContentActiveTab: 0,
+  sideContentActiveTab: 0
 })
 
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'
