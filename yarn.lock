@@ -192,16 +192,6 @@
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/@pixi/filter-zoom-blur/-/filter-zoom-blur-2.6.0.tgz#4ad966a309372b731e0fc469d97dd51bf79d1bd6"
 
-"@source-academy/js-slang@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@source-academy/js-slang/-/js-slang-0.1.0.tgz#6f46975963e9569878a97b6c52558d50a8eec0d9"
-  dependencies:
-    acorn "^5.7.1"
-    astring "^1.2.0"
-    commander "^2.14.1"
-    common-tags "^1.4.0"
-    invariant "^2.2.2"
-
 "@types/acorn@^4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@types/acorn/-/acorn-4.0.3.tgz#d1f3e738dde52536f9aad3d3380d14e448820afd"
@@ -5144,6 +5134,16 @@ js-base64@^2.1.8:
 js-base64@^2.1.9:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.3.tgz#2e545ec2b0f2957f41356510205214e98fad6582"
+
+js-slang@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.1.1.tgz#ff562bce1dcaec3278e872566d3c6a09b46d8c65"
+  dependencies:
+    acorn "^5.7.1"
+    astring "^1.2.0"
+    commander "^2.14.1"
+    common-tags "^1.4.0"
+    invariant "^2.2.2"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
