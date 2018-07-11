@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+
 import {
   CHANGE_ACTIVE_TAB,
   CHANGE_CHAPTER,
@@ -24,7 +25,7 @@ import {
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
-import { createContext } from '../slang'
+import { createContext } from '../utils/slangHelper'
 import {
   CodeOutput,
   createDefaultWorkspace,

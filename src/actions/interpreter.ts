@@ -1,4 +1,5 @@
-import { SourceError, Value } from '../slang/types'
+import { SourceError, Value } from 'js-slang/dist/types'
+
 import * as actionTypes from './actionTypes'
 import { WorkspaceLocation } from './workspaces'
 
