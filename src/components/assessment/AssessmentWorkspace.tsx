@@ -28,6 +28,8 @@ export type StateProps = {
   output: InterpreterOutput[]
   replValue: string
   sideContentHeight?: number
+  storedAssessmentId?: number
+  storedQuestionId?: number
 }
 
 export type OwnProps = {
@@ -47,7 +49,9 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
+  handleResetAssessmentWorkspace: () => void
   handleSideContentHeightChange: (heightChange: number) => void
+  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
 }
 
 class AssessmentWorkspace extends React.Component<
