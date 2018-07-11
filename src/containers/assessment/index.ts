@@ -3,7 +3,6 @@ import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { fetchAssessmentOverviews } from '../../actions/session'
-import { resetAssessmentWorkspace, updateCurrentAssessmentId } from '../../actions/workspaces'
 import Assessment, { IDispatchProps, IOwnProps, IStateProps } from '../../components/assessment'
 import { IAssessmentOverview } from '../../components/assessment/assessmentShape'
 import { IState } from '../../reducers/states'
@@ -15,8 +14,6 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state,
     assessmentOverviews: state.session.assessmentOverviews
       ? state.session.assessmentOverviews.filter(categoryFilter)
       : undefined,
-    storedAssessmentId: state.workspaces.currentAssessment,
-    storedQuestionId: state.workspaces.currentQuestion
   }
   return stateProps
 }
@@ -25,8 +22,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
   bindActionCreators(
     {
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
-      handleResetAssessmentWorkspace: resetAssessmentWorkspace,
-      handleUpdateCurrentAssessmentId: updateCurrentAssessmentId
     },
     dispatch
   )

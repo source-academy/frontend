@@ -15,6 +15,7 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from '../../actions'
+import { resetAssessmentWorkspace, updateCurrentAssessmentId } from '../../actions/workspaces'
 import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
@@ -31,7 +32,9 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     editorWidth: state.workspaces.assessment.editorWidth,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     output: state.workspaces.assessment.output,
-    replValue: state.workspaces.assessment.replValue
+    replValue: state.workspaces.assessment.replValue,
+    storedAssessmentId: state.workspaces.currentAssessment,
+    storedQuestionId: state.workspaces.currentQuestion
   }
 }
 
@@ -51,8 +54,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleResetAssessmentWorkspace: resetAssessmentWorkspace,
       handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, location)
+        changeSideContentHeight(heightChange, location),
+      handleUpdateCurrentAssessmentId: updateCurrentAssessmentId
     },
     dispatch
   )
