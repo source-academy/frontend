@@ -46,7 +46,6 @@ interface IWorkspaceState {
   readonly isRunning: boolean
   readonly output: InterpreterOutput[]
   readonly replValue: string
-  readonly sourceChapter: number
   readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
 }
@@ -158,7 +157,6 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   output: [],
   replValue: '',
   sideContentActiveTab: 0,
-  sourceChapter: latestSourceChapter
 })
 
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'
