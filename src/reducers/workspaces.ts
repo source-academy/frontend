@@ -151,14 +151,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       return {
         ...state,
         [location]: {
-          ...state[location],
+          ...state[location]
         }
       }
     case EVAL_REPL:
       return {
         ...state,
         [location]: {
-          ...state[location],
+          ...state[location]
         }
       }
     case EVAL_INTERPRETER_SUCCESS:
@@ -180,7 +180,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          output: newOutput,
+          output: newOutput
         }
       }
     case EVAL_INTERPRETER_ERROR:
@@ -202,7 +202,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          output: newOutput,
+          output: newOutput
         }
       }
     case END_INTERRUPT_EXECUTION:
