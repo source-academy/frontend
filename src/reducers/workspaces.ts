@@ -4,6 +4,7 @@ import {
   CHANGE_ACTIVE_TAB,
   CHANGE_CHAPTER,
   CHANGE_EDITOR_WIDTH,
+  CHANGE_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
@@ -32,7 +33,8 @@ import {
   defaultComments,
   defaultWorkspaceManager,
   InterpreterOutput,
-  IWorkspaceManagerState
+  IWorkspaceManagerState,
+  sourceLibraries
 } from './states'
 
 /**
@@ -104,12 +106,28 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           )
         }
       }
+    /**
+     * This action is only meant for Playground usage,
+     * as library is specified by an individual question for an 
+     * Assessment.
+     */
     case CHANGE_CHAPTER:
+      const externals = sourceLibraries.get(state.playgroundLibrary)
       return {
         ...state,
         [location]: {
           ...state[location],
-          context: createContext<WorkspaceLocation>(action.payload.newChapter, undefined, location)
+          context: createContext<WorkspaceLocation>(action.payload.newChapter, externals, location)
+        }
+      }
+    case CHANGE_LIBRARY:
+      const chapter = state[location].context.chapter
+      const newExternals = sourceLibraries.get(action.payload.newLibrary)
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          context: createContext<WorkspaceLocation>(chapter, newExternals, location)
         }
       }
     case HANDLE_CONSOLE_LOG:
