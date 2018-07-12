@@ -11,6 +11,8 @@ const baseProps = {
   editorWidth: '50%',
   sideContentHeight: 40,
   sourceChapter: 2,
+  /** TODO use constant value */
+  sourceLibrary: 'none',
   output: [],
   replValue: '',
   handleChapterSelect: (i: any, e: any) => {},

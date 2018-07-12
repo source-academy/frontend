@@ -37,6 +37,7 @@ export interface IWorkspaceManagerState {
   readonly gradingCommentsValue: string
   readonly gradingXP: number | undefined
   readonly playground: IWorkspaceState
+  readonly playgroundLibrary: string
 }
 
 interface IWorkspaceState {
@@ -124,10 +125,14 @@ export enum Role {
 /** Defines what chapters are available for usage. */
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
-/** Defines which external libraries are available for usage. */
-const libraryMap: Map<string, string[]> = new Map()
-libraryMap.set('sound', ['make_sourcesound'])
-export const sourceLibraries = libraryMap
+
+/** 
+ * Defines which external libraries are available for usage. 
+ * TODO use constants
+ * TODO move this to a file closer to the libraries
+ */
+const libEntries: Array<[string, string[]]> = [['none', []], ['sound', ['make_sourcesound']]]
+export const sourceLibraries: Map<string, string[]> = new Map(libEntries)
  
 
 const currentEnvironment = (): ApplicationEnvironment => {
@@ -171,7 +176,8 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   currentQuestion: undefined,
   gradingCommentsValue: defaultComments,
   gradingXP: undefined,
-  playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) }
+  playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) },
+  playgroundLibrary: 'none'
 }
 
 export const defaultSession: ISessionState = {

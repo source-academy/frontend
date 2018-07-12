@@ -17,7 +17,9 @@ export type ControlBarProps = {
   isRunning: boolean
   queryString?: string
   sourceChapter: number
+  sourceLibrary?: string
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleLibraryrSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
   handleGenerateLz?: () => void
   handleInterruptEval: () => void
