@@ -124,6 +124,11 @@ export enum Role {
 /** Defines what chapters are available for usage. */
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
+/** Defines which external libraries are available for usage. */
+const libraryMap: Map<string, string[]> = new Map()
+libraryMap.set('sound', ['make_sourcesound'])
+export const sourceLibraries = libraryMap
+ 
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
