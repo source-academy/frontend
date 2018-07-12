@@ -3,6 +3,7 @@ import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import {
+  beginInterruptExecution,
   changeActiveTab,
   changeEditorWidth,
   changeSideContentHeight,
@@ -11,7 +12,6 @@ import {
   evalEditor,
   evalRepl,
   generateLzString,
-  handleInterruptExecution,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -23,12 +23,12 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.playground.sideContentActiveTab,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue,
-  isRunning: state.workspaces.playground.isRunning,
+  isRunning: state.workspaces.playground.context.runtime.isRunning,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
   replValue: state.workspaces.playground.replValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
-  sourceChapter: state.workspaces.playground.sourceChapter
+  sourceChapter: state.workspaces.playground.context.chapter
 })
 
 const location: WorkspaceLocation = 'playground'
@@ -43,7 +43,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleGenerateLz: generateLzString,
-      handleInterruptEval: () => handleInterruptExecution(location),
+      handleInterruptEval: () => beginInterruptExecution(location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

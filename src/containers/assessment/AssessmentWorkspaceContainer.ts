@@ -2,6 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import {
+  beginInterruptExecution,
   changeActiveTab,
   changeEditorWidth,
   changeSideContentHeight,
@@ -10,11 +11,11 @@ import {
   evalEditor,
   evalRepl,
   fetchAssessment,
-  handleInterruptExecution,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
 } from '../../actions'
+import { resetAssessmentWorkspace, updateCurrentAssessmentId } from '../../actions/workspaces'
 import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
@@ -26,12 +27,14 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
   return {
     assessment: state.session.assessments.get(props.assessmentId),
     editorValue: state.workspaces.assessment.editorValue,
-    isRunning: state.workspaces.assessment.isRunning,
+    isRunning: state.workspaces.assessment.context.runtime.isRunning,
     activeTab: state.workspaces.assessment.sideContentActiveTab,
     editorWidth: state.workspaces.assessment.editorWidth,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     output: state.workspaces.assessment.output,
-    replValue: state.workspaces.assessment.replValue
+    replValue: state.workspaces.assessment.replValue,
+    storedAssessmentId: state.workspaces.currentAssessment,
+    storedQuestionId: state.workspaces.currentQuestion
   }
 }
 
@@ -47,12 +50,14 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
-      handleInterruptEval: () => handleInterruptExecution(location),
+      handleInterruptEval: () => beginInterruptExecution(location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleResetAssessmentWorkspace: resetAssessmentWorkspace,
       handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, location)
+        changeSideContentHeight(heightChange, location),
+      handleUpdateCurrentAssessmentId: updateCurrentAssessmentId
     },
     dispatch
   )

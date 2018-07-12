@@ -8,13 +8,13 @@ import {
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
+  END_INTERRUPT_EXECUTION,
   EVAL_EDITOR,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
-  INTERRUPT_EXECUTION,
   RESET_ASSESSMENT_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_CURRENT_ASSESSMENT_ID,
@@ -98,7 +98,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           context: createContext<WorkspaceLocation>(
-            state[location].sourceChapter,
+            state[location].context.chapter,
             undefined,
             location
           )
@@ -109,7 +109,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          sourceChapter: action.payload.newChapter
+          context: createContext<WorkspaceLocation>(action.payload.newChapter, undefined, location)
         }
       }
     case HANDLE_CONSOLE_LOG:
@@ -151,16 +151,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       return {
         ...state,
         [location]: {
-          ...state[location],
-          isRunning: true
+          ...state[location]
         }
       }
     case EVAL_REPL:
       return {
         ...state,
         [location]: {
-          ...state[location],
-          isRunning: true
+          ...state[location]
         }
       }
     case EVAL_INTERPRETER_SUCCESS:
@@ -182,8 +180,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          output: newOutput,
-          isRunning: false
+          output: newOutput
         }
       }
     case EVAL_INTERPRETER_ERROR:
@@ -205,16 +202,30 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          output: newOutput,
-          isRunning: false
+          output: newOutput
         }
       }
-    case INTERRUPT_EXECUTION:
+    /**
+     * Called to signal the end of an interruption,
+     * i.e called after the interpreter is told to stop interruption,
+     * to cause UI changes.
+     */
+    case END_INTERRUPT_EXECUTION:
+      /**
+       * Set the isRunning property of the
+       * context to false, to ensure a re-render.
+       * Also in case the async js-slang interrupt()
+       * function does not finish interrupting before
+       * this action is called.
+       */
       return {
         ...state,
         [location]: {
           ...state[location],
-          isRunning: false
+          context: {
+            ...state[location].context,
+            isRunning: false
+          }
         }
       }
     case RESET_ASSESSMENT_WORKSPACE:

@@ -43,10 +43,8 @@ interface IWorkspaceState {
   readonly context: Context
   readonly editorValue: string
   readonly editorWidth: string
-  readonly isRunning: boolean
   readonly output: InterpreterOutput[]
   readonly replValue: string
-  readonly sourceChapter: number
   readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
 }
@@ -123,6 +121,7 @@ export enum Role {
   Admin = 'admin'
 }
 
+/** Defines what chapters are available for usage. */
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
 
@@ -154,11 +153,9 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
   editorValue: defaultEditorValue,
   editorWidth: '50%',
-  isRunning: false,
   output: [],
   replValue: '',
-  sideContentActiveTab: 0,
-  sourceChapter: latestSourceChapter
+  sideContentActiveTab: 0
 })
 
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'

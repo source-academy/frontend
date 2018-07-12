@@ -28,6 +28,8 @@ export type StateProps = {
   output: InterpreterOutput[]
   replValue: string
   sideContentHeight?: number
+  storedAssessmentId?: number
+  storedQuestionId?: number
 }
 
 export type OwnProps = {
@@ -47,7 +49,9 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
+  handleResetAssessmentWorkspace: () => void
   handleSideContentHeightChange: (heightChange: number) => void
+  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
 }
 
 class AssessmentWorkspace extends React.Component<
@@ -57,10 +61,16 @@ class AssessmentWorkspace extends React.Component<
   public state = { showOverlay: false }
 
   public componentWillMount() {
+    /* Load assessment if it isn't passed as a prop. */
     this.props.handleAssessmentFetch(this.props.assessmentId)
     if (this.props.questionId === 0) {
       this.setState({ showOverlay: true })
     }
+    this.checkWorkspaceReset(this.props)
+  }
+
+  public componentWillUpdate() {
+    this.checkWorkspaceReset(this.props)
   }
 
   public render() {
@@ -124,6 +134,31 @@ class AssessmentWorkspace extends React.Component<
         <Workspace {...workspaceProps} />
       </div>
     )
+  }
+
+  /**
+   * Checks if there is a need to reset the workspace, then executes
+   * a dispatch (in the props) if needed.
+   *
+   * @param props the props passed to the component
+   */
+  private checkWorkspaceReset(props: AssessmentWorkspaceProps) {
+    /* Don't reset workspace if assessment not fetched yet. */
+    if (this.props.assessment === undefined) {
+      return
+    }
+
+    /* Reset assessment if it has changed.*/
+    const assessmentId = this.props.assessmentId
+    const questionId = this.props.questionId
+
+    if (
+      this.props.storedAssessmentId !== assessmentId ||
+      this.props.storedQuestionId !== questionId
+    ) {
+      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
+      this.props.handleResetAssessmentWorkspace()
+    }
   }
 
   /** Pre-condition: IAssessment has been loaded */

@@ -26,7 +26,12 @@ export const evalInterpreterError = (
   payload: { type: 'errors', errors, workspaceLocation }
 })
 
-export const handleInterruptExecution = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.INTERRUPT_EXECUTION,
+export const beginInterruptExecution = (workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.BEGIN_INTERRUPT_EXECUTION,
+  payload: { workspaceLocation }
+})
+
+export const endInterruptExecution = (workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.END_INTERRUPT_EXECUTION,
   payload: { workspaceLocation }
 })

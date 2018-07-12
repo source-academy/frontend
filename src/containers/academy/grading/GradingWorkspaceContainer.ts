@@ -2,6 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import {
+  beginInterruptExecution,
   changeActiveTab,
   changeEditorWidth,
   changeSideContentHeight,
@@ -10,7 +11,6 @@ import {
   evalEditor,
   evalRepl,
   fetchGrading,
-  handleInterruptExecution,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -33,7 +33,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
   return {
     grading: state.session.gradings.get(props.submissionId),
     editorValue: state.workspaces.assessment.editorValue,
-    isRunning: state.workspaces.assessment.isRunning,
+    isRunning: state.workspaces.assessment.context.runtime.isRunning,
     activeTab: state.workspaces.assessment.sideContentActiveTab,
     editorWidth: state.workspaces.assessment.editorWidth,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
@@ -52,7 +52,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
-      handleInterruptEval: () => handleInterruptExecution(location),
+      handleInterruptEval: () => beginInterruptExecution(location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

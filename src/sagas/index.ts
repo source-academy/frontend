@@ -1,4 +1,5 @@
 import { Context, interrupt, runInContext } from 'js-slang'
+import { InterruptedError } from 'js-slang/dist/interpreter-errors'
 import { compressToEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
 import { SagaIterator } from 'redux-saga'
@@ -82,10 +83,9 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const newChapter = (action as actionTypes.IAction).payload.chapter
-    const oldChapter = yield select((state: IState) => state.workspaces[location].sourceChapter)
+    const oldChapter = yield select((state: IState) => state.workspaces[location].context.chapter)
     if (newChapter !== oldChapter) {
       yield put(actions.changeChapter(newChapter, location))
-      yield put(actions.clearContext(location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
@@ -110,13 +110,13 @@ function* loginSaga(): SagaIterator {
 function* playgroundSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
     const code = yield select((state: IState) => state.workspaces.playground.editorValue)
-    const lib = yield select((state: IState) => state.workspaces.playground.sourceChapter)
+    const chapter = yield select((state: IState) => state.workspaces.playground.context.chapter)
     const newQueryString =
       code === '' || code === defaultEditorValue
         ? undefined
         : qs.stringify({
             prgrm: compressToEncodedURIComponent(code),
-            lib
+            lib: chapter
           })
     yield put(actions.changeQueryString(newQueryString))
   })
@@ -125,7 +125,11 @@ function* playgroundSaga(): SagaIterator {
 function* evalCode(code: string, context: Context, location: WorkspaceLocation) {
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
-    interrupted: take(actionTypes.INTERRUPT_EXECUTION)
+    /**
+     * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
+     * i.e the trigger for the interpreter to interrupt execution.
+     */
+    interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION)
   })
   if (result) {
     if (result.status === 'finished') {
@@ -135,6 +139,9 @@ function* evalCode(code: string, context: Context, location: WorkspaceLocation) 
     }
   } else if (interrupted) {
     interrupt(context)
+    /* Redundancy, added ensure that interruption results in an error. ( */
+    context.errors.push(new InterruptedError(context.runtime.nodes[0]))
+    yield put(actions.endInterruptExecution(location))
     yield call(showWarningMessage, 'Execution aborted by user')
   }
 }

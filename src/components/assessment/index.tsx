@@ -36,8 +36,6 @@ export interface IAssessmentProps
 
 export interface IDispatchProps {
   handleAssessmentOverviewFetch: () => void
-  handleResetAssessmentWorkspace: () => void
-  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
 }
 
 export interface IOwnProps {
@@ -46,8 +44,6 @@ export interface IOwnProps {
 
 export interface IStateProps {
   assessmentOverviews?: IAssessmentOverview[]
-  storedAssessmentId?: number
-  storedQuestionId?: number
 }
 
 type State = {
@@ -64,26 +60,6 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     this.state = {
       showOpenAssessments: true,
       showClosedAssessments: false
-    }
-  }
-
-  /**
-   * If the current AssessmentId/QuestionId has changed, update it
-   * in the store and reset the workspace.
-   */
-  public componentWillMount() {
-    const assessmentId = stringParamToInt(this.props.match.params.assessmentId)
-    if (assessmentId === null) {
-      return
-    }
-    const questionId = stringParamToInt(this.props.match.params.questionId)!
-
-    if (
-      this.props.storedAssessmentId !== assessmentId ||
-      this.props.storedQuestionId !== questionId
-    ) {
-      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
-      this.props.handleResetAssessmentWorkspace()
     }
   }
 
