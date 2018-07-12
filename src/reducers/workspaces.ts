@@ -133,7 +133,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           context: createContext<WorkspaceLocation>(chapter, newExternals, location)
-        }
+        },
+        playgroundLibrary: action.payload.newLibrary
       }
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:
