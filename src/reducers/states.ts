@@ -37,6 +37,7 @@ export interface IWorkspaceManagerState {
   readonly gradingCommentsValue: string
   readonly gradingXP: number | undefined
   readonly playground: IWorkspaceState
+  /** Defines the external library name to be used. */
   readonly playgroundLibrary: string
 }
 
