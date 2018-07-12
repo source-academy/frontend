@@ -126,14 +126,13 @@ export enum Role {
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
 
-/** 
- * Defines which external libraries are available for usage. 
+/**
+ * Defines which external libraries are available for usage.
  * TODO use constants
  * TODO move this to a file closer to the libraries
  */
 const libEntries: Array<[string, string[]]> = [['none', []], ['sound', ['make_sourcesound']]]
 export const sourceLibraries: Map<string, string[]> = new Map(libEntries)
- 
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {

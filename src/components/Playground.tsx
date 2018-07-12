@@ -19,8 +19,8 @@ export interface IStateProps {
   queryString?: string
   replValue: string
   sideContentHeight?: number
-  sourceChapter: number,
-sourceLibrary: string
+  sourceChapter: number
+  sourceLibrary: string
 }
 
 export interface IDispatchProps {

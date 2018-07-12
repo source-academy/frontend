@@ -37,8 +37,8 @@ interface IChapter {
 }
 
 /**
- * Defined for displaying a library. 
- * @see Library under assessmentShape.ts for 
+ * Defined for displaying a library.
+ * @see Library under assessmentShape.ts for
  *   the definition of a Library in an assessment.
  */
 interface ILibrary {
@@ -118,9 +118,10 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined
-    const librarySelectButton = this.props.hasChapterSelect && this.props.sourceLibrary !== undefined
-      ? librarySelect(this.props.sourceLibrary, this.props.handleLibrarySelect)
-      : undefined
+    const librarySelectButton =
+      this.props.hasChapterSelect && this.props.sourceLibrary !== undefined
+        ? librarySelect(this.props.sourceLibrary, this.props.handleLibrarySelect)
+        : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
         {this.props.isRunning ? stopButton : runButton} {saveButton}
@@ -200,8 +201,11 @@ const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers,
   <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
 )
 
-const libraries = Array.from(sourceLibraries.entries())
-  .map((entry, index) => ({ displayName: entry[0], key: index, externals: entry[1] }))
+const libraries = Array.from(sourceLibraries.entries()).map((entry, index) => ({
+  displayName: entry[0],
+  key: index,
+  externals: entry[1]
+}))
 
 const librarySelect = (
   currentLibrary: string,
@@ -214,11 +218,7 @@ const librarySelect = (
     itemRenderer={libraryRenderer}
     filterable={false}
   >
-    <Button
-      className="pt-minimal"
-      text={currentLibrary}
-      rightIcon="double-caret-vertical"
-    />
+    <Button className="pt-minimal" text={currentLibrary} rightIcon="double-caret-vertical" />
   </LibrarySelectComponent>
 )
 
