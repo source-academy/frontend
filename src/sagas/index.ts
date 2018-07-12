@@ -125,6 +125,10 @@ function* playgroundSaga(): SagaIterator {
 function* evalCode(code: string, context: Context, location: WorkspaceLocation) {
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
+    /**
+     * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
+     * i.e the trigger for the interpreter to interrupt execution.
+     */
     interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION)
   })
   if (result) {

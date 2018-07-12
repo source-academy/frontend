@@ -205,11 +205,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           output: newOutput
         }
       }
+    /**
+     * Called to signal the end of an interruption,
+     * i.e called after the interpreter is told to stop interruption,
+     * to cause UI changes.
+     */
     case END_INTERRUPT_EXECUTION:
       /**
-       * Sets the isRunning property of the 
-       * context to false, to ensure a re-render
-       * and also in case the async js-slang interrupt()
+       * Set the isRunning property of the 
+       * context to false, to ensure a re-render.
+       * Also in case the async js-slang interrupt()
        * function does not finish interrupting before 
        * this action is called.
        */

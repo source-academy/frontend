@@ -15,16 +15,7 @@ export const GENERATE_LZ_STRING = 'GENERATE_LZ_STRING'
 export const HANDLE_CONSOLE_LOG = 'HANDLE_CONSOLE_LOG'
 export const EVAL_INTERPRETER_SUCCESS = 'EVAL_INTERPRETER_SUCCESS'
 export const EVAL_INTERPRETER_ERROR = 'EVAL_INTERPRETER_ERROR'
-/**
- * Called to signal the beginning of an interruption,
- * i.e the trigger for the interpreter to interrupt execution.
- */
 export const BEGIN_INTERRUPT_EXECUTION = 'BEGIN_INTERRUPT_EXECUTION'
-/**
- * Called to signal the end of an interruption,
- * i.e called after the interpreter is told to stop interruption,
- * to cause UI changes.
- */
 export const END_INTERRUPT_EXECUTION = 'END_INTERRUPT_EXECUTION'
 
 /** Workspace */
