@@ -212,10 +212,10 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      */
     case END_INTERRUPT_EXECUTION:
       /**
-       * Set the isRunning property of the 
+       * Set the isRunning property of the
        * context to false, to ensure a re-render.
        * Also in case the async js-slang interrupt()
-       * function does not finish interrupting before 
+       * function does not finish interrupting before
        * this action is called.
        */
       return {
