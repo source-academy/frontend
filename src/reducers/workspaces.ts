@@ -207,11 +207,21 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
     case END_INTERRUPT_EXECUTION:
       /**
-       * Called to force a state change, which
-       * will cause a re-render
+       * Sets the isRunning property of the 
+       * context to false, to ensure a re-render
+       * and also in case the async js-slang interrupt()
+       * function does not finish interrupting before 
+       * this action is called.
        */
       return {
-        ...state
+        ...state,
+        [location]: {
+          ...state[location],
+          context: {
+            ...state[location].context,
+            isRunning: false
+          }
+        }
       }
     case RESET_ASSESSMENT_WORKSPACE:
       return {

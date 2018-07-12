@@ -1,4 +1,5 @@
 import { Context, interrupt, runInContext } from 'js-slang'
+import { InterruptedError } from 'js-slang/dist/interpreter-errors'
 import { compressToEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
 import { SagaIterator } from 'redux-saga'
@@ -134,6 +135,8 @@ function* evalCode(code: string, context: Context, location: WorkspaceLocation) 
     }
   } else if (interrupted) {
     interrupt(context)
+    /* Redundancy, added ensure that interruption results in an error. ( */
+    context.errors.push(new InterruptedError(context.runtime.nodes[0]))
     yield put(actions.endInterruptExecution(location))
     yield call(showWarningMessage, 'Execution aborted by user')
   }
