@@ -76,7 +76,7 @@ export const librarySelect: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.CHAPTER_SELECT,
   payload: {
-    chapter: library.displayName,
+    library: library.displayName,
     workspaceLocation
   }
 })
