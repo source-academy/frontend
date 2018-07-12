@@ -95,10 +95,10 @@ function* workspaceSaga(): SagaIterator {
    * Note that the LIBRARY_SELECT action can only select the library for playground.
    * This is because assessments do not have a chapter & library select, the question
    * specifies the chapter and library to be used.
-   * 
-   * To abstract this to assessments, the state structure must be manipulated to store 
+   *
+   * To abstract this to assessments, the state structure must be manipulated to store
    * Library in a IWorkspaceState (as compared to IWorkspaceManagerState).
-   * 
+   *
    * @see IWorkspaceManagerState @see IWorkspaceState
    */
   yield takeEvery(actionTypes.LIBRARY_SELECT, function*(action) {
