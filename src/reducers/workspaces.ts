@@ -108,7 +108,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
     /**
      * This action is only meant for Playground usage,
-     * as library is specified by an individual question for an 
+     * as chapter is specified by an individual question for an 
      * Assessment.
      */
     case CHANGE_CHAPTER:
@@ -120,6 +120,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           context: createContext<WorkspaceLocation>(action.payload.newChapter, externals, location)
         }
       }
+    /**
+     * This action is only meant for Playground usage,
+     * as external library is specified by an individual question for an 
+     * Assessment.
+     */
     case CHANGE_LIBRARY:
       const chapter = state[location].context.chapter
       const newExternals = sourceLibraries.get(action.payload.newLibrary)

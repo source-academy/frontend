@@ -108,7 +108,7 @@ function* workspaceSaga(): SagaIterator {
     if (newLibrary !== oldLibrary) {
       yield put(actions.changeLibrary(newLibrary, location))
       yield put(actions.clearReplOutput(location))
-      yield call(showSuccessMessage, `Switched to \xa7${newLibrary} library`)
+      yield call(showSuccessMessage, `Switched to ${newLibrary} library`)
     }
   })
 

@@ -12,6 +12,7 @@ import {
   evalEditor,
   evalRepl,
   generateLzString,
+  librarySelect,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -45,6 +46,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
+      handleLibrarySelect: (library: any, changeEvent: any) =>
+        librarySelect(library, changeEvent, location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
