@@ -6,13 +6,13 @@ import Grading, { IDispatchProps, IStateProps } from '../../../components/academ
 import { IState } from '../../../reducers/states'
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  gradingOverviews: state.session.gradingOverviews,
+  gradingOverviews: state.session.gradingOverviews
 })
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleFetchGradingOverviews: fetchGradingOverviews,
+      handleFetchGradingOverviews: fetchGradingOverviews
     },
     dispatch
   )
