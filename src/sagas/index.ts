@@ -65,6 +65,7 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const code: string = yield select((state: IState) => state.workspaces[location].editorValue)
+    yield put(actions.beginInterruptExecution(location))
     yield put(actions.clearContext(location))
     yield put(actions.clearReplOutput(location))
     context = yield select((state: IState) => state.workspaces[location].context)
@@ -74,9 +75,10 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const code: string = yield select((state: IState) => state.workspaces[location].replValue)
-    context = yield select((state: IState) => state.workspaces[location].context)
+    yield put(actions.beginInterruptExecution(location))
     yield put(actions.clearReplInput(location))
     yield put(actions.sendReplInputToOutput(code, location))
+    context = yield select((state: IState) => state.workspaces[location].context)
     yield* evalCode(code, context, location)
   })
 
@@ -139,7 +141,7 @@ function* evalCode(code: string, context: Context, location: WorkspaceLocation) 
     }
   } else if (interrupted) {
     interrupt(context)
-    /* Redundancy, added ensure that interruption results in an error. ( */
+    /* Redundancy, added ensure that interruption results in an error. */
     context.errors.push(new InterruptedError(context.runtime.nodes[0]))
     yield put(actions.endInterruptExecution(location))
     yield call(showWarningMessage, 'Execution aborted by user')
