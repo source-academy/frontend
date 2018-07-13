@@ -50,6 +50,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     action.payload !== undefined ? action.payload.workspaceLocation : undefined
   let newOutput: InterpreterOutput[]
   let lastOutput: InterpreterOutput
+  let chapter: number
+  let externals: string[]
+
   switch (action.type) {
     case CHANGE_ACTIVE_TAB:
       return {
@@ -112,7 +115,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      * Assessment.
      */
     case CHANGE_CHAPTER:
-      const externals = sourceLibraries.get(state.playgroundLibrary)
+      externals = sourceLibraries.get(state.playgroundLibrary) || []
       return {
         ...state,
         [location]: {
@@ -126,13 +129,13 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      * Assessment.
      */
     case CHANGE_LIBRARY:
-      const chapter = state[location].context.chapter
-      const newExternals = sourceLibraries.get(action.payload.newLibrary)
+      chapter = state[location].context.chapter
+      externals = sourceLibraries.get(action.payload.newLibrary) || []
       return {
         ...state,
         [location]: {
           ...state[location],
-          context: createContext<WorkspaceLocation>(chapter, newExternals, location)
+          context: createContext<WorkspaceLocation>(chapter, externals, location)
         },
         playgroundLibrary: action.payload.newLibrary
       }
@@ -252,10 +255,15 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         }
       }
+    /**
+     * Resets the assessment workspace (under state.workspaces.assessment).
+     */
     case RESET_ASSESSMENT_WORKSPACE:
+      chapter = action.payload.chapter
+      externals  = action.payload.externals
       return {
         ...state,
-        assessment: createDefaultWorkspace(WorkspaceLocations.assessment),
+        assessment: createDefaultWorkspace(WorkspaceLocations.assessment, chapter, externals),
         gradingCommentsValue: defaultComments,
         gradingXP: undefined
       }

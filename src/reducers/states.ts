@@ -159,8 +159,8 @@ export const defaultPlayground: IPlaygroundState = {}
 
 export const defaultEditorValue = '// Type your program in here!'
 
-export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
-  context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
+export const createDefaultWorkspace = (location: WorkspaceLocation, chapter: number = latestSourceChapter, externals?: string[]): IWorkspaceState => ({
+  context: createContext<WorkspaceLocation>(chapter, externals, location),
   editorValue: defaultEditorValue,
   editorWidth: '50%',
   output: [],
