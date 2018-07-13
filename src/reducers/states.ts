@@ -45,6 +45,7 @@ interface IWorkspaceState {
   readonly editorValue: string
   readonly editorWidth: string
   readonly output: InterpreterOutput[]
+  readonly replHistory: ReplHistory
   readonly replValue: string
   readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
@@ -63,6 +64,11 @@ export interface ISessionState {
   readonly role?: Role
   readonly storyAct: string
   readonly username?: string
+}
+
+type ReplHistory = {
+  isBrowsingIndex: null | number // [0, 49] if browsing, else null
+  records: string[]
 }
 
 /**
@@ -189,6 +195,10 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   editorValue: defaultEditorValue,
   editorWidth: '50%',
   output: [],
+  replHistory: {
+    isBrowsingIndex: null,
+    records: []
+  },
   replValue: '',
   sideContentActiveTab: 0,
   externals: []
