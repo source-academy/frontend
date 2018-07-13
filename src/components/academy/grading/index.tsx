@@ -35,14 +35,10 @@ export interface IGradingWorkspaceParams {
 
 export interface IDispatchProps {
   handleFetchGradingOverviews: () => void
-  handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
-  handleResetAssessmentWorkspace: () => void
 }
 
 export interface IStateProps {
   gradingOverviews?: GradingOverview[]
-  storedSubmissionId?: number
-  storedQuestionId?: number
 }
 
 class Grading extends React.Component<IGradingProps, State> {
@@ -68,26 +64,6 @@ class Grading extends React.Component<IGradingProps, State> {
           cellRendererFramework: GradingNavLink
         }
       ]
-    }
-  }
-
-  /**
-   * If the current SubmissionId/QuestionId has changed, update it
-   * in the store and reset the workspace.
-   */
-  public componentWillMount() {
-    const submissionId = stringParamToInt(this.props.match.params.submissionId)
-    if (submissionId === null) {
-      return
-    }
-    const questionId = stringParamToInt(this.props.match.params.questionId)!
-
-    if (
-      this.props.storedSubmissionId !== submissionId ||
-      this.props.storedQuestionId !== questionId
-    ) {
-      this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
-      this.props.handleResetAssessmentWorkspace()
     }
   }
 

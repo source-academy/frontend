@@ -15,6 +15,7 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from '../../../actions'
+import { resetAssessmentWorkspace, updateCurrentSubmissionId } from '../../../actions/workspaces'
 import GradingWorkspace, {
   DispatchProps,
   OwnProps,
@@ -38,7 +39,9 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     editorWidth: state.workspaces.assessment.editorWidth,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     output: state.workspaces.assessment.output,
-    replValue: state.workspaces.assessment.replValue
+    replValue: state.workspaces.assessment.replValue,
+    storedSubmissionId: state.workspaces.currentSubmission,
+    storedQuestionId: state.workspaces.currentQuestion
   }
 }
 
@@ -57,7 +60,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
       handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, location)
+        changeSideContentHeight(heightChange, location),
+      handleUpdateCurrentSubmissionId: updateCurrentSubmissionId,
+      handleResetAssessmentWorkspace: resetAssessmentWorkspace
     },
     dispatch
   )
