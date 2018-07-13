@@ -132,7 +132,26 @@ const latestSourceChapter = sourceChapters.slice(-1)[0]
  * TODO use constants
  * TODO move this to a file closer to the libraries
  */
-const libEntries: Array<[string, string[]]> = [['none', []], ['sound', ['make_sourcesound']]]
+const libEntries: Array<[string, string[]]> = [
+  ['none', []],
+  [
+    'sound',
+    [
+      'make_sourcesound',
+      'get_wave',
+      'get_duration',
+      'is_sound',
+      'play',
+      'stop',
+      'cut_sourcesound',
+      'cut',
+      'sourcesound_to_sound',
+      'autocut_sourcesound',
+      'consecutively',
+      'simultaneously'
+    ]
+  ]
+]
 export const externalLibraries: Map<string, string[]> = new Map(libEntries)
 
 const currentEnvironment = (): ApplicationEnvironment => {
