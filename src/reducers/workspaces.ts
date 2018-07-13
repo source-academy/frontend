@@ -140,11 +140,21 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case SEND_REPL_INPUT_TO_OUTPUT:
       // CodeOutput properties exist in parallel with workspaceLocation
       newOutput = state[location].output.concat(action.payload as CodeOutput)
+      const newReplHistoryRecords = [action.payload.value].concat(
+        state[location].replHistory.records
+      )
+      if (newReplHistoryRecords.length > 50) {
+        newReplHistoryRecords.pop()
+      }
       return {
         ...state,
         [location]: {
           ...state[location],
-          output: newOutput
+          output: newOutput,
+          replHistory: {
+            ...state[location].replHistory,
+            records: newReplHistoryRecords
+          }
         }
       }
     case EVAL_INTERPRETER_SUCCESS:
