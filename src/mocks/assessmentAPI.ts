@@ -75,7 +75,7 @@ export const mockAssessmentOverviews = [
 
 export const mockLibrary: Library = {
   chapter: 1,
-  externals: ['mockLibraryExternal'],
+  externals: ['make_sourcesound', 'array_test', 'draw_connected'],
   files: ['mockLibraryFile'],
   globals: ['mockLibraryGlobal']
 }
