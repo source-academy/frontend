@@ -15,7 +15,22 @@ export enum WorkspaceLocations {
   assessment = 'assessment',
   playground = 'playground'
 }
+
 export type WorkspaceLocation = keyof typeof WorkspaceLocations
+
+export const browseReplHistoryDown: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.BROWSE_REPL_HISTORY_DOWN,
+  payload: { workspaceLocation }
+})
+
+export const browseReplHistoryUp: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.BROWSE_REPL_HISTORY_UP,
+  payload: { workspaceLocation }
+})
 
 export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
   activeTab: number,
