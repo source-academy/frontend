@@ -260,7 +260,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      */
     case RESET_ASSESSMENT_WORKSPACE:
       chapter = action.payload.chapter
-      externals  = action.payload.externals
+      externals = action.payload.externals
       return {
         ...state,
         assessment: createDefaultWorkspace(WorkspaceLocations.assessment, chapter, externals),

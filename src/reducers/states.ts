@@ -159,7 +159,19 @@ export const defaultPlayground: IPlaygroundState = {}
 
 export const defaultEditorValue = '// Type your program in here!'
 
-export const createDefaultWorkspace = (location: WorkspaceLocation, chapter: number = latestSourceChapter, externals?: string[]): IWorkspaceState => ({
+/**
+ * Create a default IWorkspaceState for 'resetting' a workspace.
+ * Takes in parameters to set the js-slang library and chapter.
+ *
+ * @param location the location of the workspace, used for context
+ * @param chapter the chapter number for the js-slang interpreter
+ * @param externals any external library exposed symbols
+ */
+export const createDefaultWorkspace = (
+  location: WorkspaceLocation,
+  chapter: number = latestSourceChapter,
+  externals?: string[]
+): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(chapter, externals, location),
   editorValue: defaultEditorValue,
   editorWidth: '50%',
