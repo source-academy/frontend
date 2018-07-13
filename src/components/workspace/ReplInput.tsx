@@ -6,6 +6,8 @@ import 'brace/theme/terminal'
 
 export interface IReplInputProps {
   replValue: string
+  handleBrowseHistoryDown: () => void
+  handleBrowseHistoryUp: () => void
   handleReplValueChange: (newCode: string) => void
   handleReplEval: () => void
 }

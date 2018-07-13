@@ -37,13 +37,15 @@ export type OwnProps = {
 }
 
 export type DispatchProps = {
-  handleGradingFetch: (submissionId: number) => void
+  handleBrowseHistoryDown: () => void
+  handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
   handleClearContext: (chapter: number, externals: string[]) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
+  handleGradingFetch: (submissionId: number) => void
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
@@ -101,10 +103,12 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {
-        output: this.props.output,
-        replValue: this.props.replValue,
+        handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
+        handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        handleReplValueChange: this.props.handleReplValueChange,
+        output: this.props.output,
+        replValue: this.props.replValue
       }
     }
     return (

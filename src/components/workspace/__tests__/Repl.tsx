@@ -35,11 +35,13 @@ const mockErrorOutput: ErrorOutput = {
 
 test('Repl renders correctly', () => {
   const props = {
-    output: [mockResultOutput, mockCodeOutput, mockErrorOutput, mockRunningOutput],
-    replValue: '',
+    handleBrowseHistoryDown: () => {},
+    handleBrowseHistoryUp: () => {},
     handleReplValueChange: (newCode: string) => {},
     handleReplEval: () => {},
-    handleReplOutputClear: () => {}
+    handleReplOutputClear: () => {},
+    output: [mockResultOutput, mockCodeOutput, mockErrorOutput, mockRunningOutput],
+    replValue: ''
   }
   const app = <Repl {...props} />
   const tree = shallow(app)

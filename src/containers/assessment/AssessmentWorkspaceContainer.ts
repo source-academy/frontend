@@ -3,6 +3,8 @@ import { bindActionCreators, Dispatch } from 'redux'
 
 import {
   beginInterruptExecution,
+  browseReplHistoryDown,
+  browseReplHistoryUp,
   changeActiveTab,
   changeEditorWidth,
   changeSideContentHeight,
@@ -48,6 +50,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators<DispatchProps>(
     {
       handleAssessmentFetch: fetchAssessment,
+      handleBrowseHistoryDown: () => browseReplHistoryDown(location),
+      handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, changeEvent, location),

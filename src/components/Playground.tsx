@@ -24,6 +24,8 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+  handleBrowseHistoryDown: () => void
+  handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
   handleEditorEval: () => void
@@ -85,6 +87,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       replProps: {
         output: this.props.output,
         replValue: this.props.replValue,
+        handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
+        handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange
       },
