@@ -49,7 +49,7 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
-  handleResetAssessmentWorkspace: () => void
+  handleResetAssessmentWorkspace: (chapter: number, externals: string[]) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
 }
@@ -156,8 +156,10 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedAssessmentId !== assessmentId ||
       this.props.storedQuestionId !== questionId
     ) {
+      const chapter = this.props.assessment.questions[questionId].library.chapter
+      const externals = this.props.assessment.questions[questionId].library.externals
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
-      this.props.handleResetAssessmentWorkspace()
+      this.props.handleResetAssessmentWorkspace(chapter, externals)
     }
   }
 
