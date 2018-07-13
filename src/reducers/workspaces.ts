@@ -9,10 +9,8 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   END_INTERRUPT_EXECUTION,
-  EVAL_EDITOR,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
-  EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
   RESET_ASSESSMENT_WORKSPACE,
@@ -147,20 +145,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           output: newOutput
-        }
-      }
-    case EVAL_EDITOR:
-      return {
-        ...state,
-        [location]: {
-          ...state[location]
-        }
-      }
-    case EVAL_REPL:
-      return {
-        ...state,
-        [location]: {
-          ...state[location]
         }
       }
     case EVAL_INTERPRETER_SUCCESS:
