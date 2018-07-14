@@ -19,7 +19,7 @@
   },
   "exclude": [
     "node_modules",
-    "public/sourceLibs",
+    "public/externalLibs",
     "build",
     "scripts",
     "acceptance-tests",
