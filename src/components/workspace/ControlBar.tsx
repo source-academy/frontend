@@ -4,7 +4,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 
-import { sourceChapters, sourceLibraries } from '../../reducers/states'
+import { sourceChapters, externalLibraries } from '../../reducers/states'
 import { controlButton } from '../commons'
 
 export type ControlBarProps = {
@@ -17,7 +17,7 @@ export type ControlBarProps = {
   isRunning: boolean
   queryString?: string
   sourceChapter: number
-  sourceLibrary?: string
+  externalLibrary?: string
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleLibrarySelect?: (i: ILibrary, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
@@ -119,8 +119,8 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined
     const librarySelectButton =
-      this.props.hasChapterSelect && this.props.sourceLibrary !== undefined
-        ? librarySelect(this.props.sourceLibrary, this.props.handleLibrarySelect)
+      this.props.hasChapterSelect && this.props.externalLibrary !== undefined
+        ? librarySelect(this.props.externalLibrary, this.props.handleLibrarySelect)
         : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
@@ -201,7 +201,7 @@ const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers,
   <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
 )
 
-const libraries = Array.from(sourceLibraries.entries()).map((entry, index) => ({
+const libraries = Array.from(externalLibraries.entries()).map((entry, index) => ({
   displayName: entry[0],
   key: index,
   externals: entry[1]
