@@ -34,7 +34,7 @@ import {
   defaultWorkspaceManager,
   InterpreterOutput,
   IWorkspaceManagerState,
-  sourceLibraries
+  externalLibraries
 } from './states'
 
 /**
@@ -115,7 +115,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      * Assessment.
      */
     case CHANGE_CHAPTER:
-      externals = sourceLibraries.get(state.playgroundLibrary) || []
+      externals = externalLibraries.get(state.playgroundLibrary) || []
       return {
         ...state,
         [location]: {
@@ -130,7 +130,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      */
     case CHANGE_LIBRARY:
       chapter = state[location].context.chapter
-      externals = sourceLibraries.get(action.payload.newLibrary) || []
+      externals = externalLibraries.get(action.payload.newLibrary) || []
       return {
         ...state,
         [location]: {
