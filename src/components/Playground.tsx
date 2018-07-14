@@ -20,7 +20,7 @@ export interface IStateProps {
   replValue: string
   sideContentHeight?: number
   sourceChapter: number
-  sourceLibrary: string
+  externalLibrary: string
 }
 
 export interface IDispatchProps {
@@ -72,7 +72,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         isRunning: this.props.isRunning,
         queryString: this.props.queryString,
         sourceChapter: this.props.sourceChapter,
-        sourceLibrary: this.props.sourceLibrary
+        externalLibrary: this.props.externalLibrary
       },
       editorProps: {
         editorValue: this.props.editorValue,

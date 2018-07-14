@@ -12,7 +12,7 @@ const baseProps = {
   sideContentHeight: 40,
   sourceChapter: 2,
   /** TODO use constant value */
-  sourceLibrary: 'none',
+  externalLibrary: 'none',
   output: [],
   replValue: '',
   handleChapterSelect: (chapter: any, e: any) => {},
