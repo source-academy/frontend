@@ -133,7 +133,7 @@ const latestSourceChapter = sourceChapters.slice(-1)[0]
  * TODO move this to a file closer to the libraries
  */
 const libEntries: Array<[string, string[]]> = [['none', []], ['sound', ['make_sourcesound']]]
-export const sourceLibraries: Map<string, string[]> = new Map(libEntries)
+export const externalLibraries: Map<string, string[]> = new Map(libEntries)
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
