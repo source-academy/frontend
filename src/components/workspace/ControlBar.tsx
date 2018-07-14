@@ -4,7 +4,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 
-import { sourceChapters, externalLibraries } from '../../reducers/states'
+import { externalLibraries, sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
 export type ControlBarProps = {

@@ -32,9 +32,9 @@ import {
   createDefaultWorkspace,
   defaultComments,
   defaultWorkspaceManager,
+  externalLibraries,
   InterpreterOutput,
-  IWorkspaceManagerState,
-  externalLibraries
+  IWorkspaceManagerState
 } from './states'
 
 /**
