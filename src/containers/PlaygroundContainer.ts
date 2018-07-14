@@ -30,7 +30,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   replValue: state.workspaces.playground.replValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
-  sourceLibrary: state.workspaces.playgroundLibrary
+  externalLibrary: state.workspaces.playgroundLibrary
 })
 
 const location: WorkspaceLocation = 'playground'
