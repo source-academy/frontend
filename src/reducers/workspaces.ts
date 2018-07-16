@@ -246,6 +246,22 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         }
       }
+    case EVAL_EDITOR:
+      // Forces re-render of workspace on editor eval
+      return {
+        ...state,
+        [location]: {
+          ...state[location]
+        }
+      }
+    case EVAL_REPL:
+      // Forces re-render of workspace on repl eval
+      return {
+        ...state,
+        [location]: {
+          ...state[location]
+        }
+      }
     case EVAL_INTERPRETER_SUCCESS:
       lastOutput = state[location].output.slice(-1)[0]
       if (lastOutput !== undefined && lastOutput.type === 'running') {
