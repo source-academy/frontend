@@ -8,7 +8,6 @@ import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
-import { mockAssessments } from '../mocks/assessmentAPI'
 import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
 import { defaultEditorValue, externalLibraries, IState } from '../reducers/states'
 import { IVLE_KEY } from '../utils/constants'
@@ -24,15 +23,6 @@ function* mainSaga() {
 }
 
 function* apiFetchSaga(): SagaIterator {
-  yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
-    const id = (action as actionTypes.IAction).payload
-    const newContent = mockAssessments[id]
-    const oldContent = yield select((state: IState) => state.session.assessments[id])
-    if (newContent !== oldContent) {
-      yield put(actions.updateAssessment(newContent))
-    }
-  })
-
   yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
     const accessToken = yield select((state: IState) => state.session.accessToken)
     const gradingOverviews = yield call(() => mockFetchGradingOverview(accessToken))

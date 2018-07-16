@@ -29,6 +29,13 @@ function* backendSaga(): SagaIterator {
     const assessmentOverviews = yield call(callAssessments, accessToken)
     yield put(actions.updateAssessmentOverviews(assessmentOverviews))
   })
+
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
+    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const id = (action as actionTypes.IAction).payload
+    const assessment = yield call(callAssessmentsId, id, accessToken)
+    yield put(actions.updateAssessment(assessment))
+  })
 }
 
 const callAuth = (ivleToken: string) =>
@@ -50,6 +57,13 @@ const callAssessments = async (accessToken: string) => {
     delete overview.type
     return overview as IAssessmentOverview
   })
+}
+
+const callAssessmentsId = async (id: number, accessToken: string) => {
+  const assessment: any = await authorizedGet(`assessments/${id}`, accessToken)
+  assessment.category = capitalise(assessment.type)
+  delete assessment.type
+  return assessment
 }
 
 const authorizedGet = (path: string, accessToken: string) =>
