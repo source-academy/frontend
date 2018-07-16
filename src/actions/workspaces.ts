@@ -81,9 +81,13 @@ export const librarySelect: ActionCreator<actionTypes.IAction> = (
   }
 })
 
-export const clearContext = (workspaceLocation: WorkspaceLocation, chapter: number, externals: string[]) => ({
+export const clearContext = (
+  workspaceLocation: WorkspaceLocation,
+  chapter: number,
+  externals: string[]
+) => ({
   type: actionTypes.CLEAR_CONTEXT,
-  payload: { 
+  payload: {
     workspaceLocation,
     chapter,
     externals

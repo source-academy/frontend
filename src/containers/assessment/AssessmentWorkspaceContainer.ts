@@ -13,9 +13,13 @@ import {
   evalRepl,
   fetchAssessment,
   updateEditorValue,
-  updateReplValue,
+  updateReplValue
 } from '../../actions'
-import { resetAssessmentWorkspace, WorkspaceLocation, updateCurrentAssessmentId } from '../../actions/workspaces'
+import {
+  resetAssessmentWorkspace,
+  updateCurrentAssessmentId,
+  WorkspaceLocation
+} from '../../actions/workspaces'
 import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
@@ -47,7 +51,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, changeEvent, location),
-      handleClearContext: (chapter: number, externals: string[]) => clearContext(location, chapter, externals),
+      handleClearContext: (chapter: number, externals: string[]) =>
+        clearContext(location, chapter, externals),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),

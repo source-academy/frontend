@@ -1,4 +1,4 @@
-import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs/core' 
+import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
@@ -14,7 +14,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
-  QuestionTypes,
+  QuestionTypes
 } from './assessmentShape'
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps

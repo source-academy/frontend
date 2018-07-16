@@ -65,8 +65,12 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const code: string = yield select((state: IState) => state.workspaces[location].editorValue)
-    const chapter: number = yield select((state: IState) => state.workspaces[location].context.chapter)
-    const externals: string[] = yield select((state: IState) => state.workspaces[location].externals)
+    const chapter: number = yield select(
+      (state: IState) => state.workspaces[location].context.chapter
+    )
+    const externals: string[] = yield select(
+      (state: IState) => state.workspaces[location].externals
+    )
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
     /** Clear the context, with the same chapter and externals as before. */
