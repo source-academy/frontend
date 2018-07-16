@@ -18,8 +18,8 @@ export interface IStateProps {
   accessToken?: string
   role?: Role
   username?: string
-  currentChapter: number
-  currentExternals: string[]
+  currentPlaygroundChapter: number
+  currentPlaygroundExternals: string[]
 }
 
 export interface IDispatchProps {
