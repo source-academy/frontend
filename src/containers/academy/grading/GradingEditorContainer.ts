@@ -10,8 +10,8 @@ import { IState } from '../../../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    gradingCommentsValue: state.workspaces.gradingCommentsValue,
-    gradingXP: state.workspaces.gradingXP
+    gradingCommentsValue: state.workspaces.grading.gradingCommentsValue,
+    gradingXP: state.workspaces.grading.gradingXP
   }
 }
 
