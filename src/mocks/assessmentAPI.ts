@@ -9,6 +9,7 @@ import {
 
 const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {
+    attempted: true,
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
@@ -20,6 +21,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'An Odessey to Runes'
   },
   {
+    attempted: false,
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
@@ -31,6 +33,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'The Secret to Streams'
   },
   {
+    attempted: true,
     category: AssessmentCategories.Sidequest,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
@@ -45,6 +48,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
 
 const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
   {
+    attempted: true,
     category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
@@ -56,6 +60,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     title: 'A closed Mission'
   },
   {
+    attempted: false,
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',

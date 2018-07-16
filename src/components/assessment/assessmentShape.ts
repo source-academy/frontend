@@ -2,6 +2,7 @@
  * Used to display information regarding an assessment in the UI.
  */
 export interface IAssessmentOverview {
+  attempted: boolean
   category: AssessmentCategory
   closeAt: string
   coverImage: string
