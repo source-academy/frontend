@@ -17,7 +17,7 @@ import {
   EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
-  RESET_ASSESSMENT_WORKSPACE,
+  RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -333,14 +333,33 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       }
     /**
-     * Resets the assessment workspace (under state.workspaces.assessment).
+     * Resets the workspace to default settings,
+     * including the js-slang Context.
      */
-    case RESET_ASSESSMENT_WORKSPACE:
-      return {
+    case RESET_WORKSPACE:
+      let newState = {
         ...state,
-        assessment: createDefaultWorkspace(WorkspaceLocations.assessment),
-        gradingCommentsValue: defaultComments,
-        gradingXP: undefined
+        [location]: {
+          ...state[location],
+          ...createDefaultWorkspace(location)
+        }
+      }
+      /** 
+       * Use this switch case to reset values other 
+       * than properties in IWorkspaceState.
+       */
+      switch (location) {
+        case WorkspaceLocations.grading:
+          return {
+            ...newState,
+            grading: {
+              ...newState.grading,
+              gradingCommentsValue: defaultComments,
+              gradingXP: undefined
+            }
+          }
+        default:
+          return newState
       }
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
