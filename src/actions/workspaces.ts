@@ -25,14 +25,6 @@ export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
   payload: { activeTab, workspaceLocation }
 })
 
-export const changeChapter: ActionCreator<actionTypes.IAction> = (
-  newChapter: number,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHANGE_CHAPTER,
-  payload: { newChapter, workspaceLocation }
-})
-
 export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
   newExternal: string,
 ) => ({

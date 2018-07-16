@@ -2,7 +2,6 @@ import { Reducer } from 'redux'
 
 import {
   CHANGE_ACTIVE_TAB,
-  CHANGE_CHAPTER,
   CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
@@ -32,7 +31,6 @@ import {
   createDefaultWorkspace,
   defaultComments,
   defaultWorkspaceManager,
-  externalLibraries,
   InterpreterOutput,
   IWorkspaceManagerState
 } from './states'
@@ -108,21 +106,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       }
     /**
-     * This action is only meant for Playground usage,
-     * as chapter is specified by an individual question for an
-     * Assessment.
-     */
-    case CHANGE_CHAPTER:
-      const externals = externalLibraries.get(state.playgroundExternal) || []
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          context: createContext<WorkspaceLocation>(action.payload.newChapter, externals, location)
-        }
-      }
-    /**
-     * This action is only meant for Playground usage, where the library is displayed.
+     * This action is only meant for Playground usage, where 
+     * the external library is displayed.
      */
     case CHANGE_PLAYGROUND_EXTERNAL:
       return {
