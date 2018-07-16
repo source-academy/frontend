@@ -40,6 +40,7 @@ export type DispatchProps = {
   handleGradingFetch: (submissionId: number) => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
+  handleClearContext: (chapter: number, externals: string[]) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -47,8 +48,7 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
-  /** Resetting the Assessment Workspace as this is the part of state Grading uses. */
-  handleResetAssessmentWorkspace: (chapter: number, externals: string[]) => void
+  handleResetAssessmentWorkspace: () => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
 }
@@ -137,7 +137,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       const chapter = this.props.grading[questionId].question.library.chapter
       const externals = this.props.grading[questionId].question.library.externals
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
-      this.props.handleResetAssessmentWorkspace(chapter, externals)
+      this.props.handleResetAssessmentWorkspace()
+      this.props.handleClearContext(chapter, externals)
     }
   }
 
