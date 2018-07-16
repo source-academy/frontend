@@ -117,8 +117,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   /**
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
-   *
-   * @param props the props passed to the component
    */
   private checkWorkspaceReset(props: GradingWorkspaceProps) {
     /* Don't reset workspace if grading not fetched yet. */
