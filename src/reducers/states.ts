@@ -220,13 +220,22 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
-  assessment: { ...createDefaultWorkspace(WorkspaceLocations.assessment) },
-  currentAssessment: undefined,
-  currentQuestion: undefined,
-  gradingCommentsValue: defaultComments,
-  gradingXP: undefined,
-  playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) },
-  playgroundExternal: 'none'
+  assessment: { 
+    ...createDefaultWorkspace(WorkspaceLocations.assessment),
+    currentAssessment: undefined,
+    currentQuestion: undefined,
+  },
+  grading: {
+    ...createDefaultWorkspace(WorkspaceLocations.grading),
+    currentSubmission: undefined,
+    currentQuestion: undefined,
+    gradingCommentsValue: defaultComments,
+    gradingXP: undefined,
+  },
+  playground: { 
+    ...createDefaultWorkspace(WorkspaceLocations.playground),
+    playgroundExternal: 'none'
+  }
 }
 
 export const defaultSession: ISessionState = {
