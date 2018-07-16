@@ -12,6 +12,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleAssessmentFetch: (assessmentId: number) => {},
   handleChangeActiveTab: (activeTab: number) => {},
   handleChapterSelect: (chapter: any, changeEvent: any) => {},
+  handleClearContext: (chapter: number, externals: string[]) => {},
   handleEditorEval: () => {},
   handleEditorValueChange: (val: string) => {},
   handleEditorWidthChange: (widthChange: number) => {},

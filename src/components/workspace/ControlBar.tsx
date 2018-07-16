@@ -19,7 +19,7 @@ export type ControlBarProps = {
   sourceChapter: number
   externalLibrary?: string
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
-  handleLibrarySelect?: (i: ILibrary, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
   handleGenerateLz?: () => void
   handleInterruptEval: () => void
@@ -37,11 +37,11 @@ interface IChapter {
 }
 
 /**
- * Defined for displaying a library.
+ * Defined for displaying an external library.
  * @see Library under assessmentShape.ts for
  *   the definition of a Library in an assessment.
  */
-interface ILibrary {
+interface IExternal {
   key: number
   displayName: string
   externals: string[]
@@ -118,14 +118,14 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined
-    const librarySelectButton =
+    const externalSelectButton =
       this.props.hasChapterSelect && this.props.externalLibrary !== undefined
-        ? librarySelect(this.props.externalLibrary, this.props.handleLibrarySelect)
+        ? externalSelect(this.props.externalLibrary, this.props.handleExternalSelect)
         : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
         {this.props.isRunning ? stopButton : runButton} {saveButton}
-        {shareButton} {chapterSelectButton} {librarySelectButton}
+        {shareButton} {chapterSelectButton} {externalSelectButton}
       </div>
     )
   }
@@ -201,31 +201,31 @@ const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers,
   <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
 )
 
-const libraries = Array.from(externalLibraries.entries()).map((entry, index) => ({
+const externals = Array.from(externalLibraries.entries()).map((entry, index) => ({
   displayName: entry[0],
   key: index,
   externals: entry[1]
 }))
 
-const librarySelect = (
-  currentLibrary: string,
-  handleSelect = (i: ILibrary, e: React.ChangeEvent<HTMLSelectElement>) => {}
+const externalSelect = (
+  currentExternal: string,
+  handleSelect = (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
-  <LibrarySelectComponent
+  <ExternalSelectComponent
     className="pt-minimal"
-    items={libraries}
+    items={externals}
     onItemSelect={handleSelect}
-    itemRenderer={libraryRenderer}
+    itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={currentLibrary} rightIcon="double-caret-vertical" />
-  </LibrarySelectComponent>
+    <Button className="pt-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
+  </ExternalSelectComponent>
 )
 
-const LibrarySelectComponent = Select.ofType<ILibrary>()
+const ExternalSelectComponent = Select.ofType<IExternal>()
 
-const libraryRenderer: ItemRenderer<ILibrary> = (lib, { handleClick, modifiers, query }) => (
-  <MenuItem active={false} key={lib.key} onClick={handleClick} text={lib.displayName} />
+const externalRenderer: ItemRenderer<IExternal> = (external, { handleClick, modifiers, query }) => (
+  <MenuItem active={false} key={external.key} onClick={handleClick} text={external.displayName} />
 )
 
 export default ControlBar

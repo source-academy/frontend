@@ -37,8 +37,7 @@ export interface IWorkspaceManagerState {
   readonly gradingCommentsValue: string
   readonly gradingXP: number | undefined
   readonly playground: IWorkspaceState
-  /** Defines the external library name to be used. */
-  readonly playgroundLibrary: string
+  readonly playgroundExternal: string
 }
 
 interface IWorkspaceState {
@@ -49,6 +48,7 @@ interface IWorkspaceState {
   readonly replValue: string
   readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
+  readonly externals: string[]
 }
 
 export interface ISessionState {
@@ -132,7 +132,26 @@ const latestSourceChapter = sourceChapters.slice(-1)[0]
  * TODO use constants
  * TODO move this to a file closer to the libraries
  */
-const libEntries: Array<[string, string[]]> = [['none', []], ['sound', ['make_sourcesound']]]
+const libEntries: Array<[string, string[]]> = [
+  ['none', []],
+  [
+    'sound',
+    [
+      'make_sourcesound',
+      'get_wave',
+      'get_duration',
+      'is_sound',
+      'play',
+      'stop',
+      'cut_sourcesound',
+      'cut',
+      'sourcesound_to_sound',
+      'autocut_sourcesound',
+      'consecutively',
+      'simultaneously'
+    ]
+  ]
+]
 export const externalLibraries: Map<string, string[]> = new Map(libEntries)
 
 const currentEnvironment = (): ApplicationEnvironment => {
@@ -164,20 +183,15 @@ export const defaultEditorValue = '// Type your program in here!'
  * Takes in parameters to set the js-slang library and chapter.
  *
  * @param location the location of the workspace, used for context
- * @param chapter the chapter number for the js-slang interpreter
- * @param externals any external library exposed symbols
  */
-export const createDefaultWorkspace = (
-  location: WorkspaceLocation,
-  chapter: number = latestSourceChapter,
-  externals?: string[]
-): IWorkspaceState => ({
-  context: createContext<WorkspaceLocation>(chapter, externals, location),
+export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
+  context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
   editorValue: defaultEditorValue,
   editorWidth: '50%',
   output: [],
   replValue: '',
-  sideContentActiveTab: 0
+  sideContentActiveTab: 0,
+  externals: []
 })
 
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'
@@ -189,7 +203,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   gradingCommentsValue: defaultComments,
   gradingXP: undefined,
   playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) },
-  playgroundLibrary: 'none'
+  playgroundExternal: 'none'
 }
 
 export const defaultSession: ISessionState = {

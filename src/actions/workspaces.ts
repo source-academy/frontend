@@ -25,20 +25,11 @@ export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
   payload: { activeTab, workspaceLocation }
 })
 
-export const changeChapter: ActionCreator<actionTypes.IAction> = (
-  newChapter: number,
-  workspaceLocation: WorkspaceLocation
+export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
+  newExternal: string
 ) => ({
-  type: actionTypes.CHANGE_CHAPTER,
-  payload: { newChapter, workspaceLocation }
-})
-
-export const changeLibrary: ActionCreator<actionTypes.IAction> = (
-  newLibrary: string,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHANGE_LIBRARY,
-  payload: { newLibrary, workspaceLocation }
+  type: actionTypes.CHANGE_PLAYGROUND_EXTERNAL,
+  payload: { newExternal }
 })
 
 export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
@@ -69,21 +60,29 @@ export const chapterSelect: ActionCreator<actionTypes.IAction> = (
   }
 })
 
-export const librarySelect: ActionCreator<actionTypes.IAction> = (
-  library,
+export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
+  external,
   changeEvent,
   workspaceLocation: WorkspaceLocation
 ) => ({
-  type: actionTypes.LIBRARY_SELECT,
+  type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
   payload: {
-    library: library.displayName,
+    external: external.displayName,
     workspaceLocation
   }
 })
 
-export const clearContext = (workspaceLocation: WorkspaceLocation) => ({
+export const clearContext = (
+  chapter: number,
+  externals: string[],
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.CLEAR_CONTEXT,
-  payload: { workspaceLocation }
+  payload: {
+    workspaceLocation,
+    chapter,
+    externals
+  }
 })
 
 export const clearReplInput = (workspaceLocation: WorkspaceLocation) => ({
@@ -134,12 +133,8 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 })
 
-export const resetAssessmentWorkspace = (chapter: number, externals: string[]) => ({
-  type: actionTypes.RESET_ASSESSMENT_WORKSPACE,
-  payload: {
-    chapter,
-    externals
-  }
+export const resetAssessmentWorkspace = () => ({
+  type: actionTypes.RESET_ASSESSMENT_WORKSPACE
 })
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({

@@ -2,8 +2,9 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { changeChapter, updateEditorValue } from '../actions'
-import Application, { IDispatchProps } from '../components/Application'
+import { clearContext, updateEditorValue } from '../actions'
+import { WorkspaceLocations } from '../actions/workspaces'
+import Application, { IDispatchProps, IStateProps } from '../components/Application'
 import { IState } from '../reducers/states'
 
 /**
@@ -13,18 +14,23 @@ import { IState } from '../reducers/states'
  * as the routing properties of @type {RouteComponentProps} are
  * provided using the withRouter() method below.
  */
-const mapStateToProps: MapStateToProps<{ title: string }, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   title: state.application.title,
   accessToken: state.session.accessToken,
   role: state.session.role,
-  username: state.session.username
+  username: state.session.username,
+  currentPlaygroundChapter: state.workspaces.playground.context.chapter,
+  currentPlaygroundExternals: state.workspaces.playground.externals
 })
+
+const workspaceLocation = WorkspaceLocations.playground
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleChangeChapter: (chapter: number) => changeChapter(chapter, 'playground'),
-      handleEditorValueChange: (val: string) => updateEditorValue(val, 'playground')
+      handleClearContext: (chapter: number, externals: string[]) =>
+        clearContext(chapter, externals, workspaceLocation),
+      handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation)
     },
     dispatch
   )

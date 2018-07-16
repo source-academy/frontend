@@ -12,7 +12,7 @@ import {
   evalEditor,
   evalRepl,
   generateLzString,
-  librarySelect,
+  playgroundExternalSelect,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -30,7 +30,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   replValue: state.workspaces.playground.replValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
-  externalLibrary: state.workspaces.playgroundLibrary
+  externalLibrary: state.workspaces.playgroundExternal
 })
 
 const location: WorkspaceLocation = 'playground'
@@ -46,8 +46,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
-      handleLibrarySelect: (library: any, changeEvent: any) =>
-        librarySelect(library, changeEvent, location),
+      handleExternalSelect: (external: any, changeEvent: any) =>
+        playgroundExternalSelect(external, changeEvent, location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

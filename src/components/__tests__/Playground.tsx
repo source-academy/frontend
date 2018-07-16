@@ -16,7 +16,7 @@ const baseProps = {
   output: [],
   replValue: '',
   handleChapterSelect: (chapter: any, e: any) => {},
-  handleLibrarySelect: (library: any, e: any) => {},
+  handleExternalSelect: (external: any, e: any) => {},
   handleChangeActiveTab: (n: number) => {},
   handleEditorEval: () => {},
   handleEditorValueChange: () => {},

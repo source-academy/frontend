@@ -7,15 +7,19 @@ import {
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
+  clearContext,
   clearReplOutput,
   evalEditor,
   evalRepl,
   fetchAssessment,
   updateEditorValue,
-  updateReplValue,
-  WorkspaceLocation
+  updateReplValue
 } from '../../actions'
-import { resetAssessmentWorkspace, updateCurrentAssessmentId } from '../../actions/workspaces'
+import {
+  resetAssessmentWorkspace,
+  updateCurrentAssessmentId,
+  WorkspaceLocation
+} from '../../actions/workspaces'
 import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
@@ -47,6 +51,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, changeEvent, location),
+      handleClearContext: (chapter: number, externals: string[]) =>
+        clearContext(chapter, externals, location),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
@@ -54,7 +60,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleResetAssessmentWorkspace: resetAssessmentWorkspace,
+      handleResetAssessmentWorkspace: () => resetAssessmentWorkspace,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId

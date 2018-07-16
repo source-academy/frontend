@@ -11,15 +11,19 @@ import { Role, sourceChapters } from '../reducers/states'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
-export interface IApplicationProps extends IDispatchProps, RouteComponentProps<{}> {
+export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
+
+export interface IStateProps {
   title: string
   accessToken?: string
   role?: Role
   username?: string
+  currentPlaygroundChapter: number
+  currentPlaygroundExternals: string[]
 }
 
 export interface IDispatchProps {
-  handleChangeChapter: (chapter: number) => void
+  handleClearContext: (chapter: number, externals: string[]) => void
   handleEditorValueChange: (val: string) => void
 }
 
@@ -66,8 +70,9 @@ const parsePlayground = (props: IApplicationProps) => {
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
   }
+  /** Changes the chapter, retains the externals. */
   if (lib) {
-    props.handleChangeChapter(lib)
+    props.handleClearContext(lib, props.currentPlaygroundExternals)
   }
 }
 

@@ -10,7 +10,7 @@ import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/assessmentAPI'
 import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
-import { defaultEditorValue, IState } from '../reducers/states'
+import { defaultEditorValue, externalLibraries, IState } from '../reducers/states'
 import { IVLE_KEY } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import backendSaga from './backend'
@@ -65,8 +65,16 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const code: string = yield select((state: IState) => state.workspaces[location].editorValue)
+    const chapter: number = yield select(
+      (state: IState) => state.workspaces[location].context.chapter
+    )
+    const externals: string[] = yield select(
+      (state: IState) => state.workspaces[location].externals
+    )
+    /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
-    yield put(actions.clearContext(location))
+    /** Clear the context, with the same chapter and externals as before. */
+    yield put(actions.clearContext(chapter, externals, location))
     yield put(actions.clearReplOutput(location))
     context = yield select((state: IState) => state.workspaces[location].context)
     yield* evalCode(code, context, location)
@@ -86,31 +94,38 @@ function* workspaceSaga(): SagaIterator {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const newChapter = (action as actionTypes.IAction).payload.chapter
     const oldChapter = yield select((state: IState) => state.workspaces[location].context.chapter)
+    const externals: string[] = yield select(
+      (state: IState) => state.workspaces[location].externals
+    )
     if (newChapter !== oldChapter) {
-      yield put(actions.changeChapter(newChapter, location))
+      yield put(actions.clearContext(newChapter, externals, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
   })
 
   /**
-   * Note that the LIBRARY_SELECT action can only select the library for playground.
+   * Note that the PLAYGROUND_EXTERNAL_SELECT action is made to
+   * select the library for playground.
    * This is because assessments do not have a chapter & library select, the question
    * specifies the chapter and library to be used.
    *
    * To abstract this to assessments, the state structure must be manipulated to store
-   * Library in a IWorkspaceState (as compared to IWorkspaceManagerState).
+   * the external library name in a IWorkspaceState (as compared to IWorkspaceManagerState).
    *
    * @see IWorkspaceManagerState @see IWorkspaceState
    */
-  yield takeEvery(actionTypes.LIBRARY_SELECT, function*(action) {
+  yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
-    const newLibrary = (action as actionTypes.IAction).payload.library
-    const oldLibrary = yield select((state: IState) => state.workspaces.playgroundLibrary)
-    if (newLibrary !== oldLibrary) {
-      yield put(actions.changeLibrary(newLibrary, location))
+    const chapter = yield select((state: IState) => state.workspaces[location].context.chapter)
+    const newExternal = (action as actionTypes.IAction).payload.external
+    const oldExternal = yield select((state: IState) => state.workspaces.playgroundExternal)
+    if (newExternal !== oldExternal) {
+      const externals = externalLibraries.get(newExternal)!
+      yield put(actions.changePlaygroundExternal(newExternal))
+      yield put(actions.clearContext(chapter, externals, location))
       yield put(actions.clearReplOutput(location))
-      yield call(showSuccessMessage, `Switched to ${newLibrary} library`)
+      yield call(showSuccessMessage, `Switched to ${newExternal} library`)
     }
   })
 
