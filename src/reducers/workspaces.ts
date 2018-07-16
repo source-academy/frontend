@@ -1,6 +1,8 @@
 import { Reducer } from 'redux'
 
 import {
+  BROWSE_REPL_HISTORY_DOWN,
+  BROWSE_REPL_HISTORY_UP,
   CHANGE_ACTIVE_TAB,
   CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
@@ -34,9 +36,12 @@ import {
 } from './states'
 
 /**
- * Takes in a IWorkspaceManagerState and maps it to a new state. The pre-conditions are that
- *   - There exists an IWorkspaceState in the IWorkspaceManagerState of the key `location`.
- *   - `location` is defined (and exists) as a property 'workspaceLocation' in the action's payload.
+ * Takes in a IWorkspaceManagerState and maps it to a new state. The
+ * pre-conditions are that
+ *   - There exists an IWorkspaceState in the IWorkspaceManagerState of the key
+ *     `location`.
+ *   - `location` is defined (and exists) as a property 'workspaceLocation' in
+ *     the action's payload.
  */
 export const reducer: Reducer<IWorkspaceManagerState> = (
   state = defaultWorkspaceManager,
@@ -48,6 +53,87 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
   let lastOutput: InterpreterOutput
 
   switch (action.type) {
+    case BROWSE_REPL_HISTORY_DOWN:
+      if (state[location].replHistory.isBrowsingIndex === null) {
+        // Not yet started browsing history, nothing to do
+        return state
+      } else if (state[location].replHistory.isBrowsingIndex !== 0) {
+        // Browsing history, and still have earlier records to show
+        const newIndex = state[location].replHistory.isBrowsingIndex! - 1
+        const newReplValue = state[location].replHistory.records[newIndex]
+        return {
+          ...state,
+          [location]: {
+            ...state[location],
+            replValue: newReplValue,
+            replHistory: {
+              ...state[location].replHistory,
+              isBrowsingIndex: newIndex
+            }
+          }
+        }
+      } else {
+        // Browsing history, no earlier records to show; return replValue to
+        // the last value when user started browsing
+        const newIndex = null
+        const newReplValue = state[location].replHistory.records[-1]
+        const newRecords = state[location].replHistory.records.slice()
+        delete newRecords[-1]
+        return {
+          ...state,
+          [location]: {
+            ...state[location],
+            replValue: newReplValue,
+            replHistory: {
+              isBrowsingIndex: newIndex,
+              records: newRecords
+            }
+          }
+        }
+      }
+    case BROWSE_REPL_HISTORY_UP:
+      const lastRecords = state[location].replHistory.records
+      const lastIndex = state[location].replHistory.isBrowsingIndex
+      if (
+        lastRecords.length === 0 ||
+        (lastIndex !== null && lastRecords[lastIndex + 1] === undefined)
+      ) {
+        // There is no more later history to show
+        return state
+      } else if (lastIndex === null) {
+        // Not yet started browsing, initialise the index & array
+        const newIndex = 0
+        const newRecords = lastRecords.slice()
+        newRecords[-1] = state[location].replValue
+        const newReplValue = newRecords[newIndex]
+        return {
+          ...state,
+          [location]: {
+            ...state[location],
+            replValue: newReplValue,
+            replHistory: {
+              ...state[location].replHistory,
+              isBrowsingIndex: newIndex,
+              records: newRecords
+            }
+          }
+        }
+      } else {
+        // Browsing history, and still have later history to show
+        const newIndex = lastIndex + 1
+        const newReplValue = lastRecords[newIndex]
+        return {
+          ...state,
+          [location]: {
+            ...state[location],
+            replValue: newReplValue,
+            replHistory: {
+              ...state[location].replHistory,
+              isBrowsingIndex: newIndex
+            }
+          }
+        }
+      }
     case CHANGE_ACTIVE_TAB:
       return {
         ...state,

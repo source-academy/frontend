@@ -20,8 +20,8 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
 
   constructor(props: IReplInputProps) {
     super(props)
-    this.execBrowseHistoryDown = () => {}
-    this.execBrowseHistoryUp = () => {}
+    this.execBrowseHistoryDown = props.handleBrowseHistoryDown
+    this.execBrowseHistoryUp = props.handleBrowseHistoryUp
     this.execEvaluate = () => {
       this.replInputBottom.scrollIntoView()
       this.props.handleReplEval()
