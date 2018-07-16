@@ -4,7 +4,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 
-import { sourceChapters } from '../../reducers/states'
+import { externalLibraries, sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
 export type ControlBarProps = {
@@ -17,7 +17,9 @@ export type ControlBarProps = {
   isRunning: boolean
   queryString?: string
   sourceChapter: number
+  externalLibrary?: string
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleLibrarySelect?: (i: ILibrary, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
   handleGenerateLz?: () => void
   handleInterruptEval: () => void
@@ -32,6 +34,17 @@ export type ControlBarProps = {
 interface IChapter {
   chapter: number
   displayName: string
+}
+
+/**
+ * Defined for displaying a library.
+ * @see Library under assessmentShape.ts for
+ *   the definition of a Library in an assessment.
+ */
+interface ILibrary {
+  key: number
+  displayName: string
+  externals: string[]
 }
 
 class ControlBar extends React.PureComponent<ControlBarProps, {}> {
@@ -105,10 +118,14 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined
+    const librarySelectButton =
+      this.props.hasChapterSelect && this.props.externalLibrary !== undefined
+        ? librarySelect(this.props.externalLibrary, this.props.handleLibrarySelect)
+        : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
         {this.props.isRunning ? stopButton : runButton} {saveButton}
-        {shareButton} {chapterSelectButton}
+        {shareButton} {chapterSelectButton} {librarySelectButton}
       </div>
     )
   }
@@ -182,6 +199,33 @@ const ChapterSelectComponent = Select.ofType<IChapter>()
 
 const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
+)
+
+const libraries = Array.from(externalLibraries.entries()).map((entry, index) => ({
+  displayName: entry[0],
+  key: index,
+  externals: entry[1]
+}))
+
+const librarySelect = (
+  currentLibrary: string,
+  handleSelect = (i: ILibrary, e: React.ChangeEvent<HTMLSelectElement>) => {}
+) => (
+  <LibrarySelectComponent
+    className="pt-minimal"
+    items={libraries}
+    onItemSelect={handleSelect}
+    itemRenderer={libraryRenderer}
+    filterable={false}
+  >
+    <Button className="pt-minimal" text={currentLibrary} rightIcon="double-caret-vertical" />
+  </LibrarySelectComponent>
+)
+
+const LibrarySelectComponent = Select.ofType<ILibrary>()
+
+const libraryRenderer: ItemRenderer<ILibrary> = (lib, { handleClick, modifiers, query }) => (
+  <MenuItem active={false} key={lib.key} onClick={handleClick} text={lib.displayName} />
 )
 
 export default ControlBar

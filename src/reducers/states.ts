@@ -37,6 +37,8 @@ export interface IWorkspaceManagerState {
   readonly gradingCommentsValue: string
   readonly gradingXP: number | undefined
   readonly playground: IWorkspaceState
+  /** Defines the external library name to be used. */
+  readonly playgroundLibrary: string
 }
 
 interface IWorkspaceState {
@@ -125,6 +127,14 @@ export enum Role {
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
 
+/**
+ * Defines which external libraries are available for usage.
+ * TODO use constants
+ * TODO move this to a file closer to the libraries
+ */
+const libEntries: Array<[string, string[]]> = [['none', []], ['sound', ['make_sourcesound']]]
+export const externalLibraries: Map<string, string[]> = new Map(libEntries)
+
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
     case 'development':
@@ -149,8 +159,20 @@ export const defaultPlayground: IPlaygroundState = {}
 
 export const defaultEditorValue = '// Type your program in here!'
 
-export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
-  context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
+/**
+ * Create a default IWorkspaceState for 'resetting' a workspace.
+ * Takes in parameters to set the js-slang library and chapter.
+ *
+ * @param location the location of the workspace, used for context
+ * @param chapter the chapter number for the js-slang interpreter
+ * @param externals any external library exposed symbols
+ */
+export const createDefaultWorkspace = (
+  location: WorkspaceLocation,
+  chapter: number = latestSourceChapter,
+  externals?: string[]
+): IWorkspaceState => ({
+  context: createContext<WorkspaceLocation>(chapter, externals, location),
   editorValue: defaultEditorValue,
   editorWidth: '50%',
   output: [],
@@ -166,7 +188,8 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   currentQuestion: undefined,
   gradingCommentsValue: defaultComments,
   gradingXP: undefined,
-  playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) }
+  playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) },
+  playgroundLibrary: 'none'
 }
 
 export const defaultSession: ISessionState = {

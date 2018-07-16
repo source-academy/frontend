@@ -33,6 +33,14 @@ export const changeChapter: ActionCreator<actionTypes.IAction> = (
   payload: { newChapter, workspaceLocation }
 })
 
+export const changeLibrary: ActionCreator<actionTypes.IAction> = (
+  newLibrary: string,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.CHANGE_LIBRARY,
+  payload: { newLibrary, workspaceLocation }
+})
+
 export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
   widthChange: string,
   workspaceLocation: WorkspaceLocation
@@ -57,6 +65,18 @@ export const chapterSelect: ActionCreator<actionTypes.IAction> = (
   type: actionTypes.CHAPTER_SELECT,
   payload: {
     chapter: chapter.chapter,
+    workspaceLocation
+  }
+})
+
+export const librarySelect: ActionCreator<actionTypes.IAction> = (
+  library,
+  changeEvent,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.LIBRARY_SELECT,
+  payload: {
+    library: library.displayName,
     workspaceLocation
   }
 })
@@ -114,8 +134,12 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 })
 
-export const resetAssessmentWorkspace = () => ({
-  type: actionTypes.RESET_ASSESSMENT_WORKSPACE
+export const resetAssessmentWorkspace = (chapter: number, externals: string[]) => ({
+  type: actionTypes.RESET_ASSESSMENT_WORKSPACE,
+  payload: {
+    chapter,
+    externals
+  }
 })
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({

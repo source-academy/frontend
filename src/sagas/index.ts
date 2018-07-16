@@ -93,6 +93,27 @@ function* workspaceSaga(): SagaIterator {
     }
   })
 
+  /**
+   * Note that the LIBRARY_SELECT action can only select the library for playground.
+   * This is because assessments do not have a chapter & library select, the question
+   * specifies the chapter and library to be used.
+   *
+   * To abstract this to assessments, the state structure must be manipulated to store
+   * Library in a IWorkspaceState (as compared to IWorkspaceManagerState).
+   *
+   * @see IWorkspaceManagerState @see IWorkspaceState
+   */
+  yield takeEvery(actionTypes.LIBRARY_SELECT, function*(action) {
+    const location = (action as actionTypes.IAction).payload.workspaceLocation
+    const newLibrary = (action as actionTypes.IAction).payload.library
+    const oldLibrary = yield select((state: IState) => state.workspaces.playgroundLibrary)
+    if (newLibrary !== oldLibrary) {
+      yield put(actions.changeLibrary(newLibrary, location))
+      yield put(actions.clearReplOutput(location))
+      yield call(showSuccessMessage, `Switched to ${newLibrary} library`)
+    }
+  })
+
   yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {
     // TODO api call here
     yield call(showSuccessMessage, 'Saved grading')

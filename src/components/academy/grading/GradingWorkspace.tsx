@@ -27,6 +27,8 @@ export type StateProps = {
   output: InterpreterOutput[]
   replValue: string
   sideContentHeight?: number
+  storedSubmissionId?: number
+  storedQuestionId?: number
 }
 
 export type OwnProps = {
@@ -45,12 +47,20 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
+  /** Resetting the Assessment Workspace as this is the part of state Grading uses. */
+  handleResetAssessmentWorkspace: (chapter: number, externals: string[]) => void
   handleSideContentHeightChange: (heightChange: number) => void
+  handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   public componentWillMount() {
     this.props.handleGradingFetch(this.props.submissionId)
+    this.checkWorkspaceReset(this.props)
+  }
+
+  public componentWillUpdate() {
+    this.checkWorkspaceReset(this.props)
   }
 
   public render() {
@@ -102,6 +112,33 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         <Workspace {...workspaceProps} />
       </div>
     )
+  }
+
+  /**
+   * Checks if there is a need to reset the workspace, then executes
+   * a dispatch (in the props) if needed.
+   *
+   * @param props the props passed to the component
+   */
+  private checkWorkspaceReset(props: GradingWorkspaceProps) {
+    /* Don't reset workspace if grading not fetched yet. */
+    if (this.props.grading === undefined) {
+      return
+    }
+
+    /* Reset grading if it has changed.*/
+    const submissionId = this.props.submissionId
+    const questionId = this.props.questionId
+
+    if (
+      this.props.storedSubmissionId !== submissionId ||
+      this.props.storedQuestionId !== questionId
+    ) {
+      const chapter = this.props.grading[questionId].question.library.chapter
+      const externals = this.props.grading[questionId].question.library.externals
+      this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
+      this.props.handleResetAssessmentWorkspace(chapter, externals)
+    }
   }
 
   /** Pre-condition: Grading has been loaded */
