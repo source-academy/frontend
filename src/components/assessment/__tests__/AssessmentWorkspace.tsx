@@ -12,6 +12,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleAssessmentFetch: (assessmentId: number) => {},
   handleChangeActiveTab: (activeTab: number) => {},
   handleChapterSelect: (chapter: any, changeEvent: any) => {},
+  handleClearContext: (chapter: number, externals: string[]) => {},
   handleEditorEval: () => {},
   handleEditorValueChange: (val: string) => {},
   handleEditorWidthChange: (widthChange: number) => {},
@@ -22,8 +23,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleResetAssessmentWorkspace: () => {},
   handleSideContentHeightChange: (heightChange: number) => {},
   handleUpdateCurrentAssessmentId: (a: number, q: number) => {},
-  isRunning: false,
-  output: [],
+  isRunning: false, output: [],
   questionId: 0,
   replValue: ''
 }
