@@ -31,7 +31,7 @@ export interface IDispatchProps {
   handleEditorWidthChange: (widthChange: number) => void
   handleGenerateLz: () => void
   handleInterruptEval: () => void
-  handleLibrarySelect: (library: any, changeEvent: any) => void
+  handleExternalSelect: (external: any, changeEvent: any) => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
