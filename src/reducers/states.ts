@@ -29,15 +29,26 @@ export interface IPlaygroundState {
   readonly queryString?: string
 }
 
-export interface IWorkspaceManagerState {
-  readonly assessment: IWorkspaceState
+interface IAssessmentWorkspace extends IWorkspaceState {
   readonly currentAssessment?: number
+  readonly currentQuestion?: number
+}
+
+interface IGradingWorkspace extends IWorkspaceState {
   readonly currentSubmission?: number
   readonly currentQuestion?: number
   readonly gradingCommentsValue: string
   readonly gradingXP: number | undefined
-  readonly playground: IWorkspaceState
+}
+
+interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: string
+}
+
+export interface IWorkspaceManagerState {
+  readonly assessment: IAssessmentWorkspace
+  readonly grading: IGradingWorkspace
+  readonly playground: IPlaygroundWorkspace
 }
 
 interface IWorkspaceState {
