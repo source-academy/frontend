@@ -259,11 +259,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      * Resets the assessment workspace (under state.workspaces.assessment).
      */
     case RESET_ASSESSMENT_WORKSPACE:
-      chapter = action.payload.chapter
-      externals = action.payload.externals
       return {
         ...state,
-        assessment: createDefaultWorkspace(WorkspaceLocations.assessment, chapter, externals),
+        assessment: createDefaultWorkspace(WorkspaceLocations.assessment),
         gradingCommentsValue: defaultComments,
         gradingXP: undefined
       }

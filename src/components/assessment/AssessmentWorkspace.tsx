@@ -1,5 +1,4 @@
-import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
+import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs/core' import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import { InterpreterOutput } from '../../reducers/states'
@@ -159,6 +158,7 @@ class AssessmentWorkspace extends React.Component<
       const chapter = this.props.assessment.questions[questionId].library.chapter
       const externals = this.props.assessment.questions[questionId].library.externals
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
+      // TODO clear context here using chapter and externals
       this.props.handleResetAssessmentWorkspace(chapter, externals)
     }
   }
