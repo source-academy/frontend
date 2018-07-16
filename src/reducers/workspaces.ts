@@ -4,7 +4,7 @@ import {
   CHANGE_ACTIVE_TAB,
   CHANGE_CHAPTER,
   CHANGE_EDITOR_WIDTH,
-  CHANGE_LIBRARY,
+  CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
@@ -50,8 +50,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     action.payload !== undefined ? action.payload.workspaceLocation : undefined
   let newOutput: InterpreterOutput[]
   let lastOutput: InterpreterOutput
-  let chapter: number
-  let externals: string[]
 
   switch (action.type) {
     case CHANGE_ACTIVE_TAB:
@@ -115,7 +113,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      * Assessment.
      */
     case CHANGE_CHAPTER:
-      externals = externalLibraries.get(state.playgroundLibrary) || []
+      const externals = externalLibraries.get(state.playgroundLibrary) || []
       return {
         ...state,
         [location]: {
