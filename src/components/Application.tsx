@@ -70,8 +70,9 @@ const parsePlayground = (props: IApplicationProps) => {
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
   }
+  /** Changes the chapter, retains the externals. */
   if (lib) {
-    props.handleChangeChapter(lib)
+    props.handleClearContext(lib, props.currentPlaygroundExternals)
   }
 }
 
