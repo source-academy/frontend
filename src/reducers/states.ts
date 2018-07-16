@@ -37,8 +37,7 @@ export interface IWorkspaceManagerState {
   readonly gradingCommentsValue: string
   readonly gradingXP: number | undefined
   readonly playground: IWorkspaceState
-  /** Defines the external library name to be used. */
-  readonly playgroundLibrary: string
+  readonly playgroundExternal: string
 }
 
 interface IWorkspaceState {
@@ -204,7 +203,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   gradingCommentsValue: defaultComments,
   gradingXP: undefined,
   playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) },
-  playgroundLibrary: 'none'
+  playgroundExternal: 'none'
 }
 
 export const defaultSession: ISessionState = {

@@ -113,7 +113,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      * Assessment.
      */
     case CHANGE_CHAPTER:
-      const externals = externalLibraries.get(state.playgroundLibrary) || []
+      const externals = externalLibraries.get(state.playgroundExternal) || []
       return {
         ...state,
         [location]: {
