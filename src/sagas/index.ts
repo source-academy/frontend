@@ -10,7 +10,7 @@ import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockAssessmentOverviews, mockAssessments } from '../mocks/assessmentAPI'
 import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
-import { defaultEditorValue, IState } from '../reducers/states'
+import { defaultEditorValue, externalLibraries, IState } from '../reducers/states'
 import { IVLE_KEY } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import backendSaga from './backend'
@@ -105,21 +105,25 @@ function* workspaceSaga(): SagaIterator {
   })
 
   /**
-   * Note that the LIBRARY_SELECT action can only select the library for playground.
+   * Note that the PLAYGROUND_EXTERNAL_SELECT action is made to 
+   * select the library for playground.
    * This is because assessments do not have a chapter & library select, the question
    * specifies the chapter and library to be used.
    *
    * To abstract this to assessments, the state structure must be manipulated to store
-   * Library in a IWorkspaceState (as compared to IWorkspaceManagerState).
+   * the external library name in a IWorkspaceState (as compared to IWorkspaceManagerState).
    *
    * @see IWorkspaceManagerState @see IWorkspaceState
    */
-  yield takeEvery(actionTypes.LIBRARY_SELECT, function*(action) {
+  yield takeEvery(actionTypes.EXTERNAL_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
+    const chapter = yield select((state: IState) => state.workspaces[location].context.chapter)
     const newLibrary = (action as actionTypes.IAction).payload.library
     const oldLibrary = yield select((state: IState) => state.workspaces.playgroundLibrary)
     if (newLibrary !== oldLibrary) {
-      yield put(actions.changeLibrary(newLibrary, location))
+      const externals = externalLibraries.get(newLibrary)!
+      yield put(actions.changePlaygroundExternal(newLibrary))
+      yield put(actions.clearContext(location, chapter, externals))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to ${newLibrary} library`)
     }

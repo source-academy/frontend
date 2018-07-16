@@ -33,12 +33,11 @@ export const changeChapter: ActionCreator<actionTypes.IAction> = (
   payload: { newChapter, workspaceLocation }
 })
 
-export const changeLibrary: ActionCreator<actionTypes.IAction> = (
-  newLibrary: string,
-  workspaceLocation: WorkspaceLocation
+export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
+  newExternal: string,
 ) => ({
-  type: actionTypes.CHANGE_LIBRARY,
-  payload: { newLibrary, workspaceLocation }
+  type: actionTypes.CHANGE_PLAYGROUND_EXTERNAL,
+  payload: { newExternal }
 })
 
 export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (

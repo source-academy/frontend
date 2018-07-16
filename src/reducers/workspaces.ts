@@ -124,20 +124,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       }
     /**
-     * This action is only meant for Playground usage,
-     * as external library is specified by an individual question for an
-     * Assessment.
+     * This action is only meant for Playground usage, where the library is displayed.
      */
-    case CHANGE_LIBRARY:
-      chapter = state[location].context.chapter
-      externals = externalLibraries.get(action.payload.newLibrary) || []
+    case CHANGE_PLAYGROUND_EXTERNAL:
       return {
         ...state,
-        [location]: {
-          ...state[location],
-          context: createContext<WorkspaceLocation>(chapter, externals, location)
-        },
-        playgroundLibrary: action.payload.newLibrary
+        playgroundExternal: action.payload.newExternal
       }
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:
