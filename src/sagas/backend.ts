@@ -1,9 +1,10 @@
 import { delay, SagaIterator } from 'redux-saga'
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
-import { AssessmentCategories, IAssessmentOverview } from '../components/assessment/assessmentShape'
+import { IAssessmentOverview } from '../components/assessment/assessmentShape'
+import { IState } from '../reducers/states'
 import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
 
@@ -16,13 +17,17 @@ function* backendSaga(): SagaIterator {
       refreshToken: resp.refresh_token
     }
     const user = yield call(authorizedGet, 'user', tokens.accessToken)
-    const assessments = yield call(callAssessments, tokens.accessToken)
     yield put(actions.setTokens(tokens))
     yield put(actions.setRole(user.role))
     yield put(actions.setUsername(user.name))
-    yield put(actions.updateAssessmentOverviews(assessments))
     yield delay(2000)
     yield history.push('/academy')
+  })
+
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function*() {
+    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const assessmentOverviews = yield call(callAssessments, accessToken)
+    yield put(actions.updateAssessmentOverviews(assessmentOverviews))
   })
 }
 
@@ -37,23 +42,11 @@ const callAuth = (ivleToken: string) =>
   })
 
 const callAssessments = async (accessToken: string) => {
-  interface IBackendAssessmentOverview extends IAssessmentOverview {
-    type: 'contest' | 'mission' | 'path' | 'sidequest'
-  }
-  const assessmentOverviews = await authorizedGet('assessments', accessToken)
-  return assessmentOverviews.map((overview: IBackendAssessmentOverview) => {
-    switch (overview.type) {
-      case 'contest':
-        overview.category = AssessmentCategories.Contest
-      case 'mission':
-        overview.category = AssessmentCategories.Mission
-      case 'path':
-        overview.category = AssessmentCategories.Path
-      case 'sidequest':
-        overview.category = AssessmentCategories.Sidequest
-      default:
-        overview.category = AssessmentCategories.Sidequest
-    }
+  const assessmentOverviews: any = await authorizedGet('assessments', accessToken)
+  return assessmentOverviews.map((overview: any) => {
+    // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
+    //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+    overview.category = capitalise(overview.type)
     delete overview.type
     return overview as IAssessmentOverview
   })
@@ -72,5 +65,7 @@ const request = (path: string, opts: {}) =>
   fetch(`${BACKEND_URL}/v1/${path}`, opts)
     .then(data => data.json())
     .catch(_ => null)
+
+const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
 
 export default backendSaga
