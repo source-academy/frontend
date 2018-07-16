@@ -11,15 +11,19 @@ import { Role, sourceChapters } from '../reducers/states'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
-export interface IApplicationProps extends IDispatchProps, RouteComponentProps<{}> {
+export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
+
+export interface IStateProps {
   title: string
   accessToken?: string
   role?: Role
   username?: string
+  currentChapter: number
+  currentExternals: string[]
 }
 
 export interface IDispatchProps {
-  handleChangeChapter: (chapter: number) => void
+  handleClearContext: (chapter: number, externals: string[]) => void
   handleEditorValueChange: (val: string) => void
 }
 
