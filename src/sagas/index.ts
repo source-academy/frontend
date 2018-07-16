@@ -115,11 +115,11 @@ function* workspaceSaga(): SagaIterator {
    *
    * @see IWorkspaceManagerState @see IWorkspaceState
    */
-  yield takeEvery(actionTypes.EXTERNAL_SELECT, function*(action) {
+  yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const chapter = yield select((state: IState) => state.workspaces[location].context.chapter)
-    const newLibrary = (action as actionTypes.IAction).payload.library
-    const oldLibrary = yield select((state: IState) => state.workspaces.playgroundLibrary)
+    const newExternal = (action as actionTypes.IAction).payload.external
+    const oldExternal = yield select((state: IState) => state.workspaces.playgroundExternal)
     if (newLibrary !== oldLibrary) {
       const externals = externalLibraries.get(newLibrary)!
       yield put(actions.changePlaygroundExternal(newLibrary))
