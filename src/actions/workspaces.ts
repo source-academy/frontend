@@ -148,8 +148,11 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 })
 
-export const resetAssessmentWorkspace = () => ({
-  type: actionTypes.RESET_ASSESSMENT_WORKSPACE
+export const resetWorkspace = (workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.RESET_WORKSPACE,
+  payload: {
+    workspaceLocation
+  }
 })
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
