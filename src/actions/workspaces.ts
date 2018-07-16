@@ -68,14 +68,14 @@ export const chapterSelect: ActionCreator<actionTypes.IAction> = (
   }
 })
 
-export const librarySelect: ActionCreator<actionTypes.IAction> = (
-  library,
+export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
+  external,
   changeEvent,
   workspaceLocation: WorkspaceLocation
 ) => ({
-  type: actionTypes.LIBRARY_SELECT,
+  type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
   payload: {
-    library: library.displayName,
+    external: external.displayName,
     workspaceLocation
   }
 })
