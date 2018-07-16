@@ -94,8 +94,11 @@ function* workspaceSaga(): SagaIterator {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const newChapter = (action as actionTypes.IAction).payload.chapter
     const oldChapter = yield select((state: IState) => state.workspaces[location].context.chapter)
+    const externals: string[] = yield select(
+      (state: IState) => state.workspaces[location].externals
+    )
     if (newChapter !== oldChapter) {
-      yield put(actions.changeChapter(newChapter, location))
+      yield put(actions.clearContext(location, newChapter, externals))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
