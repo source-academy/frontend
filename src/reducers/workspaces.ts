@@ -11,8 +11,10 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   END_INTERRUPT_EXECUTION,
+  EVAL_EDITOR,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
+  EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
   RESET_ASSESSMENT_WORKSPACE,
@@ -32,7 +34,8 @@ import {
   defaultComments,
   defaultWorkspaceManager,
   InterpreterOutput,
-  IWorkspaceManagerState
+  IWorkspaceManagerState,
+  maxBrowseIndex
 } from './states'
 
 /**
@@ -232,7 +235,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       } else {
         newReplHistoryRecords = state[location].replHistory.records
       }
-      if (newReplHistoryRecords.length > 50) {
+      if (newReplHistoryRecords.length > maxBrowseIndex) {
         newReplHistoryRecords.pop()
       }
       return {
@@ -248,14 +251,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
     case EVAL_EDITOR:
       // Forces re-render of workspace on editor eval
-      return {
-        ...state,
-        [location]: {
-          ...state[location]
-        }
-      }
-    case EVAL_REPL:
-      // Forces re-render of workspace on repl eval
       return {
         ...state,
         [location]: {
@@ -304,6 +299,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           output: newOutput
+        }
+      }
+    case EVAL_REPL:
+      // Forces re-render of workspace on repl eval
+      return {
+        ...state,
+        [location]: {
+          ...state[location]
         }
       }
     /**

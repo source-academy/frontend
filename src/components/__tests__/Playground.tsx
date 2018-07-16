@@ -25,7 +25,6 @@ const baseProps = {
   handleExternalSelect: (external: any, e: any) => {},
   handleGenerateLz: () => {},
   handleInterruptEval: () => {},
-  handleLibrarySelect: (library: any, e: any) => {},
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},

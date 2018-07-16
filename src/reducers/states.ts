@@ -71,6 +71,8 @@ type ReplHistory = {
   records: string[]
 }
 
+export const maxBrowseIndex = 50
+
 /**
  * An output while the program is still being run in the interpreter. As a
  * result, there are no return values or SourceErrors yet. However, there could
