@@ -73,9 +73,9 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
 })
 
 export const clearContext = (
-  workspaceLocation: WorkspaceLocation,
   chapter: number,
-  externals: string[]
+  externals: string[],
+  workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.CLEAR_CONTEXT,
   payload: {

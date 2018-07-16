@@ -74,7 +74,7 @@ function* workspaceSaga(): SagaIterator {
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
     /** Clear the context, with the same chapter and externals as before. */
-    yield put(actions.clearContext(location, chapter, externals))
+    yield put(actions.clearContext(chapter, externals, location))
     yield put(actions.clearReplOutput(location))
     context = yield select((state: IState) => state.workspaces[location].context)
     yield* evalCode(code, context, location)
@@ -98,7 +98,7 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => state.workspaces[location].externals
     )
     if (newChapter !== oldChapter) {
-      yield put(actions.clearContext(location, newChapter, externals))
+      yield put(actions.clearContext(newChapter, externals, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
@@ -123,7 +123,7 @@ function* workspaceSaga(): SagaIterator {
     if (newExternal !== oldExternal) {
       const externals = externalLibraries.get(newExternal)!
       yield put(actions.changePlaygroundExternal(newExternal))
-      yield put(actions.clearContext(location, chapter, externals))
+      yield put(actions.clearContext(chapter, externals, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to ${newExternal} library`)
     }
