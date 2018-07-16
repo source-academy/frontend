@@ -54,12 +54,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
 
   switch (action.type) {
     case BROWSE_REPL_HISTORY_DOWN:
-      if (state[location].replHistory.isBrowsingIndex === null) {
+      if (state[location].replHistory.browseIndex === null) {
         // Not yet started browsing history, nothing to do
         return state
-      } else if (state[location].replHistory.isBrowsingIndex !== 0) {
+      } else if (state[location].replHistory.browseIndex !== 0) {
         // Browsing history, and still have earlier records to show
-        const newIndex = state[location].replHistory.isBrowsingIndex! - 1
+        const newIndex = state[location].replHistory.browseIndex! - 1
         const newReplValue = state[location].replHistory.records[newIndex]
         return {
           ...state,
@@ -68,7 +68,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replValue: newReplValue,
             replHistory: {
               ...state[location].replHistory,
-              isBrowsingIndex: newIndex
+              browseIndex: newIndex
             }
           }
         }
@@ -85,7 +85,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             ...state[location],
             replValue: newReplValue,
             replHistory: {
-              isBrowsingIndex: newIndex,
+              browseIndex: newIndex,
               records: newRecords
             }
           }
@@ -93,7 +93,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
     case BROWSE_REPL_HISTORY_UP:
       const lastRecords = state[location].replHistory.records
-      const lastIndex = state[location].replHistory.isBrowsingIndex
+      const lastIndex = state[location].replHistory.browseIndex
       if (
         lastRecords.length === 0 ||
         (lastIndex !== null && lastRecords[lastIndex + 1] === undefined)
@@ -113,7 +113,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replValue: newReplValue,
             replHistory: {
               ...state[location].replHistory,
-              isBrowsingIndex: newIndex,
+              browseIndex: newIndex,
               records: newRecords
             }
           }
@@ -129,7 +129,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replValue: newReplValue,
             replHistory: {
               ...state[location].replHistory,
-              isBrowsingIndex: newIndex
+              browseIndex: newIndex
             }
           }
         }

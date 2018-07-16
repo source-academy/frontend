@@ -67,7 +67,7 @@ export interface ISessionState {
 }
 
 type ReplHistory = {
-  isBrowsingIndex: null | number // [0, 49] if browsing, else null
+  browseIndex: null | number // [0, 49] if browsing, else null
   records: string[]
 }
 
@@ -196,7 +196,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   editorWidth: '50%',
   output: [],
   replHistory: {
-    isBrowsingIndex: null,
+    browseIndex: null,
     records: []
   },
   replValue: '',
