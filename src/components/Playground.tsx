@@ -72,7 +72,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         hasShareButton: true,
         isRunning: this.props.isRunning,
         queryString: this.props.queryString,
-        sourceChapter: this.props.sourceChapter,
+        sourceChapter: this.props.sourceChapter
       },
       editorProps: {
         editorValue: this.props.editorValue,

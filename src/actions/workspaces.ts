@@ -26,7 +26,7 @@ export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
 })
 
 export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
-  newExternal: string,
+  newExternal: string
 ) => ({
   type: actionTypes.CHANGE_PLAYGROUND_EXTERNAL,
   payload: { newExternal }

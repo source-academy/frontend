@@ -105,7 +105,7 @@ function* workspaceSaga(): SagaIterator {
   })
 
   /**
-   * Note that the PLAYGROUND_EXTERNAL_SELECT action is made to 
+   * Note that the PLAYGROUND_EXTERNAL_SELECT action is made to
    * select the library for playground.
    * This is because assessments do not have a chapter & library select, the question
    * specifies the chapter and library to be used.

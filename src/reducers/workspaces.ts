@@ -106,7 +106,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       }
     /**
-     * This action is only meant for Playground usage, where 
+     * This action is only meant for Playground usage, where
      * the external library is displayed.
      */
     case CHANGE_PLAYGROUND_EXTERNAL:

@@ -8,8 +8,8 @@ test('Application renders correctly', () => {
   const props: IApplicationProps = {
     ...mockRouterProps('/academy', {}),
     title: 'Cadet',
-  currentPlaygroundChapter: 2,
-  currentPlaygroundExternals: [],
+    currentPlaygroundChapter: 2,
+    currentPlaygroundExternals: [],
     handleClearContext: (chapter: number, externals: string[]) => {},
     handleEditorValueChange: (val: string) => {}
   }

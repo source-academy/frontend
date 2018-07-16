@@ -28,7 +28,7 @@ const workspaceLocation = WorkspaceLocations.playground
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleClearContext: (chapter: number, externals: string[]) => 
+      handleClearContext: (chapter: number, externals: string[]) =>
         clearContext(chapter, externals, workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation)
     },
