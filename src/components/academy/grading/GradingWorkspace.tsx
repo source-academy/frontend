@@ -54,13 +54,9 @@ export type DispatchProps = {
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
-  public componentWillMount() {
+  public componentDidMount() {
+    this.checkWorkspaceReset(this.props)
     this.props.handleGradingFetch(this.props.submissionId)
-    this.checkWorkspaceReset(this.props)
-  }
-
-  public componentWillUpdate() {
-    this.checkWorkspaceReset(this.props)
   }
 
   public render() {
