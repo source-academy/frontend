@@ -403,16 +403,20 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
         ...state,
-        currentAssessment: action.payload.assessmentId,
-        currentQuestion: action.payload.questionId,
-        currentSubmission: undefined
+        assessment: {
+          ...state.assessment,
+          currentAssessment: action.payload.assessmentId,
+          currentQuestion: action.payload.questionId
+        }
       }
     case UPDATE_CURRENT_SUBMISSION_ID:
       return {
         ...state,
-        currentAssessment: undefined,
-        currentQuestion: action.payload.questionId,
-        currentSubmission: action.payload.submissionId
+        grading: {
+          ...state.grading,
+          currentSubmission: action.payload.submissionId,
+          currentQuestion: action.payload.questionId
+        }
       }
     case UPDATE_EDITOR_VALUE:
       return {
@@ -433,12 +437,18 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case UPDATE_GRADING_COMMENTS_VALUE:
       return {
         ...state,
-        gradingCommentsValue: action.payload
+        grading: {
+          ...state.grading,
+          gradingCommentsValue: action.payload
+        }
       }
     case UPDATE_GRADING_XP:
       return {
         ...state,
+        grading: {
+          ...state.grading,
         gradingXP: action.payload
+        }
       }
     default:
       return state
