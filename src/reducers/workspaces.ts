@@ -187,9 +187,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           context: createContext<WorkspaceLocation>(
             action.payload.chapter,
-            action.payload.externals,
-            location
-          )
+            action.payload.externals
+          ),
+          externals: action.payload.externals
         }
       }
     case SEND_REPL_INPUT_TO_OUTPUT:
@@ -231,30 +231,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       return {
         ...state,
         playground: {
-          ...state[location],
+          ...state.playground,
           playgroundExternal: action.payload.newExternal
         }
-      }
-    case CLEAR_CONTEXT:
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          context: createContext<WorkspaceLocation>(
-            action.payload.chapter,
-            action.payload.externals,
-            location
-          )
-        }
-      }
-    /**
-     * This action is only meant for Playground usage, where
-     * the external library is displayed.
-     */
-    case CHANGE_PLAYGROUND_EXTERNAL:
-      return {
-        ...state,
-        playgroundExternal: action.payload.newExternal
       }
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:
