@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 /**
- * Takes the output of the rendered graphics (in a hidden canvas tag under <body>) 
+ * Takes the output of the rendered graphics (in a hidden canvas tag under <body>)
  * and makes it into a new <canvas> output for viewing.
  */
 class CanvasOutput extends React.Component<{}, {}> {
@@ -23,8 +23,7 @@ class CanvasOutput extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <div ref={r => (this.$parent = r)}
-           className="canvas-container">
+      <div ref={r => (this.$parent = r)} className="canvas-container">
         <canvas width={512} height={512} ref={r => (this.$canvas = r)} />
       </div>
     )
