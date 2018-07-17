@@ -147,6 +147,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
     case CHANGE_EDITOR_WIDTH:
       return {
+        ...state,
         [location]: {
           ...state[location],
           editorWidth:

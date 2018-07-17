@@ -52,18 +52,22 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, workspaceLocation),
-      handleChapterSelect: (chapter: any, changeEvent: any) => chapterSelect(chapter, changeEvent, workspaceLocation),
-      handleClearContext: (chapter: number, externals: string[]) => clearContext(chapter, externals, workspaceLocation),
+      handleChapterSelect: (chapter: any, changeEvent: any) =>
+        chapterSelect(chapter, changeEvent, workspaceLocation),
+      handleClearContext: (chapter: number, externals: string[]) =>
+        clearContext(chapter, externals, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, workspaceLocation),
+      handleEditorWidthChange: (widthChange: number) =>
+        changeEditorWidth(widthChange, workspaceLocation),
       handleGradingFetch: fetchGrading,
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleResetWorkspace: () => resetWorkspace(workspaceLocation),
-      handleSideContentHeightChange: (heightChange: number) => changeSideContentHeight(heightChange, workspaceLocation),
+      handleSideContentHeightChange: (heightChange: number) =>
+        changeSideContentHeight(heightChange, workspaceLocation),
       handleUpdateCurrentSubmissionId: updateCurrentSubmissionId
     },
     dispatch
