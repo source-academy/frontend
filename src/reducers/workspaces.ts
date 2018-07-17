@@ -215,14 +215,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         }
       }
-    case EVAL_EDITOR:
-      // Forces re-render of workspace on editor eval
-      return {
-        ...state,
-        [location]: {
-          ...state[location]
-        }
-      }
     /**
      * This action is only meant for Playground usage, where
      * the external library is displayed.
@@ -260,17 +252,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           output: newOutput
         }
       }
-    case SEND_REPL_INPUT_TO_OUTPUT:
-      // CodeOutput properties exist in parallel with workspaceLocation
-      newOutput = state[location].output.concat(action.payload as CodeOutput)
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          output: newOutput
-        }
-      }
     case EVAL_EDITOR:
+      // Forces re-render of workspace on editor eval
       return {
         ...state,
         [location]: {
