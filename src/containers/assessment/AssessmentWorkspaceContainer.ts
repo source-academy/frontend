@@ -60,7 +60,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleResetAssessmentWorkspace: () => resetAssessmentWorkspace,
+      handleResetAssessmentWorkspace: resetAssessmentWorkspace,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId

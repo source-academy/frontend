@@ -61,17 +61,13 @@ class AssessmentWorkspace extends React.Component<
 > {
   public state = { showOverlay: false }
 
-  public componentWillMount() {
+  public componentDidMount() {
+    this.checkWorkspaceReset(this.props)
     /* Load assessment if it isn't passed as a prop. */
     this.props.handleAssessmentFetch(this.props.assessmentId)
     if (this.props.questionId === 0) {
       this.setState({ showOverlay: true })
     }
-    this.checkWorkspaceReset(this.props)
-  }
-
-  public componentWillUpdate() {
-    this.checkWorkspaceReset(this.props)
   }
 
   public render() {
