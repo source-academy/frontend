@@ -447,7 +447,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         grading: {
           ...state.grading,
-        gradingXP: action.payload
+          gradingXP: action.payload
         }
       }
     default:
