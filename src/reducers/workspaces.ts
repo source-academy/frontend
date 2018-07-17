@@ -147,7 +147,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
     case CHANGE_EDITOR_WIDTH:
       return {
-        ...state,
         [location]: {
           ...state[location],
           editorWidth:
@@ -235,6 +234,27 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           playgroundExternal: action.payload.newExternal
         }
       }
+    case CLEAR_CONTEXT:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          context: createContext<WorkspaceLocation>(
+            action.payload.chapter,
+            action.payload.externals,
+            location
+          )
+        }
+      }
+    /**
+     * This action is only meant for Playground usage, where
+     * the external library is displayed.
+     */
+    case CHANGE_PLAYGROUND_EXTERNAL:
+      return {
+        ...state,
+        playgroundExternal: action.payload.newExternal
+      }
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:
      * (1) state[location].output === [], i.e. state[location].output[-1] === undefined
@@ -258,6 +278,30 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           output: newOutput
+        }
+      }
+    case SEND_REPL_INPUT_TO_OUTPUT:
+      // CodeOutput properties exist in parallel with workspaceLocation
+      newOutput = state[location].output.concat(action.payload as CodeOutput)
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          output: newOutput
+        }
+      }
+    case EVAL_EDITOR:
+      return {
+        ...state,
+        [location]: {
+          ...state[location]
+        }
+      }
+    case EVAL_REPL:
+      return {
+        ...state,
+        [location]: {
+          ...state[location]
         }
       }
     case EVAL_INTERPRETER_SUCCESS:
@@ -304,14 +348,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           output: newOutput
         }
       }
-    case EVAL_REPL:
-      // Forces re-render of workspace on repl eval
-      return {
-        ...state,
-        [location]: {
-          ...state[location]
-        }
-      }
     /**
      * Called to signal the end of an interruption,
      * i.e called after the interpreter is told to stop interruption,
@@ -340,7 +376,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      * including the js-slang Context.
      */
     case RESET_WORKSPACE:
-      let newState = {
+      const newState = {
         ...state,
         [location]: {
           ...state[location],
