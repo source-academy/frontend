@@ -1,8 +1,8 @@
 import * as React from 'react'
 
 /**
- * Takes the output of the rendered graphics (in a canvas tag under <body>) 
- * and makes it an output for viewing
+ * Takes the output of the rendered graphics (in a hidden canvas tag under <body>) 
+ * and makes it into a new <canvas> output for viewing.
  */
 class CanvasOutput extends React.Component<{}, {}> {
   private $canvas: HTMLCanvasElement | null
