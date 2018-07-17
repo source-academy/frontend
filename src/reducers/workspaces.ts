@@ -192,40 +192,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           )
         }
       }
-    /**
-     * This action is only meant for Playground usage, where
-     * the external library is displayed.
-     */
-    case CHANGE_PLAYGROUND_EXTERNAL:
-      return {
-        ...state,
-        playgroundExternal: action.payload.newExternal
-      }
-    case HANDLE_CONSOLE_LOG:
-      /* Possible cases:
-       * (1) state[location].output === [], i.e. state[location].output[-1] === undefined
-       * (2) state[location].output[-1] is not RunningOutput
-       * (3) state[location].output[-1] is RunningOutput */
-      lastOutput = state[location].output.slice(-1)[0]
-      if (lastOutput === undefined || lastOutput.type !== 'running') {
-        newOutput = state[location].output.concat({
-          type: 'running',
-          consoleLogs: [action.payload.logString]
-        })
-      } else {
-        const updatedLastOutput = {
-          type: lastOutput.type,
-          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
-        }
-        newOutput = state[location].output.slice(0, -1).concat(updatedLastOutput)
-      }
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          output: newOutput
-        }
-      }
     case SEND_REPL_INPUT_TO_OUTPUT:
       // CodeOutput properties exist in parallel with workspaceLocation
       newOutput = state[location].output.concat(action.payload as CodeOutput)
@@ -255,6 +221,43 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location]
+        }
+      }
+    /**
+     * This action is only meant for Playground usage, where
+     * the external library is displayed.
+     */
+    case CHANGE_PLAYGROUND_EXTERNAL:
+      return {
+        ...state,
+        playground: {
+          ...state[location],
+          playgroundExternal: action.payload.newExternal
+        }
+      }
+    case HANDLE_CONSOLE_LOG:
+      /* Possible cases:
+     * (1) state[location].output === [], i.e. state[location].output[-1] === undefined
+     * (2) state[location].output[-1] is not RunningOutput
+     * (3) state[location].output[-1] is RunningOutput */
+      lastOutput = state[location].output.slice(-1)[0]
+      if (lastOutput === undefined || lastOutput.type !== 'running') {
+        newOutput = state[location].output.concat({
+          type: 'running',
+          consoleLogs: [action.payload.logString]
+        })
+      } else {
+        const updatedLastOutput = {
+          type: lastOutput.type,
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
+        }
+        newOutput = state[location].output.slice(0, -1).concat(updatedLastOutput)
+      }
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          output: newOutput
         }
       }
     case EVAL_INTERPRETER_SUCCESS:
@@ -344,8 +347,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...createDefaultWorkspace(location)
         }
       }
-      /** 
-       * Use this switch case to reset values other 
+      /**
+       * Use this switch case to reset values other
        * than properties in IWorkspaceState.
        */
       switch (location) {
