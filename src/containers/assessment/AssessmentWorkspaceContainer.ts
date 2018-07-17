@@ -18,7 +18,7 @@ import {
   updateReplValue
 } from '../../actions'
 import {
-  resetAssessmentWorkspace,
+  resetWorkspace,
   updateCurrentAssessmentId,
   WorkspaceLocation
 } from '../../actions/workspaces'
@@ -44,29 +44,26 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
   }
 }
 
-const location: WorkspaceLocation = 'assessment'
+const workspaceLocation: WorkspaceLocation = 'assessment'
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
       handleAssessmentFetch: fetchAssessment,
-      handleBrowseHistoryDown: () => browseReplHistoryDown(location),
-      handleBrowseHistoryUp: () => browseReplHistoryUp(location),
-      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
-      handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, changeEvent, location),
-      handleClearContext: (chapter: number, externals: string[]) =>
-        clearContext(chapter, externals, location),
-      handleEditorEval: () => evalEditor(location),
-      handleEditorValueChange: (val: string) => updateEditorValue(val, location),
-      handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
-      handleInterruptEval: () => beginInterruptExecution(location),
-      handleReplEval: () => evalRepl(location),
-      handleReplOutputClear: () => clearReplOutput(location),
-      handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleResetAssessmentWorkspace: resetAssessmentWorkspace,
-      handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, location),
+      handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
+      handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
+      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, workspaceLocation),
+      handleChapterSelect: (chapter: any, changeEvent: any) => chapterSelect(chapter, changeEvent, workspaceLocation),
+      handleClearContext: (chapter: number, externals: string[]) => clearContext(chapter, externals, workspaceLocation),
+      handleEditorEval: () => evalEditor(workspaceLocation),
+      handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, workspaceLocation),
+      handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
+      handleReplEval: () => evalRepl(workspaceLocation),
+      handleReplOutputClear: () => clearReplOutput(workspaceLocation),
+      handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
+      handleResetWorkspace: () => resetWorkspace(workspaceLocation),
+      handleSideContentHeightChange: (heightChange: number) => changeSideContentHeight(heightChange, workspaceLocation),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId
     },
     dispatch
