@@ -13,7 +13,8 @@ import * as actionTypes from './actionTypes'
  */
 export enum WorkspaceLocations {
   assessment = 'assessment',
-  playground = 'playground'
+  playground = 'playground',
+  grading = 'grading'
 }
 
 export type WorkspaceLocation = keyof typeof WorkspaceLocations
@@ -148,8 +149,11 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 })
 
-export const resetAssessmentWorkspace = () => ({
-  type: actionTypes.RESET_ASSESSMENT_WORKSPACE
+export const resetWorkspace = (workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.RESET_WORKSPACE,
+  payload: {
+    workspaceLocation
+  }
 })
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({

@@ -50,7 +50,7 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
-  handleResetAssessmentWorkspace: () => void
+  handleResetWorkspace: () => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
 }
@@ -135,7 +135,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       const chapter = this.props.grading[questionId].question.library.chapter
       const externals = this.props.grading[questionId].question.library.externals
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
-      this.props.handleResetAssessmentWorkspace()
+      this.props.handleResetWorkspace()
       this.props.handleClearContext(chapter, externals)
     }
   }

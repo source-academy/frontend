@@ -29,15 +29,26 @@ export interface IPlaygroundState {
   readonly queryString?: string
 }
 
-export interface IWorkspaceManagerState {
-  readonly assessment: IWorkspaceState
+interface IAssessmentWorkspace extends IWorkspaceState {
   readonly currentAssessment?: number
+  readonly currentQuestion?: number
+}
+
+interface IGradingWorkspace extends IWorkspaceState {
   readonly currentSubmission?: number
   readonly currentQuestion?: number
   readonly gradingCommentsValue: string
   readonly gradingXP: number | undefined
-  readonly playground: IWorkspaceState
+}
+
+interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: string
+}
+
+export interface IWorkspaceManagerState {
+  readonly assessment: IAssessmentWorkspace
+  readonly grading: IGradingWorkspace
+  readonly playground: IPlaygroundWorkspace
 }
 
 interface IWorkspaceState {
@@ -209,13 +220,22 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
-  assessment: { ...createDefaultWorkspace(WorkspaceLocations.assessment) },
-  currentAssessment: undefined,
-  currentQuestion: undefined,
-  gradingCommentsValue: defaultComments,
-  gradingXP: undefined,
-  playground: { ...createDefaultWorkspace(WorkspaceLocations.playground) },
-  playgroundExternal: 'none'
+  assessment: {
+    ...createDefaultWorkspace(WorkspaceLocations.assessment),
+    currentAssessment: undefined,
+    currentQuestion: undefined
+  },
+  grading: {
+    ...createDefaultWorkspace(WorkspaceLocations.grading),
+    currentSubmission: undefined,
+    currentQuestion: undefined,
+    gradingCommentsValue: defaultComments,
+    gradingXP: undefined
+  },
+  playground: {
+    ...createDefaultWorkspace(WorkspaceLocations.playground),
+    playgroundExternal: 'none'
+  }
 }
 
 export const defaultSession: ISessionState = {

@@ -19,7 +19,7 @@ import {
 } from '../../../actions'
 import {
   clearContext,
-  resetAssessmentWorkspace,
+  resetWorkspace,
   updateCurrentSubmissionId
 } from '../../../actions/workspaces'
 import GradingWorkspace, {
@@ -29,50 +29,46 @@ import GradingWorkspace, {
 } from '../../../components/academy/grading/GradingWorkspace'
 import { IState } from '../../../reducers/states'
 
-/**
- * Grading will use the assessment slice of IWorkspaceManagerState, as there is no reason to be
- * grading and doing an assessment at the same time. This also saves the creation of one Context,
- * that is the most bulky part of the IWorkspaceState.
- */
-const location: WorkspaceLocation = 'assessment'
+const workspaceLocation: WorkspaceLocation = 'grading'
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     grading: state.session.gradings.get(props.submissionId),
-    editorValue: state.workspaces.assessment.editorValue,
-    isRunning: state.workspaces.assessment.context.runtime.isRunning,
-    activeTab: state.workspaces.assessment.sideContentActiveTab,
-    editorWidth: state.workspaces.assessment.editorWidth,
-    sideContentHeight: state.workspaces.assessment.sideContentHeight,
-    output: state.workspaces.assessment.output,
-    replValue: state.workspaces.assessment.replValue,
-    storedSubmissionId: state.workspaces.currentSubmission,
-    storedQuestionId: state.workspaces.currentQuestion
+    editorValue: state.workspaces.grading.editorValue,
+    isRunning: state.workspaces.grading.context.runtime.isRunning,
+    activeTab: state.workspaces.grading.sideContentActiveTab,
+    editorWidth: state.workspaces.grading.editorWidth,
+    sideContentHeight: state.workspaces.grading.sideContentHeight,
+    output: state.workspaces.grading.output,
+    replValue: state.workspaces.grading.replValue,
+    storedSubmissionId: state.workspaces.grading.currentSubmission,
+    storedQuestionId: state.workspaces.grading.currentQuestion
   }
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
-      handleBrowseHistoryDown: () => browseReplHistoryDown(location),
-      handleBrowseHistoryUp: () => browseReplHistoryUp(location),
-      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
+      handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
+      handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
+      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, changeEvent, location),
+        chapterSelect(chapter, changeEvent, workspaceLocation),
       handleClearContext: (chapter: number, externals: string[]) =>
-        clearContext(chapter, externals, location),
-      handleEditorEval: () => evalEditor(location),
-      handleEditorValueChange: (val: string) => updateEditorValue(val, location),
-      handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
+        clearContext(chapter, externals, workspaceLocation),
+      handleEditorEval: () => evalEditor(workspaceLocation),
+      handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorWidthChange: (widthChange: number) =>
+        changeEditorWidth(widthChange, workspaceLocation),
       handleGradingFetch: fetchGrading,
-      handleInterruptEval: () => beginInterruptExecution(location),
-      handleReplEval: () => evalRepl(location),
-      handleReplOutputClear: () => clearReplOutput(location),
-      handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
+      handleReplEval: () => evalRepl(workspaceLocation),
+      handleReplOutputClear: () => clearReplOutput(workspaceLocation),
+      handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
+      handleResetWorkspace: () => resetWorkspace(workspaceLocation),
       handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, location),
-      handleUpdateCurrentSubmissionId: updateCurrentSubmissionId,
-      handleResetAssessmentWorkspace: resetAssessmentWorkspace
+        changeSideContentHeight(heightChange, workspaceLocation),
+      handleUpdateCurrentSubmissionId: updateCurrentSubmissionId
     },
     dispatch
   )

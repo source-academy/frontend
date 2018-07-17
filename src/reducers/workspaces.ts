@@ -17,7 +17,7 @@ import {
   EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
-  RESET_ASSESSMENT_WORKSPACE,
+  RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -187,43 +187,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           context: createContext<WorkspaceLocation>(
             action.payload.chapter,
-            action.payload.externals,
-            location
-          )
-        }
-      }
-    /**
-     * This action is only meant for Playground usage, where
-     * the external library is displayed.
-     */
-    case CHANGE_PLAYGROUND_EXTERNAL:
-      return {
-        ...state,
-        playgroundExternal: action.payload.newExternal
-      }
-    case HANDLE_CONSOLE_LOG:
-      /* Possible cases:
-       * (1) state[location].output === [], i.e. state[location].output[-1] === undefined
-       * (2) state[location].output[-1] is not RunningOutput
-       * (3) state[location].output[-1] is RunningOutput */
-      lastOutput = state[location].output.slice(-1)[0]
-      if (lastOutput === undefined || lastOutput.type !== 'running') {
-        newOutput = state[location].output.concat({
-          type: 'running',
-          consoleLogs: [action.payload.logString]
-        })
-      } else {
-        const updatedLastOutput = {
-          type: lastOutput.type,
-          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
-        }
-        newOutput = state[location].output.slice(0, -1).concat(updatedLastOutput)
-      }
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          output: newOutput
+            action.payload.externals
+          ),
+          externals: action.payload.externals
         }
       }
     case SEND_REPL_INPUT_TO_OUTPUT:
@@ -249,7 +215,52 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         }
       }
+    /**
+     * This action is only meant for Playground usage, where
+     * the external library is displayed.
+     */
+    case CHANGE_PLAYGROUND_EXTERNAL:
+      return {
+        ...state,
+        playground: {
+          ...state.playground,
+          playgroundExternal: action.payload.newExternal
+        }
+      }
+    case HANDLE_CONSOLE_LOG:
+      /* Possible cases:
+     * (1) state[location].output === [], i.e. state[location].output[-1] === undefined
+     * (2) state[location].output[-1] is not RunningOutput
+     * (3) state[location].output[-1] is RunningOutput */
+      lastOutput = state[location].output.slice(-1)[0]
+      if (lastOutput === undefined || lastOutput.type !== 'running') {
+        newOutput = state[location].output.concat({
+          type: 'running',
+          consoleLogs: [action.payload.logString]
+        })
+      } else {
+        const updatedLastOutput = {
+          type: lastOutput.type,
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
+        }
+        newOutput = state[location].output.slice(0, -1).concat(updatedLastOutput)
+      }
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          output: newOutput
+        }
+      }
     case EVAL_EDITOR:
+      // Forces re-render of workspace on editor eval
+      return {
+        ...state,
+        [location]: {
+          ...state[location]
+        }
+      }
+    case EVAL_REPL:
       // Forces re-render of workspace on editor eval
       return {
         ...state,
@@ -301,14 +312,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           output: newOutput
         }
       }
-    case EVAL_REPL:
-      // Forces re-render of workspace on repl eval
-      return {
-        ...state,
-        [location]: {
-          ...state[location]
-        }
-      }
     /**
      * Called to signal the end of an interruption,
      * i.e called after the interpreter is told to stop interruption,
@@ -333,28 +336,51 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       }
     /**
-     * Resets the assessment workspace (under state.workspaces.assessment).
+     * Resets the workspace to default settings,
+     * including the js-slang Context.
      */
-    case RESET_ASSESSMENT_WORKSPACE:
-      return {
+    case RESET_WORKSPACE:
+      const newState = {
         ...state,
-        assessment: createDefaultWorkspace(WorkspaceLocations.assessment),
-        gradingCommentsValue: defaultComments,
-        gradingXP: undefined
+        [location]: {
+          ...state[location],
+          ...createDefaultWorkspace(location)
+        }
+      }
+      /**
+       * Use this switch case to reset values other
+       * than properties in IWorkspaceState.
+       */
+      switch (location) {
+        case WorkspaceLocations.grading:
+          return {
+            ...newState,
+            grading: {
+              ...newState.grading,
+              gradingCommentsValue: defaultComments,
+              gradingXP: undefined
+            }
+          }
+        default:
+          return newState
       }
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
         ...state,
-        currentAssessment: action.payload.assessmentId,
-        currentQuestion: action.payload.questionId,
-        currentSubmission: undefined
+        assessment: {
+          ...state.assessment,
+          currentAssessment: action.payload.assessmentId,
+          currentQuestion: action.payload.questionId
+        }
       }
     case UPDATE_CURRENT_SUBMISSION_ID:
       return {
         ...state,
-        currentAssessment: undefined,
-        currentQuestion: action.payload.questionId,
-        currentSubmission: action.payload.submissionId
+        grading: {
+          ...state.grading,
+          currentSubmission: action.payload.submissionId,
+          currentQuestion: action.payload.questionId
+        }
       }
     case UPDATE_EDITOR_VALUE:
       return {
@@ -375,12 +401,18 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case UPDATE_GRADING_COMMENTS_VALUE:
       return {
         ...state,
-        gradingCommentsValue: action.payload
+        grading: {
+          ...state.grading,
+          gradingCommentsValue: action.payload
+        }
       }
     case UPDATE_GRADING_XP:
       return {
         ...state,
-        gradingXP: action.payload
+        grading: {
+          ...state.grading,
+          gradingXP: action.payload
+        }
       }
     default:
       return state
