@@ -4,6 +4,7 @@ import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 
 import { InterpreterOutput } from '../../reducers/states'
+import CanvasOutput from './CanvasOutput'
 import ReplInput, { IReplInputProps } from './ReplInput'
 
 export interface IReplProps {
@@ -54,14 +55,18 @@ export const Output: React.SFC<IOutputProps> = props => {
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <pre className="resultOutput">{toString(props.output.value)}</pre>
+            <pre className="resultOutput">
+              {renderResult(props.output.value)}
+            </pre>
           </Card>
         )
       } else {
         return (
           <Card>
             <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
-            <pre className="resultOutput">{toString(props.output.value)}</pre>
+            <pre className="resultOutput">
+              {renderResult(props.output.value)}
+            </pre>
           </Card>
         )
       }
@@ -83,6 +88,19 @@ export const Output: React.SFC<IOutputProps> = props => {
       }
     default:
       return <Card>''</Card>
+  }
+}
+
+const renderResult = (value: any) => {
+  /** A class which is the output of the show() function */
+  const ShapeDrawn = (window as any).ShapeDrawn
+  if (
+    typeof ShapeDrawn !== 'undefined' &&
+    value instanceof ShapeDrawn
+  ) {
+    return <CanvasOutput />
+  } else {
+    return toString(value)
   }
 }
 
