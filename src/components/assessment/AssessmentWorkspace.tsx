@@ -40,6 +40,8 @@ export type OwnProps = {
 
 export type DispatchProps = {
   handleAssessmentFetch: (assessmentId: number) => void
+  handleBrowseHistoryDown: () => void
+  handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
   handleClearContext: (chapter: number, externals: string[]) => void
@@ -119,10 +121,12 @@ class AssessmentWorkspace extends React.Component<
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {
-        output: this.props.output,
-        replValue: this.props.replValue,
+        handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
+        handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        handleReplValueChange: this.props.handleReplValueChange,
+        output: this.props.output,
+        replValue: this.props.replValue
       }
     }
     return (
@@ -195,6 +199,7 @@ class AssessmentWorkspace extends React.Component<
       handleInterruptEval: this.props.handleInterruptEval,
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
+      handleReplValueChange: this.props.handleReplValueChange,
       hasChapterSelect: false,
       hasDoneButton: questionId === this.props.assessment!.questions.length - 1,
       hasNextButton: questionId < this.props.assessment!.questions.length - 1,

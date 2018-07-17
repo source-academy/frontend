@@ -6,12 +6,27 @@ import 'brace/theme/terminal'
 
 export interface IReplInputProps {
   replValue: string
+  handleBrowseHistoryDown: () => void
+  handleBrowseHistoryUp: () => void
   handleReplValueChange: (newCode: string) => void
   handleReplEval: () => void
 }
 
 class ReplInput extends React.PureComponent<IReplInputProps, {}> {
   private replInputBottom: HTMLDivElement
+  private execBrowseHistoryDown: () => void
+  private execBrowseHistoryUp: () => void
+  private execEvaluate: () => void
+
+  constructor(props: IReplInputProps) {
+    super(props)
+    this.execBrowseHistoryDown = props.handleBrowseHistoryDown
+    this.execBrowseHistoryUp = props.handleBrowseHistoryUp
+    this.execEvaluate = () => {
+      this.replInputBottom.scrollIntoView()
+      this.props.handleReplEval()
+    }
+  }
 
   public componentDidUpdate() {
     if (this.replInputBottom.clientWidth >= window.innerWidth - 50) {
@@ -42,15 +57,28 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
           onChange={this.props.handleReplValueChange}
           commands={[
             {
+              name: 'browseHistoryDown',
+              bindKey: {
+                win: 'Down',
+                mac: 'Down'
+              },
+              exec: this.execBrowseHistoryDown
+            },
+            {
+              name: 'browseHistoryUp',
+              bindKey: {
+                win: 'Up',
+                mac: 'Up'
+              },
+              exec: this.execBrowseHistoryUp
+            },
+            {
               name: 'evaluate',
               bindKey: {
                 win: 'Shift-Enter',
                 mac: 'Shift-Enter'
               },
-              exec: () => {
-                this.replInputBottom.scrollIntoView()
-                this.props.handleReplEval()
-              }
+              exec: this.execEvaluate
             }
           ]}
           minLines={1}

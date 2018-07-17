@@ -45,7 +45,7 @@ exports[`Repl renders correctly 1`] = `
     <Component output={{...}} />
     <Component output={{...}} />
     <HotKeys className=\\"repl-input-parent row pt-card pt-elevation-0\\" handlers={{...}}>
-      <ReplInput output={{...}} replValue=\\"\\" handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} />
+      <ReplInput handleBrowseHistoryDown={[Function: handleBrowseHistoryDown]} handleBrowseHistoryUp={[Function: handleBrowseHistoryUp]} handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} output={{...}} replValue=\\"\\" />
     </HotKeys>
   </div>
 </div>"

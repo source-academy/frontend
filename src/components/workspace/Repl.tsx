@@ -9,6 +9,8 @@ import ReplInput, { IReplInputProps } from './ReplInput'
 export interface IReplProps {
   output: InterpreterOutput[]
   replValue: string
+  handleBrowseHistoryDown: () => void
+  handleBrowseHistoryUp: () => void
   handleReplEval: () => void
   handleReplValueChange: (newCode: string) => void
 }

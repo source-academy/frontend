@@ -45,6 +45,7 @@ interface IWorkspaceState {
   readonly editorValue: string
   readonly editorWidth: string
   readonly output: InterpreterOutput[]
+  readonly replHistory: ReplHistory
   readonly replValue: string
   readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
@@ -64,6 +65,13 @@ export interface ISessionState {
   readonly storyAct: string
   readonly username?: string
 }
+
+type ReplHistory = {
+  browseIndex: null | number // [0, 49] if browsing, else null
+  records: string[]
+}
+
+export const maxBrowseIndex = 50
 
 /**
  * An output while the program is still being run in the interpreter. As a
@@ -189,6 +197,10 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   editorValue: defaultEditorValue,
   editorWidth: '50%',
   output: [],
+  replHistory: {
+    browseIndex: null,
+    records: []
+  },
   replValue: '',
   sideContentActiveTab: 0,
   externals: []
