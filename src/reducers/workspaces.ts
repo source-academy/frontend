@@ -261,6 +261,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       }
     case EVAL_REPL:
+      // Forces re-render of workspace on editor eval
       return {
         ...state,
         [location]: {
