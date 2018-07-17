@@ -1,11 +1,19 @@
+terraform {
+  backend "s3" {
+    bucket  = "cadet-terraform-state"
+    key     = "cadet-frontend.tfstate"
+    region  = "ap-southeast-1"
+    encrypt = "true"
+    acl     = "private"
+  }
+}
+
 variable "bucket_name" {
   default = "stg-cadet-frontend"
 }
-variable "credentials-profile" {}
 
 provider "aws" {
   region = "ap-southeast-1"
-  profile = "${var.credentials-profile}"
 }
 
 resource "aws_s3_bucket" "stg-site" {
@@ -33,6 +41,6 @@ resource "aws_s3_bucket" "stg-site" {
 }
 EOF
   provisioner "local-exec" {
-    command = "yarn build && ./sync-build.sh ${var.credentials-profile}"
+    command = "yarn build && ./sync-build.sh"
   }
 }
