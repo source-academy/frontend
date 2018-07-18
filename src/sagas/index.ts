@@ -64,7 +64,7 @@ function* workspaceSaga(): SagaIterator {
     if (newChapter !== oldChapter) {
       yield put(actions.clearContext(newChapter, externals, ExternalLibraryNames.NONE, location))
       yield put(actions.clearReplOutput(location))
-      yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
+      yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
     }
   })
 
@@ -91,7 +91,7 @@ function* workspaceSaga(): SagaIterator {
       yield put(actions.changePlaygroundExternal(newExternal))
       yield put(actions.clearContext(chapter, externals, newExternal, location))
       yield put(actions.clearReplOutput(location))
-      yield call(showSuccessMessage, `Switched to ${newExternal} library`)
+      yield call(showSuccessMessage, `Switched to ${newExternal} library`, 1000)
     }
   })
 
@@ -119,7 +119,7 @@ function* workspaceSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {
     // TODO api call here
-    yield call(showSuccessMessage, 'Saved grading')
+    yield call(showSuccessMessage, 'Saved grading', 1000)
   })
 }
 
@@ -168,7 +168,7 @@ function* evalCode(code: string, context: Context, location: WorkspaceLocation) 
     /* Redundancy, added ensure that interruption results in an error. */
     context.errors.push(new InterruptedError(context.runtime.nodes[0]))
     yield put(actions.endInterruptExecution(location))
-    yield call(showWarningMessage, 'Execution aborted by user')
+    yield call(showWarningMessage, 'Execution aborted by user', 750)
   }
 }
 

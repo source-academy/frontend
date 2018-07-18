@@ -4,7 +4,7 @@ const notification = Toaster.create({
   position: Position.TOP
 })
 
-export const showSuccessMessage = (message: string, timeout = 500) => {
+export const showSuccessMessage = (message: string, timeout: number) => {
   notification.show({
     intent: Intent.SUCCESS,
     message,
@@ -12,7 +12,7 @@ export const showSuccessMessage = (message: string, timeout = 500) => {
   })
 }
 
-export const showWarningMessage = (message: string, timeout = 500) => {
+export const showWarningMessage = (message: string, timeout: number) => {
   notification.show({
     intent: Intent.WARNING,
     message,

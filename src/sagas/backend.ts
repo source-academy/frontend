@@ -44,13 +44,15 @@ function* backendSaga(): SagaIterator {
     const answer = (action as actionTypes.IAction).payload.answer
     const resp = yield postAnswer(id, accessToken, answer)
     if (resp !== null && resp.ok) {
-      yield call(showSuccessMessage, 'Saved!')
+      yield call(showSuccessMessage, 'Saved!', 1000)
     } else if (resp !== null) {
       // only students are allowed to submit answers
-      yield call(showWarningMessage, `Something went wrong (got ${resp.status})`)
+      // TODO: Make this a switch/case, add a custom message for staff trying to
+      // save a submission, once backend decides if it's a 401 or 403.
+      yield call(showWarningMessage, `Something went wrong (got ${resp.status})`, 2000)
     } else {
       // postAnswer returns null for failed fetch
-      yield call(showWarningMessage, 'Something went wrong, are you online?')
+      yield call(showWarningMessage, 'Something went wrong, are you online?', 2000)
     }
   })
 }
