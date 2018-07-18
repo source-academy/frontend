@@ -148,11 +148,82 @@ const latestSourceChapter = sourceChapters.slice(-1)[0]
 
 /**
  * Defines which external libraries are available for usage.
- * TODO use constants
- * TODO move this to a file closer to the libraries
  */
 const libEntries: Array<[string, string[]]> = [
   ['none', []],
+  [
+    'runes',
+    [
+      'show',
+      'anaglyph',
+      'hollusion',
+      'animate',
+      'stereogram',
+      'random_color',
+      'red',
+      'pink',
+      'purple',
+      'indigo',
+      'blue',
+      'green',
+      'yellow',
+      'orange',
+      'brown',
+      'black',
+      'white',
+      'scale_independent',
+      'scale',
+      'translate',
+      'rotate',
+      'stack_frac',
+      'stack',
+      'stackn',
+      'quarter_turn_right',
+      'quarter_turn_left',
+      'turn_upside_down',
+      'beside_frac',
+      'beside',
+      'flip_vert',
+      'flip_horiz',
+      'make_cross',
+      'repeat_pattern',
+      'overlay_frac',
+      'overlay',
+      'black_bb',
+      'blank_bb',
+      'rcross_bb',
+      'sail_bb',
+      'corner_bb',
+      'nova_bb',
+      'circle_bb',
+      'heart_bb',
+      'pentagram_bb',
+      'ribbon_bb'
+    ]
+  ], 
+  [
+    'curves',
+    [
+      'make_point',
+      'draw_points_on',
+      'draw_connected',
+      'draw_points_squeezed_to_window',
+      'draw_connected_squeezed_to_window',
+      'draw_connected_full_view',
+      'draw_connected_full_view_proportional',
+      'x_of',
+      'y_of',
+      'unit_line',
+      'unit_line_at',
+      'unit_circle',
+      'connect_rigidly',
+      'connect_ends',
+      'put_in_standard_position',
+      'full_view_proportional',
+      'squeeze_full_view',
+      'squeeze_rectangular_portion'
+    ]
+  ],
   [
     'sound',
     [
@@ -164,32 +235,36 @@ const libEntries: Array<[string, string[]]> = [
       'stop',
       'cut_sourcesound',
       'cut',
-      'sourcesound_to_sound',
       'autocut_sourcesound',
+      'sourcesound_to_sound',
+      'sound_to_sourcesound',
       'consecutively',
-      'simultaneously'
+      'simultaneously',
+      'noise_sourcesound',
+      'noise',
+      'sine_sourcesound',
+      'sine_sound',
+      'constant_sourcesound',
+      'silence_sourcesound',
+      'high_sourcesound',
+      'silence',
+      'high',
+      'invert_sourcesound',
+      'invert',
+      'clamp_sourcesound',
+      'clamp',
+      'letter_name_to_midi_note',
+      'letter_name_to_frequency',
+      'midi_note_to_frequency',
+      'square_sourcesound',
+      'square_sound',
+      'triangle_sourcesound',
+      'triangle_sound',
+      'sawtooth_sourcesound',
+      'sawtooth_sound',
+      'play_concurrently'
     ]
   ],
-  [
-    'runes',
-    [
-      'stack',
-      'stack_frac',
-      'quarter_turn_right • flip_horiz',
-      'flip_vert',
-      'turn_upside_down',
-      'quarter_turn_left • beside',
-      'make_cross',
-      'repeat_pattern',
-      'stackn',
-      'heart_bb',
-      'black_bb',
-      'blank_bb',
-      'circle_bb',
-      'pentagram_bb',
-      'show'
-    ]
-  ]
 ]
 export const externalLibraries: Map<string, string[]> = new Map(libEntries)
 
