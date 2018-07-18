@@ -186,7 +186,7 @@ export const defaultEditorValue = '// Type your program in here!'
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
-  editorValue: defaultEditorValue,
+  editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : undefined,
   editorWidth: '50%',
   output: [],
   replHistory: {
@@ -201,6 +201,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
+<<<<<<< HEAD
   assessment: {
     ...createDefaultWorkspace(WorkspaceLocations.assessment),
     currentAssessment: undefined,
