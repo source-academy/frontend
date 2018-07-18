@@ -169,6 +169,26 @@ const libEntries: Array<[string, string[]]> = [
       'consecutively',
       'simultaneously'
     ]
+  ],
+  [
+    'runes',
+    [
+      'stack',
+      'stack_frac',
+      'quarter_turn_right • flip_horiz',
+      'flip_vert',
+      'turn_upside_down',
+      'quarter_turn_left • beside',
+      'make_cross',
+      'repeat_pattern',
+      'stackn',
+      'heart_bb',
+      'black_bb',
+      'blank_bb',
+      'circle_bb',
+      'pentagram_bb',
+      'show'
+    ]
   ]
 ]
 export const externalLibraries: Map<string, string[]> = new Map(libEntries)
