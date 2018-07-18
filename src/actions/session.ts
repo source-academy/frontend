@@ -55,6 +55,17 @@ export const setUsername: ActionCreator<actionTypes.IAction> = (username: string
   payload: username
 })
 
+export const submitAnswer: ActionCreator<actionTypes.IAction> = (
+  id: number,
+  answer: string | number
+) => ({
+  type: actionTypes.SUBMIT_ANSWER,
+  payload: {
+    id,
+    answer
+  }
+})
+
 export const updateHistoryHelpers: ActionCreator<actionTypes.IAction> = (loc: string) => ({
   type: actionTypes.UPDATE_HISTORY_HELPERS,
   payload: loc

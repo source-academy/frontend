@@ -58,7 +58,7 @@ export interface IWorkspaceManagerState {
 
 interface IWorkspaceState {
   readonly context: Context
-  readonly editorValue: string
+  readonly editorValue: string | undefined
   readonly editorWidth: string
   readonly output: InterpreterOutput[]
   readonly replHistory: ReplHistory
@@ -201,7 +201,6 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
-<<<<<<< HEAD
   assessment: {
     ...createDefaultWorkspace(WorkspaceLocations.assessment),
     currentAssessment: undefined,

@@ -58,6 +58,7 @@ export type DispatchProps = {
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
   handleResetWorkspace: () => void
+  handleSave: (id: number, answer: number | string) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
 }
@@ -223,6 +224,11 @@ class AssessmentWorkspace extends React.Component<
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
+      onClickSave: () =>
+        this.props.handleSave(
+          this.props.assessment!.questions[questionId].id,
+          this.props.editorValue!
+        ),
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter
     }
   }
