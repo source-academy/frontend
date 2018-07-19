@@ -46,13 +46,14 @@ function* backendSaga(): SagaIterator {
     if (resp !== null && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
     } else if (resp !== null) {
-      // only students are allowed to submit answers
-      // TODO: Make this a switch/case, add a custom message for staff trying to
-      // save a submission, once backend decides if it's a 401 or 403.
-      yield call(showWarningMessage, `Something went wrong (got ${resp.status})`, 2000)
+      const errorMessage =
+        resp.status === 403
+          ? 'Got 403 response. Only students can save assessment answers.'
+          : `Something went wrong (got ${resp.status} response)`
+      yield call(showWarningMessage, errorMessage, 2000)
     } else {
       // postAnswer returns null for failed fetch
-      yield call(showWarningMessage, 'Something went wrong, are you online?', 2000)
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?", 2000)
     }
   })
 }
