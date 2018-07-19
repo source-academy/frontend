@@ -253,7 +253,7 @@ function getReadyWebGLForCanvas(mode, canvas) {
     gl.enable(gl.DEPTH_TEST); // Enable depth testing
     gl.depthFunc(gl.LEQUAL); // Near things obscure far things
     // Clear the color as well as the depth buffer.
-    clear();
+    clear_viewport();
 
     //TODO: Revise this, it seems unnecessary
     // Align the drawable canvas in the middle
@@ -298,7 +298,7 @@ function getReadyWebGL(mode, name, horiz, vert, aa_off) {
     gl.enable(gl.DEPTH_TEST); // Enable depth testing
     gl.depthFunc(gl.LEQUAL); // Near things obscure far things
     // Clear the color as well as the depth buffer.
-    clear();
+    clear_viewport();
 
     //TODO: Revise this, it seems unnecessary
     // Align the drawable canvas in the middle
@@ -491,11 +491,11 @@ function initFramebufferObject() {
 
 function clearFramebuffer(framebuffer) {
   gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-  clear();
+  clear_viewport();
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 }
 
-function clear() {
+function clear_viewport() {
   if (!gl) {
     throw new Error(
       'Please activate the Canvas component by clicking it in the sidebar'
@@ -507,8 +507,6 @@ function clear() {
     clearHollusion();
   }
 }
-
-var clear_viewport = clear; // firefox console already has function clear
 
 //---------------------Rune 2d and 3d functions---------------------
 function initRuneCommon() {

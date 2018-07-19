@@ -70,7 +70,7 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
   } else {
     // do nothing for normal situations
   }
-  clear();
+  clear_viewport();
   gl.uniformMatrix4fv(u_transformMatrix, false, transMat);
   drawCurve(drawMode, curvePosArray);
   return new ShapeDrawn();

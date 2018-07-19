@@ -394,14 +394,14 @@ function drawWithWebGL(flattened_shape_list, drawFunction) {
 }
 
 function show(shape) {
-  clear();
+  clear_viewport();
   var flattened_shape_list = generateFlattenedShapeList(shape);
   drawWithWebGL(flattened_shape_list, drawRune);
   return new ShapeDrawn();
 }
 
 function anaglyph(shape) {
-  clear();
+  clear_viewport();
   clearAnaglyphFramebuffer();
   var flattened_shape_list = generateFlattenedShapeList(shape);
   drawWithWebGL(flattened_shape_list, drawAnaglyph);
@@ -410,7 +410,7 @@ function anaglyph(shape) {
 
 var hollusionTimeout;
 function hollusion(shape, num) {
-  clear();
+  clear_viewport();
   var num = num > 3 ? num : 3;
   var flattened_shape_list = generateFlattenedShapeList(shape);
   var frame_list = [];
@@ -443,7 +443,7 @@ function hollusion(shape, num) {
     gl.finish();
     copy_viewport(gl.canvas, frame);
     frame_list.push(frame);
-    clear();
+    clear_viewport();
   }
   for (var i = frame_list.length - 2; i > 0; i--) {
     frame_list.push(frame_list[i]);
@@ -464,7 +464,7 @@ function clearHollusion() {
 }
 
 function stereogram(shape) {
-  clear();
+  clear_viewport();
   var flattened_shape_list = generateFlattenedShapeList(shape);
   var depth_map = open_pixmap('depth_map', viewport_size, viewport_size, true);
   // draw the depth map

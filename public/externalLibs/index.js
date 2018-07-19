@@ -16,18 +16,23 @@ function dynamicallyLoadScript(url) {
  */
 function loadLibs() {
   const files = [
+    // list library 
     '/externalLibs/list.js',
+    // sound
     '/externalLibs/sound/sounds.js',
     '/externalLibs/sound/soundToneMatrix.js',
     '/externalLibs/sound/riffwave.js',
+    // graphics
     '/externalLibs/graphics/gl-matrix.js',
-    '/externalLibs/graphics/webGLcurve.js',
-    '/externalLibs/graphics/webGLgraphics.js',
     '/externalLibs/graphics/webGLhi_graph.js',
-    '/externalLibs/graphics/webGLinitCurve.js',
+    '/externalLibs/graphics/webGLhi_graph_ce.js',
+    '/externalLibs/graphics/webGLgraphics.js',
+    '/externalLibs/graphics/webGLcurve.js',
     '/externalLibs/graphics/webGLrune.js',
     '/externalLibs/graphics/webGLinit2D.js',
     '/externalLibs/graphics/webGLinit3D.js',
+    '/externalLibs/graphics/webGLinitCurve.js',
+    // list visualizer
     '/externalLibs/visualizer/KineticJS.js',
     '/externalLibs/visualizer/visualizer.js',
   ];
@@ -37,5 +42,4 @@ function loadLibs() {
   }
 }
 
-// loadLibs(dependencies);
 loadLibs();
