@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer'
+import { ExternalLibraryName } from '../../../reducers/externalLibraries'
 import { InterpreterOutput } from '../../../reducers/states'
 import { history } from '../../../utils/history'
 import {
@@ -10,7 +11,6 @@ import {
   IProgrammingQuestion,
   IQuestion,
   QuestionTypes,
-  RenderMode
 } from '../../assessment/assessmentShape'
 import Workspace, { WorkspaceProps } from '../../workspace'
 import { ControlBarProps } from '../../workspace/ControlBar'
@@ -42,7 +42,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (chapter: number, externals: string[], renderMode: RenderMode | null) => void
+  handleClearContext: (chapter: number, externals: string[], externalLibraryName: ExternalLibraryName) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -134,11 +134,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       this.props.storedQuestionId !== questionId
     ) {
       const chapter = this.props.grading[questionId].question.library.chapter
+      const externalName = this.props.grading[questionId].question.library.externalLibraryName
       const externals = this.props.grading[questionId].question.library.externals
-      const renderMode = this.props.grading[questionId].question.library.renderMode || null
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
       this.props.handleResetWorkspace()
-      this.props.handleClearContext(chapter, externals, renderMode)
+      this.props.handleClearContext(chapter, externals, externalName)
     }
   }
 

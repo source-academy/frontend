@@ -1,3 +1,5 @@
+import { ExternalLibraryName } from '../../reducers/externalLibraries'
+
 /*
  * Used to display information regarding an assessment in the UI.
  */

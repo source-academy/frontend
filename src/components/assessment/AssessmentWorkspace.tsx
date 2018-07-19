@@ -2,6 +2,7 @@ import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
+import { ExternalLibraryName } from '../../reducers/externalLibraries'
 import { InterpreterOutput } from '../../reducers/states'
 import { beforeNow } from '../../utils/dateHelpers'
 import { history } from '../../utils/history'
@@ -15,7 +16,6 @@ import {
   IProgrammingQuestion,
   IQuestion,
   QuestionTypes,
-  RenderMode
 } from './assessmentShape'
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
@@ -45,7 +45,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (chapter: number, externals: string[], renderMode: RenderMode | null) => void
+  handleClearContext: (chapter: number, externals: string[], externalLibraryName: ExternalLibraryName) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -159,11 +159,11 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedQuestionId !== questionId
     ) {
       const chapter = this.props.assessment.questions[questionId].library.chapter
+      const externalName = this.props.assessment.questions[questionId].library.externalLibraryName
       const externals = this.props.assessment.questions[questionId].library.externals
-      const renderMode = this.props.assessment.questions[questionId].library.renderMode || null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace()
-      this.props.handleClearContext(chapter, externals, renderMode)
+      this.props.handleClearContext(chapter, externals, externalName)
     }
   }
 
