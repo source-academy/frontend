@@ -64,13 +64,23 @@ class AssessmentWorkspace extends React.Component<
 > {
   public state = { showOverlay: false }
 
+  /**
+   * This will definitely cause a component update, as there is no 
+   * shallow equality in the fetched assessment.
+   */
   public componentDidMount() {
-    this.checkWorkspaceReset(this.props)
-    /* Load assessment if it isn't passed as a prop. */
     this.props.handleAssessmentFetch(this.props.assessmentId)
     if (this.props.questionId === 0) {
       this.setState({ showOverlay: true })
     }
+  }
+
+  /**
+   * After the Assessment is fetched, there is a check for wether the 
+   * workspace needs to be udpated (a change in assessmentId or questionId)
+   */
+  public componentDidUpdate() {
+    this.checkWorkspaceReset(this.props)
   }
 
   public render() {

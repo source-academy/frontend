@@ -57,9 +57,20 @@ export type DispatchProps = {
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
+  /**
+   * This will definitely cause a component update, as there is no 
+   * shallow equality in the fetched grading.
+   */
   public componentDidMount() {
-    this.checkWorkspaceReset(this.props)
     this.props.handleGradingFetch(this.props.submissionId)
+  }
+  
+  /**
+   * After the Grading is fetched, there is a check for wether the 
+   * workspace needs to be udpated (a change in submissionId or questionId)
+   */
+  public componentDidUpdate() {
+    this.checkWorkspaceReset(this.props)
   }
 
   public render() {
