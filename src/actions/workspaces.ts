@@ -92,7 +92,7 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
 
 /**
  * Clears the js-slang Context at a specified workspace location.
- * 
+ *
  * @param chapter the SICP chapter for the context to be set in
  * @param externals a list of symbols to be exposed from the global scope
  * @param externalLibraryName the name of the external library used

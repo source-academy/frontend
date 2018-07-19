@@ -15,7 +15,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
-  QuestionTypes,
+  QuestionTypes
 } from './assessmentShape'
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
@@ -45,7 +45,11 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (chapter: number, externals: string[], externalLibraryName: ExternalLibraryName) => void
+  handleClearContext: (
+    chapter: number,
+    externals: string[],
+    externalLibraryName: ExternalLibraryName
+  ) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -65,7 +69,7 @@ class AssessmentWorkspace extends React.Component<
   public state = { showOverlay: false }
 
   /**
-   * This will definitely cause a component update, as there is no 
+   * This will definitely cause a component update, as there is no
    * shallow equality in the fetched assessment.
    */
   public componentDidMount() {
@@ -76,7 +80,7 @@ class AssessmentWorkspace extends React.Component<
   }
 
   /**
-   * After the Assessment is fetched, there is a check for wether the 
+   * After the Assessment is fetched, there is a check for wether the
    * workspace needs to be udpated (a change in assessmentId or questionId)
    */
   public componentDidUpdate() {

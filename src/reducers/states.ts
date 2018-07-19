@@ -143,13 +143,12 @@ export enum Role {
   Admin = 'admin'
 }
 
-/** 
- * Defines what chapters are available for usage. 
+/**
+ * Defines what chapters are available for usage.
  * For external libraries, see externalLibraries.ts
  */
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
-
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {

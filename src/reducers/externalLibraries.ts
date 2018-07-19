@@ -55,7 +55,7 @@ export enum ExternalLibraryNames {
 export type ExternalLibraryName = keyof typeof ExternalLibraryNames
 
 /**
- * Defines which external libraries are available for usage, and what 
+ * Defines which external libraries are available for usage, and what
  * externals (exposed functions) are under them.
  */
 const libEntries: Array<[ExternalLibraryName, string[]]> = [

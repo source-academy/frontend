@@ -10,7 +10,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
-  QuestionTypes,
+  QuestionTypes
 } from '../../assessment/assessmentShape'
 import Workspace, { WorkspaceProps } from '../../workspace'
 import { ControlBarProps } from '../../workspace/ControlBar'
@@ -42,7 +42,11 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (chapter: number, externals: string[], externalLibraryName: ExternalLibraryName) => void
+  handleClearContext: (
+    chapter: number,
+    externals: string[],
+    externalLibraryName: ExternalLibraryName
+  ) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -58,15 +62,15 @@ export type DispatchProps = {
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   /**
-   * This will definitely cause a component update, as there is no 
+   * This will definitely cause a component update, as there is no
    * shallow equality in the fetched grading.
    */
   public componentDidMount() {
     this.props.handleGradingFetch(this.props.submissionId)
   }
-  
+
   /**
-   * After the Grading is fetched, there is a check for wether the 
+   * After the Grading is fetched, there is a check for wether the
    * workspace needs to be udpated (a change in submissionId or questionId)
    */
   public componentDidUpdate() {
