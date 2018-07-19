@@ -87,13 +87,14 @@ function* workspaceSaga(): SagaIterator {
     if (newExternal !== oldExternal) {
       const externals = externalLibraries.get(newExternal)!
       yield put(actions.changePlaygroundExternal(newExternal))
-      const renderMode: RenderMode | null = newExternal === '2D Runes'
-        ? '2d'
-        : newExternal === '3D Runes'
-        ? '3d'
-        : newExternal === 'Curves'
-        ? 'curve'
-        : null
+      const renderMode: RenderMode | null =
+        newExternal === '2D Runes'
+          ? '2d'
+          : newExternal === '3D Runes'
+            ? '3d'
+            : newExternal === 'Curves'
+              ? 'curve'
+              : null
       yield put(actions.clearContext(chapter, externals, renderMode, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to ${newExternal} library`)
@@ -109,7 +110,7 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
     const renderMode = (action as actionTypes.IAction).payload.renderMode
     if (renderMode !== null) {
-        (window as any).getReadyWebGLForCanvas(renderMode)
+      ;(window as any).getReadyWebGLForCanvas(renderMode)
     }
     yield undefined
   })

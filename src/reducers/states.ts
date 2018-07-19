@@ -192,9 +192,7 @@ const TwoDRunesExternals = [
  */
 const libEntries: Array<[string, string[]]> = [
   ['None', []],
-  [
-    '2D Runes', TwoDRunesExternals
-  ], 
+  ['2D Runes', TwoDRunesExternals],
   [
     '3D Runes',
     [
@@ -204,8 +202,8 @@ const libEntries: Array<[string, string[]]> = [
       'animate',
       'stereogram',
       'overlay_frac',
-      'overlay',
-    ],
+      'overlay'
+    ]
   ],
   [
     'Curves',
@@ -270,7 +268,7 @@ const libEntries: Array<[string, string[]]> = [
       'sawtooth_sound',
       'play_concurrently'
     ]
-  ],
+  ]
 ]
 export const externalLibraries: Map<string, string[]> = new Map(libEntries)
 
