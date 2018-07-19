@@ -82,7 +82,7 @@ export const mockAssessmentOverviews = [
 const mockSoundLibrary: Library = {
   chapter: 1,
   externalLibraryName: ExternalLibraryNames.SOUND,
-  externals: externalLibraries.get('sound')!,
+  externals: externalLibraries.get(ExternalLibraryNames.SOUND)!,
   files: ['mockLibraryFile'],
   globals: []
 }
@@ -90,7 +90,7 @@ const mockSoundLibrary: Library = {
 export const mock2DRuneLibrary: Library = {
   chapter: 1,
   externalLibraryName: ExternalLibraryNames.TWO_DIM_RUNES,
-  externals: externalLibraries.get('runes')!,
+  externals: externalLibraries.get(ExternalLibraryNames.TWO_DIM_RUNES)!,
   files: ['mockLibraryFile'],
   globals: []
 }
@@ -98,7 +98,7 @@ export const mock2DRuneLibrary: Library = {
 const mock3DRuneLibrary: Library = {
   chapter: 1,
   externalLibraryName: ExternalLibraryNames.THREE_DIM_RUNES,
-  externals: externalLibraries.get('runes')!,
+  externals: externalLibraries.get(ExternalLibraryNames.THREE_DIM_RUNES)!,
   files: ['mockLibraryFile'],
   globals: []
 }
@@ -106,7 +106,7 @@ const mock3DRuneLibrary: Library = {
 const mockCurveLibrary: Library = {
   chapter: 1,
   externalLibraryName: ExternalLibraryNames.CURVES,
-  externals: externalLibraries.get('curves')!,
+  externals: externalLibraries.get(ExternalLibraryNames.CURVES)!,
   files: ['mockLibraryFile'],
   globals: []
 }
