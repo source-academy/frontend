@@ -188,6 +188,7 @@ var normalShaderProgram; // the default shader program
 var vertexBuffer;
 var vertexPositionAttribute; // location of a_position
 var colorAttribute; // location of a_color
+var canvas; // the <canvas> object that is used to display webGL output
 
 // rune 2d and 3d
 var instance_ext; // ANGLE_instanced_arrays extension
@@ -245,7 +246,40 @@ function open_pixmap(name, horiz, vert, aa_off) {
   return canvas;
 }
 
-function getReadyWebGLForCanvas(mode, canvas) {
+/**
+ * Creates a <canvas> object, or resets it if it exists.
+ *
+ * Post-condition: canvas is defined as the selected <canvas>
+ *   object in the document.
+ */
+function resetCanvas() {
+  canvas = document.querySelector('.rune-canvas');
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.setAttribute('width', 512);
+    canvas.setAttribute('height', 512);
+    canvas.className = 'rune-canvas';
+    canvas.hidden = true;
+    document.body.appendChild(canvas);
+  } else {
+    canvas.parentNode.removeChild(canvas);
+    resetCanvas();
+  }
+}
+
+/**
+ * Gets the WebGL object (gl) ready for usage. Use this
+ * to reset the mode of rendering i.e to change from 2d to 3d runes.
+ *
+ * Post-condition: gl is non-null, uses an appropriate
+ *   program and has an appropriate initialized state
+ *   for mode-specific rendering (e.g props for 3d render).
+ *
+ * @param mode a string -- '2d'/'3d'/'curve' that is the usage of
+ *   the gl object.
+ */
+function getReadyWebGLForCanvas(mode) {
+  resetCanvas();
   // Get the rendering context for WebGL
   gl = initWebGL(canvas);
   if (gl) {
