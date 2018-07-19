@@ -6,7 +6,7 @@ import {
   IProgrammingQuestion,
   Library
 } from '../components/assessment/assessmentShape'
-import { externalLibraries } from '../reducers/externalLibraries'
+import { externalLibraries, ExternalLibraryNames } from '../reducers/externalLibraries'
 
 const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {
@@ -81,6 +81,7 @@ export const mockAssessmentOverviews = [
 
 const mockSoundLibrary: Library = {
   chapter: 1,
+  externalLibraryName: ExternalLibraryNames.SOUND,
   externals: externalLibraries.get('sound')!,
   files: ['mockLibraryFile'],
   globals: []
@@ -88,7 +89,7 @@ const mockSoundLibrary: Library = {
 
 export const mock2DRuneLibrary: Library = {
   chapter: 1,
-  renderMode: '2d',
+  externalLibraryName: ExternalLibraryNames.TWO_DIM_RUNES,
   externals: externalLibraries.get('runes')!,
   files: ['mockLibraryFile'],
   globals: []
@@ -96,7 +97,7 @@ export const mock2DRuneLibrary: Library = {
 
 const mock3DRuneLibrary: Library = {
   chapter: 1,
-  renderMode: '3d',
+  externalLibraryName: ExternalLibraryNames.THREE_DIM_RUNES,
   externals: externalLibraries.get('runes')!,
   files: ['mockLibraryFile'],
   globals: []
@@ -104,7 +105,7 @@ const mock3DRuneLibrary: Library = {
 
 const mockCurveLibrary: Library = {
   chapter: 1,
-  renderMode: 'curve',
+  externalLibraryName: ExternalLibraryNames.CURVES,
   externals: externalLibraries.get('curves')!,
   files: ['mockLibraryFile'],
   globals: []
