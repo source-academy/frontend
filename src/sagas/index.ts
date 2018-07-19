@@ -36,7 +36,7 @@ function* workspaceSaga(): SagaIterator {
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
     /** Clear the context, with the same chapter and externals as before. */
-    yield put(actions.clearContext(chapter, externals, location))
+    yield put(actions.clearContext(chapter, externals, null, location))
     yield put(actions.clearReplOutput(location))
     context = yield select((state: IState) => state.workspaces[location].context)
     yield* evalCode(code, context, location)
@@ -60,7 +60,7 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => state.workspaces[location].externals
     )
     if (newChapter !== oldChapter) {
-      yield put(actions.clearContext(newChapter, externals, location))
+      yield put(actions.clearContext(newChapter, externals, null, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
@@ -87,10 +87,25 @@ function* workspaceSaga(): SagaIterator {
     if (newExternal !== oldExternal) {
       const externals = externalLibraries.get(newExternal)!
       yield put(actions.changePlaygroundExternal(newExternal))
-      yield put(actions.clearContext(chapter, externals, location))
+      const renderMode: RenderMode | null = newExternal === '2D Runes'
+        ? '2d'
+        : newExternal === '3D Runes'
+        ? '3d'
+        : newExternal === 'Curves'
+        ? 'curve'
+        : null
+      yield put(actions.clearContext(chapter, externals, renderMode, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to ${newExternal} library`)
     }
+  })
+
+  yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
+    const renderMode = (action as actionTypes.IAction).payload.renderMode
+    if (renderMode !== null) {
+        (window as any).getReadyWebGLForCanvas(renderMode)
+    }
+    yield undefined
   })
 
   yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {
