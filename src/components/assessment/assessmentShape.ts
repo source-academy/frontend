@@ -63,11 +63,9 @@ export enum QuestionTypes {
 }
 export type QuestionType = keyof typeof QuestionTypes
 
-export type RenderMode = '2d' | '3d' | 'curve'
-
 export type Library = {
   chapter: number
-  renderMode?: RenderMode
+  externalLibraryName: ExternalLibraryName
   files: string[]
   externals: string[]
   globals: string[]

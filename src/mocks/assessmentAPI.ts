@@ -6,7 +6,7 @@ import {
   IProgrammingQuestion,
   Library
 } from '../components/assessment/assessmentShape'
-import { externalLibraries } from '../reducers/states'
+import { externalLibraries } from '../reducers/externalLibraries'
 
 const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {
