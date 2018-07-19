@@ -9,7 +9,8 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
-  QuestionTypes
+  QuestionTypes,
+  RenderMode
 } from '../../assessment/assessmentShape'
 import Workspace, { WorkspaceProps } from '../../workspace'
 import { ControlBarProps } from '../../workspace/ControlBar'
@@ -41,7 +42,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (chapter: number, externals: string[]) => void
+  handleClearContext: (chapter: number, externals: string[], renderMode: RenderMode | null) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -134,9 +135,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     ) {
       const chapter = this.props.grading[questionId].question.library.chapter
       const externals = this.props.grading[questionId].question.library.externals
+      const renderMode = this.props.grading[questionId].question.library.renderMode || null
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
       this.props.handleResetWorkspace()
-      this.props.handleClearContext(chapter, externals)
+      this.props.handleClearContext(chapter, externals, renderMode)
     }
   }
 

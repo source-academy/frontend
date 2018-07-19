@@ -14,7 +14,8 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
-  QuestionTypes
+  QuestionTypes,
+  RenderMode
 } from './assessmentShape'
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
@@ -44,7 +45,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (chapter: number, externals: string[]) => void
+  handleClearContext: (chapter: number, externals: string[], renderMode: RenderMode | null) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -159,9 +160,10 @@ class AssessmentWorkspace extends React.Component<
     ) {
       const chapter = this.props.assessment.questions[questionId].library.chapter
       const externals = this.props.assessment.questions[questionId].library.externals
+      const renderMode = this.props.assessment.questions[questionId].library.renderMode || null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace()
-      this.props.handleClearContext(chapter, externals)
+      this.props.handleClearContext(chapter, externals, renderMode)
     }
   }
 

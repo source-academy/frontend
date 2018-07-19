@@ -22,6 +22,7 @@ import {
   updateCurrentAssessmentId,
   WorkspaceLocation
 } from '../../actions/workspaces'
+import { RenderMode } from '../../components/assessment/assessmentShape'
 import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
@@ -55,8 +56,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, changeEvent, workspaceLocation),
-      handleClearContext: (chapter: number, externals: string[]) =>
-        clearContext(chapter, externals, workspaceLocation),
+      handleClearContext: (chapter: number, externals: string[], renderMode: RenderMode | null) =>
+        clearContext(chapter, externals, renderMode, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
