@@ -100,6 +100,12 @@ function* workspaceSaga(): SagaIterator {
     }
   })
 
+  /**
+   * Handles the side effect of resetting the WebGL context,
+   * if a renderMode is provided.
+   *
+   * @see clearContext @see 'public/externalLibs/graphics'
+   */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
     const renderMode = (action as actionTypes.IAction).payload.renderMode
     if (renderMode !== null) {
