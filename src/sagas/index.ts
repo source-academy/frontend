@@ -9,37 +9,16 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockBackendSaga } from '../mocks/backend'
-import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
 import { defaultEditorValue, externalLibraries, IState } from '../reducers/states'
 import { IVLE_KEY, USE_BACKEND } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import backendSaga from './backend'
 
 function* mainSaga() {
-  yield* apiFetchSaga()
   yield* USE_BACKEND ? backendSaga() : mockBackendSaga()
   yield* workspaceSaga()
   yield* loginSaga()
   yield* playgroundSaga()
-}
-
-function* apiFetchSaga(): SagaIterator {
-  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
-    const accessToken = yield select((state: IState) => state.session.accessToken)
-    const gradingOverviews = yield call(() => mockFetchGradingOverview(accessToken))
-    if (gradingOverviews !== null) {
-      yield put(actions.updateGradingOverviews(gradingOverviews))
-    }
-  })
-
-  yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
-    const submissionId = (action as actionTypes.IAction).payload
-    const accessToken = yield select((state: IState) => state.session.accessToken)
-    const grading = yield call(() => mockFetchGrading(accessToken, submissionId))
-    if (grading !== null) {
-      yield put(actions.updateGrading(submissionId, grading))
-    }
-  })
 }
 
 function* workspaceSaga(): SagaIterator {
