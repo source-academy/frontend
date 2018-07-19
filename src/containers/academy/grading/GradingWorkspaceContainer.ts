@@ -22,12 +22,12 @@ import {
   resetWorkspace,
   updateCurrentSubmissionId
 } from '../../../actions/workspaces'
-import { RenderMode } from '../../../components/assessment/assessmentShape'
 import GradingWorkspace, {
   DispatchProps,
   OwnProps,
   StateProps
 } from '../../../components/academy/grading/GradingWorkspace'
+import { RenderMode } from '../../../components/assessment/assessmentShape'
 import { IState } from '../../../reducers/states'
 
 const workspaceLocation: WorkspaceLocation = 'grading'

@@ -29,7 +29,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
   bindActionCreators(
     {
       handleClearContext: (chapter: number, externals: string[]) =>
-        clearContext(chapter, externals, workspaceLocation),
+        clearContext(chapter, externals, null, workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation)
     },
     dispatch
