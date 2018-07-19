@@ -10,7 +10,7 @@ import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockBackendSaga } from '../mocks/backend'
 import { IVLE_KEY, USE_BACKEND } from '../utils/constants'
-import { externalLibraries } from '../reducers/externalLibraries'
+import { externalLibraries, ExternalLibraryNames } from '../reducers/externalLibraries'
 import { defaultEditorValue, IState } from '../reducers/states'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import backendSaga from './backend'
@@ -37,7 +37,7 @@ function* workspaceSaga(): SagaIterator {
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
     /** Clear the context, with the same chapter and externals as before. */
-    yield put(actions.clearContext(chapter, externals, null, location))
+    yield put(actions.clearContext(chapter, externals, ExternalLibraryNames.NONE, location))
     yield put(actions.clearReplOutput(location))
     context = yield select((state: IState) => state.workspaces[location].context)
     yield* evalCode(code, context, location)
@@ -61,7 +61,7 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => state.workspaces[location].externals
     )
     if (newChapter !== oldChapter) {
-      yield put(actions.clearContext(newChapter, externals, null, location))
+      yield put(actions.clearContext(newChapter, externals, ExternalLibraryNames.NONE, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
@@ -88,15 +88,7 @@ function* workspaceSaga(): SagaIterator {
     if (newExternal !== oldExternal) {
       const externals = externalLibraries.get(newExternal)!
       yield put(actions.changePlaygroundExternal(newExternal))
-      const renderMode: RenderMode | null =
-        newExternal === '2D Runes'
-          ? '2d'
-          : newExternal === '3D Runes'
-            ? '3d'
-            : newExternal === 'Curves'
-              ? 'curve'
-              : null
-      yield put(actions.clearContext(chapter, externals, renderMode, location))
+      yield put(actions.clearContext(chapter, externals, newExternal, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to ${newExternal} library`)
     }
@@ -104,14 +96,22 @@ function* workspaceSaga(): SagaIterator {
 
   /**
    * Handles the side effect of resetting the WebGL context,
-   * if a renderMode is provided.
    *
-   * @see clearContext @see 'public/externalLibs/graphics'
+   * @see clearContext and files under 'public/externalLibs/graphics'
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
-    const renderMode = (action as actionTypes.IAction).payload.renderMode
-    if (renderMode !== null) {
-      ;(window as any).getReadyWebGLForCanvas(renderMode)
+    const externalLibraryName = (action as actionTypes.IAction).payload.externalLibraryName
+    const resetWebGl = (window as any).getReadyWebGLForCanvas
+    switch (externalLibraryName) {
+      case ExternalLibraryNames.TWO_DIM_RUNES:
+        resetWebGl('2d')
+        break
+      case ExternalLibraryNames.THREE_DIM_RUNES:
+        resetWebGl('3d')
+        break
+      case ExternalLibraryNames.CURVES:
+        resetWebGl('curve')
+        break
     }
     yield undefined
   })
