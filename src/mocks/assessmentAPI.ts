@@ -114,27 +114,23 @@ const mockCurveLibrary: Library = {
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
-    content: 'Hello and welcome to this assessment! This is the 0th question, using 2d runes.',
+    answer: 'display("answer1");',
+    content: 'Hello and welcome to this assessment! This is the 0th question.',
     id: 0,
-    library: mock2DRuneLibrary,
+    library: mockSoundLibrary,
     solutionTemplate: '0th question mock solution template',
     type: 'programming'
   },
   {
-    content: 'Hello and welcome to this assessment! This is the 1st question, using 3d runes',
+    answer: null,
+    content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mock3DRuneLibrary,
     solutionTemplate: '1st question mock solution template',
     type: 'programming'
   },
   {
-    content: 'Hello and welcome to this assessment! This is the 2nd question, using sounds!',
-    id: 1,
-    library: mockSoundLibrary,
-    solutionTemplate: '1st question mock solution template',
-    type: 'programming'
-  },
-  {
+    answer: 3,
     content:
       'This is the 3rd question. Oddly enough, it is an MCQ question that uses the curves library!',
     choices: [

@@ -43,7 +43,7 @@ export type GradingQuestion = {
  */
 interface IAnsweredQuestion extends IQuestion {
   solution?: number
-  answer?: string | number
+  answer: string | number | null
   solutionTemplate?: string
   choices?: MCQChoice[]
 }
