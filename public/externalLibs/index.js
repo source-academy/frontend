@@ -29,9 +29,6 @@ function loadLibs() {
     '/externalLibs/graphics/webGLgraphics.js',
     '/externalLibs/graphics/webGLcurve.js',
     '/externalLibs/graphics/webGLrune.js',
-    '/externalLibs/graphics/webGLinit2D.js',
-    '/externalLibs/graphics/webGLinit3D.js',
-    '/externalLibs/graphics/webGLinitCurve.js',
     // list visualizer
     '/externalLibs/visualizer/KineticJS.js',
     '/externalLibs/visualizer/visualizer.js',
