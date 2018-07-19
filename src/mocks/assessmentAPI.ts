@@ -6,6 +6,7 @@ import {
   IProgrammingQuestion,
   Library
 } from '../components/assessment/assessmentShape'
+import { externalLibraries } from '../reducers/states'
 
 const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {
@@ -78,31 +79,62 @@ export const mockAssessmentOverviews = [
   ...mockClosedAssessmentOverviews
 ]
 
-export const mockLibrary: Library = {
+const mockSoundLibrary: Library = {
   chapter: 1,
-  externals: ['make_sourcesound', 'array_test', 'draw_connected'],
+  externals: externalLibraries.get('sound')!,
   files: ['mockLibraryFile'],
-  globals: ['mockLibraryGlobal']
+  globals: []
+}
+
+export const mock2DRuneLibrary: Library = {
+  chapter: 1,
+  renderMode: '2d',
+  externals: externalLibraries.get('runes')!,
+  files: ['mockLibraryFile'],
+  globals: []
+}
+
+const mock3DRuneLibrary: Library = {
+  chapter: 1,
+  renderMode: '3d',
+  externals: externalLibraries.get('runes')!,
+  files: ['mockLibraryFile'],
+  globals: []
+}
+
+const mockCurveLibrary: Library = {
+  chapter: 1,
+  renderMode: 'curve',
+  externals: externalLibraries.get('curves')!,
+  files: ['mockLibraryFile'],
+  globals: []
 }
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
-    content: 'Hello and welcome to this assessment! This is the 0th question.',
+    content: 'Hello and welcome to this assessment! This is the 0th question, using 2d runes.',
     id: 0,
-    library: mockLibrary,
+    library: mock2DRuneLibrary,
     solutionTemplate: '0th question mock solution template',
     type: 'programming'
   },
   {
-    content: 'Hello and welcome to this assessment! This is the 1st question.',
+    content: 'Hello and welcome to this assessment! This is the 1st question, using 3d runes',
     id: 1,
-    library: mockLibrary,
+    library: mock3DRuneLibrary,
+    solutionTemplate: '1st question mock solution template',
+    type: 'programming'
+  },
+  {
+    content: 'Hello and welcome to this assessment! This is the 2nd question, using sounds!',
+    id: 1,
+    library: mockSoundLibrary,
     solutionTemplate: '1st question mock solution template',
     type: 'programming'
   },
   {
     content:
-      'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
+      'This is the 3rd question. Oddly enough, it is an MCQ question that uses the curves library!',
     choices: [
       {
         content: 'A',
@@ -122,7 +154,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
       }
     ],
     id: 2,
-    library: mockLibrary,
+    library: mockCurveLibrary,
     type: 'mcq'
   }
 ]
