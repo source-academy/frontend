@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux'
 
-import { RenderMode } from '../components/assessment/assessmentShape'
+import { ExternalLibraryName } from '../reducers/externalLibraries'
 import * as actionTypes from './actionTypes'
 
 /**
@@ -93,14 +93,14 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
 export const clearContext = (
   chapter: number,
   externals: string[],
-  renderMode: RenderMode | null,
+  externalLibraryName: ExternalLibraryName,
   workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.CLEAR_CONTEXT,
   payload: {
     chapter,
     externals,
-    renderMode,
+    externalLibraryName,
     workspaceLocation
   }
 })
