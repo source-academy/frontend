@@ -8,15 +8,23 @@ import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
+import { mockBackendSaga } from '../mocks/backend'
 import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
-import { defaultEditorValue, externalLibraries, IState } from '../reducers/states'
+import {
+  ApplicationEnvironment,
+  defaultEditorValue,
+  externalLibraries,
+  IState
+} from '../reducers/states'
 import { IVLE_KEY } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import backendSaga from './backend'
 
 function* mainSaga() {
+  const environment = yield select((state: IState) => state.application.environment)
+
   yield* apiFetchSaga()
-  yield* backendSaga()
+  yield* environment === ApplicationEnvironment.Production ? backendSaga() : mockBackendSaga()
   yield* workspaceSaga()
   yield* loginSaga()
   yield* playgroundSaga()
