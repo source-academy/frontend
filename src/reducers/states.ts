@@ -7,7 +7,7 @@ import { Announcement } from '../components/Announcements'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
 import { HistoryHelper } from '../utils/history'
 import { createContext } from '../utils/slangHelper'
-import { externalLibraries, ExternalLibraryName, ExternalLibraryNames } from './externalLibraries'
+import { ExternalLibraryName, ExternalLibraryNames } from './externalLibraries'
 
 export interface IState {
   readonly academy: IAcademyState

@@ -45,11 +45,11 @@ const TwoDRunesExternals = [
 
 /** Constants for external library names */
 export enum ExternalLibraryNames {
-  NONE,
-  TWO_DIM_RUNES,
-  THREE_DIM_RUNES,
-  CURVES,
-  SOUND
+  NONE = 'NONE',
+  TWO_DIM_RUNES = 'TWO_DIM_RUNES',
+  THREE_DIM_RUNES = 'THREE_DIM_RUNES',
+  CURVES = 'CURVES',
+  SOUND = 'SOUND'
 }
 
 export type ExternalLibraryName = keyof typeof ExternalLibraryNames
@@ -58,7 +58,7 @@ export type ExternalLibraryName = keyof typeof ExternalLibraryNames
  * Defines which external libraries are available for usage, and what 
  * externals (exposed functions) are under them.
  */
-const libEntries: Array<[string, string[]]> = [
+const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.NONE, []],
   [ExternalLibraryNames.TWO_DIM_RUNES, TwoDRunesExternals],
   [
