@@ -146,63 +146,69 @@ export enum Role {
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
 
+const TwoDRunesExternals = [
+  'show',
+  'random_color',
+  'red',
+  'pink',
+  'purple',
+  'indigo',
+  'blue',
+  'green',
+  'yellow',
+  'orange',
+  'brown',
+  'black',
+  'white',
+  'scale_independent',
+  'scale',
+  'translate',
+  'rotate',
+  'stack_frac',
+  'stack',
+  'stackn',
+  'quarter_turn_right',
+  'quarter_turn_left',
+  'turn_upside_down',
+  'beside_frac',
+  'beside',
+  'flip_vert',
+  'flip_horiz',
+  'make_cross',
+  'repeat_pattern',
+  'black_bb',
+  'blank_bb',
+  'rcross_bb',
+  'sail_bb',
+  'corner_bb',
+  'nova_bb',
+  'circle_bb',
+  'heart_bb',
+  'pentagram_bb',
+  'ribbon_bb'
+]
 /**
  * Defines which external libraries are available for usage.
  */
 const libEntries: Array<[string, string[]]> = [
-  ['none', []],
+  ['None', []],
   [
-    'runes',
+    '2D Runes', TwoDRunesExternals
+  ], 
+  [
+    '3D Runes',
     [
-      'show',
+      ...TwoDRunesExternals,
       'anaglyph',
       'hollusion',
       'animate',
       'stereogram',
-      'random_color',
-      'red',
-      'pink',
-      'purple',
-      'indigo',
-      'blue',
-      'green',
-      'yellow',
-      'orange',
-      'brown',
-      'black',
-      'white',
-      'scale_independent',
-      'scale',
-      'translate',
-      'rotate',
-      'stack_frac',
-      'stack',
-      'stackn',
-      'quarter_turn_right',
-      'quarter_turn_left',
-      'turn_upside_down',
-      'beside_frac',
-      'beside',
-      'flip_vert',
-      'flip_horiz',
-      'make_cross',
-      'repeat_pattern',
       'overlay_frac',
       'overlay',
-      'black_bb',
-      'blank_bb',
-      'rcross_bb',
-      'sail_bb',
-      'corner_bb',
-      'nova_bb',
-      'circle_bb',
-      'heart_bb',
-      'pentagram_bb',
-      'ribbon_bb'
-    ]
-  ], 
+    ],
+  ],
   [
-    'curves',
+    'Curves',
     [
       'make_point',
       'draw_points_on',
@@ -225,7 +231,7 @@ const libEntries: Array<[string, string[]]> = [
     ]
   ],
   [
-    'sound',
+    'Sound',
     [
       'make_sourcesound',
       'get_wave',
@@ -329,7 +335,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
-    playgroundExternal: 'none'
+    playgroundExternal: 'None'
   }
 }
 
