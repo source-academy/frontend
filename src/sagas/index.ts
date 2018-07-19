@@ -10,21 +10,14 @@ import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import { mockBackendSaga } from '../mocks/backend'
 import { mockFetchGrading, mockFetchGradingOverview } from '../mocks/gradingAPI'
-import {
-  ApplicationEnvironment,
-  defaultEditorValue,
-  externalLibraries,
-  IState
-} from '../reducers/states'
-import { IVLE_KEY } from '../utils/constants'
+import { defaultEditorValue, externalLibraries, IState } from '../reducers/states'
+import { IVLE_KEY, USE_BACKEND } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import backendSaga from './backend'
 
 function* mainSaga() {
-  const environment = yield select((state: IState) => state.application.environment)
-
   yield* apiFetchSaga()
-  yield* environment === ApplicationEnvironment.Production ? backendSaga() : mockBackendSaga()
+  yield* USE_BACKEND ? backendSaga() : mockBackendSaga()
   yield* workspaceSaga()
   yield* loginSaga()
   yield* playgroundSaga()
