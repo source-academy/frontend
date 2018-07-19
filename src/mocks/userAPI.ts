@@ -1,3 +1,6 @@
+/**
+ * Deprecated, check backend for roles
+ */
 export enum Roles {
   student = 'student',
   trainer = 'trainer',
