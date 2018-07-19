@@ -308,6 +308,7 @@ function getReadyWebGLForCanvas(mode) {
     // rune-specific operations
     if (mode === '2d' || mode === '3d') {
       initRuneCommon();
+      initRuneBuffer(vertices, indices);
       // rune-3d-specific operations
       if (mode === '3d') {
         initRune3d();
