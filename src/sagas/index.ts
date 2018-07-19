@@ -95,7 +95,7 @@ function* workspaceSaga(): SagaIterator {
   })
 
   /**
-   * Handles the side effect of resetting the WebGL context,
+   * Handles the side effect of resetting the WebGL context when context is reset.
    *
    * @see clearContext and files under 'public/externalLibs/graphics'
    */
