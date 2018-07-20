@@ -69,22 +69,18 @@ class AssessmentWorkspace extends React.Component<
   public state = { showOverlay: false }
 
   /**
-   * This will definitely cause a component update, as there is no
-   * shallow equality in the fetched assessment.
+   * First, check for a need to reset the workspace, 
+   * then fetch the assessment. This works because a change in 
+   * assessmentId or questionId results in a navigation, causing
+   * this component to be mounted again. The handleAssessmentFetch 
+   * occurs after the call to checkWorkspaceReset finishes.
    */
   public componentDidMount() {
+    this.checkWorkspaceReset(this.props)
     this.props.handleAssessmentFetch(this.props.assessmentId)
     if (this.props.questionId === 0) {
       this.setState({ showOverlay: true })
     }
-  }
-
-  /**
-   * After the Assessment is fetched, there is a check for wether the
-   * workspace needs to be udpated (a change in assessmentId or questionId)
-   */
-  public componentDidUpdate() {
-    this.checkWorkspaceReset(this.props)
   }
 
   public render() {
