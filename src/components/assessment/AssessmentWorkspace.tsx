@@ -69,10 +69,10 @@ class AssessmentWorkspace extends React.Component<
   public state = { showOverlay: false }
 
   /**
-   * First, check for a need to reset the workspace, 
-   * then fetch the assessment. This works because a change in 
+   * First, check for a need to reset the workspace,
+   * then fetch the assessment. This works because a change in
    * assessmentId or questionId results in a navigation, causing
-   * this component to be mounted again. The handleAssessmentFetch 
+   * this component to be mounted again. The handleAssessmentFetch
    * occurs after the call to checkWorkspaceReset finishes.
    */
   public componentDidMount() {

@@ -34,7 +34,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield delay(2000)
     const id = (action as actionTypes.IAction).payload
     const assessment = mockAssessments[id]
-    yield put(actions.updateAssessment({...assessment}))
+    yield put(actions.updateAssessment({ ...assessment }))
   })
 
   yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
