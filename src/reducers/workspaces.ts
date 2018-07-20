@@ -190,7 +190,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             action.payload.externals,
             location
           ),
-          externals: action.payload.externals
+          externals: action.payload.externals,
+          globals: action.payload.globals
         }
       }
     case SEND_REPL_INPUT_TO_OUTPUT:
