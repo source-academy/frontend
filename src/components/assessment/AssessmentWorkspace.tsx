@@ -121,6 +121,11 @@ class AssessmentWorkspace extends React.Component<
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
           : undefined
+    if (editorValue) {
+      // Update the editorValue in the state, or evaluating the editor will
+      // evaluate the default editorValue, which is undefined
+      this.props.handleEditorValueChange(editorValue)
+    }
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
