@@ -23,7 +23,7 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
 export type StateProps = {
   activeTab: number
   assessment?: IAssessment
-  editorValue?: string
+  editorValue: string | null
   editorWidth: string
   isRunning: boolean
   output: InterpreterOutput[]
@@ -58,6 +58,7 @@ export type DispatchProps = {
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
   handleResetWorkspace: () => void
+  handleSave: (id: number, answer: number | string) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
 }
@@ -76,11 +77,14 @@ class AssessmentWorkspace extends React.Component<
    * occurs after the call to checkWorkspaceReset finishes.
    */
   public componentDidMount() {
-    this.checkWorkspaceReset(this.props)
     this.props.handleAssessmentFetch(this.props.assessmentId)
     if (this.props.questionId === 0) {
       this.setState({ showOverlay: true })
     }
+  }
+
+  public componentDidUpdate() {
+    this.checkWorkspaceReset(this.props)
   }
 
   public render() {
@@ -112,15 +116,18 @@ class AssessmentWorkspace extends React.Component<
         ? this.props.assessment.questions.length - 1
         : this.props.questionId
     const question: IQuestion = this.props.assessment.questions[questionId]
+    const editorValue =
+      question.type === QuestionTypes.programming
+        ? question.answer !== null
+          ? ((question as IProgrammingQuestion).answer as string)
+          : (question as IProgrammingQuestion).solutionTemplate
+        : null
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorValue:
-                this.props.editorValue !== undefined
-                  ? this.props.editorValue
-                  : (question as IProgrammingQuestion).solutionTemplate,
+              editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange
             }
@@ -151,8 +158,6 @@ class AssessmentWorkspace extends React.Component<
   /**
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
-   *
-   * @param props the props passed to the component
    */
   private checkWorkspaceReset(props: AssessmentWorkspaceProps) {
     /* Don't reset workspace if assessment not fetched yet. */
@@ -168,12 +173,22 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedAssessmentId !== assessmentId ||
       this.props.storedQuestionId !== questionId
     ) {
-      const chapter = this.props.assessment.questions[questionId].library.chapter
-      const externalName = this.props.assessment.questions[questionId].library.externalLibraryName
-      const externals = this.props.assessment.questions[questionId].library.externals
+      const question = this.props.assessment.questions[questionId]
+      const chapter = question.library.chapter
+      const externalName = question.library.externalLibraryName
+      const externals = question.library.externals
+      const editorValue =
+        question.type === QuestionTypes.programming
+          ? question.answer !== null
+            ? ((question as IProgrammingQuestion).answer as string)
+            : (question as IProgrammingQuestion).solutionTemplate
+          : null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace()
       this.props.handleClearContext(chapter, externals, externalName)
+      if (editorValue) {
+        this.props.handleEditorValueChange(editorValue)
+      }
     }
   }
 
@@ -223,6 +238,11 @@ class AssessmentWorkspace extends React.Component<
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
+      onClickSave: () =>
+        this.props.handleSave(
+          this.props.assessment!.questions[questionId].id,
+          this.props.editorValue!
+        ),
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter
     }
   }

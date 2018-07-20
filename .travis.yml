@@ -8,5 +8,5 @@ branches:
 script:
   - yarn format:ci
   - yarn build-css
-  - yarn build-js
+  - yarn tslint -p .
   - yarn test-coveralls

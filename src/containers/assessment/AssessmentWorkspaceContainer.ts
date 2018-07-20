@@ -14,6 +14,7 @@ import {
   evalEditor,
   evalRepl,
   fetchAssessment,
+  submitAnswer,
   updateEditorValue,
   updateReplValue
 } from '../../actions'
@@ -70,6 +71,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleResetWorkspace: () => resetWorkspace(workspaceLocation),
+      handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId

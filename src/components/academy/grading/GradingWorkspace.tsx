@@ -22,7 +22,7 @@ export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps
 export type StateProps = {
   activeTab: number
   grading?: Grading
-  editorValue?: string
+  editorValue: string | null
   editorWidth: string
   isRunning: boolean
   output: InterpreterOutput[]
@@ -69,7 +69,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
    * occurs after the call to checkWorkspaceReset finishes.
    */
   public componentDidMount() {
-    this.checkWorkspaceReset(this.props)
     this.props.handleGradingFetch(this.props.submissionId)
   }
 
@@ -77,7 +76,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
    * After the Grading is fetched, there is a check for wether the
    * workspace needs to be udpated (a change in submissionId or questionId)
    */
-  public componentDidUpdate() {}
+  public componentDidUpdate() {
+    this.checkWorkspaceReset(this.props)
+  }
 
   public render() {
     if (this.props.grading === undefined) {
@@ -97,15 +98,18 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         : this.props.questionId
     /* Get the question to be graded */
     const question = this.props.grading[questionId].question as IQuestion
+    const editorValue =
+      question.type === QuestionTypes.programming
+        ? question.answer !== null
+          ? ((question as IProgrammingQuestion).answer as string)
+          : (question as IProgrammingQuestion).solutionTemplate
+        : null
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorValue:
-                this.props.editorValue !== undefined
-                  ? this.props.editorValue
-                  : (question as IProgrammingQuestion).solutionTemplate,
+              editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange
             }
@@ -150,12 +154,22 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       this.props.storedSubmissionId !== submissionId ||
       this.props.storedQuestionId !== questionId
     ) {
-      const chapter = this.props.grading[questionId].question.library.chapter
-      const externalName = this.props.grading[questionId].question.library.externalLibraryName
-      const externals = this.props.grading[questionId].question.library.externals
+      const question = this.props.grading[questionId].question as IQuestion
+      const chapter = question.library.chapter
+      const externalName = question.library.externalLibraryName
+      const externals = question.library.externals
+      const editorValue =
+        question.type === QuestionTypes.programming
+          ? question.answer !== null
+            ? ((question as IProgrammingQuestion).answer as string)
+            : (question as IProgrammingQuestion).solutionTemplate
+          : null
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
       this.props.handleResetWorkspace()
       this.props.handleClearContext(chapter, externals, externalName)
+      if (editorValue) {
+        this.props.handleEditorValueChange(editorValue)
+      }
     }
   }
 

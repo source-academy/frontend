@@ -89,6 +89,7 @@ const mockGrading: Grading = [
   {
     question: {
       // C is the answer
+      answer: 3,
       solution: 2,
       content:
         'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
