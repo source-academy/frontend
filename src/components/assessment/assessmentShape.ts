@@ -80,7 +80,6 @@ export type ExternalLibraryName = keyof typeof ExternalLibraryNames
 export type Library = {
   chapter: number
   externalLibraryName: ExternalLibraryName
-  files: string[]
   externals: string[]
-  globals: string[]
+  globals: Array<[string, any]>
 }
