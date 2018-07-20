@@ -87,7 +87,7 @@ const mockGlobals: Array<[string, any]> = [
   ['testBooleanFalse', false],
   ['testBooleanUndefined', undefined],
   ['testBooleanNull', null],
-  ['testObject', {'a': 1, 'b': 2}],
+  ['testObject', { a: 1, b: 2 }],
   ['testArray', [1, 2, 'a', 'b']]
 ]
 

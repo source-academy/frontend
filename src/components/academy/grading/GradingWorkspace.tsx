@@ -62,7 +62,6 @@ export type DispatchProps = {
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
-
   /**
    * After mounting (either an older copy of the grading
    * or a loading screen), try to fetch a newer grading.
