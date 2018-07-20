@@ -35,10 +35,13 @@ function* workspaceSaga(): SagaIterator {
     const externals: string[] = yield select(
       (state: IState) => state.workspaces[location].externals
     )
+    const globals: Array<[string, any]> = yield select(
+      (state: IState) => state.workspaces[location].globals
+    )
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
     /** Clear the context, with the same chapter and externals as before. */
-    yield put(actions.clearContext(chapter, externals, ExternalLibraryNames.NONE, location))
+    yield put(actions.clearContext(chapter, externals, globals, ExternalLibraryNames.NONE, location))
     yield put(actions.clearReplOutput(location))
     context = yield select((state: IState) => state.workspaces[location].context)
     yield* evalCode(code, context, location)
@@ -61,8 +64,11 @@ function* workspaceSaga(): SagaIterator {
     const externals: string[] = yield select(
       (state: IState) => state.workspaces[location].externals
     )
+    const globals: Array<[string, any]> = yield select(
+      (state: IState) => state.workspaces[location].globals
+    )
     if (newChapter !== oldChapter) {
-      yield put(actions.clearContext(newChapter, externals, ExternalLibraryNames.NONE, location))
+      yield put(actions.clearContext(newChapter, externals, globals, ExternalLibraryNames.NONE, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
     }
@@ -82,6 +88,9 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const chapter = yield select((state: IState) => state.workspaces[location].context.chapter)
+    const globals: Array<[string, any]> = yield select(
+      (state: IState) => state.workspaces[location].globals
+    )
     const newExternal = (action as actionTypes.IAction).payload.external
     const oldExternal = yield select(
       (state: IState) => state.workspaces.playground.playgroundExternal
@@ -89,7 +98,7 @@ function* workspaceSaga(): SagaIterator {
     if (newExternal !== oldExternal) {
       const externals = externalLibraries.get(newExternal)!
       yield put(actions.changePlaygroundExternal(newExternal))
-      yield put(actions.clearContext(chapter, externals, newExternal, location))
+      yield put(actions.clearContext(chapter, externals, globals, newExternal, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to ${newExternal} library`, 1000)
     }
@@ -113,6 +122,10 @@ function* workspaceSaga(): SagaIterator {
       case ExternalLibraryNames.CURVES:
         resetWebGl('curve')
         break
+    }
+    const globals: Array<[string, any]> = (action as actionTypes.IAction).payload.globals
+    for (const [key, value] of globals) {
+      window[key] = value
     }
     yield undefined
   })
