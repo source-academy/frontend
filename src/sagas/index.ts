@@ -29,6 +29,7 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const code: string = yield select((state: IState) => state.workspaces[location].editorValue)
+    alert(`saga: EVAL_EDITOR; location: ${location}; code: ${code}`)
     const chapter: number = yield select(
       (state: IState) => state.workspaces[location].context.chapter
     )

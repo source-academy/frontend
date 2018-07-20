@@ -52,6 +52,7 @@ function* backendSaga(): SagaIterator {
       const assessment = yield select((state: IState) =>
         state.session.assessments.get(assessmentId)
       )
+      alert(JSON.stringify(yield select((state: IState) => state.session.assessments)))
       const newQuestions = assessment.questions.slice().map((question: IQuestion) => {
         if (question.id === questionId) {
           question.answer = answer
@@ -76,10 +77,10 @@ function* backendSaga(): SagaIterator {
           errorMessage = `Something went wrong (got ${resp.status} response)`
           break
       }
-      yield call(showWarningMessage, errorMessage, 2000)
+      yield call(showWarningMessage, errorMessage)
     } else {
       // postAnswer returns null for failed fetch
-      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?", 2000)
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?")
     }
   })
 }

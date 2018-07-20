@@ -77,11 +77,14 @@ class AssessmentWorkspace extends React.Component<
    * occurs after the call to checkWorkspaceReset finishes.
    */
   public componentDidMount() {
-    this.checkWorkspaceReset(this.props)
     this.props.handleAssessmentFetch(this.props.assessmentId)
     if (this.props.questionId === 0) {
       this.setState({ showOverlay: true })
     }
+  }
+
+  public componentDidUpdate() {
+    this.checkWorkspaceReset(this.props)
   }
 
   public render() {
@@ -114,18 +117,11 @@ class AssessmentWorkspace extends React.Component<
         : this.props.questionId
     const question: IQuestion = this.props.assessment.questions[questionId]
     const editorValue =
-      this.props.editorValue !== null
-        ? this.props.editorValue
-        : question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IProgrammingQuestion).answer as string)
-            : (question as IProgrammingQuestion).solutionTemplate
-          : null
-    if (editorValue) {
-      // Update the editorValue in the state, or evaluating the editor will
-      // evaluate the default editorValue, which is null
-      this.props.handleEditorValueChange(editorValue)
-    }
+      question.type === QuestionTypes.programming
+        ? question.answer !== null
+          ? ((question as IProgrammingQuestion).answer as string)
+          : (question as IProgrammingQuestion).solutionTemplate
+        : null
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
@@ -162,8 +158,6 @@ class AssessmentWorkspace extends React.Component<
   /**
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
-   *
-   * @param props the props passed to the component
    */
   private checkWorkspaceReset(props: AssessmentWorkspaceProps) {
     /* Don't reset workspace if assessment not fetched yet. */
@@ -179,12 +173,22 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedAssessmentId !== assessmentId ||
       this.props.storedQuestionId !== questionId
     ) {
-      const chapter = this.props.assessment.questions[questionId].library.chapter
-      const externalName = this.props.assessment.questions[questionId].library.externalLibraryName
-      const externals = this.props.assessment.questions[questionId].library.externals
+      const question = this.props.assessment.questions[questionId]
+      const chapter = question.library.chapter
+      const externalName = question.library.externalLibraryName
+      const externals = question.library.externals
+      const editorValue =
+        question.type === QuestionTypes.programming
+          ? question.answer !== null
+            ? ((question as IProgrammingQuestion).answer as string)
+            : (question as IProgrammingQuestion).solutionTemplate
+          : null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace()
       this.props.handleClearContext(chapter, externals, externalName)
+      if (editorValue) {
+        this.props.handleEditorValueChange(editorValue)
+      }
     }
   }
 
