@@ -60,8 +60,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleClearContext: (
         chapter: number,
         externals: string[],
+        globals: Array<[string, any]>,
         externalLibraryName: ExternalLibraryName
-      ) => clearContext(chapter, externals, externalLibraryName, workspaceLocation),
+      ) => clearContext(chapter, externals, globals, externalLibraryName, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
