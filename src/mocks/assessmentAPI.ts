@@ -80,32 +80,43 @@ export const mockAssessmentOverviews = [
   ...mockClosedAssessmentOverviews
 ]
 
+const mockGlobals: Array<[string, any]> = [
+  ['testNumber', 3.141592653589793],
+  ['testString', 'who dat boi'],
+  ['testBooleanTrue', true],
+  ['testBooleanFalse', false],
+  ['testBooleanUndefined', undefined],
+  ['testBooleanNull', null],
+  ['testObject', {'a': 1, 'b': 2}],
+  ['testArray', [1, 2, 'a', 'b']]
+]
+
 const mockSoundLibrary: Library = {
   chapter: 1,
   externalLibraryName: ExternalLibraryNames.SOUND,
   externals: externalLibraries.get(ExternalLibraryNames.SOUND)!,
-  globals: []
+  globals: mockGlobals
 }
 
 export const mock2DRuneLibrary: Library = {
   chapter: 1,
   externalLibraryName: ExternalLibraryNames.TWO_DIM_RUNES,
   externals: externalLibraries.get(ExternalLibraryNames.TWO_DIM_RUNES)!,
-  globals: []
+  globals: mockGlobals
 }
 
 const mock3DRuneLibrary: Library = {
   chapter: 1,
   externalLibraryName: ExternalLibraryNames.THREE_DIM_RUNES,
   externals: externalLibraries.get(ExternalLibraryNames.THREE_DIM_RUNES)!,
-  globals: []
+  globals: mockGlobals
 }
 
 const mockCurveLibrary: Library = {
   chapter: 1,
   externalLibraryName: ExternalLibraryNames.CURVES,
   externals: externalLibraries.get(ExternalLibraryNames.CURVES)!,
-  globals: []
+  globals: mockGlobals
 }
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
