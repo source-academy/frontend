@@ -4,7 +4,12 @@ import { SourceError } from 'js-slang/dist/types'
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
 import { Announcement } from '../components/Announcements'
-import { ExternalLibraryName, ExternalLibraryNames, IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
+import {
+  ExternalLibraryName,
+  ExternalLibraryNames,
+  IAssessment,
+  IAssessmentOverview
+} from '../components/assessment/assessmentShape'
 import { HistoryHelper } from '../utils/history'
 import { createContext } from '../utils/slangHelper'
 
