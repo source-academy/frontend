@@ -14,7 +14,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
       <Blueprint2.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
     </Blueprint2.Card>
   </Blueprint2.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={[undefined]} editorWidth=\\"50%\\" handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} mcq={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={{...}} editorWidth=\\"50%\\" handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} mcq={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
 

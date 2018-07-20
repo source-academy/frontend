@@ -8,8 +8,10 @@ import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
+import { ExternalLibraryNames } from '../components/assessment/assessmentShape'
 import { mockBackendSaga } from '../mocks/backend'
-import { defaultEditorValue, externalLibraries, IState } from '../reducers/states'
+import { externalLibraries } from '../reducers/externalLibraries'
+import { defaultEditorValue, IState } from '../reducers/states'
 import { IVLE_KEY, USE_BACKEND } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import backendSaga from './backend'
@@ -36,7 +38,7 @@ function* workspaceSaga(): SagaIterator {
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
     /** Clear the context, with the same chapter and externals as before. */
-    yield put(actions.clearContext(chapter, externals, location))
+    yield put(actions.clearContext(chapter, externals, ExternalLibraryNames.NONE, location))
     yield put(actions.clearReplOutput(location))
     context = yield select((state: IState) => state.workspaces[location].context)
     yield* evalCode(code, context, location)
@@ -60,7 +62,7 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => state.workspaces[location].externals
     )
     if (newChapter !== oldChapter) {
-      yield put(actions.clearContext(newChapter, externals, location))
+      yield put(actions.clearContext(newChapter, externals, ExternalLibraryNames.NONE, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`)
     }
@@ -87,10 +89,32 @@ function* workspaceSaga(): SagaIterator {
     if (newExternal !== oldExternal) {
       const externals = externalLibraries.get(newExternal)!
       yield put(actions.changePlaygroundExternal(newExternal))
-      yield put(actions.clearContext(chapter, externals, location))
+      yield put(actions.clearContext(chapter, externals, newExternal, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to ${newExternal} library`)
     }
+  })
+
+  /**
+   * Handles the side effect of resetting the WebGL context when context is reset.
+   *
+   * @see clearContext and files under 'public/externalLibs/graphics'
+   */
+  yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
+    const externalLibraryName = (action as actionTypes.IAction).payload.externalLibraryName
+    const resetWebGl = (window as any).getReadyWebGLForCanvas
+    switch (externalLibraryName) {
+      case ExternalLibraryNames.TWO_DIM_RUNES:
+        resetWebGl('2d')
+        break
+      case ExternalLibraryNames.THREE_DIM_RUNES:
+        resetWebGl('3d')
+        break
+      case ExternalLibraryNames.CURVES:
+        resetWebGl('curve')
+        break
+    }
+    yield undefined
   })
 
   yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {

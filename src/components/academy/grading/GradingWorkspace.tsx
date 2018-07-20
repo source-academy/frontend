@@ -2,6 +2,7 @@ import { NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
+import { ExternalLibraryName } from '../../../components/assessment/assessmentShape'
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer'
 import { InterpreterOutput } from '../../../reducers/states'
 import { history } from '../../../utils/history'
@@ -41,7 +42,11 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (chapter: number, externals: string[]) => void
+  handleClearContext: (
+    chapter: number,
+    externals: string[],
+    externalLibraryName: ExternalLibraryName
+  ) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -56,10 +61,23 @@ export type DispatchProps = {
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
+  /**
+   * First, check for a need to reset the workspace,
+   * then fetch the grading. This works because a change in
+   * submissionId or questionId results in a navigation, causing
+   * this component to be mounted again. The handleGradingFetch
+   * occurs after the call to checkWorkspaceReset finishes.
+   */
   public componentDidMount() {
     this.checkWorkspaceReset(this.props)
     this.props.handleGradingFetch(this.props.submissionId)
   }
+
+  /**
+   * After the Grading is fetched, there is a check for wether the
+   * workspace needs to be udpated (a change in submissionId or questionId)
+   */
+  public componentDidUpdate() {}
 
   public render() {
     if (this.props.grading === undefined) {
@@ -133,10 +151,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       this.props.storedQuestionId !== questionId
     ) {
       const chapter = this.props.grading[questionId].question.library.chapter
+      const externalName = this.props.grading[questionId].question.library.externalLibraryName
       const externals = this.props.grading[questionId].question.library.externals
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
       this.props.handleResetWorkspace()
-      this.props.handleClearContext(chapter, externals)
+      this.props.handleClearContext(chapter, externals, externalName)
     }
   }
 

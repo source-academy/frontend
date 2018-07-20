@@ -10,6 +10,7 @@ import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
 import {
+  ExternalLibraryName,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -44,7 +45,11 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (chapter: number, externals: string[]) => void
+  handleClearContext: (
+    chapter: number,
+    externals: string[],
+    externalLibraryName: ExternalLibraryName
+  ) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -63,9 +68,15 @@ class AssessmentWorkspace extends React.Component<
 > {
   public state = { showOverlay: false }
 
+  /**
+   * First, check for a need to reset the workspace,
+   * then fetch the assessment. This works because a change in
+   * assessmentId or questionId results in a navigation, causing
+   * this component to be mounted again. The handleAssessmentFetch
+   * occurs after the call to checkWorkspaceReset finishes.
+   */
   public componentDidMount() {
     this.checkWorkspaceReset(this.props)
-    /* Load assessment if it isn't passed as a prop. */
     this.props.handleAssessmentFetch(this.props.assessmentId)
     if (this.props.questionId === 0) {
       this.setState({ showOverlay: true })
@@ -158,10 +169,11 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedQuestionId !== questionId
     ) {
       const chapter = this.props.assessment.questions[questionId].library.chapter
+      const externalName = this.props.assessment.questions[questionId].library.externalLibraryName
       const externals = this.props.assessment.questions[questionId].library.externals
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace()
-      this.props.handleClearContext(chapter, externals)
+      this.props.handleClearContext(chapter, externals, externalName)
     }
   }
 

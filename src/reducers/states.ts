@@ -4,7 +4,12 @@ import { SourceError } from 'js-slang/dist/types'
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
 import { Announcement } from '../components/Announcements'
-import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
+import {
+  ExternalLibraryName,
+  ExternalLibraryNames,
+  IAssessment,
+  IAssessmentOverview
+} from '../components/assessment/assessmentShape'
 import { HistoryHelper } from '../utils/history'
 import { createContext } from '../utils/slangHelper'
 
@@ -42,7 +47,7 @@ interface IGradingWorkspace extends IWorkspaceState {
 }
 
 interface IPlaygroundWorkspace extends IWorkspaceState {
-  readonly playgroundExternal: string
+  readonly playgroundExternal: ExternalLibraryName
 }
 
 export interface IWorkspaceManagerState {
@@ -142,56 +147,12 @@ export enum Role {
   Admin = 'admin'
 }
 
-/** Defines what chapters are available for usage. */
+/**
+ * Defines what chapters are available for usage.
+ * For external libraries, see externalLibraries.ts
+ */
 export const sourceChapters = [1, 2]
 const latestSourceChapter = sourceChapters.slice(-1)[0]
-
-/**
- * Defines which external libraries are available for usage.
- * TODO use constants
- * TODO move this to a file closer to the libraries
- */
-const libEntries: Array<[string, string[]]> = [
-  ['none', []],
-  [
-    'sound',
-    [
-      'make_sourcesound',
-      'get_wave',
-      'get_duration',
-      'is_sound',
-      'play',
-      'stop',
-      'cut_sourcesound',
-      'cut',
-      'sourcesound_to_sound',
-      'autocut_sourcesound',
-      'consecutively',
-      'simultaneously'
-    ]
-  ],
-  [
-    'runes',
-    [
-      'stack',
-      'stack_frac',
-      'quarter_turn_right • flip_horiz',
-      'flip_vert',
-      'turn_upside_down',
-      'quarter_turn_left • beside',
-      'make_cross',
-      'repeat_pattern',
-      'stackn',
-      'heart_bb',
-      'black_bb',
-      'blank_bb',
-      'circle_bb',
-      'pentagram_bb',
-      'show'
-    ]
-  ]
-]
-export const externalLibraries: Map<string, string[]> = new Map(libEntries)
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
@@ -254,7 +215,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
-    playgroundExternal: 'none'
+    playgroundExternal: ExternalLibraryNames.NONE
   }
 }
 

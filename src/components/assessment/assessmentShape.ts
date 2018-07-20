@@ -63,9 +63,21 @@ export enum QuestionTypes {
 }
 export type QuestionType = keyof typeof QuestionTypes
 
+/** Constants for external library names */
+export enum ExternalLibraryNames {
+  NONE = 'NONE',
+  TWO_DIM_RUNES = 'TWO_DIM_RUNES',
+  THREE_DIM_RUNES = 'THREE_DIM_RUNES',
+  CURVES = 'CURVES',
+  SOUND = 'SOUND'
+}
+
+export type ExternalLibraryName = keyof typeof ExternalLibraryNames
+
 export type Library = {
   chapter: number
-  externals: string[]
+  externalLibraryName: ExternalLibraryName
   files: string[]
+  externals: string[]
   globals: string[]
 }
