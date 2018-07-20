@@ -62,20 +62,18 @@ export type DispatchProps = {
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
+
   /**
-   * First, check for a need to reset the workspace,
-   * then fetch the grading. This works because a change in
-   * submissionId or questionId results in a navigation, causing
-   * this component to be mounted again. The handleGradingFetch
-   * occurs after the call to checkWorkspaceReset finishes.
+   * After mounting (either an older copy of the grading
+   * or a loading screen), try to fetch a newer grading.
    */
   public componentDidMount() {
     this.props.handleGradingFetch(this.props.submissionId)
   }
 
   /**
-   * After the Grading is fetched, there is a check for wether the
-   * workspace needs to be udpated (a change in submissionId or questionId)
+   * Once there is an update (due to the grading being fetched), check
+   * if a workspace reset is needed.
    */
   public componentDidUpdate() {
     this.checkWorkspaceReset(this.props)
