@@ -64,10 +64,18 @@ function* backendSaga(): SagaIterator {
       }
       yield put(actions.updateAssessment(newAssessment))
     } else if (resp !== null) {
-      const errorMessage =
-        resp.status === 403
-          ? 'Got 403 response. Only students can save assessment answers.'
-          : `Something went wrong (got ${resp.status} response)`
+      let errorMessage: string
+      switch (resp.status) {
+        case 403:
+          errorMessage = 'Got 403 response. Only students can save assessment answers.'
+          break
+        case 400:
+          errorMessage = "Can't save an empty answer."
+          break
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`
+          break
+      }
       yield call(showWarningMessage, errorMessage, 2000)
     } else {
       // postAnswer returns null for failed fetch
