@@ -2,8 +2,8 @@ import { NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
+import { ExternalLibraryName } from '../../../components/assessment/assessmentShape'
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer'
-import { ExternalLibraryName } from '../../../reducers/externalLibraries'
 import { InterpreterOutput } from '../../../reducers/states'
 import { history } from '../../../utils/history'
 import {

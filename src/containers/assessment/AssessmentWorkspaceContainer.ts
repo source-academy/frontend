@@ -22,12 +22,12 @@ import {
   updateCurrentAssessmentId,
   WorkspaceLocation
 } from '../../actions/workspaces'
+import { ExternalLibraryName } from '../../components/assessment/assessmentShape'
 import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
   StateProps
 } from '../../components/assessment/AssessmentWorkspace'
-import { ExternalLibraryName } from '../../reducers/externalLibraries'
 import { IState } from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {

@@ -1,3 +1,5 @@
+import { ExternalLibraryName, ExternalLibraryNames } from '../components/assessment/assessmentShape'
+
 /**
  * Defines all the externals for playground, i.e full access to runes functionality.
  */
@@ -42,17 +44,6 @@ const TwoDRunesExternals = [
   'pentagram_bb',
   'ribbon_bb'
 ]
-
-/** Constants for external library names */
-export enum ExternalLibraryNames {
-  NONE = 'NONE',
-  TWO_DIM_RUNES = 'TWO_DIM_RUNES',
-  THREE_DIM_RUNES = 'THREE_DIM_RUNES',
-  CURVES = 'CURVES',
-  SOUND = 'SOUND'
-}
-
-export type ExternalLibraryName = keyof typeof ExternalLibraryNames
 
 /**
  * Defines which external libraries are available for usage, and what

@@ -5,7 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { clearContext, updateEditorValue } from '../actions'
 import { WorkspaceLocations } from '../actions/workspaces'
 import Application, { IDispatchProps, IStateProps } from '../components/Application'
-import { ExternalLibraryNames } from '../reducers/externalLibraries'
+import { ExternalLibraryNames } from '../components/assessment/assessmentShape'
 import { IState } from '../reducers/states'
 
 /**

@@ -27,7 +27,7 @@ import GradingWorkspace, {
   OwnProps,
   StateProps
 } from '../../../components/academy/grading/GradingWorkspace'
-import { ExternalLibraryName } from '../../../reducers/externalLibraries'
+import { ExternalLibraryName } from '../../../components/assessment/assessmentShape'
 import { IState } from '../../../reducers/states'
 
 const workspaceLocation: WorkspaceLocation = 'grading'

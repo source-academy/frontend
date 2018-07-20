@@ -2,7 +2,6 @@ import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import { ExternalLibraryName } from '../../reducers/externalLibraries'
 import { InterpreterOutput } from '../../reducers/states'
 import { beforeNow } from '../../utils/dateHelpers'
 import { history } from '../../utils/history'
@@ -11,6 +10,7 @@ import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
 import {
+  ExternalLibraryName,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,

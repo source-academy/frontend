@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux'
 
-import { ExternalLibraryName } from '../reducers/externalLibraries'
+import { ExternalLibraryName } from '../components/assessment/assessmentShape'
 import * as actionTypes from './actionTypes'
 
 /**

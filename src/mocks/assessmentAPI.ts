@@ -1,12 +1,13 @@
 import {
   AssessmentCategories,
+  ExternalLibraryNames,
   IAssessment,
   IAssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
   Library
 } from '../components/assessment/assessmentShape'
-import { externalLibraries, ExternalLibraryNames } from '../reducers/externalLibraries'
+import { externalLibraries } from '../reducers/externalLibraries'
 
 const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {

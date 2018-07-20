@@ -1,5 +1,3 @@
-import { ExternalLibraryName } from '../../reducers/externalLibraries'
-
 /*
  * Used to display information regarding an assessment in the UI.
  */
@@ -64,6 +62,17 @@ export enum QuestionTypes {
   mcq = 'mcq'
 }
 export type QuestionType = keyof typeof QuestionTypes
+
+/** Constants for external library names */
+export enum ExternalLibraryNames {
+  NONE = 'NONE',
+  TWO_DIM_RUNES = 'TWO_DIM_RUNES',
+  THREE_DIM_RUNES = 'THREE_DIM_RUNES',
+  CURVES = 'CURVES',
+  SOUND = 'SOUND'
+}
+
+export type ExternalLibraryName = keyof typeof ExternalLibraryNames
 
 export type Library = {
   chapter: number
