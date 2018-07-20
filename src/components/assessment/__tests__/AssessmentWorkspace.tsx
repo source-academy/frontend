@@ -8,6 +8,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   activeTab: 0,
   assessmentId: 0,
   closeDate: '2048-06-18T05:24:26.026Z',
+  editorValue: null,
   editorWidth: '50%',
   handleAssessmentFetch: (assessmentId: number) => {},
   handleBrowseHistoryDown: () => {},

@@ -22,7 +22,7 @@ export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps
 export type StateProps = {
   activeTab: number
   grading?: Grading
-  editorValue?: string
+  editorValue: string | null
   editorWidth: string
   isRunning: boolean
   output: InterpreterOutput[]
@@ -97,15 +97,25 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         : this.props.questionId
     /* Get the question to be graded */
     const question = this.props.grading[questionId].question as IQuestion
+    const editorValue =
+      this.props.editorValue !== null
+        ? this.props.editorValue
+        : question.type === QuestionTypes.programming
+          ? question.answer !== null
+            ? ((question as IProgrammingQuestion).answer as string)
+            : (question as IProgrammingQuestion).solutionTemplate
+          : null
+    if (editorValue) {
+      // Update the editorValue in the state, or evaluating the editor will
+      // evaluate the default editorValue, which is null
+      this.props.handleEditorValueChange(editorValue)
+    }
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorValue:
-                this.props.editorValue !== undefined
-                  ? this.props.editorValue
-                  : (question as IProgrammingQuestion).solutionTemplate,
+              editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange
             }

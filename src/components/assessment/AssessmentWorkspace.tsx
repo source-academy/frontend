@@ -23,7 +23,7 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
 export type StateProps = {
   activeTab: number
   assessment?: IAssessment
-  editorValue?: string
+  editorValue: string | null
   editorWidth: string
   isRunning: boolean
   output: InterpreterOutput[]
@@ -114,16 +114,16 @@ class AssessmentWorkspace extends React.Component<
         : this.props.questionId
     const question: IQuestion = this.props.assessment.questions[questionId]
     const editorValue =
-      this.props.editorValue !== undefined
+      this.props.editorValue !== null
         ? this.props.editorValue
         : question.type === QuestionTypes.programming
-          ? this.props.assessment.questions[questionId].answer !== null
+          ? question.answer !== null
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
-          : undefined
+          : null
     if (editorValue) {
       // Update the editorValue in the state, or evaluating the editor will
-      // evaluate the default editorValue, which is undefined
+      // evaluate the default editorValue, which is null
       this.props.handleEditorValueChange(editorValue)
     }
     const workspaceProps: WorkspaceProps = {
