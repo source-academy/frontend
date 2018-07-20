@@ -45,6 +45,7 @@ export type DispatchProps = {
   handleClearContext: (
     chapter: number,
     externals: string[],
+    globals: Array<[string, any]>,
     externalLibraryName: ExternalLibraryName
   ) => void
   handleEditorEval: () => void
@@ -161,6 +162,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       const chapter = question.library.chapter
       const externalName = question.library.externalLibraryName
       const externals = question.library.externals
+      const globals = this.props.grading[questionId].question.library.globals
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
@@ -169,7 +171,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           : null
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
       this.props.handleResetWorkspace({ editorValue })
-      this.props.handleClearContext(chapter, externals, externalName)
+      this.props.handleClearContext(chapter, externals, globals, externalName)
     }
   }
 
