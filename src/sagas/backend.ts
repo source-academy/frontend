@@ -52,7 +52,6 @@ function* backendSaga(): SagaIterator {
       const assessment = yield select((state: IState) =>
         state.session.assessments.get(assessmentId)
       )
-      alert(JSON.stringify(yield select((state: IState) => state.session.assessments)))
       const newQuestions = assessment.questions.slice().map((question: IQuestion) => {
         if (question.id === questionId) {
           question.answer = answer
