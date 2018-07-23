@@ -7,7 +7,7 @@ import { WorkspaceLocation } from './workspaces'
 // is implemented completely
 export const handleConsoleLog = (
   logString: string,
-  workspaceLocation: WorkspaceLocation = 'assessment'
+  workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.HANDLE_CONSOLE_LOG,
   payload: { logString, workspaceLocation }
