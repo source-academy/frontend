@@ -1,6 +1,13 @@
 import { IState } from './reducers/states'
 import { HistoryHelper } from './utils/history'
 
+/**
+ * Note that the properties in this interface are a 
+ * subset of the properties in IState.session, so an instance
+ * of an object that implements this interface cannot 
+ * be used as a substitute for IState. Rather, it can be used 
+ * to complement defaultState.session with saved properties.
+ */
 export interface ISavedState {
   historyHelper: HistoryHelper
   accessToken?: string
