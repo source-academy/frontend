@@ -187,7 +187,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           context: createContext<WorkspaceLocation>(
             action.payload.chapter,
-            action.payload.externals
+            action.payload.externals,
+            location
           ),
           externals: action.payload.externals
         }
