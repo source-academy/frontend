@@ -1,4 +1,4 @@
-import { IState } from './reducers/states'
+import { IState, Role } from './reducers/states'
 import { HistoryHelper } from './utils/history'
 
 /**
@@ -12,6 +12,7 @@ export interface ISavedState {
   historyHelper: HistoryHelper
   accessToken?: string
   refreshToken?: string
+  role?: Role
   username?: string
 }
 
@@ -24,6 +25,7 @@ export const loadStoredState = (): ISavedState | undefined => {
       return JSON.parse(serializedState) as ISavedState
     }
   } catch (err) {
+    // Issue #143
     return undefined
   }
 }
@@ -34,6 +36,7 @@ export const saveState = (state: IState) => {
       accessToken: state.session.accessToken,
       historyHelper: state.session.historyHelper,
       refreshToken: state.session.refreshToken,
+      role: state.session.role,
       username: state.session.username
     }
     const serialized = JSON.stringify(stateToBeSaved)
