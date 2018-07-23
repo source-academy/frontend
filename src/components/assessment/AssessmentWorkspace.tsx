@@ -122,6 +122,10 @@ class AssessmentWorkspace extends React.Component<
           ? ((question as IProgrammingQuestion).answer as string)
           : (question as IProgrammingQuestion).solutionTemplate
         : null
+    const chosenMCQAnswer = 
+      question.type === QuestionTypes.mcq && question.answer !== null
+        ? ((question as IMCQQuestion).answer as number)
+        : null
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
@@ -136,6 +140,7 @@ class AssessmentWorkspace extends React.Component<
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcqProps: {
+        chosenOption: chosenMCQAnswer,
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
           this.props.handleSave(this.props.assessment!.questions[questionId].id, option)
