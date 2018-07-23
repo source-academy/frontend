@@ -138,10 +138,7 @@ class AssessmentWorkspace extends React.Component<
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
-          this.props.handleSave(
-            this.props.assessment!.questions[questionId].id,
-            option
-          )
+          this.props.handleSave(this.props.assessment!.questions[questionId].id, option)
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
