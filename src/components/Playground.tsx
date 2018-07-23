@@ -115,7 +115,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 }
 
-const SICP_SITE = 'http://www.comp.nus.edu.sg/~henz/sicp_js/'
+const SICP_SITE = 'https://www.comp.nus.edu.sg/~cs1101s/source/'
 const CHAP = '\xa7'
 const playgroundIntroduction: SideContentTab = {
   label: 'Introduction',
