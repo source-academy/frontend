@@ -5,10 +5,7 @@ import { WorkspaceLocation } from './workspaces'
 
 // TODO fix this immediately after location
 // is implemented completely
-export const handleConsoleLog = (
-  logString: string,
-  workspaceLocation: WorkspaceLocation
-) => ({
+export const handleConsoleLog = (logString: string, workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.HANDLE_CONSOLE_LOG,
   payload: { logString, workspaceLocation }
 })
