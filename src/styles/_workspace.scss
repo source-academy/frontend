@@ -240,6 +240,18 @@ $code-color-error: #ff4444;
 
       .resultOutput {
         color: $code-color-result;
+
+        .canvas-container {
+          display: flex;
+          padding: 0.5rem 0 0.5rem 0;
+          align-items: center;
+          justify-content: center;
+        }
+
+        canvas {
+          height: 20rem;
+          width: 20rem;
+        }
       }
 
       .errorOutput {
