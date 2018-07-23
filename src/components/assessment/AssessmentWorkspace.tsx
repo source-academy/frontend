@@ -135,7 +135,14 @@ class AssessmentWorkspace extends React.Component<
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      mcq: question as IMCQQuestion,
+      mcqProps: {
+        mcq: question as IMCQQuestion,
+        handleMCQSubmit: (option: number) =>
+          this.props.handleSave(
+            this.props.assessment!.questions[questionId].id,
+            option
+          )
+      },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {
