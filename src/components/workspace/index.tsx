@@ -140,7 +140,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     if (props.editorProps !== undefined) {
       return <Editor {...props.editorProps} />
     } else {
-      return <MCQChooser mcq={this.props.mcq!} />
+      return <MCQChooser mcq={this.props.mcq!} handleOptionSelect={props.controlBarProps.onClickSave!} />
     }
   }
 }

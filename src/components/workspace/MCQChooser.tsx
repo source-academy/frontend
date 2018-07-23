@@ -4,6 +4,7 @@ import * as React from 'react'
 import { IMCQQuestion } from '../assessment/assessmentShape'
 
 export interface IMCQChooserProps {
+  handleOptionSelect: (option: number) => void
   mcq: IMCQQuestion
   mcqSubmit?: (choiceId: number) => void
 }
