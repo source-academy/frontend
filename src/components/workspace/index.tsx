@@ -1,7 +1,6 @@
 import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
 
-import { IMCQQuestion } from '../assessment/assessmentShape'
 import ControlBar, { ControlBarProps } from './ControlBar'
 import Editor, { IEditorProps } from './Editor'
 import MCQChooser, { IMCQChooserProps } from './MCQChooser'
