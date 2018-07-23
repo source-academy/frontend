@@ -4,9 +4,8 @@ import * as React from 'react'
 import { IMCQQuestion } from '../assessment/assessmentShape'
 
 export interface IMCQChooserProps {
-  handleOptionSelect: (option: number) => void
   mcq: IMCQQuestion
-  mcqSubmit?: (choiceId: number) => void
+  handleMCQSubmit: (choiceId: number) => void
 }
 
 class MCQChooser extends React.PureComponent<IMCQChooserProps, {}> {
@@ -34,7 +33,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, {}> {
     )
   }
 
-  private onButtonClickFactory = (i: number) => (e: any) => this.props.handleOptionSelect(i)
+  private onButtonClickFactory = (i: number) => (e: any) => this.props.handleMCQSubmit(i)
 }
 
 export default MCQChooser
