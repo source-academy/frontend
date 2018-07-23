@@ -122,7 +122,7 @@ class AssessmentWorkspace extends React.Component<
           ? ((question as IProgrammingQuestion).answer as string)
           : (question as IProgrammingQuestion).solutionTemplate
         : null
-    const chosenMCQAnswer = 
+    const chosenMCQAnswer =
       question.type === QuestionTypes.mcq && question.answer !== null
         ? ((question as IMCQQuestion).answer as number)
         : null

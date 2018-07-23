@@ -22,7 +22,12 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
   }
   public render() {
     const options = this.props.mcq.choices.map((choice, i) => (
-      <Button key={i} className="mcq-option col-xs-6" active={i === this.state.mcqOption} onClick={this.onButtonClickFactory(i)} >
+      <Button
+        key={i}
+        className="mcq-option col-xs-6"
+        active={i === this.state.mcqOption}
+        onClick={this.onButtonClickFactory(i)}
+      >
         <Tooltip content={choice.hint}>
           <Text className="Text"> {choice.content} </Text>
         </Tooltip>
@@ -48,7 +53,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
    * A function to generate an onClick function that causes
    * and mcq submission with a given answer id.
    *
-   * Post-condition: the local state will be updated to store the 
+   * Post-condition: the local state will be updated to store the
    * mcq option selected.
    *
    * @param i the id of the answer
