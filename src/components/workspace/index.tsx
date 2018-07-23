@@ -4,18 +4,18 @@ import * as React from 'react'
 import { IMCQQuestion } from '../assessment/assessmentShape'
 import ControlBar, { ControlBarProps } from './ControlBar'
 import Editor, { IEditorProps } from './Editor'
-import MCQChooser from './MCQChooser'
+import MCQChooser, { IMCQChooserProps } from './MCQChooser'
 import Repl, { IReplProps } from './Repl'
 import SideContent, { SideContentProps } from './side-content'
 
 export type WorkspaceProps = {
-  // Either editorProps or mcq must be provided
+  // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps
   editorProps?: IEditorProps
   editorWidth: string
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
-  mcq?: IMCQQuestion
+  mcqProps?: IMCQChooserProps
   replProps: IReplProps
   sideContentHeight?: number
   sideContentProps: SideContentProps
@@ -140,7 +140,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     if (props.editorProps !== undefined) {
       return <Editor {...props.editorProps} />
     } else {
-      return <MCQChooser mcq={this.props.mcq!} handleOptionSelect={props.controlBarProps.onClickSave!} />
+      return <MCQChooser {...props.mcqProps!} />
     }
   }
 }
