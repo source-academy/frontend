@@ -78,7 +78,7 @@ function visualiseList(list: any) {}
  * provides the original function with the required
  * externalBuiltIns, such as display and prompt.
  */
-export function createContext<T>(chapter = 1, externals: string[] = [], externalContext?: T) {
+export function createContext<T>(chapter = 1, externals: string[] = [], externalContext: T) {
   const externalBuiltIns = {
     display,
     prompt: cadetPrompt,
