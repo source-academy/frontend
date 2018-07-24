@@ -2,6 +2,7 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import { mockAssessments } from '../../../mocks/assessmentAPI'
+import { Library} from '../assessmentShape'
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace'
 
 const defaultProps: AssessmentWorkspaceProps = {
@@ -15,7 +16,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleBrowseHistoryUp: () => {},
   handleChangeActiveTab: (activeTab: number) => {},
   handleChapterSelect: (chapter: any, changeEvent: any) => {},
-  handleClearContext: (chapter: number, externals: string[]) => {},
+  handleClearContext: (library: Library) => {},
   handleEditorEval: () => {},
   handleEditorValueChange: (val: string) => {},
   handleEditorWidthChange: (widthChange: number) => {},
