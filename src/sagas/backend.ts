@@ -39,13 +39,6 @@ function* backendSaga(): SagaIterator {
     const accessToken = yield select((state: IState) => state.session.accessToken)
     const id = (action as actionTypes.IAction).payload
     const assessment: IAssessment = yield call(getAssessment, id, accessToken)
-    // TODO remove parsing once backend/#162 is resolved.
-    assessment.questions = assessment.questions.map(q => {
-      if (q.type === 'mcq' && q.answer !== null) {
-        q.answer = parseInt(q.answer.toString(), 10)
-      }
-      return q
-    })
     yield put(actions.updateAssessment(assessment))
   })
 
