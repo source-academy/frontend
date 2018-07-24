@@ -70,7 +70,7 @@ const parsePlayground = (props: IApplicationProps) => {
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
   }
-  /** Changes the chapter, retains the externals. */
+  /** Changes the chapter, retains the external symbols. */
   if (lib) {
     props.handleClearContext(lib, props.currentPlaygroundExternalSymbols)
   }

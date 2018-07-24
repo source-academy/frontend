@@ -10,7 +10,7 @@ test('Application renders correctly', () => {
     title: 'Cadet',
     currentPlaygroundChapter: 2,
     currentPlaygroundExternalSymbols: [],
-    handleClearContext: (chapter: number, externals: string[]) => {},
+    handleClearContext: (chapter: number, externalSymbols: string[]) => {},
     handleEditorValueChange: (val: string) => {}
   }
   const app = <Application {...props} />
