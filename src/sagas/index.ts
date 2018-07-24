@@ -48,7 +48,7 @@ function* workspaceSaga(): SagaIterator {
     }
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
-    /** Clear the context, with the same chapter and externals as before. */
+    /** Clear the context, with the same chapter and externalSymbols as before. */
     yield put(
       actions.clearContext(library, location)
     )
@@ -72,8 +72,7 @@ function* workspaceSaga(): SagaIterator {
     const newChapter = (action as actionTypes.IAction).payload.chapter
     const oldChapter = yield select((state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter)
     const symbols: string[] = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).externals
-    )
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).externalSymbols)
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
     )
