@@ -9,7 +9,7 @@ test('Application renders correctly', () => {
     ...mockRouterProps('/academy', {}),
     title: 'Cadet',
     currentPlaygroundChapter: 2,
-    currentPlaygroundExternals: [],
+    currentPlaygroundExternalSymbols: [],
     handleClearContext: (chapter: number, externals: string[]) => {},
     handleEditorValueChange: (val: string) => {}
   }

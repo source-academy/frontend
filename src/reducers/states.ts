@@ -65,7 +65,7 @@ export interface IWorkspaceState {
   readonly replValue: string
   readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
-  readonly externals: string[]
+  readonly externalSymbols: string[]
   readonly globals: Array<[string, any]>
 }
 
@@ -196,7 +196,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   },
   replValue: '',
   sideContentActiveTab: 0,
-  externals: [],
+  externalSymbols: [],
   globals: []
 })
 

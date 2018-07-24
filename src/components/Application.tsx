@@ -19,7 +19,7 @@ export interface IStateProps {
   role?: Role
   username?: string
   currentPlaygroundChapter: number
-  currentPlaygroundExternals: string[]
+  currentPlaygroundExternalSymbols: string[]
 }
 
 export interface IDispatchProps {
@@ -72,7 +72,7 @@ const parsePlayground = (props: IApplicationProps) => {
   }
   /** Changes the chapter, retains the externals. */
   if (lib) {
-    props.handleClearContext(lib, props.currentPlaygroundExternals)
+    props.handleClearContext(lib, props.currentPlaygroundExternalSymbols)
   }
 }
 
