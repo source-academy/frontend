@@ -20,11 +20,22 @@ export type WorkspaceProps = {
   sideContentProps: SideContentProps
 }
 
-class Workspace extends React.Component<WorkspaceProps, {}> {
+type WorkspaceState = {
+  isUnsavedChanges: boolean
+}
+
+class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
   private editorDividerDiv: HTMLDivElement
   private leftParentResizable: Resizable
   private maxDividerHeight: number
   private sideDividerDiv: HTMLDivElement
+
+  constructor(props: WorkspaceProps) {
+    super(props)
+    this.state = {
+      isUnsavedChanges: true
+    }
+  }
 
   public componentDidMount() {
     this.maxDividerHeight = this.sideDividerDiv.clientHeight
@@ -39,7 +50,10 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   public render() {
     return (
       <div className="workspace">
-        <ControlBar {...this.props.controlBarProps} />
+        <ControlBar
+          {...this.props.controlBarProps}
+          isUnsavedChanges={this.state.isUnsavedChanges}
+        />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
           <Resizable {...this.editorResizableProps()}>{this.workspaceInput(this.props)}</Resizable>

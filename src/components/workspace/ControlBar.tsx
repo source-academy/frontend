@@ -1,4 +1,4 @@
-import { Button, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
+import { Button, Intent, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
@@ -7,6 +7,14 @@ import * as CopyToClipboard from 'react-copy-to-clipboard'
 import { externalLibraries } from '../../reducers/externalLibraries'
 import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
+
+/**
+ * FullControlBarProps is used to allow the higher order component workspace to
+ * pass it's state isUnsavedChanges as a prop to this ControlBar component.
+ * Components implementing the higher order component workspace do not need to
+ * concern themselves with OwnProps---they will use ControlBarProps instead.
+ */
+export type FullControlBarProps = ControlBarProps & OwnProps
 
 export type ControlBarProps = {
   hasChapterSelect: boolean
@@ -32,6 +40,10 @@ export type ControlBarProps = {
   onClickDone?(): any
 }
 
+export type OwnProps = {
+  isUnsavedChanges: boolean
+}
+
 interface IChapter {
   chapter: number
   displayName: string
@@ -48,7 +60,7 @@ interface IExternal {
   symbols: string[]
 }
 
-class ControlBar extends React.PureComponent<ControlBarProps, {}> {
+class ControlBar extends React.PureComponent<FullControlBarProps, {}> {
   public static defaultProps: Partial<ControlBarProps> = {
     hasChapterSelect: false,
     hasNextButton: false,
@@ -63,7 +75,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
 
   private shareInputElem: HTMLInputElement
 
-  constructor(props: ControlBarProps) {
+  constructor(props: FullControlBarProps) {
     super(props)
     this.selectShareInputText = this.selectShareInputText.bind(this)
   }
@@ -85,8 +97,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       </Tooltip>
     )
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval)
+    const saveButtonOpts = this.props.isUnsavedChanges
+      ? { intent: Intent.WARNING, minimal: false }
+      : {}
     const saveButton = this.props.hasSaveButton
-      ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
+      ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave, saveButtonOpts)
       : undefined
     const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
       this.props.queryString
