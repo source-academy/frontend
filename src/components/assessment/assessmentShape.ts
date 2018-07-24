@@ -77,9 +77,13 @@ export enum ExternalLibraryNames {
 
 export type ExternalLibraryName = keyof typeof ExternalLibraryNames
 
+type ExternalLibrary = {
+  name: ExternalLibraryName
+  symbols: string[]
+}
+
 export type Library = {
   chapter: number
-  externalLibraryName: ExternalLibraryName
-  externals: string[]
+  external: ExternalLibrary
   globals: Array<[string, any]>
 }
