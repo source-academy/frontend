@@ -14,6 +14,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  Library,
   QuestionTypes
 } from './assessmentShape'
 
@@ -175,10 +176,6 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedQuestionId !== questionId
     ) {
       const question = this.props.assessment.questions[questionId]
-      const chapter = question.library.chapter
-      const externalName = question.library.externalLibraryName
-      const externals = question.library.externals
-      const globals = this.props.assessment.questions[questionId].library.globals
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
@@ -187,7 +184,7 @@ class AssessmentWorkspace extends React.Component<
           : null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace({ editorValue })
-      this.props.handleClearContext(chapter, externals, globals, externalName)
+      this.props.handleClearContext(question.library)
     }
   }
 
