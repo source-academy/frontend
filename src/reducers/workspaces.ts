@@ -256,7 +256,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       }
     case LOG_OUT:
-      return defaultWorkspaceManager
+      // Preserve the playground workspace even after log out
+      const playgroundWorkspace = state.playground
+      return {
+        ...defaultWorkspaceManager,
+        playground: playgroundWorkspace
+      }
     case EVAL_EDITOR:
       // Forces re-render of workspace on editor eval
       return {
