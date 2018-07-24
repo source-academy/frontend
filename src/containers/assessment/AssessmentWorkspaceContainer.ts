@@ -29,7 +29,7 @@ import AssessmentWorkspace, {
   OwnProps,
   StateProps
 } from '../../components/assessment/AssessmentWorkspace'
-import { IState } from '../../reducers/states'
+import { IState, IWorkspaceState } from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
@@ -70,7 +70,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleResetWorkspace: () => resetWorkspace(workspaceLocation),
+      handleResetWorkspace: (options: Partial<IWorkspaceState>) => resetWorkspace(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),

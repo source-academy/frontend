@@ -28,7 +28,7 @@ import GradingWorkspace, {
   StateProps
 } from '../../../components/academy/grading/GradingWorkspace'
 import { ExternalLibraryName } from '../../../components/assessment/assessmentShape'
-import { IState } from '../../../reducers/states'
+import { IState, IWorkspaceState } from '../../../reducers/states'
 
 const workspaceLocation: WorkspaceLocation = 'grading'
 
@@ -69,7 +69,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleResetWorkspace: () => resetWorkspace(workspaceLocation),
+      handleResetWorkspace: (options: Partial<IWorkspaceState>) => resetWorkspace(workspaceLocation, options),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleUpdateCurrentSubmissionId: updateCurrentSubmissionId
