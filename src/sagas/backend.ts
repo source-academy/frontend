@@ -1,13 +1,11 @@
+/*eslint no-eval: "error"*/
+/*eslint-env browser*/
 import { delay, SagaIterator } from 'redux-saga'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
-import {
-  IAssessment,
-  IAssessmentOverview,
-  IQuestion
-} from '../components/assessment/assessmentShape'
+import { AssessmentCategory, ExternalLibraryName, IAssessment, IAssessmentOverview, IQuestion } from '../components/assessment/assessmentShape'
 import { IState } from '../reducers/states'
 import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
@@ -122,9 +120,25 @@ const getAssessmentOverviews = async (accessToken: string) => {
  * @returns {IAssessment}
  */
 const getAssessment = async (id: number, accessToken: string) => {
-  const assessment: any = await authorizedGet(`assessments/${id}`, accessToken)
-  assessment.category = capitalise(assessment.type)
-  delete assessment.type
+  const assessmentResult: any = await authorizedGet(`assessments/${id}`, accessToken)
+  const assessment = assessmentResult as IAssessment
+  /** Fix type -> category */
+  assessment.category = capitalise(assessmentResult.type) as AssessmentCategory
+  delete assessmentResult.type
+  assessment.questions = assessment.questions.map(q => {
+    /** Make library.external.name uppercase */
+    q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName
+    /** Make globals into an Array of (string, value) */
+    q.library.globals = Object
+      .entries(q.library.globals as object)
+      .map(entry => {
+        try {
+          entry[1] = (window as any).eval(entry[1])
+        } catch(e) {}
+        return entry
+      })
+    return q
+  })
   return assessment
 }
 
