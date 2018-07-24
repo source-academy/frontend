@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { ExternalLibraryName } from '../../../components/assessment/assessmentShape'
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer'
-import { InterpreterOutput } from '../../../reducers/states'
+import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states'
 import { history } from '../../../utils/history'
 import {
   IMCQQuestion,
@@ -55,7 +55,7 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
-  handleResetWorkspace: () => void
+  handleResetWorkspace: (options: Partial<IWorkspaceState>) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
 }

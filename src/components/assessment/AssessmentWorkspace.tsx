@@ -2,7 +2,7 @@ import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import { InterpreterOutput } from '../../reducers/states'
+import { InterpreterOutput, IWorkspaceState } from '../../reducers/states'
 import { beforeNow } from '../../utils/dateHelpers'
 import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
@@ -57,7 +57,7 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
-  handleResetWorkspace: () => void
+  handleResetWorkspace: (options: Partial<IWorkspaceState>) => void
   handleSave: (id: number, answer: number | string) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
@@ -186,18 +186,18 @@ class AssessmentWorkspace extends React.Component<
       const chapter = question.library.chapter
       const externalName = question.library.externalLibraryName
       const externals = question.library.externals
-      const editorValue =
-        question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IProgrammingQuestion).answer as string)
-            : (question as IProgrammingQuestion).solutionTemplate
-          : null
+      // const editorValue =
+      //   question.type === QuestionTypes.programming
+      //     ? question.answer !== null
+      //       ? ((question as IProgrammingQuestion).answer as string)
+      //       : (question as IProgrammingQuestion).solutionTemplate
+      //     : null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace()
       this.props.handleClearContext(chapter, externals, externalName)
-      if (editorValue) {
-        this.props.handleEditorValueChange(editorValue)
-      }
+      // if (editorValue) {
+      //   this.props.handleEditorValueChange(editorValue)
+      // }
     }
   }
 
