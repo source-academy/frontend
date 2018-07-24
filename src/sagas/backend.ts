@@ -3,7 +3,11 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
-import { IAssessment, IAssessmentOverview, IQuestion } from '../components/assessment/assessmentShape'
+import {
+  IAssessment,
+  IAssessmentOverview,
+  IQuestion
+} from '../components/assessment/assessmentShape'
 import { IState } from '../reducers/states'
 import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
@@ -36,13 +40,12 @@ function* backendSaga(): SagaIterator {
     const id = (action as actionTypes.IAction).payload
     const assessment: IAssessment = yield call(getAssessment, id, accessToken)
     // TODO remove parsing once backend/#162 is resolved.
-    assessment.questions = assessment.questions
-      .map(q => {
-        if (q.type === 'mcq' && q.answer !== null) {
-          q.answer = parseInt(q.answer.toString(), 10)
-        }
-        return q
-      })
+    assessment.questions = assessment.questions.map(q => {
+      if (q.type === 'mcq' && q.answer !== null) {
+        q.answer = parseInt(q.answer.toString(), 10)
+      }
+      return q
+    })
     yield put(actions.updateAssessment(assessment))
   })
 
