@@ -41,7 +41,13 @@ function createStore(history: History): Store<IState> {
           ...defaultState,
           session: {
             ...defaultState.session,
-            ...loadedStore
+            ...loadedStore.session
+          },
+          workspaces: {
+            ...defaultState.workspaces,
+            playground: loadedStore.playgroundWorkspace
+              ? loadedStore.playgroundWorkspace
+              : defaultState.workspaces.playground
           }
         }
   const createdStore = _createStore<IState>(rootReducer, initialStore, enchancers)

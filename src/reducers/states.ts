@@ -46,7 +46,7 @@ interface IGradingWorkspace extends IWorkspaceState {
   readonly gradingXP: number | undefined
 }
 
-interface IPlaygroundWorkspace extends IWorkspaceState {
+export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName
 }
 
