@@ -23,7 +23,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-  handleClearContext: (chapter: number, externals: string[]) => void
+  handleClearContext: (chapter: number, symbols: string[]) => void
   handleEditorValueChange: (val: string) => void
 }
 
