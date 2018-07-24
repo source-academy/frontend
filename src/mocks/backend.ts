@@ -3,8 +3,12 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
+import {
+  IQuestion
+} from '../components/assessment/assessmentShape'
 import { IState } from '../reducers/states'
 import { history } from '../utils/history'
+import { showSuccessMessage } from '../utils/notification'
 import { mockAssessmentOverviews, mockAssessments } from './assessmentAPI'
 import { mockFetchGrading, mockFetchGradingOverview } from './gradingAPI'
 
@@ -49,5 +53,29 @@ export function* mockBackendSaga(): SagaIterator {
     if (grading !== null) {
       yield put(actions.updateGrading(submissionId, [...grading]))
     }
+  })
+
+  yield takeEvery(actionTypes.SUBMIT_ANSWER, function*(action) {
+    const questionId = (action as actionTypes.IAction).payload.id
+    const answer = (action as actionTypes.IAction).payload.answer
+    // Now, update the answer for the question in the assessment in the store
+    const assessmentId = yield select(
+      (state: IState) => state.workspaces.assessment.currentAssessment!
+    )
+    const assessment = yield select((state: IState) =>
+      state.session.assessments.get(assessmentId)
+    )
+    const newQuestions = assessment.questions.slice().map((question: IQuestion) => {
+      if (question.id === questionId) {
+        question.answer = answer
+      }
+      return question
+    })
+    const newAssessment = {
+      ...assessment,
+      questions: newQuestions
+    }
+    yield put(actions.updateAssessment(newAssessment))
+    yield call(showSuccessMessage, 'Saved!', 1000)
   })
 }
