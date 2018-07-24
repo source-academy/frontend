@@ -34,14 +34,17 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
        * and that ExternalLibraryNames.NONE is used (as URL library support is not ready yet).
        */
       handleClearContext: (chapter: number, symbols: string[]) =>
-      clearContext({
-        chapter,
-        external: {
-          name: ExternalLibraryNames.NONE,
-          symbols
-        },
-        globals: []
-        }, workspaceLocation),
+        clearContext(
+          {
+            chapter,
+            external: {
+              name: ExternalLibraryNames.NONE,
+              symbols
+            },
+            globals: []
+          },
+          workspaceLocation
+        ),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation)
     },
     dispatch

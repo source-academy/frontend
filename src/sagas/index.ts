@@ -28,7 +28,9 @@ function* workspaceSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
-    const code: string = yield select((state: IState) => (state.workspaces[location] as IWorkspaceState).editorValue)
+    const code: string = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).editorValue
+    )
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
     )
@@ -39,55 +41,60 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
     )
     const library = {
-      chapter, 
+      chapter,
       external: {
-        name: ExternalLibraryNames.NONE, 
-        symbols,
+        name: ExternalLibraryNames.NONE,
+        symbols
       },
       globals
     }
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
     /** Clear the context, with the same chapter and externalSymbols as before. */
-    yield put(
-      actions.clearContext(library, location)
-    )
+    yield put(actions.clearContext(library, location))
     yield put(actions.clearReplOutput(location))
-    context = yield select((state: IState) => (state.workspaces[location] as IWorkspaceState).context)
+    context = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+    )
     yield* evalCode(code, context, location)
   })
 
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
-    const code: string = yield select((state: IState) => (state.workspaces[location] as IWorkspaceState).replValue)
+    const code: string = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).replValue
+    )
     yield put(actions.beginInterruptExecution(location))
     yield put(actions.clearReplInput(location))
     yield put(actions.sendReplInputToOutput(code, location))
-    context = yield select((state: IState) => (state.workspaces[location] as IWorkspaceState).context)
+    context = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+    )
     yield* evalCode(code, context, location)
   })
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const newChapter = (action as actionTypes.IAction).payload.chapter
-    const oldChapter = yield select((state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter)
+    const oldChapter = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
+    )
     const symbols: string[] = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).externalSymbols)
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).externalSymbols
+    )
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
     )
     if (newChapter !== oldChapter) {
       const library = {
-        chapter: newChapter, 
+        chapter: newChapter,
         external: {
-          name: ExternalLibraryNames.NONE, 
-          symbols,
+          name: ExternalLibraryNames.NONE,
+          symbols
         },
         globals
       }
-      yield put(
-        actions.clearContext(library, location)
-      )
+      yield put(actions.clearContext(library, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
     }
@@ -106,7 +113,9 @@ function* workspaceSaga(): SagaIterator {
    */
   yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
-    const chapter = yield select((state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter)
+    const chapter = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
+    )
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
     )
@@ -116,14 +125,14 @@ function* workspaceSaga(): SagaIterator {
     )
     const symbols = externalLibraries.get(newExternalLibraryName)!
     const library = {
-      chapter, 
+      chapter,
       external: {
-        name: newExternalLibraryName, 
-        symbols,
+        name: newExternalLibraryName,
+        symbols
       },
       globals
     }
-    if (newExternalLibraryName!== oldExternalLibraryName) {
+    if (newExternalLibraryName !== oldExternalLibraryName) {
       yield put(actions.changePlaygroundExternal(newExternalLibraryName))
       yield put(actions.clearContext(library, location))
       yield put(actions.clearReplOutput(location))

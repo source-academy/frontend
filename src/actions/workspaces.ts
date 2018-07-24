@@ -99,10 +99,7 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
  *
  * @see Library in assessmentShape.ts
  */
-export const clearContext = (
-  library: Library,
-  workspaceLocation: WorkspaceLocation
-) => ({
+export const clearContext = (library: Library, workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.CLEAR_CONTEXT,
   payload: {
     library,

@@ -2,7 +2,7 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import { mockAssessments } from '../../../mocks/assessmentAPI'
-import { Library} from '../assessmentShape'
+import { Library } from '../assessmentShape'
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace'
 
 const defaultProps: AssessmentWorkspaceProps = {
