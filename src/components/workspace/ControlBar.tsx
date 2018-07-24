@@ -18,7 +18,7 @@ export type ControlBarProps = {
   isRunning: boolean
   queryString?: string
   sourceChapter: number
-  externalLibrary?: string
+  externalLibraryName?: string
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
@@ -120,8 +120,8 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined
     const externalSelectButton =
-      this.props.hasChapterSelect && this.props.externalLibrary !== undefined
-        ? externalSelect(this.props.externalLibrary, this.props.handleExternalSelect)
+      this.props.hasChapterSelect && this.props.externalLibraryName !== undefined
+        ? externalSelect(this.props.externalLibraryName, this.props.handleExternalSelect)
         : undefined
     return (
       <div className="ControlBar_editor pt-button-group">

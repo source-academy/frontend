@@ -2,6 +2,7 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import { mockRouterProps } from '../../mocks/components'
+import { ExternalLibraryNames } from '../assessment/assessmentShape'
 import Playground, { IPlaygroundProps } from '../Playground'
 
 const baseProps = {
@@ -11,8 +12,7 @@ const baseProps = {
   editorWidth: '50%',
   sideContentHeight: 40,
   sourceChapter: 2,
-  /** TODO use constant value */
-  externalLibrary: 'none',
+  externalLibraryName: ExternalLibraryNames.NONE,
   output: [],
   replValue: '',
   handleBrowseHistoryDown: () => {},
