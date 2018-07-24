@@ -70,7 +70,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleResetWorkspace: (options: Partial<IWorkspaceState>) => resetWorkspace(workspaceLocation, options),
+      handleResetWorkspace: (options: Partial<IWorkspaceState>) =>
+        resetWorkspace(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),

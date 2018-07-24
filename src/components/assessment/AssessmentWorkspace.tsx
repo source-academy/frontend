@@ -193,7 +193,7 @@ class AssessmentWorkspace extends React.Component<
             : (question as IProgrammingQuestion).solutionTemplate
           : null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
-      this.props.handleResetWorkspace({editorValue})
+      this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(chapter, externals, externalName)
     }
   }
@@ -237,8 +237,9 @@ class AssessmentWorkspace extends React.Component<
       hasDoneButton: questionId === this.props.assessment!.questions.length - 1,
       hasNextButton: questionId < this.props.assessment!.questions.length - 1,
       hasPreviousButton: questionId > 0,
-      hasSaveButton: !beforeNow(this.props.closeDate) 
-        && this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ,
+      hasSaveButton:
+        !beforeNow(this.props.closeDate) &&
+        this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
       hasShareButton: false,
       isRunning: this.props.isRunning,
       onClickDone: () => history.push(listingPath),

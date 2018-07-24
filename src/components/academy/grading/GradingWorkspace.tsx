@@ -173,7 +173,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             : (question as IProgrammingQuestion).solutionTemplate
           : null
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
-      this.props.handleResetWorkspace({editorValue})
+      this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(chapter, externals, externalName)
     }
   }

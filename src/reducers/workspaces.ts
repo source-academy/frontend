@@ -338,7 +338,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
     /**
      * Resets the workspace to default settings,
-     * including the js-slang Context. Apply 
+     * including the js-slang Context. Apply
      * any specified settings (workspaceOptions)
      */
     case RESET_WORKSPACE:
