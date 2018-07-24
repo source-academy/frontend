@@ -32,17 +32,25 @@ function* workspaceSaga(): SagaIterator {
     const chapter: number = yield select(
       (state: IState) => state.workspaces[location].context.chapter
     )
-    const externals: string[] = yield select(
+    const symbols: string[] = yield select(
       (state: IState) => state.workspaces[location].externals
     )
     const globals: Array<[string, any]> = yield select(
       (state: IState) => state.workspaces[location].globals
     )
+    const library = {
+      chapter, 
+      external: {
+        name: ExternalLibraryNames.NONE, 
+        symbols,
+      },
+      globals
+    }
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
     /** Clear the context, with the same chapter and externals as before. */
     yield put(
-      actions.clearContext(chapter, externals, globals, ExternalLibraryNames.NONE, location)
+      actions.clearContext(library, location)
     )
     yield put(actions.clearReplOutput(location))
     context = yield select((state: IState) => state.workspaces[location].context)
@@ -63,15 +71,23 @@ function* workspaceSaga(): SagaIterator {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const newChapter = (action as actionTypes.IAction).payload.chapter
     const oldChapter = yield select((state: IState) => state.workspaces[location].context.chapter)
-    const externals: string[] = yield select(
+    const symbols: string[] = yield select(
       (state: IState) => state.workspaces[location].externals
     )
     const globals: Array<[string, any]> = yield select(
       (state: IState) => state.workspaces[location].globals
     )
     if (newChapter !== oldChapter) {
+      const library = {
+        chapter: newChapter, 
+        external: {
+          name: ExternalLibraryNames.NONE, 
+          symbols,
+        },
+        globals
+      }
       yield put(
-        actions.clearContext(newChapter, externals, globals, ExternalLibraryNames.NONE, location)
+        actions.clearContext(library, location)
       )
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
@@ -95,16 +111,24 @@ function* workspaceSaga(): SagaIterator {
     const globals: Array<[string, any]> = yield select(
       (state: IState) => state.workspaces[location].globals
     )
-    const newExternal = (action as actionTypes.IAction).payload.external
-    const oldExternal = yield select(
+    const newExternalLibraryName = (action as actionTypes.IAction).payload.external
+    const oldExternalLibraryName = yield select(
       (state: IState) => state.workspaces.playground.playgroundExternal
     )
-    if (newExternal !== oldExternal) {
-      const externals = externalLibraries.get(newExternal)!
-      yield put(actions.changePlaygroundExternal(newExternal))
-      yield put(actions.clearContext(chapter, externals, globals, newExternal, location))
+    const symbols = externalLibraries.get(newExternalLibraryName)!
+    const library = {
+      chapter, 
+      external: {
+        name: newExternalLibraryName, 
+        symbols,
+      },
+      globals
+    }
+    if (newExternalLibraryName!== oldExternalLibraryName) {
+      yield put(actions.changePlaygroundExternal(newExternalLibraryName))
+      yield put(actions.clearContext(library, location))
       yield put(actions.clearReplOutput(location))
-      yield call(showSuccessMessage, `Switched to ${newExternal} library`, 1000)
+      yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
     }
   })
 
@@ -114,7 +138,7 @@ function* workspaceSaga(): SagaIterator {
    * @see clearContext and files under 'public/externalLibs/graphics'
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
-    const externalLibraryName = (action as actionTypes.IAction).payload.externalLibraryName
+    const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
     const resetWebGl = (window as any).getReadyWebGLForCanvas
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:
@@ -127,7 +151,7 @@ function* workspaceSaga(): SagaIterator {
         resetWebGl('curve')
         break
     }
-    const globals: Array<[string, any]> = (action as actionTypes.IAction).payload.globals
+    const globals: Array<[string, any]> = (action as actionTypes.IAction).payload.library.globals
     for (const [key, value] of globals) {
       window[key] = value
     }
