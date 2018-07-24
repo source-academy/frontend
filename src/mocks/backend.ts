@@ -3,9 +3,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
-import {
-  IQuestion
-} from '../components/assessment/assessmentShape'
+import { IQuestion } from '../components/assessment/assessmentShape'
 import { IState } from '../reducers/states'
 import { history } from '../utils/history'
 import { showSuccessMessage } from '../utils/notification'
@@ -62,9 +60,7 @@ export function* mockBackendSaga(): SagaIterator {
     const assessmentId = yield select(
       (state: IState) => state.workspaces.assessment.currentAssessment!
     )
-    const assessment = yield select((state: IState) =>
-      state.session.assessments.get(assessmentId)
-    )
+    const assessment = yield select((state: IState) => state.session.assessments.get(assessmentId))
     const newQuestions = assessment.questions.slice().map((question: IQuestion) => {
       if (question.id === questionId) {
         question.answer = answer
