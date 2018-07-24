@@ -1,6 +1,7 @@
 import { ActionCreator } from 'redux'
 
 import { ExternalLibraryName } from '../components/assessment/assessmentShape'
+import { IWorkspaceState } from '../reducers/states'
 import * as actionTypes from './actionTypes'
 
 /**
@@ -161,12 +162,23 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 })
 
-export const resetWorkspace = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.RESET_WORKSPACE,
-  payload: {
-    workspaceLocation
-  }
-})
+/**
+ * Resets a workspace to its default properties.
+ *
+ * @param workspaceLocation the workspace to be reset
+ * @param workspaceOptions an object with any number of properties
+ *   in IWorkspaceState, that will take precedence over the default 
+ *   values. For example, one can use this to specify a particular
+ *   editorValue.
+ */
+export const resetWorkspace = (workspaceLocation: WorkspaceLocation, 
+  workspaceOptions?: Partial<IWorkspaceState>) => ({
+    type: actionTypes.RESET_WORKSPACE,
+    payload: {
+      workspaceLocation,
+      workspaceOptions
+    }
+  })
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
   type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
