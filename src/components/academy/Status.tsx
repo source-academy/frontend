@@ -34,7 +34,10 @@ const StatusPopover = (props: StatusProps) => (
       <Text>
         <h4>{`Source Academy, ${titleCase(props.role)}`}</h4>
       </Text>
-      {controlButton('', IconNames.LOG_OUT, props.handleLogOut)}
+      {controlButton('Log Out', IconNames.LOG_OUT, props.handleLogOut, {
+        minimal: false,
+        iconOnRight: true
+      })}
     </div>
   </Popover>
 )
