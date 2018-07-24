@@ -8,6 +8,7 @@ import { controlButton } from '../commons'
 type StatusProps = OwnProps
 
 type OwnProps = {
+  handleLogOut: () => void
   username: string
   role: Role
 }
@@ -33,7 +34,7 @@ const StatusPopover = (props: StatusProps) => (
       <Text>
         <h4>{`Source Academy, ${titleCase(props.role)}`}</h4>
       </Text>
-      {controlButton('', IconNames.LOG_OUT, () => {})}
+      {controlButton('', IconNames.LOG_OUT, props.handleLogOut)}
     </div>
   </Popover>
 )

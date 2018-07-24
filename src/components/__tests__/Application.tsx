@@ -10,8 +10,9 @@ test('Application renders correctly', () => {
     title: 'Cadet',
     currentPlaygroundChapter: 2,
     currentPlaygroundExternalSymbols: [],
-    handleClearContext: (chapter: number, externalSymbols: string[]) => {},
-    handleEditorValueChange: (val: string) => {}
+    handleClearContext: (chapter: number, externals: string[]) => {},
+    handleEditorValueChange: (val: string) => {},
+    handleLogOut: () => {}
   }
   const app = <Application {...props} />
   const tree = shallow(app)

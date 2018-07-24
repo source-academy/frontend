@@ -5,11 +5,20 @@ import { shallow } from 'enzyme'
 import NavigationBar from '../NavigationBar'
 
 test('NavigationBar renders "Not logged in" correctly', () => {
-  const tree = shallow(<NavigationBar title="Cadet" />)
+  const props = {
+    handleLogOut: () => {},
+    title: 'Source Academy'
+  }
+  const tree = shallow(<NavigationBar {...props} />)
   expect(tree.debug()).toMatchSnapshot()
 })
 
 test('NavigationBar renders correctly with username', () => {
-  const tree = shallow(<NavigationBar title="Cadet" username="Evis Rucer" />)
+  const props = {
+    handleLogOut: () => {},
+    title: 'Source Academy',
+    username: 'Evis Rucer'
+  }
+  const tree = shallow(<NavigationBar {...props} />)
   expect(tree.debug()).toMatchSnapshot()
 })
