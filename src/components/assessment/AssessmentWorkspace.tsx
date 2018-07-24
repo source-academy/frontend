@@ -186,14 +186,14 @@ class AssessmentWorkspace extends React.Component<
       const chapter = question.library.chapter
       const externalName = question.library.externalLibraryName
       const externals = question.library.externals
-      // const editorValue =
-      //   question.type === QuestionTypes.programming
-      //     ? question.answer !== null
-      //       ? ((question as IProgrammingQuestion).answer as string)
-      //       : (question as IProgrammingQuestion).solutionTemplate
-      //     : null
+      const editorValue =
+        question.type === QuestionTypes.programming
+          ? question.answer !== null
+            ? ((question as IProgrammingQuestion).answer as string)
+            : (question as IProgrammingQuestion).solutionTemplate
+          : null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
-      this.props.handleResetWorkspace()
+      this.props.handleResetWorkspace({editorValue})
       this.props.handleClearContext(chapter, externals, externalName)
       // if (editorValue) {
       //   this.props.handleEditorValueChange(editorValue)
