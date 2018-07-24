@@ -111,7 +111,7 @@ function* workspaceSaga(): SagaIterator {
     const globals: Array<[string, any]> = yield select(
       (state: IState) => state.workspaces[location].globals
     )
-    const newExternalLibraryName = (action as actionTypes.IAction).payload.external
+    const newExternalLibraryName = (action as actionTypes.IAction).payload.externalLibraryName
     const oldExternalLibraryName = yield select(
       (state: IState) => state.workspaces.playground.playgroundExternal
     )

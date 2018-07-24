@@ -86,7 +86,7 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
   payload: {
-    external: external.displayName,
+    externalLibraryName: external.displayName,
     workspaceLocation
   }
 })
