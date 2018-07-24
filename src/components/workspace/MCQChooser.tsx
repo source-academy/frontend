@@ -4,7 +4,6 @@ import * as React from 'react'
 import { IMCQQuestion } from '../assessment/assessmentShape'
 
 export interface IMCQChooserProps {
-  chosenOption: number | null
   mcq: IMCQQuestion
   handleMCQSubmit: (choiceId: number) => void
 }
@@ -17,7 +16,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
   constructor(props: IMCQChooserProps) {
     super(props)
     this.state = {
-      mcqOption: props.chosenOption
+      mcqOption: props.mcq.answer
     }
   }
   public render() {
