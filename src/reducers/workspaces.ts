@@ -17,6 +17,7 @@ import {
   EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
+  LOG_OUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_CURRENT_ASSESSMENT_ID,
@@ -254,6 +255,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           output: newOutput
         }
       }
+    case LOG_OUT:
+      return defaultWorkspaceManager
     case EVAL_EDITOR:
       // Forces re-render of workspace on editor eval
       return {

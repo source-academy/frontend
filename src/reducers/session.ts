@@ -2,6 +2,7 @@ import { Reducer } from 'redux'
 
 import {
   IAction,
+  LOG_OUT,
   SET_ROLE,
   SET_TOKENS,
   SET_USERNAME,
@@ -15,6 +16,8 @@ import { defaultSession, ISessionState } from './states'
 
 export const reducer: Reducer<ISessionState> = (state = defaultSession, action: IAction) => {
   switch (action.type) {
+    case LOG_OUT:
+      return defaultSession
     case SET_ROLE:
       return {
         ...state,

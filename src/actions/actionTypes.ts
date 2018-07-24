@@ -7,6 +7,9 @@ export interface IAction extends ReduxAction {
 /** Academy */
 export const SAVE_CANVAS = 'SAVE_CANVAS'
 
+/** Commons (used by many) */
+export const LOG_OUT = 'LOG_OUT'
+
 /** Playground */
 export const CHANGE_QUERY_STRING = 'CHANGE_QUERY_STRING'
 export const GENERATE_LZ_STRING = 'GENERATE_LZ_STRING'
