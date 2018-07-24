@@ -124,7 +124,9 @@ class AssessmentWorkspace extends React.Component<
         : null
     const chosenMCQAnswer =
       question.type === QuestionTypes.mcq && question.answer !== null
-        ? ((question as IMCQQuestion).answer as number)
+        // TODO remove parsing once backend/#162 is resolved
+        // previously: (question as IMCQQuestion).answer as number
+        ? parseInt(question.answer.toString(), 10) as number
         : null
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
