@@ -29,12 +29,14 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
   private leftParentResizable: Resizable
   private maxDividerHeight: number
   private sideDividerDiv: HTMLDivElement
+  private workspaceInput: JSX.Element
 
   constructor(props: WorkspaceProps) {
     super(props)
     this.state = {
       isUnsavedChanges: false
     }
+    this.workspaceInput = this.createWorkspaceInput(this.props)
   }
 
   public componentDidMount() {
@@ -62,7 +64,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
         <ControlBar {...controlBarProps} isUnsavedChanges={this.state.isUnsavedChanges} />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
-          <Resizable {...this.editorResizableProps()}>{this.workspaceInput(this.props)}</Resizable>
+          <Resizable {...this.editorResizableProps()}>{this.workspaceInput}</Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
               <SideContent {...this.props.sideContentProps} />
@@ -155,7 +157,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
    * Pre-condition: `this.props.editorProps`
    * XOR `this.props.mcq` are defined.
    */
-  private workspaceInput = (props: WorkspaceProps) => {
+  private createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.editorProps) {
       const editorProps = {
         ...props.editorProps,
