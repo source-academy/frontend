@@ -20,15 +20,22 @@ const Status: React.SFC<StatusProps> = props => (
     <div className="hidden-xs">
       <NavbarDivider className="default-divider" />
     </div>
-    <Popover popoverClassName="Popover-share pt-dark" inheritDarkTheme={true}>
-      <div className="navbar-button-text hidden-xs">
-        {controlButton(titleCase(props.username), IconNames.USER)}
-      </div>
+    {StatusPopover(props)}
+  </>
+)
+
+const StatusPopover = (props: StatusProps) => (
+  <Popover popoverClassName="Popover-share pt-dark" inheritDarkTheme={true}>
+    <div className="navbar-button-text hidden-xs">
+      {controlButton(titleCase(props.username), IconNames.USER)}
+    </div>
+    <div className="Popover-status-content">
       <Text>
         <h4>{`Source Academy, ${titleCase(props.role)}`}</h4>
       </Text>
-    </Popover>
-  </>
+      {controlButton('', IconNames.LOG_OUT, () => {})}
+    </div>
+  </Popover>
 )
 
 const titleCase = (str: string) =>
