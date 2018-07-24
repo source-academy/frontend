@@ -106,9 +106,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         : null
     const chosenMCQAnswer =
       question.type === QuestionTypes.mcq && question.answer !== null
-        // TODO remove parsing once backend/#162 is resolved
-        // previously: (question as IMCQQuestion).answer as number
-        ? parseInt(question.answer.toString(), 10) as number
+        ? (question as IMCQQuestion).answer as number
         : null
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
