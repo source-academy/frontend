@@ -1,7 +1,7 @@
 import { ActionCreator } from 'redux'
 
 import { IWorkspaceState } from '../reducers/states'
-import { ExternalLibrary } from '../components/assessment/assessmentShape'
+import { Library } from '../components/assessment/assessmentShape'
 import * as actionTypes from './actionTypes'
 
 /**
@@ -94,22 +94,18 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
 /**
  * Clears the js-slang Context at a specified workspace location.
  *
- * @param chapter the SICP chapter for the context to be set in
- * @param externals an ExternalLibrary that the context will make use of
- * @param globals a list of key value pairs to be defined in the global scope
+ * @param library the Library that the context shall be using
  * @param workspaceLocation the location of the workspace
+ *
+ * @see Library in assessmentShape.ts
  */
 export const clearContext = (
-  chapter: number,
-  external: ExternalLibrary,
-  globals: Array<[string, any]>,
+  library: Library,
   workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.CLEAR_CONTEXT,
   payload: {
-    chapter,
-    external,
-    globals,
+    library,
     workspaceLocation
   }
 })

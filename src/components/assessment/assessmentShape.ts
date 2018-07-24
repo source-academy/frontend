@@ -75,9 +75,9 @@ export enum ExternalLibraryNames {
   SOUND = 'SOUND'
 }
 
-export type ExternalLibraryName = keyof typeof ExternalLibraryNames
+type ExternalLibraryName = keyof typeof ExternalLibraryNames
 
-export type ExternalLibrary = {
+type ExternalLibrary = {
   name: ExternalLibraryName
   symbols: string[]
 }
