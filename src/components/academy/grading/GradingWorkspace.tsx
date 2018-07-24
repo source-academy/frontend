@@ -104,10 +104,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           ? ((question as IProgrammingQuestion).answer as string)
           : (question as IProgrammingQuestion).solutionTemplate
         : null
-    const chosenMCQAnswer =
-      question.type === QuestionTypes.mcq && question.answer !== null
-        ? ((question as IMCQQuestion).answer as number)
-        : null
+    const chosenMCQAnswer = ((question as IMCQQuestion).answer as number) || null
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:

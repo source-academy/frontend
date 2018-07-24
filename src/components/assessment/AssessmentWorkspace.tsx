@@ -116,16 +116,13 @@ class AssessmentWorkspace extends React.Component<
         ? this.props.assessment.questions.length - 1
         : this.props.questionId
     const question: IQuestion = this.props.assessment.questions[questionId]
-    const editorValue =
+    const editorValue = 
       question.type === QuestionTypes.programming
         ? question.answer !== null
-          ? ((question as IProgrammingQuestion).answer as string)
+          ? (question as IProgrammingQuestion).answer as string
           : (question as IProgrammingQuestion).solutionTemplate
         : null
-    const chosenMCQAnswer =
-      question.type === QuestionTypes.mcq && question.answer !== null
-        ? ((question as IMCQQuestion).answer as number)
-        : null
+    const chosenMCQAnswer = ((question as IMCQQuestion).answer as number) || null
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
