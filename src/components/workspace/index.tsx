@@ -33,7 +33,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
   constructor(props: WorkspaceProps) {
     super(props)
     this.state = {
-      isUnsavedChanges: true
+      isUnsavedChanges: false
     }
   }
 
@@ -48,12 +48,18 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
    * REPL from being flush with the top of the editor
    */
   public render() {
+    const controlBarProps = {
+      ...this.props.controlBarProps,
+      onClickSave: () => {
+        if (this.props.controlBarProps.onClickSave) {
+          this.props.controlBarProps.onClickSave()
+        }
+        this.setState({ isUnsavedChanges: false })
+      }
+    }
     return (
       <div className="workspace">
-        <ControlBar
-          {...this.props.controlBarProps}
-          isUnsavedChanges={this.state.isUnsavedChanges}
-        />
+        <ControlBar {...controlBarProps} isUnsavedChanges={this.state.isUnsavedChanges} />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
           <Resizable {...this.editorResizableProps()}>{this.workspaceInput(this.props)}</Resizable>
@@ -150,8 +156,15 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
    * XOR `this.props.mcq` are defined.
    */
   private workspaceInput = (props: WorkspaceProps) => {
-    if (props.editorProps !== undefined) {
-      return <Editor {...props.editorProps} />
+    if (props.editorProps) {
+      const editorProps = {
+        ...props.editorProps,
+        handleEditorValueChange: (newCode: string) => {
+          props.editorProps!.handleEditorValueChange(newCode)
+          this.setState({ isUnsavedChanges: true })
+        }
+      }
+      return <Editor {...editorProps} />
     } else {
       return <MCQChooser {...props.mcqProps!} />
     }
