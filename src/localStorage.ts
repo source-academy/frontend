@@ -1,3 +1,5 @@
+import { compressToUTF16, decompressFromUTF16 } from 'lz-string'
+
 import { IPlaygroundWorkspace, ISessionState, IState } from './reducers/states'
 
 export type ISavedState = {
@@ -11,7 +13,7 @@ export const loadStoredState = (): ISavedState | undefined => {
     if (serializedState === null) {
       return undefined
     } else {
-      return JSON.parse(serializedState) as ISavedState
+      return JSON.parse(decompressFromUTF16(serializedState)) as ISavedState
     }
   } catch (err) {
     // Issue #143
@@ -31,7 +33,7 @@ export const saveState = (state: IState) => {
       },
       playgroundWorkspace: state.workspaces.playground
     }
-    const serialized = JSON.stringify(stateToBeSaved)
+    const serialized = compressToUTF16(JSON.stringify(stateToBeSaved))
     localStorage.setItem('storedState', serialized)
   } catch (err) {
     // Issue #143
