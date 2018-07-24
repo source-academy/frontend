@@ -93,29 +93,37 @@ const mockGlobals: Array<[string, any]> = [
 
 const mockSoundLibrary: Library = {
   chapter: 1,
-  externalLibraryName: ExternalLibraryNames.SOUND,
-  externals: externalLibraries.get(ExternalLibraryNames.SOUND)!,
+  external: {
+    name: ExternalLibraryNames.SOUND,
+    symbols: externalLibraries.get(ExternalLibraryNames.SOUND)!
+  },
   globals: mockGlobals
 }
 
 export const mock2DRuneLibrary: Library = {
   chapter: 1,
-  externalLibraryName: ExternalLibraryNames.TWO_DIM_RUNES,
-  externals: externalLibraries.get(ExternalLibraryNames.TWO_DIM_RUNES)!,
+  external: {
+    name: ExternalLibraryNames.TWO_DIM_RUNES,
+    symbols: externalLibraries.get(ExternalLibraryNames.TWO_DIM_RUNES)!
+  },
   globals: mockGlobals
 }
 
 const mock3DRuneLibrary: Library = {
   chapter: 1,
-  externalLibraryName: ExternalLibraryNames.THREE_DIM_RUNES,
-  externals: externalLibraries.get(ExternalLibraryNames.THREE_DIM_RUNES)!,
+  external: {
+    name: ExternalLibraryNames.THREE_DIM_RUNES,
+    symbols: externalLibraries.get(ExternalLibraryNames.THREE_DIM_RUNES)!
+  },
   globals: mockGlobals
 }
 
 const mockCurveLibrary: Library = {
   chapter: 1,
-  externalLibraryName: ExternalLibraryNames.CURVES,
-  externals: externalLibraries.get(ExternalLibraryNames.CURVES)!,
+  external: {
+    name: ExternalLibraryNames.CURVES,
+    symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
+  },
   globals: mockGlobals
 }
 
