@@ -5,7 +5,13 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
-import { AssessmentCategory, ExternalLibraryName, IAssessment, IAssessmentOverview, IQuestion } from '../components/assessment/assessmentShape'
+import {
+  AssessmentCategory,
+  ExternalLibraryName,
+  IAssessment,
+  IAssessmentOverview,
+  IQuestion
+} from '../components/assessment/assessmentShape'
 import { IState } from '../reducers/states'
 import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
@@ -129,14 +135,12 @@ const getAssessment = async (id: number, accessToken: string) => {
     /** Make library.external.name uppercase */
     q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName
     /** Make globals into an Array of (string, value) */
-    q.library.globals = Object
-      .entries(q.library.globals as object)
-      .map(entry => {
-        try {
-          entry[1] = (window as any).eval(entry[1])
-        } catch(e) {}
-        return entry
-      })
+    q.library.globals = Object.entries(q.library.globals as object).map(entry => {
+      try {
+        entry[1] = (window as any).eval(entry[1])
+      } catch (e) {}
+      return entry
+    })
     return q
   })
   return assessment
