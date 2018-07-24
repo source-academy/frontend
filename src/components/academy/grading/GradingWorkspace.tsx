@@ -2,7 +2,6 @@ import { NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import { ExternalLibraryName } from '../../../components/assessment/assessmentShape'
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer'
 import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states'
 import { history } from '../../../utils/history'
@@ -10,6 +9,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  Library,
   QuestionTypes
 } from '../../assessment/assessmentShape'
 import Workspace, { WorkspaceProps } from '../../workspace'
@@ -42,12 +42,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (
-    chapter: number,
-    externals: string[],
-    globals: Array<[string, any]>,
-    externalLibraryName: ExternalLibraryName
-  ) => void
+  handleClearContext: (library: Library) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void

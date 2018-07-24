@@ -10,7 +10,6 @@ import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
 import {
-  ExternalLibraryName,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -45,12 +44,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (
-    chapter: number,
-    externals: string[],
-    globals: Array<[string, any]>,
-    externalLibraryName: ExternalLibraryName
-  ) => void
+  handleClearContext: (library: Library) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
