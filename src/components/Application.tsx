@@ -8,6 +8,7 @@ import Announcements from '../containers/AnnouncementsContainer'
 import Login from '../containers/LoginContainer'
 import Playground from '../containers/PlaygroundContainer'
 import { Role, sourceChapters } from '../reducers/states'
+import { ExternalLibraryName } from './assessment/assessmentShape'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
@@ -16,14 +17,14 @@ export interface IApplicationProps extends IDispatchProps, IStateProps, RouteCom
 export interface IStateProps {
   accessToken?: string
   currentPlaygroundChapter: number
-  currentPlaygroundExternalSymbols: string[]
   role?: Role
   title: string
   username?: string
+  currentPlaygroundExternalLibrary: ExternalLibraryName
 }
 
 export interface IDispatchProps {
-  handleClearContext: (chapter: number, symbols: string[]) => void
+  handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => void
   handleEditorValueChange: (val: string) => void
   handleLogOut: () => void
 }
@@ -72,13 +73,14 @@ const toLogin = (props: IApplicationProps) => () => (
 
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props)
-  const lib = parseLib(props)
+  const chapter = parseChapter(props) || currentPlaygroundChapter
+  const library = "" || currentPlaygroundExternalSymbols
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
   }
   /** Changes the chapter, retains the external symbols. */
-  if (lib) {
-    props.handleClearContext(lib, props.currentPlaygroundExternalSymbols)
+  if (chapter) {
+    props.handleClearContext(chapter, props.currentPlaygroundExternalSymbols)
   }
 }
 
@@ -89,10 +91,10 @@ const parsePrgrm = (props: RouteComponentProps<{}>) => {
   return program !== undefined ? decompressFromEncodedURIComponent(program) : undefined
 }
 
-const parseLib = (props: RouteComponentProps<{}>) => {
-  const libQuery = qs.parse(props.location.hash).lib
-  const lib = libQuery === undefined ? NaN : parseInt(libQuery, 10)
-  return sourceChapters.includes(lib) ? lib : undefined
+const parseChapter = (props: RouteComponentProps<{}>) => {
+  const chapQuery = qs.parse(props.location.hash).lib
+  const chap = chapQuery === undefined ? NaN : parseInt(chapQuery, 10)
+  return sourceChapters.includes(chap) ? chap : undefined
 }
 
 export default Application
