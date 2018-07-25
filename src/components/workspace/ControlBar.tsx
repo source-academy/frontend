@@ -6,6 +6,7 @@ import * as CopyToClipboard from 'react-copy-to-clipboard'
 
 import { externalLibraries } from '../../reducers/externalLibraries'
 import { sourceChapters } from '../../reducers/states'
+import { ExternalLibraryName } from '../assessment/assessmentShape'
 import { controlButton } from '../commons'
 
 export type ControlBarProps = {
@@ -45,7 +46,7 @@ interface IChapter {
  */
 interface IExternal {
   key: number
-  name: string
+  name: ExternalLibraryName
   symbols: string[]
 }
 
@@ -207,7 +208,7 @@ const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers,
 )
 
 const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
-  name: entry[0],
+  name: entry[0] as ExternalLibraryName,
   key: index,
   symbols: entry[1]
 }))

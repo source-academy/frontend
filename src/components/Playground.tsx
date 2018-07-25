@@ -5,6 +5,7 @@ import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
 import { InterpreterOutput } from '../reducers/states'
+import { ExternalLibraryName } from './assessment/assessmentShape'
 import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
 
@@ -33,7 +34,7 @@ export interface IDispatchProps {
   handleEditorWidthChange: (widthChange: number) => void
   handleGenerateLz: () => void
   handleInterruptEval: () => void
-  handleExternalSelect: (external: any, changeEvent: any) => void
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
@@ -60,7 +61,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       controlBarProps: {
         externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: this.props.handleChapterSelect,
-        handleExternalSelect: this.props.handleExternalSelect,
+        handleExternalSelect: ({name}: { name: ExternalLibraryName }, e: any) => this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
         handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,
