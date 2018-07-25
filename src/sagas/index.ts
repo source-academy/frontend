@@ -147,16 +147,15 @@ function* workspaceSaga(): SagaIterator {
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
     const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
-    const resetWebGl = (window as any).getReadyWebGLForCanvas
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:
-        resetWebGl('2d')
+        (window as any).getReadyWebGLForCanvas('2d')
         break
       case ExternalLibraryNames.THREE_DIM_RUNES:
-        resetWebGl('3d')
+        (window as any).getReadyWebGLForCanvas('3d')
         break
       case ExternalLibraryNames.CURVES:
-        resetWebGl('curve')
+        (window as any).getReadyWebGLForCanvas('curve')
         break
     }
     const globals: Array<[string, any]> = (action as actionTypes.IAction).payload.library.globals
@@ -186,12 +185,14 @@ function* playgroundSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
     const code = yield select((state: IState) => state.workspaces.playground.editorValue)
     const chapter = yield select((state: IState) => state.workspaces.playground.context.chapter)
+    const external = yield select((state: IState) => state.workspaces.playground.playgroundExternal)
     const newQueryString =
       code === '' || code === defaultEditorValue
         ? undefined
         : qs.stringify({
             prgrm: compressToEncodedURIComponent(code),
-            lib: chapter
+            chap: chapter,
+            ext: external
           })
     yield put(actions.changeQueryString(newQueryString))
   })
