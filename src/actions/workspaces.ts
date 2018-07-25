@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux'
 
-import { Library } from '../components/assessment/assessmentShape'
+import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape'
 import { IWorkspaceState } from '../reducers/states'
 import * as actionTypes from './actionTypes'
 
@@ -80,13 +80,12 @@ export const chapterSelect: ActionCreator<actionTypes.IAction> = (
 })
 
 export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
-  external,
-  changeEvent,
+  externalLibraryName: ExternalLibraryName,
   workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
   payload: {
-    externalLibraryName: external.name,
+    externalLibraryName,
     workspaceLocation
   }
 })
