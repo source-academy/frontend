@@ -2,8 +2,8 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import { mockRouterProps } from '../../mocks/components'
-import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape'
 import Application, { IApplicationProps } from '../Application'
+import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape'
 
 test('Application renders correctly', () => {
   const props: IApplicationProps = {
