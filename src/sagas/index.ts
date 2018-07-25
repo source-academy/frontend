@@ -147,7 +147,13 @@ function* workspaceSaga(): SagaIterator {
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
     const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
-    yield call(delay, 500)
+    /** 
+     * Delay execution in the case of external libraries not being loaded.
+     * This happens in the case of someone loading the website from a playground URL.
+     */
+    if ((window as any).getReadyWebGLForCanvas === undefined) {
+      yield call(delay, 500)
+    }
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:
         ;(window as any).getReadyWebGLForCanvas('2d')
