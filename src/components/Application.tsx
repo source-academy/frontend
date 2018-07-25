@@ -29,32 +29,36 @@ export interface IDispatchProps {
   handleLogOut: () => void
 }
 
-const Application: React.SFC<IApplicationProps> = props => {
-  const redirectToNews = () => <Redirect to="/news" />
+class Application extends React.Component<IApplicationProps, {}> {
+  public componentDidMount() {
+    parsePlayground(this.props)
+  }
 
-  parsePlayground(props)
-
-  return (
-    <div className="Application">
-      <NavigationBar
-        handleLogOut={props.handleLogOut}
-        role={props.role}
-        username={props.username}
-        title={props.title}
-      />
-      <div className="Application__main">
-        <Switch>
-          <Route path="/academy" component={toAcademy(props)} />
-          <Route path="/news" component={Announcements} />
-          <Route path="/material" component={Announcements} />
-          <Route path="/playground" component={Playground} />
-          <Route path="/login" render={toLogin(props)} />
-          <Route exact={true} path="/" render={redirectToNews} />
-          <Route component={NotFound} />
-        </Switch>
+  public render() {
+    return (
+      <div className="Application">
+        <NavigationBar
+          handleLogOut={props.handleLogOut}
+          role={props.role}
+          username={props.username}
+          title={props.title}
+        />
+        <div className="Application__main">
+          <Switch>
+            <Route path="/academy" component={toAcademy(this.props)} />
+            <Route path="/news" component={Announcements} />
+            <Route path="/material" component={Announcements} />
+            <Route path="/playground" component={Playground} />
+            <Route path="/login" render={toLogin(this.props)} />
+            <Route exact={true} path="/" render={this.redirectToNews} />
+            <Route component={NotFound} />
+          </Switch>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  private redirectToNews = () => <Redirect to="/news" />
 }
 
 /**
@@ -96,7 +100,7 @@ const parseChapter = (props: RouteComponentProps<{}>) => {
 }
 
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
-  const ext = qs.parse(props.location.hash).external || ""
+  const ext = qs.parse(props.location.hash).ext || ""
   return Object.values(ExternalLibraryNames).includes(ext) 
     ? ext 
     : ExternalLibraryNames.NONE
