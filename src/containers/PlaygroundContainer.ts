@@ -44,8 +44,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
-      handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, changeEvent, location),
+      handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),

@@ -28,7 +28,7 @@ export interface IDispatchProps {
   handleBrowseHistoryDown: () => void
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
-  handleChapterSelect: (chapter: any, changeEvent: any) => void
+  handleChapterSelect: (chapter: number) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -60,7 +60,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         externalLibraryName: this.props.externalLibraryName,
-        handleChapterSelect: this.props.handleChapterSelect,
+        handleChapterSelect: ({chapter}: {chapter: number}, e: any) => this.props.handleChapterSelect(chapter),
         handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
           this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
