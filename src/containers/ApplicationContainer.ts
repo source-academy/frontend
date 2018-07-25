@@ -5,7 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { clearContext, logOut, updateEditorValue } from '../actions'
 import { WorkspaceLocations } from '../actions/workspaces'
 import Application, { IDispatchProps, IStateProps } from '../components/Application'
-import { ExternalLibraryName } from '../components/assessment/assessmentShape'
+import { ExternalLibraryName, ExternalLibraryNames } from '../components/assessment/assessmentShape'
 import { externalLibraries } from '../reducers/externalLibraries'
 import { IState } from '../reducers/states'
 
@@ -36,7 +36,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
             chapter,
             external: {
               name: externalLibraryName,
-              symbols: externalLibraries.get(externalLibraryName)!
+              symbols: externalLibraries.get(externalLibraryName) 
+                || externalLibraries.get(ExternalLibraryNames.NONE)!
             },
             globals: []
           },
