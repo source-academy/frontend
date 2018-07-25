@@ -15,29 +15,17 @@ export type WorkspaceProps = {
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
   mcqProps?: IMCQChooserProps
+  hasUnsavedChanges?: boolean
   replProps: IReplProps
   sideContentHeight?: number
   sideContentProps: SideContentProps
 }
 
-type WorkspaceState = {
-  isUnsavedChanges: boolean
-}
-
-class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
+class Workspace extends React.Component<WorkspaceProps, {}> {
   private editorDividerDiv: HTMLDivElement
   private leftParentResizable: Resizable
   private maxDividerHeight: number
   private sideDividerDiv: HTMLDivElement
-  private workspaceInput: JSX.Element
-
-  constructor(props: WorkspaceProps) {
-    super(props)
-    this.state = {
-      isUnsavedChanges: false
-    }
-    this.workspaceInput = this.createWorkspaceInput(this.props)
-  }
 
   public componentDidMount() {
     this.maxDividerHeight = this.sideDividerDiv.clientHeight
@@ -50,21 +38,14 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
    * REPL from being flush with the top of the editor
    */
   public render() {
-    const controlBarProps = {
-      ...this.props.controlBarProps,
-      onClickSave: () => {
-        if (this.props.controlBarProps.onClickSave) {
-          this.props.controlBarProps.onClickSave()
-        }
-        this.setState({ isUnsavedChanges: false })
-      }
-    }
     return (
       <div className="workspace">
-        <ControlBar {...controlBarProps} isUnsavedChanges={this.state.isUnsavedChanges} />
+        <ControlBar {...this.props.controlBarProps} />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
-          <Resizable {...this.editorResizableProps()}>{this.workspaceInput}</Resizable>
+          <Resizable {...this.editorResizableProps()}>
+            {this.createWorkspaceInput(this.props)}
+          </Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
               <SideContent {...this.props.sideContentProps} />
@@ -159,14 +140,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
    */
   private createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.editorProps) {
-      const editorProps = {
-        ...props.editorProps,
-        handleEditorValueChange: (newCode: string) => {
-          props.editorProps!.handleEditorValueChange(newCode)
-          this.setState({ isUnsavedChanges: true })
-        }
-      }
-      return <Editor {...editorProps} />
+      return <Editor {...props.editorProps} />
     } else {
       return <MCQChooser {...props.mcqProps!} />
     }

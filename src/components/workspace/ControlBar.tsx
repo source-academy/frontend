@@ -8,14 +8,6 @@ import { externalLibraries } from '../../reducers/externalLibraries'
 import { sourceChapters } from '../../reducers/states'
 import { controlButton } from '../commons'
 
-/**
- * FullControlBarProps is used to allow the higher order component workspace to
- * pass it's state isUnsavedChanges as a prop to this ControlBar component.
- * Components implementing the higher order component workspace do not need to
- * concern themselves with OwnProps---they will use ControlBarProps instead.
- */
-export type FullControlBarProps = ControlBarProps & OwnProps
-
 export type ControlBarProps = {
   hasChapterSelect: boolean
   hasNextButton: boolean
@@ -34,14 +26,11 @@ export type ControlBarProps = {
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
+  hasUnsavedChanges?: boolean
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any
   onClickDone?(): any
-}
-
-export type OwnProps = {
-  isUnsavedChanges: boolean
 }
 
 interface IChapter {
@@ -60,7 +49,7 @@ interface IExternal {
   symbols: string[]
 }
 
-class ControlBar extends React.PureComponent<FullControlBarProps, {}> {
+class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   public static defaultProps: Partial<ControlBarProps> = {
     hasChapterSelect: false,
     hasNextButton: false,
@@ -75,7 +64,7 @@ class ControlBar extends React.PureComponent<FullControlBarProps, {}> {
 
   private shareInputElem: HTMLInputElement
 
-  constructor(props: FullControlBarProps) {
+  constructor(props: ControlBarProps) {
     super(props)
     this.selectShareInputText = this.selectShareInputText.bind(this)
   }
@@ -97,7 +86,7 @@ class ControlBar extends React.PureComponent<FullControlBarProps, {}> {
       </Tooltip>
     )
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval)
-    const saveButtonOpts = this.props.isUnsavedChanges
+    const saveButtonOpts = this.props.hasUnsavedChanges
       ? { intent: Intent.WARNING, minimal: false }
       : {}
     const saveButton = this.props.hasSaveButton
