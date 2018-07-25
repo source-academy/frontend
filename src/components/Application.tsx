@@ -73,14 +73,12 @@ const toLogin = (props: IApplicationProps) => () => (
 
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props)
-  const chapter = parseChapter(props) || currentPlaygroundChapter
-  const library = "" || currentPlaygroundExternalSymbols
+  const chapter = parseChapter(props) || props.currentPlaygroundChapter
+  // TODO add parsing here
+  const externalLibraryName = "" || props.currentPlaygroundExternalLibrary
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
-  }
-  /** Changes the chapter, retains the external symbols. */
-  if (chapter) {
-    props.handleClearContext(chapter, props.currentPlaygroundExternalSymbols)
+    props.handleClearContext(chapter, externalLibraryName)
   }
 }
 
