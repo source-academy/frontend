@@ -79,8 +79,7 @@ const toLogin = (props: IApplicationProps) => () => (
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props)
   const chapter = parseChapter(props) || props.currentPlaygroundChapter
-  const externalLibraryName = parseExternalLibrary(props) 
-    || props.currentPlaygroundExternalLibrary
+  const externalLibraryName = parseExternalLibrary(props) || props.currentPlaygroundExternalLibrary
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
     props.handleClearContext(chapter, externalLibraryName)
@@ -102,11 +101,8 @@ const parseChapter = (props: RouteComponentProps<{}>) => {
 }
 
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
-  const ext = qs.parse(props.location.hash).ext || ""
-  return Object.values(ExternalLibraryNames).includes(ext) 
-    ? ext 
-    : ExternalLibraryNames.NONE
+  const ext = qs.parse(props.location.hash).ext || ''
+  return Object.values(ExternalLibraryNames).includes(ext) ? ext : ExternalLibraryNames.NONE
 }
-
 
 export default Application

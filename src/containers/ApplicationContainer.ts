@@ -44,7 +44,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         ),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleLogOut: logOut
-      handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) => playgroundExternalSelect(externalLibraryName, workspaceLocation)
+      handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) =>
+        playgroundExternalSelect(externalLibraryName, workspaceLocation)
     },
     dispatch
   )

@@ -61,7 +61,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       controlBarProps: {
         externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: this.props.handleChapterSelect,
-        handleExternalSelect: ({name}: { name: ExternalLibraryName }, e: any) => this.props.handleExternalSelect(name),
+        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
+          this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
         handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,
