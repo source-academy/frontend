@@ -68,13 +68,12 @@ export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (
 })
 
 export const chapterSelect: ActionCreator<actionTypes.IAction> = (
-  chapter,
-  changeEvent,
+  chapter: number,
   workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.CHAPTER_SELECT,
   payload: {
-    chapter: chapter.chapter,
+    chapter,
     workspaceLocation
   }
 })
