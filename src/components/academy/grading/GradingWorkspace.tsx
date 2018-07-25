@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { ExternalLibraryName } from '../../../components/assessment/assessmentShape'
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer'
-import { InterpreterOutput } from '../../../reducers/states'
+import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states'
 import { history } from '../../../utils/history'
 import {
   IMCQQuestion,
@@ -55,7 +55,7 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
-  handleResetWorkspace: () => void
+  handleResetWorkspace: (options: Partial<IWorkspaceState>) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
 }
@@ -117,7 +117,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      mcq: question as IMCQQuestion,
+      mcqProps: {
+        mcq: question as IMCQQuestion,
+        handleMCQSubmit: (i: number) => {}
+      },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {
@@ -165,11 +168,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             : (question as IProgrammingQuestion).solutionTemplate
           : null
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
-      this.props.handleResetWorkspace()
+      this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(chapter, externals, externalName)
-      if (editorValue) {
-        this.props.handleEditorValueChange(editorValue)
-      }
     }
   }
 

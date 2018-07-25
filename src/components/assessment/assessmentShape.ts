@@ -35,11 +35,13 @@ export enum AssessmentCategories {
 export type AssessmentCategory = keyof typeof AssessmentCategories
 
 export interface IProgrammingQuestion extends IQuestion {
+  answer: string | null
   solutionTemplate: string
   type: 'programming'
 }
 
 export interface IMCQQuestion extends IQuestion {
+  answer: number | null
   choices: MCQChoice[]
   type: 'mcq'
 }

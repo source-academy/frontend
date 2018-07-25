@@ -56,7 +56,7 @@ export interface IWorkspaceManagerState {
   readonly playground: IPlaygroundWorkspace
 }
 
-interface IWorkspaceState {
+export interface IWorkspaceState {
   readonly context: Context
   readonly editorValue: string | null
   readonly editorWidth: string

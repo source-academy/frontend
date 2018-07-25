@@ -2,7 +2,7 @@ import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import { InterpreterOutput } from '../../reducers/states'
+import { InterpreterOutput, IWorkspaceState } from '../../reducers/states'
 import { beforeNow } from '../../utils/dateHelpers'
 import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
@@ -57,7 +57,7 @@ export type DispatchProps = {
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
-  handleResetWorkspace: () => void
+  handleResetWorkspace: (options: Partial<IWorkspaceState>) => void
   handleSave: (id: number, answer: number | string) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
@@ -135,7 +135,11 @@ class AssessmentWorkspace extends React.Component<
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      mcq: question as IMCQQuestion,
+      mcqProps: {
+        mcq: question as IMCQQuestion,
+        handleMCQSubmit: (option: number) =>
+          this.props.handleSave(this.props.assessment!.questions[questionId].id, option)
+      },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
       replProps: {
@@ -184,11 +188,8 @@ class AssessmentWorkspace extends React.Component<
             : (question as IProgrammingQuestion).solutionTemplate
           : null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
-      this.props.handleResetWorkspace()
+      this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(chapter, externals, externalName)
-      if (editorValue) {
-        this.props.handleEditorValueChange(editorValue)
-      }
     }
   }
 
@@ -231,7 +232,9 @@ class AssessmentWorkspace extends React.Component<
       hasDoneButton: questionId === this.props.assessment!.questions.length - 1,
       hasNextButton: questionId < this.props.assessment!.questions.length - 1,
       hasPreviousButton: questionId > 0,
-      hasSaveButton: !beforeNow(this.props.closeDate),
+      hasSaveButton:
+        !beforeNow(this.props.closeDate) &&
+        this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
       hasShareButton: false,
       isRunning: this.props.isRunning,
       onClickDone: () => history.push(listingPath),
