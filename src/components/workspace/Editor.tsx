@@ -16,9 +16,22 @@ export interface IEditorProps {
   editorValue: string
   handleEditorEval: () => void
   handleEditorValueChange: (newCode: string) => void
+  handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void
 }
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
+  private onChangeMethod: (newCode: string) => void
+
+  constructor(props: IEditorProps) {
+    super(props)
+    this.onChangeMethod = (newCode: string) => {
+      if (this.props.handleUpdateHasUnsavedChanges) {
+        this.props.handleUpdateHasUnsavedChanges(true)
+      }
+      this.props.handleEditorValueChange(newCode)
+    }
+  }
+
   public render() {
     return (
       <HotKeys className="Editor" handlers={handlers}>
@@ -42,7 +55,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             height="100%"
             highlightActiveLine={false}
             mode="javascript"
-            onChange={this.props.handleEditorValueChange}
+            onChange={this.onChangeMethod}
             theme="cobalt"
             value={this.props.editorValue}
             width="100%"

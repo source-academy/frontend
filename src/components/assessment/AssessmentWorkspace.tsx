@@ -129,7 +129,8 @@ class AssessmentWorkspace extends React.Component<
           ? {
               editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange
+              handleEditorValueChange: this.props.handleEditorValueChange,
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -233,6 +234,7 @@ class AssessmentWorkspace extends React.Component<
         !beforeNow(this.props.closeDate) &&
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
       hasShareButton: false,
+      hasUnsavedChanges: this.props.hasUnsavedChanges,
       isRunning: this.props.isRunning,
       onClickDone: () => history.push(listingPath),
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),

@@ -17,6 +17,8 @@ import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 
+import { WorkspaceLocation } from '../actions/workspaces'
+
 function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
     const ivleToken = (action as actionTypes.IAction).payload
@@ -71,6 +73,7 @@ function* backendSaga(): SagaIterator {
         questions: newQuestions
       }
       yield put(actions.updateAssessment(newAssessment))
+      yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
     } else if (resp !== null) {
       let errorMessage: string
       switch (resp.status) {
