@@ -37,6 +37,7 @@ export interface IPlaygroundState {
 interface IAssessmentWorkspace extends IWorkspaceState {
   readonly currentAssessment?: number
   readonly currentQuestion?: number
+  readonly hasUnsavedChanges: boolean
 }
 
 interface IGradingWorkspace extends IWorkspaceState {
@@ -44,6 +45,7 @@ interface IGradingWorkspace extends IWorkspaceState {
   readonly currentQuestion?: number
   readonly gradingCommentsValue: string
   readonly gradingXP: number | undefined
+  readonly hasUnsavedChanges: boolean
 }
 
 interface IPlaygroundWorkspace extends IWorkspaceState {
@@ -206,14 +208,16 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   assessment: {
     ...createDefaultWorkspace(WorkspaceLocations.assessment),
     currentAssessment: undefined,
-    currentQuestion: undefined
+    currentQuestion: undefined,
+    hasUnsavedChanges: false
   },
   grading: {
     ...createDefaultWorkspace(WorkspaceLocations.grading),
     currentSubmission: undefined,
     currentQuestion: undefined,
     gradingCommentsValue: defaultComments,
-    gradingXP: undefined
+    gradingXP: undefined,
+    hasUnsavedChanges: false
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
