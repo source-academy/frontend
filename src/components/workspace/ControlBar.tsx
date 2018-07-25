@@ -10,11 +10,12 @@ import { controlButton } from '../commons'
 
 export type ControlBarProps = {
   hasChapterSelect: boolean
+  hasDoneButton: boolean
   hasNextButton: boolean
   hasPreviousButton: boolean
   hasSaveButton: boolean
   hasShareButton: boolean
-  hasDoneButton: boolean
+  hasUnsavedChanges?: boolean
   isRunning: boolean
   queryString?: string
   sourceChapter: number
@@ -26,7 +27,6 @@ export type ControlBarProps = {
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
-  hasUnsavedChanges?: boolean
   onClickNext?(): any
   onClickPrevious?(): any
   onClickSave?(): any

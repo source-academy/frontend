@@ -24,6 +24,7 @@ export type StateProps = {
   grading?: Grading
   editorValue: string | null
   editorWidth: string
+  hasUnsavedChanges: boolean
   isRunning: boolean
   output: InterpreterOutput[]
   replValue: string
