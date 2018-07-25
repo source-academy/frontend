@@ -2,7 +2,7 @@ import { Context, interrupt, runInContext } from 'js-slang'
 import { InterruptedError } from 'js-slang/dist/interpreter-errors'
 import { compressToEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
-import { SagaIterator } from 'redux-saga'
+import { delay, SagaIterator } from 'redux-saga'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
@@ -147,6 +147,7 @@ function* workspaceSaga(): SagaIterator {
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
     const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
+    yield call(delay, 500)
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:
         (window as any).getReadyWebGLForCanvas('2d')
