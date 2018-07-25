@@ -27,6 +27,7 @@ export interface IDispatchProps {
   handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => void
   handleEditorValueChange: (val: string) => void
   handleLogOut: () => void
+  handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void
 }
 
 class Application extends React.Component<IApplicationProps, {}> {
@@ -83,6 +84,7 @@ const parsePlayground = (props: IApplicationProps) => {
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
     props.handleClearContext(chapter, externalLibraryName)
+    props.handlePlaygroundExternalSelect(externalLibraryName)
   }
 }
 

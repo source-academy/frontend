@@ -10,10 +10,11 @@ test('Application renders correctly', () => {
     ...mockRouterProps('/academy', {}),
     title: 'Cadet',
     currentPlaygroundChapter: 2,
-    handleEditorValueChange: (val: string) => {},
     handleLogOut: () => {}
     currentPlaygroundExternalLibrary: ExternalLibraryNames.NONE,
     handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => {},
+    handleEditorValueChange: (val: string) => {},
+    handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) => {}
   }
   const app = <Application {...props} />
   const tree = shallow(app)

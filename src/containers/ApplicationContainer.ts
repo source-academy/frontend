@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { clearContext, logOut, updateEditorValue } from '../actions'
-import { WorkspaceLocations } from '../actions/workspaces'
+import { playgroundExternalSelect, WorkspaceLocations } from '../actions/workspaces'
 import Application, { IDispatchProps, IStateProps } from '../components/Application'
 import { ExternalLibraryName } from '../components/assessment/assessmentShape'
 import { externalLibraries } from '../reducers/externalLibraries'
@@ -44,6 +44,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         ),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleLogOut: logOut
+      handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) => playgroundExternalSelect(externalLibraryName, workspaceLocation)
     },
     dispatch
   )
