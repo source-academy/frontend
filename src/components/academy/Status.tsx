@@ -21,11 +21,11 @@ const Status: React.SFC<StatusProps> = props => (
     <div className="hidden-xs">
       <NavbarDivider className="default-divider" />
     </div>
-    {StatusPopover(props)}
+    {statusPopover(props)}
   </>
 )
 
-const StatusPopover = (props: StatusProps) => (
+const statusPopover = (props: StatusProps) => (
   <Popover popoverClassName="Popover-share pt-dark" inheritDarkTheme={true}>
     <div className="navbar-button-text hidden-xs">
       {controlButton(titleCase(props.username), IconNames.USER)}
