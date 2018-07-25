@@ -1,5 +1,6 @@
 import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
+import { Prompt } from 'react-router'
 
 import ControlBar, { ControlBarProps } from './ControlBar'
 import Editor, { IEditorProps } from './Editor'
@@ -40,7 +41,12 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   public render() {
     return (
       <div className="workspace">
-        <ControlBar {...this.props.controlBarProps} />
+        {this.props.hasUnsavedChanges ? (
+          <Prompt
+            message={'You have changes that may not be saved. Are you sure you want to leave?'}
+          />
+        ) : null}
+        <ControlBar {...this.controlBarProps()} />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
           <Resizable {...this.editorResizableProps()}>
@@ -56,6 +62,13 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         </div>
       </div>
     )
+  }
+
+  private controlBarProps() {
+    return {
+      ...this.props.controlBarProps,
+      hasUnsavedChanges: this.props.hasUnsavedChanges
+    }
   }
 
   private editorResizableProps() {

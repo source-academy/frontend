@@ -136,6 +136,7 @@ class AssessmentWorkspace extends React.Component<
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
+      hasUnsavedChanges: this.props.hasUnsavedChanges,
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
@@ -234,7 +235,6 @@ class AssessmentWorkspace extends React.Component<
         !beforeNow(this.props.closeDate) &&
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
       hasShareButton: false,
-      hasUnsavedChanges: this.props.hasUnsavedChanges,
       isRunning: this.props.isRunning,
       onClickDone: () => history.push(listingPath),
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
