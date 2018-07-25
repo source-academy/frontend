@@ -166,6 +166,12 @@ function* backendSaga(): SagaIterator {
       yield call(showWarningMessage, 'Something went wrong. Please try again.')
     }
   })
+
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
+    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const gradingOverviews = yield call(getGradingOverviews, accessToken)
+    yield put(actions.updateGradingOverviews(gradingOverviews))
+  })
 }
 
 /**
