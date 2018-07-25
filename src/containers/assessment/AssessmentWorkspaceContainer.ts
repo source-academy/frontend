@@ -16,6 +16,7 @@ import {
   fetchAssessment,
   submitAnswer,
   updateEditorValue,
+  updateHasUnsavedChanges,
   updateReplValue
 } from '../../actions'
 import {
@@ -72,6 +73,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
+      handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
+        updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId
     },
     dispatch

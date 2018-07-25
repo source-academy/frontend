@@ -14,6 +14,7 @@ import {
   evalRepl,
   fetchGrading,
   updateEditorValue,
+  updateHasUnsavedChanges,
   updateReplValue,
   WorkspaceLocation
 } from '../../../actions'
@@ -70,7 +71,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         resetWorkspace(workspaceLocation, options),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
-      handleUpdateCurrentSubmissionId: updateCurrentSubmissionId
+      handleUpdateCurrentSubmissionId: updateCurrentSubmissionId,
+      handleUpdateHasUnsavedChanges: (unsavedChanges: boolean) =>
+        updateHasUnsavedChanges(workspaceLocation, unsavedChanges)
     },
     dispatch
   )

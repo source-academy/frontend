@@ -58,6 +58,7 @@ export type DispatchProps = {
   handleSave: (id: number, answer: number | string) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
+  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void
 }
 
 class AssessmentWorkspace extends React.Component<

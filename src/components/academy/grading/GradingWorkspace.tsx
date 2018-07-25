@@ -55,6 +55,7 @@ export type DispatchProps = {
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
+  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
