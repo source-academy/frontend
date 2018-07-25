@@ -19,6 +19,7 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from '../actions'
+import { ExternalLibraryName } from '../components/assessment/assessmentShape'
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground'
 import { IState } from '../reducers/states'
 
@@ -50,8 +51,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
-      handleExternalSelect: (external: any, changeEvent: any) =>
-        playgroundExternalSelect(external, changeEvent, location),
+      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
+        playgroundExternalSelect(externalLibraryName, location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
