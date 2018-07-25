@@ -46,7 +46,10 @@ function createStore(history: History): Store<IState> {
           workspaces: {
             ...defaultState.workspaces,
             playground: loadedStore.playgroundWorkspace
-              ? loadedStore.playgroundWorkspace
+              ? {
+                  ...defaultState.workspaces.playground,
+                  ...loadedStore.playgroundWorkspace
+                }
               : defaultState.workspaces.playground
           }
         }
