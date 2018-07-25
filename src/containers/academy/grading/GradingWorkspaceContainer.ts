@@ -27,8 +27,8 @@ import GradingWorkspace, {
   OwnProps,
   StateProps
 } from '../../../components/academy/grading/GradingWorkspace'
-import { IState, IWorkspaceState } from '../../../reducers/states'
 import { Library } from '../../../components/assessment/assessmentShape'
+import { IState, IWorkspaceState } from '../../../reducers/states'
 
 const workspaceLocation: WorkspaceLocation = 'grading'
 
