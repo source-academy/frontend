@@ -8,7 +8,7 @@ import Announcements from '../containers/AnnouncementsContainer'
 import Login from '../containers/LoginContainer'
 import Playground from '../containers/PlaygroundContainer'
 import { Role, sourceChapters } from '../reducers/states'
-import { ExternalLibraryName } from './assessment/assessmentShape'
+import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
@@ -74,8 +74,8 @@ const toLogin = (props: IApplicationProps) => () => (
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props)
   const chapter = parseChapter(props) || props.currentPlaygroundChapter
-  // TODO add parsing here
-  const externalLibraryName = "" || props.currentPlaygroundExternalLibrary
+  const externalLibraryName = parseExternalLibrary(props) 
+    || props.currentPlaygroundExternalLibrary
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
     props.handleClearContext(chapter, externalLibraryName)
@@ -90,9 +90,17 @@ const parsePrgrm = (props: RouteComponentProps<{}>) => {
 }
 
 const parseChapter = (props: RouteComponentProps<{}>) => {
-  const chapQuery = qs.parse(props.location.hash).lib
+  const chapQuery = qs.parse(props.location.hash).chap
   const chap = chapQuery === undefined ? NaN : parseInt(chapQuery, 10)
   return sourceChapters.includes(chap) ? chap : undefined
 }
+
+const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
+  const ext = qs.parse(props.location.hash).external || ""
+  return Object.values(ExternalLibraryNames).includes(ext) 
+    ? ext 
+    : ExternalLibraryNames.NONE
+}
+
 
 export default Application
