@@ -147,7 +147,7 @@ function* workspaceSaga(): SagaIterator {
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
     const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
-    /** 
+    /**
      * Delay execution in the case of external libraries not being loaded.
      * This happens in the case of someone loading the website from a playground URL.
      */
