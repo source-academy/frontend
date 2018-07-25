@@ -189,6 +189,10 @@ class AssessmentWorkspace extends React.Component<
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(question.library)
+      this.props.handleUpdateHasUnsavedChanges(false)
+      if (editorValue) {
+        this.props.handleEditorValueChange(editorValue)
+      }
     }
   }
 

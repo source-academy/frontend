@@ -162,6 +162,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
       this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(question.library)
+      this.props.handleUpdateHasUnsavedChanges(false)
+      if (editorValue) {
+        this.props.handleEditorValueChange(editorValue)
+      }
     }
   }
 
