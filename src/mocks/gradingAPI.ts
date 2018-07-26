@@ -4,37 +4,40 @@ import { mockFetchRole, Role, Roles } from './userAPI'
 
 export const mockGradingOverviews: GradingOverview[] = [
   {
-    submissionId: 0,
-    studentId: 0,
+    adjustments: 0,
+    assessmentCategory: 'Mission',
     assessmentId: 0,
     assessmentName: 'Mission 0 ',
-    assessmentCategory: 'Mission',
-    currentXP: 69,
-    graded: false,
-    maximumXP: 100,
-    studentName: 'Al Gorithm'
+    currentGrade: 69,
+    initialGrade: 69,
+    maximumGrade: 100,
+    studentId: 0,
+    studentName: 'Al Gorithm',
+    submissionId: 0
   },
   {
-    submissionId: 1,
-    studentId: 0,
+    adjustments: -2,
+    assessmentCategory: 'Mission',
     assessmentId: 1,
     assessmentName: 'Mission 1',
-    assessmentCategory: 'Mission',
-    currentXP: 0,
-    graded: false,
-    maximumXP: 400,
-    studentName: 'Dee Sign'
+    currentGrade: -2,
+    initialGrade: 0,
+    maximumGrade: 400,
+    studentId: 0,
+    studentName: 'Dee Sign',
+    submissionId: 1
   },
   {
-    submissionId: 2,
-    studentId: 1,
+    adjustments: 4,
+    assessmentCategory: 'Mission',
     assessmentId: 0,
     assessmentName: 'Mission 0',
-    assessmentCategory: 'Mission',
-    currentXP: 1000,
-    graded: true,
-    maximumXP: 1000,
-    studentName: 'May Trix'
+    currentGrade: 1000,
+    initialGrade: 996,
+    maximumGrade: 1000,
+    studentId: 1,
+    studentName: 'May Trix',
+    submissionId: 2
   }
 ]
 
