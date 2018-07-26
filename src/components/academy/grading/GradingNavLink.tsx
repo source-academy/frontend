@@ -22,7 +22,7 @@ class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
   public render() {
     return (
       <NavLink to={`/academy/grading/${this.props.data.submissionId}`} activeClassName="pt-active">
-        {this.props.data.graded ? 'Done' : 'Not Graded'}
+        {'Add comments'}
       </NavLink>
     )
   }
