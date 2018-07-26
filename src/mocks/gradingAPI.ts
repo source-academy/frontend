@@ -68,9 +68,10 @@ const mockGrading: Grading = [
       solutionTemplate: '0th question mock solution template',
       type: 'programming'
     },
-    maximumXP: 1000,
+    maximumGrade: 1000,
     grade: {
-      xp: 0,
+      adjustment: 0,
+      grade: 0,
       comment: ''
     }
   },
@@ -83,9 +84,10 @@ const mockGrading: Grading = [
       solutionTemplate: '1st question mock solution template',
       type: 'programming'
     },
-    maximumXP: 200,
+    maximumGrade: 200,
     grade: {
-      xp: 100,
+      adjustment: 0,
+      grade: 100,
       comment: 'Good job!!'
     }
   },
@@ -118,9 +120,10 @@ const mockGrading: Grading = [
       library: mockLibrary,
       type: 'mcq'
     },
-    maximumXP: 100,
+    maximumGrade: 100,
     grade: {
-      xp: 50,
+      adjustment: 0,
+      grade: 50,
       comment:
         'A Very long string. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a leo et lectus gravida sagittis a non neque. Phasellus consectetur arcu vitae metus vulputate commodo. Phasellus varius sollicitudin quam a porta. Pellentesque mollis molestie felis vitae imperdiet. Nam porta purus ac tellus luctus ultrices. Integer pellentesque nisl vel nunc ullamcorper, in vehicula est dapibus. Nunc dapibus neque dolor, ut mattis massa mattis in. Fusce nec risus nec ex pharetra lacinia. Mauris sit amet ullamcorper sapien. Suspendisse scelerisque neque sed nunc tincidunt, ac semper enim efficitur. Ut sit amet eleifend arcu. Donec viverra at justo vitae eleifend. Morbi ut erat ultricies, hendrerit mi ut, ornare mauris.'
     }
