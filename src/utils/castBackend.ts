@@ -1,4 +1,4 @@
-import { Library } from '../components/assessment/assessmentShape'
+import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape'
 
 export const castLibrary = (lib: any): Library => ({
   chapter: lib.chapter,
