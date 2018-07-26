@@ -12,7 +12,7 @@ const mapStateToProps: MapStateToProps<{}, {}, IState> = state => ({})
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
-      handleGradingInputSave: saveGradingInput
+      handleGradingSave: saveGradingInput
     },
     dispatch
   )

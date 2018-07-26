@@ -8,7 +8,7 @@ import { controlButton } from '../../commons'
 type GradingEditorProps = DispatchProps & OwnProps
 
 export type DispatchProps = {
-  handleGradingInputSave: (s: string, i: number | undefined) => void
+  handleGradingSave: (s: string, i: number | undefined) => void
 }
 
 export type OwnProps = {
@@ -94,7 +94,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private onClickSaveButton = () => {
-    this.props.handleGradingInputSave(this.state.mdeState.markdown!, this.state.adjustmentInput)
+    this.props.handleGradingSave(this.state.mdeState.markdown!, this.state.adjustmentInput)
   }
 
   private onAdjustmentInputChange = (newValue: number) => {
