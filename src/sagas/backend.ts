@@ -172,6 +172,13 @@ function* backendSaga(): SagaIterator {
     const gradingOverviews = yield call(getGradingOverviews, accessToken)
     yield put(actions.updateGradingOverviews(gradingOverviews))
   })
+
+  yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
+    const id = (action as actionTypes.IAction).payload
+    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const grading = yield call(getGrading, id, accessToken)
+    yield put(actions.updateGrading(id, grading))
+  })
 }
 
 /**
