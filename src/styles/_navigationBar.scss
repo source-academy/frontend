@@ -41,7 +41,12 @@
 
 .Popover-share {
   h4 {
-    margin: 0.3rem 0 0.3rem 0;
+    margin: 0.3rem 0.5rem 0.3rem 0;
+  }
+
+  .Popover-status-content {
+    display: flex;
+    justify-content: center;
   }
 }
 

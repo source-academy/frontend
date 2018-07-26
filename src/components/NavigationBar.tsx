@@ -7,9 +7,10 @@ import { Role } from '../reducers/states'
 import Status from './academy/Status'
 
 export interface INavigationBarProps {
+  handleLogOut: () => void
+  role?: Role
   title: string
   username?: string
-  role?: Role
 }
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
@@ -54,7 +55,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </NavLink>
 
       {props.username !== undefined && props.role !== undefined ? (
-        <Status username={props.username} role={props.role} />
+        <Status username={props.username} role={props.role} handleLogOut={props.handleLogOut} />
       ) : (
         undefined
       )}

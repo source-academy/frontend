@@ -1,19 +1,10 @@
-import { IState, Role } from './reducers/states'
-import { HistoryHelper } from './utils/history'
+import { compressToUTF16, decompressFromUTF16 } from 'lz-string'
 
-/**
- * Note that the properties in this interface are a
- * subset of the properties in IState.session, so an instance
- * of an object that implements this interface cannot
- * be used as a substitute for IState. Rather, it can be used
- * to complement defaultState.session with saved properties.
- */
-export interface ISavedState {
-  historyHelper: HistoryHelper
-  accessToken?: string
-  refreshToken?: string
-  role?: Role
-  username?: string
+import { ISessionState, IState } from './reducers/states'
+
+export type ISavedState = {
+  session: Partial<ISessionState>
+  playgroundEditorValue: string | null
 }
 
 export const loadStoredState = (): ISavedState | undefined => {
@@ -22,7 +13,7 @@ export const loadStoredState = (): ISavedState | undefined => {
     if (serializedState === null) {
       return undefined
     } else {
-      return JSON.parse(serializedState) as ISavedState
+      return JSON.parse(decompressFromUTF16(serializedState)) as ISavedState
     }
   } catch (err) {
     // Issue #143
@@ -33,13 +24,16 @@ export const loadStoredState = (): ISavedState | undefined => {
 export const saveState = (state: IState) => {
   try {
     const stateToBeSaved: ISavedState = {
-      accessToken: state.session.accessToken,
-      historyHelper: state.session.historyHelper,
-      refreshToken: state.session.refreshToken,
-      role: state.session.role,
-      username: state.session.username
+      session: {
+        accessToken: state.session.accessToken,
+        historyHelper: state.session.historyHelper,
+        refreshToken: state.session.refreshToken,
+        role: state.session.role,
+        username: state.session.username
+      },
+      playgroundEditorValue: state.workspaces.playground.editorValue
     }
-    const serialized = JSON.stringify(stateToBeSaved)
+    const serialized = compressToUTF16(JSON.stringify(stateToBeSaved))
     localStorage.setItem('storedState', serialized)
   } catch (err) {
     // Issue #143

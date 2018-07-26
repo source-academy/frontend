@@ -48,7 +48,7 @@ interface IGradingWorkspace extends IWorkspaceState {
   readonly hasUnsavedChanges: boolean
 }
 
-interface IPlaygroundWorkspace extends IWorkspaceState {
+export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName
 }
 

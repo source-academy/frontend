@@ -14,17 +14,18 @@ import NotFound from './NotFound'
 export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
-  title: string
   accessToken?: string
-  role?: Role
-  username?: string
   currentPlaygroundChapter: number
   currentPlaygroundExternalSymbols: string[]
+  role?: Role
+  title: string
+  username?: string
 }
 
 export interface IDispatchProps {
   handleClearContext: (chapter: number, symbols: string[]) => void
   handleEditorValueChange: (val: string) => void
+  handleLogOut: () => void
 }
 
 const Application: React.SFC<IApplicationProps> = props => {
@@ -34,7 +35,12 @@ const Application: React.SFC<IApplicationProps> = props => {
 
   return (
     <div className="Application">
-      <NavigationBar title={props.title} username={props.username} role={props.role} />
+      <NavigationBar
+        handleLogOut={props.handleLogOut}
+        role={props.role}
+        username={props.username}
+        title={props.title}
+      />
       <div className="Application__main">
         <Switch>
           <Route path="/academy" component={toAcademy(props)} />

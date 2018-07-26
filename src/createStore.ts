@@ -34,16 +34,27 @@ function createStore(history: History): Store<IState> {
   })
   const enchancers = composeEnhancers(applyMiddleware(...middleware))
   const loadedStore = loadStoredState()
-  const initialStore: IState =
-    loadedStore === undefined
-      ? defaultState
-      : {
-          ...defaultState,
-          session: {
-            ...defaultState.session,
-            ...loadedStore
-          }
+  let initialStore: IState
+  if (loadedStore) {
+    initialStore = {
+      ...defaultState,
+      session: {
+        ...defaultState.session,
+        ...(loadedStore.session ? loadedStore.session : {})
+      },
+      workspaces: {
+        ...defaultState.workspaces,
+        playground: {
+          ...defaultState.workspaces.playground,
+          editorValue: loadedStore.playgroundEditorValue
+            ? loadedStore.playgroundEditorValue
+            : defaultState.workspaces.playground.editorValue
         }
+      }
+    }
+  } else {
+    initialStore = defaultState
+  }
   const createdStore = _createStore<IState>(rootReducer, initialStore, enchancers)
 
   sagaMiddleware.run(mainSaga)

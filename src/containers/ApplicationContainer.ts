@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { clearContext, updateEditorValue } from '../actions'
+import { clearContext, logOut, updateEditorValue } from '../actions'
 import { WorkspaceLocations } from '../actions/workspaces'
 import Application, { IDispatchProps, IStateProps } from '../components/Application'
 import { ExternalLibraryNames } from '../components/assessment/assessmentShape'
@@ -45,7 +45,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
           },
           workspaceLocation
         ),
-      handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation)
+      handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleLogOut: logOut
     },
     dispatch
   )

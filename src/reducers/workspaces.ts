@@ -17,6 +17,7 @@ import {
   EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
+  LOG_OUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   UPDATE_CURRENT_ASSESSMENT_ID,
@@ -254,6 +255,13 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           output: newOutput
         }
+      }
+    case LOG_OUT:
+      // Preserve the playground workspace even after log out
+      const playgroundWorkspace = state.playground
+      return {
+        ...defaultWorkspaceManager,
+        playground: playgroundWorkspace
       }
     case EVAL_EDITOR:
       // Forces re-render of workspace on editor eval
