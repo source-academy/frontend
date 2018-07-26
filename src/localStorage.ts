@@ -31,7 +31,12 @@ export const saveState = (state: IState) => {
         role: state.session.role,
         username: state.session.username
       },
-      playgroundWorkspace: state.workspaces.playground
+      playgroundWorkspace: {
+        ...state.workspaces.playground,
+        // clear the output, because otherwise ErrorOutputs will try to parse
+        // errors that have already been overwritten by a new context
+        output: []
+      }
     }
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved))
     localStorage.setItem('storedState', serialized)
