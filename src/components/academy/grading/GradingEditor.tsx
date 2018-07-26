@@ -8,29 +8,30 @@ import { controlButton } from '../../commons'
 type GradingEditorProps = DispatchProps & OwnProps & StateProps
 
 export type DispatchProps = {
-  handleGradingCommentsChange: (s: string) => void
-  handleGradingXPChange: (i: number | undefined) => void
+  handleCommentsChange: (s: string) => void
+  handleGradeAdjustmentChange: (i: number | undefined) => void
   handleGradingInputSave: (s: string, i: number | undefined) => void
 }
 
 export type OwnProps = {
-  maximumXP: number
+  maximumGrade: number
+  initialGrade: number
 }
 
 export type StateProps = {
-  gradingCommentsValue: string
-  gradingXP: number | undefined
+  comments: string
+  adjustment: number | undefined
 }
 
 /**
  * Keeps track of the current editor state,
- * as well as the XP in the numeric input.
+ * as well as the grade adjustment in the numeric input.
  *
- * XP can be undefined to show the hint text.
+ * adjustment can be undefined to show the hint text.
  */
 type State = {
   mdeState: ReactMdeTypes.MdeState
-  XPInput: number | undefined
+  adjustment: number | undefined
 }
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
@@ -40,9 +41,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     super(props)
     this.state = {
       mdeState: {
-        markdown: this.props.gradingCommentsValue
+        markdown: this.props.comments
       },
-      XPInput: this.props.gradingXP
+      adjustmentInput: this.props.adjustment
     }
     /**
      * The markdown-to-html converter for the editor.
@@ -61,8 +62,8 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * value in the local state.
    */
   public componentWillUnmount() {
-    this.props.handleGradingCommentsChange(this.state.mdeState.markdown!)
-    this.props.handleGradingXPChange(this.state.XPInput)
+    this.props.handleCommentsChange(this.state.mdeState.markdown!)
+    this.props.handleGradeAdjustmentChange(this.state.adjustmentInput)
   }
 
   public render() {
@@ -71,12 +72,12 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         <div className="grading-editor-input-parent">
           <ButtonGroup fill={true}>
             <NumericInput
-              onValueChange={this.onXPInputChange}
-              value={this.state.XPInput}
+              onValueChange={this.onAdjustmentInputChange}
+              value={this.state.adjustmentInput}
               buttonPosition={Position.LEFT}
-              placeholder="XP here"
-              min={0}
-              max={this.props.maximumXP}
+              placeholder="Adjust grades relatively here"
+              min={ 0 - this.props.initialGrade }
+              max={ this.props.maximumGrade - this.props.initialGrade }
             />
             {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton)}
           </ButtonGroup>
@@ -107,18 +108,21 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private onClickSaveButton = () => {
-    this.props.handleGradingInputSave(this.state.mdeState.markdown!, this.state.XPInput)
+    this.props.handleGradingInputSave(this.state.mdeState.markdown!, this.state.adjustmentInput)
   }
 
-  private onXPInputChange = (newValue: number) => {
+  private onAdjustmentInputChange = (newValue: number) => {
     this.setState({
       ...this.state,
-      XPInput: newValue
+      adjustmentInput: newValue
     })
   }
 
   private handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
-    this.setState({ mdeState })
+    this.setState({
+      ...this.state,
+      mdeState 
+    })
   }
 
   private generateMarkdownPreview = (markdown: string) =>
