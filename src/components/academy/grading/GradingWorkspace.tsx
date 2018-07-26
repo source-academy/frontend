@@ -182,10 +182,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         icon: IconNames.TICK,
         /* Render an editor with the xp given to the current question. */
         body: <GradingEditor 
-          maximumGrade={props.grading![questionId].maximumGrade}
-          initialAdjustment={props.grading![questionId].grade.adjustment}
+          adjustment={props.grading![questionId].grade.adjustment}
+          comments={props.grading![questionId].grade.comment}
           initialGrade={props.grading![questionId].grade.grade}
-          initialComments={props.grading![questionId].grade.comment}
+          maximumGrade={props.grading![questionId].maximumGrade}
         />
       },
       {
