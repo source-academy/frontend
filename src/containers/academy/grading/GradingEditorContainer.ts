@@ -10,16 +10,16 @@ import { IState } from '../../../reducers/states'
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
   return {
-    gradingCommentsValue: state.workspaces.grading.gradingCommentsValue,
-    gradingXP: state.workspaces.grading.gradingXP
+    comments: state.workspaces.grading.gradingCommentsValue,
+    adjustment: state.workspaces.grading.gradingXP
   }
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
-      handleGradingCommentsChange: updateGradingCommentsValue,
-      handleGradingXPChange: updateGradingXP,
+      handleCommentsChange: updateGradingCommentsValue,
+      handleGradeAdjustmentChange: updateGradingXP,
       handleGradingInputSave: saveGradingInput
     },
     dispatch

@@ -14,8 +14,10 @@ export type DispatchProps = {
 }
 
 export type OwnProps = {
-  maximumGrade: number
   initialGrade: number
+  initialAdjustment: number
+  initialComments: string
+  maximumGrade: number
 }
 
 export type StateProps = {
@@ -43,7 +45,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       mdeState: {
         markdown: this.props.comments
       },
-      adjustmentInput: this.props.adjustment
+      adjustmentInput: this.props.initialAdjustment
     }
     /**
      * The markdown-to-html converter for the editor.
