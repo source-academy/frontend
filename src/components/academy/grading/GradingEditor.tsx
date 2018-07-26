@@ -5,7 +5,7 @@ import ReactMde, { ReactMdeTypes } from 'react-mde'
 import * as Showdown from 'showdown'
 import { controlButton } from '../../commons'
 
-type GradingEditorProps = DispatchProps & OwnProps & StateProps
+type GradingEditorProps = DispatchProps & OwnProps
 
 export type DispatchProps = {
   handleCommentsChange: (s: string) => void
@@ -14,15 +14,10 @@ export type DispatchProps = {
 }
 
 export type OwnProps = {
-  initialGrade: number
-  initialAdjustment: number
-  initialComments: string
-  maximumGrade: number
-}
-
-export type StateProps = {
+  adjustment: number
   comments: string
-  adjustment: number | undefined
+  initialGrade: number
+  maximumGrade: number
 }
 
 /**
@@ -45,7 +40,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       mdeState: {
         markdown: this.props.comments
       },
-      adjustmentInput: this.props.initialAdjustment
+      adjustmentInput: this.props.adjustment
     }
     /**
      * The markdown-to-html converter for the editor.
@@ -64,8 +59,8 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * value in the local state.
    */
   public componentWillUnmount() {
-    this.props.handleCommentsChange(this.state.mdeState.markdown!)
-    this.props.handleGradeAdjustmentChange(this.state.adjustmentInput)
+    // this.props.handleCommentsChange(this.state.mdeState.markdown!)
+    // this.props.handleGradeAdjustmentChange(this.state.adjustmentInput)
   }
 
   public render() {
