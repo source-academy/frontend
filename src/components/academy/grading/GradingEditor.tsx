@@ -2,7 +2,9 @@ import { ButtonGroup, Icon, NumericInput, Position } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import ReactMde, { ReactMdeTypes } from 'react-mde'
+import { Prompt } from 'react-router'
 import * as Showdown from 'showdown'
+
 import { controlButton } from '../../commons'
 
 type GradingEditorProps = DispatchProps & OwnProps
@@ -55,6 +57,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   public render() {
     return (
       <>
+        {this.hasUnsavedChanges() ? (
+          <Prompt
+            message={'You have changes that may not be saved. Are you sure you want to leave?'}
+          />
+        ) : null}
         <div className="grading-editor-input-parent">
           <ButtonGroup fill={true}>
             <NumericInput
@@ -109,6 +116,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       ...this.state,
       mdeState 
     })
+  }
+
+  private hasUnsavedChanges = () => {
+    return this.props.comments !== this.state.mdeState.markdown
+      || this.props.adjustment !== this.state.adjustmentInput
   }
 
   private generateMarkdownPreview = (markdown: string) =>
