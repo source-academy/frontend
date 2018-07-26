@@ -141,7 +141,7 @@ function* workspaceSaga(): SagaIterator {
   })
 
   /**
-   * A generator function that constantly checks if getReadyWebGLForCanvas 
+   * A generator function that constantly checks if getReadyWebGLForCanvas
    * is available in the global (window) scope. Returns (true) if such a function
    * exists.
    */
@@ -163,7 +163,7 @@ function* workspaceSaga(): SagaIterator {
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
     /** Create a race condition between the js files being loaded and a 3 second timeout. */
-    const {loadedScripts, timeout} = yield race({
+    const { loadedScripts, timeout } = yield race({
       loadedScripts: call(checkWebGLAvailable),
       timeout: call(delay, 3000)
     })
