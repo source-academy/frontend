@@ -31,7 +31,7 @@ export type StateProps = {
  */
 type State = {
   mdeState: ReactMdeTypes.MdeState
-  adjustment: number | undefined
+  adjustmentInput: number | undefined
 }
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
