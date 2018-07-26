@@ -141,19 +141,38 @@ function* workspaceSaga(): SagaIterator {
   })
 
   /**
+   * A generator function that constantly checks if getReadyWebGLForCanvas 
+   * is available in the global (window) scope. Returns (true) if such a function
+   * exists.
+   */
+  function* checkWebGLAvailable() {
+    while (true) {
+      if ((window as any).getReadyWebGLForCanvas !== undefined) {
+        break
+      }
+      /** Prevent checking instantaenously by waiting for a bit. */
+      yield call(delay, 250)
+    }
+    return true
+  }
+
+  /**
    * Handles the side effect of resetting the WebGL context when context is reset.
    *
    * @see clearContext and files under 'public/externalLibs/graphics'
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
-    const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
-    /**
-     * Delay execution in the case of external libraries not being loaded.
-     * This happens in the case of someone loading the website from a playground URL.
-     */
-    if ((window as any).getReadyWebGLForCanvas === undefined) {
-      yield call(delay, 500)
+    /** Create a race condition between the js files being loaded and a 3 second timeout. */
+    const {loadedScripts, timeout} = yield race({
+      loadedScripts: call(checkWebGLAvailable),
+      timeout: call(delay, 3000)
+    })
+    if (timeout !== undefined && loadedScripts === undefined) {
+      yield call(showWarningMessage, 'Error loading libraries', 750)
+      yield undefined
     }
+
+    const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:
         ;(window as any).getReadyWebGLForCanvas('2d')
