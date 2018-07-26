@@ -20,7 +20,7 @@ export interface IStateProps {
   replValue: string
   sideContentHeight?: number
   sourceChapter: number
-  externalLibrary: string
+  externalLibraryName: string
 }
 
 export interface IDispatchProps {
@@ -58,7 +58,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   public render() {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
-        externalLibrary: this.props.externalLibrary,
+        externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: this.props.handleChapterSelect,
         handleExternalSelect: this.props.handleExternalSelect,
         handleEditorEval: this.props.handleEditorEval,

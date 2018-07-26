@@ -21,7 +21,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   role: state.session.role,
   username: state.session.username,
   currentPlaygroundChapter: state.workspaces.playground.context.chapter,
-  currentPlaygroundExternals: state.workspaces.playground.externals
+  currentPlaygroundExternalSymbols: state.workspaces.playground.externalSymbols
 })
 
 const workspaceLocation = WorkspaceLocations.playground
@@ -29,8 +29,22 @@ const workspaceLocation = WorkspaceLocations.playground
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleClearContext: (chapter: number, externals: string[]) =>
-        clearContext(chapter, externals, ExternalLibraryNames.NONE, workspaceLocation),
+      /**
+       * Note that an empty globals is passed (as this is never used in URLs)
+       * and that ExternalLibraryNames.NONE is used (as URL library support is not ready yet).
+       */
+      handleClearContext: (chapter: number, symbols: string[]) =>
+        clearContext(
+          {
+            chapter,
+            external: {
+              name: ExternalLibraryNames.NONE,
+              symbols
+            },
+            globals: []
+          },
+          workspaceLocation
+        ),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation)
     },
     dispatch

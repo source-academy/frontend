@@ -18,7 +18,7 @@ export type ControlBarProps = {
   isRunning: boolean
   queryString?: string
   sourceChapter: number
-  externalLibrary?: string
+  externalLibraryName?: string
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
   handleEditorEval: () => void
@@ -44,8 +44,8 @@ interface IChapter {
  */
 interface IExternal {
   key: number
-  displayName: string
-  externals: string[]
+  name: string
+  symbols: string[]
 }
 
 class ControlBar extends React.PureComponent<ControlBarProps, {}> {
@@ -120,8 +120,8 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined
     const externalSelectButton =
-      this.props.hasChapterSelect && this.props.externalLibrary !== undefined
-        ? externalSelect(this.props.externalLibrary, this.props.handleExternalSelect)
+      this.props.hasChapterSelect && this.props.externalLibraryName !== undefined
+        ? externalSelect(this.props.externalLibraryName, this.props.handleExternalSelect!)
         : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
@@ -202,19 +202,19 @@ const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers,
   <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
 )
 
-const externals = Array.from(externalLibraries.entries()).map((entry, index) => ({
-  displayName: entry[0],
+const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
+  name: entry[0],
   key: index,
-  externals: entry[1]
+  symbols: entry[1]
 }))
 
 const externalSelect = (
   currentExternal: string,
-  handleSelect = (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => {}
+  handleSelect: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
 ) => (
   <ExternalSelectComponent
     className="pt-minimal"
-    items={externals}
+    items={iExternals}
     onItemSelect={handleSelect}
     itemRenderer={externalRenderer}
     filterable={false}
@@ -226,7 +226,7 @@ const externalSelect = (
 const ExternalSelectComponent = Select.ofType<IExternal>()
 
 const externalRenderer: ItemRenderer<IExternal> = (external, { handleClick, modifiers, query }) => (
-  <MenuItem active={false} key={external.key} onClick={handleClick} text={external.displayName} />
+  <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />
 )
 
 export default ControlBar

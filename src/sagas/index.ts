@@ -11,7 +11,7 @@ import { WorkspaceLocation } from '../actions/workspaces'
 import { ExternalLibraryNames } from '../components/assessment/assessmentShape'
 import { mockBackendSaga } from '../mocks/backend'
 import { externalLibraries } from '../reducers/externalLibraries'
-import { defaultEditorValue, IState } from '../reducers/states'
+import { defaultEditorValue, IState, IWorkspaceState } from '../reducers/states'
 import { IVLE_KEY, USE_BACKEND } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 import backendSaga from './backend'
@@ -28,41 +28,73 @@ function* workspaceSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
-    const code: string = yield select((state: IState) => state.workspaces[location].editorValue)
+    const code: string = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).editorValue
+    )
     const chapter: number = yield select(
-      (state: IState) => state.workspaces[location].context.chapter
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
     )
-    const externals: string[] = yield select(
-      (state: IState) => state.workspaces[location].externals
+    const symbols: string[] = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).externalSymbols
     )
+    const globals: Array<[string, any]> = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
+    )
+    const library = {
+      chapter,
+      external: {
+        name: ExternalLibraryNames.NONE,
+        symbols
+      },
+      globals
+    }
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
-    /** Clear the context, with the same chapter and externals as before. */
-    yield put(actions.clearContext(chapter, externals, ExternalLibraryNames.NONE, location))
+    /** Clear the context, with the same chapter and externalSymbols as before. */
+    yield put(actions.clearContext(library, location))
     yield put(actions.clearReplOutput(location))
-    context = yield select((state: IState) => state.workspaces[location].context)
+    context = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+    )
     yield* evalCode(code, context, location)
   })
 
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
-    const code: string = yield select((state: IState) => state.workspaces[location].replValue)
+    const code: string = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).replValue
+    )
     yield put(actions.beginInterruptExecution(location))
     yield put(actions.clearReplInput(location))
     yield put(actions.sendReplInputToOutput(code, location))
-    context = yield select((state: IState) => state.workspaces[location].context)
+    context = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+    )
     yield* evalCode(code, context, location)
   })
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
     const newChapter = (action as actionTypes.IAction).payload.chapter
-    const oldChapter = yield select((state: IState) => state.workspaces[location].context.chapter)
-    const externals: string[] = yield select(
-      (state: IState) => state.workspaces[location].externals
+    const oldChapter = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
+    )
+    const symbols: string[] = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).externalSymbols
+    )
+    const globals: Array<[string, any]> = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
     )
     if (newChapter !== oldChapter) {
-      yield put(actions.clearContext(newChapter, externals, ExternalLibraryNames.NONE, location))
+      const library = {
+        chapter: newChapter,
+        external: {
+          name: ExternalLibraryNames.NONE,
+          symbols
+        },
+        globals
+      }
+      yield put(actions.clearContext(library, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
     }
@@ -81,17 +113,30 @@ function* workspaceSaga(): SagaIterator {
    */
   yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation
-    const chapter = yield select((state: IState) => state.workspaces[location].context.chapter)
-    const newExternal = (action as actionTypes.IAction).payload.external
-    const oldExternal = yield select(
+    const chapter = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
+    )
+    const globals: Array<[string, any]> = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
+    )
+    const newExternalLibraryName = (action as actionTypes.IAction).payload.externalLibraryName
+    const oldExternalLibraryName = yield select(
       (state: IState) => state.workspaces.playground.playgroundExternal
     )
-    if (newExternal !== oldExternal) {
-      const externals = externalLibraries.get(newExternal)!
-      yield put(actions.changePlaygroundExternal(newExternal))
-      yield put(actions.clearContext(chapter, externals, newExternal, location))
+    const symbols = externalLibraries.get(newExternalLibraryName)!
+    const library = {
+      chapter,
+      external: {
+        name: newExternalLibraryName,
+        symbols
+      },
+      globals
+    }
+    if (newExternalLibraryName !== oldExternalLibraryName) {
+      yield put(actions.changePlaygroundExternal(newExternalLibraryName))
+      yield put(actions.clearContext(library, location))
       yield put(actions.clearReplOutput(location))
-      yield call(showSuccessMessage, `Switched to ${newExternal} library`, 1000)
+      yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
     }
   })
 
@@ -101,7 +146,7 @@ function* workspaceSaga(): SagaIterator {
    * @see clearContext and files under 'public/externalLibs/graphics'
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
-    const externalLibraryName = (action as actionTypes.IAction).payload.externalLibraryName
+    const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
     const resetWebGl = (window as any).getReadyWebGLForCanvas
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:
@@ -113,6 +158,10 @@ function* workspaceSaga(): SagaIterator {
       case ExternalLibraryNames.CURVES:
         resetWebGl('curve')
         break
+    }
+    const globals: Array<[string, any]> = (action as actionTypes.IAction).payload.library.globals
+    for (const [key, value] of globals) {
+      window[key] = value
     }
     yield undefined
   })

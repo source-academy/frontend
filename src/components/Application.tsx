@@ -19,11 +19,11 @@ export interface IStateProps {
   role?: Role
   username?: string
   currentPlaygroundChapter: number
-  currentPlaygroundExternals: string[]
+  currentPlaygroundExternalSymbols: string[]
 }
 
 export interface IDispatchProps {
-  handleClearContext: (chapter: number, externals: string[]) => void
+  handleClearContext: (chapter: number, symbols: string[]) => void
   handleEditorValueChange: (val: string) => void
 }
 
@@ -70,9 +70,9 @@ const parsePlayground = (props: IApplicationProps) => {
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
   }
-  /** Changes the chapter, retains the externals. */
+  /** Changes the chapter, retains the external symbols. */
   if (lib) {
-    props.handleClearContext(lib, props.currentPlaygroundExternals)
+    props.handleClearContext(lib, props.currentPlaygroundExternalSymbols)
   }
 }
 

@@ -9,8 +9,8 @@ test('Application renders correctly', () => {
     ...mockRouterProps('/academy', {}),
     title: 'Cadet',
     currentPlaygroundChapter: 2,
-    currentPlaygroundExternals: [],
-    handleClearContext: (chapter: number, externals: string[]) => {},
+    currentPlaygroundExternalSymbols: [],
+    handleClearContext: (chapter: number, externalSymbols: string[]) => {},
     handleEditorValueChange: (val: string) => {}
   }
   const app = <Application {...props} />

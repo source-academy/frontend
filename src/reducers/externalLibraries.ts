@@ -1,7 +1,7 @@
 import { ExternalLibraryName, ExternalLibraryNames } from '../components/assessment/assessmentShape'
 
 /**
- * Defines all the externals for playground, i.e full access to runes functionality.
+ * Defines all the external symbols for playground, i.e full access to runes functionality.
  */
 const TwoDRunesExternals = [
   'show',
@@ -47,7 +47,7 @@ const TwoDRunesExternals = [
 
 /**
  * Defines which external libraries are available for usage, and what
- * externals (exposed functions) are under them.
+ * external symbols (exposed functions) are under them.
  */
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.NONE, []],

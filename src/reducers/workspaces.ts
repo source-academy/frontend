@@ -186,11 +186,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           context: createContext<WorkspaceLocation>(
-            action.payload.chapter,
-            action.payload.externals,
+            action.payload.library.chapter,
+            action.payload.library.external.symbols,
             location
           ),
-          externals: action.payload.externals
+          externalSymbols: action.payload.library.external.symbols,
+          globals: action.payload.library.globals
         }
       }
     case SEND_REPL_INPUT_TO_OUTPUT:

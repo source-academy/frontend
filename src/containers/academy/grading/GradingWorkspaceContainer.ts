@@ -27,7 +27,7 @@ import GradingWorkspace, {
   OwnProps,
   StateProps
 } from '../../../components/academy/grading/GradingWorkspace'
-import { ExternalLibraryName } from '../../../components/assessment/assessmentShape'
+import { Library } from '../../../components/assessment/assessmentShape'
 import { IState, IWorkspaceState } from '../../../reducers/states'
 
 const workspaceLocation: WorkspaceLocation = 'grading'
@@ -55,11 +55,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, changeEvent, workspaceLocation),
-      handleClearContext: (
-        chapter: number,
-        externals: string[],
-        externalLibraryName: ExternalLibraryName
-      ) => clearContext(chapter, externals, externalLibraryName, workspaceLocation),
+      handleClearContext: (library: Library) => clearContext(library, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>

@@ -10,11 +10,11 @@ import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
 import {
-  ExternalLibraryName,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  Library,
   QuestionTypes
 } from './assessmentShape'
 
@@ -45,11 +45,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (
-    chapter: number,
-    externals: string[],
-    externalLibraryName: ExternalLibraryName
-  ) => void
+  handleClearContext: (library: Library) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -70,11 +66,9 @@ class AssessmentWorkspace extends React.Component<
   public state = { showOverlay: false }
 
   /**
-   * First, check for a need to reset the workspace,
-   * then fetch the assessment. This works because a change in
-   * assessmentId or questionId results in a navigation, causing
-   * this component to be mounted again. The handleAssessmentFetch
-   * occurs after the call to checkWorkspaceReset finishes.
+   * After mounting (either an older copy of the assessment
+   * or a loading screen), try to fetch a newer assessment,
+   * and show the briefing.
    */
   public componentDidMount() {
     this.props.handleAssessmentFetch(this.props.assessmentId)
@@ -83,6 +77,10 @@ class AssessmentWorkspace extends React.Component<
     }
   }
 
+  /**
+   * Once there is an update (due to the assessment being fetched), check
+   * if a workspace reset is needed.
+   */
   public componentDidUpdate() {
     this.checkWorkspaceReset(this.props)
   }
@@ -178,9 +176,6 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedQuestionId !== questionId
     ) {
       const question = this.props.assessment.questions[questionId]
-      const chapter = question.library.chapter
-      const externalName = question.library.externalLibraryName
-      const externals = question.library.externals
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
@@ -189,7 +184,7 @@ class AssessmentWorkspace extends React.Component<
           : null
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace({ editorValue })
-      this.props.handleClearContext(chapter, externals, externalName)
+      this.props.handleClearContext(question.library)
     }
   }
 

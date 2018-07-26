@@ -2,7 +2,6 @@ import { NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
-import { ExternalLibraryName } from '../../../components/assessment/assessmentShape'
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer'
 import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states'
 import { history } from '../../../utils/history'
@@ -10,6 +9,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  Library,
   QuestionTypes
 } from '../../assessment/assessmentShape'
 import Workspace, { WorkspaceProps } from '../../workspace'
@@ -42,11 +42,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (
-    chapter: number,
-    externals: string[],
-    externalLibraryName: ExternalLibraryName
-  ) => void
+  handleClearContext: (library: Library) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
@@ -62,19 +58,16 @@ export type DispatchProps = {
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   /**
-   * First, check for a need to reset the workspace,
-   * then fetch the grading. This works because a change in
-   * submissionId or questionId results in a navigation, causing
-   * this component to be mounted again. The handleGradingFetch
-   * occurs after the call to checkWorkspaceReset finishes.
+   * After mounting (either an older copy of the grading
+   * or a loading screen), try to fetch a newer grading.
    */
   public componentDidMount() {
     this.props.handleGradingFetch(this.props.submissionId)
   }
 
   /**
-   * After the Grading is fetched, there is a check for wether the
-   * workspace needs to be udpated (a change in submissionId or questionId)
+   * Once there is an update (due to the grading being fetched), check
+   * if a workspace reset is needed.
    */
   public componentDidUpdate() {
     this.checkWorkspaceReset(this.props)
@@ -158,9 +151,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       this.props.storedQuestionId !== questionId
     ) {
       const question = this.props.grading[questionId].question as IQuestion
-      const chapter = question.library.chapter
-      const externalName = question.library.externalLibraryName
-      const externals = question.library.externals
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
@@ -169,7 +159,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           : null
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
       this.props.handleResetWorkspace({ editorValue })
-      this.props.handleClearContext(chapter, externals, externalName)
+      this.props.handleClearContext(question.library)
     }
   }
 
