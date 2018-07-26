@@ -5,12 +5,13 @@ import { AssessmentCategory, IQuestion, MCQChoice } from '../../assessment/asses
  * for a particular assessment. Used for display in the UI.
  */
 export type GradingOverview = {
+  adjustments: number
   assessmentId: number
   assessmentName: string
   assessmentCategory: AssessmentCategory
-  currentXP: number
-  graded: boolean
-  maximumXP: number
+  initialGrade: number
+  currentGrade: number
+  maximumGrade: number
   studentId: number
   studentName: string
   submissionId: number
