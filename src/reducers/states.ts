@@ -43,8 +43,6 @@ interface IAssessmentWorkspace extends IWorkspaceState {
 interface IGradingWorkspace extends IWorkspaceState {
   readonly currentSubmission?: number
   readonly currentQuestion?: number
-  readonly gradingCommentsValue: string
-  readonly gradingXP: number | undefined
   readonly hasUnsavedChanges: boolean
 }
 
@@ -215,8 +213,6 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     ...createDefaultWorkspace(WorkspaceLocations.grading),
     currentSubmission: undefined,
     currentQuestion: undefined,
-    gradingCommentsValue: defaultComments,
-    gradingXP: undefined,
     hasUnsavedChanges: false
   },
   playground: {
