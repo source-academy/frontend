@@ -29,10 +29,11 @@ export type Grading = GradingQuestion[]
  */
 export type GradingQuestion = {
   question: IAnsweredQuestion
-  maximumXP: number
+  maximumGrade: number
   grade: {
-    xp: number
+    adjustment: number
     comment: string
+    grade: number
   }
 }
 
