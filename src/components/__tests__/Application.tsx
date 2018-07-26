@@ -10,7 +10,7 @@ test('Application renders correctly', () => {
     ...mockRouterProps('/academy', {}),
     title: 'Cadet',
     currentPlaygroundChapter: 2,
-    handleLogOut: () => {}
+    handleLogOut: () => {},
     currentPlaygroundExternalLibrary: ExternalLibraryNames.NONE,
     handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => {},
     handleEditorValueChange: (val: string) => {},

@@ -39,10 +39,10 @@ class Application extends React.Component<IApplicationProps, {}> {
     return (
       <div className="Application">
         <NavigationBar
-          handleLogOut={props.handleLogOut}
-          role={props.role}
-          username={props.username}
-          title={props.title}
+          handleLogOut={this.props.handleLogOut}
+          role={this.props.role}
+          username={this.props.username}
+          title={this.props.title}
         />
         <div className="Application__main">
           <Switch>
