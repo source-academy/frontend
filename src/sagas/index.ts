@@ -3,7 +3,7 @@ import { InterruptedError } from 'js-slang/dist/interpreter-errors'
 import { compressToEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
 import { delay, SagaIterator } from 'redux-saga'
-import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
+import { all, call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
@@ -141,20 +141,46 @@ function* workspaceSaga(): SagaIterator {
   })
 
   /**
-   * A generator function that constantly checks if getReadyWebGLForCanvas
-   * is available in the global (window) scope. Returns (true) if such a function
-   * exists.
+   * Ensures that the external JS libraries have been loaded, with a
+   * timeout of 3 seconds. An error will be thrown if the libraries are not
+   * loaded.
    */
   function* checkWebGLAvailable() {
-    while (true) {
-      if ((window as any).getReadyWebGLForCanvas !== undefined) {
-        break
+    /**
+     * A generator function that constantly checks if getReadyWebGLForCanvas
+     * is available in the global (window) scope. Returns (true) if such a function
+     * exists.
+     */
+    function* helper() {
+      while (true) {
+        if ((window as any).getReadyWebGLForCanvas !== undefined) {
+          break
+        }
+        /** Prevent checking instantaenously by waiting for a bit. */
+        yield call(delay, 250)
       }
-      /** Prevent checking instantaenously by waiting for a bit. */
-      yield call(delay, 250)
+      return true
     }
-    return true
+    /** Create a race condition between the js files being loaded and a 3 second timeout. */
+    const { loadedScripts, timeout } = yield race({
+      loadedScripts: call(helper),
+      timeout: call(delay, 4000)
+    })
+    if (timeout !== undefined && loadedScripts === undefined) {
+      yield call(showWarningMessage, 'Error loading libraries', 750)
+      return false
+    } else {
+      return true
+    }
   }
+
+  /**
+   * Makes a call to checkWebGLAvailable to ensure that the Graphics libraries are loaded.
+   * To abstract this to all libraries, add a call to the all() effect.
+   */
+  yield takeEvery(actionTypes.ENSURE_LIBRARIES_LOADED, function*(action) {
+    yield all([call(checkWebGLAvailable)])
+  })
 
   /**
    * Handles the side effect of resetting the WebGL context when context is reset.
@@ -162,16 +188,7 @@ function* workspaceSaga(): SagaIterator {
    * @see clearContext and files under 'public/externalLibs/graphics'
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
-    /** Create a race condition between the js files being loaded and a 3 second timeout. */
-    const { loadedScripts, timeout } = yield race({
-      loadedScripts: call(checkWebGLAvailable),
-      timeout: call(delay, 3000)
-    })
-    if (timeout !== undefined && loadedScripts === undefined) {
-      yield call(showWarningMessage, 'Error loading libraries', 750)
-      yield undefined
-    }
-
+    yield all([call(checkWebGLAvailable)])
     const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:

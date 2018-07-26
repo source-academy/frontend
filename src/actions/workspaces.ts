@@ -115,6 +115,10 @@ export const clearReplOutput = (workspaceLocation: WorkspaceLocation) => ({
   payload: { workspaceLocation }
 })
 
+export const ensureLibrariesLoaded = () => ({
+  type: actionTypes.ENSURE_LIBRARIES_LOADED
+})
+
 export const evalEditor = (workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.EVAL_EDITOR,
   payload: { workspaceLocation }
