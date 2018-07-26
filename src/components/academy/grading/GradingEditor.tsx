@@ -1,4 +1,4 @@
-import { ButtonGroup, Icon, NumericInput, Position } from '@blueprintjs/core'
+import { ButtonGroup, Icon, Intent, NumericInput, Position } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import ReactMde, { ReactMdeTypes } from 'react-mde'
@@ -55,9 +55,13 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   public render() {
+    const hasUnsavedChanges = this.hasUnsavedChanges()
+    const saveButtonOpts = hasUnsavedChanges
+      ? { intent: Intent.WARNING, minimal: false }
+      : {}
     return (
       <>
-        {this.hasUnsavedChanges() ? (
+        { hasUnsavedChanges ? (
           <Prompt
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
           />
@@ -72,7 +76,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
               min={ 0 - this.props.initialGrade }
               max={ this.props.maximumGrade - this.props.initialGrade }
             />
-            {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton)}
+            {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
           </ButtonGroup>
         </div>
         <div className="react-mde-parent">
