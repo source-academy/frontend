@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { saveGradingInput, updateGradingCommentsValue, updateGradingXP } from '../../../actions'
+import { saveGradingInput } from '../../../actions'
 import GradingEditor, {
   DispatchProps
 } from '../../../components/academy/grading/GradingEditor'
@@ -12,8 +12,6 @@ const mapStateToProps: MapStateToProps<{}, {}, IState> = state => ({})
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
-      handleCommentsChange: updateGradingCommentsValue,
-      handleGradeAdjustmentChange: updateGradingXP,
       handleGradingInputSave: saveGradingInput
     },
     dispatch

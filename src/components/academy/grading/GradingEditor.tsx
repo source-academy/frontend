@@ -8,8 +8,6 @@ import { controlButton } from '../../commons'
 type GradingEditorProps = DispatchProps & OwnProps
 
 export type DispatchProps = {
-  handleCommentsChange: (s: string) => void
-  handleGradeAdjustmentChange: (i: number | undefined) => void
   handleGradingInputSave: (s: string, i: number | undefined) => void
 }
 
@@ -52,15 +50,6 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       tasklists: true,
       openLinksInNewWindow: true
     })
-  }
-
-  /**
-   * Update the redux state's grading comments value, using the latest
-   * value in the local state.
-   */
-  public componentWillUnmount() {
-    // this.props.handleCommentsChange(this.state.mdeState.markdown!)
-    // this.props.handleGradeAdjustmentChange(this.state.adjustmentInput)
   }
 
   public render() {
