@@ -12,7 +12,8 @@ import {
   ExternalLibraryName,
   IAssessment,
   IAssessmentOverview,
-  IQuestion
+  IQuestion,
+  QuestionType
 } from '../components/assessment/assessmentShape'
 import { store } from '../createStore'
 import { IState, Role } from '../reducers/states'
