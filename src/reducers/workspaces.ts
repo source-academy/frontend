@@ -24,6 +24,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_GRADING_COMMENTS_VALUE,
   UPDATE_GRADING_XP,
+  UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
@@ -416,6 +417,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         grading: {
           ...state.grading,
           gradingXP: action.payload
+        }
+      }
+    case UPDATE_HAS_UNSAVED_CHANGES:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          hasUnsavedChanges: action.payload.hasUnsavedChanges
         }
       }
     default:

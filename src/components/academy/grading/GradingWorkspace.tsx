@@ -24,6 +24,7 @@ export type StateProps = {
   grading?: Grading
   editorValue: string | null
   editorWidth: string
+  hasUnsavedChanges: boolean
   isRunning: boolean
   output: InterpreterOutput[]
   replValue: string
@@ -54,6 +55,7 @@ export type DispatchProps = {
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
+  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void
 }
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
@@ -160,6 +162,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId)
       this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(question.library)
+      this.props.handleUpdateHasUnsavedChanges(false)
+      if (editorValue) {
+        this.props.handleEditorValueChange(editorValue)
+      }
     }
   }
 

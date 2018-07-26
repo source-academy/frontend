@@ -25,6 +25,7 @@ export type StateProps = {
   assessment?: IAssessment
   editorValue: string | null
   editorWidth: string
+  hasUnsavedChanges: boolean
   isRunning: boolean
   output: InterpreterOutput[]
   replValue: string
@@ -57,6 +58,7 @@ export type DispatchProps = {
   handleSave: (id: number, answer: number | string) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
+  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void
 }
 
 class AssessmentWorkspace extends React.Component<
@@ -127,12 +129,14 @@ class AssessmentWorkspace extends React.Component<
           ? {
               editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange
+              handleEditorValueChange: this.props.handleEditorValueChange,
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
             }
           : undefined,
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
+      hasUnsavedChanges: this.props.hasUnsavedChanges,
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
@@ -185,6 +189,10 @@ class AssessmentWorkspace extends React.Component<
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(question.library)
+      this.props.handleUpdateHasUnsavedChanges(false)
+      if (editorValue) {
+        this.props.handleEditorValueChange(editorValue)
+      }
     }
   }
 

@@ -213,3 +213,14 @@ export const saveGradingInput: ActionCreator<actionTypes.IAction> = (
     gradingXP
   }
 })
+
+export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  hasUnsavedChanges: boolean
+) => ({
+  type: actionTypes.UPDATE_HAS_UNSAVED_CHANGES,
+  payload: {
+    workspaceLocation,
+    hasUnsavedChanges
+  }
+})

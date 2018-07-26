@@ -1,5 +1,6 @@
 import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
+import { Prompt } from 'react-router'
 
 import ControlBar, { ControlBarProps } from './ControlBar'
 import Editor, { IEditorProps } from './Editor'
@@ -15,6 +16,7 @@ export type WorkspaceProps = {
   handleEditorWidthChange: (widthChange: number) => void
   handleSideContentHeightChange: (height: number) => void
   mcqProps?: IMCQChooserProps
+  hasUnsavedChanges?: boolean
   replProps: IReplProps
   sideContentHeight?: number
   sideContentProps: SideContentProps
@@ -39,10 +41,17 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   public render() {
     return (
       <div className="workspace">
-        <ControlBar {...this.props.controlBarProps} />
+        {this.props.hasUnsavedChanges ? (
+          <Prompt
+            message={'You have changes that may not be saved. Are you sure you want to leave?'}
+          />
+        ) : null}
+        <ControlBar {...this.controlBarProps()} />
         <div className="row workspace-parent">
           <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
-          <Resizable {...this.editorResizableProps()}>{this.workspaceInput(this.props)}</Resizable>
+          <Resizable {...this.editorResizableProps()}>
+            {this.createWorkspaceInput(this.props)}
+          </Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
               <SideContent {...this.props.sideContentProps} />
@@ -53,6 +62,13 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         </div>
       </div>
     )
+  }
+
+  private controlBarProps() {
+    return {
+      ...this.props.controlBarProps,
+      hasUnsavedChanges: this.props.hasUnsavedChanges
+    }
   }
 
   private editorResizableProps() {
@@ -135,8 +151,8 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * Pre-condition: `this.props.editorProps`
    * XOR `this.props.mcq` are defined.
    */
-  private workspaceInput = (props: WorkspaceProps) => {
-    if (props.editorProps !== undefined) {
+  private createWorkspaceInput = (props: WorkspaceProps) => {
+    if (props.editorProps) {
       return <Editor {...props.editorProps} />
     } else {
       return <MCQChooser {...props.mcqProps!} />

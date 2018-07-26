@@ -1,4 +1,4 @@
-import { Button, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
+import { Button, Intent, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
@@ -10,11 +10,12 @@ import { controlButton } from '../commons'
 
 export type ControlBarProps = {
   hasChapterSelect: boolean
+  hasDoneButton: boolean
   hasNextButton: boolean
   hasPreviousButton: boolean
   hasSaveButton: boolean
   hasShareButton: boolean
-  hasDoneButton: boolean
+  hasUnsavedChanges?: boolean
   isRunning: boolean
   queryString?: string
   sourceChapter: number
@@ -85,8 +86,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       </Tooltip>
     )
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval)
+    const saveButtonOpts = this.props.hasUnsavedChanges
+      ? { intent: Intent.WARNING, minimal: false }
+      : {}
     const saveButton = this.props.hasSaveButton
-      ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave)
+      ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave, saveButtonOpts)
       : undefined
     const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
       this.props.queryString
