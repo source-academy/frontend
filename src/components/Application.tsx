@@ -26,6 +26,7 @@ export interface IStateProps {
 export interface IDispatchProps {
   handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => void
   handleEditorValueChange: (val: string) => void
+  handleEnsureLibrariesLoaded: () => void
   handleLogOut: () => void
   handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void
 }
@@ -82,6 +83,7 @@ const parsePlayground = (props: IApplicationProps) => {
   const externalLibraryName = parseExternalLibrary(props) || props.currentPlaygroundExternalLibrary
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
+    props.handleEnsureLibrariesLoaded()
     props.handleClearContext(chapter, externalLibraryName)
     props.handlePlaygroundExternalSelect(externalLibraryName)
   }

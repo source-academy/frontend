@@ -14,6 +14,7 @@ test('Application renders correctly', () => {
     currentPlaygroundExternalLibrary: ExternalLibraryNames.NONE,
     handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => {},
     handleEditorValueChange: (val: string) => {},
+    handleEnsureLibrariesLoaded: () => {},
     handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) => {}
   }
   const app = <Application {...props} />
