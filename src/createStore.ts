@@ -46,9 +46,9 @@ function createStore(history: History): Store<IState> {
         ...defaultState.workspaces,
         playground: {
           ...defaultState.workspaces.playground,
-          editorValue: (loadedStore.playgroundEditorValue 
-            ? loadedStore.playgroundEditorValue 
-            : defaultState.workspaces.playground.editorValue)
+          editorValue: loadedStore.playgroundEditorValue
+            ? loadedStore.playgroundEditorValue
+            : defaultState.workspaces.playground.editorValue
         }
       }
     }
