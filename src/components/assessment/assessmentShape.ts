@@ -7,7 +7,7 @@ export interface IAssessmentOverview {
   closeAt: string
   coverImage: string
   id: number
-  maximumEXP: number
+  maximumGrade: number
   openAt: string
   shortSummary: string
   title: string
