@@ -3,7 +3,7 @@ import { InterruptedError } from 'js-slang/dist/interpreter-errors'
 import { compressToEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
 import { delay, SagaIterator } from 'redux-saga'
-import { all, call, put, race, select, take, takeEvery } from 'redux-saga/effects'
+import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
@@ -141,11 +141,12 @@ function* workspaceSaga(): SagaIterator {
   })
 
   /**
-   * Ensures that the external JS libraries have been loaded, with a
-   * timeout if it cannot load. An error message will be shown 
+   * Ensures that the external JS libraries have been loaded by waiting
+   * with a timeout. An error message will be shown 
    * if the libraries are not loaded. This is particularly useful
    * when dealing with external library pre-conditions, e.g when the 
-   * website has just loaded and there is a need to reset the js-slang context.
+   * website has just loaded and there is a need to reset the js-slang context,
+   * but it cannot be determined if the global JS files are loaded yet.
    *
    * The presence of JS libraries are checked using the presence of a global
    * function "getReadyWebGLForCanvas", that is used in CLEAR_CONTEXT to prepare 
@@ -154,7 +155,8 @@ function* workspaceSaga(): SagaIterator {
    * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on 
    * the function.
    *
-   * @return true if the libraries are loaded, false if it is not.
+   * @returns true if the libraries are loaded before timeout
+   * @returns false if the loading of the libraries times out
    */
   function* checkWebGLAvailable() {
     function* helper() {
@@ -184,7 +186,7 @@ function* workspaceSaga(): SagaIterator {
    * To abstract this to other libraries, add a call to the all() effect.
    */
   yield takeEvery(actionTypes.ENSURE_LIBRARIES_LOADED, function*(action) {
-    yield all([call(checkWebGLAvailable)])
+    yield* checkWebGLAvailable()
   })
 
   /**
@@ -194,7 +196,7 @@ function* workspaceSaga(): SagaIterator {
    * the function.
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
-    yield all([call(checkWebGLAvailable)])
+    yield* checkWebGLAvailable()
     const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:
