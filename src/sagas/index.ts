@@ -142,17 +142,17 @@ function* workspaceSaga(): SagaIterator {
 
   /**
    * Ensures that the external JS libraries have been loaded by waiting
-   * with a timeout. An error message will be shown 
+   * with a timeout. An error message will be shown
    * if the libraries are not loaded. This is particularly useful
-   * when dealing with external library pre-conditions, e.g when the 
+   * when dealing with external library pre-conditions, e.g when the
    * website has just loaded and there is a need to reset the js-slang context,
    * but it cannot be determined if the global JS files are loaded yet.
    *
    * The presence of JS libraries are checked using the presence of a global
-   * function "getReadyWebGLForCanvas", that is used in CLEAR_CONTEXT to prepare 
+   * function "getReadyWebGLForCanvas", that is used in CLEAR_CONTEXT to prepare
    * the canvas for rendering in a specific mode.
    *
-   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on 
+   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
    * the function.
    *
    * @returns true if the libraries are loaded before timeout
@@ -192,7 +192,7 @@ function* workspaceSaga(): SagaIterator {
   /**
    * Handles the side effect of resetting the WebGL context when context is reset.
    *
-   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on 
+   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
    * the function.
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
