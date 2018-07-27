@@ -215,7 +215,6 @@ function* workspaceSaga(): SagaIterator {
     }
     yield undefined
   })
-
 }
 
 function* loginSaga(): SagaIterator {

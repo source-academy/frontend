@@ -2,9 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { submitGrading } from '../../../actions'
-import GradingEditor, {
-  DispatchProps
-} from '../../../components/academy/grading/GradingEditor'
+import GradingEditor, { DispatchProps } from '../../../components/academy/grading/GradingEditor'
 import { IState } from '../../../reducers/states'
 
 const mapStateToProps: MapStateToProps<{}, {}, IState> = state => ({})

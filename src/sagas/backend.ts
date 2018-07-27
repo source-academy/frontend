@@ -190,7 +190,14 @@ function* backendSaga(): SagaIterator {
       adjustment
     } = (action as actionTypes.IAction).payload
     const accessToken = yield select((state: IState) => state.session.accessToken)
-    const resp = yield postGrading(submissionId, questionId, accessToken, grade, comment, adjustment)
+    const resp = yield postGrading(
+      submissionId,
+      questionId,
+      accessToken,
+      grade,
+      comment,
+      adjustment
+    )
     if (resp !== null && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
       // Now, update the grade for the question in the Grading in the store
@@ -212,7 +219,7 @@ function* backendSaga(): SagaIterator {
       let errorMessage: string
       switch (resp.status) {
         case 400:
-          errorMessage = "Invalid or missing parameter(s) or submission and/or question not found"
+          errorMessage = 'Invalid or missing parameter(s) or submission and/or question not found'
           break
         case 401:
           errorMessage = 'Got 403 response. Only staff can save gradings.'
@@ -305,17 +312,23 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
   }
 }
 
-/** 
+/**
  * POST /grading/{submissionId}/{questionId}
  */
-const postGrading = async (submissionId: number, questionId: number, 
-  accessToken: string, grade: number, comment: string, adjustment: number) => {
-    const resp = await authorizedPost(`grading/${submissionId}/${questionId}`, accessToken, {
-      grade,
-      comment,
-      adjustment
-    })
-    return resp
+const postGrading = async (
+  submissionId: number,
+  questionId: number,
+  accessToken: string,
+  grade: number,
+  comment: string,
+  adjustment: number
+) => {
+  const resp = await authorizedPost(`grading/${submissionId}/${questionId}`, accessToken, {
+    grade,
+    comment,
+    adjustment
+  })
+  return resp
 }
 
 /**

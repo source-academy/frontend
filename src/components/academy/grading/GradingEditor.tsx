@@ -10,8 +10,13 @@ import { controlButton } from '../../commons'
 type GradingEditorProps = DispatchProps & OwnProps
 
 export type DispatchProps = {
-  handleGradingSave: (submissionId: number, questionId: number, 
-    g: number, s: string, i: number | undefined) => void
+  handleGradingSave: (
+    submissionId: number,
+    questionId: number,
+    g: number,
+    s: string,
+    i: number | undefined
+  ) => void
 }
 
 export type OwnProps = {
@@ -59,12 +64,10 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
 
   public render() {
     const hasUnsavedChanges = this.hasUnsavedChanges()
-    const saveButtonOpts = hasUnsavedChanges
-      ? { intent: Intent.WARNING, minimal: true }
-      : {}
+    const saveButtonOpts = hasUnsavedChanges ? { intent: Intent.WARNING, minimal: true } : {}
     return (
       <>
-        { hasUnsavedChanges ? (
+        {hasUnsavedChanges ? (
           <Prompt
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
           />
@@ -76,8 +79,8 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
               value={this.state.adjustmentInput}
               buttonPosition={Position.LEFT}
               placeholder="Adjust grades relatively here"
-              min={ 0 - this.props.initialGrade }
-              max={ this.props.maximumGrade - this.props.initialGrade }
+              min={0 - this.props.initialGrade}
+              max={this.props.maximumGrade - this.props.initialGrade}
             />
             {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
           </ButtonGroup>
@@ -111,7 +114,10 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     this.props.handleGradingSave(
       this.props.submissionId,
       this.props.questionId,
-      this.props.initialGrade, this.state.mdeState.markdown!, this.state.adjustmentInput)
+      this.props.initialGrade,
+      this.state.mdeState.markdown!,
+      this.state.adjustmentInput
+    )
   }
 
   private onAdjustmentInputChange = (newValue: number) => {
@@ -124,13 +130,15 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   private handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
     this.setState({
       ...this.state,
-      mdeState 
+      mdeState
     })
   }
 
   private hasUnsavedChanges = () => {
-    return this.props.comments !== this.state.mdeState.markdown
-      || this.props.adjustment !== this.state.adjustmentInput
+    return (
+      this.props.comments !== this.state.mdeState.markdown ||
+      this.props.adjustment !== this.state.adjustmentInput
+    )
   }
 
   private generateMarkdownPreview = (markdown: string) =>
