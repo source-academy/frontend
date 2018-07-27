@@ -142,26 +142,31 @@ function* workspaceSaga(): SagaIterator {
 
   /**
    * Ensures that the external JS libraries have been loaded, with a
-   * timeout of 3 seconds. An error will be thrown if the libraries are not
-   * loaded.
+   * timeout if it cannot load. An error message will be shown 
+   * if the libraries are not loaded. This is particularly useful
+   * when dealing with external library pre-conditions, e.g when the 
+   * website has just loaded and there is a need to reset the js-slang context.
+   *
+   * The presence of JS libraries are checked using the presence of a global
+   * function "getReadyWebGLForCanvas", that is used in CLEAR_CONTEXT to prepare 
+   * the canvas for rendering in a specific mode.
+   *
+   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on 
+   * the function.
+   *
+   * @return true if the libraries are loaded, false if it is not.
    */
   function* checkWebGLAvailable() {
-    /**
-     * A generator function that constantly checks if getReadyWebGLForCanvas
-     * is available in the global (window) scope. Returns (true) if such a function
-     * exists.
-     */
     function* helper() {
       while (true) {
         if ((window as any).getReadyWebGLForCanvas !== undefined) {
           break
         }
-        /** Prevent checking instantaenously by waiting for a bit. */
         yield call(delay, 250)
       }
       return true
     }
-    /** Create a race condition between the js files being loaded and a 3 second timeout. */
+    /** Create a race condition between the js files being loaded and a timeout. */
     const { loadedScripts, timeout } = yield race({
       loadedScripts: call(helper),
       timeout: call(delay, 4000)
@@ -176,7 +181,7 @@ function* workspaceSaga(): SagaIterator {
 
   /**
    * Makes a call to checkWebGLAvailable to ensure that the Graphics libraries are loaded.
-   * To abstract this to all libraries, add a call to the all() effect.
+   * To abstract this to other libraries, add a call to the all() effect.
    */
   yield takeEvery(actionTypes.ENSURE_LIBRARIES_LOADED, function*(action) {
     yield all([call(checkWebGLAvailable)])
@@ -185,7 +190,8 @@ function* workspaceSaga(): SagaIterator {
   /**
    * Handles the side effect of resetting the WebGL context when context is reset.
    *
-   * @see clearContext and files under 'public/externalLibs/graphics'
+   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on 
+   * the function.
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
     yield all([call(checkWebGLAvailable)])
