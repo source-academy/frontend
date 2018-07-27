@@ -186,6 +186,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           comments={props.grading![questionId].grade.comment}
           initialGrade={props.grading![questionId].grade.grade}
           maximumGrade={props.grading![questionId].maximumGrade}
+          questionId={questionId} 
+          submissionId={props.submissionId} 
         />
       },
       {
