@@ -180,6 +180,51 @@ function* backendSaga(): SagaIterator {
     const grading = yield call(getGrading, id, accessToken)
     yield put(actions.updateGrading(id, grading))
   })
+
+  yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {
+    const {comment, adjustment} = (action as actionTypes.IAction).payload
+    yield call(showSuccessMessage, 'Saved grading', 1000)
+    const resp = yield postAnswer(questionId, accessToken, answer)
+    if (resp !== null && resp.ok) {
+      yield call(showSuccessMessage, 'Saved!', 1000)
+      // Now, update the answer for the question in the assessment in the store
+      const assessmentId = yield select(
+        (state: IState) => state.workspaces.assessment.currentAssessment!
+      )
+      const assessment = yield select((state: IState) =>
+        state.session.assessments.get(assessmentId)
+      )
+      const newQuestions = assessment.questions.slice().map((question: IQuestion) => {
+        if (question.id === questionId) {
+          question.answer = answer
+        }
+        return question
+      })
+      const newAssessment = {
+        ...assessment,
+        questions: newQuestions
+      }
+      yield put(actions.updateAssessment(newAssessment))
+      yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
+    } else if (resp !== null) {
+      let errorMessage: string
+      switch (resp.status) {
+        case 403:
+          errorMessage = 'Got 403 response. Only students can save assessment answers.'
+          break
+        case 400:
+          errorMessage = "Can't save an empty answer."
+          break
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`
+          break
+      }
+      yield call(showWarningMessage, errorMessage)
+    } else {
+      // postAnswer returns null for failed fetch
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?")
+    }
+  })
 }
 
 /**
@@ -256,6 +301,19 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
   } else {
     return null // invalid accessToken _and_ refreshToken
   }
+}
+
+/** 
+ * POST /grading/{submissionId}/{questionId}
+ */
+const postAnswer = async (submissionId: number, questionId: number, 
+  accessToken: string, grade: number, comment: string, adjustment: number) => {
+    const resp = await authorizedPost(`grading/${submissionId}/${questionId}`, accessToken, {
+      grade,
+      comment,
+      adjustment
+    })
+    return resp
 }
 
 /**
