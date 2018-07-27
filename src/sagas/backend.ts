@@ -5,6 +5,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
+import { WorkspaceLocation } from '../actions/workspaces'
 import {
   AssessmentCategory,
   ExternalLibraryName,
@@ -17,7 +18,20 @@ import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 
-import { WorkspaceLocation } from '../actions/workspaces'
+/**
+ * @property accessToken - backend access token
+ * @property body - request body, for HTTP POST
+ * @property noHeaderAccept - if Accept: application/json should be omitted
+ * @property refreshToken - backend refresh token
+ * @property shouldRefresh - if should attempt to refresh access token
+ */
+type RequestOptions = {
+  accessToken?: string
+  body?: object
+  noHeaderAccept?: boolean
+  refreshToken?: string
+  shouldRefresh?: boolean
+}
 
 function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
@@ -105,9 +119,10 @@ function* backendSaga(): SagaIterator {
  */
 async function postAuth(ivleToken: string): Promise<object | null> {
   try {
-    const response = await request2('auth', 'POST', false, {
-      body: JSON.stringify({ login: { ivle_token: ivleToken } })
-    })
+    const requestOpts = {
+      body: { login: { ivle_token: ivleToken } }
+    }
+    const response = await request3('auth', 'POST', requestOpts)
     const tokens = await response!.json()
     return tokens
   } catch (e) {
@@ -118,23 +133,27 @@ async function postAuth(ivleToken: string): Promise<object | null> {
 /**
  * @returns {(Response|null)} Response if successful, otherwise null
  */
-async function request2(path: string, method: string, retry: boolean = false, opts: object) {
+async function request3(path: string, method: string, opts: RequestOptions) {
+  const headers = new Headers()
+  if (!opts.noHeaderAccept) {
+    headers.append('Accept', 'application/json')
+  }
+  if (method === 'POST') {
+    headers.append('Content-Type', 'application/json')
+  }
+  if (opts.accessToken) {
+    headers.append('Authorization', `Bearer ${opts.accessToken}`)
+  }
+  const fetchOpts: any = { method, headers }
+  if (opts.body) {
+    fetchOpts.body = JSON.stringify(opts.body)
+  }
   try {
-    const response = await fetch(`${BACKEND_URL}/v1/${path}`, {
-      method,
-      headers: defaultHeaders,
-      ...opts
-    })
-    return response
+    return await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts)
   } catch (e) {
     return null
   }
 }
-
-const defaultHeaders: Headers = new Headers({
-  Accept: 'application/json',
-  'Content-Type': 'application/json'
-})
 
 ///////////////////////////////////////////////////////////////////////////////
 
