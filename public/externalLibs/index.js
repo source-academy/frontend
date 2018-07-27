@@ -32,6 +32,13 @@ function loadLibs() {
     // list visualizer
     '/externalLibs/visualizer/KineticJS.js',
     '/externalLibs/visualizer/visualizer.js',
+    // deathcube
+    '/externalLibs/deathcube/common/object.js',
+    '/externalLibs/deathcube/common/inheritance.js',
+    '/externalLibs/deathcube/common/globals.js',
+    '/externalLibs/deathcube/common/dcgraphics.js',
+    '/externalLibs/deathcube/common/classes.js',
+    '/externalLibs/deathcube/common/engine.js',
   ];
 
   for (var i = 0; i < files.length; i++) {
