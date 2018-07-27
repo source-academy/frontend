@@ -121,7 +121,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
-                                    XP: 3000
+                                    Grade: 3000
                                   </h6>
                                 </div>
                                 <div className=\\"row listing-description\\">
@@ -190,7 +190,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
-                                    XP: 3000
+                                    Grade: 3000
                                   </h6>
                                 </div>
                                 <div className=\\"row listing-description\\">
@@ -259,7 +259,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
-                                    XP: 3000
+                                    Grade: 3000
                                   </h6>
                                 </div>
                                 <div className=\\"row listing-description\\">
