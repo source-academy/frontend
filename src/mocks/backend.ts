@@ -3,6 +3,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
+import { Grading, GradingQuestion } from '../components/academy/grading/gradingShape'
 import { IQuestion } from '../components/assessment/assessmentShape'
 import { IState } from '../reducers/states'
 import { history } from '../utils/history'
@@ -72,6 +73,32 @@ export function* mockBackendSaga(): SagaIterator {
       questions: newQuestions
     }
     yield put(actions.updateAssessment(newAssessment))
+    yield call(showSuccessMessage, 'Saved!', 1000)
+  })
+
+  yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {
+    const {
+      submissionId,
+      questionId,
+      grade,
+      comment,
+      adjustment
+    } = (action as actionTypes.IAction).payload
+    // Now, update the grade for the question in the Grading in the store
+    const grading: Grading = yield select((state: IState) =>
+      state.session.gradings.get(submissionId)
+    )
+    const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
+      if (gradingQuestion.question.id === questionId) {
+        gradingQuestion.grade = {
+          adjustment,
+          comment,
+          grade
+        }
+      }
+      return gradingQuestion
+    })
+    yield put(actions.updateGrading(submissionId, newGrading))
     yield call(showSuccessMessage, 'Saved!', 1000)
   })
 }
