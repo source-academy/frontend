@@ -33,6 +33,11 @@ type RequestOptions = {
   shouldRefresh?: boolean
 }
 
+type Tokens = {
+  accessToken: string
+  refreshToken: string
+}
+
 function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
     const ivleToken = (action as actionTypes.IAction).payload
@@ -50,8 +55,11 @@ function* backendSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function*() {
-    const accessToken = yield select((state: IState) => state.session.accessToken)
-    const assessmentOverviews = yield call(getAssessmentOverviews, accessToken)
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }))
+    const assessmentOverviews = yield call(getAssessmentOverviews, tokens)
     yield put(actions.updateAssessmentOverviews(assessmentOverviews))
   })
 
@@ -119,14 +127,37 @@ function* backendSaga(): SagaIterator {
  */
 async function postAuth(ivleToken: string): Promise<object | null> {
   try {
-    const requestOpts = {
+    const response = await request3('auth', 'POST', {
       body: { login: { ivle_token: ivleToken } }
-    }
-    const response = await request3('auth', 'POST', requestOpts)
+    })
     const tokens = await response!.json()
     return tokens
   } catch (e) {
     return null
+  }
+}
+
+/**
+ * GET /assessments
+ * @returns {Array} IAssessmentOverview[]
+ */
+async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+  const response = await request3('assessments', 'GET', {
+    accessToken: tokens.accessToken,
+    shouldRefresh: true,
+    refreshToken: tokens.refreshToken
+  })
+  if (response) {
+    const assessmentOverviews = await response.json()
+    // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
+    //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+    return assessmentOverviews.map((overview: any) => {
+      overview.category = capitalise(overview.type)
+      delete overview.type
+      return overview as IAssessmentOverview
+    })
+  } else {
+    return null // invalid accessToken _and_ refreshToken
   }
 }
 
@@ -156,21 +187,6 @@ async function request3(path: string, method: string, opts: RequestOptions) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
-/**
- * GET /assessments
- * @returns {Array} IAssessmentOverview[]
- */
-const getAssessmentOverviews = async (accessToken: string) => {
-  const assessmentOverviews: any = await authorizedGet('assessments', accessToken)
-  return assessmentOverviews.map((overview: any) => {
-    // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
-    //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
-    overview.category = capitalise(overview.type)
-    delete overview.type
-    return overview as IAssessmentOverview
-  })
-}
 
 /**
  * GET /assessments/${assessmentId}
