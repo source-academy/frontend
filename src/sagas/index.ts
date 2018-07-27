@@ -216,10 +216,6 @@ function* workspaceSaga(): SagaIterator {
     yield undefined
   })
 
-  yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {
-    // TODO api call here
-    yield call(showSuccessMessage, 'Saved grading', 1000)
-  })
 }
 
 function* loginSaga(): SagaIterator {
