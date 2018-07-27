@@ -8,6 +8,7 @@ import Announcements from '../containers/AnnouncementsContainer'
 import Login from '../containers/LoginContainer'
 import Playground from '../containers/PlaygroundContainer'
 import { Role, sourceChapters } from '../reducers/states'
+import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape'
 import NavigationBar from './NavigationBar'
 import NotFound from './NotFound'
 
@@ -16,44 +17,50 @@ export interface IApplicationProps extends IDispatchProps, IStateProps, RouteCom
 export interface IStateProps {
   accessToken?: string
   currentPlaygroundChapter: number
-  currentPlaygroundExternalSymbols: string[]
   role?: Role
   title: string
   username?: string
+  currentPlaygroundExternalLibrary: ExternalLibraryName
 }
 
 export interface IDispatchProps {
-  handleClearContext: (chapter: number, symbols: string[]) => void
+  handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => void
   handleEditorValueChange: (val: string) => void
+  handleEnsureLibrariesLoaded: () => void
   handleLogOut: () => void
+  handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void
 }
 
-const Application: React.SFC<IApplicationProps> = props => {
-  const redirectToNews = () => <Redirect to="/news" />
+class Application extends React.Component<IApplicationProps, {}> {
+  public componentDidMount() {
+    parsePlayground(this.props)
+  }
 
-  parsePlayground(props)
-
-  return (
-    <div className="Application">
-      <NavigationBar
-        handleLogOut={props.handleLogOut}
-        role={props.role}
-        username={props.username}
-        title={props.title}
-      />
-      <div className="Application__main">
-        <Switch>
-          <Route path="/academy" component={toAcademy(props)} />
-          <Route path="/news" component={Announcements} />
-          <Route path="/material" component={Announcements} />
-          <Route path="/playground" component={Playground} />
-          <Route path="/login" render={toLogin(props)} />
-          <Route exact={true} path="/" render={redirectToNews} />
-          <Route component={NotFound} />
-        </Switch>
+  public render() {
+    return (
+      <div className="Application">
+        <NavigationBar
+          handleLogOut={this.props.handleLogOut}
+          role={this.props.role}
+          username={this.props.username}
+          title={this.props.title}
+        />
+        <div className="Application__main">
+          <Switch>
+            <Route path="/academy" component={toAcademy(this.props)} />
+            <Route path="/news" component={Announcements} />
+            <Route path="/material" component={Announcements} />
+            <Route path="/playground" component={Playground} />
+            <Route path="/login" render={toLogin(this.props)} />
+            <Route exact={true} path="/" render={this.redirectToNews} />
+            <Route component={NotFound} />
+          </Switch>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  private redirectToNews = () => <Redirect to="/news" />
 }
 
 /**
@@ -72,13 +79,13 @@ const toLogin = (props: IApplicationProps) => () => (
 
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props)
-  const lib = parseLib(props)
+  const chapter = parseChapter(props) || props.currentPlaygroundChapter
+  const externalLibraryName = parseExternalLibrary(props) || props.currentPlaygroundExternalLibrary
   if (prgrm) {
     props.handleEditorValueChange(prgrm)
-  }
-  /** Changes the chapter, retains the external symbols. */
-  if (lib) {
-    props.handleClearContext(lib, props.currentPlaygroundExternalSymbols)
+    props.handleEnsureLibrariesLoaded()
+    props.handleClearContext(chapter, externalLibraryName)
+    props.handlePlaygroundExternalSelect(externalLibraryName)
   }
 }
 
@@ -89,10 +96,15 @@ const parsePrgrm = (props: RouteComponentProps<{}>) => {
   return program !== undefined ? decompressFromEncodedURIComponent(program) : undefined
 }
 
-const parseLib = (props: RouteComponentProps<{}>) => {
-  const libQuery = qs.parse(props.location.hash).lib
-  const lib = libQuery === undefined ? NaN : parseInt(libQuery, 10)
-  return sourceChapters.includes(lib) ? lib : undefined
+const parseChapter = (props: RouteComponentProps<{}>) => {
+  const chapQuery = qs.parse(props.location.hash).chap
+  const chap = chapQuery === undefined ? NaN : parseInt(chapQuery, 10)
+  return sourceChapters.includes(chap) ? chap : undefined
+}
+
+const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
+  const ext = qs.parse(props.location.hash).ext || ''
+  return Object.values(ExternalLibraryNames).includes(ext) ? ext : ExternalLibraryNames.NONE
 }
 
 export default Application

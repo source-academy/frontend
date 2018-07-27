@@ -2,7 +2,7 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import { mockRouterProps } from '../../mocks/components'
-import { ExternalLibraryNames } from '../assessment/assessmentShape'
+import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape'
 import Playground, { IPlaygroundProps } from '../Playground'
 
 const baseProps = {
@@ -18,11 +18,11 @@ const baseProps = {
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeActiveTab: (n: number) => {},
-  handleChapterSelect: (chapter: any, e: any) => {},
+  handleChapterSelect: (chapter: number) => {},
   handleEditorEval: () => {},
   handleEditorValueChange: () => {},
   handleEditorWidthChange: (widthChange: number) => {},
-  handleExternalSelect: (external: any, e: any) => {},
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
   handleGenerateLz: () => {},
   handleInterruptEval: () => {},
   handleReplEval: () => {},

@@ -3,16 +3,19 @@ import * as React from 'react'
 
 import { mockRouterProps } from '../../mocks/components'
 import Application, { IApplicationProps } from '../Application'
+import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape'
 
 test('Application renders correctly', () => {
   const props: IApplicationProps = {
     ...mockRouterProps('/academy', {}),
     title: 'Cadet',
     currentPlaygroundChapter: 2,
-    currentPlaygroundExternalSymbols: [],
-    handleClearContext: (chapter: number, externals: string[]) => {},
+    handleLogOut: () => {},
+    currentPlaygroundExternalLibrary: ExternalLibraryNames.NONE,
+    handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => {},
     handleEditorValueChange: (val: string) => {},
-    handleLogOut: () => {}
+    handleEnsureLibrariesLoaded: () => {},
+    handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) => {}
   }
   const app = <Application {...props} />
   const tree = shallow(app)

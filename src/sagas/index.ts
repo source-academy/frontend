@@ -2,7 +2,7 @@ import { Context, interrupt, runInContext } from 'js-slang'
 import { InterruptedError } from 'js-slang/dist/interpreter-errors'
 import { compressToEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
-import { SagaIterator } from 'redux-saga'
+import { delay, SagaIterator } from 'redux-saga'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
@@ -141,22 +141,72 @@ function* workspaceSaga(): SagaIterator {
   })
 
   /**
+   * Ensures that the external JS libraries have been loaded by waiting
+   * with a timeout. An error message will be shown
+   * if the libraries are not loaded. This is particularly useful
+   * when dealing with external library pre-conditions, e.g when the
+   * website has just loaded and there is a need to reset the js-slang context,
+   * but it cannot be determined if the global JS files are loaded yet.
+   *
+   * The presence of JS libraries are checked using the presence of a global
+   * function "getReadyWebGLForCanvas", that is used in CLEAR_CONTEXT to prepare
+   * the canvas for rendering in a specific mode.
+   *
+   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
+   * the function.
+   *
+   * @returns true if the libraries are loaded before timeout
+   * @returns false if the loading of the libraries times out
+   */
+  function* checkWebGLAvailable() {
+    function* helper() {
+      while (true) {
+        if ((window as any).getReadyWebGLForCanvas !== undefined) {
+          break
+        }
+        yield call(delay, 250)
+      }
+      return true
+    }
+    /** Create a race condition between the js files being loaded and a timeout. */
+    const { loadedScripts, timeout } = yield race({
+      loadedScripts: call(helper),
+      timeout: call(delay, 4000)
+    })
+    if (timeout !== undefined && loadedScripts === undefined) {
+      yield call(showWarningMessage, 'Error loading libraries', 750)
+      return false
+    } else {
+      return true
+    }
+  }
+
+  /**
+   * Makes a call to checkWebGLAvailable to ensure that the Graphics libraries are loaded.
+   * To abstract this to other libraries, add a call to the all() effect.
+   */
+  yield takeEvery(actionTypes.ENSURE_LIBRARIES_LOADED, function*(action) {
+    yield* checkWebGLAvailable()
+  })
+
+  /**
    * Handles the side effect of resetting the WebGL context when context is reset.
    *
-   * @see clearContext and files under 'public/externalLibs/graphics'
+   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
+   * the function.
    */
   yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
+    yield* checkWebGLAvailable()
     const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
-    const resetWebGl = (window as any).getReadyWebGLForCanvas
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:
-        resetWebGl('2d')
+        ;(window as any).getReadyWebGLForCanvas('2d')
         break
       case ExternalLibraryNames.THREE_DIM_RUNES:
-        resetWebGl('3d')
+        ;(window as any).getReadyWebGLForCanvas('3d')
         break
       case ExternalLibraryNames.CURVES:
-        resetWebGl('curve')
+        ;(window as any).getReadyWebGLForCanvas('curve')
         break
     }
     const globals: Array<[string, any]> = (action as actionTypes.IAction).payload.library.globals
@@ -186,12 +236,14 @@ function* playgroundSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, function*() {
     const code = yield select((state: IState) => state.workspaces.playground.editorValue)
     const chapter = yield select((state: IState) => state.workspaces.playground.context.chapter)
+    const external = yield select((state: IState) => state.workspaces.playground.playgroundExternal)
     const newQueryString =
       code === '' || code === defaultEditorValue
         ? undefined
         : qs.stringify({
             prgrm: compressToEncodedURIComponent(code),
-            lib: chapter
+            chap: chapter,
+            ext: external
           })
     yield put(actions.changeQueryString(newQueryString))
   })

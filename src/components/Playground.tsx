@@ -5,6 +5,7 @@ import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
 import { InterpreterOutput } from '../reducers/states'
+import { ExternalLibraryName } from './assessment/assessmentShape'
 import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
 
@@ -27,13 +28,13 @@ export interface IDispatchProps {
   handleBrowseHistoryDown: () => void
   handleBrowseHistoryUp: () => void
   handleChangeActiveTab: (activeTab: number) => void
-  handleChapterSelect: (chapter: any, changeEvent: any) => void
+  handleChapterSelect: (chapter: number) => void
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
   handleGenerateLz: () => void
   handleInterruptEval: () => void
-  handleExternalSelect: (external: any, changeEvent: any) => void
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
@@ -59,8 +60,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         externalLibraryName: this.props.externalLibraryName,
-        handleChapterSelect: this.props.handleChapterSelect,
-        handleExternalSelect: this.props.handleExternalSelect,
+        handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
+          this.props.handleChapterSelect(chapter),
+        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
+          this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
         handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,

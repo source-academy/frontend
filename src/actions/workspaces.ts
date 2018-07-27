@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux'
 
-import { Library } from '../components/assessment/assessmentShape'
+import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape'
 import { IWorkspaceState } from '../reducers/states'
 import * as actionTypes from './actionTypes'
 
@@ -68,25 +68,23 @@ export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (
 })
 
 export const chapterSelect: ActionCreator<actionTypes.IAction> = (
-  chapter,
-  changeEvent,
+  chapter: number,
   workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.CHAPTER_SELECT,
   payload: {
-    chapter: chapter.chapter,
+    chapter,
     workspaceLocation
   }
 })
 
 export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
-  external,
-  changeEvent,
+  externalLibraryName: ExternalLibraryName,
   workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
   payload: {
-    externalLibraryName: external.name,
+    externalLibraryName,
     workspaceLocation
   }
 })
@@ -115,6 +113,10 @@ export const clearReplInput = (workspaceLocation: WorkspaceLocation) => ({
 export const clearReplOutput = (workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.CLEAR_REPL_OUTPUT,
   payload: { workspaceLocation }
+})
+
+export const ensureLibrariesLoaded = () => ({
+  type: actionTypes.ENSURE_LIBRARIES_LOADED
 })
 
 export const evalEditor = (workspaceLocation: WorkspaceLocation) => ({
