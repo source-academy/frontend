@@ -194,12 +194,18 @@ export const updateCurrentSubmissionId = (submissionId: number, questionId: numb
 })
 
 export const saveGradingInput: ActionCreator<actionTypes.IAction> = (
-  comments: string,
-  adjustment: number | undefined
+  submissionId: number,
+  questionId: number,
+  grade: number,
+  comment: string,
+  adjustment: number = 0
 ) => ({
   type: actionTypes.SAVE_GRADING_INPUT,
   payload: {
-    comments,
+    submissionId,
+    questionId,
+    grade,
+    comment,
     adjustment
   }
 })
