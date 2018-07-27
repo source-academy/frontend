@@ -95,19 +95,48 @@ function* backendSaga(): SagaIterator {
   })
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 /**
  * POST /auth
- * @returns {Object} with string properties accessToken & refreshToken
+ * @returns {(Object|null)}
+ *   object with string properties `access_token` and `refresh_token`
+ *   or `null` if there has been an error
  */
-const postAuth = (ivleToken: string) =>
-  request('auth', {
-    method: 'POST',
-    body: JSON.stringify({ login: { ivle_token: ivleToken } }),
-    headers: new Headers({
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
+async function postAuth(ivleToken: string): Promise<object | null> {
+  try {
+    const response = await request2('auth', 'POST', false, {
+      body: JSON.stringify({ login: { ivle_token: ivleToken } })
     })
-  })
+    const tokens = await response!.json()
+    return tokens
+  } catch (e) {
+    return null
+  }
+}
+
+/**
+ * @returns {(Response|null)} Response if successful, otherwise null
+ */
+async function request2(path: string, method: string, retry: boolean = false, opts: object) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/v1/${path}`, {
+      method,
+      headers: defaultHeaders,
+      ...opts
+    })
+    return response
+  } catch (e) {
+    return null
+  }
+}
+
+const defaultHeaders: Headers = new Headers({
+  Accept: 'application/json',
+  'Content-Type': 'application/json'
+})
+
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * GET /assessments
