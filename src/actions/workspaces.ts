@@ -193,23 +193,6 @@ export const updateCurrentSubmissionId = (submissionId: number, questionId: numb
   }
 })
 
-export const saveGradingInput: ActionCreator<actionTypes.IAction> = (
-  submissionId: number,
-  questionId: number,
-  grade: number,
-  comment: string,
-  adjustment: number = 0
-) => ({
-  type: actionTypes.SAVE_GRADING_INPUT,
-  payload: {
-    submissionId,
-    questionId,
-    grade,
-    comment,
-    adjustment
-  }
-})
-
 export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
   workspaceLocation: WorkspaceLocation,
   hasUnsavedChanges: boolean
