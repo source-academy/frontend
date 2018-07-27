@@ -76,7 +76,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Saved!', 1000)
   })
 
-  yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {
+  yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
     const {
       submissionId,
       questionId,

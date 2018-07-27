@@ -181,7 +181,7 @@ function* backendSaga(): SagaIterator {
     yield put(actions.updateGrading(id, grading))
   })
 
-  yield takeEvery(actionTypes.SAVE_GRADING_INPUT, function*(action) {
+  yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
     const {
       submissionId,
       questionId,
