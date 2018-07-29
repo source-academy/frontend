@@ -71,10 +71,15 @@ function* backendSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
-    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }))
     const id = (action as actionTypes.IAction).payload
-    const assessment: IAssessment = yield call(getAssessment, id, accessToken)
-    yield put(actions.updateAssessment(assessment))
+    const assessment: IAssessment = yield call(getAssessment, id, tokens)
+    if (assessment) {
+      yield put(actions.updateAssessment(assessment))
+    }
   })
 
   yield takeEvery(actionTypes.SUBMIT_ANSWER, function*(action) {
@@ -176,8 +181,8 @@ async function postRefresh(refreshToken: string): Promise<Tokens | null> {
 async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
   const response = await request3('assessments', 'GET', {
     accessToken: tokens.accessToken,
-    shouldRefresh: true,
-    refreshToken: tokens.refreshToken
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
   })
   if (response && response.ok) {
     const assessmentOverviews = await response.json()
@@ -190,6 +195,40 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
     })
   } else {
     return null // invalid accessToken _and_ refreshToken
+  }
+}
+
+/**
+ * GET /assessments/${assessmentId}
+ * @returns {IAssessment}
+ */
+async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
+  const response = await request3(`assessments/${id}`, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  })
+  if (response && response.ok) {
+    const assessment = (await response.json()) as IAssessment
+    // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
+    //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+    assessment.category = capitalise((assessment as any).type) as AssessmentCategory
+    delete (assessment as any).type
+    assessment.questions = assessment.questions.map(q => {
+      // Make library.external.name uppercase
+      q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName
+      // Make globals into an Array of (string, value)
+      q.library.globals = Object.entries(q.library.globals as object).map(entry => {
+        try {
+          entry[1] = (window as any).eval(entry[1])
+        } catch (e) {}
+        return entry
+      })
+      return q
+    })
+    return assessment
+  } else {
+    return null
   }
 }
 
@@ -250,31 +289,6 @@ async function request3(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
-/**
- * GET /assessments/${assessmentId}
- * @returns {IAssessment}
- */
-const getAssessment = async (id: number, accessToken: string) => {
-  const assessmentResult: any = await authorizedGet(`assessments/${id}`, accessToken)
-  const assessment = assessmentResult as IAssessment
-  /** Fix type -> category */
-  assessment.category = capitalise(assessmentResult.type) as AssessmentCategory
-  delete assessmentResult.type
-  assessment.questions = assessment.questions.map(q => {
-    /** Make library.external.name uppercase */
-    q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName
-    /** Make globals into an Array of (string, value) */
-    q.library.globals = Object.entries(q.library.globals as object).map(entry => {
-      try {
-        entry[1] = (window as any).eval(entry[1])
-      } catch (e) {}
-      return entry
-    })
-    return q
-  })
-  return assessment
-}
 
 /** POST /assessments/question/${questionId}/submit
  */
