@@ -373,30 +373,30 @@ function set_tail(xs,x) {
     }
 }
 
-//function display(str) {
-//	var to_show = str;
-//    if (is_array(str) && str.length > 2) {
-//        to_show = '[' + str.toString() + ']';
-//	} else if (is_array(str) && is_empty_list(str)) {
-//		to_show = '[]';
-//	} else if (is_pair(str)) {
-//		to_show = '';
-//		var stringize = function(item) {
-//			if (is_empty_list(item)) {
-//				return '[]';
-//			} else if (is_pair(item)) {
-//				return '[' + stringize(head(item)) + ', ' + stringize(tail(item)) + ']';
-//			} else {
-//				return item.toString();
-//			}
-//		}
-//		to_show = stringize(str);
-//	}
-//	//process.stdout.write(to_show);
-//	if (typeof to_show === 'function' && to_show.toString) {
-//		console.log(to_show.toString());
-//	} else {
-//		console.log(to_show);
-//	}
-//	return str;
-//}
+function display(str) {
+	var to_show = str;
+    if (is_array(str) && str.length > 2) {
+        to_show = '[' + str.toString() + ']';
+	} else if (is_array(str) && is_empty_list(str)) {
+		to_show = '[]';
+	} else if (is_pair(str)) {
+		to_show = '';
+		var stringize = function(item) {
+			if (is_empty_list(item)) {
+				return '[]';
+			} else if (is_pair(item)) {
+				return '[' + stringize(head(item)) + ', ' + stringize(tail(item)) + ']';
+			} else {
+				return item.toString();
+			}
+		}
+		to_show = stringize(str);
+	}
+	//process.stdout.write(to_show);
+	if (typeof to_show === 'function' && to_show.toString) {
+		console.log(to_show.toString());
+	} else {
+		console.log(to_show);
+	}
+	return str;
+}
