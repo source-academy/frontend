@@ -141,7 +141,7 @@ function* backendSaga(): SagaIterator {
  * POST /auth
  */
 async function postAuth(ivleToken: string): Promise<Tokens | null> {
-  const response = await request3('auth', 'POST', {
+  const response = await request('auth', 'POST', {
     body: { login: { ivle_token: ivleToken } },
     errorMessage: 'Could not login. Please contact the module administrator.'
   })
@@ -160,7 +160,7 @@ async function postAuth(ivleToken: string): Promise<Tokens | null> {
  * POST /auth/refresh
  */
 async function postRefresh(refreshToken: string): Promise<Tokens | null> {
-  const response = await request3('auth/refresh', 'POST', {
+  const response = await request('auth/refresh', 'POST', {
     body: { refresh_token: refreshToken }
   })
   if (response) {
@@ -178,7 +178,7 @@ async function postRefresh(refreshToken: string): Promise<Tokens | null> {
  * GET /user
  */
 async function getUser(tokens: Tokens): Promise<object | null> {
-  const response = await request3('user', 'GET', {
+  const response = await request('user', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -194,7 +194,7 @@ async function getUser(tokens: Tokens): Promise<object | null> {
  * GET /assessments
  */
 async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
-  const response = await request3('assessments', 'GET', {
+  const response = await request('assessments', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -217,7 +217,7 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
  * GET /assessments/${assessmentId}
  */
 async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
-  const response = await request3(`assessments/${id}`, 'GET', {
+  const response = await request(`assessments/${id}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -254,7 +254,7 @@ async function postAnswer(
   answer: string | number,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request3(`assessments/question/${id}/submit`, 'POST', {
+  const resp = await request(`assessments/question/${id}/submit`, 'POST', {
     accessToken: tokens.accessToken,
     body: { answer: `${answer}` },
     noHeaderAccept: true,
@@ -277,12 +277,11 @@ async function postAnswer(
  * If fetch throws an error, or final response has status code < 200 or > 299,
  * this function will cause the user to logout.
  */
-async function request3(
+async function request(
   path: string,
   method: string,
   opts: RequestOptions
 ): Promise<Response | null> {
-  console.log(`${method} ${path}; ${JSON.stringify(opts)}`) // tslint:disable-line
   const headers = new Headers()
   if (!opts.noHeaderAccept) {
     headers.append('Accept', 'application/json')
@@ -311,7 +310,7 @@ async function request3(
         accessToken: newTokens!.accessToken,
         shouldRefresh: false
       }
-      return request3(path, method, newOpts)
+      return request(path, method, newOpts)
     } else if (response && opts.shouldAutoLogout === false) {
       // this clause is mostly for SUBMIT_ANSWER; show an error message instead
       // and ask student to manually logout, so that they have a change to save
