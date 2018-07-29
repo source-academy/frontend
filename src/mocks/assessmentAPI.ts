@@ -16,7 +16,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 0,
-    maximumEXP: 3000,
+    maximumGrade: 3000,
     openAt: '2018-06-18T05:24:26.026Z',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
@@ -28,7 +28,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 1,
-    maximumEXP: 3000,
+    maximumGrade: 3000,
     openAt: '2018-07-18T05:24:26.026Z',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
@@ -40,7 +40,7 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 2,
-    maximumEXP: 3000,
+    maximumGrade: 3000,
     openAt: '2018-07-18T05:24:26.026Z',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
@@ -55,7 +55,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 3,
-    maximumEXP: 3000,
+    maximumGrade: 3000,
     openAt: '2007-07-18T05:24:26.026Z',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
@@ -67,7 +67,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'www.imgur.com',
     id: 4,
-    maximumEXP: 3000,
+    maximumGrade: 3000,
     openAt: '2007-07-18T05:24:26.026Z',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
