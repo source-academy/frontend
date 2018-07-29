@@ -14,7 +14,7 @@ import {
   IQuestion
 } from '../components/assessment/assessmentShape'
 import { store } from '../createStore'
-import { IState } from '../reducers/states'
+import { IState, Role } from '../reducers/states'
 import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
@@ -35,6 +35,7 @@ type RequestOptions = {
   body?: object
   noHeaderAccept?: boolean
   refreshToken?: string
+  shouldAutoLogout?: boolean
   shouldRefresh?: boolean
 }
 
@@ -47,8 +48,8 @@ function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
     const ivleToken = (action as actionTypes.IAction).payload
     const tokens = yield call(postAuth, ivleToken)
-    if (tokens) {
-      const user = yield call(authorizedGet, 'user', tokens.accessToken)
+    const user = tokens ? yield call(getUser, tokens) : null
+    if (tokens && user) {
       yield put(actions.setTokens(tokens))
       yield put(actions.setRole(user.role))
       yield put(actions.setUsername(user.name))
@@ -83,11 +84,18 @@ function* backendSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.SUBMIT_ANSWER, function*(action) {
-    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const role = yield select((state: IState) => state.session.role!)
+    if (role !== Role.Student) {
+      return yield call(showWarningMessage, 'Only students can submit answers.')
+    }
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }))
     const questionId = (action as actionTypes.IAction).payload.id
     const answer = (action as actionTypes.IAction).payload.answer
-    const resp = yield postAnswer(questionId, accessToken, answer)
-    if (resp !== null && resp.ok) {
+    const resp = yield call(postAnswer, questionId, answer, tokens)
+    if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
       // Now, update the answer for the question in the assessment in the store
       const assessmentId = yield select(
@@ -112,7 +120,7 @@ function* backendSaga(): SagaIterator {
       let errorMessage: string
       switch (resp.status) {
         case 403:
-          errorMessage = 'Got 403 response. Only students can save assessment answers.'
+          errorMessage = 'Session expired. Please login again.'
           break
         case 400:
           errorMessage = "Can't save an empty answer."
@@ -129,13 +137,8 @@ function* backendSaga(): SagaIterator {
   })
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 /**
  * POST /auth
- * @returns {(Object|null)}
- *   object with string properties `access_token` and `refresh_token`
- *   or `null` if there has been an error
  */
 async function postAuth(ivleToken: string): Promise<Tokens | null> {
   const response = await request3('auth', 'POST', {
@@ -155,9 +158,6 @@ async function postAuth(ivleToken: string): Promise<Tokens | null> {
 
 /**
  * POST /auth/refresh
- * @returns {(Object|null)}
- *   object with string properties `access_token` and `refresh_token`
- *   or `null` if there has been an error
  */
 async function postRefresh(refreshToken: string): Promise<Tokens | null> {
   const response = await request3('auth/refresh', 'POST', {
@@ -175,8 +175,23 @@ async function postRefresh(refreshToken: string): Promise<Tokens | null> {
 }
 
 /**
+ * GET /user
+ */
+async function getUser(tokens: Tokens): Promise<object | null> {
+  const response = await request3('user', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  })
+  if (response && response.ok) {
+    return await response.json()
+  } else {
+    return null
+  }
+}
+
+/**
  * GET /assessments
- * @returns {Array} IAssessmentOverview[]
  */
 async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
   const response = await request3('assessments', 'GET', {
@@ -200,7 +215,6 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
 
 /**
  * GET /assessments/${assessmentId}
- * @returns {IAssessment}
  */
 async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
   const response = await request3(`assessments/${id}`, 'GET', {
@@ -233,6 +247,25 @@ async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | 
 }
 
 /**
+ * POST /assessments/question/${questionId}/submit
+ */
+async function postAnswer(
+  id: number,
+  answer: string | number,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request3(`assessments/question/${id}/submit`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { answer: `${answer}` },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  })
+  return resp
+}
+
+/**
  * @returns {(Response|null)} Response if successful, otherwise null.
  *
  * @see @type{RequestOptions} for options to this function.
@@ -249,6 +282,7 @@ async function request3(
   method: string,
   opts: RequestOptions
 ): Promise<Response | null> {
+  console.log(`${method} ${path}; ${JSON.stringify(opts)}`) // tslint:disable-line
   const headers = new Headers()
   if (!opts.noHeaderAccept) {
     headers.append('Accept', 'application/json')
@@ -269,7 +303,7 @@ async function request3(
     // response.status of > 299 does not raise error; so deal with in in the try clause
     if (response && response.ok) {
       return response
-    } else if (opts.shouldRefresh) {
+    } else if (opts.shouldRefresh && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!)
       store.dispatch(actions.setTokens(newTokens))
       const newOpts = {
@@ -278,6 +312,11 @@ async function request3(
         shouldRefresh: false
       }
       return request3(path, method, newOpts)
+    } else if (response && opts.shouldAutoLogout === false) {
+      // this clause is mostly for SUBMIT_ANSWER; show an error message instead
+      // and ask student to manually logout, so that they have a change to save
+      // their answers
+      return response
     } else {
       throw new Error('API call failed or got non-OK response')
     }
@@ -287,59 +326,6 @@ async function request3(
     return null
   }
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-/** POST /assessments/question/${questionId}/submit
- */
-const postAnswer = async (id: number, accessToken: string, answer: string | number) => {
-  const resp = await authorizedPost(`assessments/question/${id}/submit`, accessToken, {
-    answer: `${answer}`
-  })
-  return resp
-}
-
-/**
- * Makes a GET request to given path with appropriate JWT from accessToken
- */
-const authorizedGet = (path: string, accessToken: string) =>
-  request(path, {
-    method: 'GET',
-    headers: new Headers({
-      Authorization: `Bearer ${accessToken}`,
-      Accept: 'application/json'
-    })
-  })
-
-/**
- * Makes a POST request to given path with appropriate JWT from accessToken,
- * and application/json body from data
- */
-const authorizedPost = (path: string, accessToken: string, data: object) =>
-  requestAnyResponse(path, {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: new Headers({
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    })
-  })
-
-/**
- * Makes a request, but does not try to decode the response as a JSON object
- */
-const requestAnyResponse = (path: string, opts: {}) =>
-  fetch(`${BACKEND_URL}/v1/${path}`, opts)
-    .then(data => data)
-    .catch(error => null)
-
-/**
- * Makes a request and returns the response body decoded as a JSON object
- */
-const request = (path: string, opts: {}) =>
-  fetch(`${BACKEND_URL}/v1/${path}`, opts)
-    .then(data => data.json())
-    .catch(error => error)
 
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
 
