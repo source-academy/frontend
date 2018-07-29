@@ -60,7 +60,12 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }))
     const assessmentOverviews = yield call(getAssessmentOverviews, tokens)
-    yield put(actions.updateAssessmentOverviews(assessmentOverviews))
+    if (assessmentOverviews) {
+      yield put(actions.updateAssessmentOverviews(assessmentOverviews))
+    } else {
+      yield call(showWarningMessage, 'Session expired. Please login again.')
+      yield put(actions.logOut())
+    }
   })
 
   yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
@@ -147,7 +152,7 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
     shouldRefresh: true,
     refreshToken: tokens.refreshToken
   })
-  if (response) {
+  if (response && response.ok) {
     const assessmentOverviews = await response.json()
     // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
     //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
@@ -180,6 +185,8 @@ async function request3(path: string, method: string, opts: RequestOptions) {
     fetchOpts.body = JSON.stringify(opts.body)
   }
   try {
+    // response.status of > 299 does not raise error;
+    // in functions using request/3, check response.ok instead
     return await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts)
   } catch (e) {
     return null
