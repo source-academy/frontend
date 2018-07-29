@@ -16,7 +16,8 @@ function dynamicallyLoadScript(url) {
  */
 function loadAllLibs() {
   const files = [
-    // list library 
+    // commonly used functions
+    '/externalLibs/misc.js',
     '/externalLibs/list.js',
     // sound
     '/externalLibs/sound/sounds.js',
@@ -41,6 +42,9 @@ function loadAllLibs() {
     '/externalLibs/deathcube/common/dcgraphics.js',
     '/externalLibs/deathcube/common/classes.js',
     '/externalLibs/deathcube/common/engine.js',
+    '/externalLibs/deathcube/mission/layout16a.js',
+    '/externalLibs/deathcube/mission/layout16b.js',
+    '/externalLibs/deathcube/mission/mission16functions.js',
   ];
 
   for (var i = 0; i < files.length; i++) {
