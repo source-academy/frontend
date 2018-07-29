@@ -1,6 +1,6 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
-import { delay, SagaIterator } from 'redux-saga'
+import { SagaIterator } from 'redux-saga'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
@@ -50,10 +50,11 @@ function* backendSaga(): SagaIterator {
     const tokens = yield call(postAuth, ivleToken)
     const user = tokens ? yield call(getUser, tokens) : null
     if (tokens && user) {
-      yield put(actions.setTokens(tokens))
-      yield put(actions.setRole(user.role))
-      yield put(actions.setUsername(user.name))
-      yield delay(2000)
+      // Use dispatch instead of saga's put to guarantee the reducer has
+      // finished setting values in the state before /academy begins rendering
+      store.dispatch(actions.setTokens(tokens))
+      store.dispatch(actions.setRole(user.role))
+      store.dispatch(actions.setUsername(user.name))
       yield history.push('/academy')
     } else {
       yield history.push('/')
@@ -313,7 +314,7 @@ async function request(
       return request(path, method, newOpts)
     } else if (response && opts.shouldAutoLogout === false) {
       // this clause is mostly for SUBMIT_ANSWER; show an error message instead
-      // and ask student to manually logout, so that they have a change to save
+      // and ask student to manually logout, so that they have a chance to save
       // their answers
       return response
     } else {
