@@ -21,6 +21,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notification'
 
 /**
  * @property accessToken - backend access token
+ * @property errorMessage - message to showWarningMessage on failure
  * @property body - request body, for HTTP POST
  * @property noHeaderAccept - if Accept: application/json should be omitted
  * @property refreshToken - backend refresh token
@@ -30,6 +31,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notification'
  */
 type RequestOptions = {
   accessToken?: string
+  errorMessage?: string
   body?: object
   noHeaderAccept?: boolean
   refreshToken?: string
@@ -45,12 +47,16 @@ function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
     const ivleToken = (action as actionTypes.IAction).payload
     const tokens = yield call(postAuth, ivleToken)
-    const user = yield call(authorizedGet, 'user', tokens.accessToken)
-    yield put(actions.setTokens(tokens))
-    yield put(actions.setRole(user.role))
-    yield put(actions.setUsername(user.name))
-    yield delay(2000)
-    yield history.push('/academy')
+    if (tokens) {
+      const user = yield call(authorizedGet, 'user', tokens.accessToken)
+      yield put(actions.setTokens(tokens))
+      yield put(actions.setRole(user.role))
+      yield put(actions.setUsername(user.name))
+      yield delay(2000)
+      yield history.push('/academy')
+    } else {
+      yield history.push('/')
+    }
   })
 
   yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function*() {
@@ -128,7 +134,8 @@ function* backendSaga(): SagaIterator {
  */
 async function postAuth(ivleToken: string): Promise<Tokens | null> {
   const response = await request3('auth', 'POST', {
-    body: { login: { ivle_token: ivleToken } }
+    body: { login: { ivle_token: ivleToken } },
+    errorMessage: 'Could not login. Please contact the module administrator.'
   })
   if (response) {
     const tokens = await response.json()
@@ -203,7 +210,6 @@ async function request3(
   method: string,
   opts: RequestOptions
 ): Promise<Response | null> {
-  console.log(`request3 ${method} ${path}; opts: ${JSON.stringify(opts)}`) // tslint:disable-line
   const headers = new Headers()
   if (!opts.noHeaderAccept) {
     headers.append('Accept', 'application/json')
@@ -238,7 +244,7 @@ async function request3(
     }
   } catch (e) {
     store.dispatch(actions.logOut())
-    showWarningMessage('Please login again.')
+    showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.')
     return null
   }
 }
