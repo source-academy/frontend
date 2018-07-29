@@ -13,6 +13,7 @@ import {
   IAssessmentOverview,
   IQuestion
 } from '../components/assessment/assessmentShape'
+import { store } from '../createStore'
 import { IState } from '../reducers/states'
 import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
@@ -24,6 +25,8 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notification'
  * @property noHeaderAccept - if Accept: application/json should be omitted
  * @property refreshToken - backend refresh token
  * @property shouldRefresh - if should attempt to refresh access token
+ *
+ * If shouldRefresh, accessToken and refreshToken are required.
  */
 type RequestOptions = {
   accessToken?: string
@@ -41,11 +44,7 @@ type Tokens = {
 function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
     const ivleToken = (action as actionTypes.IAction).payload
-    const resp = yield call(postAuth, ivleToken)
-    const tokens = {
-      accessToken: resp.access_token,
-      refreshToken: resp.refresh_token
-    }
+    const tokens = yield call(postAuth, ivleToken)
     const user = yield call(authorizedGet, 'user', tokens.accessToken)
     yield put(actions.setTokens(tokens))
     yield put(actions.setRole(user.role))
@@ -62,9 +61,6 @@ function* backendSaga(): SagaIterator {
     const assessmentOverviews = yield call(getAssessmentOverviews, tokens)
     if (assessmentOverviews) {
       yield put(actions.updateAssessmentOverviews(assessmentOverviews))
-    } else {
-      yield call(showWarningMessage, 'Session expired. Please login again.')
-      yield put(actions.logOut())
     }
   })
 
@@ -130,14 +126,38 @@ function* backendSaga(): SagaIterator {
  *   object with string properties `access_token` and `refresh_token`
  *   or `null` if there has been an error
  */
-async function postAuth(ivleToken: string): Promise<object | null> {
-  try {
-    const response = await request3('auth', 'POST', {
-      body: { login: { ivle_token: ivleToken } }
-    })
-    const tokens = await response!.json()
-    return tokens
-  } catch (e) {
+async function postAuth(ivleToken: string): Promise<Tokens | null> {
+  const response = await request3('auth', 'POST', {
+    body: { login: { ivle_token: ivleToken } }
+  })
+  if (response) {
+    const tokens = await response.json()
+    return {
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token
+    }
+  } else {
+    return null
+  }
+}
+
+/**
+ * POST /auth/refresh
+ * @returns {(Object|null)}
+ *   object with string properties `access_token` and `refresh_token`
+ *   or `null` if there has been an error
+ */
+async function postRefresh(refreshToken: string): Promise<Tokens | null> {
+  const response = await request3('auth/refresh', 'POST', {
+    body: { refresh_token: refreshToken }
+  })
+  if (response) {
+    const tokens = await response.json()
+    return {
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token
+    }
+  } else {
     return null
   }
 }
@@ -167,9 +187,23 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
 }
 
 /**
- * @returns {(Response|null)} Response if successful, otherwise null
+ * @returns {(Response|null)} Response if successful, otherwise null.
+ *
+ * @see @type{RequestOptions} for options to this function.
+ *
+ * If opts.shouldRefresh, an initial response status of < 200 or > 299 will
+ * cause this function to call postRefresh to attempt to setToken with fresh
+ * tokens.
+ *
+ * If fetch throws an error, or final response has status code < 200 or > 299,
+ * this function will cause the user to logout.
  */
-async function request3(path: string, method: string, opts: RequestOptions) {
+async function request3(
+  path: string,
+  method: string,
+  opts: RequestOptions
+): Promise<Response | null> {
+  console.log(`request3 ${method} ${path}; opts: ${JSON.stringify(opts)}`) // tslint:disable-line
   const headers = new Headers()
   if (!opts.noHeaderAccept) {
     headers.append('Accept', 'application/json')
@@ -185,10 +219,26 @@ async function request3(path: string, method: string, opts: RequestOptions) {
     fetchOpts.body = JSON.stringify(opts.body)
   }
   try {
-    // response.status of > 299 does not raise error;
-    // in functions using request/3, check response.ok instead
-    return await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts)
+    const response = await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts)
+    // response.ok is (200 <= response.status <= 299)
+    // response.status of > 299 does not raise error; so deal with in in the try clause
+    if (response && response.ok) {
+      return response
+    } else if (opts.shouldRefresh) {
+      const newTokens = await postRefresh(opts.refreshToken!)
+      store.dispatch(actions.setTokens(newTokens))
+      const newOpts = {
+        ...opts,
+        accessToken: newTokens!.accessToken,
+        shouldRefresh: false
+      }
+      return request3(path, method, newOpts)
+    } else {
+      throw new Error('API call failed or got non-OK response')
+    }
   } catch (e) {
+    store.dispatch(actions.logOut())
+    showWarningMessage('Please login again.')
     return null
   }
 }
