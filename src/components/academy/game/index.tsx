@@ -1,7 +1,5 @@
 import * as React from 'react'
 
-import story from './game.js'
-
 type GameProps = DispatchProps & StateProps
 
 export type DispatchProps = {
@@ -17,7 +15,8 @@ export class Game extends React.Component<GameProps, {}> {
   private canvas: HTMLCanvasElement
   private div: HTMLDivElement
 
-  public componentDidMount() {
+  public async componentDidMount() {
+    const story: any = (await import('./game.js')).default
     /**
      * Basically, if the function story is called twice (on different canvas
      * elements), the second time the component is mounted, the pixi.js canvas
@@ -31,7 +30,8 @@ export class Game extends React.Component<GameProps, {}> {
      * react, but it also prevents excessive loading of the game
      */
     if (this.props.canvas === undefined) {
-      story(this.div, this.canvas, this.props.story ? this.props.story : 'mission-1')
+      // story(this.div, this.canvas, this.props.story ? this.props.story : 'mission-1')
+      story(this.div, this.canvas, 'mission-1')
       this.props.handleSaveCanvas(this.canvas)
     } else {
       this.div.innerHTML = ''
