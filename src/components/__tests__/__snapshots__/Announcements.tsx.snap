@@ -5,8 +5,8 @@ exports[`Announcements page "loading" content renders correctly 1`] = `
   <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
     <div className=\\"ContentDisplay row center-xs\\">
       <div className=\\"col-xs-10 contentdisplay-content-parent\\">
-        <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
-          <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
+        <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
+          <div className=\\"pt-card pt-elevation-3 contentdisplay-content\\">
             <Component announcements={[undefined]}>
               <NonIdealState description=\\"Fetching announcements...\\" visual={{...}}>
                 <div className=\\"pt-non-ideal-state\\">
@@ -41,8 +41,8 @@ exports[`Announcements page with 0 announcements renders correctly 1`] = `
   <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
     <div className=\\"ContentDisplay row center-xs\\">
       <div className=\\"col-xs-10 contentdisplay-content-parent\\">
-        <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
-          <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
+        <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
+          <div className=\\"pt-card pt-elevation-3 contentdisplay-content\\">
             <Component announcements={{...}}>
               <NonIdealState title=\\"There are no announcements.\\" visual=\\"feed\\">
                 <div className=\\"pt-non-ideal-state\\">
@@ -75,8 +75,8 @@ exports[`Announcements page with multiple loaded announcements renders correctly
   <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAnnouncementsFetch]}>
     <div className=\\"ContentDisplay row center-xs\\">
       <div className=\\"col-xs-10 contentdisplay-content-parent\\">
-        <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
-          <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
+        <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
+          <div className=\\"pt-card pt-elevation-3 contentdisplay-content\\">
             <Component announcements={{...}}>
               <div>
                 <Blueprint2.Card elevation={0} interactive={false}>
