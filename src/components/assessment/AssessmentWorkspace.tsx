@@ -232,18 +232,18 @@ class AssessmentWorkspace extends React.Component<
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
       hasChapterSelect: false,
-      hasDoneButton: questionId === this.props.assessment!.questions.length - 1,
       hasNextButton: questionId < this.props.assessment!.questions.length - 1,
       hasPreviousButton: questionId > 0,
+      hasReturnButton: questionId === this.props.assessment!.questions.length - 1,
       hasSaveButton:
         !beforeNow(this.props.closeDate) &&
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
       hasShareButton: false,
       isRunning: this.props.isRunning,
-      onClickDone: () => history.push(listingPath),
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
+      onClickReturn: () => history.push(listingPath),
       onClickSave: () =>
         this.props.handleSave(
           this.props.assessment!.questions[questionId].id,
