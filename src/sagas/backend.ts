@@ -7,6 +7,11 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import {
+  Grading,
+  GradingOverview,
+  GradingQuestion
+} from '../components/academy/grading/gradingShape'
+import {
   AssessmentCategory,
   AssessmentStatuses,
   ExternalLibraryName,
@@ -17,6 +22,7 @@ import {
 } from '../components/assessment/assessmentShape'
 import { store } from '../createStore'
 import { IState, Role } from '../reducers/states'
+import { castLibrary } from '../utils/castBackend'
 import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
@@ -465,7 +471,7 @@ const postGrading = async (
   grade: number,
   comment: string,
   adjustment: number,
-  tokens: Tokens,
+  tokens: Tokens
 ) => {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
     accessToken: tokens.accessToken,
