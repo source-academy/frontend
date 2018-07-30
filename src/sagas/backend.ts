@@ -418,6 +418,45 @@ async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | 
 }
 
 /**
+ * GET /grading/${submissionId}
+ * @returns {Grading}
+ */
+async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading | null> {
+  const response = await request(`grading/${submissionId}`, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  })
+  if (response && response.ok) {
+    const gradingResult = await response.json()
+    const grading: Grading = gradingResult.map((gradingQuestion: any) => {
+      const { question, max_grade, grade } = gradingQuestion
+      return {
+        question: {
+          answer: question.answer,
+          choices: question.choices,
+          content: question.content,
+          id: question.id,
+          library: castLibrary(question.library),
+          solution: question.solution,
+          solutionTemplate: question.solution_template,
+          type: question.type as QuestionType
+        },
+        maximumGrade: max_grade,
+        grade: {
+          grade: grade.grade,
+          comment: grade.comment,
+          adjustment: grade.adjustment
+        }
+      }
+    })
+    return grading
+  } else {
+    return null
+  }
+}
+
+/**
  * POST /grading/{submissionId}/{questionId}
  */
 const postGrading = async (
