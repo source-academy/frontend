@@ -46,9 +46,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     super(props)
     this.state = {
       mdeState: {
-        markdown: this.props.comments
+        markdown: props.comments
       },
-      adjustmentInput: this.props.adjustment
+      adjustmentInput: props.adjustment
     }
     /**
      * The markdown-to-html converter for the editor.
