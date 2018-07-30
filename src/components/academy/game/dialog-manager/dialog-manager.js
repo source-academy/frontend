@@ -129,7 +129,7 @@ export function init(playerName_parameter, playerImageCanvas) {
   dialogBox.alpha = 0.87;
   dialogContainer.addChild(dialogBox);
   dialogText = new Text('', {
-    fontFamily:'Ubuntu Mono',
+    fontFamily: 'Arial',
     fontSize: Constants.fontSize,
     wordWrap: true,
     wordWrapWidth: Constants.dialogBoxWidth - 2 * Constants.innerDialogPadding,
