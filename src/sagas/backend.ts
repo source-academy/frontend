@@ -203,14 +203,7 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }))
-    const resp = yield postGrading(
-      submissionId,
-      questionId,
-      grade,
-      comment,
-      adjustment,
-      tokens
-    )
+    const resp = yield postGrading(submissionId, questionId, grade, comment, adjustment, tokens)
     if (resp !== null && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
       // Now, update the grade for the question in the Grading in the store
@@ -326,25 +319,6 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
 }
 
 /**
- * POST /grading/{submissionId}/{questionId}
- */
-const postGrading = async (
-  submissionId: number,
-  questionId: number,
-  grade: number,
-  comment: string,
-  adjustment: number,
-  tokens: Tokens,
-) => {
-  const resp = await authorizedPost(`grading/${submissionId}/${questionId}`, accessToken, {
-    grade,
-    comment,
-    adjustment
-  })
-  return resp
-}
-
-/**
  * GET /assessments/${assessmentId}
  */
 async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
@@ -406,6 +380,25 @@ async function postAssessment(id: number, tokens: Tokens): Promise<Response | nu
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false, // 400 if some questions unattempted
     shouldRefresh: true
+  })
+  return resp
+}
+
+/**
+ * POST /grading/{submissionId}/{questionId}
+ */
+const postGrading = async (
+  submissionId: number,
+  questionId: number,
+  grade: number,
+  comment: string,
+  adjustment: number,
+  tokens: Tokens
+) => {
+  const resp = await authorizedPost(`grading/${submissionId}/${questionId}`, accessToken, {
+    grade,
+    comment,
+    adjustment
   })
   return resp
 }
