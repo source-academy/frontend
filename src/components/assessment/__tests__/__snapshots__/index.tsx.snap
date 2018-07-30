@@ -115,8 +115,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true}>
-                                    <div className=\\"pt-text-overflow-ellipsis\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-11\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-11\\" title={[undefined]}>
                                       <h4>
                                         An Odessey to Runes
                                       </h4>
@@ -210,8 +210,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true}>
-                                    <div className=\\"pt-text-overflow-ellipsis\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-11\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-11\\" title={[undefined]}>
                                       <h4>
                                         The Secret to Streams
                                       </h4>
@@ -305,8 +305,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true}>
-                                    <div className=\\"pt-text-overflow-ellipsis\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-11\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-11\\" title={[undefined]}>
                                       <h4>
                                         A sample Sidequest
                                       </h4>

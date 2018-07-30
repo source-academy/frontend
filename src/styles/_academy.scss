@@ -76,6 +76,11 @@
       display: flex;
     }
 
+    .col-xs-11 {
+      /* overwrite default padding */
+      padding: 0;
+    }
+
     h4 {
       margin: 4px 0 0 0;
     }

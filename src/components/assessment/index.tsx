@@ -165,7 +165,7 @@ const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
       </div>
       <div className="col-xs-9 listing-text">
         <div className="row listing-title">
-          <Text ellipsize={true}>
+          <Text ellipsize={true} className="col-xs-11">
             <h4>{overview.title}</h4>
           </Text>
           <Popover content={makeMenu(overview, index)}>
