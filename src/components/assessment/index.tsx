@@ -13,6 +13,7 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
+import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
@@ -155,7 +156,9 @@ class Assessment extends React.Component<IAssessmentProps, State> {
 const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
   <div key={index}>
     <Card className="row listing">
-      <div className="col-xs-3 listing-picture">PICTURE</div>
+      <div className="col-xs-3 listing-picture">
+        <img src={overview.coverImage ? overview.coverImage : defaultCoverImage} />
+      </div>
       <div className="col-xs-9 listing-text">
         <div className="row listing-title">
           <h4>{overview.title}</h4>

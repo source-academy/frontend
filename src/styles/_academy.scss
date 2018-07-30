@@ -23,6 +23,14 @@
   }
 }
 
+.listing-picture {
+  img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+  }
+}
+
 .Grading {
   /* To show the table borders that get cut out by a Card  */
   padding: 1px;
