@@ -199,14 +199,17 @@ function* backendSaga(): SagaIterator {
       comment,
       adjustment
     } = (action as actionTypes.IAction).payload
-    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }))
     const resp = yield postGrading(
       submissionId,
       questionId,
-      accessToken,
       grade,
       comment,
-      adjustment
+      adjustment,
+      tokens
     )
     if (resp !== null && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
@@ -240,7 +243,7 @@ function* backendSaga(): SagaIterator {
       }
       yield call(showWarningMessage, errorMessage)
     } else {
-      // postAnswer returns null for failed fetch
+      // postGrading returns null for failed fetch
       yield call(showWarningMessage, "Couldn't reach our servers. Are you online?")
     }
   })
@@ -328,10 +331,10 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
 const postGrading = async (
   submissionId: number,
   questionId: number,
-  accessToken: string,
   grade: number,
   comment: string,
-  adjustment: number
+  adjustment: number,
+  tokens: Tokens,
 ) => {
   const resp = await authorizedPost(`grading/${submissionId}/${questionId}`, accessToken, {
     grade,
