@@ -393,12 +393,19 @@ const postGrading = async (
   grade: number,
   comment: string,
   adjustment: number,
-  tokens: Tokens
+  tokens: Tokens,
 ) => {
-  const resp = await authorizedPost(`grading/${submissionId}/${questionId}`, accessToken, {
-    grade,
-    comment,
-    adjustment
+  const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: {
+      grade,
+      comment,
+      adjustment
+    },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
   })
   return resp
 }
