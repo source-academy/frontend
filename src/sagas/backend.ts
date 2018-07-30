@@ -180,10 +180,15 @@ function* backendSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }))
     const id = (action as actionTypes.IAction).payload
-    const accessToken = yield select((state: IState) => state.session.accessToken)
-    const grading = yield call(getGrading, id, accessToken)
-    yield put(actions.updateGrading(id, grading))
+    const grading = yield call(getGrading, id, tokens)
+    if (grading) {
+      yield put(actions.updateGrading(id, grading))
+    }
   })
 
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
