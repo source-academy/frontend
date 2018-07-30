@@ -3,9 +3,8 @@ import { Reducer } from 'redux'
 import {
   IAction,
   LOG_OUT,
-  SET_ROLE,
   SET_TOKENS,
-  SET_USERNAME,
+  SET_USER,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
@@ -18,21 +17,16 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
   switch (action.type) {
     case LOG_OUT:
       return defaultSession
-    case SET_ROLE:
-      return {
-        ...state,
-        role: action.payload
-      }
     case SET_TOKENS:
       return {
         ...state,
         accessToken: action.payload.accessToken,
         refreshToken: action.payload.refreshToken
       }
-    case SET_USERNAME:
+    case SET_USER:
       return {
         ...state,
-        username: action.payload
+        ...action.payload
       }
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper

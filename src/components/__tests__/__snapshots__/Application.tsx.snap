@@ -2,7 +2,7 @@
 
 exports[`Application renders correctly 1`] = `
 "<div className=\\"Application\\">
-  <NavigationBar handleLogOut={[Function: handleLogOut]} role={[undefined]} username={[undefined]} title=\\"Cadet\\" />
+  <NavigationBar handleLogOut={[Function: handleLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
   <div className=\\"Application__main\\">
     <Switch>
       <Route path=\\"/academy\\" component={[Function]} />

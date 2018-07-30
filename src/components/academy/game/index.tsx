@@ -10,7 +10,7 @@ export type DispatchProps = {
 
 export type StateProps = {
   canvas?: HTMLCanvasElement
-  storyAct: string
+  story?: string
 }
 
 export class Game extends React.Component<GameProps, {}> {
@@ -31,7 +31,7 @@ export class Game extends React.Component<GameProps, {}> {
      * react, but it also prevents excessive loading of the game
      */
     if (this.props.canvas === undefined) {
-      story(this.div, this.canvas, this.props.storyAct)
+      story(this.div, this.canvas, this.props.story ? this.props.story : 'mission-1')
       this.props.handleSaveCanvas(this.canvas)
     } else {
       this.div.innerHTML = ''

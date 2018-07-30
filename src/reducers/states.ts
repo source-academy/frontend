@@ -75,13 +75,14 @@ export interface ISessionState {
   readonly assessmentOverviews?: IAssessmentOverview[]
   readonly assessments: Map<number, IAssessment>
   readonly announcements?: Announcement[]
+  readonly grade: number
   readonly gradingOverviews?: GradingOverview[]
   readonly gradings: Map<number, Grading>
   readonly historyHelper: HistoryHelper
   readonly refreshToken?: string
   readonly role?: Role
-  readonly storyAct: string
-  readonly username?: string
+  readonly story?: string
+  readonly name?: string
 }
 
 type ReplHistory = {
@@ -236,6 +237,7 @@ export const defaultSession: ISessionState = {
   ],
   assessments: new Map<number, IAssessment>(),
   assessmentOverviews: undefined,
+  grade: 0,
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
   historyHelper: {
@@ -243,8 +245,8 @@ export const defaultSession: ISessionState = {
     lastGeneralLocations: [null, null]
   },
   refreshToken: undefined,
-  storyAct: 'mission-1',
-  username: undefined
+  story: 'mission-1',
+  name: undefined
 }
 
 export const defaultState: IState = {

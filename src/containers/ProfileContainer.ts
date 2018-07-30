@@ -8,7 +8,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   grade: undefined,
   maxGrade: undefined,
   maxXp: undefined,
-  name: state.session.username,
+  name: state.session.name,
   role: state.session.role,
   xp: undefined
 })

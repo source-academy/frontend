@@ -29,7 +29,7 @@ export const saveState = (state: IState) => {
         historyHelper: state.session.historyHelper,
         refreshToken: state.session.refreshToken,
         role: state.session.role,
-        username: state.session.username
+        name: state.session.name
       },
       playgroundEditorValue: state.workspaces.playground.editorValue
     }

@@ -37,11 +37,6 @@ export const login = () => ({
   type: actionTypes.LOGIN
 })
 
-export const setRole: ActionCreator<actionTypes.IAction> = (role: Role) => ({
-  type: actionTypes.SET_ROLE,
-  payload: role
-})
-
 export const setTokens: ActionCreator<actionTypes.IAction> = ({ accessToken, refreshToken }) => ({
   type: actionTypes.SET_TOKENS,
   payload: {
@@ -50,9 +45,14 @@ export const setTokens: ActionCreator<actionTypes.IAction> = ({ accessToken, ref
   }
 })
 
-export const setUsername: ActionCreator<actionTypes.IAction> = (username: string) => ({
-  type: actionTypes.SET_USERNAME,
-  payload: username
+export const setUser: ActionCreator<actionTypes.IAction> = (user: {
+  name: string
+  role: Role
+  grade: number
+  story: string
+}) => ({
+  type: actionTypes.SET_USER,
+  payload: user
 })
 
 export const submitAnswer: ActionCreator<actionTypes.IAction> = (
