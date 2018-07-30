@@ -408,7 +408,7 @@ async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | 
         adjustments: overview.adjustment || 0,
         assessmentId: overview.assessment.id,
         assessmentName: overview.assessment.title,
-        assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory, 
+        assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
         initialGrade: overview.grade - (overview.adjustment || 0),
         currentGrade: overview.grade,
         maximumGrade: overview.assessment.maxGrade,
@@ -451,7 +451,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
         maximumGrade: maxGrade,
         grade: {
           grade: grade.grade,
-          comment: grade.comment || "",
+          comment: grade.comment || '',
           adjustment: grade.adjustment
         }
       }
