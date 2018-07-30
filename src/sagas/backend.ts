@@ -384,6 +384,39 @@ async function postAssessment(id: number, tokens: Tokens): Promise<Response | nu
   return resp
 }
 
+/*
+ * GET /grading
+ * @returns {Array} GradingOverview[]
+ */
+async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | null> {
+  const response = await request('grading', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  })
+  if (response && response.ok) {
+    const gradingOverviews = await response.json()
+    return gradingOverviews.map((overview: any) => {
+      const gradingOverview: GradingOverview = {
+        adjustments: overview.adjustment,
+        assessmentId: overview.assessment.id,
+        // TODO wait for backend issue
+        assessmentName: overview.assessment.name || '',
+        assessmentCategory: overview.assessment.category || '',
+        initialGrade: overview.grade - overview.adjustment,
+        currentGrade: overview.grade,
+        maximumGrade: overview.assessment.max_grade,
+        studentId: overview.student.id,
+        studentName: overview.student.name,
+        submissionId: overview.submissionId
+      }
+      return gradingOverview
+    })
+  } else {
+    return null // invalid accessToken _and_ refreshToken
+  }
+}
+
 /**
  * POST /grading/{submissionId}/{questionId}
  */
