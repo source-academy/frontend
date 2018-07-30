@@ -164,10 +164,12 @@ const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
           <h4>{overview.title}</h4>
         </div>
         <div className="row listing-order">
-          <h6>{`Grade: ${overview.maximumGrade}`}</h6>
+          <h6>{`Max Grade: ${overview.maximumGrade}`}</h6>
         </div>
         <div className="row listing-description">
-          <p className="col-xs-12">{overview.shortSummary}</p>
+          <Text className="col-xs-12" ellipsize={true}>
+            {overview.shortSummary}
+          </Text>
         </div>
         <div className="row between-xs middle-xs listing-controls">
           <div className="col-xs-8 listing-due-date-parent">

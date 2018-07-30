@@ -9,6 +9,7 @@
 .collapse-button {
   /* To override the center-xs center alignment */
   display: block;
+  margin: 0 0 10px 0;
 }
 
 .pt-non-ideal-state {
@@ -23,11 +24,51 @@
   }
 }
 
-.listing-picture {
-  img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: cover;
+.Assessment {
+  color: $cadet-color-3;
+
+  .contentdisplay-content.pt-card {
+    padding: 10px 20px 1px 20px;
+  }
+
+  .listing.pt-card {
+    margin: 0 0 1rem 0;
+  }
+
+  .listing {
+    background-color: $cadet-color-5;
+    margin: 0px;
+    padding: 0;
+    text-align: justify;
+
+    .listing-due-icon {
+      vertical-align: baseline;
+      margin-right: 0.4rem;
+    }
+  }
+
+  .listing-picture {
+    max-height: 200px;
+    padding: 0;
+
+    img {
+      max-height: 200px;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .listing-text {
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    border: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    .listing-description {
+      /* Pushes .listing-controls to the bottom of container */
+      flex-grow: 1;
+    }
   }
 }
 
