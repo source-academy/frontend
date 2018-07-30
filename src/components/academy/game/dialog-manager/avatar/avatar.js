@@ -12,7 +12,7 @@ function Avatar() {
   container.addChild(image);
 
   var nameText = new PIXI.Text('', {
-    fontFamily: 'Fredoka One',
+    fontFamily: 'Arial',
     fontSize: Constants.fontSize
   });
   nameText.anchor.set(0, 1);
