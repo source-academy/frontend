@@ -60,13 +60,39 @@
   }
 
   .listing-text {
-    padding: 0.5rem 1rem 0.5rem 1rem;
+    padding: 0.5rem 1rem 0.5rem 1.5rem;
     border: 1rem;
     display: flex;
     flex-direction: column;
+  }
 
-    .listing-description {
-      /* Pushes .listing-controls to the bottom of container */
+  .listing-title {
+    display: flex;
+    margin-bottom: 2px;
+
+    .pt-text-overflow-ellipsis {
+      /* Pushes button to the right of container */
+      flex-grow: 1;
+      display: flex;
+    }
+
+    h4 {
+      justify-content: center;
+      margin: 4px 0 0 0;
+    }
+  }
+
+  .listing-description {
+    /* Pushes .listing-controls to the bottom of container */
+    flex-grow: 1;
+  }
+
+  .listing-controls {
+    display: flex;
+
+    .listing-due-date {
+      /* Pushes button to the right of container */
+      padding-top: 6px;
       flex-grow: 1;
     }
   }
