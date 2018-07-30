@@ -130,6 +130,36 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'sawtooth_sound',
       'play_concurrently'
     ]
+  ],
+  [
+    ExternalLibraryNames.DEATHCUBE,
+    [
+      'is_instance_of',
+      'is_boolean',
+      'is_object',
+      'NamedObject',
+      'Room',
+      'ProtectedRoom',
+      'Ship',
+      'MobileObject',
+      'Generator',
+      'LivingThing',
+      'Person',
+      'Player',
+      'ServiceBot',
+      'SecurityDrone',
+      'Thing',
+      'Weapon',
+      'MeleeWeapon',
+      'RangedWeapon',
+      'SpellWeapon',
+      'Bomb',
+      'Keycard',
+      'DeathCubeEngine',
+      'MakeAndInstallBot',
+      'STEP_MODE',
+      'LAYOUT16A'
+    ]
   ]
 ]
 
