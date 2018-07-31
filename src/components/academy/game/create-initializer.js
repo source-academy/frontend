@@ -7,8 +7,9 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
   var hookHandlers = {
     startMission: function (number) {
+      console.log('startMission: ' + number)
       const assessmentType = story.split('-')[0] + 's'
-      history.push(`/academy/#{assessmentType}/#{number}`)
+      return history.push('/academy/' + assessmentType + '/' + number)
     },
     openTemplate: function (name) {
       switch (name) {
@@ -19,7 +20,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
         case 'lesson_plan':
           return history.push('/academy/missions');
         case 'students':
-          return history.push('/profile');
+          return history.push('/news');
         case 'materials':
           return history.push('/material');
         case 'IDE':
@@ -40,7 +41,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
   };
 
   function openWristDevice() {
-    history.push('/academy/announements')
+    history.push('/academy/news')
   }
 
   function startGame(div, canvas, saveData) {

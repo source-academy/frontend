@@ -26,7 +26,6 @@ export const saveState = (state: IState) => {
     const stateToBeSaved: ISavedState = {
       session: {
         accessToken: state.session.accessToken,
-        historyHelper: state.session.historyHelper,
         refreshToken: state.session.refreshToken,
         role: state.session.role,
         name: state.session.name
