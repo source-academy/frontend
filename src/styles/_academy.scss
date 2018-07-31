@@ -89,6 +89,8 @@
   .listing-description {
     /* Pushes .listing-controls to the bottom of container */
     flex-grow: 1;
+    /* Creates space between the description text, buttons and title */
+    margin: 1rem 0rem 1rem 0rem;
   }
 
   .listing-controls {
