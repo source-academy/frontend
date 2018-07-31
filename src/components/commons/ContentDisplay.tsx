@@ -1,4 +1,4 @@
-import { Card } from '@blueprintjs/core'
+import { Card, Elevation } from '@blueprintjs/core'
 import * as React from 'react'
 
 export interface IContentDisplayProps {
@@ -20,7 +20,7 @@ class ContentDisplay extends React.Component<IContentDisplayProps, {}> {
             this.props.fullWidth ? 'col-xs-12' : 'col-xs-10'
           } contentdisplay-content-parent`}
         >
-          <Card className="contentdisplay-content" elevation={1}>
+          <Card className="contentdisplay-content" elevation={Elevation.THREE}>
             {this.props.display}
           </Card>
         </div>

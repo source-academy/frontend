@@ -11,9 +11,9 @@ import { controlButton } from '../commons'
 
 export type ControlBarProps = {
   hasChapterSelect: boolean
-  hasDoneButton: boolean
   hasNextButton: boolean
   hasPreviousButton: boolean
+  hasReturnButton: boolean
   hasSaveButton: boolean
   hasShareButton: boolean
   hasUnsavedChanges?: boolean
@@ -30,8 +30,8 @@ export type ControlBarProps = {
   handleReplOutputClear: () => void
   onClickNext?(): any
   onClickPrevious?(): any
+  onClickReturn?(): any
   onClickSave?(): any
-  onClickDone?(): any
 }
 
 interface IChapter {
@@ -57,7 +57,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     hasPreviousButton: false,
     hasSaveButton: false,
     hasShareButton: true,
-    hasDoneButton: false,
+    hasReturnButton: false,
     onClickNext: () => {},
     onClickPrevious: () => {},
     onClickSave: () => {}
@@ -143,15 +143,15 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const nextButton = this.props.hasNextButton
       ? controlButton('Next', IconNames.ARROW_RIGHT, this.props.onClickNext, { iconOnRight: true })
       : undefined
-    const submitButton = this.props.hasDoneButton
-      ? controlButton('Done', IconNames.TICK_CIRCLE, this.props.onClickDone, {
+    const returnButton = this.props.hasReturnButton
+      ? controlButton('Return to Academy', IconNames.ARROW_RIGHT, this.props.onClickReturn, {
           iconOnRight: true
         })
       : undefined
 
     return (
       <div className="ControlBar_flow pt-button-group">
-        {previousButton} {nextButton} {submitButton}
+        {previousButton} {nextButton} {returnButton}
       </div>
     )
   }

@@ -6,11 +6,6 @@
   flex: 1 1 100%;
 }
 
-.collapse-button {
-  /* To override the center-xs center alignment */
-  display: block;
-}
-
 .pt-non-ideal-state {
   padding-top: 0.7rem;
 
@@ -20,6 +15,94 @@
 
   .pt-non-ideal-state-title {
     padding: 0.5rem 0 0 0;
+  }
+}
+
+.Assessment {
+  color: $cadet-color-3;
+
+  .contentdisplay-content.pt-card {
+    padding: 10px 20px 10px 20px;
+
+    button.collapse-button {
+      /* To override the center-xs center alignment */
+      display: block;
+      margin: 0 0 10px 0;
+    }
+  }
+
+  .listing.pt-card {
+    margin: 0 0 1rem 0;
+  }
+
+  .listing {
+    background-color: $cadet-color-5;
+    margin: 0px;
+    padding: 0;
+    text-align: justify;
+
+    .listing-due-icon {
+      vertical-align: baseline;
+      margin-right: 0.4rem;
+    }
+  }
+
+  .listing-picture {
+    max-height: 200px;
+    padding: 0;
+
+    img {
+      max-height: 200px;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .listing-text {
+    padding: 0.5rem 1rem 0.5rem 1.5rem;
+    border: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .listing-title {
+    display: flex;
+    margin-bottom: 2px;
+
+    .pt-text-overflow-ellipsis {
+      /* Pushes button to the right of container */
+      flex-grow: 1;
+      display: flex;
+    }
+
+    .col-xs-11 {
+      /* overwrite default padding */
+      padding: 0;
+    }
+
+    h4 {
+      margin: 4px 0 0 0;
+    }
+  }
+
+  .listing-description {
+    /* Pushes .listing-controls to the bottom of container */
+    flex-grow: 1;
+    /* Creates space between the description text, buttons and title */
+    margin: 1rem 0rem 1rem 0rem;
+  }
+
+  .listing-controls {
+    display: flex;
+
+    .listing-due-date {
+      /* Pushes button to the right of container */
+      display: flex;
+      flex-grow: 1;
+      align-items: center;
+      padding-top: 6px;
+    }
   }
 }
 

@@ -4,8 +4,8 @@ exports[`ContentDisplay page renders correctly 1`] = `
 "<ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
   <div className=\\"ContentDisplay row center-xs\\">
     <div className=\\"col-xs-10 contentdisplay-content-parent\\">
-      <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={1} interactive={false}>
-        <div className=\\"pt-card pt-elevation-1 contentdisplay-content\\">
+      <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
+        <div className=\\"pt-card pt-elevation-3 contentdisplay-content\\">
           <div>
              Test Content 
           </div>

@@ -205,15 +205,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       hasChapterSelect: false,
-      hasDoneButton: questionId === this.props.grading!.length - 1,
       hasNextButton: questionId < this.props.grading!.length - 1,
       hasPreviousButton: questionId > 0,
+      hasReturnButton: questionId === this.props.grading!.length - 1,
       hasSaveButton: false,
       hasShareButton: false,
       isRunning: this.props.isRunning,
-      onClickDone: () => history.push(listingPath),
       onClickNext: () => history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () => history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),
+      onClickReturn: () => history.push(listingPath),
       sourceChapter: this.props.grading![questionId].question.library.chapter
     }
   }

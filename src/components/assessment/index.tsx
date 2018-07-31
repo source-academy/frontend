@@ -2,9 +2,13 @@ import {
   Button,
   Card,
   Collapse,
+  Elevation,
   Icon,
   Intent,
+  Menu,
+  MenuItem,
   NonIdealState,
+  Popover,
   Spinner,
   Text
 } from '@blueprintjs/core'
@@ -13,6 +17,7 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
+import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
@@ -154,45 +159,68 @@ class Assessment extends React.Component<IAssessmentProps, State> {
  */
 const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
   <div key={index}>
-    <Card className="row listing">
-      <div className="col-xs-3 listing-picture">PICTURE</div>
+    <Card className="row listing" elevation={Elevation.ONE}>
+      <div className="col-xs-3 listing-picture">
+        <img src={overview.coverImage ? overview.coverImage : defaultCoverImage} />
+      </div>
       <div className="col-xs-9 listing-text">
         <div className="row listing-title">
-          <h4>{overview.title}</h4>
+          <Text ellipsize={true} className="col-xs-11">
+            <h4>{overview.title}</h4>
+          </Text>
+          <Popover content={makeMenu(overview, index)}>
+            <Button icon={IconNames.MENU} minimal={true} />
+          </Popover>
         </div>
         <div className="row listing-order">
-          <h6>{`Grade: ${overview.maximumGrade}`}</h6>
+          <h6>{`Max Grade: ${overview.maximumGrade}`}</h6>
         </div>
         <div className="row listing-description">
-          <p className="col-xs-12">{overview.shortSummary}</p>
+          <Text className="col-xs-12" ellipsize={true}>
+            {overview.shortSummary}
+          </Text>
         </div>
-        <div className="row between-xs middle-xs listing-controls">
-          <div className="col-xs-8 listing-due-date-parent">
-            <Text className="listing-due-date">
-              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-              {`Due: ${getPrettyDate(overview.closeAt)}`}
-            </Text>
-          </div>
-          <div className="col-xs">
-            <NavLink
-              to={`/academy/${assessmentCategoryLink(
-                overview.category
-              )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+        <div className="listing-controls">
+          <Text className="listing-due-date">
+            <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+            {`Due: ${getPrettyDate(overview.closeAt)}`}
+          </Text>
+          <NavLink
+            to={`/academy/${assessmentCategoryLink(
+              overview.category
+            )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+          >
+            <Button
+              className="listing-skip-button"
+              minimal={true}
+              intent={Intent.PRIMARY}
+              icon={IconNames.FLAME}
             >
-              <Button
-                className="listing-skip-button"
-                minimal={true}
-                intent={Intent.PRIMARY}
-                icon={IconNames.FLAME}
-              >
-                {'Skip Story & Attempt'}
-              </Button>
-            </NavLink>
-          </div>
+              {'Skip Story & Attempt'}
+            </Button>
+          </NavLink>
         </div>
       </div>
     </Card>
   </div>
+)
+
+const makeMenu = (overview: IAssessmentOverview, index: number) => (
+  <Menu>
+    <MenuItem
+      disabled={true}
+      icon={IconNames.ARROW_TOP_RIGHT}
+      onClick={emptyFunc}
+      text="Replay story"
+    />
+    <MenuItem
+      disabled={true}
+      icon={IconNames.CONFIRM}
+      intent={Intent.DANGER}
+      onClick={emptyFunc}
+      text="Betcha"
+    />
+  </Menu>
 )
 
 const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
@@ -200,5 +228,7 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
     minimal: true,
     className: 'collapse-button'
   })
+
+const emptyFunc = () => {}
 
 export default Assessment
