@@ -245,7 +245,6 @@ export const defaultSession: ISessionState = {
     lastGeneralLocations: [null, null]
   },
   refreshToken: undefined,
-  story: 'mission-1',
   name: undefined
 }
 

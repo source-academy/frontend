@@ -35,6 +35,6 @@ export const saveState = (state: IState) => {
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved))
     localStorage.setItem('storedState', serialized)
   } catch (err) {
-    // Issue #143
+    // https://github.com/source-academy/cadet-frontend/issues/143
   }
 }

@@ -1,5 +1,9 @@
 import * as React from 'react'
 
+import { setUser } from '../../../actions'
+import { store } from '../../../createStore'
+import { getUser } from '../../../sagas/backend'
+
 type GameProps = DispatchProps & StateProps
 
 export type DispatchProps = {
@@ -8,6 +12,7 @@ export type DispatchProps = {
 
 export type StateProps = {
   canvas?: HTMLCanvasElement
+  username: string
   story?: string
 }
 
@@ -15,25 +20,42 @@ export class Game extends React.Component<GameProps, {}> {
   private canvas: HTMLCanvasElement
   private div: HTMLDivElement
 
+  /**
+   * Basically, if the function story is called twice (on different canvas
+   * elements), the second time the component is mounted, the pixi.js canvas
+   * will show nothing but a black screen. This means that if the user
+   * navigate aways from the game tab, and then back again, the game would not
+   * work.
+   *
+   * So, we save a reference to the first canvas that is loaded. Thereafter,
+   * when this component is mounted, use that canvas instead of the new canvas
+   * mounted with this div. This is a bit hacky, and refs aren't favoured in
+   * react, but it also prevents excessive loading of the game
+   */
   public async componentDidMount() {
     const story: any = (await import('./game.js')).default
-    /**
-     * Basically, if the function story is called twice (on different canvas
-     * elements), the second time the component is mounted, the pixi.js canvas
-     * will show nothing but a black screen. This means that if the user
-     * navigate aways from the game tab, and then back again, the game would not
-     * work.
-     *
-     * So, we save a reference to the first canvas that is loaded. Thereafter,
-     * when this component is mounted, use that canvas instead of the new canvas
-     * mounted with this div. This is a bit hacky, and refs aren't favoured in
-     * react, but it also prevents excessive loading of the game
-     */
+    let storyXML: string
     if (this.props.canvas === undefined) {
-      // story(this.div, this.canvas, this.props.story ? this.props.story : 'mission-1')
-      story(this.div, this.canvas, 'mission-1')
+      // First time rendering the Game component
+      if (this.props.story) {
+        storyXML = this.props.story
+      } else {
+        // session.story is undefined if creating store from localStorage
+        const state = store.getState()
+        const tokens = {
+          accessToken: state.session.accessToken!,
+          refreshToken: state.session.refreshToken!
+        }
+        const user: any = await getUser(tokens)
+        // if user is null, actions.logOut is called anyways
+        storyXML = user ? user.story : undefined
+        store.dispatch(setUser(user))
+      }
+      // TODO: https://github.com/source-academy/cadet/issues/179
+      story(this.div, this.canvas, this.props.username, storyXML, false)
       this.props.handleSaveCanvas(this.canvas)
     } else {
+      // This browser window has loaded the Game component & canvas before
       this.div.innerHTML = ''
       this.div.appendChild(this.props.canvas)
     }
@@ -41,14 +63,7 @@ export class Game extends React.Component<GameProps, {}> {
 
   public render() {
     return (
-      <div
-        id="game-display"
-        className="sa-game"
-        data-story="spaceship"
-        data-attempted-all="true"
-        data-username="mockUsername"
-        ref={e => (this.div = e!)}
-      >
+      <div id="game-display" className="sa-game" ref={e => (this.div = e!)}>
         <canvas ref={e => (this.canvas = e!)} />
       </div>
     )

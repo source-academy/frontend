@@ -287,7 +287,7 @@ async function postRefresh(refreshToken: string): Promise<Tokens | null> {
 /**
  * GET /user
  */
-async function getUser(tokens: Tokens): Promise<object | null> {
+export async function getUser(tokens: Tokens): Promise<object | null> {
   const response = await request('user', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
