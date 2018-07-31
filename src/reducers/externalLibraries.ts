@@ -158,7 +158,8 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'DeathCubeEngine',
       'MakeAndInstallBot',
       'STEP_MODE',
-      'LAYOUT16A'
+      'LAYOUT16A',
+      'test_task2'
     ]
   ]
 ]
