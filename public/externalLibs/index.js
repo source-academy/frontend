@@ -38,13 +38,14 @@ function loadAllLibs() {
     // deathcube
     '/externalLibs/deathcube/common/object.js',
     '/externalLibs/deathcube/common/inheritance.js',
-    '/externalLibs/deathcube/common/globals.js',
     '/externalLibs/deathcube/common/dcgraphics.js',
+    '/externalLibs/deathcube/common/globals.js',
     '/externalLibs/deathcube/common/classes.js',
-    '/externalLibs/deathcube/common/engine.js',
       // deathcube mission 16 layout and functions
     '/externalLibs/deathcube/mission/layout16a.js',
+    '/externalLibs/deathcube/mission/layout16b.js',
     '/externalLibs/deathcube/mission/mission16functions.js',
+    '/externalLibs/deathcube/common/engine.js',
   ];
 
   for (var i = 0; i < files.length; i++) {
