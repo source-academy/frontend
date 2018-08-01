@@ -22,7 +22,8 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'An Odessey to Runes',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    status: AssessmentStatuses.attempted
+    status: AssessmentStatuses.attempted,
+    story: 'mission-1'
   },
   {
     attempted: false,
@@ -35,7 +36,8 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'The Secret to Streams',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    status: AssessmentStatuses.attempting
+    status: AssessmentStatuses.attempting,
+    story: 'mission-2'
   },
   {
     attempted: true,
@@ -48,7 +50,8 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     title: 'A sample Sidequest',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    status: AssessmentStatuses.not_attempted
+    status: AssessmentStatuses.not_attempted,
+    story: 'sidequest-2.1'
   }
 ]
 
@@ -64,7 +67,8 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     title: 'A closed Mission',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    status: AssessmentStatuses.submitted
+    status: AssessmentStatuses.submitted,
+    story: 'mission-3'
   },
   {
     attempted: false,
@@ -77,7 +81,8 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     title: 'A closed sidequest',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    status: AssessmentStatuses.submitted
+    status: AssessmentStatuses.submitted,
+    story: null
   }
 ]
 

@@ -66,6 +66,11 @@ export const submitAnswer: ActionCreator<actionTypes.IAction> = (
   }
 })
 
+export const submitAssessment: ActionCreator<actionTypes.IAction> = (id: number) => ({
+  type: actionTypes.SUBMIT_ASSESSMENT,
+  payload: id
+})
+
 export const updateHistoryHelpers: ActionCreator<actionTypes.IAction> = (loc: string) => ({
   type: actionTypes.UPDATE_HISTORY_HELPERS,
   payload: loc

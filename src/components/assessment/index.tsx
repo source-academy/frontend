@@ -49,6 +49,7 @@ export interface IAssessmentProps
 
 export interface IDispatchProps {
   handleAssessmentOverviewFetch: () => void
+  handleSubmitAssessment: (id: number) => void
 }
 
 export interface IOwnProps {
@@ -170,7 +171,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
             {controlButton('Cancel', null, this.setBetchaAssessmentNull, { minimal: false })}
-            {controlButton('Finalise Submission', null, this.setBetchaAssessmentNull, {
+            {controlButton('Finalise Submission', null, this.submitAssessment, {
               minimal: false,
               intent: Intent.DANGER
             })}
@@ -210,6 +211,13 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     })
 
   private setBetchaAssessmentNull = () => this.setBetchaAssessment(null)
+
+  private submitAssessment = () => {
+    if (this.state.betchaAssessment) {
+      this.props.handleSubmitAssessment(this.state.betchaAssessment.id)
+      this.setBetchaAssessmentNull()
+    }
+  }
 }
 
 /**
@@ -275,7 +283,10 @@ const makeMenu = (
       text="Replay story"
     />
     <MenuItem
-      disabled={overview.status === AssessmentStatuses.submitted}
+      disabled={
+        overview.status === AssessmentStatuses.submitted ||
+        overview.status === AssessmentStatuses.not_attempted
+      }
       icon={IconNames.CONFIRM}
       intent={Intent.DANGER}
       // intentional: each menu renders own version of onClick
@@ -292,7 +303,7 @@ const makeOverviewCardButton = (overview: IAssessmentOverview) => {
   switch (overview.status) {
     case AssessmentStatuses.not_attempted:
       icon = IconNames.STEP_FORWARD
-      label = 'Skip Story & Attempt'
+      label = overview.story ? 'Skip Story & Attempt' : 'Attempt'
       break
     case AssessmentStatuses.attempting:
       icon = IconNames.PLAY

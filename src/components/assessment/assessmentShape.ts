@@ -12,6 +12,7 @@ export interface IAssessmentOverview {
   title: string
   shortSummary: string
   status: AssessmentStatus
+  story: string | null
 }
 
 export enum AssessmentStatuses {

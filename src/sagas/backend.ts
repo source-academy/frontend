@@ -8,6 +8,7 @@ import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import {
   AssessmentCategory,
+  AssessmentStatuses,
   ExternalLibraryName,
   IAssessment,
   IAssessmentOverview,
@@ -134,6 +135,41 @@ function* backendSaga(): SagaIterator {
     } else {
       // postAnswer returns null for failed fetch
       yield call(showWarningMessage, "Couldn't reach our servers. Are you online?")
+    }
+  })
+
+  yield takeEvery(actionTypes.SUBMIT_ASSESSMENT, function*(action) {
+    const role = yield select((state: IState) => state.session.role!)
+    if (role !== Role.Student) {
+      return yield call(showWarningMessage, 'Only students can submit assessments.')
+    }
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }))
+    const assessmentId = (action as actionTypes.IAction).payload
+    const resp = yield call(postAssessment, assessmentId, tokens)
+    if (resp && resp.ok) {
+      yield call(showSuccessMessage, 'Submitted!', 2000)
+      // Now, update the status of the assessment overview in the store
+      const overviews: IAssessmentOverview[] = yield select(
+        (state: IState) => state.session.assessmentOverviews
+      )
+      const newOverviews = overviews.map(overview => {
+        if (overview.id === assessmentId) {
+          return { ...overview, status: AssessmentStatuses.submitted }
+        }
+        return overview
+      })
+      yield put(actions.updateAssessmentOverviews(newOverviews))
+    } else if (resp.status === 400) {
+      yield call(
+        showWarningMessage,
+        "Can't submit an incomplete assessment (it looks like some of the tasks in this assessment have not been attempted).",
+        4000
+      )
+    } else {
+      yield call(showWarningMessage, 'Something went wrong. Please try again.')
     }
   })
 }
@@ -267,6 +303,20 @@ async function postAnswer(
 }
 
 /**
+ * POST /assessments/${assessmentId}/submit
+ */
+async function postAssessment(id: number, tokens: Tokens): Promise<Response | null> {
+  const resp = await request(`assessments/${id}/submit`, 'POST', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false, // 400 if some questions unattempted
+    shouldRefresh: true
+  })
+  return resp
+}
+
+/**
  * @returns {(Response|null)} Response if successful, otherwise null.
  *
  * @see @type{RequestOptions} for options to this function.
@@ -287,14 +337,12 @@ async function request(
   if (!opts.noHeaderAccept) {
     headers.append('Accept', 'application/json')
   }
-  if (method === 'POST') {
-    headers.append('Content-Type', 'application/json')
-  }
   if (opts.accessToken) {
     headers.append('Authorization', `Bearer ${opts.accessToken}`)
   }
   const fetchOpts: any = { method, headers }
   if (opts.body) {
+    headers.append('Content-Type', 'application/json')
     fetchOpts.body = JSON.stringify(opts.body)
   }
   try {

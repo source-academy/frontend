@@ -3,7 +3,7 @@
 exports[`Assessment page "loading" content renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={[undefined]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+    <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={[undefined]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
       <div className=\\"Assessment\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
@@ -46,7 +46,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
 exports[`Assessment page with 0 missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+    <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
       <div className=\\"Assessment\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
@@ -87,7 +87,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
 exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
 "<MemoryRouter initialEntries={{...}}>
   <Router history={{...}}>
-    <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+    <Assessment assessmentCategory=\\"Mission\\" assessmentOverviews={{...}} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
       <div className=\\"Assessment\\">
         <ContentDisplay display={{...}} loadContentDispatch={[Function: handleAssessmentOverviewFetch]}>
           <div className=\\"ContentDisplay row center-xs\\">
