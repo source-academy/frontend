@@ -105,7 +105,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         </svg>
                       </Blueprint2.Icon>
                       <span className=\\"pt-button-text\\">
-                        Due soon
+                        Open
                       </span>
                       <Blueprint2.Icon icon={[undefined]} />
                     </button>

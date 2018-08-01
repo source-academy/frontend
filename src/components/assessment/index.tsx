@@ -111,7 +111,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const openCardsCollapsible =
         openCards.length > 0 ? (
           <>
-            {collapseButton('Due soon', this.state.showOpenAssessments, this.toggleOpenAssessments)}
+            {collapseButton('Open', this.state.showOpenAssessments, this.toggleOpenAssessments)}
             <Collapse isOpen={this.state.showOpenAssessments}>{openCards}</Collapse>
           </>
         ) : null
