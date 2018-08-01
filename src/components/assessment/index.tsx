@@ -1,7 +1,10 @@
 import {
   Button,
+  ButtonGroup,
   Card,
+  Classes,
   Collapse,
+  Dialog,
   Elevation,
   Icon,
   Intent,
@@ -52,8 +55,9 @@ export interface IStateProps {
 }
 
 type State = {
-  showOpenAssessments: boolean
+  betchaAssessment: IAssessmentOverview | null
   showClosedAssessments: boolean
+  showOpenAssessments: boolean
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -63,8 +67,9 @@ class Assessment extends React.Component<IAssessmentProps, State> {
   public constructor(props: IAssessmentProps) {
     super(props)
     this.state = {
-      showOpenAssessments: true,
-      showClosedAssessments: false
+      betchaAssessment: null,
+      showClosedAssessments: false,
+      showOpenAssessments: true
     }
   }
 
@@ -73,10 +78,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     const questionId: number =
       stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
 
-    /**
-     * If there is an assessment to render, create a workspace. The assessment
-     * overviews must still be loaded for this, to send the due date.
-     */
+    // If there is an assessment to render, create a workspace. The assessment
+    // overviews must still be loaded for this, to send the due date.
     if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
       const assessmentProps: AssessmentProps = {
         assessmentId,
@@ -87,7 +90,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       return <AssessmentWorkspaceContainer {...assessmentProps} />
     }
 
-    // The item to be displayed in the ContentDisplay
+    // Otherwise, render a list of assessments to the user.
     let display: JSX.Element
     if (this.props.assessmentOverviews === undefined) {
       display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
@@ -96,10 +99,10 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     } else {
       const openCards = this.props.assessmentOverviews
         .filter(a => !beforeNow(a.closeAt))
-        .map((overview, index) => makeOverviewCard(overview, index))
+        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
       const closedCards = this.props.assessmentOverviews
         .filter(a => beforeNow(a.closeAt))
-        .map((overview, index) => makeOverviewCard(overview, index))
+        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
       const openCardsCollapsible =
         openCards.length > 0 ? (
           <>
@@ -125,18 +128,69 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         </>
       )
     }
-    /**
-     * Finally, render the ContentDisplay.
-     */
+
+    // Define the betcha dialog (in each card's menu)
+    const betchaText = this.state.betchaAssessment ? (
+      <>
+        <p>
+          You are about to finalise your submission for the{' '}
+          {this.state.betchaAssessment.category.toLowerCase()}{' '}
+          <i>&quot;{this.state.betchaAssessment.title}&quot;</i>.
+        </p>
+        <p>
+          Early submissions grant you additional XP, but{' '}
+          <span className="warning">this action is irreversible.</span>
+        </p>
+      </>
+    ) : (
+      <>
+        <p>You are about to finalise your submission.</p>
+        <p>
+          Early submissions grant you additional XP, but{' '}
+          <span className="warning">this action is irreversible.</span>
+        </p>
+      </>
+    )
+    const betchaDialog = (
+      <Dialog
+        className="betcha-dialog"
+        icon={IconNames.ERROR}
+        isCloseButtonShown={false}
+        isOpen={this.state.betchaAssessment !== null}
+        title="Betcha: Early Submission"
+      >
+        <div className={Classes.DIALOG_BODY}>
+          <Text>{betchaText}</Text>
+        </div>
+        <div className={Classes.DIALOG_FOOTER}>
+          <ButtonGroup>
+            {controlButton('Cancel', null, this.setBetchaAssessmentNull, { minimal: false })}
+            {controlButton('Finalise Submission', null, this.setBetchaAssessmentNull, {
+              minimal: false,
+              intent: Intent.DANGER
+            })}
+          </ButtonGroup>
+        </div>
+      </Dialog>
+    )
+
+    // Finally, render the ContentDisplay.
     return (
       <div className="Assessment">
         <ContentDisplay
           display={display}
           loadContentDispatch={this.props.handleAssessmentOverviewFetch}
         />
+        {betchaDialog}
       </div>
     )
   }
+
+  private toggleClosedAssessments = () =>
+    this.setState({
+      ...this.state,
+      showClosedAssessments: !this.state.showClosedAssessments
+    })
 
   private toggleOpenAssessments = () =>
     this.setState({
@@ -144,11 +198,13 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showOpenAssessments: !this.state.showOpenAssessments
     })
 
-  private toggleClosedAssessments = () =>
+  private setBetchaAssessment = (assessment: IAssessmentOverview | null) =>
     this.setState({
       ...this.state,
-      showClosedAssessments: !this.state.showClosedAssessments
+      betchaAssessment: assessment
     })
+
+  private setBetchaAssessmentNull = () => this.setBetchaAssessment(null)
 }
 
 /**
@@ -157,7 +213,11 @@ class Assessment extends React.Component<IAssessmentProps, State> {
  * @param {number} index a unique number for this card (required for sequential rendering).
  *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
  */
-const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
+const makeOverviewCard = (
+  overview: IAssessmentOverview,
+  index: number,
+  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
+) => (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
       <div className="col-xs-3 listing-picture">
@@ -168,7 +228,7 @@ const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
           <Text ellipsize={true} className="col-xs-11">
             <h4>{overview.title}</h4>
           </Text>
-          <Popover content={makeMenu(overview, index)}>
+          <Popover content={makeMenu(overview, index, setBetchaAssessment)}>
             <Button icon={IconNames.MENU} minimal={true} />
           </Popover>
         </div>
@@ -205,7 +265,11 @@ const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
   </div>
 )
 
-const makeMenu = (overview: IAssessmentOverview, index: number) => (
+const makeMenu = (
+  overview: IAssessmentOverview,
+  index: number,
+  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
+) => (
   <Menu>
     <MenuItem
       disabled={true}
@@ -214,10 +278,11 @@ const makeMenu = (overview: IAssessmentOverview, index: number) => (
       text="Replay story"
     />
     <MenuItem
-      disabled={true}
       icon={IconNames.CONFIRM}
       intent={Intent.DANGER}
-      onClick={emptyFunc}
+      // intentional: each menu renders own version of onClick
+      // tslint:disable-next-line:jsx-no-lambda
+      onClick={() => setBetchaAssessment(overview)}
       text="Betcha"
     />
   </Menu>

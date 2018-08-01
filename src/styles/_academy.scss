@@ -106,6 +106,22 @@
   }
 }
 
+.betcha-dialog {
+  span.warning {
+    font-weight: bold;
+    color: firebrick;
+  }
+
+  div.pt-dialog-body {
+    margin: 15px 20px 15px 20px;
+  }
+
+  div.pt-dialog-footer {
+    // align the div.pt-button-group right
+    text-align: right;
+  }
+}
+
 .Grading {
   /* To show the table borders that get cut out by a Card  */
   padding: 1px;

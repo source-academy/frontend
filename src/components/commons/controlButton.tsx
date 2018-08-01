@@ -17,7 +17,7 @@ const defaultOptions = {
 
 export function controlButton(
   label: string,
-  icon: IconName,
+  icon: IconName | null,
   onClick = () => {},
   options: controlButtonOptionals = {}
 ) {
@@ -26,6 +26,8 @@ export function controlButton(
   props.intent = opts.intent === undefined ? Intent.NONE : opts.intent
   props.minimal = opts.minimal !== undefined && opts.minimal ? true : false
   props.className = opts.className
-  opts.iconOnRight ? (props.rightIcon = icon) : (props.icon = icon)
+  if (icon) {
+    opts.iconOnRight ? (props.rightIcon = icon) : (props.icon = icon)
+  }
   return <Button {...props}>{label}</Button>
 }
