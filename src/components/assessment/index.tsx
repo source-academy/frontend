@@ -7,6 +7,7 @@ import {
   Dialog,
   Elevation,
   Icon,
+  IconName,
   Intent,
   Menu,
   MenuItem,
@@ -24,7 +25,11 @@ import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
-import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape'
+import {
+  AssessmentCategory,
+  AssessmentStatuses,
+  IAssessmentOverview
+} from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
@@ -245,20 +250,7 @@ const makeOverviewCard = (
             <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
             {`Due: ${getPrettyDate(overview.closeAt)}`}
           </Text>
-          <NavLink
-            to={`/academy/${assessmentCategoryLink(
-              overview.category
-            )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
-          >
-            <Button
-              className="listing-skip-button"
-              minimal={true}
-              intent={Intent.PRIMARY}
-              icon={IconNames.FLAME}
-            >
-              {'Skip Story & Attempt'}
-            </Button>
-          </NavLink>
+          {makeOverviewCardButton(overview)}
         </div>
       </div>
     </Card>
@@ -287,6 +279,43 @@ const makeMenu = (
     />
   </Menu>
 )
+
+const makeOverviewCardButton = (overview: IAssessmentOverview) => {
+  let icon: IconName
+  let label: string
+  switch (overview.status) {
+    case AssessmentStatuses.not_attempted:
+      icon = IconNames.STEP_FORWARD
+      label = 'Skip Story & Attempt'
+      break
+    case AssessmentStatuses.attempting:
+      icon = IconNames.PLAY
+      label = 'Continue Attempt'
+      break
+    case AssessmentStatuses.attempted:
+      icon = IconNames.EDIT
+      label = 'Review Attempt'
+      break
+    case AssessmentStatuses.submitted:
+      icon = IconNames.EYE_OPEN
+      label = 'Review Submission'
+      break
+    default:
+      // If we reach this case, backend data did not fit IAssessmentOverview
+      icon = IconNames.PLAY
+      label = 'Review'
+      break
+  }
+  return (
+    <NavLink
+      to={`/academy/${assessmentCategoryLink(
+        overview.category
+      )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+    >
+      {controlButton(label, icon)}
+    </NavLink>
+  )
+}
 
 const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
   controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {

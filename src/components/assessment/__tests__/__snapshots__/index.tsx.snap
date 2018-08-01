@@ -34,6 +34,9 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
             </div>
           </div>
         </ContentDisplay>
+        <Blueprint2.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
+          <Blueprint2.Overlay className=\\"pt-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"pt-overlay\\" usePortal={true} />
+        </Blueprint2.Dialog>
       </div>
     </Assessment>
   </Router>
@@ -72,6 +75,9 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
             </div>
           </div>
         </ContentDisplay>
+        <Blueprint2.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
+          <Blueprint2.Overlay className=\\"pt-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"pt-overlay\\" usePortal={true} />
+        </Blueprint2.Dialog>
       </div>
     </Assessment>
   </Router>
@@ -88,8 +94,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                 <div className=\\"pt-card pt-elevation-3 contentdisplay-content\\">
-                  <Blueprint2.Button onClick={[Function]} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\">
-                    <button type=\\"button\\" onClick={[Function]} className=\\"pt-button pt-minimal collapse-button\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                  <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
+                    <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-down\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                           <title>
@@ -111,7 +117,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                           <Blueprint2.Card className=\\"row listing\\" elevation={1} interactive={false}>
                             <div className=\\"pt-card pt-elevation-1 row listing\\">
                               <div className=\\"col-xs-3 listing-picture\\">
-                                <img src=\\"www.imgur.com\\" />
+                                <img src=\\"https://fakeimg.pl/300/\\" />
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
@@ -177,18 +183,18 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <Route path=\\"/academy/missions/0/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/missions/0/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/0/0\\">
-                                          <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
-                                              <Blueprint2.Icon icon=\\"flame\\">
-                                                <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                          <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"edit\\">
+                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                              <Blueprint2.Icon icon=\\"edit\\">
+                                                <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
-                                                    flame
+                                                    edit
                                                   </title>
-                                                  <path d=\\"M9.217 0c0 1.368.368 2.462 1.104 3.282C12.774 5.197 14 7.385 14 9.846c0 2.735-1.472 4.786-4.415 6.154 2.165-2.4 1.84-3.385-.368-6.4-2.342 1.2-1.967 2-1.592 3.6-.786 0-1.5 0-1.875-.4 0 .547.898 2 1.464 3.2-2.943-.82-6.092-5.744-4.988-6.154.736-.273 1.594-.137 2.575.41C3.575 5.333 5.047 1.915 9.217 0z\\" fillRule=\\"evenodd\\" />
+                                                  <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
                                                 </svg>
                                               </Blueprint2.Icon>
                                               <span className=\\"pt-button-text\\">
-                                                Skip Story &amp; Attempt
+                                                Review Attempt
                                               </span>
                                               <Blueprint2.Icon icon={[undefined]} />
                                             </button>
@@ -206,7 +212,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                           <Blueprint2.Card className=\\"row listing\\" elevation={1} interactive={false}>
                             <div className=\\"pt-card pt-elevation-1 row listing\\">
                               <div className=\\"col-xs-3 listing-picture\\">
-                                <img src=\\"www.imgur.com\\" />
+                                <img src=\\"https://fakeimg.pl/350x200/ff0000/000\\" />
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
@@ -272,18 +278,18 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <Route path=\\"/academy/missions/1/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/1/0\\">
-                                          <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
-                                              <Blueprint2.Icon icon=\\"flame\\">
-                                                <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                          <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"play\\">
+                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                              <Blueprint2.Icon icon=\\"play\\">
+                                                <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
-                                                    flame
+                                                    play
                                                   </title>
-                                                  <path d=\\"M9.217 0c0 1.368.368 2.462 1.104 3.282C12.774 5.197 14 7.385 14 9.846c0 2.735-1.472 4.786-4.415 6.154 2.165-2.4 1.84-3.385-.368-6.4-2.342 1.2-1.967 2-1.592 3.6-.786 0-1.5 0-1.875-.4 0 .547.898 2 1.464 3.2-2.943-.82-6.092-5.744-4.988-6.154.736-.273 1.594-.137 2.575.41C3.575 5.333 5.047 1.915 9.217 0z\\" fillRule=\\"evenodd\\" />
+                                                  <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 0 0 5 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
                                                 </svg>
                                               </Blueprint2.Icon>
                                               <span className=\\"pt-button-text\\">
-                                                Skip Story &amp; Attempt
+                                                Continue Attempt
                                               </span>
                                               <Blueprint2.Icon icon={[undefined]} />
                                             </button>
@@ -301,7 +307,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                           <Blueprint2.Card className=\\"row listing\\" elevation={1} interactive={false}>
                             <div className=\\"pt-card pt-elevation-1 row listing\\">
                               <div className=\\"col-xs-3 listing-picture\\">
-                                <img src=\\"www.imgur.com\\" />
+                                <img src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
@@ -367,14 +373,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <Route path=\\"/academy/sidequests/2/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/sidequests/2/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/sidequests/2/0\\">
-                                          <Blueprint2.Button className=\\"listing-skip-button\\" minimal={true} intent=\\"primary\\" icon=\\"flame\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal pt-intent-primary listing-skip-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
-                                              <Blueprint2.Icon icon=\\"flame\\">
-                                                <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"flame\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                          <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
+                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                              <Blueprint2.Icon icon=\\"step-forward\\">
+                                                <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"step-forward\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
-                                                    flame
+                                                    step-forward
                                                   </title>
-                                                  <path d=\\"M9.217 0c0 1.368.368 2.462 1.104 3.282C12.774 5.197 14 7.385 14 9.846c0 2.735-1.472 4.786-4.415 6.154 2.165-2.4 1.84-3.385-.368-6.4-2.342 1.2-1.967 2-1.592 3.6-.786 0-1.5 0-1.875-.4 0 .547.898 2 1.464 3.2-2.943-.82-6.092-5.744-4.988-6.154.736-.273 1.594-.137 2.575.41C3.575 5.333 5.047 1.915 9.217 0z\\" fillRule=\\"evenodd\\" />
+                                                  <path d=\\"M12 3h-1c-.55 0-1 .45-1 1v2.72l-4.38-3.5v.01A.987.987 0 0 0 5 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .24 0 .44-.09.62-.23l.01.01L10 9.28V12c0 .55.45 1 1 1h1c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
                                                 </svg>
                                               </Blueprint2.Icon>
                                               <span className=\\"pt-button-text\\">
@@ -395,8 +401,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                   </Blueprint2.Collapse>
-                  <Blueprint2.Button onClick={[Function]} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-right\\">
-                    <button type=\\"button\\" onClick={[Function]} className=\\"pt-button pt-minimal collapse-button\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                  <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-right\\" onClick={[Function]}>
+                    <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-right\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                           <title>
@@ -421,6 +427,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
             </div>
           </div>
         </ContentDisplay>
+        <Blueprint2.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
+          <Blueprint2.Overlay className=\\"pt-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"pt-overlay\\" usePortal={true} />
+        </Blueprint2.Dialog>
       </div>
     </Assessment>
   </Router>
