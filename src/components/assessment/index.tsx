@@ -103,11 +103,13 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     } else if (this.props.assessmentOverviews.length === 0) {
       display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
     } else {
+      const isOverviewOpen = (overview: IAssessmentOverview) =>
+        !beforeNow(overview.closeAt) && overview.status !== AssessmentStatuses.submitted
       const openCards = this.props.assessmentOverviews
-        .filter(a => !beforeNow(a.closeAt))
+        .filter(overview => isOverviewOpen(overview))
         .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
       const closedCards = this.props.assessmentOverviews
-        .filter(a => beforeNow(a.closeAt))
+        .filter(overview => !isOverviewOpen(overview))
         .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
       const openCardsCollapsible =
         openCards.length > 0 ? (
