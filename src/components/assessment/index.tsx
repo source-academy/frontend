@@ -277,12 +277,6 @@ const makeMenu = (
 ) => (
   <Menu>
     <MenuItem
-      disabled={true}
-      icon={IconNames.ARROW_TOP_RIGHT}
-      onClick={emptyFunc}
-      text="Replay story"
-    />
-    <MenuItem
       disabled={
         overview.status === AssessmentStatuses.submitted ||
         overview.status === AssessmentStatuses.not_attempted
@@ -339,7 +333,5 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
     minimal: true,
     className: 'collapse-button'
   })
-
-const emptyFunc = () => {}
 
 export default Assessment
