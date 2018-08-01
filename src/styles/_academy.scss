@@ -57,6 +57,18 @@
       width: 100%;
       object-fit: cover;
     }
+
+    img.cover-image-submitted {
+      filter: gray; /* IE6-9 */
+      -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+      filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+    }
+
+    /* Disable grayscale on hover */
+    img.cover-image-submitted:hover {
+      -webkit-filter: grayscale(0);
+      filter: none;
+    }
   }
 
   .listing-text {

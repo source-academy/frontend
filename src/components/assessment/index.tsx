@@ -226,7 +226,10 @@ const makeOverviewCard = (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
       <div className="col-xs-3 listing-picture">
-        <img src={overview.coverImage ? overview.coverImage : defaultCoverImage} />
+        <img
+          className={`cover-image-${overview.status}`}
+          src={overview.coverImage ? overview.coverImage : defaultCoverImage}
+        />
       </div>
       <div className="col-xs-9 listing-text">
         <div className="row listing-title">
@@ -272,6 +275,7 @@ const makeMenu = (
       text="Replay story"
     />
     <MenuItem
+      disabled={overview.status === AssessmentStatuses.submitted}
       icon={IconNames.CONFIRM}
       intent={Intent.DANGER}
       // intentional: each menu renders own version of onClick

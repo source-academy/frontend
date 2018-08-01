@@ -117,7 +117,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                           <Blueprint2.Card className=\\"row listing\\" elevation={1} interactive={false}>
                             <div className=\\"pt-card pt-elevation-1 row listing\\">
                               <div className=\\"col-xs-3 listing-picture\\">
-                                <img src=\\"https://fakeimg.pl/300/\\" />
+                                <img className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
@@ -214,7 +214,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                           <Blueprint2.Card className=\\"row listing\\" elevation={1} interactive={false}>
                             <div className=\\"pt-card pt-elevation-1 row listing\\">
                               <div className=\\"col-xs-3 listing-picture\\">
-                                <img src=\\"https://fakeimg.pl/350x200/ff0000/000\\" />
+                                <img className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
@@ -311,7 +311,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                           <Blueprint2.Card className=\\"row listing\\" elevation={1} interactive={false}>
                             <div className=\\"pt-card pt-elevation-1 row listing\\">
                               <div className=\\"col-xs-3 listing-picture\\">
-                                <img src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
+                                <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
