@@ -162,12 +162,6 @@ function* backendSaga(): SagaIterator {
         return overview
       })
       yield put(actions.updateAssessmentOverviews(newOverviews))
-    } else if (resp.status === 400) {
-      yield call(
-        showWarningMessage,
-        "Can't submit an incomplete assessment (it looks like some of the tasks in this assessment have not been attempted).",
-        4000
-      )
     } else {
       yield call(showWarningMessage, 'Something went wrong. Please try again.')
     }

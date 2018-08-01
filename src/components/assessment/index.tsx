@@ -277,10 +277,7 @@ const makeMenu = (
 ) => (
   <Menu>
     <MenuItem
-      disabled={
-        overview.status === AssessmentStatuses.submitted ||
-        overview.status === AssessmentStatuses.not_attempted
-      }
+      disabled={overview.status !== AssessmentStatuses.attempted}
       icon={IconNames.CONFIRM}
       intent={Intent.DANGER}
       // intentional: each menu renders own version of onClick
