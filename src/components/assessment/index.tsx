@@ -230,12 +230,14 @@ const makeOverviewCard = (
       </div>
       <div className="col-xs-9 listing-text">
         <div className="row listing-title">
-          <Text ellipsize={true} className="col-xs-11">
+          <Text ellipsize={true} className="col-xs-10">
             <h4>{overview.title}</h4>
           </Text>
-          <Popover content={makeMenu(overview, index, setBetchaAssessment)}>
-            <Button icon={IconNames.MENU} minimal={true} />
-          </Popover>
+          <div className="col-xs-2">
+            <Popover content={makeMenu(overview, index, setBetchaAssessment)}>
+              <Button icon={IconNames.MENU} minimal={true} />
+            </Popover>
+          </div>
         </div>
         <div className="row listing-order">
           <h6>{`Max Grade: ${overview.maximumGrade}`}</h6>
