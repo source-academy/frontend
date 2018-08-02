@@ -34,7 +34,7 @@ export type OwnProps = {
  * Keeps track of the current editor state,
  * as well as the grade adjustment in the numeric input.
  *
- * @prop adjustmentInput a potentially null string. this property being null 
+ * @prop adjustmentInput a potentially null string. this property being null
  *   will show the hint text in the NumericInput. This property is a string
  *   so as to allow input such as the '-' character.
  */
