@@ -17,15 +17,20 @@ const defaultOptions = {
 
 export function controlButton(
   label: string,
-  icon: IconName,
-  onClick = () => {},
+  icon: IconName | null,
+  onClick: (() => void) | null = null,
   options: controlButtonOptionals = {}
 ) {
   const opts: controlButtonOptionals = { ...defaultOptions, ...options }
-  const props: IButtonProps = { onClick }
+  const props: IButtonProps = {}
   props.intent = opts.intent === undefined ? Intent.NONE : opts.intent
   props.minimal = opts.minimal !== undefined && opts.minimal ? true : false
   props.className = opts.className
-  opts.iconOnRight ? (props.rightIcon = icon) : (props.icon = icon)
+  if (icon) {
+    opts.iconOnRight ? (props.rightIcon = icon) : (props.icon = icon)
+  }
+  if (onClick) {
+    props.onClick = onClick
+  }
   return <Button {...props}>{label}</Button>
 }

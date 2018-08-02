@@ -9,9 +9,20 @@ export interface IAssessmentOverview {
   id: number
   maximumGrade: number
   openAt: string
-  shortSummary: string
   title: string
+  shortSummary: string
+  status: AssessmentStatus
+  story: string | null
 }
+
+export enum AssessmentStatuses {
+  not_attempted = 'not_attempted',
+  attempting = 'attempting',
+  attempted = 'attempted',
+  submitted = 'submitted'
+}
+
+export type AssessmentStatus = keyof typeof AssessmentStatuses
 
 /*
  * Used when an assessment is being actively attempted/graded.
@@ -32,6 +43,7 @@ export enum AssessmentCategories {
   Path = 'Path',
   Sidequest = 'Sidequest'
 }
+
 export type AssessmentCategory = keyof typeof AssessmentCategories
 
 export interface IProgrammingQuestion extends IQuestion {

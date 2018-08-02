@@ -1,5 +1,6 @@
 import {
   AssessmentCategories,
+  AssessmentStatuses,
   ExternalLibraryNames,
   IAssessment,
   IAssessmentOverview,
@@ -14,37 +15,43 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     attempted: true,
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
-    coverImage: 'www.imgur.com',
+    coverImage: 'https://fakeimg.pl/300/',
     id: 0,
     maximumGrade: 3000,
     openAt: '2018-06-18T05:24:26.026Z',
+    title: 'An Odessey to Runes',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    title: 'An Odessey to Runes'
+    status: AssessmentStatuses.attempted,
+    story: 'mission-1'
   },
   {
     attempted: false,
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
-    coverImage: 'www.imgur.com',
+    coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     id: 1,
     maximumGrade: 3000,
     openAt: '2018-07-18T05:24:26.026Z',
+    title: 'The Secret to Streams',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    title: 'The Secret to Streams'
+    status: AssessmentStatuses.attempting,
+    story: 'mission-2'
   },
   {
     attempted: true,
     category: AssessmentCategories.Sidequest,
     closeAt: '2048-06-18T05:24:26.026Z',
-    coverImage: 'www.imgur.com',
+    coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 2,
     maximumGrade: 3000,
     openAt: '2018-07-18T05:24:26.026Z',
+    title: 'A sample Sidequest',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    title: 'A sample Sidequest'
+    status: AssessmentStatuses.not_attempted,
+    story: 'sidequest-2.1'
   }
 ]
 
@@ -53,25 +60,29 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     attempted: true,
     category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
-    coverImage: 'www.imgur.com',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 3,
     maximumGrade: 3000,
     openAt: '2007-07-18T05:24:26.026Z',
+    title: 'A closed Mission',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    title: 'A closed Mission'
+    status: AssessmentStatuses.submitted,
+    story: 'mission-3'
   },
   {
     attempted: false,
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
-    coverImage: 'www.imgur.com',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 4,
     maximumGrade: 3000,
     openAt: '2007-07-18T05:24:26.026Z',
+    title: 'A closed sidequest',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-    title: 'A closed sidequest'
+    status: AssessmentStatuses.submitted,
+    story: null
   }
 ]
 

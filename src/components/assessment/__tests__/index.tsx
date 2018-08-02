@@ -11,6 +11,7 @@ const defaultProps: IAssessmentProps = {
   assessmentCategory: AssessmentCategories.Mission,
   assessmentOverviews: undefined,
   handleAssessmentOverviewFetch: () => {},
+  handleSubmitAssessment: (id: number) => {},
   ...mockRouterProps('/academy/missions', {})
 }
 

@@ -1,9 +1,13 @@
 import {
   Button,
+  ButtonGroup,
   Card,
+  Classes,
   Collapse,
+  Dialog,
   Elevation,
   Icon,
+  IconName,
   Intent,
   Menu,
   MenuItem,
@@ -21,7 +25,11 @@ import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
-import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape'
+import {
+  AssessmentCategory,
+  AssessmentStatuses,
+  IAssessmentOverview
+} from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
@@ -41,6 +49,7 @@ export interface IAssessmentProps
 
 export interface IDispatchProps {
   handleAssessmentOverviewFetch: () => void
+  handleSubmitAssessment: (id: number) => void
 }
 
 export interface IOwnProps {
@@ -52,8 +61,9 @@ export interface IStateProps {
 }
 
 type State = {
-  showOpenAssessments: boolean
+  betchaAssessment: IAssessmentOverview | null
   showClosedAssessments: boolean
+  showOpenAssessments: boolean
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -63,8 +73,9 @@ class Assessment extends React.Component<IAssessmentProps, State> {
   public constructor(props: IAssessmentProps) {
     super(props)
     this.state = {
-      showOpenAssessments: true,
-      showClosedAssessments: false
+      betchaAssessment: null,
+      showClosedAssessments: false,
+      showOpenAssessments: true
     }
   }
 
@@ -73,10 +84,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     const questionId: number =
       stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
 
-    /**
-     * If there is an assessment to render, create a workspace. The assessment
-     * overviews must still be loaded for this, to send the due date.
-     */
+    // If there is an assessment to render, create a workspace. The assessment
+    // overviews must still be loaded for this, to send the due date.
     if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
       const assessmentProps: AssessmentProps = {
         assessmentId,
@@ -87,23 +96,25 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       return <AssessmentWorkspaceContainer {...assessmentProps} />
     }
 
-    // The item to be displayed in the ContentDisplay
+    // Otherwise, render a list of assessments to the user.
     let display: JSX.Element
     if (this.props.assessmentOverviews === undefined) {
       display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
     } else if (this.props.assessmentOverviews.length === 0) {
       display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
     } else {
+      const isOverviewOpen = (overview: IAssessmentOverview) =>
+        !beforeNow(overview.closeAt) && overview.status !== AssessmentStatuses.submitted
       const openCards = this.props.assessmentOverviews
-        .filter(a => !beforeNow(a.closeAt))
-        .map((overview, index) => makeOverviewCard(overview, index))
+        .filter(overview => isOverviewOpen(overview))
+        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
       const closedCards = this.props.assessmentOverviews
-        .filter(a => beforeNow(a.closeAt))
-        .map((overview, index) => makeOverviewCard(overview, index))
+        .filter(overview => !isOverviewOpen(overview))
+        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
       const openCardsCollapsible =
         openCards.length > 0 ? (
           <>
-            {collapseButton('Due soon', this.state.showOpenAssessments, this.toggleOpenAssessments)}
+            {collapseButton('Open', this.state.showOpenAssessments, this.toggleOpenAssessments)}
             <Collapse isOpen={this.state.showOpenAssessments}>{openCards}</Collapse>
           </>
         ) : null
@@ -125,18 +136,69 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         </>
       )
     }
-    /**
-     * Finally, render the ContentDisplay.
-     */
+
+    // Define the betcha dialog (in each card's menu)
+    const betchaText = this.state.betchaAssessment ? (
+      <>
+        <p>
+          You are about to finalise your submission for the{' '}
+          {this.state.betchaAssessment.category.toLowerCase()}{' '}
+          <i>&quot;{this.state.betchaAssessment.title}&quot;</i>.
+        </p>
+        <p>
+          Early submissions grant you additional XP, but{' '}
+          <span className="warning">this action is irreversible.</span>
+        </p>
+      </>
+    ) : (
+      <>
+        <p>You are about to finalise your submission.</p>
+        <p>
+          Early submissions grant you additional XP, but{' '}
+          <span className="warning">this action is irreversible.</span>
+        </p>
+      </>
+    )
+    const betchaDialog = (
+      <Dialog
+        className="betcha-dialog"
+        icon={IconNames.ERROR}
+        isCloseButtonShown={false}
+        isOpen={this.state.betchaAssessment !== null}
+        title="Betcha: Early Submission"
+      >
+        <div className={Classes.DIALOG_BODY}>
+          <Text>{betchaText}</Text>
+        </div>
+        <div className={Classes.DIALOG_FOOTER}>
+          <ButtonGroup>
+            {controlButton('Cancel', null, this.setBetchaAssessmentNull, { minimal: false })}
+            {controlButton('Finalise Submission', null, this.submitAssessment, {
+              minimal: false,
+              intent: Intent.DANGER
+            })}
+          </ButtonGroup>
+        </div>
+      </Dialog>
+    )
+
+    // Finally, render the ContentDisplay.
     return (
       <div className="Assessment">
         <ContentDisplay
           display={display}
           loadContentDispatch={this.props.handleAssessmentOverviewFetch}
         />
+        {betchaDialog}
       </div>
     )
   }
+
+  private toggleClosedAssessments = () =>
+    this.setState({
+      ...this.state,
+      showClosedAssessments: !this.state.showClosedAssessments
+    })
 
   private toggleOpenAssessments = () =>
     this.setState({
@@ -144,11 +206,20 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showOpenAssessments: !this.state.showOpenAssessments
     })
 
-  private toggleClosedAssessments = () =>
+  private setBetchaAssessment = (assessment: IAssessmentOverview | null) =>
     this.setState({
       ...this.state,
-      showClosedAssessments: !this.state.showClosedAssessments
+      betchaAssessment: assessment
     })
+
+  private setBetchaAssessmentNull = () => this.setBetchaAssessment(null)
+
+  private submitAssessment = () => {
+    if (this.state.betchaAssessment) {
+      this.props.handleSubmitAssessment(this.state.betchaAssessment.id)
+      this.setBetchaAssessmentNull()
+    }
+  }
 }
 
 /**
@@ -157,20 +228,29 @@ class Assessment extends React.Component<IAssessmentProps, State> {
  * @param {number} index a unique number for this card (required for sequential rendering).
  *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
  */
-const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
+const makeOverviewCard = (
+  overview: IAssessmentOverview,
+  index: number,
+  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
+) => (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
       <div className="col-xs-3 listing-picture">
-        <img src={overview.coverImage ? overview.coverImage : defaultCoverImage} />
+        <img
+          className={`cover-image-${overview.status}`}
+          src={overview.coverImage ? overview.coverImage : defaultCoverImage}
+        />
       </div>
       <div className="col-xs-9 listing-text">
         <div className="row listing-title">
-          <Text ellipsize={true} className="col-xs-11">
+          <Text ellipsize={true} className="col-xs-10">
             <h4>{overview.title}</h4>
           </Text>
-          <Popover content={makeMenu(overview, index)}>
-            <Button icon={IconNames.MENU} minimal={true} />
-          </Popover>
+          <div className="col-xs-2">
+            <Popover content={makeMenu(overview, index, setBetchaAssessment)}>
+              <Button icon={IconNames.MENU} minimal={true} />
+            </Popover>
+          </div>
         </div>
         <div className="row listing-order">
           <h6>{`Max Grade: ${overview.maximumGrade}`}</h6>
@@ -185,50 +265,72 @@ const makeOverviewCard = (overview: IAssessmentOverview, index: number) => (
             <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
             {`Due: ${getPrettyDate(overview.closeAt)}`}
           </Text>
-          <NavLink
-            to={`/academy/${assessmentCategoryLink(
-              overview.category
-            )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
-          >
-            <Button
-              className="listing-skip-button"
-              minimal={true}
-              intent={Intent.PRIMARY}
-              icon={IconNames.FLAME}
-            >
-              {'Skip Story & Attempt'}
-            </Button>
-          </NavLink>
+          {makeOverviewCardButton(overview)}
         </div>
       </div>
     </Card>
   </div>
 )
 
-const makeMenu = (overview: IAssessmentOverview, index: number) => (
+const makeMenu = (
+  overview: IAssessmentOverview,
+  index: number,
+  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
+) => (
   <Menu>
     <MenuItem
-      disabled={true}
-      icon={IconNames.ARROW_TOP_RIGHT}
-      onClick={emptyFunc}
-      text="Replay story"
-    />
-    <MenuItem
-      disabled={true}
+      disabled={overview.status !== AssessmentStatuses.attempted}
       icon={IconNames.CONFIRM}
       intent={Intent.DANGER}
-      onClick={emptyFunc}
+      // intentional: each menu renders own version of onClick
+      // tslint:disable-next-line:jsx-no-lambda
+      onClick={() => setBetchaAssessment(overview)}
       text="Betcha"
     />
   </Menu>
 )
+
+const makeOverviewCardButton = (overview: IAssessmentOverview) => {
+  let icon: IconName
+  let label: string
+  switch (overview.status) {
+    case AssessmentStatuses.not_attempted:
+      icon = IconNames.STEP_FORWARD
+      label = overview.story ? 'Skip Story & Attempt' : 'Attempt'
+      break
+    case AssessmentStatuses.attempting:
+      icon = IconNames.PLAY
+      label = 'Continue Attempt'
+      break
+    case AssessmentStatuses.attempted:
+      icon = IconNames.EDIT
+      label = 'Review Attempt'
+      break
+    case AssessmentStatuses.submitted:
+      icon = IconNames.EYE_OPEN
+      label = 'Review Submission'
+      break
+    default:
+      // If we reach this case, backend data did not fit IAssessmentOverview
+      icon = IconNames.PLAY
+      label = 'Review'
+      break
+  }
+  return (
+    <NavLink
+      to={`/academy/${assessmentCategoryLink(
+        overview.category
+      )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+    >
+      {controlButton(label, icon)}
+    </NavLink>
+  )
+}
 
 const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
   controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
     minimal: true,
     className: 'collapse-button'
   })
-
-const emptyFunc = () => {}
 
 export default Assessment

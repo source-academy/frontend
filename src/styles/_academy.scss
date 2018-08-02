@@ -57,6 +57,18 @@
       width: 100%;
       object-fit: cover;
     }
+
+    img.cover-image-submitted {
+      filter: gray; /* IE6-9 */
+      -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+      filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+    }
+
+    /* Disable grayscale on hover */
+    img.cover-image-submitted:hover {
+      -webkit-filter: grayscale(0);
+      filter: none;
+    }
   }
 
   .listing-text {
@@ -76,9 +88,14 @@
       display: flex;
     }
 
-    .col-xs-11 {
+    .col-xs-10 {
       /* overwrite default padding */
       padding: 0;
+    }
+
+    .col-xs-2 {
+      /* flush menu button, span.pt-popover-wrapper, to right */
+      text-align: right;
     }
 
     h4 {
@@ -103,6 +120,22 @@
       align-items: center;
       padding-top: 6px;
     }
+  }
+}
+
+.betcha-dialog {
+  span.warning {
+    font-weight: bold;
+    color: firebrick;
+  }
+
+  div.pt-dialog-body {
+    margin: 15px 20px 15px 20px;
+  }
+
+  div.pt-dialog-footer {
+    // align the div.pt-button-group right
+    text-align: right;
   }
 }
 
