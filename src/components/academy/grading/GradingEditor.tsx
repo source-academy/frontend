@@ -77,7 +77,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           <ButtonGroup fill={true}>
             <NumericInput
               onValueChange={this.onAdjustmentInputChange}
-              value={this.state.adjustmentInput || ""}
+              value={this.state.adjustmentInput || ''}
               buttonPosition={Position.LEFT}
               placeholder="Adjust grades relatively here"
               min={0 - this.props.initialGrade}

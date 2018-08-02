@@ -1,7 +1,7 @@
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape'
 
 /**
- * Casts a library returned by an API call to a 
+ * Casts a library returned by an API call to a
  * Library used in the frontend.
  */
 export const castLibrary = (lib: any): Library => ({
