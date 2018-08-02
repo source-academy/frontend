@@ -128,7 +128,7 @@ function* backendSaga(): SagaIterator {
     } else if (resp !== null) {
       let errorMessage: string
       switch (resp.status) {
-        case 403:
+        case 401:
           errorMessage = 'Session expired. Please login again.'
           break
         case 400:
@@ -233,7 +233,7 @@ function* backendSaga(): SagaIterator {
         case 400:
           errorMessage = 'Invalid or missing parameter(s) or submission and/or question not found'
           break
-        case 401:
+        case 403:
           errorMessage = 'Got 403 response. Only staff can save gradings.'
           break
         default:
@@ -400,7 +400,7 @@ async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | 
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   })
-  if (response && response.ok) {
+  if (response) {
     const gradingOverviews = await response.json()
     return gradingOverviews.map((overview: any) => {
       const gradingOverview: GradingOverview = {
@@ -432,7 +432,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   })
-  if (response && response.ok) {
+  if (response) {
     const gradingResult = await response.json()
     const grading: Grading = gradingResult.map((gradingQuestion: any) => {
       const { question, maxGrade, grade } = gradingQuestion
