@@ -34,7 +34,9 @@ export type OwnProps = {
  * Keeps track of the current editor state,
  * as well as the grade adjustment in the numeric input.
  *
- * adjustment can be undefined to show the hint text.
+ * @prop adjustmentInput a potentially null string. this property being null 
+ *   will show the hint text in the NumericInput. This property is a string
+ *   so as to allow input such as the '-' character.
  */
 type State = {
   mdeState: ReactMdeTypes.MdeState
@@ -130,6 +132,12 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     }
   }
 
+  /**
+   * Handles changes in the NumericInput, and updates the local State.
+   *
+   * @param valueAsNumber an unused parameter, as we use strings for the input. @see State
+   * @param valueAsString a string that contains the input. To be parsed by another function.
+   */
   private onAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
     this.setState({
       ...this.state,
