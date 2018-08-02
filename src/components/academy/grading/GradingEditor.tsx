@@ -5,6 +5,7 @@ import ReactMde, { ReactMdeTypes } from 'react-mde'
 import { Prompt } from 'react-router'
 import * as Showdown from 'showdown'
 
+import { stringParamToInt } from '../../../utils/paramParseHelpers'
 import { controlButton } from '../../commons'
 
 type GradingEditorProps = DispatchProps & OwnProps
@@ -36,7 +37,7 @@ export type OwnProps = {
  */
 type State = {
   mdeState: ReactMdeTypes.MdeState
-  adjustmentInput: number | undefined
+  adjustmentInput: string | undefined
 }
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
@@ -48,7 +49,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       mdeState: {
         markdown: props.comments
       },
-      adjustmentInput: props.adjustment
+      adjustmentInput: props.adjustment.toString()
     }
     /**
      * The markdown-to-html converter for the editor.
@@ -116,14 +117,14 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       this.props.questionId,
       this.props.initialGrade,
       this.state.mdeState.markdown!,
-      this.state.adjustmentInput
+      stringParamToInt(this.state.adjustmentInput) || undefined
     )
   }
 
-  private onAdjustmentInputChange = (newValue: number) => {
+  private onAdjustmentInputChange = (valueAsNumber: number, valueAsString: string) => {
     this.setState({
       ...this.state,
-      adjustmentInput: newValue
+      adjustmentInput: valueAsString
     })
   }
 
@@ -135,9 +136,10 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private hasUnsavedChanges = () => {
+    const adjustmentInput = stringParamToInt(this.state.adjustmentInput)
     return (
       this.props.comments !== this.state.mdeState.markdown ||
-      this.props.adjustment !== this.state.adjustmentInput
+       this.props.adjustment !== adjustmentInput
     )
   }
 
