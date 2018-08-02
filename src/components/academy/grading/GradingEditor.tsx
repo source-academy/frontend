@@ -139,7 +139,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     const adjustmentInput = stringParamToInt(this.state.adjustmentInput)
     return (
       this.props.comments !== this.state.mdeState.markdown ||
-       this.props.adjustment !== adjustmentInput
+      this.props.adjustment !== adjustmentInput
     )
   }
 
