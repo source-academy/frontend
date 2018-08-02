@@ -5,6 +5,7 @@ import ReactMde, { ReactMdeTypes } from 'react-mde'
 import { Prompt } from 'react-router'
 import * as Showdown from 'showdown'
 
+import { showWarningMessage } from '../../../utils/notification'
 import { stringParamToInt } from '../../../utils/paramParseHelpers'
 import { controlButton } from '../../commons'
 
@@ -112,13 +113,21 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private onClickSaveButton = () => {
-    this.props.handleGradingSave(
-      this.props.submissionId,
-      this.props.questionId,
-      this.props.initialGrade,
-      this.state.mdeState.markdown!,
-      stringParamToInt(this.state.adjustmentInput || undefined) || undefined
-    )
+    const adjustmentInput = stringParamToInt(this.state.adjustmentInput || undefined) || undefined
+    const grade = this.props.initialGrade + (adjustmentInput || 0)
+    if (grade < 0 || grade > this.props.maximumGrade) {
+      showWarningMessage(
+        `Grade ${grade.toString()} is out of bounds. Maximum grade is ${this.props.maximumGrade.toString()}.`
+      )
+    } else {
+      this.props.handleGradingSave(
+        this.props.submissionId,
+        this.props.questionId,
+        this.props.initialGrade,
+        this.state.mdeState.markdown!,
+        adjustmentInput
+      )
+    }
   }
 
   private onAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
