@@ -14,9 +14,9 @@ export type DispatchProps = {
   handleGradingSave: (
     submissionId: number,
     questionId: number,
-    g: number,
-    s: string,
-    i: number | undefined
+    grading: number,
+    comments: string,
+    adjustment: number | undefined
   ) => void
 }
 
@@ -37,7 +37,7 @@ export type OwnProps = {
  */
 type State = {
   mdeState: ReactMdeTypes.MdeState
-  adjustmentInput: string | undefined
+  adjustmentInput: string | null
 }
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
@@ -77,7 +77,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           <ButtonGroup fill={true}>
             <NumericInput
               onValueChange={this.onAdjustmentInputChange}
-              value={this.state.adjustmentInput}
+              value={this.state.adjustmentInput || ""}
               buttonPosition={Position.LEFT}
               placeholder="Adjust grades relatively here"
               min={0 - this.props.initialGrade}
@@ -117,11 +117,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       this.props.questionId,
       this.props.initialGrade,
       this.state.mdeState.markdown!,
-      stringParamToInt(this.state.adjustmentInput) || undefined
+      stringParamToInt(this.state.adjustmentInput || undefined) || undefined
     )
   }
 
-  private onAdjustmentInputChange = (valueAsNumber: number, valueAsString: string) => {
+  private onAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
     this.setState({
       ...this.state,
       adjustmentInput: valueAsString
@@ -136,7 +136,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private hasUnsavedChanges = () => {
-    const adjustmentInput = stringParamToInt(this.state.adjustmentInput)
+    const adjustmentInput = stringParamToInt(this.state.adjustmentInput || undefined)
     return (
       this.props.comments !== this.state.mdeState.markdown ||
       this.props.adjustment !== adjustmentInput
