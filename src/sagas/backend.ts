@@ -404,8 +404,7 @@ async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | 
     const gradingOverviews = await response.json()
     return gradingOverviews.map((overview: any) => {
       const gradingOverview: GradingOverview = {
-        // TODO wait for backend issue
-        adjustments: overview.adjustment || 0,
+        adjustments: overview.adjustment,
         assessmentId: overview.assessment.id,
         assessmentName: overview.assessment.title,
         assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
