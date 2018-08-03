@@ -1,4 +1,4 @@
-import { Button, Card, Text, Intent } from '@blueprintjs/core'
+import { Button, Card, Intent, Text } from '@blueprintjs/core'
 import * as React from 'react'
 
 import { IMCQQuestion } from '../assessment/assessmentShape'
