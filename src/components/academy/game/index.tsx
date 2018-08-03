@@ -32,6 +32,10 @@ export class Game extends React.Component<GameProps, {}> {
    * when this component is mounted, use that canvas instead of the new canvas
    * mounted with this div. This is a bit hacky, and refs aren't favoured in
    * react, but it also prevents excessive loading of the game
+   *
+   * Note that the story/4's 4th param is named 'attemptedAll'. It is true if a
+   * storyline should not be loaded, and false if it should. In contrast,
+   * backend sends us 'playStory', which is the negation (!) of `attemptedAll`.
    */
   public async componentDidMount() {
     const story: any = (await import('./game.js')).default
@@ -51,10 +55,15 @@ export class Game extends React.Component<GameProps, {}> {
         if (user) {
           storyOpts = [user.story.story, !user.story.playStory]
           store.dispatch(setUser(user))
-          story(this.div, this.canvas, this.props.name, ...storyOpts)
-          this.props.handleSaveCanvas(this.canvas)
-        } // if user is null, actions.logOut is called anyways
+        } else {
+          // if user is null, actions.logOut is called anyways; nonetheless we
+          // set storyOpts, otherwise typescript complains about using storyOpts
+          // before assignment in story/4 below
+          storyOpts = ['mission-1', true]
+        }
       }
+      story(this.div, this.canvas, this.props.name, ...storyOpts)
+      this.props.handleSaveCanvas(this.canvas)
     } else {
       // This browser window has loaded the Game component & canvas before
       this.div.innerHTML = ''

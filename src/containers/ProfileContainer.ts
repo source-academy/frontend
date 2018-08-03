@@ -5,7 +5,7 @@ import { IState } from '../reducers/states'
 
 // TODO: connect to actual state once backend implements these features
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
-  grade: undefined,
+  grade: state.session.grade,
   maxGrade: undefined,
   maxXp: undefined,
   name: state.session.name,

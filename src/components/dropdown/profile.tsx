@@ -36,7 +36,9 @@ class Profile extends React.Component<ProfileProps> {
           <div className="progress">
             <div className="grade">
               <span className="label">Grade</span>
-              <span className="value">{this.props.grade ? this.props.grade : '???'}</span>
+              <span className="value">
+                {this.props.grade !== undefined ? this.props.grade : '???'}
+              </span>
             </div>
             <Tooltip content="Sorry, the grade progress bar is not ready yet">
               <ProgressBar className="grade" animate={false} stripes={false} />
