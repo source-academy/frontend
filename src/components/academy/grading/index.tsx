@@ -56,11 +56,13 @@ class Grading extends React.Component<IGradingProps, State> {
         { headerName: 'Assessment Category', field: 'assessmentCategory' },
         { headerName: 'Student ID', field: 'studentId' },
         { headerName: 'Student Name', field: 'studentName' },
-        { headerName: 'Current XP', field: 'currentXP' },
-        { headerName: 'Maximum XP', field: 'maximumXP' },
+        { headerName: 'Initial Grade', field: 'initialGrade' },
+        { headerName: 'Adjustments', field: 'adjustments' },
+        { headerName: 'Current Grade', field: 'currentGrade' },
+        { headerName: 'Maximum Grade', field: 'maximumGrade' },
         {
-          headerName: 'Graded',
-          field: 'graded',
+          headerName: 'Edit',
+          field: '',
           cellRendererFramework: GradingNavLink
         }
       ]

@@ -4,37 +4,40 @@ import { mockFetchRole, Role, Roles } from './userAPI'
 
 export const mockGradingOverviews: GradingOverview[] = [
   {
-    submissionId: 0,
-    studentId: 0,
+    adjustments: 0,
+    assessmentCategory: 'Mission',
     assessmentId: 0,
     assessmentName: 'Mission 0 ',
-    assessmentCategory: 'Mission',
-    currentXP: 69,
-    graded: false,
-    maximumXP: 100,
-    studentName: 'Al Gorithm'
+    currentGrade: 69,
+    initialGrade: 69,
+    maximumGrade: 100,
+    studentId: 0,
+    studentName: 'Al Gorithm',
+    submissionId: 0
   },
   {
-    submissionId: 1,
-    studentId: 0,
+    adjustments: -2,
+    assessmentCategory: 'Mission',
     assessmentId: 1,
     assessmentName: 'Mission 1',
-    assessmentCategory: 'Mission',
-    currentXP: 0,
-    graded: false,
-    maximumXP: 400,
-    studentName: 'Dee Sign'
+    currentGrade: -2,
+    initialGrade: 0,
+    maximumGrade: 400,
+    studentId: 0,
+    studentName: 'Dee Sign',
+    submissionId: 1
   },
   {
-    submissionId: 2,
-    studentId: 1,
+    adjustments: 4,
+    assessmentCategory: 'Mission',
     assessmentId: 0,
     assessmentName: 'Mission 0',
-    assessmentCategory: 'Mission',
-    currentXP: 1000,
-    graded: true,
-    maximumXP: 1000,
-    studentName: 'May Trix'
+    currentGrade: 1000,
+    initialGrade: 996,
+    maximumGrade: 1000,
+    studentId: 1,
+    studentName: 'May Trix',
+    submissionId: 2
   }
 ]
 
@@ -65,9 +68,10 @@ const mockGrading: Grading = [
       solutionTemplate: '0th question mock solution template',
       type: 'programming'
     },
-    maximumXP: 1000,
+    maximumGrade: 1000,
     grade: {
-      xp: 0,
+      adjustment: 0,
+      grade: 0,
       comment: ''
     }
   },
@@ -80,9 +84,10 @@ const mockGrading: Grading = [
       solutionTemplate: '1st question mock solution template',
       type: 'programming'
     },
-    maximumXP: 200,
+    maximumGrade: 200,
     grade: {
-      xp: 100,
+      adjustment: 0,
+      grade: 100,
       comment: 'Good job!!'
     }
   },
@@ -115,9 +120,10 @@ const mockGrading: Grading = [
       library: mockLibrary,
       type: 'mcq'
     },
-    maximumXP: 100,
+    maximumGrade: 100,
     grade: {
-      xp: 50,
+      adjustment: 0,
+      grade: 50,
       comment:
         'A Very long string. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a leo et lectus gravida sagittis a non neque. Phasellus consectetur arcu vitae metus vulputate commodo. Phasellus varius sollicitudin quam a porta. Pellentesque mollis molestie felis vitae imperdiet. Nam porta purus ac tellus luctus ultrices. Integer pellentesque nisl vel nunc ullamcorper, in vehicula est dapibus. Nunc dapibus neque dolor, ut mattis massa mattis in. Fusce nec risus nec ex pharetra lacinia. Mauris sit amet ullamcorper sapien. Suspendisse scelerisque neque sed nunc tincidunt, ac semper enim efficitur. Ut sit amet eleifend arcu. Donec viverra at justo vitae eleifend. Morbi ut erat ultricies, hendrerit mi ut, ornare mauris.'
     }

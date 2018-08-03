@@ -1,28 +1,15 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
+import { connect, MapDispatchToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { saveGradingInput, updateGradingCommentsValue, updateGradingXP } from '../../../actions'
-import GradingEditor, {
-  DispatchProps,
-  StateProps
-} from '../../../components/academy/grading/GradingEditor'
-import { IState } from '../../../reducers/states'
-
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => {
-  return {
-    gradingCommentsValue: state.workspaces.grading.gradingCommentsValue,
-    gradingXP: state.workspaces.grading.gradingXP
-  }
-}
+import { submitGrading } from '../../../actions'
+import GradingEditor, { DispatchProps } from '../../../components/academy/grading/GradingEditor'
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
-      handleGradingCommentsChange: updateGradingCommentsValue,
-      handleGradingXPChange: updateGradingXP,
-      handleGradingInputSave: saveGradingInput
+      handleGradingSave: submitGrading
     },
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(GradingEditor)
+export default connect(null, mapDispatchToProps)(GradingEditor)

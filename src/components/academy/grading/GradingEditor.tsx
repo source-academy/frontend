@@ -1,36 +1,45 @@
-import { ButtonGroup, Icon, NumericInput, Position } from '@blueprintjs/core'
+import { ButtonGroup, Icon, Intent, NumericInput, Position } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import ReactMde, { ReactMdeTypes } from 'react-mde'
+import { Prompt } from 'react-router'
 import * as Showdown from 'showdown'
+
+import { showWarningMessage } from '../../../utils/notification'
+import { stringParamToInt } from '../../../utils/paramParseHelpers'
 import { controlButton } from '../../commons'
 
-type GradingEditorProps = DispatchProps & OwnProps & StateProps
+type GradingEditorProps = DispatchProps & OwnProps
 
 export type DispatchProps = {
-  handleGradingCommentsChange: (s: string) => void
-  handleGradingXPChange: (i: number | undefined) => void
-  handleGradingInputSave: (s: string, i: number | undefined) => void
+  handleGradingSave: (
+    submissionId: number,
+    questionId: number,
+    comments: string,
+    adjustment: number | undefined
+  ) => void
 }
 
 export type OwnProps = {
-  maximumXP: number
-}
-
-export type StateProps = {
-  gradingCommentsValue: string
-  gradingXP: number | undefined
+  adjustment: number
+  comments: string
+  initialGrade: number
+  maximumGrade: number
+  questionId: number
+  submissionId: number
 }
 
 /**
  * Keeps track of the current editor state,
- * as well as the XP in the numeric input.
+ * as well as the grade adjustment in the numeric input.
  *
- * XP can be undefined to show the hint text.
+ * @prop adjustmentInput a potentially null string. this property being null
+ *   will show the hint text in the NumericInput. This property is a string
+ *   so as to allow input such as the '-' character.
  */
 type State = {
   mdeState: ReactMdeTypes.MdeState
-  XPInput: number | undefined
+  adjustmentInput: string | null
 }
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
@@ -40,9 +49,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     super(props)
     this.state = {
       mdeState: {
-        markdown: this.props.gradingCommentsValue
+        markdown: props.comments
       },
-      XPInput: this.props.gradingXP
+      adjustmentInput: props.adjustment.toString()
     }
     /**
      * The markdown-to-html converter for the editor.
@@ -56,29 +65,27 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     })
   }
 
-  /**
-   * Update the redux state's grading comments value, using the latest
-   * value in the local state.
-   */
-  public componentWillUnmount() {
-    this.props.handleGradingCommentsChange(this.state.mdeState.markdown!)
-    this.props.handleGradingXPChange(this.state.XPInput)
-  }
-
   public render() {
+    const hasUnsavedChanges = this.hasUnsavedChanges()
+    const saveButtonOpts = hasUnsavedChanges ? { intent: Intent.WARNING, minimal: true } : {}
     return (
       <>
+        {hasUnsavedChanges ? (
+          <Prompt
+            message={'You have changes that may not be saved. Are you sure you want to leave?'}
+          />
+        ) : null}
         <div className="grading-editor-input-parent">
           <ButtonGroup fill={true}>
             <NumericInput
-              onValueChange={this.onXPInputChange}
-              value={this.state.XPInput}
+              onValueChange={this.onAdjustmentInputChange}
+              value={this.state.adjustmentInput || ''}
               buttonPosition={Position.LEFT}
-              placeholder="XP here"
-              min={0}
-              max={this.props.maximumXP}
+              placeholder="Adjust grades relatively here"
+              min={0 - this.props.initialGrade}
+              max={this.props.maximumGrade - this.props.initialGrade}
             />
-            {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton)}
+            {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
           </ButtonGroup>
         </div>
         <div className="react-mde-parent">
@@ -107,18 +114,48 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private onClickSaveButton = () => {
-    this.props.handleGradingInputSave(this.state.mdeState.markdown!, this.state.XPInput)
+    const adjustmentInput = stringParamToInt(this.state.adjustmentInput || undefined) || undefined
+    const grade = this.props.initialGrade + (adjustmentInput || 0)
+    if (grade < 0 || grade > this.props.maximumGrade) {
+      showWarningMessage(
+        `Grade ${grade.toString()} is out of bounds. Maximum grade is ${this.props.maximumGrade.toString()}.`
+      )
+    } else {
+      this.props.handleGradingSave(
+        this.props.submissionId,
+        this.props.questionId,
+        this.state.mdeState.markdown!,
+        adjustmentInput
+      )
+    }
   }
 
-  private onXPInputChange = (newValue: number) => {
+  /**
+   * Handles changes in the NumericInput, and updates the local State.
+   *
+   * @param valueAsNumber an unused parameter, as we use strings for the input. @see State
+   * @param valueAsString a string that contains the input. To be parsed by another function.
+   */
+  private onAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
     this.setState({
       ...this.state,
-      XPInput: newValue
+      adjustmentInput: valueAsString
     })
   }
 
   private handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
-    this.setState({ mdeState })
+    this.setState({
+      ...this.state,
+      mdeState
+    })
+  }
+
+  private hasUnsavedChanges = () => {
+    const adjustmentInput = stringParamToInt(this.state.adjustmentInput || undefined)
+    return (
+      this.props.comments !== this.state.mdeState.markdown ||
+      this.props.adjustment !== adjustmentInput
+    )
   }
 
   private generateMarkdownPreview = (markdown: string) =>

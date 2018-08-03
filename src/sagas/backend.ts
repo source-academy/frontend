@@ -7,15 +7,22 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { WorkspaceLocation } from '../actions/workspaces'
 import {
+  Grading,
+  GradingOverview,
+  GradingQuestion
+} from '../components/academy/grading/gradingShape'
+import {
   AssessmentCategory,
   AssessmentStatuses,
   ExternalLibraryName,
   IAssessment,
   IAssessmentOverview,
-  IQuestion
+  IQuestion,
+  QuestionType
 } from '../components/assessment/assessmentShape'
 import { store } from '../createStore'
 import { IState, Role } from '../reducers/states'
+import { castLibrary } from '../utils/castBackend'
 import { BACKEND_URL } from '../utils/constants'
 import { history } from '../utils/history'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
@@ -121,7 +128,7 @@ function* backendSaga(): SagaIterator {
     } else if (resp !== null) {
       let errorMessage: string
       switch (resp.status) {
-        case 403:
+        case 401:
           errorMessage = 'Session expired. Please login again.'
           break
         case 400:
@@ -164,6 +171,79 @@ function* backendSaga(): SagaIterator {
       yield put(actions.updateAssessmentOverviews(newOverviews))
     } else {
       yield call(showWarningMessage, 'Something went wrong. Please try again.')
+    }
+  })
+
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }))
+    const gradingOverviews = yield call(getGradingOverviews, tokens)
+    if (gradingOverviews) {
+      yield put(actions.updateGradingOverviews(gradingOverviews))
+    }
+  })
+
+  yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }))
+    const id = (action as actionTypes.IAction).payload
+    const grading = yield call(getGrading, id, tokens)
+    if (grading) {
+      yield put(actions.updateGrading(id, grading))
+    }
+  })
+
+  yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
+    const role = yield select((state: IState) => state.session.role!)
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can submit answers.')
+    }
+    const {
+      submissionId,
+      questionId,
+      comment,
+      adjustment
+    } = (action as actionTypes.IAction).payload
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }))
+    const resp = yield postGrading(submissionId, questionId, comment, adjustment, tokens)
+    if (resp && resp.ok) {
+      yield call(showSuccessMessage, 'Saved!', 1000)
+      // Now, update the grade for the question in the Grading in the store
+      const grading: Grading = yield select((state: IState) =>
+        state.session.gradings.get(submissionId)
+      )
+      const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
+        if (gradingQuestion.question.id === questionId) {
+          gradingQuestion.grade = {
+            adjustment,
+            comment,
+            grade: gradingQuestion.grade.grade
+          }
+        }
+        return gradingQuestion
+      })
+      yield put(actions.updateGrading(submissionId, newGrading))
+    } else if (resp !== null) {
+      let errorMessage: string
+      switch (resp.status) {
+        case 401:
+          errorMessage = 'Session expired. Please login again.'
+          break
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`
+          break
+      }
+      yield call(showWarningMessage, errorMessage)
+    } else {
+      // postGrading returns null for failed fetch
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?")
     }
   })
 }
@@ -305,6 +385,103 @@ async function postAssessment(id: number, tokens: Tokens): Promise<Response | nu
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false, // 400 if some questions unattempted
+    shouldRefresh: true
+  })
+  return resp
+}
+
+/*
+ * GET /grading
+ * @returns {Array} GradingOverview[]
+ */
+async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | null> {
+  const response = await request('grading', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  })
+  if (response) {
+    const gradingOverviews = await response.json()
+    return gradingOverviews.map((overview: any) => {
+      const gradingOverview: GradingOverview = {
+        adjustments: overview.adjustment,
+        assessmentId: overview.assessment.id,
+        assessmentName: overview.assessment.title,
+        assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
+        initialGrade: overview.grade - (overview.adjustment || 0),
+        currentGrade: overview.grade,
+        maximumGrade: overview.assessment.maxGrade,
+        studentId: overview.student.id,
+        studentName: overview.student.name,
+        submissionId: overview.id
+      }
+      return gradingOverview
+    })
+  } else {
+    return null // invalid accessToken _and_ refreshToken
+  }
+}
+
+/**
+ * GET /grading/${submissionId}
+ * @returns {Grading}
+ */
+async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading | null> {
+  const response = await request(`grading/${submissionId}`, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  })
+  if (response) {
+    const gradingResult = await response.json()
+    const grading: Grading = gradingResult.map((gradingQuestion: any) => {
+      const { question, maxGrade, grade } = gradingQuestion
+      return {
+        question: {
+          answer: question.answer,
+          choices: question.choices,
+          content: question.content,
+          id: question.id,
+          library: castLibrary(question.library),
+          solution: question.answer,
+          solutionTemplate: question.solutionTemplate,
+          type: question.type as QuestionType
+        },
+        maximumGrade: maxGrade,
+        grade: {
+          grade: grade.grade,
+          comment: grade.comment || '',
+          adjustment: grade.adjustment
+        }
+      }
+    })
+    return grading
+  } else {
+    return null
+  }
+}
+
+/**
+ * POST /grading/{submissionId}/{questionId}
+ */
+const postGrading = async (
+  submissionId: number,
+  questionId: number,
+  comment: string,
+  adjustment: number,
+  tokens: Tokens
+) => {
+  const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: {
+      grading: {
+        comment: `${comment}`,
+        adjustment
+      }
+    },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
     shouldRefresh: true
   })
   return resp

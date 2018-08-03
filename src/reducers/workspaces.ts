@@ -23,17 +23,14 @@ import {
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
-  UPDATE_GRADING_COMMENTS_VALUE,
-  UPDATE_GRADING_XP,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE
 } from '../actions/actionTypes'
-import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
+import { WorkspaceLocation } from '../actions/workspaces'
 import { createContext } from '../utils/slangHelper'
 import {
   CodeOutput,
   createDefaultWorkspace,
-  defaultComments,
   defaultWorkspaceManager,
   InterpreterOutput,
   IWorkspaceManagerState,
@@ -352,30 +349,13 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      * any specified settings (workspaceOptions)
      */
     case RESET_WORKSPACE:
-      const newState = {
+      return {
         ...state,
         [location]: {
           ...state[location],
           ...createDefaultWorkspace(location),
           ...action.payload.workspaceOptions
         }
-      }
-      /**
-       * Use this switch case to reset values other
-       * than properties in IWorkspaceState.
-       */
-      switch (location) {
-        case WorkspaceLocations.grading:
-          return {
-            ...newState,
-            grading: {
-              ...newState.grading,
-              gradingCommentsValue: defaultComments,
-              gradingXP: undefined
-            }
-          }
-        default:
-          return newState
       }
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
@@ -409,22 +389,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           replValue: action.payload.newReplValue
-        }
-      }
-    case UPDATE_GRADING_COMMENTS_VALUE:
-      return {
-        ...state,
-        grading: {
-          ...state.grading,
-          gradingCommentsValue: action.payload
-        }
-      }
-    case UPDATE_GRADING_XP:
-      return {
-        ...state,
-        grading: {
-          ...state.grading,
-          gradingXP: action.payload
         }
       }
     case UPDATE_HAS_UNSAVED_CHANGES:
