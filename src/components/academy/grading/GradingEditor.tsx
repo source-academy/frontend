@@ -81,7 +81,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
               <tr>
                 <th> {`Auto-grader's grade:`} </th>
                 <td>
-                  <Text>{this.props.initialGrade}</Text>
+                  <Text>{this.props.initialGrade} / {this.props.maximumGrade}</Text>
                 </td>
               </tr>
               <tr>
@@ -102,7 +102,10 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
               <tr>
                 <th> {`Final grade:`} </th>
                 <td>
-                    <Text>{this.props.initialGrade}</Text>
+                    <Text>{
+                      this.props.initialGrade + 
+                      (stringParamToInt(this.state.adjustmentInput || undefined) || 0)
+                    } / {this.props.maximumGrade}</Text>
                 </td>
               </tr>
               <tr>
