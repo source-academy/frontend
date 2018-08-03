@@ -2,6 +2,7 @@ import { ActionCreator } from 'redux'
 
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape'
+import { Story } from '../reducers/states'
 import * as actionTypes from './actionTypes'
 
 import { Role } from '../reducers/states'
@@ -49,7 +50,7 @@ export const setUser: ActionCreator<actionTypes.IAction> = (user: {
   name: string
   role: Role
   grade: number
-  story: string
+  story: Story
 }) => ({
   type: actionTypes.SET_USER,
   payload: user

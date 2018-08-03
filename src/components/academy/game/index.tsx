@@ -48,12 +48,13 @@ export class Game extends React.Component<GameProps, {}> {
           refreshToken: state.session.refreshToken!
         }
         const user: any = await getUser(tokens)
-        // if user is null, actions.logOut is called anyways
-        storyOpts = [user.story.story, !user.story.playStory]
-        store.dispatch(setUser(user))
+        if (user) {
+          storyOpts = [user.story.story, !user.story.playStory]
+          store.dispatch(setUser(user))
+          story(this.div, this.canvas, this.props.name, ...storyOpts)
+          this.props.handleSaveCanvas(this.canvas)
+        } // if user is null, actions.logOut is called anyways
       }
-      story(this.div, this.canvas, this.props.name, ...storyOpts)
-      this.props.handleSaveCanvas(this.canvas)
     } else {
       // This browser window has loaded the Game component & canvas before
       this.div.innerHTML = ''

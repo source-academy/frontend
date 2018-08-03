@@ -21,7 +21,10 @@ export function* mockBackendSaga(): SagaIterator {
     const user = {
       name: 'DevStaff',
       role: 'staff',
-      story: 'mission-1',
+      story: {
+        story: 'mission-1',
+        playStory: true
+      },
       grade: 0
     }
     store.dispatch(actions.setTokens(tokens))
