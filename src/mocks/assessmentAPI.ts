@@ -12,7 +12,6 @@ import { externalLibraries } from '../reducers/externalLibraries'
 
 const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
   {
-    attempted: true,
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
@@ -26,7 +25,6 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     story: 'mission-1'
   },
   {
-    attempted: false,
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
@@ -40,7 +38,6 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     story: 'mission-2'
   },
   {
-    attempted: true,
     category: AssessmentCategories.Sidequest,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
@@ -57,7 +54,6 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
 
 const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
   {
-    attempted: true,
     category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
@@ -71,7 +67,6 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     story: 'mission-3'
   },
   {
-    attempted: false,
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',

@@ -37,6 +37,7 @@ export type StateProps = {
 export type OwnProps = {
   assessmentId: number
   questionId: number
+  notAttempted: boolean
   closeDate: string
 }
 
@@ -65,7 +66,12 @@ class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
   { showOverlay: boolean }
 > {
-  public state = { showOverlay: false }
+  public constructor(props: AssessmentWorkspaceProps) {
+    super(props)
+    this.state = {
+      showOverlay: false
+    }
+  }
 
   /**
    * After mounting (either an older copy of the assessment
@@ -74,7 +80,7 @@ class AssessmentWorkspace extends React.Component<
    */
   public componentDidMount() {
     this.props.handleAssessmentFetch(this.props.assessmentId)
-    if (this.props.questionId === 0) {
+    if (this.props.questionId === 0 && this.props.notAttempted) {
       this.setState({ showOverlay: true })
     }
   }

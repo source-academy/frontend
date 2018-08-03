@@ -87,11 +87,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     // If there is an assessment to render, create a workspace. The assessment
     // overviews must still be loaded for this, to send the due date.
     if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
+      const overview = this.props.assessmentOverviews.filter(a => a.id === assessmentId)[0]
       const assessmentProps: AssessmentProps = {
         assessmentId,
         questionId,
-        // get the closeDate of the assessment
-        closeDate: this.props.assessmentOverviews.filter(a => a.id === assessmentId)[0].closeAt
+        notAttempted: overview.status === AssessmentStatuses.not_attempted,
+        closeDate: overview.closeAt
       }
       return <AssessmentWorkspaceContainer {...assessmentProps} />
     }
