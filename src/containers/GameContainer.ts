@@ -15,7 +15,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   canvas: state.academy.gameCanvas,
-  username: state.session.name!,
+  name: state.session.name!,
   story: state.session.story
 })
 

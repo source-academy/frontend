@@ -81,7 +81,7 @@ export interface ISessionState {
   readonly historyHelper: HistoryHelper
   readonly refreshToken?: string
   readonly role?: Role
-  readonly story?: string
+  readonly story?: Story
   readonly name?: string
 }
 
@@ -91,6 +91,11 @@ type ReplHistory = {
 }
 
 export const maxBrowseIndex = 50
+
+export type Story = {
+  story: string
+  playStory: boolean
+}
 
 /**
  * An output while the program is still being run in the interpreter. As a

@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { setUser } from '../../../actions'
 import { store } from '../../../createStore'
+import { Story } from '../../../reducers/states'
 import { getUser } from '../../../sagas/backend'
 
 type GameProps = DispatchProps & StateProps
@@ -12,8 +13,8 @@ export type DispatchProps = {
 
 export type StateProps = {
   canvas?: HTMLCanvasElement
-  username: string
-  story?: string
+  name: string
+  story?: Story
 }
 
 export class Game extends React.Component<GameProps, {}> {
@@ -34,11 +35,11 @@ export class Game extends React.Component<GameProps, {}> {
    */
   public async componentDidMount() {
     const story: any = (await import('./game.js')).default
-    let storyXML: string
+    let storyOpts: Array<string | boolean>
     if (this.props.canvas === undefined) {
       // First time rendering the Game component
       if (this.props.story) {
-        storyXML = this.props.story
+        storyOpts = [this.props.story.story, !this.props.story.playStory]
       } else {
         // session.story is undefined if creating store from localStorage
         const state = store.getState()
@@ -48,11 +49,10 @@ export class Game extends React.Component<GameProps, {}> {
         }
         const user: any = await getUser(tokens)
         // if user is null, actions.logOut is called anyways
-        storyXML = user ? user.story : undefined
+        storyOpts = [user.story.story, !user.story.playStory]
         store.dispatch(setUser(user))
       }
-      // TODO: https://github.com/source-academy/cadet/issues/179
-      story(this.div, this.canvas, this.props.username, storyXML, false)
+      story(this.div, this.canvas, this.props.name, ...storyOpts)
       this.props.handleSaveCanvas(this.canvas)
     } else {
       // This browser window has loaded the Game component & canvas before
