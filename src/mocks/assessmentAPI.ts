@@ -158,7 +158,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   {
     answer: 3,
     content:
-      'This is the 3rd question. Oddly enough, it is an MCQ question that uses the curves library!',
+      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library!',
     choices: [
       {
         content: 'A',
@@ -179,7 +179,35 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     ],
     id: 2,
     library: mockCurveLibrary,
-    type: 'mcq'
+    type: 'mcq',
+    solution: 2
+  },
+  {
+    answer: 3,
+    content:
+      'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
+    choices: [
+      {
+        content: 'A',
+        hint: 'hint A'
+      },
+      {
+        content: 'B',
+        hint: 'hint B'
+      },
+      {
+        content: 'C',
+        hint: 'hint C'
+      },
+      {
+        content: 'D',
+        hint: 'hint D'
+      }
+    ],
+    id: 2,
+    library: mockCurveLibrary,
+    type: 'mcq',
+    solution: null
   }
 ]
 
