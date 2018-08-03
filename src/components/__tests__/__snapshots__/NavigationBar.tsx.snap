@@ -29,6 +29,15 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Playground
       </div>
     </NavLink>
+    <div className=\\"visible-xs\\">
+      <Blueprint2.NavbarDivider className=\\"thin-divider\\" />
+    </div>
+    <div className=\\"hidden-xs\\">
+      <Blueprint2.NavbarDivider className=\\"default-divider\\" />
+    </div>
+    <Blueprint2.Popover content={{...}} inheritDarkTheme={false} position=\\"bottom\\" defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+      <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"caret-down\\" />
+    </Blueprint2.Popover>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;
@@ -62,6 +71,15 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Playground
       </div>
     </NavLink>
+    <div className=\\"visible-xs\\">
+      <Blueprint2.NavbarDivider className=\\"thin-divider\\" />
+    </div>
+    <div className=\\"hidden-xs\\">
+      <Blueprint2.NavbarDivider className=\\"default-divider\\" />
+    </div>
+    <Blueprint2.Popover content={{...}} inheritDarkTheme={false} position=\\"bottom\\" defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+      <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"caret-down\\" />
+    </Blueprint2.Popover>
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;
