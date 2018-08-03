@@ -139,9 +139,28 @@
   }
 }
 
+.GradingEditor {
+  .grading-editor-input-parent {
+    /** Center the text for numeric input and showing grades. */
+    table {
+      border-spacing: 5px;
+      tbody {
+        text-align: center;
+        button {
+          width: 100%;
+        }
+      }
+    }
+    .grading-adjustment-input {
+      width: 150px;
+    }
+  }
+}
+
 .Grading {
   /* To show the table borders that get cut out by a Card  */
   padding: 1px;
+
   /** 
    *  To prevent misalignment of column header and content 
    *  for large displays. This effectively flushes the content left.
