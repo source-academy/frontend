@@ -11,8 +11,10 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   END_INTERRUPT_EXECUTION,
+  EVAL_EDITOR,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
+  EVAL_REPL,
   HANDLE_CONSOLE_LOG,
   IAction,
   LOG_OUT,
@@ -261,6 +263,22 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...defaultWorkspaceManager,
         playground: playgroundWorkspace
       }
+    case EVAL_EDITOR:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          isRunning: true
+        }
+      }
+    case EVAL_REPL:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          isRunning: true
+        }
+      }
     case EVAL_INTERPRETER_SUCCESS:
       lastOutput = state[location].output.slice(-1)[0]
       if (lastOutput !== undefined && lastOutput.type === 'running') {
@@ -280,7 +298,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          output: newOutput
+          output: newOutput,
+          isRunning: false 
         }
       }
     case EVAL_INTERPRETER_ERROR:
@@ -302,7 +321,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          output: newOutput
+          output: newOutput,
+          isRunning: false 
         }
       }
     /**
@@ -322,10 +342,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          context: {
-            ...state[location].context,
-            isRunning: false
-          }
+          isRunning: false
         }
       }
     /**
