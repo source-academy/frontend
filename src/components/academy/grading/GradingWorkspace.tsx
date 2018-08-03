@@ -128,7 +128,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       }
     }
     return (
-      <div className="AssessmentWorkspace pt-dark">
+      <div className="GradingWorkspace pt-dark">
         <Workspace {...workspaceProps} />
       </div>
     )
