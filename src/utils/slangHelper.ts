@@ -71,7 +71,13 @@ cadetAlert.__SOURCE__ = 'alert(a)'
  *
  * @param list the list to be visualised.
  */
-function visualiseList(list: any) {}
+function visualiseList(list: any) {
+  if ((window as any).ListVisualizer) {
+    (window as any).ListVisualizer.draw(list)
+  } else {
+    throw new Error('List visualizer is not enabled') 
+  }
+}
 
 /**
  * A wrapper around js-slang's createContext. This
