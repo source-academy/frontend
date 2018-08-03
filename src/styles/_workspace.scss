@@ -82,18 +82,23 @@ $code-color-error: #ff4444;
     .mcq-content-parent {
       height: 100%;
       overflow: auto;
-    }
-    .mcq-options-parent {
-      margin-bottom: 20px;
-    }
-    .mcq-option {
-      padding: 20px;
-      margin-bottom: 10px;
+      .mcq-options-parent {
+        height: 100%;
+        .mcq-option {
+          padding: 20px;
+          margin-bottom: 10px;
+        }
+        *:last-child {
+          margin-bottom: 0; 
+        }
+      }
     }
     .mcq-task-parent {
+      font-size: 16px;
       margin-bottom: 20px;
+      color: black;
       .pt-card {
-        background-color: $cadet-color-3;
+        background-color: $cadet-color-4;
       }
     }
     .pt-card {

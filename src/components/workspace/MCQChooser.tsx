@@ -34,16 +34,9 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
       </Button>
     ))
     return (
-      <div className="MCQChooser">
-        <Card className="mcq-content-parent row center-xs">
-          <div className="col-xs-12">
-            <div className="mcq-task-parent row center-xs ">
-              <Card className="mcq-task col-xs-12" elevation={2}>
-                <Text className="Text"> {this.props.mcq.content} </Text>
-              </Card>
-            </div>
-            <div className="row mcq-options-parent center-xs">{options}</div>
-          </div>
+      <div className="MCQChooser row">
+        <Card className="mcq-content-parent col-xs-12 middle-xs">
+          <div className="row mcq-options-parent between-xs">{options}</div>
         </Card>
       </div>
     )
