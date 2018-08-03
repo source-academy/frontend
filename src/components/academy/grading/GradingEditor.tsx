@@ -15,7 +15,6 @@ export type DispatchProps = {
   handleGradingSave: (
     submissionId: number,
     questionId: number,
-    grading: number,
     comments: string,
     adjustment: number | undefined
   ) => void
@@ -125,7 +124,6 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       this.props.handleGradingSave(
         this.props.submissionId,
         this.props.questionId,
-        this.props.initialGrade,
         this.state.mdeState.markdown!,
         adjustmentInput
       )

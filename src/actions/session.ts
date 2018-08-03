@@ -82,7 +82,6 @@ export const submitGrading: ActionCreator<actionTypes.IAction> = (
   payload: {
     submissionId,
     questionId,
-    grade,
     comment,
     adjustment
   }
