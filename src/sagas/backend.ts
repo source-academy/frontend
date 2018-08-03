@@ -198,6 +198,10 @@ function* backendSaga(): SagaIterator {
   })
 
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
+    const role = yield select((state: IState) => state.session.role!)
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can submit answers.')
+    }
     const {
       submissionId,
       questionId,
@@ -209,7 +213,7 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }))
     const resp = yield postGrading(submissionId, questionId, comment, adjustment, tokens)
-    if (resp !== null && resp.ok) {
+    if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
       // Now, update the grade for the question in the Grading in the store
       const grading: Grading = yield select((state: IState) =>
@@ -229,11 +233,8 @@ function* backendSaga(): SagaIterator {
     } else if (resp !== null) {
       let errorMessage: string
       switch (resp.status) {
-        case 400:
-          errorMessage = 'Invalid or missing parameter(s) or submission and/or question not found'
-          break
-        case 403:
-          errorMessage = 'Got 403 response. Only staff can save gradings.'
+        case 401:
+          errorMessage = 'Session expired. Please login again.'
           break
         default:
           errorMessage = `Something went wrong (got ${resp.status} response)`
