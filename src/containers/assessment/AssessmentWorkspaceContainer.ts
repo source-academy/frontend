@@ -39,7 +39,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     editorValue: state.workspaces.assessment.editorValue,
     editorWidth: state.workspaces.assessment.editorWidth,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
-    isRunning: state.workspaces.assessment.context.runtime.isRunning,
+    isRunning: state.workspaces.assessment.isRunning,
     output: state.workspaces.assessment.output,
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
