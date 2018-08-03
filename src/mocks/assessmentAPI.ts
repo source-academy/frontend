@@ -184,19 +184,19 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     choices: [
       {
         content: 'A',
-        hint: null
+        hint: 'hint A'
       },
       {
         content: 'B',
-        hint: null
+        hint: 'hint B'
       },
       {
         content: 'C',
-        hint: null
+        hint: 'hint C'
       },
       {
         content: 'D',
-        hint: null
+        hint: 'hint D'
       }
     ],
     id: 2,
