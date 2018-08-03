@@ -29,6 +29,13 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Playground
       </div>
     </NavLink>
+    <div className=\\"visible-xs\\">
+      <Blueprint2.NavbarDivider className=\\"thin-divider\\" />
+    </div>
+    <div className=\\"hidden-xs\\">
+      <Blueprint2.NavbarDivider className=\\"default-divider\\" />
+    </div>
+    <Dropdown handleLogOut={[Function: handleLogOut]} username={[undefined]} />
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;
@@ -62,6 +69,13 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Playground
       </div>
     </NavLink>
+    <div className=\\"visible-xs\\">
+      <Blueprint2.NavbarDivider className=\\"thin-divider\\" />
+    </div>
+    <div className=\\"hidden-xs\\">
+      <Blueprint2.NavbarDivider className=\\"default-divider\\" />
+    </div>
+    <Dropdown handleLogOut={[Function: handleLogOut]} username=\\"Evis Rucer\\" />
   </Blueprint2.NavbarGroup>
 </Blueprint2.Navbar>"
 `;

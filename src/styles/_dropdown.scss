@@ -1,0 +1,88 @@
+div.pt-dialog.about {
+  padding: 0;
+
+  div.pt-dialog-body {
+    margin-top: 10px;
+  }
+
+  div#pt-tab-panel_about_abt {
+    margin-top: 10px;
+    text-align: justify;
+  }
+
+  div#pt-tab-panel_about_devs {
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  span.dot {
+    padding: 0 0.2rem 0 0.2rem;
+  }
+
+  div.pt-tab {
+    outline: 0;
+  }
+}
+
+div.pt-dialog.help {
+  padding: 0;
+  text-align: justify;
+
+  div.pt-dialog-body {
+    margin-top: 15px;
+  }
+
+  ul {
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+}
+
+div.pt-dialog.profile {
+  padding: 0;
+
+  div.header {
+    text-align: center;
+
+    span.name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      padding-right: 0.7rem;
+    }
+
+    span.role {
+      font-style: italic;
+    }
+  }
+
+  div.progress {
+    p {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 0.3em;
+      padding-top: 1rem;
+
+      &:first-child {
+        padding-top: 0;
+      }
+    }
+
+    span {
+      display: block;
+
+      &.label {
+        /* Flush &.value to right */
+        flex-grow: 1;
+      }
+
+      &.value {
+        align-self: end;
+        font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+          monospace;
+      }
+    }
+  }
+}

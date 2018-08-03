@@ -1,10 +1,17 @@
-import { Alignment, Icon, Navbar, NavbarGroup, NavbarHeading } from '@blueprintjs/core'
+import {
+  Alignment,
+  Icon,
+  Navbar,
+  NavbarDivider,
+  NavbarGroup,
+  NavbarHeading
+} from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Role } from '../reducers/states'
-import Status from './academy/Status'
+import Dropdown from './dropdown'
 
 export interface INavigationBarProps {
   handleLogOut: () => void
@@ -54,11 +61,14 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <div className="navbar-button-text hidden-xs">Playground</div>
       </NavLink>
 
-      {props.username !== undefined && props.role !== undefined ? (
-        <Status username={props.username} role={props.role} handleLogOut={props.handleLogOut} />
-      ) : (
-        undefined
-      )}
+      <div className="visible-xs">
+        <NavbarDivider className="thin-divider" />
+      </div>
+      <div className="hidden-xs">
+        <NavbarDivider className="default-divider" />
+      </div>
+
+      <Dropdown handleLogOut={props.handleLogOut} username={props.username} />
     </NavbarGroup>
   </Navbar>
 )
