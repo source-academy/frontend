@@ -201,7 +201,6 @@ function* backendSaga(): SagaIterator {
     const {
       submissionId,
       questionId,
-      grade,
       comment,
       adjustment
     } = (action as actionTypes.IAction).payload
@@ -209,7 +208,7 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }))
-    const resp = yield postGrading(submissionId, questionId, grade, comment, adjustment, tokens)
+    const resp = yield postGrading(submissionId, questionId, comment, adjustment, tokens)
     if (resp !== null && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
       // Now, update the grade for the question in the Grading in the store
@@ -221,7 +220,7 @@ function* backendSaga(): SagaIterator {
           gradingQuestion.grade = {
             adjustment,
             comment,
-            grade
+            grade: gradingQuestion.grade.grade
           }
         }
         return gradingQuestion
@@ -467,7 +466,6 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
 const postGrading = async (
   submissionId: number,
   questionId: number,
-  grade: number,
   comment: string,
   adjustment: number,
   tokens: Tokens
