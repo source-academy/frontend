@@ -1,4 +1,4 @@
-import { Button, Card, Text, Tooltip } from '@blueprintjs/core'
+import { Button, Card, Text, Intent } from '@blueprintjs/core'
 import * as React from 'react'
 
 import { IMCQQuestion } from '../assessment/assessmentShape'
@@ -25,12 +25,11 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
         key={i}
         className="mcq-option col-xs-12"
         active={i === this.state.mcqOption}
+        intent={this.getButtonIntent(i, this.state.mcqOption, this.props.mcq.solution)}
         onClick={this.onButtonClickFactory(i)}
         minimal={true}
       >
-        <Tooltip content={choice.hint}>
-          <Text className="Text"> {choice.content} </Text>
-        </Tooltip>
+        <Text className="Text"> {choice.content} </Text>
       </Button>
     ))
     return (
@@ -56,6 +55,29 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
     this.setState({
       mcqOption: i
     })
+  }
+
+  /**
+   * Handles the logic for what intent an MCQ option should show up as.
+   * This is dependent on the presence of an actual solution (for ungraded assessments),
+   * the current selection, and whether the selected option is active.
+   * 
+   * @param currentOption the current button key, corresponding to a choice ID
+   * @param chosenOption the mcq option that is chosen in the state, i.e what should show up as "selected"
+   * @param solution the solution to the mcq, if any
+   */
+  private getButtonIntent = (currentOption: number, chosenOption: number | null, solution: number | null, ): Intent => {
+    const active = currentOption === chosenOption
+    const correctOptionSelected = active && solution && currentOption === solution
+    if (!solution) {
+      return Intent.NONE
+    } else if (active && correctOptionSelected) {
+      return Intent.SUCCESS
+    } else if (active && !correctOptionSelected) {
+      return Intent.DANGER
+    } else {
+      return Intent.NONE
+    }
   }
 }
 
