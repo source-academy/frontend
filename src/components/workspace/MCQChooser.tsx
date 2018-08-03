@@ -68,6 +68,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
    * Handles the logic for what intent an MCQ option should show up as.
    * This is dependent on the presence of an actual solution (for ungraded assessments),
    * the current selection, and whether the selected option is active.
+   *
    * @param currentOption the current button key, corresponding to a choice ID
    * @param chosenOption the mcq option that is chosen in the state, i.e what should show up as "selected"
    * @param solution the solution to the mcq, if any
