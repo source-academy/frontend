@@ -1,6 +1,6 @@
 import { connect, MapStateToProps } from 'react-redux'
 
-import Profile, { StateProps } from '../components/dropdown/profile'
+import Profile, { StateProps } from '../components/dropdown/Profile'
 import { IState } from '../reducers/states'
 
 // TODO: connect to actual state once backend implements these features

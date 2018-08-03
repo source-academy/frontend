@@ -4,8 +4,8 @@ import * as React from 'react'
 
 import Profile from '../../containers/ProfileContainer'
 import { controlButton } from '../commons/controlButton'
-import About from './about'
-import Help from './help'
+import About from './About'
+import Help from './Help'
 
 type DropdownProps = {
   handleLogOut: () => void
