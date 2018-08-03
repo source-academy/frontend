@@ -35,3 +35,49 @@ div.pt-dialog.help {
     margin-bottom: 0.5rem;
   }
 }
+
+div.pt-dialog.profile {
+  padding: 0;
+
+  div.header {
+    text-align: center;
+
+    span.name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      padding-right: 0.7rem;
+    }
+
+    span.role {
+      font-style: italic;
+    }
+  }
+
+  div.progress {
+    p {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 0.3em;
+      padding-top: 1rem;
+
+      &:first-child {
+        padding-top: 0;
+      }
+    }
+
+    span {
+      display: block;
+
+      &.label {
+        /* Flush &.value to right */
+        flex-grow: 1;
+      }
+
+      &.value {
+        align-self: end;
+        font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+          monospace;
+      }
+    }
+  }
+}

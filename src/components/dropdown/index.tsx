@@ -2,6 +2,7 @@ import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
+import Profile from '../../containers/ProfileContainer'
 import { controlButton } from '../commons/controlButton'
 import About from './about'
 import Help from './help'
@@ -39,6 +40,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
         </Popover>
         <About isOpen={this.state.isAboutOpen} onClose={this.toggleAboutOpen} />
         <Help isOpen={this.state.isHelpOpen} onClose={this.toggleHelpOpen} />
+        <Profile isOpen={this.state.isProfileOpen} onClose={this.toggleProfileOpen} />
       </>
     )
   }
