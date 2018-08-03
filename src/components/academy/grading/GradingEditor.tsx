@@ -77,11 +77,13 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         ) : null}
         <div className="grading-editor-input-parent">
           <table>
-              <tbody>
+            <tbody>
               <tr>
                 <th> {`Auto-grader's grade:`} </th>
                 <td>
-                  <Text>{this.props.initialGrade} / {this.props.maximumGrade}</Text>
+                  <Text>
+                    {this.props.initialGrade} / {this.props.maximumGrade}
+                  </Text>
                 </td>
               </tr>
               <tr>
@@ -102,20 +104,26 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
               <tr>
                 <th> {`Final grade:`} </th>
                 <td>
-                    <Text>{
-                      this.props.initialGrade + 
-                      (stringParamToInt(this.state.adjustmentInput || undefined) || 0)
-                    } / {this.props.maximumGrade}</Text>
+                  <Text>
+                    {this.props.initialGrade +
+                      (stringParamToInt(this.state.adjustmentInput || undefined) || 0)}{' '}
+                    / {this.props.maximumGrade}
+                  </Text>
                 </td>
               </tr>
               <tr>
                 <td />
                 <td>
-                  {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
+                  {controlButton(
+                    'Save',
+                    IconNames.FLOPPY_DISK,
+                    this.onClickSaveButton,
+                    saveButtonOpts
+                  )}
                 </td>
               </tr>
-              </tbody>
-            </table>
+            </tbody>
+          </table>
         </div>
         <div className="react-mde-parent">
           <ReactMde
