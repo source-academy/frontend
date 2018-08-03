@@ -11,6 +11,7 @@ const About: React.SFC<DialogProps> = props => (
   <Dialog
     className="about"
     icon={IconNames.HELP}
+    isCloseButtonShown={false}
     isOpen={props.isOpen}
     onClose={props.onClose}
     title="About"
@@ -70,7 +71,6 @@ const panelDevs = () => (
     <p>
       Ng Tse Pei {dot} Joey Yeo {dot} Tan Yu Wei
     </p>
-    >>>>>>> 2ae6819... Add the Help component
   </div>
 )
 

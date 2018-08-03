@@ -10,12 +10,17 @@ div.pt-dialog.about {
     text-align: justify;
   }
 
-  div.devs {
+  div#pt-tab-panel_about_devs {
+    margin-top: 10px;
     text-align: center;
   }
 
   span.dot {
     padding: 0 0.2rem 0 0.2rem;
+  }
+
+  div.pt-tab {
+    outline: 0;
   }
 }
 

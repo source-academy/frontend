@@ -62,6 +62,7 @@ class Profile extends React.Component<ProfileProps> {
       <Dialog
         className="profile"
         icon={IconNames.USER}
+        isCloseButtonShown={false}
         isOpen={this.props.isOpen}
         onClose={this.props.onClose}
         title="Profile"
