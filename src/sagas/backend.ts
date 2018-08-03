@@ -475,9 +475,10 @@ const postGrading = async (
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
     accessToken: tokens.accessToken,
     body: {
-      grade,
-      comment,
-      adjustment
+      grading: {
+        comment: `${comment}`,
+        adjustment
+      }
     },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
