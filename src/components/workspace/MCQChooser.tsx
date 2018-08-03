@@ -1,6 +1,7 @@
 import { Button, Card, Intent, Text } from '@blueprintjs/core'
 import * as React from 'react'
 
+import { showSuccessMessage, showWarningMessage } from '../../utils/notification'
 import { IMCQQuestion } from '../assessment/assessmentShape'
 
 export interface IMCQChooserProps {
@@ -46,12 +47,18 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
    * and mcq submission with a given answer id.
    *
    * Post-condition: the local state will be updated to store the
-   * mcq option selected.
+   * mcq option selected, and a notification will be displayed with
+   * a hint, if the question is ungraded.
    *
    * @param i the id of the answer
    */
   private onButtonClickFactory = (i: number) => (e: any) => {
     this.props.handleMCQSubmit(i)
+    if (this.props.mcq.solution && i === this.props.mcq.solution) {
+      showSuccessMessage(this.props.mcq.choices[i].hint!, 4000)
+    } else if (this.props.mcq.solution && i !== this.props.mcq.solution) {
+      showWarningMessage(this.props.mcq.choices[i].hint!, 4000)
+    }
     this.setState({
       mcqOption: i
     })
