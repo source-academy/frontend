@@ -9,7 +9,13 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     startMission: function (number) {
       console.log('startMission: ' + number)
       const assessmentType = story.split('-')[0] + 's'
-      return history.push('/academy/' + assessmentType + '/' + number)
+      return history.push('/academy/' + assessmentType)
+      // TODO: Reimplement redirection to actual assessment rather than the
+      //       listing, after story.xml files have been changed. Currently, the
+      //       story xml number points to the mission number, but the
+      //       assessment id we obtain and therefore organise our assessments
+      //       by refers to the database table ID
+      // return history.push('/academy/' + assessmentType + '/' + number)
     },
     openTemplate: function (name) {
       switch (name) {
