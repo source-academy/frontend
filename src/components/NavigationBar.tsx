@@ -69,7 +69,6 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </div>
 
       <Dropdown handleLogOut={props.handleLogOut} username={props.username} />
-
     </NavbarGroup>
   </Navbar>
 )

@@ -4,6 +4,7 @@ import * as React from 'react'
 
 import { controlButton } from '../commons/controlButton'
 import About from './about'
+import Help from './help'
 
 type DropdownProps = {
   handleLogOut: () => void
@@ -37,6 +38,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
           {controlButton('', IconNames.CARET_DOWN)}
         </Popover>
         <About isOpen={this.state.isAboutOpen} onClose={this.toggleAboutOpen} />
+        <Help isOpen={this.state.isHelpOpen} onClose={this.toggleHelpOpen} />
       </>
     )
   }
@@ -65,14 +67,14 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
   }
 
   private toggleAboutOpen = () => {
-    this.setState({...this.state, isAboutOpen: !this.state.isAboutOpen})
+    this.setState({ ...this.state, isAboutOpen: !this.state.isAboutOpen })
   }
 
   private toggleHelpOpen = () =>
-    this.setState({...this.state, isHelpOpen: !this.state.isHelpOpen})
+    this.setState({ ...this.state, isHelpOpen: !this.state.isHelpOpen })
 
   private toggleProfileOpen = () =>
-    this.setState({...this.state, isProfileOpen: !this.state.isProfileOpen})
+    this.setState({ ...this.state, isProfileOpen: !this.state.isProfileOpen })
 }
 
 const titleCase = (str: string) =>

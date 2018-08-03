@@ -7,6 +7,7 @@ div.pt-dialog.about {
 
   div#pt-tab-panel_about_abt {
     margin-top: 10px;
+    text-align: justify;
   }
 
   div.devs {
@@ -15,5 +16,22 @@ div.pt-dialog.about {
 
   span.dot {
     padding: 0 0.2rem 0 0.2rem;
+  }
+}
+
+div.pt-dialog.help {
+  padding: 0;
+  text-align: justify;
+
+  div.pt-dialog-body {
+    margin-top: 15px;
+  }
+
+  ul {
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
   }
 }
