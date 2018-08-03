@@ -1,6 +1,7 @@
-import { Button, Card, Text, Tooltip } from '@blueprintjs/core'
+import { Button, Card, Intent, Text } from '@blueprintjs/core'
 import * as React from 'react'
 
+import { showSuccessMessage, showWarningMessage } from '../../utils/notification'
 import { IMCQQuestion } from '../assessment/assessmentShape'
 
 export interface IMCQChooserProps {
@@ -23,26 +24,19 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
     const options = this.props.mcq.choices.map((choice, i) => (
       <Button
         key={i}
-        className="mcq-option col-xs-6"
+        className="mcq-option col-xs-12"
         active={i === this.state.mcqOption}
+        intent={this.getButtonIntent(i, this.state.mcqOption, this.props.mcq.solution)}
         onClick={this.onButtonClickFactory(i)}
+        minimal={true}
       >
-        <Tooltip content={choice.hint}>
-          <Text className="Text"> {choice.content} </Text>
-        </Tooltip>
+        <Text className="Text"> {choice.content} </Text>
       </Button>
     ))
     return (
-      <div className="MCQChooser">
-        <Card className="mcq-content-parent row center-xs">
-          <div className="col-xs-12">
-            <div className="mcq-task-parent row center-xs ">
-              <Card className="mcq-task col-xs-12" elevation={2}>
-                <Text className="Text"> {this.props.mcq.content} </Text>
-              </Card>
-            </div>
-            <div className="row mcq-options-parent center-xs">{options}</div>
-          </div>
+      <div className="MCQChooser row">
+        <Card className="mcq-content-parent col-xs-12 middle-xs">
+          <div className="row mcq-options-parent between-xs">{options}</div>
         </Card>
       </div>
     )
@@ -53,15 +47,48 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
    * and mcq submission with a given answer id.
    *
    * Post-condition: the local state will be updated to store the
-   * mcq option selected.
+   * mcq option selected, and a notification will be displayed with
+   * a hint, if the question is ungraded.
    *
    * @param i the id of the answer
    */
   private onButtonClickFactory = (i: number) => (e: any) => {
     this.props.handleMCQSubmit(i)
+    if (this.props.mcq.solution && i === this.props.mcq.solution) {
+      showSuccessMessage(this.props.mcq.choices[i].hint!, 4000)
+    } else if (this.props.mcq.solution && i !== this.props.mcq.solution) {
+      showWarningMessage(this.props.mcq.choices[i].hint!, 4000)
+    }
     this.setState({
       mcqOption: i
     })
+  }
+
+  /**
+   * Handles the logic for what intent an MCQ option should show up as.
+   * This is dependent on the presence of an actual solution (for ungraded assessments),
+   * the current selection, and whether the selected option is active.
+   *
+   * @param currentOption the current button key, corresponding to a choice ID
+   * @param chosenOption the mcq option that is chosen in the state, i.e what should show up as "selected"
+   * @param solution the solution to the mcq, if any
+   */
+  private getButtonIntent = (
+    currentOption: number,
+    chosenOption: number | null,
+    solution: number | null
+  ): Intent => {
+    const active = currentOption === chosenOption
+    const correctOptionSelected = active && solution && currentOption === solution
+    if (!solution) {
+      return Intent.NONE
+    } else if (active && correctOptionSelected) {
+      return Intent.SUCCESS
+    } else if (active && !correctOptionSelected) {
+      return Intent.DANGER
+    } else {
+      return Intent.NONE
+    }
   }
 }
 
