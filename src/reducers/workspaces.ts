@@ -261,19 +261,19 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         playground: playgroundWorkspace
       }
     case EVAL_EDITOR:
-      // Forces re-render of workspace on editor eval
       return {
         ...state,
         [location]: {
-          ...state[location]
+          ...state[location],
+          isRunning: true
         }
       }
     case EVAL_REPL:
-      // Forces re-render of workspace on editor eval
       return {
         ...state,
         [location]: {
-          ...state[location]
+          ...state[location],
+          isRunning: true
         }
       }
     case EVAL_INTERPRETER_SUCCESS:
@@ -295,7 +295,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          output: newOutput
+          output: newOutput,
+          isRunning: false
         }
       }
     case EVAL_INTERPRETER_ERROR:
@@ -317,7 +318,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          output: newOutput
+          output: newOutput,
+          isRunning: false
         }
       }
     /**
@@ -337,10 +339,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          context: {
-            ...state[location].context,
-            isRunning: false
-          }
+          isRunning: false
         }
       }
     /**
