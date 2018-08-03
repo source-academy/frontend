@@ -1,4 +1,4 @@
-import { ButtonGroup, Icon, Intent, NumericInput, Position } from '@blueprintjs/core'
+import { Icon, Intent, NumericInput, Position, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import ReactMde, { ReactMdeTypes } from 'react-mde'
@@ -69,24 +69,50 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     const hasUnsavedChanges = this.hasUnsavedChanges()
     const saveButtonOpts = hasUnsavedChanges ? { intent: Intent.WARNING, minimal: true } : {}
     return (
-      <>
+      <div className="GradingEditor">
         {hasUnsavedChanges ? (
           <Prompt
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
           />
         ) : null}
         <div className="grading-editor-input-parent">
-          <ButtonGroup fill={true}>
-            <NumericInput
-              onValueChange={this.onAdjustmentInputChange}
-              value={this.state.adjustmentInput || ''}
-              buttonPosition={Position.LEFT}
-              placeholder="Adjust grades relatively here"
-              min={0 - this.props.initialGrade}
-              max={this.props.maximumGrade - this.props.initialGrade}
-            />
-            {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
-          </ButtonGroup>
+          <table>
+              <tbody>
+              <tr>
+                <th> {`Auto-grader's grade:`} </th>
+                <td>
+                  <Text>{this.props.initialGrade}</Text>
+                </td>
+              </tr>
+              <tr>
+                <th> {`Your adjustment:`} </th>
+                <td>
+                  <NumericInput
+                    className="grading-adjustment-input"
+                    onValueChange={this.onAdjustmentInputChange}
+                    value={this.state.adjustmentInput || ''}
+                    buttonPosition={Position.LEFT}
+                    fill={true}
+                    placeholder="Adjust grades relatively here"
+                    min={0 - this.props.initialGrade}
+                    max={this.props.maximumGrade - this.props.initialGrade}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th> {`Final grade:`} </th>
+                <td>
+                    <Text>{this.props.initialGrade}</Text>
+                </td>
+              </tr>
+              <tr>
+                <td />
+                <td>
+                  {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
+                </td>
+              </tr>
+              </tbody>
+            </table>
         </div>
         <div className="react-mde-parent">
           <ReactMde
@@ -99,7 +125,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             generateMarkdownPreview={this.generateMarkdownPreview}
           />
         </div>
-      </>
+      </div>
     )
   }
 
