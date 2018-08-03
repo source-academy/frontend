@@ -23,9 +23,10 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
     const options = this.props.mcq.choices.map((choice, i) => (
       <Button
         key={i}
-        className="mcq-option col-xs-6"
+        className="mcq-option col-xs-12"
         active={i === this.state.mcqOption}
         onClick={this.onButtonClickFactory(i)}
+        minimal={true}
       >
         <Tooltip content={choice.hint}>
           <Text className="Text"> {choice.content} </Text>
