@@ -11,7 +11,7 @@ import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Role } from '../reducers/states'
-import dropdown from './dropdown'
+import Dropdown from './dropdown'
 
 export interface INavigationBarProps {
   handleLogOut: () => void
@@ -68,7 +68,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <NavbarDivider className="default-divider" />
       </div>
 
-      {dropdown(props)}
+      <Dropdown handleLogOut={props.handleLogOut} username={props.username} />
+
     </NavbarGroup>
   </Navbar>
 )
