@@ -91,7 +91,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const assessmentProps: AssessmentProps = {
         assessmentId,
         questionId,
-        attempted: overview.status === AssessmentStatuses.not_attempted,
+        notAttempted: overview.status === AssessmentStatuses.not_attempted,
         closeDate: overview.closeAt
       }
       return <AssessmentWorkspaceContainer {...assessmentProps} />
