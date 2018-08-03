@@ -299,7 +299,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           output: newOutput,
-          isRunning: false 
+          isRunning: false
         }
       }
     case EVAL_INTERPRETER_ERROR:
@@ -322,7 +322,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           output: newOutput,
-          isRunning: false 
+          isRunning: false
         }
       }
     /**
