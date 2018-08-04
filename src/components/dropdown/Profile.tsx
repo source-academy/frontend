@@ -28,27 +28,29 @@ class Profile extends React.Component<ProfileProps> {
       content = (
         <>
           <div className="header">
-            <p>
+            <div>
               <span className="name">{this.props.name}</span>
               <span className="role">{this.props.role}</span>
-            </p>
+            </div>
           </div>
           <div className="progress">
-            <p className="grade">
+            <div className="grade">
               <span className="label">Grade</span>
-              <span className="value">{this.props.grade ? this.props.grade : '???'}</span>
-            </p>
+              <span className="value">
+                {this.props.grade !== undefined ? this.props.grade : '???'}
+              </span>
+            </div>
             <Tooltip content="Sorry, the grade progress bar is not ready yet">
               <ProgressBar className="grade" animate={false} stripes={false} />
             </Tooltip>
-            <p className="xp">
+            <div className="xp">
               <span className="label">XP</span>
               <span className="value">
                 <Tooltip content="Sorry, the XP display is not ready yet">
                   {this.props.xp ? this.props.xp : '???'}
                 </Tooltip>
               </span>
-            </p>
+            </div>
             <Tooltip content="Sorry, the XP progress bar is not ready yet">
               <ProgressBar className="xp" animate={false} stripes={false} />
             </Tooltip>

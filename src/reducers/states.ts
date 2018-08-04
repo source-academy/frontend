@@ -75,13 +75,14 @@ export interface ISessionState {
   readonly assessmentOverviews?: IAssessmentOverview[]
   readonly assessments: Map<number, IAssessment>
   readonly announcements?: Announcement[]
+  readonly grade: number
   readonly gradingOverviews?: GradingOverview[]
   readonly gradings: Map<number, Grading>
   readonly historyHelper: HistoryHelper
   readonly refreshToken?: string
   readonly role?: Role
-  readonly storyAct: string
-  readonly username?: string
+  readonly story?: Story
+  readonly name?: string
 }
 
 type ReplHistory = {
@@ -90,6 +91,11 @@ type ReplHistory = {
 }
 
 export const maxBrowseIndex = 50
+
+export type Story = {
+  story: string
+  playStory: boolean
+}
 
 /**
  * An output while the program is still being run in the interpreter. As a
@@ -236,6 +242,7 @@ export const defaultSession: ISessionState = {
   ],
   assessments: new Map<number, IAssessment>(),
   assessmentOverviews: undefined,
+  grade: 0,
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
   historyHelper: {
@@ -243,8 +250,7 @@ export const defaultSession: ISessionState = {
     lastGeneralLocations: [null, null]
   },
   refreshToken: undefined,
-  storyAct: 'mission-1',
-  username: undefined
+  name: undefined
 }
 
 export const defaultState: IState = {

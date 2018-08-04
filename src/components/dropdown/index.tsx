@@ -4,12 +4,12 @@ import * as React from 'react'
 
 import Profile from '../../containers/ProfileContainer'
 import { controlButton } from '../commons/controlButton'
-import About from './about'
-import Help from './help'
+import About from './About'
+import Help from './Help'
 
 type DropdownProps = {
   handleLogOut: () => void
-  username?: string
+  name?: string
 }
 
 type DropdownState = {
@@ -46,15 +46,15 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
   }
 
   private menu(props: DropdownProps) {
-    const profile = this.props.username ? (
+    const profile = this.props.name ? (
       <MenuItem
         icon={IconNames.USER}
         onClick={this.toggleProfileOpen}
-        text={titleCase(this.props.username)}
+        text={titleCase(this.props.name)}
       />
     ) : null
 
-    const logout = this.props.username ? (
+    const logout = this.props.name ? (
       <MenuItem icon={IconNames.LOG_OUT} text="Logout" onClick={this.props.handleLogOut} />
     ) : null
 

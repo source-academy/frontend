@@ -26,16 +26,15 @@ export const saveState = (state: IState) => {
     const stateToBeSaved: ISavedState = {
       session: {
         accessToken: state.session.accessToken,
-        historyHelper: state.session.historyHelper,
         refreshToken: state.session.refreshToken,
         role: state.session.role,
-        username: state.session.username
+        name: state.session.name
       },
       playgroundEditorValue: state.workspaces.playground.editorValue
     }
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved))
     localStorage.setItem('storedState', serialized)
   } catch (err) {
-    // Issue #143
+    // https://github.com/source-academy/cadet-frontend/issues/143
   }
 }

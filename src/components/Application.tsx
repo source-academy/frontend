@@ -19,7 +19,7 @@ export interface IStateProps {
   currentPlaygroundChapter: number
   role?: Role
   title: string
-  username?: string
+  name?: string
   currentPlaygroundExternalLibrary: ExternalLibraryName
 }
 
@@ -42,7 +42,7 @@ class Application extends React.Component<IApplicationProps, {}> {
         <NavigationBar
           handleLogOut={this.props.handleLogOut}
           role={this.props.role}
-          username={this.props.username}
+          name={this.props.name}
           title={this.props.title}
         />
         <div className="Application__main">

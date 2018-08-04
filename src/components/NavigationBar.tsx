@@ -17,7 +17,7 @@ export interface INavigationBarProps {
   handleLogOut: () => void
   role?: Role
   title: string
-  username?: string
+  name?: string
 }
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
@@ -68,7 +68,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <NavbarDivider className="default-divider" />
       </div>
 
-      <Dropdown handleLogOut={props.handleLogOut} username={props.username} />
+      <Dropdown handleLogOut={props.handleLogOut} name={props.name} />
     </NavbarGroup>
   </Navbar>
 )

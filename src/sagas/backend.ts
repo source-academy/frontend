@@ -61,8 +61,7 @@ function* backendSaga(): SagaIterator {
       // Use dispatch instead of saga's put to guarantee the reducer has
       // finished setting values in the state before /academy begins rendering
       store.dispatch(actions.setTokens(tokens))
-      store.dispatch(actions.setRole(user.role))
-      store.dispatch(actions.setUsername(user.name))
+      store.dispatch(actions.setUser(user))
       yield history.push('/academy')
     } else {
       yield history.push('/')
@@ -288,7 +287,7 @@ async function postRefresh(refreshToken: string): Promise<Tokens | null> {
 /**
  * GET /user
  */
-async function getUser(tokens: Tokens): Promise<object | null> {
+export async function getUser(tokens: Tokens): Promise<object | null> {
   const response = await request('user', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,

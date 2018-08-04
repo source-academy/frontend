@@ -5,6 +5,7 @@ import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
 import { Grading, GradingQuestion } from '../components/academy/grading/gradingShape'
 import { IQuestion } from '../components/assessment/assessmentShape'
+import { store } from '../createStore'
 import { IState } from '../reducers/states'
 import { history } from '../utils/history'
 import { showSuccessMessage } from '../utils/notification'
@@ -19,11 +20,15 @@ export function* mockBackendSaga(): SagaIterator {
     }
     const user = {
       name: 'DevStaff',
-      role: 'staff'
+      role: 'staff',
+      story: {
+        story: 'mission-1',
+        playStory: true
+      },
+      grade: 0
     }
-    yield put(actions.setTokens(tokens))
-    yield put(actions.setRole(user.role))
-    yield put(actions.setUsername(user.name))
+    store.dispatch(actions.setTokens(tokens))
+    store.dispatch(actions.setUser(user))
     yield history.push('/academy')
   })
 
