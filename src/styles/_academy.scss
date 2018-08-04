@@ -18,6 +18,13 @@
   }
 }
 
+.assessment-briefing {
+  padding-bottom: 0;
+  .assessment-briefing-button {
+    margin-top: 1rem;
+  }
+}
+
 .Assessment {
   color: $cadet-color-3;
 
@@ -137,6 +144,12 @@
     // align the div.pt-button-group right
     text-align: right;
   }
+}
+
+.WorkspaceParent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .GradingEditor {
