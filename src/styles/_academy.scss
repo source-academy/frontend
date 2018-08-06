@@ -157,10 +157,15 @@
     /** Center the text for numeric input and showing grades. */
     table {
       border-spacing: 5px;
+      width: 100%;
       tbody {
         text-align: center;
         button {
           width: 100%;
+        }
+        td {
+          /** Aligns the numeric input */
+          text-align: -webkit-center;
         }
       }
     }
