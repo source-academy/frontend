@@ -71,7 +71,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       intent: hasUnsavedChanges ? Intent.WARNING : Intent.NONE,
       minimal: !hasUnsavedChanges,
       fullWidth: true,
-      className: "grading-editor-save-button"
+      className: 'grading-editor-save-button'
     }
     return (
       <div className="GradingEditor">
@@ -130,12 +130,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             generateMarkdownPreview={this.generateMarkdownPreview}
           />
         </div>
-        {controlButton(
-          'Save',
-          IconNames.FLOPPY_DISK,
-          this.onClickSaveButton,
-          saveButtonOpts
-        )}
+        {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
       </div>
     )
   }

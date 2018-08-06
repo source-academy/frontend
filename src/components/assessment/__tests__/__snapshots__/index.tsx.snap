@@ -94,7 +94,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                 <div className=\\"pt-card pt-elevation-3 contentdisplay-content\\">
-                  <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
+                  <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
                     <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-down\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -185,7 +185,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <Route path=\\"/academy/missions/0/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/missions/0/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/0/0\\">
-                                          <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"edit\\">
+                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"edit\\">
                                             <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"edit\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -282,7 +282,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <Route path=\\"/academy/missions/1/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/1/0\\">
-                                          <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"play\\">
+                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"play\\">
                                             <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"play\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -379,7 +379,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <Route path=\\"/academy/sidequests/2/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/sidequests/2/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/sidequests/2/0\\">
-                                          <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
+                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
                                             <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"step-forward\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"step-forward\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -407,7 +407,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                   </Blueprint2.Collapse>
-                  <Blueprint2.Button intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-right\\" onClick={[Function]}>
+                  <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-right\\" onClick={[Function]}>
                     <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-right\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
