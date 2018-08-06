@@ -4,3 +4,13 @@
   flex-direction: column;
   flex: 1 1 100%;
 }
+
+.kineticjs-content {
+  /** 
+   * Fixes a bug where the 1000x1000 canvas does not overflow
+   * when it's container is too small.
+   */
+  width: 100% !important;
+  height: 40vh !important; // 100% results in 0 height, 100vh is too big.
+  overflow: scroll;
+}
