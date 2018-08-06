@@ -67,7 +67,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
 
   public render() {
     const hasUnsavedChanges = this.hasUnsavedChanges()
-    const saveButtonOpts = hasUnsavedChanges ? { intent: Intent.WARNING, minimal: true } : {}
+    const saveButtonOpts = {
+      intent: hasUnsavedChanges ? Intent.WARNING : Intent.NONE,
+      minimal: true,
+      className: "grading-editor-save-button"
+    }
     return (
       <div className="GradingEditor">
         {hasUnsavedChanges ? (
@@ -93,7 +97,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                     className="grading-adjustment-input"
                     onValueChange={this.onAdjustmentInputChange}
                     value={this.state.adjustmentInput || ''}
-                    buttonPosition={Position.LEFT}
+                    buttonPosition={Position.RIGHT}
                     fill={true}
                     placeholder="Adjust grades relatively here"
                     min={0 - this.props.initialGrade}
@@ -111,17 +115,6 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                   </Text>
                 </td>
               </tr>
-              <tr>
-                <td />
-                <td>
-                  {controlButton(
-                    'Save',
-                    IconNames.FLOPPY_DISK,
-                    this.onClickSaveButton,
-                    saveButtonOpts
-                  )}
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -136,6 +129,12 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             generateMarkdownPreview={this.generateMarkdownPreview}
           />
         </div>
+        {controlButton(
+          'Save',
+          IconNames.FLOPPY_DISK,
+          this.onClickSaveButton,
+          saveButtonOpts
+        )}
       </div>
     )
   }
