@@ -148,7 +148,7 @@ const playgroundIntroductionTab: SideContentTab = {
 }
 const listVisualizerTab: SideContentTab = {
   label: 'List Visualizer',
-  icon: IconNames.COMPASS,
+  icon: IconNames.EYE_OPEN,
   body: <ListVisualizer />
 }
 
