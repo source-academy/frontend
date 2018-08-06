@@ -73,9 +73,9 @@ cadetAlert.__SOURCE__ = 'alert(a)'
  */
 function visualiseList(list: any) {
   if ((window as any).ListVisualizer) {
-    (window as any).ListVisualizer.draw(list)
+    ;(window as any).ListVisualizer.draw(list)
   } else {
-    throw new Error('List visualizer is not enabled') 
+    throw new Error('List visualizer is not enabled')
   }
 }
 /** Follow the js-slang specification of the visualiseList symbol. */
