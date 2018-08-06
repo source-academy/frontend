@@ -69,7 +69,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     const hasUnsavedChanges = this.hasUnsavedChanges()
     const saveButtonOpts = {
       intent: hasUnsavedChanges ? Intent.WARNING : Intent.NONE,
-      minimal: true,
+      minimal: !hasUnsavedChanges,
       className: "grading-editor-save-button"
     }
     return (
