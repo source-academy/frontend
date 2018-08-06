@@ -78,6 +78,8 @@ function visualiseList(list: any) {
     throw new Error('List visualizer is not enabled') 
   }
 }
+/** Follow the js-slang specification of the visualiseList symbol. */
+visualiseList.__SOURCE__ = 'draw(a)'
 
 /**
  * A wrapper around js-slang's createContext. This
