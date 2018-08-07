@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AssessmentWorkspace page "loading" content renders correctly 1`] = `"<NonIdealState className=\\"AssessmentWorkspace pt-dark\\" description=\\"Getting mission ready...\\" visual={{...}} />"`;
+exports[`AssessmentWorkspace page "loading" content renders correctly 1`] = `"<NonIdealState className=\\"WorkspaceParent pt-dark\\" description=\\"Getting mission ready...\\" visual={{...}} />"`;
 
 exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
-"<div className=\\"AssessmentWorkspace pt-dark\\">
+"<div className=\\"WorkspaceParent pt-dark\\">
   <Blueprint2.Dialog className=\\"assessment-briefing\\" isOpen={false} canOutsideClickClose={true}>
     <Blueprint2.Card elevation={0} interactive={false}>
       <Text>
@@ -19,7 +19,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
 `;
 
 exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] = `
-"<div className=\\"AssessmentWorkspace pt-dark\\">
+"<div className=\\"WorkspaceParent pt-dark\\">
   <Blueprint2.Dialog className=\\"assessment-briefing\\" isOpen={true} canOutsideClickClose={true}>
     <Blueprint2.Card elevation={0} interactive={false}>
       <Text>
@@ -35,7 +35,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
 `;
 
 exports[`AssessmentWorkspace page with programming question renders correctly 1`] = `
-"<div className=\\"AssessmentWorkspace pt-dark\\">
+"<div className=\\"WorkspaceParent pt-dark\\">
   <Blueprint2.Dialog className=\\"assessment-briefing\\" isOpen={true} canOutsideClickClose={true}>
     <Blueprint2.Card elevation={0} interactive={false}>
       <Text>

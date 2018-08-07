@@ -79,7 +79,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     if (this.props.grading === undefined) {
       return (
         <NonIdealState
-          className="AssessmentWorkspace pt-dark"
+          className="WorkspaceParent pt-dark"
           description="Getting assessment ready..."
           visual={<Spinner large={true} />}
         />
@@ -128,7 +128,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       }
     }
     return (
-      <div className="AssessmentWorkspace pt-dark">
+      <div className="WorkspaceParent pt-dark">
         <Workspace {...workspaceProps} />
       </div>
     )

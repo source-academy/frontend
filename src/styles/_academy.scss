@@ -18,6 +18,13 @@
   }
 }
 
+.assessment-briefing {
+  padding-bottom: 0;
+  .assessment-briefing-button {
+    margin-top: 1rem;
+  }
+}
+
 .Assessment {
   color: $cadet-color-3;
 
@@ -139,9 +146,43 @@
   }
 }
 
+.WorkspaceParent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.GradingEditor {
+  .grading-editor-input-parent {
+    /** Center the text for numeric input and showing grades. */
+    table {
+      border-spacing: 5px;
+      width: 100%;
+      tbody {
+        text-align: center;
+        button {
+          width: 100%;
+        }
+        td {
+          /** Aligns the numeric input */
+          text-align: -webkit-center;
+        }
+      }
+    }
+    .grading-adjustment-input {
+      width: 150px;
+    }
+  }
+  .grading-editor-save-button {
+    margin-top: 0.4rem;
+    width: 100% !important;
+  }
+}
+
 .Grading {
   /* To show the table borders that get cut out by a Card  */
   padding: 1px;
+
   /** 
    *  To prevent misalignment of column header and content 
    *  for large displays. This effectively flushes the content left.
