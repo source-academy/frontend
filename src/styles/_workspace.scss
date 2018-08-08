@@ -79,23 +79,29 @@ $code-color-error: #ff4444;
     flex: 1 1;
     margin: 0 0.5rem 0 0.5rem;
     overflow: hidden;
+
     .mcq-content-parent {
       height: 100%;
       overflow: auto;
       padding: 20px;
+
       .mcq-options-parent {
         height: 100%;
+
         .mcq-option {
           padding: 20px;
         }
+
         .mcq-option:focus {
           outline: 0;
         }
       }
     }
+
     .pt-card {
       background-color: $cadet-color-2;
     }
+
     .Text {
       word-break: break-word;
       word-wrap: break-word;
