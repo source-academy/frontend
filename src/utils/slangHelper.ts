@@ -79,7 +79,7 @@ function visualiseList(list: any) {
   }
 }
 /** Follow the js-slang specification of the visualiseList symbol. */
-visualiseList.__SOURCE__ = 'draw(a)'
+visualiseList.__SOURCE__ = 'draw_list(a)'
 
 /**
  * A wrapper around js-slang's createContext. This
