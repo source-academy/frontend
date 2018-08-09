@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 /**
  * Checks if a date is before or at the current time.
  *
@@ -23,6 +25,6 @@ export const beforeNow = (d: string): boolean => {
  *   e.g 07/06, 20:09
  */
 export const getPrettyDate = (d: string): string => {
-  const date = new Date(d)
-  return `${date.getDate()}/${date.getMonth()}, ${date.getHours()}:${date.getMinutes()}`
+  const date = moment(d)
+  return date.format('DD/M, HH:mm')
 }
