@@ -9,9 +9,7 @@ import * as moment from 'moment';
  *   is before the time of execution of this function.
  */
 export const beforeNow = (d: string): boolean => {
-  const date = new Date(d)
-  const now = new Date()
-  return date <= now
+  return moment(d).isBefore(moment())
 }
 
 /**
