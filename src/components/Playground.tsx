@@ -8,6 +8,7 @@ import { InterpreterOutput } from '../reducers/states'
 import { ExternalLibraryName } from './assessment/assessmentShape'
 import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
+import ListVisualizer from './workspace/side-content/ListVisualizer'
 
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
@@ -99,7 +100,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [playgroundIntroduction]
+        tabs: [playgroundIntroductionTab, listVisualizerTab]
       }
     }
     return (
@@ -120,7 +121,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 
 const SICP_SITE = 'https://www.comp.nus.edu.sg/~cs1101s/source/'
 const CHAP = '\xa7'
-const playgroundIntroduction: SideContentTab = {
+const playgroundIntroductionTab: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
   body: (
@@ -144,6 +145,11 @@ const playgroundIntroduction: SideContentTab = {
       right border of the editor, or the top border of the REPL.
     </Text>
   )
+}
+const listVisualizerTab: SideContentTab = {
+  label: 'List Visualizer',
+  icon: IconNames.EYE_OPEN,
+  body: <ListVisualizer />
 }
 
 export default Playground
