@@ -65,7 +65,7 @@ type State = {
   betchaAssessment: IAssessmentOverview | null
   showClosedAssessments: boolean
   showOpenedAssessments: boolean
-  showUnopenedAssessments: boolean
+  showUpcomingAssessments: boolean
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -78,7 +78,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       betchaAssessment: null,
       showClosedAssessments: false,
       showOpenedAssessments: true,
-      showUnopenedAssessments: true
+      showUpcomingAssessments: true
     }
   }
 
@@ -107,7 +107,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     } else if (this.props.assessmentOverviews.length === 0) {
       display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
     } else {
-      /** Unopened assessments, that are not released yet. */
+      /** Upcoming assessments, that are not released yet. */
       const isOverviewUpcoming = (overview: IAssessmentOverview) =>
         !beforeNow(overview.closeAt) && !beforeNow(overview.openAt)
       const upcomingCards = this.props.assessmentOverviews
@@ -139,11 +139,11 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         upcomingCards.length > 0 ? (
           <>
             {collapseButton(
-              'Unopened',
-              this.state.showUnopenedAssessments,
-              this.toggleUnopenedAssessments
+              'Upcoming',
+              this.state.showUpcomingAssessments,
+              this.toggleUpcomingAssessments
             )}
-            <Collapse isOpen={this.state.showUnopenedAssessments}>{upcomingCards}</Collapse>
+            <Collapse isOpen={this.state.showUpcomingAssessments}>{upcomingCards}</Collapse>
           </>
         ) : null
       const openedCardsCollapsible =
@@ -242,10 +242,10 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showOpenedAssessments: !this.state.showOpenedAssessments
     })
 
-  private toggleUnopenedAssessments = () =>
+  private toggleUpcomingAssessments = () =>
     this.setState({
       ...this.state,
-      showUnopenedAssessments: !this.state.showUnopenedAssessments
+      showUpcomingAssessments: !this.state.showUpcomingAssessments
     })
 
   private setBetchaAssessment = (assessment: IAssessmentOverview | null) =>
