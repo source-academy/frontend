@@ -230,7 +230,7 @@ class AssessmentWorkspace extends React.Component<
     return {
       activeTab: props.activeTab,
       handleChangeActiveTab: props.handleChangeActiveTab,
-      tabs,
+      tabs
     }
   }
 

@@ -163,7 +163,7 @@ What's your favourite dinner food?
   },
   {
     answer: null,
-    comments: "`Great Job` **young padawan**",
+    comments: '`Great Job` **young padawan**',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mock3DRuneLibrary,
@@ -172,7 +172,7 @@ What's your favourite dinner food?
   },
   {
     answer: 3,
-    comments: "## Money trees is the *perfect place for shade and ``` thats just how i feel ``` ",
+    comments: '## Money trees is the *perfect place for shade and ``` thats just how i feel ``` ',
     content:
       'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library!',
     choices: [
