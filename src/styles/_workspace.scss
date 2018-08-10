@@ -148,29 +148,41 @@ $code-color-error: #ff4444;
           /* word-wrap and word-break are added to make text wrap. */
           word-wrap: break-word;
           word-break: break-word;
+
+          div {
+            p:last-child {
+              margin-bottom: 0;
+            }
+          }
+
           .grading-editor-input-parent {
             /* Position the editor away from the buttons */
-            margin-bottom: 0.5rem;
             /* Cause the 'save' button shift down when size is small. */
+            margin-bottom: 0.5rem;
+
             .pt-button-group {
               flex-wrap: wrap;
             }
+
             .pt-numeric-input {
               .pt-button {
                 background-color: $cadet-color-2;
               }
             }
           }
+
           .react-mde {
             /* Color the borders */
             border-color: $cadet-color-5;
             border-radius: 3px;
             /* Override side-content's default text justify*/
             text-align: initial;
-            /* Color the toolbar */
+
             .mde-header {
+              /* Color the toolbar */
               background-color: $cadet-color-5;
             }
+
             /**
              * Color code blocks. style is forced due to deep nesting,
              * and no access to the generated html to place classes.
