@@ -20,7 +20,7 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     openAt: '2038-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes (Duplicate)',
     shortSummary:
-    'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    'This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0',
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1'
   }
