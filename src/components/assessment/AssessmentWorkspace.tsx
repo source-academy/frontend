@@ -1,6 +1,7 @@
 import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
+import { Converter } from 'showdown'
 
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states'
 import { beforeNow } from '../../utils/dateHelpers'
@@ -106,7 +107,11 @@ class AssessmentWorkspace extends React.Component<
     const overlay = (
       <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
         <Card>
-          <Text> {this.props.assessment.longSummary} </Text>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: converter.makeHtml(this.props.assessment.longSummary)
+            }}
+          />
           <Button
             className="assessment-briefing-button"
             // tslint:disable-next-line jsx-no-lambda
@@ -259,5 +264,7 @@ class AssessmentWorkspace extends React.Component<
     }
   }
 }
+
+const converter = new Converter()
 
 export default AssessmentWorkspace

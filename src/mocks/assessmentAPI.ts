@@ -243,8 +243,25 @@ export const mockAssessments: IAssessment[] = [
   {
     category: AssessmentCategories.Sidequest,
     id: 2,
-    longSummary:
-      'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    longSummary: `###This is the sidequest briefing.
+
+*Lorem ipsum* dolor sit amet, consectetur adipiscing elit.
+
+> Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin
+enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis
+vestibulum.
+
+- Etiam in egestas dolor.
+- Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum,
+  vel ornare metus turpis sed justo.
+- Vivamus at tellus sed ex convallis commodo at in lectus.
+
+\`\`\`
+Pellentesque
+pharetra
+pulvinar
+sapien
+\`\`\``,
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
     title: 'A sample Sidequest'
