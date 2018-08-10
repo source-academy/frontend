@@ -8,8 +8,10 @@ import * as moment from 'moment'
  * @returns {boolean} true if the date specified by the paramter
  *   is before the time of execution of this function.
  */
-export const beforeNow = (d: string): boolean => {
-  return moment(d).isBefore(moment())
+export const beforeNow = (dateString: string): boolean => {
+  const date = moment(dateString)
+  const now = moment()
+  return date.isBefore(now)
 }
 
 /**
@@ -22,7 +24,8 @@ export const beforeNow = (d: string): boolean => {
  * @returns {string} A user-friendly readable date string,
  *   e.g 07/06, 20:09
  */
-export const getPrettyDate = (d: string): string => {
-  const date = moment(d)
-  return date.format('DD/M, HH:mm')
+export const getPrettyDate = (dateString: string): string => {
+  const date = moment(dateString)
+  const prettyDate = date.format('DD/M, HH:mm')
+  return prettyDate
 }
