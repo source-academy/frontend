@@ -69,6 +69,7 @@ Hello and welcome to this assessment! This is the *0th question*.
 >>> import this
 \`\`\`
 `,
+      comments: null,
       id: 0,
       library: mockLibrary,
       solutionTemplate: '0th question mock solution template',
@@ -84,6 +85,7 @@ Hello and welcome to this assessment! This is the *0th question*.
   {
     question: {
       answer: "This student's answer to the 1st question",
+      comments: null,
       content: 'Hello and welcome to this assessment! This is the 1st question.',
       id: 1,
       library: mockLibrary,
@@ -101,6 +103,7 @@ Hello and welcome to this assessment! This is the *0th question*.
     question: {
       // C is the answer
       answer: 3,
+      comments: null,
       solution: 2,
       content:
         'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',

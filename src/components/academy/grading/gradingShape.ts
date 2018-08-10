@@ -42,8 +42,12 @@ export type GradingQuestion = {
  * grading a submission. This means that
  * either of (library & solutionTemplate) xor (choices) must
  * be present, and either of (solution) xor (answer) must be present.
+ * 
+ * @property comments This property is already present in GradingQuestion,
+ *   and thus does not need to be used here.
  */
 interface IAnsweredQuestion extends IQuestion {
+  comments: null 
   solution?: number
   answer: string | number | null
   solutionTemplate?: string
