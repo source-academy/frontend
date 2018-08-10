@@ -58,6 +58,7 @@ export interface IOwnProps {
 
 export interface IStateProps {
   assessmentOverviews?: IAssessmentOverview[]
+  isStudent: boolean
 }
 
 type State = {
