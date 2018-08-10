@@ -108,10 +108,10 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
     } else {
       /** Unopened assessments, that are not released yet. */
-      const isOverviewUnopened = (overview: IAssessmentOverview) =>
+      const isOverviewUpcoming = (overview: IAssessmentOverview) =>
         !beforeNow(overview.closeAt) && !beforeNow(overview.openAt)
-      const unopenedCards = this.props.assessmentOverviews
-        .filter(isOverviewUnopened)
+      const upcomingCards = this.props.assessmentOverviews
+        .filter(isOverviewUpcoming)
         .map((overview, index) =>
           makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
         )
@@ -129,21 +129,21 @@ class Assessment extends React.Component<IAssessmentProps, State> {
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.props.assessmentOverviews
-        .filter(overview => !isOverviewOpened(overview) && !isOverviewUnopened(overview))
+        .filter(overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview))
         .map((overview, index) =>
           makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
         )
 
       /** Render cards */
-      const unopenedCardsCollapsible =
-        unopenedCards.length > 0 ? (
+      const upcomingCardsCollapsible =
+        upcomingCards.length > 0 ? (
           <>
             {collapseButton(
               'Unopened',
               this.state.showUnopenedAssessments,
               this.toggleUnopenedAssessments
             )}
-            <Collapse isOpen={this.state.showUnopenedAssessments}>{unopenedCards}</Collapse>
+            <Collapse isOpen={this.state.showUnopenedAssessments}>{upcomingCards}</Collapse>
           </>
         ) : null
       const openedCardsCollapsible =
@@ -166,7 +166,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         ) : null
       display = (
         <>
-          {unopenedCardsCollapsible}
+          {upcomingCardsCollapsible}
           {openedCardsCollapsible}
           {closedCardsCollapsible}
         </>
