@@ -161,11 +161,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   </h6>
                                 </div>
                                 <div className=\\"row listing-description\\">
-                                  <Text className=\\"col-xs-12\\" ellipsize={true}>
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
-                                      Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
-                                    </div>
-                                  </Text>
+                                  <div dangerouslySetInnerHTML={{...}} />
                                 </div>
                                 <div className=\\"listing-controls\\">
                                   <Text className=\\"listing-due-date\\">
@@ -258,11 +254,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   </h6>
                                 </div>
                                 <div className=\\"row listing-description\\">
-                                  <Text className=\\"col-xs-12\\" ellipsize={true}>
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
-                                      Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
-                                    </div>
-                                  </Text>
+                                  <div dangerouslySetInnerHTML={{...}} />
                                 </div>
                                 <div className=\\"listing-controls\\">
                                   <Text className=\\"listing-due-date\\">
@@ -355,11 +347,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   </h6>
                                 </div>
                                 <div className=\\"row listing-description\\">
-                                  <Text className=\\"col-xs-12\\" ellipsize={true}>
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
-                                      Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
-                                    </div>
-                                  </Text>
+                                  <div dangerouslySetInnerHTML={{...}} />
                                 </div>
                                 <div className=\\"listing-controls\\">
                                   <Text className=\\"listing-due-date\\">

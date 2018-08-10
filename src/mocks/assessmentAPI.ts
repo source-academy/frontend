@@ -19,8 +19,20 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     maximumGrade: 3000,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
-    shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    shortSummary: `
+*Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua.
+
+\`\`\`
+const a = 5;
+\`\`\`
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+_doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
+[veritatis et quasi architecto](google.com) beatae vitae dicta sunt
+\`explicabo\`.
+
+`,
     status: AssessmentStatuses.attempted,
     story: 'mission-1'
   },

@@ -20,6 +20,7 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { NavLink } from 'react-router-dom'
+import { Converter } from 'showdown'
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
@@ -257,9 +258,7 @@ const makeOverviewCard = (
           <h6>{`Max Grade: ${overview.maximumGrade}`}</h6>
         </div>
         <div className="row listing-description">
-          <Text className="col-xs-12" ellipsize={true}>
-            {overview.shortSummary}
-          </Text>
+          <div dangerouslySetInnerHTML={{ __html: converter.makeHtml(overview.shortSummary) }} />
         </div>
         <div className="listing-controls">
           <Text className="listing-due-date">
@@ -333,5 +332,7 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
     minimal: true,
     className: 'collapse-button'
   })
+
+const converter = new Converter()
 
 export default Assessment
