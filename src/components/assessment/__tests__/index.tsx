@@ -31,6 +31,12 @@ const mockPresentAssessment: IAssessmentProps = {
   assessmentOverviews: mockAssessmentOverviews
 }
 
+const mockPresentAssessmentForStudent: IAssessmentProps = {
+  ...defaultProps,
+  assessmentOverviews: mockAssessmentOverviews,
+  isStudent: true
+}
+
 test('Assessment page "loading" content renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
@@ -55,6 +61,16 @@ test('Assessment page with multiple loaded missions renders correctly', () => {
   const app = (
     <MemoryRouter initialEntries={['/unknown']}>
       <Assessment {...mockPresentAssessment} />
+    </MemoryRouter>
+  )
+  const tree = mount(app)
+  expect(tree.debug()).toMatchSnapshot()
+})
+
+test('Assessment page does not show attempt Button for upcoming assessments for student user', () => {
+  const app = (
+    <MemoryRouter initialEntries={['/unknown']}>
+      <Assessment {...mockPresentAssessmentForStudent} />
     </MemoryRouter>
   )
   const tree = mount(app)
