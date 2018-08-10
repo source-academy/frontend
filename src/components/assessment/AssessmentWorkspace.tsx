@@ -207,22 +207,32 @@ class AssessmentWorkspace extends React.Component<
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
     questionId: number
-  ) => ({
-    activeTab: props.activeTab,
-    handleChangeActiveTab: props.handleChangeActiveTab,
-    tabs: [
-      {
-        label: `Task ${questionId}`,
-        icon: IconNames.NINJA,
-        body: <Markdown content={props.assessment!.questions[questionId].content} />
-      },
-      {
-        label: `${props.assessment!.category} Briefing`,
-        icon: IconNames.BRIEFCASE,
-        body: <Markdown content={props.assessment!.longSummary} />
-      }
-    ]
-  })
+  ) => {
+    const tabs = [
+        {
+          label: `Task ${questionId}`,
+          icon: IconNames.NINJA,
+          body: <Markdown content={props.assessment!.questions[questionId].content} />
+        },
+        {
+          label: `${props.assessment!.category} Briefing`,
+          icon: IconNames.BRIEFCASE,
+          body: <Markdown content={props.assessment!.longSummary} />
+        }
+      ]
+    if (props.assessment!.questions[questionId].comments) {
+      tabs.push({
+        label: `Comments`,
+        icon: IconNames.CHAT,
+        body: <Markdown content={props.assessment!.questions[questionId].comments} />
+      })
+    }
+    return {
+      activeTab: props.activeTab,
+      handleChangeActiveTab: props.handleChangeActiveTab,
+      tabs,
+    }
+  }
 
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
