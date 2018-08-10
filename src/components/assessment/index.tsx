@@ -115,7 +115,9 @@ class Assessment extends React.Component<IAssessmentProps, State> {
 
       /** Opened assessments, that are released and can be attempted. */
       const isOverviewOpened = (overview: IAssessmentOverview) =>
-        !beforeNow(overview.closeAt) && beforeNow(overview.openAt) && overview.status !== AssessmentStatuses.submitted
+        !beforeNow(overview.closeAt) &&
+        beforeNow(overview.openAt) &&
+        overview.status !== AssessmentStatuses.submitted
       const openedCards = this.props.assessmentOverviews
         .filter(overview => isOverviewOpened(overview))
         .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
@@ -126,10 +128,14 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
 
       /** Render cards */
-      const unopenedCardsCollapsible = 
+      const unopenedCardsCollapsible =
         unopenedCards.length > 0 ? (
           <>
-            {collapseButton('Unopened', this.state.showUnopenedAssessments, this.toggleUnopenedAssessments)}
+            {collapseButton(
+              'Unopened',
+              this.state.showUnopenedAssessments,
+              this.toggleUnopenedAssessments
+            )}
             <Collapse isOpen={this.state.showUnopenedAssessments}>{unopenedCards}</Collapse>
           </>
         ) : null
