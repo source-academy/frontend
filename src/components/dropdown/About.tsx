@@ -62,9 +62,7 @@ const panelDevs = () => (
     <p>
       <strong>Backend Team</strong>
     </p>
-    <p>
-      Julius Putra Tanu Setiaji {dot} Chen Shaowei {dot} Sreyans Sipani
-    </p>
+    <p>Julius Putra Tanu Setiaji {dot} Chen Shaowei</p>
     <p>
       <strong>Artistic Team</strong>
     </p>

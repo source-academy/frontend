@@ -42,7 +42,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         target="_blank"
         to={LUMINUS_LINK}
       >
-        <Icon icon={IconNames.FOLDER_SHARED} />
+        <Icon icon={IconNames.BOOK} />
         <div className="navbar-button-text hidden-xs">News &amp; Material</div>
       </NavLink>
 

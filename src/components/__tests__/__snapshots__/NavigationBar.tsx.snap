@@ -10,7 +10,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
       </Blueprint2.NavbarHeading>
     </NavLink>
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" target=\\"_blank\\" to=\\"https://luminus.nus.edu.sg/modules/8722e9a5-abc5-4160-820d-bf69d8a63c6f\\" ariaCurrent=\\"true\\">
-      <Blueprint2.Icon icon=\\"folder-shared\\" />
+      <Blueprint2.Icon icon=\\"book\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         News &amp; Material
       </div>
@@ -50,7 +50,7 @@ exports[`NavigationBar renders correctly with username 1`] = `
       </Blueprint2.NavbarHeading>
     </NavLink>
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" target=\\"_blank\\" to=\\"https://luminus.nus.edu.sg/modules/8722e9a5-abc5-4160-820d-bf69d8a63c6f\\" ariaCurrent=\\"true\\">
-      <Blueprint2.Icon icon=\\"folder-shared\\" />
+      <Blueprint2.Icon icon=\\"book\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         News &amp; Material
       </div>
