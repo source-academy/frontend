@@ -312,7 +312,7 @@ const makeOverviewCard = (
             <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
             {`Due: ${getPrettyDate(overview.closeAt)}`}
           </Text>
-          {makeOverviewCardButton(overview)}
+          {renderAttemptButton ? makeOverviewCardButton(overview) : null}
         </div>
       </div>
     </Card>
