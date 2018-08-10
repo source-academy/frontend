@@ -33,6 +33,7 @@ import {
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
+import Markdown from '../commons/Markdown'
 
 const DEFAULT_QUESTION_ID: number = 0
 
@@ -257,9 +258,7 @@ const makeOverviewCard = (
           <h6>{`Max Grade: ${overview.maximumGrade}`}</h6>
         </div>
         <div className="row listing-description">
-          <Text className="col-xs-12" ellipsize={true}>
-            {overview.shortSummary}
-          </Text>
+          <Markdown content={overview.shortSummary} />
         </div>
         <div className="listing-controls">
           <Text className="listing-due-date">

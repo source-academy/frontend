@@ -161,11 +161,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   </h6>
                                 </div>
                                 <div className=\\"row listing-description\\">
-                                  <Text className=\\"col-xs-12\\" ellipsize={true}>
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
-                                      Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
-                                    </div>
-                                  </Text>
+                                  <Markdown content=\\"\\\\n*Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\nincididunt ut labore et dolore magna aliqua.\\\\n\\\\n\`\`\`\\\\nconst a = 5;\\\\n\`\`\`\\\\n\\\\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n_doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n[veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n\`explicabo\`.\\\\n\\\\n\\">
+                                    <div className={[undefined]} dangerouslySetInnerHTML={{...}} />
+                                  </Markdown>
                                 </div>
                                 <div className=\\"listing-controls\\">
                                   <Text className=\\"listing-due-date\\">
@@ -258,11 +256,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   </h6>
                                 </div>
                                 <div className=\\"row listing-description\\">
-                                  <Text className=\\"col-xs-12\\" ellipsize={true}>
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
-                                      Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
-                                    </div>
-                                  </Text>
+                                  <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                    <div className={[undefined]} dangerouslySetInnerHTML={{...}} />
+                                  </Markdown>
                                 </div>
                                 <div className=\\"listing-controls\\">
                                   <Text className=\\"listing-due-date\\">
@@ -355,11 +351,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   </h6>
                                 </div>
                                 <div className=\\"row listing-description\\">
-                                  <Text className=\\"col-xs-12\\" ellipsize={true}>
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
-                                      Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.
-                                    </div>
-                                  </Text>
+                                  <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                    <div className={[undefined]} dangerouslySetInnerHTML={{...}} />
+                                  </Markdown>
                                 </div>
                                 <div className=\\"listing-controls\\">
                                   <Text className=\\"listing-due-date\\">

@@ -62,7 +62,13 @@ const mockGrading: Grading = [
   {
     question: {
       answer: "This student's answer to the 0th question......",
-      content: 'Hello and welcome to this assessment! This is the 0th question.',
+      content: `
+Hello and welcome to this assessment! This is the *0th question*.
+
+\`\`\`
+>>> import this
+\`\`\`
+`,
       id: 0,
       library: mockLibrary,
       solutionTemplate: '0th question mock solution template',

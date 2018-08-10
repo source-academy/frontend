@@ -19,8 +19,20 @@ const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
     maximumGrade: 3000,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
-    shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    shortSummary: `
+*Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua.
+
+\`\`\`
+const a = 5;
+\`\`\`
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+_doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
+[veritatis et quasi architecto](google.com) beatae vitae dicta sunt
+\`explicabo\`.
+
+`,
     status: AssessmentStatuses.attempted,
     story: 'mission-1'
   },
@@ -136,7 +148,13 @@ const mockCurveLibrary: Library = {
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     answer: 'display("answer1");',
-    content: 'Hello and welcome to this assessment! This is the 0th question.',
+    content: `
+This question has an id of \`0\`.
+
+\`\`\`
+What's your favourite dinner food?
+\`\`\`
+`,
     id: 0,
     library: mockSoundLibrary,
     solutionTemplate: '0th question mock solution template',
@@ -231,8 +249,25 @@ export const mockAssessments: IAssessment[] = [
   {
     category: AssessmentCategories.Sidequest,
     id: 2,
-    longSummary:
-      'This is the sidequest briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    longSummary: `###This is the sidequest briefing.
+
+*Lorem ipsum* dolor sit amet, consectetur adipiscing elit.
+
+> Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin
+enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis
+vestibulum.
+
+- Etiam in egestas dolor.
+- Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum,
+  vel ornare metus turpis sed justo.
+- Vivamus at tellus sed ex convallis commodo at in lectus.
+
+\`\`\`
+Pellentesque
+pharetra
+pulvinar
+sapien
+\`\`\``,
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
     title: 'A sample Sidequest'
