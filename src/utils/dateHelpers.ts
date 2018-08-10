@@ -22,10 +22,10 @@ export const beforeNow = (dateString: string): boolean => {
  * @param {string} d an ISO 8601 compliant date string
  *   e.g 2018-07-06T10:20:09.961Z
  * @returns {string} A user-friendly readable date string,
- *   e.g 07/06, 20:09
+ *   e.g 7th June, 20:09
  */
 export const getPrettyDate = (dateString: string): string => {
   const date = moment(dateString)
-  const prettyDate = date.format('DD/M, HH:mm')
+  const prettyDate = date.format('Do MMMM, HH:mm')
   return prettyDate
 }
