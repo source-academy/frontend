@@ -2,10 +2,10 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
-import { Converter } from 'showdown'
 
 import { InterpreterOutput } from '../reducers/states'
 import { ExternalLibraryName } from './assessment/assessmentShape'
+import Markdown from './commons/Markdown'
 import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
 import ListVisualizer from './workspace/side-content/ListVisualizer'
@@ -140,12 +140,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 }
 
-const converter = new Converter()
-
 const playgroundIntroductionTab: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
-  body: <div dangerouslySetInnerHTML={{ __html: converter.makeHtml(INTRODUCTION) }} />
+  body: <Markdown content={INTRODUCTION} />
 }
 
 const listVisualizerTab: SideContentTab = {
