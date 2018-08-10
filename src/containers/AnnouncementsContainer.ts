@@ -1,3 +1,8 @@
+/**
+ * This component is on hold until an endpoint is implemented at
+ * source-academy/cadet which is able to download and relay news and material
+ * from lumiNUS to us.
+ */
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 

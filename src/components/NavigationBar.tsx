@@ -13,6 +13,10 @@ import { NavLink } from 'react-router-dom'
 import { Role } from '../reducers/states'
 import Dropdown from './dropdown'
 
+const LUMINUS_LINK = 'https://luminus.nus.edu.sg/modules/8722e9a5-abc5-4160-820d-bf69d8a63c6f'
+
+const PIAZZA_LINK = 'https://piazza.com/nus.edu.sg/fall2018/cs1101s'
+
 export interface INavigationBarProps {
   handleLogOut: () => void
   role?: Role
@@ -24,38 +28,40 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
   <Navbar className="NavigationBar primary-navbar pt-dark">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
-        to="/academy"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
+        to="/academy"
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
         <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
       </NavLink>
 
       <NavLink
-        to="/news"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
+        target="_blank"
+        to={LUMINUS_LINK}
       >
-        <Icon icon={IconNames.FEED} />
-        <div className="navbar-button-text hidden-xs">News</div>
+        <Icon icon={IconNames.BOOK} />
+        <div className="navbar-button-text hidden-xs">News &amp; Material</div>
       </NavLink>
 
       <NavLink
-        to="/material"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
+        target="_blank"
+        to={PIAZZA_LINK}
       >
-        <Icon icon={IconNames.FOLDER_OPEN} />
-        <div className="navbar-button-text hidden-xs">Material</div>
+        <Icon icon={IconNames.CHAT} />
+        <div className="navbar-button-text hidden-xs">Forum</div>
       </NavLink>
     </NavbarGroup>
 
     <NavbarGroup align={Alignment.RIGHT}>
       <NavLink
-        to="/playground"
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
+        to="/playground"
       >
         <Icon icon={IconNames.CODE} />
         <div className="navbar-button-text hidden-xs">Playground</div>

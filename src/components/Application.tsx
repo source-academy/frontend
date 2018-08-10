@@ -4,7 +4,6 @@ import * as React from 'react'
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
 
 import Academy from '../containers/academy'
-import Announcements from '../containers/AnnouncementsContainer'
 import Login from '../containers/LoginContainer'
 import Playground from '../containers/PlaygroundContainer'
 import { Role, sourceChapters } from '../reducers/states'
@@ -48,11 +47,9 @@ class Application extends React.Component<IApplicationProps, {}> {
         <div className="Application__main">
           <Switch>
             <Route path="/academy" component={toAcademy(this.props)} />
-            <Route path="/news" component={Announcements} />
-            <Route path="/material" component={Announcements} />
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
-            <Route exact={true} path="/" render={this.redirectToNews} />
+            <Route exact={true} path="/" render={this.redirectToAcademy} />
             <Route component={NotFound} />
           </Switch>
         </div>
@@ -60,7 +57,7 @@ class Application extends React.Component<IApplicationProps, {}> {
     )
   }
 
-  private redirectToNews = () => <Redirect to="/news" />
+  private redirectToAcademy = () => <Redirect to="/academy" />
 }
 
 /**
