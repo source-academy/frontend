@@ -220,11 +220,12 @@ class AssessmentWorkspace extends React.Component<
         body: <Markdown content={props.assessment!.longSummary} />
       }
     ]
-    if (props.assessment!.questions[questionId].comments) {
+    const comment = props.assessment!.questions[questionId].comment
+    if (comment !== null) {
       tabs.push({
         label: `Comments`,
         icon: IconNames.CHAT,
-        body: <Markdown content={props.assessment!.questions[questionId].comments} />
+        body: <Markdown content={comment} />
       })
     }
     return {

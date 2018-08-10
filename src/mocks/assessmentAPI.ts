@@ -172,7 +172,7 @@ What's your favourite dinner food?
   },
   {
     answer: 3,
-    comment: '## Money trees is the *perfect place for shade and ``` thats just how i feel ``` ',
+    comment: '## Money trees is the *perfect place for shade* and ``` thats just how i feel ``` ',
     content:
       'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library!',
     choices: [
