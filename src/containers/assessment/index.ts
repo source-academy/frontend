@@ -5,7 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { fetchAssessmentOverviews, submitAssessment } from '../../actions/session'
 import Assessment, { IDispatchProps, IOwnProps, IStateProps } from '../../components/assessment'
 import { IAssessmentOverview } from '../../components/assessment/assessmentShape'
-import { IState, Role} from '../../reducers/states'
+import { IState, Role } from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state, props) => {
   const categoryFilter = (overview: IAssessmentOverview) =>

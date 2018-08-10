@@ -112,7 +112,9 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         !beforeNow(overview.closeAt) && !beforeNow(overview.openAt)
       const unopenedCards = this.props.assessmentOverviews
         .filter(isOverviewUnopened)
-        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent))
+        .map((overview, index) =>
+          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
+        )
 
       /** Opened assessments, that are released and can be attempted. */
       const isOverviewOpened = (overview: IAssessmentOverview) =>
@@ -121,12 +123,16 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         overview.status !== AssessmentStatuses.submitted
       const openedCards = this.props.assessmentOverviews
         .filter(overview => isOverviewOpened(overview))
-        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent))
+        .map((overview, index) =>
+          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
+        )
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.props.assessmentOverviews
         .filter(overview => !isOverviewOpened(overview) && !isOverviewUnopened(overview))
-        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent))
+        .map((overview, index) =>
+          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
+        )
 
       /** Render cards */
       const unopenedCardsCollapsible =
@@ -265,7 +271,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
  *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
  * @param setBetchaAssessment a function that handles the side-effect of setting which assessment
  *   is to be set for final submission ("betcha" functionality)
- * @param renderAttemptButton will only render the attempt button if true, regardless 
+ * @param renderAttemptButton will only render the attempt button if true, regardless
  *   of attempt status.
  */
 const makeOverviewCard = (
