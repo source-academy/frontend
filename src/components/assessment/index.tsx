@@ -262,11 +262,16 @@ class Assessment extends React.Component<IAssessmentProps, State> {
  * @param {IAssessmentOverview} overview the assessment overview to display
  * @param {number} index a unique number for this card (required for sequential rendering).
  *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
+ * @param setBetchaAssessment a function that handles the side-effect of setting which assessment
+ *   is to be set for final submission ("betcha" functionality)
+ * @param renderAttemptButton will only render the attempt button if true, regardless 
+ *   of attempt status.
  */
 const makeOverviewCard = (
   overview: IAssessmentOverview,
   index: number,
-  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
+  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
+  renderAttemptButton: boolean
 ) => (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
