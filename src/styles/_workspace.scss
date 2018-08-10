@@ -111,90 +111,90 @@ $code-color-error: #ff4444;
   .resize-side-content {
     display: flex;
     flex-direction: column;
+  }
 
-    .side-content-header {
-      align-items: center;
+  .side-content-header {
+    align-items: center;
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 0.2rem;
+  }
+
+  .side-content-divider {
+    height: 0.6rem;
+    flex: initial;
+  }
+
+  .side-content {
+    flex: 1 1 auto;
+    height: 100%;
+    text-align: justify;
+    overflow-y: auto;
+
+    .pt-card {
+      background-color: $cadet-color-2;
+      color: $code-color-result;
       display: flex;
-      flex: none;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding-bottom: 0.2rem;
-    }
-
-    .side-content-divider {
-      height: 0.6rem;
-      flex: initial;
-    }
-
-    .side-content {
-      flex: 1 1 auto;
+      flex-direction: column;
       height: 100%;
-      text-align: justify;
+      margin: 0 0.5rem 0 0;
+      /* Fix card not wrapping content on OSX, Chrome */
       overflow-y: auto;
+      padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+    }
+  }
 
-      .pt-card {
+  .side-content-text {
+    height: fit-content;
+    /* word-wrap and word-break are added to make text wrap. */
+    word-wrap: break-word;
+    word-break: break-word;
+
+    div {
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .grading-editor-input-parent {
+    /* Position the editor away from the buttons */
+    /* Cause the 'save' button shift down when size is small. */
+    margin-bottom: 0.5rem;
+
+    .pt-button-group {
+      flex-wrap: wrap;
+    }
+
+    .pt-numeric-input {
+      .pt-button {
         background-color: $cadet-color-2;
-        color: $code-color-result;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        margin: 0 0.5rem 0 0;
-        /* Fix card not wrapping content on OSX, Chrome */
-        overflow-y: auto;
-        padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+      }
+    }
+  }
 
-        .side-content-text {
-          height: fit-content;
-          /* word-wrap and word-break are added to make text wrap. */
-          word-wrap: break-word;
-          word-break: break-word;
+  .react-mde {
+    /* Color the borders */
+    border-color: $cadet-color-5;
+    border-radius: 3px;
+    /* Override side-content's default text justify*/
+    text-align: initial;
 
-          div {
-            p:last-child {
-              margin-bottom: 0;
-            }
-          }
+    .mde-header {
+      /* Color the toolbar */
+      background-color: $cadet-color-5;
+    }
 
-          .grading-editor-input-parent {
-            /* Position the editor away from the buttons */
-            /* Cause the 'save' button shift down when size is small. */
-            margin-bottom: 0.5rem;
-
-            .pt-button-group {
-              flex-wrap: wrap;
-            }
-
-            .pt-numeric-input {
-              .pt-button {
-                background-color: $cadet-color-2;
-              }
-            }
-          }
-
-          .react-mde {
-            /* Color the borders */
-            border-color: $cadet-color-5;
-            border-radius: 3px;
-            /* Override side-content's default text justify*/
-            text-align: initial;
-
-            .mde-header {
-              /* Color the toolbar */
-              background-color: $cadet-color-5;
-            }
-
-            /**
-             * Color code blocks. style is forced due to deep nesting,
-             * and no access to the generated html to place classes.
-             */
-            .mde-preview .mde-preview-content pre {
-              background-color: $cadet-color-5 !important;
-              code {
-                color: black !important;
-              }
-            }
-          }
-        }
+    /**
+     * Color code blocks. style is forced due to deep nesting,
+     * and no access to the generated html to place classes.
+     */
+    .mde-preview .mde-preview-content pre {
+      background-color: $cadet-color-5 !important;
+      code {
+        color: black !important;
       }
     }
   }
