@@ -28,7 +28,6 @@ export type AssessmentStatus = keyof typeof AssessmentStatuses
  */
 export interface IAssessment {
   category: AssessmentCategory
-  comments: string | null
   id: number
   longSummary: string
   missionPDF: string
