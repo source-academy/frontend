@@ -1,4 +1,4 @@
-import { Button, Card, Dialog, NonIdealState, Spinner, Text } from '@blueprintjs/core'
+import { Button, Card, Dialog, NonIdealState, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
@@ -214,12 +214,12 @@ class AssessmentWorkspace extends React.Component<
       {
         label: `Task ${questionId}`,
         icon: IconNames.NINJA,
-        body: <Text> {props.assessment!.questions[questionId].content} </Text>
+        body: <Markdown content={props.assessment!.questions[questionId].content} />
       },
       {
         label: `${props.assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
-        body: <Text> {props.assessment!.longSummary} </Text>
+        body: <Markdown content={props.assessment!.longSummary} />
       }
     ]
   })

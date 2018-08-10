@@ -148,7 +148,13 @@ const mockCurveLibrary: Library = {
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     answer: 'display("answer1");',
-    content: 'Hello and welcome to this assessment! This is the 0th question.',
+    content: `
+This question has an id of \`0\`.
+
+\`\`\`
+What's your favourite dinner food?
+\`\`\`
+`,
     id: 0,
     library: mockSoundLibrary,
     solutionTemplate: '0th question mock solution template',
