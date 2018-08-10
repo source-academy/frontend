@@ -15,6 +15,12 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         News &amp; Material
       </div>
     </NavLink>
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" target=\\"_blank\\" to=\\"https://piazza.com/nus.edu.sg/fall2018/cs1101s\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"chat\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Forum
+      </div>
+    </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup align=\\"right\\">
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" ariaCurrent=\\"true\\">
@@ -47,6 +53,12 @@ exports[`NavigationBar renders correctly with username 1`] = `
       <Blueprint2.Icon icon=\\"folder-shared\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         News &amp; Material
+      </div>
+    </NavLink>
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" target=\\"_blank\\" to=\\"https://piazza.com/nus.edu.sg/fall2018/cs1101s\\" ariaCurrent=\\"true\\">
+      <Blueprint2.Icon icon=\\"chat\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Forum
       </div>
     </NavLink>
   </Blueprint2.NavbarGroup>

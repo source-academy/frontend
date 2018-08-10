@@ -15,6 +15,8 @@ import Dropdown from './dropdown'
 
 const LUMINUS_LINK = 'https://luminus.nus.edu.sg/modules/8722e9a5-abc5-4160-820d-bf69d8a63c6f'
 
+const PIAZZA_LINK = 'https://piazza.com/nus.edu.sg/fall2018/cs1101s'
+
 export interface INavigationBarProps {
   handleLogOut: () => void
   role?: Role
@@ -42,6 +44,16 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       >
         <Icon icon={IconNames.FOLDER_SHARED} />
         <div className="navbar-button-text hidden-xs">News &amp; Material</div>
+      </NavLink>
+
+      <NavLink
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+        target="_blank"
+        to={PIAZZA_LINK}
+      >
+        <Icon icon={IconNames.CHAT} />
+        <div className="navbar-button-text hidden-xs">Forum</div>
       </NavLink>
     </NavbarGroup>
 
