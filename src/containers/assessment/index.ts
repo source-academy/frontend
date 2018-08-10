@@ -5,7 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { fetchAssessmentOverviews, submitAssessment } from '../../actions/session'
 import Assessment, { IDispatchProps, IOwnProps, IStateProps } from '../../components/assessment'
 import { IAssessmentOverview } from '../../components/assessment/assessmentShape'
-import { Role, IState } from '../../reducers/states'
+import { IState, Role} from '../../reducers/states'
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state, props) => {
   const categoryFilter = (overview: IAssessmentOverview) =>
@@ -14,7 +14,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state,
     assessmentOverviews: state.session.assessmentOverviews
       ? state.session.assessmentOverviews.filter(categoryFilter)
       : undefined,
-    isStudent: state.session.role && state.session.role === Role.Student
+    isStudent: state.session.role ? state.session.role === Role.Student : true
   }
   return stateProps
 }
