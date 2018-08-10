@@ -63,7 +63,8 @@ export interface IStateProps {
 type State = {
   betchaAssessment: IAssessmentOverview | null
   showClosedAssessments: boolean
-  showOpenAssessments: boolean
+  showOpenedAssessments: boolean
+  showUnopenedAssessments: boolean
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -75,7 +76,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     this.state = {
       betchaAssessment: null,
       showClosedAssessments: false,
-      showOpenAssessments: true
+      showOpenedAssessments: true,
+      showUnopenedAssessments: true
     }
   }
 
@@ -127,15 +129,15 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const unopenedCardsCollapsible = 
         unopenedCards.length > 0 ? (
           <>
-            {collapseButton('Unopened', this.state.showOpenAssessments, this.toggleOpenAssessments)}
-            <Collapse isOpen={this.state.showOpenAssessments}>{unopenedCards}</Collapse>
+            {collapseButton('Unopened', this.state.showUnopenedAssessments, this.toggleUnopenedAssessments)}
+            <Collapse isOpen={this.state.showUnopenedAssessments}>{unopenedCards}</Collapse>
           </>
         ) : null
       const openedCardsCollapsible =
         openedCards.length > 0 ? (
           <>
-            {collapseButton('Open', this.state.showOpenAssessments, this.toggleOpenAssessments)}
-            <Collapse isOpen={this.state.showOpenAssessments}>{openedCards}</Collapse>
+            {collapseButton('Open', this.state.showOpenedAssessments, this.toggleOpenAssessments)}
+            <Collapse isOpen={this.state.showOpenedAssessments}>{openedCards}</Collapse>
           </>
         ) : null
       const closedCardsCollapsible =
@@ -224,7 +226,13 @@ class Assessment extends React.Component<IAssessmentProps, State> {
   private toggleOpenAssessments = () =>
     this.setState({
       ...this.state,
-      showOpenAssessments: !this.state.showOpenAssessments
+      showOpenedAssessments: !this.state.showOpenedAssessments
+    })
+
+  private toggleUnopenedAssessments = () =>
+    this.setState({
+      ...this.state,
+      showUnopenedAssessments: !this.state.showUnopenedAssessments
     })
 
   private setBetchaAssessment = (assessment: IAssessmentOverview | null) =>
