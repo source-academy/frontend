@@ -43,11 +43,11 @@ export type GradingQuestion = {
  * either of (library & solutionTemplate) xor (choices) must
  * be present, and either of (solution) xor (answer) must be present.
  *
- * @property comments This property is already present in GradingQuestion,
- *   and thus does not need to be used here.
+ * @property comment This property is already present in GradingQuestion,
+ *   and thus does not need to be used here, and is set to null
  */
 interface IAnsweredQuestion extends IQuestion {
-  comments: null
+  comment: null
   solution?: number
   answer: string | number | null
   solutionTemplate?: string

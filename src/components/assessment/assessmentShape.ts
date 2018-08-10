@@ -60,7 +60,7 @@ export interface IMCQQuestion extends IQuestion {
 
 export interface IQuestion {
   answer: string | number | null
-  comments: string | null
+  comment: string | null
   content: string
   id: number
   library: Library

@@ -209,17 +209,17 @@ class AssessmentWorkspace extends React.Component<
     questionId: number
   ) => {
     const tabs = [
-        {
-          label: `Task ${questionId}`,
-          icon: IconNames.NINJA,
-          body: <Markdown content={props.assessment!.questions[questionId].content} />
-        },
-        {
-          label: `${props.assessment!.category} Briefing`,
-          icon: IconNames.BRIEFCASE,
-          body: <Markdown content={props.assessment!.longSummary} />
-        }
-      ]
+      {
+        label: `Task ${questionId}`,
+        icon: IconNames.NINJA,
+        body: <Markdown content={props.assessment!.questions[questionId].content} />
+      },
+      {
+        label: `${props.assessment!.category} Briefing`,
+        icon: IconNames.BRIEFCASE,
+        body: <Markdown content={props.assessment!.longSummary} />
+      }
+    ]
     if (props.assessment!.questions[questionId].comments) {
       tabs.push({
         label: `Comments`,

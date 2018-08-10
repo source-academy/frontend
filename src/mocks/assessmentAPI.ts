@@ -155,7 +155,7 @@ This question has an id of \`0\`.
 What's your favourite dinner food?
 \`\`\`
 `,
-    comments: null,
+    comment: null,
     id: 0,
     library: mockSoundLibrary,
     solutionTemplate: '0th question mock solution template',
@@ -163,7 +163,7 @@ What's your favourite dinner food?
   },
   {
     answer: null,
-    comments: '`Great Job` **young padawan**',
+    comment: '`Great Job` **young padawan**',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mock3DRuneLibrary,
@@ -172,7 +172,7 @@ What's your favourite dinner food?
   },
   {
     answer: 3,
-    comments: '## Money trees is the *perfect place for shade and ``` thats just how i feel ``` ',
+    comment: '## Money trees is the *perfect place for shade and ``` thats just how i feel ``` ',
     content:
       'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library!',
     choices: [
@@ -200,7 +200,7 @@ What's your favourite dinner food?
   },
   {
     answer: 3,
-    comments: null,
+    comment: null,
     content:
       'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
     choices: [
