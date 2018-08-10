@@ -104,19 +104,38 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     } else if (this.props.assessmentOverviews.length === 0) {
       display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
     } else {
-      const isOverviewOpen = (overview: IAssessmentOverview) =>
-        !beforeNow(overview.closeAt) && overview.status !== AssessmentStatuses.submitted
-      const openCards = this.props.assessmentOverviews
-        .filter(overview => isOverviewOpen(overview))
+      /** Unopened assessments, that are not released yet. */
+      const isOverviewUnopened = (overview: IAssessmentOverview) =>
+        !beforeNow(overview.closeAt) && !beforeNow(overview.openAt)
+      const unopenedCards = this.props.assessmentOverviews
+        .filter(isOverviewUnopened)
         .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
+
+      /** Opened assessments, that are released and can be attempted. */
+      const isOverviewOpened = (overview: IAssessmentOverview) =>
+        !beforeNow(overview.closeAt) && beforeNow(overview.openAt) && overview.status !== AssessmentStatuses.submitted
+      const openedCards = this.props.assessmentOverviews
+        .filter(overview => isOverviewOpened(overview))
+        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
+
+      /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.props.assessmentOverviews
-        .filter(overview => !isOverviewOpen(overview))
+        .filter(overview => !isOverviewOpened(overview) && !isOverviewUnopened(overview))
         .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
-      const openCardsCollapsible =
-        openCards.length > 0 ? (
+
+      /** Render cards */
+      const unopenedCardsCollapsible = 
+        unopenedCards.length > 0 ? (
+          <>
+            {collapseButton('Unopened', this.state.showOpenAssessments, this.toggleOpenAssessments)}
+            <Collapse isOpen={this.state.showOpenAssessments}>{unopenedCards}</Collapse>
+          </>
+        ) : null
+      const openedCardsCollapsible =
+        openedCards.length > 0 ? (
           <>
             {collapseButton('Open', this.state.showOpenAssessments, this.toggleOpenAssessments)}
-            <Collapse isOpen={this.state.showOpenAssessments}>{openCards}</Collapse>
+            <Collapse isOpen={this.state.showOpenAssessments}>{openedCards}</Collapse>
           </>
         ) : null
       const closedCardsCollapsible =
@@ -132,7 +151,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         ) : null
       display = (
         <>
-          {openCardsCollapsible}
+          {unopenedCardsCollapsible}
+          {openedCardsCollapsible}
           {closedCardsCollapsible}
         </>
       )
