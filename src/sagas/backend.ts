@@ -311,11 +311,22 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
   })
   if (response && response.ok) {
     const assessmentOverviews = await response.json()
-    // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
-    //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
     return assessmentOverviews.map((overview: any) => {
+      /**
+       * backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
+       *              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+       */
+
       overview.category = capitalise(overview.type)
       delete overview.type
+
+      /**
+       * backend has property maxGrade, we have property maximumGrade
+       */
+
+      overview.maximumGrade = overview.maxGrade
+      delete overview.maxGrade
+
       return overview as IAssessmentOverview
     })
   } else {
