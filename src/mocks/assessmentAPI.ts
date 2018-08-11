@@ -171,7 +171,7 @@ What's your favourite dinner food?
   {
     answer: 3,
     content:
-      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library!',
+      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
     choices: [
       {
         content: 'A',
@@ -183,7 +183,7 @@ What's your favourite dinner food?
       },
       {
         content: 'C',
-        hint: 'hint C'
+        hint: null
       },
       {
         content: 'D',
