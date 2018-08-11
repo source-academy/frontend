@@ -59,12 +59,14 @@ export interface IOwnProps {
 
 export interface IStateProps {
   assessmentOverviews?: IAssessmentOverview[]
+  isStudent: boolean
 }
 
 type State = {
   betchaAssessment: IAssessmentOverview | null
   showClosedAssessments: boolean
-  showOpenAssessments: boolean
+  showOpenedAssessments: boolean
+  showUpcomingAssessments: boolean
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -76,7 +78,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     this.state = {
       betchaAssessment: null,
       showClosedAssessments: false,
-      showOpenAssessments: true
+      showOpenedAssessments: true,
+      showUpcomingAssessments: true
     }
   }
 
@@ -105,19 +108,50 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     } else if (this.props.assessmentOverviews.length === 0) {
       display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
     } else {
-      const isOverviewOpen = (overview: IAssessmentOverview) =>
-        !beforeNow(overview.closeAt) && overview.status !== AssessmentStatuses.submitted
-      const openCards = this.props.assessmentOverviews
-        .filter(overview => isOverviewOpen(overview))
-        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
+      /** Upcoming assessments, that are not released yet. */
+      const isOverviewUpcoming = (overview: IAssessmentOverview) =>
+        !beforeNow(overview.closeAt) && !beforeNow(overview.openAt)
+      const upcomingCards = this.props.assessmentOverviews
+        .filter(isOverviewUpcoming)
+        .map((overview, index) =>
+          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
+        )
+
+      /** Opened assessments, that are released and can be attempted. */
+      const isOverviewOpened = (overview: IAssessmentOverview) =>
+        !beforeNow(overview.closeAt) &&
+        beforeNow(overview.openAt) &&
+        overview.status !== AssessmentStatuses.submitted
+      const openedCards = this.props.assessmentOverviews
+        .filter(overview => isOverviewOpened(overview))
+        .map((overview, index) =>
+          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
+        )
+
+      /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.props.assessmentOverviews
-        .filter(overview => !isOverviewOpen(overview))
-        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment))
-      const openCardsCollapsible =
-        openCards.length > 0 ? (
+        .filter(overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview))
+        .map((overview, index) =>
+          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
+        )
+
+      /** Render cards */
+      const upcomingCardsCollapsible =
+        upcomingCards.length > 0 ? (
           <>
-            {collapseButton('Open', this.state.showOpenAssessments, this.toggleOpenAssessments)}
-            <Collapse isOpen={this.state.showOpenAssessments}>{openCards}</Collapse>
+            {collapseButton(
+              'Upcoming',
+              this.state.showUpcomingAssessments,
+              this.toggleUpcomingAssessments
+            )}
+            <Collapse isOpen={this.state.showUpcomingAssessments}>{upcomingCards}</Collapse>
+          </>
+        ) : null
+      const openedCardsCollapsible =
+        openedCards.length > 0 ? (
+          <>
+            {collapseButton('Open', this.state.showOpenedAssessments, this.toggleOpenAssessments)}
+            <Collapse isOpen={this.state.showOpenedAssessments}>{openedCards}</Collapse>
           </>
         ) : null
       const closedCardsCollapsible =
@@ -133,7 +167,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         ) : null
       display = (
         <>
-          {openCardsCollapsible}
+          {upcomingCardsCollapsible}
+          {openedCardsCollapsible}
           {closedCardsCollapsible}
         </>
       )
@@ -205,7 +240,13 @@ class Assessment extends React.Component<IAssessmentProps, State> {
   private toggleOpenAssessments = () =>
     this.setState({
       ...this.state,
-      showOpenAssessments: !this.state.showOpenAssessments
+      showOpenedAssessments: !this.state.showOpenedAssessments
+    })
+
+  private toggleUpcomingAssessments = () =>
+    this.setState({
+      ...this.state,
+      showUpcomingAssessments: !this.state.showUpcomingAssessments
     })
 
   private setBetchaAssessment = (assessment: IAssessmentOverview | null) =>
@@ -229,11 +270,16 @@ class Assessment extends React.Component<IAssessmentProps, State> {
  * @param {IAssessmentOverview} overview the assessment overview to display
  * @param {number} index a unique number for this card (required for sequential rendering).
  *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
+ * @param setBetchaAssessment a function that handles the side-effect of setting which assessment
+ *   is to be set for final submission ("betcha" functionality)
+ * @param renderAttemptButton will only render the attempt button if true, regardless
+ *   of attempt status.
  */
 const makeOverviewCard = (
   overview: IAssessmentOverview,
   index: number,
-  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
+  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
+  renderAttemptButton: boolean
 ) => (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
@@ -265,7 +311,7 @@ const makeOverviewCard = (
             <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
             {`Due: ${getPrettyDate(overview.closeAt)}`}
           </Text>
-          {makeOverviewCardButton(overview)}
+          {renderAttemptButton ? makeOverviewCardButton(overview) : null}
         </div>
       </div>
     </Card>

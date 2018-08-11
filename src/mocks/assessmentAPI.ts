@@ -10,7 +10,23 @@ import {
 } from '../components/assessment/assessmentShape'
 import { externalLibraries } from '../reducers/externalLibraries'
 
-const mockOpenAssessmentsOverviews: IAssessmentOverview[] = [
+const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
+  {
+    category: AssessmentCategories.Mission,
+    closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/300/',
+    id: 0,
+    maximumGrade: 3000,
+    openAt: '2038-06-18T05:24:26.026Z',
+    title: 'An Odessey to Runes (Duplicate)',
+    shortSummary:
+      'This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0',
+    status: AssessmentStatuses.not_attempted,
+    story: 'mission-1'
+  }
+]
+
+const mockOpenedAssessmentsOverviews: IAssessmentOverview[] = [
   {
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
@@ -94,7 +110,8 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
 ]
 
 export const mockAssessmentOverviews = [
-  ...mockOpenAssessmentsOverviews,
+  ...mockUnopenedAssessmentsOverviews,
+  ...mockOpenedAssessmentsOverviews,
   ...mockClosedAssessmentOverviews
 ]
 

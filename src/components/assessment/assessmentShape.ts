@@ -1,5 +1,10 @@
 /*
  * Used to display information regarding an assessment in the UI.
+ *
+ * @property closeAt an ISO 8601 compliant date string specifiying when
+ *   the assessment closes
+ * @property openAt an ISO 8601 compliant date string specifiying when
+ *   the assessment opens
  */
 export interface IAssessmentOverview {
   category: AssessmentCategory
