@@ -192,7 +192,7 @@ export const defaultEditorValue = '// Type your program in here!'
  * @param location the location of the workspace, used for context
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
-  context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
+  context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
   editorWidth: '50%',
   output: [],
