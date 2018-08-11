@@ -189,7 +189,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             action.payload.library.external.symbols,
             location
           ),
-          externalSymbols: action.payload.library.external.symbols,
           globals: action.payload.library.globals
         }
       }
