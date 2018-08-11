@@ -35,7 +35,7 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
     )
     const symbols: string[] = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).externalSymbols
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.externalSymbols
     )
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
@@ -80,7 +80,7 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
     )
     const symbols: string[] = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).externalSymbols
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.externalSymbols
     )
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).globals

@@ -66,7 +66,6 @@ export interface IWorkspaceState {
   readonly replValue: string
   readonly sideContentActiveTab: number
   readonly sideContentHeight?: number
-  readonly externalSymbols: string[]
   readonly globals: Array<[string, any]>
 }
 
@@ -193,7 +192,7 @@ export const defaultEditorValue = '// Type your program in here!'
  * @param location the location of the workspace, used for context
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
-  context: createContext<WorkspaceLocation>(latestSourceChapter, undefined, location),
+  context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
   editorWidth: '50%',
   output: [],
@@ -203,7 +202,6 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   },
   replValue: '',
   sideContentActiveTab: 0,
-  externalSymbols: [],
   globals: [],
   isRunning: false
 })
