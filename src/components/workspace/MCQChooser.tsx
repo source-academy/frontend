@@ -53,15 +53,20 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
    * @param i the id of the answer
    */
   private onButtonClickFactory = (i: number) => (e: any) => {
-    this.props.handleMCQSubmit(i)
-    if (this.props.mcq.solution && i === this.props.mcq.solution) {
-      showSuccessMessage(this.props.mcq.choices[i].hint!, 4000)
-    } else if (this.props.mcq.solution && i !== this.props.mcq.solution) {
-      showWarningMessage(this.props.mcq.choices[i].hint!, 4000)
+    if (i !== this.state.mcqOption) {
+      this.props.handleMCQSubmit(i)
+      this.setState({
+        mcqOption: i
+      })
     }
-    this.setState({
-      mcqOption: i
-    })
+    const shouldDisplayMessage = this.props.mcq.solution && this.props.mcq.choices[i].hint
+    if (shouldDisplayMessage) {
+      if (i === this.props.mcq.solution) {
+        showSuccessMessage(this.props.mcq.choices[i].hint!, 4000)
+      } else {
+        showWarningMessage(this.props.mcq.choices[i].hint!, 4000)
+      }
+    }
   }
 
   /**
