@@ -35,7 +35,7 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
       const click = (i: number) => () => this.props.handleChangeActiveTab(i)
       const buttons = this.props.tabs.map((tab, i) => (
         <Tooltip key={i} content={tab.label}>
-          <Button icon={tab.icon as IconName} className="pt-minimal" onClick={click(i)} />
+          <Button icon={tab.icon as IconName} className="pt-minimal" onClick={click(i)} active={i === this.props.activeTab}/>
         </Tooltip>
       ))
       return (
