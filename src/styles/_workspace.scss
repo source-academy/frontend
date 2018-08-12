@@ -120,6 +120,9 @@ $code-color-error: #ff4444;
     flex-wrap: wrap;
     justify-content: center;
     padding-bottom: 0.2rem;
+    .side-content-header-button:focus {
+      outline: 0;
+    }
   }
 
   .side-content-divider {
