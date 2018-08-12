@@ -207,10 +207,8 @@ class AssessmentWorkspace extends React.Component<
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
     questionId: number
-  ) => ({
-    activeTab: props.activeTab,
-    handleChangeActiveTab: props.handleChangeActiveTab,
-    tabs: [
+  ) => {
+    const tabs = [
       {
         label: `Task ${questionId}`,
         icon: IconNames.NINJA,
@@ -222,7 +220,20 @@ class AssessmentWorkspace extends React.Component<
         body: <Markdown content={props.assessment!.longSummary} />
       }
     ]
-  })
+    const comment = props.assessment!.questions[questionId].comment
+    if (comment !== null) {
+      tabs.push({
+        label: `Comments`,
+        icon: IconNames.CHAT,
+        body: <Markdown content={comment} />
+      })
+    }
+    return {
+      activeTab: props.activeTab,
+      handleChangeActiveTab: props.handleChangeActiveTab,
+      tabs
+    }
+  }
 
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
