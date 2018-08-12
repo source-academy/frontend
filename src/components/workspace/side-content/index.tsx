@@ -15,11 +15,14 @@ export type SideContentTab = {
 
 class SideContent extends React.PureComponent<SideContentProps, {}> {
   public render() {
+    const activeTab = (this.props.activeTab < 0 || this.props.activeTab >= this.props.tabs.length) 
+      ? 0 
+      : this.props.activeTab
     return (
       <div className="side-content">
         <Card>
           {this.renderHeader()}
-          <div className="side-content-text">{this.props.tabs[this.props.activeTab].body}</div>
+          <div className="side-content-text">{this.props.tabs[activeTab].body}</div>
         </Card>
       </div>
     )
