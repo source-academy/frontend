@@ -15,9 +15,10 @@ export type SideContentTab = {
 
 class SideContent extends React.PureComponent<SideContentProps, {}> {
   public render() {
-    const activeTab = (this.props.activeTab < 0 || this.props.activeTab >= this.props.tabs.length) 
-      ? 0 
-      : this.props.activeTab
+    const activeTab =
+      this.props.activeTab < 0 || this.props.activeTab >= this.props.tabs.length
+        ? 0
+        : this.props.activeTab
     return (
       <div className="side-content">
         <Card>
@@ -35,7 +36,13 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
       const click = (i: number) => () => this.props.handleChangeActiveTab(i)
       const buttons = this.props.tabs.map((tab, i) => (
         <Tooltip key={i} content={tab.label}>
-          <Button className="side-content-header-button" icon={tab.icon as IconName} minimal={true} onClick={click(i)} active={i === this.props.activeTab}/>
+          <Button
+            className="side-content-header-button"
+            icon={tab.icon as IconName}
+            minimal={true}
+            onClick={click(i)}
+            active={i === this.props.activeTab}
+          />
         </Tooltip>
       ))
       return (
