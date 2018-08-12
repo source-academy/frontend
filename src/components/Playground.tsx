@@ -4,13 +4,12 @@ import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
 
 import { InterpreterOutput } from '../reducers/states'
+import { LINKS } from '../utils/constants'
 import { ExternalLibraryName } from './assessment/assessmentShape'
 import Markdown from './commons/Markdown'
 import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
 import ListVisualizer from './workspace/side-content/ListVisualizer'
-
-const SICP_SITE = 'https://www.comp.nus.edu.sg/~cs1101s/source/'
 
 const CHAP = '\xa7'
 
@@ -21,8 +20,8 @@ The language _Source_ is the official language of the textbook _Structure and
 Interpretation of Computer Programs, JavaScript Adaptation_. You have never
 heard of Source? No worries! It was invented just for the purpose of the book.
 Source is a sublanguage of ECMAScript 2016 (7th Edition) and defined in [the
-documents titled _"Source ${CHAP}x"_](${SICP_SITE}), where x refers to the
-respective textbook chapter. For example, Source ${CHAP}3 is suitable for
+documents titled _"Source ${CHAP}x"_](${LINKS.SOURCE_DOCS}), where x refers to
+the respective textbook chapter. For example, Source ${CHAP}3 is suitable for
 textbook Chapter 3 and the preceeding chapters.
 
 The playground comes with an editor and a REPL, on the left and right of the

@@ -11,11 +11,8 @@ import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Role } from '../reducers/states'
+import { LINKS } from '../utils/constants'
 import Dropdown from './dropdown'
-
-const LUMINUS_LINK = 'https://luminus.nus.edu.sg/modules/8722e9a5-abc5-4160-820d-bf69d8a63c6f'
-
-const PIAZZA_LINK = 'https://piazza.com/nus.edu.sg/fall2018/cs1101s'
 
 export interface INavigationBarProps {
   handleLogOut: () => void
@@ -40,7 +37,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
         target="_blank"
-        to={LUMINUS_LINK}
+        to={LINKS.LUMINUS}
       >
         <Icon icon={IconNames.BOOK} />
         <div className="navbar-button-text hidden-xs">News &amp; Material</div>
@@ -50,7 +47,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
         target="_blank"
-        to={PIAZZA_LINK}
+        to={LINKS.PIAZZA}
       >
         <Icon icon={IconNames.CHAT} />
         <div className="navbar-button-text hidden-xs">Forum</div>
