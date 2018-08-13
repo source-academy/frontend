@@ -43,6 +43,9 @@ class Profile extends React.Component<ProfileProps> {
             </div>
             {IS_XP_IMPLEMENTED ? (
               <>
+                {/* TODO: Move tooltip out of this tenary once max grade for a
+                  user is implemented in GET /user.
+                  https://github.com/source-academy/cadet/issues/205 */}
                 <Tooltip content="Sorry, the grade progress bar is not ready yet">
                   <ProgressBar className="grade" animate={false} stripes={false} />
                 </Tooltip>
