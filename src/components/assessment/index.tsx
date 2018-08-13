@@ -23,6 +23,7 @@ import { NavLink } from 'react-router-dom'
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
+import { IS_XP_IMPLEMENTED } from '../../utils/constants'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import {
@@ -290,16 +291,7 @@ const makeOverviewCard = (
         />
       </div>
       <div className="col-xs-9 listing-text">
-        <div className="row listing-title">
-          <Text ellipsize={true} className="col-xs-10">
-            <h4>{overview.title}</h4>
-          </Text>
-          <div className="col-xs-2">
-            <Popover content={makeMenu(overview, index, setBetchaAssessment)}>
-              <Button icon={IconNames.MENU} minimal={true} />
-            </Popover>
-          </div>
-        </div>
+        {makeOverviewCardTitle(overview, index, setBetchaAssessment)}
         <div className="row listing-order">
           <h6>{`Max Grade: ${overview.maximumGrade}`}</h6>
         </div>
@@ -315,6 +307,25 @@ const makeOverviewCard = (
         </div>
       </div>
     </Card>
+  </div>
+)
+
+const makeOverviewCardTitle = (
+  overview: IAssessmentOverview,
+  index: number,
+  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
+) => (
+  <div className="row listing-title">
+    <Text ellipsize={true} className={IS_XP_IMPLEMENTED ? 'col-xs-10' : 'col-xs-12'}>
+      <h4>{overview.title}</h4>
+    </Text>
+    {IS_XP_IMPLEMENTED ? (
+      <div className="col-xs-2">
+        <Popover content={makeMenu(overview, index, setBetchaAssessment)}>
+          <Button icon={IconNames.MENU} minimal={true} />
+        </Popover>
+      </div>
+    ) : null}
   </div>
 )
 

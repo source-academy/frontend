@@ -93,9 +93,10 @@
       display: flex;
     }
 
-    .col-xs-10 {
+    div {
       /* overwrite default padding */
       padding: 0;
+      margin-bottom: 0.4rem;
     }
 
     .col-xs-2 {

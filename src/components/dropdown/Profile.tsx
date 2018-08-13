@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import { Role } from '../../reducers/states'
+import { IS_XP_IMPLEMENTED } from '../../utils/constants'
 
 type ProfileProps = OwnProps & StateProps
 
@@ -40,20 +41,27 @@ class Profile extends React.Component<ProfileProps> {
                 {this.props.grade !== undefined ? this.props.grade : '???'}
               </span>
             </div>
-            <Tooltip content="Sorry, the grade progress bar is not ready yet">
-              <ProgressBar className="grade" animate={false} stripes={false} />
-            </Tooltip>
-            <div className="xp">
-              <span className="label">XP</span>
-              <span className="value">
-                <Tooltip content="Sorry, the XP display is not ready yet">
-                  {this.props.xp ? this.props.xp : '???'}
+            {IS_XP_IMPLEMENTED ? (
+              <>
+                {/* TODO: Move tooltip out of this tenary once max grade for a
+                  user is implemented in GET /user.
+                  https://github.com/source-academy/cadet/issues/205 */}
+                <Tooltip content="Sorry, the grade progress bar is not ready yet">
+                  <ProgressBar className="grade" animate={false} stripes={false} />
                 </Tooltip>
-              </span>
-            </div>
-            <Tooltip content="Sorry, the XP progress bar is not ready yet">
-              <ProgressBar className="xp" animate={false} stripes={false} />
-            </Tooltip>
+                <div className="xp">
+                  <span className="label">XP</span>
+                  <span className="value">
+                    <Tooltip content="Sorry, the XP display is not ready yet">
+                      {this.props.xp ? this.props.xp : '???'}
+                    </Tooltip>
+                  </span>
+                </div>
+                <Tooltip content="Sorry, the XP progress bar is not ready yet">
+                  <ProgressBar className="xp" animate={false} stripes={false} />
+                </Tooltip>
+              </>
+            ) : null}
           </div>
         </>
       )
