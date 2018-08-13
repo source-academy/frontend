@@ -1,3 +1,4 @@
+import { LINKS } from '../../../utils/constants'
 import { history } from '../../../utils/history'
 
 export default function (StoryXMLPlayer, story, username, attemptedAll) {
@@ -20,21 +21,21 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     openTemplate: function (name) {
       switch (name) {
         case 'textbook':
-          return window.open('https://www.comp.nus.edu.sg/~cs1101s/sicp/', '_blank');
+          return window.open(LINKS.TEXTBOOK, '_blank');
         case 'announcements':
-          return history.push('/news');
+          return history.push(LINKS.LUMINUS);
         case 'lesson_plan':
           return history.push('/academy/missions');
         case 'students':
-          return history.push('/news');
+          return history.push(LINKS.PIAZZA);
         case 'materials':
-          return history.push('/material');
+          return history.push(LINKS.LUMINUS);
         case 'IDE':
           return history.push('/playground');
         case 'path':
           return history.push('/academy/paths');
         default:
-          return history.push('/news');
+          return history.push(LINKS.LUMINUS);
       }
     },
     pickUpCollectible: function () { },

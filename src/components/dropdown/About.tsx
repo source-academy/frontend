@@ -2,6 +2,8 @@ import { Classes, Dialog, Tab, Tabs } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
+import { LINKS } from '../../utils/constants'
+
 type DialogProps = {
   isOpen: boolean
   onClose: () => void
@@ -38,7 +40,7 @@ const panelAbout = (
     <p>
       This iteration of Source Academy, code-named <i>Cadet</i>, is available under the MIT License.
       You may find the source code for Cadet at our GitHub organisation,{' '}
-      <a href="https://github.com/source-academy">Source Academy</a>.
+      <a href={LINKS.GITHUB_ORG}>Source Academy</a>.
     </p>
   </>
 )

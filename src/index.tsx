@@ -5,7 +5,7 @@ import { ConnectedRouter } from 'react-router-redux'
 
 import ApplicationContainer from './containers/ApplicationContainer'
 import { store } from './createStore'
-import { VERSION } from './utils/constants'
+import { LINKS, VERSION } from './utils/constants'
 import { history } from './utils/history'
 import registerServiceWorker from './utils/registerServiceWorker'
 
@@ -16,7 +16,7 @@ const rootContainer = document.getElementById('root') as HTMLElement
 // tslint:disable-next-line
 console.log(
   `%c Source Academy v${VERSION}; ` +
-    'Please visit https://github.com/source-academy/cadet-frontend/issues to report bugs or issues.',
+    `Please visit ${LINKS.GITHUB_ISSUES} to report bugs or issues.`,
   'font-weight: bold;'
 )
 
