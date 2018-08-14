@@ -651,10 +651,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       Due: 18th June, 13:24
                                     </div>
                                   </Text>
-                                  <NavLink to=\\"/academy/sidequests/2/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
-                                    <Route path=\\"/academy/sidequests/2/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                      <Link to=\\"/academy/sidequests/2/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
-                                        <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/sidequests/2/0\\">
+                                  <NavLink to=\\"/academy/quests/2/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
+                                    <Route path=\\"/academy/quests/2/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                      <Link to=\\"/academy/quests/2/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
+                                        <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/quests/2/0\\">
                                           <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
                                             <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"step-forward\\">

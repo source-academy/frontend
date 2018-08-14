@@ -31,7 +31,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
       >
         <Icon icon={IconNames.LIGHTBULB} />
-        <div className="navbar-button-text hidden-xs">Sidequests</div>
+        <div className="navbar-button-text hidden-xs">Quests</div>
       </NavLink>
 
       <NavLink

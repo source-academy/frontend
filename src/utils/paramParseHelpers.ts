@@ -1,13 +1,17 @@
-import { AssessmentCategory } from '../components/assessment/assessmentShape'
+import { AssessmentCategories, AssessmentCategory } from '../components/assessment/assessmentShape'
 
 /**
  * Converts an AssessmentCategory into a string for use in URLs.
+ *
+ * Note that there is an exception to the usual logic, for sidequests.
+ * Sidequests show up on the frontend as 'Quests' (#295) and the URLs
+ * must be represented as such.
  *
  * @param {AssessmentCategory} cat - Any AssessmentCategory, usually
  *   retrieved from the AssessmentCategories enum
  */
 export const assessmentCategoryLink = (cat: AssessmentCategory): string =>
-  cat.toLowerCase().concat('s')
+  cat === AssessmentCategories.Sidequest ? 'quests' : cat.toLowerCase().concat('s')
 
 /** Converts an optinal string
  *  parameter into an integer or null value.
