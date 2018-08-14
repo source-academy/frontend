@@ -194,11 +194,11 @@ What's your favourite dinner food?
       'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
     choices: [
       {
-        content: 'A',
-        hint: 'hint A'
+        content: '**Option** `A`',
+        hint: '_hint_ A is `here`'
       },
       {
-        content: 'B',
+        content: '### B',
         hint: 'hint B'
       },
       {
