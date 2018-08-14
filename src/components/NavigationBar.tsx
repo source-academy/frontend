@@ -37,7 +37,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
         target="_blank"
-        to={LINKS.LUMINUS}
+        to={LINKS.IVLE}
       >
         <Icon icon={IconNames.BOOK} />
         <div className="navbar-button-text hidden-xs">News &amp; Material</div>
