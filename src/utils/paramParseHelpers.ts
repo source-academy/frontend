@@ -11,9 +11,7 @@ import { AssessmentCategories, AssessmentCategory } from '../components/assessme
  *   retrieved from the AssessmentCategories enum
  */
 export const assessmentCategoryLink = (cat: AssessmentCategory): string =>
-  cat === AssessmentCategories.Sidequest
-    ? 'quests'
-    : cat.toLowerCase().concat('s')
+  cat === AssessmentCategories.Sidequest ? 'quests' : cat.toLowerCase().concat('s')
 
 /** Converts an optinal string
  *  parameter into an integer or null value.
