@@ -15,7 +15,7 @@ export const USE_BACKEND = process.env.REACT_APP_USE_BACKEND
 export enum LINKS {
   GITHUB_ISSUES = 'https://github.com/source-academy/cadet-frontend/issues',
   GITHUB_ORG = 'https://github.com/source-academy',
-  LUMINUS = 'https://luminus.nus.edu.sg/modules/8722e9a5-abc5-4160-820d-bf69d8a63c6f',
+  IVLE = 'https://ivle.nus.edu.sg/v1/Module/Student/default.aspx?CourseID=a6579f36-4d7d-41fb-b394-92a00b78148b',
   PIAZZA = 'https://piazza.com/nus.edu.sg/fall2018/cs1101s',
   SOURCE_DOCS = 'https://www.comp.nus.edu.sg/~cs1101s/source/',
   TECH_SVC = 'mailto:techsvc@comp.nus.edu.sg',
