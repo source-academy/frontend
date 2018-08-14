@@ -12,7 +12,7 @@ exports[`Grading NavLink does NOT renders for Role.Student 1`] = `
     <NavLink to=\\"/academy/sidequests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Sidequests
+        Quests
       </div>
     </NavLink>
     <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
@@ -43,7 +43,7 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
     <NavLink to=\\"/academy/sidequests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Sidequests
+        Quests
       </div>
     </NavLink>
     <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
@@ -82,7 +82,7 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
     <NavLink to=\\"/academy/sidequests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Sidequests
+        Quests
       </div>
     </NavLink>
     <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
