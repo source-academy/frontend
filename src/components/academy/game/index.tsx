@@ -39,29 +39,8 @@ export class Game extends React.Component<GameProps, {}> {
    */
   public async componentDidMount() {
     const story: any = (await import('./game.js')).default
-    let storyOpts: Array<string | boolean>
     if (this.props.canvas === undefined) {
-      // First time rendering the Game component
-      if (this.props.story) {
-        storyOpts = [this.props.story.story, !this.props.story.playStory]
-      } else {
-        // session.story is undefined if creating store from localStorage
-        const state = store.getState()
-        const tokens = {
-          accessToken: state.session.accessToken!,
-          refreshToken: state.session.refreshToken!
-        }
-        const user: any = await getUser(tokens)
-        if (user) {
-          storyOpts = [user.story.story, !user.story.playStory]
-          store.dispatch(setUser(user))
-        } else {
-          // if user is null, actions.logOut is called anyways; nonetheless we
-          // set storyOpts, otherwise typescript complains about using storyOpts
-          // before assignment in story/4 below
-          storyOpts = ['mission-1', true]
-        }
-      }
+      const storyOpts = await this.getStoryOpts()
       story(this.div, this.canvas, this.props.name, ...storyOpts)
       this.props.handleSaveCanvas(this.canvas)
     } else {
@@ -77,6 +56,33 @@ export class Game extends React.Component<GameProps, {}> {
         <canvas ref={e => (this.canvas = e!)} />
       </div>
     )
+  }
+
+  private async getStoryOpts() {
+    if (this.props.story) {
+      // no missions, no story from backend, just play intro
+      return this.props.story.story
+        ? [this.props.story.story, !this.props.story.playStory]
+        : ['mission-1', true]
+    } else {
+      // this.props.story is null if creating 'fresh' store from localStorage
+      const state = store.getState()
+      const tokens = {
+        accessToken: state.session.accessToken!,
+        refreshToken: state.session.refreshToken!
+      }
+      const user: any = await getUser(tokens)
+      if (user) {
+        store.dispatch(setUser(user))
+        // no missions, no story from backend, just play intro
+        return user.story.story ? [user.story.story, !user.story.playStory] : ['mission-1', true]
+      } else {
+        // if user is null, actions.logOut is called anyways; nonetheless we
+        // return a storyOpts, otherwise typescript complains about using storyOpts
+        // before assignment in story/4 below
+        return ['mission-1', true]
+      }
+    }
   }
 }
 
