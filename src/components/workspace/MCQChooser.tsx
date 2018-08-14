@@ -1,8 +1,9 @@
-import { Button, Card, Intent, Text } from '@blueprintjs/core'
+import { Button, Card, Intent } from '@blueprintjs/core'
 import * as React from 'react'
 
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification'
 import { IMCQQuestion } from '../assessment/assessmentShape'
+import Markdown from '../commons/Markdown'
 
 export interface IMCQChooserProps {
   mcq: IMCQQuestion
@@ -30,7 +31,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
         onClick={this.onButtonClickFactory(i)}
         minimal={true}
       >
-        <Text className="Text"> {choice.content} </Text>
+        <Markdown content={choice.content} />
       </Button>
     ))
     return (
@@ -61,10 +62,11 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
     }
     const shouldDisplayMessage = this.props.mcq.solution && this.props.mcq.choices[i].hint
     if (shouldDisplayMessage) {
+      const hintElement = <Markdown content={this.props.mcq.choices[i].hint!} />
       if (i === this.props.mcq.solution) {
-        showSuccessMessage(this.props.mcq.choices[i].hint!, 4000)
+        showSuccessMessage(hintElement, 4000)
       } else {
-        showWarningMessage(this.props.mcq.choices[i].hint!, 4000)
+        showWarningMessage(hintElement, 4000)
       }
     }
   }
