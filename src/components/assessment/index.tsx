@@ -125,16 +125,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         overview.status !== AssessmentStatuses.submitted
       const openedCards = this.props.assessmentOverviews
         .filter(overview => isOverviewOpened(overview))
-        .map((overview, index) =>
-          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
-        )
+        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment, true))
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.props.assessmentOverviews
         .filter(overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview))
-        .map((overview, index) =>
-          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
-        )
+        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment, true))
 
       /** Render cards */
       const upcomingCardsCollapsible =
