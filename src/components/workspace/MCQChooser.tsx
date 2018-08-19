@@ -6,6 +6,7 @@ import { IMCQQuestion } from '../assessment/assessmentShape'
 import Markdown from '../commons/Markdown'
 
 export interface IMCQChooserProps {
+  disableSelection?: boolean
   mcq: IMCQQuestion
   handleMCQSubmit: (choiceId: number) => void
 }
@@ -15,6 +16,10 @@ type State = {
 }
 
 class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
+  public static defaultProps: Partial<IMCQChooserProps> = {
+    disableSelection: false
+  }
+
   constructor(props: IMCQChooserProps) {
     super(props)
     this.state = {
@@ -54,7 +59,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
    * @param i the id of the answer
    */
   private onButtonClickFactory = (i: number) => (e: any) => {
-    if (i !== this.state.mcqOption) {
+    if (i !== this.state.mcqOption && !this.props.disableSelection) {
       this.props.handleMCQSubmit(i)
       this.setState({
         mcqOption: i
