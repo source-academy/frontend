@@ -48,7 +48,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
   };
 
   function openWristDevice() {
-    history.push(LINKS.IVLE)
+    window.open(LINKS.IVLE);
   }
 
   function startGame(div, canvas, saveData) {
