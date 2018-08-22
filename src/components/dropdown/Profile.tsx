@@ -36,16 +36,12 @@ class Profile extends React.Component<ProfileProps> {
           <div className="progress">
             <div className="grade">
               <span className="label">Grade</span>
-              <span className="value">
-                {this.props.grade}
-              </span>
+              <span className="value">{this.props.grade}</span>
             </div>
             <ProgressBar className="grade" animate={false} stripes={false} />
             <div className="xp">
               <span className="label">XP</span>
-              <span className="value">
-                {this.props.xp}
-              </span>
+              <span className="value">{this.props.xp}</span>
             </div>
             <ProgressBar className="xp" animate={false} stripes={false} />
           </div>

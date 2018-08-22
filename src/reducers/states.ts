@@ -255,7 +255,6 @@ export const defaultSession: ISessionState = {
   refreshToken: undefined,
   name: undefined,
   xp: 0
-
 }
 
 export const defaultState: IState = {
