@@ -288,7 +288,7 @@ const makeOverviewCard = (
       <div className="col-xs-9 listing-text">
         {makeOverviewCardTitle(overview, index, setBetchaAssessment)}
         <div className="row listing-order">
-          <h6>{`Max Grade: ${overview.maximumGrade}`}</h6>
+          <h6>{`Max Grade: ${overview.maxGrade}`}</h6>
         </div>
         <div className="row listing-description">
           <Markdown content={overview.shortSummary} />
