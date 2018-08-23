@@ -95,9 +95,13 @@ export function* mockBackendSaga(): SagaIterator {
     const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
         gradingQuestion.grade = {
-          adjustment,
+          gradeAdjustment: adjustment,
+          // TODO
+          xpAdjustment: 0,
           comment,
           grade: gradingQuestion.grade.grade
+          // TODO
+          xp: 0
         }
       }
       return gradingQuestion
