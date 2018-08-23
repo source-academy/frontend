@@ -80,13 +80,39 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true} className=\\"col-xs-12\\">
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-10\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         An Odessey to Runes (Duplicate)
                                       </h4>
                                     </div>
                                   </Text>
+                                  <div className=\\"col-xs-2\\">
+                                    <Blueprint2.Popover content={{...}} defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+                                      <Manager tag=\\"span\\" className=\\"pt-popover-wrapper\\">
+                                        <span className=\\"pt-popover-wrapper\\">
+                                          <Target onClick={[Function]} className=\\"pt-popover-target\\" component=\\"div\\" innerRef={[Function: target]}>
+                                            <div onClick={[Function]} className=\\"pt-popover-target\\">
+                                              <Blueprint2.Button icon=\\"menu\\" minimal={true} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} tabIndex={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                                  <Blueprint2.Icon icon=\\"menu\\">
+                                                    <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"menu\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                      <title>
+                                                        menu
+                                                      </title>
+                                                      <path d=\\"M1 4h14c.55 0 1-.45 1-1s-.45-1-1-1H1c-.55 0-1 .45-1 1s.45 1 1 1zm14 8H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zm0-5H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
+                                                  </Blueprint2.Icon>
+                                                  <Blueprint2.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint2.Button>
+                                            </div>
+                                          </Target>
+                                          <Blueprint2.Overlay autoFocus={true} backdropClassName=\\"pt-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} didOpen={[Function]} enforceFocus={true} hasBackdrop={false} usePortal={true} isOpen={false} onClose={[Function]} transitionDuration={300} transitionName=\\"pt-popover\\" lazy={true} />
+                                        </span>
+                                      </Manager>
+                                    </Blueprint2.Popover>
+                                  </div>
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
@@ -147,13 +173,39 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true} className=\\"col-xs-12\\">
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-10\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         An Odessey to Runes
                                       </h4>
                                     </div>
                                   </Text>
+                                  <div className=\\"col-xs-2\\">
+                                    <Blueprint2.Popover content={{...}} defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+                                      <Manager tag=\\"span\\" className=\\"pt-popover-wrapper\\">
+                                        <span className=\\"pt-popover-wrapper\\">
+                                          <Target onClick={[Function]} className=\\"pt-popover-target\\" component=\\"div\\" innerRef={[Function: target]}>
+                                            <div onClick={[Function]} className=\\"pt-popover-target\\">
+                                              <Blueprint2.Button icon=\\"menu\\" minimal={true} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} tabIndex={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                                  <Blueprint2.Icon icon=\\"menu\\">
+                                                    <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"menu\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                      <title>
+                                                        menu
+                                                      </title>
+                                                      <path d=\\"M1 4h14c.55 0 1-.45 1-1s-.45-1-1-1H1c-.55 0-1 .45-1 1s.45 1 1 1zm14 8H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zm0-5H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
+                                                  </Blueprint2.Icon>
+                                                  <Blueprint2.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint2.Button>
+                                            </div>
+                                          </Target>
+                                          <Blueprint2.Overlay autoFocus={true} backdropClassName=\\"pt-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} didOpen={[Function]} enforceFocus={true} hasBackdrop={false} usePortal={true} isOpen={false} onClose={[Function]} transitionDuration={300} transitionName=\\"pt-popover\\" lazy={true} />
+                                        </span>
+                                      </Manager>
+                                    </Blueprint2.Popover>
+                                  </div>
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
@@ -216,13 +268,39 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true} className=\\"col-xs-12\\">
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-10\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         The Secret to Streams
                                       </h4>
                                     </div>
                                   </Text>
+                                  <div className=\\"col-xs-2\\">
+                                    <Blueprint2.Popover content={{...}} defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+                                      <Manager tag=\\"span\\" className=\\"pt-popover-wrapper\\">
+                                        <span className=\\"pt-popover-wrapper\\">
+                                          <Target onClick={[Function]} className=\\"pt-popover-target\\" component=\\"div\\" innerRef={[Function: target]}>
+                                            <div onClick={[Function]} className=\\"pt-popover-target\\">
+                                              <Blueprint2.Button icon=\\"menu\\" minimal={true} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} tabIndex={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                                  <Blueprint2.Icon icon=\\"menu\\">
+                                                    <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"menu\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                      <title>
+                                                        menu
+                                                      </title>
+                                                      <path d=\\"M1 4h14c.55 0 1-.45 1-1s-.45-1-1-1H1c-.55 0-1 .45-1 1s.45 1 1 1zm14 8H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zm0-5H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
+                                                  </Blueprint2.Icon>
+                                                  <Blueprint2.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint2.Button>
+                                            </div>
+                                          </Target>
+                                          <Blueprint2.Overlay autoFocus={true} backdropClassName=\\"pt-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} didOpen={[Function]} enforceFocus={true} hasBackdrop={false} usePortal={true} isOpen={false} onClose={[Function]} transitionDuration={300} transitionName=\\"pt-popover\\" lazy={true} />
+                                        </span>
+                                      </Manager>
+                                    </Blueprint2.Popover>
+                                  </div>
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
@@ -285,13 +363,39 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true} className=\\"col-xs-12\\">
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-10\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         A sample Sidequest
                                       </h4>
                                     </div>
                                   </Text>
+                                  <div className=\\"col-xs-2\\">
+                                    <Blueprint2.Popover content={{...}} defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+                                      <Manager tag=\\"span\\" className=\\"pt-popover-wrapper\\">
+                                        <span className=\\"pt-popover-wrapper\\">
+                                          <Target onClick={[Function]} className=\\"pt-popover-target\\" component=\\"div\\" innerRef={[Function: target]}>
+                                            <div onClick={[Function]} className=\\"pt-popover-target\\">
+                                              <Blueprint2.Button icon=\\"menu\\" minimal={true} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} tabIndex={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                                  <Blueprint2.Icon icon=\\"menu\\">
+                                                    <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"menu\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                      <title>
+                                                        menu
+                                                      </title>
+                                                      <path d=\\"M1 4h14c.55 0 1-.45 1-1s-.45-1-1-1H1c-.55 0-1 .45-1 1s.45 1 1 1zm14 8H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zm0-5H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
+                                                  </Blueprint2.Icon>
+                                                  <Blueprint2.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint2.Button>
+                                            </div>
+                                          </Target>
+                                          <Blueprint2.Overlay autoFocus={true} backdropClassName=\\"pt-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} didOpen={[Function]} enforceFocus={true} hasBackdrop={false} usePortal={true} isOpen={false} onClose={[Function]} transitionDuration={300} transitionName=\\"pt-popover\\" lazy={true} />
+                                        </span>
+                                      </Manager>
+                                    </Blueprint2.Popover>
+                                  </div>
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
@@ -462,13 +566,39 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true} className=\\"col-xs-12\\">
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-10\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         An Odessey to Runes (Duplicate)
                                       </h4>
                                     </div>
                                   </Text>
+                                  <div className=\\"col-xs-2\\">
+                                    <Blueprint2.Popover content={{...}} defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+                                      <Manager tag=\\"span\\" className=\\"pt-popover-wrapper\\">
+                                        <span className=\\"pt-popover-wrapper\\">
+                                          <Target onClick={[Function]} className=\\"pt-popover-target\\" component=\\"div\\" innerRef={[Function: target]}>
+                                            <div onClick={[Function]} className=\\"pt-popover-target\\">
+                                              <Blueprint2.Button icon=\\"menu\\" minimal={true} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} tabIndex={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                                  <Blueprint2.Icon icon=\\"menu\\">
+                                                    <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"menu\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                      <title>
+                                                        menu
+                                                      </title>
+                                                      <path d=\\"M1 4h14c.55 0 1-.45 1-1s-.45-1-1-1H1c-.55 0-1 .45-1 1s.45 1 1 1zm14 8H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zm0-5H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
+                                                  </Blueprint2.Icon>
+                                                  <Blueprint2.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint2.Button>
+                                            </div>
+                                          </Target>
+                                          <Blueprint2.Overlay autoFocus={true} backdropClassName=\\"pt-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} didOpen={[Function]} enforceFocus={true} hasBackdrop={false} usePortal={true} isOpen={false} onClose={[Function]} transitionDuration={300} transitionName=\\"pt-popover\\" lazy={true} />
+                                        </span>
+                                      </Manager>
+                                    </Blueprint2.Popover>
+                                  </div>
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
@@ -553,13 +683,39 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true} className=\\"col-xs-12\\">
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-10\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         An Odessey to Runes
                                       </h4>
                                     </div>
                                   </Text>
+                                  <div className=\\"col-xs-2\\">
+                                    <Blueprint2.Popover content={{...}} defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+                                      <Manager tag=\\"span\\" className=\\"pt-popover-wrapper\\">
+                                        <span className=\\"pt-popover-wrapper\\">
+                                          <Target onClick={[Function]} className=\\"pt-popover-target\\" component=\\"div\\" innerRef={[Function: target]}>
+                                            <div onClick={[Function]} className=\\"pt-popover-target\\">
+                                              <Blueprint2.Button icon=\\"menu\\" minimal={true} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} tabIndex={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                                  <Blueprint2.Icon icon=\\"menu\\">
+                                                    <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"menu\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                      <title>
+                                                        menu
+                                                      </title>
+                                                      <path d=\\"M1 4h14c.55 0 1-.45 1-1s-.45-1-1-1H1c-.55 0-1 .45-1 1s.45 1 1 1zm14 8H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zm0-5H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
+                                                  </Blueprint2.Icon>
+                                                  <Blueprint2.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint2.Button>
+                                            </div>
+                                          </Target>
+                                          <Blueprint2.Overlay autoFocus={true} backdropClassName=\\"pt-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} didOpen={[Function]} enforceFocus={true} hasBackdrop={false} usePortal={true} isOpen={false} onClose={[Function]} transitionDuration={300} transitionName=\\"pt-popover\\" lazy={true} />
+                                        </span>
+                                      </Manager>
+                                    </Blueprint2.Popover>
+                                  </div>
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
@@ -622,13 +778,39 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true} className=\\"col-xs-12\\">
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-10\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         The Secret to Streams
                                       </h4>
                                     </div>
                                   </Text>
+                                  <div className=\\"col-xs-2\\">
+                                    <Blueprint2.Popover content={{...}} defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+                                      <Manager tag=\\"span\\" className=\\"pt-popover-wrapper\\">
+                                        <span className=\\"pt-popover-wrapper\\">
+                                          <Target onClick={[Function]} className=\\"pt-popover-target\\" component=\\"div\\" innerRef={[Function: target]}>
+                                            <div onClick={[Function]} className=\\"pt-popover-target\\">
+                                              <Blueprint2.Button icon=\\"menu\\" minimal={true} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} tabIndex={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                                  <Blueprint2.Icon icon=\\"menu\\">
+                                                    <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"menu\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                      <title>
+                                                        menu
+                                                      </title>
+                                                      <path d=\\"M1 4h14c.55 0 1-.45 1-1s-.45-1-1-1H1c-.55 0-1 .45-1 1s.45 1 1 1zm14 8H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zm0-5H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
+                                                  </Blueprint2.Icon>
+                                                  <Blueprint2.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint2.Button>
+                                            </div>
+                                          </Target>
+                                          <Blueprint2.Overlay autoFocus={true} backdropClassName=\\"pt-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} didOpen={[Function]} enforceFocus={true} hasBackdrop={false} usePortal={true} isOpen={false} onClose={[Function]} transitionDuration={300} transitionName=\\"pt-popover\\" lazy={true} />
+                                        </span>
+                                      </Manager>
+                                    </Blueprint2.Popover>
+                                  </div>
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
@@ -691,13 +873,39 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               </div>
                               <div className=\\"col-xs-9 listing-text\\">
                                 <div className=\\"row listing-title\\">
-                                  <Text ellipsize={true} className=\\"col-xs-12\\">
-                                    <div className=\\"pt-text-overflow-ellipsis col-xs-12\\" title={[undefined]}>
+                                  <Text ellipsize={true} className=\\"col-xs-10\\">
+                                    <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         A sample Sidequest
                                       </h4>
                                     </div>
                                   </Text>
+                                  <div className=\\"col-xs-2\\">
+                                    <Blueprint2.Popover content={{...}} defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+                                      <Manager tag=\\"span\\" className=\\"pt-popover-wrapper\\">
+                                        <span className=\\"pt-popover-wrapper\\">
+                                          <Target onClick={[Function]} className=\\"pt-popover-target\\" component=\\"div\\" innerRef={[Function: target]}>
+                                            <div onClick={[Function]} className=\\"pt-popover-target\\">
+                                              <Blueprint2.Button icon=\\"menu\\" minimal={true} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                                                <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} tabIndex={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                                  <Blueprint2.Icon icon=\\"menu\\">
+                                                    <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"menu\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                      <title>
+                                                        menu
+                                                      </title>
+                                                      <path d=\\"M1 4h14c.55 0 1-.45 1-1s-.45-1-1-1H1c-.55 0-1 .45-1 1s.45 1 1 1zm14 8H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zm0-5H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
+                                                  </Blueprint2.Icon>
+                                                  <Blueprint2.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint2.Button>
+                                            </div>
+                                          </Target>
+                                          <Blueprint2.Overlay autoFocus={true} backdropClassName=\\"pt-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} didOpen={[Function]} enforceFocus={true} hasBackdrop={false} usePortal={true} isOpen={false} onClose={[Function]} transitionDuration={300} transitionName=\\"pt-popover\\" lazy={true} />
+                                        </span>
+                                      </Manager>
+                                    </Blueprint2.Popover>
+                                  </div>
                                 </div>
                                 <div className=\\"row listing-order\\">
                                   <h6>
