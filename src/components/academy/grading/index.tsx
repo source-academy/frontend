@@ -50,16 +50,18 @@ class Grading extends React.Component<IGradingProps, State> {
 
     this.state = {
       columnDefs: [
-        { headerName: 'Submission ID', field: 'submissionId' },
         { headerName: 'Assessment ID', field: 'assessmentId' },
         { headerName: 'Assessment Name', field: 'assessmentName' },
         { headerName: 'Assessment Category', field: 'assessmentCategory' },
-        { headerName: 'Student ID', field: 'studentId' },
         { headerName: 'Student Name', field: 'studentName' },
-        { headerName: 'Initial Grade', field: 'initialGrade' },
-        { headerName: 'Adjustments', field: 'adjustments' },
+        { headerName: 'Auograder grade', field: 'initialGrade' },
+        { headerName: 'Grade adjustment', field: 'adjustments' },
         { headerName: 'Current Grade', field: 'currentGrade' },
-        { headerName: 'Maximum Grade', field: 'maximumGrade' },
+        { headerName: 'Maximum Grade', field: 'maxGrade' },
+        { headerName: 'XP', field: 'initialXp' },
+        { headerName: 'XP adjustment', field: 'xpAdjustment' },
+        { headerName: 'Current XP', field: 'currentXp' },
+        { headerName: 'Maximum XP', field: 'maxXp' },
         {
           headerName: 'Edit',
           field: '',
