@@ -307,7 +307,11 @@ const makeOverviewCard = (
         <div className="listing-controls">
           <Text className="listing-due-date">
             <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-            {`Due: ${getPrettyDate(overview.closeAt)}`}
+            {
+              beforeNow(overview.openAt)
+                ? `Due: ${getPrettyDate(overview.closeAt)}`
+                : `Opens at: ${getPrettyDate(overview.openAt)}`
+            }
           </Text>
           {renderAttemptButton ? makeOverviewCardButton(overview) : null}
         </div>
