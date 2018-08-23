@@ -4,6 +4,7 @@ import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid/dist/styles/ag-grid.css'
 import 'ag-grid/dist/styles/ag-theme-balham.css'
+import { sortBy } from 'lodash'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 
@@ -93,6 +94,7 @@ class Grading extends React.Component<IGradingProps, State> {
         visual={<Spinner large={true} />}
       />
     )
+    const data = sortBy(this.props.gradingOverviews, [(a: GradingOverview) => -a.assessmentId, (a: GradingOverview) => -a.submissionId])
     const grid = (
       <div className="Grading">
         <div className="ag-grid-parent ag-theme-balham">
@@ -103,7 +105,7 @@ class Grading extends React.Component<IGradingProps, State> {
             enableFilter={true}
             columnDefs={this.state.columnDefs}
             onGridReady={this.onGridReady}
-            rowData={this.props.gradingOverviews}
+            rowData={data}
           />
         </div>
         <div className="ag-grid-export-button">
