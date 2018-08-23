@@ -221,9 +221,13 @@ function* backendSaga(): SagaIterator {
       const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
         if (gradingQuestion.question.id === questionId) {
           gradingQuestion.grade = {
-            adjustment,
+            gradeAdjustment: adjustment,
+            // TODO
+            xpAdjustment: 0,
             comment,
-            grade: gradingQuestion.grade.grade
+            grade: gradingQuestion.grade.grade,
+            // TODO
+            xp: 0
           }
         }
         return gradingQuestion
@@ -449,6 +453,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
           answer: question.answer,
           choices: question.choices,
           content: question.content,
+          comment: null,
           id: question.id,
           library: castLibrary(question.library),
           solution: question.answer,
@@ -459,7 +464,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
         maxXp,
         grade: {
           grade: grade.grade,
-          x: grade.xp,
+          xp: grade.xp,
           comment: grade.comment || '',
           gradeAdjustment: grade.adjustment,
           xpAdjustment: grade.xpAdjustment
