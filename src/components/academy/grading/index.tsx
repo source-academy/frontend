@@ -94,7 +94,10 @@ class Grading extends React.Component<IGradingProps, State> {
         visual={<Spinner large={true} />}
       />
     )
-    const data = sortBy(this.props.gradingOverviews, [(a: GradingOverview) => -a.assessmentId, (a: GradingOverview) => -a.submissionId])
+    const data = sortBy(this.props.gradingOverviews, [
+      (a: GradingOverview) => -a.assessmentId,
+      (a: GradingOverview) => -a.submissionId
+    ])
     const grid = (
       <div className="Grading">
         <div className="ag-grid-parent ag-theme-balham">
