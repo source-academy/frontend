@@ -406,7 +406,6 @@ async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | 
     const gradingOverviews = await response.json()
     return gradingOverviews.map((overview: any) => {
       const gradingOverview: GradingOverview = {
-        adjustments: overview.adjustment,
         assessmentId: overview.assessment.id,
         assessmentName: overview.assessment.title,
         assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
@@ -415,7 +414,17 @@ async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | 
         maximumGrade: overview.assessment.maxGrade,
         studentId: overview.student.id,
         studentName: overview.student.name,
-        submissionId: overview.id
+        submissionId: overview.id,
+        // Grade
+        initialGrade: overview.grade,
+        gradeAdjustment: overview.adjustment,
+        currentGrade: overview.grade + overview.adjustment,
+        maxGrade: overview.assessment.maxGrade,
+        // XP
+        initialXp: overview.xp,
+        xpAdjustment: overview.xpAdjustment,
+        currentXp: overview.xp + overview.xpAdjustment,
+        maxXp: overview.assessment.maxXp
       }
       return gradingOverview
     })
