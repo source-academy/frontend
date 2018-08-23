@@ -288,18 +288,20 @@ const makeOverviewCard = (
       <div className="col-xs-9 listing-text">
         {makeOverviewCardTitle(overview, index, setBetchaAssessment)}
         <div className="row listing-grade">
-          <h6> {
-            beforeNow(overview.openAt)
-            ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-            : `Max Grade: ${overview.maxGrade}`
-          } </h6>
+          <h6>
+            {' '}
+            {beforeNow(overview.openAt)
+              ? `Grade: ${overview.grade} / ${overview.maxGrade}`
+              : `Max Grade: ${overview.maxGrade}`}{' '}
+          </h6>
         </div>
         <div className="row listing-xp">
-          <h6> {
-            beforeNow(overview.openAt)
-            ? `XP: ${overview.xp} / ${overview.maxXp}`
-            : `Max XP: ${overview.maxGrade}`
-          } </h6>
+          <h6>
+            {' '}
+            {beforeNow(overview.openAt)
+              ? `XP: ${overview.xp} / ${overview.maxXp}`
+              : `Max XP: ${overview.maxGrade}`}{' '}
+          </h6>
         </div>
         <div className="row listing-description">
           <Markdown content={overview.shortSummary} />
@@ -307,11 +309,9 @@ const makeOverviewCard = (
         <div className="listing-controls">
           <Text className="listing-due-date">
             <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-            {
-              beforeNow(overview.openAt)
-                ? `Due: ${getPrettyDate(overview.closeAt)}`
-                : `Opens at: ${getPrettyDate(overview.openAt)}`
-            }
+            {beforeNow(overview.openAt)
+              ? `Due: ${getPrettyDate(overview.closeAt)}`
+              : `Opens at: ${getPrettyDate(overview.openAt)}`}
           </Text>
           {renderAttemptButton ? makeOverviewCardButton(overview) : null}
         </div>
