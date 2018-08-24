@@ -213,7 +213,7 @@ What's your favourite dinner food?
     id: 2,
     library: mockCurveLibrary,
     type: 'mcq',
-    solution: 2
+    solution: 0
   },
   {
     answer: 3,
