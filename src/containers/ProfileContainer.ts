@@ -3,13 +3,14 @@ import { connect, MapStateToProps } from 'react-redux'
 import Profile, { StateProps } from '../components/dropdown/Profile'
 import { IState } from '../reducers/states'
 
+// TODO: connect to actual state once backend implements these features
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   grade: state.session.grade,
-  maxGrade: state.session.maxGrade,
-  maxXp: state.session.maxXp,
+  maxGrade: undefined,
+  maxXp: undefined,
   name: state.session.name,
   role: state.session.role,
-  xp: state.session.xp
+  xp: undefined
 })
 
 export default connect(mapStateToProps)(Profile)
