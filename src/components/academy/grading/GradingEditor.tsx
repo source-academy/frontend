@@ -15,7 +15,7 @@ export type DispatchProps = {
   handleGradingSave: (
     submissionId: number,
     questionId: number,
-    comments: string,
+    comment: string,
     adjustment: number | undefined
   ) => void
 }
