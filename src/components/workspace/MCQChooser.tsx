@@ -60,7 +60,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
         mcqOption: i
       })
     }
-    const shouldDisplayMessage = this.props.mcq.solution && this.props.mcq.choices[i].hint
+    const shouldDisplayMessage = this.props.mcq.solution !== null && this.props.mcq.choices[i].hint
     if (shouldDisplayMessage) {
       const hintElement = <Markdown content={this.props.mcq.choices[i].hint!} />
       if (i === this.props.mcq.solution) {
@@ -86,8 +86,8 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
     solution: number | null
   ): Intent => {
     const active = currentOption === chosenOption
-    const correctOptionSelected = active && solution && currentOption === solution
-    if (!solution) {
+    const correctOptionSelected = active && solution !== null && currentOption === solution
+    if (solution === null) {
       return Intent.NONE
     } else if (active && correctOptionSelected) {
       return Intent.SUCCESS
