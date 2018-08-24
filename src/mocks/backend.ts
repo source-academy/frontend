@@ -85,7 +85,6 @@ export function* mockBackendSaga(): SagaIterator {
     const {
       submissionId,
       questionId,
-      grade,
       comment,
       adjustment
     } = (action as actionTypes.IAction).payload
@@ -98,7 +97,7 @@ export function* mockBackendSaga(): SagaIterator {
         gradingQuestion.grade = {
           adjustment,
           comment,
-          grade
+          grade: gradingQuestion.grade.grade
         }
       }
       return gradingQuestion
