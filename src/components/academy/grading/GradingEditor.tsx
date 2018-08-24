@@ -15,14 +15,14 @@ export type DispatchProps = {
   handleGradingSave: (
     submissionId: number,
     questionId: number,
-    comments: string,
+    comment: string,
     adjustment: number | undefined
   ) => void
 }
 
 export type OwnProps = {
   adjustment: number
-  comments: string
+  comment: string
   initialGrade: number
   maximumGrade: number
   questionId: number
@@ -49,7 +49,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     super(props)
     this.state = {
       mdeState: {
-        markdown: props.comments
+        markdown: props.comment
       },
       adjustmentInput: props.adjustment.toString()
     }
@@ -185,7 +185,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   private hasUnsavedChanges = () => {
     const adjustmentInput = stringParamToInt(this.state.adjustmentInput || undefined)
     return (
-      this.props.comments !== this.state.mdeState.markdown ||
+      this.props.comment !== this.state.mdeState.markdown ||
       this.props.adjustment !== adjustmentInput
     )
   }
