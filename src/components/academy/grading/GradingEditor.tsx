@@ -103,6 +103,12 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                     {this.props.initialGrade} / {this.props.maxGrade}
                   </Text>
                 </td>
+                <th> {`Auto-grader's XP:`} </th>
+                <td>
+                  <Text>
+                    {this.props.initialXp} / {this.props.maxXp}
+                  </Text>
+                </td>
               </tr>
               <tr>
                 <th> {`Your adjustment:`} </th>
@@ -116,6 +122,19 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                     placeholder="Adjust grades relatively here"
                     min={0 - this.props.initialGrade}
                     max={this.props.maxGrade - this.props.initialGrade}
+                  />
+                </td>
+                <th> {`Your adjustment:`} </th>
+                <td>
+                  <NumericInput
+                    className="grading-adjustment-input"
+                    onValueChange={this.onXpAdjustmentInputChange}
+                    value={this.state.xpAdjustmentInput || ''}
+                    buttonPosition={Position.RIGHT}
+                    fill={true}
+                    placeholder="Adjust XP relatively here"
+                    min={0 - this.props.initialXp}
+                    max={this.props.maxXp - this.props.initialXp}
                   />
                 </td>
               </tr>
@@ -201,7 +220,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * @param valueAsNumber an unused parameter, as we use strings for the input. @see State
    * @param valueAsString a string that contains the input. To be parsed by another function.
    */
-  private onXPAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
+  private onXpAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
     this.setState({
       ...this.state,
       xpAdjustmentInput: valueAsString
