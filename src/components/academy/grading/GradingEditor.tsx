@@ -37,11 +37,11 @@ export type OwnProps = {
  * Keeps track of the current editor state,
  * as well as the grade adjustment in the numeric input.
  *
- * @prop gradeAdjustmentInput a potentially null string which defines the 
+ * @prop gradeAdjustmentInput a potentially null string which defines the
  *   result for the number grade input. This property being null
  *   will show the hint text in the NumericInput. This property is a string
  *   so as to allow input such as the '-' character.
- * @prop xpAdjustmentInput a potentially null string which defines the 
+ * @prop xpAdjustmentInput a potentially null string which defines the
  *   result for the number grade input. This property being null
  *   will show the hint text in the NumericInput. This property is a string
  *   so as to allow input such as the '-' character.
@@ -184,9 +184,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private onClickSaveButton = () => {
-    const gradeAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined
+    const gradeAdjustmentInput =
+      stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined
     const grade = this.props.initialGrade + (gradeAdjustmentInput || 0)
-    const xpAdjustmentInput = stringParamToInt(this.state.xpAdjustmentInput || undefined) || undefined
+    const xpAdjustmentInput =
+      stringParamToInt(this.state.xpAdjustmentInput || undefined) || undefined
     const xp = this.props.initialXp + (xpAdjustmentInput || 0)
     if (grade < 0 || grade > this.props.maxGrade) {
       showWarningMessage(

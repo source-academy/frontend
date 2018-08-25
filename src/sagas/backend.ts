@@ -212,7 +212,14 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }))
-    const resp = yield postGrading(submissionId, questionId, comment, gradeAdjustment, xpAdjustment, tokens)
+    const resp = yield postGrading(
+      submissionId,
+      questionId,
+      comment,
+      gradeAdjustment,
+      xpAdjustment,
+      tokens
+    )
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
       // Now, update the grade for the question in the Grading in the store
