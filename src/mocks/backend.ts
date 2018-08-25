@@ -99,7 +99,7 @@ export function* mockBackendSaga(): SagaIterator {
           // TODO
           xpAdjustment: 0,
           comment,
-          grade: gradingQuestion.grade.grade
+          grade: gradingQuestion.grade.grade,
           // TODO
           xp: 0
         }
