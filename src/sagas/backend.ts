@@ -316,16 +316,8 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
        * backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
        *              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
        */
-
       overview.category = capitalise(overview.type)
       delete overview.type
-
-      /**
-       * backend has property maxGrade, we have property maximumGrade
-       */
-
-      overview.maximumGrade = overview.maxGrade
-      delete overview.maxGrade
 
       return overview as IAssessmentOverview
     })
