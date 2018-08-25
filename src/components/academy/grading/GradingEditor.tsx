@@ -100,7 +100,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                 <th> {`Auto-grader's grade:`} </th>
                 <td>
                   <Text>
-                    {this.props.initialGrade} / {this.props.maximumGrade}
+                    {this.props.initialGrade} / {this.props.maxGrade}
                   </Text>
                 </td>
               </tr>
@@ -115,7 +115,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                     fill={true}
                     placeholder="Adjust grades relatively here"
                     min={0 - this.props.initialGrade}
-                    max={this.props.maximumGrade - this.props.initialGrade}
+                    max={this.props.maxGrade - this.props.initialGrade}
                   />
                 </td>
               </tr>
@@ -125,7 +125,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                   <Text>
                     {this.props.initialGrade +
                       (stringParamToInt(this.state.gradeAdjustmentInput || undefined) || 0)}{' '}
-                    / {this.props.maximumGrade}
+                    / {this.props.maxGrade}
                   </Text>
                 </td>
               </tr>
@@ -159,18 +159,25 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private onClickSaveButton = () => {
-    const adjustmentInput = stringParamToInt(this.state.adjustmentInput || undefined) || undefined
-    const grade = this.props.initialGrade + (adjustmentInput || 0)
-    if (grade < 0 || grade > this.props.maximumGrade) {
+    const gradeAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined
+    const grade = this.props.initialGrade + (gradeAdjustmentInput || 0)
+    const xpAdjustmentInput = stringParamToInt(this.state.xpAdjustmentInput || undefined) || undefined
+    const xp = this.props.initialXp + (xpAdjustmentInput || 0)
+    if (grade < 0 || grade > this.props.maxGrade) {
       showWarningMessage(
-        `Grade ${grade.toString()} is out of bounds. Maximum grade is ${this.props.maximumGrade.toString()}.`
+        `Grade ${grade.toString()} is out of bounds. Maximum grade is ${this.props.maxGrade.toString()}.`
+      )
+    } else if (xp < 0 || xp > this.props.maxXp) {
+      showWarningMessage(
+        `XP ${xp.toString()} is out of bounds. Maximum grade is ${this.props.maxXp.toString()}.`
       )
     } else {
       this.props.handleGradingSave(
         this.props.submissionId,
         this.props.questionId,
         this.state.mdeState.markdown!,
-        adjustmentInput
+        gradeAdjustmentInput,
+        xpAdjustmentInput
       )
     }
   }
