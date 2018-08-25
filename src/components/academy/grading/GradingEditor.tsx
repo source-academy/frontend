@@ -93,11 +93,10 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           />
         ) : null}
         {
-          this.props.solution !== null && this.props.solution !== undefined
+          this.props.solution !== null
             ? (
               <div className="grading-editor-solution">
-                <h6> Solution </h6>
-                <code> {this.props.solution.toString()} </code>
+                <pre> {this.props.solution.toString()} </pre>
               </div>
             ): null
         }
