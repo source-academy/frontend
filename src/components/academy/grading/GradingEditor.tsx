@@ -25,11 +25,9 @@ export type OwnProps = {
   comment: string
   questionId: number
   submissionId: number
-  // Grade
   initialGrade: number
   gradeAdjustment: number
   maxGrade: number
-  //XP
   initialXp: number
   xpAdjustment: number
   maxXp: number
