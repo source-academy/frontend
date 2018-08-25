@@ -1,19 +1,18 @@
-import { Classes, Dialog, NonIdealState, ProgressBar, Spinner, Tooltip } from '@blueprintjs/core'
+import { Classes, Dialog, NonIdealState, ProgressBar, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
 import { Role } from '../../reducers/states'
-import { IS_XP_IMPLEMENTED } from '../../utils/constants'
 
 type ProfileProps = OwnProps & StateProps
 
 export type StateProps = {
-  grade?: number
-  maxGrade?: number
-  maxXp?: number
+  grade: number
+  maxGrade: number
+  maxXp: number
   name?: string
   role?: Role
-  xp?: number
+  xp: number
 }
 
 type OwnProps = {
@@ -37,31 +36,14 @@ class Profile extends React.Component<ProfileProps> {
           <div className="progress">
             <div className="grade">
               <span className="label">Grade</span>
-              <span className="value">
-                {this.props.grade !== undefined ? this.props.grade : '???'}
-              </span>
+              <span className="value">{this.props.grade}</span>
             </div>
-            {IS_XP_IMPLEMENTED ? (
-              <>
-                {/* TODO: Move tooltip out of this tenary once max grade for a
-                  user is implemented in GET /user.
-                  https://github.com/source-academy/cadet/issues/205 */}
-                <Tooltip content="Sorry, the grade progress bar is not ready yet">
-                  <ProgressBar className="grade" animate={false} stripes={false} />
-                </Tooltip>
-                <div className="xp">
-                  <span className="label">XP</span>
-                  <span className="value">
-                    <Tooltip content="Sorry, the XP display is not ready yet">
-                      {this.props.xp ? this.props.xp : '???'}
-                    </Tooltip>
-                  </span>
-                </div>
-                <Tooltip content="Sorry, the XP progress bar is not ready yet">
-                  <ProgressBar className="xp" animate={false} stripes={false} />
-                </Tooltip>
-              </>
-            ) : null}
+            <ProgressBar className="grade" animate={false} stripes={false} />
+            <div className="xp">
+              <span className="label">XP</span>
+              <span className="value">{this.props.xp}</span>
+            </div>
+            <ProgressBar className="xp" animate={false} stripes={false} />
           </div>
         </>
       )
