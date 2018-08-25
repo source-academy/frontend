@@ -22,12 +22,17 @@ export type DispatchProps = {
 }
 
 export type OwnProps = {
-  gradeAdjustment: number
   comment: string
-  initialGrade: number
-  maximumGrade: number
   questionId: number
   submissionId: number
+  // Grade
+  initialGrade: number
+  gradeAdjustment: number
+  maxGrade: number
+  //XP
+  initialXp: number
+  xpAdjustment: number
+  maxXp: number
 }
 
 /**
@@ -58,7 +63,8 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       mdeState: {
         markdown: props.comment
       },
-      gradeAdjustmentInput: props.adjustment.toString()
+      gradeAdjustmentInput: props.gradeAdjustment.toString(),
+      xpAdjustmentInput: props.xpAdjustment.toString()
     }
     /**
      * The markdown-to-html converter for the editor.
@@ -104,7 +110,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                   <NumericInput
                     className="grading-adjustment-input"
                     onValueChange={this.onAdjustmentInputChange}
-                    value={this.state.adjustmentInput || ''}
+                    value={this.state.gradeAdjustmentInput || ''}
                     buttonPosition={Position.RIGHT}
                     fill={true}
                     placeholder="Adjust grades relatively here"
@@ -118,7 +124,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                 <td>
                   <Text>
                     {this.props.initialGrade +
-                      (stringParamToInt(this.state.adjustmentInput || undefined) || 0)}{' '}
+                      (stringParamToInt(this.state.gradeAdjustmentInput || undefined) || 0)}{' '}
                     / {this.props.maximumGrade}
                   </Text>
                 </td>
