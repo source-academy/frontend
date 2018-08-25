@@ -8,7 +8,6 @@ import * as Showdown from 'showdown'
 import { showWarningMessage } from '../../../utils/notification'
 import { stringParamToInt } from '../../../utils/paramParseHelpers'
 import { controlButton } from '../../commons'
-import Markdown from '../../commons/Markdown'
 
 type GradingEditorProps = DispatchProps & OwnProps
 
@@ -98,7 +97,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             ? (
               <div className="grading-editor-solution">
                 <h6> Solution </h6>
-                <Markdown content={this.props.solution.toString()}/>
+                <code> {this.props.solution.toString()} </code>
               </div>
             ): null
         }
