@@ -176,7 +176,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         <p>
           You are about to finalise your submission for the{' '}
           {this.state.betchaAssessment.category.toLowerCase()}{' '}
-          <i>&quot;{this.state.betchaAssessment.title}&quot;</i>.
+          <i>
+            &quot;
+            {this.state.betchaAssessment.title}
+            &quot;
+          </i>
+          .
         </p>
         <p>
           Early submissions grant you additional XP, but{' '}

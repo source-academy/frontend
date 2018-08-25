@@ -22,18 +22,21 @@ class GradingHistory extends React.Component<GradingNavLinkProps, {}> {
   }
 
   public render() {
-
     const popoverInfo = () => (
-        <div className="col-xs-12" style={{padding: 10}}>
-          <p>Initial Grade: {this.props.data.initialGrade}</p>
-          <p>Grade Adjustments: {this.props.data.gradeAdjustment}</p>
-          <p>Initial XP: {this.props.data.initialXp}</p>
-          <p>XP Adjustments: {this.props.data.xpAdjustment}</p>
-        </div>
+      <div className="col-xs-12" style={{ padding: 10 }}>
+        <p>Initial Grade: {this.props.data.initialGrade}</p>
+        <p>Grade Adjustments: {this.props.data.gradeAdjustment}</p>
+        <p>Initial XP: {this.props.data.initialXp}</p>
+        <p>XP Adjustments: {this.props.data.xpAdjustment}</p>
+      </div>
     )
 
     return (
-      <Popover content={popoverInfo()} position={Position.LEFT} interactionKind={PopoverInteractionKind.HOVER}>
+      <Popover
+        content={popoverInfo()}
+        position={Position.LEFT}
+        interactionKind={PopoverInteractionKind.HOVER}
+      >
         <Icon className="grade-edit-icon" iconSize={16} icon={IconNames.HISTORY} />
       </Popover>
     )

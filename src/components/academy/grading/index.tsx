@@ -1,4 +1,4 @@
-import { InputGroup,NonIdealState, Spinner } from '@blueprintjs/core'
+import { InputGroup, NonIdealState, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid'
 import { AgGridReact } from 'ag-grid-react'
@@ -22,8 +22,8 @@ import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace'
  * can be manipulated easier. See constructor for an example.
  */
 type State = {
-  columnDefs: ColDef[],
-  filterValue: string 
+  columnDefs: ColDef[]
+  filterValue: string
 }
 
 type GradingNavLinkProps = {
@@ -48,13 +48,13 @@ export interface IStateProps {
   gradingOverviews?: GradingOverview[]
 }
 
-const GradingMarks = (props: GradingNavLinkProps) => {  
+const GradingMarks = (props: GradingNavLinkProps) => {
   if (props.data.currentGrade !== 0 && props.data.maxGrade !== 0) {
-     return (
+    return (
       <div>
         {`${props.data.currentGrade}`} / {`${props.data.maxGrade}`}
       </div>
-     )
+    )
   } else {
     return <div>N/A</div>
   }
@@ -83,19 +83,21 @@ class Grading extends React.Component<IGradingProps, State> {
         { headerName: 'Assessment Name', field: 'assessmentName' },
         { headerName: 'Category', field: 'assessmentCategory', maxWidth: 150 },
         { headerName: 'Student Name', field: 'studentName' },
-        { headerName: 'Grade', 
+        {
+          headerName: 'Grade',
           field: '',
           cellRendererFramework: GradingMarks,
           maxWidth: 100,
-          cellStyle: (params) => {
+          cellStyle: params => {
             if (params.data.currentGrade < params.data.maxGrade) {
-              return {backgroundColor: '#ffe6e6'}
+              return { backgroundColor: '#ffe6e6' }
             } else {
               return {}
             }
           }
         },
-        { headerName: 'XP', 
+        {
+          headerName: 'XP',
           field: '',
           cellRendererFramework: GradingExp,
           maxWidth: 100
@@ -111,10 +113,10 @@ class Grading extends React.Component<IGradingProps, State> {
           field: '',
           cellRendererFramework: GradingHistory,
           maxWidth: 90
-        },
+        }
       ],
 
-      filterValue: ""
+      filterValue: ''
     }
   }
 
@@ -127,7 +129,7 @@ class Grading extends React.Component<IGradingProps, State> {
     if (submissionId !== null) {
       const props: GradingWorkspaceProps = {
         submissionId,
-        questionId           
+        questionId
       }
       return <GradingWorkspaceContainer {...props} />
     }
@@ -147,20 +149,19 @@ class Grading extends React.Component<IGradingProps, State> {
 
     const grid = (
       <div className="GradingContainer">
-        
         <div>
           <div className="col-md-6">
             <InputGroup
-                      large={false}
-                      leftIcon="filter"
-                      placeholder="Filter..."
-                      value={this.state.filterValue}
-                      onChange={this.handleFilterChange}
+              large={false}
+              leftIcon="filter"
+              placeholder="Filter..."
+              value={this.state.filterValue}
+              onChange={this.handleFilterChange}
             />
           </div>
         </div>
 
-        <br/>
+        <br />
 
         <div className="Grading">
           <div className="ag-grid-parent ag-theme-fresh">
@@ -189,17 +190,17 @@ class Grading extends React.Component<IGradingProps, State> {
   }
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const changeVal = event.target.value;
-    this.setState({filterValue: changeVal});
+    const changeVal = event.target.value
+    this.setState({ filterValue: changeVal })
 
     if (this.gridApi) {
-      this.gridApi.setQuickFilter(this.state.filterValue);
+      this.gridApi.setQuickFilter(this.state.filterValue)
     }
   }
 
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api
-    this.gridApi.sizeColumnsToFit();
+    this.gridApi.sizeColumnsToFit()
   }
 
   private exportCSV = () => {
