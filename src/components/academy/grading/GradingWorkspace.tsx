@@ -185,6 +185,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         body: (
           <GradingEditor
             comment={props.grading![questionId].grade.comment}
+            solution={props.grading![questionId].question.solution}
             questionId={props.grading![questionId].question.id}
             submissionId={props.submissionId}
             initialGrade={props.grading![questionId].grade.grade}
