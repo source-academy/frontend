@@ -145,6 +145,14 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                     / {this.props.maxGrade}
                   </Text>
                 </td>
+                <th> {`Final XP:`} </th>
+                <td>
+                  <Text>
+                    {this.props.initialXp +
+                      (stringParamToInt(this.state.xpAdjustmentInput || undefined) || 0)}{' '}
+                    / {this.props.maxXp}
+                  </Text>
+                </td>
               </tr>
             </tbody>
           </table>
