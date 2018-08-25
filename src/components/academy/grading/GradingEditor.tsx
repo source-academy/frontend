@@ -8,6 +8,7 @@ import * as Showdown from 'showdown'
 import { showWarningMessage } from '../../../utils/notification'
 import { stringParamToInt } from '../../../utils/paramParseHelpers'
 import { controlButton } from '../../commons'
+import Markdown from '../../commons/Markdown'
 
 type GradingEditorProps = DispatchProps & OwnProps
 
@@ -23,6 +24,7 @@ export type DispatchProps = {
 
 export type OwnProps = {
   comment: string
+  solution: number | string | null
   questionId: number
   submissionId: number
   initialGrade: number
@@ -91,6 +93,15 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
           />
         ) : null}
+        {
+          this.props.solution !== null
+            ? (
+              <div className="grading-editor-solution">
+                <h6> Solution </h6>
+                <Markdown content={this.props.solution.toString()}/>
+              </div>
+            ): null
+        }
         <div className="grading-editor-input-parent">
           <table>
             <tbody>
