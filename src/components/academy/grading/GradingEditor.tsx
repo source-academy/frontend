@@ -22,7 +22,7 @@ export type DispatchProps = {
 }
 
 export type OwnProps = {
-  adjustment: number
+  gradeAdjustment: number
   comment: string
   initialGrade: number
   maximumGrade: number
@@ -34,13 +34,19 @@ export type OwnProps = {
  * Keeps track of the current editor state,
  * as well as the grade adjustment in the numeric input.
  *
- * @prop adjustmentInput a potentially null string. this property being null
+ * @prop gradeAdjustmentInput a potentially null string which defines the 
+ *   result for the number grade input. This property being null
+ *   will show the hint text in the NumericInput. This property is a string
+ *   so as to allow input such as the '-' character.
+ * @prop xpAdjustmentInput a potentially null string which defines the 
+ *   result for the number grade input. This property being null
  *   will show the hint text in the NumericInput. This property is a string
  *   so as to allow input such as the '-' character.
  */
 type State = {
   mdeState: ReactMdeTypes.MdeState
-  adjustmentInput: string | null
+  gradeAdjustmentInput: string | null
+  xpAdjustmentInput: string | null
 }
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
@@ -52,7 +58,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       mdeState: {
         markdown: props.comment
       },
-      adjustmentInput: props.adjustment.toString()
+      gradeAdjustmentInput: props.adjustment.toString()
     }
     /**
      * The markdown-to-html converter for the editor.
