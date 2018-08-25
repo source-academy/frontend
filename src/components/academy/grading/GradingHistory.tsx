@@ -10,7 +10,7 @@ type GradingNavLinkProps = {
 }
 
 /**
- * Used to render the marks in the table that displays GradingOverviews.
+ * Used to render the marking history in the table that displays GradingOverviews.
  * This is a fully fledged component (not SFC) by specification in
  * ag-grid.
  *

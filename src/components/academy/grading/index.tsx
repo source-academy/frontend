@@ -48,6 +48,7 @@ export interface IStateProps {
   gradingOverviews?: GradingOverview[]
 }
 
+/** Component to render in table - marks */
 const GradingMarks = (props: GradingNavLinkProps) => {
   if (props.data.currentGrade !== 0 && props.data.maxGrade !== 0) {
     return (
@@ -60,6 +61,7 @@ const GradingMarks = (props: GradingNavLinkProps) => {
   }
 }
 
+/** Component to render in table - XP */
 const GradingExp = (props: GradingNavLinkProps) => {
   if (props.data.currentXp && props.data.maxXp) {
     return (
