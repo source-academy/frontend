@@ -16,7 +16,8 @@ export type DispatchProps = {
     submissionId: number,
     questionId: number,
     comment: string,
-    adjustment: number | undefined
+    gradeAdjustment: number | undefined,
+    xpAdjustment: number | undefined
   ) => void
 }
 
