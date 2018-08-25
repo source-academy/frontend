@@ -86,7 +86,8 @@ export function* mockBackendSaga(): SagaIterator {
       submissionId,
       questionId,
       comment,
-      adjustment
+      gradeAdjustment,
+      xpAdjustment
     } = (action as actionTypes.IAction).payload
     // Now, update the grade for the question in the Grading in the store
     const grading: Grading = yield select((state: IState) =>
@@ -95,13 +96,11 @@ export function* mockBackendSaga(): SagaIterator {
     const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
         gradingQuestion.grade = {
-          gradeAdjustment: adjustment,
-          // TODO
-          xpAdjustment: 0,
+          gradeAdjustment,
+          xpAdjustment,
           comment,
           grade: gradingQuestion.grade.grade,
-          // TODO
-          xp: 0
+          xp: gradingQuestion.grade.xp
         }
       }
       return gradingQuestion
