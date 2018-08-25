@@ -36,11 +36,11 @@ export type GradingQuestion = {
   maxGrade: number
   maxXp: number
   grade: {
-    gradeAdjustment: number
-    xpAdjustment: number
     comment: string
     grade: number
+    gradeAdjustment: number
     xp: number
+    xpAdjustment: number
   }
 }
 
