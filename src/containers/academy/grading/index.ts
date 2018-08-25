@@ -17,7 +17,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     dispatch
   )
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Grading)
+export default connect(mapStateToProps, mapDispatchToProps)(Grading)

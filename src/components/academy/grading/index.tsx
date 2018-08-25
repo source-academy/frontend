@@ -48,7 +48,10 @@ export interface IStateProps {
   gradingOverviews?: GradingOverview[]
 }
 
+<<<<<<< Updated upstream
 /** Component to render in table - marks */
+=======
+>>>>>>> Stashed changes
 const GradingMarks = (props: GradingNavLinkProps) => {
   if (props.data.currentGrade !== 0 && props.data.maxGrade !== 0) {
     return (
