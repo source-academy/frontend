@@ -19,7 +19,4 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   story: state.session.story
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Game)
+export default connect(mapStateToProps, mapDispatchToProps)(Game)
