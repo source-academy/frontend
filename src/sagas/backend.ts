@@ -205,7 +205,8 @@ function* backendSaga(): SagaIterator {
       submissionId,
       questionId,
       comment,
-      adjustment
+      gradeAdjustment,
+      xpAdjustment
     } = (action as actionTypes.IAction).payload
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
@@ -221,13 +222,11 @@ function* backendSaga(): SagaIterator {
       const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
         if (gradingQuestion.question.id === questionId) {
           gradingQuestion.grade = {
-            gradeAdjustment: adjustment,
-            // TODO
-            xpAdjustment: 0,
+            gradeAdjustment,
+            xpAdjustment,
             comment,
             grade: gradingQuestion.grade.grade,
-            // TODO
-            xp: 0
+            xp: gradingQuestion.grade.xp
           }
         }
         return gradingQuestion
