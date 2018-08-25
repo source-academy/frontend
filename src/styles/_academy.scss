@@ -152,6 +152,11 @@
 }
 
 .GradingEditor {
+  .grading-editor-solution {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
   .grading-editor-input-parent {
     /** Center the text for numeric input and showing grades. */
     table {
