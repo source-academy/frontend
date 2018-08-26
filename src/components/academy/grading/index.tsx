@@ -50,20 +50,12 @@ export interface IStateProps {
 
 /** Component to render in table - marks */
 const GradingMarks = (props: GradingNavLinkProps) => {
-  return <GradingHistory 
-            data={props.data}
-            exp={false}
-            grade={true}
-         />
+  return <GradingHistory data={props.data} exp={false} grade={true} />
 }
 
 /** Component to render in table - XP */
 const GradingExp = (props: GradingNavLinkProps) => {
-  return <GradingHistory 
-            data={props.data}
-            exp={true}
-            grade={false}
-         />
+  return <GradingHistory data={props.data} exp={true} grade={false} />
 }
 
 class Grading extends React.Component<IGradingProps, State> {

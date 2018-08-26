@@ -5,8 +5,8 @@ import * as React from 'react'
 import { GradingOverview } from './gradingShape'
 
 type GradingHistoryProps = {
-  data: GradingOverview,
-  exp: boolean,
+  data: GradingOverview
+  exp: boolean
   grade: boolean
 }
 
@@ -25,17 +25,18 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
   public render() {
     const popoverInfo = () => (
       <div className="col-xs-12" style={{ padding: 10 }}>
-        {this.props.grade &&
+        {(this.props.grade && (
           <div>
             <p>Initial Grade: {this.props.data.initialGrade}</p>
             <p>Grade Adjustments: {this.props.data.gradeAdjustment}</p>
           </div>
-        || this.props.exp &&
-          <div>
-            <p>Initial XP: {this.props.data.initialXp}</p>
-            <p>XP Adjustments: {this.props.data.xpAdjustment}</p>
-          </div>
-        }
+        )) ||
+          (this.props.exp && (
+            <div>
+              <p>Initial XP: {this.props.data.initialXp}</p>
+              <p>XP Adjustments: {this.props.data.xpAdjustment}</p>
+            </div>
+          ))}
       </div>
     )
 
@@ -71,10 +72,7 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
         position={Position.LEFT}
         interactionKind={PopoverInteractionKind.HOVER}
       >
-        {
-          this.props.exp && <GradingExp/> 
-          || this.props.grade && <GradingMarks/>
-        }
+        {(this.props.exp && <GradingExp />) || (this.props.grade && <GradingMarks />)}
       </Popover>
     )
   }
