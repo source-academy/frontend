@@ -563,6 +563,27 @@ function hexToColor(hex) {
   ];
 }
 
+/**
+ * Function to add color to shape by specifying the red, green, blue value.
+ * Opacity is kept at default value of 1. (Full opacity)
+ * @param {*} shape The shape to add color to.
+ * @param {*} r The red value.
+ * @param {*} g The green value.
+ * @param {*} b The blue value.
+ */
+function color(shape, r, g, b) {
+  var wrapper = new Shape();
+  wrapper.addS(shape);
+  var color = [
+    r,
+    g,
+    b,
+    1
+  ]
+  wrapper.setColor(color);
+  return wrapper;
+}
+
 function addColorFromHex(shape, hex) {
   var wrapper = new Shape();
   wrapper.addS(shape);

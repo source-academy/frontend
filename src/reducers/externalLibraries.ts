@@ -5,6 +5,7 @@ import { ExternalLibraryName, ExternalLibraryNames } from '../components/assessm
  */
 const TwoDRunesExternals = [
   'show',
+  'color',
   'random_color',
   'red',
   'pink',
