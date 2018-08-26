@@ -175,7 +175,7 @@ class Grading extends React.Component<IGradingProps, State> {
     this.setState({ filterValue: changeVal })
 
     if (this.gridApi) {
-      this.gridApi.setQuickFilter(this.state.filterValue)
+      this.gridApi.setQuickFilter(changeVal)
     }
   }
 
