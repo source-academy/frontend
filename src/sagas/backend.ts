@@ -462,7 +462,11 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
           comment: null,
           id: question.id,
           library: castLibrary(question.library),
-          solution: gradingQuestion.solution ? gradingQuestion.solution : question.solution !== undefined ? question.solution : null || null,
+          solution: gradingQuestion.solution
+            ? gradingQuestion.solution
+            : question.solution !== undefined
+              ? question.solution
+              : null,
           solutionTemplate: question.solutionTemplate,
           type: question.type as QuestionType
         },

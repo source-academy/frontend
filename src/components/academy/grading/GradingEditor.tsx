@@ -92,14 +92,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
           />
         ) : null}
-        {
-          this.props.solution !== null
-            ? (
-              <div className="grading-editor-solution">
-                <pre> {this.props.solution.toString()} </pre>
-              </div>
-            ): null
-        }
+        {this.props.solution !== null ? (
+          <div className="grading-editor-solution">
+            <pre> {this.props.solution.toString()} </pre>
+          </div>
+        ) : null}
         <div className="grading-editor-input-parent">
           <table>
             <tbody>
