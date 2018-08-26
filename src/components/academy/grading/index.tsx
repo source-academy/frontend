@@ -50,28 +50,20 @@ export interface IStateProps {
 
 /** Component to render in table - marks */
 const GradingMarks = (props: GradingNavLinkProps) => {
-  if (props.data.currentGrade !== 0 && props.data.maxGrade !== 0) {
-    return (
-      <div>
-        {`${props.data.currentGrade}`} / {`${props.data.maxGrade}`}
-      </div>
-    )
-  } else {
-    return <div>N/A</div>
-  }
+  return <GradingHistory 
+            data={props.data}
+            exp={false}
+            grade={true}
+         />
 }
 
 /** Component to render in table - XP */
 const GradingExp = (props: GradingNavLinkProps) => {
-  if (props.data.currentXp && props.data.maxXp) {
-    return (
-      <div>
-        {`${props.data.currentXp}`} / {`${props.data.maxXp}`}
-      </div>
-    )
-  } else {
-    return <div>No Exp</div>
-  }
+  return <GradingHistory 
+            data={props.data}
+            exp={true}
+            grade={false}
+         />
 }
 
 class Grading extends React.Component<IGradingProps, State> {
@@ -109,12 +101,6 @@ class Grading extends React.Component<IGradingProps, State> {
           field: '',
           cellRendererFramework: GradingNavLink,
           maxWidth: 70
-        },
-        {
-          headerName: 'History',
-          field: '',
-          cellRendererFramework: GradingHistory,
-          maxWidth: 90
         }
       ],
 
@@ -171,6 +157,7 @@ class Grading extends React.Component<IGradingProps, State> {
               gridAutoHeight={true}
               enableColResize={true}
               enableSorting={true}
+              enableFilter={true}
               columnDefs={this.state.columnDefs}
               onGridReady={this.onGridReady}
               rowData={data}

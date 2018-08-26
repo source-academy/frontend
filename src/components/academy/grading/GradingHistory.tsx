@@ -1,12 +1,13 @@
-import { Icon, Popover, PopoverInteractionKind, Position } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
+import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core'
 
 import * as React from 'react'
 
 import { GradingOverview } from './gradingShape'
 
-type GradingNavLinkProps = {
-  data: GradingOverview
+type GradingHistoryProps = {
+  data: GradingOverview,
+  exp: boolean,
+  grade: boolean
 }
 
 /**
@@ -16,20 +17,53 @@ type GradingNavLinkProps = {
  *
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
-class GradingHistory extends React.Component<GradingNavLinkProps, {}> {
-  constructor(props: GradingNavLinkProps) {
+class GradingHistory extends React.Component<GradingHistoryProps, {}> {
+  constructor(props: GradingHistoryProps) {
     super(props)
   }
 
   public render() {
     const popoverInfo = () => (
       <div className="col-xs-12" style={{ padding: 10 }}>
-        <p>Initial Grade: {this.props.data.initialGrade}</p>
-        <p>Grade Adjustments: {this.props.data.gradeAdjustment}</p>
-        <p>Initial XP: {this.props.data.initialXp}</p>
-        <p>XP Adjustments: {this.props.data.xpAdjustment}</p>
+        {this.props.grade &&
+          <div>
+            <p>Initial Grade: {this.props.data.initialGrade}</p>
+            <p>Grade Adjustments: {this.props.data.gradeAdjustment}</p>
+          </div>
+        || this.props.exp &&
+          <div>
+            <p>Initial XP: {this.props.data.initialXp}</p>
+            <p>XP Adjustments: {this.props.data.xpAdjustment}</p>
+          </div>
+        }
       </div>
     )
+
+    /** Component to render in table - marks */
+    const GradingMarks = () => {
+      if (this.props.data.currentGrade !== 0 && this.props.data.maxGrade !== 0) {
+        return (
+          <div>
+            {`${this.props.data.currentGrade}`} / {`${this.props.data.maxGrade}`}
+          </div>
+        )
+      } else {
+        return <div>N/A</div>
+      }
+    }
+
+    /** Component to render in table - XP */
+    const GradingExp = () => {
+      if (this.props.data.currentXp && this.props.data.maxXp) {
+        return (
+          <div>
+            {`${this.props.data.currentXp}`} / {`${this.props.data.maxXp}`}
+          </div>
+        )
+      } else {
+        return <div>No Exp</div>
+      }
+    }
 
     return (
       <Popover
@@ -37,7 +71,10 @@ class GradingHistory extends React.Component<GradingNavLinkProps, {}> {
         position={Position.LEFT}
         interactionKind={PopoverInteractionKind.HOVER}
       >
-        <Icon className="grade-edit-icon" iconSize={16} icon={IconNames.HISTORY} />
+        {
+          this.props.exp && <GradingExp/> 
+          || this.props.grade && <GradingMarks/>
+        }
       </Popover>
     )
   }
