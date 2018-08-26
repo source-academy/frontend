@@ -196,7 +196,7 @@ class Grading extends React.Component<IGradingProps, State> {
     if (this.gridApi === undefined) {
       return
     }
-    this.gridApi.exportDataAsCsv({allColumns: true})
+    this.gridApi.exportDataAsCsv({ allColumns: true })
   }
 }
 
