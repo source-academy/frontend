@@ -93,7 +93,15 @@ class Grading extends React.Component<IGradingProps, State> {
           field: '',
           cellRendererFramework: GradingNavLink,
           maxWidth: 70
-        }
+        },
+        { headerName: 'Initial Grade', field: 'initialGrade', hide: true },
+        { headerName: 'Grade Adjustment', field: 'gradeAdjustment', hide: true },
+        { headerName: 'Initial XP', field: 'initialXp', hide: true },
+        { headerName: 'XP Adjustment', field: 'xpAdjustment', hide: true },
+        { headerName: 'Current Grade', field: 'currentGrade', hide: true },
+        { headerName: 'Max Grade', field: 'maxGrade', hide: true },
+        { headerName: 'Current XP', field: 'currentXp', hide: true },
+        { headerName: 'Max XP', field: 'maxXp', hide: true }
       ],
 
       filterValue: ''
@@ -188,7 +196,7 @@ class Grading extends React.Component<IGradingProps, State> {
     if (this.gridApi === undefined) {
       return
     }
-    this.gridApi.exportDataAsCsv()
+    this.gridApi.exportDataAsCsv({allColumns: true})
   }
 }
 
