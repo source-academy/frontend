@@ -119,7 +119,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                     fill={true}
                     placeholder="Adjust grades relatively here"
                     min={0 - this.props.initialGrade}
-                    max={this.props.maxGrade > this.props.initialGrade ? this.props.maxGrade - this.props.initialGrade : undefined}
+                    max={
+                      this.props.maxGrade > this.props.initialGrade
+                        ? this.props.maxGrade - this.props.initialGrade
+                        : undefined
+                    }
                   />
                 </td>
                 <th> {`Your adjustment:`} </th>
@@ -132,7 +136,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                     fill={true}
                     placeholder="Adjust XP relatively here"
                     min={0 - this.props.initialXp}
-                    max={this.props.maxXp > this.props.initialXp ? this.props.maxXp - this.props.initialXp : undefined}
+                    max={
+                      this.props.maxXp > this.props.initialXp
+                        ? this.props.maxXp - this.props.initialXp
+                        : undefined
+                    }
                   />
                 </td>
               </tr>
