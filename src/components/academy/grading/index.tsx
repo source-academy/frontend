@@ -1,4 +1,4 @@
-import { InputGroup, NonIdealState, Spinner } from '@blueprintjs/core'
+import { Colors, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid'
 import { AgGridReact } from 'ag-grid-react'
@@ -92,7 +92,7 @@ class Grading extends React.Component<IGradingProps, State> {
           maxWidth: 100,
           cellStyle: params => {
             if (params.data.currentGrade < params.data.maxGrade) {
-              return { backgroundColor: '#ffe6e6' }
+              return { backgroundColor: Colors.RED5 }
             } else {
               return {}
             }
