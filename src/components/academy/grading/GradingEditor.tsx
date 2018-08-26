@@ -119,7 +119,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                     fill={true}
                     placeholder="Adjust grades relatively here"
                     min={0 - this.props.initialGrade}
-                    max={this.props.maxGrade - this.props.initialGrade}
+                    max={this.props.maxGrade > this.props.initialGrade ? this.props.maxGrade - this.props.initialGrade : undefined}
                   />
                 </td>
                 <th> {`Your adjustment:`} </th>
@@ -132,7 +132,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                     fill={true}
                     placeholder="Adjust XP relatively here"
                     min={0 - this.props.initialXp}
-                    max={this.props.maxXp - this.props.initialXp}
+                    max={this.props.maxXp > this.props.initialXp ? this.props.maxXp - this.props.initialXp : undefined}
                   />
                 </td>
               </tr>
@@ -196,7 +196,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       )
     } else if (xp < 0 || xp > this.props.maxXp) {
       showWarningMessage(
-        `XP ${xp.toString()} is out of bounds. Maximum grade is ${this.props.maxXp.toString()}.`
+        `XP ${xp.toString()} is out of bounds. Maximum xp is ${this.props.maxXp.toString()}.`
       )
     } else {
       this.props.handleGradingSave(
@@ -244,7 +244,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
 
   private hasUnsavedChanges = () => {
     const gradeAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined)
-    const xpAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined)
+    const xpAdjustmentInput = stringParamToInt(this.state.xpAdjustmentInput || undefined)
     return (
       this.props.comment !== this.state.mdeState.markdown ||
       this.props.gradeAdjustment !== gradeAdjustmentInput ||
