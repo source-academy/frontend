@@ -138,7 +138,7 @@ class Grading extends React.Component<IGradingProps, State> {
     const grid = (
       <div className="GradingContainer">
         <div>
-          <div className="col-md-6">
+          <div className="col-md-6 col-md-offset-3">
             <InputGroup
               large={false}
               leftIcon="filter"
