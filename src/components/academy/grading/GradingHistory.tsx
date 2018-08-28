@@ -42,7 +42,7 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
 
     /** Component to render in table - marks */
     const GradingMarks = () => {
-      if (this.props.data.currentGrade !== 0 && this.props.data.maxGrade !== 0) {
+      if (this.props.data.maxGrade !== 0) {
         return (
           <div>
             {`${this.props.data.currentGrade}`} / {`${this.props.data.maxGrade}`}
