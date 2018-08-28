@@ -205,13 +205,21 @@ function* backendSaga(): SagaIterator {
       submissionId,
       questionId,
       comment,
-      adjustment
+      gradeAdjustment,
+      xpAdjustment
     } = (action as actionTypes.IAction).payload
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }))
-    const resp = yield postGrading(submissionId, questionId, comment, adjustment, tokens)
+    const resp = yield postGrading(
+      submissionId,
+      questionId,
+      comment,
+      gradeAdjustment,
+      xpAdjustment,
+      tokens
+    )
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
       // Now, update the grade for the question in the Grading in the store
@@ -221,9 +229,11 @@ function* backendSaga(): SagaIterator {
       const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
         if (gradingQuestion.question.id === questionId) {
           gradingQuestion.grade = {
-            adjustment,
+            gradeAdjustment,
+            xpAdjustment,
             comment,
-            grade: gradingQuestion.grade.grade
+            grade: gradingQuestion.grade.grade,
+            xp: gradingQuestion.grade.xp
           }
         }
         return gradingQuestion
@@ -443,25 +453,29 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
   if (response) {
     const gradingResult = await response.json()
     const grading: Grading = gradingResult.map((gradingQuestion: any) => {
-      const { question, maxGrade, grade } = gradingQuestion
+      const { question, maxGrade, maxXp, grade } = gradingQuestion
       return {
         question: {
           answer: question.answer,
           choices: question.choices,
           content: question.content,
+          comment: null,
           id: question.id,
           library: castLibrary(question.library),
           solution: question.answer,
           solutionTemplate: question.solutionTemplate,
           type: question.type as QuestionType
         },
-        maximumGrade: maxGrade,
+        maxGrade,
+        maxXp,
         grade: {
           grade: grade.grade,
+          xp: grade.xp,
           comment: grade.comment || '',
-          adjustment: grade.adjustment
+          gradeAdjustment: grade.adjustment,
+          xpAdjustment: grade.xpAdjustment
         }
-      }
+      } as GradingQuestion
     })
     return grading
   } else {
@@ -476,7 +490,8 @@ const postGrading = async (
   submissionId: number,
   questionId: number,
   comment: string,
-  adjustment: number,
+  gradeAdjustment: number,
+  xpAdjustment: number,
   tokens: Tokens
 ) => {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
@@ -484,7 +499,8 @@ const postGrading = async (
     body: {
       grading: {
         comment: `${comment}`,
-        adjustment
+        adjustment: gradeAdjustment,
+        xpAdjustment
       }
     },
     noHeaderAccept: true,
