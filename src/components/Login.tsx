@@ -32,7 +32,8 @@ const Login: React.SFC<LoginProps> = props => {
         <Card className="login-card pt-elevation-4">
           <div className="login-header">
             <h4>
-              <Icon icon={IconNames.LOCK} />LOGIN
+              <Icon icon={IconNames.LOCK} />
+              LOGIN
             </h4>
           </div>
           <div className="login-body">
