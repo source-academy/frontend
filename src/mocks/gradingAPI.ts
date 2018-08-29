@@ -85,6 +85,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       id: 0,
       library: mockLibrary,
       solutionTemplate: '0th question mock solution template',
+      solution: 'This is how the 0th question is `solved`',
       type: 'programming'
     },
     maxGrade: 1000,
@@ -105,6 +106,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       id: 1,
       library: mockLibrary,
       solutionTemplate: '1st question mock solution template',
+      solution: null,
       type: 'programming'
     },
     maxGrade: 200,

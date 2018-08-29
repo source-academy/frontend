@@ -23,6 +23,7 @@ export type DispatchProps = {
 
 export type OwnProps = {
   comment: string
+  solution: number | string | null
   questionId: number
   submissionId: number
   initialGrade: number
@@ -90,6 +91,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           <Prompt
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
           />
+        ) : null}
+        {this.props.solution !== null ? (
+          <div className="grading-editor-solution">
+            <pre> {this.props.solution.toString()} </pre>
+          </div>
         ) : null}
         <div className="grading-editor-input-parent">
           <table>
