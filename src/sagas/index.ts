@@ -200,14 +200,16 @@ function* workspaceSaga(): SagaIterator {
     const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
     switch (externalLibraryName) {
       case ExternalLibraryNames.TWO_DIM_RUNES:
-        ;(window as any).getReadyWebGLForCanvas('2d')
         ;(window as any).loadLib('TWO_DIM_RUNES')
+        ;(window as any).getReadyWebGLForCanvas('2d')
         break
       case ExternalLibraryNames.THREE_DIM_RUNES:
         ;(window as any).loadLib('THREE_DIM_RUNES')
+        ;(window as any).getReadyWebGLForCanvas('3d')
         break
       case ExternalLibraryNames.CURVES:
         ;(window as any).loadLib('CURVES')
+        ;(window as any).getReadyWebGLForCanvas('curve')
         break
     }
     const globals: Array<[string, any]> = (action as actionTypes.IAction).payload.library.globals
