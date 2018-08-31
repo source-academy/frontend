@@ -14,7 +14,7 @@ function dynamicallyLoadScript(url) {
 /**
  * Loads all the required libraries
  */
-function loadLibs() {
+function loadAllLibs() {
   const files = [
     // list library 
     '/externalLibs/list.js',
@@ -39,4 +39,47 @@ function loadLibs() {
   }
 }
 
-loadLibs();
+function loadLib(externalLibraryName) {
+  let files;
+  switch(externalLibraryName) {
+    case "TWO_DIM_RUNES":
+      files = [
+        // graphics
+        '/externalLibs/graphics/gl-matrix.js',
+        '/externalLibs/graphics/webGLgraphics.js',
+        '/externalLibs/graphics/webGLrune.js',
+      ];
+      for (var i = 0; i < files.length; i++) {
+        dynamicallyLoadScript(files[i]);
+      }
+      break;
+    case "THREE_DIM_RUNES":
+      files = [
+        // graphics
+        '/externalLibs/graphics/gl-matrix.js',
+        '/externalLibs/graphics/webGLgraphics.js',
+        '/externalLibs/graphics/webGLrune.js',
+      ];
+      for (var i = 0; i < files.length; i++) {
+        dynamicallyLoadScript(files[i]);
+      }
+      break;
+    case "CURVES":
+      files = [
+        // graphics
+        '/externalLibs/graphics/gl-matrix.js',
+        '/externalLibs/graphics/webGLhi_graph.js',
+        '/externalLibs/graphics/webGLhi_graph_ce.js',
+        '/externalLibs/graphics/webGLgraphics.js',
+        '/externalLibs/graphics/webGLcurve.js',
+      ];
+      for (var i = 0; i < files.length; i++) {
+        dynamicallyLoadScript(files[i]);
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+loadAllLibs();
