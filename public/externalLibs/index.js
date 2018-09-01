@@ -49,9 +49,6 @@ function loadLib(externalLibraryName) {
         '/externalLibs/graphics/webGLgraphics.js',
         '/externalLibs/graphics/webGLrune.js',
       ];
-      for (var i = 0; i < files.length; i++) {
-        dynamicallyLoadScript(files[i]);
-      }
       break;
     case "THREE_DIM_RUNES":
       files = [
@@ -60,9 +57,6 @@ function loadLib(externalLibraryName) {
         '/externalLibs/graphics/webGLgraphics.js',
         '/externalLibs/graphics/webGLrune.js',
       ];
-      for (var i = 0; i < files.length; i++) {
-        dynamicallyLoadScript(files[i]);
-      }
       break;
     case "CURVES":
       files = [
@@ -73,12 +67,12 @@ function loadLib(externalLibraryName) {
         '/externalLibs/graphics/webGLgraphics.js',
         '/externalLibs/graphics/webGLcurve.js',
       ];
-      for (var i = 0; i < files.length; i++) {
-        dynamicallyLoadScript(files[i]);
-      }
       break;
     default:
       break;
+  }
+  for (var i = 0; i < files.length; i++) {
+    dynamicallyLoadScript(files[i]);
   }
 }
 
