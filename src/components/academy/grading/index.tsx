@@ -138,11 +138,7 @@ class Grading extends React.Component<IGradingProps, State> {
     const grid = (
       <div className="GradingContainer">
         <div>
-          <FormGroup
-              label="Filter:"
-              labelFor="text-input"
-              inline={true}
-          >
+          <FormGroup label="Filter:" labelFor="text-input" inline={true}>
             <InputGroup
               id="filterBar"
               large={false}
@@ -151,15 +147,14 @@ class Grading extends React.Component<IGradingProps, State> {
               value={this.state.filterValue}
               onChange={this.handleFilterChange}
             />
-            
           </FormGroup>
 
           <div className="col-md-2">
-            <Checkbox  label="Show all submissions"  />
+            <Checkbox label="Show all submissions" />
           </div>
         </div>
 
-        <hr/>
+        <hr />
         <br />
 
         <div className="Grading">
