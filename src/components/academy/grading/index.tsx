@@ -1,4 +1,4 @@
-import { Colors, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core'
+import { Checkbox, Colors, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid'
 import { AgGridReact } from 'ag-grid-react'
@@ -138,17 +138,28 @@ class Grading extends React.Component<IGradingProps, State> {
     const grid = (
       <div className="GradingContainer">
         <div>
-          <div className="col-md-6 col-md-offset-3">
+          <FormGroup
+              label="Filter:"
+              labelFor="text-input"
+              inline={true}
+          >
             <InputGroup
+              id="filterBar"
               large={false}
               leftIcon="filter"
-              placeholder="Filter..."
+              placeholder="Enter any text(e.g. mission)"
               value={this.state.filterValue}
               onChange={this.handleFilterChange}
             />
+            
+          </FormGroup>
+
+          <div className="col-md-2">
+            <Checkbox  label="Show all submissions"  />
           </div>
         </div>
 
+        <hr/>
         <br />
 
         <div className="Grading">
@@ -161,6 +172,8 @@ class Grading extends React.Component<IGradingProps, State> {
               columnDefs={this.state.columnDefs}
               onGridReady={this.onGridReady}
               rowData={data}
+              pagination={true}
+              paginationPageSize={50}
             />
           </div>
           <div className="ag-grid-export-button">
