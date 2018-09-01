@@ -16,30 +16,41 @@ export type DispatchProps = {
     submissionId: number,
     questionId: number,
     comment: string,
-    adjustment: number | undefined
+    gradeAdjustment: number | undefined,
+    xpAdjustment: number | undefined
   ) => void
 }
 
 export type OwnProps = {
-  adjustment: number
   comment: string
-  initialGrade: number
-  maximumGrade: number
+  solution: number | string | null
   questionId: number
   submissionId: number
+  initialGrade: number
+  gradeAdjustment: number
+  maxGrade: number
+  initialXp: number
+  xpAdjustment: number
+  maxXp: number
 }
 
 /**
  * Keeps track of the current editor state,
  * as well as the grade adjustment in the numeric input.
  *
- * @prop adjustmentInput a potentially null string. this property being null
+ * @prop gradeAdjustmentInput a potentially null string which defines the
+ *   result for the number grade input. This property being null
+ *   will show the hint text in the NumericInput. This property is a string
+ *   so as to allow input such as the '-' character.
+ * @prop xpAdjustmentInput a potentially null string which defines the
+ *   result for the number grade input. This property being null
  *   will show the hint text in the NumericInput. This property is a string
  *   so as to allow input such as the '-' character.
  */
 type State = {
   mdeState: ReactMdeTypes.MdeState
-  adjustmentInput: string | null
+  gradeAdjustmentInput: string | null
+  xpAdjustmentInput: string | null
 }
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
@@ -51,7 +62,8 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       mdeState: {
         markdown: props.comment
       },
-      adjustmentInput: props.adjustment.toString()
+      gradeAdjustmentInput: props.gradeAdjustment.toString(),
+      xpAdjustmentInput: props.xpAdjustment.toString()
     }
     /**
      * The markdown-to-html converter for the editor.
@@ -80,6 +92,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
           />
         ) : null}
+        {this.props.solution !== null ? (
+          <div className="grading-editor-solution">
+            <pre> {this.props.solution.toString()} </pre>
+          </div>
+        ) : null}
         <div className="grading-editor-input-parent">
           <table>
             <tbody>
@@ -87,7 +104,13 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                 <th> {`Auto-grader's grade:`} </th>
                 <td>
                   <Text>
-                    {this.props.initialGrade} / {this.props.maximumGrade}
+                    {this.props.initialGrade} / {this.props.maxGrade}
+                  </Text>
+                </td>
+                <th> {`Auto-grader's XP:`} </th>
+                <td>
+                  <Text>
+                    {this.props.initialXp} / {this.props.maxXp}
                   </Text>
                 </td>
               </tr>
@@ -96,13 +119,34 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                 <td>
                   <NumericInput
                     className="grading-adjustment-input"
-                    onValueChange={this.onAdjustmentInputChange}
-                    value={this.state.adjustmentInput || ''}
+                    onValueChange={this.onGradeAdjustmentInputChange}
+                    value={this.state.gradeAdjustmentInput || ''}
                     buttonPosition={Position.RIGHT}
                     fill={true}
                     placeholder="Adjust grades relatively here"
                     min={0 - this.props.initialGrade}
-                    max={this.props.maximumGrade - this.props.initialGrade}
+                    max={
+                      this.props.maxGrade > this.props.initialGrade
+                        ? this.props.maxGrade - this.props.initialGrade
+                        : undefined
+                    }
+                  />
+                </td>
+                <th> {`Your adjustment:`} </th>
+                <td>
+                  <NumericInput
+                    className="grading-adjustment-input"
+                    onValueChange={this.onXpAdjustmentInputChange}
+                    value={this.state.xpAdjustmentInput || ''}
+                    buttonPosition={Position.RIGHT}
+                    fill={true}
+                    placeholder="Adjust XP relatively here"
+                    min={0 - this.props.initialXp}
+                    max={
+                      this.props.maxXp > this.props.initialXp
+                        ? this.props.maxXp - this.props.initialXp
+                        : undefined
+                    }
                   />
                 </td>
               </tr>
@@ -111,8 +155,16 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                 <td>
                   <Text>
                     {this.props.initialGrade +
-                      (stringParamToInt(this.state.adjustmentInput || undefined) || 0)}{' '}
-                    / {this.props.maximumGrade}
+                      (stringParamToInt(this.state.gradeAdjustmentInput || undefined) || 0)}{' '}
+                    / {this.props.maxGrade}
+                  </Text>
+                </td>
+                <th> {`Final XP:`} </th>
+                <td>
+                  <Text>
+                    {this.props.initialXp +
+                      (stringParamToInt(this.state.xpAdjustmentInput || undefined) || 0)}{' '}
+                    / {this.props.maxXp}
                   </Text>
                 </td>
               </tr>
@@ -146,32 +198,54 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private onClickSaveButton = () => {
-    const adjustmentInput = stringParamToInt(this.state.adjustmentInput || undefined) || undefined
-    const grade = this.props.initialGrade + (adjustmentInput || 0)
-    if (grade < 0 || grade > this.props.maximumGrade) {
+    const gradeAdjustmentInput =
+      stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined
+    const grade = this.props.initialGrade + (gradeAdjustmentInput || 0)
+    const xpAdjustmentInput =
+      stringParamToInt(this.state.xpAdjustmentInput || undefined) || undefined
+    const xp = this.props.initialXp + (xpAdjustmentInput || 0)
+    if (grade < 0 || grade > this.props.maxGrade) {
       showWarningMessage(
-        `Grade ${grade.toString()} is out of bounds. Maximum grade is ${this.props.maximumGrade.toString()}.`
+        `Grade ${grade.toString()} is out of bounds. Maximum grade is ${this.props.maxGrade.toString()}.`
+      )
+    } else if (xp < 0 || xp > this.props.maxXp) {
+      showWarningMessage(
+        `XP ${xp.toString()} is out of bounds. Maximum xp is ${this.props.maxXp.toString()}.`
       )
     } else {
       this.props.handleGradingSave(
         this.props.submissionId,
         this.props.questionId,
         this.state.mdeState.markdown!,
-        adjustmentInput
+        gradeAdjustmentInput,
+        xpAdjustmentInput
       )
     }
   }
 
   /**
-   * Handles changes in the NumericInput, and updates the local State.
+   * Handles changes in the grade NumericInput, and updates the local State.
    *
    * @param valueAsNumber an unused parameter, as we use strings for the input. @see State
    * @param valueAsString a string that contains the input. To be parsed by another function.
    */
-  private onAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
+  private onGradeAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
     this.setState({
       ...this.state,
-      adjustmentInput: valueAsString
+      gradeAdjustmentInput: valueAsString
+    })
+  }
+
+  /**
+   * Handles changes in the XP NumericInput, and updates the local State.
+   *
+   * @param valueAsNumber an unused parameter, as we use strings for the input. @see State
+   * @param valueAsString a string that contains the input. To be parsed by another function.
+   */
+  private onXpAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
+    this.setState({
+      ...this.state,
+      xpAdjustmentInput: valueAsString
     })
   }
 
@@ -183,10 +257,12 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   }
 
   private hasUnsavedChanges = () => {
-    const adjustmentInput = stringParamToInt(this.state.adjustmentInput || undefined)
+    const gradeAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined)
+    const xpAdjustmentInput = stringParamToInt(this.state.xpAdjustmentInput || undefined)
     return (
       this.props.comment !== this.state.mdeState.markdown ||
-      this.props.adjustment !== adjustmentInput
+      this.props.gradeAdjustment !== gradeAdjustmentInput ||
+      this.props.xpAdjustment !== xpAdjustmentInput
     )
   }
 

@@ -152,6 +152,13 @@
 }
 
 .GradingEditor {
+  .grading-editor-solution {
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      word-break: break-word;
+    }
+  }
   .grading-editor-input-parent {
     /** Center the text for numeric input and showing grades. */
     table {
@@ -193,4 +200,16 @@
   .ag-grid-export-button {
     margin-top: 20px;
   }
+}
+
+.ag-header-cell-label {
+  justify-content: center;
+  font-weight: bold;
+  padding-left: 15px;
+}
+
+.ag-cell {
+  padding-top: 4px;
+  justify-content: center;
+  text-align: center;
 }

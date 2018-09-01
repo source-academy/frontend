@@ -5,13 +5,17 @@ import { AssessmentCategory, IQuestion, MCQChoice } from '../../assessment/asses
  * for a particular assessment. Used for display in the UI.
  */
 export type GradingOverview = {
-  adjustments: number
   assessmentId: number
   assessmentName: string
   assessmentCategory: AssessmentCategory
   initialGrade: number
+  gradeAdjustment: number
   currentGrade: number
-  maximumGrade: number
+  maxGrade: number
+  initialXp: number
+  xpAdjustment: number
+  currentXp: number
+  maxXp: number
   studentId: number
   studentName: string
   submissionId: number
@@ -29,11 +33,14 @@ export type Grading = GradingQuestion[]
  */
 export type GradingQuestion = {
   question: IAnsweredQuestion
-  maximumGrade: number
+  maxGrade: number
+  maxXp: number
   grade: {
-    adjustment: number
     comment: string
     grade: number
+    gradeAdjustment: number
+    xp: number
+    xpAdjustment: number
   }
 }
 
@@ -45,10 +52,12 @@ export type GradingQuestion = {
  *
  * @property comment This property is already present in GradingQuestion,
  *   and thus does not need to be used here, and is set to null
+ * @property solution this can be either the answer to the MCQ, the solution to
+ *   a programming question, or null.
  */
 interface IAnsweredQuestion extends IQuestion {
   comment: null
-  solution?: number
+  solution: number | string | null
   answer: string | number | null
   solutionTemplate?: string
   choices?: MCQChoice[]
