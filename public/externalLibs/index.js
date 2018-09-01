@@ -12,7 +12,7 @@ function dynamicallyLoadScript(url) {
 }
 
 /**
- * Loads all the required libraries
+ * Loads all libraries, including sound and graphics.
  */
 function loadAllLibs() {
   const files = [
@@ -39,6 +39,11 @@ function loadAllLibs() {
   }
 }
 
+/**
+ * Loads libraries according to the name provided.
+ * This is to faciliate a lack of namespace clash for 
+ * graphics libraries (@see #341)
+ */
 function loadLib(externalLibraryName) {
   let files;
   switch(externalLibraryName) {
