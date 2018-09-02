@@ -59,7 +59,10 @@ export const mockGradingOverviews: GradingOverview[] = [
  *
  * @param accessToken a valid access token for the cadet backend.
  */
-export const mockFetchGradingOverview = (accessToken: string, group: boolean): GradingOverview[] | null => {
+export const mockFetchGradingOverview = (
+  accessToken: string,
+  group: boolean
+): GradingOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
   const role: Role | null = mockFetchRole(accessToken)
