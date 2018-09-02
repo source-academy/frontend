@@ -42,6 +42,14 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.updateAssessment({ ...assessment }))
   })
 
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS_GROUP, function*() {
+    const accessToken = yield select((state: IState) => state.session.accessToken)
+    const gradingOverviews = yield call(() => mockFetchGradingOverview(accessToken))
+    if (gradingOverviews !== null) {
+      yield put(actions.updateGradingOverviews([...gradingOverviews]))
+    }
+  })
+
   yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
     const accessToken = yield select((state: IState) => state.session.accessToken)
     const gradingOverviews = yield call(() => mockFetchGradingOverview(accessToken))

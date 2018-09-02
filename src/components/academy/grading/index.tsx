@@ -1,4 +1,4 @@
-import { Checkbox, Colors, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core'
+import { Colors, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid'
 import { AgGridReact } from 'ag-grid-react'
@@ -24,6 +24,7 @@ import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace'
 type State = {
   columnDefs: ColDef[]
   filterValue: string
+  groupsFilter: boolean
 }
 
 type GradingNavLinkProps = {
@@ -42,6 +43,7 @@ export interface IGradingWorkspaceParams {
 
 export interface IDispatchProps {
   handleFetchGradingOverviews: () => void
+  handleFetchGradingOverviewsForGroup: () => void
 }
 
 export interface IStateProps {
@@ -104,7 +106,9 @@ class Grading extends React.Component<IGradingProps, State> {
         { headerName: 'Max XP', field: 'maxXp', hide: true }
       ],
 
-      filterValue: ''
+      filterValue: '',
+
+      groupsFilter: false
     }
   }
 
@@ -149,8 +153,15 @@ class Grading extends React.Component<IGradingProps, State> {
             />
           </FormGroup>
 
-          <div className="col-md-2">
-            <Checkbox label="Show all submissions" />
+          <div className="checkboxPanel">
+            <label>Show All Submissions:</label>
+            &nbsp;&nbsp;
+            <input
+              name="showAllSubmissions"
+              type="checkbox"
+              checked={this.state.groupsFilter}
+              onChange={this.handleGroupsFilter}
+            />
           </div>
         </div>
 
@@ -179,7 +190,7 @@ class Grading extends React.Component<IGradingProps, State> {
     )
     return (
       <ContentDisplay
-        loadContentDispatch={this.props.handleFetchGradingOverviews}
+        loadContentDispatch={this.props.handleFetchGradingOverviewsForGroup}
         display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
         fullWidth={false}
       />
@@ -192,6 +203,17 @@ class Grading extends React.Component<IGradingProps, State> {
 
     if (this.gridApi) {
       this.gridApi.setQuickFilter(changeVal)
+    }
+  }
+
+  private handleGroupsFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checkStatus = event.target.checked
+    this.setState({ groupsFilter: checkStatus })
+
+    if (checkStatus) {
+      this.props.handleFetchGradingOverviews()
+    } else {
+      this.props.handleFetchGradingOverviewsForGroup()
     }
   }
 

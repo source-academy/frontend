@@ -34,6 +34,10 @@ export const fetchGradingOverviews = () => ({
   type: actionTypes.FETCH_GRADING_OVERVIEWS
 })
 
+export const fetchGradingOverviewsForGroup = () => ({
+  type: actionTypes.FETCH_GRADING_OVERVIEWS_GROUP
+})
+
 export const login = () => ({
   type: actionTypes.LOGIN
 })
