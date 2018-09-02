@@ -58,6 +58,7 @@ export const mockGradingOverviews: GradingOverview[] = [
  * A null value is returned for invalid token or role.
  *
  * @param accessToken a valid access token for the cadet backend.
+ * @param group a boolean if true, only fetches submissions from the grader's group
  */
 export const mockFetchGradingOverview = (
   accessToken: string,

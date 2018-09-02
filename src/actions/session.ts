@@ -30,6 +30,10 @@ export const fetchGrading = (submissionId: number) => ({
   payload: submissionId
 })
 
+/**
+ * @param filterToGroup - param when set to true, only shows submissions under the group
+ * of the grader
+ */
 export const fetchGradingOverviews = (filterToGroup = true) => ({
   type: actionTypes.FETCH_GRADING_OVERVIEWS,
   payload: filterToGroup

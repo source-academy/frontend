@@ -407,6 +407,7 @@ async function postAssessment(id: number, tokens: Tokens): Promise<Response | nu
 
 /*
  * GET /grading
+ * @params group - a boolean if true gets the submissions from the grader's group
  * @returns {Array} GradingOverview[]
  */
 async function getGradingOverviews(
