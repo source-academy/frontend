@@ -24,7 +24,7 @@ import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace'
 type State = {
   columnDefs: ColDef[]
   filterValue: string
-  groupsFilter: boolean
+  groupFilterEnabled: boolean
 }
 
 type GradingNavLinkProps = {
@@ -42,8 +42,7 @@ export interface IGradingWorkspaceParams {
 }
 
 export interface IDispatchProps {
-  handleFetchGradingOverviews: () => void
-  handleFetchGradingOverviewsForGroup: () => void
+  handleFetchGradingOverviews: (filterToGroup?: boolean) => void
 }
 
 export interface IStateProps {
@@ -108,7 +107,7 @@ class Grading extends React.Component<IGradingProps, State> {
 
       filterValue: '',
 
-      groupsFilter: false
+      groupFilterEnabled: false
     }
   }
 
@@ -159,7 +158,7 @@ class Grading extends React.Component<IGradingProps, State> {
             <input
               name="showAllSubmissions"
               type="checkbox"
-              checked={this.state.groupsFilter}
+              checked={this.state.groupFilterEnabled}
               onChange={this.handleGroupsFilter}
             />
           </div>
@@ -190,7 +189,7 @@ class Grading extends React.Component<IGradingProps, State> {
     )
     return (
       <ContentDisplay
-        loadContentDispatch={this.props.handleFetchGradingOverviewsForGroup}
+        loadContentDispatch={this.props.handleFetchGradingOverviews}
         display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
         fullWidth={false}
       />
@@ -208,13 +207,8 @@ class Grading extends React.Component<IGradingProps, State> {
 
   private handleGroupsFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checkStatus = event.target.checked
-    this.setState({ groupsFilter: checkStatus })
-
-    if (checkStatus) {
-      this.props.handleFetchGradingOverviews()
-    } else {
-      this.props.handleFetchGradingOverviewsForGroup()
-    }
+    this.setState({ groupFilterEnabled: checkStatus })
+    this.props.handleFetchGradingOverviews(!checkStatus)
   }
 
   private onGridReady = (params: GridReadyEvent) => {

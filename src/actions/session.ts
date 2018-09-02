@@ -30,12 +30,9 @@ export const fetchGrading = (submissionId: number) => ({
   payload: submissionId
 })
 
-export const fetchGradingOverviews = () => ({
-  type: actionTypes.FETCH_GRADING_OVERVIEWS
-})
-
-export const fetchGradingOverviewsForGroup = () => ({
-  type: actionTypes.FETCH_GRADING_OVERVIEWS_GROUP
+export const fetchGradingOverviews = (filterToGroup = true) => ({
+  type: actionTypes.FETCH_GRADING_OVERVIEWS,
+  payload: filterToGroup
 })
 
 export const login = () => ({

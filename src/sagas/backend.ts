@@ -173,23 +173,15 @@ function* backendSaga(): SagaIterator {
     }
   })
 
-  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS_GROUP, function*() {
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }))
-    const gradingOverviews = yield call(getGradingOverviews, tokens, true)
-    if (gradingOverviews) {
-      yield put(actions.updateGradingOverviews(gradingOverviews))
-    }
-  })
 
-  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
-    const tokens = yield select((state: IState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }))
-    const gradingOverviews = yield call(getGradingOverviews, tokens)
+    const filterToGroup = (action as actionTypes.IAction).payload
+
+    const gradingOverviews = yield call(getGradingOverviews, tokens, filterToGroup)
     if (gradingOverviews) {
       yield put(actions.updateGradingOverviews(gradingOverviews))
     }
@@ -419,7 +411,7 @@ async function postAssessment(id: number, tokens: Tokens): Promise<Response | nu
  */
 async function getGradingOverviews(
   tokens: Tokens,
-  group = false
+  group: boolean
 ): Promise<GradingOverview[] | null> {
   const response = await request(`grading?group=${group}`, 'GET', {
     accessToken: tokens.accessToken,
