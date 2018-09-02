@@ -173,12 +173,15 @@ function* backendSaga(): SagaIterator {
     }
   })
 
-  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }))
-    const gradingOverviews = yield call(getGradingOverviews, tokens)
+
+    const filterToGroup = (action as actionTypes.IAction).payload
+
+    const gradingOverviews = yield call(getGradingOverviews, tokens, filterToGroup)
     if (gradingOverviews) {
       yield put(actions.updateGradingOverviews(gradingOverviews))
     }
@@ -404,10 +407,14 @@ async function postAssessment(id: number, tokens: Tokens): Promise<Response | nu
 
 /*
  * GET /grading
+ * @params group - a boolean if true gets the submissions from the grader's group
  * @returns {Array} GradingOverview[]
  */
-async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | null> {
-  const response = await request('grading', 'GET', {
+async function getGradingOverviews(
+  tokens: Tokens,
+  group: boolean
+): Promise<GradingOverview[] | null> {
+  const response = await request(`grading?group=${group}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true

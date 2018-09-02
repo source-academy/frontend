@@ -58,15 +58,19 @@ export const mockGradingOverviews: GradingOverview[] = [
  * A null value is returned for invalid token or role.
  *
  * @param accessToken a valid access token for the cadet backend.
+ * @param group a boolean if true, only fetches submissions from the grader's group
  */
-export const mockFetchGradingOverview = (accessToken: string): GradingOverview[] | null => {
+export const mockFetchGradingOverview = (
+  accessToken: string,
+  group: boolean
+): GradingOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
   const role: Role | null = mockFetchRole(accessToken)
   if (role === null || !permittedRoles.includes(role)) {
     return null
   } else {
-    return mockGradingOverviews
+    return group ? [mockGradingOverviews[0]] : mockGradingOverviews
   }
 }
 
