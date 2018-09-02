@@ -85,7 +85,9 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'put_in_standard_position',
       'full_view_proportional',
       'squeeze_full_view',
-      'squeeze_rectangular_portion'
+      'squeeze_rectangular_portion',
+      'translate',
+      'scale'
     ]
   ],
   [
