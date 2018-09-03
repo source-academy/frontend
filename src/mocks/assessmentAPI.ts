@@ -15,14 +15,17 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
+    grade: 1,
     id: 0,
-    maximumGrade: 3000,
+    maxGrade: 3000,
+    maxXp: 1000,
     openAt: '2038-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes (Duplicate)',
     shortSummary:
       'This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0',
     status: AssessmentStatuses.not_attempted,
-    story: 'mission-1'
+    story: 'mission-1',
+    xp: 0
   }
 ]
 
@@ -31,8 +34,10 @@ const mockOpenedAssessmentsOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
+    grade: 2,
     id: 0,
-    maximumGrade: 3000,
+    maxGrade: 3000,
+    maxXp: 1000,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
     shortSummary: `
@@ -50,33 +55,40 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
 
 `,
     status: AssessmentStatuses.attempted,
-    story: 'mission-1'
+    story: 'mission-1',
+    xp: 1
   },
   {
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
+    grade: 3,
     id: 1,
-    maximumGrade: 3000,
+    maxGrade: 3000,
+    maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'The Secret to Streams',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.attempting,
-    story: 'mission-2'
+    story: 'mission-2',
+    xp: 2
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
+    grade: 4,
     id: 2,
-    maximumGrade: 3000,
+    maxGrade: 3000,
+    maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Sidequest',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.not_attempted,
-    story: 'sidequest-2.1'
+    story: 'sidequest-2.1',
+    xp: 3
   }
 ]
 
@@ -85,27 +97,33 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
+    grade: 5,
     id: 3,
-    maximumGrade: 3000,
+    maxGrade: 3000,
+    maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.submitted,
-    story: 'mission-3'
+    story: 'mission-3',
+    xp: 4
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
+    grade: 6,
     id: 4,
-    maximumGrade: 3000,
+    maxGrade: 3000,
+    maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed sidequest',
     shortSummary:
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.submitted,
-    story: null
+    story: null,
+    xp: 5
   }
 ]
 

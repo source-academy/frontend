@@ -173,12 +173,15 @@ function* backendSaga(): SagaIterator {
     }
   })
 
-  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*() {
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }))
-    const gradingOverviews = yield call(getGradingOverviews, tokens)
+
+    const filterToGroup = (action as actionTypes.IAction).payload
+
+    const gradingOverviews = yield call(getGradingOverviews, tokens, filterToGroup)
     if (gradingOverviews) {
       yield put(actions.updateGradingOverviews(gradingOverviews))
     }
@@ -205,13 +208,21 @@ function* backendSaga(): SagaIterator {
       submissionId,
       questionId,
       comment,
-      adjustment
+      gradeAdjustment,
+      xpAdjustment
     } = (action as actionTypes.IAction).payload
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }))
-    const resp = yield postGrading(submissionId, questionId, comment, adjustment, tokens)
+    const resp = yield postGrading(
+      submissionId,
+      questionId,
+      comment,
+      gradeAdjustment,
+      xpAdjustment,
+      tokens
+    )
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000)
       // Now, update the grade for the question in the Grading in the store
@@ -221,9 +232,11 @@ function* backendSaga(): SagaIterator {
       const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
         if (gradingQuestion.question.id === questionId) {
           gradingQuestion.grade = {
-            adjustment,
+            gradeAdjustment,
+            xpAdjustment,
             comment,
-            grade: gradingQuestion.grade.grade
+            grade: gradingQuestion.grade.grade,
+            xp: gradingQuestion.grade.xp
           }
         }
         return gradingQuestion
@@ -316,16 +329,8 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
        * backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
        *              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
        */
-
       overview.category = capitalise(overview.type)
       delete overview.type
-
-      /**
-       * backend has property maxGrade, we have property maximumGrade
-       */
-
-      overview.maximumGrade = overview.maxGrade
-      delete overview.maxGrade
 
       return overview as IAssessmentOverview
     })
@@ -402,10 +407,14 @@ async function postAssessment(id: number, tokens: Tokens): Promise<Response | nu
 
 /*
  * GET /grading
+ * @params group - a boolean if true gets the submissions from the grader's group
  * @returns {Array} GradingOverview[]
  */
-async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | null> {
-  const response = await request('grading', 'GET', {
+async function getGradingOverviews(
+  tokens: Tokens,
+  group: boolean
+): Promise<GradingOverview[] | null> {
+  const response = await request(`grading?group=${group}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -414,16 +423,22 @@ async function getGradingOverviews(tokens: Tokens): Promise<GradingOverview[] | 
     const gradingOverviews = await response.json()
     return gradingOverviews.map((overview: any) => {
       const gradingOverview: GradingOverview = {
-        adjustments: overview.adjustment,
         assessmentId: overview.assessment.id,
         assessmentName: overview.assessment.title,
         assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
-        initialGrade: overview.grade,
-        currentGrade: overview.grade + (overview.adjustment || 0),
-        maximumGrade: overview.assessment.maxGrade,
         studentId: overview.student.id,
         studentName: overview.student.name,
-        submissionId: overview.id
+        submissionId: overview.id,
+        // Grade
+        initialGrade: overview.grade,
+        gradeAdjustment: overview.adjustment,
+        currentGrade: overview.grade + overview.adjustment,
+        maxGrade: overview.assessment.maxGrade,
+        // XP
+        initialXp: overview.xp,
+        xpAdjustment: overview.xpAdjustment,
+        currentXp: overview.xp + overview.xpAdjustment,
+        maxXp: overview.assessment.maxXp
       }
       return gradingOverview
     })
@@ -445,25 +460,33 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
   if (response) {
     const gradingResult = await response.json()
     const grading: Grading = gradingResult.map((gradingQuestion: any) => {
-      const { question, maxGrade, grade } = gradingQuestion
+      const { question, maxGrade, maxXp, grade } = gradingQuestion
       return {
         question: {
           answer: question.answer,
           choices: question.choices,
           content: question.content,
+          comment: null,
           id: question.id,
           library: castLibrary(question.library),
-          solution: question.answer,
+          solution: gradingQuestion.solution
+            ? gradingQuestion.solution
+            : question.solution !== undefined
+              ? question.solution
+              : null,
           solutionTemplate: question.solutionTemplate,
           type: question.type as QuestionType
         },
-        maximumGrade: maxGrade,
+        maxGrade,
+        maxXp,
         grade: {
           grade: grade.grade,
+          xp: grade.xp,
           comment: grade.comment || '',
-          adjustment: grade.adjustment
+          gradeAdjustment: grade.adjustment,
+          xpAdjustment: grade.xpAdjustment
         }
-      }
+      } as GradingQuestion
     })
     return grading
   } else {
@@ -478,7 +501,8 @@ const postGrading = async (
   submissionId: number,
   questionId: number,
   comment: string,
-  adjustment: number,
+  gradeAdjustment: number,
+  xpAdjustment: number,
   tokens: Tokens
 ) => {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
@@ -486,7 +510,8 @@ const postGrading = async (
     body: {
       grading: {
         comment: `${comment}`,
-        adjustment
+        adjustment: gradeAdjustment,
+        xpAdjustment
       }
     },
     noHeaderAccept: true,

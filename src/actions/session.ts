@@ -30,8 +30,13 @@ export const fetchGrading = (submissionId: number) => ({
   payload: submissionId
 })
 
-export const fetchGradingOverviews = () => ({
-  type: actionTypes.FETCH_GRADING_OVERVIEWS
+/**
+ * @param filterToGroup - param when set to true, only shows submissions under the group
+ * of the grader
+ */
+export const fetchGradingOverviews = (filterToGroup = true) => ({
+  type: actionTypes.FETCH_GRADING_OVERVIEWS,
+  payload: filterToGroup
 })
 
 export const login = () => ({
@@ -76,14 +81,16 @@ export const submitGrading: ActionCreator<actionTypes.IAction> = (
   submissionId: number,
   questionId: number,
   comment: string,
-  adjustment: number = 0
+  gradeAdjustment: number = 0,
+  xpAdjustment: number = 0
 ) => ({
   type: actionTypes.SUBMIT_GRADING,
   payload: {
     submissionId,
     questionId,
     comment,
-    adjustment
+    gradeAdjustment,
+    xpAdjustment
   }
 })
 

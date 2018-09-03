@@ -23,7 +23,6 @@ import { NavLink } from 'react-router-dom'
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
-import { IS_XP_IMPLEMENTED } from '../../utils/constants'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import {
@@ -177,7 +176,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         <p>
           You are about to finalise your submission for the{' '}
           {this.state.betchaAssessment.category.toLowerCase()}{' '}
-          <i>&quot;{this.state.betchaAssessment.title}&quot;</i>.
+          <i>
+            &quot;
+            {this.state.betchaAssessment.title}
+            &quot;
+          </i>
+          .
         </p>
         <p>
           Early submissions grant you additional XP, but{' '}
@@ -288,8 +292,21 @@ const makeOverviewCard = (
       </div>
       <div className="col-xs-9 listing-text">
         {makeOverviewCardTitle(overview, index, setBetchaAssessment)}
-        <div className="row listing-order">
-          <h6>{`Max Grade: ${overview.maximumGrade}`}</h6>
+        <div className="row listing-grade">
+          <h6>
+            {' '}
+            {beforeNow(overview.openAt)
+              ? `Grade: ${overview.grade} / ${overview.maxGrade}`
+              : `Max Grade: ${overview.maxGrade}`}{' '}
+          </h6>
+        </div>
+        <div className="row listing-xp">
+          <h6>
+            {' '}
+            {beforeNow(overview.openAt)
+              ? `XP: ${overview.xp} / ${overview.maxXp}`
+              : `Max XP: ${overview.maxGrade}`}{' '}
+          </h6>
         </div>
         <div className="row listing-description">
           <Markdown content={overview.shortSummary} />
@@ -297,7 +314,9 @@ const makeOverviewCard = (
         <div className="listing-controls">
           <Text className="listing-due-date">
             <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-            {`Due: ${getPrettyDate(overview.closeAt)}`}
+            {beforeNow(overview.openAt)
+              ? `Due: ${getPrettyDate(overview.closeAt)}`
+              : `Opens at: ${getPrettyDate(overview.openAt)}`}
           </Text>
           {renderAttemptButton ? makeOverviewCardButton(overview) : null}
         </div>
@@ -312,16 +331,14 @@ const makeOverviewCardTitle = (
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
 ) => (
   <div className="row listing-title">
-    <Text ellipsize={true} className={IS_XP_IMPLEMENTED ? 'col-xs-10' : 'col-xs-12'}>
+    <Text ellipsize={true} className={'col-xs-10'}>
       <h4>{overview.title}</h4>
     </Text>
-    {IS_XP_IMPLEMENTED ? (
-      <div className="col-xs-2">
-        <Popover content={makeMenu(overview, index, setBetchaAssessment)}>
-          <Button icon={IconNames.MENU} minimal={true} />
-        </Popover>
-      </div>
-    ) : null}
+    <div className="col-xs-2">
+      <Popover content={makeMenu(overview, index, setBetchaAssessment)}>
+        <Button icon={IconNames.MENU} minimal={true} />
+      </Popover>
+    </div>
   </div>
 )
 

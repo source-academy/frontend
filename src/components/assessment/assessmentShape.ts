@@ -10,13 +10,16 @@ export interface IAssessmentOverview {
   category: AssessmentCategory
   closeAt: string
   coverImage: string
+  grade: number
   id: number
-  maximumGrade: number
+  maxGrade: number
+  maxXp: number
   openAt: string
   title: string
   shortSummary: string
   status: AssessmentStatus
   story: string | null
+  xp: number
 }
 
 export enum AssessmentStatuses {
