@@ -244,7 +244,7 @@ function gosper_curve(level) {
 // DRAWING GOSPER CURVES
 
 function show_connected_gosper(level) {
-  draw_connected(200)(
+  return draw_connected(200)(
     squeeze_rectangular_portion(-0.5, 1.5, -0.5, 1.5)(gosper_curve(level))
   );
 }
