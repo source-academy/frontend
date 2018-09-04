@@ -216,6 +216,10 @@ function* workspaceSaga(): SagaIterator {
     for (const [key, value] of globals) {
       window[key] = value
     }
+    yield put(actions.endClearContext(
+      (action as actionTypes.IAction).payload.library,
+      (action as actionTypes.IAction).payload.workspaceLocation
+    ))
     yield undefined
   })
 }
