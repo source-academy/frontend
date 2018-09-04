@@ -90,11 +90,11 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
 })
 
 /**
- * Starts the process to clear the js-slang Context 
+ * Starts the process to clear the js-slang Context
  * at a specified workspace location.
  *
  * This action is to be handled by saga, in order to
- * call upon side effects such as loading libraries in 
+ * call upon side effects such as loading libraries in
  * the global scope.
  *
  * @param library the Library that the context shall be using
@@ -121,10 +121,10 @@ export const clearReplOutput = (workspaceLocation: WorkspaceLocation) => ({
 })
 
 /**
- * Finishes the process to clear the js-slang Context 
+ * Finishes the process to clear the js-slang Context
  * at a specified workspace location.
  *
- * This action is to be handled in the reducer, to call the reset on the 
+ * This action is to be handled in the reducer, to call the reset on the
  * Context in the state.
  *
  * @param library the Library that the context shall be using
