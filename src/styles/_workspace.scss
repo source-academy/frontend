@@ -44,6 +44,7 @@ $code-color-error: #ff4444;
     flex: 1 1;
     height: 100%;
     padding-bottom: 0.6rem;
+    overflow: auto;
   }
 
   .left-parent {
@@ -239,15 +240,15 @@ $code-color-error: #ff4444;
         color: inherit;
         padding: 0px;
         margin: 0px;
-        /* white-space, word-wrap and word-break 
+        /* white-space, word-wrap and word-break
          * are specified to allow all output to wrap.
          */
         white-space: pre-wrap;
         word-wrap: break-word;
         word-break: break-word;
-        /** 
-         * Use same fonts as ace-editor for 
-         * output. Taken from react-ace 
+        /**
+         * Use same fonts as ace-editor for
+         * output. Taken from react-ace
          * sourcecode, font size modified.
          */
         font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
