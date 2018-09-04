@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { withRouter } from 'react-router'
 import { bindActionCreators, Dispatch } from 'redux'
 
-import { clearContext, logOut, updateEditorValue } from '../actions'
+import { beginClearContext, logOut, updateEditorValue } from '../actions'
 import {
   ensureLibrariesLoaded,
   playgroundExternalSelect,
@@ -35,7 +35,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
   bindActionCreators(
     {
       handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) =>
-        clearContext(
+        beginClearContext(
           {
             chapter,
             external: {

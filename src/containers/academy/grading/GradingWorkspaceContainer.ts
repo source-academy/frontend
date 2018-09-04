@@ -19,7 +19,7 @@ import {
   WorkspaceLocation
 } from '../../../actions'
 import {
-  clearContext,
+  beginClearContext,
   resetWorkspace,
   updateCurrentSubmissionId
 } from '../../../actions/workspaces'
@@ -57,7 +57,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, changeEvent, workspaceLocation),
-      handleClearContext: (library: Library) => clearContext(library, workspaceLocation),
+      handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
