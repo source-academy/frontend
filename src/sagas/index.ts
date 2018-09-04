@@ -51,7 +51,7 @@ function* workspaceSaga(): SagaIterator {
     /** End any code that is running right now. */
     yield put(actions.beginInterruptExecution(location))
     /** Clear the context, with the same chapter and externalSymbols as before. */
-    yield put(actions.clearContext(library, location))
+    yield put(actions.beginClearContext(library, location))
     yield put(actions.clearReplOutput(location))
     context = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context
@@ -94,7 +94,7 @@ function* workspaceSaga(): SagaIterator {
         },
         globals
       }
-      yield put(actions.clearContext(library, location))
+      yield put(actions.beginClearContext(library, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
     }
@@ -134,7 +134,7 @@ function* workspaceSaga(): SagaIterator {
     }
     if (newExternalLibraryName !== oldExternalLibraryName) {
       yield put(actions.changePlaygroundExternal(newExternalLibraryName))
-      yield put(actions.clearContext(library, location))
+      yield put(actions.beginClearContext(library, location))
       yield put(actions.clearReplOutput(location))
       yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
     }
@@ -195,7 +195,7 @@ function* workspaceSaga(): SagaIterator {
    * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
    * the function.
    */
-  yield takeEvery(actionTypes.CLEAR_CONTEXT, function*(action) {
+  yield takeEvery(actionTypes.BEGIN_CLEAR_CONTEXT, function*(action) {
     yield* checkWebGLAvailable()
     const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name
     switch (externalLibraryName) {
@@ -216,6 +216,12 @@ function* workspaceSaga(): SagaIterator {
     for (const [key, value] of globals) {
       window[key] = value
     }
+    yield put(
+      actions.endClearContext(
+        (action as actionTypes.IAction).payload.library,
+        (action as actionTypes.IAction).payload.workspaceLocation
+      )
+    )
     yield undefined
   })
 }
