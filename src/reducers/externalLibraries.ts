@@ -87,12 +87,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'squeeze_full_view',
       'squeeze_rectangular_portion',
       'translate',
-      'scale',
-      'gosperize',
-      'gosper_curve',
-      'show_connected_gosper',
-      'param_gosper',
-      'param_gosperize'
+      'scale'
     ]
   ],
   [
