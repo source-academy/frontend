@@ -233,7 +233,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     this.setState({
       ...this.state,
       gradeAdjustmentInput: valueAsString,
-      xpAdjustmentInput: String(Math.round(valueAsNumber / this.props.maxGrade * this.props.maxXp))
+      xpAdjustmentInput: String(
+        Math.round(valueAsNumber / this.props.maxGrade * this.props.maxXp)  || 0
+      )
     })
   }
 
