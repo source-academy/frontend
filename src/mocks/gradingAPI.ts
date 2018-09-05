@@ -17,7 +17,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 100,
     studentId: 0,
     studentName: 'Al Gorithm',
-    submissionId: 0
+    submissionId: 0,
+    groupName: '1D'
   },
   {
     gradeAdjustment: -2,
@@ -33,7 +34,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 400,
     studentId: 0,
     studentName: 'Dee Sign',
-    submissionId: 1
+    submissionId: 1,
+    groupName: '1F'
   },
   {
     gradeAdjustment: 4,
@@ -49,7 +51,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 1000,
     studentId: 1,
     studentName: 'May Trix',
-    submissionId: 2
+    submissionId: 2,
+    groupName: '1F'
   }
 ]
 
