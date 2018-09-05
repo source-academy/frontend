@@ -89,7 +89,11 @@ class Grading extends React.Component<IGradingProps, State> {
           cellRendererFramework: GradingExp,
           maxWidth: 100
         },
-        { headerName: 'Student Group', field: 'groupName' },
+        {
+          headerName: 'Group',
+          field: 'groupName',
+          maxWidth: 120
+        },
         {
           headerName: 'Edit',
           field: '',
