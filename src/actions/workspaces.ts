@@ -90,15 +90,20 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
 })
 
 /**
- * Clears the js-slang Context at a specified workspace location.
+ * Starts the process to clear the js-slang Context
+ * at a specified workspace location.
+ *
+ * This action is to be handled by saga, in order to
+ * call upon side effects such as loading libraries in
+ * the global scope.
  *
  * @param library the Library that the context shall be using
  * @param workspaceLocation the location of the workspace
  *
  * @see Library in assessmentShape.ts
  */
-export const clearContext = (library: Library, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.CLEAR_CONTEXT,
+export const beginClearContext = (library: Library, workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.BEGIN_CLEAR_CONTEXT,
   payload: {
     library,
     workspaceLocation
@@ -113,6 +118,26 @@ export const clearReplInput = (workspaceLocation: WorkspaceLocation) => ({
 export const clearReplOutput = (workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.CLEAR_REPL_OUTPUT,
   payload: { workspaceLocation }
+})
+
+/**
+ * Finishes the process to clear the js-slang Context
+ * at a specified workspace location.
+ *
+ * This action is to be handled in the reducer, to call the reset on the
+ * Context in the state.
+ *
+ * @param library the Library that the context shall be using
+ * @param workspaceLocation the location of the workspace
+ *
+ * @see Library in assessmentShape.ts
+ */
+export const endClearContext = (library: Library, workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.END_CLEAR_CONTEXT,
+  payload: {
+    library,
+    workspaceLocation
+  }
 })
 
 export const ensureLibrariesLoaded = () => ({

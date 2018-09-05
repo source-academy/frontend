@@ -7,9 +7,9 @@ import {
   CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
-  CLEAR_CONTEXT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
+  END_CLEAR_CONTEXT,
   END_INTERRUPT_EXECUTION,
   EVAL_EDITOR,
   EVAL_INTERPRETER_ERROR,
@@ -179,7 +179,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           output: []
         }
       }
-    case CLEAR_CONTEXT:
+    case END_CLEAR_CONTEXT:
       return {
         ...state,
         [location]: {
