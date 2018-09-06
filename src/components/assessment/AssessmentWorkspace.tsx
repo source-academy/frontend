@@ -10,6 +10,7 @@ import Markdown from '../commons/Markdown'
 import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
+import ToneMatrix from '../workspace/side-content/ToneMatrix'
 import {
   IAssessment,
   IMCQQuestion,
@@ -228,11 +229,11 @@ class AssessmentWorkspace extends React.Component<
         body: <Markdown content={comment} />
       })
     }
-    if (props.assessment!.title == 'The Magical Tone Matrix') {
+    if (props.assessment!.title.match('The Magical Tone Matrix') !== null) {
       tabs.push({
         label: `Tone Matrix`,
         icon: IconNames.GRID_VIEW,
-        body: <h3>Hi There</h3>
+        body: <ToneMatrix />
       })
     }
     return {
