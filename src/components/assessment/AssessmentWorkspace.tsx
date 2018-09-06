@@ -228,6 +228,13 @@ class AssessmentWorkspace extends React.Component<
         body: <Markdown content={comment} />
       })
     }
+    if (props.assessment!.title == 'The Magical Tone Matrix') {
+      tabs.push({
+        label: `Tone Matrix`,
+        icon: IconNames.GRID_VIEW,
+        body: <h3>Hi There</h3>
+      })
+    }
     return {
       activeTab: props.activeTab,
       handleChangeActiveTab: props.handleChangeActiveTab,
