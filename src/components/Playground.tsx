@@ -25,7 +25,7 @@ the respective textbook chapter. For example, Source ${CHAP}3 is suitable for
 textbook Chapter 3 and the preceeding chapters.
 
 The playground comes with an editor and a REPL, on the left and right of the
-screen, respectively. You may customimse the layout of the playground by
+screen, respectively. You may customise the layout of the playground by
 clicking and dragging on the right border of the editor, or the top border of
 the REPL.
 `
