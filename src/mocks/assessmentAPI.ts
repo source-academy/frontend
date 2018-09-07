@@ -184,7 +184,7 @@ const mockToneMatrixLibrary: Library = {
   chapter: 1,
   external: {
     name: ExternalLibraryNames.SOUND,
-    symbols: ["get_matrix"]
+    symbols: ['get_matrix']
   },
   globals: mockGlobals
 }
@@ -278,7 +278,7 @@ What's your favourite dinner food?
     library: mockToneMatrixLibrary,
     solutionTemplate: '1st question mock solution template',
     type: 'programming'
-  },
+  }
 ]
 
 /*
