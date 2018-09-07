@@ -230,7 +230,7 @@ class AssessmentWorkspace extends React.Component<
       })
     }
 
-    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;
+    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
