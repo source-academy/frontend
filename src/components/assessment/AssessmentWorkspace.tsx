@@ -229,7 +229,9 @@ class AssessmentWorkspace extends React.Component<
         body: <Markdown content={comment} />
       })
     }
-    if (props.assessment!.title.match('The Magical Tone Matrix') !== null) {
+
+    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;
+    if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
         icon: IconNames.GRID_VIEW,
