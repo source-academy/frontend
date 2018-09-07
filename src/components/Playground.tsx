@@ -14,7 +14,7 @@ import ListVisualizer from './workspace/side-content/ListVisualizer'
 const CHAP = '\xa7'
 
 const INTRODUCTION = `
-Welcome to the source-academy playground!
+Welcome to the Source Academy playground!
 
 The language _Source_ is the official language of the textbook _Structure and
 Interpretation of Computer Programs, JavaScript Adaptation_. You have never
