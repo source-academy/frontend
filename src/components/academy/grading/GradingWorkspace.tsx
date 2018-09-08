@@ -213,6 +213,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const listingPath = `/academy/grading`
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`
     return {
+      hasAssessment: true,
+      currentQuestion: questionId + 1,
+      maxQuestionLength: this.props.grading!.length,
       handleChapterSelect: this.props.handleChapterSelect,
       handleEditorEval: this.props.handleEditorEval,
       handleInterruptEval: this.props.handleInterruptEval,

@@ -10,6 +10,9 @@ import { ExternalLibraryName } from '../assessment/assessmentShape'
 import { controlButton } from '../commons'
 
 export type ControlBarProps = {
+  hasAssessment: boolean
+  currentQuestion: number | null,
+  maxQuestionLength: number | null,
   hasChapterSelect: boolean
   hasNextButton: boolean
   hasPreviousButton: boolean
@@ -52,6 +55,9 @@ interface IExternal {
 
 class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   public static defaultProps: Partial<ControlBarProps> = {
+    hasAssessment: false,
+    currentQuestion: null,
+    maxQuestionLength: null,
     hasChapterSelect: false,
     hasNextButton: false,
     hasPreviousButton: false,
@@ -137,6 +143,10 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private flowControl() {
+    const questionView = this.props.hasAssessment
+      ? controlButton(`Question ${this.props.currentQuestion} of ${this.props.maxQuestionLength}  `,
+        null, null, { }, true)
+      : undefined
     const previousButton = this.props.hasPreviousButton
       ? controlButton('Previous', IconNames.ARROW_LEFT, this.props.onClickPrevious)
       : undefined
@@ -151,7 +161,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
 
     return (
       <div className="ControlBar_flow pt-button-group">
-        {previousButton} {nextButton} {returnButton}
+        {previousButton} {questionView} {nextButton} {returnButton}
       </div>
     )
   }

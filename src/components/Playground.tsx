@@ -80,6 +80,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   public render() {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
+        hasAssessment: false,
+        currentQuestion: null,
+        maxQuestionLength: null,
         externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
           this.props.handleChapterSelect(chapter),
