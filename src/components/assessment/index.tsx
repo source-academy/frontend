@@ -331,9 +331,7 @@ const makeOverviewCardTitle = (
     <Text ellipsize={true} className={'col-xs-10'}>
       <h4>{overview.title}</h4>
     </Text>
-    <div className="col-xs-2">
-      {makeSubmissionButton(overview, index, setBetchaAssessment)}
-    </div>
+    <div className="col-xs-2">{makeSubmissionButton(overview, index, setBetchaAssessment)}</div>
   </div>
 )
 
@@ -342,15 +340,15 @@ const makeSubmissionButton = (
   index: number,
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
 ) => (
-  <Button 
+  <Button
     disabled={overview.status !== AssessmentStatuses.attempted}
     icon={IconNames.CONFIRM}
     intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
     minimal={true}
-    
     // intentional: each menu renders own version of onClick
     // tslint:disable-next-line:jsx-no-lambda
-    onClick={() => setBetchaAssessment(overview)}>
+    onClick={() => setBetchaAssessment(overview)}
+  >
     Finalize Submission
   </Button>
 )
