@@ -11,12 +11,9 @@ import { controlButton } from '../commons'
 
 export type ControlBarProps = {
   hasAssessment: boolean
-  currentQuestion: number | null,
-  maxQuestionLength: number | null,
+  currentQuestion: number,
+  assessmentLength: number,
   hasChapterSelect: boolean
-  hasNextButton: boolean
-  hasPreviousButton: boolean
-  hasReturnButton: boolean
   hasSaveButton: boolean
   hasShareButton: boolean
   hasUnsavedChanges?: boolean
@@ -56,14 +53,11 @@ interface IExternal {
 class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   public static defaultProps: Partial<ControlBarProps> = {
     hasAssessment: false,
-    currentQuestion: null,
-    maxQuestionLength: null,
+    currentQuestion: 0,
+    assessmentLength: 0,
     hasChapterSelect: false,
-    hasNextButton: false,
-    hasPreviousButton: false,
     hasSaveButton: false,
     hasShareButton: true,
-    hasReturnButton: false,
     onClickNext: () => {},
     onClickPrevious: () => {},
     onClickSave: () => {}
@@ -144,16 +138,16 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
 
   private flowControl() {
     const questionView = this.props.hasAssessment
-      ? controlButton(`Question ${this.props.currentQuestion} of ${this.props.maxQuestionLength}  `,
+      ? controlButton(`Question ${this.props.currentQuestion} of ${this.props.assessmentLength}  `,
         null, null, { }, true)
       : undefined
-    const previousButton = this.props.hasPreviousButton
+    const previousButton = this.hasPreviousButton()
       ? controlButton('Previous', IconNames.ARROW_LEFT, this.props.onClickPrevious)
       : undefined
-    const nextButton = this.props.hasNextButton
+    const nextButton = this.hasNextButton()
       ? controlButton('Next', IconNames.ARROW_RIGHT, this.props.onClickNext, { iconOnRight: true })
       : undefined
-    const returnButton = this.props.hasReturnButton
+    const returnButton = this.hasReturnButton()
       ? controlButton('Return to Academy', IconNames.ARROW_RIGHT, this.props.onClickReturn, {
           iconOnRight: true
         })
@@ -183,6 +177,18 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   private selectShareInputText() {
     this.shareInputElem.focus()
     this.shareInputElem.select()
+  }
+
+  private hasNextButton(){
+    return this.props.hasAssessment && this.props.currentQuestion < this.props.assessmentLength;
+  }
+
+  private hasPreviousButton(){
+    return this.props.hasAssessment && this.props!.currentQuestion > 0;
+  }
+
+  private hasReturnButton() {
+    return this.props.hasAssessment &&  this.props.currentQuestion === this.props.assessmentLength;
   }
 }
 

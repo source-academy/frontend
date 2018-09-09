@@ -245,7 +245,7 @@ class AssessmentWorkspace extends React.Component<
     return {
       hasAssessment: true,
       currentQuestion: questionId + 1,
-      maxQuestionLength: this.props.assessment!.questions.length,
+      assessmentLength: this.props.assessment!.questions.length,
       handleChapterSelect: this.props.handleChapterSelect,
       handleEditorEval: this.props.handleEditorEval,
       handleInterruptEval: this.props.handleInterruptEval,
@@ -253,9 +253,6 @@ class AssessmentWorkspace extends React.Component<
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
       hasChapterSelect: false,
-      hasNextButton: questionId < this.props.assessment!.questions.length - 1,
-      hasPreviousButton: questionId > 0,
-      hasReturnButton: questionId === this.props.assessment!.questions.length - 1,
       hasSaveButton:
         !beforeNow(this.props.closeDate) &&
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
