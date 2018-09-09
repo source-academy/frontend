@@ -9,10 +9,7 @@ import {
   Icon,
   IconName,
   Intent,
-  Menu,
-  MenuItem,
   NonIdealState,
-  Popover,
   Spinner,
   Text
 } from '@blueprintjs/core'
@@ -334,30 +331,26 @@ const makeOverviewCardTitle = (
     <Text ellipsize={true} className={'col-xs-10'}>
       <h4>{overview.title}</h4>
     </Text>
-    <div className="col-xs-2">
-      <Popover content={makeMenu(overview, index, setBetchaAssessment)}>
-        <Button icon={IconNames.MENU} minimal={true} />
-      </Popover>
-    </div>
+    <div className="col-xs-2">{makeSubmissionButton(overview, index, setBetchaAssessment)}</div>
   </div>
 )
 
-const makeMenu = (
+const makeSubmissionButton = (
   overview: IAssessmentOverview,
   index: number,
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
 ) => (
-  <Menu>
-    <MenuItem
-      disabled={overview.status !== AssessmentStatuses.attempted}
-      icon={IconNames.CONFIRM}
-      intent={Intent.DANGER}
-      // intentional: each menu renders own version of onClick
-      // tslint:disable-next-line:jsx-no-lambda
-      onClick={() => setBetchaAssessment(overview)}
-      text="Betcha"
-    />
-  </Menu>
+  <Button
+    disabled={overview.status !== AssessmentStatuses.attempted}
+    icon={IconNames.CONFIRM}
+    intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
+    minimal={true}
+    // intentional: each menu renders own version of onClick
+    // tslint:disable-next-line:jsx-no-lambda
+    onClick={() => setBetchaAssessment(overview)}
+  >
+    Finalize Submission
+  </Button>
 )
 
 const makeOverviewCardButton = (overview: IAssessmentOverview) => {
