@@ -19,6 +19,7 @@ export type GradingOverview = {
   studentId: number
   studentName: string
   submissionId: number
+  groupName: string
 }
 
 /**

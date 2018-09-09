@@ -90,6 +90,11 @@ class Grading extends React.Component<IGradingProps, State> {
           maxWidth: 100
         },
         {
+          headerName: 'Group',
+          field: 'groupName',
+          maxWidth: 120
+        },
+        {
           headerName: 'Edit',
           field: '',
           cellRendererFramework: GradingNavLink,
