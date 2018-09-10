@@ -276,7 +276,7 @@ What's your favourite dinner food?
     content: 'You have reached the last question! Have some fun with the tone matrix...',
     id: 1,
     library: mockToneMatrixLibrary,
-    solutionTemplate: '1st question mock solution template',
+    solutionTemplate: '5th question mock solution template',
     type: 'programming'
   }
 ]
