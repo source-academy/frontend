@@ -180,6 +180,15 @@ const mockCurveLibrary: Library = {
   globals: mockGlobals
 }
 
+const mockToneMatrixLibrary: Library = {
+  chapter: 1,
+  external: {
+    name: ExternalLibraryNames.SOUND,
+    symbols: ['get_matrix']
+  },
+  globals: mockGlobals
+}
+
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     answer: 'display("answer1");',
@@ -260,6 +269,15 @@ What's your favourite dinner food?
     library: mockCurveLibrary,
     type: 'mcq',
     solution: null
+  },
+  {
+    answer: null,
+    comment: 'Wow you have come far! `Steady`',
+    content: 'You have reached the last question! Have some fun with the tone matrix...',
+    id: 1,
+    library: mockToneMatrixLibrary,
+    solutionTemplate: '5th question mock solution template',
+    type: 'programming'
   }
 ]
 

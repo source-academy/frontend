@@ -10,6 +10,7 @@ import Markdown from '../commons/Markdown'
 import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
+import ToneMatrix from '../workspace/side-content/ToneMatrix'
 import {
   IAssessment,
   IMCQQuestion,
@@ -226,6 +227,15 @@ class AssessmentWorkspace extends React.Component<
         label: `Comments`,
         icon: IconNames.CHAT,
         body: <Markdown content={comment} />
+      })
+    }
+
+    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols
+    if (functionsAttached.includes('get_matrix')) {
+      tabs.push({
+        label: `Tone Matrix`,
+        icon: IconNames.GRID_VIEW,
+        body: <ToneMatrix />
       })
     }
     return {
