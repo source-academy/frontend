@@ -53,8 +53,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                 <div className=\\"pt-card pt-elevation-3 contentdisplay-content\\">
-                  <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
-                    <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                  <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
+                    <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-down\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                           <title>
@@ -144,7 +144,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Opens at: 18th June, 13:24
+                                      Opens at: 17th June, 22:24
                                     </div>
                                   </Text>
                                 </div>
@@ -155,8 +155,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </div>
                   </Blueprint2.Collapse>
-                  <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
-                    <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                  <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
+                    <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-down\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                           <title>
@@ -246,15 +246,15 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 18th June, 13:24
+                                      Due: 17th June, 22:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/0/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
                                     <Route path=\\"/academy/missions/0/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/missions/0/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/0/0\\">
-                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"edit\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"edit\\">
+                                            <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal\\" onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"edit\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
@@ -350,15 +350,15 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 18th June, 13:24
+                                      Due: 17th June, 22:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
                                     <Route path=\\"/academy/missions/1/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/1/0\\">
-                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"play\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"play\\">
+                                            <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal\\" onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"play\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
@@ -454,15 +454,15 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 18th June, 13:24
+                                      Due: 17th June, 22:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/quests/2/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
                                     <Route path=\\"/academy/quests/2/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/quests/2/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/quests/2/0\\">
-                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
+                                            <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal\\" onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"step-forward\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"step-forward\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
@@ -489,8 +489,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </div>
                   </Blueprint2.Collapse>
-                  <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-right\\" onClick={[Function]}>
-                    <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                  <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-right\\" onClick={[Function]}>
+                    <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-right\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                           <title>
@@ -575,8 +575,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
             <div className=\\"col-xs-10 contentdisplay-content-parent\\">
               <Blueprint2.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                 <div className=\\"pt-card pt-elevation-3 contentdisplay-content\\">
-                  <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
-                    <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                  <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
+                    <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-down\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                           <title>
@@ -666,15 +666,15 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Opens at: 18th June, 13:24
+                                      Opens at: 17th June, 22:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/0/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
                                     <Route path=\\"/academy/missions/0/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/missions/0/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/0/0\\">
-                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
+                                            <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal\\" onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"step-forward\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"step-forward\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
@@ -701,8 +701,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                   </Blueprint2.Collapse>
-                  <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
-                    <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                  <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-down\\" onClick={[Function]}>
+                    <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-down\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                           <title>
@@ -792,15 +792,15 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 18th June, 13:24
+                                      Due: 17th June, 22:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/0/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
                                     <Route path=\\"/academy/missions/0/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/missions/0/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/0/0\\">
-                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"edit\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"edit\\">
+                                            <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal\\" onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"edit\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
@@ -896,15 +896,15 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 18th June, 13:24
+                                      Due: 17th June, 22:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
                                     <Route path=\\"/academy/missions/1/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/missions/1/0\\">
-                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"play\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"play\\">
+                                            <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal\\" onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"play\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
@@ -1000,15 +1000,15 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 18th June, 13:24
+                                      Due: 17th June, 22:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/quests/2/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
                                     <Route path=\\"/academy/quests/2/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                       <Link to=\\"/academy/quests/2/0\\" className={[undefined]} style={[undefined]} aria-current={false} replace={false}>
                                         <a className={[undefined]} style={[undefined]} aria-current={false} onClick={[Function]} href=\\"/academy/quests/2/0\\">
-                                          <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
-                                            <button type=\\"button\\" className=\\"pt-button pt-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                                          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" icon=\\"step-forward\\">
+                                            <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal\\" onClick={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
                                               <Blueprint2.Icon icon=\\"step-forward\\">
                                                 <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"step-forward\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                   <title>
@@ -1035,8 +1035,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                   </Blueprint2.Collapse>
-                  <Blueprint2.Button fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-right\\" onClick={[Function]}>
-                    <button type=\\"button\\" className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]}>
+                  <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" icon=\\"caret-right\\" onClick={[Function]}>
+                    <button type=\\"button\\" disabled={[undefined]} className=\\"pt-button pt-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]}>
                       <Blueprint2.Icon icon=\\"caret-right\\">
                         <svg className=\\"pt-icon\\" style={{...}} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                           <title>

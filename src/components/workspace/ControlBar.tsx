@@ -11,8 +11,8 @@ import { controlButton } from '../commons'
 
 export type ControlBarProps = {
   hasAssessment: boolean
-  currentQuestion: number,
-  assessmentLength: number,
+  currentQuestion: number
+  assessmentLength: number
   hasChapterSelect: boolean
   hasSaveButton: boolean
   hasShareButton: boolean
@@ -138,8 +138,13 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
 
   private flowControl() {
     const questionView = this.props.hasAssessment
-      ? controlButton(`Question ${this.props.currentQuestion} of ${this.props.assessmentLength}  `,
-        null, null, { }, true)
+      ? controlButton(
+          `Question ${this.props.currentQuestion} of ${this.props.assessmentLength}  `,
+          null,
+          null,
+          {},
+          true
+        )
       : undefined
     const previousButton = this.hasPreviousButton()
       ? controlButton('Previous', IconNames.ARROW_LEFT, this.props.onClickPrevious)
@@ -179,16 +184,16 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     this.shareInputElem.select()
   }
 
-  private hasNextButton(){
-    return this.props.hasAssessment && this.props.currentQuestion < this.props.assessmentLength;
+  private hasNextButton() {
+    return this.props.hasAssessment && this.props.currentQuestion < this.props.assessmentLength
   }
 
-  private hasPreviousButton(){
-    return this.props.hasAssessment && this.props!.currentQuestion > 0;
+  private hasPreviousButton() {
+    return this.props.hasAssessment && this.props!.currentQuestion > 0
   }
 
   private hasReturnButton() {
-    return this.props.hasAssessment &&  this.props.currentQuestion === this.props.assessmentLength;
+    return this.props.hasAssessment && this.props.currentQuestion === this.props.assessmentLength
   }
 }
 
