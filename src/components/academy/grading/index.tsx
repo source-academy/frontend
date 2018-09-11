@@ -81,13 +81,27 @@ class Grading extends React.Component<IGradingProps, State> {
             } else {
               return {}
             }
+          },
+          comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
+            if (nodeA && nodeB) {
+              return nodeA.data.currentGrade - nodeB.data.currentGrade
+            } else {
+              return valueA - valueB
+            }
           }
         },
         {
           headerName: 'XP',
           field: '',
           cellRendererFramework: GradingExp,
-          maxWidth: 100
+          maxWidth: 100,
+          comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
+            if (nodeA && nodeB) {
+              return nodeA.data.currentXp - nodeB.data.currentXp
+            } else {
+              return valueA - valueB
+            }
+          }
         },
         {
           headerName: 'Group',
