@@ -21,10 +21,11 @@ export function controlButton(
   label: string,
   icon: IconName | null,
   onClick: (() => void) | null = null,
-  options: controlButtonOptionals = {}
+  options: controlButtonOptionals = {},
+  disabled: boolean = false
 ) {
   const opts: controlButtonOptionals = { ...defaultOptions, ...options }
-  const props: IButtonProps = {}
+  const props: IButtonProps = { disabled }
   props.fill = opts.fullWidth !== undefined && opts.fullWidth
   props.intent = opts.intent === undefined ? Intent.NONE : opts.intent
   props.minimal = opts.minimal !== undefined && opts.minimal

@@ -253,6 +253,9 @@ class AssessmentWorkspace extends React.Component<
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
     const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`
     return {
+      hasAssessment: true,
+      currentQuestion: questionId + 1,
+      assessmentLength: this.props.assessment!.questions.length,
       handleChapterSelect: this.props.handleChapterSelect,
       handleEditorEval: this.props.handleEditorEval,
       handleInterruptEval: this.props.handleInterruptEval,
@@ -260,9 +263,6 @@ class AssessmentWorkspace extends React.Component<
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
       hasChapterSelect: false,
-      hasNextButton: questionId < this.props.assessment!.questions.length - 1,
-      hasPreviousButton: questionId > 0,
-      hasReturnButton: questionId === this.props.assessment!.questions.length - 1,
       hasSaveButton:
         !beforeNow(this.props.closeDate) &&
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
