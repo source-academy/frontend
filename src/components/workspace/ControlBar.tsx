@@ -184,8 +184,9 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private hasNextButton() {
-    return this.props.questionProgress 
-      && this.props.questionProgress[0] < this.props.questionProgress[1]
+    return (
+      this.props.questionProgress && this.props.questionProgress[0] < this.props.questionProgress[1]
+    )
   }
 
   private hasPreviousButton() {
@@ -193,8 +194,10 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private hasReturnButton() {
-    return this.props.questionProgress 
-      && this.props.questionProgress[0] === this.props.questionProgress[1]
+    return (
+      this.props.questionProgress &&
+      this.props.questionProgress[0] === this.props.questionProgress[1]
+    )
   }
 }
 
