@@ -198,7 +198,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         )
       },
       {
-        label: `Task ${questionId}`,
+        label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />
       }
@@ -225,7 +225,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       onClickNext: () => history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () => history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),
       onClickReturn: () => history.push(listingPath),
-      questionProgress: [questionId, this.props.grading!.length],
+      questionProgress: [questionId + 1, this.props.grading!.length],
       sourceChapter: this.props.grading![questionId].question.library.chapter
     }
   }

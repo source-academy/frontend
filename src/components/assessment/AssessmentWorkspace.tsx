@@ -211,7 +211,7 @@ class AssessmentWorkspace extends React.Component<
   ) => {
     const tabs = [
       {
-        label: `Task ${questionId}`,
+        label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
         body: <Markdown content={props.assessment!.questions[questionId].content} />
       },
@@ -274,7 +274,7 @@ class AssessmentWorkspace extends React.Component<
           this.props.assessment!.questions[questionId].id,
           this.props.editorValue!
         ),
-      questionProgress: [questionId, this.props.assessment!.questions.length],
+      questionProgress: [questionId + 1, this.props.assessment!.questions.length],
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter
     }
   }
