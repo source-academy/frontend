@@ -11,7 +11,7 @@ import { controlButton } from '../commons'
 
 /**
  * @prop questionProgress a tuple of (current question number, question length) where
- *   the current question number is 0-based.
+ *   the current question number is 1-based.
  */
 export type ControlBarProps = {
   externalLibraryName?: string
@@ -54,9 +54,6 @@ interface IExternal {
 
 class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   public static defaultProps: Partial<ControlBarProps> = {
-    hasAssessment: false,
-    currentQuestion: 0,
-    assessmentLength: 0,
     hasChapterSelect: false,
     hasSaveButton: false,
     hasShareButton: true,
@@ -139,9 +136,9 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private flowControl() {
-    const questionView = this.props.hasAssessment
+    const questionView = this.props.questionProgress
       ? controlButton(
-          `Question ${this.props.currentQuestion} of ${this.props.assessmentLength}  `,
+          `Question ${this.props.questionProgress[0]} of ${this.props.questionProgress[1]}  `,
           null,
           null,
           {},
@@ -187,15 +184,17 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private hasNextButton() {
-    return this.props.hasAssessment && this.props.currentQuestion < this.props.assessmentLength
+    return this.props.questionProgress 
+      && this.props.questionProgress[0] < this.props.questionProgress[1]
   }
 
   private hasPreviousButton() {
-    return this.props.hasAssessment && this.props!.currentQuestion > 0
+    return this.props.questionProgress && this.props.questionProgress[0] > 0
   }
 
   private hasReturnButton() {
-    return this.props.hasAssessment && this.props.currentQuestion === this.props.assessmentLength
+    return this.props.questionProgress 
+      && this.props.questionProgress[0] === this.props.questionProgress[1]
   }
 }
 
