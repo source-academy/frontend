@@ -136,7 +136,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Opens at: 17th June, 22:24
+                                      Opens at: 18th June, 13:24
                                     </div>
                                   </Text>
                                 </div>
@@ -230,7 +230,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 17th June, 22:24
+                                      Due: 18th June, 13:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/0/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
@@ -326,7 +326,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 17th June, 22:24
+                                      Due: 18th June, 13:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
@@ -422,7 +422,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 17th June, 22:24
+                                      Due: 18th June, 13:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/quests/2/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
@@ -626,7 +626,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Opens at: 17th June, 22:24
+                                      Opens at: 18th June, 13:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/0/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
@@ -744,7 +744,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 17th June, 22:24
+                                      Due: 18th June, 13:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/0/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
@@ -840,7 +840,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 17th June, 22:24
+                                      Due: 18th June, 13:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
@@ -936,7 +936,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                           <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
                                         </svg>
                                       </Blueprint2.Icon>
-                                      Due: 17th June, 22:24
+                                      Due: 18th June, 13:24
                                     </div>
                                   </Text>
                                   <NavLink to=\\"/academy/quests/2/0\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">

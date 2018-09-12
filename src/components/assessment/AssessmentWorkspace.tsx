@@ -211,7 +211,7 @@ class AssessmentWorkspace extends React.Component<
   ) => {
     const tabs = [
       {
-        label: `Task ${questionId}`,
+        label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
         body: <Markdown content={props.assessment!.questions[questionId].content} />
       },
@@ -253,9 +253,6 @@ class AssessmentWorkspace extends React.Component<
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
     const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`
     return {
-      hasAssessment: true,
-      currentQuestion: questionId + 1,
-      assessmentLength: this.props.assessment!.questions.length,
       handleChapterSelect: this.props.handleChapterSelect,
       handleEditorEval: this.props.handleEditorEval,
       handleInterruptEval: this.props.handleInterruptEval,
@@ -277,6 +274,7 @@ class AssessmentWorkspace extends React.Component<
           this.props.assessment!.questions[questionId].id,
           this.props.editorValue!
         ),
+      questionProgress: [questionId + 1, this.props.assessment!.questions.length],
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter
     }
   }
