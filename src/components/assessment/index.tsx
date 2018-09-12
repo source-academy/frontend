@@ -302,7 +302,7 @@ const makeOverviewCard = (
             {' '}
             {beforeNow(overview.openAt)
               ? `XP: ${overview.xp} / ${overview.maxXp}`
-              : `Max XP: ${overview.maxGrade}`}{' '}
+              : `Max XP: ${overview.maxXp}`}{' '}
           </h6>
         </div>
         <div className="row listing-description">
