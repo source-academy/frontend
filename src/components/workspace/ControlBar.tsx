@@ -14,26 +14,26 @@ import { controlButton } from '../commons'
  *   the current question number is 1-based.
  */
 export type ControlBarProps = {
-  externalLibraryName?: string
-  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
-  handleEditorEval: () => void
-  handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
-  handleGenerateLz?: () => void
-  handleInterruptEval: () => void
-  handleReplEval: () => void
-  handleReplOutputClear: () => void
+  questionProgress: [number, number] | null
   hasChapterSelect: boolean
   hasSaveButton: boolean
   hasShareButton: boolean
   hasUnsavedChanges?: boolean
   isRunning: boolean
+  queryString?: string
+  sourceChapter: number
+  externalLibraryName?: string
+  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleEditorEval: () => void
+  handleGenerateLz?: () => void
+  handleInterruptEval: () => void
+  handleReplEval: () => void
+  handleReplOutputClear: () => void
   onClickNext?(): any
   onClickPrevious?(): any
   onClickReturn?(): any
   onClickSave?(): any
-  queryString?: string
-  questionProgress: [number, number] | null
-  sourceChapter: number
 }
 
 interface IChapter {
