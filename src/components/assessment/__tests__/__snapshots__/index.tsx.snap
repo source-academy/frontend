@@ -116,7 +116,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                 <div className=\\"row listing-xp\\">
                                   <h6>
                                      
-                                    Max XP: 3000
+                                    Max XP: 1000
                                      
                                   </h6>
                                 </div>
@@ -606,7 +606,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                 <div className=\\"row listing-xp\\">
                                   <h6>
                                      
-                                    Max XP: 3000
+                                    Max XP: 1000
                                      
                                   </h6>
                                 </div>
