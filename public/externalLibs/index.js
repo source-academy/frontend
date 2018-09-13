@@ -32,6 +32,8 @@ function loadAllLibs() {
     // list visualizer
     '/externalLibs/visualizer/KineticJS.js',
     '/externalLibs/visualizer/visualizer.js',
+    // binary tree library
+    '/externalLibs/tree.js',
   ];
 
   for (var i = 0; i < files.length; i++) {
@@ -71,6 +73,13 @@ function loadLib(externalLibraryName) {
         '/externalLibs/graphics/webGLhi_graph_ce.js',
         '/externalLibs/graphics/webGLgraphics.js',
         '/externalLibs/graphics/webGLcurve.js',
+      ];
+      break;
+    case "TREE":
+      files = [
+        // tree
+        '/externalLibs/list.js',
+        '/externalLibs/tree.js',
       ];
       break;
     default:
