@@ -75,13 +75,6 @@ function loadLib(externalLibraryName) {
         '/externalLibs/graphics/webGLcurve.js',
       ];
       break;
-    case "TREE":
-      files = [
-        // tree
-        '/externalLibs/list.js',
-        '/externalLibs/tree.js',
-      ];
-      break;
     default:
       break;
   }
