@@ -10,6 +10,7 @@ import { RouteComponentProps } from 'react-router'
 
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer'
 import { stringParamToInt } from '../../../utils/paramParseHelpers'
+import { AssessmentCategories } from '../../assessment/assessmentShape'
 import { controlButton } from '../../commons'
 import ContentDisplay from '../../commons/ContentDisplay'
 import GradingHistory from './GradingHistory'
@@ -25,6 +26,9 @@ type State = {
   columnDefs: ColDef[]
   filterValue: string
   groupFilterEnabled: boolean
+  missionFilter: boolean
+  questFilter: boolean
+  pathFilter: boolean
 }
 
 type GradingNavLinkProps = {
@@ -49,6 +53,10 @@ export interface IStateProps {
   gradingOverviews?: GradingOverview[]
 }
 
+interface IGradingOverviewNode {
+  data: GradingOverview
+}
+
 /** Component to render in table - marks */
 const GradingMarks = (props: GradingNavLinkProps) => {
   return <GradingHistory data={props.data} exp={false} grade={true} />
@@ -68,7 +76,7 @@ class Grading extends React.Component<IGradingProps, State> {
     this.state = {
       columnDefs: [
         { headerName: 'Assessment Name', field: 'assessmentName' },
-        { headerName: 'Category', field: 'assessmentCategory', maxWidth: 150 },
+        { headerName: 'Category', field: 'assessmentCategory', maxWidth: 150, suppressFilter: true },
         { headerName: 'Student Name', field: 'studentName' },
         {
           headerName: 'Grade',
@@ -126,7 +134,10 @@ class Grading extends React.Component<IGradingProps, State> {
 
       filterValue: '',
 
-      groupFilterEnabled: false
+      groupFilterEnabled: false,
+      missionFilter: true,
+      questFilter: true,
+      pathFilter: false
     }
   }
 
@@ -181,6 +192,36 @@ class Grading extends React.Component<IGradingProps, State> {
               onChange={this.handleGroupsFilter}
             />
           </div>
+
+          <div className="checkboxPanel">
+            <label>Categories:</label>
+            &nbsp;&nbsp;
+            <div>
+              <input
+                name="missionFilter"
+                type="checkbox"
+                checked={this.state.missionFilter}
+                onChange={this.handleCategoryChange}
+                />
+              <label>Missions</label>
+              &nbsp;&nbsp;
+              <input
+                name="questFilter"
+                type="checkbox"
+                checked={this.state.questFilter}
+                onChange={this.handleCategoryChange}
+                />
+              <label>Sidequests</label>
+              &nbsp;&nbsp;
+              <input
+                name="pathFilter"
+                type="checkbox"
+                checked={this.state.pathFilter}
+                onChange={this.handleCategoryChange}
+                />
+              <label>Paths</label>
+            </div>
+          </div>
         </div>
 
         <hr />
@@ -198,6 +239,8 @@ class Grading extends React.Component<IGradingProps, State> {
               rowData={data}
               pagination={true}
               paginationPageSize={50}
+              isExternalFilterPresent={this.isExternalFilterPresent}
+              doesExternalFilterPass={this.doesExternalFilterPass}
             />
           </div>
           <div className="ag-grid-export-button">
@@ -230,9 +273,34 @@ class Grading extends React.Component<IGradingProps, State> {
     this.props.handleFetchGradingOverviews(!checkStatus)
   }
 
+  private handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checkStatus = event.target.checked
+    this.setState({ [event.target.name as any]: checkStatus },
+      () => {
+        if(this.gridApi) { this.gridApi.onFilterChanged() }
+      }
+    )
+
+      
+  }
+
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api
     this.gridApi.sizeColumnsToFit()
+  }
+
+  private isExternalFilterPresent = () => {
+    return true
+  }
+
+  private filterCategory = (node: IGradingOverviewNode) => {
+    return (this.state.missionFilter && node.data.assessmentCategory === AssessmentCategories.Mission)
+    || (this.state.questFilter && node.data.assessmentCategory === AssessmentCategories.Sidequest)
+    || (this.state.pathFilter && node.data.assessmentCategory === AssessmentCategories.Path)
+  }
+
+  private doesExternalFilterPass = (node: IGradingOverviewNode) => {
+    return this.filterCategory(node)
   }
 
   private exportCSV = () => {
