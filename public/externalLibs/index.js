@@ -32,6 +32,8 @@ function loadAllLibs() {
     // list visualizer
     '/externalLibs/visualizer/KineticJS.js',
     '/externalLibs/visualizer/visualizer.js',
+    // binary tree library
+    '/externalLibs/tree.js',
   ];
 
   for (var i = 0; i < files.length; i++) {
