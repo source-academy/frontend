@@ -1,6 +1,8 @@
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
+import { AssessmentStatuses } from '../components/assessment/assessmentShape'
 import { mock2DRuneLibrary as mockLibrary } from './assessmentAPI'
 import { mockFetchRole, Role, Roles } from './userAPI'
+
 
 export const mockGradingOverviews: GradingOverview[] = [
   {
@@ -18,7 +20,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 0,
     studentName: 'Al Gorithm',
     submissionId: 0,
-    groupName: '1D'
+    groupName: '1D',
+    status: AssessmentStatuses.submitted
   },
   {
     gradeAdjustment: -2,
@@ -35,7 +38,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 0,
     studentName: 'Dee Sign',
     submissionId: 1,
-    groupName: '1F'
+    groupName: '1F',
+    status: AssessmentStatuses.submitted
   },
   {
     gradeAdjustment: 4,
@@ -52,7 +56,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 1,
     studentName: 'May Trix',
     submissionId: 2,
-    groupName: '1F'
+    groupName: '1F',
+    status: AssessmentStatuses.submitted
   }
 ]
 

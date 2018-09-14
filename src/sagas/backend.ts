@@ -430,6 +430,7 @@ async function getGradingOverviews(
         studentName: overview.student.name,
         submissionId: overview.id,
         groupName: overview.groupName,
+        status: overview.status,
         // Grade
         initialGrade: overview.grade,
         gradeAdjustment: overview.adjustment,
