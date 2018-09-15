@@ -10,7 +10,7 @@ import { RouteComponentProps } from 'react-router'
 
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer'
 import { stringParamToInt } from '../../../utils/paramParseHelpers'
-import { AssessmentCategories } from '../../assessment/assessmentShape'
+import { AssessmentCategories, AssessmentStatuses } from '../../assessment/assessmentShape'
 import { controlButton } from '../../commons'
 import ContentDisplay from '../../commons/ContentDisplay'
 import GradingHistory from './GradingHistory'
@@ -29,6 +29,9 @@ type State = {
   missionFilter: boolean
   questFilter: boolean
   pathFilter: boolean
+  attemptingFilter: boolean
+  attemptedFilter: boolean
+  submittedFilter: boolean
 }
 
 type GradingNavLinkProps = {
@@ -129,7 +132,8 @@ class Grading extends React.Component<IGradingProps, State> {
         { headerName: 'Current Grade', field: 'currentGrade', hide: true },
         { headerName: 'Max Grade', field: 'maxGrade', hide: true },
         { headerName: 'Current XP', field: 'currentXp', hide: true },
-        { headerName: 'Max XP', field: 'maxXp', hide: true }
+        { headerName: 'Max XP', field: 'maxXp', hide: true },
+        { headerName: 'Status', field: 'status', hide: true }
       ],
 
       filterValue: '',
@@ -137,7 +141,10 @@ class Grading extends React.Component<IGradingProps, State> {
       groupFilterEnabled: false,
       missionFilter: true,
       questFilter: true,
-      pathFilter: false
+      pathFilter: false,
+      submittedFilter: true,
+      attemptedFilter: false,
+      attemptingFilter: false
     }
   }
 
@@ -183,7 +190,7 @@ class Grading extends React.Component<IGradingProps, State> {
           </FormGroup>
 
           <div className="checkboxPanel">
-            <label>Show All Submissions:</label>
+            <label>Show Submissions from other groups:</label>
             &nbsp;&nbsp;
             <input
               name="showAllSubmissions"
@@ -201,7 +208,7 @@ class Grading extends React.Component<IGradingProps, State> {
                 name="missionFilter"
                 type="checkbox"
                 checked={this.state.missionFilter}
-                onChange={this.handleCategoryChange}
+                onChange={this.handleCheckboxFilterChange}
                 />
               <label>Missions</label>
               &nbsp;&nbsp;
@@ -209,7 +216,7 @@ class Grading extends React.Component<IGradingProps, State> {
                 name="questFilter"
                 type="checkbox"
                 checked={this.state.questFilter}
-                onChange={this.handleCategoryChange}
+                onChange={this.handleCheckboxFilterChange}
                 />
               <label>Sidequests</label>
               &nbsp;&nbsp;
@@ -217,11 +224,43 @@ class Grading extends React.Component<IGradingProps, State> {
                 name="pathFilter"
                 type="checkbox"
                 checked={this.state.pathFilter}
-                onChange={this.handleCategoryChange}
+                onChange={this.handleCheckboxFilterChange}
                 />
               <label>Paths</label>
             </div>
           </div>
+
+
+          <div className="checkboxPanel">
+            <label>Submission status:</label>
+            &nbsp;&nbsp;
+            <div>
+              <input
+                name="submittedFilter"
+                type="checkbox"
+                checked={this.state.submittedFilter}
+                onChange={this.handleCheckboxFilterChange}
+                />
+              <label>Submitted</label>
+              &nbsp;&nbsp;
+              <input
+                name="attemptedFilter"
+                type="checkbox"
+                checked={this.state.attemptedFilter}
+                onChange={this.handleCheckboxFilterChange}
+                />
+              <label>Attempted</label>
+              &nbsp;&nbsp;
+              <input
+                name="attemptingFilter"
+                type="checkbox"
+                checked={this.state.attemptingFilter}
+                onChange={this.handleCheckboxFilterChange}
+                />
+              <label>Attempting</label>
+            </div>
+          </div>
+
         </div>
 
         <hr />
@@ -273,15 +312,13 @@ class Grading extends React.Component<IGradingProps, State> {
     this.props.handleFetchGradingOverviews(!checkStatus)
   }
 
-  private handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  private handleCheckboxFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checkStatus = event.target.checked
     this.setState({ [event.target.name as any]: checkStatus },
       () => {
         if(this.gridApi) { this.gridApi.onFilterChanged() }
       }
     )
-
-      
   }
 
   private onGridReady = (params: GridReadyEvent) => {
@@ -299,8 +336,14 @@ class Grading extends React.Component<IGradingProps, State> {
     || (this.state.pathFilter && node.data.assessmentCategory === AssessmentCategories.Path)
   }
 
+  private filterStatus = (node: IGradingOverviewNode) => {
+    return (this.state.attemptingFilter && node.data.status === AssessmentStatuses.attempting )
+    || (this.state.attemptedFilter && node.data.status === AssessmentStatuses.attempted )
+    || (this.state.submittedFilter && node.data.status === AssessmentStatuses.submitted )
+  }
+
   private doesExternalFilterPass = (node: IGradingOverviewNode) => {
-    return this.filterCategory(node)
+    return this.filterCategory(node) && this.filterStatus(node)
   }
 
   private exportCSV = () => {
