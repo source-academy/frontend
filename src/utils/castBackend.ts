@@ -15,7 +15,7 @@ export const castLibrary = (lib: any): Library => ({
   globals: Object.entries(lib.globals as object).map(entry => {
     /** The value that is passed is evaluated into an actual JS value */
     try {
-      entry[0] = (window as any).eval(entry[1])
+      entry[1] = (window as any).eval(entry[1])
     } catch (e) {}
     return entry
   })
