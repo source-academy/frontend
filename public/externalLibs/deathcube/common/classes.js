@@ -1324,3 +1324,15 @@ Action.prototype.__getThickness = function(){
     return this.__thickness;
 }
 //-------------------------------------------------------------------------
+
+function createCustomPlayer(name) {
+    function Me(name) {
+      Player.call(this.name)
+    }
+    Me.Inherits(Player);  
+    var me = new Me(name);
+    return me;
+}
+ 
+
+  
