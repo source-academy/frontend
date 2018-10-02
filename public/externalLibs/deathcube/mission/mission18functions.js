@@ -19,7 +19,7 @@ function test_task1(player) {
 	return engine;
 }
 
-function test_task2(player) {
+function test_task3(player) {
 	CONF_MAX_INERTIA = 2;
 	var engine = new DeathCubeEngine(CONT_MODE, LAYOUT18);
 	engine.__registerPlayer(player);

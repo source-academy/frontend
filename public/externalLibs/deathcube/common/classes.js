@@ -1325,14 +1325,71 @@ Action.prototype.__getThickness = function(){
 }
 //-------------------------------------------------------------------------
 
-function createCustomPlayer(name) {
-    function Me(name) {
-      Player.call(this.name)
-    }
-    Me.Inherits(Player);  
-    var me = new Me(name);
-    return me;
+// function getCustomPlayer(name, obj, func) {
+//     function Me(name) {
+//         Player.call(this, name)
+//         var self = this;
+//         var keys = Object.keys(obj);
+//         keys.forEach(key => {
+//             self[key] = obj[key]
+//         })
+//     }
+    
+//     Me.Inherits(Player);
+//     Me.prototype[func.name] = function() {
+//         Player.prototype[func.name].call(this);
+//         return func(obj);
+//     }
+
+//     return new Me(name);
+// }
+
+function Me(name) {
+    Player.call(this, name)
+}
+
+Me.Inherits(Player);
+
+function getCustomPlayer(name) {
+    return new Me(name);
 }
  
+function updateCustomPlayer(obj, func) {
+    obj.__act = function() {
+        Player.prototype.__act.call(obj);
+        func();
+    }
+    return obj;
+}
 
-  
+function is_ServiceBot(x) {
+    return is_instance_of(x, ServiceBot);
+}
+
+function is_Weapon(x) {
+    return is_instance_of(x, Weapon)
+}
+
+function is_Keycard(x) {
+    return is_instance_of(x, Keycard)
+}
+
+function is_ProtectedRoom(x) {
+    return is_instance_of(x, ProtectedRoom)
+}
+
+function is_SecurityDrone(x) {
+    return is_instance_of(x, SecurityDrone);
+}
+
+function is_Generator(x) {
+    return is_instance_of(x, Generator);
+}
+
+function math_random() {
+    return Math.random();
+}
+
+function math_floor(x) {
+    return Math.floor(x);
+}

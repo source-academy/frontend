@@ -44,6 +44,8 @@ function loadAllLibs() {
       // deathcube mission 16 layout and functions
     '/externalLibs/deathcube/mission/layout16a.js',
     '/externalLibs/deathcube/mission/layout16b.js',
+    '/externalLibs/deathcube/mission/layout17.js',
+    '/externalLibs/deathcube/mission/layout18.js',
     '/externalLibs/deathcube/mission/mission16functions.js',
     '/externalLibs/deathcube/mission/mission17functions.js',
     '/externalLibs/deathcube/mission/mission18functions.js',
