@@ -13,6 +13,6 @@ const Markdown: React.SFC<MarkdownProps> = props => (
   />
 )
 
-const converter = new Converter({tables: true})
+const converter = new Converter({ tables: true })
 
 export default Markdown
