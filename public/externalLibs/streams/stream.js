@@ -1,4 +1,3 @@
-
 // stream.js: Supporting streams in the Scheme style, following
 //            "stream discipline"
 // A stream is either the empty list or a pair whose tail is
@@ -43,9 +42,9 @@ function list_to_stream(xs) {
     if (is_empty_list(xs)) {
         return [];
     } else {
-        return pair(head(xs), 
-                    function() { 
-                        return list_to_stream(tail(xs)); 
+        return pair(head(xs),
+                    function() {
+                        return list_to_stream(tail(xs));
                     });
     }
 }
@@ -97,7 +96,7 @@ function stream_map(f, s) {
     if (is_empty_list(s)) {
        return [];
     } else {
-        return pair(f(head(s)), 
+        return pair(f(head(s)),
                     function() {
                         return stream_map(f, stream_tail(s));
                     });
@@ -115,9 +114,9 @@ function build_stream(n, fun) {
         if (i >= n) {
             return [];
         } else {
-            return pair(fun(i), 
-                        function() { 
-                            return build(i + 1); 
+            return pair(fun(i),
+                        function() {
+                            return build(i + 1);
                         });
         }
     }
@@ -150,7 +149,7 @@ function stream_reverse(xs) {
         if (is_empty_list(original)) {
             return reversed;
         } else {
-            return rev(stream_tail(original), 
+            return rev(stream_tail(original),
                        pair(head(original), function() { return reversed; }));
         }
     }
@@ -182,8 +181,8 @@ function stream_append(xs, ys) {
         return ys;
     } else {
         return pair(head(xs),
-                    function() { 
-                        return stream_append(stream_tail(xs), ys); 
+                    function() {
+                        return stream_append(stream_tail(xs), ys);
                     });
     }
 }
@@ -213,9 +212,9 @@ function stream_remove(v, xs) {
     } else if (v === head(xs)) {
         return stream_tail(xs);
     } else {
-        return pair(head(xs), 
-                    function() { 
-                        return stream_remove(v, stream_tail(xs)); 
+        return pair(head(xs),
+                    function() {
+                        return stream_remove(v, stream_tail(xs));
                     });
     }
 }
@@ -228,8 +227,8 @@ function stream_remove_all(v, xs) {
     } else if (v === head(xs)) {
         return stream_remove_all(v, stream_tail(xs));
     } else {
-        return pair(head(xs), function() { 
-            return stream_remove_all(v, stream_tail(xs)); 
+        return pair(head(xs), function() {
+            return stream_remove_all(v, stream_tail(xs));
         });
     }
 }
@@ -244,7 +243,7 @@ function stream_filter(p, s) {
     if (is_empty_list(s)) {
         return [];
     } else if (p(head(s))) {
-        return pair(head(s), 
+        return pair(head(s),
                     function() {
                         return stream_filter(p, stream_tail(s));
                     });
@@ -262,9 +261,9 @@ function enum_stream(start, end) {
     if (start > end) {
         return [];
     } else {
-        return pair(start, 
-                    function() { 
-                        return enum_stream(start + 1, end); 
+        return pair(start,
+                    function() {
+                        return enum_stream(start + 1, end);
                     });
     }
 }
@@ -305,4 +304,10 @@ function stream_ref(s, n) {
     } else {
         return stream_ref(stream_tail(s), n - 1);
     }
+}
+
+function stream_take_max(str, n) {
+  return is_empty_list(str) || n === 0
+    ? []
+    : pair(head(str), () => stream_take_max(stream_tail(str), n - 1));
 }
