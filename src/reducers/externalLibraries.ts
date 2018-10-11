@@ -128,7 +128,15 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'triangle_sound',
       'sawtooth_sourcesound',
       'sawtooth_sound',
-      'play_concurrently'
+      'play_concurrently',
+      /** Contest functions */
+      'adsr',
+      'stacking_adsr',
+      'trombone',
+      'piano',
+      'bell',
+      'violin',
+      'cello'
     ]
   ]
 ]
