@@ -130,6 +130,11 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'sawtooth_sound',
       'play_concurrently'
     ]
+  ],
+  [
+    ExternalLibraryNames.STREAMS,
+    [
+    ]
   ]
 ]
 
