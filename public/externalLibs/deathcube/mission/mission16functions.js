@@ -1,6 +1,6 @@
-function test_task2(player) {
+function test_task2(player, isGrader) {
 	CONF_DRONE_CARD = false; CONF_DRONE_BOT = false; 
-	var engine = new DeathCubeEngine(CONT_MODE, LAYOUT16B);
+	var engine = new DeathCubeEngine(CONT_MODE, LAYOUT16B, isGrader);
 	engine.__registerPlayer(player);
 	var mySaber = MakeAndInstallLightSaber(player.getLocation(), 30, COL_RED);
 	player.take(list(mySaber));    

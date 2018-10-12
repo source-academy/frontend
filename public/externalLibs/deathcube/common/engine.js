@@ -353,7 +353,8 @@ ActorManager.prototype.__sort = function(){
   this.__actors = sorted;
 }
 //-------------------------------------------------------------------------
-function DeathCubeEngine(mode, layout){
+function DeathCubeEngine(mode, layout, isGrader){
+  this.isGrader = isGrader;
   this.__deathcube    = [];
   this.__ship         = null;
   this.__endGame      = [];
@@ -532,8 +533,19 @@ DeathCubeEngine.prototype.__start = function(){
   if(this.__state != STATE_RUN){
     return;
   }
+  var interval;
+  if(this.isGrader) {
+    interval = 1;
+  } else {
+    interval = WINDOW.LOOP_INTERVAL;
+  }
+
   this.__timer = setInterval(function(){
-    engine.__draw();
+    console.log("ENGINE HERE")
+    console.log(engine.isGrader)
+    if(engine.isGrader === false) {
+      engine.__draw();
+    }
 
     if(engine.__mode == window.STEP_MODE &&
        engine.__roundsLeft == 0 && engine.__stepsLeft == 0){
@@ -550,7 +562,7 @@ DeathCubeEngine.prototype.__start = function(){
         engine.__stepsLeft--;
       }
     }
-  }, window.LOOP_INTERVAL);
+  }, interval);
 }
 
 DeathCubeEngine.prototype.__stop = function(){
