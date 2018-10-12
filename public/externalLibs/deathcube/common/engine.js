@@ -353,8 +353,9 @@ ActorManager.prototype.__sort = function(){
   this.__actors = sorted;
 }
 //-------------------------------------------------------------------------
-function DeathCubeEngine(mode, layout, isGrader){
+function DeathCubeEngine(mode, layout, isGrader, interval){
   this.isGrader = isGrader;
+  this.interval = interval;
   this.__deathcube    = [];
   this.__ship         = null;
   this.__endGame      = [];
@@ -535,9 +536,9 @@ DeathCubeEngine.prototype.__start = function(){
   }
   var interval;
   if(this.isGrader) {
-    interval = 1;
+    interval = this.interval;
   } else {
-    interval = WINDOW.LOOP_INTERVAL;
+    interval = window.LOOP_INTERVAL;
   }
 
   this.__timer = setInterval(function(){
