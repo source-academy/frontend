@@ -1393,3 +1393,103 @@ function math_random() {
 function math_floor(x) {
     return Math.floor(x);
 }
+
+// Methods for Rooms
+function spaceLeft(room) {
+    return room.spaceLeft();
+}
+
+function allowEntry(room, person) {
+    return room.allowEntry(person);
+}
+
+function getExit(room, dir) {
+    return room.getExit(dir);
+}
+
+function getExits(room) {
+    return room.getExits(room);
+}
+
+function getNeighbours(room) {
+    return room.getNeighbours(room);
+}
+
+function getThings(room) {
+    return room.getThings();
+}
+
+function getOccupants(room) {
+    return room.getOccupants();
+}
+
+// End of method for Rooms
+
+// Methods for Living Things
+function getHealth(obj) {
+    return obj.getHealth();
+}
+
+function getMaxHealth(obj) {
+    return obj.getMaxHealth();
+}
+// End of method for Living Things
+
+// Methods for Player
+
+// End of method for Player
+
+function getPossessions(obj) {
+    return obj.getPossessions();
+}
+
+function getLocation(obj) {
+    return obj.getLocation();
+}
+
+function say(obj, msg) {
+    return obj.say(msg);
+}
+
+function take(obj, lst) {
+    return obj.take(lst);
+}
+
+function drop(obj, lst) {
+    return obj.drop(lst);
+}
+
+function use(obj, thing, target) {
+    return obj.use(thing, target);
+}
+
+function moveTo(obj, newRoom) {
+    return obj.moveTo(newRoom);
+}
+
+function go(obj, direction) {
+    return obj.go(direction);
+}
+
+// Methods for Weapon
+function isCharging(obj) {
+    return obj.isCharging();
+}
+
+function chargeCyclesLeft(obj) {
+    return obj.chargeCyclesLeft();
+}
+
+function getMaxDmg(obj) {
+    return obj.getMaxDmg();
+}
+
+function getMinDmg(obj) {
+    return obj.getMinDmg();
+}
+
+function getRange(obj) {
+    return obj.getRange();
+}
+
+// End of Methods for Weapon
