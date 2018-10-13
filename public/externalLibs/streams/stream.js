@@ -306,8 +306,3 @@ function stream_ref(s, n) {
     }
 }
 
-function stream_take_max(str, n) {
-  return is_empty_list(str) || n === 0
-    ? []
-    : pair(head(str), () => stream_take_max(stream_tail(str), n - 1));
-}
