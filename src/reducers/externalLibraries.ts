@@ -153,8 +153,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'enum_stream',
       'integers_from',
       'eval_stream',
-      'stream_ref',
-      'stream_take_max'
+      'stream_ref'
     ]
   ]
 ]
