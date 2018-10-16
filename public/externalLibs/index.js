@@ -34,6 +34,8 @@ function loadAllLibs() {
     '/externalLibs/visualizer/visualizer.js',
     // binary tree library
     '/externalLibs/tree.js',
+    // streams
+    '/externalLibs/streams/stream.js',
   ];
 
   for (var i = 0; i < files.length; i++) {

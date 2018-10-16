@@ -149,6 +149,31 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'violin',
       'cello'
     ]
+  ],
+  [
+    ExternalLibraryNames.STREAMS,
+    [
+      'stream_tail',
+      'is_stream',
+      'list_to_stream',
+      'stream_to_list',
+      'stream',
+      'stream_length',
+      'stream_map',
+      'build_stream',
+      'stream_for_each',
+      'stream_reverse',
+      'stream_to_vector',
+      'stream_append',
+      'stream_member',
+      'stream_remove',
+      'stream_remove_all',
+      'stream_filter',
+      'enum_stream',
+      'integers_from',
+      'eval_stream',
+      'stream_ref'
+    ]
   ]
 ]
 
