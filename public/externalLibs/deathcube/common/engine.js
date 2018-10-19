@@ -542,8 +542,6 @@ DeathCubeEngine.prototype.__start = function(){
   }
 
   this.__timer = setInterval(function(){
-    console.log("ENGINE HERE")
-    console.log(engine.isGrader)
     if(engine.isGrader === false) {
       engine.__draw();
     }
