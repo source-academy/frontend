@@ -1,6 +1,6 @@
-function test_task1(player) {
+function test_task3(player, isGrader, interval) {
 	CONF_MAX_INERTIA = 2;
-	var engine = new DeathCubeEngine(CONT_MODE, LAYOUT18);
+	var engine = new DeathCubeEngine(CONT_MODE, LAYOUT18, isGrader, interval);
 	engine.__registerPlayer(player);
 	player.take(list(MakeAndInstallLightSaber(player.getLocation(), 30, COL_RED),
 									 MakeAndInstallLaser(player.getLocation(), 30, COL_BLUE),
@@ -19,9 +19,9 @@ function test_task1(player) {
 	return engine;
 }
 
-function test_task3(player) {
+function test_task4(player, isGrader, interval) {
 	CONF_MAX_INERTIA = 2;
-	var engine = new DeathCubeEngine(CONT_MODE, LAYOUT18);
+	var engine = new DeathCubeEngine(CONT_MODE, LAYOUT18, isGrader, interval);
 	engine.__registerPlayer(player);
 	player.take(list(MakeAndInstallLightSaber(player.getLocation(), 30, COL_RED),
 									 MakeAndInstallLaser(player.getLocation(), 30, COL_BLUE),

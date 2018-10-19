@@ -1,6 +1,6 @@
-function test_task(player) {
+function test_task(player, isGrader, interval) {
 	CONF_MAX_INERTIA = 2;
-	var engine = new DeathCubeEngine(CONT_MODE, LAYOUT17);
+	var engine = new DeathCubeEngine(CONT_MODE, LAYOUT17, isGrader, interval);
 	engine.__registerPlayer(player);
 	var mySaber = MakeAndInstallLightSaber(player.getLocation(), 30, COL_RED);
 	player.take(list(mySaber));    

@@ -1382,12 +1382,32 @@ function is_SecurityDrone(x) {
     return is_instance_of(x, SecurityDrone);
 }
 
+function is_MeleeWeapon(x) {
+    return is_instance_of(x, MeleeWeapon);
+}
+
+
+function is_SpellWeapon(x) {
+    return is_instance_of(x, SpellWeapon);
+}
+
+function is_RangedWeapon(x) {
+    return is_instance_of(x, RangedWeapon);
+}
+
+function is_Bomb(x) {
+    return is_instance_of(x, Bomb);
+}
 function is_Generator(x) {
     return is_instance_of(x, Generator);
 }
 
-function math_random() {
-    return Math.random();
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+function math_random(x) {
+    return getRandomInt(x);
 }
 
 function math_floor(x) {
@@ -1460,7 +1480,11 @@ function drop(obj, lst) {
 }
 
 function use(obj, thing, target) {
-    return obj.use(thing, target);
+    if(is_Bomb(obj)) {
+        return obj.use(thing);
+    } else {
+        return obj.use(thing, target);
+    }
 }
 
 function moveTo(obj, newRoom) {
