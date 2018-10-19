@@ -400,3 +400,48 @@ function display(str) {
 	}
 	return str;
 }
+// take(xs, n) puts the first n elements of xs into a list.
+function take(xs, n) {
+    if (n < 0) {
+        throw new Error("take(xs, n) expects a positive integer as " +
+            "argument n, but encountered " + n);
+    }
+    return (n === 0) ? [] : pair(head(xs), take(tail(xs), n - 1));
+}
+
+// drop(xs, n) removes the first n elements from xs and returns the rest (as a list)
+function drop(xs, n) {
+    if (n < 0) {
+        throw new Error("drop(xs, n) expects a positive integer as " +
+            "argument n, but encountered " + n);
+    }
+    return (n === 0) ? xs : drop(tail(xs), n - 1);
+}
+
+//function display(str) {
+//	var to_show = str;
+//    if (is_array(str) && str.length > 2) {
+//        to_show = '[' + str.toString() + ']';
+//	} else if (is_array(str) && is_empty_list(str)) {
+//		to_show = '[]';
+//	} else if (is_pair(str)) {
+//		to_show = '';
+//		var stringize = function(item) {
+//			if (is_empty_list(item)) {
+//				return '[]';
+//			} else if (is_pair(item)) {
+//				return '[' + stringize(head(item)) + ', ' + stringize(tail(item)) + ']';
+//			} else {
+//				return item.toString();
+//			}
+//		}
+//		to_show = stringize(str);
+//	}
+//	//process.stdout.write(to_show);
+//	if (typeof to_show === 'function' && to_show.toString) {
+//		console.log(to_show.toString());
+//	} else {
+//		console.log(to_show);
+//	}
+//	return str;
+//}

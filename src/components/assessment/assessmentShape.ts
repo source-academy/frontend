@@ -94,7 +94,8 @@ export enum ExternalLibraryNames {
   THREE_DIM_RUNES = 'THREE_DIM_RUNES',
   CURVES = 'CURVES',
   SOUND = 'SOUND',
-  DEATHCUBE = 'DEATHCUBE'
+  DEATHCUBE = 'DEATHCUBE',
+  STREAMS = 'STREAMS'
 }
 
 export type ExternalLibraryName = keyof typeof ExternalLibraryNames

@@ -87,7 +87,18 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'squeeze_full_view',
       'squeeze_rectangular_portion',
       'translate',
-      'scale'
+      'scale',
+      /** Contest functions */
+      'alternative_unit_circle',
+      'rotate_pi_over_2',
+      'scale_x_y',
+      'gosperize',
+      'gosper_curve',
+      'show_connected_gosper',
+      'repeated',
+      'param_gosper',
+      'param_gosperize',
+      'rotate_around_origin'
     ]
   ],
   [
@@ -128,7 +139,40 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'triangle_sound',
       'sawtooth_sourcesound',
       'sawtooth_sound',
-      'play_concurrently'
+      'play_concurrently',
+      /** Contest functions */
+      'adsr',
+      'stacking_adsr',
+      'trombone',
+      'piano',
+      'bell',
+      'violin',
+      'cello'
+    ]
+  ],
+  [
+    ExternalLibraryNames.STREAMS,
+    [
+      'stream_tail',
+      'is_stream',
+      'list_to_stream',
+      'stream_to_list',
+      'stream',
+      'stream_length',
+      'stream_map',
+      'build_stream',
+      'stream_for_each',
+      'stream_reverse',
+      'stream_to_vector',
+      'stream_append',
+      'stream_member',
+      'stream_remove',
+      'stream_remove_all',
+      'stream_filter',
+      'enum_stream',
+      'integers_from',
+      'eval_stream',
+      'stream_ref'
     ]
   ],
   [

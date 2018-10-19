@@ -50,6 +50,8 @@ function loadAllLibs() {
     '/externalLibs/deathcube/mission/mission17functions.js',
     '/externalLibs/deathcube/mission/mission18functions.js',
     '/externalLibs/deathcube/common/engine.js',
+    // streams
+    '/externalLibs/streams/stream.js',
   ];
 
   for (var i = 0; i < files.length; i++) {
