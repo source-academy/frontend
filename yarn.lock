@@ -5135,9 +5135,9 @@ js-base64@^2.1.9:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.3.tgz#2e545ec2b0f2957f41356510205214e98fad6582"
 
-js-slang@0.1.8:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.1.8.tgz#791841db199853f81c14872c0f0366414f31ff96"
+js-slang@0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.1.10.tgz#d081b896d5bbab34246e4bbb6d7d020b07ec72d6"
   dependencies:
     "@types/acorn" "^4.0.3"
     "@types/estree" "0.0.39"
