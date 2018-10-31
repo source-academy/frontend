@@ -325,10 +325,10 @@
   resolved "https://registry.yarnpkg.com/@types/lz-string/-/lz-string-1.3.32.tgz#60e26d0f70daa6bf385b9437bb02f661a5713f81"
   integrity sha1-YOJtD3Dapr84W5Q3uwL2YaVxP4E=
 
-"@types/node@*", "@types/node@^9.6.5":
-  version "9.6.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.5.tgz#ee700810fdf49ac1c399fc5980b7559b3e5a381d"
-  integrity sha512-NOLEgsT6UiDTjnWG5Hd2Mg25LRyz/oe8ql3wbjzgSFeRzRROhPmtlsvIrei4B46UjERF0td9SZ1ZXPLOdcrBHg==
+"@types/node@*", "@types/node@^10.12.1":
+  version "10.12.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.1.tgz#da61b64a2930a80fa708e57c45cd5441eb379d5b"
+  integrity sha512-i1sl+WCX2OCHeUi9oi7PiCNUtYFrpWhpcx878vpeq/tlZTKzcFdHePlyFHVbWqeuKN0SRPl/9ZFDSTsfv9h7VQ==
 
 "@types/pixi.js@^4.7.3":
   version "4.7.3"
