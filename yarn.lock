@@ -46,18 +46,18 @@
     react-popper "^0.8.2"
     tslib "^1.9.0"
 
-"@blueprintjs/icons@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-2.1.1.tgz#426b0291baf198e0181ae8f49bb5c2bc0bb55e9f"
-  integrity sha512-A7oLBH1oSsKEvEwAES3wCNWnZkOuDoAgLYoXJjk1Q+hdDqU+x9PQCgASR4o69jjV6GapSKVDKJ+G9Z/uKT5ARg==
+"@blueprintjs/icons@^2.1.1", "@blueprintjs/icons@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-2.2.1.tgz#1b4275fc67467218a8ffec6403c87c7af24532a5"
+  integrity sha512-aMFjwfI6eEliw+Rqyhzt0ZbetxQgKO+fsnWefMqUEYG9eix/PSNPD8Bb/v1vyaFSO1Doa74G5Xj6d5AgNZt+Ww==
   dependencies:
     classnames "^2.2"
     tslib "^1.9.0"
 
-"@blueprintjs/icons@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-2.2.1.tgz#1b4275fc67467218a8ffec6403c87c7af24532a5"
-  integrity sha512-aMFjwfI6eEliw+Rqyhzt0ZbetxQgKO+fsnWefMqUEYG9eix/PSNPD8Bb/v1vyaFSO1Doa74G5Xj6d5AgNZt+Ww==
+"@blueprintjs/icons@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.2.0.tgz#d21cceebfac9c1bceded047e493ee1e180b86f11"
+  integrity sha512-MoI4TdZ2QMM9DEd+/vJOMSlhuvPID3Zip0TB/MB1J7p7GnUThIRq2FlETMUg6ig1GZweAWNl7cUtYFNHZ3EiUQ==
   dependencies:
     classnames "^2.2"
     tslib "^1.9.0"
