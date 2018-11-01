@@ -5926,10 +5926,10 @@ js-base64@^2.1.9:
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.3.tgz#2e545ec2b0f2957f41356510205214e98fad6582"
   integrity sha512-H7ErYLM34CvDMto3GbD6xD0JLUGYXR3QTcH6B/tr4Hi/QpSThnCsIp+Sy5FRTw3B0d6py4HcNkW7nO/wdtGWEw==
 
-js-slang@0.1.14:
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.1.14.tgz#7df10d980bbd0f65e4ee6813d26db5b544d64ce2"
-  integrity sha512-j2zLfhRrDN0uSJrR9N1nFMQ4nOqiFrSLOa+hqbuPbcUsMlSV9hDYy9tZ/ZyW1oB2gpRyzCFvJRvkEkde7ooBlQ==
+js-slang@0.1.16:
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.1.16.tgz#2fc6835118e35e9bfeb1666e7b16c596242a9d9e"
+  integrity sha512-0R9iM2iqBTLXkoGzO7bQguFWIE5NezCa4zNGFHUTVJCYmhKQDfRJk5IHbhX+PeirN3PcXeQyaZgAwqQ9YDZQ/w==
   dependencies:
     "@types/acorn" "^4.0.3"
     "@types/estree" "0.0.39"
