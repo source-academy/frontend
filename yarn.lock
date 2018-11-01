@@ -18,6 +18,13 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@babel/runtime@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.1.2.tgz#81c89935f4647706fc54541145e6b4ecfef4b8e3"
+  integrity sha512-Y3SCjmhSupzFB6wcv1KmmFucH6gDVnI30WjOcicV10ju0cZjak3Jcs67YLIXBrmZYw1xCrVeJPbycFwrqNyxpg==
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 "@blueprintjs/core@^2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-2.1.1.tgz#8e7178c7bd0faea53a0f9a25392215a1fe62d05e"
@@ -4669,10 +4676,17 @@ hoek@4.x.x:
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.1.tgz#9634502aa12c445dd5a7c5734b572bb8738aacbb"
   integrity sha512-QLg82fGkfnJ/4iy1xZ81/9SIJiq1NGFUMGs6ParyjBZr6jW2Ufj/snDqTHixNlHdPNwN2RLVD0Pi3igeK9+JfA==
 
-hoist-non-react-statics@^2.3.0, hoist-non-react-statics@^2.5.0:
+hoist-non-react-statics@^2.3.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.0.tgz#d2ca2dfc19c5a91c5a6615ce8e564ef0347e2a40"
   integrity sha512-6Bl6XsDT1ntE0lHbIhr4Kp2PGcleGZ66qu5Jqk8lc0Xc/IeG6gVLmwUGs/K0Us+L8VWoKgj0uWdPMataOsm31w==
+
+hoist-non-react-statics@^3.0.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.1.0.tgz#42414ccdfff019cd2168168be998c7b3bd5245c0"
+  integrity sha512-MYcYuROh7SBM69xHGqXEwQqDux34s9tz+sCnxJmN18kgWh6JFdTw/5YdZtqsOdZJXddE/wUpCzfEdDrJj8p0Iw==
+  dependencies:
+    react-is "^16.3.2"
 
 home-or-tmp@^2.0.0:
   version "2.0.0"
@@ -5060,7 +5074,7 @@ interpret@^1.0.0:
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.1.0.tgz#7ed1b1410c6a0e0f78cf95d3b8440c63f78b8614"
   integrity sha1-ftGxQQxqDg94z5XTuEQMY/eLhhQ=
 
-invariant@^2.0.0, invariant@^2.2.1, invariant@^2.2.2:
+invariant@^2.2.1, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -6305,7 +6319,7 @@ lockfile@^1.0.4:
   dependencies:
     signal-exit "^3.0.2"
 
-lodash-es@^4.17.5, lodash-es@^4.2.1:
+lodash-es@^4.2.1:
   version "4.17.8"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.8.tgz#6fa8c8c5d337481df0bdf1c0d899d42473121e45"
   integrity sha512-I9mjAxengFAleSThFhhAhvba6fsO0hunb9/0sQ6qQihSZsJRBofv2rYH58WXaOb/O++eUmYpCLywSQ22GfU+sA==
@@ -6448,7 +6462,7 @@ lodash.without@~4.4.0:
   resolved "https://registry.yarnpkg.com/lodash.without/-/lodash.without-4.4.0.tgz#3cd4574a00b67bae373a94b748772640507b7aac"
   integrity sha1-PNRXSgC2e643OpS3SHcmQFB7eqw=
 
-"lodash@>=3.5 <5", lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.1, lodash@^4.3.0:
+"lodash@>=3.5 <5", lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.1, lodash@^4.3.0:
   version "4.17.5"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
   integrity sha512-svL3uiZf1RwhH+cWrfZn3A4+U58wbP0tGVTLQPbjplZxZ8ROD9VLuNgsRniTlLe7OlSqR79RUehXgpBW/s0IQw==
@@ -8823,6 +8837,16 @@ react-is@^16.3.2:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.2.tgz#f4d3d0e2f5fbb6ac46450641eb2e25bf05d36b22"
   integrity sha512-ybEM7YOr4yBgFd6w8dJqwxegqZGJNBZl6U27HnGKuTZmDvVrD5quWOK/wAnMywiZzW+Qsk+l4X2c70+thp/A8Q==
 
+react-is@^16.6.0:
+  version "16.6.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.6.0.tgz#456645144581a6e99f6816ae2bd24ee94bdd0c01"
+  integrity sha512-q8U7k0Fi7oxF1HvQgyBjPwDXeMplEsArnKt2iYhuIF86+GBbgLHdAmokL3XUFjTd7Q363OSNG55FOGUdONVn1g==
+
+react-lifecycles-compat@^3.0.0:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+  integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
 react-mde@^5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/react-mde/-/react-mde-5.6.0.tgz#91a24496d03d97799d7464b084573b6621f1ea1b"
@@ -8849,17 +8873,18 @@ react-reconciler@^0.7.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-redux@^5.0.7:
-  version "5.0.7"
-  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.7.tgz#0dc1076d9afb4670f993ffaef44b8f8c1155a4c8"
-  integrity sha512-5VI8EV5hdgNgyjfmWzBbdrqUkrVRKlyTKk1sGH3jzM2M2Mhj/seQgPXaz6gVAj2lz/nz688AdTqMO18Lr24Zhg==
+react-redux@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.1.0.tgz#948b1e2686473d1999092bcfb32d0dc43d33f667"
+  integrity sha512-CRMpEx8+ccpoVxQrQDkG1obExNYpj6dZ1Ni7lUNFB9wcxOhy02tIqpFo4IUXc0kYvCGMu6ABj9A4imEX2VGZJQ==
   dependencies:
-    hoist-non-react-statics "^2.5.0"
-    invariant "^2.0.0"
-    lodash "^4.17.5"
-    lodash-es "^4.17.5"
+    "@babel/runtime" "^7.1.2"
+    hoist-non-react-statics "^3.0.0"
+    invariant "^2.2.4"
     loose-envify "^1.1.0"
-    prop-types "^15.6.0"
+    prop-types "^15.6.1"
+    react-is "^16.6.0"
+    react-lifecycles-compat "^3.0.0"
 
 react-router-dom@^4.2.2:
   version "4.2.2"
@@ -9195,6 +9220,11 @@ regenerator-runtime@^0.11.0:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
   integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
+
+regenerator-runtime@^0.12.0:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.12.1.tgz#fa1a71544764c036f8c49b13a08b2594c9f8a0de"
+  integrity sha512-odxIc1/vDlo4iZcfXqRYFj0vpXFNoGdKMAUieAlFYO6m/nl5e9KR/beGf41z4a1FI+aQgtjhuaSlDxQ0hmkrHg==
 
 regenerator-transform@^0.10.0:
   version "0.10.1"
