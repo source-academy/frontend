@@ -36,6 +36,7 @@ function loadAllLibs() {
     '/externalLibs/tree.js',
     // streams
     '/externalLibs/streams/stream.js',
+    '/externalLibs/pe_library.js'
   ];
 
   for (var i = 0; i < files.length; i++) {
