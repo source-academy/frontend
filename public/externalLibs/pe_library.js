@@ -8,7 +8,7 @@ function is_array(x) {
 
 function map_array(f, ls){
     let res = [];
-    let len = array_length(ls);
+    let len = ls.length;
     for(let i = 0; i < len; i++){
         res.push(f(ls[i]));
     }
@@ -35,6 +35,24 @@ function enum_array(a,b){
     let res = [];
     for(let i = a; a <= b; a++){
         res.push(a);
+    }
+    return res;
+}
+
+function take_array(xs, n){
+    let res = [];
+    let arr_len = xs.length;
+    for(let i = 0; i < n; i = i + 1){
+        res[i] = xs[i];
+    }
+    return res;
+}
+
+function drop_array(xs, n){
+    let res = [];
+    let arr_len = xs.length;
+    for(let i = n; i < arr_len; i = i + 1){
+        res.push(xs[i]);
     }
     return res;
 }
