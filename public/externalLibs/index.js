@@ -36,7 +36,8 @@ function loadAllLibs() {
     '/externalLibs/tree.js',
     // streams
     '/externalLibs/streams/stream.js',
-    '/externalLibs/pe_library.js'
+    '/externalLibs/pe_library.js',
+    '/externalLibs/assert_compiled.js'
   ];
 
   for (var i = 0; i < files.length; i++) {
