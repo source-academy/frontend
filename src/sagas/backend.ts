@@ -439,7 +439,8 @@ async function getGradingOverviews(
         initialXp: overview.xp,
         xpAdjustment: overview.xpAdjustment,
         currentXp: overview.xp + overview.xpAdjustment,
-        maxXp: overview.assessment.maxXp
+        maxXp: overview.assessment.maxXp,
+        xpBonus: overview.xpBonus
       }
       return gradingOverview
     })

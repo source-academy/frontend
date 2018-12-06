@@ -13,6 +13,7 @@ export type GradingOverview = {
   currentGrade: number
   maxGrade: number
   initialXp: number
+  xpBonus: number
   xpAdjustment: number
   currentXp: number
   maxXp: number

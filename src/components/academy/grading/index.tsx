@@ -121,7 +121,8 @@ class Grading extends React.Component<IGradingProps, State> {
         { headerName: 'Current Grade', field: 'currentGrade', hide: true },
         { headerName: 'Max Grade', field: 'maxGrade', hide: true },
         { headerName: 'Current XP', field: 'currentXp', hide: true },
-        { headerName: 'Max XP', field: 'maxXp', hide: true }
+        { headerName: 'Max XP', field: 'maxXp', hide: true },
+        { headerName: 'Bonus XP', field: 'xpBonus', hide: true }
       ],
 
       filterValue: '',
