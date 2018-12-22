@@ -1,4 +1,3 @@
-import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
 import * as React from 'react'
 import { Prompt } from 'react-router'
 
@@ -7,6 +6,8 @@ import Editor, { IEditorProps } from './Editor'
 import MCQChooser, { IMCQChooserProps } from './MCQChooser'
 import Repl, { IReplProps } from './Repl'
 import SideContent, { SideContentProps } from './side-content'
+
+import Resizable, { ResizableElement, ResizableProps, ResizeCallback } from '../commons/Resizable'
 
 export type WorkspaceProps = {
   // Either editorProps or mcqProps must be provided
@@ -23,13 +24,20 @@ export type WorkspaceProps = {
 }
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
-  private editorDividerDiv: HTMLDivElement
-  private leftParentResizable: Resizable
+  private editorDividerDiv: React.RefObject<HTMLDivElement>
+  private leftParentResizable: ResizableElement
   private maxDividerHeight: number
-  private sideDividerDiv: HTMLDivElement
+  private sideDividerDiv: React.RefObject<HTMLDivElement>
+
+  constructor(props: WorkspaceProps) {
+    super(props)
+    this.editorDividerDiv = React.createRef<HTMLDivElement>()
+    this.sideDividerDiv = React.createRef<HTMLDivElement>()
+  }
 
   public componentDidMount() {
-    this.maxDividerHeight = this.sideDividerDiv.clientHeight
+    this.maxDividerHeight =
+      this.sideDividerDiv.current !== null ? this.sideDividerDiv.current.clientHeight : 0
   }
 
   /**
@@ -48,14 +56,14 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         ) : null}
         <ControlBar {...this.controlBarProps()} />
         <div className="row workspace-parent">
-          <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
+          <div className="editor-divider" ref={this.editorDividerDiv} />
           <Resizable {...this.editorResizableProps()}>
             {this.createWorkspaceInput(this.props)}
           </Resizable>
           <div className="right-parent">
             <Resizable {...this.sideContentResizableProps()}>
               <SideContent {...this.props.sideContentProps} />
-              <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
+              <div className="side-content-divider" ref={this.sideDividerDiv} />
             </Resizable>
             <Repl {...this.props.replProps} />
           </div>
@@ -74,7 +82,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private editorResizableProps() {
     const onResizeStop: ResizeCallback = ({}, {}, {}, diff) =>
       this.props.handleEditorWidthChange(diff.width * 100 / window.innerWidth)
-    const ref = (e: Resizable) => (this.leftParentResizable = e as Resizable)
+    const ref = (e: ResizableElement) => (this.leftParentResizable = e as ResizableElement)
     return {
       className: 'resize-editor left-parent',
       enable: rightResizeOnly,
@@ -123,9 +131,9 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     }
     // Update divider margin
     if (editorWidthPercentage < leftThreshold) {
-      this.editorDividerDiv.style.marginRight = '0.6rem'
+      this.editorDividerDiv.current!.style.marginRight = '0.6rem'
     } else {
-      this.editorDividerDiv.style.marginRight = '0'
+      this.editorDividerDiv.current!.style.marginRight = '0'
     }
   }
 
@@ -135,15 +143,15 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    */
   private toggleDividerDisplay: ResizeCallback = ({}, {}, ref) => {
     this.maxDividerHeight =
-      this.sideDividerDiv.clientHeight > this.maxDividerHeight
-        ? this.sideDividerDiv.clientHeight
+      this.sideDividerDiv.current!.clientHeight > this.maxDividerHeight
+        ? this.sideDividerDiv.current!.clientHeight
         : this.maxDividerHeight
     const resizableHeight = (ref as HTMLDivElement).clientHeight
     const rightParentHeight = (ref.parentNode as HTMLDivElement).clientHeight
     if (resizableHeight + this.maxDividerHeight + 2 > rightParentHeight) {
-      this.sideDividerDiv.style.display = 'none'
+      this.sideDividerDiv.current!.style.display = 'none'
     } else {
-      this.sideDividerDiv.style.display = 'initial'
+      this.sideDividerDiv.current!.style.display = 'initial'
     }
   }
 

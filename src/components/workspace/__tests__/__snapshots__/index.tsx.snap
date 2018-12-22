@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Workspace renders correctly 1`] = `
+"<div className=\\"workspace\\">
+  <ControlBar externalLibraryName=\\"\\" handleChapterSelect={[Function: handleChapterSelect]} handleExternalSelect={[Function: handleExternalSelect]} handleEditorEval={[Function: handleEditorEval]} handleGenerateLz={[Function: handleGenerateLz]} handleInterruptEval={[Function: handleInterruptEval]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} hasChapterSelect={true} hasSaveButton={false} hasShareButton={true} isRunning={true} queryString=\\"/playground\\" questionProgress={{...}} sourceChapter={3} hasUnsavedChanges={[undefined]} onClickNext={[Function: onClickNext]} onClickPrevious={[Function: onClickPrevious]} onClickSave={[Function: onClickSave]} />
+  <div className=\\"row workspace-parent\\">
+    <div className=\\"editor-divider\\" />
+    <Resizable className=\\"resize-editor left-parent\\" enable={{...}} minWidth={0} onResize={[Function]} onResizeStop={[Function: onResizeStop]} size={{...}} onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0}>
+      <Editor editorValue=\\"\\" handleEditorEval={[Function: handleEditorEval]} handleEditorValueChange={[Function: handleEditorValueChange]} />
+    </Resizable>
+    <div className=\\"right-parent\\">
+      <Resizable bounds=\\"parent\\" className=\\"resize-side-content\\" enable={{...}} minHeight={0} onResize={[Function]} onResizeStop={[Function: onResizeStop]} size={{...}} onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0}>
+        <SideContent activeTab={0} handleChangeActiveTab={[Function: handleChangeActiveTab]} tabs={{...}} />
+        <div className=\\"side-content-divider\\" />
+      </Resizable>
+      <Repl output={{...}} replValue=\\"\\" handleBrowseHistoryDown={[Function: handleBrowseHistoryDown]} handleBrowseHistoryUp={[Function: handleBrowseHistoryUp]} handleReplEval={[Function: handleReplEval]} handleReplValueChange={[Function: handleReplValueChange]} />
+    </div>
+  </div>
+</div>"
+`;
