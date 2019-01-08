@@ -538,7 +538,7 @@ function adsr(attack_time, decay_time, sustain_level, release_time) {
 
 function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
   function zip(lst, n) {
-    if (is_empty_list(lst)) {
+    if (is_null(lst)) {
       return lst;
     } else {
       return pair(pair(n, head(lst)), zip(tail(lst), n + 1));
@@ -547,7 +547,7 @@ function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
 
   return simultaneously(accumulate(function (x, y) {
     return pair((tail(x))(waveform(base_frequency * head(x), duration)), y);
-  }, [], zip(list_of_envelope, 1)));
+  }, null, zip(list_of_envelope, 1)));
 }
 
 // instruments for students

@@ -40,10 +40,10 @@
               thisNode.data = head(lst);
           }
           // similarly for right subtree.
-          if (is_pair(tail(lst)) || is_list(tail(lst)) && is_empty_list(tail(lst))) {
+          if (is_pair(tail(lst)) || is_list(tail(lst)) && is_null(tail(lst))) {
               if (perms.indexOf(tail(lst)) > -1) {
                   thisNode.rightid = perms.indexOf(tail(lst));
-              } else if (!is_empty_list(tail(lst))){
+              } else if (!is_null(tail(lst))){
                   thisNode.right = construct_tree(tail(lst));
               }
           } else {
@@ -349,7 +349,7 @@
       var txtValue;
       var label;
       // text for data item #1
-      if (value !== null && (!is_list(value) || !is_empty_list(value))) {
+      if (value !== null && (!is_list(value) || !is_null(value))) {
           txtValue = toText(value);
           label = false;
           if (txtValue === false) {
@@ -366,7 +366,7 @@
               fill    :'white'
           });
           this.image.add(txt);
-      } else if (is_list(value) && is_empty_list(value)) {
+      } else if (is_list(value) && is_null(value)) {
           var empty = new NodeEmpty_list( -tcon.boxWidth*tcon.vertBarPos, 0);
           var emptyBox = empty.getRaw();
           this.image.add(emptyBox);
@@ -397,7 +397,7 @@
       this.image.add(line);
 
       // text need to be on top of the box background
-      if (value !== null && (!is_list(value) || !is_empty_list(value))) {
+      if (value !== null && (!is_list(value) || !is_null(value))) {
           txt.moveToTop();
       } else if (emptyBox) {
           emptyBox.moveToTop();
@@ -640,7 +640,7 @@
       layerList.push(layer);
 
       if (!is_pair(xs)) {
-          if (is_empty_list(xs)) {
+          if (is_null(xs)) {
               var display = "[  ]";
           } else {
               var display = toText(xs, true);

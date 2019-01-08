@@ -1,5 +1,6 @@
 import { Card } from '@blueprintjs/core'
-import { parseError, toString } from 'js-slang'
+import { parseError } from 'js-slang'
+import { stringify } from 'js-slang/dist/interop'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 
@@ -93,7 +94,7 @@ const renderResult = (value: any) => {
   if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
     return <CanvasOutput />
   } else {
-    return toString(value)
+    return stringify(value)
   }
 }
 

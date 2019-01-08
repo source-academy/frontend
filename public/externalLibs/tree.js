@@ -5,7 +5,7 @@
 
 // make_empty_binary_tree returns an empty list
 function make_empty_binary_tree() {
-    return [];
+    return null;
 }
 
 // checks if a given list is a valid binary tree, according to the abstraction
@@ -29,7 +29,7 @@ function make_binary_tree_node(left, value, right) {
 
 // is_empty_binary_tree checks if given binary tree node is an empty list
 function is_empty_binary_tree(t) {
-    return is_empty_list(t);
+    return is_null(t);
 }
 
 // left_subtree_of returns the left subtree of a given binary tree node
@@ -46,4 +46,3 @@ function value_of(t) {
 function right_subtree_of(t) {
     return list_ref(t, 2);
 }
-    
