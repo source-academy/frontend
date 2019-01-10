@@ -10,8 +10,10 @@ import {
   IconName,
   Intent,
   NonIdealState,
+  Position,
   Spinner,
-  Text
+  Text,
+  Tooltip
 } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
@@ -25,6 +27,7 @@ import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParse
 import {
   AssessmentCategory,
   AssessmentStatuses,
+  GradingStatuses,
   IAssessmentOverview
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
@@ -111,7 +114,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const upcomingCards = this.props.assessmentOverviews
         .filter(isOverviewUpcoming)
         .map((overview, index) =>
-          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent)
+          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent, false)
         )
 
       /** Opened assessments, that are released and can be attempted. */
@@ -121,12 +124,16 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         overview.status !== AssessmentStatuses.submitted
       const openedCards = this.props.assessmentOverviews
         .filter(overview => isOverviewOpened(overview))
-        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment, true))
+        .map((overview, index) =>
+          makeOverviewCard(overview, index, this.setBetchaAssessment, true, false)
+        )
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.props.assessmentOverviews
         .filter(overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview))
-        .map((overview, index) => makeOverviewCard(overview, index, this.setBetchaAssessment, true))
+        .map((overview, index) =>
+          makeOverviewCard(overview, index, this.setBetchaAssessment, true, true)
+        )
 
       /** Render cards */
       const upcomingCardsCollapsible =
@@ -277,7 +284,8 @@ const makeOverviewCard = (
   overview: IAssessmentOverview,
   index: number,
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
-  renderAttemptButton: boolean
+  renderAttemptButton: boolean,
+  renderGradingStatus: boolean
 ) => (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
@@ -288,7 +296,7 @@ const makeOverviewCard = (
         />
       </div>
       <div className="col-xs-9 listing-text">
-        {makeOverviewCardTitle(overview, index, setBetchaAssessment)}
+        {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)}
         <div className="row listing-grade">
           <h6>
             {' '}
@@ -325,15 +333,51 @@ const makeOverviewCard = (
 const makeOverviewCardTitle = (
   overview: IAssessmentOverview,
   index: number,
-  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
+  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
+  renderGradingStatus: boolean
 ) => (
   <div className="row listing-title">
     <Text ellipsize={true} className={'col-xs-10'}>
-      <h4>{overview.title}</h4>
+      <h4>
+        {overview.title} {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
+      </h4>
     </Text>
     <div className="col-xs-2">{makeSubmissionButton(overview, index, setBetchaAssessment)}</div>
   </div>
 )
+
+const makeGradingStatus = (gradingStatus: string) => {
+  let intent: Intent
+  let tooltip: string
+
+  switch (gradingStatus) {
+    case GradingStatuses.none:
+      intent = Intent.DANGER
+      tooltip = 'Submission has not been graded by an Avenger'
+      break
+
+    case GradingStatuses.grading:
+      intent = Intent.WARNING
+      tooltip = 'Submission has been partially graded by an Avenger'
+      break
+
+    case GradingStatuses.graded:
+      intent = Intent.SUCCESS
+      tooltip = 'Submission has been fully graded by an Avenger'
+      break
+
+    default:
+      intent = Intent.DANGER
+      tooltip = 'Submission has not been graded by an Avenger'
+      break
+  }
+
+  return (
+    <Tooltip content={tooltip} position={Position.RIGHT}>
+      <Icon icon={IconNames.ENDORSED} intent={intent} />
+    </Tooltip>
+  )
+}
 
 const makeSubmissionButton = (
   overview: IAssessmentOverview,

@@ -25,7 +25,8 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
       'This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0',
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
-    xp: 0
+    xp: 0,
+    gradingStatus: 'none'
   }
 ]
 
@@ -56,7 +57,8 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
 `,
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
-    xp: 1
+    xp: 1,
+    gradingStatus: 'none'
   },
   {
     category: AssessmentCategories.Mission,
@@ -72,7 +74,8 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
-    xp: 2
+    xp: 2,
+    gradingStatus: 'none'
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -88,7 +91,8 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
-    xp: 3
+    xp: 3,
+    gradingStatus: 'none'
   }
 ]
 
@@ -107,7 +111,8 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
-    xp: 4
+    xp: 4,
+    gradingStatus: 'none'
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -123,7 +128,8 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 5
+    xp: 5,
+    gradingStatus: 'none'
   }
 ]
 
