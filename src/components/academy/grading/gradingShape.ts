@@ -35,8 +35,6 @@ export type Grading = GradingQuestion[]
  */
 export type GradingQuestion = {
   question: IAnsweredQuestion
-  maxGrade: number
-  maxXp: number
   grade: {
     comment: string
     grade: number
@@ -61,6 +59,8 @@ interface IAnsweredQuestion extends IQuestion {
   comment: null
   solution: number | string | null
   answer: string | number | null
+  maxGrade: number
+  maxXp: number
   solutionTemplate?: string
   choices?: MCQChoice[]
 }

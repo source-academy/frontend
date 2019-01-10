@@ -96,10 +96,10 @@ Hello and welcome to this assessment! This is the *0th question*.
       library: mockLibrary,
       solutionTemplate: '0th question mock solution template',
       solution: 'This is how the 0th question is `solved`',
-      type: 'programming'
+      type: 'programming',
+      maxGrade: 1000,
+      maxXp: 1000
     },
-    maxGrade: 1000,
-    maxXp: 1000,
     grade: {
       gradeAdjustment: 0,
       xpAdjustment: 0,
@@ -117,10 +117,10 @@ Hello and welcome to this assessment! This is the *0th question*.
       library: mockLibrary,
       solutionTemplate: '1st question mock solution template',
       solution: null,
-      type: 'programming'
+      type: 'programming',
+      maxGrade: 200,
+      maxXp: 200
     },
-    maxGrade: 200,
-    maxXp: 200,
     grade: {
       gradeAdjustment: 0,
       xpAdjustment: 0,
@@ -157,10 +157,10 @@ Hello and welcome to this assessment! This is the *0th question*.
       ],
       id: 2,
       library: mockLibrary,
-      type: 'mcq'
+      type: 'mcq',
+      maxGrade: 100,
+      maxXp: 100
     },
-    maxGrade: 100,
-    maxXp: 100,
     grade: {
       gradeAdjustment: 0,
       xpAdjustment: 0,
