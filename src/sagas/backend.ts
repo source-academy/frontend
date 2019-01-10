@@ -462,7 +462,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
   if (response) {
     const gradingResult = await response.json()
     const grading: Grading = gradingResult.map((gradingQuestion: any) => {
-      const { question, grade } = gradingQuestion
+      const { student, question, grade } = gradingQuestion
 
       return {
         question: {
@@ -482,6 +482,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
           maxGrade: question.maxGrade,
           maxXp: question.maxXp
         },
+        student,
         grade: {
           grade: grade.grade,
           xp: grade.xp,
