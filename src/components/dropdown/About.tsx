@@ -58,11 +58,11 @@ const panelDevs = () => (
     </p>
     {Math.round(Math.random()) === 0 ? (
       <p>
-        Lee Ning Yuan {dot} Vignesh Shankar {dot} Rahul Rajes
+        Lee Ning Yuan {dot} Vignesh Shankar {dot} Rahul Rajesh
       </p>
     ) : (
       <p>
-        Vignesh Shankar {dot} Lee Ning Yuan {dot} Rahul Rajes
+        Vignesh Shankar {dot} Lee Ning Yuan {dot} Rahul Rajesh
       </p>
     )}
     <p>
