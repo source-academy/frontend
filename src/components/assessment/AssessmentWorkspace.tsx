@@ -11,6 +11,7 @@ import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
 import ToneMatrix from '../workspace/side-content/ToneMatrix'
+import AssessmentGrading from './AssessmentGrading'
 import {
   IAssessment,
   IMCQQuestion,
@@ -221,12 +222,24 @@ class AssessmentWorkspace extends React.Component<
         body: <Markdown content={props.assessment!.longSummary} />
       }
     ]
-    const comment = props.assessment!.questions[questionId].comment
-    if (comment !== null) {
+    const isGraded = props.assessment!.questions[questionId].grader !== null
+    if (isGraded) {
       tabs.push({
-        label: `Comments`,
-        icon: IconNames.CHAT,
-        body: <Markdown content={comment} />
+        label: `Grading`,
+        icon: IconNames.ISSUE_CLOSED,
+        body: (
+          <AssessmentGrading
+            comment={props.assessment!.questions[questionId].comment}
+            graderName={props.assessment!.questions[questionId].grader.name}
+            gradedAt={props.assessment!.questions[questionId].gradedAt}
+            xp={props.assessment!.questions[questionId].xp}
+            grade={props.assessment!.questions[questionId].grade}
+            maxGrade={100}
+            maxXp={100}
+
+            // Awaiting pr on backend
+          />
+        )
       })
     }
 

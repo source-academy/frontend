@@ -209,7 +209,14 @@ What's your favourite dinner food?
     id: 0,
     library: mockSoundLibrary,
     solutionTemplate: '0th question mock solution template',
-    type: 'programming'
+    type: 'programming',
+    grader: {
+      name: 'avenger',
+      id: 1
+    },
+    gradedAt: '',
+    xp: 0,
+    grade: 0
   },
   {
     answer: null,
@@ -218,7 +225,14 @@ What's your favourite dinner food?
     id: 1,
     library: mock3DRuneLibrary,
     solutionTemplate: '1st question mock solution template',
-    type: 'programming'
+    type: 'programming',
+    grader: {
+      name: 'avenger',
+      id: 1
+    },
+    gradedAt: '',
+    xp: 0,
+    grade: 0
   },
   {
     answer: 3,
@@ -246,7 +260,14 @@ What's your favourite dinner food?
     id: 2,
     library: mockCurveLibrary,
     type: 'mcq',
-    solution: 0
+    solution: 0,
+    grader: {
+      name: 'avenger',
+      id: 1
+    },
+    gradedAt: '',
+    xp: 0,
+    grade: 0
   },
   {
     answer: 3,
@@ -274,7 +295,14 @@ What's your favourite dinner food?
     id: 2,
     library: mockCurveLibrary,
     type: 'mcq',
-    solution: null
+    solution: null,
+    grader: {
+      name: 'avenger',
+      id: 1
+    },
+    gradedAt: '',
+    xp: 0,
+    grade: 0
   },
   {
     answer: null,
@@ -283,7 +311,14 @@ What's your favourite dinner food?
     id: 1,
     library: mockToneMatrixLibrary,
     solutionTemplate: '5th question mock solution template',
-    type: 'programming'
+    type: 'programming',
+    grader: {
+      name: 'avenger',
+      id: 1
+    },
+    gradedAt: '',
+    xp: 0,
+    grade: 0
   }
 ]
 

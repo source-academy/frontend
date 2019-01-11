@@ -98,7 +98,14 @@ Hello and welcome to this assessment! This is the *0th question*.
       solution: 'This is how the 0th question is `solved`',
       type: 'programming',
       maxGrade: 1000,
-      maxXp: 1000
+      maxXp: 1000,
+      grader: {
+        name: 'avenger',
+        id: 1
+      },
+      gradedAt: '',
+      xp: 1,
+      grade: 1
     },
     grade: {
       gradeAdjustment: 0,
@@ -123,7 +130,14 @@ Hello and welcome to this assessment! This is the *0th question*.
       solution: null,
       type: 'programming',
       maxGrade: 200,
-      maxXp: 200
+      maxXp: 200,
+      grader: {
+        name: 'avenger',
+        id: 1
+      },
+      gradedAt: '',
+      xp: 1,
+      grade: 1
     },
     grade: {
       gradeAdjustment: 0,
@@ -167,7 +181,14 @@ Hello and welcome to this assessment! This is the *0th question*.
       library: mockLibrary,
       type: 'mcq',
       maxGrade: 100,
-      maxXp: 100
+      maxXp: 100,
+      grader: {
+        name: 'avenger',
+        id: 1
+      },
+      gradedAt: '',
+      xp: 1,
+      grade: 1
     },
     grade: {
       gradeAdjustment: 0,
