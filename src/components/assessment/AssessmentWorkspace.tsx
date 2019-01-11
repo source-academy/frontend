@@ -226,7 +226,7 @@ class AssessmentWorkspace extends React.Component<
     if (isGraded) {
       tabs.push({
         label: `Grading`,
-        icon: IconNames.ISSUE_CLOSED,
+        icon: IconNames.ISSUE,
         body: (
           <AssessmentGrading
             comment={props.assessment!.questions[questionId].comment}
