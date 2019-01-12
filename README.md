@@ -11,6 +11,9 @@
    to contain your IVLE Lapi key.
 4. Run `yarn start` to start the server at `localhost:80`. Admin permissions may
    be required for your OS to serve at port 80.
+   
+## IVLE LAPI Key
+For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
 
 ## Application Structure
 
