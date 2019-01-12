@@ -1,5 +1,4 @@
-import { Icon, Intent, Text } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
+import { Text } from '@blueprintjs/core'
 import * as React from 'react'
 import { getPrettyDate } from '../../utils/dateHelpers'
 
@@ -33,12 +32,6 @@ class AssessmentGrading extends React.Component<AssessmentGradingProps, {}> {
                     {this.props.grade} / {this.props.maxGrade}
                   </Text>
                 </td>
-
-                {this.props.grade === this.props.maxGrade ? (
-                  <td>
-                    <Icon icon={IconNames.THUMBS_UP} intent={Intent.SUCCESS} />
-                  </td>
-                ) : null}
               </tr>
 
               <tr>
@@ -48,12 +41,6 @@ class AssessmentGrading extends React.Component<AssessmentGradingProps, {}> {
                     {this.props.xp} / {this.props.maxXp}
                   </Text>
                 </td>
-
-                {this.props.xp === this.props.maxXp ? (
-                  <td>
-                    <Icon icon={IconNames.THUMBS_UP} intent={Intent.SUCCESS} />
-                  </td>
-                ) : null}
               </tr>
             </tbody>
           </table>
@@ -72,7 +59,7 @@ class AssessmentGrading extends React.Component<AssessmentGradingProps, {}> {
 
           <div className="assessment-grading-info">
             <Text>
-              last graded by <b>{this.props.graderName}</b> at {getPrettyDate(this.props.gradedAt)}.
+              Graded by <b>{this.props.graderName}</b> on {getPrettyDate(this.props.gradedAt)}
             </Text>
           </div>
         </div>
