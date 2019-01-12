@@ -1,3 +1,5 @@
+import { Icon, Intent, Text } from '@blueprintjs/core'
+import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 import { getPrettyDate } from '../../utils/dateHelpers'
 
@@ -21,19 +23,59 @@ class AssessmentGrading extends React.Component<AssessmentGradingProps, {}> {
   public render() {
     return (
       <div className="AssessmentGrading">
-        <h3>PLEASE HELP TO MAKE THIS PRETTY</h3>
+        <div className="assessment-grading-table">
+          <table>
+            <tbody>
+              <tr>
+                <th>Grade:</th>
+                <td>
+                  <Text>
+                    {this.props.grade} / {this.props.maxGrade}
+                  </Text>
+                </td>
 
-        <p>GRADED BY: {this.props.graderName}</p>
-        <p>LAST GRADED AT: {getPrettyDate(this.props.gradedAt)}</p>
+                {this.props.grade === this.props.maxGrade ? (
+                  <td>
+                    <Icon icon={IconNames.THUMBS_UP} intent={Intent.SUCCESS} />
+                  </td>
+                ) : null}
+              </tr>
 
-        <p>
-          GRADE: {this.props.grade} / {this.props.maxGrade}
-        </p>
-        <p>
-          XP: {this.props.xp} / {this.props.maxXp}
-        </p>
+              <tr>
+                <th>XP:</th>
+                <td>
+                  <Text>
+                    {this.props.xp} / {this.props.maxXp}
+                  </Text>
+                </td>
 
-        {this.props.comment !== null ? <p>COMMENTS: {this.props.comment}</p> : null}
+                {this.props.xp === this.props.maxXp ? (
+                  <td>
+                    <Icon icon={IconNames.THUMBS_UP} intent={Intent.SUCCESS} />
+                  </td>
+                ) : null}
+              </tr>
+            </tbody>
+          </table>
+
+          {this.props.comment !== null ? (
+            <div>
+              <br />
+              <th>Comment:</th>
+              <p>
+                <pre>{this.props.comment}</pre>
+              </p>
+            </div>
+          ) : null}
+
+          <br />
+
+          <div className="assessment-grading-info">
+            <Text>
+              last graded by <b>{this.props.graderName}</b> at {getPrettyDate(this.props.gradedAt)}.
+            </Text>
+          </div>
+        </div>
       </div>
     )
   }

@@ -216,7 +216,9 @@ What's your favourite dinner food?
     },
     gradedAt: '',
     xp: 0,
-    grade: 0
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
   },
   {
     answer: null,
@@ -232,7 +234,9 @@ What's your favourite dinner food?
     },
     gradedAt: '',
     xp: 0,
-    grade: 0
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
   },
   {
     answer: 3,
@@ -267,7 +271,9 @@ What's your favourite dinner food?
     },
     gradedAt: '',
     xp: 0,
-    grade: 0
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
   },
   {
     answer: 3,
@@ -302,7 +308,9 @@ What's your favourite dinner food?
     },
     gradedAt: '',
     xp: 0,
-    grade: 0
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
   },
   {
     answer: null,
@@ -318,7 +326,9 @@ What's your favourite dinner food?
     },
     gradedAt: '',
     xp: 0,
-    grade: 0
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
   }
 ]
 

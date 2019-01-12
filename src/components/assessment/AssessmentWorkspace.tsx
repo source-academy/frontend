@@ -226,7 +226,7 @@ class AssessmentWorkspace extends React.Component<
     if (isGraded) {
       tabs.push({
         label: `Grading`,
-        icon: IconNames.ISSUE,
+        icon: IconNames.TICK,
         body: (
           <AssessmentGrading
             comment={props.assessment!.questions[questionId].comment}
@@ -234,10 +234,8 @@ class AssessmentWorkspace extends React.Component<
             gradedAt={props.assessment!.questions[questionId].gradedAt}
             xp={props.assessment!.questions[questionId].xp}
             grade={props.assessment!.questions[questionId].grade}
-            maxGrade={100}
-            maxXp={100}
-
-            // Awaiting pr on backend
+            maxGrade={props.assessment!.questions[questionId].maxGrade}
+            maxXp={props.assessment!.questions[questionId].maxXp}
           />
         )
       })

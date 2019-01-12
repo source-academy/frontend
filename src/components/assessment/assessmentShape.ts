@@ -89,6 +89,8 @@ export interface IQuestion {
   gradedAt: string
   xp: number
   grade: number
+  maxGrade: number
+  maxXp: number
 }
 
 export type MCQChoice = {
