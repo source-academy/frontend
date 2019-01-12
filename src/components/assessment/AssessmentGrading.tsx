@@ -1,6 +1,7 @@
 import { Text } from '@blueprintjs/core'
 import * as React from 'react'
 import { getPrettyDate } from '../../utils/dateHelpers'
+import Markdown from '../commons/Markdown'
 
 type AssessmentGradingProps = OwnProps
 
@@ -50,7 +51,9 @@ class AssessmentGrading extends React.Component<AssessmentGradingProps, {}> {
               <br />
               <th>Comment:</th>
               <p>
-                <pre>{this.props.comment}</pre>
+                <pre>
+                  <Markdown content={this.props.comment} />
+                </pre>
               </p>
             </div>
           ) : null}
