@@ -347,34 +347,33 @@ const makeOverviewCardTitle = (
 )
 
 const makeGradingStatus = (gradingStatus: string) => {
+  let iconName: IconName
   let intent: Intent
   let tooltip: string
 
   switch (gradingStatus) {
-    case GradingStatuses.none:
-      intent = Intent.DANGER
-      tooltip = 'Submission has not been graded by an Avenger'
-      break
-
     case GradingStatuses.grading:
+      iconName = IconNames.REFRESH
       intent = Intent.WARNING
-      tooltip = 'Submission has been partially graded by an Avenger'
+      tooltip = 'Grading in progress'
       break
 
     case GradingStatuses.graded:
+      iconName = IconNames.TICK
       intent = Intent.SUCCESS
-      tooltip = 'Submission has been fully graded by an Avenger'
+      tooltip = 'Fully graded'
       break
 
     default:
+      iconName = IconNames.REMOVE
       intent = Intent.DANGER
-      tooltip = 'Submission has not been graded by an Avenger'
+      tooltip = 'Not graded yet'
       break
   }
 
   return (
     <Tooltip content={tooltip} position={Position.RIGHT}>
-      <Icon icon={IconNames.ENDORSED} intent={intent} />
+      <Icon icon={iconName} intent={intent} />
     </Tooltip>
   )
 }
