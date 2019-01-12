@@ -95,7 +95,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         ) : null}
 
         <div className="grading-editor-student-name">
-          <h3>{this.props.studentName}</h3>
+          <h3>Currently Grading: {this.props.studentName}</h3>
         </div>
         {this.props.solution !== null ? (
           <div className="grading-editor-solution">
