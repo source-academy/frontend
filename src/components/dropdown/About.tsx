@@ -57,14 +57,24 @@ const panelDevs = () => (
       <strong>Frontend Team</strong>
     </p>
     {Math.round(Math.random()) === 0 ? (
-      <p>Lee Ning Yuan {dot} Vignesh Shankar</p>
+      <p>
+        Lee Ning Yuan {dot} Vignesh Shankar {dot} Rahul Rajesh
+      </p>
     ) : (
-      <p>Vignesh Shankar {dot} Lee Ning Yuan </p>
+      <p>
+        Vignesh Shankar {dot} Lee Ning Yuan {dot} Rahul Rajesh
+      </p>
     )}
     <p>
       <strong>Backend Team</strong>
     </p>
-    <p>Julius Putra Tanu Setiaji {dot} Chen Shaowei</p>
+    <p>
+      Julius Putra Tanu Setiaji {dot} Chen Shaowei {dot} Liow Jia Chen
+    </p>
+    <p>
+      <strong>Source Team</strong>
+    </p>
+    <p>Tan Chee Kun, Thomas</p>
     <p>
       <strong>Artistic Team</strong>
     </p>
