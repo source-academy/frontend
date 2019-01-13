@@ -352,20 +352,20 @@ const makeGradingStatus = (gradingStatus: string) => {
   let tooltip: string
 
   switch (gradingStatus) {
-    case GradingStatuses.grading:
-      iconName = IconNames.REFRESH
-      intent = Intent.WARNING
-      tooltip = 'Grading in progress'
-      break
-
     case GradingStatuses.graded:
       iconName = IconNames.TICK
       intent = Intent.SUCCESS
       tooltip = 'Fully graded'
       break
 
+    case GradingStatuses.grading:
+      iconName = IconNames.TIME
+      intent = Intent.WARNING
+      tooltip = 'Grading in progress'
+      break
+
     default:
-      iconName = IconNames.REMOVE
+      iconName = IconNames.CROSS
       intent = Intent.DANGER
       tooltip = 'Not graded yet'
       break
