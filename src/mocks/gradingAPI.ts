@@ -103,7 +103,7 @@ Hello and welcome to this assessment! This is the *0th question*.
         name: 'avenger',
         id: 1
       },
-      gradedAt: '',
+      gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
       grade: 1
     },
@@ -112,7 +112,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       xpAdjustment: 0,
       grade: 0,
       xp: 0,
-      comment: ''
+      comment: 'Good job!!'
     },
     student: {
       name: 'Al Gorithm',
@@ -135,7 +135,7 @@ Hello and welcome to this assessment! This is the *0th question*.
         name: 'avenger',
         id: 1
       },
-      gradedAt: '',
+      gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
       grade: 1
     },
@@ -186,7 +186,7 @@ Hello and welcome to this assessment! This is the *0th question*.
         name: 'avenger',
         id: 1
       },
-      gradedAt: '',
+      gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
       grade: 1
     },

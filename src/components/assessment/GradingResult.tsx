@@ -3,7 +3,7 @@ import * as React from 'react'
 import { getPrettyDate } from '../../utils/dateHelpers'
 import Markdown from '../commons/Markdown'
 
-type AssessmentGradingProps = OwnProps
+type GradingResultProps = OwnProps
 
 export type OwnProps = {
   comment: string | null
@@ -15,15 +15,15 @@ export type OwnProps = {
   maxXp: number
 }
 
-class AssessmentGrading extends React.Component<AssessmentGradingProps, {}> {
-  constructor(props: AssessmentGradingProps) {
+class GradingResult extends React.Component<GradingResultProps, {}> {
+  constructor(props: GradingResultProps) {
     super(props)
   }
 
   public render() {
     return (
-      <div className="AssessmentGrading">
-        <div className="assessment-grading-table">
+      <div className="GradingResult">
+        <div className="grading-result-table">
           <table>
             <tbody>
               <tr>
@@ -60,7 +60,7 @@ class AssessmentGrading extends React.Component<AssessmentGradingProps, {}> {
 
           <br />
 
-          <div className="assessment-grading-info">
+          <div className="grading-result-info">
             <Text>
               Graded by <b>{this.props.graderName}</b> on {getPrettyDate(this.props.gradedAt)}
             </Text>
@@ -71,4 +71,4 @@ class AssessmentGrading extends React.Component<AssessmentGradingProps, {}> {
   }
 }
 
-export default AssessmentGrading
+export default GradingResult

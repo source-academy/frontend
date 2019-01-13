@@ -11,7 +11,6 @@ import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
 import ToneMatrix from '../workspace/side-content/ToneMatrix'
-import AssessmentGrading from './AssessmentGrading'
 import {
   IAssessment,
   IMCQQuestion,
@@ -20,6 +19,7 @@ import {
   Library,
   QuestionTypes
 } from './assessmentShape'
+import GradingResult from './GradingResult'
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
 
@@ -228,7 +228,7 @@ class AssessmentWorkspace extends React.Component<
         label: `Grading`,
         icon: IconNames.TICK,
         body: (
-          <AssessmentGrading
+          <GradingResult
             comment={props.assessment!.questions[questionId].comment}
             graderName={props.assessment!.questions[questionId].grader.name}
             gradedAt={props.assessment!.questions[questionId].gradedAt}
