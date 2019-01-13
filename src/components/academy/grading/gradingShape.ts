@@ -35,6 +35,10 @@ export type Grading = GradingQuestion[]
  */
 export type GradingQuestion = {
   question: IAnsweredQuestion
+  student: {
+    name: string
+    id: number
+  }
   grade: {
     comment: string
     grade: number

@@ -32,6 +32,7 @@ export type OwnProps = {
   initialXp: number
   xpAdjustment: number
   maxXp: number
+  studentName: string
 }
 
 /**
@@ -92,6 +93,10 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
           />
         ) : null}
+
+        <div className="grading-editor-student-name">
+          <h3>Currently Grading: {this.props.studentName}</h3>
+        </div>
         {this.props.solution !== null ? (
           <div className="grading-editor-solution">
             <pre> {this.props.solution.toString()} </pre>
