@@ -20,6 +20,7 @@ export interface IAssessmentOverview {
   status: AssessmentStatus
   story: string | null
   xp: number
+  gradingStatus: GradingStatus
 }
 
 export enum AssessmentStatuses {
@@ -30,6 +31,14 @@ export enum AssessmentStatuses {
 }
 
 export type AssessmentStatus = keyof typeof AssessmentStatuses
+
+export enum GradingStatuses {
+  none = 'none',
+  grading = 'grading',
+  graded = 'graded'
+}
+
+export type GradingStatus = keyof typeof GradingStatuses
 
 /*
  * Used when an assessment is being actively attempted/graded.
