@@ -82,6 +82,15 @@ export interface IQuestion {
   id: number
   library: Library
   type: QuestionType
+  grader: {
+    name: string
+    id: number
+  }
+  gradedAt: string
+  xp: number
+  grade: number
+  maxGrade: number
+  maxXp: number
 }
 
 export type MCQChoice = {
