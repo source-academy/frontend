@@ -1,6 +1,6 @@
 import { Card } from '@blueprintjs/core'
 import { parseError } from 'js-slang'
-import { stringify } from 'js-slang/dist/interop'
+import { stringify } from 'js-slang/interop'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 

@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "acorn": "^5.7.1",
+    "acorn-walk": "^6.1.1",
     "ag-grid": "^18.0.1",
     "ag-grid-react": "^18.0.0",
     "astring": "^1.3.0",
@@ -37,7 +38,7 @@
     "draft-js": "^0.10.5",
     "flexboxgrid": "^6.3.1",
     "flexboxgrid-helpers": "^1.1.3",
-    "js-slang": "0.1.19",
+    "js-slang": "file:../openorclosejsslang/dist",
     "lodash": "^4.17.10",
     "lz-string": "^1.4.4",
     "moment": "^2.22.2",
