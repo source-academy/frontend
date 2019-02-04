@@ -84,6 +84,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         An Odessey to Runes (Duplicate)
+                                         
                                       </h4>
                                     </div>
                                   </Text>
@@ -178,6 +179,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         An Odessey to Runes
+                                         
                                       </h4>
                                     </div>
                                   </Text>
@@ -274,6 +276,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         The Secret to Streams
+                                         
                                       </h4>
                                     </div>
                                   </Text>
@@ -370,6 +373,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         A sample Sidequest
+                                         
                                       </h4>
                                     </div>
                                   </Text>
@@ -574,6 +578,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         An Odessey to Runes (Duplicate)
+                                         
                                       </h4>
                                     </div>
                                   </Text>
@@ -692,6 +697,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         An Odessey to Runes
+                                         
                                       </h4>
                                     </div>
                                   </Text>
@@ -788,6 +794,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         The Secret to Streams
+                                         
                                       </h4>
                                     </div>
                                   </Text>
@@ -884,6 +891,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     <div className=\\"pt-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                       <h4>
                                         A sample Sidequest
+                                         
                                       </h4>
                                     </div>
                                   </Text>
