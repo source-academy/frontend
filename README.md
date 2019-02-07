@@ -5,6 +5,7 @@
 
 `"js-slang": "file:../openorclosejsslang/dist",`
 
+note that this will copy the files over, and any changes after that will not be reflected.
 
 
 ## Original Readme below
