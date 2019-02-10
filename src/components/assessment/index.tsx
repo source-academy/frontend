@@ -33,6 +33,7 @@ import {
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
+import ImportFromFileComponent from '../commons/ImportFromFileComponent'
 import Markdown from '../commons/Markdown'
 
 const DEFAULT_QUESTION_ID: number = 0
@@ -170,6 +171,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           {upcomingCardsCollapsible}
           {openedCardsCollapsible}
           {closedCardsCollapsible}
+          <ImportFromFileComponent />
         </>
       )
     }
