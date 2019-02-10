@@ -51,28 +51,28 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
         assessments: newAssessments
       }
     case UPDATE_ASSESSMENT_OVERVIEW:
-      const newOverviews = Object.assign([], state.assessmentOverviews);
-      newOverviews.push(action.payload);
+      const newOverviews = Object.assign([], state.assessmentOverviews)
+      newOverviews.push(action.payload)
       return {
         ...state,
         assessmentOverviews: newOverviews
       }
     case UPDATE_ASSESSMENT_OVERVIEWS:
-      if (state.assessmentOverviews){
-        const updatedOverviews = Object.assign([], state.assessmentOverviews);
-        const usedIDs = new Set();
-        state.assessmentOverviews.forEach((x: any) => {usedIDs.add(x.id)});
-        action.payload.forEach((x: any) => {if (!usedIDs.has(x.id)) {updatedOverviews.push(x)}})
-        return {
-          ...state,
-          assessmentOverviews: updatedOverviews
-        }
-      } else{
-        return {
-          ...state,
-          assessmentOverviews: action.payload
-        }
+      // if (state.assessmentOverviews){
+      //   const updatedOverviews = Object.assign([], action.payload);
+      //   const usedIDs = new Set();
+      //   action.payload.forEach((x: any) => {usedIDs.add(x.id)});
+      //   state.assessmentOverviews.forEach((x: any) => {if (!usedIDs.has(x.id)) {updatedOverviews.push(x)}})
+      //   return {
+      //     ...state,
+      //     assessmentOverviews: updatedOverviews
+      //   }
+      // } else{
+      return {
+        ...state,
+        assessmentOverviews: action.payload
       }
+    // }
     case UPDATE_GRADING:
       const newGradings = new Map(state.gradings)
       newGradings.set(action.payload.submissionId, action.payload.grading)
