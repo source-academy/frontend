@@ -46,8 +46,8 @@ const makeAssessmentOverview = (task: any) => {
 	}
 }
 
-class ImportFromFileComponent extends React.Component<any, any>{
-	public fileReader : FileReader;
+export class ImportFromFileComponent extends React.Component<any, any>{
+	private fileReader : FileReader;
 	public constructor(props: any) {
     super(props);
     this.handleFileRead = this.handleFileRead.bind(this);
@@ -71,9 +71,9 @@ class ImportFromFileComponent extends React.Component<any, any>{
 	  const content = this.fileReader.result;
 	  if (content) {
 		  parseString(content, (err: any, result: any) => {
-		  	// tslint:disable-next-line:no-console
-	    	console.dir(result);
 	    	const task = result.CONTENT.TASK[0];
+	    	// tslint:disable-next-line:no-console
+	    	console.dir(task);
 	    	const overview: IAssessmentOverview  =  makeAssessmentOverview(task);
 	    	this.props.newAssessmentOverview(overview);
 			});
