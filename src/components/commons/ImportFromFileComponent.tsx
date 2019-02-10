@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { connect, MapDispatchToProps } from "react-redux"
+import { connect, MapDispatchToProps, MapStateToProps } from "react-redux"
 import { bindActionCreators, Dispatch } from 'redux'
 import { parseString } from 'xml2js'
 import { updateAssessment, updateAssessmentOverview} from '../../actions/session'
@@ -7,13 +7,19 @@ import {
 	AssessmentCategories,
 	AssessmentStatuses, 
 	GradingStatuses,
-	// IAssessment, 
+	IAssessment, 
 	IAssessmentOverview 
 } from '../../components/assessment/assessmentShape'
 // import { IDispatchProps } from '../../components/assessment'
 
+export interface IDispatchProps {
+	newAssessment: (overview: IAssessment) => void
+  newAssessmentOverview: (assessment: IAssessmentOverview) => void
+}
 
-const mapDispatchToProps: MapDispatchToProps<any, IAssessmentOverview> = (dispatch: Dispatch<any>) =>
+const mapStateToProps: MapStateToProps<{}, any, {}> = (_, ownProps) => ownProps
+
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
       newAssessment: updateAssessment,
@@ -91,4 +97,4 @@ export class ImportFromFileComponent extends React.Component<any, any>{
 	}
 }
 
-export default connect(null, mapDispatchToProps)(ImportFromFileComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(ImportFromFileComponent)
