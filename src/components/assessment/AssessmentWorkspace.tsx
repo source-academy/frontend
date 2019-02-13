@@ -19,6 +19,7 @@ import {
   Library,
   QuestionTypes
 } from './assessmentShape'
+import GradingResult from './GradingResult'
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
 
@@ -221,12 +222,22 @@ class AssessmentWorkspace extends React.Component<
         body: <Markdown content={props.assessment!.longSummary} />
       }
     ]
-    const comment = props.assessment!.questions[questionId].comment
-    if (comment !== null) {
+    const isGraded = props.assessment!.questions[questionId].grader !== null
+    if (isGraded) {
       tabs.push({
-        label: `Comments`,
-        icon: IconNames.CHAT,
-        body: <Markdown content={comment} />
+        label: `Grading`,
+        icon: IconNames.TICK,
+        body: (
+          <GradingResult
+            comment={props.assessment!.questions[questionId].comment}
+            graderName={props.assessment!.questions[questionId].grader.name}
+            gradedAt={props.assessment!.questions[questionId].gradedAt}
+            xp={props.assessment!.questions[questionId].xp}
+            grade={props.assessment!.questions[questionId].grade}
+            maxGrade={props.assessment!.questions[questionId].maxGrade}
+            maxXp={props.assessment!.questions[questionId].maxXp}
+          />
+        )
       })
     }
 
