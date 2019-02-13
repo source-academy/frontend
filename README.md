@@ -15,12 +15,21 @@ note that this will copy the files over, and any changes after that will not be 
 
 ## Development Setup
 
-1. Install a stable version of Yarn and NodeJS.
+1. Install a stable version of Yarn and NodeJS (use node version 4-9 with nvm).
 2. Run `yarn` to install dependencies.
 3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_IVLE_KEY`
    to contain your IVLE Lapi key.
 4. Run `yarn start` to start the server at `localhost:80`. Admin permissions may
    be required for your OS to serve at port 80.
+   
+## IVLE LAPI Key
+For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
+
+## For Windows Users
+In package.json, change line 19:
+"start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",
+to:
+"start-js": "set PORT=80 & react-scripts-ts start",
 
 ## Application Structure
 
