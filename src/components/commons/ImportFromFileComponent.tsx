@@ -4,23 +4,15 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { parseString } from 'xml2js'
 import { updateAssessment, updateAssessmentOverview } from '../../actions/session'
 import {
-  AssessmentCategories,
-  AssessmentStatuses,
-  ExternalLibraryNames,
-  GradingStatuses,
   IAssessment,
   IAssessmentOverview,
-  IMCQQuestion,
-  IProgrammingQuestion,
-  Library,
-  MCQChoice
 } from '../../components/assessment/assessmentShape'
-import { externalLibraries } from '../../reducers/externalLibraries'
+import { makeAssessment, makeAssessmentOverview } from '../../utils/xmlParser'
 // import { IDispatchProps } from '../../components/assessment'
 
 export interface IDispatchProps {
-  newAssessment: (overview: IAssessment) => void
-  newAssessmentOverview: (assessment: IAssessmentOverview) => void
+  newAssessment: (assessment: IAssessment) => void
+  newAssessmentOverview: (overview: IAssessmentOverview) => void
 }
 
 const mapStateToProps: MapStateToProps<{}, any, {}> = (_, ownProps) => ownProps
@@ -33,112 +25,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     },
     dispatch
   )
-
-const capitalizeFirstLetter = (str: string) => {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
-
-const makeAssessmentOverview = (task: any) => {
-  const rawOverview = task.$
-  return {
-    category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
-    closeAt: rawOverview.duedate,
-    coverImage: rawOverview.coverimage,
-    grade: 1,
-    id: 7,
-    maxGrade: 3000,
-    maxXp: 1000,
-    openAt: rawOverview.startdate,
-    title: rawOverview.title,
-    shortSummary: task.WEBSUMMARY ? task.WEBSUMMARY[0] : '',
-    status: AssessmentStatuses.not_attempted,
-    story: rawOverview.story,
-    xp: 0,
-    gradingStatus: 'none' as GradingStatuses
-  }
-}
-
-const makeAssessment = (task: any) => {
-  const rawOverview = task.$
-  return {
-    category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
-    id: 7,
-    longSummary: task.TEXT[0],
-    missionPDF: 'google.com',
-    questions: makeQuestions(task),
-    title: rawOverview.title
-  }
-}
-
-const mockGlobals: Array<[string, any]> = [
-  ['testNumber', 3.141592653589793],
-  ['testString', 'who dat boi'],
-  ['testBooleanTrue', true],
-  ['testBooleanFalse', false],
-  ['testBooleanUndefined', undefined],
-  ['testBooleanNull', null],
-  ['testObject', { a: 1, b: 2 }],
-  ['testArray', [1, 2, 'a', 'b']]
-]
-
-const mockSoundLibrary: Library = {
-  chapter: 1,
-  external: {
-    name: ExternalLibraryNames.SOUND,
-    symbols: externalLibraries.get(ExternalLibraryNames.SOUND)!
-  },
-  globals: mockGlobals
-}
-
-const makeQuestions = (task: any) => {
-  const questions: Array<IProgrammingQuestion | IMCQQuestion> = []
-  task.PROBLEMS[0].PROBLEM.forEach((problem: any, curId: number) => {
-    const question = {
-      comment: null,
-      content: problem.TEXT[0],
-      id: curId,
-      library: mockSoundLibrary,
-      type: problem.$.type,
-      grader: {
-        name: 'fake person',
-        id: 1
-      },
-      gradedAt: '2038-06-18T05:24:26.026Z',
-      xp: 0,
-      grade: 0,
-      maxGrade: problem.$.maxgrade,
-      maxXp: problem.$.maxxp
-    }
-    let qn: IProgrammingQuestion | IMCQQuestion
-    if (question.type === 'programming') {
-      qn = {
-        ...question,
-        answer: problem.SNIPPET[0].TEMPLATE[0],
-        solutionTemplate: problem.SNIPPET[0].SOLUTION[0]
-      }
-      questions.push(qn)
-    }
-    if (question.type === 'mcq') {
-      const choicess: MCQChoice[] = []
-      let ans = 0
-      problem.CHOICE.forEach((choice: any, i: number) => {
-        choicess.push({
-          content: choice.TEXT[0],
-          hint: null
-        })
-        ans = choice.$.correct === 'true' ? i : ans
-      })
-      qn = {
-        ...question,
-        answer: problem.SNIPPET[0].SOLUTION[0],
-        choices: choicess,
-        solution: ans
-      }
-      questions.push(qn)
-    }
-  })
-  return questions
-}
 
 export class ImportFromFileComponent extends React.Component<any, any> {
   private fileReader: FileReader
@@ -163,9 +49,9 @@ export class ImportFromFileComponent extends React.Component<any, any> {
         const task = result.CONTENT.TASK[0]
         // tslint:disable-next-line:no-console
         console.dir(task)
-        const overview: IAssessmentOverview = makeAssessmentOverview(task)
+        const overview: IAssessmentOverview = makeAssessmentOverview(result)
         this.props.newAssessmentOverview(overview)
-        const assessment: IAssessment = makeAssessment(task)
+        const assessment: IAssessment = makeAssessment(result)
         this.props.newAssessment(assessment)
       })
     }
