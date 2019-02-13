@@ -131,7 +131,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
         : undefined
     const resetButton = this.props.hasSaveButton
       ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
-      : undefined     
+      : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
         {this.props.isRunning ? stopButton : runButton} {saveButton}

@@ -1,4 +1,13 @@
-import { Button, ButtonGroup, Card, Classes, Dialog, Intent, NonIdealState, Spinner } from '@blueprintjs/core'
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Classes,
+  Dialog,
+  Intent,
+  NonIdealState,
+  Spinner
+} from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
 
@@ -68,15 +77,15 @@ export type DispatchProps = {
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean , showResetOverlay: boolean }
-  > {
+  { showOverlay: boolean; showResetOverlay: boolean }
+> {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props)
     this.state = {
       showOverlay: false,
       showResetOverlay: false
     }
-    this.props.handleEditorValueChange("")
+    this.props.handleEditorValueChange('')
   }
 
   /**
@@ -100,7 +109,7 @@ class AssessmentWorkspace extends React.Component<
           ? question.answer !== null
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
-          : ""
+          : ''
       )
     }
   }
@@ -138,29 +147,39 @@ class AssessmentWorkspace extends React.Component<
     )
 
     const resetOverlay = (
-      <Dialog className="assessment-reset" 
+      <Dialog
+        className="assessment-reset"
         icon={IconNames.ERROR}
         isCloseButtonShown={false}
         isOpen={this.state.showResetOverlay}
-        title="Confirmation: Reset editor?">
+        title="Confirmation: Reset editor?"
+      >
         <Card>
           <div className={Classes.DIALOG_BODY}>
-          <Markdown content="Are you sure you want to reset the template?" />
+            <Markdown content="Are you sure you want to reset the template?" />
           </div>
           <div className={Classes.DIALOG_FOOTER}>
-          <ButtonGroup>
-            {controlButton('Cancel', null, () => this.setState({ showResetOverlay: false }), { minimal: false })}
-            {controlButton('Confirm', null, () => {
-              this.setState({ showResetOverlay: false })
-              this.props.handleEditorValueChange(
-                (this.props.assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate)
-              this.props.handleUpdateHasUnsavedChanges(true)}, 
-              {minimal: false, intent: Intent.DANGER})}
-          </ButtonGroup>
+            <ButtonGroup>
+              {controlButton('Cancel', null, () => this.setState({ showResetOverlay: false }), {
+                minimal: false
+              })}
+              {controlButton(
+                'Confirm',
+                null,
+                () => {
+                  this.setState({ showResetOverlay: false })
+                  this.props.handleEditorValueChange(
+                    (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
+                      .solutionTemplate
+                  )
+                  this.props.handleUpdateHasUnsavedChanges(true)
+                },
+                { minimal: false, intent: Intent.DANGER }
+              )}
+            </ButtonGroup>
           </div>
         </Card>
       </Dialog>
-      
     )
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
@@ -173,11 +192,11 @@ class AssessmentWorkspace extends React.Component<
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-            editorValue: this.props.editorValue!,
-            handleEditorEval: this.props.handleEditorEval,
-            handleEditorValueChange: this.props.handleEditorValueChange,
-            handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
-          }
+              editorValue: this.props.editorValue!,
+              handleEditorEval: this.props.handleEditorEval,
+              handleEditorValueChange: this.props.handleEditorValueChange,
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
+            }
           : undefined,
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
@@ -232,7 +251,7 @@ class AssessmentWorkspace extends React.Component<
           ? question.answer !== null
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
-          : ""
+          : ''
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(question.library)
@@ -324,7 +343,7 @@ class AssessmentWorkspace extends React.Component<
           this.props.editorValue!
         ),
       onClickReset: () => {
-        this.setState({showResetOverlay: true})
+        this.setState({ showResetOverlay: true })
       },
       questionProgress: [questionId + 1, this.props.assessment!.questions.length],
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter
