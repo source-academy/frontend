@@ -1,15 +1,3 @@
-# TESTING Cadet Frontend, 1920 js-slang
-
-1. Follow the instructions on js-slang to transpile your own copy
-2. Edit line 41 of package.json to link to the dist directory of your js-slang:
-
-`"js-slang": "file:../openorclosejsslang/dist",`
-
-note that this will copy the files over, and any changes after that will not be reflected.
-
-
-## Original Readme below
-
 [![Build Status](https://travis-ci.org/source-academy/cadet-frontend.svg?branch=master)](https://travis-ci.org/source-academy/cadet-frontend)
 [![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=travis)](https://coveralls.io/github/source-academy/cadet-frontend?branch=travis)
 
@@ -30,6 +18,17 @@ In package.json, change line 19:
 "start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",
 to:
 "start-js": "set PORT=80 & react-scripts-ts start",
+
+## For Testing of js-slang
+
+1. Follow the instructions on js-slang to transpile your own copy
+2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
+
+`"js-slang": "file:path/to/js-slang",`
+
+Note that this copies your files over, any future changes will not be reflected. 
+
+You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
 
 ## Application Structure
 
