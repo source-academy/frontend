@@ -1,5 +1,5 @@
 import { Context, interrupt, runInContext } from 'js-slang'
-import { InterruptedError } from 'js-slang/interpreter-errors'
+import { InterruptedError } from 'js-slang/dist/interpreter-errors'
 import { compressToEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
 import { delay, SagaIterator } from 'redux-saga'
