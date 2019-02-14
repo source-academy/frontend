@@ -1,3 +1,5 @@
+# Cadet Frontend 
+
 [![Build Status](https://travis-ci.org/source-academy/cadet-frontend.svg?branch=master)](https://travis-ci.org/source-academy/cadet-frontend)
 [![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=travis)](https://coveralls.io/github/source-academy/cadet-frontend?branch=travis)
 
@@ -21,8 +23,9 @@ to:
 
 ## For Testing of js-slang
 
-1. Follow the instructions on js-slang to transpile your own copy
-2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
+1. For now, use the branch 'update-js-slang' in cadet-frontend
+2. Follow the instructions on js-slang to transpile your own copy
+3. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
 
 `"js-slang": "file:path/to/js-slang",`
 
