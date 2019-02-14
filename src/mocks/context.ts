@@ -1,9 +1,9 @@
 import { parse } from 'acorn'
-import * as es from 'estree'
-import { createContext } from 'js-slang'
-import Closure from 'js-slang/closure'
-import { Context, Frame } from 'js-slang/types'
-import { TypeError } from 'js-slang/utils/rttc'
+import { FunctionExpression } from 'estree'
+import Closure from 'js-slang/dist/closure'
+import createContext from 'js-slang/dist/createContext'
+import { Context, Frame } from 'js-slang/dist/types'
+import { TypeError } from 'js-slang/dist/utils/rttc'
 
 export function mockContext(chapter = 1): Context {
   return createContext(chapter)
@@ -31,7 +31,7 @@ export function mockRuntimeContext(): Context {
 }
 
 export function mockClosure(): Closure {
-  return new Closure({} as es.FunctionExpression, {} as Frame, {} as Context)
+  return new Closure({} as FunctionExpression, {} as Frame, {} as Context)
 }
 
 export function mockTypeError(): TypeError {

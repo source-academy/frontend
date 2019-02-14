@@ -1,5 +1,5 @@
 import { Context } from 'js-slang'
-import { SourceError } from 'js-slang/types'
+import { SourceError } from 'js-slang/dist/types'
 
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces'
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'

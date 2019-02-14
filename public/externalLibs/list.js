@@ -167,13 +167,6 @@ function for_each(fun, xs) {
   return true
 }
 
-// list_to_string returns a string that represents the argument list.
-// It applies itself recursively on the elements of the given list.
-// When it encounters a non-list, it applies stringify to it.
-function list_to_string(l) {
-  return interop_1.stringify(l)
-}
-
 // reverse reverses the argument list
 // reverse throws an exception if the argument is not a list.
 function reverse(xs) {

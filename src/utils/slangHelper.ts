@@ -1,7 +1,7 @@
 /* tslint:disable: ban-types*/
-import { createContext as createSlangContext } from 'js-slang'
-import { stringify } from 'js-slang/interop'
-import { Value } from 'js-slang/types'
+import createSlangContext from 'js-slang/dist/createContext'
+import { stringify } from 'js-slang/dist/interop'
+import { Value } from 'js-slang/dist/types'
 
 import { handleConsoleLog } from '../actions'
 
