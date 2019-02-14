@@ -1,7 +1,6 @@
 import {
   AssessmentCategories,
   AssessmentStatuses,
-  ExternalLibraryNames,
   GradingStatuses,
   IAssessment,
   IAssessmentOverview,
@@ -11,15 +10,24 @@ import {
   Library,
   MCQChoice
 } from '../components/assessment/assessmentShape'
-import { externalLibraries } from '../reducers/externalLibraries'
+import {
+  IXmlParseStrCProblem,
+  IXmlParseStrOverview,
+  IXmlParseStrPProblem,
+  IXmlParseStrProblem,
+  IXmlParseStrProblemChoice,
+  IXmlParseStrTask
+} from '../utils/xmlParseStrShapes'; 
+
+
 
 const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 export const makeAssessmentOverview = (result: any) : IAssessmentOverview => {
-  const task = result.CONTENT.TASK[0];
-  const rawOverview = task.$;
+  const task : IXmlParseStrTask = result.CONTENT.TASK[0];
+  const rawOverview : IXmlParseStrOverview = task.$;
   return {
     category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
     closeAt: rawOverview.duedate,
@@ -31,7 +39,7 @@ export const makeAssessmentOverview = (result: any) : IAssessmentOverview => {
     openAt: rawOverview.startdate,
     title: rawOverview.title,
     shortSummary: task.WEBSUMMARY ? task.WEBSUMMARY[0] : '',
-    status: AssessmentStatuses.editing,
+    status: AssessmentStatuses.attempting,
     story: rawOverview.story,
     xp: 0,
     gradingStatus: 'none' as GradingStatuses
@@ -39,8 +47,8 @@ export const makeAssessmentOverview = (result: any) : IAssessmentOverview => {
 }
 
 export const makeAssessment = (result: any) : IAssessment => {
-  const task = result.CONTENT.TASK[0];
-  const rawOverview = task.$;
+  const task : IXmlParseStrTask = result.CONTENT.TASK[0];
+  const rawOverview : IXmlParseStrOverview = task.$;
   return {
     category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
     id: 7,
@@ -62,24 +70,27 @@ const mockGlobals: Array<[string, any]> = [
   ['testArray', [1, 2, 'a', 'b']]
 ]
 
-const mockSoundLibrary: Library = {
-  chapter: 1,
-  external: {
-    name: ExternalLibraryNames.SOUND,
-    symbols: externalLibraries.get(ExternalLibraryNames.SOUND)!
-  },
-  globals: mockGlobals
+const makeLibrary = (task: IXmlParseStrTask) : Library => {
+  const symbolsVal : string[]  = ["hi"];
+  return {
+    chapter: task.DEPLOYMENT.$.interpreter,
+    external: {
+      name: task.DEPLOYMENT[0].EXTERNAL.$.name,
+      symbols: symbolsVal
+    },
+    globals: mockGlobals
+  }
 }
 
-const makeQuestions = (task: any) : IQuestion[] => {
+const makeQuestions = (task: IXmlParseStrTask) : IQuestion[] => {
   const questions: Array<IProgrammingQuestion | IMCQQuestion> = []
-  task.PROBLEMS[0].PROBLEM.forEach((problem: any, curId: number) => {
+  task.PROBLEMS[0].PROBLEM.forEach((problem: IXmlParseStrProblem, curId: number) => {
     const question: IQuestion = {
       answer: null,
       comment: null,
       content: problem.TEXT[0],
       id: curId,
-      library: mockSoundLibrary,
+      library: makeLibrary(task),
       type: problem.$.type,
       grader: {
         name: 'fake person',
@@ -92,19 +103,19 @@ const makeQuestions = (task: any) : IQuestion[] => {
       maxXp: problem.$.maxxp
     }
     if (question.type === 'programming') {
-      questions.push(makeProgramming(problem, question))
+      questions.push(makeProgramming(problem as IXmlParseStrPProblem, question))
     }
     if (question.type === 'mcq') {
-      questions.push(makeMCQ(problem, question));
+      questions.push(makeMCQ(problem as IXmlParseStrCProblem, question));
     }
   })
   return questions
 }
 
-const makeMCQ = (problem: any, question: IQuestion) : IMCQQuestion => {
+const makeMCQ = (problem: IXmlParseStrCProblem, question: IQuestion) : IMCQQuestion => {
   const choicesVal: MCQChoice[] = []
   let solutionVal = 0
-  problem.CHOICE.forEach((choice: any, i: number) => {
+  problem.CHOICE.forEach((choice: IXmlParseStrProblemChoice, i: number) => {
     choicesVal.push({
       content: choice.TEXT[0],
       hint: null
@@ -114,25 +125,25 @@ const makeMCQ = (problem: any, question: IQuestion) : IMCQQuestion => {
   return {
     ...question,
     type: "mcq",
-    answer: problem.SNIPPET[0].SOLUTION[0],
+    answer: problem.SNIPPET[0].SOLUTION[0] as number,
     choices: choicesVal,
     solution: solutionVal
   }
 }
 
-const makeProgramming = (problem: any, question: IQuestion): IProgrammingQuestion => {
+const makeProgramming = (problem: IXmlParseStrPProblem, question: IQuestion): IProgrammingQuestion => {
   return {
     ...question,
-    answer: problem.SNIPPET[0].TEMPLATE[0],
-    solutionTemplate: problem.SNIPPET[0].SOLUTION[0],
+    answer: problem.SNIPPET[0].TEMPLATE[0] as string,
+    solutionTemplate: problem.SNIPPET[0].SOLUTION[0] as string,
     type: 'programming'
   }
 }
 
 
-export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOverview): any => {
+export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOverview): IXmlParseStrTask => {
   const task: any = {};
-  task.$ = {
+  const rawOverview : IXmlParseStrOverview = {
     kind: overview.category.toLowerCase(),
     duedate: overview.closeAt,
     coverimage: overview.coverImage,
@@ -140,6 +151,7 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
     title: overview.title,
     story: overview.story
   };
+  task.$ = rawOverview;
 
   task.WEBSUMMARY = [overview.shortSummary];
   task.TEXT = [assessment.longSummary];
