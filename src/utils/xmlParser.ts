@@ -131,7 +131,7 @@ const makeProgramming = (problem: any, question: IQuestion): IProgrammingQuestio
 
 
 export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOverview): any => {
-  let task: any = {};
+  const task: any = {};
   task.$ = {
     kind: overview.category.toLowerCase(),
     duedate: overview.closeAt,
@@ -146,7 +146,7 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
   task.PROBLEMS = [];
 
   assessment.questions.forEach((question: IProgrammingQuestion | IMCQQuestion) => {
-    let problem = {
+    const problem = {
       $: {
         type: question.type,
         maxgrade: question.maxGrade,
