@@ -1,14 +1,32 @@
 import {
+  ExternalLibraryNames,
   IQuestion
 } from '../components/assessment/assessmentShape'
 
 export interface IXmlParseStrTask {
   $: IXmlParseStrOverview,
-  TEXT: string[],
-  WEBSUMMARY?: string[],
+  DEPLOYMENT: IXmlParseStrDeployment[],
+  GLOBAL: Array<{
+    IDENTIFIER: string[],
+    VALUE: string[]
+  }>,
+  GRADERDEPLOYMENT: IXmlParseStrDeployment[],
   PROBLEMS: Array<{PROBLEM: IXmlParseStrProblem[]}>,
   READING: string[],
-  DEPLOYMENT: any,
+  TEXT: string[],
+  WEBSUMMARY?: string[],
+}
+
+export interface IXmlParseStrDeployment{
+  $: {
+    interpreter: string,
+  },
+  EXTERNAL: Array<{
+    $: {
+      name: ExternalLibraryNames,
+    },
+    SYMBOL: string[],
+  }>
 }
 
 export interface IXmlParseStrOverview {

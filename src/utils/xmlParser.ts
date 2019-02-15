@@ -20,7 +20,6 @@ import {
 } from '../utils/xmlParseStrShapes'; 
 
 
-
 const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
@@ -59,26 +58,20 @@ export const makeAssessment = (result: any) : IAssessment => {
   }
 }
 
-const mockGlobals: Array<[string, any]> = [
-  ['testNumber', 3.141592653589793],
-  ['testString', 'who dat boi'],
-  ['testBooleanTrue', true],
-  ['testBooleanFalse', false],
-  ['testBooleanUndefined', undefined],
-  ['testBooleanNull', null],
-  ['testObject', { a: 1, b: 2 }],
-  ['testArray', [1, 2, 'a', 'b']]
-]
+const altEval = (str: string) : any => {
+    return Function('"use strict";return (' + str + ')')();
+}
 
 const makeLibrary = (task: IXmlParseStrTask) : Library => {
-  const symbolsVal : string[]  = ["hi"];
+  const symbolsVal : string[]  = task.DEPLOYMENT[0].EXTERNAL[0].SYMBOL || [];
+  const globalsVal = task.GLOBAL.map((x) => [x.IDENTIFIER[0], altEval(x.VALUE[0])]) as Array<[string, any]>;
   return {
-    chapter: task.DEPLOYMENT.$.interpreter,
+    chapter: parseInt(task.DEPLOYMENT[0].$.interpreter, 10),
     external: {
-      name: task.DEPLOYMENT[0].EXTERNAL.$.name,
+      name: task.DEPLOYMENT[0].EXTERNAL[0].$.name,
       symbols: symbolsVal
     },
-    globals: mockGlobals
+    globals: globalsVal,
   }
 }
 
