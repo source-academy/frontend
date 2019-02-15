@@ -26,7 +26,7 @@ const assessmentRenderFactory = (cat: AssessmentCategory) => (
   routerProps: RouteComponentProps<any>
 ) => <AssessmentContainer assessmentCategory={cat} />
 
-const assessmentRegExp = ':assessmentId(\\d+)?/:questionId(\\d+)?'
+const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?'
 const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?'
 
 export const Academy: React.SFC<IAcademyProps> = props => (

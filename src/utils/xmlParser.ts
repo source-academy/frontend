@@ -19,6 +19,7 @@ import {
   IXmlParseStrTask
 } from '../utils/xmlParseStrShapes'; 
 
+const editingId = -1;
 
 const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -32,7 +33,7 @@ export const makeAssessmentOverview = (result: any) : IAssessmentOverview => {
     closeAt: rawOverview.duedate,
     coverImage: rawOverview.coverimage,
     grade: 1,
-    id: 7,
+    id: editingId,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: rawOverview.startdate,
@@ -50,7 +51,7 @@ export const makeAssessment = (result: any) : IAssessment => {
   const rawOverview : IXmlParseStrOverview = task.$;
   return {
     category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
-    id: 7,
+    id: editingId,
     longSummary: task.TEXT[0],
     missionPDF: 'google.com',
     questions: makeQuestions(task),
@@ -63,12 +64,20 @@ const altEval = (str: string) : any => {
 }
 
 const makeLibrary = (task: IXmlParseStrTask) : Library => {
-  const symbolsVal : string[]  = task.DEPLOYMENT[0].EXTERNAL[0].SYMBOL || [];
-  const globalsVal = task.GLOBAL.map((x) => [x.IDENTIFIER[0], altEval(x.VALUE[0])]) as Array<[string, any]>;
+  const external = task.DEPLOYMENT[0].EXTERNAL;
+  const nameVal = external ? 
+    external[0].$.name
+    : "NONE";
+  const symbolsVal : string[]  = external ? 
+    external[0].SYMBOL 
+    : [];
+  const globalsVal = task.GLOBAL ? 
+    task.GLOBAL.map((x) => [x.IDENTIFIER[0], altEval(x.VALUE[0])]) as Array<[string, any]>
+    : [];
   return {
     chapter: parseInt(task.DEPLOYMENT[0].$.interpreter, 10),
     external: {
-      name: task.DEPLOYMENT[0].EXTERNAL[0].$.name,
+      name: nameVal,
       symbols: symbolsVal
     },
     globals: globalsVal,
@@ -76,6 +85,7 @@ const makeLibrary = (task: IXmlParseStrTask) : Library => {
 }
 
 const makeQuestions = (task: IXmlParseStrTask) : IQuestion[] => {
+  const libraryVal = makeLibrary(task);
   const questions: Array<IProgrammingQuestion | IMCQQuestion> = []
   task.PROBLEMS[0].PROBLEM.forEach((problem: IXmlParseStrProblem, curId: number) => {
     const question: IQuestion = {
@@ -83,7 +93,7 @@ const makeQuestions = (task: IXmlParseStrTask) : IQuestion[] => {
       comment: null,
       content: problem.TEXT[0],
       id: curId,
-      library: makeLibrary(task),
+      library: libraryVal,
       type: problem.$.type,
       grader: {
         name: 'fake person',

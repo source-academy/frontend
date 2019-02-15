@@ -2,17 +2,15 @@ import * as React from 'react'
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { parseString } from 'xml2js'
-import { updateAssessment, updateAssessmentOverview } from '../../actions/session'
+import { updateAssessment } from '../../actions/session'
 import {
   IAssessment,
   IAssessmentOverview,
 } from '../../components/assessment/assessmentShape'
 import { makeAssessment, makeAssessmentOverview } from '../../utils/xmlParser'
-// import { IDispatchProps } from '../../components/assessment'
 
 export interface IDispatchProps {
   newAssessment: (assessment: IAssessment) => void
-  newAssessmentOverview: (overview: IAssessmentOverview) => void
 }
 
 const mapStateToProps: MapStateToProps<{}, any, {}> = (_, ownProps) => ownProps
@@ -21,7 +19,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
   bindActionCreators(
     {
       newAssessment: updateAssessment,
-      newAssessmentOverview: updateAssessmentOverview
     },
     dispatch
   )
@@ -32,6 +29,13 @@ export class ImportFromFileComponent extends React.Component<any, any> {
     super(props)
     this.handleFileRead = this.handleFileRead.bind(this)
     this.handleChangeFile = this.handleChangeFile.bind(this)
+  }
+
+  public componentDidMount(){
+  	const assessment = localStorage.getItem("MissionEditingAssessmentSA");
+  	if (assessment) {
+  		this.props.newAssessment(JSON.parse(assessment));
+  	}
   }
 
   public render() {
@@ -50,8 +54,10 @@ export class ImportFromFileComponent extends React.Component<any, any> {
         // tslint:disable-next-line:no-console
         console.dir(task)
         const overview: IAssessmentOverview = makeAssessmentOverview(result)
-        this.props.newAssessmentOverview(overview)
+        localStorage.setItem("MissionEditingOverviewSA", JSON.stringify(overview));
+
         const assessment: IAssessment = makeAssessment(result)
+        localStorage.setItem("MissionEditingAssessmentSA", JSON.stringify(assessment));
         this.props.newAssessment(assessment)
       })
     }

@@ -87,7 +87,20 @@ class Assessment extends React.Component<IAssessmentProps, State> {
   public render() {
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId)
     const questionId: number =
-      stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
+      stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID;
+
+    // If mission for testing is to render, create workspace
+    const editingOverview = localStorage.getItem("MissionEditingOverviewSA"); 
+    if (assessmentId === -1 && editingOverview) {
+      const overview = JSON.parse(editingOverview)
+      const assessmentProps: AssessmentProps = {
+        assessmentId,
+        questionId,
+        notAttempted: overview.status === AssessmentStatuses.not_attempted,
+        closeDate: overview.closeAt
+      }
+      return <AssessmentWorkspaceContainer {...assessmentProps} />
+    }
 
     // If there is an assessment to render, create a workspace. The assessment
     // overviews must still be loaded for this, to send the due date.
@@ -136,6 +149,17 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           makeOverviewCard(overview, index, this.setBetchaAssessment, true, true)
         )
 
+      /** Mission editing card, stored in local storage and have index of -1. */
+      const missionEditingCard = editingOverview ? 
+        makeOverviewCard(
+          JSON.parse(editingOverview),
+          -1,
+          this.setBetchaAssessment,
+          true,
+          false
+        ) :
+        null;
+
       /** Render cards */
       const upcomingCardsCollapsible =
         upcomingCards.length > 0 ? (
@@ -168,10 +192,11 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         ) : null
       display = (
         <>
+          <ImportFromFileComponent />
+          {missionEditingCard}
           {upcomingCardsCollapsible}
           {openedCardsCollapsible}
           {closedCardsCollapsible}
-          <ImportFromFileComponent />
         </>
       )
     }

@@ -99,11 +99,6 @@ export const updateHistoryHelpers: ActionCreator<actionTypes.IAction> = (loc: st
   payload: loc
 })
 
-export const updateAssessmentOverview = (overview: IAssessmentOverview) => ({
-  type: actionTypes.UPDATE_ASSESSMENT_OVERVIEW,
-  payload: overview
-})
-
 export const updateAssessmentOverviews = (overviews: IAssessmentOverview[]) => ({
   type: actionTypes.UPDATE_ASSESSMENT_OVERVIEWS,
   payload: overviews
