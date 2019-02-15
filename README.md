@@ -33,7 +33,7 @@ Note that this copies your files over, any future changes will not be reflected.
 
 You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
 
-## For Previewing Missions Only
+## For Previewing Local XML Missions Only
 
 1. Use the branch 'mission-testing' in cadet-frontend
 2. Run in browser with yarn start
