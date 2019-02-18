@@ -154,31 +154,30 @@ class AssessmentWorkspace extends React.Component<
         isOpen={this.state.showResetOverlay}
         title="Confirmation: Reset editor?"
       >
-        <Card>
-          <div className={Classes.DIALOG_BODY}>
-            <Markdown content="Are you sure you want to reset the template?" />
-          </div>
-          <div className={Classes.DIALOG_FOOTER}>
-            <ButtonGroup>
-              {controlButton('Cancel', null, () => this.setState({ showResetOverlay: false }), {
-                minimal: false
-              })}
-              {controlButton(
-                'Confirm',
-                null,
-                () => {
-                  this.setState({ showResetOverlay: false })
-                  this.props.handleEditorValueChange(
-                    (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
-                      .solutionTemplate
-                  )
-                  this.props.handleUpdateHasUnsavedChanges(true)
-                },
-                { minimal: false, intent: Intent.DANGER }
-              )}
-            </ButtonGroup>
-          </div>
-        </Card>
+        <div className={Classes.DIALOG_BODY}>
+          <Markdown content="Are you sure you want to reset the template?" />
+          <Markdown content="*Note this will not affect the saved copy of your code, unless you save over it.*" />
+        </div>
+        <div className={Classes.DIALOG_FOOTER}>
+          <ButtonGroup>
+            {controlButton('Cancel', null, () => this.setState({ showResetOverlay: false }), {
+              minimal: false
+            })}
+            {controlButton(
+              'Confirm',
+              null,
+              () => {
+                this.setState({ showResetOverlay: false })
+                this.props.handleEditorValueChange(
+                  (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
+                    .solutionTemplate
+                )
+                this.props.handleUpdateHasUnsavedChanges(true)
+              },
+              { minimal: false, intent: Intent.DANGER }
+            )}
+          </ButtonGroup>
+        </div>
       </Dialog>
     )
     /* If questionId is out of bounds, set it to the max. */

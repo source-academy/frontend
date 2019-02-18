@@ -11,21 +11,20 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
     </Blueprint2.Card>
   </Blueprint2.Dialog>
   <Blueprint2.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
-    <Blueprint2.Card elevation={0} interactive={false}>
-      <div className=\\"pt-dialog-body\\">
-        <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      </div>
-      <div className=\\"pt-dialog-footer\\">
-        <Blueprint2.ButtonGroup>
-          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" onClick={[Function]}>
-            Cancel
-          </Blueprint2.Button>
-          <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" onClick={[Function]}>
-            Confirm
-          </Blueprint2.Button>
-        </Blueprint2.ButtonGroup>
-      </div>
-    </Blueprint2.Card>
+    <div className=\\"pt-dialog-body\\">
+      <Markdown content=\\"Are you sure you want to reset the template?\\" />
+      <Markdown content=\\"*Note this will not affect the saved copy of your code, unless you save over it.*\\" />
+    </div>
+    <div className=\\"pt-dialog-footer\\">
+      <Blueprint2.ButtonGroup>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" onClick={[Function]}>
+          Cancel
+        </Blueprint2.Button>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" onClick={[Function]}>
+          Confirm
+        </Blueprint2.Button>
+      </Blueprint2.ButtonGroup>
+    </div>
   </Blueprint2.Dialog>
   <Workspace controlBarProps={{...}} editorProps={[undefined]} editorWidth=\\"50%\\" handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
@@ -40,21 +39,20 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
     </Blueprint2.Card>
   </Blueprint2.Dialog>
   <Blueprint2.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
-    <Blueprint2.Card elevation={0} interactive={false}>
-      <div className=\\"pt-dialog-body\\">
-        <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      </div>
-      <div className=\\"pt-dialog-footer\\">
-        <Blueprint2.ButtonGroup>
-          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" onClick={[Function]}>
-            Cancel
-          </Blueprint2.Button>
-          <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" onClick={[Function]}>
-            Confirm
-          </Blueprint2.Button>
-        </Blueprint2.ButtonGroup>
-      </div>
-    </Blueprint2.Card>
+    <div className=\\"pt-dialog-body\\">
+      <Markdown content=\\"Are you sure you want to reset the template?\\" />
+      <Markdown content=\\"*Note this will not affect the saved copy of your code, unless you save over it.*\\" />
+    </div>
+    <div className=\\"pt-dialog-footer\\">
+      <Blueprint2.ButtonGroup>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" onClick={[Function]}>
+          Cancel
+        </Blueprint2.Button>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" onClick={[Function]}>
+          Confirm
+        </Blueprint2.Button>
+      </Blueprint2.ButtonGroup>
+    </div>
   </Blueprint2.Dialog>
   <Workspace controlBarProps={{...}} editorProps={{...}} editorWidth=\\"50%\\" handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
@@ -69,21 +67,20 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
     </Blueprint2.Card>
   </Blueprint2.Dialog>
   <Blueprint2.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
-    <Blueprint2.Card elevation={0} interactive={false}>
-      <div className=\\"pt-dialog-body\\">
-        <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      </div>
-      <div className=\\"pt-dialog-footer\\">
-        <Blueprint2.ButtonGroup>
-          <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" onClick={[Function]}>
-            Cancel
-          </Blueprint2.Button>
-          <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" onClick={[Function]}>
-            Confirm
-          </Blueprint2.Button>
-        </Blueprint2.ButtonGroup>
-      </div>
-    </Blueprint2.Card>
+    <div className=\\"pt-dialog-body\\">
+      <Markdown content=\\"Are you sure you want to reset the template?\\" />
+      <Markdown content=\\"*Note this will not affect the saved copy of your code, unless you save over it.*\\" />
+    </div>
+    <div className=\\"pt-dialog-footer\\">
+      <Blueprint2.ButtonGroup>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" onClick={[Function]}>
+          Cancel
+        </Blueprint2.Button>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" onClick={[Function]}>
+          Confirm
+        </Blueprint2.Button>
+      </Blueprint2.ButtonGroup>
+    </div>
   </Blueprint2.Dialog>
   <Workspace controlBarProps={{...}} editorProps={{...}} editorWidth=\\"50%\\" handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
