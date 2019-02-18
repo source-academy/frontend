@@ -11,6 +11,7 @@ import {
   MCQChoice
 } from '../components/assessment/assessmentShape'
 import {
+  IXmlParseStrDeployment,
   IXmlParseStrCProblem,
   IXmlParseStrOverview,
   IXmlParseStrPProblem,
@@ -67,7 +68,7 @@ const makeLibrary = (task: IXmlParseStrTask) : Library => {
   const external = task.DEPLOYMENT[0].EXTERNAL;
   const nameVal = external ? 
     external[0].$.name
-    : "NONE";
+    : 'NONE';
   const symbolsVal : string[]  = external ? 
     external[0].SYMBOL 
     : [];
@@ -160,6 +161,21 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
   task.TEXT = [assessment.longSummary];
   task.PROBLEMS = [];
 
+  const library : Library = assessment.questions[0].library;
+  const deployment : IXmlParseStrDeployment = {
+    $: {
+      interpreter: library.chapter.toString()
+    },
+    EXTERNAL: [{
+      $: {
+        name: library.external.name,
+      },
+      SYMBOL: library.external.symbols,
+    }]
+  }
+
+  task.DEPLOYMENT = deployment;
+
   assessment.questions.forEach((question: IProgrammingQuestion | IMCQQuestion) => {
     const problem = {
       $: {
@@ -195,5 +211,6 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
 
     task.PROBLEMS.push(problem);
   });
+
   return task;
 }

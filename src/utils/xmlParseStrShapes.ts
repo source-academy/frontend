@@ -1,5 +1,5 @@
 import {
-  ExternalLibraryNames,
+  ExternalLibraryName,
   IQuestion
 } from '../components/assessment/assessmentShape'
 
@@ -23,7 +23,7 @@ export interface IXmlParseStrDeployment{
   },
   EXTERNAL: Array<{
     $: {
-      name: ExternalLibraryNames,
+      name: ExternalLibraryName,
     },
     SYMBOL: string[],
   }>
