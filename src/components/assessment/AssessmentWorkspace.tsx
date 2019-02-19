@@ -73,6 +73,7 @@ export type DispatchProps = {
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void
+  setEditorValue: (newCode: string) => void
 }
 
 class AssessmentWorkspace extends React.Component<
@@ -168,7 +169,7 @@ class AssessmentWorkspace extends React.Component<
               null,
               () => {
                 this.setState({ showResetOverlay: false })
-                this.props.handleEditorValueChange(
+                this.props.setEditorValue(
                   (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
                     .solutionTemplate
                 )
@@ -194,7 +195,8 @@ class AssessmentWorkspace extends React.Component<
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+              setEditorValue: this.props.setEditorValue
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -345,7 +347,8 @@ class AssessmentWorkspace extends React.Component<
         this.setState({ showResetOverlay: true })
       },
       questionProgress: [questionId + 1, this.props.assessment!.questions.length],
-      sourceChapter: this.props.assessment!.questions[questionId].library.chapter
+      sourceChapter: this.props.assessment!.questions[questionId].library.chapter,
+      setEditorValue: this.props.setEditorValue
     }
   }
 }

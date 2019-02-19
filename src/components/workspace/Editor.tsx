@@ -18,6 +18,7 @@ export interface IEditorProps {
   handleEditorEval: () => void
   handleEditorValueChange: (newCode: string) => void
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void
+  setEditorValue?: (newCode: string | null) => void
 }
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
@@ -31,6 +32,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
       this.props.handleEditorValueChange(newCode)
     }
+  }
+
+  public setEditorValue(newCode: string) {
+    this.setState({ ...this.state, editorValue: newCode })
   }
 
   public render() {

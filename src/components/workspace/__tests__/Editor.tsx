@@ -8,7 +8,8 @@ test('Editor renders correctly', () => {
   const props: IEditorProps = {
     editorValue: '',
     handleEditorEval: () => {},
-    handleEditorValueChange: newCode => {}
+    handleEditorValueChange: newCode => {},
+    setEditorValue: newCode => {}
   }
   const app = <Editor {...props} />
   const tree = shallow(app)

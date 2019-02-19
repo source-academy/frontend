@@ -20,6 +20,7 @@ import {
   LOG_OUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SET_EDITOR_VALUE,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -379,6 +380,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           editorValue: action.payload.newEditorValue
+        }
+      }
+    case SET_EDITOR_VALUE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorValue: action.payload.newCode
         }
       }
     case UPDATE_REPL_VALUE:

@@ -14,6 +14,7 @@ import {
   evalEditor,
   evalRepl,
   fetchAssessment,
+  setEditorValue,
   submitAnswer,
   updateEditorValue,
   updateHasUnsavedChanges,
@@ -75,7 +76,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         changeSideContentHeight(heightChange, workspaceLocation),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
-      handleUpdateCurrentAssessmentId: updateCurrentAssessmentId
+      handleUpdateCurrentAssessmentId: updateCurrentAssessmentId,
+      setEditorValue: (newCode: string) => setEditorValue(newCode, workspaceLocation)
     },
     dispatch
   )

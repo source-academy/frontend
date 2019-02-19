@@ -182,6 +182,17 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 })
 
+export const setEditorValue: ActionCreator<actionTypes.IAction> = (
+  newCode: string,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.SET_EDITOR_VALUE,
+  payload: {
+    newCode,
+    workspaceLocation
+  }
+})
+
 /**
  * Resets a workspace to its default properties.
  *
