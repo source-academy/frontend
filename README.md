@@ -5,12 +5,33 @@
 
 ## Development Setup
 
-1. Install a stable version of Yarn and NodeJS.
+1. Install a stable version of Yarn and NodeJS (use node version 4-9 with nvm).
 2. Run `yarn` to install dependencies.
 3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_IVLE_KEY`
    to contain your IVLE Lapi key.
 4. Run `yarn start` to start the server at `localhost:80`. Admin permissions may
    be required for your OS to serve at port 80.
+   
+## IVLE LAPI Key
+For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
+
+## For Windows Users
+In package.json, change line 19:
+"start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",
+to:
+"start-js": "set PORT=80 & react-scripts-ts start",
+
+## For Testing of js-slang
+
+1. For now, use the branch 'update-js-slang' in cadet-frontend
+2. Follow the instructions on js-slang to transpile your own copy
+3. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
+
+`"js-slang": "file:path/to/js-slang",`
+
+Note that this copies your files over, any future changes will not be reflected. 
+
+You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
 
 ## Application Structure
 

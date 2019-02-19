@@ -2,6 +2,7 @@ import * as React from 'react'
 import AceEditor from 'react-ace'
 import { HotKeys } from 'react-hotkeys'
 
+import 'brace/ext/searchbox'
 import 'brace/mode/javascript'
 import 'brace/theme/cobalt'
 
