@@ -55,9 +55,9 @@ export class ImportFromFileComponent extends React.Component<Props, {}> {
     const content = this.fileReader.result
     if (content) {
       parseString(content, (err: any, result: any) => {
-        const task = result.CONTENT.TASK[0]
+        // const task = result.CONTENT.TASK[0]
         // tslint:disable-next-line:no-console
-        console.dir(task)
+        // console.dir(task)
         const overview: IAssessmentOverview = makeAssessmentOverview(result);
         localStorage.setItem("MissionEditingOverviewSA", JSON.stringify(overview));
         this.props.updateEditingOverview(overview);

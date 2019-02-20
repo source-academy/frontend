@@ -1,3 +1,4 @@
+import { Builder } from 'xml2js'
 import {
   AssessmentCategories,
   AssessmentStatuses,
@@ -144,6 +145,31 @@ const makeProgramming = (problem: IXmlParseStrPProblem, question: IQuestion): IP
   }
 }
 
+export const exportXml = () => {
+    const assessmentStr = localStorage.getItem("MissionEditingAssessmentSA");
+    const overviewStr = localStorage.getItem("MissionEditingOverviewSA")
+    if (assessmentStr && overviewStr){
+      const assessment: IAssessment = JSON.parse(assessmentStr);
+      const overview: IAssessmentOverview = JSON.parse(overviewStr);
+      const builder = new Builder();
+      const xmlTask : IXmlParseStrTask = assessmentToXml(assessment,overview);
+      const xml = {
+        CONTENT: {
+          TASK: xmlTask
+        }
+      }
+      // tslint:disable-next-line:no-console
+      console.dir(xml)
+      let xmlStr = builder.buildObject(xml);
+      xmlStr = xmlStr.replace(/(&#xD;)+/g, '');
+      const element = document.createElement("a");
+      const file = new Blob([xmlStr], {endings:"native", type:"text/xml;charset=UTF-8"});
+      element.href = URL.createObjectURL(file);
+      element.download = "myMission.xml";
+      element.click();
+    }
+  }
+
 
 export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOverview): IXmlParseStrTask => {
   const task: any = {};
@@ -175,13 +201,13 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
   }
 
   task.DEPLOYMENT = deployment;
+  task.PROBLEMS.push({PROBLEM: []})
 
   assessment.questions.forEach((question: IProgrammingQuestion | IMCQQuestion) => {
     const problem = {
       $: {
         type: question.type,
-        maxgrade: question.maxGrade,
-        maxxp: question.maxXp
+        maxgrade: question.maxGrade
       },
       SNIPPET: [
         {
@@ -191,6 +217,11 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
       ],
       TEXT: [question.content],
       CHOICE: [] as any[],
+    }
+
+    if (question.maxXp){
+      const maxxp = 'maxxp';
+      problem.$[maxxp] = question.maxXp;
     }
 
     if (question.type === 'programming') {
@@ -209,7 +240,7 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
       })
     }
 
-    task.PROBLEMS.push(problem);
+    task.PROBLEMS[0].PROBLEM.push(problem);
   });
 
   return task;
