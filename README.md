@@ -16,10 +16,10 @@
 For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
 
 ## For Windows Users
-In package.json, change line 19:
-"start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",
-to:
-"start-js": "set PORT=80 & react-scripts-ts start",
+In package.json, change line 19:\
+"start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",\
+to:\
+"start-js": "set PORT=80 & react-scripts-ts start",\
 
 ## For Testing of js-slang
 
