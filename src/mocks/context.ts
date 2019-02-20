@@ -12,6 +12,7 @@ export function mockContext(chapter = 1): Context {
 export function mockRuntimeContext(): Context {
   const context = createContext()
   context.runtime = {
+    break: false,
     isRunning: true,
     frames: [],
     nodes: [
