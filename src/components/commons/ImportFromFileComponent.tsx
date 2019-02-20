@@ -28,7 +28,7 @@ type Props = {
 	updateEditingOverview: (overview: IAssessmentOverview) => void
 }
 
-export class ImportFromFileComponent extends React.Component<Props, {}> {
+export class ImportFromFileComponent extends React.Component<Props> {
   private fileReader: FileReader
   public constructor(props: any) {
     super(props)
@@ -55,9 +55,8 @@ export class ImportFromFileComponent extends React.Component<Props, {}> {
     const content = this.fileReader.result
     if (content) {
       parseString(content, (err: any, result: any) => {
-        // const task = result.CONTENT.TASK[0]
         // tslint:disable-next-line:no-console
-        // console.dir(task)
+        // console.dir(result.CONTENT.TASK[0])
         const overview: IAssessmentOverview = makeAssessmentOverview(result);
         localStorage.setItem("MissionEditingOverviewSA", JSON.stringify(overview));
         this.props.updateEditingOverview(overview);
@@ -67,7 +66,6 @@ export class ImportFromFileComponent extends React.Component<Props, {}> {
         this.props.newAssessment(assessment);
       })
     }
-    // You can set content in state and show it in render.
   }
 
   private handleChangeFile = (e: any) => {

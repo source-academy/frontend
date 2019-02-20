@@ -154,12 +154,13 @@ export const exportXml = () => {
       const builder = new Builder();
       const xmlTask : IXmlParseStrTask = assessmentToXml(assessment,overview);
       const xml = {
+        $: {
+          "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+        },
         CONTENT: {
           TASK: xmlTask
         }
       }
-      // tslint:disable-next-line:no-console
-      console.dir(xml)
       let xmlStr = builder.buildObject(xml);
       xmlStr = xmlStr.replace(/(&#xD;)+/g, '');
       const element = document.createElement("a");
@@ -183,9 +184,9 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
   };
   task.$ = rawOverview;
 
-  task.WEBSUMMARY = [overview.shortSummary];
-  task.TEXT = [assessment.longSummary];
-  task.PROBLEMS = [];
+  task.WEBSUMMARY = overview.shortSummary;
+  task.TEXT = assessment.longSummary;
+  task.PROBLEMS = {PROBLEM: []};
 
   const library : Library = assessment.questions[0].library;
   const deployment : IXmlParseStrDeployment = {
@@ -201,7 +202,6 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
   }
 
   task.DEPLOYMENT = deployment;
-  task.PROBLEMS.push({PROBLEM: []})
 
   assessment.questions.forEach((question: IProgrammingQuestion | IMCQQuestion) => {
     const problem = {
@@ -209,13 +209,11 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
         type: question.type,
         maxgrade: question.maxGrade
       },
-      SNIPPET: [
-        {
-          SOLUTION: [question.answer],
-          TEMPLATE: [question.answer]
-        }
-      ],
-      TEXT: [question.content],
+      SNIPPET: {
+        SOLUTION: question.answer,
+        TEMPLATE: question.answer
+      },
+      TEXT: question.content,
       CHOICE: [] as any[],
     }
 
@@ -225,22 +223,22 @@ export const assessmentToXml = (assessment: IAssessment, overview: IAssessmentOv
     }
 
     if (question.type === 'programming') {
-      problem.SNIPPET[0].TEMPLATE[0] = question.solutionTemplate;
+      problem.SNIPPET.TEMPLATE = question.solutionTemplate;
     }
 
     if (question.type === 'mcq') {
-      problem.SNIPPET[0].SOLUTION[0] = question.answer;
+      problem.SNIPPET.SOLUTION = question.answer;
       question.choices.forEach((choice: MCQChoice, i: number) => {
         problem.CHOICE.push({
           $: {
             correct: (question.solution === i) ? 'true' : 'false',
           },
-          TEXT: [choice.content],
+          TEXT: choice.content,
         })
       })
     }
 
-    task.PROBLEMS[0].PROBLEM.push(problem);
+    task.PROBLEMS.PROBLEM.push(problem);
   });
 
   return task;

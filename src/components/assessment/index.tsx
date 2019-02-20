@@ -28,7 +28,6 @@ import {
   AssessmentCategory,
   AssessmentStatuses,
   GradingStatuses,
-  IAssessment,
   IAssessmentOverview
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
@@ -55,7 +54,6 @@ export interface IAssessmentProps
 export interface IDispatchProps {
   handleAssessmentOverviewFetch: () => void
   handleSubmitAssessment: (id: number) => void
-  newAssessment: (assessment: IAssessment) => void
 }
 
 export interface IOwnProps {

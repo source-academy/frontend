@@ -5,14 +5,13 @@ import { MemoryRouter } from 'react-router'
 import Assessment, { IAssessmentProps } from '../'
 import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI'
 import { mockRouterProps } from '../../../mocks/components'
-import { AssessmentCategories, IAssessment } from '../assessmentShape'
+import { AssessmentCategories } from '../assessmentShape'
 
 const defaultProps: IAssessmentProps = {
   assessmentCategory: AssessmentCategories.Mission,
   assessmentOverviews: undefined,
   handleAssessmentOverviewFetch: () => {},
   handleSubmitAssessment: (id: number) => {},
-  newAssessment: (assessment: IAssessment) => {},
   isStudent: false,
   ...mockRouterProps('/academy/missions', {})
 }
