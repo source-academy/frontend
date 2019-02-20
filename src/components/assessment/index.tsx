@@ -32,6 +32,7 @@ import {
   IAssessmentOverview
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
+import { EditingOverviewCard } from '../assessment/EditingOverviewCard'
 import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
 import ImportFromFileComponent from '../commons/ImportFromFileComponent'
@@ -72,6 +73,7 @@ type State = {
   showOpenedAssessments: boolean
   showUpcomingAssessments: boolean
   editOverview: string
+  editingOverview: IAssessmentOverview | null;
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -85,7 +87,18 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showClosedAssessments: false,
       showOpenedAssessments: true,
       showUpcomingAssessments: true,
-      editOverview: ''
+      editOverview: '',
+      editingOverview: null
+    }
+  }
+
+  public componentDidMount(){
+    const editingOverviewStr = localStorage.getItem('MissionEditingOverviewSA');
+    if (editingOverviewStr) {
+      this.setState({
+        ...this.state,
+        editingOverview: JSON.parse(editingOverviewStr)
+      })
     }
   }
 
@@ -95,21 +108,23 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
 
     // If mission for testing is to render, create workspace
-    const editingOverview = localStorage.getItem('MissionEditingOverviewSA')
-    if (assessmentId === -1 && editingOverview) {
-      const overview = JSON.parse(editingOverview)
-      const assessmentProps: AssessmentProps = {
-        assessmentId,
-        questionId,
-        notAttempted: overview.status === AssessmentStatuses.not_attempted,
-        closeDate: overview.closeAt
+    if (assessmentId === -1) {
+      const editingOverviewStr = localStorage.getItem('MissionEditingOverviewSA');
+      if (editingOverviewStr){
+        const overview = JSON.parse(editingOverviewStr)
+        const assessmentProps: AssessmentProps = {
+          assessmentId,
+          questionId,
+          notAttempted: overview.status === AssessmentStatuses.not_attempted,
+          closeDate: overview.closeAt
+        }
+        return <AssessmentWorkspaceContainer {...assessmentProps} />
       }
-      return <AssessmentWorkspaceContainer {...assessmentProps} />
     }
 
     // If there is an assessment to render, create a workspace. The assessment
     // overviews must still be loaded for this, to send the due date.
-    if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
+    else if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
       const overview = this.props.assessmentOverviews.filter(a => a.id === assessmentId)[0]
       const assessmentProps: AssessmentProps = {
         assessmentId,
@@ -154,15 +169,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           makeOverviewCard(overview, index, this.setBetchaAssessment, true, true)
         )
 
-      /** Mission editing card, stored in local storage and have index of -1. */
-      const missionEditingCard = editingOverview
-        ? this.makeEditingOverviewCard(
-            JSON.parse(editingOverview),
-            -1,
-            this.setBetchaAssessment,
-            true,
-            false
-          )
+      /** Mission editing card */
+      const missionEditingCard = this.state.editingOverview
+        ? <EditingOverviewCard 
+          overview={this.state.editingOverview} 
+          updateEditingOverview={this.updateEditingOverview}
+          />
         : null
 
       /** Render cards */
@@ -197,7 +209,9 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         ) : null
       display = (
         <>
-          <ImportFromFileComponent />
+          <ImportFromFileComponent 
+            updateEditingOverview={this.updateEditingOverview}
+          />
           {missionEditingCard}
           {upcomingCardsCollapsible}
           {openedCardsCollapsible}
@@ -301,109 +315,11 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     }
   }
 
-  private editOverview = (field: string, value: any) => {
-    const overviewString: string | null = localStorage.getItem('MissionEditingOverviewSA')
-    if (overviewString) {
-      const overview = JSON.parse(overviewString)
-      overview[field] = value
-      localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overview))
-      this.props.newAssessment(overview)
-    }
+  private updateEditingOverview = (overview: IAssessmentOverview) => {
+    this.setState({
+      editingOverview: overview
+    })
   }
-
-  private handleEditOverview = (field: string) => (e: any) =>
-    this.editOverview(field, e.target.value)
-  private toggleEditField = (field: string) => (e: any) => {
-    this.setState({ editOverview: field })
-  }
-
-  private makeEditingOverviewCard = (
-    overview: IAssessmentOverview,
-    index: number,
-    setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
-    renderAttemptButton: boolean,
-    renderGradingStatus: boolean
-  ) => (
-    <div key={index}>
-      You can edit this card
-      <Card className="row listing" elevation={Elevation.ONE}>
-        <div className="col-xs-3 listing-picture">
-          <img
-            className={`cover-image-${overview.status}`}
-            src={overview.coverImage ? overview.coverImage : defaultCoverImage}
-          />
-        </div>
-        <div className="col-xs-9 listing-text">
-          {this.makeEditingOverviewCardTitle(
-            overview,
-            index,
-            setBetchaAssessment,
-            renderGradingStatus
-          )}
-          <div className="row listing-grade">
-            <h6>
-              {' '}
-              {beforeNow(overview.openAt)
-                ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                : `Max Grade: ${overview.maxGrade}`}{' '}
-            </h6>
-          </div>
-          <div className="row listing-xp">
-            <h6>
-              {' '}
-              {beforeNow(overview.openAt)
-                ? `XP: ${overview.xp} / ${overview.maxXp}`
-                : `Max XP: ${overview.maxXp}`}{' '}
-            </h6>
-          </div>
-          <div className="row listing-description" onClick={this.toggleEditField('shortSummary')}>
-            {this.state.editOverview === 'shortSummary' ? (
-              <input
-                type="text"
-                onChange={this.handleEditOverview('shortSummary')}
-                value={overview.shortSummary}
-              />
-            ) : (
-              <Markdown content={overview.shortSummary} />
-            )}
-          </div>
-          <div className="listing-controls">
-            <Text className="listing-due-date">
-              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-              <div className="date-container" onClick={this.toggleEditField("date")}>
-                {this.state.editOverview === "date" 
-                ? [<input type="text" key="openAt" onChange={this.handleEditOverview("openAt")} value={overview.openAt}/>,
-                  <input type="text" key="closeAt" onChange={this.handleEditOverview("closeAt")} value={overview.closeAt}/>]
-                : (beforeNow(overview.openAt)
-                  ? `Due: ${getPrettyDate(overview.closeAt)}`
-                  : `Opens at: ${getPrettyDate(overview.openAt)}`)}
-              </div>
-            </Text>
-            {renderAttemptButton ? makeOverviewCardButton(overview) : null}
-          </div>
-        </div>
-      </Card>
-    </div>
-  )
-
-  private makeEditingOverviewCardTitle = (
-    overview: IAssessmentOverview,
-    index: number,
-    setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
-    renderGradingStatus: boolean
-  ) => (
-    <div className="row listing-title">
-      <Text ellipsize={true} className={'col-xs-10'}>
-        <h4 onClick={this.toggleEditField("title")}>
-          { this.state.editOverview === 'title' 
-            ? <input type="text" onChange={this.handleEditOverview('title')} value={overview.title} />
-            : overview.title }{' '}
-          {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
-        </h4>
-      </Text>
-      <div className="col-xs-2">{makeSubmissionButton(overview, index, setBetchaAssessment)}</div>
-    </div>
-  )
 }
 
 /**

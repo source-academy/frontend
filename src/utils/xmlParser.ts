@@ -11,8 +11,8 @@ import {
   MCQChoice
 } from '../components/assessment/assessmentShape'
 import {
-  IXmlParseStrDeployment,
   IXmlParseStrCProblem,
+  IXmlParseStrDeployment,
   IXmlParseStrOverview,
   IXmlParseStrPProblem,
   IXmlParseStrProblem,

@@ -106,7 +106,7 @@ export enum QuestionTypes {
 export type QuestionType = keyof typeof QuestionTypes
 
 /** Constants for external library names */
-enum ExternalLibraryNames {
+export enum ExternalLibraryNames {
   NONE = 'NONE',
   TWO_DIM_RUNES = 'TWO_DIM_RUNES',
   THREE_DIM_RUNES = 'THREE_DIM_RUNES',
