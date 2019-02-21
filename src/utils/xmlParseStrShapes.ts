@@ -6,10 +6,6 @@ import {
 export interface IXmlParseStrTask {
   $: IXmlParseStrOverview,
   DEPLOYMENT: IXmlParseStrDeployment[],
-  GLOBAL: Array<{
-    IDENTIFIER: string[],
-    VALUE: string[]
-  }>,
   GRADERDEPLOYMENT: IXmlParseStrDeployment[],
   PROBLEMS: Array<{PROBLEM: IXmlParseStrProblem[]}>,
   READING: string[],
@@ -21,7 +17,11 @@ export interface IXmlParseStrDeployment{
   $: {
     interpreter: string,
   },
-  EXTERNAL: Array<{
+  GLOBAL?: Array<{
+    IDENTIFIER: string[],
+    VALUE: string[]
+  }>,
+  EXTERNAL?: Array<{
     $: {
       name: ExternalLibraryName,
     },
@@ -41,8 +41,8 @@ export interface IXmlParseStrOverview {
 export interface IXmlParseStrProblem {
   $: {
     type: IQuestion["type"],
-    maxgrade: number,
-    maxxp: number
+    maxgrade: string,
+    maxxp: string
   },
   TEXT: string[]
 }
@@ -50,7 +50,7 @@ export interface IXmlParseStrProblem {
 export interface IXmlParseStrPProblem extends IXmlParseStrProblem {
   SNIPPET: Array<{
     TEMPLATE: string[],
-    SOLUTION: Array<string | null>,
+    SOLUTION: string[],
     GRADER: string[]
   }>,
   TEXT: string[]

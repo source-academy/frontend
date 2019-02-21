@@ -7,7 +7,7 @@ import {
   IAssessment,
   IAssessmentOverview,
 } from '../../components/assessment/assessmentShape'
-import { makeAssessment, makeAssessmentOverview } from '../../utils/xmlParser'
+import { makeEntireAssessment } from '../../utils/xmlParser'
 
 export interface IDispatchProps {
   newAssessment: (assessment: IAssessment) => void
@@ -54,16 +54,16 @@ export class ImportFromFileComponent extends React.Component<Props> {
   private handleFileRead = (e: any) => {
     const content = this.fileReader.result
     if (content) {
-      parseString(content, (err: any, result: any) => {
+      parseString(content, 
+      	(err: any, result: any) => {
         // tslint:disable-next-line:no-console
-        // console.dir(result.CONTENT.TASK[0])
-        const overview: IAssessmentOverview = makeAssessmentOverview(result);
-        localStorage.setItem("MissionEditingOverviewSA", JSON.stringify(overview));
-        this.props.updateEditingOverview(overview);
+        console.dir(result)
+        const entireAssessment: [IAssessmentOverview, IAssessment] = makeEntireAssessment(result);
+        localStorage.setItem("MissionEditingOverviewSA", JSON.stringify(entireAssessment[0]));
+        this.props.updateEditingOverview(entireAssessment[0]);
 
-        const assessment: IAssessment = makeAssessment(result);
-        localStorage.setItem("MissionEditingAssessmentSA", JSON.stringify(assessment));
-        this.props.newAssessment(assessment);
+        localStorage.setItem("MissionEditingAssessmentSA", JSON.stringify(entireAssessment[1]));
+        this.props.newAssessment(entireAssessment[1]);
       })
     }
   }
