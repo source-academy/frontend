@@ -28,12 +28,15 @@ type Props = {
 	updateEditingOverview: (overview: IAssessmentOverview) => void
 }
 
-export class ImportFromFileComponent extends React.Component<Props> {
+export class ImportFromFileComponent extends React.Component<Props, {isInvalidXml: boolean}> {
   private fileReader: FileReader
   public constructor(props: any) {
     super(props)
     this.handleFileRead = this.handleFileRead.bind(this)
     this.handleChangeFile = this.handleChangeFile.bind(this)
+    this.state = {
+      isInvalidXml: false,
+    }
   }
 
   public componentDidMount(){
@@ -47,6 +50,7 @@ export class ImportFromFileComponent extends React.Component<Props> {
     return (
       <div>
         <input type="file" id="file" accept=".xml" onChange={this.handleChangeFile} />
+        {this.state.isInvalidXml ? <div>The xml uploaded is invalid.</div> : <div>You can edit this card</div>}
       </div>
     )
   }
@@ -58,12 +62,23 @@ export class ImportFromFileComponent extends React.Component<Props> {
       	(err: any, result: any) => {
         // tslint:disable-next-line:no-console
         console.dir(result)
-        const entireAssessment: [IAssessmentOverview, IAssessment] = makeEntireAssessment(result);
-        localStorage.setItem("MissionEditingOverviewSA", JSON.stringify(entireAssessment[0]));
-        this.props.updateEditingOverview(entireAssessment[0]);
+        try {
+	        const entireAssessment: [IAssessmentOverview, IAssessment] = makeEntireAssessment(result);
+	        localStorage.setItem("MissionEditingOverviewSA", JSON.stringify(entireAssessment[0]));
+	        this.props.updateEditingOverview(entireAssessment[0]);
 
-        localStorage.setItem("MissionEditingAssessmentSA", JSON.stringify(entireAssessment[1]));
-        this.props.newAssessment(entireAssessment[1]);
+	        localStorage.setItem("MissionEditingAssessmentSA", JSON.stringify(entireAssessment[1]));
+	        this.props.newAssessment(entireAssessment[1]);
+	        this.setState({
+        		isInvalidXml: false
+        	})
+	      } catch(err) {
+	      	// tslint:disable-next-line:no-console
+        	console.log(err);
+        	this.setState({
+        		isInvalidXml: true
+        	})
+	      }
       })
     }
   }

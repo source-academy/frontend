@@ -87,6 +87,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
 
   private makeEditingOverviewTextarea = (field: keyof IAssessmentOverview) => 
     <Textarea
+      autoFocus={true}
       style={textareaStyle}
       onChange={this.handleEditOverview()}
       onBlur={this.saveEditOverview(field)}
@@ -97,7 +98,6 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     overview: IAssessmentOverview
   ) => (
     <div>
-      You can edit this card
       <Card className="row listing" elevation={Elevation.ONE}>
 
         <div className="col-xs-3 listing-picture" onClick={this.toggleEditField("coverImage")}>
