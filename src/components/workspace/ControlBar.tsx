@@ -34,6 +34,7 @@ export type ControlBarProps = {
   onClickPrevious?(): any
   onClickReturn?(): any
   onClickSave?(): any
+  onClickReset?(): any
 }
 
 interface IChapter {
@@ -59,7 +60,8 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {}
+    onClickSave: () => {},
+    onClickReset: () => {}
   }
 
   private shareInputElem: HTMLInputElement
@@ -127,10 +129,13 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       this.props.hasChapterSelect && this.props.externalLibraryName !== undefined
         ? externalSelect(this.props.externalLibraryName, this.props.handleExternalSelect!)
         : undefined
+    const resetButton = this.props.hasSaveButton
+      ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
+      : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
         {this.props.isRunning ? stopButton : runButton} {saveButton}
-        {shareButton} {chapterSelectButton} {externalSelectButton}
+        {shareButton} {chapterSelectButton} {externalSelectButton} {resetButton}
       </div>
     )
   }
