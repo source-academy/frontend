@@ -89,6 +89,13 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
   }
 })
 
+export const toggleEditorAutorun: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.TOGGLE_EDITOR_AUTORUN,
+  payload: { workspaceLocation }
+})
+
 /**
  * Starts the process to clear the js-slang Context
  * at a specified workspace location.

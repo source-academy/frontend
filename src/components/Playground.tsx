@@ -37,6 +37,7 @@ export interface IStateProps {
   editorValue: string
   editorWidth: string
   isRunning: boolean
+  isEditorAutorun: boolean
   output: InterpreterOutput[]
   queryString?: string
   replValue: string
@@ -60,6 +61,7 @@ export interface IDispatchProps {
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
   handleSideContentHeightChange: (heightChange: number) => void
+  handleToggleEditorAutorun: () => void
 }
 
 type PlaygroundState = {
@@ -90,9 +92,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleInterruptEval: this.props.handleInterruptEval,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
+        handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
         hasChapterSelect: true,
         hasSaveButton: false,
         hasShareButton: true,
+        isEditorAutorun: this.props.isEditorAutorun,
         isRunning: this.props.isRunning,
         queryString: this.props.queryString,
         questionProgress: null,
@@ -101,7 +105,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       editorProps: {
         editorValue: this.props.editorValue,
         handleEditorEval: this.props.handleEditorEval,
-        handleEditorValueChange: this.props.handleEditorValueChange
+        handleEditorValueChange: this.props.handleEditorValueChange,
+        isEditorAutorun: this.props.isEditorAutorun
       },
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
