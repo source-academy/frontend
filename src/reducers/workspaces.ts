@@ -229,9 +229,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:
-     * (1) state[location].output === [], i.e. state[location].output[-1] === undefined
-     * (2) state[location].output[-1] is not RunningOutput
-     * (3) state[location].output[-1] is RunningOutput */
+       * (1) state[location].output === [], i.e. state[location].output[-1] === undefined
+       * (2) state[location].output[-1] is not RunningOutput
+       * (3) state[location].output[-1] is RunningOutput */
       lastOutput = state[location].output.slice(-1)[0]
       if (lastOutput === undefined || lastOutput.type !== 'running') {
         newOutput = state[location].output.concat({
