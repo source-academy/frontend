@@ -20,6 +20,7 @@ import {
   LOG_OUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  TOGGLE_EDITOR_AUTORUN,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -353,6 +354,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           ...createDefaultWorkspace(location),
           ...action.payload.workspaceOptions
+        }
+      }
+    case TOGGLE_EDITOR_AUTORUN:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          isEditorAutorun: !state[location].isEditorAutorun
         }
       }
     case UPDATE_CURRENT_ASSESSMENT_ID:

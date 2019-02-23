@@ -60,6 +60,7 @@ export interface IWorkspaceState {
   readonly context: Context
   readonly editorValue: string | null
   readonly editorWidth: string
+  readonly isEditorAutorun: boolean
   readonly isRunning: boolean
   readonly output: InterpreterOutput[]
   readonly replHistory: ReplHistory
@@ -206,6 +207,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   replValue: '',
   sideContentActiveTab: 0,
   globals: [],
+  isEditorAutorun: false,
   isRunning: false
 })
 

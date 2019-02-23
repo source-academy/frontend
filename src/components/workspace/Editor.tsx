@@ -1,5 +1,5 @@
 import * as React from 'react'
-import AceEditor from 'react-ace'
+import AceEditor, { Annotation } from 'react-ace'
 import { HotKeys } from 'react-hotkeys'
 
 import 'brace/ext/searchbox'
@@ -14,6 +14,7 @@ import 'brace/theme/cobalt'
  *           of the editor's content, using `slang`
  */
 export interface IEditorProps {
+  isEditorAutorun?: boolean
   editorValue: string
   handleEditorEval: () => void
   handleEditorValueChange: (newCode: string) => void
@@ -22,6 +23,7 @@ export interface IEditorProps {
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
   private onChangeMethod: (newCode: string) => void
+  private onValidateMethod: (annotations: Annotation[]) => void
 
   constructor(props: IEditorProps) {
     super(props)
@@ -30,6 +32,11 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         this.props.handleUpdateHasUnsavedChanges(true)
       }
       this.props.handleEditorValueChange(newCode)
+    }
+    this.onValidateMethod = (annotations: Annotation[]) => {
+      if (this.props.isEditorAutorun && annotations.length === 0) {
+        this.props.handleEditorEval()
+      }
     }
   }
 
@@ -57,6 +64,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             highlightActiveLine={false}
             mode="javascript"
             onChange={this.onChangeMethod}
+            onValidate={this.onValidateMethod}
             theme="cobalt"
             value={this.props.editorValue}
             width="100%"

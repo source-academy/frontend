@@ -48,7 +48,10 @@ function createStore(history: History): Store<IState> {
           ...defaultState.workspaces.playground,
           editorValue: loadedStore.playgroundEditorValue
             ? loadedStore.playgroundEditorValue
-            : defaultState.workspaces.playground.editorValue
+            : defaultState.workspaces.playground.editorValue,
+          isEditorAutorun: loadedStore.playgroundIsEditorAutorun
+            ? loadedStore.playgroundIsEditorAutorun
+            : defaultState.workspaces.playground.isEditorAutorun
         }
       }
     }
