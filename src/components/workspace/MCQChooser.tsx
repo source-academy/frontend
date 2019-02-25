@@ -4,10 +4,12 @@ import * as React from 'react'
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification'
 import { IMCQQuestion } from '../assessment/assessmentShape'
 import Markdown from '../commons/Markdown'
+import { EditingAssessment } from './EditingAssessment';
 
 export interface IMCQChooserProps {
   mcq: IMCQQuestion
   handleMCQSubmit: (choiceId: number) => void
+  editingMCQPath: any
 }
 
 type State = {
@@ -23,6 +25,10 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
   }
   public render() {
     const options = this.props.mcq.choices.map((choice, i) => (
+      <div>
+      {this.props.editingMCQPath !== null 
+      ? <EditingAssessment path={this.props.editingMCQPath.concat(["choices", i])}/>
+      : undefined}
       <Button
         key={i}
         className="mcq-option col-xs-12"
@@ -33,6 +39,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
       >
         <Markdown content={choice.content} />
       </Button>
+      </div>
     ))
     return (
       <div className="MCQChooser row">

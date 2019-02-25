@@ -5,6 +5,7 @@ import { HotKeys } from 'react-hotkeys'
 import 'brace/ext/searchbox'
 import 'brace/mode/javascript'
 import 'brace/theme/cobalt'
+import { EditingAssessment } from './EditingAssessment';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -18,6 +19,7 @@ export interface IEditorProps {
   handleEditorEval: () => void
   handleEditorValueChange: (newCode: string) => void
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void
+  editingQuestionPath: any
 }
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
@@ -37,6 +39,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     return (
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
+          <EditingAssessment path={this.props.editingQuestionPath.concat(["content"])}/>
           <AceEditor
             className="react-ace"
             commands={[

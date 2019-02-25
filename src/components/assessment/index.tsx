@@ -28,7 +28,8 @@ import {
   AssessmentCategory,
   AssessmentStatuses,
   GradingStatuses,
-  IAssessmentOverview
+  IAssessment,
+  IAssessmentOverview,
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { EditingOverviewCard } from '../assessment/EditingOverviewCard'
@@ -36,6 +37,7 @@ import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
 import ImportFromFileComponent from '../commons/ImportFromFileComponent'
 import Markdown from '../commons/Markdown'
+import { EditingAssessment } from '../workspace/EditingAssessment';
 // import { AnyAction } from 'redux';
 
 const DEFAULT_QUESTION_ID: number = 0
@@ -72,6 +74,7 @@ type State = {
   showUpcomingAssessments: boolean
   editOverview: string
   editingOverview: IAssessmentOverview | null;
+  editingAssessment: IAssessment | null;
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -86,16 +89,19 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showOpenedAssessments: true,
       showUpcomingAssessments: true,
       editOverview: '',
-      editingOverview: null
+      editingOverview: null,
+      editingAssessment: null
     }
   }
 
   public componentDidMount(){
-    const editingOverviewStr = localStorage.getItem('MissionEditingOverviewSA');
+    const editingOverviewStr: any = localStorage.getItem('MissionEditingOverviewSA');
+    const editingAssessmentStr: any = localStorage.getItem('MissionEditingAssessmentSA');
     if (editingOverviewStr) {
       this.setState({
         ...this.state,
-        editingOverview: JSON.parse(editingOverviewStr)
+        editingOverview: JSON.parse(editingOverviewStr),
+        editingAssessment: JSON.parse(editingAssessmentStr)
       })
     }
   }
@@ -116,7 +122,11 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           notAttempted: overview.status === AssessmentStatuses.not_attempted,
           closeDate: overview.closeAt
         }
-        return <AssessmentWorkspaceContainer {...assessmentProps} />
+        return <div> 
+            <EditingAssessment path={["title"]}/>
+            <EditingAssessment path={["longSummary"]}/>
+            <AssessmentWorkspaceContainer {...assessmentProps} />
+          </div>
       }
     }
 
