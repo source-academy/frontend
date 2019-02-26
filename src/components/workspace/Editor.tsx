@@ -39,7 +39,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     return (
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
-          <EditingAssessment path={this.props.editingQuestionPath.concat(["content"])}/>
+          { this.props.editingQuestionPath === null 
+            ? undefined 
+            : <EditingAssessment path={this.props.editingQuestionPath.concat(["content"])}/> }
           <AceEditor
             className="react-ace"
             commands={[

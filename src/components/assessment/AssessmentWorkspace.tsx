@@ -140,7 +140,7 @@ class AssessmentWorkspace extends React.Component<
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-              editingQuestionPath: ["questions", questionId],
+              editingQuestionPath: (this.props.assessmentId === -1) ? ["questions", questionId] : null,
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -151,7 +151,7 @@ class AssessmentWorkspace extends React.Component<
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
           this.props.handleSave(this.props.assessment!.questions[questionId].id, option),
-        editingMCQPath: ["questions", questionId],
+        editingMCQPath: (this.props.assessmentId === -1) ? ["questions", questionId] : null,
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
