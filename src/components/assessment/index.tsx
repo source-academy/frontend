@@ -34,7 +34,7 @@ import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { EditingOverviewCard } from '../assessment/EditingOverviewCard'
 import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
-import ImportFromFileComponent from '../commons/ImportFromFileComponent'
+import ImportFromFileComponent from '../assessment/ImportFromFileComponent'
 import Markdown from '../commons/Markdown'
 // import { AnyAction } from 'redux';
 

@@ -9,7 +9,7 @@ import {
 } from '../../components/assessment/assessmentShape'
 import { makeEntireAssessment } from '../../utils/xmlParser'
 
-export interface IDispatchProps {
+interface IDispatchProps {
   newAssessment: (assessment: IAssessment) => void
 }
 
