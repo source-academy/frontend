@@ -24,6 +24,7 @@ import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
+import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser'
 import {
   AssessmentCategory,
   AssessmentStatuses,
@@ -32,9 +33,9 @@ import {
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { EditingOverviewCard } from '../assessment/EditingOverviewCard'
+import ImportFromFileComponent from '../assessment/ImportFromFileComponent'
 import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
-import ImportFromFileComponent from '../assessment/ImportFromFileComponent'
 import Markdown from '../commons/Markdown'
 // import { AnyAction } from 'redux';
 
@@ -86,17 +87,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showOpenedAssessments: true,
       showUpcomingAssessments: true,
       editOverview: '',
-      editingOverview: null
-    }
-  }
-
-  public componentDidMount(){
-    const editingOverviewStr = localStorage.getItem('MissionEditingOverviewSA');
-    if (editingOverviewStr) {
-      this.setState({
-        ...this.state,
-        editingOverview: JSON.parse(editingOverviewStr)
-      })
+      editingOverview: retrieveLocalAssessmentOverview()
     }
   }
 
@@ -107,9 +98,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
 
     // If mission for testing is to render, create workspace
     if (assessmentId === -1) {
-      const editingOverviewStr = localStorage.getItem('MissionEditingOverviewSA');
-      if (editingOverviewStr){
-        const overview = JSON.parse(editingOverviewStr)
+      if (this.state.editingOverview){
+        const overview = this.state.editingOverview
         const assessmentProps: AssessmentProps = {
           assessmentId,
           questionId,

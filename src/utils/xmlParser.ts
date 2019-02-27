@@ -27,6 +27,24 @@ const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+export const retrieveLocalAssessment = () : IAssessment | null => {
+  const assessment = localStorage.getItem("MissionEditingAssessmentSA");
+  if (assessment) {
+    return JSON.parse(assessment);
+  } else {
+    return null;
+  }
+}
+
+export const retrieveLocalAssessmentOverview = () : IAssessmentOverview | null => {
+  const assessment = localStorage.getItem("MissionEditingOverviewSA");
+  if (assessment) {
+    return JSON.parse(assessment);
+  } else {
+    return null;
+  }
+}
+
 export const makeEntireAssessment = (result: any) : [IAssessmentOverview, IAssessment] => {
   const assessmentArr = makeAssessment(result);
   const overview = makeAssessmentOverview(result, assessmentArr[1], assessmentArr[2]);

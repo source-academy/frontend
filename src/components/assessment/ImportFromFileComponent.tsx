@@ -7,7 +7,7 @@ import {
   IAssessment,
   IAssessmentOverview,
 } from '../../components/assessment/assessmentShape'
-import { makeEntireAssessment } from '../../utils/xmlParser'
+import { makeEntireAssessment, retrieveLocalAssessment } from '../../utils/xmlParser'
 
 interface IDispatchProps {
   newAssessment: (assessment: IAssessment) => void
@@ -40,9 +40,9 @@ export class ImportFromFileComponent extends React.Component<Props, {isInvalidXm
   }
 
   public componentDidMount(){
-  	const assessment = localStorage.getItem("MissionEditingAssessmentSA");
+  	const assessment = retrieveLocalAssessment();
   	if (assessment) {
-  		this.props.newAssessment(JSON.parse(assessment));
+  		this.props.newAssessment(assessment);
   	}
   }
 
