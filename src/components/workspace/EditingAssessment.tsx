@@ -1,6 +1,8 @@
 import { IAssessment } from "../assessment/assessmentShape";
 
 import * as React from 'react'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
 
 import {
     Button,
@@ -12,19 +14,32 @@ import {
     // Text,
   } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
+import { updateAssessment } from "../../actions/session";
+
 // import * as React from 'react'
 // import { NavLink } from 'react-router-dom'
 // import Textarea from 'react-textarea-autosize';
 
 // import { IAssessmentOverview, IQuestion, IAssessment } from '../assessment/assessmentShape'
 // import { controlButton } from '../commons'
-// import Markdown from '../commons/Markdown'
 
-// const DEFAULT_QUESTION_ID: number = 0
+export interface IDispatchProps {
+    newAssessment: (assessment: IAssessment) => void
+}
+  
+const mapStateToProps: MapStateToProps<{}, any, {}> = (_, ownProps) => ownProps
 
-type Props = {
-    path: any,
-    // updateEditingAssessment: any
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+    bindActionCreators(
+        {
+        newAssessment: updateAssessment,
+        },
+        dispatch
+    )
+
+interface IProps {
+    path: Array<(string | number)>,
+    newAssessment: (assessment: IAssessment) => void,
 }
 
 interface IState {
@@ -40,8 +55,8 @@ interface IState {
 //     "resize": "none" as "none"
 // }
 
-export class EditingAssessment extends React.Component<Props, IState> {
-    public constructor(props: Props) {
+export class EditingAssessment extends React.Component<IProps, IState> {
+    public constructor(props: any) {
         super(props)
         this.state = {
             assessment: null,
@@ -102,6 +117,11 @@ export class EditingAssessment extends React.Component<Props, IState> {
         // console.log(assessment);
         localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessment));
         this.setState((state, props) => ({ isVisible: !this.state.isVisible }));
+        if (assessment) {
+            this.props.newAssessment(assessment)
+            // tslint:disable-next-line:no-console
+            console.log("updated");
+        }
     }
     
     private handleEditingAssessment = (e: any) => this.setState({ fieldValue: e.target.value })
@@ -124,3 +144,5 @@ export class EditingAssessment extends React.Component<Props, IState> {
         });
     };
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditingAssessment)

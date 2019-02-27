@@ -4,7 +4,7 @@ import * as React from 'react'
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification'
 import { IMCQQuestion } from '../assessment/assessmentShape'
 import Markdown from '../commons/Markdown'
-import { EditingAssessment } from './EditingAssessment';
+import EditingAssessment from './EditingAssessment';
 
 export interface IMCQChooserProps {
   mcq: IMCQQuestion

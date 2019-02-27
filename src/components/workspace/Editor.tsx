@@ -5,7 +5,7 @@ import { HotKeys } from 'react-hotkeys'
 import 'brace/ext/searchbox'
 import 'brace/mode/javascript'
 import 'brace/theme/cobalt'
-import { EditingAssessment } from './EditingAssessment';
+import EditingAssessment from './EditingAssessment';
 
 /**
  * @property editorValue - The string content of the react-ace editor

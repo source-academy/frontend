@@ -37,7 +37,7 @@ import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
 import ImportFromFileComponent from '../commons/ImportFromFileComponent'
 import Markdown from '../commons/Markdown'
-import { EditingAssessment } from '../workspace/EditingAssessment';
+import EditingAssessment from '../workspace/EditingAssessment'
 // import { AnyAction } from 'redux';
 
 const DEFAULT_QUESTION_ID: number = 0
