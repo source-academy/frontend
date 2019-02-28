@@ -5,12 +5,20 @@
   flex: 1 1 100%;
 }
 
+/*
+ * Previously used as a bug fix to enable overflow.
+ * Currently not used as it results in the viewport being locked to a fixed
+ * maximum height.
+ */
+
+/*
 .kineticjs-content {
-  /** 
-   * Fixes a bug where the 1000x1000 canvas does not overflow
-   * when it's container is too small.
-   */
+
+   // Fixes a bug where the 1000x1000 canvas does not overflow
+   // when its container is too small.
+
   width: 100% !important;
   height: 40vh !important; // 100% results in 0 height, 100vh is too big.
-  overflow: auto;
+  overflow: scroll;
 }
+*/
