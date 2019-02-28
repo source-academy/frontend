@@ -3,27 +3,27 @@
 
 // Author: Martin Henz
 
-'use strict'
+'use strict';
 // array test works differently for Rhino and
 // the Firefox environment (especially Web Console)
 function array_test(x) {
   if (Array.isArray === undefined) {
-    return x instanceof Array
+    return x instanceof Array;
   } else {
-    return Array.isArray(x)
+    return Array.isArray(x);
   }
 }
 
 // pair constructs a pair using a two-element array
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function pair(x, xs) {
-  return [x, xs]
+  return [x, xs];
 }
 
 // is_pair returns true iff arg is a two-element array
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function is_pair(x) {
-  return array_test(x) && x.length === 2
+  return array_test(x) && x.length === 2;
 }
 
 // head returns the first component of the given pair,
@@ -31,9 +31,9 @@ function is_pair(x) {
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function head(xs) {
   if (is_pair(xs)) {
-    return xs[0]
+    return xs[0];
   } else {
-    throw new Error('head(xs) expects a pair as argument xs, but encountered ' + xs)
+    throw new Error('head(xs) expects a pair as argument xs, but encountered ' + xs);
   }
 }
 
@@ -42,16 +42,16 @@ function head(xs) {
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function tail(xs) {
   if (is_pair(xs)) {
-    return xs[1]
+    return xs[1];
   } else {
-    throw new Error('tail(xs) expects a pair as argument xs, but encountered ' + xs)
+    throw new Error('tail(xs) expects a pair as argument xs, but encountered ' + xs);
   }
 }
 
 // is_null returns true if arg is exactly null
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function is_null(xs) {
-  return xs === null
+  return xs === null;
 }
 
 // is_list recurses down the list and checks that it ends with the empty list []
@@ -60,9 +60,9 @@ function is_null(xs) {
 function is_list(xs) {
   for (; ; xs = tail(xs)) {
     if (is_null(xs)) {
-      return true
+      return true;
     } else if (!is_pair(xs)) {
-      return false
+      return false;
     }
   }
 }
@@ -70,11 +70,11 @@ function is_list(xs) {
 // list makes a list out of its arguments
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function list() {
-  let the_list = null
+  let the_list = null;
   for (let i = arguments.length - 1; i >= 0; i--) {
-    the_list = pair(arguments[i], the_list)
+    the_list = pair(arguments[i], the_list);
   }
-  return the_list
+  return the_list;
 }
 
 // list_to_vector returns vector that contains the elements of the argument list
@@ -82,12 +82,12 @@ function list() {
 // list_to_vector throws an exception if the argument is not a list
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function list_to_vector(lst) {
-  const vector = []
+  const vector = [];
   while (!is_null(lst)) {
-    vector.push(head(lst))
-    lst = tail(lst)
+    vector.push(head(lst));
+    lst = tail(lst);
   }
-  return vector
+  return vector;
 }
 
 // vector_to_list returns a list that contains the elements of the argument vector
@@ -95,22 +95,22 @@ function list_to_vector(lst) {
 // vector_to_list throws an exception if the argument is not a vector
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function vector_to_list(vector) {
-  let result = null
+  let result = null;
   for (let i = vector.length - 1; i >= 0; i = i - 1) {
-    result = pair(vector[i], result)
+    result = pair(vector[i], result);
   }
-  return result
+  return result;
 }
 
 // returns the length of a given argument list
 // throws an exception if the argument is not a list
 function length(xs) {
-  let i = 0
+  let i = 0;
   while (!is_null(xs)) {
-    i += 1
-    xs = tail(xs)
+    i += 1;
+    xs = tail(xs);
   }
-  return i
+  return i;
 }
 
 // map applies first arg f to the elements of the second argument,
@@ -122,7 +122,7 @@ function length(xs) {
 // argument is not a function.
 // tslint:disable-next-line:ban-types
 function map(f, xs) {
-  return is_null(xs) ? null : pair(f(head(xs)), map(f, tail(xs)))
+  return is_null(xs) ? null : pair(f(head(xs)), map(f, tail(xs)));
 }
 
 // build_list takes a non-negative integer n as first argument,
@@ -134,19 +134,19 @@ function build_list(n, fun) {
   if (typeof n !== 'number' || n < 0 || Math.floor(n) !== n) {
     throw new Error(
       'build_list(n, fun) expects a positive integer as ' + 'argument n, but encountered ' + n
-    )
+    );
   }
 
   // tslint:disable-next-line:ban-types
   function build(i, alreadyBuilt) {
     if (i < 0) {
-      return alreadyBuilt
+      return alreadyBuilt;
     } else {
-      return build(i - 1, pair(fun(i), alreadyBuilt))
+      return build(i - 1, pair(fun(i), alreadyBuilt));
     }
   }
 
-  return build(n - 1, null)
+  return build(n - 1, null);
 }
 
 // for_each applies first arg fun to the elements of the list passed as
@@ -159,25 +159,25 @@ function build_list(n, fun) {
 // tslint:disable-next-line:ban-types
 function for_each(fun, xs) {
   if (!is_list(xs)) {
-    throw new Error('for_each expects a list as argument xs, but encountered ' + xs)
+    throw new Error('for_each expects a list as argument xs, but encountered ' + xs);
   }
   for (; !is_null(xs); xs = tail(xs)) {
-    fun(head(xs))
+    fun(head(xs));
   }
-  return true
+  return true;
 }
 
 // reverse reverses the argument list
 // reverse throws an exception if the argument is not a list.
 function reverse(xs) {
   if (!is_list(xs)) {
-    throw new Error('reverse(xs) expects a list as argument xs, but encountered ' + xs)
+    throw new Error('reverse(xs) expects a list as argument xs, but encountered ' + xs);
   }
-  let result = null
+  let result = null;
   for (; !is_null(xs); xs = tail(xs)) {
-    result = pair(head(xs), result)
+    result = pair(head(xs), result);
   }
-  return result
+  return result;
 }
 
 // append first argument list and second argument list.
@@ -186,9 +186,9 @@ function reverse(xs) {
 // append throws an exception if the first argument is not a list
 function append(xs, ys) {
   if (is_null(xs)) {
-    return ys
+    return ys;
   } else {
-    return pair(head(xs), append(tail(xs), ys))
+    return pair(head(xs), append(tail(xs), ys));
   }
 }
 
@@ -199,10 +199,10 @@ function append(xs, ys) {
 function member(v, xs) {
   for (; !is_null(xs); xs = tail(xs)) {
     if (head(xs) === v) {
-      return xs
+      return xs;
     }
   }
-  return null
+  return null;
 }
 
 // removes the first occurrence of a given first-argument element
@@ -210,12 +210,12 @@ function member(v, xs) {
 // if there is no occurrence.
 function remove(v, xs) {
   if (is_null(xs)) {
-    return null
+    return null;
   } else {
     if (v === head(xs)) {
-      return tail(xs)
+      return tail(xs);
     } else {
-      return pair(head(xs), remove(v, tail(xs)))
+      return pair(head(xs), remove(v, tail(xs)));
     }
   }
 }
@@ -223,12 +223,12 @@ function remove(v, xs) {
 // Similar to remove. But removes all instances of v instead of just the first
 function remove_all(v, xs) {
   if (is_null(xs)) {
-    return null
+    return null;
   } else {
     if (v === head(xs)) {
-      return remove_all(v, tail(xs))
+      return remove_all(v, tail(xs));
     } else {
-      return pair(head(xs), remove_all(v, tail(xs)))
+      return pair(head(xs), remove_all(v, tail(xs)));
     }
   }
 }
@@ -238,9 +238,9 @@ function remove_all(v, xs) {
 // over its arguments
 function equal(item1, item2) {
   if (is_pair(item1) && is_pair(item2)) {
-    return equal(head(item1), head(item2)) && equal(tail(item1), tail(item2))
+    return equal(head(item1), head(item2)) && equal(tail(item1), tail(item2));
   } else {
-    return item1 === item2
+    return item1 === item2;
   }
 }
 
@@ -252,11 +252,11 @@ function equal(item1, item2) {
 // pair
 function assoc(v, xs) {
   if (is_null(xs)) {
-    return false
+    return false;
   } else if (equal(v, head(head(xs)))) {
-    return head(xs)
+    return head(xs);
   } else {
-    return assoc(v, tail(xs))
+    return assoc(v, tail(xs));
   }
 }
 
@@ -265,12 +265,12 @@ function assoc(v, xs) {
 // tslint:disable-next-line:ban-types
 function filter(pred, xs) {
   if (is_null(xs)) {
-    return xs
+    return xs;
   } else {
     if (pred(head(xs))) {
-      return pair(head(xs), filter(pred, tail(xs)))
+      return pair(head(xs), filter(pred, tail(xs)));
     } else {
-      return filter(pred, tail(xs))
+      return filter(pred, tail(xs));
     }
   }
 }
@@ -282,17 +282,17 @@ function enum_list(start, end) {
   if (typeof start !== 'number') {
     throw new Error(
       'enum_list(start, end) expects a number as argument start, but encountered ' + start
-    )
+    );
   }
   if (typeof end !== 'number') {
     throw new Error(
       'enum_list(start, end) expects a number as argument start, but encountered ' + end
-    )
+    );
   }
   if (start > end) {
-    return null
+    return null;
   } else {
-    return pair(start, enum_list(start + 1, end))
+    return pair(start, enum_list(start + 1, end));
   }
 }
 
@@ -301,12 +301,12 @@ function list_ref(xs, n) {
   if (typeof n !== 'number' || n < 0 || Math.floor(n) !== n) {
     throw new Error(
       'list_ref(xs, n) expects a positive integer as argument n, but encountered ' + n
-    )
+    );
   }
   for (; n > 0; --n) {
-    xs = tail(xs)
+    xs = tail(xs);
   }
-  return head(xs)
+  return head(xs);
 }
 
 // accumulate applies given operation op to elements of a list
@@ -319,9 +319,9 @@ function list_ref(xs, n) {
 // op(1, op(2, op(3, zero)))
 function accumulate(op, initial, sequence) {
   if (is_null(sequence)) {
-    return initial
+    return initial;
   } else {
-    return op(head(sequence), accumulate(op, initial, tail(sequence)))
+    return op(head(sequence), accumulate(op, initial, tail(sequence)));
   }
 }
 
@@ -330,10 +330,10 @@ function accumulate(op, initial, sequence) {
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function set_head(xs, x) {
   if (is_pair(xs)) {
-    xs[0] = x
-    return undefined
+    xs[0] = x;
+    return undefined;
   } else {
-    throw new Error('set_head(xs,x) expects a pair as argument xs, but encountered ' + xs)
+    throw new Error('set_head(xs,x) expects a pair as argument xs, but encountered ' + xs);
   }
 }
 
@@ -342,11 +342,11 @@ function set_head(xs, x) {
 // LOW-LEVEL FUNCTION, NOT SOURCE
 function set_tail(xs, x) {
   if (is_pair(xs)) {
-    xs[1] = x
-    return undefined
+    xs[1] = x;
+    return undefined;
   } else {
-    throw new Error('set_tail(xs,x) expects a pair as argument xs, but encountered ' + xs)
+    throw new Error('set_tail(xs,x) expects a pair as argument xs, but encountered ' + xs);
   }
 }
 
-exports.set_tail = set_tail
+exports.set_tail = set_tail;

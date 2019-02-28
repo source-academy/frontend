@@ -7,8 +7,8 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library
-} from '../components/assessment/assessmentShape'
-import { externalLibraries } from '../reducers/externalLibraries'
+} from '../components/assessment/assessmentShape';
+import { externalLibraries } from '../reducers/externalLibraries';
 
 const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
   {
@@ -28,7 +28,7 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     xp: 0,
     gradingStatus: 'none'
   }
-]
+];
 
 const mockOpenedAssessmentsOverviews: IAssessmentOverview[] = [
   {
@@ -94,7 +94,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     xp: 3,
     gradingStatus: 'none'
   }
-]
+];
 
 const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
   {
@@ -131,13 +131,13 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     xp: 5,
     gradingStatus: 'none'
   }
-]
+];
 
 export const mockAssessmentOverviews = [
   ...mockUnopenedAssessmentsOverviews,
   ...mockOpenedAssessmentsOverviews,
   ...mockClosedAssessmentOverviews
-]
+];
 
 const mockGlobals: Array<[string, any]> = [
   ['testNumber', 3.141592653589793],
@@ -148,7 +148,7 @@ const mockGlobals: Array<[string, any]> = [
   ['testBooleanNull', null],
   ['testObject', { a: 1, b: 2 }],
   ['testArray', [1, 2, 'a', 'b']]
-]
+];
 
 const mockSoundLibrary: Library = {
   chapter: 1,
@@ -157,7 +157,7 @@ const mockSoundLibrary: Library = {
     symbols: externalLibraries.get(ExternalLibraryNames.SOUND)!
   },
   globals: mockGlobals
-}
+};
 
 export const mock2DRuneLibrary: Library = {
   chapter: 1,
@@ -166,7 +166,7 @@ export const mock2DRuneLibrary: Library = {
     symbols: externalLibraries.get(ExternalLibraryNames.TWO_DIM_RUNES)!
   },
   globals: mockGlobals
-}
+};
 
 const mock3DRuneLibrary: Library = {
   chapter: 1,
@@ -175,7 +175,7 @@ const mock3DRuneLibrary: Library = {
     symbols: externalLibraries.get(ExternalLibraryNames.THREE_DIM_RUNES)!
   },
   globals: mockGlobals
-}
+};
 
 const mockCurveLibrary: Library = {
   chapter: 1,
@@ -184,7 +184,7 @@ const mockCurveLibrary: Library = {
     symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
   },
   globals: mockGlobals
-}
+};
 
 const mockToneMatrixLibrary: Library = {
   chapter: 1,
@@ -193,7 +193,7 @@ const mockToneMatrixLibrary: Library = {
     symbols: ['get_matrix']
   },
   globals: mockGlobals
-}
+};
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
@@ -330,7 +330,7 @@ What's your favourite dinner food?
     maxGrade: 2,
     maxXp: 2
   }
-]
+];
 
 /*
  * A few Assessments to try out in workspaces.
@@ -389,4 +389,4 @@ sapien
     questions: mockAssessmentQuestions,
     title: 'A Closed Mission'
   }
-]
+];

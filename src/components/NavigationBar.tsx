@@ -5,20 +5,20 @@ import {
   NavbarDivider,
   NavbarGroup,
   NavbarHeading
-} from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
-import { NavLink } from 'react-router-dom'
+} from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 
-import { Role } from '../reducers/states'
-import { LINKS } from '../utils/constants'
-import Dropdown from './dropdown'
+import { Role } from '../reducers/states';
+import { LINKS } from '../utils/constants';
+import Dropdown from './dropdown';
 
 export interface INavigationBarProps {
-  handleLogOut: () => void
-  role?: Role
-  title: string
-  name?: string
+  handleLogOut: () => void;
+  role?: Role;
+  title: string;
+  name?: string;
 }
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
@@ -74,6 +74,6 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       <Dropdown handleLogOut={props.handleLogOut} name={props.name} />
     </NavbarGroup>
   </Navbar>
-)
+);
 
-export default NavigationBar
+export default NavigationBar;

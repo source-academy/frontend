@@ -9,22 +9,22 @@
 // throws an exception if the argument is not a pair
 // LOW-LEVEL FUNCTION, NOT JEDISCRIPT
 function stream_tail(xs) {
-  var tail
+  var tail;
   if (is_pair(xs)) {
-    tail = xs[1]
+    tail = xs[1];
   } else {
-    throw new Error('stream_tail(xs) expects a pair as ' + 'argument xs, but encountered ' + xs)
+    throw new Error('stream_tail(xs) expects a pair as ' + 'argument xs, but encountered ' + xs);
   }
 
   if (typeof tail === 'function') {
-    return tail()
+    return tail();
   } else {
     throw new Error(
       'stream_tail(xs) expects a function as ' +
         'the tail of the argument pair xs, ' +
         'but encountered ' +
         tail
-    )
+    );
   }
 }
 
@@ -36,18 +36,18 @@ function is_stream(xs) {
   return (
     (array_test(xs) && xs.length === 0) ||
     (is_pair(xs) && typeof tail(xs) === 'function' && is_stream(stream_tail(xs)))
-  )
+  );
 }
 
 // list_to_stream transforms a given list to a stream
 // Lazy? Yes: list_to_stream goes down the list only when forced
 function list_to_stream(xs) {
   if (is_empty_list(xs)) {
-    return []
+    return [];
   } else {
     return pair(head(xs), function() {
-      return list_to_stream(tail(xs))
-    })
+      return list_to_stream(tail(xs));
+    });
   }
 }
 
@@ -55,9 +55,9 @@ function list_to_stream(xs) {
 // Lazy? No: stream_to_list needs to force the whole stream
 function stream_to_list(xs) {
   if (is_empty_list(xs)) {
-    return []
+    return [];
   } else {
-    return pair(head(xs), stream_to_list(stream_tail(xs)))
+    return pair(head(xs), stream_to_list(stream_tail(xs)));
   }
 }
 
@@ -66,11 +66,11 @@ function stream_to_list(xs) {
 // Lazy? No: In this implementation, we generate first a
 //           complete list, and then a stream using list_to_stream
 function stream() {
-  var the_list = []
+  var the_list = [];
   for (var i = arguments.length - 1; i >= 0; i--) {
-    the_list = pair(arguments[i], the_list)
+    the_list = pair(arguments[i], the_list);
   }
-  return list_to_stream(the_list)
+  return list_to_stream(the_list);
 }
 
 // stream_length returns the length of a given argument stream
@@ -78,9 +78,9 @@ function stream() {
 // Lazy? No: The function needs to explore the whole stream
 function stream_length(xs) {
   if (is_empty_list(xs)) {
-    return 0
+    return 0;
   } else {
-    return 1 + stream_length(stream_tail(xs))
+    return 1 + stream_length(stream_tail(xs));
   }
 }
 
@@ -96,11 +96,11 @@ function stream_length(xs) {
 //            the result stream.
 function stream_map(f, s) {
   if (is_empty_list(s)) {
-    return []
+    return [];
   } else {
     return pair(f(head(s)), function() {
-      return stream_map(f, stream_tail(s))
-    })
+      return stream_map(f, stream_tail(s));
+    });
   }
 }
 
@@ -113,14 +113,14 @@ function stream_map(f, s) {
 function build_stream(n, fun) {
   function build(i) {
     if (i >= n) {
-      return []
+      return [];
     } else {
       return pair(fun(i), function() {
-        return build(i + 1)
-      })
+        return build(i + 1);
+      });
     }
   }
-  return build(0)
+  return build(0);
 }
 
 // stream_for_each applies first arg fun to the elements of the list
@@ -134,10 +134,10 @@ function build_stream(n, fun) {
 // Lazy? No: stream_for_each forces the exploration of the entire stream
 function stream_for_each(fun, xs) {
   if (is_empty_list(xs)) {
-    return true
+    return true;
   } else {
-    fun(head(xs))
-    return stream_for_each(fun, stream_tail(xs))
+    fun(head(xs));
+    return stream_for_each(fun, stream_tail(xs));
   }
 }
 
@@ -147,17 +147,17 @@ function stream_for_each(fun, xs) {
 function stream_reverse(xs) {
   function rev(original, reversed) {
     if (is_empty_list(original)) {
-      return reversed
+      return reversed;
     } else {
       return rev(
         stream_tail(original),
         pair(head(original), function() {
-          return reversed
+          return reversed;
         })
-      )
+      );
     }
   }
-  return rev(xs, [])
+  return rev(xs, []);
 }
 
 // stream_to_vector returns vector that contains the elements of the argument
@@ -166,12 +166,12 @@ function stream_reverse(xs) {
 // LOW-LEVEL FUNCTION, NOT JEDISCRIPT
 // Lazy? No: stream_to_vector forces the exploration of the entire stream
 function stream_to_vector(lst) {
-  var vector = []
+  var vector = [];
   while (!is_empty_list(lst)) {
-    vector.push(head(lst))
-    lst = stream_tail(lst)
+    vector.push(head(lst));
+    lst = stream_tail(lst);
   }
-  return vector
+  return vector;
 }
 
 // stream_append appends first argument stream and second argument stream.
@@ -182,11 +182,11 @@ function stream_to_vector(lst) {
 // Lazy? Yes: the result stream forces the actual append operation
 function stream_append(xs, ys) {
   if (is_empty_list(xs)) {
-    return ys
+    return ys;
   } else {
     return pair(head(xs), function() {
-      return stream_append(stream_tail(xs), ys)
-    })
+      return stream_append(stream_tail(xs), ys);
+    });
   }
 }
 
@@ -197,11 +197,11 @@ function stream_append(xs, ys) {
 // Lazy? Sort-of: stream_member forces the stream only until the element is found.
 function stream_member(x, s) {
   if (is_empty_list(s)) {
-    return []
+    return [];
   } else if (head(s) === x) {
-    return s
+    return s;
   } else {
-    return stream_member(x, stream_tail(s))
+    return stream_member(x, stream_tail(s));
   }
 }
 
@@ -211,13 +211,13 @@ function stream_member(x, s) {
 // Lazy? Yes: the result stream forces the construction of each next element
 function stream_remove(v, xs) {
   if (is_empty_list(xs)) {
-    return []
+    return [];
   } else if (v === head(xs)) {
-    return stream_tail(xs)
+    return stream_tail(xs);
   } else {
     return pair(head(xs), function() {
-      return stream_remove(v, stream_tail(xs))
-    })
+      return stream_remove(v, stream_tail(xs));
+    });
   }
 }
 
@@ -225,13 +225,13 @@ function stream_remove(v, xs) {
 // Lazy? Yes: the result stream forces the construction of each next element
 function stream_remove_all(v, xs) {
   if (is_empty_list(xs)) {
-    return []
+    return [];
   } else if (v === head(xs)) {
-    return stream_remove_all(v, stream_tail(xs))
+    return stream_remove_all(v, stream_tail(xs));
   } else {
     return pair(head(xs), function() {
-      return stream_remove_all(v, stream_tail(xs))
-    })
+      return stream_remove_all(v, stream_tail(xs));
+    });
   }
 }
 
@@ -243,13 +243,13 @@ function stream_remove_all(v, xs) {
 //            until an element is found for which p holds.
 function stream_filter(p, s) {
   if (is_empty_list(s)) {
-    return []
+    return [];
   } else if (p(head(s))) {
     return pair(head(s), function() {
-      return stream_filter(p, stream_tail(s))
-    })
+      return stream_filter(p, stream_tail(s));
+    });
   } else {
-    return stream_filter(p, stream_tail(s))
+    return stream_filter(p, stream_tail(s));
   }
 }
 
@@ -260,11 +260,11 @@ function stream_filter(p, s) {
 //            each next element
 function enum_stream(start, end) {
   if (start > end) {
-    return []
+    return [];
   } else {
     return pair(start, function() {
-      return enum_stream(start + 1, end)
-    })
+      return enum_stream(start + 1, end);
+    });
   }
 }
 
@@ -274,8 +274,8 @@ function enum_stream(start, end) {
 //            each next element
 function integers_from(n) {
   return pair(n, function() {
-    return integers_from(n + 1)
-  })
+    return integers_from(n + 1);
+  });
 }
 
 // eval_stream constructs the list of the first n elements
@@ -285,9 +285,9 @@ function integers_from(n) {
 //                the stream untouched.
 function eval_stream(s, n) {
   if (n === 0) {
-    return []
+    return [];
   } else {
-    return pair(head(s), eval_stream(stream_tail(s), n - 1))
+    return pair(head(s), eval_stream(stream_tail(s), n - 1));
   }
 }
 
@@ -297,8 +297,8 @@ function eval_stream(s, n) {
 //                the stream untouched.
 function stream_ref(s, n) {
   if (n === 0) {
-    return head(s)
+    return head(s);
   } else {
-    return stream_ref(stream_tail(s), n - 1)
+    return stream_ref(stream_tail(s), n - 1);
   }
 }

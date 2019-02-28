@@ -246,10 +246,10 @@
     "@types/cheerio" "*"
     "@types/react" "*"
 
-"@types/enzyme@^3.1.17":
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/@types/enzyme/-/enzyme-3.9.0.tgz#a81c91e2dfd2d70e67f013f2c0e5efed6df05489"
-  integrity sha512-o0C7ooyBtj9NKyMzn2BWN53W4J21KPhO+/v+qqQX28Pcz0Z1B3DjL9bq2ZR4TN70PVw8O7gkhuFtC7VN3tausg==
+"@types/enzyme@3.1.17":
+  version "3.1.17"
+  resolved "https://registry.yarnpkg.com/@types/enzyme/-/enzyme-3.1.17.tgz#41f553bfdbaa00880488feabb3ade47d5489db42"
+  integrity sha512-pZ+Blk1hODkprPZ9cxXd8njxdBnbLGWOKAmKk0QhpJvWzI4q4F20FHHUnkZXPXJt5WnK6SbbY5lfTKoz1M/CTw==
   dependencies:
     "@types/cheerio" "*"
     "@types/react" "*"
@@ -5195,6 +5195,7 @@ js-base64@^2.1.9:
 js-slang@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.2.0.tgz#15b998d2e67bc2834421235f96408b4015bb322c"
+  integrity sha512-Y8iJQidviBi+2sENvGqy8rSXtphpMft0Yb+Ye8smwEvpdExLpvf6KjWFkqG/q0J0rQmpQfkIvdxatHCclZdelQ==
   dependencies:
     "@types/estree" "0.0.39"
     acorn "^6.0.5"

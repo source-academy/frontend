@@ -1,17 +1,17 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
-import { withRouter } from 'react-router'
-import { bindActionCreators, Dispatch } from 'redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { withRouter } from 'react-router';
+import { bindActionCreators, Dispatch } from 'redux';
 
-import { beginClearContext, logOut, updateEditorValue } from '../actions'
+import { beginClearContext, logOut, updateEditorValue } from '../actions';
 import {
   ensureLibrariesLoaded,
   playgroundExternalSelect,
   WorkspaceLocations
-} from '../actions/workspaces'
-import Application, { IDispatchProps, IStateProps } from '../components/Application'
-import { ExternalLibraryName } from '../components/assessment/assessmentShape'
-import { externalLibraries } from '../reducers/externalLibraries'
-import { IState } from '../reducers/states'
+} from '../actions/workspaces';
+import Application, { IDispatchProps, IStateProps } from '../components/Application';
+import { ExternalLibraryName } from '../components/assessment/assessmentShape';
+import { externalLibraries } from '../reducers/externalLibraries';
+import { IState } from '../reducers/states';
 
 /**
  * Provides the title of the application for display.
@@ -27,9 +27,9 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   name: state.session.name,
   currentPlaygroundChapter: state.workspaces.playground.context.chapter,
   currentPlaygroundExternalLibrary: state.workspaces.playground.playgroundExternal
-})
+});
 
-const workspaceLocation = WorkspaceLocations.playground
+const workspaceLocation = WorkspaceLocations.playground;
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -53,6 +53,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         playgroundExternalSelect(externalLibraryName, workspaceLocation)
     },
     dispatch
-  )
+  );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Application))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Application));

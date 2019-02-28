@@ -1,9 +1,9 @@
-import { createMemoryHistory } from 'history'
-import { RouteComponentProps } from 'react-router'
+import { createMemoryHistory } from 'history';
+import { RouteComponentProps } from 'react-router';
 
 export function mockRouterProps<P>(path: string, params: P): RouteComponentProps<P> {
-  const history = createMemoryHistory()
-  history.push(path)
+  const history = createMemoryHistory();
+  history.push(path);
   const props: RouteComponentProps<P> = {
     match: {
       isExact: true,
@@ -14,6 +14,6 @@ export function mockRouterProps<P>(path: string, params: P): RouteComponentProps
     location: history.location,
     history,
     staticContext: {}
-  }
-  return props
+  };
+  return props;
 }
