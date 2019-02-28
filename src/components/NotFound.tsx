@@ -1,6 +1,6 @@
-import { NonIdealState } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
+import { NonIdealState } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
 
 const NotFound: React.SFC<{}> = () => (
   <div className="NotFound pt-dark">
@@ -10,6 +10,6 @@ const NotFound: React.SFC<{}> = () => (
       description="The requested resource could not be found"
     />
   </div>
-)
+);
 
-export default NotFound
+export default NotFound;

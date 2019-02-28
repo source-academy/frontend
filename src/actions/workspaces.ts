@@ -1,8 +1,8 @@
-import { ActionCreator } from 'redux'
+import { ActionCreator } from 'redux';
 
-import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape'
-import { IWorkspaceState } from '../reducers/states'
-import * as actionTypes from './actionTypes'
+import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
+import { IWorkspaceState } from '../reducers/states';
+import * as actionTypes from './actionTypes';
 
 /**
  * Used to differenciate between the sources of actions, as
@@ -20,21 +20,21 @@ export enum WorkspaceLocations {
   grading = 'grading'
 }
 
-export type WorkspaceLocation = keyof typeof WorkspaceLocations
+export type WorkspaceLocation = keyof typeof WorkspaceLocations;
 
 export const browseReplHistoryDown: ActionCreator<actionTypes.IAction> = (
   workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.BROWSE_REPL_HISTORY_DOWN,
   payload: { workspaceLocation }
-})
+});
 
 export const browseReplHistoryUp: ActionCreator<actionTypes.IAction> = (
   workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.BROWSE_REPL_HISTORY_UP,
   payload: { workspaceLocation }
-})
+});
 
 export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
   activeTab: number,
@@ -42,14 +42,14 @@ export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.CHANGE_ACTIVE_TAB,
   payload: { activeTab, workspaceLocation }
-})
+});
 
 export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
   newExternal: string
 ) => ({
   type: actionTypes.CHANGE_PLAYGROUND_EXTERNAL,
   payload: { newExternal }
-})
+});
 
 export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
   widthChange: string,
@@ -57,7 +57,7 @@ export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.CHANGE_EDITOR_WIDTH,
   payload: { widthChange, workspaceLocation }
-})
+});
 
 export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (
   height: number,
@@ -65,7 +65,7 @@ export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.CHANGE_SIDE_CONTENT_HEIGHT,
   payload: { height, workspaceLocation }
-})
+});
 
 export const chapterSelect: ActionCreator<actionTypes.IAction> = (
   chapter: number,
@@ -76,7 +76,7 @@ export const chapterSelect: ActionCreator<actionTypes.IAction> = (
     chapter,
     workspaceLocation
   }
-})
+});
 
 export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
   externalLibraryName: ExternalLibraryName,
@@ -87,7 +87,7 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
     externalLibraryName,
     workspaceLocation
   }
-})
+});
 
 /**
  * Starts the process to clear the js-slang Context
@@ -108,17 +108,17 @@ export const beginClearContext = (library: Library, workspaceLocation: Workspace
     library,
     workspaceLocation
   }
-})
+});
 
 export const clearReplInput = (workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.CLEAR_REPL_INPUT,
   payload: { workspaceLocation }
-})
+});
 
 export const clearReplOutput = (workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.CLEAR_REPL_OUTPUT,
   payload: { workspaceLocation }
-})
+});
 
 /**
  * Finishes the process to clear the js-slang Context
@@ -138,21 +138,21 @@ export const endClearContext = (library: Library, workspaceLocation: WorkspaceLo
     library,
     workspaceLocation
   }
-})
+});
 
 export const ensureLibrariesLoaded = () => ({
   type: actionTypes.ENSURE_LIBRARIES_LOADED
-})
+});
 
 export const evalEditor = (workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.EVAL_EDITOR,
   payload: { workspaceLocation }
-})
+});
 
 export const evalRepl = (workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.EVAL_REPL,
   payload: { workspaceLocation }
-})
+});
 
 export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
   newEditorValue: string,
@@ -160,7 +160,7 @@ export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.UPDATE_EDITOR_VALUE,
   payload: { newEditorValue, workspaceLocation }
-})
+});
 
 export const updateReplValue: ActionCreator<actionTypes.IAction> = (
   newReplValue: string,
@@ -168,7 +168,7 @@ export const updateReplValue: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.UPDATE_REPL_VALUE,
   payload: { newReplValue, workspaceLocation }
-})
+});
 
 export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   newOutput: string,
@@ -180,7 +180,7 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
     workspaceLocation,
     value: newOutput
   }
-})
+});
 
 /**
  * Resets a workspace to its default properties.
@@ -200,7 +200,7 @@ export const resetWorkspace = (
     workspaceLocation,
     workspaceOptions
   }
-})
+});
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
   type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
@@ -208,7 +208,7 @@ export const updateCurrentAssessmentId = (assessmentId: number, questionId: numb
     assessmentId,
     questionId
   }
-})
+});
 
 export const updateCurrentSubmissionId = (submissionId: number, questionId: number) => ({
   type: actionTypes.UPDATE_CURRENT_SUBMISSION_ID,
@@ -216,7 +216,7 @@ export const updateCurrentSubmissionId = (submissionId: number, questionId: numb
     submissionId,
     questionId
   }
-})
+});
 
 export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
   workspaceLocation: WorkspaceLocation,
@@ -227,4 +227,4 @@ export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
     workspaceLocation,
     hasUnsavedChanges
   }
-})
+});

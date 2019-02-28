@@ -1,14 +1,14 @@
-import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core'
+import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 
-import * as React from 'react'
+import * as React from 'react';
 
-import { GradingOverview } from './gradingShape'
+import { GradingOverview } from './gradingShape';
 
 type GradingHistoryProps = {
-  data: GradingOverview
-  exp: boolean
-  grade: boolean
-}
+  data: GradingOverview;
+  exp: boolean;
+  grade: boolean;
+};
 
 /**
  * Used to render the marking history in the table that displays GradingOverviews.
@@ -19,7 +19,7 @@ type GradingHistoryProps = {
  */
 class GradingHistory extends React.Component<GradingHistoryProps, {}> {
   constructor(props: GradingHistoryProps) {
-    super(props)
+    super(props);
   }
 
   public render() {
@@ -38,7 +38,7 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
             </div>
           ))}
       </div>
-    )
+    );
 
     /** Component to render in table - marks */
     const GradingMarks = () => {
@@ -47,11 +47,11 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
           <div>
             {`${this.props.data.currentGrade}`} / {`${this.props.data.maxGrade}`}
           </div>
-        )
+        );
       } else {
-        return <div>N/A</div>
+        return <div>N/A</div>;
       }
-    }
+    };
 
     /** Component to render in table - XP */
     const GradingExp = () => {
@@ -60,11 +60,11 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
           <div>
             {`${this.props.data.currentXp}`} / {`${this.props.data.maxXp}`}
           </div>
-        )
+        );
       } else {
-        return <div>No Exp</div>
+        return <div>No Exp</div>;
       }
-    }
+    };
 
     return (
       <Popover
@@ -74,8 +74,8 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
       >
         {(this.props.exp && <GradingExp />) || (this.props.grade && <GradingMarks />)}
       </Popover>
-    )
+    );
   }
 }
 
-export default GradingHistory
+export default GradingHistory;

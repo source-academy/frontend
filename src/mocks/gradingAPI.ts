@@ -1,6 +1,6 @@
-import { Grading, GradingOverview } from '../components/academy/grading/gradingShape'
-import { mock2DRuneLibrary as mockLibrary } from './assessmentAPI'
-import { mockFetchRole, Role, Roles } from './userAPI'
+import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
+import { mock2DRuneLibrary as mockLibrary } from './assessmentAPI';
+import { mockFetchRole, Role, Roles } from './userAPI';
 
 export const mockGradingOverviews: GradingOverview[] = [
   {
@@ -57,7 +57,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     submissionId: 2,
     groupName: '1F'
   }
-]
+];
 
 /**
  * Mock for fetching a trainer/admin's student grading information.
@@ -71,14 +71,14 @@ export const mockFetchGradingOverview = (
   group: boolean
 ): GradingOverview[] | null => {
   // mocks backend role fetching
-  const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
-  const role: Role | null = mockFetchRole(accessToken)
+  const permittedRoles: Role[] = [Roles.admin, Roles.trainer];
+  const role: Role | null = mockFetchRole(accessToken);
   if (role === null || !permittedRoles.includes(role)) {
-    return null
+    return null;
   } else {
-    return group ? [mockGradingOverviews[0]] : mockGradingOverviews
+    return group ? [mockGradingOverviews[0]] : mockGradingOverviews;
   }
-}
+};
 
 const mockGrading: Grading = [
   {
@@ -203,7 +203,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       id: 0
     }
   }
-]
+];
 
 /**
  * Mock for fetching a trainer/admin's student grading information.
@@ -213,11 +213,11 @@ Hello and welcome to this assessment! This is the *0th question*.
  */
 export const mockFetchGrading = (accessToken: string, submissionId: number): Grading | null => {
   // mocks backend role fetching
-  const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
-  const role: Role | null = mockFetchRole(accessToken)
+  const permittedRoles: Role[] = [Roles.admin, Roles.trainer];
+  const role: Role | null = mockFetchRole(accessToken);
   if (role === null || !permittedRoles.includes(role)) {
-    return null
+    return null;
   } else {
-    return mockGrading
+    return mockGrading;
   }
-}
+};

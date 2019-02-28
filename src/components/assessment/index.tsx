@@ -14,32 +14,32 @@ import {
   Spinner,
   Text,
   Tooltip
-} from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
-import { NavLink } from 'react-router-dom'
+} from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
-import defaultCoverImage from '../../assets/default_cover_image.jpg'
-import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
-import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
-import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
+import defaultCoverImage from '../../assets/default_cover_image.jpg';
+import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer';
+import { beforeNow, getPrettyDate } from '../../utils/dateHelpers';
+import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers';
 import {
   AssessmentCategory,
   AssessmentStatuses,
   GradingStatuses,
   IAssessmentOverview
-} from '../assessment/assessmentShape'
-import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
-import { controlButton } from '../commons'
-import ContentDisplay from '../commons/ContentDisplay'
-import Markdown from '../commons/Markdown'
+} from '../assessment/assessmentShape';
+import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace';
+import { controlButton } from '../commons';
+import ContentDisplay from '../commons/ContentDisplay';
+import Markdown from '../commons/Markdown';
 
-const DEFAULT_QUESTION_ID: number = 0
+const DEFAULT_QUESTION_ID: number = 0;
 
 export interface IAssessmentWorkspaceParams {
-  assessmentId?: string
-  questionId?: string
+  assessmentId?: string;
+  questionId?: string;
 }
 
 export interface IAssessmentProps
@@ -49,91 +49,91 @@ export interface IAssessmentProps
     IStateProps {}
 
 export interface IDispatchProps {
-  handleAssessmentOverviewFetch: () => void
-  handleSubmitAssessment: (id: number) => void
+  handleAssessmentOverviewFetch: () => void;
+  handleSubmitAssessment: (id: number) => void;
 }
 
 export interface IOwnProps {
-  assessmentCategory: AssessmentCategory
+  assessmentCategory: AssessmentCategory;
 }
 
 export interface IStateProps {
-  assessmentOverviews?: IAssessmentOverview[]
-  isStudent: boolean
+  assessmentOverviews?: IAssessmentOverview[];
+  isStudent: boolean;
 }
 
 type State = {
-  betchaAssessment: IAssessmentOverview | null
-  showClosedAssessments: boolean
-  showOpenedAssessments: boolean
-  showUpcomingAssessments: boolean
-}
+  betchaAssessment: IAssessmentOverview | null;
+  showClosedAssessments: boolean;
+  showOpenedAssessments: boolean;
+  showUpcomingAssessments: boolean;
+};
 
 class Assessment extends React.Component<IAssessmentProps, State> {
   /**
    * Initialize state
    */
   public constructor(props: IAssessmentProps) {
-    super(props)
+    super(props);
     this.state = {
       betchaAssessment: null,
       showClosedAssessments: false,
       showOpenedAssessments: true,
       showUpcomingAssessments: true
-    }
+    };
   }
 
   public render() {
-    const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId)
+    const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId);
     const questionId: number =
-      stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
+      stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID;
 
     // If there is an assessment to render, create a workspace. The assessment
     // overviews must still be loaded for this, to send the due date.
     if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
-      const overview = this.props.assessmentOverviews.filter(a => a.id === assessmentId)[0]
+      const overview = this.props.assessmentOverviews.filter(a => a.id === assessmentId)[0];
       const assessmentProps: AssessmentProps = {
         assessmentId,
         questionId,
         notAttempted: overview.status === AssessmentStatuses.not_attempted,
         closeDate: overview.closeAt
-      }
-      return <AssessmentWorkspaceContainer {...assessmentProps} />
+      };
+      return <AssessmentWorkspaceContainer {...assessmentProps} />;
     }
 
     // Otherwise, render a list of assessments to the user.
-    let display: JSX.Element
+    let display: JSX.Element;
     if (this.props.assessmentOverviews === undefined) {
-      display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
+      display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />;
     } else if (this.props.assessmentOverviews.length === 0) {
-      display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />
+      display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />;
     } else {
       /** Upcoming assessments, that are not released yet. */
       const isOverviewUpcoming = (overview: IAssessmentOverview) =>
-        !beforeNow(overview.closeAt) && !beforeNow(overview.openAt)
+        !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
       const upcomingCards = this.props.assessmentOverviews
         .filter(isOverviewUpcoming)
         .map((overview, index) =>
           makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent, false)
-        )
+        );
 
       /** Opened assessments, that are released and can be attempted. */
       const isOverviewOpened = (overview: IAssessmentOverview) =>
         !beforeNow(overview.closeAt) &&
         beforeNow(overview.openAt) &&
-        overview.status !== AssessmentStatuses.submitted
+        overview.status !== AssessmentStatuses.submitted;
       const openedCards = this.props.assessmentOverviews
         .filter(overview => isOverviewOpened(overview))
         .map((overview, index) =>
           makeOverviewCard(overview, index, this.setBetchaAssessment, true, false)
-        )
+        );
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.props.assessmentOverviews
         .filter(overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview))
         .map((overview, index) =>
           makeOverviewCard(overview, index, this.setBetchaAssessment, true, true)
-        )
+        );
 
       /** Render cards */
       const upcomingCardsCollapsible =
@@ -146,14 +146,14 @@ class Assessment extends React.Component<IAssessmentProps, State> {
             )}
             <Collapse isOpen={this.state.showUpcomingAssessments}>{upcomingCards}</Collapse>
           </>
-        ) : null
+        ) : null;
       const openedCardsCollapsible =
         openedCards.length > 0 ? (
           <>
             {collapseButton('Open', this.state.showOpenedAssessments, this.toggleOpenAssessments)}
             <Collapse isOpen={this.state.showOpenedAssessments}>{openedCards}</Collapse>
           </>
-        ) : null
+        ) : null;
       const closedCardsCollapsible =
         closedCards.length > 0 ? (
           <>
@@ -164,14 +164,14 @@ class Assessment extends React.Component<IAssessmentProps, State> {
             )}
             <Collapse isOpen={this.state.showClosedAssessments}>{closedCards}</Collapse>
           </>
-        ) : null
+        ) : null;
       display = (
         <>
           {upcomingCardsCollapsible}
           {openedCardsCollapsible}
           {closedCardsCollapsible}
         </>
-      )
+      );
     }
 
     // Define the betcha dialog (in each card's menu)
@@ -200,7 +200,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           <span className="warning">this action is irreversible.</span>
         </p>
       </>
-    )
+    );
     const betchaDialog = (
       <Dialog
         className="betcha-dialog"
@@ -222,7 +222,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           </ButtonGroup>
         </div>
       </Dialog>
-    )
+    );
 
     // Finally, render the ContentDisplay.
     return (
@@ -233,41 +233,41 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         />
         {betchaDialog}
       </div>
-    )
+    );
   }
 
   private toggleClosedAssessments = () =>
     this.setState({
       ...this.state,
       showClosedAssessments: !this.state.showClosedAssessments
-    })
+    });
 
   private toggleOpenAssessments = () =>
     this.setState({
       ...this.state,
       showOpenedAssessments: !this.state.showOpenedAssessments
-    })
+    });
 
   private toggleUpcomingAssessments = () =>
     this.setState({
       ...this.state,
       showUpcomingAssessments: !this.state.showUpcomingAssessments
-    })
+    });
 
   private setBetchaAssessment = (assessment: IAssessmentOverview | null) =>
     this.setState({
       ...this.state,
       betchaAssessment: assessment
-    })
+    });
 
-  private setBetchaAssessmentNull = () => this.setBetchaAssessment(null)
+  private setBetchaAssessmentNull = () => this.setBetchaAssessment(null);
 
   private submitAssessment = () => {
     if (this.state.betchaAssessment) {
-      this.props.handleSubmitAssessment(this.state.betchaAssessment.id)
-      this.setBetchaAssessmentNull()
+      this.props.handleSubmitAssessment(this.state.betchaAssessment.id);
+      this.setBetchaAssessmentNull();
     }
-  }
+  };
 }
 
 /**
@@ -328,7 +328,7 @@ const makeOverviewCard = (
       </div>
     </Card>
   </div>
-)
+);
 
 const makeOverviewCardTitle = (
   overview: IAssessmentOverview,
@@ -344,39 +344,39 @@ const makeOverviewCardTitle = (
     </Text>
     <div className="col-xs-2">{makeSubmissionButton(overview, index, setBetchaAssessment)}</div>
   </div>
-)
+);
 
 const makeGradingStatus = (gradingStatus: string) => {
-  let iconName: IconName
-  let intent: Intent
-  let tooltip: string
+  let iconName: IconName;
+  let intent: Intent;
+  let tooltip: string;
 
   switch (gradingStatus) {
     case GradingStatuses.graded:
-      iconName = IconNames.TICK
-      intent = Intent.SUCCESS
-      tooltip = 'Fully graded'
-      break
+      iconName = IconNames.TICK;
+      intent = Intent.SUCCESS;
+      tooltip = 'Fully graded';
+      break;
 
     case GradingStatuses.grading:
-      iconName = IconNames.TIME
-      intent = Intent.WARNING
-      tooltip = 'Grading in progress'
-      break
+      iconName = IconNames.TIME;
+      intent = Intent.WARNING;
+      tooltip = 'Grading in progress';
+      break;
 
     default:
-      iconName = IconNames.CROSS
-      intent = Intent.DANGER
-      tooltip = 'Not graded yet'
-      break
+      iconName = IconNames.CROSS;
+      intent = Intent.DANGER;
+      tooltip = 'Not graded yet';
+      break;
   }
 
   return (
     <Tooltip content={tooltip} position={Position.RIGHT}>
       <Icon icon={iconName} intent={intent} />
     </Tooltip>
-  )
-}
+  );
+};
 
 const makeSubmissionButton = (
   overview: IAssessmentOverview,
@@ -394,33 +394,33 @@ const makeSubmissionButton = (
   >
     Finalize Submission
   </Button>
-)
+);
 
 const makeOverviewCardButton = (overview: IAssessmentOverview) => {
-  let icon: IconName
-  let label: string
+  let icon: IconName;
+  let label: string;
   switch (overview.status) {
     case AssessmentStatuses.not_attempted:
-      icon = IconNames.STEP_FORWARD
-      label = overview.story ? 'Skip Story & Attempt' : 'Attempt'
-      break
+      icon = IconNames.STEP_FORWARD;
+      label = overview.story ? 'Skip Story & Attempt' : 'Attempt';
+      break;
     case AssessmentStatuses.attempting:
-      icon = IconNames.PLAY
-      label = 'Continue Attempt'
-      break
+      icon = IconNames.PLAY;
+      label = 'Continue Attempt';
+      break;
     case AssessmentStatuses.attempted:
-      icon = IconNames.EDIT
-      label = 'Review Attempt'
-      break
+      icon = IconNames.EDIT;
+      label = 'Review Attempt';
+      break;
     case AssessmentStatuses.submitted:
-      icon = IconNames.EYE_OPEN
-      label = 'Review Submission'
-      break
+      icon = IconNames.EYE_OPEN;
+      label = 'Review Submission';
+      break;
     default:
       // If we reach this case, backend data did not fit IAssessmentOverview
-      icon = IconNames.PLAY
-      label = 'Review'
-      break
+      icon = IconNames.PLAY;
+      label = 'Review';
+      break;
   }
   return (
     <NavLink
@@ -430,13 +430,13 @@ const makeOverviewCardButton = (overview: IAssessmentOverview) => {
     >
       {controlButton(label, icon)}
     </NavLink>
-  )
-}
+  );
+};
 
 const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
   controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
     minimal: true,
     className: 'collapse-button'
-  })
+  });
 
-export default Assessment
+export default Assessment;

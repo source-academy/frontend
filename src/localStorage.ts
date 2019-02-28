@@ -1,25 +1,25 @@
-import { compressToUTF16, decompressFromUTF16 } from 'lz-string'
+import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import { ISessionState, IState } from './reducers/states'
+import { ISessionState, IState } from './reducers/states';
 
 export type ISavedState = {
-  session: Partial<ISessionState>
-  playgroundEditorValue: string | null
-}
+  session: Partial<ISessionState>;
+  playgroundEditorValue: string | null;
+};
 
 export const loadStoredState = (): ISavedState | undefined => {
   try {
-    const serializedState = localStorage.getItem('storedState')
+    const serializedState = localStorage.getItem('storedState');
     if (serializedState === null) {
-      return undefined
+      return undefined;
     } else {
-      return JSON.parse(decompressFromUTF16(serializedState)) as ISavedState
+      return JSON.parse(decompressFromUTF16(serializedState)) as ISavedState;
     }
   } catch (err) {
     // Issue #143
-    return undefined
+    return undefined;
   }
-}
+};
 
 export const saveState = (state: IState) => {
   try {
@@ -31,10 +31,10 @@ export const saveState = (state: IState) => {
         name: state.session.name
       },
       playgroundEditorValue: state.workspaces.playground.editorValue
-    }
-    const serialized = compressToUTF16(JSON.stringify(stateToBeSaved))
-    localStorage.setItem('storedState', serialized)
+    };
+    const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));
+    localStorage.setItem('storedState', serialized);
   } catch (err) {
     // https://github.com/source-academy/cadet-frontend/issues/143
   }
-}
+};
