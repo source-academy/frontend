@@ -32,6 +32,8 @@ export interface IApplicationState {
 
 export interface IPlaygroundState {
   readonly queryString?: string
+  readonly storageToken?: string
+  readonly storageTokenExpiresAt?: string
 }
 
 interface IAssessmentWorkspace extends IWorkspaceState {
@@ -85,8 +87,6 @@ export interface ISessionState {
   readonly story?: Story
   readonly name?: string
   readonly xp: number
-  readonly storageToken?: string
-  readonly storageTokenExpiresAt?: string
 }
 
 type ReplHistory = {

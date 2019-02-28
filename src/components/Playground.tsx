@@ -63,6 +63,7 @@ export interface IDispatchProps {
   handleReplValueChange: (newValue: string) => void
   handleSideContentHeightChange: (heightChange: number) => void
   handleOauthCallback: () => void
+  handleOpenPicker: () => void
 }
 
 type PlaygroundState = {
@@ -94,12 +95,14 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
         hasChapterSelect: true,
-        hasSaveButton: false,
+        hasSaveButton: this.props.storageToken !== undefined,
         hasShareButton: true,
+        hasOpenButton: this.props.storageToken !== undefined,
         isRunning: this.props.isRunning,
         queryString: this.props.queryString,
         questionProgress: null,
-        sourceChapter: this.props.sourceChapter
+        sourceChapter: this.props.sourceChapter,
+        onClickOpen: this.props.handleOpenPicker
       },
       editorProps: {
         editorValue: this.props.editorValue,

@@ -269,7 +269,8 @@ function* backendSaga(): SagaIterator {
 
     if (storageTokens) {
       yield call(showSuccessMessage, `Successfully link to Google Drive!`, 1000)
-      yield put(actions.updateStorageTokens(storageTokens.accessToken, storageTokens.expires_at))
+
+      yield put(actions.updateStorageTokens(storageTokens.accessToken, storageTokens.expiresAt))
     } else {
       yield call(showWarningMessage, `Failed to link to Google Drive`, 1000)
     }
@@ -546,18 +547,26 @@ const postGrading = async (
  */
 export async function getOuathCallback(tokens: Tokens): Promise<object | null> {
   const query = window.location.search
+
+  if (query === '') {
+    return null
+  }
+
+  const cleanUri = location.protocol + '//' + location.host + location.pathname
+  window.history.replaceState({}, document.title, cleanUri)
+
   const response = await request('auth/google/callback' + query, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
+    shouldRefresh: false,
     noHeaderAccept: true
   })
   if (response && response.ok) {
     const token = await response.json()
 
     return {
-      access_token: token.accessToken,
-      expires_at: token.expires_at
+      accessToken: token.access_token,
+      expiresAt: token.expires_at
     }
   } else {
     return null

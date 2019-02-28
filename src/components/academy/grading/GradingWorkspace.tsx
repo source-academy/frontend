@@ -222,6 +222,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       hasChapterSelect: false,
       hasSaveButton: false,
       hasShareButton: false,
+      hasOpenButton: false,
       isRunning: this.props.isRunning,
       onClickNext: () => history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () => history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),

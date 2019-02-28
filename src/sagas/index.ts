@@ -251,6 +251,36 @@ function* playgroundSaga(): SagaIterator {
           })
     yield put(actions.changeQueryString(newQueryString))
   })
+
+  yield takeEvery(actionTypes.OPEN_PICKER, function*() {
+    // todo check if expired
+    // todo externalize keys
+    const token = yield select((state: IState) => state.playground.storageToken)
+
+    gapi.load('picker', () => {
+      const view = new google.picker.DocsView(google.picker.ViewId.DOCS)
+      view.setOwnedByMe(true)
+      view.setIncludeFolders(true)
+      view.setMode(google.picker.DocsViewMode.LIST)
+
+      // bug in @types/google.picker
+      // @ts-ignore
+      view.setMimeTypes('application/source')
+
+      const picker = new google.picker.PickerBuilder()
+        .setTitle('Source Academy')
+        .addView(view)
+        .setSelectableMimeTypes('application/source')
+        .setOAuthToken(token)
+        .setDeveloperKey('AIzaSyCQhSKSkV0e6-LX_JHztLmVBBgPnNtr5q0')
+        .setCallback(() => {
+          // tslint:disable-next-line:no-console
+          console.log('picker callback')
+        })
+        .build()
+      picker.setVisible(true)
+    })
+  })
 }
 
 function* evalCode(code: string, context: Context, location: WorkspaceLocation) {

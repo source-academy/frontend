@@ -275,6 +275,7 @@ class AssessmentWorkspace extends React.Component<
         !beforeNow(this.props.closeDate) &&
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
       hasShareButton: false,
+      hasOpenButton: false,
       isRunning: this.props.isRunning,
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>

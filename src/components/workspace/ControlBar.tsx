@@ -28,12 +28,14 @@ export type ControlBarProps = {
   hasChapterSelect: boolean
   hasSaveButton: boolean
   hasShareButton: boolean
+  hasOpenButton: boolean
   hasUnsavedChanges?: boolean
   isRunning: boolean
   onClickNext?(): any
   onClickPrevious?(): any
   onClickReturn?(): any
   onClickSave?(): any
+  onClickOpen?(): any
 }
 
 interface IChapter {
@@ -57,6 +59,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     hasChapterSelect: false,
     hasSaveButton: false,
     hasShareButton: true,
+    hasOpenButton: false,
     onClickNext: () => {},
     onClickPrevious: () => {},
     onClickSave: () => {}
@@ -83,14 +86,22 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   private storageControl() {
     const linkButton = controlButton(
       'Link to Google Drive',
-      IconNames.DOCUMENT_OPEN,
+      IconNames.DOCUMENT_SHARE,
       () => {
         // todo externalize
         window.location.assign('http://localhost:4000/auth/google')
       },
       {}
     )
-    return <div className="ControlBar_storage pt-button-group">{linkButton}</div>
+    // TODO!!!
+    const openButton = this.props.hasOpenButton
+      ? controlButton('Open', IconNames.DOCUMENT_OPEN, this.props.onClickOpen, {})
+      : undefined
+    return (
+      <div className="ControlBar_storage pt-button-group">
+        {linkButton} {openButton}
+      </div>
+    )
   }
 
   private editorControl() {

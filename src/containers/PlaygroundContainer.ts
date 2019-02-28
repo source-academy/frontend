@@ -15,6 +15,7 @@ import {
   evalRepl,
   generateLzString,
   oauthCallback,
+  openPicker,
   playgroundExternalSelect,
   updateEditorValue,
   updateReplValue,
@@ -35,8 +36,8 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
   externalLibraryName: state.workspaces.playground.playgroundExternal,
-  storageToken: state.session.storageToken,
-  storageTokenExpiryAt: state.session.storageTokenExpiresAt
+  storageToken: state.playground.storageToken,
+  storageTokenExpiryAt: state.playground.storageTokenExpiresAt
 })
 
 const location: WorkspaceLocation = 'playground'
@@ -60,7 +61,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
-      handleOauthCallback: oauthCallback
+      handleOauthCallback: oauthCallback,
+      handleOpenPicker: openPicker
     },
     dispatch
   )

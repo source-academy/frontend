@@ -31,7 +31,8 @@ const baseProps = {
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
   handleSideContentHeightChange: (h: number) => {},
-  handleOauthCallback: () => {}
+  handleOauthCallback: () => {},
+  handleOpenPicker: () => {}
 }
 
 const testValueProps: IPlaygroundProps = {

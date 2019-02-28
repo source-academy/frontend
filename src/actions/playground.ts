@@ -15,7 +15,14 @@ export const oauthCallback = () => ({
   type: actionTypes.OAUTH_CALLBACK
 })
 
-export const updateStorageTokens = (token: string, expiresAt: string) => ({
+export const openPicker = () => ({
+  type: actionTypes.OPEN_PICKER
+})
+
+export const updateStorageTokens: ActionCreator<actionTypes.IAction> = (
+  token: string,
+  expiresAt: string
+) => ({
   type: actionTypes.UPDATE_STORAGE_TOKENS,
   payload: {
     token,
