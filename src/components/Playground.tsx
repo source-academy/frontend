@@ -43,6 +43,8 @@ export interface IStateProps {
   sideContentHeight?: number
   sourceChapter: number
   externalLibraryName: string
+  storageToken?: string
+  storageTokenExpiresAt?: string
 }
 
 export interface IDispatchProps {
@@ -60,6 +62,7 @@ export interface IDispatchProps {
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
   handleSideContentHeightChange: (heightChange: number) => void
+  handleOauthCallback: () => void
 }
 
 type PlaygroundState = {
@@ -121,6 +124,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         tabs: [playgroundIntroductionTab, listVisualizerTab]
       }
     }
+
+    if (this.isOuathCallback()) {
+      this.props.handleOauthCallback()
+    }
+
     return (
       <HotKeys
         className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
@@ -130,6 +138,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         <Workspace {...workspaceProps} />
       </HotKeys>
     )
+  }
+
+  private isOuathCallback() {
+    return this.props.location.search.toString().startsWith('?code=')
   }
 
   private toggleIsGreen() {

@@ -85,6 +85,8 @@ export interface ISessionState {
   readonly story?: Story
   readonly name?: string
   readonly xp: number
+  readonly storageToken?: string
+  readonly storageTokenExpiresAt?: string
 }
 
 type ReplHistory = {

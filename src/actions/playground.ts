@@ -10,3 +10,15 @@ export const changeQueryString: ActionCreator<actionTypes.IAction> = (queryStrin
   type: actionTypes.CHANGE_QUERY_STRING,
   payload: queryString
 })
+
+export const oauthCallback = () => ({
+  type: actionTypes.OAUTH_CALLBACK
+})
+
+export const updateStorageTokens = (token: string, expiresAt: string) => ({
+  type: actionTypes.UPDATE_STORAGE_TOKENS,
+  payload: {
+    token,
+    expiresAt
+  }
+})

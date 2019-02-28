@@ -72,11 +72,25 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   public render() {
     return (
       <div className="ControlBar">
+        {this.storageControl()}
         {this.editorControl()}
         {this.flowControl()}
         {this.replControl()}
       </div>
     )
+  }
+
+  private storageControl() {
+    const linkButton = controlButton(
+      'Link to Google Drive',
+      IconNames.DOCUMENT_OPEN,
+      () => {
+        // todo externalize
+        window.location.assign('http://localhost:4000/auth/google')
+      },
+      {}
+    )
+    return <div className="ControlBar_storage pt-button-group">{linkButton}</div>
   }
 
   private editorControl() {

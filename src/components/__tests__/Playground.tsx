@@ -15,6 +15,8 @@ const baseProps = {
   externalLibraryName: ExternalLibraryNames.NONE,
   output: [],
   replValue: '',
+  storageToken: '',
+  storageTokenExpiresAt: '',
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeActiveTab: (n: number) => {},
@@ -28,7 +30,8 @@ const baseProps = {
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
-  handleSideContentHeightChange: (h: number) => {}
+  handleSideContentHeightChange: (h: number) => {},
+  handleOauthCallback: () => {}
 }
 
 const testValueProps: IPlaygroundProps = {
