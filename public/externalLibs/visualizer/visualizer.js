@@ -2,16 +2,11 @@
   /**
    * Setup Stage
    */
-  var stage;
+  var stage; // intialisation done at start of user-called draw() function
   var container = document.createElement('div')
   container.id = 'list-visualizer-container'
   container.hidden = true
   document.body.appendChild(container)
-  stage = new Kinetic.Stage({
-    width: 1000,
-    height: 1000,
-    container: 'list-visualizer-container'
-  })
 
   /**
   *  Converts a list, or a pair, to a tree object. Wrapper function.
@@ -616,6 +611,20 @@
       return this.image;
   };
 
+  /**
+   * Find the height of a drawing to determine canvas (stage) height
+   */ 
+  function findListHeight(xs) {
+      if ((!is_pair(xs) && !is_array(xs)) || is_empty_list(xs)) return 0;
+      else {
+          const leftHeight = findListHeight(xs[0]);
+          const rightHeight = findListHeight(xs[1]);
+          return leftHeight > rightHeight
+                  ? 1 + leftHeight
+                  : 1 + rightHeight;
+      }
+  }
+  
   // A list of layers drawn, used for history
   var layerList = [];
   // ID of the current layer shown. Avoid changing this value externally as layer is not updated.
@@ -627,6 +636,11 @@
   *  Then shift it to the left end.
   */
   function draw(xs) {
+      stage = new Kinetic.Stage({
+        width: 1000,
+        height: findListHeight(xs) * 60 + 100,
+        container: 'list-visualizer-container'
+      });
       minLeft = 500;
       nodelist = [];
       nodeLabel = 0;
@@ -638,8 +652,7 @@
       var layer = new Kinetic.Layer();
       stage.add(layer);
       layerList.push(layer);
-
-      if (!is_pair(xs)) {
+      if (!is_pair(xs) && !is_array(xs)) {
           if (is_empty_list(xs)) {
               var display = "[  ]";
           } else {
