@@ -1,10 +1,10 @@
-import * as React from 'react'
-import AceEditor from 'react-ace'
-import { HotKeys } from 'react-hotkeys'
+import * as React from 'react';
+import AceEditor from 'react-ace';
+import { HotKeys } from 'react-hotkeys';
 
-import 'brace/ext/searchbox'
-import 'brace/mode/javascript'
-import 'brace/theme/cobalt'
+import 'brace/ext/searchbox';
+import 'brace/mode/javascript';
+import 'brace/theme/cobalt';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -14,23 +14,23 @@ import 'brace/theme/cobalt'
  *           of the editor's content, using `slang`
  */
 export interface IEditorProps {
-  editorValue: string
-  handleEditorEval: () => void
-  handleEditorValueChange: (newCode: string) => void
-  handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void
+  editorValue: string;
+  handleEditorEval: () => void;
+  handleEditorValueChange: (newCode: string) => void;
+  handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
-  private onChangeMethod: (newCode: string) => void
+  private onChangeMethod: (newCode: string) => void;
 
   constructor(props: IEditorProps) {
-    super(props)
+    super(props);
     this.onChangeMethod = (newCode: string) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
-        this.props.handleUpdateHasUnsavedChanges(true)
+        this.props.handleUpdateHasUnsavedChanges(true);
       }
-      this.props.handleEditorValueChange(newCode)
-    }
+      this.props.handleEditorValueChange(newCode);
+    };
   }
 
   public render() {
@@ -63,13 +63,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
           />
         </div>
       </HotKeys>
-    )
+    );
   }
 }
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
   goGreen: () => {}
-}
+};
 
-export default Editor
+export default Editor;

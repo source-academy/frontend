@@ -1,6 +1,6 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
-import { withRouter } from 'react-router'
-import { bindActionCreators, Dispatch } from 'redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { withRouter } from 'react-router';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import {
   beginInterruptExecution,
@@ -18,10 +18,10 @@ import {
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
-} from '../actions'
-import { ExternalLibraryName } from '../components/assessment/assessmentShape'
-import Playground, { IDispatchProps, IStateProps } from '../components/Playground'
-import { IState } from '../reducers/states'
+} from '../actions';
+import { ExternalLibraryName } from '../components/assessment/assessmentShape';
+import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
+import { IState } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.playground.sideContentActiveTab,
@@ -34,9 +34,9 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
   externalLibraryName: state.workspaces.playground.playgroundExternal
-})
+});
 
-const location: WorkspaceLocation = 'playground'
+const location: WorkspaceLocation = 'playground';
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -59,6 +59,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         changeSideContentHeight(heightChange, location)
     },
     dispatch
-  )
+  );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));

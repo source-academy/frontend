@@ -1,38 +1,38 @@
-import { decompressFromEncodedURIComponent } from 'lz-string'
-import * as qs from 'query-string'
-import * as React from 'react'
-import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
+import { decompressFromEncodedURIComponent } from 'lz-string';
+import * as qs from 'query-string';
+import * as React from 'react';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
-import Academy from '../containers/academy'
-import Login from '../containers/LoginContainer'
-import Playground from '../containers/PlaygroundContainer'
-import { Role, sourceChapters } from '../reducers/states'
-import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape'
-import NavigationBar from './NavigationBar'
-import NotFound from './NotFound'
+import Academy from '../containers/academy';
+import Login from '../containers/LoginContainer';
+import Playground from '../containers/PlaygroundContainer';
+import { Role, sourceChapters } from '../reducers/states';
+import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
+import NavigationBar from './NavigationBar';
+import NotFound from './NotFound';
 
 export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
-  accessToken?: string
-  currentPlaygroundChapter: number
-  role?: Role
-  title: string
-  name?: string
-  currentPlaygroundExternalLibrary: ExternalLibraryName
+  accessToken?: string;
+  currentPlaygroundChapter: number;
+  role?: Role;
+  title: string;
+  name?: string;
+  currentPlaygroundExternalLibrary: ExternalLibraryName;
 }
 
 export interface IDispatchProps {
-  handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => void
-  handleEditorValueChange: (val: string) => void
-  handleEnsureLibrariesLoaded: () => void
-  handleLogOut: () => void
-  handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void
+  handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => void;
+  handleEditorValueChange: (val: string) => void;
+  handleEnsureLibrariesLoaded: () => void;
+  handleLogOut: () => void;
+  handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void;
 }
 
 class Application extends React.Component<IApplicationProps, {}> {
   public componentDidMount() {
-    parsePlayground(this.props)
+    parsePlayground(this.props);
   }
 
   public render() {
@@ -54,10 +54,10 @@ class Application extends React.Component<IApplicationProps, {}> {
           </Switch>
         </div>
       </div>
-    )
+    );
   }
 
-  private redirectToAcademy = () => <Redirect to="/academy" />
+  private redirectToAcademy = () => <Redirect to="/academy" />;
 }
 
 /**
@@ -68,40 +68,40 @@ class Application extends React.Component<IApplicationProps, {}> {
 const toAcademy = (props: IApplicationProps) =>
   props.accessToken === undefined || props.role === undefined
     ? () => <Redirect to="/login" />
-    : () => <Academy accessToken={props.accessToken} role={props.role!} />
+    : () => <Academy accessToken={props.accessToken} role={props.role!} />;
 
 const toLogin = (props: IApplicationProps) => () => (
   <Login ivleToken={qs.parse(props.location.search).token} />
-)
+);
 
 const parsePlayground = (props: IApplicationProps) => {
-  const prgrm = parsePrgrm(props)
-  const chapter = parseChapter(props) || props.currentPlaygroundChapter
-  const externalLibraryName = parseExternalLibrary(props) || props.currentPlaygroundExternalLibrary
+  const prgrm = parsePrgrm(props);
+  const chapter = parseChapter(props) || props.currentPlaygroundChapter;
+  const externalLibraryName = parseExternalLibrary(props) || props.currentPlaygroundExternalLibrary;
   if (prgrm) {
-    props.handleEditorValueChange(prgrm)
-    props.handleEnsureLibrariesLoaded()
-    props.handleClearContext(chapter, externalLibraryName)
-    props.handlePlaygroundExternalSelect(externalLibraryName)
+    props.handleEditorValueChange(prgrm);
+    props.handleEnsureLibrariesLoaded();
+    props.handleClearContext(chapter, externalLibraryName);
+    props.handlePlaygroundExternalSelect(externalLibraryName);
   }
-}
+};
 
 const parsePrgrm = (props: RouteComponentProps<{}>) => {
-  const qsParsed = qs.parse(props.location.hash)
+  const qsParsed = qs.parse(props.location.hash);
   // legacy support
-  const program = qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm
-  return program !== undefined ? decompressFromEncodedURIComponent(program) : undefined
-}
+  const program = qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm;
+  return program !== undefined ? decompressFromEncodedURIComponent(program) : undefined;
+};
 
 const parseChapter = (props: RouteComponentProps<{}>) => {
-  const chapQuery = qs.parse(props.location.hash).chap
-  const chap = chapQuery === undefined ? NaN : parseInt(chapQuery, 10)
-  return sourceChapters.includes(chap) ? chap : undefined
-}
+  const chapQuery = qs.parse(props.location.hash).chap;
+  const chap = chapQuery === undefined ? NaN : parseInt(chapQuery, 10);
+  return sourceChapters.includes(chap) ? chap : undefined;
+};
 
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
-  const ext = qs.parse(props.location.hash).ext || ''
-  return Object.values(ExternalLibraryNames).includes(ext) ? ext : ExternalLibraryNames.NONE
-}
+  const ext = qs.parse(props.location.hash).ext || '';
+  return Object.values(ExternalLibraryNames).includes(ext) ? ext : ExternalLibraryNames.NONE;
+};
 
-export default Application
+export default Application;

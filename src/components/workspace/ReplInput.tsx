@@ -1,31 +1,31 @@
-import * as React from 'react'
-import AceEditor from 'react-ace'
+import * as React from 'react';
+import AceEditor from 'react-ace';
 
-import 'brace/mode/javascript'
-import 'brace/theme/terminal'
+import 'brace/mode/javascript';
+import 'brace/theme/terminal';
 
 export interface IReplInputProps {
-  replValue: string
-  handleBrowseHistoryDown: () => void
-  handleBrowseHistoryUp: () => void
-  handleReplValueChange: (newCode: string) => void
-  handleReplEval: () => void
+  replValue: string;
+  handleBrowseHistoryDown: () => void;
+  handleBrowseHistoryUp: () => void;
+  handleReplValueChange: (newCode: string) => void;
+  handleReplEval: () => void;
 }
 
 class ReplInput extends React.PureComponent<IReplInputProps, {}> {
-  private replInputBottom: HTMLDivElement
-  private execBrowseHistoryDown: () => void
-  private execBrowseHistoryUp: () => void
-  private execEvaluate: () => void
+  private replInputBottom: HTMLDivElement;
+  private execBrowseHistoryDown: () => void;
+  private execBrowseHistoryUp: () => void;
+  private execEvaluate: () => void;
 
   constructor(props: IReplInputProps) {
-    super(props)
-    this.execBrowseHistoryDown = props.handleBrowseHistoryDown
-    this.execBrowseHistoryUp = props.handleBrowseHistoryUp
+    super(props);
+    this.execBrowseHistoryDown = props.handleBrowseHistoryDown;
+    this.execBrowseHistoryUp = props.handleBrowseHistoryUp;
     this.execEvaluate = () => {
-      this.replInputBottom.scrollIntoView()
-      this.props.handleReplEval()
-    }
+      this.replInputBottom.scrollIntoView();
+      this.props.handleReplEval();
+    };
   }
 
   public componentDidUpdate() {
@@ -40,7 +40,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
        * Fix: the if condition is true when the Repl has dissapeared off-screen.
        *   (-15 to account for the scrollbar */
     } else {
-      this.replInputBottom.scrollIntoView()
+      this.replInputBottom.scrollIntoView();
     }
   }
 
@@ -89,8 +89,8 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
         />
         <div className="replInputBottom" ref={e => (this.replInputBottom = e!)} />
       </>
-    )
+    );
   }
 }
 
-export default ReplInput
+export default ReplInput;

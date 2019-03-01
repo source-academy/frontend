@@ -1,5 +1,5 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import {
   beginInterruptExecution,
@@ -17,21 +17,21 @@ import {
   updateHasUnsavedChanges,
   updateReplValue,
   WorkspaceLocation
-} from '../../../actions'
+} from '../../../actions';
 import {
   beginClearContext,
   resetWorkspace,
   updateCurrentSubmissionId
-} from '../../../actions/workspaces'
+} from '../../../actions/workspaces';
 import GradingWorkspace, {
   DispatchProps,
   OwnProps,
   StateProps
-} from '../../../components/academy/grading/GradingWorkspace'
-import { Library } from '../../../components/assessment/assessmentShape'
-import { IState, IWorkspaceState } from '../../../reducers/states'
+} from '../../../components/academy/grading/GradingWorkspace';
+import { Library } from '../../../components/assessment/assessmentShape';
+import { IState, IWorkspaceState } from '../../../reducers/states';
 
-const workspaceLocation: WorkspaceLocation = 'grading'
+const workspaceLocation: WorkspaceLocation = 'grading';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
@@ -46,8 +46,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     sideContentHeight: state.workspaces.grading.sideContentHeight,
     storedSubmissionId: state.workspaces.grading.currentSubmission,
     storedQuestionId: state.workspaces.grading.currentQuestion
-  }
-}
+  };
+};
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
@@ -76,6 +76,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         updateHasUnsavedChanges(workspaceLocation, unsavedChanges)
     },
     dispatch
-  )
+  );
 
-export default connect(mapStateToProps, mapDispatchToProps)(GradingWorkspace)
+export default connect(mapStateToProps, mapDispatchToProps)(GradingWorkspace);

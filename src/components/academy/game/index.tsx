@@ -1,25 +1,25 @@
-import * as React from 'react'
+import * as React from 'react';
 
-import { setUser } from '../../../actions'
-import { store } from '../../../createStore'
-import { Story } from '../../../reducers/states'
-import { getUser } from '../../../sagas/backend'
+import { setUser } from '../../../actions';
+import { store } from '../../../createStore';
+import { Story } from '../../../reducers/states';
+import { getUser } from '../../../sagas/backend';
 
-type GameProps = DispatchProps & StateProps
+type GameProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
-  handleSaveCanvas: (c: HTMLCanvasElement) => void
-}
+  handleSaveCanvas: (c: HTMLCanvasElement) => void;
+};
 
 export type StateProps = {
-  canvas?: HTMLCanvasElement
-  name: string
-  story?: Story
-}
+  canvas?: HTMLCanvasElement;
+  name: string;
+  story?: Story;
+};
 
 export class Game extends React.Component<GameProps, {}> {
-  private canvas: HTMLCanvasElement
-  private div: HTMLDivElement
+  private canvas: HTMLCanvasElement;
+  private div: HTMLDivElement;
 
   /**
    * Basically, if the function story is called twice (on different canvas
@@ -38,15 +38,15 @@ export class Game extends React.Component<GameProps, {}> {
    * backend sends us 'playStory', which is the negation (!) of `attemptedAll`.
    */
   public async componentDidMount() {
-    const story: any = (await import('./game.js')).default
+    const story: any = (await import('./game.js')).default;
     if (this.props.canvas === undefined) {
-      const storyOpts = await this.getStoryOpts()
-      story(this.div, this.canvas, this.props.name, ...storyOpts)
-      this.props.handleSaveCanvas(this.canvas)
+      const storyOpts = await this.getStoryOpts();
+      story(this.div, this.canvas, this.props.name, ...storyOpts);
+      this.props.handleSaveCanvas(this.canvas);
     } else {
       // This browser window has loaded the Game component & canvas before
-      this.div.innerHTML = ''
-      this.div.appendChild(this.props.canvas)
+      this.div.innerHTML = '';
+      this.div.appendChild(this.props.canvas);
     }
   }
 
@@ -55,7 +55,7 @@ export class Game extends React.Component<GameProps, {}> {
       <div id="game-display" className="sa-game" ref={e => (this.div = e!)}>
         <canvas ref={e => (this.canvas = e!)} />
       </div>
-    )
+    );
   }
 
   private async getStoryOpts() {
@@ -63,27 +63,27 @@ export class Game extends React.Component<GameProps, {}> {
       // no missions, no story from backend, just play intro
       return this.props.story.story
         ? [this.props.story.story, !this.props.story.playStory]
-        : ['mission-1', true]
+        : ['mission-1', true];
     } else {
       // this.props.story is null if creating 'fresh' store from localStorage
-      const state = store.getState()
+      const state = store.getState();
       const tokens = {
         accessToken: state.session.accessToken!,
         refreshToken: state.session.refreshToken!
-      }
-      const user: any = await getUser(tokens)
+      };
+      const user: any = await getUser(tokens);
       if (user) {
-        store.dispatch(setUser(user))
+        store.dispatch(setUser(user));
         // no missions, no story from backend, just play intro
-        return user.story.story ? [user.story.story, !user.story.playStory] : ['mission-1', true]
+        return user.story.story ? [user.story.story, !user.story.playStory] : ['mission-1', true];
       } else {
         // if user is null, actions.logOut is called anyways; nonetheless we
         // return a storyOpts, otherwise typescript complains about using storyOpts
         // before assignment in story/4 below
-        return ['mission-1', true]
+        return ['mission-1', true];
       }
     }
   }
 }
 
-export default Game
+export default Game;
