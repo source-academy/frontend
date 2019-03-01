@@ -1,9 +1,9 @@
-import { shallow } from 'enzyme'
-import * as React from 'react'
+import { shallow } from 'enzyme';
+import * as React from 'react';
 
-import { mockRouterProps } from '../../mocks/components'
-import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape'
-import Playground, { IPlaygroundProps } from '../Playground'
+import { mockRouterProps } from '../../mocks/components';
+import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape';
+import Playground, { IPlaygroundProps } from '../Playground';
 
 const baseProps = {
   editorValue: '',
@@ -31,28 +31,28 @@ const baseProps = {
   handleReplValueChange: (code: string) => {},
   handleSideContentHeightChange: (h: number) => {},
   handleToggleEditorAutorun: () => {}
-}
+};
 
 const testValueProps: IPlaygroundProps = {
   ...baseProps,
   ...mockRouterProps('/academy', {}),
   editorValue: 'Test value'
-}
+};
 
 const playgroundLinkProps: IPlaygroundProps = {
   ...baseProps,
   ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {}),
   editorValue: 'This should not show up'
-}
+};
 
 test('Playground renders correctly', () => {
-  const app = <Playground {...testValueProps} />
-  const tree = shallow(app)
-  expect(tree.debug()).toMatchSnapshot()
-})
+  const app = <Playground {...testValueProps} />;
+  const tree = shallow(app);
+  expect(tree.debug()).toMatchSnapshot();
+});
 
 test('Playground with link renders correctly', () => {
-  const app = <Playground {...playgroundLinkProps} />
-  const tree = shallow(app)
-  expect(tree.debug()).toMatchSnapshot()
-})
+  const app = <Playground {...playgroundLinkProps} />;
+  const tree = shallow(app);
+  expect(tree.debug()).toMatchSnapshot();
+});

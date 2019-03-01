@@ -1,15 +1,15 @@
-import { Card, Elevation } from '@blueprintjs/core'
-import * as React from 'react'
+import { Card, Elevation } from '@blueprintjs/core';
+import * as React from 'react';
 
 export interface IContentDisplayProps {
-  fullWidth?: boolean
-  display: JSX.Element
-  loadContentDispatch: () => void
+  fullWidth?: boolean;
+  display: JSX.Element;
+  loadContentDispatch: () => void;
 }
 
 class ContentDisplay extends React.Component<IContentDisplayProps, {}> {
   public componentDidMount() {
-    this.props.loadContentDispatch()
+    this.props.loadContentDispatch();
   }
 
   public render() {
@@ -25,8 +25,8 @@ class ContentDisplay extends React.Component<IContentDisplayProps, {}> {
           </Card>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default ContentDisplay
+export default ContentDisplay;

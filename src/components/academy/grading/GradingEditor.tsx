@@ -1,15 +1,15 @@
-import { Icon, Intent, NumericInput, Position, Text } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
-import ReactMde, { ReactMdeTypes } from 'react-mde'
-import { Prompt } from 'react-router'
-import * as Showdown from 'showdown'
+import { Icon, Intent, NumericInput, Position, Text } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+import ReactMde, { ReactMdeTypes } from 'react-mde';
+import { Prompt } from 'react-router';
+import * as Showdown from 'showdown';
 
-import { showWarningMessage } from '../../../utils/notification'
-import { stringParamToInt } from '../../../utils/paramParseHelpers'
-import { controlButton } from '../../commons'
+import { showWarningMessage } from '../../../utils/notification';
+import { stringParamToInt } from '../../../utils/paramParseHelpers';
+import { controlButton } from '../../commons';
 
-type GradingEditorProps = DispatchProps & OwnProps
+type GradingEditorProps = DispatchProps & OwnProps;
 
 export type DispatchProps = {
   handleGradingSave: (
@@ -18,22 +18,22 @@ export type DispatchProps = {
     comment: string,
     gradeAdjustment: number | undefined,
     xpAdjustment: number | undefined
-  ) => void
-}
+  ) => void;
+};
 
 export type OwnProps = {
-  comment: string
-  solution: number | string | null
-  questionId: number
-  submissionId: number
-  initialGrade: number
-  gradeAdjustment: number
-  maxGrade: number
-  initialXp: number
-  xpAdjustment: number
-  maxXp: number
-  studentName: string
-}
+  comment: string;
+  solution: number | string | null;
+  questionId: number;
+  submissionId: number;
+  initialGrade: number;
+  gradeAdjustment: number;
+  maxGrade: number;
+  initialXp: number;
+  xpAdjustment: number;
+  maxXp: number;
+  studentName: string;
+};
 
 /**
  * Keeps track of the current editor state,
@@ -49,23 +49,23 @@ export type OwnProps = {
  *   so as to allow input such as the '-' character.
  */
 type State = {
-  mdeState: ReactMdeTypes.MdeState
-  gradeAdjustmentInput: string | null
-  xpAdjustmentInput: string | null
-}
+  mdeState: ReactMdeTypes.MdeState;
+  gradeAdjustmentInput: string | null;
+  xpAdjustmentInput: string | null;
+};
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
-  private converter: Showdown.Converter
+  private converter: Showdown.Converter;
 
   constructor(props: GradingEditorProps) {
-    super(props)
+    super(props);
     this.state = {
       mdeState: {
         markdown: props.comment
       },
       gradeAdjustmentInput: props.gradeAdjustment.toString(),
       xpAdjustmentInput: props.xpAdjustment.toString()
-    }
+    };
     /**
      * The markdown-to-html converter for the editor.
      */
@@ -75,17 +75,17 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       strikethrough: true,
       tasklists: true,
       openLinksInNewWindow: true
-    })
+    });
   }
 
   public render() {
-    const hasUnsavedChanges = this.hasUnsavedChanges()
+    const hasUnsavedChanges = this.hasUnsavedChanges();
     const saveButtonOpts = {
       intent: hasUnsavedChanges ? Intent.WARNING : Intent.NONE,
       minimal: !hasUnsavedChanges,
       fullWidth: true,
       className: 'grading-editor-save-button'
-    }
+    };
     return (
       <div className="GradingEditor">
         {hasUnsavedChanges ? (
@@ -189,7 +189,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         </div>
         {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
       </div>
-    )
+    );
   }
 
   /**
@@ -199,24 +199,24 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * See {@link https://github.com/andrerpena/react-mde}
    */
   private blueprintIconProvider(name: string) {
-    return <Icon icon={faToBlueprintIconMapping(name)} />
+    return <Icon icon={faToBlueprintIconMapping(name)} />;
   }
 
   private onClickSaveButton = () => {
     const gradeAdjustmentInput =
-      stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined
-    const grade = this.props.initialGrade + (gradeAdjustmentInput || 0)
+      stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined;
+    const grade = this.props.initialGrade + (gradeAdjustmentInput || 0);
     const xpAdjustmentInput =
-      stringParamToInt(this.state.xpAdjustmentInput || undefined) || undefined
-    const xp = this.props.initialXp + (xpAdjustmentInput || 0)
+      stringParamToInt(this.state.xpAdjustmentInput || undefined) || undefined;
+    const xp = this.props.initialXp + (xpAdjustmentInput || 0);
     if (grade < 0 || grade > this.props.maxGrade) {
       showWarningMessage(
         `Grade ${grade.toString()} is out of bounds. Maximum grade is ${this.props.maxGrade.toString()}.`
-      )
+      );
     } else if (xp < 0 || xp > this.props.maxXp) {
       showWarningMessage(
         `XP ${xp.toString()} is out of bounds. Maximum xp is ${this.props.maxXp.toString()}.`
-      )
+      );
     } else {
       this.props.handleGradingSave(
         this.props.submissionId,
@@ -224,9 +224,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         this.state.mdeState.markdown!,
         gradeAdjustmentInput,
         xpAdjustmentInput
-      )
+      );
     }
-  }
+  };
 
   /**
    * Handles changes in the grade NumericInput, and updates the local State.
@@ -241,8 +241,8 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       xpAdjustmentInput: String(
         Math.round(valueAsNumber / this.props.maxGrade * this.props.maxXp) || 0
       )
-    })
-  }
+    });
+  };
 
   /**
    * Handles changes in the XP NumericInput, and updates the local State.
@@ -254,28 +254,28 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     this.setState({
       ...this.state,
       xpAdjustmentInput: valueAsString
-    })
-  }
+    });
+  };
 
   private handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
     this.setState({
       ...this.state,
       mdeState
-    })
-  }
+    });
+  };
 
   private hasUnsavedChanges = () => {
-    const gradeAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined)
-    const xpAdjustmentInput = stringParamToInt(this.state.xpAdjustmentInput || undefined)
+    const gradeAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined);
+    const xpAdjustmentInput = stringParamToInt(this.state.xpAdjustmentInput || undefined);
     return (
       this.props.comment !== this.state.mdeState.markdown ||
       this.props.gradeAdjustment !== gradeAdjustmentInput ||
       this.props.xpAdjustment !== xpAdjustmentInput
-    )
-  }
+    );
+  };
 
   private generateMarkdownPreview = (markdown: string) =>
-    Promise.resolve(this.converter.makeHtml(markdown))
+    Promise.resolve(this.converter.makeHtml(markdown));
 }
 
 /**
@@ -286,30 +286,30 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
 const faToBlueprintIconMapping = (name: string) => {
   switch (name) {
     case 'heading':
-      return IconNames.HEADER
+      return IconNames.HEADER;
     case 'bold':
-      return IconNames.BOLD
+      return IconNames.BOLD;
     case 'italic':
-      return IconNames.ITALIC
+      return IconNames.ITALIC;
     case 'strikethrough':
-      return IconNames.STRIKETHROUGH
+      return IconNames.STRIKETHROUGH;
     case 'link':
-      return IconNames.LINK
+      return IconNames.LINK;
     case 'quote-right':
-      return IconNames.CITATION
+      return IconNames.CITATION;
     case 'code':
-      return IconNames.CODE
+      return IconNames.CODE;
     case 'image':
-      return IconNames.MEDIA
+      return IconNames.MEDIA;
     case 'list-ul':
-      return IconNames.PROPERTIES
+      return IconNames.PROPERTIES;
     case 'list-ol':
-      return IconNames.NUMBERED_LIST
+      return IconNames.NUMBERED_LIST;
     case 'tasks':
-      return IconNames.TICK
+      return IconNames.TICK;
     default:
-      return IconNames.HELP
+      return IconNames.HELP;
   }
-}
+};
 
-export default GradingEditor
+export default GradingEditor;

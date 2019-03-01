@@ -1,16 +1,16 @@
-import { Button, Card, Dialog, NonIdealState, Spinner } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
+import { Button, Card, Dialog, NonIdealState, Spinner } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
 
-import { InterpreterOutput, IWorkspaceState } from '../../reducers/states'
-import { beforeNow } from '../../utils/dateHelpers'
-import { history } from '../../utils/history'
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
-import Markdown from '../commons/Markdown'
-import Workspace, { WorkspaceProps } from '../workspace'
-import { ControlBarProps } from '../workspace/ControlBar'
-import { SideContentProps } from '../workspace/side-content'
-import ToneMatrix from '../workspace/side-content/ToneMatrix'
+import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { beforeNow } from '../../utils/dateHelpers';
+import { history } from '../../utils/history';
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import Markdown from '../commons/Markdown';
+import Workspace, { WorkspaceProps } from '../workspace';
+import { ControlBarProps } from '../workspace/ControlBar';
+import { SideContentProps } from '../workspace/side-content';
+import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
   IAssessment,
   IMCQQuestion,
@@ -18,62 +18,62 @@ import {
   IQuestion,
   Library,
   QuestionTypes
-} from './assessmentShape'
-import GradingResult from './GradingResult'
+} from './assessmentShape';
+import GradingResult from './GradingResult';
 
-export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
+export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
-  activeTab: number
-  assessment?: IAssessment
-  editorValue: string | null
-  editorWidth: string
-  hasUnsavedChanges: boolean
-  isRunning: boolean
-  output: InterpreterOutput[]
-  replValue: string
-  sideContentHeight?: number
-  storedAssessmentId?: number
-  storedQuestionId?: number
-}
+  activeTab: number;
+  assessment?: IAssessment;
+  editorValue: string | null;
+  editorWidth: string;
+  hasUnsavedChanges: boolean;
+  isRunning: boolean;
+  output: InterpreterOutput[];
+  replValue: string;
+  sideContentHeight?: number;
+  storedAssessmentId?: number;
+  storedQuestionId?: number;
+};
 
 export type OwnProps = {
-  assessmentId: number
-  questionId: number
-  notAttempted: boolean
-  closeDate: string
-}
+  assessmentId: number;
+  questionId: number;
+  notAttempted: boolean;
+  closeDate: string;
+};
 
 export type DispatchProps = {
-  handleAssessmentFetch: (assessmentId: number) => void
-  handleBrowseHistoryDown: () => void
-  handleBrowseHistoryUp: () => void
-  handleChangeActiveTab: (activeTab: number) => void
-  handleChapterSelect: (chapter: any, changeEvent: any) => void
-  handleClearContext: (library: Library) => void
-  handleEditorEval: () => void
-  handleEditorValueChange: (val: string) => void
-  handleEditorWidthChange: (widthChange: number) => void
-  handleInterruptEval: () => void
-  handleReplEval: () => void
-  handleReplOutputClear: () => void
-  handleReplValueChange: (newValue: string) => void
-  handleResetWorkspace: (options: Partial<IWorkspaceState>) => void
-  handleSave: (id: number, answer: number | string) => void
-  handleSideContentHeightChange: (heightChange: number) => void
-  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void
-}
+  handleAssessmentFetch: (assessmentId: number) => void;
+  handleBrowseHistoryDown: () => void;
+  handleBrowseHistoryUp: () => void;
+  handleChangeActiveTab: (activeTab: number) => void;
+  handleChapterSelect: (chapter: any, changeEvent: any) => void;
+  handleClearContext: (library: Library) => void;
+  handleEditorEval: () => void;
+  handleEditorValueChange: (val: string) => void;
+  handleEditorWidthChange: (widthChange: number) => void;
+  handleInterruptEval: () => void;
+  handleReplEval: () => void;
+  handleReplOutputClear: () => void;
+  handleReplValueChange: (newValue: string) => void;
+  handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
+  handleSave: (id: number, answer: number | string) => void;
+  handleSideContentHeightChange: (heightChange: number) => void;
+  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
+  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
+};
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
   { showOverlay: boolean }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
-    super(props)
+    super(props);
     this.state = {
       showOverlay: false
-    }
+    };
   }
 
   /**
@@ -82,9 +82,9 @@ class AssessmentWorkspace extends React.Component<
    * and show the briefing.
    */
   public componentDidMount() {
-    this.props.handleAssessmentFetch(this.props.assessmentId)
+    this.props.handleAssessmentFetch(this.props.assessmentId);
     if (this.props.questionId === 0 && this.props.notAttempted) {
-      this.setState({ showOverlay: true })
+      this.setState({ showOverlay: true });
     }
   }
 
@@ -93,7 +93,7 @@ class AssessmentWorkspace extends React.Component<
    * if a workspace reset is needed.
    */
   public componentDidUpdate() {
-    this.checkWorkspaceReset(this.props)
+    this.checkWorkspaceReset(this.props);
   }
 
   public render() {
@@ -104,7 +104,7 @@ class AssessmentWorkspace extends React.Component<
           description="Getting mission ready..."
           visual={<Spinner large={true} />}
         />
-      )
+      );
     }
     const overlay = (
       <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
@@ -118,19 +118,19 @@ class AssessmentWorkspace extends React.Component<
           />
         </Card>
       </Dialog>
-    )
+    );
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.props.assessment.questions.length
         ? this.props.assessment.questions.length - 1
-        : this.props.questionId
-    const question: IQuestion = this.props.assessment.questions[questionId]
+        : this.props.questionId;
+    const question: IQuestion = this.props.assessment.questions[questionId];
     const editorValue =
       question.type === QuestionTypes.programming
         ? question.answer !== null
           ? ((question as IProgrammingQuestion).answer as string)
           : (question as IProgrammingQuestion).solutionTemplate
-        : null
+        : null;
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
@@ -161,13 +161,13 @@ class AssessmentWorkspace extends React.Component<
         output: this.props.output,
         replValue: this.props.replValue
       }
-    }
+    };
     return (
       <div className="WorkspaceParent pt-dark">
         {overlay}
         <Workspace {...workspaceProps} />
       </div>
-    )
+    );
   }
 
   /**
@@ -177,30 +177,30 @@ class AssessmentWorkspace extends React.Component<
   private checkWorkspaceReset(props: AssessmentWorkspaceProps) {
     /* Don't reset workspace if assessment not fetched yet. */
     if (this.props.assessment === undefined) {
-      return
+      return;
     }
 
     /* Reset assessment if it has changed.*/
-    const assessmentId = this.props.assessmentId
-    const questionId = this.props.questionId
+    const assessmentId = this.props.assessmentId;
+    const questionId = this.props.questionId;
 
     if (
       this.props.storedAssessmentId !== assessmentId ||
       this.props.storedQuestionId !== questionId
     ) {
-      const question = this.props.assessment.questions[questionId]
+      const question = this.props.assessment.questions[questionId];
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
-          : null
-      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
-      this.props.handleResetWorkspace({ editorValue })
-      this.props.handleClearContext(question.library)
-      this.props.handleUpdateHasUnsavedChanges(false)
+          : null;
+      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
+      this.props.handleResetWorkspace({ editorValue });
+      this.props.handleClearContext(question.library);
+      this.props.handleUpdateHasUnsavedChanges(false);
       if (editorValue) {
-        this.props.handleEditorValueChange(editorValue)
+        this.props.handleEditorValueChange(editorValue);
       }
     }
   }
@@ -221,8 +221,8 @@ class AssessmentWorkspace extends React.Component<
         icon: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />
       }
-    ]
-    const isGraded = props.assessment!.questions[questionId].grader !== null
+    ];
+    const isGraded = props.assessment!.questions[questionId].grader !== null;
     if (isGraded) {
       tabs.push({
         label: `Grading`,
@@ -238,31 +238,31 @@ class AssessmentWorkspace extends React.Component<
             maxXp={props.assessment!.questions[questionId].maxXp}
           />
         )
-      })
+      });
     }
 
-    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols
+    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
         icon: IconNames.GRID_VIEW,
         body: <ToneMatrix />
-      })
+      });
     }
     return {
       activeTab: props.activeTab,
       handleChangeActiveTab: props.handleChangeActiveTab,
       tabs
-    }
-  }
+    };
+  };
 
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
-    const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`
+    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`;
+    const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`;
     return {
       handleChapterSelect: this.props.handleChapterSelect,
       handleEditorEval: this.props.handleEditorEval,
@@ -287,8 +287,8 @@ class AssessmentWorkspace extends React.Component<
         ),
       questionProgress: [questionId + 1, this.props.assessment!.questions.length],
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter
-    }
-  }
+    };
+  };
 }
 
-export default AssessmentWorkspace
+export default AssessmentWorkspace;

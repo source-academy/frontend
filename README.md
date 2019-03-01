@@ -16,10 +16,10 @@
 For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
 
 ## For Windows Users
-In package.json, change line 19:
-"start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",
-to:
-"start-js": "set PORT=80 & react-scripts-ts start",
+In package.json, change line 19:\
+"start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",\
+to:\
+"start-js": "set PORT=80 & react-scripts-ts start",\
 
 ## For Testing of js-slang
 
@@ -32,6 +32,12 @@ to:
 Note that this copies your files over, any future changes will not be reflected. 
 
 You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
+
+## For Previewing Local XML Missions Only
+
+1. Use the branch 'mission-testing' in cadet-frontend
+2. Run in browser with yarn start
+2. Go to Missions page, and upload xml file to preview
 
 ## Application Structure
 

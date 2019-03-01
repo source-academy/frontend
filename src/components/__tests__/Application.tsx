@@ -1,9 +1,9 @@
-import { shallow } from 'enzyme'
-import * as React from 'react'
+import { shallow } from 'enzyme';
+import * as React from 'react';
 
-import { mockRouterProps } from '../../mocks/components'
-import Application, { IApplicationProps } from '../Application'
-import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape'
+import { mockRouterProps } from '../../mocks/components';
+import Application, { IApplicationProps } from '../Application';
+import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape';
 
 test('Application renders correctly', () => {
   const props: IApplicationProps = {
@@ -16,8 +16,8 @@ test('Application renders correctly', () => {
     handleEditorValueChange: (val: string) => {},
     handleEnsureLibrariesLoaded: () => {},
     handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) => {}
-  }
-  const app = <Application {...props} />
-  const tree = shallow(app)
-  expect(tree.debug()).toMatchSnapshot()
-})
+  };
+  const app = <Application {...props} />;
+  const tree = shallow(app);
+  expect(tree.debug()).toMatchSnapshot();
+});

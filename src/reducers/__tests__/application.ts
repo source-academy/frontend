@@ -1,7 +1,7 @@
-import { reducer } from '../application'
+import { reducer } from '../application';
 
-const initialState = reducer(undefined!, { type: '*' })
+const initialState = reducer(undefined!, { type: '*' });
 
 test('initial state should match a snapshot', () => {
-  expect(initialState).toMatchSnapshot()
-})
+  expect(initialState).toMatchSnapshot();
+});
