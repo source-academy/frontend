@@ -1,7 +1,7 @@
 /* tslint:disable: ban-types*/
 import createSlangContext from 'js-slang/dist/createContext'
 import { stringify } from 'js-slang/dist/interop'
-import { Value } from 'js-slang/dist/types'
+import { Context, Value } from 'js-slang/dist/types'
 
 import { handleConsoleLog } from '../actions'
 
@@ -77,9 +77,17 @@ function cadetAlert(value: any) {
  */
 function visualiseList(list: any) {
   if ((window as any).ListVisualizer) {
-    ;(window as any).ListVisualizer.draw(list)
+    (window as any).ListVisualizer.draw(list)
   } else {
     throw new Error('List visualizer is not enabled')
+  }
+}
+
+export function inspectorUpdate(context: Context) {
+  if ((window as any).Inspector) {
+    (window as any).Inspector.updateContext({context})
+  } else {
+    throw new Error('Inspector not loaded')
   }
 }
 

@@ -15,6 +15,7 @@ import { externalLibraries } from '../reducers/externalLibraries'
 import { defaultEditorValue, IState, IWorkspaceState } from '../reducers/states'
 import { IVLE_KEY, USE_BACKEND } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
+import { inspectorUpdate } from '../utils/slangHelper'
 import backendSaga from './backend'
 
 function* mainSaga() {
@@ -301,6 +302,7 @@ function* evalCode(
       }
       yield put(actions.endDebuggerPause(location))
       yield put(actions.evalInterpreterSuccess('Debugging enabled: Breakpoint hit!', location))
+      inspectorUpdate(result)
     } else {
       yield put(actions.evalInterpreterError(context.errors, location))
     }
@@ -336,6 +338,7 @@ function* evalRestofCode(code: string, context: Context, location: WorkspaceLoca
       lastDebuggerResult = result
       yield put(actions.endDebuggerPause(location))
       yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location))
+      inspectorUpdate(result)
     } else {
       yield put(actions.evalInterpreterError(context.errors, location))
     }

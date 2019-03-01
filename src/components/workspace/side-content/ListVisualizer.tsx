@@ -5,7 +5,7 @@ class ListVisualizer extends React.Component<{}, {}> {
 
   public componentDidMount() {
     if (this.$parent) {
-      ;(window as any).ListVisualizer.init(this.$parent)
+      (window as any).ListVisualizer.init(this.$parent)
     }
   }
 

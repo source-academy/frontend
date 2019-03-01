@@ -92,7 +92,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     )
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval)
     const pauseButton = controlButton('Pause', IconNames.STOP, this.props.handleDebuggerPause)
-    const resumeButton = controlButton('Resume', IconNames.STOP, this.props.handleDebuggerResume)
+    const resumeButton = controlButton('Resume', IconNames.CHEVRON_RIGHT, this.props.handleDebuggerResume)
     const resetButton = controlButton('Reset', IconNames.STOP, this.props.handleDebuggerReset)
     const saveButtonOpts = this.props.hasUnsavedChanges
       ? { intent: Intent.WARNING, minimal: false }
