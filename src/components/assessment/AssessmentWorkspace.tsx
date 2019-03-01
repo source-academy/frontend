@@ -30,6 +30,8 @@ export type StateProps = {
   editorWidth: string
   hasUnsavedChanges: boolean
   isRunning: boolean
+  isDebugging: boolean
+  enableDebugging: boolean
   output: InterpreterOutput[]
   replValue: string
   sideContentHeight?: number
@@ -63,6 +65,9 @@ export type DispatchProps = {
   handleSideContentHeightChange: (heightChange: number) => void
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void
+  handleDebuggerPause: () => void
+  handleDebuggerResume: () => void
+  handleDebuggerReset: () => void
 }
 
 class AssessmentWorkspace extends React.Component<
@@ -270,12 +275,17 @@ class AssessmentWorkspace extends React.Component<
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
+      handleDebuggerPause: this.props.handleDebuggerPause,
+      handleDebuggerResume: this.props.handleDebuggerResume,
+      handleDebuggerReset: this.props.handleDebuggerReset,
       hasChapterSelect: false,
       hasSaveButton:
         !beforeNow(this.props.closeDate) &&
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
       hasShareButton: false,
       isRunning: this.props.isRunning,
+      isDebugging: this.props.isDebugging,
+      enableDebugging: this.props.enableDebugging,
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),

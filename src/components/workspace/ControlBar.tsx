@@ -25,11 +25,16 @@ export type ControlBarProps = {
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
+  handleDebuggerPause: () => void
+  handleDebuggerResume: () => void
+  handleDebuggerReset: () => void
   hasChapterSelect: boolean
   hasSaveButton: boolean
   hasShareButton: boolean
   hasUnsavedChanges?: boolean
   isRunning: boolean
+  isDebugging: boolean
+  enableDebugging: boolean
   onClickNext?(): any
   onClickPrevious?(): any
   onClickReturn?(): any
@@ -86,6 +91,9 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       </Tooltip>
     )
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval)
+    const pauseButton = controlButton('Pause', IconNames.STOP, this.props.handleDebuggerPause)
+    const resumeButton = controlButton('Resume', IconNames.STOP, this.props.handleDebuggerResume)
+    const resetButton = controlButton('Reset', IconNames.STOP, this.props.handleDebuggerReset)
     const saveButtonOpts = this.props.hasUnsavedChanges
       ? { intent: Intent.WARNING, minimal: false }
       : {}
@@ -129,7 +137,19 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
         : undefined
     return (
       <div className="ControlBar_editor pt-button-group">
-        {this.props.isRunning ? stopButton : runButton} {saveButton}
+        {this.props.isRunning 
+          ? stopButton
+          : this.props.isDebugging 
+            ? resetButton
+            : runButton} 
+        {this.props.isRunning 
+          ? this.props.isDebugging 
+            ? null
+            : pauseButton 
+          : this.props.isDebugging
+            ? resumeButton
+            : null} 
+        {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton}
       </div>
     )

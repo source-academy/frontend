@@ -61,6 +61,8 @@ export interface IWorkspaceState {
   readonly editorValue: string | null
   readonly editorWidth: string
   readonly isRunning: boolean
+  readonly isDebugging: boolean
+  readonly enableDebugging: boolean
   readonly output: InterpreterOutput[]
   readonly replHistory: ReplHistory
   readonly replValue: string
@@ -206,7 +208,9 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   replValue: '',
   sideContentActiveTab: 0,
   globals: [],
-  isRunning: false
+  isRunning: false,
+  isDebugging: false,
+  enableDebugging: true
 })
 
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!'

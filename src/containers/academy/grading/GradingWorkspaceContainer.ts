@@ -2,6 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import {
+  beginDebuggerPause,
   beginInterruptExecution,
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -10,6 +11,8 @@ import {
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
+  debuggerReset,
+  debuggerResume,
   evalEditor,
   evalRepl,
   fetchGrading,
@@ -41,6 +44,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     grading: state.session.gradings.get(props.submissionId),
     hasUnsavedChanges: state.workspaces.grading.hasUnsavedChanges,
     isRunning: state.workspaces.grading.isRunning,
+    isDebugging: state.workspaces.grading.isDebugging,
+    enableDebugging: state.workspaces.grading.enableDebugging,
     output: state.workspaces.grading.output,
     replValue: state.workspaces.grading.replValue,
     sideContentHeight: state.workspaces.grading.sideContentHeight,
@@ -73,7 +78,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         changeSideContentHeight(heightChange, workspaceLocation),
       handleUpdateCurrentSubmissionId: updateCurrentSubmissionId,
       handleUpdateHasUnsavedChanges: (unsavedChanges: boolean) =>
-        updateHasUnsavedChanges(workspaceLocation, unsavedChanges)
+        updateHasUnsavedChanges(workspaceLocation, unsavedChanges),
+      handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
+      handleDebuggerResume: () => debuggerResume(workspaceLocation),
+      handleDebuggerReset: () => debuggerReset(workspaceLocation)
     },
     dispatch
   )

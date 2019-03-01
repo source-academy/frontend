@@ -8,6 +8,8 @@ import Playground, { IPlaygroundProps } from '../Playground'
 const baseProps = {
   editorValue: '',
   isRunning: false,
+  isDebugging: false,
+  enableDebugging: true,
   activeTab: 0,
   editorWidth: '50%',
   sideContentHeight: 40,
@@ -28,7 +30,10 @@ const baseProps = {
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
-  handleSideContentHeightChange: (h: number) => {}
+  handleSideContentHeightChange: (h: number) => {},
+  handleDebuggerPause: () => {},
+  handleDebuggerResume: () => {},
+  handleDebuggerReset: () => {}
 }
 
 const testValueProps: IPlaygroundProps = {

@@ -1,5 +1,6 @@
-import { Context, interrupt, runInContext } from 'js-slang'
+import { Context, interrupt, resume, runInContext } from 'js-slang'
 import { InterruptedError } from 'js-slang/dist/interpreter-errors'
+import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector'
 import { compressToEncodedURIComponent } from 'lz-string'
 import * as qs from 'query-string'
 import { delay, SagaIterator } from 'redux-saga'
@@ -56,7 +57,7 @@ function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context
     )
-    yield* evalCode(code, context, location)
+    yield* evalCode(code, context, location, actionTypes.EVAL_EDITOR)
   })
 
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
@@ -70,7 +71,29 @@ function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context
     )
-    yield* evalCode(code, context, location)
+    yield* evalCode(code, context, location, actionTypes.EVAL_REPL)
+  })
+
+  yield takeEvery(actionTypes.DEBUG_RESUME, function*(action) {
+    const location = (action as actionTypes.IAction).payload.workspaceLocation
+    const code: string = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).editorValue
+    )
+    yield put(actions.beginInterruptExecution(location))
+    /** Clear the context, with the same chapter and externalSymbols as before. */
+    yield put(actions.clearReplOutput(location))
+    context = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+    )
+    yield* evalRestofCode(code, context, location)
+  })
+
+  yield takeEvery(actionTypes.DEBUG_RESET, function*(action) {
+    const location = (action as actionTypes.IAction).payload.workspaceLocation
+    context = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+    )
+    yield put(actions.clearReplOutput(location))
   })
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
@@ -253,18 +276,31 @@ function* playgroundSaga(): SagaIterator {
   })
 }
 
-function* evalCode(code: string, context: Context, location: WorkspaceLocation) {
-  const { result, interrupted } = yield race({
+let lastDebuggerResult: any
+function* evalCode(
+  code: string,
+  context: Context,
+  location: WorkspaceLocation,
+  actionType: string
+) {
+  const { result, interrupted, paused } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
      */
-    interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION)
+    interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION),
+    paused: take(actionTypes.BEGIN_DEBUG_PAUSE)
   })
   if (result) {
     if (result.status === 'finished') {
       yield put(actions.evalInterpreterSuccess(result.value, location))
+    } else if (result.status === 'suspended') {
+      if (actionType === actionTypes.EVAL_EDITOR) {
+        lastDebuggerResult = result
+      }
+      yield put(actions.endDebuggerPause(location))
+      yield put(actions.evalInterpreterSuccess('Debugging enabled: Breakpoint hit!', location))
     } else {
       yield put(actions.evalInterpreterError(context.errors, location))
     }
@@ -272,8 +308,48 @@ function* evalCode(code: string, context: Context, location: WorkspaceLocation) 
     interrupt(context)
     /* Redundancy, added ensure that interruption results in an error. */
     context.errors.push(new InterruptedError(context.runtime.nodes[0]))
+    yield put(actions.debuggerReset(location))
     yield put(actions.endInterruptExecution(location))
-    yield call(showWarningMessage, 'Execution aborted by user', 750)
+    yield call(showWarningMessage, 'Execution aborted by user [308]', 750)
+  } else if (paused) {
+    lastDebuggerResult = manualToggleDebugger(context)
+    yield put(actions.endDebuggerPause(location))
+    yield call(showWarningMessage, 'Debugger [312]', 750)
+  }
+}
+
+function* evalRestofCode(code: string, context: Context, location: WorkspaceLocation) {
+  const { result, interrupted, paused } = yield race({
+    result: call(resume, lastDebuggerResult),
+    /**
+     * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
+     * i.e the trigger for the interpreter to interrupt execution.
+     */
+    interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION),
+    paused: take(actionTypes.BEGIN_DEBUG_PAUSE)
+  })
+  if (result) {
+    if (result.status === 'finished') {
+      yield put(actions.evalInterpreterSuccess(result.value, location))
+      lastDebuggerResult = undefined
+    } else if (result.status === 'suspended') {
+      lastDebuggerResult = result
+      yield put(actions.endDebuggerPause(location))
+      yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location))
+    } else {
+      yield put(actions.evalInterpreterError(context.errors, location))
+    }
+  } else if (interrupted) {
+    interrupt(context)
+    /* Redundancy, added ensure that interruption results in an error. */
+    context.errors.push(new InterruptedError(context.runtime.nodes[0]))
+    yield put(actions.debuggerReset(location))
+    yield put(actions.endInterruptExecution(location))
+    yield call(showWarningMessage, 'Execution aborted by user [343]', 750)
+  } else if (paused) {
+    lastDebuggerResult = manualToggleDebugger(context)
+    yield put(actions.endDebuggerPause(location))
+    yield call(showWarningMessage, 'Debugging Interrupted. [347]', 750)
   }
 }
 

@@ -5191,7 +5191,7 @@ js-base64@^2.1.9:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.3.tgz#2e545ec2b0f2957f41356510205214e98fad6582"
 
-"js-slang@file:../js-slang":
+js-slang@../js-slang:
   version "0.2.0-alpha"
   dependencies:
     "@types/estree" "0.0.39"
@@ -5650,10 +5650,6 @@ lodash@^3.10.1:
 lodash@^4.0.0, lodash@~4.17.4:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
-
-lodash@^4.17.11:
-  version "4.17.11"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 
 lodash@^4.17.11:
   version "4.17.11"

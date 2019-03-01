@@ -27,6 +27,8 @@ export type StateProps = {
   editorWidth: string
   hasUnsavedChanges: boolean
   isRunning: boolean
+  isDebugging: boolean
+  enableDebugging: boolean
   output: InterpreterOutput[]
   replValue: string
   sideContentHeight?: number
@@ -55,6 +57,9 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void
   handleSideContentHeightChange: (heightChange: number) => void
+  handleDebuggerPause: () => void
+  handleDebuggerResume: () => void
+  handleDebuggerReset: () => void
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void
 }
@@ -219,10 +224,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleInterruptEval: this.props.handleInterruptEval,
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
+      handleDebuggerPause: this.props.handleDebuggerPause,
+      handleDebuggerResume: this.props.handleDebuggerResume,
+      handleDebuggerReset: this.props.handleDebuggerReset,
       hasChapterSelect: false,
       hasSaveButton: false,
       hasShareButton: false,
       isRunning: this.props.isRunning,
+      isDebugging: this.props.isDebugging,
+      enableDebugging: this.props.enableDebugging,
       onClickNext: () => history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () => history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),
       onClickReturn: () => history.push(listingPath),

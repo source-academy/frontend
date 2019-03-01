@@ -37,6 +37,8 @@ export interface IStateProps {
   editorValue: string
   editorWidth: string
   isRunning: boolean
+  isDebugging: boolean
+  enableDebugging: boolean
   output: InterpreterOutput[]
   queryString?: string
   replValue: string
@@ -60,6 +62,9 @@ export interface IDispatchProps {
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
   handleSideContentHeightChange: (heightChange: number) => void
+  handleDebuggerPause: () => void
+  handleDebuggerResume: () => void
+  handleDebuggerReset: () => void
 }
 
 type PlaygroundState = {
@@ -90,10 +95,15 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleInterruptEval: this.props.handleInterruptEval,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
+        handleDebuggerPause: this.props.handleDebuggerPause,
+        handleDebuggerResume: this.props.handleDebuggerResume,
+        handleDebuggerReset: this.props.handleDebuggerReset,
         hasChapterSelect: true,
         hasSaveButton: false,
         hasShareButton: true,
         isRunning: this.props.isRunning,
+        isDebugging: this.props.isDebugging,
+        enableDebugging: this.props.enableDebugging,
         queryString: this.props.queryString,
         questionProgress: null,
         sourceChapter: this.props.sourceChapter
