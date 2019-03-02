@@ -84,6 +84,8 @@ function visualiseList(list: any) {
 }
 
 export function inspectorUpdate(context: Context) {
+// tslint:disable-next-line: no-debugger
+  debugger;
   if ((window as any).Inspector) {
     (window as any).Inspector.updateContext({context})
   } else {

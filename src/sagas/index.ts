@@ -95,6 +95,8 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context
     )
     yield put(actions.clearReplOutput(location))
+    context.runtime.break = false
+    lastDebuggerResult = undefined
   })
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
@@ -284,6 +286,7 @@ function* evalCode(
   location: WorkspaceLocation,
   actionType: string
 ) {
+  context.runtime.debuggerOn = actionType === actionTypes.EVAL_EDITOR
   const { result, interrupted, paused } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
     /**
@@ -295,6 +298,9 @@ function* evalCode(
   })
   if (result) {
     if (result.status === 'finished') {
+      if (!context.runtime.debuggerOn) {
+        inspectorUpdate(result);
+      }
       yield put(actions.evalInterpreterSuccess(result.value, location))
     } else if (result.status === 'suspended') {
       if (actionType === actionTypes.EVAL_EDITOR) {
@@ -321,6 +327,7 @@ function* evalCode(
 }
 
 function* evalRestofCode(code: string, context: Context, location: WorkspaceLocation) {
+  context.runtime.debuggerOn = true;
   const { result, interrupted, paused } = yield race({
     result: call(resume, lastDebuggerResult),
     /**
