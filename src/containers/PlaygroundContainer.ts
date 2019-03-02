@@ -15,6 +15,7 @@ import {
   evalRepl,
   generateLzString,
   playgroundExternalSelect,
+  toggleEditorAutorun,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -27,6 +28,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.playground.sideContentActiveTab,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
+  isEditorAutorun: state.workspaces.playground.isEditorAutorun,
   isRunning: state.workspaces.playground.isRunning,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
@@ -56,7 +58,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
       handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, location)
+        changeSideContentHeight(heightChange, location),
+      handleToggleEditorAutorun: () => toggleEditorAutorun(location)
     },
     dispatch
   );

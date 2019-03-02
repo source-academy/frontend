@@ -25,10 +25,13 @@ export type ControlBarProps = {
   handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
+  handleToggleEditorAutorun?: () => void;
   hasChapterSelect: boolean;
+  hasEditorAutorunButton: boolean;
   hasSaveButton: boolean;
   hasShareButton: boolean;
   hasUnsavedChanges?: boolean;
+  isEditorAutorun?: boolean;
   isRunning: boolean;
   onClickNext?(): any;
   onClickPrevious?(): any;
@@ -127,10 +130,18 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       this.props.hasChapterSelect && this.props.externalLibraryName !== undefined
         ? externalSelect(this.props.externalLibraryName, this.props.handleExternalSelect!)
         : undefined;
+    const startAutorunButton = this.props.hasEditorAutorunButton
+      ? controlButton('Autorun', IconNames.PLAY, this.props.handleToggleEditorAutorun)
+      : undefined;
+    const stopAutorunButton = this.props.hasEditorAutorunButton
+      ? controlButton('Autorun', IconNames.STOP, this.props.handleToggleEditorAutorun)
+      : undefined;
     return (
       <div className="ControlBar_editor pt-button-group">
-        {this.props.isRunning ? stopButton : runButton} {saveButton}
+        {this.props.isEditorAutorun ? undefined : this.props.isRunning ? stopButton : runButton}
+        {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton}
+        {this.props.isEditorAutorun ? stopAutorunButton : startAutorunButton}
       </div>
     );
   }

@@ -10,6 +10,7 @@ const baseProps = {
   isRunning: false,
   activeTab: 0,
   editorWidth: '50%',
+  isEditorAutorun: false,
   sideContentHeight: 40,
   sourceChapter: 2,
   externalLibraryName: ExternalLibraryNames.NONE,
@@ -28,7 +29,8 @@ const baseProps = {
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
-  handleSideContentHeightChange: (h: number) => {}
+  handleSideContentHeightChange: (h: number) => {},
+  handleToggleEditorAutorun: () => {}
 };
 
 const testValueProps: IPlaygroundProps = {
