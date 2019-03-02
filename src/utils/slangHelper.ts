@@ -77,17 +77,15 @@ function cadetAlert(value: any) {
  */
 function visualiseList(list: any) {
   if ((window as any).ListVisualizer) {
-    (window as any).ListVisualizer.draw(list)
+    ;(window as any).ListVisualizer.draw(list)
   } else {
     throw new Error('List visualizer is not enabled')
   }
 }
 
 export function inspectorUpdate(context: Context) {
-// tslint:disable-next-line: no-debugger
-  debugger;
   if ((window as any).Inspector) {
-    (window as any).Inspector.updateContext({context})
+    ;(window as any).Inspector.updateContext({ context })
   } else {
     throw new Error('Inspector not loaded')
   }

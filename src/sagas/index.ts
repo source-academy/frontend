@@ -299,7 +299,7 @@ function* evalCode(
   if (result) {
     if (result.status === 'finished') {
       if (!context.runtime.debuggerOn) {
-        inspectorUpdate(result);
+        inspectorUpdate(result)
       }
       yield put(actions.evalInterpreterSuccess(result.value, location))
     } else if (result.status === 'suspended') {
@@ -327,7 +327,7 @@ function* evalCode(
 }
 
 function* evalRestofCode(code: string, context: Context, location: WorkspaceLocation) {
-  context.runtime.debuggerOn = true;
+  context.runtime.debuggerOn = true
   const { result, interrupted, paused } = yield race({
     result: call(resume, lastDebuggerResult),
     /**
