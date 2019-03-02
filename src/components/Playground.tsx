@@ -94,6 +94,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleReplOutputClear: this.props.handleReplOutputClear,
         handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
         hasChapterSelect: true,
+        hasEditorAutorunButton: true,
         hasSaveButton: false,
         hasShareButton: true,
         isEditorAutorun: this.props.isEditorAutorun,

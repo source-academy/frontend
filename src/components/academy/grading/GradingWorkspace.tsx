@@ -220,6 +220,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       hasChapterSelect: false,
+      hasEditorAutorunButton: false,
       hasSaveButton: false,
       hasShareButton: false,
       isRunning: this.props.isRunning,
