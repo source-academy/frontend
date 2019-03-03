@@ -37,7 +37,6 @@ import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
 import ImportFromFileComponent from '../commons/ImportFromFileComponent'
 import Markdown from '../commons/Markdown'
-import EditingAssessment from '../workspace/EditingAssessment'
 // import { AnyAction } from 'redux';
 
 const DEFAULT_QUESTION_ID: number = 0
@@ -97,6 +96,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
   public componentDidMount(){
     const editingOverviewStr: any = localStorage.getItem('MissionEditingOverviewSA');
     const editingAssessmentStr: any = localStorage.getItem('MissionEditingAssessmentSA');
+    // tslint:disable-next-line:no-console
+    console.log(JSON.parse(editingAssessmentStr));
     if (editingOverviewStr) {
       this.setState({
         ...this.state,
@@ -123,8 +124,6 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           closeDate: overview.closeAt
         }
         return <div> 
-            <EditingAssessment path={["title"]}/>
-            <EditingAssessment path={["longSummary"]}/>
             <AssessmentWorkspaceContainer {...assessmentProps} />
           </div>
       }

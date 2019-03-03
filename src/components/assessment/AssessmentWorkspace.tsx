@@ -9,6 +9,7 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import Markdown from '../commons/Markdown'
 import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
+import EditingAssessmentForm  from '../workspace/EditingAssessmentForm';
 import { SideContentProps } from '../workspace/side-content'
 import ToneMatrix from '../workspace/side-content/ToneMatrix'
 import {
@@ -164,8 +165,9 @@ class AssessmentWorkspace extends React.Component<
         replValue: this.props.replValue
       }
     }
-    return (
+    return ( 
       <div className="WorkspaceParent pt-dark">
+       {this.props.assessmentId === -1 ? <EditingAssessmentForm path={[]}/> : undefined}
         {overlay}
         <Workspace {...workspaceProps} />
       </div>
