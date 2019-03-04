@@ -59,7 +59,7 @@ export class EditingAssessmentForm extends React.Component<IProps, IState> {
     public render() {
         return <div style={divStyle}>
             {(this.state.assessment) 
-                ? this.objToForm(this.state.assessment!.questions, this.props.path.concat(["questions"]), ["library"]) 
+                ? this.objToForm(this.pathToField(0, this.props.path, this.state.assessment), this.props.path, ["library"]) 
                 : undefined}
         </div>;
     }

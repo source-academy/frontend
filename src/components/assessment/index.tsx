@@ -89,7 +89,6 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showOpenedAssessments: true,
       showUpcomingAssessments: true,
       editOverview: '',
-<<<<<<< HEAD
       editingOverview: null,
       editingAssessment: null
     }
@@ -99,16 +98,13 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     const editingOverviewStr: any = localStorage.getItem('MissionEditingOverviewSA');
     const editingAssessmentStr: any = localStorage.getItem('MissionEditingAssessmentSA');
     // tslint:disable-next-line:no-console
-    console.log(JSON.parse(editingAssessmentStr));
+    // console.log(JSON.parse(editingAssessmentStr));
     if (editingOverviewStr) {
       this.setState({
         ...this.state,
-        editingOverview: JSON.parse(editingOverviewStr),
-        editingAssessment: JSON.parse(editingAssessmentStr)
+        editingOverview: retrieveLocalAssessmentOverview(),
+        editingAssessment: JSON.parse(editingAssessmentStr),
       })
-=======
-      editingOverview: retrieveLocalAssessmentOverview()
->>>>>>> 67b9b142ac3a8e312de9af1944d36edfc6345972
     }
   }
 

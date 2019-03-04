@@ -62,7 +62,9 @@ export class EditingAssessment extends React.Component<IProps, IState> {
     private handleEditingAssessment = (e: any) => this.setState({ fieldValue: e.target.value })
 
     private pathToField: any = (i: number, path: any, obj: any) => {
-        return path.length - 1 === i ? obj[path[i]] : this.pathToField(i + 1, path, obj[path[i]])
+        return path.length < i 
+                ? obj 
+                : path.length - 1 === i ? obj[path[i]] : this.pathToField(i + 1, path, obj[path[i]])
     }
 
     private assignFieldToPath: any = (i: number, path: any, obj: any, value: any) => {
