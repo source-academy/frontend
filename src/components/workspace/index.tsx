@@ -1,35 +1,35 @@
-import Resizable, { ResizableProps, ResizeCallback } from 're-resizable'
-import * as React from 'react'
-import { Prompt } from 'react-router'
+import Resizable, { ResizableProps, ResizeCallback } from 're-resizable';
+import * as React from 'react';
+import { Prompt } from 'react-router';
 
-import ControlBar, { ControlBarProps } from './ControlBar'
-import Editor, { IEditorProps } from './Editor'
-import MCQChooser, { IMCQChooserProps } from './MCQChooser'
-import Repl, { IReplProps } from './Repl'
-import SideContent, { SideContentProps } from './side-content'
+import ControlBar, { ControlBarProps } from './ControlBar';
+import Editor, { IEditorProps } from './Editor';
+import MCQChooser, { IMCQChooserProps } from './MCQChooser';
+import Repl, { IReplProps } from './Repl';
+import SideContent, { SideContentProps } from './side-content';
 
 export type WorkspaceProps = {
   // Either editorProps or mcqProps must be provided
-  controlBarProps: ControlBarProps
-  editorProps?: IEditorProps
-  editorWidth: string
-  handleEditorWidthChange: (widthChange: number) => void
-  handleSideContentHeightChange: (height: number) => void
-  mcqProps?: IMCQChooserProps
-  hasUnsavedChanges?: boolean
-  replProps: IReplProps
-  sideContentHeight?: number
-  sideContentProps: SideContentProps
-}
+  controlBarProps: ControlBarProps;
+  editorProps?: IEditorProps;
+  editorWidth: string;
+  handleEditorWidthChange: (widthChange: number) => void;
+  handleSideContentHeightChange: (height: number) => void;
+  mcqProps?: IMCQChooserProps;
+  hasUnsavedChanges?: boolean;
+  replProps: IReplProps;
+  sideContentHeight?: number;
+  sideContentProps: SideContentProps;
+};
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
-  private editorDividerDiv: HTMLDivElement
-  private leftParentResizable: Resizable
-  private maxDividerHeight: number
-  private sideDividerDiv: HTMLDivElement
+  private editorDividerDiv: HTMLDivElement;
+  private leftParentResizable: Resizable;
+  private maxDividerHeight: number;
+  private sideDividerDiv: HTMLDivElement;
 
   public componentDidMount() {
-    this.maxDividerHeight = this.sideDividerDiv.clientHeight
+    this.maxDividerHeight = this.sideDividerDiv.clientHeight;
   }
 
   /**
@@ -61,20 +61,20 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   private controlBarProps() {
     return {
       ...this.props.controlBarProps,
       hasUnsavedChanges: this.props.hasUnsavedChanges
-    }
+    };
   }
 
   private editorResizableProps() {
     const onResizeStop: ResizeCallback = ({}, {}, {}, diff) =>
-      this.props.handleEditorWidthChange(diff.width * 100 / window.innerWidth)
-    const ref = (e: Resizable) => (this.leftParentResizable = e as Resizable)
+      this.props.handleEditorWidthChange(diff.width * 100 / window.innerWidth);
+    const ref = (e: Resizable) => (this.leftParentResizable = e as Resizable);
     return {
       className: 'resize-editor left-parent',
       enable: rightResizeOnly,
@@ -83,12 +83,12 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       onResizeStop,
       ref,
       size: { width: this.props.editorWidth, height: '100%' }
-    } as ResizableProps
+    } as ResizableProps;
   }
 
   private sideContentResizableProps() {
     const onResizeStop: ResizeCallback = ({}, {}, ref, {}) =>
-      this.props.handleSideContentHeightChange(ref.clientHeight)
+      this.props.handleSideContentHeightChange(ref.clientHeight);
     return {
       bounds: 'parent',
       className: 'resize-side-content',
@@ -103,7 +103,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
               height: this.props.sideContentHeight,
               width: '100%'
             }
-    } as ResizableProps
+    } as ResizableProps;
   }
 
   /**
@@ -112,22 +112,22 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * in the case of < 5%.
    */
   private toggleEditorDividerDisplay: ResizeCallback = ({}, {}, ref) => {
-    const leftThreshold = 2
-    const rightThreshold = 95
-    const editorWidthPercentage = (ref as HTMLDivElement).clientWidth / window.innerWidth * 100
+    const leftThreshold = 2;
+    const rightThreshold = 95;
+    const editorWidthPercentage = (ref as HTMLDivElement).clientWidth / window.innerWidth * 100;
     // update resizable size
     if (editorWidthPercentage > rightThreshold) {
-      this.leftParentResizable.updateSize({ width: '100%', height: '100%' })
+      this.leftParentResizable.updateSize({ width: '100%', height: '100%' });
     } else if (editorWidthPercentage < leftThreshold) {
-      this.leftParentResizable.updateSize({ width: '0%', height: '100%' })
+      this.leftParentResizable.updateSize({ width: '0%', height: '100%' });
     }
     // Update divider margin
     if (editorWidthPercentage < leftThreshold) {
-      this.editorDividerDiv.style.marginRight = '0.6rem'
+      this.editorDividerDiv.style.marginRight = '0.6rem';
     } else {
-      this.editorDividerDiv.style.marginRight = '0'
+      this.editorDividerDiv.style.marginRight = '0';
     }
-  }
+  };
 
   /**
    * Hides the side-content-divider div when side-content is resized downwards
@@ -137,15 +137,15 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     this.maxDividerHeight =
       this.sideDividerDiv.clientHeight > this.maxDividerHeight
         ? this.sideDividerDiv.clientHeight
-        : this.maxDividerHeight
-    const resizableHeight = (ref as HTMLDivElement).clientHeight
-    const rightParentHeight = (ref.parentNode as HTMLDivElement).clientHeight
+        : this.maxDividerHeight;
+    const resizableHeight = (ref as HTMLDivElement).clientHeight;
+    const rightParentHeight = (ref.parentNode as HTMLDivElement).clientHeight;
     if (resizableHeight + this.maxDividerHeight + 2 > rightParentHeight) {
-      this.sideDividerDiv.style.display = 'none'
+      this.sideDividerDiv.style.display = 'none';
     } else {
-      this.sideDividerDiv.style.display = 'initial'
+      this.sideDividerDiv.style.display = 'initial';
     }
-  }
+  };
 
   /**
    * Pre-condition: `this.props.editorProps`
@@ -153,11 +153,11 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    */
   private createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.editorProps) {
-      return <Editor {...props.editorProps} />
+      return <Editor {...props.editorProps} />;
     } else {
-      return <MCQChooser {...props.mcqProps!} />
+      return <MCQChooser {...props.mcqProps!} />;
     }
-  }
+  };
 }
 
 const rightResizeOnly = {
@@ -169,7 +169,7 @@ const rightResizeOnly = {
   bottomRight: false,
   bottomLeft: false,
   topLeft: false
-}
+};
 
 const bottomResizeOnly = {
   top: false,
@@ -180,6 +180,6 @@ const bottomResizeOnly = {
   bottomRight: false,
   bottomLeft: false,
   topLeft: false
-}
+};
 
-export default Workspace
+export default Workspace;
