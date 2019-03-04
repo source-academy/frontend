@@ -111,25 +111,18 @@ function get_duration(sourcesound) {
   return tail(sourcesound)
 }
 
-function is_sound(sound) {
-  return is_pair(sound) && head(sound) === 'sound'
-}
+var _playing = false;
+var _audio = null;
 
-var _playing = false
-var _audio = null
-function play(sound) {
-  if (_playing) return
-
-  if (!is_sound(sound)) {
-    throw new Error('play() expects sound as input, did you forget to sourcesound_to_sound()?')
-  }
-
-  var data = tail(sound)
-
-  _audio = raw_to_audio(data)
-  _audio.addEventListener('ended', stop)
-  _audio.play()
-  _playing = true
+function play(sourcesound) {
+    var duration = get_duration(sourcesound);
+    var wave = get_wave(sourcesound);
+    var data = discretize(wave, duration);
+    if (_playing) return;
+    _audio = raw_to_audio(data);
+    _audio.addEventListener('ended', stop);
+    _audio.play();
+    _playing = true;
 }
 
 function stop() {
@@ -151,92 +144,44 @@ function cut_sourcesound(sourcesound, duration) {
   }, duration)
 }
 
-function cut(sound, duration) {
-  var data = tail(sound)
-  var ret = []
-  for (var i = 0; i < FS * duration; i++) {
-    ret[i] = data[i]
-  }
-  return ret
-}
-
 function autocut_sourcesound(sourcesound) {
   return cut_sourcesound(sourcesound, get_duration(sourcesound))
 }
 
-function sourcesound_to_sound(sourcesound) {
-  var duration = get_duration(sourcesound)
-  var wave = get_wave(sourcesound)
-  var data = discretize(wave, duration)
-  var sound = pair('sound', data)
-  sound.toString = function() {
-    return '[object Sound]'
-  }
 
-  return sound
+// Concats two sourcesounds (not intended for student use, only to implement consecutively)
+function consec_two(ss1, ss2) {
+    wave1 = head(ss1);
+    wave2 = head(ss2);
+    dur1 = tail(ss1);
+    dur2 = tail(ss2);
+    return pair(t => t < dur1 ? wave1(t) : wave2(t) , dur1 + dur2);
 }
 
-function sound_to_sourcesound(sound) {
-  if (!is_sound(sound)) {
-    throw new Error(
-      'sound_to_sourcesound() expects sound as input, did you forget to sourcesound_to_sound()?'
-    )
-  }
 
-  var data = tail(sound)
-  var duration = data.length / FS
-
-  return autocut_sourcesound(
-    make_sourcesound(function(t) {
-      var index = t * FS
-      var lowerIndex = Math.floor(index)
-      var upperIndex = lowerIndex + 1
-      var ratio = index - lowerIndex
-      var upper = data[upperIndex] ? data[upperIndex] : 0
-      var lower = data[lowerIndex] ? data[lowerIndex] : 0
-      return lower * (1 - ratio) + upper * ratio
-    }, duration)
-  )
+// Concats a list of sourcesounds
+function consecutively(list_of_sourcesounds) {
+    return accumulate(consec_two, silence_sourcesound(0), list_of_sourcesounds);
 }
 
-function consecutively(list_of_sounds) {
-  return pair(
-    'sound',
-    accumulate(
-      function(x, data) {
-        return x.concat(data)
-      },
-      [],
-      map(tail, list_of_sounds)
-    )
-  )
-}
-
-function simultaneously(list_of_sounds) {
-  // There is likely a bug in Chrome 37 for OS X 10.9
-  // That in the second for loop, chrome will throw
-  // random "illegal access" exception, which seems to
-  // to away when a breakpoint, even unreachable, is set.
-  if (false) {
-    debugger
-  }
-
-  var vec = list_to_vector(map(tail, list_of_sounds))
-  var max_length = 0
-  var i
-  var sound = []
-  for (i = 0; i < vec.length; i++) {
-    max_length = Math.max(max_length, vec[i].length)
-  }
-  for (i = 0; i < max_length; i++) {
-    sound[i] = 0
-    for (var j = 0; j < vec.length; j++) {
-      var a = vec[j][i]
-      sound[i] += a ? a : 0
+// Mushes a list of sourcesounds together
+function simultaneously(list_of_sourcesounds) {
+    function musher(ss1, ss2) {
+        wave1 = head(ss1);
+        wave2 = head(ss2);
+        dur1 = tail(ss1);
+        dur2 = tail(ss2);
+        // new_wave assumes sound discipline (ie, wave(t) = 0 after t > dur)
+        new_wave = t => wave1(t) + wave2(t);
+        // new_dur is higher of the two dur
+        new_dur = dur1 < dur2 ? dur2 : dur1;
+        return pair(new_wave, new_dur);
     }
-    sound[i] /= vec.length
-  }
-  return pair('sound', sound)
+
+    mushed_sounds = accumulate(musher, silence_sourcesound(0), list_of_sourcesounds);
+    normalised_wave = t => (head(mushed_sounds))(t) / length(list_of_sourcesounds);
+    highest_duration = tail(mushed_sounds);
+    return pair(normalised_wave, highest_duration);
 }
 
 function noise_sourcesound(duration) {
@@ -247,20 +192,12 @@ function noise_sourcesound(duration) {
   )
 }
 
-function noise(duration) {
-  return sourcesound_to_sound(noise_sourcesound(duration))
-}
-
 function sine_sourcesound(freq, duration) {
   return autocut_sourcesound(
     make_sourcesound(function(t) {
       return Math.sin(2 * Math.PI * t * freq)
     }, duration)
   )
-}
-
-function sine_sound(freq, duration) {
-  return sourcesound_to_sound(sine_sourcesound(freq, duration))
 }
 
 function constant_sourcesound(constant, duration) {
@@ -279,29 +216,12 @@ function high_sourcesound(duration) {
   return constant_sourcesound(1, duration)
 }
 
-function silence(duration) {
-  return sourcesound_to_sound(silence_sourcesound(duration))
-}
-
-function high(duration) {
-  return sourcesound_to_sound(high_sourcesound(duration))
-}
-
 function invert_sourcesound(sourcesound) {
   var wave = get_wave(sourcesound)
   var duration = get_duration(sourcesound)
   return make_sourcesound(function(t) {
     return -wave(t)
   }, duration)
-}
-
-function invert(sound) {
-  var ret = []
-  var data = tail(sound)
-  for (var i = 0; i < data.length; i++) {
-    ret[i] = -data[i]
-  }
-  return ret
 }
 
 function clamp_sourcesound(sourcesound) {
@@ -317,21 +237,6 @@ function clamp_sourcesound(sourcesound) {
       return a
     }
   }, duration)
-}
-
-function clamp(sound) {
-  var ret = []
-  var data = tail(sound)
-  for (var i = 0; i < data.length; i++) {
-    if (ret[i] > 1) {
-      return 1
-    } else if (ret[i] < -1) {
-      return -1
-    } else {
-      return ret[i]
-    }
-  }
-  return ret
 }
 
 // for mission 14
@@ -420,10 +325,6 @@ function square_sourcesound(freq, duration) {
   )
 }
 
-function square_sound(freq, duration) {
-  return sourcesound_to_sound(square_sourcesound(freq, duration))
-}
-
 function triangle_sourcesound(freq, duration) {
   function fourier_expansion_triangle(level, t) {
     var answer = 0
@@ -448,10 +349,6 @@ function triangle_sourcesound(freq, duration) {
   )
 }
 
-function triangle_sound(freq, duration) {
-  return sourcesound_to_sound(triangle_sourcesound(freq, duration))
-}
-
 function sawtooth_sourcesound(freq, duration) {
   function fourier_expansion_sawtooth(level, t) {
     var answer = 0
@@ -474,17 +371,10 @@ function sawtooth_sourcesound(freq, duration) {
   )
 }
 
-function sawtooth_sound(freq, duration) {
-  return sourcesound_to_sound(sawtooth_sourcesound(freq, duration))
-}
-
-function play_concurrently(sound) {
-  if (!is_sound(sound)) {
-    throw new Error('play() expects sound as input, did you forget to sourcesound_to_sound()?')
-  }
-
-  var data = tail(sound)
-
-  var audio = raw_to_audio(data)
-  audio.play()
+function play_concurrently(sourcesound) {
+    var duration = get_duration(sourcesound);
+    var wave = get_wave(sourcesound);
+    var data = discretize(wave, duration);
+    var audio = raw_to_audio(data);
+    audio.play();
 }
