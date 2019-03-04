@@ -23,6 +23,12 @@ to:\
 
 ## For Testing of js-slang
 
+### Alpha version
+
+Use branch js-slang-alpha-preview to see the new changes (native and verbose errors).
+
+### To run local copy of js-slang
+
 1. Follow the instructions on the js-slang repository to transpile your own copy
 2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
 
