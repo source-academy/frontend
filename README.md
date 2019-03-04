@@ -23,8 +23,8 @@ to:\
 
 ## For Testing of js-slang
 
-2. Follow the instructions on the js-slang repository to transpile your own copy
-3. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
+1. Follow the instructions on the js-slang repository to transpile your own copy
+2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
 
 `"js-slang": "file:path/to/js-slang",`
 
