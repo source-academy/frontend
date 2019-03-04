@@ -702,7 +702,7 @@
       const existing = []; 
       
       function helper(xs) {   
-          if ((!is_pair(xs) && !is_array(xs)) || is_empty_list(xs)) {
+          if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
               return 0;
           } else {
               const leftHeight = existing.includes(xs[0])
@@ -735,7 +735,7 @@
       const existing = [];
 
       function helper(xs) {   
-          if ((!is_pair(xs) && !is_array(xs)) || is_empty_list(xs)) {
+          if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
               return 0;
           } else {
               const leftHeight = existing.includes(xs[0])
