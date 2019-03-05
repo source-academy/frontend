@@ -19,7 +19,6 @@ export interface IEditorProps {
   handleEditorEval: () => void
   handleEditorValueChange: (newCode: string) => void
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void
-  editingQuestionPath: any
 }
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
@@ -64,9 +63,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             width="100%"
           />
         </div>
-          {/* { this.props.editingQuestionPath === null 
-            ? undefined 
-            : <EditingAssessment path={this.props.editingQuestionPath.concat(["content"])}/> } */}
       </HotKeys>
     )
   }

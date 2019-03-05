@@ -9,7 +9,7 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import Markdown from '../commons/Markdown'
 import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
-// import EditingAssessmentForm  from '../workspace/EditingAssessmentForm';
+import EditingAssessmentForm  from '../workspace/EditingAssessmentForm';
 import { SideContentProps } from '../workspace/side-content'
 import ToneMatrix from '../workspace/side-content/ToneMatrix'
 import {
@@ -141,7 +141,6 @@ class AssessmentWorkspace extends React.Component<
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-              editingQuestionPath: (this.props.assessmentId === -1) ? ["questions", questionId] : null,
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -152,7 +151,6 @@ class AssessmentWorkspace extends React.Component<
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
           this.props.handleSave(this.props.assessment!.questions[questionId].id, option),
-        editingMCQPath: (this.props.assessmentId === -1) ? ["questions", questionId] : null,
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -167,9 +165,9 @@ class AssessmentWorkspace extends React.Component<
     }
     return ( 
       <div className="WorkspaceParent pt-dark">
-       {/* {this.props.assessmentId === -1 
+       {this.props.assessmentId === -1 
        ? <EditingAssessmentForm path={["questions", this.props.questionId]}/> 
-       : undefined} */}
+       : undefined}
         {overlay}
         <Workspace {...workspaceProps} />
       </div>

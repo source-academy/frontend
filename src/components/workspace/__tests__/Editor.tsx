@@ -9,7 +9,6 @@ test('Editor renders correctly', () => {
     editorValue: '',
     handleEditorEval: () => {},
     handleEditorValueChange: newCode => {},
-    editingQuestionPath: null
   }
   const app = <Editor {...props} />
   const tree = shallow(app)

@@ -102,7 +102,6 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         editorValue: this.props.editorValue,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
-        editingQuestionPath: null,
       },
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,

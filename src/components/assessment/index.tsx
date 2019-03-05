@@ -29,7 +29,7 @@ import {
   AssessmentCategory,
   AssessmentStatuses,
   GradingStatuses,
-  IAssessment,
+  // IAssessment,
   IAssessmentOverview,
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
@@ -74,7 +74,6 @@ type State = {
   showUpcomingAssessments: boolean
   editOverview: string
   editingOverview: IAssessmentOverview | null;
-  editingAssessment: IAssessment | null;
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -90,20 +89,15 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showUpcomingAssessments: true,
       editOverview: '',
       editingOverview: null,
-      editingAssessment: null
     }
   }
 
   public componentDidMount(){
     const editingOverviewStr: any = localStorage.getItem('MissionEditingOverviewSA');
-    const editingAssessmentStr: any = localStorage.getItem('MissionEditingAssessmentSA');
-    // tslint:disable-next-line:no-console
-    // console.log(JSON.parse(editingAssessmentStr));
     if (editingOverviewStr) {
       this.setState({
         ...this.state,
         editingOverview: retrieveLocalAssessmentOverview(),
-        editingAssessment: JSON.parse(editingAssessmentStr),
       })
     }
   }
