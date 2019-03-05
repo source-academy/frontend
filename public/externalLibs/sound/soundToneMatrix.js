@@ -7,7 +7,11 @@
 
   Modifier:
   v2 (2016/2017) Xiao Pu - September 2016 - fit source academy IDE
+
+  Modifier:
+  v3 (2018/2019) Uriel Tan, Iskandar - April 2019 - Refactor to remove 'sound'
 */
+
 
 var $tone_matrix // canvas container for tone matrix
 
@@ -454,10 +458,6 @@ function square_sourcesound(freq, duration) {
   )
 }
 
-function square_sound(freq, duration) {
-  return sourcesound_to_sound(square_sourcesound(freq, duration))
-}
-
 function triangle_sourcesound(freq, duration) {
   function fourier_expansion_triangle(level, t) {
     var answer = 0
@@ -482,10 +482,6 @@ function triangle_sourcesound(freq, duration) {
   )
 }
 
-function triangle_sound(freq, duration) {
-  return sourcesound_to_sound(triangle_sourcesound(freq, duration))
-}
-
 function sawtooth_sourcesound(freq, duration) {
   function fourier_expansion_sawtooth(level, t) {
     var answer = 0
@@ -508,10 +504,6 @@ function sawtooth_sourcesound(freq, duration) {
   )
 }
 
-function sawtooth_sound(freq, duration) {
-  return sourcesound_to_sound(sawtooth_sourcesound(freq, duration))
-}
-
 function exponential_decay(decay_period) {
   return function(t) {
     if (t > decay_period || t < 0) {
@@ -525,33 +517,28 @@ function exponential_decay(decay_period) {
 }
 
 function adsr(attack_time, decay_time, sustain_level, release_time) {
-  return function(sound) {
-    var sourcesound = sound_to_sourcesound(sound)
-    var wave = get_wave(sourcesound)
-    var duration = get_duration(sourcesound)
-    return sourcesound_to_sound(
-      make_sourcesound(function(x) {
-        if (x < attack_time) {
-          return wave(x) * (x / attack_time)
-        } else if (x < attack_time + decay_time) {
-          return (
-            (exponential_decay(1 - sustain_level, decay_time)(x - attack_time) + sustain_level) *
-            wave(x)
-          )
-        } else if (x < duration - release_time) {
-          return wave(x) * sustain_level
-        } else if (x <= duration) {
-          return (
-            wave(x) * sustain_level * exponential_decay(release_time)(x - (duration - release_time))
-          )
-        } else {
-          return 0
-        }
-      }, duration)
-    )
-  }
+  return function (sourcesound) {
+    var wave = get_wave(sourcesound);
+    var duration = get_duration(sourcesound);
+    return make_sourcesound(function (x) {
+      if (x < attack_time) {
+        return wave(x) * (x / attack_time);
+      } else if (x < attack_time + decay_time) {
+        return ((exponential_decay(1 - sustain_level, decay_time))(x - attack_time) + sustain_level) * wave(x);
+      } else if (x < duration - release_time) {
+        return wave(x) * sustain_level;
+      } else if (x <= duration) {
+        return wave(x) * sustain_level * (exponential_decay(release_time))(x - (duration - release_time));
+      } else {
+        return 0;
+      }
+    }, duration);
+  };
 }
 
+//\/\/\/\//\/\/\/\/\/\\/\/\//
+
+// waveform is a function that accepts freq, dur and returns sourcesound
 function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
   function zip(lst, n) {
     if (is_null(lst)) {
@@ -560,22 +547,35 @@ function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
       return pair(pair(n, head(lst)), zip(tail(lst), n + 1))
     }
   }
-
-  return simultaneously(
-    accumulate(
-      function(x, y) {
-        return pair(tail(x)(waveform(base_frequency * head(x), duration)), y)
-      },
-      null,
-      zip(list_of_envelope, 1)
-    )
-  )
+  return simultaneously(accumulate(
+    function (x, y) {
+      return pair((tail(x))
+         waveform(base_frequency * head(x), duration))
+         , y);
+  }
+  , []
+  , zip(list_of_envelope, 1)));
 }
+
+
+// function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
+//   function zip(lst, n) {
+//     if (is_empty_list(lst)) {
+//       return lst;
+//     } else {
+//       return pair(pair(n, head(lst)), zip(tail(lst), n + 1));
+//     }
+//   }
+
+//   return simultaneously(accumulate(function (x, y) {
+//     return pair((tail(x))(waveform(base_frequency * head(x), duration)), y);
+//   }, [], zip(list_of_envelope, 1)));
+// }
 
 // instruments for students
 function trombone(note, duration) {
   return stacking_adsr(
-    square_sound,
+    square_sourcesound,
     midi_note_to_frequency(note),
     duration,
     list(adsr(0.4, 0, 1, 0), adsr(0.6472, 1.2, 0, 0))
@@ -583,17 +583,15 @@ function trombone(note, duration) {
 }
 
 function piano(note, duration) {
-  return stacking_adsr(
-    triangle_sound,
-    midi_note_to_frequency(note),
-    duration,
-    list(adsr(0, 1.03, 0, 0), adsr(0, 0.64, 0, 0), adsr(0, 0.4, 0, 0))
-  )
+  return stacking_adsr(triangle_sourcesound, midi_note_to_frequency(note), duration,
+    list(adsr(0, 1.03, 0, 0),
+      adsr(0, 0.64, 0, 0),
+      adsr(0, 0.4, 0, 0)));
 }
 
 function bell(note, duration) {
   return stacking_adsr(
-    square_sound,
+    square_sourcesound,
     midi_note_to_frequency(note),
     duration,
     list(adsr(0, 1.2, 0, 0), adsr(0, 1.3236, 0, 0), adsr(0, 1.5236, 0, 0), adsr(0, 1.8142, 0, 0))
@@ -602,7 +600,7 @@ function bell(note, duration) {
 
 function violin(note, duration) {
   return stacking_adsr(
-    sawtooth_sound,
+    sawtooth_sourcesound,
     midi_note_to_frequency(note),
     duration,
     list(adsr(0.7, 0, 1, 0.3), adsr(0.7, 0, 1, 0.3), adsr(0.9, 0, 1, 0.3), adsr(0.9, 0, 1, 0.3))
@@ -611,7 +609,7 @@ function violin(note, duration) {
 
 function cello(note, duration) {
   return stacking_adsr(
-    square_sound,
+    square_sourcesound,
     midi_note_to_frequency(note),
     duration,
     list(adsr(0.1, 0, 1, 0.2), adsr(0.1, 0, 1, 0.3), adsr(0, 0, 0.2, 0.3))
