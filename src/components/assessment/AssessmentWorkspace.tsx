@@ -68,12 +68,13 @@ export type DispatchProps = {
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean }
+  { showOverlay: boolean, isEditing: boolean }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props)
     this.state = {
-      showOverlay: false
+      showOverlay: false,
+      isEditing: false
     }
   }
 
@@ -165,11 +166,14 @@ class AssessmentWorkspace extends React.Component<
     }
     return ( 
       <div className="WorkspaceParent pt-dark">
-       {this.props.assessmentId === -1 
+      <button onClick={this.toggleEdit}>Toggle Editing Mode</button>
+       {this.props.assessmentId === -1 && this.state.isEditing
        ? <EditingAssessmentForm path={["questions", this.props.questionId]}/> 
        : undefined}
         {overlay}
-        <Workspace {...workspaceProps} />
+        {this.props.assessmentId !== -1 || !this.state.isEditing 
+        ? <Workspace {...workspaceProps} />
+        : undefined}
       </div>
     )
   }
@@ -208,6 +212,8 @@ class AssessmentWorkspace extends React.Component<
       }
     }
   }
+
+  private toggleEdit: (e: any) => void = (e: any) => { this.setState((state: any, props: any) => ({isEditing: !state.isEditing})); }
 
   /** Pre-condition: IAssessment has been loaded */
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
