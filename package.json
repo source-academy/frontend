@@ -64,7 +64,7 @@
     "redux-mock-store": "^1.5.1",
     "redux-saga": "^0.15.6",
     "showdown": "^1.8.7",
-    "typesafe-actions": "^3.0.0",
+    "typesafe-actions": "^3.2.1",
     "utility-types": "^2.0.0"
   },
   "devDependencies": {
