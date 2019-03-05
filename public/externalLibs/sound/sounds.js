@@ -151,11 +151,14 @@ function autocut_sourcesound(sourcesound) {
 
 // Concats two sourcesounds (not intended for student use, only to implement consecutively)
 function consec_two(ss1, ss2) {
-    wave1 = head(ss1);
-    wave2 = head(ss2);
-    dur1 = tail(ss1);
-    dur2 = tail(ss2);
-    return pair(t => t < dur1 ? wave1(t) : wave2(t) , dur1 + dur2);
+    var wave1 = head(ss1);
+    var wave2 = head(ss2);
+    var dur1 = tail(ss1);
+    var dur2 = tail(ss2);
+    var new_wave = function(t) {
+        return t < dur1 ? wave1(t) : wave2(t-dur1);
+    }
+    return pair(new_wave, dur1 + dur2);
 }
 
 
@@ -167,20 +170,24 @@ function consecutively(list_of_sourcesounds) {
 // Mushes a list of sourcesounds together
 function simultaneously(list_of_sourcesounds) {
     function musher(ss1, ss2) {
-        wave1 = head(ss1);
-        wave2 = head(ss2);
-        dur1 = tail(ss1);
-        dur2 = tail(ss2);
+        var wave1 = head(ss1);
+        var wave2 = head(ss2);
+        var dur1 = tail(ss1);
+        var dur2 = tail(ss2);
         // new_wave assumes sound discipline (ie, wave(t) = 0 after t > dur)
-        new_wave = t => wave1(t) + wave2(t);
+        var new_wave = function(t) {
+            return wave1(t) + wave2(t);
+        }
         // new_dur is higher of the two dur
-        new_dur = dur1 < dur2 ? dur2 : dur1;
+        var new_dur = dur1 < dur2 ? dur2 : dur1;
         return pair(new_wave, new_dur);
     }
 
-    mushed_sounds = accumulate(musher, silence_sourcesound(0), list_of_sourcesounds);
-    normalised_wave = t => (head(mushed_sounds))(t) / length(list_of_sourcesounds);
-    highest_duration = tail(mushed_sounds);
+    var mushed_sounds = accumulate(musher, silence_sourcesound(0), list_of_sourcesounds);
+    var normalised_wave =  function(t) {
+       return (head(mushed_sounds))(t) / length(list_of_sourcesounds);
+    }  
+    var highest_duration = tail(mushed_sounds);
     return pair(normalised_wave, highest_duration);
 }
 
