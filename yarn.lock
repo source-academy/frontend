@@ -5192,10 +5192,10 @@ js-base64@^2.1.9:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.3.tgz#2e545ec2b0f2957f41356510205214e98fad6582"
 
-js-slang@0.2.1-alpha.2:
-  version "0.2.1-alpha.2"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.2.1-alpha.2.tgz#0c69db6049907dea67f899586b3d0214dfada6e1"
-  integrity sha512-BhC0bi/P8mecqHD3nWu9i3F2QHQVpe6lzcNm/yuHdUkdh8l8+flrVUOADYFWBpk173LGqmknym/ifZ0IPzFMyA==
+js-slang@0.2.1-alpha.3:
+  version "0.2.1-alpha.3"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.2.1-alpha.3.tgz#8e93828c67e0eb729ce229f66cadc5e081730541"
+  integrity sha512-iLEhlsrW1kbZ1OZ0rlVrhrFSsAacLAjqSqLuMqO+bAbdbZq2xc1wtQk+/xrj1hnRFRJhPqZH5qQetQm8vkQqFg==
   dependencies:
     "@types/estree" "0.0.39"
     acorn "^6.0.5"
