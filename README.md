@@ -23,6 +23,18 @@ to:\
 
 ## For Testing of js-slang
 
+### Alpha version
+
+Use branch js-slang-alpha-preview to see the new changes (native and verbose errors).
+
+Have `"enable verbose";` as the first line of your program to activate verbose messages.
+
+Edit https://github.com/source-academy/cadet-frontend/blob/57ba44f6b55c214d0f20339cd45bece57f24f48c/src/sagas/index.ts#L260
+
+to toggle native.
+
+### To run local copy of js-slang
+
 1. Follow the instructions on the js-slang repository to transpile your own copy
 2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
 
