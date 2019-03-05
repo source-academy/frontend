@@ -69,7 +69,7 @@
   },
   "devDependencies": {
     "@blueprintjs/core": "^2.1.1",
-    "@blueprintjs/icons": "^2.2.1",
+    "@blueprintjs/icons": "^3.6.0",
     "@blueprintjs/select": "^2.0.1",
     "@types/acorn": "^4.0.3",
     "@types/classnames": "^2.2.3",
