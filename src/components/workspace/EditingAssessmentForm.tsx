@@ -33,7 +33,7 @@ interface IState {
 const divStyle = {
     "display": "flex",
     "flex-direction": "column",
-    "max-width": "70%",
+    "width": "100%",
     "overflow": 'auto' as 'auto',
     "background": "#2D3E50",
     "margin": "auto",
