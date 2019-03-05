@@ -1,33 +1,33 @@
-import * as React from 'react'
-import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
+import * as React from 'react';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
-import Grading from '../../containers/academy/grading'
-import AssessmentContainer from '../../containers/assessment'
-import Game from '../../containers/GameContainer'
-import { isAcademyRe } from '../../reducers/session'
-import { Role } from '../../reducers/states'
-import { HistoryHelper } from '../../utils/history'
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
-import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape'
-import AcademyNavigationBar from './NavigationBar'
+import Grading from '../../containers/academy/grading';
+import AssessmentContainer from '../../containers/assessment';
+import Game from '../../containers/GameContainer';
+import { isAcademyRe } from '../../reducers/session';
+import { Role } from '../../reducers/states';
+import { HistoryHelper } from '../../utils/history';
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape';
+import AcademyNavigationBar from './NavigationBar';
 
 interface IAcademyProps extends IOwnProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IOwnProps {
-  accessToken?: string
-  role: Role
+  accessToken?: string;
+  role: Role;
 }
 
 export interface IStateProps {
-  historyHelper: HistoryHelper
+  historyHelper: HistoryHelper;
 }
 
 const assessmentRenderFactory = (cat: AssessmentCategory) => (
   routerProps: RouteComponentProps<any>
-) => <AssessmentContainer assessmentCategory={cat} />
+) => <AssessmentContainer assessmentCategory={cat} />;
 
-const assessmentRegExp = ':assessmentId(\\d+)?/:questionId(\\d+)?'
-const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?'
+const assessmentRegExp = ':assessmentId(\\d+)?/:questionId(\\d+)?';
+const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?';
 
 export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
@@ -61,7 +61,7 @@ export const Academy: React.SFC<IAcademyProps> = props => (
       <Route component={redirectTo404} />
     </Switch>
   </div>
-)
+);
 
 /**
  * 1. If user is in /academy.*, redirect to game
@@ -69,17 +69,17 @@ export const Academy: React.SFC<IAcademyProps> = props => (
  * See src/utils/history.ts for more details
  */
 const dynamicRedirect = (props: IStateProps) => {
-  const clickedFrom = props.historyHelper.lastGeneralLocations[0]
-  const lastAcademy = props.historyHelper.lastAcademyLocations[0]
+  const clickedFrom = props.historyHelper.lastGeneralLocations[0];
+  const lastAcademy = props.historyHelper.lastAcademyLocations[0];
   if (clickedFrom != null && isAcademyRe.exec(clickedFrom!) == null && lastAcademy != null) {
-    return () => <Redirect to={lastAcademy!} />
+    return () => <Redirect to={lastAcademy!} />;
   } else {
-    return redirectToGame
+    return redirectToGame;
   }
-}
+};
 
-const redirectTo404 = () => <Redirect to="/404" />
+const redirectTo404 = () => <Redirect to="/404" />;
 
-const redirectToGame = () => <Redirect to="/academy/game" />
+const redirectToGame = () => <Redirect to="/academy/game" />;
 
-export default Academy
+export default Academy;

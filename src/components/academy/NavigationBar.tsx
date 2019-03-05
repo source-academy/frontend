@@ -1,17 +1,17 @@
-import { Alignment, Icon, Navbar, NavbarGroup } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Alignment, Icon, Navbar, NavbarGroup } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 
-import { Role } from '../../reducers/states'
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
-import { AssessmentCategories } from '../assessment/assessmentShape'
+import { Role } from '../../reducers/states';
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import { AssessmentCategories } from '../assessment/assessmentShape';
 
-type NavigationBarProps = OwnProps
+type NavigationBarProps = OwnProps;
 
 type OwnProps = {
-  role: Role
-}
+  role: Role;
+};
 
 const NavigationBar: React.SFC<NavigationBarProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
@@ -65,6 +65,6 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       </NavbarGroup>
     ) : null}
   </Navbar>
-)
+);
 
-export default NavigationBar
+export default NavigationBar;

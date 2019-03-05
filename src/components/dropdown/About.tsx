@@ -1,13 +1,13 @@
-import { Classes, Dialog, Tab, Tabs } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
+import { Classes, Dialog, Tab, Tabs } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
 
-import { LINKS } from '../../utils/constants'
+import { LINKS } from '../../utils/constants';
 
 type DialogProps = {
-  isOpen: boolean
-  onClose: () => void
-}
+  isOpen: boolean;
+  onClose: () => void;
+};
 
 const About: React.SFC<DialogProps> = props => (
   <Dialog
@@ -29,7 +29,7 @@ const About: React.SFC<DialogProps> = props => (
       </Tabs>
     </div>
   </Dialog>
-)
+);
 
 const panelAbout = (
   <>
@@ -43,9 +43,9 @@ const panelAbout = (
       <a href={LINKS.GITHUB_ORG}>Source Academy</a>.
     </p>
   </>
-)
+);
 
-const dot = <span className="dot">&bull;</span>
+const dot = <span className="dot">&bull;</span>;
 
 const panelDevs = () => (
   <div className="devs">
@@ -82,6 +82,6 @@ const panelDevs = () => (
       Ng Tse Pei {dot} Joey Yeo {dot} Tan Yu Wei
     </p>
   </div>
-)
+);
 
-export default About
+export default About;

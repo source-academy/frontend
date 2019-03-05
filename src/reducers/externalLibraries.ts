@@ -1,4 +1,7 @@
-import { ExternalLibraryName, ExternalLibraryNames } from '../components/assessment/assessmentShape'
+import {
+  ExternalLibraryName,
+  ExternalLibraryNames
+} from '../components/assessment/assessmentShape';
 
 /**
  * Defines all the external symbols for playground, i.e full access to runes functionality.
@@ -44,7 +47,7 @@ const TwoDRunesExternals = [
   'heart_bb',
   'pentagram_bb',
   'ribbon_bb'
-]
+];
 
 /**
  * Defines which external libraries are available for usage, and what
@@ -175,6 +178,6 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'stream_ref'
     ]
   ]
-]
+];
 
-export const externalLibraries: Map<string, string[]> = new Map(libEntries)
+export const externalLibraries: Map<string, string[]> = new Map(libEntries);

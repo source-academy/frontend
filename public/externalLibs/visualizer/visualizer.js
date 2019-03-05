@@ -3,15 +3,11 @@
    * Setup Stage
    */
   var stage
+  var stage
   var container = document.createElement('div')
   container.id = 'list-visualizer-container'
   container.hidden = true
   document.body.appendChild(container)
-  stage = new Kinetic.Stage({
-    width: 1000,
-    height: 1000,
-    container: 'list-visualizer-container'
-  })
 
   /**
    *  Converts a list, or a pair, to a tree object. Wrapper function.
@@ -698,6 +694,71 @@
     return this.image
   }
 
+  /**
+   * Find the height of a drawing (in number of "rows" of pairs)
+   */ 
+  function findListHeight(xs) {
+      // Store pairs/arrays that were traversed previously so as to not double-count their height.
+      const existing = []; 
+      
+      function helper(xs) {   
+          if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
+              return 0;
+          } else {
+              const leftHeight = existing.includes(xs[0])
+                                 ? 0
+                                 : helper(xs[0]);
+              if (!existing.includes(xs[0]) 
+                  && (is_pair(xs[0]) || is_array(xs[0]))) {
+                  existing.push(xs[0]);
+              }
+              const rightHeight = existing.includes(xs[1])
+                                 ? 0
+                                 : helper(xs[1]);
+              if (!existing.includes(xs[1])
+                  && (is_pair(xs[1]) || is_array(xs[1]))) {
+                  existing.push(xs[1]);
+              }
+              return leftHeight > rightHeight
+                      ? 1 + leftHeight
+                      : 1 + rightHeight;
+          }
+      }
+      
+      return helper(xs, []);
+  }
+  
+  /**
+   * Find the width of a drawing (in number of "columns" of pairs)
+   */ 
+  function findListWidth(xs) {
+      const existing = [];
+
+      function helper(xs) {   
+          if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
+              return 0;
+          } else {
+              const leftHeight = existing.includes(xs[0])
+                                 ? 0
+                                 : helper(xs[0]);
+              if (!existing.includes(xs[0]) 
+                  && (is_pair(xs[0]) || is_array(xs[0]))) {
+                  existing.push(xs[0]);
+              }
+              const rightHeight = existing.includes(xs[1])
+                                 ? 0
+                                 : helper(xs[1]);
+              if (!existing.includes(xs[1])
+                  && (is_pair(xs[1]) || is_array(xs[1]))) {
+                  existing.push(xs[1]);
+              }
+              return leftHeight + rightHeight + 1;
+          }
+      }
+      
+      return helper(xs);
+  }
+  
   // A list of layers drawn, used for history
   var layerList = []
   // ID of the current layer shown. Avoid changing this value externally as layer is not updated.
@@ -709,6 +770,11 @@
    *  Then shift it to the left end.
    */
   function draw(xs) {
+    stage = new Kinetic.Stage({
+      width: findListWidth(xs) * 45 + 200,
+      height: findListHeight(xs) * 60 + 100,
+      container: 'list-visualizer-container'
+    });
     minLeft = 500
     nodelist = []
     nodeLabel = 0
