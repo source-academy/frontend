@@ -51,8 +51,10 @@ export class EditingAssessment extends React.Component<IProps, IState> {
     private saveAssessment = (path: any) => (e: any) => {
         const assessment = this.props.assessment
         this.assignFieldToPath(0, path, assessment, this.state.fieldValue)
+        // const maxGrade: number = assessment.questions.map(qn => qn.maxGrade).reduce((acc, grade) => acc + grade);
+        // assessment.maxGrade = maxGrade;
         // tslint:disable-next-line:no-console
-        // console.log(assessment);
+        console.log(assessment);
         localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessment));
         if (assessment) {
             this.props.newAssessment(assessment)
