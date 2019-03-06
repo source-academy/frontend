@@ -166,7 +166,7 @@ class AssessmentWorkspace extends React.Component<
     }
     return ( 
       <div className="WorkspaceParent pt-dark">
-      <button onClick={this.toggleEdit}>Toggle Editing Mode</button>
+      {this.props.assessmentId === -1 ? <button onClick={this.toggleEdit}>Toggle Editing Mode</button> : undefined}
        {this.props.assessmentId === -1 && this.state.isEditing
        ? <EditingAssessmentForm path={["questions", this.props.questionId]}/> 
        : undefined}
