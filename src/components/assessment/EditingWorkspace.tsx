@@ -1,17 +1,16 @@
 import { Button, Card, Dialog, NonIdealState, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
+import AceEditor from 'react-ace'
 import Textarea from 'react-textarea-autosize';
 
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states'
-import { beforeNow } from '../../utils/dateHelpers'
 import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { retrieveLocalAssessment } from '../../utils/xmlParser'
 import Markdown from '../commons/Markdown'
 import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
-import EditingAssessmentForm  from '../workspace/EditingAssessmentForm';
 import { SideContentProps } from '../workspace/side-content'
 import ToneMatrix from '../workspace/side-content/ToneMatrix'
 import {
@@ -120,7 +119,7 @@ class AssessmentWorkspace extends React.Component<
   }
 
   public render() {
-    if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
+    if (this.state.assessment === null || this.state.assessment!.questions.length === 0) {
       return (
         <NonIdealState
           className="WorkspaceParent pt-dark"
@@ -132,7 +131,7 @@ class AssessmentWorkspace extends React.Component<
     const overlay = (
       <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
         <Card>
-          <Markdown content={this.props.assessment.longSummary} />
+          <Markdown content={this.state.assessment.longSummary} />
           <Button
             className="assessment-briefing-button"
             // tslint:disable-next-line jsx-no-lambda
@@ -144,10 +143,10 @@ class AssessmentWorkspace extends React.Component<
     )
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
-      this.props.questionId >= this.props.assessment.questions.length
-        ? this.props.assessment.questions.length - 1
+      this.props.questionId >= this.state.assessment.questions.length
+        ? this.state.assessment.questions.length - 1
         : this.props.questionId
-    const question: IQuestion = this.props.assessment.questions[questionId]
+    const question: IQuestion = this.state.assessment.questions[questionId]
     const editorValue =
       question.type === QuestionTypes.programming
         ? question.answer !== null
@@ -172,7 +171,7 @@ class AssessmentWorkspace extends React.Component<
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
-          this.props.handleSave(this.props.assessment!.questions[questionId].id, option),
+          this.props.handleSave(this.state.assessment!.questions[questionId].id, option),
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -187,14 +186,8 @@ class AssessmentWorkspace extends React.Component<
     }
     return ( 
       <div className="WorkspaceParent pt-dark">
-      <button onClick={this.toggleEdit}>Toggle Editing Mode</button>
-       {this.props.assessmentId === -1 && this.state.isEditing
-       ? <EditingAssessmentForm path={["questions", this.props.questionId]}/> 
-       : undefined}
         {overlay}
-        {this.props.assessmentId !== -1 || !this.state.isEditing 
-        ? <Workspace {...workspaceProps} />
-        : undefined}
+        <Workspace {...workspaceProps} />
       </div>
     )
   }
@@ -234,9 +227,13 @@ class AssessmentWorkspace extends React.Component<
     }
   }
 
-  private getValueFromPath = (path: string[], obj: any) : any => {
-    for (let i = 0; i < path.length; i++) {
-      obj = obj[path[i]];
+  private handleSave = () =>{
+    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(this.state.assessment));
+  }
+
+  private getValueFromPath = (path: string[], obj: any = this.state.assessment) : any => {
+    for (const next of path) {
+      obj = obj[next];
     }
     return obj;
   }
@@ -250,19 +247,28 @@ class AssessmentWorkspace extends React.Component<
   }
 
   private saveEditAssessment = (path: string[]) => (e: any) =>{
-    const assessment = this.state.assessment;
-    this.assignToPath(path, this.state.fieldValue, assessment);
+    const assessmentVal = this.state.assessment;
+    this.assignToPath(path, this.state.fieldValue, assessmentVal);
     this.setState({
       editingAssessmentPath: '',
       fieldValue:'',
-      assessment: assessment
+      assessment: assessmentVal
     })
-    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessment));
   }
 
   private handleEditAssessment = () => (e: any) =>{
     this.setState({
       fieldValue:e.target.value
+    })
+  }
+
+  private handleTemplateChange = (questionId: number) => (newCode: string) =>{
+    const assessmentVal = this.state.assessment;
+    assessmentVal!.questions[questionId].answer = newCode;
+    this.setState({
+      editingAssessmentPath: '',
+      fieldValue:'',
+      assessment: assessmentVal
     })
   }
 
@@ -283,9 +289,7 @@ class AssessmentWorkspace extends React.Component<
       value={this.state.fieldValue}
     />
 
-  private toggleEdit: (e: any) => void = (e: any) => { this.setState((state: any, props: any) => ({isEditing: !state.isEditing})); }
-
-  private questionContent = (questionId: number) =>{ 
+  private questionContentTab = (questionId: number) =>{ 
     const path = ["questions", questionId.toString(10), "content"];
     const pathString = path.join("/");
     return (
@@ -299,7 +303,27 @@ class AssessmentWorkspace extends React.Component<
     )
   }
 
-  private longSummaryContent = () =>{ 
+  private questionTemplateTab = (questionId: number) =>{ 
+    const path = ["questions", questionId.toString(10), "answer"];
+    // tslint:disable-next-line:no-console
+    // console.dir(this.state.assessment)
+    return (
+      <AceEditor
+        className="react-ace"
+        editorProps={{
+          $blockScrolling: Infinity
+        }}
+        fontSize={14}
+        highlightActiveLine={false}
+        mode="javascript"
+        onChange={this.handleTemplateChange(questionId)}
+        theme="cobalt"
+        value={this.getValueFromPath(path)}
+      />
+    )
+  }
+
+  private longSummaryTab = () =>{ 
     const path = ["longSummary"];
     return (
       <div onClick={this.toggleEditField(path)}>
@@ -317,38 +341,44 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
+    const assessment = this.state.assessment;
     const tabs = [
       {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
-        body: this.questionContent(questionId)
+        body: this.questionContentTab(questionId)
       },
       {
-        label: `${props.assessment!.category} Briefing`,
+        label: `${assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
-        body: this.longSummaryContent()
+        body: this.longSummaryTab()
+      },
+      {
+        label: `Question Template`,
+        icon: IconNames.WRENCH,
+        body: this.questionTemplateTab(questionId)
       }
     ]
-    const isGraded = props.assessment!.questions[questionId].grader !== null
+    const isGraded = assessment!.questions[questionId].grader !== null
     if (isGraded) {
       tabs.push({
         label: `Grading`,
         icon: IconNames.TICK,
         body: (
           <GradingResult
-            comment={props.assessment!.questions[questionId].comment}
-            graderName={props.assessment!.questions[questionId].grader.name}
-            gradedAt={props.assessment!.questions[questionId].gradedAt}
-            xp={props.assessment!.questions[questionId].xp}
-            grade={props.assessment!.questions[questionId].grade}
-            maxGrade={props.assessment!.questions[questionId].maxGrade}
-            maxXp={props.assessment!.questions[questionId].maxXp}
+            comment={assessment!.questions[questionId].comment}
+            graderName={assessment!.questions[questionId].grader.name}
+            gradedAt={assessment!.questions[questionId].gradedAt}
+            xp={assessment!.questions[questionId].xp}
+            grade={assessment!.questions[questionId].grade}
+            maxGrade={assessment!.questions[questionId].maxGrade}
+            maxXp={assessment!.questions[questionId].maxXp}
           />
         )
       })
     }
 
-    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols
+    const functionsAttached = assessment!.questions[questionId].library.external.symbols
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
@@ -368,8 +398,8 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`
-    const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`
+    const listingPath = `/academy/${assessmentCategoryLink(this.state.assessment!.category)}`
+    const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`
     return {
       handleChapterSelect: this.props.handleChapterSelect,
       handleEditorEval: this.props.handleEditorEval,
@@ -378,22 +408,16 @@ class AssessmentWorkspace extends React.Component<
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
       hasChapterSelect: false,
-      hasSaveButton:
-        !beforeNow(this.props.closeDate) &&
-        this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
+      hasSaveButton: this.state.assessment!.questions[questionId].type !== QuestionTypes.mcq,
       hasShareButton: false,
       isRunning: this.props.isRunning,
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
       onClickReturn: () => history.push(listingPath),
-      onClickSave: () =>
-        this.props.handleSave(
-          this.props.assessment!.questions[questionId].id,
-          this.props.editorValue!
-        ),
-      questionProgress: [questionId + 1, this.props.assessment!.questions.length],
-      sourceChapter: this.props.assessment!.questions[questionId].library.chapter
+      onClickSave: this.handleSave,
+      questionProgress: [questionId + 1, this.state.assessment!.questions.length],
+      sourceChapter: this.state.assessment!.questions[questionId].library.chapter
     }
   }
 }

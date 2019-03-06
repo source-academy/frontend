@@ -22,6 +22,7 @@ import { NavLink } from 'react-router-dom'
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
+import EditingWorkspaceContainer from '../../containers/assessment/EditingWorkspaceContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser'
@@ -72,7 +73,6 @@ type State = {
   showClosedAssessments: boolean
   showOpenedAssessments: boolean
   showUpcomingAssessments: boolean
-  editOverview: string
   editingOverview: IAssessmentOverview | null;
 }
 
@@ -87,7 +87,6 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showClosedAssessments: false,
       showOpenedAssessments: true,
       showUpcomingAssessments: true,
-      editOverview: '',
       editingOverview: null,
     }
   }
@@ -117,9 +116,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           notAttempted: overview.status === AssessmentStatuses.not_attempted,
           closeDate: overview.closeAt
         }
-        return <div> 
-            <AssessmentWorkspaceContainer {...assessmentProps} />
-          </div>
+        return <EditingWorkspaceContainer {...assessmentProps} />
       }
     }
 
