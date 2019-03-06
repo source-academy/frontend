@@ -1,14 +1,17 @@
 import { Button, Card, Dialog, NonIdealState, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
+import Textarea from 'react-textarea-autosize';
 
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states'
 import { beforeNow } from '../../utils/dateHelpers'
 import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
+import { retrieveLocalAssessment } from '../../utils/xmlParser'
 import Markdown from '../commons/Markdown'
 import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
+import EditingAssessmentForm  from '../workspace/EditingAssessmentForm';
 import { SideContentProps } from '../workspace/side-content'
 import ToneMatrix from '../workspace/side-content/ToneMatrix'
 import {
@@ -65,14 +68,34 @@ export type DispatchProps = {
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void
 }
 
+interface IState {
+  showOverlay: boolean, 
+  isEditing: boolean, 
+  assessment: IAssessment | null,
+  editingAssessmentPath: string,
+  fieldValue: string,
+}
+
+const textareaStyle = {
+  "height": "100%",
+  "width": "100%",
+  "overflow": "hidden" as "hidden",
+  "resize": "none" as "none"
+}
+
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean }
+  IState
 > {
+
   public constructor(props: AssessmentWorkspaceProps) {
     super(props)
     this.state = {
-      showOverlay: false
+      showOverlay: false,
+      isEditing: false,
+      assessment: retrieveLocalAssessment(),
+      editingAssessmentPath: '',
+      fieldValue:'',
     }
   }
 
@@ -139,7 +162,7 @@ class AssessmentWorkspace extends React.Component<
               editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -149,7 +172,7 @@ class AssessmentWorkspace extends React.Component<
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
-          this.props.handleSave(this.props.assessment!.questions[questionId].id, option)
+          this.props.handleSave(this.props.assessment!.questions[questionId].id, option),
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -162,10 +185,16 @@ class AssessmentWorkspace extends React.Component<
         replValue: this.props.replValue
       }
     }
-    return (
+    return ( 
       <div className="WorkspaceParent pt-dark">
+      <button onClick={this.toggleEdit}>Toggle Editing Mode</button>
+       {this.props.assessmentId === -1 && this.state.isEditing
+       ? <EditingAssessmentForm path={["questions", this.props.questionId]}/> 
+       : undefined}
         {overlay}
-        <Workspace {...workspaceProps} />
+        {this.props.assessmentId !== -1 || !this.state.isEditing 
+        ? <Workspace {...workspaceProps} />
+        : undefined}
       </div>
     )
   }
@@ -205,6 +234,84 @@ class AssessmentWorkspace extends React.Component<
     }
   }
 
+  private getValueFromPath = (path: string[], obj: any) : any => {
+    for (let i = 0; i < path.length; i++) {
+      obj = obj[path[i]];
+    }
+    return obj;
+  }
+
+  private assignToPath: any = (path: string[], value: any, obj: any,) : void => {
+    let i = 0;
+    for (i = 0; i < path.length - 1; i++) {
+      obj = obj[path[i]];
+    }
+    obj[path[i]] = value;
+  }
+
+  private saveEditAssessment = (path: string[]) => (e: any) =>{
+    const assessment = this.state.assessment;
+    this.assignToPath(path, this.state.fieldValue, assessment);
+    this.setState({
+      editingAssessmentPath: '',
+      fieldValue:'',
+      assessment: assessment
+    })
+    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessment));
+  }
+
+  private handleEditAssessment = () => (e: any) =>{
+    this.setState({
+      fieldValue:e.target.value
+    })
+  }
+
+  private toggleEditField = (path: string[]) => (e: any) => {
+    const stringPath = path.join("/");
+    this.setState({
+      editingAssessmentPath: stringPath,
+      fieldValue: this.getValueFromPath(path, this.state.assessment)
+    })
+  }
+
+  private makeEditingTextarea = (path : string[]) => 
+    <Textarea
+      autoFocus={true}
+      style={textareaStyle}
+      onChange={this.handleEditAssessment()}
+      onBlur={this.saveEditAssessment(path)}
+      value={this.state.fieldValue}
+    />
+
+  private toggleEdit: (e: any) => void = (e: any) => { this.setState((state: any, props: any) => ({isEditing: !state.isEditing})); }
+
+  private questionContent = (questionId: number) =>{ 
+    const path = ["questions", questionId.toString(10), "content"];
+    const pathString = path.join("/");
+    return (
+      <div onClick={this.toggleEditField(path)}>
+        {this.state.editingAssessmentPath === pathString ? (
+            this.makeEditingTextarea(path)
+        ) : (
+          <Markdown content={this.state.assessment!.questions[questionId].content} />
+        )}
+      </div>
+    )
+  }
+
+  private longSummaryContent = () =>{ 
+    const path = ["longSummary"];
+    return (
+      <div onClick={this.toggleEditField(path)}>
+        {this.state.editingAssessmentPath === "longSummary" ? (
+            this.makeEditingTextarea(path)
+        ) : (
+          <Markdown content={this.state.assessment!.longSummary} />
+        )}
+      </div>
+    )
+  }
+
   /** Pre-condition: IAssessment has been loaded */
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
@@ -214,12 +321,12 @@ class AssessmentWorkspace extends React.Component<
       {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
-        body: <Markdown content={props.assessment!.questions[questionId].content} />
+        body: this.questionContent(questionId)
       },
       {
         label: `${props.assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
-        body: <Markdown content={props.assessment!.longSummary} />
+        body: this.longSummaryContent()
       }
     ]
     const isGraded = props.assessment!.questions[questionId].grader !== null
