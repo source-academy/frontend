@@ -20,7 +20,6 @@ import {
   Library,
   QuestionTypes
 } from './assessmentShape'
-// import GradingResult from './GradingResult'
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
 
@@ -70,8 +69,6 @@ export type DispatchProps = {
 interface IState {
   showOverlay: boolean,
   assessment: IAssessment | null,
-  editingAssessmentPath: string,
-  fieldValue: string,
   activeTab: number,
 }
 
@@ -85,8 +82,6 @@ class AssessmentWorkspace extends React.Component<
     this.state = {
       showOverlay: false,
       assessment: retrieveLocalAssessment(),
-      editingAssessmentPath: '',
-      fieldValue:'',
       activeTab: 0,
     }
   }
@@ -287,16 +282,6 @@ class AssessmentWorkspace extends React.Component<
         />
       })
     }
-
-    // <GradingResult
-    //         comment={assessment!.questions[questionId].comment}
-    //         graderName={assessment!.questions[questionId].grader.name}
-    //         gradedAt={assessment!.questions[questionId].gradedAt}
-    //         xp={0}
-    //         grade={0}
-    //         maxGrade={assessment!.questions[questionId].maxGrade}
-    //         maxXp={assessment!.questions[questionId].maxXp}
-    //       />
 
     const functionsAttached = assessment!.questions[questionId].library.external.symbols
     if (functionsAttached.includes('get_matrix')) {
