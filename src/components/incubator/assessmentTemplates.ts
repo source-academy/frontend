@@ -3,6 +3,7 @@ import {
   AssessmentStatuses,
   IAssessment,
   IAssessmentOverview,
+  IMCQQuestion,
   IProgrammingQuestion,
 } from '../../components/assessment/assessmentShape'
 import { mock2DRuneLibrary } from '../../mocks/assessmentAPI'
@@ -26,8 +27,8 @@ export const overviewTemplate: IAssessmentOverview =
     gradingStatus: 'none'
   }
   
-export const questionsTemplate: IProgrammingQuestion[] = [{
-    answer: null,
+export const programmingTemplate: IProgrammingQuestion = {
+    answer: '//1st question mock solution template',
     comment: '`Great Job` **young padawan**',
     content: 'Enter content here',
     id: 0,
@@ -43,7 +44,45 @@ export const questionsTemplate: IProgrammingQuestion[] = [{
     grade: 0,
     maxGrade: 2,
     maxXp: 2
-  }]
+  }
+
+export const mcqTemplate: IMCQQuestion = {
+  answer: 3,
+  comment: null,
+  content:
+    'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
+  choices: [
+    {
+      content: 'A',
+      hint: null
+    },
+    {
+      content: 'B',
+      hint: null
+    },
+    {
+      content: 'C',
+      hint: null
+    },
+    {
+      content: 'D',
+      hint: null
+    }
+  ],
+  id: 2,
+  library: mock2DRuneLibrary,
+  type: 'mcq',
+  solution: 1,
+  grader: {
+    name: 'avenger',
+    id: 1
+  },
+  gradedAt: '2038-06-18T05:24:26.026Z',
+  xp: 0,
+  grade: 0,
+  maxGrade: 2,
+  maxXp: 2
+}
 
 export const assessmentTemplate: IAssessment = {
     category: 'Mission',
@@ -51,6 +90,6 @@ export const assessmentTemplate: IAssessment = {
     longSummary:
       'Insert mission briefing here',
     missionPDF: 'www.google.com',
-    questions: questionsTemplate,
+    questions: [programmingTemplate],
     title: 'Insert title here'
   }
