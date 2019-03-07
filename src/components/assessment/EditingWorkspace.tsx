@@ -1,8 +1,6 @@
 import { Button, Card, Dialog, NonIdealState, Spinner } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons'
 import * as React from 'react'
-import AceEditor from 'react-ace'
-import Textarea from 'react-textarea-autosize';
 
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states'
 import { history } from '../../utils/history'
@@ -12,6 +10,7 @@ import Markdown from '../commons/Markdown'
 import Workspace, { WorkspaceProps } from '../workspace'
 import { ControlBarProps } from '../workspace/ControlBar'
 import { SideContentProps } from '../workspace/side-content'
+import EditingContentTab from '../workspace/side-content/EditingContentTab'
 import ToneMatrix from '../workspace/side-content/ToneMatrix'
 import {
   IAssessment,
@@ -225,154 +224,10 @@ class AssessmentWorkspace extends React.Component<
     localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(this.state.assessment));
   }
 
-  private getValueFromPath = (path: Array<string | number>, obj: any = this.state.assessment) : any => {
-    for (const next of path) {
-      obj = obj[next];
-    }
-    return obj;
-  }
-
-  private assignToPath: any = (path: Array<string | number>, value: any, obj: any,) : void => {
-    let i = 0;
-    for (i = 0; i < path.length - 1; i++) {
-      obj = obj[path[i]];
-    }
-    obj[path[i]] = value;
-  }
-
-  private saveEditAssessment = (
-    path: Array<string | number>,
-    isString: boolean = true
-  ) => () => (e: any) => {
-    const fieldValue = (isString) ? this.state.fieldValue : parseInt(this.state.fieldValue, 10);
-    const assessmentVal = this.state.assessment;
-    this.assignToPath(path, fieldValue, assessmentVal);
+  private updateEditAssessmentState = (assessmentVal: IAssessment) => {
     this.setState({
-      editingAssessmentPath: '',
-      fieldValue:'',
       assessment: assessmentVal
     })
-  }
-
-  private handleEditAssessment = () => (e: any) =>{
-    this.setState({
-      fieldValue:e.target.value
-    })
-  }
-
-  private handleTemplateChange = (path: Array<string | number>) => (newCode: string) =>{
-    const assessmentVal = this.state.assessment;
-    this.assignToPath(path, newCode, assessmentVal);
-    this.setState({
-      editingAssessmentPath: '',
-      fieldValue:'',
-      assessment: assessmentVal
-    })
-  }
-
-  private toggleEditField = (path: Array<string | number>) => (e: any) => {
-    const stringPath = path.join("/");
-    const fieldVal = this.getValueFromPath(path, this.state.assessment) || '';
-    this.setState({
-      editingAssessmentPath: stringPath,
-      fieldValue: (typeof fieldVal === "string") ? fieldVal : fieldVal.toString()
-    })
-  }
-
-  private makeEditingTextarea = (
-    handleOnBlur: () => (e: any) => void
-  ) => 
-    <Textarea
-      autoFocus={true}
-      className={'editing-textarea'}
-      onChange={this.handleEditAssessment()}
-      onBlur={handleOnBlur()}
-      value={this.state.fieldValue}
-    />
-
-  private contentTab = (
-    path: Array<string | number>, 
-    filler: string = 'Enter Value',
-    isString: boolean = true 
-  ) =>{ 
-    const pathString = path.join("/");
-    return (
-      <div onClick={this.toggleEditField(path)}>
-        {this.state.editingAssessmentPath === pathString ? (
-          this.makeEditingTextarea(this.saveEditAssessment(path, isString))
-        ) : (
-          isString ? 
-            <Markdown content={this.getValueFromPath(path) || filler} />
-          :
-            this.getValueFromPath(path)
-        )}
-      </div>
-    )
-  }
-
-  private mcqTab = (questionId: number) => {
-    const question = this.state.assessment!.questions[questionId] as IMCQQuestion;
-    const mcqButton = question.choices.map((choice, i) => (
-      <div key={i} className="mcq-option col-xs-12">
-        Option {i}:
-        {this.contentTab(
-          ["questions", questionId, "choices", i, "content"],
-          "Enter Option here"
-        )}
-        <br/>
-        Hint:
-        {this.contentTab(
-          ["questions", questionId, "choices", i, "hint"],
-          "Enter Hint here"
-        )}
-      </div>
-    ))
-
-    return ( 
-      <div className="MCQChooser row">
-        <Card className="mcq-content-parent col-xs-12 middle-xs">
-          <div className="row mcq-options-parent between-xs">
-            {mcqButton}
-            Solution: 
-            {this.contentTab(
-              ["questions", questionId, "solution"],
-              "Enter Solution Here",
-              false
-            )}
-          </div>
-        </Card>
-      </div>
-    )
-  }
-
-  private programmingTab = (path: Array<string | number>) => (
-    <AceEditor
-      className="react-ace"
-      editorProps={{
-        $blockScrolling: Infinity
-      }}
-      fontSize={14}
-      highlightActiveLine={false}
-      mode="javascript"
-      onChange={this.handleTemplateChange(path)}
-      theme="cobalt"
-      value={this.getValueFromPath(path)}
-    />
-  )
-
-  private questionTemplateTab = (questionId: number) =>{ 
-    const questionIdStr = questionId.toString(); 
-    const path = ["questions", questionIdStr, "answer"];
-    // tslint:disable-next-line:no-console
-    // console.dir(this.state.assessment)
-    const type = this.state.assessment!.questions[questionId].type;
-    const display = 
-      (type === 'mcq') ?
-        this.mcqTab(questionId)
-      : 
-        this.programmingTab(path);
-
-    return display;
   }
 
   private handleChangeActiveTab = (tab: number) => {
@@ -391,17 +246,32 @@ class AssessmentWorkspace extends React.Component<
       {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
-        body: this.contentTab(["questions", questionId, "content"])
+        body: <EditingContentTab 
+          assessment = {this.state.assessment!}
+          path = {["questions", questionId, "content"]}
+          type = 'content'
+          updateAssessment = {this.updateEditAssessmentState}
+        />
       },
       {
         label: `${assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
-        body: this.contentTab(["longSummary"])
+        body: <EditingContentTab 
+          assessment = {this.state.assessment!}
+          path = {["longSummary"]}
+          type = 'content'
+          updateAssessment = {this.updateEditAssessmentState}
+        />
       },
       {
         label: `Question Template`,
         icon: IconNames.WRENCH,
-        body: this.questionTemplateTab(questionId)
+        body: <EditingContentTab 
+          assessment = {this.state.assessment!}
+          path = {['questions', questionId]}
+          type = 'questionTemplate'
+          updateAssessment = {this.updateEditAssessmentState}
+        />
       }
     ]
     const isGraded = assessment!.questions[questionId].grader !== null
@@ -409,23 +279,12 @@ class AssessmentWorkspace extends React.Component<
       tabs.push({
         label: `Grading`,
         icon: IconNames.TICK,
-        body: (
-          <div>
-            Max Grade:
-            {this.contentTab(
-              ["questions", questionId, "maxGrade"],
-              "Max Grade",
-              false
-            )}
-            <br/>
-            Max Xp: 
-            {this.contentTab(
-              ["questions", questionId, "maxXp"],
-              "Max Xp",
-              false
-            )}
-          </div>
-        )
+        body: <EditingContentTab 
+          assessment = {this.state.assessment!}
+          path = {['questions', questionId]}
+          type = 'grading'
+          updateAssessment = {this.updateEditAssessmentState}
+        />
       })
     }
 

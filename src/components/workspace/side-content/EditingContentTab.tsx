@@ -31,6 +31,20 @@ export class EditingContentTab extends React.Component<IProps, IState> {
     }
   }
 
+  public render() {
+  	const display = (
+  		this.props.type === 'content' ?
+  			this.contentTab(this.props.path!)
+  		: this.props.type === 'questionTemplate' ?
+  			this.questionTemplateTab()
+  		: this.props.type === 'grading' ?
+  			this.gradingTab()
+  		: null
+  	);
+
+  	return display;
+  }
+
   private saveEditAssessment = (
     path: Array<string | number>,
     isString: boolean = true
@@ -82,27 +96,6 @@ export class EditingContentTab extends React.Component<IProps, IState> {
       onBlur={handleOnBlur()}
       value={this.state.fieldValue}
     />
-
-  private contentTab = (
-    path: Array<string | number>, 
-    filler: string = 'Enter Value',
-    isString: boolean = true 
-  ) =>{ 
-    const pathString = path.join("/");
-    const value = getValueFromPath(path, this.props.assessment);
-    return (
-      <div onClick={this.toggleEditField(path)}>
-        {this.state.editingAssessmentPath === pathString ? (
-          this.makeEditingTextarea(this.saveEditAssessment(path, isString))
-        ) : (
-          isString ? 
-            <Markdown content={value || filler} />
-          :
-            value
-        )}
-      </div>
-    )
-  }
 
   private mcqTab = (questionId: number) => {
     const question = this.props.assessment!.questions[questionId] as IMCQQuestion;
@@ -168,17 +161,44 @@ export class EditingContentTab extends React.Component<IProps, IState> {
     return display;
   }
 
-  public render() {
-  	const display = (
-  		this.props.type === 'content' ?
-  			this.contentTab(this.props.path!)
-  		: this.props.type === 'questionTemplate' ?
-  			this.questionTemplateTab()
-  		: null
-  	);
-
-  	return display;
+  private contentTab = (
+    path: Array<string | number>, 
+    filler: string = 'Enter Value',
+    isString: boolean = true 
+  ) =>{ 
+    const pathString = path.join("/");
+    const value = getValueFromPath(path, this.props.assessment);
+    return (
+      <div onClick={this.toggleEditField(path)}>
+        {this.state.editingAssessmentPath === pathString ? (
+          this.makeEditingTextarea(this.saveEditAssessment(path, isString))
+        ) : (
+          isString ? 
+            <Markdown content={value || filler} />
+          :
+            value
+        )}
+      </div>
+    )
   }
+
+  private gradingTab = () => (
+	  <div>
+	    Max Grade:
+	    {this.contentTab(
+	      this.props.path.concat(["maxGrade"]),
+	      "Max Grade",
+	      false
+	    )}
+	    <br/>
+	    Max Xp: 
+	    {this.contentTab(
+	      this.props.path.concat(["maxXp"]),
+	      "Max Xp",
+	      false
+	    )}
+	  </div>
+  )
 
 }
 
@@ -196,3 +216,5 @@ const assignToPath: any = (path: Array<string | number>, value: any, obj: any,) 
   }
   obj[path[i]] = value;
 }
+
+export default EditingContentTab;
