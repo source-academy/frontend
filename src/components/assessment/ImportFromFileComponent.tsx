@@ -4,64 +4,15 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { parseString } from 'xml2js'
 import { updateAssessment } from '../../actions/session'
 import {
-  AssessmentCategories,
-  AssessmentStatuses,
   IAssessment,
   IAssessmentOverview,
-  IMCQQuestion,
-  IProgrammingQuestion,
 } from '../../components/assessment/assessmentShape'
-import { mock2DRuneLibrary } from '../../mocks/assessmentAPI'
 import { makeEntireAssessment, retrieveLocalAssessment } from '../../utils/xmlParser'
-// import assessment from '../../containers/assessment';
+import {
+  assessmentTemplate, 
+  overviewTemplate,
+} from '../incubator/assessmentTemplates'
 
-const overviewTemplate: IAssessmentOverview =
-  {
-    category: AssessmentCategories.Mission,
-    closeAt: Date(),
-    coverImage: 'https://fakeimg.pl/300/',
-    grade: 1,
-    id: -1,
-    maxGrade: 0,
-    maxXp: 0,
-    openAt: Date(),
-    title: 'Insert title here',
-    shortSummary:
-      'Insert short summary here',
-    status: AssessmentStatuses.not_attempted,
-    story: 'mission',
-    xp: 0,
-    gradingStatus: 'none'
-  }
-  
-const questionsTemplate: Array<IProgrammingQuestion | IMCQQuestion> = [{
-    answer: null,
-    comment: '`Great Job` **young padawan**',
-    content: 'Hello and welcome to this assessment! This is the 1st question.',
-    id: 0,
-    library: mock2DRuneLibrary,
-    solutionTemplate: '1st question mock solution template',
-    type: 'programming',
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
-    xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2
-  }]
-
-const assessmentTemplate: IAssessment = {
-    category: 'Mission',
-    id: -1,
-    longSummary:
-      'Insert mission briefing here',
-    missionPDF: 'www.google.com',
-    questions: questionsTemplate,
-    title: 'Insert title here'
-  }
 
 interface IDispatchProps {
   newAssessment: (assessment: IAssessment) => void
@@ -120,8 +71,6 @@ export class ImportFromFileComponent extends React.Component<Props, {isInvalidXm
         // console.dir(result)
         try {
           const entireAssessment: [IAssessmentOverview, IAssessment] = makeEntireAssessment(result);
-          // tslint:disable-next-line:no-console
-          console.dir(entireAssessment)
 	        localStorage.setItem("MissionEditingOverviewSA", JSON.stringify(entireAssessment[0]));
 	        this.props.updateEditingOverview(entireAssessment[0]);
 
