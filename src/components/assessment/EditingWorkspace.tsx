@@ -69,8 +69,7 @@ export type DispatchProps = {
 }
 
 interface IState {
-  showOverlay: boolean, 
-  isEditing: boolean, 
+  showOverlay: boolean,
   assessment: IAssessment | null,
   editingAssessmentPath: string,
   fieldValue: string,
@@ -86,7 +85,6 @@ class AssessmentWorkspace extends React.Component<
     super(props)
     this.state = {
       showOverlay: false,
-      isEditing: false,
       assessment: retrieveLocalAssessment(),
       editingAssessmentPath: '',
       fieldValue:'',
@@ -245,7 +243,7 @@ class AssessmentWorkspace extends React.Component<
   private saveEditAssessment = (
     path: Array<string | number>,
     isString: boolean = true
-  ) => (e: any) =>{
+  ) => () => (e: any) => {
     const fieldValue = (isString) ? this.state.fieldValue : parseInt(this.state.fieldValue, 10);
     const assessmentVal = this.state.assessment;
     this.assignToPath(path, fieldValue, assessmentVal);
@@ -282,14 +280,13 @@ class AssessmentWorkspace extends React.Component<
   }
 
   private makeEditingTextarea = (
-    path : Array<string | number>,
-    isString: boolean = true
+    handleOnBlur: () => (e: any) => void
   ) => 
     <Textarea
       autoFocus={true}
       className={'editing-textarea'}
       onChange={this.handleEditAssessment()}
-      onBlur={this.saveEditAssessment(path, isString)}
+      onBlur={handleOnBlur()}
       value={this.state.fieldValue}
     />
 
@@ -302,7 +299,7 @@ class AssessmentWorkspace extends React.Component<
     return (
       <div onClick={this.toggleEditField(path)}>
         {this.state.editingAssessmentPath === pathString ? (
-          this.makeEditingTextarea(path, isString)
+          this.makeEditingTextarea(this.saveEditAssessment(path, isString))
         ) : (
           isString ? 
             <Markdown content={this.getValueFromPath(path) || filler} />

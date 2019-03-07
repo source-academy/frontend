@@ -24,6 +24,7 @@ import Markdown from '../commons/Markdown'
 const DEFAULT_QUESTION_ID: number = 0
 
 type Props = {
+  listingPath?: string,
 	overview: IAssessmentOverview,
 	updateEditingOverview: (overview: IAssessmentOverview) => void
 }
@@ -149,7 +150,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
                 : `${getPrettyDate(overview.closeAt)}`}
               </div>
             </Text>
-            {makeOverviewCardButton(overview)}
+            {makeOverviewCardButton(overview, this.props.listingPath)}
           </div>
         </div>
       </Card>
@@ -191,14 +192,13 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
 
 }
 
-const makeOverviewCardButton = (overview: IAssessmentOverview) => {
+const makeOverviewCardButton = (overview: IAssessmentOverview, listingPath: string | undefined) => {
   const icon: IconName = IconNames.EDIT;
   const label: string = "Edit mission";
+  listingPath = listingPath || ('/academy/' + assessmentCategoryLink(overview.category));
   return (
     <NavLink
-      to={`/academy/${assessmentCategoryLink(
-        overview.category
-      )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+      to={listingPath + `/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
     >
       {controlButton(label, icon)}
     </NavLink>
