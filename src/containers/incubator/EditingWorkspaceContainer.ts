@@ -6,14 +6,12 @@ import {
   beginInterruptExecution,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeActiveTab,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
   evalEditor,
   evalRepl,
-  fetchAssessment,
   submitAnswer,
   updateEditorValue,
   updateHasUnsavedChanges,
@@ -53,10 +51,8 @@ const workspaceLocation: WorkspaceLocation = 'assessment'
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
-      handleAssessmentFetch: fetchAssessment,
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, changeEvent, workspaceLocation),
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),

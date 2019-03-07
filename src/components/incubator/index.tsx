@@ -5,7 +5,7 @@ import {
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 
-import EditingWorkspaceContainer from '../../containers/assessment/EditingWorkspaceContainer'
+import EditingWorkspaceContainer from '../../containers/incubator/EditingWorkspaceContainer'
 import { stringParamToInt } from '../../utils/paramParseHelpers'
 import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser'
 import {

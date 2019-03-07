@@ -13,6 +13,7 @@ import { SideContentProps } from '../workspace/side-content'
 import EditingContentTab from '../workspace/side-content/EditingContentTab'
 import ToneMatrix from '../workspace/side-content/ToneMatrix'
 import {
+  ExternalLibraryName,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -46,10 +47,8 @@ export type OwnProps = {
 }
 
 export type DispatchProps = {
-  handleAssessmentFetch: (assessmentId: number) => void
   handleBrowseHistoryDown: () => void
   handleBrowseHistoryUp: () => void
-  handleChangeActiveTab: (activeTab: number) => void
   handleChapterSelect: (chapter: any, changeEvent: any) => void
   handleClearContext: (library: Library) => void
   handleEditorEval: () => void
@@ -91,12 +90,12 @@ class AssessmentWorkspace extends React.Component<
    * or a loading screen), try to fetch a newer assessment,
    * and show the briefing.
    */
-  public componentDidMount() {
-    this.props.handleAssessmentFetch(this.props.assessmentId)
-    if (this.props.questionId === 0 && this.props.notAttempted) {
-      this.setState({ showOverlay: true })
-    }
-  }
+  // public componentDidMount() {
+  //   this.props.handleAssessmentFetch(this.props.assessmentId)
+  //   if (this.props.questionId === 0 && this.props.notAttempted) {
+  //     this.setState({ showOverlay: true })
+  //   }
+  // }
 
   /**
    * Once there is an update (due to the assessment being fetched), check
@@ -315,6 +314,23 @@ class AssessmentWorkspace extends React.Component<
     }
   }
 
+  private handleChapterSelect = (chapter: any, e: any) => {
+    const assessment = this.state.assessment!;
+    for (const question of assessment.questions) {
+      question.library.chapter = chapter.chapter;
+    }
+    this.updateAndSaveAssessment(assessment);
+    // this.props.handleChapterSelect(chapter, e);
+  }
+
+  private handleExternalSelect = ({ name }: { name: ExternalLibraryName }, e: any) => {
+    const assessment = this.state.assessment!;
+    for (const question of assessment.questions) {
+      question.library.external.name = name;
+    }
+    this.updateAndSaveAssessment(assessment);
+  }
+
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
     props: AssessmentWorkspaceProps,
@@ -323,13 +339,15 @@ class AssessmentWorkspace extends React.Component<
     const listingPath = this.props.listingPath || `/academy/${assessmentCategoryLink(this.state.assessment!.category)}`
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`
     return {
-      handleChapterSelect: this.props.handleChapterSelect,
+      externalLibraryName: this.state.assessment!.questions[questionId].library.external.name,
+      handleChapterSelect: this.handleChapterSelect,
+      handleExternalSelect: this.handleExternalSelect,
       handleEditorEval: this.props.handleEditorEval,
       handleInterruptEval: this.props.handleInterruptEval,
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
-      hasChapterSelect: false,
+      hasChapterSelect: true,
       hasSaveButton: true,
       hasShareButton: false,
       isRunning: this.props.isRunning,

@@ -22,7 +22,7 @@ import { NavLink } from 'react-router-dom'
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
-import EditingWorkspaceContainer from '../../containers/assessment/EditingWorkspaceContainer'
+import EditingWorkspaceContainer from '../../containers/incubator/EditingWorkspaceContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser'
