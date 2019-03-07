@@ -8,6 +8,7 @@ import {
   IMCQQuestion,
 } from '../../assessment/assessmentShape'
 import Markdown from '../../commons/Markdown'
+import { mcqTemplate, programmingTemplate } from '../../incubator/assessmentTemplates';
 
 interface IProps {
 	assessment: IAssessment,
@@ -39,10 +40,52 @@ export class EditingContentTab extends React.Component<IProps, IState> {
   			this.questionTemplateTab()
   		: this.props.type === 'grading' ?
   			this.gradingTab()
-  		: null
+      : this.props.type === 'manageQuestions' ?
+        this.manageQuestionTab()
+      : null
   	);
 
   	return display;
+  }
+
+  private manageQuestionTab = () => {
+    return <div>
+      <button onClick={this.makeProgramming}>Make Programming Question</button>
+      <button onClick={this.makeMCQ}>Make MCQ Question</button>
+      <button onClick={this.deleteQn}>Delete Question</button>
+      </div>
+  }
+
+  private makeProgramming = () => {
+    const assessment = this.props.assessment;
+    const path = [this.props.path[0]];
+    const index = (path[1] as number) + 1;
+    let questions = getValueFromPath(path, assessment);
+    questions = questions.slice(0, index).concat([programmingTemplate]).concat(questions.slice(index));
+    assignToPath(path, questions, assessment);
+    this.props.updateAssessment(assessment);
+  }
+
+  private makeMCQ = () => {
+    const assessment = this.props.assessment;
+    const path = [this.props.path[0]];
+    const index = (path[1] as number) + 1;
+    let questions = getValueFromPath(path, assessment);
+    questions = (questions.slice(0, index)).concat([mcqTemplate]).concat(questions.slice(index));
+    assignToPath(path, questions, assessment);
+    this.props.updateAssessment(assessment);
+  }
+
+  private deleteQn = () => {
+    const assessment = this.props.assessment;
+    const path = this.props.path;
+    let questions = getValueFromPath([path[0]], assessment);
+    const index = path[1] as number;
+    if (questions.length > 1) {
+      questions = questions.slice(0, index).concat(questions.slice(index + 1));
+    } 
+    assignToPath([path[0]], questions, assessment);
+    this.props.updateAssessment(assessment);
   }
 
   private saveEditAssessment = (

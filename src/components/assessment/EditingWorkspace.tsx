@@ -186,7 +186,7 @@ class AssessmentWorkspace extends React.Component<
    */
   private checkWorkspaceReset(props: AssessmentWorkspaceProps) {
     /* Don't reset workspace if assessment not fetched yet. */
-    if (this.props.assessment === undefined) {
+    if (this.state.assessment === undefined) {
       return
     }
 
@@ -198,7 +198,7 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedAssessmentId !== assessmentId ||
       this.props.storedQuestionId !== questionId
     ) {
-      const question = this.props.assessment.questions[questionId]
+      const question = this.state.assessment!.questions[questionId]
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
@@ -223,6 +223,13 @@ class AssessmentWorkspace extends React.Component<
     this.setState({
       assessment: assessmentVal
     })
+  }
+
+  private updateAndSaveAssessment = (assessmentVal: IAssessment) => {
+    this.setState({
+      assessment: assessmentVal
+    })
+    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentVal));
   }
 
   private handleChangeActiveTab = (tab: number) => {
@@ -266,6 +273,16 @@ class AssessmentWorkspace extends React.Component<
           path = {['questions', questionId]}
           type = 'questionTemplate'
           updateAssessment = {this.updateEditAssessmentState}
+        />
+      },
+      {
+        label: `Manage Question`,
+        icon: IconNames.WRENCH,
+        body: <EditingContentTab 
+          assessment = {this.state.assessment!}
+          path = {['questions', questionId]}
+          type = 'manageQuestions'
+          updateAssessment = {this.updateAndSaveAssessment}
         />
       }
     ]
