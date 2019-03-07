@@ -33,12 +33,6 @@ interface IState {
   fieldValue: any
 }
 
-const textareaStyle = {
-	"height": "100%",
-	"width": "100%",
-  "overflow": "hidden" as "hidden",
-  "resize": "none" as "none"
-}
 
 export class EditingOverviewCard extends React.Component<Props, IState> {
 	public constructor(props: Props) {
@@ -88,7 +82,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
   private makeEditingOverviewTextarea = (field: keyof IAssessmentOverview) => 
     <Textarea
       autoFocus={true}
-      style={textareaStyle}
+      className={'editing-textarea'}
       onChange={this.handleEditOverview()}
       onBlur={this.saveEditOverview(field)}
       value={this.state.fieldValue}
