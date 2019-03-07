@@ -24,6 +24,7 @@ import Markdown from '../commons/Markdown'
 const DEFAULT_QUESTION_ID: number = 0
 
 type Props = {
+  listingPath?: string,
 	overview: IAssessmentOverview,
 	updateEditingOverview: (overview: IAssessmentOverview) => void
 }
@@ -33,12 +34,6 @@ interface IState {
   fieldValue: any
 }
 
-const textareaStyle = {
-	"height": "100%",
-	"width": "100%",
-  "overflow": "hidden" as "hidden",
-  "resize": "none" as "none"
-}
 
 export class EditingOverviewCard extends React.Component<Props, IState> {
 	public constructor(props: Props) {
@@ -88,7 +83,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
   private makeEditingOverviewTextarea = (field: keyof IAssessmentOverview) => 
     <Textarea
       autoFocus={true}
-      style={textareaStyle}
+      className={'editing-textarea'}
       onChange={this.handleEditOverview()}
       onBlur={this.saveEditOverview(field)}
       value={this.state.fieldValue}
@@ -155,7 +150,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
                 : `${getPrettyDate(overview.closeAt)}`}
               </div>
             </Text>
-            {makeOverviewCardButton(overview)}
+            {makeOverviewCardButton(overview, this.props.listingPath)}
           </div>
         </div>
       </Card>
@@ -197,14 +192,13 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
 
 }
 
-const makeOverviewCardButton = (overview: IAssessmentOverview) => {
+const makeOverviewCardButton = (overview: IAssessmentOverview, listingPath: string | undefined) => {
   const icon: IconName = IconNames.EDIT;
   const label: string = "Edit mission";
+  listingPath = listingPath || ('/academy/' + assessmentCategoryLink(overview.category));
   return (
     <NavLink
-      to={`/academy/${assessmentCategoryLink(
-        overview.category
-      )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+      to={listingPath + `/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
     >
       {controlButton(label, icon)}
     </NavLink>

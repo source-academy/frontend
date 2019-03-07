@@ -22,6 +22,7 @@ import { NavLink } from 'react-router-dom'
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
+import EditingWorkspaceContainer from '../../containers/assessment/EditingWorkspaceContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser'
@@ -29,7 +30,8 @@ import {
   AssessmentCategory,
   AssessmentStatuses,
   GradingStatuses,
-  IAssessmentOverview
+  // IAssessment,
+  IAssessmentOverview,
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { EditingOverviewCard } from '../assessment/EditingOverviewCard'
@@ -71,7 +73,6 @@ type State = {
   showClosedAssessments: boolean
   showOpenedAssessments: boolean
   showUpcomingAssessments: boolean
-  editOverview: string
   editingOverview: IAssessmentOverview | null;
 }
 
@@ -86,8 +87,17 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showClosedAssessments: false,
       showOpenedAssessments: true,
       showUpcomingAssessments: true,
-      editOverview: '',
-      editingOverview: retrieveLocalAssessmentOverview()
+      editingOverview: null,
+    }
+  }
+
+  public componentDidMount(){
+    const editingOverviewStr: any = localStorage.getItem('MissionEditingOverviewSA');
+    if (editingOverviewStr) {
+      this.setState({
+        ...this.state,
+        editingOverview: retrieveLocalAssessmentOverview(),
+      })
     }
   }
 
@@ -106,7 +116,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           notAttempted: overview.status === AssessmentStatuses.not_attempted,
           closeDate: overview.closeAt
         }
-        return <AssessmentWorkspaceContainer {...assessmentProps} />
+        return <EditingWorkspaceContainer {...assessmentProps} />
       }
     }
 
