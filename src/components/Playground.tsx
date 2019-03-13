@@ -156,13 +156,13 @@ const playgroundIntroductionTab: SideContentTab = {
 
 const listVisualizerTab: SideContentTab = {
   label: 'List Visualizer',
-  icon: IconNames.SEGMENTED_CONTROL,
+  icon: IconNames.EYE_OPEN,
   body: <ListVisualizer />
 }
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
-  icon: IconNames.EYE_OPEN,
+  icon: IconNames.SEARCH,
   body: <Inspector />
 }
 
