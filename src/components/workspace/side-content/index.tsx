@@ -47,6 +47,7 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
         <Tooltip key={i} content={tab.label}>
           <Button
             className="side-content-header-button"
+            id={tab.label + "-icon" }
             icon={tab.icon as IconName}
             minimal={true}
             onClick={click(i)}

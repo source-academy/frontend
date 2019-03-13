@@ -1,5 +1,5 @@
 ;(function(exports) {
-  var container = document.createElement('table')
+  var container = document.createElement('div')
   container.id = 'inspector-container'
 
   var builtins = [
@@ -103,6 +103,10 @@
     'math_SQRT2'
   ]
 
+  this.onFocus = function() {
+    document.getElementById("Inspector-icon").classList.remove("side-content-header-button-alert");
+  }
+
   function updateContext(context) {
     function dumpTable(env) {
       var res = ''
@@ -115,6 +119,7 @@
     }
     try {
       var frames = context.context.context.runtime.frames
+      container.innerHTML = ""
 
       for (var i = 0; i < frames.length; ++i){
         var envtoString = dumpTable(frames[i].environment)
@@ -125,10 +130,10 @@
         var newtable = document.createElement("table");
         var tbody = document.createElement("tbody");
         tbody.id = "inspect-scope"
-        tbody.innerHTML = "<strong> Frame: " + frames[i].name + "</strong>" + envtoString
-        newtable.innerHTML += "<hr/>"
+        tbody.innerHTML = "</br><caption><strong>Frame: " + frames[i].name + "</strong></caption>" + envtoString
         newtable.appendChild(tbody)
         container.appendChild(newtable)
+        document.getElementById("Inspector-icon").classList.toggle("side-content-header-button-alert");
       }
     } catch (e) {
       container.innerHTML = e
