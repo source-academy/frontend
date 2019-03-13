@@ -22,11 +22,8 @@ import { NavLink } from 'react-router-dom'
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
-import EditingWorkspaceContainer from '../../containers/incubator/EditingWorkspaceContainer'
-import ImportFromFileComponent from '../../containers/incubator/ImportFromFileComponentContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
-import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser'
 import {
   AssessmentCategory,
   AssessmentStatuses,
@@ -37,7 +34,6 @@ import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
 import Markdown from '../commons/Markdown'
-import { EditingOverviewCard } from '../incubator/EditingOverviewCard'
 
 const DEFAULT_QUESTION_ID: number = 0
 
@@ -71,7 +67,6 @@ type State = {
   showClosedAssessments: boolean
   showOpenedAssessments: boolean
   showUpcomingAssessments: boolean
-  editingOverview: IAssessmentOverview | null;
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -85,7 +80,6 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showClosedAssessments: false,
       showOpenedAssessments: true,
       showUpcomingAssessments: true,
-      editingOverview: retrieveLocalAssessmentOverview(),
     }
   }
 
@@ -94,23 +88,9 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     const questionId: number =
       stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID
 
-    // If mission for testing is to render, create workspace
-    if (assessmentId === -1) {
-      if (this.state.editingOverview){
-        const overview = this.state.editingOverview
-        const assessmentProps: AssessmentProps = {
-          assessmentId,
-          questionId,
-          notAttempted: overview.status === AssessmentStatuses.not_attempted,
-          closeDate: overview.closeAt
-        }
-        return <EditingWorkspaceContainer {...assessmentProps} />
-      }
-    }
-
     // If there is an assessment to render, create a workspace. The assessment
     // overviews must still be loaded for this, to send the due date.
-    else if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
+    if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
       const overview = this.props.assessmentOverviews.filter(a => a.id === assessmentId)[0]
       const assessmentProps: AssessmentProps = {
         assessmentId,
@@ -155,14 +135,6 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           makeOverviewCard(overview, index, this.setBetchaAssessment, true, true)
         )
 
-      /** Mission editing card */
-      const missionEditingCard = this.state.editingOverview
-        ? <EditingOverviewCard 
-          overview={this.state.editingOverview} 
-          updateEditingOverview={this.updateEditingOverview}
-          />
-        : null
-
       /** Render cards */
       const upcomingCardsCollapsible =
         upcomingCards.length > 0 ? (
@@ -195,10 +167,6 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         ) : null
       display = (
         <>
-          <ImportFromFileComponent 
-            updateEditingOverview={this.updateEditingOverview}
-          />
-          {missionEditingCard}
           {upcomingCardsCollapsible}
           {openedCardsCollapsible}
           {closedCardsCollapsible}
@@ -299,12 +267,6 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       this.props.handleSubmitAssessment(this.state.betchaAssessment.id)
       this.setBetchaAssessmentNull()
     }
-  }
-
-  private updateEditingOverview = (overview: IAssessmentOverview) => {
-    this.setState({
-      editingOverview: overview
-    })
   }
 }
 
