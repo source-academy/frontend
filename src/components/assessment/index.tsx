@@ -23,6 +23,7 @@ import { NavLink } from 'react-router-dom'
 import defaultCoverImage from '../../assets/default_cover_image.jpg'
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer'
 import EditingWorkspaceContainer from '../../containers/incubator/EditingWorkspaceContainer'
+import ImportFromFileComponent from '../../containers/incubator/ImportFromFileComponentContainer'
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers'
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers'
 import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser'
@@ -33,11 +34,10 @@ import {
   IAssessmentOverview,
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
-import { EditingOverviewCard } from '../assessment/EditingOverviewCard'
-import ImportFromFileComponent from '../assessment/ImportFromFileComponent'
 import { controlButton } from '../commons'
 import ContentDisplay from '../commons/ContentDisplay'
 import Markdown from '../commons/Markdown'
+import { EditingOverviewCard } from '../incubator/EditingOverviewCard'
 
 const DEFAULT_QUESTION_ID: number = 0
 
@@ -85,17 +85,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showClosedAssessments: false,
       showOpenedAssessments: true,
       showUpcomingAssessments: true,
-      editingOverview: null,
-    }
-  }
-
-  public componentDidMount(){
-    const editingOverviewStr: any = localStorage.getItem('MissionEditingOverviewSA');
-    if (editingOverviewStr) {
-      this.setState({
-        ...this.state,
-        editingOverview: retrieveLocalAssessmentOverview(),
-      })
+      editingOverview: retrieveLocalAssessmentOverview(),
     }
   }
 

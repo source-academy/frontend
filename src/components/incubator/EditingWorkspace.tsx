@@ -6,12 +6,6 @@ import { InterpreterOutput, IWorkspaceState } from '../../reducers/states'
 import { history } from '../../utils/history'
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
 import { retrieveLocalAssessment } from '../../utils/xmlParser'
-import Markdown from '../commons/Markdown'
-import Workspace, { WorkspaceProps } from '../workspace'
-import { ControlBarProps } from '../workspace/ControlBar'
-import { SideContentProps } from '../workspace/side-content'
-import EditingContentTab from '../workspace/side-content/EditingContentTab'
-import ToneMatrix from '../workspace/side-content/ToneMatrix'
 import {
   ExternalLibraryName,
   IAssessment,
@@ -20,7 +14,13 @@ import {
   IQuestion,
   Library,
   QuestionTypes
-} from './assessmentShape'
+} from '../assessment/assessmentShape'
+import Markdown from '../commons/Markdown'
+import Workspace, { WorkspaceProps } from '../workspace'
+import { ControlBarProps } from '../workspace/ControlBar'
+import { SideContentProps } from '../workspace/side-content'
+import EditingContentTab from '../workspace/side-content/EditingContentTab'
+import ToneMatrix from '../workspace/side-content/ToneMatrix'
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps
 

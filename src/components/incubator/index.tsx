@@ -6,6 +6,7 @@ import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 
 import EditingWorkspaceContainer from '../../containers/incubator/EditingWorkspaceContainer'
+import ImportFromFileComponent from '../../containers/incubator/ImportFromFileComponentContainer'
 import { stringParamToInt } from '../../utils/paramParseHelpers'
 import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser'
 import {
@@ -13,9 +14,8 @@ import {
   IAssessmentOverview
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
-import { EditingOverviewCard } from '../assessment/EditingOverviewCard'
-import ImportFromFileComponent from '../assessment/ImportFromFileComponent'
 import ContentDisplay from '../commons/ContentDisplay'
+import { EditingOverviewCard } from '../incubator/EditingOverviewCard'
 // import { AnyAction } from 'redux';
 
 const DEFAULT_QUESTION_ID: number = 0

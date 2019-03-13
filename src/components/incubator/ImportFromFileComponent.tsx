@@ -1,8 +1,5 @@
 import * as React from 'react'
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
 import { parseString } from 'xml2js'
-import { updateAssessment } from '../../actions/session'
 import {
   IAssessment,
   IAssessmentOverview,
@@ -12,21 +9,6 @@ import {
   assessmentTemplate, 
   overviewTemplate,
 } from '../incubator/assessmentTemplates'
-
-
-interface IDispatchProps {
-  newAssessment: (assessment: IAssessment) => void
-}
-
-const mapStateToProps: MapStateToProps<{}, any, {}> = (_, ownProps) => ownProps
-
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
-  bindActionCreators(
-    {
-      newAssessment: updateAssessment,
-    },
-    dispatch
-  )
 
 type Props = {
 	newAssessment: (assessment: IAssessment) => void,
@@ -108,4 +90,4 @@ export class ImportFromFileComponent extends React.Component<Props, {isInvalidXm
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImportFromFileComponent)
+export default ImportFromFileComponent;
