@@ -128,8 +128,8 @@ export type Library = {
   chapter: number
   external: ExternalLibrary
   globals: Array<{
-    0: string,
-    1: any,
+    0: string
+    1: any
     2?: string
   }>
 }

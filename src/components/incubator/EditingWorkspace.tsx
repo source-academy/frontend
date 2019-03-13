@@ -66,22 +66,18 @@ export type DispatchProps = {
 }
 
 interface IState {
-  showOverlay: boolean,
-  assessment: IAssessment | null,
-  activeTab: number,
+  showOverlay: boolean
+  assessment: IAssessment | null
+  activeTab: number
 }
 
-class AssessmentWorkspace extends React.Component<
-  AssessmentWorkspaceProps,
-  IState
-> {
-
+class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, IState> {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props)
     this.state = {
       showOverlay: false,
       assessment: retrieveLocalAssessment(),
-      activeTab: 0,
+      activeTab: 0
     }
   }
 
@@ -148,7 +144,7 @@ class AssessmentWorkspace extends React.Component<
               editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -158,7 +154,7 @@ class AssessmentWorkspace extends React.Component<
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
-          this.props.handleSave(this.state.assessment!.questions[questionId].id, option),
+          this.props.handleSave(this.state.assessment!.questions[questionId].id, option)
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -171,7 +167,7 @@ class AssessmentWorkspace extends React.Component<
         replValue: this.props.replValue
       }
     }
-    return ( 
+    return (
       <div className="WorkspaceParent pt-dark">
         {overlay}
         <Workspace {...workspaceProps} />
@@ -214,8 +210,8 @@ class AssessmentWorkspace extends React.Component<
     }
   }
 
-  private handleSave = () =>{
-    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(this.state.assessment));
+  private handleSave = () => {
+    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(this.state.assessment))
   }
 
   private updateEditAssessmentState = (assessmentVal: IAssessment) => {
@@ -228,12 +224,12 @@ class AssessmentWorkspace extends React.Component<
     this.setState({
       assessment: assessmentVal
     })
-    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentVal));
+    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentVal))
   }
 
   private handleChangeActiveTab = (tab: number) => {
     this.setState({
-      activeTab: tab,
+      activeTab: tab
     })
   }
 
@@ -242,47 +238,55 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const assessment = this.state.assessment;
+    const assessment = this.state.assessment
     const tabs = [
       {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
-        body: <EditingContentTab 
-          assessment = {this.state.assessment!}
-          path = {["questions", questionId, "content"]}
-          type = 'content'
-          updateAssessment = {this.updateEditAssessmentState}
-        />
+        body: (
+          <EditingContentTab
+            assessment={this.state.assessment!}
+            path={['questions', questionId, 'content']}
+            type="content"
+            updateAssessment={this.updateEditAssessmentState}
+          />
+        )
       },
       {
         label: `${assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
-        body: <EditingContentTab 
-          assessment = {this.state.assessment!}
-          path = {["longSummary"]}
-          type = 'content'
-          updateAssessment = {this.updateEditAssessmentState}
-        />
+        body: (
+          <EditingContentTab
+            assessment={this.state.assessment!}
+            path={['longSummary']}
+            type="content"
+            updateAssessment={this.updateEditAssessmentState}
+          />
+        )
       },
       {
         label: `Question Template`,
         icon: IconNames.WRENCH,
-        body: <EditingContentTab 
-          assessment = {this.state.assessment!}
-          path = {['questions', questionId]}
-          type = 'questionTemplate'
-          updateAssessment = {this.updateEditAssessmentState}
-        />
+        body: (
+          <EditingContentTab
+            assessment={this.state.assessment!}
+            path={['questions', questionId]}
+            type="questionTemplate"
+            updateAssessment={this.updateEditAssessmentState}
+          />
+        )
       },
       {
         label: `Manage Question`,
         icon: IconNames.WRENCH,
-        body: <EditingContentTab 
-          assessment = {this.state.assessment!}
-          path = {['questions', questionId]}
-          type = 'manageQuestions'
-          updateAssessment = {this.updateAndSaveAssessment}
-        />
+        body: (
+          <EditingContentTab
+            assessment={this.state.assessment!}
+            path={['questions', questionId]}
+            type="manageQuestions"
+            updateAssessment={this.updateAndSaveAssessment}
+          />
+        )
       }
     ]
     const isGraded = assessment!.questions[questionId].grader !== null
@@ -290,12 +294,14 @@ class AssessmentWorkspace extends React.Component<
       tabs.push({
         label: `Grading`,
         icon: IconNames.TICK,
-        body: <EditingContentTab 
-          assessment = {this.state.assessment!}
-          path = {['questions', questionId]}
-          type = 'grading'
-          updateAssessment = {this.updateEditAssessmentState}
-        />
+        body: (
+          <EditingContentTab
+            assessment={this.state.assessment!}
+            path={['questions', questionId]}
+            type="grading"
+            updateAssessment={this.updateEditAssessmentState}
+          />
+        )
       })
     }
 
@@ -315,20 +321,20 @@ class AssessmentWorkspace extends React.Component<
   }
 
   private handleChapterSelect = (chapter: any, e: any) => {
-    const assessment = this.state.assessment!;
+    const assessment = this.state.assessment!
     for (const question of assessment.questions) {
-      question.library.chapter = chapter.chapter;
+      question.library.chapter = chapter.chapter
     }
-    this.updateAndSaveAssessment(assessment);
+    this.updateAndSaveAssessment(assessment)
     // this.props.handleChapterSelect(chapter, e);
   }
 
   private handleExternalSelect = ({ name }: { name: ExternalLibraryName }, e: any) => {
-    const assessment = this.state.assessment!;
+    const assessment = this.state.assessment!
     for (const question of assessment.questions) {
-      question.library.external.name = name;
+      question.library.external.name = name
     }
-    this.updateAndSaveAssessment(assessment);
+    this.updateAndSaveAssessment(assessment)
   }
 
   /** Pre-condition: IAssessment has been loaded */
@@ -336,7 +342,9 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const listingPath = this.props.listingPath || `/academy/${assessmentCategoryLink(this.state.assessment!.category)}`
+    const listingPath =
+      this.props.listingPath ||
+      `/academy/${assessmentCategoryLink(this.state.assessment!.category)}`
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`
     return {
       externalLibraryName: this.state.assessment!.questions[questionId].library.external.name,

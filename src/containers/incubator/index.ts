@@ -24,7 +24,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     {
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
       handleSubmitAssessment: submitAssessment,
-      newAssessment: updateAssessment,
+      newAssessment: updateAssessment
     },
     dispatch
   )

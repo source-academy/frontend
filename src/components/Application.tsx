@@ -31,9 +31,9 @@ export interface IDispatchProps {
   handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void
 }
 
-const assessmentRenderFactory = (cat: string) => (
-  routerProps: RouteComponentProps<any>
-) => <IncubatorContainer assessmentCategory={cat} />
+const assessmentRenderFactory = (cat: string) => (routerProps: RouteComponentProps<any>) => (
+  <IncubatorContainer assessmentCategory={cat} />
+)
 
 const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?'
 
@@ -56,7 +56,7 @@ class Application extends React.Component<IApplicationProps, {}> {
             <Route path="/academy" component={toAcademy(this.props)} />
             <Route
               path={`/incubator/${assessmentRegExp}`}
-              render={assessmentRenderFactory("Missions")}
+              render={assessmentRenderFactory('Missions')}
             />
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />

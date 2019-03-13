@@ -4,7 +4,6 @@ import { updateAssessment } from '../../actions/session'
 import { IAssessment } from '../../components/assessment/assessmentShape'
 import { ImportFromFileComponent } from '../../components/incubator/ImportFromFileComponent'
 
-
 interface IDispatchProps {
   newAssessment: (assessment: IAssessment) => void
 }
@@ -14,7 +13,7 @@ const mapStateToProps: MapStateToProps<{}, any, {}> = (state, ownProps) => ownPr
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      newAssessment: updateAssessment,
+      newAssessment: updateAssessment
     },
     dispatch
   )

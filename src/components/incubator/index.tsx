@@ -1,7 +1,4 @@
-import {
-  NonIdealState,
-  Spinner,
-} from '@blueprintjs/core'
+import { NonIdealState, Spinner } from '@blueprintjs/core'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 
@@ -9,10 +6,7 @@ import EditingWorkspaceContainer from '../../containers/incubator/EditingWorkspa
 import ImportFromFileComponent from '../../containers/incubator/ImportFromFileComponentContainer'
 import { stringParamToInt } from '../../utils/paramParseHelpers'
 import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser'
-import {
-  AssessmentStatuses,
-  IAssessmentOverview
-} from '../assessment/assessmentShape'
+import { AssessmentStatuses, IAssessmentOverview } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import ContentDisplay from '../commons/ContentDisplay'
 import { EditingOverviewCard } from '../incubator/EditingOverviewCard'
@@ -47,7 +41,7 @@ export interface IStateProps {
 
 type State = {
   editOverview: string
-  editingOverview: IAssessmentOverview | null;
+  editingOverview: IAssessmentOverview | null
 }
 
 class Assessment extends React.Component<IAssessmentProps, State> {
@@ -69,7 +63,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
 
     // If mission for testing is to render, create workspace
     if (assessmentId === -1) {
-      if (this.state.editingOverview){
+      if (this.state.editingOverview) {
         const overview = this.state.editingOverview
         const assessmentProps: AssessmentProps = {
           assessmentId,
@@ -79,7 +73,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         }
         return (
           <div className="Academy">
-            <EditingWorkspaceContainer {...assessmentProps} listingPath='/incubator' />
+            <EditingWorkspaceContainer {...assessmentProps} listingPath="/incubator" />
           </div>
         )
       }
@@ -103,21 +97,18 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     if (this.props.assessmentOverviews === undefined) {
       display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />
     } else {
-
       /** Mission editing card */
-      const missionEditingCard = this.state.editingOverview
-        ? <EditingOverviewCard 
-          overview={this.state.editingOverview} 
+      const missionEditingCard = this.state.editingOverview ? (
+        <EditingOverviewCard
+          overview={this.state.editingOverview}
           updateEditingOverview={this.updateEditingOverview}
-          listingPath='/incubator'
-          />
-        : null
+          listingPath="/incubator"
+        />
+      ) : null
 
       display = (
         <>
-          <ImportFromFileComponent 
-            updateEditingOverview={this.updateEditingOverview}
-          />
+          <ImportFromFileComponent updateEditingOverview={this.updateEditingOverview} />
           {missionEditingCard}
         </>
       )

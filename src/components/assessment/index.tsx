@@ -28,7 +28,7 @@ import {
   AssessmentCategory,
   AssessmentStatuses,
   GradingStatuses,
-  IAssessmentOverview,
+  IAssessmentOverview
 } from '../assessment/assessmentShape'
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace'
 import { controlButton } from '../commons'
@@ -79,7 +79,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       betchaAssessment: null,
       showClosedAssessments: false,
       showOpenedAssessments: true,
-      showUpcomingAssessments: true,
+      showUpcomingAssessments: true
     }
   }
 
