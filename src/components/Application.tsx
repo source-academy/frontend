@@ -33,9 +33,9 @@ export interface IDispatchProps {
 
 const assessmentRenderFactory = (cat: string) => (routerProps: RouteComponentProps<any>) => (
   <IncubatorContainer assessmentCategory={cat} />
-)
+);
 
-const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?'
+const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
 
 class Application extends React.Component<IApplicationProps, {}> {
   public componentDidMount() {

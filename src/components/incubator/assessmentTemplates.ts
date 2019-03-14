@@ -5,8 +5,8 @@ import {
   IAssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion
-} from '../../components/assessment/assessmentShape'
-import { mock2DRuneLibrary } from '../../mocks/assessmentAPI'
+} from '../../components/assessment/assessmentShape';
+import { mock2DRuneLibrary } from '../../mocks/assessmentAPI';
 
 export const overviewTemplate: IAssessmentOverview = {
   category: AssessmentCategories.Mission,
@@ -23,7 +23,7 @@ export const overviewTemplate: IAssessmentOverview = {
   story: 'mission',
   xp: 0,
   gradingStatus: 'none'
-}
+};
 
 export const programmingTemplate: IProgrammingQuestion = {
   answer: '//1st question mock solution template',
@@ -42,7 +42,7 @@ export const programmingTemplate: IProgrammingQuestion = {
   grade: 0,
   maxGrade: 2,
   maxXp: 2
-}
+};
 
 export const mcqTemplate: IMCQQuestion = {
   answer: 3,
@@ -80,7 +80,7 @@ export const mcqTemplate: IMCQQuestion = {
   grade: 0,
   maxGrade: 2,
   maxXp: 2
-}
+};
 
 export const assessmentTemplate: IAssessment = {
   category: 'Mission',
@@ -89,4 +89,4 @@ export const assessmentTemplate: IAssessment = {
   missionPDF: 'www.google.com',
   questions: [programmingTemplate],
   title: 'Insert title here'
-}
+};
