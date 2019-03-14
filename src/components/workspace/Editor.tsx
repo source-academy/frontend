@@ -1,7 +1,8 @@
+// tslint:disable:no-console
 import * as React from 'react';
 import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
-import sharedbAce from "sharedb-ace";
+import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
@@ -16,6 +17,7 @@ import 'brace/theme/cobalt';
  */
 export interface IEditorProps {
   isEditorAutorun?: boolean;
+  editorSessionId?: string;
   editorValue: string;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
@@ -51,22 +53,29 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     // this editor is the same as the one in line 5 of index.js of sharedb-ace-example
     const editor = this.ace.current.editor;
     // const session = editor.getSession();
-    this.get("http://localhost:4000/gists/latest", (data: IJSONData) => {
-      const ShareAce = new sharedbAce(data.id, {
-        WsUrl: "ws://localhost:4000/ws",
-        pluginWsUrl: "ws://localhost:3108/ws",
-        namespace: "codepad",
+    if (this.props.editorSessionId !== '') {
+      console.log('Component mounted with id = ' + this.props.editorSessionId);
+      const ShareAce = new sharedbAce(this.props.editorSessionId, {
+        WsUrl: 'wss://13.250.109.61/ws',
+        pluginWsUrl: 'ws://localhost:3108/ws',
+        namespace: 'codepad'
       });
       ShareAce.on('ready', () => {
-        ShareAce.add(editor, ["code"], [
-          // SharedbAceRWControl,
-          // SharedbAceMultipleCursors
-        ]);
+        ShareAce.add(
+          editor,
+          ['code'],
+          [
+            // SharedbAceRWControl,
+            // SharedbAceMultipleCursors
+          ]
+        );
       });
-    });
+    }
   }
 
   public render() {
+    console.log('Starting render: editorSessionId = ' + this.props.editorSessionId);
+    console.log('Starting render: key = ' + this.props.editorSessionId);
     return (
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
@@ -100,18 +109,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       </HotKeys>
     );
   }
-
-  private get(url: string, callback: (data: IJSONData) => void){
-    const xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = () => {
-      if (xmlhttp.readyState === 4 && xmlhttp.status === 200){
-        callback(JSON.parse(xmlhttp.responseText));
-      }
-    };
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-  }
-
 }
 
 /* Override handler, so does not trigger when focus is in editor */

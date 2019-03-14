@@ -17,6 +17,7 @@ export type ControlBarProps = {
   queryString?: string;
   questionProgress: [number, number] | null;
   sourceChapter: number;
+  editorSessionId?: string;
   externalLibraryName?: string;
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleEditorEval: () => void;
@@ -25,9 +26,12 @@ export type ControlBarProps = {
   handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
+  handleSetEditorSessionId?: (editorSessionId: string) => void;
   handleToggleEditorAutorun?: () => void;
   hasChapterSelect: boolean;
   hasEditorAutorunButton: boolean;
+  hasInviteButton: boolean;
+  hasJoinButton: boolean;
   hasSaveButton: boolean;
   hasShareButton: boolean;
   hasUnsavedChanges?: boolean;
@@ -66,10 +70,14 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   };
 
   private shareInputElem: HTMLInputElement;
+  private joinInputElem: React.RefObject<HTMLInputElement>;
+  private inviteInputElem: HTMLInputElement;
 
   constructor(props: ControlBarProps) {
     super(props);
     this.selectShareInputText = this.selectShareInputText.bind(this);
+    this.selectInviteInputText = this.selectInviteInputText.bind(this);
+    this.joinInputElem = React.createRef();
   }
 
   public render() {
@@ -83,6 +91,23 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private editorControl() {
+    const handleStartInvite = () => {
+      if (this.props.editorSessionId === '') {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = () => {
+          if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            const id = JSON.parse(xmlhttp.responseText).id;
+            this.props.handleSetEditorSessionId!(id);
+          }
+        };
+        xmlhttp.open('GET', 'https://13.250.109.61/gists/latest', true);
+        xmlhttp.send();
+      }
+    };
+    const handleStartJoining = (e: React.FormEvent<HTMLFormElement>) => {
+      this.props.handleSetEditorSessionId!(this.joinInputElem.current!.value);
+      e.preventDefault();
+    };
     const runButton = (
       <Tooltip content="...or press shift-enter in the editor">
         {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
@@ -98,6 +123,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
       this.props.queryString
     }`;
+
     const shareButton = this.props.hasShareButton ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
@@ -123,6 +149,37 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     ) : (
       undefined
     );
+    const inviteButton = this.props.hasInviteButton ? (
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+        {controlButton('Invite', IconNames.SHARE, handleStartInvite)}
+        <>
+          <input
+            value={this.props.editorSessionId}
+            readOnly={true}
+            ref={e => (this.inviteInputElem = e!)}
+            onFocus={this.selectInviteInputText}
+          />
+          <CopyToClipboard text={'' + this.props.editorSessionId}>
+            {controlButton('', IconNames.DUPLICATE, this.selectInviteInputText)}
+          </CopyToClipboard>
+        </>
+      </Popover>
+    ) : (
+      undefined
+    );
+    const joinButton = this.props.hasJoinButton ? (
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+        {controlButton('Join', IconNames.CHAT)}
+        <>
+          <form onSubmit={handleStartJoining}>
+            <input defaultValue="" ref={this.joinInputElem} />
+            {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
+          </form>
+        </>
+      </Popover>
+    ) : (
+      undefined
+    );
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined;
@@ -142,6 +199,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton}
         {this.props.isEditorAutorun ? stopAutorunButton : startAutorunButton}
+        {inviteButton} {joinButton}
       </div>
     );
   }
@@ -192,6 +250,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   private selectShareInputText() {
     this.shareInputElem.focus();
     this.shareInputElem.select();
+  }
+
+  private selectInviteInputText() {
+    this.inviteInputElem.focus();
+    this.inviteInputElem.select();
   }
 
   private hasNextButton() {

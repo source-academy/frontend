@@ -7,6 +7,7 @@ type controlButtonOptionals = {
   iconOnRight?: boolean;
   intent?: Intent;
   minimal?: boolean;
+  type?: string;
 };
 
 const defaultOptions = {
@@ -14,7 +15,8 @@ const defaultOptions = {
   fullWidth: false,
   iconOnRight: false,
   intent: Intent.NONE,
-  minimal: true
+  minimal: true,
+  type: ''
 };
 
 export function controlButton(
@@ -30,6 +32,7 @@ export function controlButton(
   props.intent = opts.intent === undefined ? Intent.NONE : opts.intent;
   props.minimal = opts.minimal !== undefined && opts.minimal;
   props.className = opts.className;
+  props.type = opts.type;
   if (icon) {
     opts.iconOnRight ? (props.rightIcon = icon) : (props.icon = icon);
   }

@@ -34,6 +34,7 @@ export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComp
 
 export interface IStateProps {
   activeTab: number;
+  editorSessionId: string;
   editorValue: string;
   editorWidth: string;
   isEditorAutorun: boolean;
@@ -60,6 +61,7 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
 }
@@ -82,6 +84,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   public render() {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
+        editorSessionId: this.props.editorSessionId,
         externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
           this.props.handleChapterSelect(chapter),
@@ -92,9 +95,12 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleInterruptEval: this.props.handleInterruptEval,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
+        handleSetEditorSessionId: this.props.handleSetEditorSessionId,
         handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
         hasChapterSelect: true,
         hasEditorAutorunButton: true,
+        hasInviteButton: true,
+        hasJoinButton: true,
         hasSaveButton: false,
         hasShareButton: true,
         isEditorAutorun: this.props.isEditorAutorun,
@@ -105,6 +111,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       },
       editorProps: {
         editorValue: this.props.editorValue,
+        editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         isEditorAutorun: this.props.isEditorAutorun

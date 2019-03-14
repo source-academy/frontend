@@ -15,6 +15,7 @@ import {
   evalRepl,
   generateLzString,
   playgroundExternalSelect,
+  setEditorSessionId,
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue,
@@ -26,6 +27,7 @@ import { IState } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.playground.sideContentActiveTab,
+  editorSessionId: state.workspaces.playground.editorSessionId,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
   isEditorAutorun: state.workspaces.playground.isEditorAutorun,
@@ -57,6 +59,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleSetEditorSessionId: (editorSessionId: string) =>
+        setEditorSessionId(location, editorSessionId),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleToggleEditorAutorun: () => toggleEditorAutorun(location)

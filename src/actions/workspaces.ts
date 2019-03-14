@@ -209,6 +209,17 @@ export const resetWorkspace = (
   }
 });
 
+export const setEditorSessionId: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  editorSessionId: string
+) => ({
+  type: actionTypes.SET_EDITOR_SESSION_ID,
+  payload: {
+    workspaceLocation,
+    editorSessionId
+  }
+});
+
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
   type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
   payload: {

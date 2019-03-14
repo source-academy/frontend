@@ -272,6 +272,8 @@ class AssessmentWorkspace extends React.Component<
       handleReplValueChange: this.props.handleReplValueChange,
       hasChapterSelect: false,
       hasEditorAutorunButton: false,
+      hasInviteButton: false,
+      hasJoinButton: false,
       hasSaveButton:
         !beforeNow(this.props.closeDate) &&
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,

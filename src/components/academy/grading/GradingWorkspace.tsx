@@ -221,6 +221,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleReplOutputClear: this.props.handleReplOutputClear,
       hasChapterSelect: false,
       hasEditorAutorunButton: false,
+      hasInviteButton: false,
+      hasJoinButton: false,
       hasSaveButton: false,
       hasShareButton: false,
       isRunning: this.props.isRunning,

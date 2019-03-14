@@ -58,6 +58,7 @@ export interface IWorkspaceManagerState {
 
 export interface IWorkspaceState {
   readonly context: Context;
+  readonly editorSessionId: string;
   readonly editorValue: string | null;
   readonly editorWidth: string;
   readonly isEditorAutorun: boolean;
@@ -197,6 +198,7 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
+  editorSessionId: '',
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
   editorWidth: '50%',
   output: [],

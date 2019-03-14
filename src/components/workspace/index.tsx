@@ -153,7 +153,8 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    */
   private createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.editorProps) {
-      return <Editor {...props.editorProps} />;
+      // Set key to force remount of Editor component when session id changes
+      return <Editor {...props.editorProps} key={props.editorProps.editorSessionId} />;
     } else {
       return <MCQChooser {...props.mcqProps!} />;
     }

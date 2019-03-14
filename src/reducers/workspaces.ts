@@ -20,6 +20,7 @@ import {
   LOG_OUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SET_EDITOR_SESSION_ID,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -354,6 +355,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           ...createDefaultWorkspace(location),
           ...action.payload.workspaceOptions
+        }
+      };
+    case SET_EDITOR_SESSION_ID:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorSessionId: action.payload.editorSessionId
         }
       };
     case TOGGLE_EDITOR_AUTORUN:

@@ -9,6 +9,7 @@ const baseProps = {
   editorValue: '',
   isRunning: false,
   activeTab: 0,
+  editorSessionId: '',
   editorWidth: '50%',
   isEditorAutorun: false,
   sideContentHeight: 40,
@@ -29,6 +30,7 @@ const baseProps = {
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
+  handleSetEditorSessionId: (editorSessionId: string) => {},
   handleSideContentHeightChange: (h: number) => {},
   handleToggleEditorAutorun: () => {}
 };
