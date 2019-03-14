@@ -45,6 +45,7 @@ export type GradingStatus = keyof typeof GradingStatuses;
  */
 export interface IAssessment {
   category: AssessmentCategory;
+  graderDeployment?: any;
   id: number;
   longSummary: string;
   missionPDF: string;
@@ -66,6 +67,7 @@ export interface IProgrammingQuestion extends IQuestion {
   answer: string | null;
   solutionTemplate: string;
   type: 'programming';
+  graderTemplate?: string;
 }
 
 export interface IMCQQuestion extends IQuestion {
@@ -125,5 +127,9 @@ type ExternalLibrary = {
 export type Library = {
   chapter: number;
   external: ExternalLibrary;
-  globals: Array<[string, any]>;
-};
+  globals: Array<{
+    0: string,
+    1: any,
+    2?: string,
+  }>;
+}
