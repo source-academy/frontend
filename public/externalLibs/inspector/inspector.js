@@ -103,9 +103,11 @@
     'math_SQRT2'
   ]
 
-  this.onFocus = function() {
-    document.getElementById("Inspector-icon").classList.remove("side-content-header-button-alert");
-  }
+  setInterval(()=>{
+    if(document.getElementById("inspector-container") != null){
+      document.getElementById("Inspector-icon").classList.remove("side-content-header-button-alert");
+    }
+  },1000)
 
   function updateContext(context) {
     function dumpTable(env) {
