@@ -3,7 +3,8 @@
   "rules": {
     "interface-over-type-literal": false,
     "no-empty": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "semicolon": [true, "always", "ignore-bound-class-methods"]
   },
   "linterOptions": {
     "exclude": [

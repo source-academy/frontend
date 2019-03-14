@@ -1,10 +1,10 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAuth, login } from '../actions/session'
-import Login, { DispatchProps, OwnProps } from '../components/Login'
+import { fetchAuth, login } from '../actions/session';
+import Login, { DispatchProps, OwnProps } from '../components/Login';
 
-const mapStateToProps: MapStateToProps<{}, OwnProps, {}> = (_, ownProps) => ownProps
+const mapStateToProps: MapStateToProps<{}, OwnProps, {}> = (_, ownProps) => ownProps;
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -13,6 +13,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleLogin: login
     },
     dispatch
-  )
+  );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

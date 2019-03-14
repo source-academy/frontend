@@ -1,73 +1,73 @@
-import { Button, Card, Elevation, Icon, IconName, Intent, Text } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
-import { NavLink } from 'react-router-dom'
-import Textarea from 'react-textarea-autosize'
+import { Button, Card, Elevation, Icon, IconName, Intent, Text } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+import { NavLink } from 'react-router-dom';
+import Textarea from 'react-textarea-autosize';
 
-import defaultCoverImage from '../../assets/default_cover_image.jpg'
-import { getPrettyDate } from '../../utils/dateHelpers'
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers'
-import { exportXml } from '../../utils/xmlParser'
+import defaultCoverImage from '../../assets/default_cover_image.jpg';
+import { getPrettyDate } from '../../utils/dateHelpers';
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import { exportXml } from '../../utils/xmlParser';
 
-import { IAssessmentOverview } from '../assessment/assessmentShape'
-import { controlButton } from '../commons'
-import Markdown from '../commons/Markdown'
+import { IAssessmentOverview } from '../assessment/assessmentShape';
+import { controlButton } from '../commons';
+import Markdown from '../commons/Markdown';
 
-const DEFAULT_QUESTION_ID: number = 0
+const DEFAULT_QUESTION_ID: number = 0;
 
 type Props = {
-  listingPath?: string
-  overview: IAssessmentOverview
-  updateEditingOverview: (overview: IAssessmentOverview) => void
-}
+  listingPath?: string;
+  overview: IAssessmentOverview;
+  updateEditingOverview: (overview: IAssessmentOverview) => void;
+};
 
 interface IState {
-  editingOverviewField: string
-  fieldValue: any
+  editingOverviewField: string;
+  fieldValue: any;
 }
 
 export class EditingOverviewCard extends React.Component<Props, IState> {
   public constructor(props: Props) {
-    super(props)
+    super(props);
     this.state = {
       editingOverviewField: '',
       fieldValue: ''
-    }
+    };
   }
 
   public render() {
-    return <div>{this.makeEditingOverviewCard(this.props.overview)}</div>
+    return <div>{this.makeEditingOverviewCard(this.props.overview)}</div>;
   }
 
   private saveEditOverview = (field: keyof IAssessmentOverview) => (e: any) => {
     const overview = {
       ...this.props.overview,
       [field]: this.state.fieldValue
-    }
+    };
     this.setState({
       editingOverviewField: '',
       fieldValue: ''
-    })
-    localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overview))
-    this.props.updateEditingOverview(overview)
-  }
+    });
+    localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overview));
+    this.props.updateEditingOverview(overview);
+  };
 
   private handleEditOverview = () => (e: any) => {
     this.setState({
       fieldValue: e.target.value
-    })
-  }
+    });
+  };
 
   private toggleEditField = (field: keyof IAssessmentOverview) => (e: any) => {
     this.setState({
       editingOverviewField: field,
       fieldValue: this.props.overview[field]
-    })
-  }
+    });
+  };
 
   private handleExportXml = () => (e: any) => {
-    exportXml()
-  }
+    exportXml();
+  };
 
   private makeEditingOverviewTextarea = (field: keyof IAssessmentOverview) => (
     <Textarea
@@ -77,7 +77,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
       onBlur={this.saveEditOverview(field)}
       value={this.state.fieldValue}
     />
-  )
+  );
 
   private makeEditingOverviewCard = (overview: IAssessmentOverview) => (
     <div>
@@ -130,7 +130,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
         </div>
       </Card>
     </div>
-  )
+  );
 
   private makeEditingOverviewCardTitle = (overview: IAssessmentOverview, title: string) => (
     <div className="row listing-title">
@@ -143,7 +143,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
       </Text>
       <div className="col-xs-2">{this.makeSubmissionButton(overview)}</div>
     </div>
-  )
+  );
 
   private makeSubmissionButton = (overview: IAssessmentOverview) => (
     <Button
@@ -157,16 +157,16 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     >
       Export XML
     </Button>
-  )
+  );
 }
 
 const makeOverviewCardButton = (overview: IAssessmentOverview, listingPath: string | undefined) => {
-  const icon: IconName = IconNames.EDIT
-  const label: string = 'Edit mission'
-  listingPath = listingPath || '/academy/' + assessmentCategoryLink(overview.category)
+  const icon: IconName = IconNames.EDIT;
+  const label: string = 'Edit mission';
+  listingPath = listingPath || '/academy/' + assessmentCategoryLink(overview.category);
   return (
     <NavLink to={listingPath + `/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}>
       {controlButton(label, icon)}
     </NavLink>
-  )
-}
+  );
+};

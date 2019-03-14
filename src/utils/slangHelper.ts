@@ -1,9 +1,9 @@
 /* tslint:disable: ban-types*/
-import createSlangContext from 'js-slang/dist/createContext'
-import { stringify } from 'js-slang/dist/interop'
-import { Value } from 'js-slang/dist/types'
+import createSlangContext from 'js-slang/dist/createContext';
+import { stringify } from 'js-slang/dist/interop';
+import { Value } from 'js-slang/dist/types';
 
-import { handleConsoleLog } from '../actions'
+import { handleConsoleLog } from '../actions';
 
 /**
  * This file contains wrappers for certain functions
@@ -24,12 +24,8 @@ import { handleConsoleLog } from '../actions'
  *   which REPL the value shows up in.
  */
 function display(value: Value, workspaceLocation: any) {
-  const output = stringify(value)
-  // TODO in 2019: fix this hack
-  if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
-    ;(window as any).__REDUX_STORE__.dispatch(handleConsoleLog(output, workspaceLocation))
-  }
-  return value
+  display(stringify(value), workspaceLocation);
+  return value;
 }
 
 /**
@@ -44,8 +40,12 @@ function display(value: Value, workspaceLocation: any) {
  *   which REPL the value shows up in.
  */
 function rawDisplay(value: Value, workspaceLocation: any) {
-  display(String(value), workspaceLocation)
-  return value
+  const output = String(value);
+  // TODO in 2019: fix this hack
+  if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
+    (window as any).__REDUX_STORE__.dispatch(handleConsoleLog(output, workspaceLocation));
+  }
+  return value;
 }
 
 /**
@@ -55,7 +55,7 @@ function rawDisplay(value: Value, workspaceLocation: any) {
  * @param value the value to be displayed as a prompt
  */
 function cadetPrompt(value: any) {
-  return prompt(stringify(value))
+  return prompt(stringify(value));
 }
 
 /**
@@ -65,7 +65,7 @@ function cadetPrompt(value: any) {
  * @param value the value to alert the user with
  */
 function cadetAlert(value: any) {
-  alert(stringify(value))
+  alert(stringify(value));
 }
 
 /**
@@ -77,9 +77,9 @@ function cadetAlert(value: any) {
  */
 function visualiseList(list: any) {
   if ((window as any).ListVisualizer) {
-    ;(window as any).ListVisualizer.draw(list)
+    (window as any).ListVisualizer.draw(list);
   } else {
-    throw new Error('List visualizer is not enabled')
+    throw new Error('List visualizer is not enabled');
   }
 }
 
@@ -95,6 +95,6 @@ export function createContext<T>(chapter: number, externals: string[], externalC
     prompt: cadetPrompt,
     alert: cadetAlert,
     visualiseList
-  }
-  return createSlangContext<T>(chapter, externals, externalContext, externalBuiltIns)
+  };
+  return createSlangContext<T>(chapter, externals, externalContext, externalBuiltIns);
 }

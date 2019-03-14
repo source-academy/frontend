@@ -1,17 +1,17 @@
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
-import { HotKeys } from 'react-hotkeys'
-import { RouteComponentProps } from 'react-router'
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+import { HotKeys } from 'react-hotkeys';
+import { RouteComponentProps } from 'react-router';
 
-import { InterpreterOutput } from '../reducers/states'
-import { LINKS } from '../utils/constants'
-import { ExternalLibraryName } from './assessment/assessmentShape'
-import Markdown from './commons/Markdown'
-import Workspace, { WorkspaceProps } from './workspace'
-import { SideContentTab } from './workspace/side-content'
-import ListVisualizer from './workspace/side-content/ListVisualizer'
+import { InterpreterOutput } from '../reducers/states';
+import { LINKS } from '../utils/constants';
+import { ExternalLibraryName } from './assessment/assessmentShape';
+import Markdown from './commons/Markdown';
+import Workspace, { WorkspaceProps } from './workspace';
+import { SideContentTab } from './workspace/side-content';
+import ListVisualizer from './workspace/side-content/ListVisualizer';
 
-const CHAP = '\xa7'
+const CHAP = '\xa7';
 
 const INTRODUCTION = `
 Welcome to the Source Academy playground!
@@ -28,53 +28,55 @@ The playground comes with an editor and a REPL, on the left and right of the
 screen, respectively. You may customise the layout of the playground by
 clicking and dragging on the right border of the editor, or the top border of
 the REPL.
-`
+`;
 
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
-  activeTab: number
-  editorValue: string
-  editorWidth: string
-  isRunning: boolean
-  output: InterpreterOutput[]
-  queryString?: string
-  replValue: string
-  sideContentHeight?: number
-  sourceChapter: number
-  externalLibraryName: string
+  activeTab: number;
+  editorValue: string;
+  editorWidth: string;
+  isEditorAutorun: boolean;
+  isRunning: boolean;
+  output: InterpreterOutput[];
+  queryString?: string;
+  replValue: string;
+  sideContentHeight?: number;
+  sourceChapter: number;
+  externalLibraryName: string;
 }
 
 export interface IDispatchProps {
-  handleBrowseHistoryDown: () => void
-  handleBrowseHistoryUp: () => void
-  handleChangeActiveTab: (activeTab: number) => void
-  handleChapterSelect: (chapter: number) => void
-  handleEditorEval: () => void
-  handleEditorValueChange: (val: string) => void
-  handleEditorWidthChange: (widthChange: number) => void
-  handleGenerateLz: () => void
-  handleInterruptEval: () => void
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void
-  handleReplEval: () => void
-  handleReplOutputClear: () => void
-  handleReplValueChange: (newValue: string) => void
-  handleSideContentHeightChange: (heightChange: number) => void
+  handleBrowseHistoryDown: () => void;
+  handleBrowseHistoryUp: () => void;
+  handleChangeActiveTab: (activeTab: number) => void;
+  handleChapterSelect: (chapter: number) => void;
+  handleEditorEval: () => void;
+  handleEditorValueChange: (val: string) => void;
+  handleEditorWidthChange: (widthChange: number) => void;
+  handleGenerateLz: () => void;
+  handleInterruptEval: () => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleReplEval: () => void;
+  handleReplOutputClear: () => void;
+  handleReplValueChange: (newValue: string) => void;
+  handleSideContentHeightChange: (heightChange: number) => void;
+  handleToggleEditorAutorun: () => void;
 }
 
 type PlaygroundState = {
-  isGreen: boolean
-}
+  isGreen: boolean;
+};
 
 class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
-  private keyMap = { goGreen: 'h u l k' }
+  private keyMap = { goGreen: 'h u l k' };
 
-  private handlers = { goGreen: () => {} }
+  private handlers = { goGreen: () => {} };
 
   constructor(props: IPlaygroundProps) {
-    super(props)
-    this.state = { isGreen: false }
-    this.handlers.goGreen = this.toggleIsGreen.bind(this)
+    super(props);
+    this.state = { isGreen: false };
+    this.handlers.goGreen = this.toggleIsGreen.bind(this);
   }
 
   public render() {
@@ -90,9 +92,12 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleInterruptEval: this.props.handleInterruptEval,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
+        handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
         hasChapterSelect: true,
+        hasEditorAutorunButton: true,
         hasSaveButton: false,
         hasShareButton: true,
+        isEditorAutorun: this.props.isEditorAutorun,
         isRunning: this.props.isRunning,
         queryString: this.props.queryString,
         questionProgress: null,
@@ -101,7 +106,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       editorProps: {
         editorValue: this.props.editorValue,
         handleEditorEval: this.props.handleEditorEval,
-        handleEditorValueChange: this.props.handleEditorValueChange
+        handleEditorValueChange: this.props.handleEditorValueChange,
+        isEditorAutorun: this.props.isEditorAutorun
       },
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
@@ -120,7 +126,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleChangeActiveTab: this.props.handleChangeActiveTab,
         tabs: [playgroundIntroductionTab, listVisualizerTab]
       }
-    }
+    };
     return (
       <HotKeys
         className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
@@ -129,11 +135,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       >
         <Workspace {...workspaceProps} />
       </HotKeys>
-    )
+    );
   }
 
   private toggleIsGreen() {
-    this.setState({ isGreen: !this.state.isGreen })
+    this.setState({ isGreen: !this.state.isGreen });
   }
 }
 
@@ -141,12 +147,12 @@ const playgroundIntroductionTab: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
   body: <Markdown content={INTRODUCTION} />
-}
+};
 
 const listVisualizerTab: SideContentTab = {
   label: 'List Visualizer',
   icon: IconNames.EYE_OPEN,
   body: <ListVisualizer />
-}
+};
 
-export default Playground
+export default Playground;

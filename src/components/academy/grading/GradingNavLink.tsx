@@ -1,14 +1,14 @@
-import { Icon } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
+import { Icon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
 
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
 
-import { GradingOverview } from './gradingShape'
+import { GradingOverview } from './gradingShape';
 
 type GradingNavLinkProps = {
-  data: GradingOverview
-}
+  data: GradingOverview;
+};
 
 /**
  * Used to render a link in the table that displays GradingOverviews.
@@ -19,7 +19,7 @@ type GradingNavLinkProps = {
  */
 class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
   constructor(props: GradingNavLinkProps) {
-    super(props)
+    super(props);
   }
 
   public render() {
@@ -31,8 +31,8 @@ class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
       >
         <Icon className="grade-edit-icon" iconSize={16} icon={IconNames.ANNOTATION} />
       </NavLink>
-    )
+    );
   }
 }
 
-export default GradingNavLink
+export default GradingNavLink;

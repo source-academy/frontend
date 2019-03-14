@@ -1,5 +1,5 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import {
   beginClearContext,
@@ -16,19 +16,19 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue
-} from '../../actions'
+} from '../../actions';
 import {
   resetWorkspace,
   updateCurrentAssessmentId,
   WorkspaceLocation
-} from '../../actions/workspaces'
-import { Library } from '../../components/assessment/assessmentShape'
+} from '../../actions/workspaces';
+import { Library } from '../../components/assessment/assessmentShape';
 import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
   StateProps
-} from '../../components/incubator/EditingWorkspace'
-import { IState, IWorkspaceState } from '../../reducers/states'
+} from '../../components/incubator/EditingWorkspace';
+import { IState, IWorkspaceState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
@@ -43,10 +43,10 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     storedAssessmentId: state.workspaces.assessment.currentAssessment,
     storedQuestionId: state.workspaces.assessment.currentQuestion
-  }
-}
+  };
+};
 
-const workspaceLocation: WorkspaceLocation = 'assessment'
+const workspaceLocation: WorkspaceLocation = 'assessment';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
@@ -74,6 +74,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId
     },
     dispatch
-  )
+  );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AssessmentWorkspace)
+export default connect(mapStateToProps, mapDispatchToProps)(AssessmentWorkspace);
