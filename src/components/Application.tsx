@@ -31,7 +31,6 @@ export interface IDispatchProps {
   handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void;
 }
 
-
 const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
 
 class Application extends React.Component<IApplicationProps, {}> {
@@ -51,10 +50,7 @@ class Application extends React.Component<IApplicationProps, {}> {
         <div className="Application__main">
           <Switch>
             <Route path="/academy" component={toAcademy(this.props)} />
-            <Route
-              path={`/incubator/${assessmentRegExp}`}
-              render={toIncubator}
-            />
+            <Route path={`/incubator/${assessmentRegExp}`} render={toIncubator} />
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
             <Route exact={true} path="/" render={this.redirectToAcademy} />
@@ -94,9 +90,7 @@ const parsePlayground = (props: IApplicationProps) => {
   }
 };
 
-const toIncubator = (routerProps: RouteComponentProps<any>) => (
-  <IncubatorContainer />
-);
+const toIncubator = (routerProps: RouteComponentProps<any>) => <IncubatorContainer />;
 
 const parsePrgrm = (props: RouteComponentProps<{}>) => {
   const qsParsed = qs.parse(props.location.hash);

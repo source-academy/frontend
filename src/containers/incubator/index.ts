@@ -2,10 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  fetchAssessmentOverviews,
-  submitAssessment
-} from '../../actions/session';
+import { fetchAssessmentOverviews, submitAssessment } from '../../actions/session';
 import Assessment, { IDispatchProps, IStateProps } from '../../components/incubator';
 import { IState, Role } from '../../reducers/states';
 
