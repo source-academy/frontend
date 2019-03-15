@@ -19,8 +19,9 @@ import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
-import EditingContentTab from '../workspace/side-content/EditingContentTab';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
+import EditingContentTab from './editingWorkspaceSideContent/EditingContentTab';
+import TextareaContentTab from './editingWorkspaceSideContent/TextareaContent';
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
@@ -111,19 +112,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         />
       );
     }
-    const overlay = (
-      <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
-        <Card>
-          <Markdown content={this.state.assessment.longSummary} />
-          <Button
-            className="assessment-briefing-button"
-            // tslint:disable-next-line jsx-no-lambda
-            onClick={() => this.setState({ showOverlay: false })}
-            text="Continue"
-          />
-        </Card>
-      </Dialog>
-    );
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.state.assessment.questions.length
@@ -169,7 +157,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
     return (
       <div className="WorkspaceParent pt-dark">
-        {overlay}
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -244,10 +231,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
         body: (
-          <EditingContentTab
+          <TextareaContentTab
             assessment={this.state.assessment!}
             path={['questions', questionId, 'content']}
-            type="content"
             updateAssessment={this.updateEditAssessmentState}
           />
         )
@@ -256,17 +242,16 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         label: `${assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
         body: (
-          <EditingContentTab
+          <TextareaContentTab
             assessment={this.state.assessment!}
             path={['longSummary']}
-            type="content"
             updateAssessment={this.updateEditAssessmentState}
           />
         )
       },
       {
         label: `Question Template`,
-        icon: IconNames.WRENCH,
+        icon: IconNames.DOCUMENT,
         body: (
           <EditingContentTab
             assessment={this.state.assessment!}

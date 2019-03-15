@@ -100,7 +100,7 @@ const altEval = (str: string): any => {
 };
 
 const makeLibrary = (deployment: IXmlParseStrDeployment): Library => {
-  const external = deployment.EXTERNAL;
+  const external = deployment.IMPORT || deployment.EXTERNAL;
   const nameVal = external ? external[0].$.name : 'NONE';
   const symbolsVal: string[] = external ? external[0].SYMBOL : [];
   const globalsVal = deployment.GLOBAL
@@ -239,7 +239,7 @@ export const assessmentToXml = (
     $: {
       interpreter: library.chapter.toString()
     },
-    EXTERNAL: {
+    IMPORT: {
       $: {
         name: library.external.name
       }
@@ -248,7 +248,7 @@ export const assessmentToXml = (
 
   if (library.external.symbols.length !== 0) {
     /* tslint:disable:no-string-literal */
-    deployment.EXTERNAL['SYMBOL'] = library.external.symbols;
+    deployment.IMPORT['SYMBOL'] = library.external.symbols;
   }
   if (library.globals.length !== 0) {
     /* tslint:disable:no-string-literal */

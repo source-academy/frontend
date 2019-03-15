@@ -1,11 +1,10 @@
 import { Card } from '@blueprintjs/core';
 import * as React from 'react';
 import AceEditor from 'react-ace';
-import Textarea from 'react-textarea-autosize';
 
 import { IAssessment, IMCQQuestion } from '../../assessment/assessmentShape';
-import Markdown from '../../commons/Markdown';
 import { mcqTemplate, programmingTemplate } from '../../incubator/assessmentTemplates';
+import TextareaContent from './TextareaContent';
 
 interface IProps {
   assessment: IAssessment;
@@ -29,18 +28,16 @@ export class EditingContentTab extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const display =
-      this.props.type === 'content'
-        ? this.contentTab(this.props.path!)
-        : this.props.type === 'questionTemplate'
-          ? this.questionTemplateTab()
-          : this.props.type === 'grading'
-            ? this.gradingTab()
-            : this.props.type === 'manageQuestions'
-              ? this.manageQuestionTab()
-              : null;
-
-    return display;
+    switch (this.props.type) {
+      case "questionTemplate":
+        return this.questionTemplateTab();
+      case "grading":
+        return this.gradingTab();
+      case "manageQuestions":
+        return this.manageQuestionTab();      
+      default:
+        return null;
+    }
   }
 
   private manageQuestionTab = () => {
@@ -91,25 +88,6 @@ export class EditingContentTab extends React.Component<IProps, IState> {
     this.props.updateAssessment(assessment);
   };
 
-  private saveEditAssessment = (path: Array<string | number>, isString: boolean = true) => () => (
-    e: any
-  ) => {
-    const fieldValue = isString ? this.state.fieldValue : parseInt(this.state.fieldValue, 10);
-    const assessmentVal = this.props.assessment;
-    assignToPath(path, fieldValue, assessmentVal);
-    this.setState({
-      editingAssessmentPath: '',
-      fieldValue: ''
-    });
-    this.props.updateAssessment(assessmentVal);
-  };
-
-  private handleEditAssessment = () => (e: any) => {
-    this.setState({
-      fieldValue: e.target.value
-    });
-  };
-
   private handleTemplateChange = (path: Array<string | number>) => (newCode: string) => {
     const assessmentVal = this.props.assessment;
     assignToPath(path, newCode, assessmentVal);
@@ -120,34 +98,15 @@ export class EditingContentTab extends React.Component<IProps, IState> {
     this.props.updateAssessment(assessmentVal);
   };
 
-  private toggleEditField = (path: Array<string | number>) => (e: any) => {
-    const stringPath = path.join('/');
-    const fieldVal = getValueFromPath(path, this.props.assessment) || '';
-    this.setState({
-      editingAssessmentPath: stringPath,
-      fieldValue: typeof fieldVal === 'string' ? fieldVal : fieldVal.toString()
-    });
-  };
-
-  private makeEditingTextarea = (handleOnBlur: () => (e: any) => void) => (
-    <Textarea
-      autoFocus={true}
-      className={'editing-textarea'}
-      onChange={this.handleEditAssessment()}
-      onBlur={handleOnBlur()}
-      value={this.state.fieldValue}
-    />
-  );
-
   private mcqTab = (questionId: number) => {
     const question = this.props.assessment!.questions[questionId] as IMCQQuestion;
     const mcqButton = question.choices.map((choice, i) => (
       <div key={i} className="mcq-option col-xs-12">
         Option {i}:
-        {this.contentTab(['questions', questionId, 'choices', i, 'content'], 'Enter Option here')}
+        {this.textareaContent(['questions', questionId, 'choices', i, 'content'], 'Enter Option here')}
         <br />
         Hint:
-        {this.contentTab(['questions', questionId, 'choices', i, 'hint'], 'Enter Hint here')}
+        {this.textareaContent(['questions', questionId, 'choices', i, 'hint'], 'Enter Hint here')}
       </div>
     ));
 
@@ -157,7 +116,7 @@ export class EditingContentTab extends React.Component<IProps, IState> {
           <div className="row mcq-options-parent between-xs">
             {mcqButton}
             Solution:
-            {this.contentTab(['questions', questionId, 'solution'], 'Enter Solution Here', false)}
+            {this.textareaContent(['questions', questionId, 'solution'], 'Enter Solution Here', false)}
           </div>
         </Card>
       </div>
@@ -192,33 +151,29 @@ export class EditingContentTab extends React.Component<IProps, IState> {
     return display;
   };
 
-  private contentTab = (
+  private textareaContent = (
     path: Array<string | number>,
     filler: string = 'Enter Value',
-    isString: boolean = true
+    isNumber: boolean = false
   ) => {
-    const pathString = path.join('/');
-    const value = getValueFromPath(path, this.props.assessment);
     return (
-      <div onClick={this.toggleEditField(path)}>
-        {this.state.editingAssessmentPath === pathString ? (
-          this.makeEditingTextarea(this.saveEditAssessment(path, isString))
-        ) : isString ? (
-          <Markdown content={value || filler} />
-        ) : (
-          value
-        )}
-      </div>
+      <TextareaContent
+        assessment={this.props.assessment}
+        filler={filler}
+        isNumber={isNumber}
+        path={path}
+        updateAssessment={this.props.updateAssessment}
+      />
     );
   };
 
   private gradingTab = () => (
     <div>
       Max Grade:
-      {this.contentTab(this.props.path.concat(['maxGrade']), 'Max Grade', false)}
+      {this.textareaContent(this.props.path.concat(['maxGrade']), '0', true)}
       <br />
       Max Xp:
-      {this.contentTab(this.props.path.concat(['maxXp']), 'Max Xp', false)}
+      {this.textareaContent(this.props.path.concat(['maxXp']), '0', true)}
     </div>
   );
 }
