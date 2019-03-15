@@ -356,6 +356,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
       hasChapterSelect: true,
+      hasEditorAutorunButton: false,
       hasSaveButton: true,
       hasShareButton: false,
       isRunning: this.props.isRunning,
