@@ -31,9 +31,6 @@ export interface IDispatchProps {
   handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void;
 }
 
-const assessmentRenderFactory = (cat: string) => (routerProps: RouteComponentProps<any>) => (
-  <IncubatorContainer assessmentCategory={cat} />
-);
 
 const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
 
@@ -56,7 +53,7 @@ class Application extends React.Component<IApplicationProps, {}> {
             <Route path="/academy" component={toAcademy(this.props)} />
             <Route
               path={`/incubator/${assessmentRegExp}`}
-              render={assessmentRenderFactory('Missions')}
+              render={toIncubator}
             />
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
@@ -96,6 +93,10 @@ const parsePlayground = (props: IApplicationProps) => {
     props.handlePlaygroundExternalSelect(externalLibraryName);
   }
 };
+
+const toIncubator = (routerProps: RouteComponentProps<any>) => (
+  <IncubatorContainer />
+);
 
 const parsePrgrm = (props: RouteComponentProps<{}>) => {
   const qsParsed = qs.parse(props.location.hash);

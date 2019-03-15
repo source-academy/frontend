@@ -1,4 +1,3 @@
-import { NonIdealState, Spinner } from '@blueprintjs/core';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -10,7 +9,6 @@ import { AssessmentStatuses, IAssessmentOverview } from '../assessment/assessmen
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace';
 import ContentDisplay from '../commons/ContentDisplay';
 import { EditingOverviewCard } from '../incubator/EditingOverviewCard';
-// import { AnyAction } from 'redux';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
@@ -21,7 +19,6 @@ export interface IAssessmentWorkspaceParams {
 
 export interface IAssessmentProps
   extends IDispatchProps,
-    IOwnProps,
     RouteComponentProps<IAssessmentWorkspaceParams>,
     IStateProps {}
 
@@ -30,12 +27,7 @@ export interface IDispatchProps {
   handleSubmitAssessment: (id: number) => void;
 }
 
-export interface IOwnProps {
-  assessmentCategory: string;
-}
-
 export interface IStateProps {
-  assessmentOverviews?: IAssessmentOverview[];
   isStudent: boolean;
 }
 
@@ -79,40 +71,21 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       }
     }
 
-    // If there is an assessment to render, create a workspace. The assessment
-    // overviews must still be loaded for this, to send the due date.
-    // else if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
-    //   const overview = this.props.assessmentOverviews.filter(a => a.id === assessmentId)[0]
-    //   const assessmentProps: AssessmentProps = {
-    //     assessmentId,
-    //     questionId,
-    //     notAttempted: overview.status === AssessmentStatuses.not_attempted,
-    //     closeDate: overview.closeAt
-    //   }
-    //   return <AssessmentWorkspaceContainer {...assessmentProps} />
-    // }
+    /** Mission editing card */
+    const missionEditingCard = this.state.editingOverview ? (
+      <EditingOverviewCard
+        overview={this.state.editingOverview}
+        updateEditingOverview={this.updateEditingOverview}
+        listingPath="/incubator"
+      />
+    ) : null;
 
-    // Otherwise, render a list of assessments to the user.
-    let display: JSX.Element;
-    if (this.props.assessmentOverviews === undefined) {
-      display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />;
-    } else {
-      /** Mission editing card */
-      const missionEditingCard = this.state.editingOverview ? (
-        <EditingOverviewCard
-          overview={this.state.editingOverview}
-          updateEditingOverview={this.updateEditingOverview}
-          listingPath="/incubator"
-        />
-      ) : null;
-
-      display = (
-        <>
-          <ImportFromFileComponent updateEditingOverview={this.updateEditingOverview} />
-          {missionEditingCard}
-        </>
-      );
-    }
+    const display = (
+      <>
+        <ImportFromFileComponent updateEditingOverview={this.updateEditingOverview} />
+        {missionEditingCard}
+      </>
+    );
 
     // Finally, render the ContentDisplay.
     return (
