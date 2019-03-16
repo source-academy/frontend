@@ -20,7 +20,7 @@ import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
-  EditingContentTab, 
+  GradingTab,
   ManageQuestionTab, 
   QuestionTemplateTab, 
   TextareaContentTab
@@ -281,10 +281,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         label: `Grading`,
         icon: IconNames.TICK,
         body: (
-          <EditingContentTab
+          <GradingTab
             assessment={this.state.assessment!}
             path={['questions', questionId]}
-            type="grading"
             updateAssessment={this.updateEditAssessmentState}
           />
         )

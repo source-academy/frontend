@@ -6,31 +6,16 @@ import TextareaContent from './TextareaContent';
 interface IProps {
   assessment: IAssessment;
   path: Array<string | number>;
-  type: string;
   updateAssessment: (assessment: IAssessment) => void;
 }
 
-interface IState {
-  editingAssessmentPath: string;
-  fieldValue: string;
-}
-
-export class EditingContentTab extends React.Component<IProps, IState> {
+export class GradingTab extends React.Component<IProps, {}> {
   public constructor(props: IProps) {
     super(props);
-    this.state = {
-      editingAssessmentPath: '',
-      fieldValue: ''
-    };
   }
 
   public render() {
-    switch (this.props.type) {
-      case "grading":
-        return this.gradingTab();    
-      default:
-        return null;
-    }
+    return this.gradingTab();
   }
 
   private textareaContent = (
@@ -58,4 +43,4 @@ export class EditingContentTab extends React.Component<IProps, IState> {
   );
 }
 
-export default EditingContentTab;
+export default GradingTab;

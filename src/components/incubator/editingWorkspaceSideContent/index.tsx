@@ -1,10 +1,10 @@
-import EditingContentTab from './EditingContentTab';
+import GradingTab from './GradingTab';
 import ManageQuestionTab from './ManageQuestionTab';
 import QuestionTemplateTab from './QuestionTemplateTab';
 import TextareaContentTab from './TextareaContent';
 
-export { 
-	EditingContentTab,
+export {
+	GradingTab,
 	ManageQuestionTab, 
 	QuestionTemplateTab, 
 	TextareaContentTab 
