@@ -14,6 +14,7 @@ import { SideContentTab } from './workspace/side-content';
 import EnvVisualizer from './workspace/side-content/EnvVisualizer';
 import Inspector from './workspace/side-content/Inspector';
 import ListVisualizer from './workspace/side-content/ListVisualizer';
+import SubstVisualizer from './workspace/side-content/SubstVisualizer';
 
 const CHAP = '\xa7';
 
@@ -93,13 +94,13 @@ type PlaygroundState = {
 
 class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   private keyMap = { goGreen: 'h u l k' };
-
   private handlers = { goGreen: () => {} };
 
   constructor(props: IPlaygroundProps) {
     super(props);
     this.state = { isGreen: false };
     this.handlers.goGreen = this.toggleIsGreen.bind(this);
+    (window as any).thePlayground = this;
   }
 
   public render() {
@@ -172,7 +173,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
         defaultSelectedTabId: 'introduction',
-        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
+        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab, substVisualizerTab]
       }
     };
     return (
@@ -188,6 +189,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         <Workspace {...workspaceProps} />
       </HotKeys>
     );
+  }
+
+  public usingSubst() : boolean { 
+    return this.props.activeTab === 2;
   }
 
   private toggleIsGreen() {
@@ -221,6 +226,12 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
   id: 'env'
+};
+
+const substVisualizerTab: SideContentTab = {
+  label: 'Substitution Model Visualizer',
+  icon: IconNames.STOP,
+  body: <SubstVisualizer />
 };
 
 export default Playground;

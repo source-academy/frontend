@@ -279,6 +279,11 @@ $code-color-error: #ff4444;
         background-image: rgba(138, 155, 168, 0.3);
       }
     }
+    .side-content-text .slider {
+      $a: 100%;
+      $b: 140px;
+      width: calc(#{$a} - #{$b});
+    }
   }
 
   .grading-editor-input-parent {

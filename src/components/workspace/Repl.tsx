@@ -16,13 +16,20 @@ export interface IReplProps {
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
+  substVisualizer?: any;
 }
 
 export interface IOutputProps {
   output: InterpreterOutput;
+  substVisualizer?: any;
 }
 
 class Repl extends React.PureComponent<IReplProps, {}> {
+
+  public constructor(props : IReplProps) {
+    super(props);
+  }
+
   public render() {
     const cards = this.props.output.map((slice, index) => <Output output={slice} key={index} />);
     const inputProps: IReplInputProps = this.props as IReplInputProps;
@@ -57,7 +64,21 @@ export const Output: React.SFC<IOutputProps> = props => {
         </Card>
       );
     case 'result':
-      if (props.output.consoleLogs.length === 0) {
+      if (props.output.value instanceof Array) {
+          
+        const theSubstTimeline = (window as any).SubstTimeline;
+
+        if (theSubstTimeline) {
+          theSubstTimeline.updateTrees(props.output.value);
+        }
+
+        return (
+          <Card>
+            {theSubstTimeline? theSubstTimeline.getFinalValue() : ""}
+          </Card>
+        );
+      }  
+      else if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
             <Pre className="resultOutput">{renderResult(props.output.value)}</Pre>
