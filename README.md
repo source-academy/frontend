@@ -21,6 +21,14 @@ In package.json, change line 19:\
 to:\
 "start-js": "set PORT=80 & react-scripts-ts start",\
 
+In package.json, change line 28:\
+"pre-push": "bash scripts/test.sh",\
+to an empty line.
+
+Please note that doing this will disable the test suite, so you will need to run the tests manually instead. Using Git Bash (or any other UNIX-based command line), run the following:\
+cd scripts\
+bash test.sh
+
 ## For Testing of js-slang
 
 ### Alpha version
