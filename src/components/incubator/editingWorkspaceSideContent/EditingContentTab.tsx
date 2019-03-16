@@ -1,8 +1,6 @@
-import { Card } from '@blueprintjs/core';
 import * as React from 'react';
-import AceEditor from 'react-ace';
 
-import { IAssessment, IMCQQuestion } from '../../assessment/assessmentShape';
+import { IAssessment } from '../../assessment/assessmentShape';
 import { mcqTemplate, programmingTemplate } from '../../incubator/assessmentTemplates';
 import TextareaContent from './TextareaContent';
 
@@ -29,8 +27,6 @@ export class EditingContentTab extends React.Component<IProps, IState> {
 
   public render() {
     switch (this.props.type) {
-      case "questionTemplate":
-        return this.questionTemplateTab();
       case "grading":
         return this.gradingTab();
       case "manageQuestions":
@@ -88,78 +84,13 @@ export class EditingContentTab extends React.Component<IProps, IState> {
     this.props.updateAssessment(assessment);
   };
 
-  private handleTemplateChange = (path: Array<string | number>) => (newCode: string) => {
-    const assessmentVal = this.props.assessment;
-    assignToPath(path, newCode, assessmentVal);
-    this.setState({
-      editingAssessmentPath: '',
-      fieldValue: ''
-    });
-    this.props.updateAssessment(assessmentVal);
-  };
-
-  private mcqTab = (questionId: number) => {
-    const question = this.props.assessment!.questions[questionId] as IMCQQuestion;
-    const mcqButton = question.choices.map((choice, i) => (
-      <div key={i} className="mcq-option col-xs-12">
-        Option {i}:
-        {this.textareaContent(['questions', questionId, 'choices', i, 'content'], 'Enter Option here')}
-        <br />
-        Hint:
-        {this.textareaContent(['questions', questionId, 'choices', i, 'hint'], 'Enter Hint here')}
-      </div>
-    ));
-
-    return (
-      <div className="MCQChooser row">
-        <Card className="mcq-content-parent col-xs-12 middle-xs">
-          <div className="row mcq-options-parent between-xs">
-            {mcqButton}
-            Solution:
-            {this.textareaContent(['questions', questionId, 'solution'], 'Enter Solution Here', false)}
-          </div>
-        </Card>
-      </div>
-    );
-  };
-
-  private programmingTab = (path: Array<string | number>) => (
-    <AceEditor
-      className="react-ace"
-      editorProps={{
-        $blockScrolling: Infinity
-      }}
-      fontSize={14}
-      highlightActiveLine={false}
-      mode="javascript"
-      onChange={this.handleTemplateChange(path)}
-      theme="cobalt"
-      value={getValueFromPath(path, this.props.assessment)}
-    />
-  );
-
-  private questionTemplateTab = () => {
-    const questionId = this.props.path[1] as number;
-    // tslint:disable-next-line:no-console
-    // console.dir(this.props.assessment)
-    const type = this.props.assessment!.questions[questionId].type;
-    const display =
-      type === 'mcq'
-        ? this.mcqTab(questionId)
-        : this.programmingTab(this.props.path.concat(['answer']));
-
-    return display;
-  };
-
   private textareaContent = (
     path: Array<string | number>,
-    filler: string = 'Enter Value',
     isNumber: boolean = false
   ) => {
     return (
       <TextareaContent
         assessment={this.props.assessment}
-        filler={filler}
         isNumber={isNumber}
         path={path}
         updateAssessment={this.props.updateAssessment}
@@ -170,10 +101,10 @@ export class EditingContentTab extends React.Component<IProps, IState> {
   private gradingTab = () => (
     <div>
       Max Grade:
-      {this.textareaContent(this.props.path.concat(['maxGrade']), '0', true)}
+      {this.textareaContent(this.props.path.concat(['maxGrade']), true)}
       <br />
       Max Xp:
-      {this.textareaContent(this.props.path.concat(['maxXp']), '0', true)}
+      {this.textareaContent(this.props.path.concat(['maxXp']), true)}
     </div>
   );
 }

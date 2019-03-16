@@ -6,8 +6,8 @@ import Markdown from '../../commons/Markdown';
 
 interface IProps {
   assessment: IAssessment;
-  filler?: string;
   isNumber?: boolean;
+  numberRange?: number[];
   path: Array<string | number>;
   updateAssessment: (assessment: IAssessment) => void;
 }
@@ -29,6 +29,7 @@ export class TextareaContent extends React.Component<IProps, IState> {
   }
 
   public render() {
+  	const filler = "Please enter value (if applicable)";
   	let display;
   	if(this.state.isEditing) {
   		display = <div onClick={this.toggleEditField()}>
@@ -39,7 +40,7 @@ export class TextareaContent extends React.Component<IProps, IState> {
   		display = (<div onClick={this.toggleEditField()}>
   			{this.state.isNumber ? 
   				value : 
-  				<Markdown content={value || this.props.filler || "Please enter value"} />
+  				<Markdown content={value || filler} />
   			}
   		</div>);
   	}
@@ -47,7 +48,18 @@ export class TextareaContent extends React.Component<IProps, IState> {
   }
 
   private saveEditAssessment = (e: any) => {
-    const fieldValue = this.state.isNumber ? parseInt(this.state.fieldValue, 10) : this.state.fieldValue;
+    let fieldValue: number | string;
+    if(this.state.isNumber) {
+    	const range = this.props.numberRange || [0];
+    	fieldValue = parseInt(this.state.fieldValue, 10);
+    	if(isNaN(fieldValue) || fieldValue < range[0]) {
+    		fieldValue = range[0];
+    	} else if (range.length > 1 && fieldValue > range[1] ) {
+    		fieldValue = range[1];
+    	}
+    } else {
+    	fieldValue = this.state.fieldValue;
+    }
     const assessmentVal = this.props.assessment;
     assignToPath(this.props.path, fieldValue, assessmentVal);
     this.setState({

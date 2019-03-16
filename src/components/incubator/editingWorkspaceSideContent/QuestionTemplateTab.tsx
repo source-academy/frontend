@@ -63,10 +63,10 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
     const mcqButton = question.choices.map((choice, i) => (
       <div key={i} className="mcq-option col-xs-12">
         Option {i}:
-        {this.textareaContent(['questions', questionId, 'choices', i, 'content'], 'Enter Option here')}
+        {this.textareaContent(['questions', questionId, 'choices', i, 'content'])}
         <br />
         Hint:
-        {this.textareaContent(['questions', questionId, 'choices', i, 'hint'], 'Enter Hint here')}
+        {this.textareaContent(['questions', questionId, 'choices', i, 'hint'])}
       </div>
     ));
 
@@ -76,7 +76,7 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
           <div className="row mcq-options-parent between-xs">
             {mcqButton}
             Solution:
-            {this.textareaContent(['questions', questionId, 'solution'], 'Enter Solution Here', false)}
+            {this.textareaContent(['questions', questionId, 'solution'], true, [0, 3])}
           </div>
         </Card>
       </div>
@@ -85,14 +85,14 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
 
   private textareaContent = (
     path: Array<string | number>,
-    filler: string = 'Enter Value',
-    isNumber: boolean = false
+    isNumber: boolean = false,
+    numberRange: number[] = [0]
   ) => {
     return (
       <TextareaContent
         assessment={this.props.assessment}
-        filler={filler}
         isNumber={isNumber}
+        numberRange={numberRange}
         path={path}
         updateAssessment={this.props.updateAssessment}
       />

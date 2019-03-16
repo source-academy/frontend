@@ -253,10 +253,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         label: `Question Template`,
         icon: IconNames.DOCUMENT,
         body: (
-          <EditingContentTab
+          <QuestionTemplateTab
             assessment={this.state.assessment!}
-            path={['questions', questionId]}
-            type="questionTemplate"
+            questionId={questionId}
             updateAssessment={this.updateEditAssessmentState}
           />
         )
@@ -265,9 +264,10 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         label: `Manage Question`,
         icon: IconNames.WRENCH,
         body: (
-          <QuestionTemplateTab
+          <EditingContentTab
             assessment={this.state.assessment!}
-            questionId={questionId}
+            path={["questions", questionId]}
+            type="manageQuestions"
             updateAssessment={this.updateAndSaveAssessment}
           />
         )
