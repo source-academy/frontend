@@ -73,6 +73,7 @@ interface IState {
   showOverlay: boolean;
   assessment: IAssessment | null;
   activeTab: number;
+  hasUnsavedChanges: boolean;
 }
 
 class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, IState> {
@@ -81,7 +82,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.state = {
       showOverlay: false,
       assessment: retrieveLocalAssessment(),
-      activeTab: 0
+      activeTab: 0,
+      hasUnsavedChanges: false
     };
   }
 
@@ -141,7 +143,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      hasUnsavedChanges: this.props.hasUnsavedChanges,
+      hasUnsavedChanges: this.state.hasUnsavedChanges,
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
@@ -201,12 +203,16 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   }
 
   private handleSave = () => {
+    this.setState({
+      hasUnsavedChanges: false
+    });
     localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(this.state.assessment));
   };
 
   private updateEditAssessmentState = (assessmentVal: IAssessment) => {
     this.setState({
-      assessment: assessmentVal
+      assessment: assessmentVal,
+      hasUnsavedChanges: true
     });
   };
 
