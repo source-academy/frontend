@@ -1,8 +1,14 @@
 import EditingContentTab from './EditingContentTab';
+import ManageQuestionTab from './ManageQuestionTab';
 import QuestionTemplateTab from './QuestionTemplateTab';
 import TextareaContentTab from './TextareaContent';
 
-export { EditingContentTab, QuestionTemplateTab, TextareaContentTab };
+export { 
+	EditingContentTab,
+	ManageQuestionTab, 
+	QuestionTemplateTab, 
+	TextareaContentTab 
+};
 
 export const getValueFromPath = (path: Array<string | number>, obj: any): any => {
   for (const next of path) {

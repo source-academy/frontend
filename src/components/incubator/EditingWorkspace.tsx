@@ -19,7 +19,12 @@ import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
-import {EditingContentTab, QuestionTemplateTab, TextareaContentTab} from './editingWorkspaceSideContent';
+import {
+  EditingContentTab, 
+  ManageQuestionTab, 
+  QuestionTemplateTab, 
+  TextareaContentTab
+} from './editingWorkspaceSideContent';
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
@@ -262,10 +267,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         label: `Manage Question`,
         icon: IconNames.WRENCH,
         body: (
-          <EditingContentTab
+          <ManageQuestionTab
             assessment={this.state.assessment!}
-            path={["questions", questionId]}
-            type="manageQuestions"
+            questionId={questionId}
             updateAssessment={this.updateAndSaveAssessment}
           />
         )
