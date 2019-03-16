@@ -51,6 +51,7 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
         onChange={handleTemplateChange}
         theme="cobalt"
         value={getValueFromPath(path, this.props.assessment)}
+        width="100%"
       />
     );
 
