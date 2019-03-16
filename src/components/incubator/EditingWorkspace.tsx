@@ -21,8 +21,8 @@ import { SideContentProps } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
   GradingTab,
-  ManageQuestionTab, 
-  QuestionTemplateTab, 
+  ManageQuestionTab,
+  QuestionTemplateTab,
   TextareaContentTab
 } from './editingWorkspaceSideContent';
 

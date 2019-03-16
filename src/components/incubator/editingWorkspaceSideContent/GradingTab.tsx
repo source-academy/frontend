@@ -18,10 +18,7 @@ export class GradingTab extends React.Component<IProps, {}> {
     return this.gradingTab();
   }
 
-  private textareaContent = (
-    path: Array<string | number>,
-    isNumber: boolean = false
-  ) => {
+  private textareaContent = (path: Array<string | number>, isNumber: boolean = false) => {
     return (
       <TextareaContent
         assessment={this.props.assessment}

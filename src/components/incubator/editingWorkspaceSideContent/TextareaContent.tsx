@@ -3,7 +3,7 @@ import Textarea from 'react-textarea-autosize';
 
 import { IAssessment } from '../../assessment/assessmentShape';
 import Markdown from '../../commons/Markdown';
-import {assignToPath, getValueFromPath } from './';
+import { assignToPath, getValueFromPath } from './';
 
 interface IProps {
   assessment: IAssessment;
@@ -25,41 +25,38 @@ export class TextareaContent extends React.Component<IProps, IState> {
     this.state = {
       isEditing: false,
       isNumber: this.props.isNumber || false,
-      fieldValue: ""
+      fieldValue: ''
     };
   }
 
   public render() {
-  	const filler = "Please enter value (if applicable)";
-  	let display;
-  	if(this.state.isEditing) {
-  		display = <div onClick={this.toggleEditField()}>
-  			{this.makeEditingTextarea()}
-  		</div>;
-  	} else {
-  		const value = getValueFromPath(this.props.path, this.props.assessment);
-  		display = (<div onClick={this.toggleEditField()}>
-  			{this.state.isNumber ? 
-  				value : 
-  				<Markdown content={value || filler} />
-  			}
-  		</div>);
-  	}
-   	return display;
+    const filler = 'Please enter value (if applicable)';
+    let display;
+    if (this.state.isEditing) {
+      display = <div onClick={this.toggleEditField()}>{this.makeEditingTextarea()}</div>;
+    } else {
+      const value = getValueFromPath(this.props.path, this.props.assessment);
+      display = (
+        <div onClick={this.toggleEditField()}>
+          {this.state.isNumber ? value : <Markdown content={value || filler} />}
+        </div>
+      );
+    }
+    return display;
   }
 
   private saveEditAssessment = (e: any) => {
     let fieldValue: number | string;
-    if(this.state.isNumber) {
-    	const range = this.props.numberRange || [0];
-    	fieldValue = parseInt(this.state.fieldValue, 10);
-    	if(isNaN(fieldValue) || fieldValue < range[0]) {
-    		fieldValue = range[0];
-    	} else if (range.length > 1 && fieldValue > range[1] ) {
-    		fieldValue = range[1];
-    	}
+    if (this.state.isNumber) {
+      const range = this.props.numberRange || [0];
+      fieldValue = parseInt(this.state.fieldValue, 10);
+      if (isNaN(fieldValue) || fieldValue < range[0]) {
+        fieldValue = range[0];
+      } else if (range.length > 1 && fieldValue > range[1]) {
+        fieldValue = range[1];
+      }
     } else {
-    	fieldValue = this.state.fieldValue;
+      fieldValue = this.state.fieldValue;
     }
     const assessmentVal = this.props.assessment;
     assignToPath(this.props.path, fieldValue, assessmentVal);
@@ -86,13 +83,12 @@ export class TextareaContent extends React.Component<IProps, IState> {
   );
 
   private toggleEditField = () => (e: any) => {
-  	const fieldVal = getValueFromPath(this.props.path, this.props.assessment) || '';
+    const fieldVal = getValueFromPath(this.props.path, this.props.assessment) || '';
     this.setState({
       isEditing: true,
       fieldValue: typeof fieldVal === 'string' ? fieldVal : fieldVal.toString()
     });
   };
-
 }
 
 export default TextareaContent;

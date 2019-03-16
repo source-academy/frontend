@@ -3,7 +3,7 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import { IAssessment, IMCQQuestion } from '../../assessment/assessmentShape';
-import {assignToPath, getValueFromPath } from './';
+import { assignToPath, getValueFromPath } from './';
 import TextareaContent from './TextareaContent';
 
 interface IProps {
@@ -25,10 +25,7 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
     // tslint:disable-next-line:no-console
     // console.dir(this.props.assessment)
     const type = this.props.assessment!.questions[this.props.questionId].type;
-    const display =
-      type === 'mcq'
-        ? this.mcqTab()
-        : this.programmingTab();
+    const display = type === 'mcq' ? this.mcqTab() : this.programmingTab();
 
     return display;
   };
@@ -42,18 +39,20 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
       this.props.updateAssessment(assessmentVal);
     };
 
-    const display = <AceEditor
-      className="react-ace"
-      editorProps={{
-        $blockScrolling: Infinity
-      }}
-      fontSize={14}
-      highlightActiveLine={false}
-      mode="javascript"
-      onChange={handleTemplateChange}
-      theme="cobalt"
-      value={getValueFromPath(path, this.props.assessment)}
-    />;
+    const display = (
+      <AceEditor
+        className="react-ace"
+        editorProps={{
+          $blockScrolling: Infinity
+        }}
+        fontSize={14}
+        highlightActiveLine={false}
+        mode="javascript"
+        onChange={handleTemplateChange}
+        theme="cobalt"
+        value={getValueFromPath(path, this.props.assessment)}
+      />
+    );
 
     return display;
   };
