@@ -3,6 +3,7 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import { IAssessment, IMCQQuestion } from '../../assessment/assessmentShape';
+import {assignToPath, getValueFromPath } from './';
 import TextareaContent from './TextareaContent';
 
 interface IProps {
@@ -99,20 +100,5 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
     );
   };
 }
-
-const getValueFromPath = (path: Array<string | number>, obj: any): any => {
-  for (const next of path) {
-    obj = obj[next];
-  }
-  return obj;
-};
-
-const assignToPath: any = (path: Array<string | number>, value: any, obj: any): void => {
-  let i = 0;
-  for (i = 0; i < path.length - 1; i++) {
-    obj = obj[path[i]];
-  }
-  obj[path[i]] = value;
-};
 
 export default QuestionTemplateTab;

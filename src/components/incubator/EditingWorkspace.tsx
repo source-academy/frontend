@@ -19,9 +19,7 @@ import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
-import EditingContentTab from './editingWorkspaceSideContent/EditingContentTab';
-import QuestionTemplateTab from './editingWorkspaceSideContent/QuestionTemplateTab';
-import TextareaContentTab from './editingWorkspaceSideContent/TextareaContent';
+import {EditingContentTab, QuestionTemplateTab, TextareaContentTab} from './editingWorkspaceSideContent';
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 

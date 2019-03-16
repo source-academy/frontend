@@ -3,6 +3,7 @@ import Textarea from 'react-textarea-autosize';
 
 import { IAssessment } from '../../assessment/assessmentShape';
 import Markdown from '../../commons/Markdown';
+import {assignToPath, getValueFromPath } from './';
 
 interface IProps {
   assessment: IAssessment;
@@ -93,21 +94,5 @@ export class TextareaContent extends React.Component<IProps, IState> {
   };
 
 }
-
-
-const getValueFromPath = (path: Array<string | number>, obj: any): any => {
-  for (const next of path) {
-    obj = obj[next];
-  }
-  return obj;
-};
-
-const assignToPath: any = (path: Array<string | number>, value: any, obj: any): void => {
-  let i = 0;
-  for (i = 0; i < path.length - 1; i++) {
-    obj = obj[path[i]];
-  }
-  obj[path[i]] = value;
-};
 
 export default TextareaContent;
