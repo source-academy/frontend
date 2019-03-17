@@ -141,14 +141,14 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
             : title}{' '}
         </h4>
       </Text>
-      <div className="col-xs-2">{this.makeSubmissionButton(overview)}</div>
+      <div className="col-xs-2">{this.makeExportButton(overview)}</div>
     </div>
   );
 
-  private makeSubmissionButton = (overview: IAssessmentOverview) => (
+  private makeExportButton = (overview: IAssessmentOverview) => (
     <Button
       // disabled={overview.status !== AssessmentStatuses.attempted}
-      icon={IconNames.CONFIRM}
+      icon={IconNames.EXPORT}
       intent={Intent.DANGER}
       minimal={true}
       // intentional: each menu renders own version of onClick

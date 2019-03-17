@@ -1,4 +1,4 @@
-import { Button, Card, Dialog, NonIdealState, Spinner } from '@blueprintjs/core';
+import { NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -7,7 +7,6 @@ import { history } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { retrieveLocalAssessment } from '../../utils/xmlParser';
 import {
-  ExternalLibraryName,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -15,12 +14,17 @@ import {
   Library,
   QuestionTypes
 } from '../assessment/assessmentShape';
-import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
-import EditingContentTab from '../workspace/side-content/EditingContentTab';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
+import {
+  GlobalDeploymentTab,
+  GradingTab,
+  ManageQuestionTab,
+  QuestionTemplateTab,
+  TextareaContentTab
+} from './editingWorkspaceSideContent';
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
@@ -69,6 +73,7 @@ interface IState {
   showOverlay: boolean;
   assessment: IAssessment | null;
   activeTab: number;
+  hasUnsavedChanges: boolean;
 }
 
 class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, IState> {
@@ -77,7 +82,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.state = {
       showOverlay: false,
       assessment: retrieveLocalAssessment(),
-      activeTab: 0
+      activeTab: 0,
+      hasUnsavedChanges: false
     };
   }
 
@@ -111,19 +117,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         />
       );
     }
-    const overlay = (
-      <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
-        <Card>
-          <Markdown content={this.state.assessment.longSummary} />
-          <Button
-            className="assessment-briefing-button"
-            // tslint:disable-next-line jsx-no-lambda
-            onClick={() => this.setState({ showOverlay: false })}
-            text="Continue"
-          />
-        </Card>
-      </Dialog>
-    );
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.state.assessment.questions.length
@@ -150,7 +143,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      hasUnsavedChanges: this.props.hasUnsavedChanges,
+      hasUnsavedChanges: this.state.hasUnsavedChanges,
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
@@ -169,7 +162,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
     return (
       <div className="WorkspaceParent pt-dark">
-        {overlay}
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -194,6 +186,10 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       this.props.storedQuestionId !== questionId
     ) {
       const question = this.state.assessment!.questions[questionId];
+      const library =
+        question.library.chapter === -1
+          ? question.library
+          : this.state.assessment!.globalDeployment!;
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
@@ -202,27 +198,38 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           : null;
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({ editorValue });
-      this.props.handleClearContext(question.library);
+      this.props.handleClearContext(library);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (editorValue) {
         this.props.handleEditorValueChange(editorValue);
+      }
+      if (this.state.hasUnsavedChanges) {
+        this.setState({
+          assessment: retrieveLocalAssessment(),
+          hasUnsavedChanges: false
+        });
       }
     }
   }
 
   private handleSave = () => {
+    this.setState({
+      hasUnsavedChanges: false
+    });
     localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(this.state.assessment));
   };
 
   private updateEditAssessmentState = (assessmentVal: IAssessment) => {
     this.setState({
-      assessment: assessmentVal
+      assessment: assessmentVal,
+      hasUnsavedChanges: true
     });
   };
 
   private updateAndSaveAssessment = (assessmentVal: IAssessment) => {
     this.setState({
-      assessment: assessmentVal
+      assessment: assessmentVal,
+      hasUnsavedChanges: false
     });
     localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentVal));
   };
@@ -238,16 +245,15 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const assessment = this.state.assessment;
+    const assessment = this.state.assessment!;
     const tabs = [
       {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
         body: (
-          <EditingContentTab
-            assessment={this.state.assessment!}
+          <TextareaContentTab
+            assessment={assessment}
             path={['questions', questionId, 'content']}
-            type="content"
             updateAssessment={this.updateEditAssessmentState}
           />
         )
@@ -256,22 +262,20 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         label: `${assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
         body: (
-          <EditingContentTab
-            assessment={this.state.assessment!}
+          <TextareaContentTab
+            assessment={assessment}
             path={['longSummary']}
-            type="content"
             updateAssessment={this.updateEditAssessmentState}
           />
         )
       },
       {
         label: `Question Template`,
-        icon: IconNames.WRENCH,
+        icon: IconNames.DOCUMENT,
         body: (
-          <EditingContentTab
-            assessment={this.state.assessment!}
-            path={['questions', questionId]}
-            type="questionTemplate"
+          <QuestionTemplateTab
+            assessment={assessment}
+            questionId={questionId}
             updateAssessment={this.updateEditAssessmentState}
           />
         )
@@ -280,11 +284,20 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         label: `Manage Question`,
         icon: IconNames.WRENCH,
         body: (
-          <EditingContentTab
-            assessment={this.state.assessment!}
-            path={['questions', questionId]}
-            type="manageQuestions"
+          <ManageQuestionTab
+            assessment={assessment}
+            questionId={questionId}
             updateAssessment={this.updateAndSaveAssessment}
+          />
+        )
+      },
+      {
+        label: `Manage Global Deployment`,
+        icon: IconNames.TAG,
+        body: (
+          <GlobalDeploymentTab
+            assessment={assessment}
+            updateAssessment={this.updateEditAssessmentState}
           />
         )
       }
@@ -295,10 +308,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         label: `Grading`,
         icon: IconNames.TICK,
         body: (
-          <EditingContentTab
-            assessment={this.state.assessment!}
+          <GradingTab
+            assessment={assessment}
             path={['questions', questionId]}
-            type="grading"
             updateAssessment={this.updateEditAssessmentState}
           />
         )
@@ -320,23 +332,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
   };
 
-  private handleChapterSelect = (chapter: any, e: any) => {
-    const assessment = this.state.assessment!;
-    for (const question of assessment.questions) {
-      question.library.chapter = chapter.chapter;
-    }
-    this.updateAndSaveAssessment(assessment);
-    // this.props.handleChapterSelect(chapter, e);
-  };
-
-  private handleExternalSelect = ({ name }: { name: ExternalLibraryName }, e: any) => {
-    const assessment = this.state.assessment!;
-    for (const question of assessment.questions) {
-      question.library.external.name = name;
-    }
-    this.updateAndSaveAssessment(assessment);
-  };
-
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
     props: AssessmentWorkspaceProps,
@@ -348,14 +343,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
     return {
       externalLibraryName: this.state.assessment!.questions[questionId].library.external.name,
-      handleChapterSelect: this.handleChapterSelect,
-      handleExternalSelect: this.handleExternalSelect,
       handleEditorEval: this.props.handleEditorEval,
       handleInterruptEval: this.props.handleInterruptEval,
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
-      hasChapterSelect: true,
+      hasChapterSelect: false,
       hasEditorAutorunButton: false,
       hasSaveButton: true,
       hasShareButton: false,

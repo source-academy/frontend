@@ -18,6 +18,13 @@ export interface IXmlParseStrDeployment {
     IDENTIFIER: string[];
     VALUE: string[];
   }>;
+  IMPORT?: Array<{
+    $: {
+      name: ExternalLibraryName;
+    };
+    SYMBOL: string[];
+  }>;
+  // deprecated EXTERNAL in DEPLOYMENT and GRADERDEPLOYMENT, use IMPORT instead
   EXTERNAL?: Array<{
     $: {
       name: ExternalLibraryName;
@@ -41,6 +48,8 @@ export interface IXmlParseStrProblem {
     maxgrade: string;
     maxxp: string;
   };
+  DEPLOYMENT?: IXmlParseStrDeployment[];
+  GRADERDEPLOYMENT?: IXmlParseStrDeployment[];
   TEXT: string[];
 }
 
