@@ -106,7 +106,7 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
     return {
       chapter: -1,
       external: {
-        name: "NONE",
+        name: 'NONE',
         symbols: []
       },
       globals: []
@@ -295,7 +295,7 @@ export const assessmentToXml = (
       CHOICE: [] as any[]
     };
 
-    if(question.library.chapter !== -1) {
+    if (question.library.chapter !== -1) {
       /* tslint:disable:no-string-literal */
       problem.$['DEPLOYMENT'] = exportLibrary(question.library);
     }

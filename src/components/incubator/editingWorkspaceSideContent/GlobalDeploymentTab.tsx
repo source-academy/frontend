@@ -5,11 +5,9 @@ import * as React from 'react';
 import { externalLibraries } from '../../../reducers/externalLibraries';
 import { sourceChapters } from '../../../reducers/states';
 
-
 import { ExternalLibraryName, IAssessment } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
 import TextareaContent from './TextareaContent';
-
 
 interface IProps {
   assessment: IAssessment;
@@ -45,31 +43,31 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
       </div>
     ));
 
-    return <div>
-      Global Deployment 
-      <br />
-      <br />
-      Interpreter: 
-      <br />
-      {chapterSelect(deployment.chapter, this.handleChapterSelect)}
-      <br />
-      <br />
-      External Library:
-      <br />
-      {externalSelect(deployment.external.name, this.handleExternalSelect!)}
-      <br />
-      <br />
-      Symbols:
-      <br />
-      <br />
-      {symbols}
-      {controlButton('New Symbol', IconNames.PLUS, this.handleNewSymbol)}
-    </div>;
+    return (
+      <div>
+        Global Deployment
+        <br />
+        <br />
+        Interpreter:
+        <br />
+        {chapterSelect(deployment.chapter, this.handleChapterSelect)}
+        <br />
+        <br />
+        External Library:
+        <br />
+        {externalSelect(deployment.external.name, this.handleExternalSelect!)}
+        <br />
+        <br />
+        Symbols:
+        <br />
+        <br />
+        {symbols}
+        {controlButton('New Symbol', IconNames.PLUS, this.handleNewSymbol)}
+      </div>
+    );
   };
 
-  private symbolTextareaContent = (
-    i: number, 
-  ) => {
+  private symbolTextareaContent = (i: number) => {
     const symbolsPath = ['globalDeployment', 'external', 'symbols'];
     return (
       <TextareaContent
@@ -84,30 +82,30 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
   private handleSymbolUpdate = (index: number) => (assessment: IAssessment) => {
     const symbols = assessment.globalDeployment!.external.symbols;
     const symbol = symbols[index];
-    if (symbol === "") {
+    if (symbol === '') {
       symbols.splice(index, 1);
     }
     this.props.updateAssessment(assessment);
-  }
+  };
 
   private handleNewSymbol = () => {
     const assessment = this.props.assessment;
     const symbols = assessment.globalDeployment!.external.symbols;
-    symbols.push("new symbol");
+    symbols.push('new symbol');
     this.props.updateAssessment(assessment);
-  }
+  };
 
   private handleChapterSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {
     const assessment = this.props.assessment;
     assessment.globalDeployment!.chapter = i.chapter;
     this.props.updateAssessment(assessment);
-  }
+  };
 
   private handleExternalSelect = (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => {
     const assessment = this.props.assessment;
     assessment.globalDeployment!.external.name = i.name;
     this.props.updateAssessment(assessment);
-  }
+  };
 }
 
 function styliseChapter(chap: number) {

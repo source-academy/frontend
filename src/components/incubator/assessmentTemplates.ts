@@ -12,7 +12,7 @@ import { mock2DRuneLibrary } from '../../mocks/assessmentAPI';
 const emptyLibrary: Library = {
   chapter: -1,
   external: {
-    name: "NONE",
+    name: 'NONE',
     symbols: []
   },
   globals: []
@@ -57,8 +57,7 @@ export const programmingTemplate: IProgrammingQuestion = {
 export const mcqTemplate: IMCQQuestion = {
   answer: 3,
   comment: null,
-  content:
-    'This is a mock MCQ question',
+  content: 'This is a mock MCQ question',
   choices: [
     {
       content: 'A',

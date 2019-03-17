@@ -68,7 +68,7 @@ export class TextareaContent extends React.Component<IProps, IState> {
       assignToPath(this.props.path, fieldValue, assessmentVal);
       this.props.updateAssessment(assessmentVal);
     }
-    
+
     this.setState({
       isEditing: false
     });
