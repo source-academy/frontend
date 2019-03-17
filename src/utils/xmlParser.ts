@@ -80,10 +80,12 @@ const makeAssessment = (result: any): [IAssessment, number, number] => {
   const task: IXmlParseStrTask = result.CONTENT.TASK[0];
   const rawOverview: IXmlParseStrOverview = task.$;
   const questionArr = makeQuestions(task);
+  const libraryVal = makeLibrary(task.DEPLOYMENT);
   return [
     {
       category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
       id: editingId,
+      globalDeployment: libraryVal,
       graderDeployment: task.GRADERDEPLOYMENT[0],
       longSummary: task.TEXT[0],
       missionPDF: 'google.com',
@@ -99,31 +101,43 @@ const altEval = (str: string): any => {
   return Function('"use strict";return (' + str + ')')();
 };
 
-const makeLibrary = (deployment: IXmlParseStrDeployment): Library => {
-  const external = deployment.IMPORT || deployment.EXTERNAL;
-  const nameVal = external ? external[0].$.name : 'NONE';
-  const symbolsVal: string[] = external ? external[0].SYMBOL : [];
-  const globalsVal = deployment.GLOBAL
-    ? (deployment.GLOBAL.map(x => [x.IDENTIFIER[0], altEval(x.VALUE[0]), x.VALUE[0]]) as Array<
-        [string, any, string]
-      >)
-    : [];
-  return {
-    chapter: parseInt(deployment.$.interpreter, 10),
-    external: {
-      name: nameVal,
-      symbols: symbolsVal
-    },
-    globals: globalsVal
-  };
+const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Library => {
+  if (deploymentArr === undefined) {
+    return {
+      chapter: -1,
+      external: {
+        name: "NONE",
+        symbols: []
+      },
+      globals: []
+    };
+  } else {
+    const deployment = deploymentArr[0];
+    const external = deployment.IMPORT || deployment.EXTERNAL;
+    const nameVal = external ? external[0].$.name : 'NONE';
+    const symbolsVal = external ? external[0].SYMBOL || [] : [];
+    const globalsVal = deployment.GLOBAL
+      ? (deployment.GLOBAL.map(x => [x.IDENTIFIER[0], altEval(x.VALUE[0]), x.VALUE[0]]) as Array<
+          [string, any, string]
+        >)
+      : [];
+    return {
+      chapter: parseInt(deployment.$.interpreter, 10),
+      external: {
+        name: nameVal,
+        symbols: symbolsVal
+      },
+      globals: globalsVal
+    };
+  }
 };
 
 const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] => {
-  const libraryVal = makeLibrary(task.DEPLOYMENT[0]);
   let maxGrade = 0;
   let maxXp = 0;
   const questions: Array<IProgrammingQuestion | IMCQQuestion> = [];
   task.PROBLEMS[0].PROBLEM.forEach((problem: IXmlParseStrProblem, curId: number) => {
+    const libraryVal = makeLibrary(problem.DEPLOYMENT);
     const localMaxXp = problem.$.maxxp ? parseInt(problem.$.maxxp, 10) : 0;
     const question: IQuestion = {
       answer: null,
@@ -195,6 +209,7 @@ export const exportXml = () => {
   if (assessmentStr && overviewStr) {
     const assessment: IAssessment = JSON.parse(assessmentStr);
     const overview: IAssessmentOverview = JSON.parse(overviewStr);
+    const title = assessment.title;
     const builder = new Builder();
     const xmlTask: IXmlParseStrTask = assessmentToXml(assessment, overview);
     const xml = {
@@ -210,9 +225,37 @@ export const exportXml = () => {
     const element = document.createElement('a');
     const file = new Blob([xmlStr], { endings: 'native', type: 'text/xml;charset=UTF-8' });
     element.href = URL.createObjectURL(file);
-    element.download = 'myMission.xml';
+    element.download = title + '.xml';
     element.click();
   }
+};
+
+const exportLibrary = (library: Library) => {
+  const deployment = {
+    $: {
+      interpreter: library.chapter.toString()
+    },
+    EXTERNAL: {
+      $: {
+        name: library.external.name
+      }
+    }
+  };
+
+  if (library.external.symbols.length !== 0) {
+    /* tslint:disable:no-string-literal */
+    deployment.EXTERNAL['SYMBOL'] = library.external.symbols;
+  }
+  if (library.globals.length !== 0) {
+    /* tslint:disable:no-string-literal */
+    deployment['GLOBAL'] = library.globals.map(x => {
+      return {
+        IDENTIFIER: x[0],
+        VALUE: x[2]
+      };
+    });
+  }
+  return deployment;
 };
 
 export const assessmentToXml = (
@@ -234,33 +277,7 @@ export const assessmentToXml = (
   task.TEXT = assessment.longSummary;
   task.PROBLEMS = { PROBLEM: [] };
 
-  const library: Library = assessment.questions[0].library;
-  const deployment = {
-    $: {
-      interpreter: library.chapter.toString()
-    },
-    IMPORT: {
-      $: {
-        name: library.external.name
-      }
-    }
-  };
-
-  if (library.external.symbols.length !== 0) {
-    /* tslint:disable:no-string-literal */
-    deployment.IMPORT['SYMBOL'] = library.external.symbols;
-  }
-  if (library.globals.length !== 0) {
-    /* tslint:disable:no-string-literal */
-    deployment['GLOBAL'] = library.globals.map(x => {
-      return {
-        IDENTIFIER: x[0],
-        VALUE: x[2]
-      };
-    });
-  }
-
-  task.DEPLOYMENT = deployment;
+  task.DEPLOYMENT = exportLibrary(assessment.globalDeployment!);
   if (assessment.graderDeployment) {
     task.GRADERDEPLOYMENT = assessment.graderDeployment;
   }
@@ -277,6 +294,11 @@ export const assessmentToXml = (
       TEXT: question.content,
       CHOICE: [] as any[]
     };
+
+    if(question.library.chapter !== -1) {
+      /* tslint:disable:no-string-literal */
+      problem.$['DEPLOYMENT'] = exportLibrary(question.library);
+    }
 
     if (question.maxXp) {
       /* tslint:disable:no-string-literal */

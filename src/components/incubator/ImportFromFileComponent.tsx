@@ -31,6 +31,7 @@ export class ImportFromFileComponent extends React.Component<Props, { isInvalidX
   public render() {
     return (
       <div>
+        <div>Please ensure that the xml uploaded is trustable.</div>
         <input type="file" id="file" accept=".xml" onChange={this.handleChangeFile} />
         <button onClick={this.makeMission}>Make New Mission</button>
         {this.state.isInvalidXml ? (
@@ -47,7 +48,7 @@ export class ImportFromFileComponent extends React.Component<Props, { isInvalidX
     if (content) {
       parseString(content, (err: any, result: any) => {
         // tslint:disable-next-line:no-console
-        // console.dir(result)
+        // console.dir(result);
         try {
           const entireAssessment: [IAssessmentOverview, IAssessment] = makeEntireAssessment(result);
           localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(entireAssessment[0]));

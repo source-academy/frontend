@@ -45,6 +45,7 @@ export type GradingStatus = keyof typeof GradingStatuses;
  */
 export interface IAssessment {
   category: AssessmentCategory;
+  globalDeployment?: Library;
   graderDeployment?: any;
   id: number;
   longSummary: string;

@@ -10,6 +10,7 @@ interface IProps {
   isNumber?: boolean;
   numberRange?: number[];
   path: Array<string | number>;
+  useRawValue?: boolean;
   updateAssessment: (assessment: IAssessment) => void;
 }
 
@@ -17,15 +18,18 @@ interface IState {
   isEditing: boolean;
   isNumber: boolean;
   fieldValue: string;
+  useRawValue: boolean;
 }
 
 export class TextareaContent extends React.Component<IProps, IState> {
   public constructor(props: IProps) {
     super(props);
+    const isNumberVal = this.props.isNumber || false;
     this.state = {
       isEditing: false,
-      isNumber: this.props.isNumber || false,
-      fieldValue: ''
+      isNumber: isNumberVal,
+      fieldValue: '',
+      useRawValue: this.props.useRawValue || isNumberVal
     };
   }
 
@@ -38,7 +42,7 @@ export class TextareaContent extends React.Component<IProps, IState> {
       const value = getValueFromPath(this.props.path, this.props.assessment);
       display = (
         <div onClick={this.toggleEditField()}>
-          {this.state.isNumber ? value : <Markdown content={value || filler} />}
+          {this.state.useRawValue ? value : <Markdown content={value || filler} />}
         </div>
       );
     }
@@ -58,12 +62,16 @@ export class TextareaContent extends React.Component<IProps, IState> {
     } else {
       fieldValue = this.state.fieldValue;
     }
-    const assessmentVal = this.props.assessment;
-    assignToPath(this.props.path, fieldValue, assessmentVal);
+    const originalVal = getValueFromPath(this.props.path, this.props.assessment);
+    if (fieldValue !== originalVal) {
+      const assessmentVal = this.props.assessment;
+      assignToPath(this.props.path, fieldValue, assessmentVal);
+      this.props.updateAssessment(assessmentVal);
+    }
+    
     this.setState({
       isEditing: false
     });
-    this.props.updateAssessment(assessmentVal);
   };
 
   private handleEditAssessment = (e: any) => {

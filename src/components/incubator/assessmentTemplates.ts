@@ -4,9 +4,19 @@ import {
   IAssessment,
   IAssessmentOverview,
   IMCQQuestion,
-  IProgrammingQuestion
+  IProgrammingQuestion,
+  Library
 } from '../../components/assessment/assessmentShape';
 import { mock2DRuneLibrary } from '../../mocks/assessmentAPI';
+
+const emptyLibrary: Library = {
+  chapter: -1,
+  external: {
+    name: "NONE",
+    symbols: []
+  },
+  globals: []
+};
 
 export const overviewTemplate: IAssessmentOverview = {
   category: AssessmentCategories.Mission,
@@ -30,8 +40,8 @@ export const programmingTemplate: IProgrammingQuestion = {
   comment: '`Great Job` **young padawan**',
   content: 'Enter content here',
   id: 0,
-  library: mock2DRuneLibrary,
-  solutionTemplate: '//1st question mock solution template',
+  library: emptyLibrary,
+  solutionTemplate: '//This is a mock solution template',
   type: 'programming',
   grader: {
     name: 'avenger',
@@ -48,7 +58,7 @@ export const mcqTemplate: IMCQQuestion = {
   answer: 3,
   comment: null,
   content:
-    'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
+    'This is a mock MCQ question',
   choices: [
     {
       content: 'A',
@@ -68,7 +78,7 @@ export const mcqTemplate: IMCQQuestion = {
     }
   ],
   id: 2,
-  library: mock2DRuneLibrary,
+  library: emptyLibrary,
   type: 'mcq',
   solution: 1,
   grader: {
@@ -84,6 +94,7 @@ export const mcqTemplate: IMCQQuestion = {
 
 export const assessmentTemplate: IAssessment = {
   category: 'Mission',
+  globalDeployment: mock2DRuneLibrary,
   id: -1,
   longSummary: 'Insert mission briefing here',
   missionPDF: 'www.google.com',

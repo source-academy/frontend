@@ -48,6 +48,8 @@ export interface IXmlParseStrProblem {
     maxgrade: string;
     maxxp: string;
   };
+  DEPLOYMENT?: IXmlParseStrDeployment[];
+  GRADERDEPLOYMENT?: IXmlParseStrDeployment[];
   TEXT: string[];
 }
 

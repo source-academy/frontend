@@ -7,7 +7,6 @@ import { history } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { retrieveLocalAssessment } from '../../utils/xmlParser';
 import {
-  ExternalLibraryName,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -20,6 +19,7 @@ import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
+  GlobalDeploymentTab,
   GradingTab,
   ManageQuestionTab,
   QuestionTemplateTab,
@@ -186,6 +186,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       this.props.storedQuestionId !== questionId
     ) {
       const question = this.state.assessment!.questions[questionId];
+      const library = question.library.chapter === -1 ?  question.library : this.state.assessment!.globalDeployment!;
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
@@ -194,10 +195,16 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           : null;
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({ editorValue });
-      this.props.handleClearContext(question.library);
+      this.props.handleClearContext(library);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (editorValue) {
         this.props.handleEditorValueChange(editorValue);
+      }
+      if (this.state.hasUnsavedChanges) {
+        this.setState({
+          assessment: retrieveLocalAssessment(),
+          hasUnsavedChanges: false
+        });
       }
     }
   }
@@ -218,7 +225,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 
   private updateAndSaveAssessment = (assessmentVal: IAssessment) => {
     this.setState({
-      assessment: assessmentVal
+      assessment: assessmentVal,
+      hasUnsavedChanges: false
     });
     localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentVal));
   };
@@ -234,14 +242,14 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const assessment = this.state.assessment;
+    const assessment = this.state.assessment!;
     const tabs = [
       {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
         body: (
           <TextareaContentTab
-            assessment={this.state.assessment!}
+            assessment={assessment}
             path={['questions', questionId, 'content']}
             updateAssessment={this.updateEditAssessmentState}
           />
@@ -252,7 +260,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         icon: IconNames.BRIEFCASE,
         body: (
           <TextareaContentTab
-            assessment={this.state.assessment!}
+            assessment={assessment}
             path={['longSummary']}
             updateAssessment={this.updateEditAssessmentState}
           />
@@ -263,7 +271,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         icon: IconNames.DOCUMENT,
         body: (
           <QuestionTemplateTab
-            assessment={this.state.assessment!}
+            assessment={assessment}
             questionId={questionId}
             updateAssessment={this.updateEditAssessmentState}
           />
@@ -274,9 +282,19 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         icon: IconNames.WRENCH,
         body: (
           <ManageQuestionTab
-            assessment={this.state.assessment!}
+            assessment={assessment}
             questionId={questionId}
             updateAssessment={this.updateAndSaveAssessment}
+          />
+        )
+      },
+      {
+        label: `Manage Global Deployment`,
+        icon: IconNames.TAG,
+        body: (
+          <GlobalDeploymentTab
+            assessment={assessment}
+            updateAssessment={this.updateEditAssessmentState}
           />
         )
       }
@@ -288,7 +306,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         icon: IconNames.TICK,
         body: (
           <GradingTab
-            assessment={this.state.assessment!}
+            assessment={assessment}
             path={['questions', questionId]}
             updateAssessment={this.updateEditAssessmentState}
           />
@@ -311,23 +329,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
   };
 
-  private handleChapterSelect = (chapter: any, e: any) => {
-    const assessment = this.state.assessment!;
-    for (const question of assessment.questions) {
-      question.library.chapter = chapter.chapter;
-    }
-    this.updateAndSaveAssessment(assessment);
-    // this.props.handleChapterSelect(chapter, e);
-  };
-
-  private handleExternalSelect = ({ name }: { name: ExternalLibraryName }, e: any) => {
-    const assessment = this.state.assessment!;
-    for (const question of assessment.questions) {
-      question.library.external.name = name;
-    }
-    this.updateAndSaveAssessment(assessment);
-  };
-
   /** Pre-condition: IAssessment has been loaded */
   private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
     props: AssessmentWorkspaceProps,
@@ -339,14 +340,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
     return {
       externalLibraryName: this.state.assessment!.questions[questionId].library.external.name,
-      handleChapterSelect: this.handleChapterSelect,
-      handleExternalSelect: this.handleExternalSelect,
       handleEditorEval: this.props.handleEditorEval,
       handleInterruptEval: this.props.handleInterruptEval,
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
-      hasChapterSelect: true,
+      hasChapterSelect: false,
       hasEditorAutorunButton: false,
       hasSaveButton: true,
       hasShareButton: false,
