@@ -38,6 +38,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   }
 
   public componentDidMount() {
+    if (this.ace.current == undefined) return;
     const editor: any = this.ace.current.editor;
     editor.on('gutterclick', (e: any) => {
       const target = e.domEvent.target;
