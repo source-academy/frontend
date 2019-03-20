@@ -38,12 +38,8 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
     const deployment = this.props.assessment.globalDeployment!;
     const symbols = deployment.external.symbols.map((symbol, i) => (
       <tr key={i}>
-        <td>
-          {this.symbolTextareaContent(i)}
-        </td>
-        <td>
-          {controlButton('Delete', IconNames.MINUS, this.handleSymbolDelete(i))}
-        </td>
+        <td>{this.symbolTextareaContent(i)}</td>
+        <td>{controlButton('Delete', IconNames.MINUS, this.handleSymbolDelete(i))}</td>
       </tr>
     ));
 
@@ -65,9 +61,7 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
         Symbols:
         <br />
         <br />
-        <table style={{"width":"100%"}}>
-        {symbols}
-        </table>
+        <table style={{ width: '100%' }}>{symbols}</table>
         {controlButton('New Symbol', IconNames.PLUS, this.handleNewSymbol)}
       </div>
     );
@@ -95,7 +89,7 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
   };
 
   private handleSymbolDelete = (index: number) => () => {
-    const assessment = this.props.assessment; 
+    const assessment = this.props.assessment;
     const symbols = assessment.globalDeployment!.external.symbols;
     symbols.splice(index, 1);
     this.props.updateAssessment(assessment);
@@ -117,7 +111,9 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
   private handleExternalSelect = (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => {
     const assessment = this.props.assessment;
     assessment.globalDeployment!.external.name = i.name;
-    assessment.globalDeployment!.external.symbols = externalLibraries.get(i.name)!;
+    assessment.globalDeployment!.external.symbols = JSON.parse(
+      JSON.stringify(externalLibraries.get(i.name)!)
+    );
     this.props.updateAssessment(assessment);
   };
 }
