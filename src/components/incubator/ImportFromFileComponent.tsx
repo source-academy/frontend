@@ -1,7 +1,10 @@
+import { FileInput } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { parseString } from 'xml2js';
 import { IAssessment, IAssessmentOverview } from '../../components/assessment/assessmentShape';
 import { makeEntireAssessment, retrieveLocalAssessment } from '../../utils/xmlParser';
+import { controlButton } from '../commons';
 import { assessmentTemplate, overviewTemplate } from '../incubator/assessmentTemplates';
 
 type Props = {
@@ -9,7 +12,11 @@ type Props = {
   updateEditingOverview: (overview: IAssessmentOverview) => void;
 };
 
-export class ImportFromFileComponent extends React.Component<Props, { isInvalidXml: boolean }> {
+type State = {
+  fileInputText: string;
+};
+
+export class ImportFromFileComponent extends React.Component<Props, State> {
   private fileReader: FileReader;
   public constructor(props: any) {
     super(props);
@@ -17,7 +24,7 @@ export class ImportFromFileComponent extends React.Component<Props, { isInvalidX
     this.handleChangeFile = this.handleChangeFile.bind(this);
     this.makeMission = this.makeMission.bind(this);
     this.state = {
-      isInvalidXml: false
+      fileInputText: 'Import XML'
     };
   }
 
@@ -32,13 +39,14 @@ export class ImportFromFileComponent extends React.Component<Props, { isInvalidX
     return (
       <div>
         <div>Please ensure that the xml uploaded is trustable.</div>
-        <input type="file" id="file" accept=".xml" onChange={this.handleChangeFile} />
-        <button onClick={this.makeMission}>Make New Mission</button>
-        {this.state.isInvalidXml ? (
-          <div>The xml uploaded is invalid.</div>
-        ) : (
-          <div>You can edit this card</div>
-        )}
+        <div>
+          <FileInput
+            text={this.state.fileInputText}
+            inputProps={{ accept: '.xml' }}
+            onChange={this.handleChangeFile}
+          />
+        </div>
+        <div>{controlButton('Make New Mission', IconNames.NEW_OBJECT, this.makeMission)}</div>
       </div>
     );
   }
@@ -57,13 +65,13 @@ export class ImportFromFileComponent extends React.Component<Props, { isInvalidX
           localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(entireAssessment[1]));
           this.props.newAssessment(entireAssessment[1]);
           this.setState({
-            isInvalidXml: false
+            fileInputText: 'Success!'
           });
         } catch (err) {
           // tslint:disable-next-line:no-console
           console.log(err);
           this.setState({
-            isInvalidXml: true
+            fileInputText: 'Invalid XML!'
           });
         }
       });
@@ -79,7 +87,7 @@ export class ImportFromFileComponent extends React.Component<Props, { isInvalidX
     }
   };
 
-  private makeMission = (e: any) => {
+  private makeMission = () => {
     localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overviewTemplate));
     this.props.updateEditingOverview(overviewTemplate);
 
