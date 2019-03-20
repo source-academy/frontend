@@ -37,10 +37,14 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
   private deploymentTab = () => {
     const deployment = this.props.assessment.globalDeployment!;
     const symbols = deployment.external.symbols.map((symbol, i) => (
-      <div key={i} className="mcq-option col-xs-12">
-        {this.symbolTextareaContent(i)}
-        <br />
-      </div>
+      <tr key={i}>
+        <td>
+          {this.symbolTextareaContent(i)}
+        </td>
+        <td>
+          {controlButton('Delete', IconNames.MINUS, this.handleSymbolDelete(i))}
+        </td>
+      </tr>
     ));
 
     return (
@@ -61,7 +65,9 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
         Symbols:
         <br />
         <br />
+        <table style={{"width":"100%"}}>
         {symbols}
+        </table>
         {controlButton('New Symbol', IconNames.PLUS, this.handleNewSymbol)}
       </div>
     );
@@ -88,6 +94,13 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
     this.props.updateAssessment(assessment);
   };
 
+  private handleSymbolDelete = (index: number) => () => {
+    const assessment = this.props.assessment; 
+    const symbols = assessment.globalDeployment!.external.symbols;
+    symbols.splice(index, 1);
+    this.props.updateAssessment(assessment);
+  };
+
   private handleNewSymbol = () => {
     const assessment = this.props.assessment;
     const symbols = assessment.globalDeployment!.external.symbols;
@@ -104,6 +117,7 @@ export class GlobalDeploymentTab extends React.Component<IProps, {}> {
   private handleExternalSelect = (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => {
     const assessment = this.props.assessment;
     assessment.globalDeployment!.external.name = i.name;
+    assessment.globalDeployment!.external.symbols = externalLibraries.get(i.name)!;
     this.props.updateAssessment(assessment);
   };
 }
