@@ -114,7 +114,7 @@
       var res = ''
       for (var k in env) {
         if (builtins.indexOf(''+k) < 0) {
-          res += '<tr><td>' + k + '</td>' + '<td><code>' + env[k] + '</code></td></tr>'
+          res += '<tr><td>' + k + '</td>' + '<td><code>' + env[k].toString() + '</code></td></tr>'
         }
       }
       return res.length > 0 ? res : undefined
@@ -142,11 +142,32 @@
     }
   }
 
+  function highlightLine(number) {
+    if (number == undefined) return;
+    var gutterCells = document.getElementsByClassName("ace_gutter-cell");
+    if (gutterCells != undefined) {
+      for (cell of gutterCells) {
+        if (cell.innerText == number) cell.classList.add("ace_gutter-cell_hi");
+        else cell.classList.remove("ace_gutter-cell_hi");
+      }
+    }
+
+    // We are simply assuming they are sorted. This may change.
+    // Currently there is no better way to do this easily because unlike
+    // the guttercells, lines have no indices we can use.
+    var aceLines = document.getElementsByClassName("ace_line");
+    if (aceLines != undefined) {
+      for (line of aceLines) line.classList.remove("ace_line_hi");
+      aceLines[number - 1].classList.add("ace_line_hi");
+    }
+  }
+
   exports.Inspector = {
     init: function(parent) {
       parent.appendChild(container)
     },
-    updateContext
+    updateContext,
+    highlightLine
   }
   setTimeout(() => {}, 1000)
 })(window)

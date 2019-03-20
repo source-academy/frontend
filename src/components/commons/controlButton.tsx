@@ -14,7 +14,7 @@ const defaultOptions = {
   fullWidth: false,
   iconOnRight: false,
   intent: Intent.NONE,
-  minimal: true
+  minimal: true,
 }
 
 export function controlButton(

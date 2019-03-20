@@ -28,6 +28,8 @@ export type StateProps = {
   assessment?: IAssessment
   editorValue: string | null
   editorWidth: string
+  breakpoints: string[];
+  highlightedLines: number[][];
   hasUnsavedChanges: boolean
   isRunning: boolean
   isDebugging: boolean
@@ -56,6 +58,7 @@ export type DispatchProps = {
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleInterruptEval: () => void
   handleReplEval: () => void
   handleReplOutputClear: () => void
@@ -144,7 +147,10 @@ class AssessmentWorkspace extends React.Component<
               editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+              breakpoints: this.props.breakpoints,
+              highlightedLines: this.props.highlightedLines,
+              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -200,6 +206,7 @@ class AssessmentWorkspace extends React.Component<
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
           : null
+      this.props.handleEditorUpdateBreakpoints([]);
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId)
       this.props.handleResetWorkspace({ editorValue })
       this.props.handleClearContext(question.library)

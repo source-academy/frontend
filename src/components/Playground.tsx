@@ -36,6 +36,8 @@ export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComp
 export interface IStateProps {
   activeTab: number
   editorValue: string
+  breakpoints: string[];
+  highlightedLines: number[][];
   editorWidth: string
   isRunning: boolean
   isDebugging: boolean
@@ -56,6 +58,7 @@ export interface IDispatchProps {
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGenerateLz: () => void
   handleInterruptEval: () => void
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void
@@ -112,7 +115,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       editorProps: {
         editorValue: this.props.editorValue,
         handleEditorEval: this.props.handleEditorEval,
-        handleEditorValueChange: this.props.handleEditorValueChange
+        handleEditorValueChange: this.props.handleEditorValueChange,
+        breakpoints: this.props.breakpoints,
+        highlightedLines: this.props.highlightedLines,
+        handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
       },
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,

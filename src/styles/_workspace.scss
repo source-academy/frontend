@@ -74,6 +74,24 @@ $code-color-error: #ff4444;
         height: 100%;
       }
     }
+
+    .ace_gutter-cell {
+      padding-left: 0px;
+    }
+
+    .ace_gutter-cell_hi {
+      background-color: blue;
+    }
+
+    .ace_line_hi {
+      background-color: blue;
+    }
+
+    .ace_breakpoint:before {
+      content: ' \25CF';
+      margin-left: -10px;
+      color: red;
+    }
   }
 
   .MCQChooser {

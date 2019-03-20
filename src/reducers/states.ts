@@ -60,6 +60,8 @@ export interface IWorkspaceState {
   readonly context: Context
   readonly editorValue: string | null
   readonly editorWidth: string
+  readonly breakpoints: string[];
+  readonly highlightedLines: number[][];
   readonly isRunning: boolean
   readonly isDebugging: boolean
   readonly enableDebugging: boolean
@@ -200,6 +202,8 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
   editorWidth: '50%',
+  breakpoints: [],
+  highlightedLines: [],
   output: [],
   replHistory: {
     browseIndex: null,

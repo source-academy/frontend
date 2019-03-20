@@ -7,6 +7,8 @@ import Playground, { IPlaygroundProps } from '../Playground'
 
 const baseProps = {
   editorValue: '',
+  breakpoints: [],
+  highlightedLines: [],
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
@@ -24,6 +26,7 @@ const baseProps = {
   handleEditorEval: () => {},
   handleEditorValueChange: () => {},
   handleEditorWidthChange: (widthChange: number) => {},
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
   handleGenerateLz: () => {},
   handleInterruptEval: () => {},

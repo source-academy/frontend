@@ -83,6 +83,14 @@ function visualiseList(list: any) {
   }
 }
 
+export function highlightLine(line: Number) {
+  if ((window as any).Inspector) {
+    ;(window as any).Inspector.highlightLine(line)
+  } else {
+    throw new Error('Inspector not loaded')
+  }
+}
+
 export function inspectorUpdate(context: Context) {
   if ((window as any).Inspector) {
     ;(window as any).Inspector.updateContext({ context })

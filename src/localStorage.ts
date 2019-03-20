@@ -30,7 +30,7 @@ export const saveState = (state: IState) => {
         role: state.session.role,
         name: state.session.name
       },
-      playgroundEditorValue: state.workspaces.playground.editorValue
+      playgroundEditorValue: state.workspaces.playground.editorValue,
     }
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved))
     localStorage.setItem('storedState', serialized)

@@ -162,6 +162,22 @@ export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
   payload: { newEditorValue, workspaceLocation }
 })
 
+export const setEditorBreakpoint: ActionCreator<actionTypes.IAction> = (
+  breakpoints: string[],
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.UPDATE_EDITOR_BREAKPOINTS,
+  payload: { breakpoints, workspaceLocation }
+});
+
+export const highlightEditorLine: ActionCreator<actionTypes.IAction> = (
+  highlightedLines: number[],
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.HIGHLIGHT_LINE,
+  payload: { highlightedLines, workspaceLocation }
+});
+
 export const updateReplValue: ActionCreator<actionTypes.IAction> = (
   newReplValue: string,
   workspaceLocation: WorkspaceLocation
