@@ -55,11 +55,11 @@ Note that this copies your files over, any future changes will not be reflected.
 
 You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
 
-## For Editing And Previewing Local XML Missions
+## For Editing And Creating New Local XML Missions
 
 1. Use the branch 'mission-editing' in cadet-frontend
 2. Run in browser with yarn start
-2. Go to Missions page, and upload xml file to preview
+2. Go to Incubator tab.
 
 ## Application Structure
 
