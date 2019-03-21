@@ -188,8 +188,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       const question = this.state.assessment!.questions[questionId];
       const library =
         question.library.chapter === -1
-          ? question.library
-          : this.state.assessment!.globalDeployment!;
+          ? this.state.assessment!.globalDeployment!
+          : question.library;
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
