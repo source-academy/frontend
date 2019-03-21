@@ -5,12 +5,13 @@
 
 ## Development Setup
 
-1. Install a stable version of Yarn and NodeJS (use node version 4-9 with nvm).
-2. Run `yarn` to install dependencies.
+1. Install a stable version of Yarn and NodeJS (tested: Node 10.15.0).
+2. Run `yarn` to install dependencies. (tested: npm install, not yarn)
 3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_IVLE_KEY`
    to contain your IVLE Lapi key.
 4. Run `yarn start` to start the server at `localhost:80`. Admin permissions may
    be required for your OS to serve at port 80.
+5. If running cadet without ngix, `yarn cors-proxy` to solve CORS problems.
    
 ## IVLE LAPI Key
 For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
@@ -18,10 +19,7 @@ For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.
 ## For Windows Users
 
 ### Running cadet-frontend
-In package.json, change line 19:\
-"start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",\
-to:\
-"start-js": "set PORT=80 & react-scripts-ts start",\
+Run `yarn win-start`
 
 ### Dealing with hooks
 In package.json, change line 28:\
