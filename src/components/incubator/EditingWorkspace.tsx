@@ -19,7 +19,7 @@ import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
-  GlobalDeploymentTab,
+  DeploymentTab,
   GradingTab,
   ManageQuestionTab,
   QuestionTemplateTab,
@@ -293,11 +293,25 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       },
       {
         label: `Manage Global Deployment`,
-        icon: IconNames.TAG,
+        icon: IconNames.GLOBE,
         body: (
-          <GlobalDeploymentTab
+          <DeploymentTab
             assessment={assessment}
+            pathToLibrary={["globalDeployment"]}
             updateAssessment={this.updateEditAssessmentState}
+            isGlobalDeployment={true}
+          />
+        )
+      },
+      {
+        label: `Manage Local Deployment`,
+        icon: IconNames.HOME,
+        body: (
+          <DeploymentTab
+            assessment={assessment}
+            pathToLibrary={['questions', questionId, "library"]}
+            updateAssessment={this.updateEditAssessmentState}
+            isGlobalDeployment={false}
           />
         )
       }

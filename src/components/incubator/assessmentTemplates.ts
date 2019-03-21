@@ -9,7 +9,7 @@ import {
 } from '../../components/assessment/assessmentShape';
 import { mock2DRuneLibrary } from '../../mocks/assessmentAPI';
 
-const emptyLibrary: Library = {
+export const emptyLibrary: Library = {
   chapter: -1,
   external: {
     name: 'NONE',

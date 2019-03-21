@@ -10,6 +10,7 @@ interface IProps {
   isNumber?: boolean;
   numberRange?: number[];
   path: Array<string | number>;
+  processResults ?: (str: string | number) => string | number;
   useRawValue?: boolean;
   updateAssessment: (assessment: IAssessment) => void;
 }
@@ -63,6 +64,9 @@ export class TextareaContent extends React.Component<IProps, IState> {
       fieldValue = this.state.fieldValue;
     }
     const originalVal = getValueFromPath(this.props.path, this.props.assessment);
+    if (this.props.processResults) {
+      fieldValue = this.props.processResults(fieldValue);
+    }
     if (fieldValue !== originalVal) {
       const assessmentVal = this.props.assessment;
       assignToPath(this.props.path, fieldValue, assessmentVal);
