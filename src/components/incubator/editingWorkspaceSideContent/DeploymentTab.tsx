@@ -29,7 +29,7 @@ interface IExternal {
   symbols: string[];
 }
 
-export class DeploymentTab extends React.Component<IProps, {deploymentEnabled: boolean}> {
+export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: boolean }> {
   public constructor(props: IProps) {
     super(props);
     this.state = {
@@ -38,23 +38,26 @@ export class DeploymentTab extends React.Component<IProps, {deploymentEnabled: b
   }
 
   public render() {
-    if(this.props.isGlobalDeployment) {
+    if (this.props.isGlobalDeployment) {
       return this.deploymentTab();
     } else {
-      return <div>
-        <Switch 
-          checked={this.state.deploymentEnabled} 
-          label="Enable Local Deployment" 
-          onChange={this.handleSwitchDeployment}/> 
-        {this.state.deploymentEnabled ? this.deploymentTab() : null}
-      </div>;
+      return (
+        <div>
+          <Switch
+            checked={this.state.deploymentEnabled}
+            label="Enable Local Deployment"
+            onChange={this.handleSwitchDeployment}
+          />
+          {this.state.deploymentEnabled ? this.deploymentTab() : null}
+        </div>
+      );
     }
   }
 
   private deploymentTab = () => {
     const deploymentPath = this.props.pathToLibrary;
     const deployment = getValueFromPath(deploymentPath, this.props.assessment) as Library;
-    const deploymentDisp = this.props.isGlobalDeployment ? "Global Deployment" : "Local Deployment";
+    const deploymentDisp = this.props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
     const symbols = deployment.external.symbols.map((symbol, i) => (
       <tr key={i}>
         <td>{this.textareaContent(deploymentPath.concat(['external', 'symbols', i]))}</td>
@@ -63,9 +66,13 @@ export class DeploymentTab extends React.Component<IProps, {deploymentEnabled: b
     ));
     const globals = deployment.globals.map((symbol, i) => (
       <tr key={i}>
-        <td className="col-xs-3">{this.textareaContent(deploymentPath.concat(['globals', i, 0]))}</td>
+        <td className="col-xs-3">
+          {this.textareaContent(deploymentPath.concat(['globals', i, 0]))}
+        </td>
         <td className="col-xs-7">{this.globalValueTextareaContent(i)}</td>
-        <td className="col-xs-2">{controlButton('Delete', IconNames.MINUS, this.handleGlobalDelete(i))}</td>
+        <td className="col-xs-2">
+          {controlButton('Delete', IconNames.MINUS, this.handleGlobalDelete(i))}
+        </td>
       </tr>
     ));
 
@@ -98,7 +105,6 @@ export class DeploymentTab extends React.Component<IProps, {deploymentEnabled: b
     );
   };
 
-
   private textareaContent = (path: Array<string | number>) => {
     return (
       <TextareaContent
@@ -130,7 +136,7 @@ export class DeploymentTab extends React.Component<IProps, {deploymentEnabled: b
       global[1] = altEval(global[2]!);
       this.props.updateAssessment(assessment);
     } catch (e) {
-      global[2] = "Invalid Expression";
+      global[2] = 'Invalid Expression';
     }
   };
 
@@ -160,7 +166,7 @@ export class DeploymentTab extends React.Component<IProps, {deploymentEnabled: b
   private handleNewGlobal = () => {
     const assessment = this.props.assessment;
     const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
-    deployment.globals.push(["new_global", null, "null"]);
+    deployment.globals.push(['new_global', null, 'null']);
     this.props.updateAssessment(assessment);
   };
 
@@ -175,9 +181,7 @@ export class DeploymentTab extends React.Component<IProps, {deploymentEnabled: b
     const assessment = this.props.assessment;
     const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
     deployment.external.name = i.name;
-    deployment.external.symbols = JSON.parse(
-      JSON.stringify(externalLibraries.get(i.name)!)
-    );
+    deployment.external.symbols = JSON.parse(JSON.stringify(externalLibraries.get(i.name)!));
     this.props.updateAssessment(assessment);
   };
 
@@ -186,13 +190,13 @@ export class DeploymentTab extends React.Component<IProps, {deploymentEnabled: b
     if (this.state.deploymentEnabled) {
       assignToPath(this.props.pathToLibrary, JSON.parse(JSON.stringify(emptyLibrary)), assessment);
     } else {
-      assignToPath(this.props.pathToLibrary.concat(["chapter"]), 1, assessment);
+      assignToPath(this.props.pathToLibrary.concat(['chapter']), 1, assessment);
     }
     this.setState({
       deploymentEnabled: !this.state.deploymentEnabled
     });
     this.props.updateAssessment(assessment);
-  }
+  };
 }
 
 const removeSpaces = (str: string) => {

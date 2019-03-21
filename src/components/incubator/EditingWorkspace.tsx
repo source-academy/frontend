@@ -297,7 +297,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         body: (
           <DeploymentTab
             assessment={assessment}
-            pathToLibrary={["globalDeployment"]}
+            pathToLibrary={['globalDeployment']}
             updateAssessment={this.updateEditAssessmentState}
             isGlobalDeployment={true}
           />
@@ -309,7 +309,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         body: (
           <DeploymentTab
             assessment={assessment}
-            pathToLibrary={['questions', questionId, "library"]}
+            pathToLibrary={['questions', questionId, 'library']}
             updateAssessment={this.updateEditAssessmentState}
             isGlobalDeployment={false}
           />

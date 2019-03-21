@@ -10,7 +10,7 @@ interface IProps {
   isNumber?: boolean;
   numberRange?: number[];
   path: Array<string | number>;
-  processResults ?: (str: string | number) => string | number;
+  processResults?: (str: string | number) => string | number;
   useRawValue?: boolean;
   updateAssessment: (assessment: IAssessment) => void;
 }

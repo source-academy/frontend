@@ -4,13 +4,7 @@ import ManageQuestionTab from './ManageQuestionTab';
 import QuestionTemplateTab from './QuestionTemplateTab';
 import TextareaContentTab from './TextareaContent';
 
-export {
-  DeploymentTab,
-  GradingTab,
-  ManageQuestionTab,
-  QuestionTemplateTab,
-  TextareaContentTab
-};
+export { DeploymentTab, GradingTab, ManageQuestionTab, QuestionTemplateTab, TextareaContentTab };
 
 export const getValueFromPath = (path: Array<string | number>, obj: any): any => {
   for (const next of path) {
