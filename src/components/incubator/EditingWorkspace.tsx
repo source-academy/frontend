@@ -346,6 +346,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
             assessment={assessment}
             pathToLibrary={['questions', questionId, 'library']}
             updateAssessment={this.updateEditAssessmentState}
+
             isGlobalDeployment={false}
           />
         )
