@@ -50,8 +50,8 @@ export const programmingTemplate: IProgrammingQuestion = {
   gradedAt: '2038-06-18T05:24:26.026Z',
   xp: 0,
   grade: 0,
-  maxGrade: 2,
-  maxXp: 2
+  maxGrade: 0,
+  maxXp: 0
 };
 
 export const mcqTemplate: IMCQQuestion = {
@@ -87,8 +87,8 @@ export const mcqTemplate: IMCQQuestion = {
   gradedAt: '2038-06-18T05:24:26.026Z',
   xp: 0,
   grade: 0,
-  maxGrade: 2,
-  maxXp: 2
+  maxGrade: 0,
+  maxXp: 0
 };
 
 export const assessmentTemplate: IAssessment = {

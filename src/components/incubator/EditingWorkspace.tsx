@@ -5,9 +5,14 @@ import * as React from 'react';
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
 import { history } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
-import { retrieveLocalAssessment } from '../../utils/xmlParser';
+import {
+  retrieveLocalAssessment,
+  storeLocalAssessment,
+  storeLocalAssessmentOverview
+} from '../../utils/xmlParser';
 import {
   IAssessment,
+  IAssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
@@ -44,8 +49,10 @@ export type StateProps = {
 
 export type OwnProps = {
   assessmentId: number;
-  listingPath?: string;
   questionId: number;
+  assessmentOverview: IAssessmentOverview;
+  updateAssessmentOverview: (overview: IAssessmentOverview) => void;
+  listingPath?: string;
   notAttempted: boolean;
   closeDate: string;
 };
@@ -70,20 +77,22 @@ export type DispatchProps = {
 };
 
 interface IState {
-  showOverlay: boolean;
   assessment: IAssessment | null;
   activeTab: number;
   hasUnsavedChanges: boolean;
+  originalMaxGrade: number;
+  originalMaxXp: number;
 }
 
 class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, IState> {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
-      showOverlay: false,
       assessment: retrieveLocalAssessment(),
       activeTab: 0,
-      hasUnsavedChanges: false
+      hasUnsavedChanges: false,
+      originalMaxGrade: 0,
+      originalMaxXp: 0
     };
   }
 
@@ -92,12 +101,15 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
    * or a loading screen), try to fetch a newer assessment,
    * and show the briefing.
    */
-  // public componentDidMount() {
-  //   this.props.handleAssessmentFetch(this.props.assessmentId)
-  //   if (this.props.questionId === 0 && this.props.notAttempted) {
-  //     this.setState({ showOverlay: true })
-  //   }
-  // }
+  public componentDidMount() {
+    const assessment = this.state.assessment;
+    if (assessment) {
+      this.setState({
+        originalMaxGrade: assessment.questions[this.props.questionId].maxGrade,
+        originalMaxXp: assessment.questions[this.props.questionId].maxXp
+      });
+    }
+  }
 
   /**
    * Once there is an update (due to the assessment being fetched), check
@@ -209,6 +221,11 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           hasUnsavedChanges: false
         });
       }
+      this.setState({
+        activeTab: 0,
+        originalMaxGrade: question.maxGrade,
+        originalMaxXp: question.maxXp
+      });
     }
   }
 
@@ -216,7 +233,26 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.setState({
       hasUnsavedChanges: false
     });
-    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(this.state.assessment));
+    storeLocalAssessment(this.state.assessment!);
+    this.handleSaveGradeAndXp();
+  };
+
+  private handleSaveGradeAndXp = () => {
+    const assessment = this.state.assessment!;
+    const changeGrade =
+      assessment.questions[this.props.questionId].maxGrade - this.state.originalMaxGrade;
+    const changeXp = assessment.questions[this.props.questionId].maxXp - this.state.originalMaxXp;
+    if (changeGrade !== 0 || changeXp !== 0) {
+      const overview = this.props.assessmentOverview;
+      if (changeGrade !== 0) {
+        overview.maxGrade += changeGrade;
+      }
+      if (changeXp !== 0) {
+        overview.maxXp += changeXp;
+      }
+      this.props.updateAssessmentOverview(overview);
+      storeLocalAssessmentOverview(overview);
+    }
   };
 
   private updateEditAssessmentState = (assessmentVal: IAssessment) => {
@@ -228,10 +264,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 
   private updateAndSaveAssessment = (assessmentVal: IAssessment) => {
     this.setState({
-      assessment: assessmentVal,
-      hasUnsavedChanges: false
+      assessment: assessmentVal
     });
-    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentVal));
+    this.handleSave();
   };
 
   private handleChangeActiveTab = (tab: number) => {

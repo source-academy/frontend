@@ -45,6 +45,14 @@ export const retrieveLocalAssessmentOverview = (): IAssessmentOverview | null =>
   }
 };
 
+export const storeLocalAssessment = (assessment: IAssessment): void => {
+  localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessment));
+};
+
+export const storeLocalAssessmentOverview = (overview: IAssessmentOverview): void => {
+  localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overview));
+};
+
 export const makeEntireAssessment = (result: any): [IAssessmentOverview, IAssessment] => {
   const assessmentArr = makeAssessment(result);
   const overview = makeAssessmentOverview(result, assessmentArr[1], assessmentArr[2]);
