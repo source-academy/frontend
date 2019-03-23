@@ -37,6 +37,7 @@ export type ControlBarProps = {
   onClickPrevious?(): any;
   onClickReturn?(): any;
   onClickSave?(): any;
+  onClickReset?(): any
 };
 
 interface IChapter {
@@ -62,7 +63,8 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {}
+    onClickSave: () => {},
+    onClickReset: () => {}
   };
 
   private shareInputElem: HTMLInputElement;
@@ -136,12 +138,16 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const stopAutorunButton = this.props.hasEditorAutorunButton
       ? controlButton('Autorun', IconNames.STOP, this.props.handleToggleEditorAutorun)
       : undefined;
+    const resetButton = this.props.hasSaveButton
+      ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
+      : undefined;
     return (
       <div className="ControlBar_editor pt-button-group">
         {this.props.isEditorAutorun ? undefined : this.props.isRunning ? stopButton : runButton}
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton}
         {this.props.isEditorAutorun ? stopAutorunButton : startAutorunButton}
+        {resetButton}
       </div>
     );
   }
