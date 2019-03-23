@@ -1,6 +1,8 @@
+import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { IAssessment } from '../../assessment/assessmentShape';
+import { controlButton } from '../../commons';
 import { mcqTemplate, programmingTemplate } from '../../incubator/assessmentTemplates';
 
 interface IProps {
@@ -21,9 +23,13 @@ export class ManageQuestionTab extends React.Component<IProps, {}> {
   private manageQuestionTab = () => {
     return (
       <div>
-        <button onClick={this.makeQuestion(programmingTemplate)}>Make Programming Question</button>
-        <button onClick={this.makeQuestion(mcqTemplate)}>Make MCQ Question</button>
-        <button onClick={this.deleteQn}>Delete Question</button>
+        {controlButton(
+          'Make Programming Question',
+          IconNames.FONT,
+          this.makeQuestion(programmingTemplate)
+        )}
+        {controlButton('Make MCQ Question', IconNames.CONFIRM, this.makeQuestion(mcqTemplate))}
+        {controlButton('Make Programming Question', IconNames.REMOVE, this.deleteQn)}
       </div>
     );
   };

@@ -239,9 +239,10 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 
   private handleSaveGradeAndXp = () => {
     const assessment = this.state.assessment!;
-    const changeGrade =
-      assessment.questions[this.props.questionId].maxGrade - this.state.originalMaxGrade;
-    const changeXp = assessment.questions[this.props.questionId].maxXp - this.state.originalMaxXp;
+    const curGrade = assessment.questions[this.props.questionId].maxGrade;
+    const changeGrade = curGrade - this.state.originalMaxGrade;
+    const curXp = assessment.questions[this.props.questionId].maxXp;
+    const changeXp = curXp - this.state.originalMaxXp;
     if (changeGrade !== 0 || changeXp !== 0) {
       const overview = this.props.assessmentOverview;
       if (changeGrade !== 0) {
@@ -250,6 +251,10 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       if (changeXp !== 0) {
         overview.maxXp += changeXp;
       }
+      this.setState({
+        originalMaxGrade: curGrade,
+        originalMaxXp: curXp
+      });
       this.props.updateAssessmentOverview(overview);
       storeLocalAssessmentOverview(overview);
     }
