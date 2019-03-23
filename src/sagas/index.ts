@@ -102,7 +102,7 @@ function* workspaceSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.HIGHLIGHT_LINE, function*(action) {
     const location = (action as actionTypes.IAction).payload.highlightedLines;
-    highlightLine(location[0]);
+    highlightLine(location);
     yield;
   })
 

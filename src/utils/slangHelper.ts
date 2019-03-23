@@ -83,9 +83,10 @@ function visualiseList(list: any) {
   }
 }
 
-export function highlightLine(line: Number) {
+export function highlightLine(line: number) {
   if ((window as any).Inspector) {
-    ;(window as any).Inspector.highlightLine(line)
+    ;(window as any).Inspector.highlightClean()
+    ;(window as any).Inspector.highlightLine(line[0])
   } else {
     throw new Error('Inspector not loaded')
   }
