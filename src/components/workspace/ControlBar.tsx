@@ -37,7 +37,7 @@ export type ControlBarProps = {
   onClickPrevious?(): any;
   onClickReturn?(): any;
   onClickSave?(): any;
-  onClickReset?(): any
+  onClickReset?(): any;
 };
 
 interface IChapter {

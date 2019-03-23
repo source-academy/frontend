@@ -1,4 +1,4 @@
-import { NonIdealState, Spinner } from '@blueprintjs/core';
+import { ButtonGroup, Classes, Dialog, Intent, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -19,6 +19,8 @@ import {
   Library,
   QuestionTypes
 } from '../assessment/assessmentShape';
+import { controlButton } from '../commons';
+import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
@@ -80,6 +82,7 @@ interface IState {
   assessment: IAssessment | null;
   activeTab: number;
   hasUnsavedChanges: boolean;
+  showResetOverlay:  boolean;
   originalMaxGrade: number;
   originalMaxXp: number;
 }
@@ -91,6 +94,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       assessment: retrieveLocalAssessment(),
       activeTab: 0,
       hasUnsavedChanges: false,
+      showResetOverlay: false,
       originalMaxGrade: 0,
       originalMaxXp: 0
     };
@@ -102,11 +106,19 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
    * and show the briefing.
    */
   public componentDidMount() {
-    const assessment = this.state.assessment;
-    if (assessment) {
+    if (this.props.assessment) {
+      const question: IQuestion = this.props.assessment.questions[
+        this.props.questionId >= this.props.assessment.questions.length
+          ? this.props.assessment.questions.length - 1
+          : this.props.questionId
+      ];
+      const editorValue = question.type === QuestionTypes.programming
+        ? ((question as IProgrammingQuestion).answer as string)
+        : 'you aint seeing this';
+      this.props.handleEditorValueChange(editorValue);
       this.setState({
-        originalMaxGrade: assessment.questions[this.props.questionId].maxGrade,
-        originalMaxXp: assessment.questions[this.props.questionId].maxXp
+        originalMaxGrade: question.maxGrade,
+        originalMaxXp: question.maxXp
       });
     }
   }
@@ -129,24 +141,21 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         />
       );
     }
+
+    
+
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.state.assessment.questions.length
         ? this.state.assessment.questions.length - 1
         : this.props.questionId;
     const question: IQuestion = this.state.assessment.questions[questionId];
-    const editorValue =
-      question.type === QuestionTypes.programming
-        ? question.answer !== null
-          ? ((question as IProgrammingQuestion).answer as string)
-          : (question as IProgrammingQuestion).solutionTemplate
-        : null;
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorValue: editorValue!,
+              editorValue: this.props.editorValue || question.answer as string,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
@@ -174,10 +183,48 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
     return (
       <div className="WorkspaceParent pt-dark">
+        {this.resetOverlay(questionId)}
         <Workspace {...workspaceProps} />
       </div>
     );
   }
+
+  private resetOverlay = (questionId: number) => (
+    <Dialog
+      className="assessment-reset"
+      icon={IconNames.ERROR}
+      isCloseButtonShown={false}
+      isOpen={this.state.showResetOverlay}
+      title="Confirmation: Reset editor?"
+    >
+      <div className={Classes.DIALOG_BODY}>
+        <Markdown content="Are you sure you want to reset to your last save?" />
+      </div>
+      <div className={Classes.DIALOG_FOOTER}>
+        <ButtonGroup>
+          {controlButton('Cancel', null, () => this.setState({ showResetOverlay: false }), {
+            minimal: false
+          })}
+          {controlButton(
+            'Confirm',
+            null,
+            () => {
+              const assessment = retrieveLocalAssessment()!;
+              const question = assessment.questions[questionId] as IQuestion;
+              this.setState({ 
+                assessment,
+                hasUnsavedChanges: false,
+                showResetOverlay: false,
+                originalMaxGrade: question.maxGrade,
+                originalMaxXp: question.maxXp
+              });
+            },
+            { minimal: false, intent: Intent.DANGER }
+          )}
+        </ButtonGroup>
+      </div>
+    </Dialog>
+  );
 
   /**
    * Checks if there is a need to reset the workspace, then executes
@@ -204,9 +251,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           : question.library;
       const editorValue =
         question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IProgrammingQuestion).answer as string)
-            : (question as IProgrammingQuestion).solutionTemplate
+            ? ((question as IProgrammingQuestion).answer || "")
           : null;
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({ editorValue });
@@ -412,6 +457,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
       onClickReturn: () => history.push(listingPath),
       onClickSave: this.handleSave,
+      onClickReset: () => {
+        this.setState({ showResetOverlay: this.state.hasUnsavedChanges });
+      },
       questionProgress: [questionId + 1, this.state.assessment!.questions.length],
       sourceChapter: this.state.assessment!.questions[questionId].library.chapter
     };
