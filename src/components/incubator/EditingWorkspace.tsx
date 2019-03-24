@@ -114,8 +114,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           : 'you aint seeing this';
       this.props.handleEditorValueChange(editorValue);
       this.setState({
-        originalMaxGrade: question.maxGrade,
-        originalMaxXp: question.maxXp
+        originalMaxGrade: this.getMaxMarks("maxGrade"),
+        originalMaxXp: this.getMaxMarks("maxXp")
       });
     }
   }
@@ -174,7 +174,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
     return (
       <div className="WorkspaceParent pt-dark">
-        {this.resetOverlay(questionId)}
+        {this.resetOverlay()}
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -194,7 +194,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   /**
    * Resets to last save.
    */
-  private resetOverlay = (questionId: number) => (
+  private resetOverlay = () => (
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
@@ -215,14 +215,13 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
             null,
             () => {
               const assessment = retrieveLocalAssessment()!;
-              const question = assessment.questions[questionId] as IQuestion;
               this.handleRefreshLibrary();
               this.setState({
                 assessment,
                 hasUnsavedChanges: false,
                 showResetOverlay: false,
-                originalMaxGrade: question.maxGrade,
-                originalMaxXp: question.maxXp
+                originalMaxGrade: this.getMaxMarks('maxGrade'),
+                originalMaxXp: this.getMaxMarks('maxXp')
               });
             },
             { minimal: false, intent: Intent.DANGER }
@@ -269,9 +268,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         });
       }
       this.setState({
-        activeTab: 0,
-        originalMaxGrade: question.maxGrade,
-        originalMaxXp: question.maxXp
+        activeTab: 0
       });
     }
   }
@@ -304,19 +301,17 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   };
 
   private handleSaveGradeAndXp = () => {
-    const questionId = this.formatedQuestionId();
-    const assessment = this.state.assessment!;
-    const curGrade = assessment.questions[questionId].maxGrade;
+    const curGrade = this.getMaxMarks('maxGrade');
     const changeGrade = curGrade - this.state.originalMaxGrade;
-    const curXp = assessment.questions[questionId].maxXp;
+    const curXp = this.getMaxMarks('maxXp');
     const changeXp = curXp - this.state.originalMaxXp;
     if (changeGrade !== 0 || changeXp !== 0) {
       const overview = this.props.assessmentOverview;
       if (changeGrade !== 0) {
-        overview.maxGrade += changeGrade;
+        overview.maxGrade = curGrade;
       }
       if (changeXp !== 0) {
-        overview.maxXp += changeXp;
+        overview.maxXp = curXp;
       }
       this.setState({
         originalMaxGrade: curGrade,
@@ -327,6 +322,14 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     }
   };
 
+  private getMaxMarks = (field: string) => {
+    let result = 0;
+    const questions = this.state.assessment!.questions;
+    for (const question of questions) {
+      result += question[field];
+    }
+    return result as number;
+  }
   private updateEditAssessmentState = (assessmentVal: IAssessment) => {
     this.setState({
       assessment: assessmentVal,
@@ -490,6 +493,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
   };
 }
+
 
 function uniq(a: string[]) {
   const seen = {};
