@@ -8,7 +8,6 @@ import { assignToPath, getValueFromPath } from './';
 interface IProps {
   assessment: IAssessment;
   isNumber?: boolean;
-  numberRange?: number[];
   path: Array<string | number>;
   useRawValue?: boolean;
   processResults?: (newVal: string | number) => string | number;
@@ -54,12 +53,9 @@ export class TextareaContent extends React.Component<IProps, IState> {
   private saveEditAssessment = (e: any) => {
     let fieldValue: number | string;
     if (this.state.isNumber) {
-      const range = this.props.numberRange || [0];
       fieldValue = parseInt(this.state.fieldValue, 10);
-      if (isNaN(fieldValue) || fieldValue < range[0]) {
-        fieldValue = range[0];
-      } else if (range.length > 1 && fieldValue > range[1]) {
-        fieldValue = range[1];
+      if (isNaN(fieldValue)) {
+        fieldValue = getValueFromPath(this.props.path, this.props.assessment);
       }
     } else {
       fieldValue = this.state.fieldValue;
