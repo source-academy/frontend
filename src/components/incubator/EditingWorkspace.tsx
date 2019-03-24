@@ -108,9 +108,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   public componentDidMount() {
     if (this.props.assessment) {
       const question: IQuestion = this.props.assessment.questions[
-        this.props.questionId >= this.props.assessment.questions.length
-          ? this.props.assessment.questions.length - 1
-          : this.props.questionId
+        this.formatedQuestionId()
       ];
       const editorValue = question.type === QuestionTypes.programming
         ? ((question as IProgrammingQuestion).answer as string)
@@ -142,13 +140,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       );
     }
 
-    
-
-    /* If questionId is out of bounds, set it to the max. */
-    const questionId =
-      this.props.questionId >= this.state.assessment.questions.length
-        ? this.state.assessment.questions.length - 1
-        : this.props.questionId;
+    const questionId = this.formatedQuestionId();
     const question: IQuestion = this.state.assessment.questions[questionId];
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
@@ -189,6 +181,20 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     );
   }
 
+  /* If questionId is out of bounds, set it within range. */
+  private formatedQuestionId = () => {
+    let questionId = this.props.questionId;
+    if (questionId < 0) {
+      questionId = 0;
+    } else if (questionId >= this.state.assessment!.questions.length) {
+      questionId = this.state.assessment!.questions.length - 1;
+    }
+    return questionId;
+  }
+
+  /**
+   * Resets to last save.
+   */
   private resetOverlay = (questionId: number) => (
     <Dialog
       className="assessment-reset"
@@ -211,6 +217,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
             () => {
               const assessment = retrieveLocalAssessment()!;
               const question = assessment.questions[questionId] as IQuestion;
+              this.handleRefreshLibrary();
               this.setState({ 
                 assessment,
                 hasUnsavedChanges: false,
@@ -238,24 +245,20 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 
     /* Reset assessment if it has changed.*/
     const assessmentId = this.props.assessmentId;
-    const questionId = this.props.questionId;
+    const questionId = this.formatedQuestionId();
 
     if (
       this.props.storedAssessmentId !== assessmentId ||
       this.props.storedQuestionId !== questionId
     ) {
       const question = this.state.assessment!.questions[questionId];
-      const library =
-        question.library.chapter === -1
-          ? this.state.assessment!.globalDeployment!
-          : question.library;
       const editorValue =
         question.type === QuestionTypes.programming
             ? ((question as IProgrammingQuestion).answer || "")
           : null;
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({ editorValue });
-      this.props.handleClearContext(library);
+      this.handleRefreshLibrary();
       this.props.handleUpdateHasUnsavedChanges(false);
       if (editorValue) {
         this.props.handleEditorValueChange(editorValue);
@@ -274,19 +277,41 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     }
   }
 
+  private handleRefreshLibrary = () => {
+    const question = this.state.assessment!.questions[this.formatedQuestionId()];
+    let library =
+      question.library.chapter === -1
+        ? this.state.assessment!.globalDeployment!
+        : question.library;
+    if (library && library.globals.length > 0) {
+      const globalsVal = library.globals.map((x: any) => x[0]);
+      const symbolsVal = library.external.symbols.concat(globalsVal);
+      library = {
+        ...library,
+        external: {
+          name: library.external.name,
+          symbols: uniq(symbolsVal)
+        }
+      };
+    }
+    this.props.handleClearContext(library);
+  }
+
   private handleSave = () => {
     this.setState({
       hasUnsavedChanges: false
     });
     storeLocalAssessment(this.state.assessment!);
+    this.handleRefreshLibrary();
     this.handleSaveGradeAndXp();
   };
 
   private handleSaveGradeAndXp = () => {
+    const questionId = this.formatedQuestionId();
     const assessment = this.state.assessment!;
-    const curGrade = assessment.questions[this.props.questionId].maxGrade;
+    const curGrade = assessment.questions[questionId].maxGrade;
     const changeGrade = curGrade - this.state.originalMaxGrade;
-    const curXp = assessment.questions[this.props.questionId].maxXp;
+    const curXp = assessment.questions[questionId].maxXp;
     const changeXp = curXp - this.state.originalMaxXp;
     if (changeGrade !== 0 || changeXp !== 0) {
       const overview = this.props.assessmentOverview;
@@ -382,6 +407,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         body: (
           <DeploymentTab
             assessment={assessment}
+            handleRefreshLibrary={this.handleRefreshLibrary}
             pathToLibrary={['globalDeployment']}
             updateAssessment={this.updateEditAssessmentState}
             isGlobalDeployment={true}
@@ -394,6 +420,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         body: (
           <DeploymentTab
             assessment={assessment}
+            handleRefreshLibrary={this.handleRefreshLibrary}
             pathToLibrary={['questions', questionId, 'library']}
             updateAssessment={this.updateEditAssessmentState}
             isGlobalDeployment={false}
@@ -464,6 +491,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       sourceChapter: this.state.assessment!.questions[questionId].library.chapter
     };
   };
+}
+
+function uniq(a: string[]) {
+    const seen = {};
+    return a.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true)
+    );
 }
 
 export default AssessmentWorkspace;

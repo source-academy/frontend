@@ -30,7 +30,11 @@ const capitalizeFirstLetter = (str: string) => {
 export const retrieveLocalAssessment = (): IAssessment | null => {
   const assessment = localStorage.getItem('MissionEditingAssessmentSA');
   if (assessment) {
-    return JSON.parse(assessment);
+    try {
+      return JSON.parse(assessment);
+    } catch (err) {
+      return null;
+    }
   } else {
     return null;
   }
@@ -39,7 +43,11 @@ export const retrieveLocalAssessment = (): IAssessment | null => {
 export const retrieveLocalAssessmentOverview = (): IAssessmentOverview | null => {
   const assessment = localStorage.getItem('MissionEditingOverviewSA');
   if (assessment) {
-    return JSON.parse(assessment);
+    try {
+      return JSON.parse(assessment);
+    } catch (err) {
+      return null;
+    }
   } else {
     return null;
   }
@@ -88,13 +96,12 @@ const makeAssessment = (result: any): [IAssessment, number, number] => {
   const task: IXmlParseStrTask = result.CONTENT.TASK[0];
   const rawOverview: IXmlParseStrOverview = task.$;
   const questionArr = makeQuestions(task);
-  const libraryVal = makeLibrary(task.DEPLOYMENT);
   return [
     {
       category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
       id: editingId,
-      globalDeployment: libraryVal,
-      graderDeployment: task.GRADERDEPLOYMENT[0],
+      globalDeployment: makeLibrary(task.DEPLOYMENT),
+      graderDeployment: makeLibrary(task.GRADERDEPLOYMENT),
       longSummary: task.TEXT[0],
       missionPDF: 'google.com',
       questions: questionArr[0],
@@ -145,14 +152,14 @@ const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] =>
   let maxXp = 0;
   const questions: Array<IProgrammingQuestion | IMCQQuestion> = [];
   task.PROBLEMS[0].PROBLEM.forEach((problem: IXmlParseStrProblem, curId: number) => {
-    const libraryVal = makeLibrary(problem.DEPLOYMENT);
     const localMaxXp = problem.$.maxxp ? parseInt(problem.$.maxxp, 10) : 0;
     const question: IQuestion = {
       answer: null,
       comment: null,
       content: problem.TEXT[0],
       id: curId,
-      library: libraryVal,
+      library: makeLibrary(problem.DEPLOYMENT),
+      graderLibrary: makeLibrary(problem.GRADERDEPLOYMENT),
       type: problem.$.type,
       grader: {
         name: 'fake person',
@@ -286,8 +293,9 @@ export const assessmentToXml = (
   task.PROBLEMS = { PROBLEM: [] };
 
   task.DEPLOYMENT = exportLibrary(assessment.globalDeployment!);
-  if (assessment.graderDeployment) {
-    task.GRADERDEPLOYMENT = assessment.graderDeployment;
+
+  if (assessment.graderDeployment!.chapter !== -1) {
+    task.GRADERDEPLOYMENT = exportLibrary(assessment.graderDeployment!);
   }
 
   assessment.questions.forEach((question: IProgrammingQuestion | IMCQQuestion) => {
@@ -306,6 +314,11 @@ export const assessmentToXml = (
     if (question.library.chapter !== -1) {
       /* tslint:disable:no-string-literal */
       problem.$['DEPLOYMENT'] = exportLibrary(question.library);
+    }
+
+    if (question.graderLibrary!.chapter !== -1) {
+      /* tslint:disable:no-string-literal */
+      problem.$['GRADERDEPLOYMENT'] = exportLibrary(question.graderLibrary!);
     }
 
     if (question.maxXp) {

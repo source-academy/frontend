@@ -29,18 +29,18 @@ export class ManageQuestionTab extends React.Component<IProps, {}> {
           this.makeQuestion(programmingTemplate)
         )}
         {controlButton('Make MCQ Question', IconNames.CONFIRM, this.makeQuestion(mcqTemplate))}
-        {controlButton('Make Programming Question', IconNames.REMOVE, this.deleteQn)}
+        {controlButton('Delete Question', IconNames.REMOVE, this.deleteQn)}
       </div>
     );
   };
 
-  private makeQuestion = (template: any) => () => {
+  private makeQuestion = (template: () => any ) => () => {
     const assessment = this.props.assessment;
     const index = this.props.questionId;
     let questions = assessment.questions;
     questions = questions
       .slice(0, index)
-      .concat([template])
+      .concat([template()])
       .concat(questions.slice(index));
     assessment.questions = questions;
     this.props.updateAssessment(assessment);
