@@ -1,23 +1,40 @@
+import { ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { IAssessment } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
+import Markdown from '../../commons/Markdown';
 import { mcqTemplate, programmingTemplate } from '../../incubator/assessmentTemplates';
 
 interface IProps {
   assessment: IAssessment;
+  hasUnsavedChanges: boolean;
   questionId: number;
   updateAssessment: (assessment: IAssessment) => void;
 }
 
-export class ManageQuestionTab extends React.Component<IProps, {}> {
+interface IState {
+  showSaveOverlay: boolean;
+  modifyAssessment: () => void;
+}
+
+export class ManageQuestionTab extends React.Component<IProps, IState> {
   public constructor(props: IProps) {
     super(props);
+    this.state = {
+      showSaveOverlay: false,
+      modifyAssessment: () => {}
+    };
   }
 
   public render() {
-    return this.manageQuestionTab();
+    return (
+      <div>
+        {this.confirmSaveOverlay()}
+        {this.manageQuestionTab()}
+      </div>
+    );
   }
 
   private manageQuestionTab = () => {
@@ -26,10 +43,14 @@ export class ManageQuestionTab extends React.Component<IProps, {}> {
         {controlButton(
           'Make Programming Question',
           IconNames.FONT,
-          this.makeQuestion(programmingTemplate)
+          this.confirmSave(this.makeQuestion(programmingTemplate))
         )}
-        {controlButton('Make MCQ Question', IconNames.CONFIRM, this.makeQuestion(mcqTemplate))}
-        {controlButton('Delete Question', IconNames.REMOVE, this.deleteQn)}
+        {controlButton(
+          'Make MCQ Question',
+          IconNames.CONFIRM,
+          this.confirmSave(this.makeQuestion(mcqTemplate))
+        )}
+        {controlButton('Delete Question', IconNames.REMOVE, this.confirmSave(this.deleteQn))}
       </div>
     );
   };
@@ -56,6 +77,52 @@ export class ManageQuestionTab extends React.Component<IProps, {}> {
     assessment.questions = questions;
     this.props.updateAssessment(assessment);
   };
+
+  private confirmSave = (modifyAssessment: () => void) => () => {
+    if (this.props.hasUnsavedChanges) {
+      this.setState({
+        showSaveOverlay: true,
+        modifyAssessment
+      });
+    } else {
+      modifyAssessment();
+    }
+  };
+
+  /**
+   * Asks to save work.
+   */
+  private confirmSaveOverlay = () => (
+    <Dialog
+      className="assessment-reset"
+      icon={IconNames.ERROR}
+      isCloseButtonShown={false}
+      isOpen={this.state.showSaveOverlay}
+      title="Confirmation: Save unsaved changes?"
+    >
+      <div className={Classes.DIALOG_BODY}>
+        <Markdown content="Are you sure you want to save over your unsaved changes?" />
+      </div>
+      <div className={Classes.DIALOG_FOOTER}>
+        <ButtonGroup>
+          {controlButton('Cancel', null, () => this.setState({ showSaveOverlay: false }), {
+            minimal: false
+          })}
+          {controlButton(
+            'Confirm',
+            null,
+            () => {
+              this.state.modifyAssessment();
+              this.setState({
+                showSaveOverlay: false
+              });
+            },
+            { minimal: false, intent: Intent.DANGER }
+          )}
+        </ButtonGroup>
+      </div>
+    </Dialog>
+  );
 }
 
 export default ManageQuestionTab;

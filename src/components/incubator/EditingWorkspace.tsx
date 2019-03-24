@@ -393,6 +393,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         body: (
           <ManageQuestionTab
             assessment={assessment}
+            hasUnsavedChanges={this.state.hasUnsavedChanges}
             questionId={questionId}
             updateAssessment={this.updateAndSaveAssessment}
           />
