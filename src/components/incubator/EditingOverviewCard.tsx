@@ -59,10 +59,12 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
   };
 
   private toggleEditField = (field: keyof IAssessmentOverview) => (e: any) => {
-    this.setState({
-      editingOverviewField: field,
-      fieldValue: this.props.overview[field]
-    });
+    if (this.state.editingOverviewField !== field) {
+      this.setState({
+        editingOverviewField: field,
+        fieldValue: this.props.overview[field]
+      });
+    }
   };
 
   private handleExportXml = () => (e: any) => {
@@ -161,7 +163,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
 }
 
 const createPlaceholder = (str: string): string => {
-  if (str.match('^\n*$')) {
+  if (str.match('^(\n| )*$')) {
     return 'Enter Value Here.';
   } else {
     return str;

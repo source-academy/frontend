@@ -40,10 +40,11 @@ export class TextareaContent extends React.Component<IProps, IState> {
     if (this.state.isEditing) {
       display = <div onClick={this.toggleEditField()}>{this.makeEditingTextarea()}</div>;
     } else {
-      const value = getValueFromPath(this.props.path, this.props.assessment);
+      let value = getValueFromPath(this.props.path, this.props.assessment) || filler;
+      value = value.match('^(\n| )*$') ? filler : value;
       display = (
         <div onClick={this.toggleEditField()}>
-          {this.state.useRawValue ? value : <Markdown content={value || filler} />}
+          {this.state.useRawValue ? value : <Markdown content={value} />}
         </div>
       );
     }
@@ -95,11 +96,13 @@ export class TextareaContent extends React.Component<IProps, IState> {
   );
 
   private toggleEditField = () => (e: any) => {
-    const fieldVal = getValueFromPath(this.props.path, this.props.assessment) || '';
-    this.setState({
-      isEditing: true,
-      fieldValue: typeof fieldVal === 'string' ? fieldVal : fieldVal.toString()
-    });
+    if (!this.state.isEditing) {
+      const fieldVal = getValueFromPath(this.props.path, this.props.assessment) || '';
+      this.setState({
+        isEditing: true,
+        fieldValue: typeof fieldVal === 'string' ? fieldVal : fieldVal.toString()
+      });
+    }
   };
 }
 
