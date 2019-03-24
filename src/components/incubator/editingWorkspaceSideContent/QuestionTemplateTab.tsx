@@ -1,8 +1,10 @@
 import { Card } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import { IAssessment, IMCQQuestion } from '../../assessment/assessmentShape';
+import { controlButton } from '../../commons';
 import { assignToPath, getValueFromPath } from './';
 import TextareaContent from './TextareaContent';
 
@@ -78,11 +80,36 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
             {mcqButton}
             Solution:
             {this.textareaContent(['questions', questionId, 'solution'], true, [0, 3])}
+            {controlButton('Add Option', IconNames.CONFIRM, this.addOption)}
+            {controlButton('Delete Option', IconNames.REMOVE, this.delOption)}
           </div>
         </Card>
       </div>
     );
   };
+
+  private addOption = () => {
+    const assessment = this.props.assessment;
+    const questionId = this.props.questionId;
+    const question = assessment!.questions[questionId] as IMCQQuestion;
+    const choices = question.choices.concat([{
+      content: 'A',
+      hint: null
+    }]);
+    question.choices = choices;
+    assessment!.questions[questionId] = question;
+    this.props.updateAssessment(assessment);
+  }
+  
+  private delOption = () => {
+    const assessment = this.props.assessment;
+    const questionId = this.props.questionId;
+    const question = assessment!.questions[questionId] as IMCQQuestion;
+    const choices = question.choices.slice(0, question.choices.length - 1);
+    question.choices = choices;
+    assessment!.questions[questionId] = question;
+    this.props.updateAssessment(assessment);
+  }
 
   private textareaContent = (
     path: Array<string | number>,
