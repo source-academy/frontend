@@ -105,7 +105,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
             {this.state.editingOverviewField === 'shortSummary' ? (
               this.makeEditingOverviewTextarea('shortSummary')
             ) : (
-              <Markdown content={overview.shortSummary} />
+              <Markdown content={createPlaceholder(overview.shortSummary)} />
             )}
           </div>
           <div className="listing-controls">
@@ -138,7 +138,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
         <h4 onClick={this.toggleEditField('title')}>
           {this.state.editingOverviewField === 'title'
             ? this.makeEditingOverviewTextarea('title')
-            : title}{' '}
+            : createPlaceholder(title)}
         </h4>
       </Text>
       <div className="col-xs-2">{this.makeExportButton(overview)}</div>
@@ -159,6 +159,14 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     </Button>
   );
 }
+
+const createPlaceholder = (str: string): string => {
+  if (str.match('^\n*$')) {
+    return 'Enter Value Here.';
+  } else {
+    return str;
+  }
+};
 
 const makeOverviewCardButton = (overview: IAssessmentOverview, listingPath: string | undefined) => {
   const icon: IconName = IconNames.EDIT;
