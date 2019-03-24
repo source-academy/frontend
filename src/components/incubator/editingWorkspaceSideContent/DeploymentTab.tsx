@@ -77,10 +77,8 @@ export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: 
       </tr>
     ));
 
-    const resetLibrary = controlButton(
-      "Reload Library", 
-      IconNames.REFRESH, 
-      () =>this.props.handleRefreshLibrary(deployment)
+    const resetLibrary = controlButton('Reload Library', IconNames.REFRESH, () =>
+      this.props.handleRefreshLibrary(deployment)
     );
 
     return (

@@ -82,7 +82,7 @@ interface IState {
   assessment: IAssessment | null;
   activeTab: number;
   hasUnsavedChanges: boolean;
-  showResetOverlay:  boolean;
+  showResetOverlay: boolean;
   originalMaxGrade: number;
   originalMaxXp: number;
 }
@@ -107,12 +107,11 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
    */
   public componentDidMount() {
     if (this.props.assessment) {
-      const question: IQuestion = this.props.assessment.questions[
-        this.formatedQuestionId()
-      ];
-      const editorValue = question.type === QuestionTypes.programming
-        ? ((question as IProgrammingQuestion).answer as string)
-        : 'you aint seeing this';
+      const question: IQuestion = this.props.assessment.questions[this.formatedQuestionId()];
+      const editorValue =
+        question.type === QuestionTypes.programming
+          ? ((question as IProgrammingQuestion).answer as string)
+          : 'you aint seeing this';
       this.props.handleEditorValueChange(editorValue);
       this.setState({
         originalMaxGrade: question.maxGrade,
@@ -147,7 +146,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorValue: this.props.editorValue || question.answer as string,
+              editorValue: this.props.editorValue || (question.answer as string),
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
@@ -190,7 +189,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       questionId = this.state.assessment!.questions.length - 1;
     }
     return questionId;
-  }
+  };
 
   /**
    * Resets to last save.
@@ -218,7 +217,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               const assessment = retrieveLocalAssessment()!;
               const question = assessment.questions[questionId] as IQuestion;
               this.handleRefreshLibrary();
-              this.setState({ 
+              this.setState({
                 assessment,
                 hasUnsavedChanges: false,
                 showResetOverlay: false,
@@ -254,7 +253,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       const question = this.state.assessment!.questions[questionId];
       const editorValue =
         question.type === QuestionTypes.programming
-            ? ((question as IProgrammingQuestion).answer || "")
+          ? (question as IProgrammingQuestion).answer || ''
           : null;
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({ editorValue });
@@ -280,9 +279,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   private handleRefreshLibrary = () => {
     const question = this.state.assessment!.questions[this.formatedQuestionId()];
     let library =
-      question.library.chapter === -1
-        ? this.state.assessment!.globalDeployment!
-        : question.library;
+      question.library.chapter === -1 ? this.state.assessment!.globalDeployment! : question.library;
     if (library && library.globals.length > 0) {
       const globalsVal = library.globals.map((x: any) => x[0]);
       const symbolsVal = library.external.symbols.concat(globalsVal);
@@ -295,7 +292,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       };
     }
     this.props.handleClearContext(library);
-  }
+  };
 
   private handleSave = () => {
     this.setState({
@@ -494,9 +491,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 }
 
 function uniq(a: string[]) {
-    const seen = {};
-    return a.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true)
-    );
+  const seen = {};
+  return a.filter(item => (seen.hasOwnProperty(item) ? false : (seen[item] = true)));
 }
 
 export default AssessmentWorkspace;

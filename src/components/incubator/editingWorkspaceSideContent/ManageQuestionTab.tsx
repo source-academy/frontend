@@ -34,7 +34,7 @@ export class ManageQuestionTab extends React.Component<IProps, {}> {
     );
   };
 
-  private makeQuestion = (template: () => any ) => () => {
+  private makeQuestion = (template: () => any) => () => {
     const assessment = this.props.assessment;
     const index = this.props.questionId;
     let questions = assessment.questions;

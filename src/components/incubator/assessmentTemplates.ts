@@ -8,7 +8,7 @@ import {
   Library
 } from '../../components/assessment/assessmentShape';
 
-export const emptyLibrary = () :Library => {
+export const emptyLibrary = (): Library => {
   return {
     chapter: -1,
     external: {
@@ -19,7 +19,7 @@ export const emptyLibrary = () :Library => {
   };
 };
 
-export const normalLibrary = () :Library => {
+export const normalLibrary = (): Library => {
   return {
     chapter: 1,
     external: {
@@ -71,7 +71,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
   };
 };
 
-export const mcqTemplate = (): IMCQQuestion =>{
+export const mcqTemplate = (): IMCQQuestion => {
   return {
     answer: 3,
     comment: null,
@@ -110,8 +110,8 @@ export const mcqTemplate = (): IMCQQuestion =>{
   };
 };
 
-export const assessmentTemplate= (): IAssessment => {
-  return{
+export const assessmentTemplate = (): IAssessment => {
+  return {
     category: 'Mission',
     globalDeployment: normalLibrary(),
     graderDeployment: emptyLibrary(),
