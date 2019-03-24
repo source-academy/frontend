@@ -61,7 +61,9 @@ export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: 
     const deploymentDisp = this.props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
     const symbols = deployment.external.symbols.map((symbol, i) => (
       <tr key={i}>
-        <td>{this.textareaContent(deploymentPath.concat(['external', 'symbols', i]))}</td>
+        <td style={{ width: "520px" }}>
+          {this.textareaContent(deploymentPath.concat(['external', 'symbols', i]))}
+        </td>
         <td>{controlButton('Delete', IconNames.MINUS, this.handleSymbolDelete(i))}</td>
       </tr>
     ));
