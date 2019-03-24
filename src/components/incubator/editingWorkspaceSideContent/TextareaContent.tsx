@@ -35,20 +35,20 @@ export class TextareaContent extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const filler = 'Please enter value (if applicable)';
     let display;
     if (this.state.isEditing) {
-      display = <div onClick={this.toggleEditField()}>{this.makeEditingTextarea()}</div>;
+      display = this.makeEditingTextarea();
     } else {
-      let value = getValueFromPath(this.props.path, this.props.assessment) || filler;
-      value = value.match('^(\n| )*$') ? filler : value;
-      display = (
-        <div onClick={this.toggleEditField()}>
-          {this.state.useRawValue ? value : <Markdown content={value} />}
-        </div>
-      );
+      if (this.state.useRawValue) {
+        display = getValueFromPath(this.props.path, this.props.assessment);
+      } else {
+        const filler = 'Please enter value (if applicable)';
+        let value = getValueFromPath(this.props.path, this.props.assessment) || '';
+        value = value.match('^(\n| )*$') ? filler : value;
+        display = <Markdown content={value} />;
+      }
     }
-    return display;
+    return <div onClick={this.toggleEditField()}>{display}</div>;
   }
 
   private saveEditAssessment = (e: any) => {
