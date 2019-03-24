@@ -325,9 +325,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       {
         label: `Help`,
         icon: IconNames.HELP,
-        body: (
-          <HelpTab />
-        )
+        body: <HelpTab />
       },
       {
         label: `Task ${questionId + 1}`,
