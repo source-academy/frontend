@@ -14,18 +14,15 @@ export class HelpTab extends React.Component<{}, {}> {
     return (
       <div>
         Mission-specific tabs:<br />
-        Modify mission brief in the ission Briefing tab by clicking on the text<br />
-        Insert questions at the current question index or delete the current question in the
-        Add/Delete Questions tab<br />
-        The Source version, library and globals for all questions in the mission can be modified in
-        Global Deployment<br />
+        Mission Briefing: Modify mission brief by clicking on the text<br />
+        Add/Delete Questions: Insert questions at the current question index or delete the current question<br />
+        Global Deployment: Modify the Source version, library and globals for all questions in the mission<br />
         <br />
         Question-specific tabs:<br />
-        Modify question description in Task tab<br />
-        Modify question template in Question template tab<br />
-        The Source version, library and globals for the current question can be modified in Global
-        Deployment<br />
-        Modify grading in Grading tab<br />
+        Task: Modify question descriptio<br />
+        Question Template: Modify question template in Question template tab<br />
+        Local Deployment: Modify the Source version, library and globals for the current question<br />
+        Grading: Modify grading<br />
       </div>
     );
   };
