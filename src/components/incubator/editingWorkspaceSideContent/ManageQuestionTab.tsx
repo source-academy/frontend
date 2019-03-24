@@ -24,12 +24,12 @@ export class ManageQuestionTab extends React.Component<IProps, {}> {
     return (
       <div>
         {controlButton(
-          'Make Programming Question',
+          'Insert Programming Question',
           IconNames.FONT,
           this.makeQuestion(programmingTemplate)
         )}
-        {controlButton('Make MCQ Question', IconNames.CONFIRM, this.makeQuestion(mcqTemplate))}
-        {controlButton('Make Programming Question', IconNames.REMOVE, this.deleteQn)}
+        {controlButton('Insert MCQ Question', IconNames.CONFIRM, this.makeQuestion(mcqTemplate))}
+        {controlButton('Delete Current Question', IconNames.REMOVE, this.deleteQn)}
       </div>
     );
   };

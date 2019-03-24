@@ -30,6 +30,7 @@ import {
   QuestionTemplateTab,
   TextareaContentTab
 } from './editingWorkspaceSideContent';
+import HelpTab from './editingWorkspaceSideContent/HelpTab';
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
@@ -288,17 +289,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const assessment = this.state.assessment!;
     const tabs = [
       {
-        label: `Task ${questionId + 1}`,
-        icon: IconNames.NINJA,
-        body: (
-          <TextareaContentTab
-            assessment={assessment}
-            path={['questions', questionId, 'content']}
-            updateAssessment={this.updateEditAssessmentState}
-          />
-        )
-      },
-      {
         label: `${assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
         body: (
@@ -310,18 +300,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         )
       },
       {
-        label: `Question Template`,
-        icon: IconNames.DOCUMENT,
-        body: (
-          <QuestionTemplateTab
-            assessment={assessment}
-            questionId={questionId}
-            updateAssessment={this.updateEditAssessmentState}
-          />
-        )
-      },
-      {
-        label: `Manage Question`,
+        label: `Add/Delete Questions`,
         icon: IconNames.WRENCH,
         body: (
           <ManageQuestionTab
@@ -340,6 +319,35 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
             pathToLibrary={['globalDeployment']}
             updateAssessment={this.updateEditAssessmentState}
             isGlobalDeployment={true}
+          />
+        )
+      },
+      {
+        label: `Help`,
+        icon: IconNames.HELP,
+        body: (
+          <HelpTab />
+        )
+      },
+      {
+        label: `Task ${questionId + 1}`,
+        icon: IconNames.NINJA,
+        body: (
+          <TextareaContentTab
+            assessment={assessment}
+            path={['questions', questionId, 'content']}
+            updateAssessment={this.updateEditAssessmentState}
+          />
+        )
+      },
+      {
+        label: `Question Template`,
+        icon: IconNames.DOCUMENT,
+        body: (
+          <QuestionTemplateTab
+            assessment={assessment}
+            questionId={questionId}
+            updateAssessment={this.updateEditAssessmentState}
           />
         )
       },
