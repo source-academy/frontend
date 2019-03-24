@@ -9,6 +9,7 @@ import { ExternalLibraryName } from './assessment/assessmentShape'
 import Markdown from './commons/Markdown'
 import Workspace, { WorkspaceProps } from './workspace'
 import { SideContentTab } from './workspace/side-content'
+import EnvVisualizer from './workspace/side-content/EnvVisualizer'
 import Inspector from './workspace/side-content/Inspector'
 import ListVisualizer from './workspace/side-content/ListVisualizer'
 
@@ -135,7 +136,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab]
+        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
       }
     }
     return (
@@ -170,6 +171,12 @@ const inspectorTab: SideContentTab = {
   label: 'Inspector',
   icon: IconNames.SEARCH,
   body: <Inspector />
+}
+
+const envVisualizerTab: SideContentTab = {
+  label: 'Env Visualizer',
+  icon: IconNames.EYE_OPEN,
+  body: <EnvVisualizer />
 }
 
 export default Playground

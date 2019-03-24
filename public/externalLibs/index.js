@@ -32,6 +32,10 @@ function loadAllLibs() {
     // list visualizer
     '/externalLibs/visualizer/KineticJS.js',
     '/externalLibs/visualizer/visualizer.js',
+    // env visualizer
+    '/externalLibs/env_visualizer/KineticJS.js',
+    '/externalLibs/env_visualizer/ConcreteJS.js',
+    '/externalLibs/env_visualizer/visualizer.js',
     // binary tree library
     '/externalLibs/tree.js',
     // streams
