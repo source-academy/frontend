@@ -7,6 +7,7 @@ import { sourceChapters } from '../../../reducers/states';
 
 import { ExternalLibraryName, IAssessment, Library } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
+import SideContent from '../../workspace/side-content';
 import { emptyLibrary } from '../assessmentTemplates';
 import { assignToPath, getValueFromPath } from './';
 import TextareaContent from './TextareaContent';
@@ -30,10 +31,14 @@ interface IExternal {
   symbols: string[];
 }
 
-export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: boolean }> {
+export class DeploymentTab extends React.Component<
+  IProps,
+  { activeTab: number; deploymentEnabled: boolean }
+> {
   public constructor(props: IProps) {
     super(props);
     this.state = {
+      activeTab: 0,
       deploymentEnabled: false
     };
   }
@@ -58,10 +63,10 @@ export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: 
   private deploymentTab = () => {
     const deploymentPath = this.props.pathToLibrary;
     const deployment = getValueFromPath(deploymentPath, this.props.assessment) as Library;
-    const deploymentDisp = this.props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
+    // const deploymentDisp = this.props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
     const symbols = deployment.external.symbols.map((symbol, i) => (
       <tr key={i}>
-        <td style={{ width: "520px" }}>
+        <td style={{ width: '520px' }}>
           {this.textareaContent(deploymentPath.concat(['external', 'symbols', i]))}
         </td>
         <td>{controlButton('Delete', IconNames.MINUS, this.handleSymbolDelete(i))}</td>
@@ -70,13 +75,13 @@ export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: 
 
     const globals = deployment.globals.map((symbol, i) => (
       <tr key={i}>
-        <td className="col-xs-3" style={{ height: "2rem", width: "10rem",overflow: "auto" }}>
-          <div style={{ height: "2rem", width: "10rem",overflow: "auto" }}>
+        <td className="col-xs-3" style={{ height: '2rem', width: '10rem', overflow: 'auto' }}>
+          <div style={{ height: '2rem', width: '10rem', overflow: 'auto' }}>
             {this.textareaContent(deploymentPath.concat(['globals', i, 0]))}
           </div>
         </td>
-        <td className="col-xs-7" style={{ height: "2rem", width: "20rem",overflow: "auto" }}>
-          <div style={{ height: "2rem", width: "20rem",overflow: "auto" }}>
+        <td className="col-xs-7" style={{ height: '2rem', width: '20rem', overflow: 'auto' }}>
+          <div style={{ height: '2rem', width: '20rem', overflow: 'auto' }}>
             {this.globalValueTextareaContent(i)}
           </div>
         </td>
@@ -90,16 +95,8 @@ export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: 
       this.props.handleRefreshLibrary(deployment)
     );
 
-    return (
-      <div>
-        {deploymentDisp} {resetLibrary}
-        <br />
-        <br />
-        Interpreter:
-        <br />
-        {chapterSelect(deployment.chapter, this.handleChapterSelect)}
-        <br />
-        <br />
+    const symbolsFragment = (
+      <React.Fragment>
         External Library:
         <br />
         {externalSelect(deployment.external.name, this.handleExternalSelect!)}
@@ -109,14 +106,53 @@ export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: 
         <br />
         <table style={{ width: '100%' }}>{symbols}</table>
         {controlButton('New Symbol', IconNames.PLUS, this.handleNewSymbol)}
-        <br />
-        <br />
+      </React.Fragment>
+    );
+
+    const globalsFragment = (
+      <React.Fragment>
         <div>Globals:</div>
         <br />
         <table style={{ width: '100%' }}>{globals}</table>
         {controlButton('New Global', IconNames.PLUS, this.handleNewGlobal)}
+      </React.Fragment>
+    );
+
+    const tabs = [
+      {
+        label: `Library`,
+        icon: IconNames.BOOK,
+        body: symbolsFragment
+      },
+      {
+        label: `Globals`,
+        icon: IconNames.GLOBE,
+        body: globalsFragment
+      }
+    ];
+
+    return (
+      <div>
+        {/* {deploymentDisp}
+        <br /> */}
+        {resetLibrary}
+        <br />
+        Interpreter:
+        <br />
+        {chapterSelect(deployment.chapter, this.handleChapterSelect)}
+        <SideContent
+          activeTab={this.state.activeTab}
+          handleChangeActiveTab={this.handleChangeActiveTab}
+          tabs={tabs}
+        />
       </div>
     );
+  };
+
+  private handleChangeActiveTab = (tab: number) => {
+    this.setState({
+      activeTab: tab
+    });
   };
 
   private textareaContent = (path: Array<string | number>) => {

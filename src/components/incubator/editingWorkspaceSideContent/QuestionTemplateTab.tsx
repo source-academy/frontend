@@ -92,15 +92,17 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
     const assessment = this.props.assessment;
     const questionId = this.props.questionId;
     const question = assessment!.questions[questionId] as IMCQQuestion;
-    const choices = question.choices.concat([{
-      content: 'A',
-      hint: null
-    }]);
+    const choices = question.choices.concat([
+      {
+        content: 'A',
+        hint: null
+      }
+    ]);
     question.choices = choices;
     assessment!.questions[questionId] = question;
     this.props.updateAssessment(assessment);
-  }
-  
+  };
+
   private delOption = () => {
     const assessment = this.props.assessment;
     const questionId = this.props.questionId;
@@ -109,7 +111,7 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
     question.choices = choices;
     assessment!.questions[questionId] = question;
     this.props.updateAssessment(assessment);
-  }
+  };
 
   private textareaContent = (
     path: Array<string | number>,
