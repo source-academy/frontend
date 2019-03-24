@@ -237,12 +237,21 @@ export const exportXml = () => {
     };
     let xmlStr = builder.buildObject(xml);
     xmlStr = xmlStr.replace(/(&#xD;)+/g, '');
-    const element = document.createElement('a');
-    const file = new Blob([xmlStr], { endings: 'native', type: 'text/xml;charset=UTF-8' });
-    element.href = URL.createObjectURL(file);
-    element.download = title + '.xml';
-    element.click();
+    download(title + '.xml', xmlStr);
   }
+};
+
+const download = (filename: string, text: string) => {
+  const element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
 };
 
 const exportLibrary = (library: Library) => {
