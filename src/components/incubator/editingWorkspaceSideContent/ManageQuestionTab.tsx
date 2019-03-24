@@ -41,16 +41,20 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     return (
       <div>
         {controlButton(
-          'Make Programming Question',
+          'Insert Programming Question',
           IconNames.FONT,
           this.confirmSave(this.makeQuestion(programmingTemplate))
         )}
         {controlButton(
-          'Make MCQ Question',
+          'Insert MCQ Question',
           IconNames.CONFIRM,
           this.confirmSave(this.makeQuestion(mcqTemplate))
         )}
-        {controlButton('Delete Question', IconNames.REMOVE, this.confirmSave(this.deleteQn))}
+        {controlButton(
+          'Delete Current Question',
+          IconNames.REMOVE,
+          this.confirmSave(this.deleteQn)
+        )}
       </div>
     );
   };
