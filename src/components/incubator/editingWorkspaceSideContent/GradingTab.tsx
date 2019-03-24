@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { IAssessment } from '../../assessment/assessmentShape';
+import { limitNumberRange } from './';
 import TextareaContent from './TextareaContent';
 
 interface IProps {
@@ -18,12 +19,13 @@ export class GradingTab extends React.Component<IProps, {}> {
     return this.gradingTab();
   }
 
-  private textareaContent = (path: Array<string | number>, isNumber: boolean = false) => {
+  private textareaContent = (path: Array<string | number>) => {
     return (
       <TextareaContent
         assessment={this.props.assessment}
-        isNumber={isNumber}
+        isNumber={true}
         path={path}
+        processResults={limitNumberRange(0)}
         updateAssessment={this.props.updateAssessment}
       />
     );
@@ -32,10 +34,10 @@ export class GradingTab extends React.Component<IProps, {}> {
   private gradingTab = () => (
     <div>
       Max Grade:
-      {this.textareaContent(this.props.path.concat(['maxGrade']), true)}
+      {this.textareaContent(this.props.path.concat(['maxGrade']))}
       <br />
       Max Xp:
-      {this.textareaContent(this.props.path.concat(['maxXp']), true)}
+      {this.textareaContent(this.props.path.concat(['maxXp']))}
     </div>
   );
 }

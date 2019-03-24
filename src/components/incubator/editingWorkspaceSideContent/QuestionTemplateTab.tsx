@@ -3,7 +3,7 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import { IAssessment, IMCQQuestion } from '../../assessment/assessmentShape';
-import { assignToPath, getValueFromPath } from './';
+import { assignToPath, getValueFromPath, limitNumberRange } from './';
 import TextareaContent from './TextareaContent';
 
 interface IProps {
@@ -12,9 +12,18 @@ interface IProps {
   updateAssessment: (assessment: IAssessment) => void;
 }
 
-export class QuestionTemplateTab extends React.Component<IProps, {}> {
+interface IState {
+  templateValue: string;
+  templateFocused: boolean;
+}
+
+export class QuestionTemplateTab extends React.Component<IProps, IState> {
   public constructor(props: IProps) {
     super(props);
+    this.state = {
+      templateValue: '',
+      templateFocused: false
+    };
   }
 
   public render() {
@@ -34,28 +43,58 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
     const path = ['questions', this.props.questionId, 'answer'];
 
     const handleTemplateChange = (newCode: string) => {
-      const assessmentVal = this.props.assessment;
-      assignToPath(path, newCode, assessmentVal);
-      this.props.updateAssessment(assessmentVal);
+      this.setState({
+        templateValue: newCode
+      });
     };
 
+    const value = this.state.templateFocused
+      ? this.state.templateValue
+      : getValueFromPath(path, this.props.assessment);
+
     const display = (
-      <AceEditor
-        className="react-ace"
-        editorProps={{
-          $blockScrolling: Infinity
-        }}
-        fontSize={14}
-        highlightActiveLine={false}
-        mode="javascript"
-        onChange={handleTemplateChange}
-        theme="cobalt"
-        value={getValueFromPath(path, this.props.assessment)}
-        width="100%"
-      />
+      <div onClick={this.focusEditor(path)} onBlur={this.unFocusEditor(path)}>
+        <AceEditor
+          className="react-ace"
+          editorProps={{
+            $blockScrolling: Infinity
+          }}
+          fontSize={14}
+          highlightActiveLine={false}
+          mode="javascript"
+          onChange={handleTemplateChange}
+          theme="cobalt"
+          value={value}
+          width="100%"
+        />
+      </div>
     );
 
     return display;
+  };
+
+  private focusEditor = (path: Array<string | number>) => (e: any): void => {
+    if (!this.state.templateFocused) {
+      this.setState({
+        templateValue: getValueFromPath(path, this.props.assessment),
+        templateFocused: true
+      });
+    }
+  };
+
+  private unFocusEditor = (path: Array<string | number>) => (e: any): void => {
+    if (this.state.templateFocused) {
+      const value = getValueFromPath(path, this.props.assessment);
+      if (value !== this.state.templateValue) {
+        const assessmentVal = this.props.assessment;
+        assignToPath(path, this.state.templateValue, assessmentVal);
+        this.props.updateAssessment(assessmentVal);
+      }
+      this.setState({
+        templateValue: '',
+        templateFocused: false
+      });
+    }
   };
 
   private mcqTab = () => {
@@ -87,17 +126,27 @@ export class QuestionTemplateTab extends React.Component<IProps, {}> {
   private textareaContent = (
     path: Array<string | number>,
     isNumber: boolean = false,
-    numberRange: number[] = [0]
+    range: number[] = [0]
   ) => {
-    return (
-      <TextareaContent
-        assessment={this.props.assessment}
-        isNumber={isNumber}
-        numberRange={numberRange}
-        path={path}
-        updateAssessment={this.props.updateAssessment}
-      />
-    );
+    if (isNumber) {
+      return (
+        <TextareaContent
+          assessment={this.props.assessment}
+          isNumber={true}
+          path={path}
+          processResults={limitNumberRange(range[0], range[1])}
+          updateAssessment={this.props.updateAssessment}
+        />
+      );
+    } else {
+      return (
+        <TextareaContent
+          assessment={this.props.assessment}
+          path={path}
+          updateAssessment={this.props.updateAssessment}
+        />
+      );
+    }
   };
 }
 
