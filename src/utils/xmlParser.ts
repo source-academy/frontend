@@ -30,11 +30,7 @@ const capitalizeFirstLetter = (str: string) => {
 export const retrieveLocalAssessment = (): IAssessment | null => {
   const assessment = localStorage.getItem('MissionEditingAssessmentSA');
   if (assessment) {
-    try {
-      return JSON.parse(assessment);
-    } catch (err) {
-      return null;
-    }
+    return JSON.parse(assessment);
   } else {
     return null;
   }
@@ -43,11 +39,7 @@ export const retrieveLocalAssessment = (): IAssessment | null => {
 export const retrieveLocalAssessmentOverview = (): IAssessmentOverview | null => {
   const assessment = localStorage.getItem('MissionEditingOverviewSA');
   if (assessment) {
-    try {
-      return JSON.parse(assessment);
-    } catch (err) {
-      return null;
-    }
+    return JSON.parse(assessment);
   } else {
     return null;
   }
