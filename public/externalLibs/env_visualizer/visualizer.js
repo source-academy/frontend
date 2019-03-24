@@ -1553,7 +1553,7 @@
     updateListVisualizerButtons()
   }*/
   function draw(context) {
-      console.log(context.context.context.runtime.frames)
+      // WIP
   }
   exports.draw = draw
 
