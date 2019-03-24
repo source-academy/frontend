@@ -97,7 +97,7 @@ export const mcqTemplate = (): IMCQQuestion => {
     id: 2,
     library: emptyLibrary(),
     type: 'mcq',
-    solution: 1,
+    solution: 0,
     grader: {
       name: 'avenger',
       id: 1
