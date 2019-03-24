@@ -6,9 +6,9 @@ import ImportFromFileComponent from '../../containers/incubator/ImportFromFileCo
 import { stringParamToInt } from '../../utils/paramParseHelpers';
 import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser';
 import { AssessmentStatuses, IAssessmentOverview } from '../assessment/assessmentShape';
-import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace';
 import ContentDisplay from '../commons/ContentDisplay';
 import { EditingOverviewCard } from '../incubator/EditingOverviewCard';
+import { OwnProps as AssessmentProps } from '../incubator/EditingWorkspace';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
@@ -60,6 +60,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         const assessmentProps: AssessmentProps = {
           assessmentId,
           questionId,
+          assessmentOverview: overview,
+          updateAssessmentOverview: this.updateEditingOverview,
           notAttempted: overview.status === AssessmentStatuses.not_attempted,
           closeDate: overview.closeAt
         };

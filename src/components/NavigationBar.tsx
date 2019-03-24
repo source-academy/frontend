@@ -61,7 +61,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         to="/incubator"
       >
         <Icon icon={IconNames.CODE} />
-        <div className="navbar-button-text hidden-xs">Incubator</div>
+        <div className="navbar-button-text hidden-xs">Mission-Control</div>
       </NavLink>
 
       <NavLink

@@ -46,7 +46,7 @@ export type GradingStatus = keyof typeof GradingStatuses;
 export interface IAssessment {
   category: AssessmentCategory;
   globalDeployment?: Library;
-  graderDeployment?: any;
+  graderDeployment?: Library;
   id: number;
   longSummary: string;
   missionPDF: string;
@@ -84,6 +84,7 @@ export interface IQuestion {
   content: string;
   id: number;
   library: Library;
+  graderLibrary?: Library;
   type: QuestionType;
   grader: {
     name: string;

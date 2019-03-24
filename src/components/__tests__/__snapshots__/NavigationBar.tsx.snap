@@ -26,7 +26,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/incubator\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Incubator
+        Mission-Control
       </div>
     </NavLink>
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" ariaCurrent=\\"true\\">
@@ -72,7 +72,7 @@ exports[`NavigationBar renders correctly with username 1`] = `
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/incubator\\" ariaCurrent=\\"true\\">
       <Blueprint2.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Incubator
+        Mission-Control
       </div>
     </NavLink>
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" ariaCurrent=\\"true\\">

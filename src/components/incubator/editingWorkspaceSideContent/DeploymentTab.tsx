@@ -15,6 +15,7 @@ interface IProps {
   assessment: IAssessment;
   pathToLibrary: Array<string | number>;
   updateAssessment: (assessment: IAssessment) => void;
+  handleRefreshLibrary: (library: Library) => void;
   isGlobalDeployment: boolean;
 }
 
@@ -76,9 +77,13 @@ export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: 
       </tr>
     ));
 
+    const resetLibrary = controlButton('Reload Library', IconNames.REFRESH, () =>
+      this.props.handleRefreshLibrary(deployment)
+    );
+
     return (
       <div>
-        {deploymentDisp}
+        {deploymentDisp} {resetLibrary}
         <br />
         <br />
         Interpreter:
@@ -152,7 +157,7 @@ export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: 
     const assessment = this.props.assessment;
     const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
     const symbols = deployment.external.symbols;
-    symbols.push('new symbol');
+    symbols.push('new_symbol');
     this.props.updateAssessment(assessment);
   };
 
@@ -188,7 +193,7 @@ export class DeploymentTab extends React.Component<IProps, { deploymentEnabled: 
   private handleSwitchDeployment = () => {
     const assessment = this.props.assessment;
     if (this.state.deploymentEnabled) {
-      assignToPath(this.props.pathToLibrary, JSON.parse(JSON.stringify(emptyLibrary)), assessment);
+      assignToPath(this.props.pathToLibrary, emptyLibrary(), assessment);
     } else {
       assignToPath(this.props.pathToLibrary.concat(['chapter']), 1, assessment);
     }

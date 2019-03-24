@@ -88,11 +88,11 @@ export class ImportFromFileComponent extends React.Component<Props, State> {
   };
 
   private makeMission = () => {
-    localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overviewTemplate));
-    this.props.updateEditingOverview(overviewTemplate);
+    localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overviewTemplate()));
+    this.props.updateEditingOverview(overviewTemplate());
 
-    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentTemplate));
-    this.props.newAssessment(assessmentTemplate);
+    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentTemplate()));
+    this.props.newAssessment(assessmentTemplate());
   };
 }
 
