@@ -29,7 +29,8 @@ import {
   DeploymentTab,
   GradingTab,
   ManageQuestionTab,
-  QuestionTemplateTab,
+  MCQQuestionTemplateTab,
+  ProgrammingQuestionTemplateTab,
   TextareaContentTab
 } from './editingWorkspaceSideContent';
 
@@ -81,6 +82,7 @@ export type DispatchProps = {
 interface IState {
   assessment: IAssessment | null;
   activeTab: number;
+  editingMode: string;
   hasUnsavedChanges: boolean;
   showResetOverlay: boolean;
   originalMaxGrade: number;
@@ -93,6 +95,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.state = {
       assessment: retrieveLocalAssessment(),
       activeTab: 0,
+      editingMode: 'question',
       hasUnsavedChanges: false,
       showResetOverlay: false,
       originalMaxGrade: 0,
@@ -110,12 +113,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       const question: IQuestion = this.props.assessment.questions[this.formatedQuestionId()];
       const editorValue =
         question.type === QuestionTypes.programming
-          ? ((question as IProgrammingQuestion).answer as string)
-          : 'you aint seeing this';
+          ? ((question as IProgrammingQuestion).solutionTemplate as string)
+          : '//If you see this, this is a bug. Please report bug.';
       this.props.handleEditorValueChange(editorValue);
       this.setState({
-        originalMaxGrade: question.maxGrade,
-        originalMaxXp: question.maxXp
+        originalMaxGrade: this.getMaxMarks('maxGrade'),
+        originalMaxXp: this.getMaxMarks('maxXp')
       });
     }
   }
@@ -174,7 +177,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
     return (
       <div className="WorkspaceParent pt-dark">
-        {this.resetOverlay(questionId)}
+        {this.resetOverlay()}
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -194,7 +197,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   /**
    * Resets to last save.
    */
-  private resetOverlay = (questionId: number) => (
+  private resetOverlay = () => (
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
@@ -215,14 +218,13 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
             null,
             () => {
               const assessment = retrieveLocalAssessment()!;
-              const question = assessment.questions[questionId] as IQuestion;
               this.handleRefreshLibrary();
               this.setState({
                 assessment,
                 hasUnsavedChanges: false,
                 showResetOverlay: false,
-                originalMaxGrade: question.maxGrade,
-                originalMaxXp: question.maxXp
+                originalMaxGrade: this.getMaxMarks('maxGrade'),
+                originalMaxXp: this.getMaxMarks('maxXp')
               });
             },
             { minimal: false, intent: Intent.DANGER }
@@ -253,7 +255,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       const question = this.state.assessment!.questions[questionId];
       const editorValue =
         question.type === QuestionTypes.programming
-          ? (question as IProgrammingQuestion).answer || ''
+          ? (question as IProgrammingQuestion).solutionTemplate || ''
           : null;
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({ editorValue });
@@ -268,18 +270,17 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           hasUnsavedChanges: false
         });
       }
-      this.setState({
-        activeTab: 0,
-        originalMaxGrade: question.maxGrade,
-        originalMaxXp: question.maxXp
-      });
     }
   }
 
-  private handleRefreshLibrary = () => {
+  private handleRefreshLibrary = (library: Library | undefined = undefined) => {
     const question = this.state.assessment!.questions[this.formatedQuestionId()];
-    let library =
-      question.library.chapter === -1 ? this.state.assessment!.globalDeployment! : question.library;
+    if (!library) {
+      library =
+        question.library.chapter === -1
+          ? this.state.assessment!.globalDeployment!
+          : question.library;
+    }
     if (library && library.globals.length > 0) {
       const globalsVal = library.globals.map((x: any) => x[0]);
       const symbolsVal = library.external.symbols.concat(globalsVal);
@@ -299,24 +300,22 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       hasUnsavedChanges: false
     });
     storeLocalAssessment(this.state.assessment!);
-    this.handleRefreshLibrary();
+    // this.handleRefreshLibrary();
     this.handleSaveGradeAndXp();
   };
 
   private handleSaveGradeAndXp = () => {
-    const questionId = this.formatedQuestionId();
-    const assessment = this.state.assessment!;
-    const curGrade = assessment.questions[questionId].maxGrade;
+    const curGrade = this.getMaxMarks('maxGrade');
     const changeGrade = curGrade - this.state.originalMaxGrade;
-    const curXp = assessment.questions[questionId].maxXp;
+    const curXp = this.getMaxMarks('maxXp');
     const changeXp = curXp - this.state.originalMaxXp;
     if (changeGrade !== 0 || changeXp !== 0) {
       const overview = this.props.assessmentOverview;
       if (changeGrade !== 0) {
-        overview.maxGrade += changeGrade;
+        overview.maxGrade = curGrade;
       }
       if (changeXp !== 0) {
-        overview.maxXp += changeXp;
+        overview.maxXp = curXp;
       }
       this.setState({
         originalMaxGrade: curGrade,
@@ -327,6 +326,14 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     }
   };
 
+  private getMaxMarks = (field: string) => {
+    let result = 0;
+    const questions = this.state.assessment!.questions;
+    for (const question of questions) {
+      result += question[field];
+    }
+    return result as number;
+  };
   private updateEditAssessmentState = (assessmentVal: IAssessment) => {
     this.setState({
       assessment: assessmentVal,
@@ -347,108 +354,162 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     });
   };
 
+  private toggleEditingMode = () => {
+    const toggle = this.state.editingMode === 'question' ? 'global' : 'question';
+    this.setState({
+      activeTab: 0,
+      editingMode: toggle
+    });
+  };
+
   /** Pre-condition: IAssessment has been loaded */
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
     const assessment = this.state.assessment!;
-    const tabs = [
-      {
-        label: `Task ${questionId + 1}`,
-        icon: IconNames.NINJA,
-        body: (
-          <TextareaContentTab
-            assessment={assessment}
-            path={['questions', questionId, 'content']}
-            updateAssessment={this.updateEditAssessmentState}
-          />
-        )
-      },
-      {
-        label: `${assessment!.category} Briefing`,
-        icon: IconNames.BRIEFCASE,
-        body: (
-          <TextareaContentTab
-            assessment={assessment}
-            path={['longSummary']}
-            updateAssessment={this.updateEditAssessmentState}
-          />
-        )
-      },
-      {
-        label: `Question Template`,
-        icon: IconNames.DOCUMENT,
-        body: (
-          <QuestionTemplateTab
+    let tabs;
+    if (this.state.editingMode === 'question') {
+      const qnType = this.state.assessment!.questions[this.props.questionId].type;
+      const questionTemplateTab =
+        qnType === 'mcq' ? (
+          <MCQQuestionTemplateTab
             assessment={assessment}
             questionId={questionId}
             updateAssessment={this.updateEditAssessmentState}
           />
-        )
-      },
-      {
-        label: `Manage Question`,
-        icon: IconNames.WRENCH,
-        body: (
-          <ManageQuestionTab
+        ) : (
+          <ProgrammingQuestionTemplateTab
             assessment={assessment}
-            hasUnsavedChanges={this.state.hasUnsavedChanges}
             questionId={questionId}
-            updateAssessment={this.updateAndSaveAssessment}
-          />
-        )
-      },
-      {
-        label: `Manage Global Deployment`,
-        icon: IconNames.GLOBE,
-        body: (
-          <DeploymentTab
-            assessment={assessment}
-            handleRefreshLibrary={this.handleRefreshLibrary}
-            pathToLibrary={['globalDeployment']}
             updateAssessment={this.updateEditAssessmentState}
-            isGlobalDeployment={true}
+            editorValue={this.props.editorValue}
+            handleEditorValueChange={this.props.handleEditorValueChange}
           />
-        )
-      },
-      {
-        label: `Manage Local Deployment`,
-        icon: IconNames.HOME,
-        body: (
-          <DeploymentTab
-            assessment={assessment}
-            handleRefreshLibrary={this.handleRefreshLibrary}
-            pathToLibrary={['questions', questionId, 'library']}
-            updateAssessment={this.updateEditAssessmentState}
-            isGlobalDeployment={false}
-          />
-        )
+        );
+
+      tabs = [
+        {
+          label: `Task ${questionId + 1}`,
+          icon: IconNames.NINJA,
+          body: (
+            <TextareaContentTab
+              assessment={assessment}
+              path={['questions', questionId, 'content']}
+              updateAssessment={this.updateEditAssessmentState}
+            />
+          )
+        },
+        {
+          label: `Question Template`,
+          icon: IconNames.DOCUMENT,
+          body: questionTemplateTab
+        },
+        {
+          label: `Manage Local Deployment`,
+          icon: IconNames.HOME,
+          body: (
+            <DeploymentTab
+              assessment={assessment}
+              label={'Question Specific'}
+              handleRefreshLibrary={this.handleRefreshLibrary}
+              pathToLibrary={['questions', questionId, 'library']}
+              updateAssessment={this.updateEditAssessmentState}
+              isOptionalDeployment={true}
+            />
+          )
+        },
+        {
+          label: `Manage Local Grader Deployment`,
+          icon: IconNames.CONFIRM,
+          body: (
+            <DeploymentTab
+              assessment={assessment}
+              label={'Question Specific Grader'}
+              handleRefreshLibrary={this.handleRefreshLibrary}
+              pathToLibrary={['questions', questionId, 'graderLibrary']}
+              pathToCopy={['questions', questionId, 'library']}
+              updateAssessment={this.updateEditAssessmentState}
+              isOptionalDeployment={true}
+            />
+          )
+        },
+        {
+          label: `Grading`,
+          icon: IconNames.TICK,
+          body: (
+            <GradingTab
+              assessment={assessment}
+              path={['questions', questionId]}
+              updateAssessment={this.updateEditAssessmentState}
+            />
+          )
+        }
+      ];
+      const functionsAttached = assessment!.questions[questionId].library.external.symbols;
+      if (functionsAttached.includes('get_matrix')) {
+        tabs.push({
+          label: `Tone Matrix`,
+          icon: IconNames.GRID_VIEW,
+          body: <ToneMatrix />
+        });
       }
-    ];
-    const isGraded = assessment!.questions[questionId].grader !== null;
-    if (isGraded) {
-      tabs.push({
-        label: `Grading`,
-        icon: IconNames.TICK,
-        body: (
-          <GradingTab
-            assessment={assessment}
-            path={['questions', questionId]}
-            updateAssessment={this.updateEditAssessmentState}
-          />
-        )
-      });
+    } else {
+      tabs = [
+        {
+          label: `${assessment!.category} Briefing`,
+          icon: IconNames.BRIEFCASE,
+          body: (
+            <TextareaContentTab
+              assessment={assessment}
+              path={['longSummary']}
+              updateAssessment={this.updateEditAssessmentState}
+            />
+          )
+        },
+        {
+          label: `Manage Question`,
+          icon: IconNames.WRENCH,
+          body: (
+            <ManageQuestionTab
+              assessment={assessment}
+              hasUnsavedChanges={this.state.hasUnsavedChanges}
+              questionId={questionId}
+              updateAssessment={this.updateAndSaveAssessment}
+            />
+          )
+        },
+        {
+          label: `Manage Global Deployment`,
+          icon: IconNames.GLOBE,
+          body: (
+            <DeploymentTab
+              assessment={assessment}
+              label={'Global'}
+              handleRefreshLibrary={this.handleRefreshLibrary}
+              pathToLibrary={['globalDeployment']}
+              updateAssessment={this.updateEditAssessmentState}
+              isOptionalDeployment={false}
+            />
+          )
+        },
+        {
+          label: `Manage Global Grader Deployment`,
+          icon: IconNames.CONFIRM,
+          body: (
+            <DeploymentTab
+              assessment={assessment}
+              label={'Global Grader'}
+              handleRefreshLibrary={this.handleRefreshLibrary}
+              pathToLibrary={['graderDeployment']}
+              updateAssessment={this.updateEditAssessmentState}
+              isOptionalDeployment={true}
+            />
+          )
+        }
+      ];
     }
 
-    const functionsAttached = assessment!.questions[questionId].library.external.symbols;
-    if (functionsAttached.includes('get_matrix')) {
-      tabs.push({
-        label: `Tone Matrix`,
-        icon: IconNames.GRID_VIEW,
-        body: <ToneMatrix />
-      });
-    }
     return {
       activeTab: this.state.activeTab,
       handleChangeActiveTab: this.handleChangeActiveTab,
@@ -466,7 +527,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       `/academy/${assessmentCategoryLink(this.state.assessment!.category)}`;
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
     return {
-      externalLibraryName: this.state.assessment!.questions[questionId].library.external.name,
       handleEditorEval: this.props.handleEditorEval,
       handleInterruptEval: this.props.handleInterruptEval,
       handleReplEval: this.props.handleReplEval,
@@ -486,7 +546,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         this.setState({ showResetOverlay: this.state.hasUnsavedChanges });
       },
       questionProgress: [questionId + 1, this.state.assessment!.questions.length],
-      sourceChapter: this.state.assessment!.questions[questionId].library.chapter
+      sourceChapter: this.state.assessment!.questions[questionId].library.chapter,
+      editingMode: this.state.editingMode,
+      toggleEditMode: this.toggleEditingMode
     };
   };
 }

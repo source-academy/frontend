@@ -41,6 +41,7 @@ export const overviewTemplate = (): IAssessmentOverview => {
     maxXp: 0,
     openAt: '2000-01-01T00:00+08',
     title: 'Insert title here',
+    reading: '',
     shortSummary: 'Insert short summary here',
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
@@ -51,7 +52,7 @@ export const overviewTemplate = (): IAssessmentOverview => {
 
 export const programmingTemplate = (): IProgrammingQuestion => {
   return {
-    answer: '//1st question mock solution template',
+    answer: '// [Marking Scheme]\n// 1 mark for correct answer',
     comment: '`Great Job` **young padawan**',
     content: 'Enter content here',
     id: 0,
