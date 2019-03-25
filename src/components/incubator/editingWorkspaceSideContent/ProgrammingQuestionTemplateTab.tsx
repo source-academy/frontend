@@ -91,7 +91,6 @@ export class ProgrammingQuestionTemplateTab extends React.Component<IProps, ISta
     return (
       <div>
         {templateSwitch}
-        <br />
         {copyFromEditorButton}
         {copyToEditorButton}
         <br />

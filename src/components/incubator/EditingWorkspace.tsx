@@ -255,7 +255,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       const question = this.state.assessment!.questions[questionId];
       const editorValue =
         question.type === QuestionTypes.programming
-          ? (question as IProgrammingQuestion).answer || ''
+          ? (question as IProgrammingQuestion).solutionTemplate || ''
           : null;
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({ editorValue });
@@ -273,10 +273,14 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     }
   }
 
-  private handleRefreshLibrary = () => {
+  private handleRefreshLibrary = (library: Library | undefined = undefined) => {
     const question = this.state.assessment!.questions[this.formatedQuestionId()];
-    let library =
-      question.library.chapter === -1 ? this.state.assessment!.globalDeployment! : question.library;
+    if (!library) {
+      library =
+        question.library.chapter === -1
+          ? this.state.assessment!.globalDeployment!
+          : question.library;
+    }
     if (library && library.globals.length > 0) {
       const globalsVal = library.globals.map((x: any) => x[0]);
       const symbolsVal = library.external.symbols.concat(globalsVal);
@@ -296,7 +300,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       hasUnsavedChanges: false
     });
     storeLocalAssessment(this.state.assessment!);
-    this.handleRefreshLibrary();
+    // this.handleRefreshLibrary();
     this.handleSaveGradeAndXp();
   };
 
@@ -407,10 +411,26 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           body: (
             <DeploymentTab
               assessment={assessment}
+              label={'Question Specific'}
               handleRefreshLibrary={this.handleRefreshLibrary}
               pathToLibrary={['questions', questionId, 'library']}
               updateAssessment={this.updateEditAssessmentState}
-              isGlobalDeployment={false}
+              isOptionalDeployment={true}
+            />
+          )
+        },
+        {
+          label: `Manage Local Grader Deployment`,
+          icon: IconNames.CONFIRM,
+          body: (
+            <DeploymentTab
+              assessment={assessment}
+              label={'Question Specific Grader'}
+              handleRefreshLibrary={this.handleRefreshLibrary}
+              pathToLibrary={['questions', questionId, 'graderLibrary']}
+              pathToCopy={['questions', questionId, 'library']}
+              updateAssessment={this.updateEditAssessmentState}
+              isOptionalDeployment={true}
             />
           )
         },
@@ -465,10 +485,25 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           body: (
             <DeploymentTab
               assessment={assessment}
+              label={'Global'}
               handleRefreshLibrary={this.handleRefreshLibrary}
               pathToLibrary={['globalDeployment']}
               updateAssessment={this.updateEditAssessmentState}
-              isGlobalDeployment={true}
+              isOptionalDeployment={false}
+            />
+          )
+        },
+        {
+          label: `Manage Global Grader Deployment`,
+          icon: IconNames.CONFIRM,
+          body: (
+            <DeploymentTab
+              assessment={assessment}
+              label={'Global Grader'}
+              handleRefreshLibrary={this.handleRefreshLibrary}
+              pathToLibrary={['graderDeployment']}
+              updateAssessment={this.updateEditAssessmentState}
+              isOptionalDeployment={true}
             />
           )
         }

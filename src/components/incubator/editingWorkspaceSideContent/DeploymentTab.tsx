@@ -14,10 +14,12 @@ import TextareaContent from './TextareaContent';
 
 interface IProps {
   assessment: IAssessment;
+  label: string;
   pathToLibrary: Array<string | number>;
+  pathToCopy?: Array<string | number>;
   updateAssessment: (assessment: IAssessment) => void;
   handleRefreshLibrary: (library: Library) => void;
-  isGlobalDeployment: boolean;
+  isOptionalDeployment: boolean;
 }
 
 interface IChapter {
@@ -31,30 +33,33 @@ interface IExternal {
   symbols: string[];
 }
 
-export class DeploymentTab extends React.Component<
-  IProps,
-  { activeTab: number; deploymentEnabled: boolean }
-> {
+export class DeploymentTab extends React.Component<IProps, { activeTab: number }> {
   public constructor(props: IProps) {
     super(props);
     this.state = {
-      activeTab: 0,
-      deploymentEnabled: false
+      activeTab: 0
     };
   }
 
   public render() {
-    if (this.props.isGlobalDeployment) {
-      return this.deploymentTab();
+    if (!this.props.isOptionalDeployment) {
+      return (
+        <div>
+          {this.props.label + ' Deployment'}
+          <br />
+          {this.deploymentTab()}
+          }
+        </div>
+      );
     } else {
       return (
         <div>
           <Switch
-            checked={this.state.deploymentEnabled}
-            label="Enable Local Deployment"
+            checked={!this.isEmptyLibrary()}
+            label={'Enable ' + this.props.label + ' Deployment'}
             onChange={this.handleSwitchDeployment}
           />
-          {this.state.deploymentEnabled ? this.deploymentTab() : null}
+          {this.isEmptyLibrary() ? null : this.deploymentTab()}
         </div>
       );
     }
@@ -91,7 +96,7 @@ export class DeploymentTab extends React.Component<
       </tr>
     ));
 
-    const resetLibrary = controlButton('Refresh Library', IconNames.REFRESH, () =>
+    const resetLibrary = controlButton('Use this Library', IconNames.REFRESH, () =>
       this.props.handleRefreshLibrary(deployment)
     );
 
@@ -237,15 +242,24 @@ export class DeploymentTab extends React.Component<
 
   private handleSwitchDeployment = () => {
     const assessment = this.props.assessment;
-    if (this.state.deploymentEnabled) {
-      assignToPath(this.props.pathToLibrary, emptyLibrary(), assessment);
+    if (this.isEmptyLibrary()) {
+      let library = getValueFromPath(
+        this.props.pathToCopy || ['globalDeployment'],
+        assessment
+      ) as Library;
+      if (library.chapter === -1) {
+        library = assessment.globalDeployment!;
+      }
+      library = JSON.parse(JSON.stringify(library));
+      assignToPath(this.props.pathToLibrary, library, assessment);
     } else {
-      assignToPath(this.props.pathToLibrary.concat(['chapter']), 1, assessment);
+      assignToPath(this.props.pathToLibrary, emptyLibrary(), assessment);
     }
-    this.setState({
-      deploymentEnabled: !this.state.deploymentEnabled
-    });
     this.props.updateAssessment(assessment);
+  };
+
+  private isEmptyLibrary = (path: Array<string | number> = this.props.pathToLibrary) => {
+    return getValueFromPath(path.concat(['chapter']), this.props.assessment) === -1;
   };
 }
 
