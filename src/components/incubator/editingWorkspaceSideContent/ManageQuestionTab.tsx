@@ -2,6 +2,7 @@ import { ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { history } from '../../../utils/history';
 import { IAssessment } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
 import Markdown from '../../commons/Markdown';
@@ -38,8 +39,19 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
   }
 
   private manageQuestionTab = () => {
+    const index = this.props.questionId;
     return (
       <div>
+        {controlButton(
+          'Clone Current Question',
+          IconNames.DOCUMENT,
+          this.confirmSave(
+            this.makeQuestion(() =>
+              deepCopy(this.props.assessment.questions[this.props.questionId])
+            )
+          )
+        )}
+        <br />
         {controlButton(
           'Insert Programming Question',
           IconNames.FONT,
@@ -50,28 +62,57 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
           IconNames.CONFIRM,
           this.confirmSave(this.makeQuestion(mcqTemplate))
         )}
+        <br />
         {controlButton(
           'Delete Current Question',
           IconNames.REMOVE,
-          this.confirmSave(this.deleteQn)
+          this.confirmSave(this.deleteQuestion)
         )}
+        <br />
+        {index > 0
+          ? controlButton(
+              'Shift Question Left',
+              IconNames.CARET_LEFT,
+              this.confirmSave(this.shiftQuestion(-1))
+            )
+          : undefined}
+        {index < this.props.assessment.questions.length - 1
+          ? controlButton(
+              'Shift Question Right',
+              IconNames.CARET_RIGHT,
+              this.confirmSave(this.shiftQuestion(1))
+            )
+          : undefined}
       </div>
     );
   };
 
-  private makeQuestion = (template: () => any) => () => {
+  private shiftQuestion = (dir: number) => () => {
     const assessment = this.props.assessment;
     const index = this.props.questionId;
-    let questions = assessment.questions;
-    questions = questions
-      .slice(0, index)
-      .concat([template()])
-      .concat(questions.slice(index));
-    assessment.questions = questions;
-    this.props.updateAssessment(assessment);
+    const newIndex = index + dir;
+    if (newIndex >= 0 && newIndex < assessment.questions.length) {
+      const question = assessment.questions[index];
+      const questions = assessment.questions;
+      questions[index] = questions[newIndex];
+      questions[newIndex] = question;
+      assessment.questions = questions;
+      this.props.updateAssessment(assessment);
+      history.push('/incubator/-1/' + newIndex.toString());
+    }
   };
 
-  private deleteQn = () => {
+  private makeQuestion = (template: () => any) => () => {
+    const assessment = this.props.assessment;
+    const index = this.props.questionId + 1;
+    const questions = assessment.questions;
+    questions.splice(index, 0, template());
+    assessment.questions = questions;
+    this.props.updateAssessment(assessment);
+    history.push('/incubator/-1/' + index.toString());
+  };
+
+  private deleteQuestion = () => {
     const assessment = this.props.assessment;
     let questions = assessment.questions;
     const index = this.props.questionId;
@@ -128,5 +169,9 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     </Dialog>
   );
 }
+
+const deepCopy = (arr: any) => {
+  return JSON.parse(JSON.stringify(arr));
+};
 
 export default ManageQuestionTab;
