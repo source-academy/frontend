@@ -80,15 +80,13 @@ export class DeploymentTab extends React.Component<IProps, { activeTab: number }
 
     const globals = deployment.globals.map((symbol, i) => (
       <tr key={i}>
-        <td className="col-xs-3" style={{ height: '2rem', width: '10rem', overflow: 'auto' }}>
-          <div style={{ height: '2rem', width: '10rem', overflow: 'auto' }}>
+        <td className="col-xs-3" style={{ width: '10rem' }}>
+          <div style={{ width: '10rem' }}>
             {this.textareaContent(deploymentPath.concat(['globals', i, 0]))}
           </div>
         </td>
-        <td className="col-xs-7" style={{ height: '2rem', width: '20rem', overflow: 'auto' }}>
-          <div style={{ height: '2rem', width: '20rem', overflow: 'auto' }}>
-            {this.globalValueTextareaContent(i)}
-          </div>
+        <td className="col-xs-7" style={{ width: '20rem' }}>
+          <div style={{ width: '20rem' }}>{this.globalValueTextareaContent(i)}</div>
         </td>
         <td className="col-xs-2">
           {controlButton('Delete', IconNames.MINUS, this.handleGlobalDelete(i))}
