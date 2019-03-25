@@ -111,16 +111,18 @@ export class QuestionTemplateTab extends React.Component<IProps, IState> {
         {this.textareaContent(['questions', questionId, 'choices', i, 'hint'])}
       </div>
     ));
-
+    const deleteButton = controlButton('Delete Option', IconNames.REMOVE, this.delOption);
+    
     return (
       <div className="MCQChooser row">
         <Card className="mcq-content-parent col-xs-12 middle-xs">
           <div className="row mcq-options-parent between-xs">
             {mcqButton}
             Solution:
-            {this.textareaContent(['questions', questionId, 'solution'], true, [0, 3])}
+            {this.textareaContent(['questions', questionId, 'solution'], true, [0, question.choices.length])}
+            <br/>
             {controlButton('Add Option', IconNames.CONFIRM, this.addOption)}
-            {controlButton('Delete Option', IconNames.REMOVE, this.delOption)}
+            {(question.choices.length > 0) ? deleteButton : undefined}
           </div>
         </Card>
       </div>
