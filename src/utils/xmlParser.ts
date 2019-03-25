@@ -84,6 +84,7 @@ const makeAssessmentOverview = (
     maxXp: maxXpVal,
     openAt: rawOverview.startdate,
     title: rawOverview.title,
+    reading: task.READING !== null ? task.READING[0] : '',
     shortSummary: task.WEBSUMMARY ? task.WEBSUMMARY[0] : '',
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
@@ -296,6 +297,10 @@ export const assessmentToXml = (
     story: overview.story
   };
   task.$ = rawOverview;
+
+  if (overview.reading && overview.reading !== '') {
+    task.READING = overview.reading;
+  }
 
   task.WEBSUMMARY = overview.shortSummary;
   task.TEXT = assessment.longSummary;

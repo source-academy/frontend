@@ -16,6 +16,7 @@ export interface IAssessmentOverview {
   maxXp: number;
   openAt: string;
   title: string;
+  reading?: string;
   shortSummary: string;
   status: AssessmentStatus;
   story: string | null;
