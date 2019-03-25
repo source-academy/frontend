@@ -29,7 +29,8 @@ import {
   DeploymentTab,
   GradingTab,
   ManageQuestionTab,
-  QuestionTemplateTab,
+  MCQQuestionTemplateTab,
+  ProgrammingQuestionTemplateTab,
   TextareaContentTab
 } from './editingWorkspaceSideContent';
 
@@ -269,9 +270,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           hasUnsavedChanges: false
         });
       }
-      this.setState({
-        activeTab: 0
-      });
     }
   }
 
@@ -355,6 +353,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   private toggleEditingMode = () => {
     const toggle = this.state.editingMode === 'question' ? 'global' : 'question';
     this.setState({
+      activeTab: 0,
       editingMode: toggle
     });
   };
@@ -367,6 +366,24 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const assessment = this.state.assessment!;
     let tabs;
     if (this.state.editingMode === 'question') {
+      const qnType = this.state.assessment!.questions[this.props.questionId].type;
+      const questionTemplateTab =
+        qnType === 'mcq' ? (
+          <MCQQuestionTemplateTab
+            assessment={assessment}
+            questionId={questionId}
+            updateAssessment={this.updateEditAssessmentState}
+          />
+        ) : (
+          <ProgrammingQuestionTemplateTab
+            assessment={assessment}
+            questionId={questionId}
+            updateAssessment={this.updateEditAssessmentState}
+            editorValue={this.props.editorValue}
+            handleEditorValueChange={this.props.handleEditorValueChange}
+          />
+        );
+
       tabs = [
         {
           label: `Task ${questionId + 1}`,
@@ -382,13 +399,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         {
           label: `Question Template`,
           icon: IconNames.DOCUMENT,
-          body: (
-            <QuestionTemplateTab
-              assessment={assessment}
-              questionId={questionId}
-              updateAssessment={this.updateEditAssessmentState}
-            />
-          )
+          body: questionTemplateTab
         },
         {
           label: `Manage Local Deployment`,
