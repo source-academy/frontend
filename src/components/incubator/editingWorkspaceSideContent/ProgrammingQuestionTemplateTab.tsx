@@ -45,8 +45,8 @@ export class ProgrammingQuestionTemplateTab extends React.Component<IProps, ISta
       />
     );
     const path = this.state.isSuggestedAnswer
-      ? qnPath.concat(['solutionTemplate'])
-      : qnPath.concat(['answer']);
+      ? qnPath.concat(['answer'])
+      : qnPath.concat(['solutionTemplate']);
 
     const copyFromEditorButton = controlButton(
       'Copy from Editor',

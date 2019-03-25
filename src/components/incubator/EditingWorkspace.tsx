@@ -113,8 +113,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       const question: IQuestion = this.props.assessment.questions[this.formatedQuestionId()];
       const editorValue =
         question.type === QuestionTypes.programming
-          ? ((question as IProgrammingQuestion).answer as string)
-          : 'you aint seeing this';
+          ? ((question as IProgrammingQuestion).solutionTemplate as string)
+          : '//If you see this, this is a bug. Please report bug.';
       this.props.handleEditorValueChange(editorValue);
       this.setState({
         originalMaxGrade: this.getMaxMarks('maxGrade'),

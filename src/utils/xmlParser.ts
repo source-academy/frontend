@@ -208,8 +208,8 @@ const makeProgramming = (
 ): IProgrammingQuestion => {
   const result: IProgrammingQuestion = {
     ...question,
-    answer: problem.SNIPPET[0].TEMPLATE[0] as string,
-    solutionTemplate: problem.SNIPPET[0].SOLUTION[0] as string,
+    solutionTemplate: problem.SNIPPET[0].TEMPLATE[0] as string,
+    answer: problem.SNIPPET[0].SOLUTION[0] as string,
     type: 'programming'
   };
   if (problem.SNIPPET[0].GRADER) {
@@ -336,13 +336,12 @@ export const assessmentToXml = (
     }
 
     if (question.type === 'programming') {
-      problem.SNIPPET.SOLUTION = question.solutionTemplate;
       if (question.graderTemplate) {
         /* tslint:disable:no-string-literal */
         problem.SNIPPET['GRADER'] = question.graderTemplate;
       }
       /* tslint:disable:no-string-literal */
-      problem.SNIPPET['TEMPLATE'] = question.answer;
+      problem.SNIPPET['TEMPLATE'] = question.solutionTemplate;
     }
 
     if (question.type === 'mcq') {
