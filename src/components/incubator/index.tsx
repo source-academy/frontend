@@ -67,7 +67,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         };
         return (
           <div className="Academy">
-            <EditingWorkspaceContainer {...assessmentProps} listingPath="/incubator" />
+            <EditingWorkspaceContainer {...assessmentProps} />
           </div>
         );
       }
