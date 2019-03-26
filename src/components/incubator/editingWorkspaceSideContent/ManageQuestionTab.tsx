@@ -35,17 +35,16 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
         {this.confirmSaveOverlay()}
         {this.props.assessment.questions.map((q, index) => (
           <div key={index}>
-          Question {index + 1}
-          <br />
-          <Button
-              className="mcq-option col-xs-12"
-              minimal={true}
-            >
-              <Markdown content={q.content.length > 200 ? q.content.substring(0, 200) + "..." : q.content} />
+            Question {index + 1}
+            <br />
+            <Button className="mcq-option col-xs-12" minimal={true}>
+              <Markdown
+                content={q.content.length > 200 ? q.content.substring(0, 200) + '...' : q.content}
+              />
             </Button>
-          {this.manageQuestionTab(index)}
-          <br />
-        </div>
+            {this.manageQuestionTab(index)}
+            <br />
+          </div>
         ))}
       </div>
     );
@@ -58,10 +57,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
           `Clone Question ${index + 1}`,
           IconNames.DOCUMENT,
           this.confirmSave(
-            this.makeQuestion(() =>
-              deepCopy(this.props.assessment.questions[index]),
-              index
-            )
+            this.makeQuestion(() => deepCopy(this.props.assessment.questions[index]), index)
           )
         )}
         {controlButton(
