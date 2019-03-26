@@ -51,14 +51,15 @@ export class ImportFromFileComponent extends React.Component<Props, State> {
     );
   }
 
-  private handleFileRead = (e: any) => {
+  private handleFileRead = (file: any) => (e: any) => {
     const content = this.fileReader.result;
     if (content) {
       parseString(content, (err: any, result: any) => {
         // tslint:disable-next-line:no-console
-        // console.dir(result);
+        console.dir(file);
         try {
           const entireAssessment: [IAssessmentOverview, IAssessment] = makeEntireAssessment(result);
+          entireAssessment[0].fileName = file.name.slice(0, -4);
           localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(entireAssessment[0]));
           this.props.updateEditingOverview(entireAssessment[0]);
 
@@ -82,7 +83,7 @@ export class ImportFromFileComponent extends React.Component<Props, State> {
     const files = e.target.files;
     if (e.target.files) {
       this.fileReader = new FileReader();
-      this.fileReader.onloadend = this.handleFileRead;
+      this.fileReader.onloadend = this.handleFileRead(files[0]);
       this.fileReader.readAsText(files[0]);
     }
   };
@@ -90,7 +91,6 @@ export class ImportFromFileComponent extends React.Component<Props, State> {
   private makeMission = () => {
     localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overviewTemplate()));
     this.props.updateEditingOverview(overviewTemplate());
-
     localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentTemplate()));
     this.props.newAssessment(assessmentTemplate());
   };

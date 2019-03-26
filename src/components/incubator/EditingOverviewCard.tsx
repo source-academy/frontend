@@ -1,5 +1,6 @@
-import { Button, Card, Elevation, Icon, IconName, Intent, Text } from '@blueprintjs/core';
+import { Button, Card, Classes, Dialog, Elevation, Icon, IconName, Intent, MenuItem, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import Textarea from 'react-textarea-autosize';
@@ -9,7 +10,7 @@ import { getPrettyDate } from '../../utils/dateHelpers';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { exportXml } from '../../utils/xmlParser';
 
-import { IAssessmentOverview } from '../assessment/assessmentShape';
+import { AssessmentCategories, AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 
@@ -24,6 +25,7 @@ type Props = {
 interface IState {
   editingOverviewField: string;
   fieldValue: any;
+  showOptionsOverlay: boolean;
 }
 
 export class EditingOverviewCard extends React.Component<Props, IState> {
@@ -31,12 +33,13 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     super(props);
     this.state = {
       editingOverviewField: '',
-      fieldValue: ''
+      fieldValue: '',
+      showOptionsOverlay: false
     };
   }
 
   public render() {
-    return <div>{this.makeEditingOverviewCard(this.props.overview)}</div>;
+    return <div>{this.optionsOverlay()}{this.makeEditingOverviewCard(this.props.overview)}</div>;
   }
 
   private saveEditOverview = (field: keyof IAssessmentOverview) => (e: any) => {
@@ -67,7 +70,13 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     }
   };
 
-  private handleExportXml = () => (e: any) => {
+  private toggleOptionsOverlay = () => {
+    this.setState({
+      showOptionsOverlay: !this.state.showOptionsOverlay
+    });
+  };
+
+  private handleExportXml = (e: any) => {
     exportXml();
   };
 
@@ -127,6 +136,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
                   : `${getPrettyDate(overview.closeAt)}`}
               </div>
             </Text>
+            {this.makeOptionsButton()}
             {makeOverviewCardButton(overview, this.props.listingPath)}
           </div>
         </div>
@@ -149,22 +159,73 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
 
   private makeExportButton = (overview: IAssessmentOverview) => (
     <Button
-      // disabled={overview.status !== AssessmentStatuses.attempted}
       icon={IconNames.EXPORT}
       intent={Intent.DANGER}
       minimal={true}
       // intentional: each menu renders own version of onClick
       // tslint:disable-next-line:jsx-no-lambda
-      onClick={this.handleExportXml()}
+      onClick={this.handleExportXml}
     >
       Export XML
     </Button>
+  );
+
+  private makeOptionsButton = () =>
+    <Button
+      icon={IconNames.WRENCH}
+      minimal={true}
+      onClick={this.toggleOptionsOverlay}
+    >
+      Other Options
+    </Button>
+
+  private saveCategory = (i: AssessmentCategory, e: any) => {
+    const overview = {
+      ...this.props.overview,
+      category: i
+    };
+    localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overview));
+    this.props.updateEditingOverview(overview);
+  };
+
+  private optionsOverlay = () => (
+    <Dialog
+      canOutsideClickClose={false}
+      className="assessment-reset"
+      icon={IconNames.WRENCH}
+      isCloseButtonShown={true}
+      isOpen={this.state.showOptionsOverlay}
+      onClose={this.toggleOptionsOverlay}
+      title="Other options"
+    >
+      <div className={Classes.DIALOG_BODY}>
+        <h3>Category</h3>
+        {categorySelect(this.props.overview.category, this.saveCategory)}
+        <h3>Story</h3>
+        <div onClick={this.toggleEditField('story')}>
+          {this.state.editingOverviewField === 'story' ? (
+            this.makeEditingOverviewTextarea('story')
+          ) : (
+            createPlaceholder(this.props.overview.story || '')
+          )}
+        </div>
+        <br/>
+        <h3>Filename</h3>
+        <div onClick={this.toggleEditField('fileName')}>
+          {this.state.editingOverviewField === 'fileName' ? (
+            this.makeEditingOverviewTextarea('fileName')
+          ) : (
+            createPlaceholder(this.props.overview.fileName || '')
+          )}
+        </div>  
+      </div>
+    </Dialog>
   );
 }
 
 const createPlaceholder = (str: string): string => {
   if (str.match('^(\n| )*$')) {
-    return 'Enter Value Here.';
+    return 'Enter Value Here (If Applicable)';
   } else {
     return str;
   }
@@ -180,3 +241,35 @@ const makeOverviewCardButton = (overview: IAssessmentOverview, listingPath: stri
     </NavLink>
   );
 };
+
+const assessmentCategoriesArr = [
+  AssessmentCategories.Mission, 
+  AssessmentCategories.Path,
+  AssessmentCategories.Sidequest,
+  AssessmentCategories.Contest
+];
+
+const categorySelect = (
+  category: AssessmentCategory,
+  handleSelect = (i: AssessmentCategory, e: React.ChangeEvent<HTMLSelectElement>) => {}
+) => (
+  <CategorySelectComponent
+    className="pt-minimal"
+    items={assessmentCategoriesArr}
+    onItemSelect={handleSelect}
+    itemRenderer={categoryRenderer}
+    filterable={false}
+  >
+    <Button
+      className="pt-minimal"
+      text={category}
+      rightIcon="double-caret-vertical"
+    />
+  </CategorySelectComponent>
+);
+
+const CategorySelectComponent = Select.ofType<AssessmentCategory>();
+
+const categoryRenderer: ItemRenderer<AssessmentCategory> = (category, { handleClick, modifiers, query }) => (
+  <MenuItem active={false} key={category} onClick={handleClick} text={category} />
+);
