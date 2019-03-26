@@ -1,4 +1,15 @@
-import { Button, Card, Classes, Dialog, Elevation, Icon, IconName, Intent, MenuItem, Text } from '@blueprintjs/core';
+import {
+  Button,
+  Card,
+  Classes,
+  Dialog,
+  Elevation,
+  Icon,
+  IconName,
+  Intent,
+  MenuItem,
+  Text
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
@@ -10,7 +21,11 @@ import { getPrettyDate } from '../../utils/dateHelpers';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { exportXml } from '../../utils/xmlParser';
 
-import { AssessmentCategories, AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape';
+import {
+  AssessmentCategories,
+  AssessmentCategory,
+  IAssessmentOverview
+} from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 
@@ -39,7 +54,12 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
   }
 
   public render() {
-    return <div>{this.optionsOverlay()}{this.makeEditingOverviewCard(this.props.overview)}</div>;
+    return (
+      <div>
+        {this.optionsOverlay()}
+        {this.makeEditingOverviewCard(this.props.overview)}
+      </div>
+    );
   }
 
   private saveEditOverview = (field: keyof IAssessmentOverview) => (e: any) => {
@@ -170,14 +190,11 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     </Button>
   );
 
-  private makeOptionsButton = () =>
-    <Button
-      icon={IconNames.WRENCH}
-      minimal={true}
-      onClick={this.toggleOptionsOverlay}
-    >
+  private makeOptionsButton = () => (
+    <Button icon={IconNames.WRENCH} minimal={true} onClick={this.toggleOptionsOverlay}>
       Other Options
     </Button>
+  );
 
   private saveCategory = (i: AssessmentCategory, e: any) => {
     const overview = {
@@ -203,21 +220,17 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
         {categorySelect(this.props.overview.category, this.saveCategory)}
         <h3>Story</h3>
         <div onClick={this.toggleEditField('story')}>
-          {this.state.editingOverviewField === 'story' ? (
-            this.makeEditingOverviewTextarea('story')
-          ) : (
-            createPlaceholder(this.props.overview.story || '')
-          )}
+          {this.state.editingOverviewField === 'story'
+            ? this.makeEditingOverviewTextarea('story')
+            : createPlaceholder(this.props.overview.story || '')}
         </div>
-        <br/>
+        <br />
         <h3>Filename</h3>
         <div onClick={this.toggleEditField('fileName')}>
-          {this.state.editingOverviewField === 'fileName' ? (
-            this.makeEditingOverviewTextarea('fileName')
-          ) : (
-            createPlaceholder(this.props.overview.fileName || '')
-          )}
-        </div>  
+          {this.state.editingOverviewField === 'fileName'
+            ? this.makeEditingOverviewTextarea('fileName')
+            : createPlaceholder(this.props.overview.fileName || '')}
+        </div>
       </div>
     </Dialog>
   );
@@ -243,7 +256,7 @@ const makeOverviewCardButton = (overview: IAssessmentOverview, listingPath: stri
 };
 
 const assessmentCategoriesArr = [
-  AssessmentCategories.Mission, 
+  AssessmentCategories.Mission,
   AssessmentCategories.Path,
   AssessmentCategories.Sidequest,
   AssessmentCategories.Contest
@@ -260,16 +273,13 @@ const categorySelect = (
     itemRenderer={categoryRenderer}
     filterable={false}
   >
-    <Button
-      className="pt-minimal"
-      text={category}
-      rightIcon="double-caret-vertical"
-    />
+    <Button className="pt-minimal" text={category} rightIcon="double-caret-vertical" />
   </CategorySelectComponent>
 );
 
 const CategorySelectComponent = Select.ofType<AssessmentCategory>();
 
-const categoryRenderer: ItemRenderer<AssessmentCategory> = (category, { handleClick, modifiers, query }) => (
-  <MenuItem active={false} key={category} onClick={handleClick} text={category} />
-);
+const categoryRenderer: ItemRenderer<AssessmentCategory> = (
+  category,
+  { handleClick, modifiers, query }
+) => <MenuItem active={false} key={category} onClick={handleClick} text={category} />;
