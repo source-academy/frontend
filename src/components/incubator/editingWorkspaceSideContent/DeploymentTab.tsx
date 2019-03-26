@@ -48,7 +48,6 @@ export class DeploymentTab extends React.Component<IProps, { activeTab: number }
           {this.props.label + ' Deployment'}
           <br />
           {this.deploymentTab()}
-          }
         </div>
       );
     } else {
@@ -71,24 +70,20 @@ export class DeploymentTab extends React.Component<IProps, { activeTab: number }
     // const deploymentDisp = this.props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
     const symbols = deployment.external.symbols.map((symbol, i) => (
       <tr key={i}>
-        <td style={{ width: '520px' }}>
-          {this.textareaContent(deploymentPath.concat(['external', 'symbols', i]))}
+        <td>{this.textareaContent(deploymentPath.concat(['external', 'symbols', i]))}</td>
+        <td style={{ width: '100px' }}>
+          {controlButton('Delete', IconNames.MINUS, this.handleSymbolDelete(i))}
         </td>
-        <td>{controlButton('Delete', IconNames.MINUS, this.handleSymbolDelete(i))}</td>
       </tr>
     ));
 
     const globals = deployment.globals.map((symbol, i) => (
       <tr key={i}>
-        <td className="col-xs-3" style={{ width: '10rem' }}>
-          <div style={{ width: '10rem' }}>
-            {this.textareaContent(deploymentPath.concat(['globals', i, 0]))}
-          </div>
+        <td style={{ width: '170px' }}>
+          {this.textareaContent(deploymentPath.concat(['globals', i, 0]))}
         </td>
-        <td className="col-xs-7" style={{ width: '20rem' }}>
-          <div style={{ width: '20rem' }}>{this.globalValueTextareaContent(i)}</div>
-        </td>
-        <td className="col-xs-2">
+        <td>{this.globalValueTextareaContent(i)}</td>
+        <td style={{ width: '90px' }}>
           {controlButton('Delete', IconNames.MINUS, this.handleGlobalDelete(i))}
         </td>
       </tr>
@@ -107,7 +102,9 @@ export class DeploymentTab extends React.Component<IProps, { activeTab: number }
         <br />
         <div>Symbols:</div>
         <br />
-        <table style={{ width: '100%' }}>{symbols}</table>
+        <table style={{ width: '100%' }}>
+          <tbody>{symbols}</tbody>
+        </table>
         {controlButton('New Symbol', IconNames.PLUS, this.handleNewSymbol)}
       </React.Fragment>
     );
@@ -116,7 +113,9 @@ export class DeploymentTab extends React.Component<IProps, { activeTab: number }
       <React.Fragment>
         <div>Globals:</div>
         <br />
-        <table style={{ width: '100%' }}>{globals}</table>
+        <table style={{ width: '100%', borderSpacing: '5px' }}>
+          <tbody>{globals}</tbody>
+        </table>
         {controlButton('New Global', IconNames.PLUS, this.handleNewGlobal)}
       </React.Fragment>
     );
@@ -189,7 +188,7 @@ export class DeploymentTab extends React.Component<IProps, { activeTab: number }
       global[1] = altEval(global[2]!);
       this.props.updateAssessment(assessment);
     } catch (e) {
-      global[2] = 'Invalid Expression';
+      global[2] = '"Invalid Expression"';
     }
   };
 

@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
 import { history } from '../../utils/history';
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
@@ -55,7 +54,6 @@ export type OwnProps = {
   questionId: number;
   assessmentOverview: IAssessmentOverview;
   updateAssessmentOverview: (overview: IAssessmentOverview) => void;
-  listingPath?: string;
   notAttempted: boolean;
   closeDate: string;
 };
@@ -110,12 +108,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
    */
   public componentDidMount() {
     if (this.props.assessment) {
-      const question: IQuestion = this.props.assessment.questions[this.formatedQuestionId()];
-      const editorValue =
-        question.type === QuestionTypes.programming
-          ? ((question as IProgrammingQuestion).solutionTemplate as string)
-          : '//If you see this, this is a bug. Please report bug.';
-      this.props.handleEditorValueChange(editorValue);
+      this.resetEditorValue();
       this.setState({
         originalMaxGrade: this.getMaxMarks('maxGrade'),
         originalMaxXp: this.getMaxMarks('maxXp')
@@ -295,6 +288,15 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.props.handleClearContext(library);
   };
 
+  private resetEditorValue = () => {
+    const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
+    const editorValue =
+      question.type === QuestionTypes.programming
+        ? ((question as IProgrammingQuestion).solutionTemplate as string)
+        : '//If you see this, this is a bug. Please report bug.';
+    this.props.handleEditorValueChange(editorValue);
+  };
+
   private handleSave = () => {
     this.setState({
       hasUnsavedChanges: false
@@ -345,7 +347,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.setState({
       assessment: assessmentVal
     });
+    this.handleRefreshLibrary();
     this.handleSave();
+    this.resetEditorValue();
   };
 
   private handleChangeActiveTab = (tab: number) => {
@@ -522,9 +526,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const listingPath =
-      this.props.listingPath ||
-      `/academy/${assessmentCategoryLink(this.state.assessment!.category)}`;
+    const listingPath = '/incubator';
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
     return {
       handleEditorEval: this.props.handleEditorEval,
