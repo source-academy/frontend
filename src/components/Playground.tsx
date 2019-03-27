@@ -67,10 +67,10 @@ export interface IDispatchProps {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
-  handleToggleEditorAutorun: () => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handleToggleEditorAutorun: () => void;
 }
 
 type PlaygroundState = {

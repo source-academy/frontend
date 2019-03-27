@@ -5249,9 +5249,6 @@ js-base64@^2.1.9:
 
 "js-slang@file:../js-slang":
   version "0.2.0"
-=======
-  version "0.2.0-alpha"
->>>>>>> Stashed changes
   dependencies:
     "@types/estree" "0.0.39"
     acorn "^6.0.5"
