@@ -37,7 +37,9 @@ function loadAllLibs() {
     // streams
     '/externalLibs/streams/stream.js',
     '/externalLibs/pe_library.js',
-    '/externalLibs/assert_compiled.js'
+    '/externalLibs/assert_compiled.js',
+    //inspector
+    '/externalLibs/inspector/inspector.js'
   ]
 
   for (var i = 0; i < files.length; i++) {

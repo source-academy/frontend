@@ -4,15 +4,817 @@
    */
   var stage
   var container = document.createElement('div')
-  container.id = 'list-visualizer-container'
+  container.id = 'env-visualizer-container'
   container.hidden = true
   document.body.appendChild(container)
-  stage = new Kinetic.Stage({
+  /*stage = new Kinetic.Stage({
     width: 1000,
     height: 1000,
-    container: 'list-visualizer-container'
-  })
+    container: 'env-visualizer-container'
+  })*/
+  
+  /*************************************************************************************************************/
+  /*************************************************************************************************************/
+      const frameFontSetting = "14px Roboto Mono";
+      const fnRadius = 12;
+      var builtins = [
+        'runtime',
+        'display',
+        'raw_display',
+        'stringify',
+        'error',
+        'prompt',
+        'is_number',
+        'is_string',
+        'is_function',
+        'is_boolean',
+        'is_undefined',
+        'parse_int',
+        'undefined',
+        'NaN',
+        'Infinity',
+        'null',
+        'pair',
+        'is_pair',
+        'head',
+        'tail',
+        'is_null',
+        'is_list',
+        'list',
+        'length',
+        'map',
+        'build_list',
+        'for_each',
+        'list_to_string',
+        'reverse',
+        'append',
+        'member',
+        'remove',
+        'remove_all',
+        'filter',
+        'enum_list',
+        'list_ref',
+        'accumulate',
+        'equal',
+        'draw_list',
+        'set_head',
+        'set_tail',
+        'array_length',
+        'is_array',
+        'parse',
+        'apply_in_underlying_javascript',
+        'is_object',
+        'is_NaN',
+        'has_own_property',
+        'alert',
+        'timed',
+        'assoc',
+        'rawDisplay',
+        'prompt',
+        'alert',
+        'visualiseList',
+        'math_abs',
+        'math_acos',
+        'math_acosh',
+        'math_asin',
+        'math_asinh',
+        'math_atan',
+        'math_atanh',
+        'math_atan2',
+        'math_ceil',
+        'math_cbrt',
+        'math_expm1',
+        'math_clz32',
+        'math_cos',
+        'math_cosh',
+        'math_exp',
+        'math_floor',
+        'math_fround',
+        'math_hypot',
+        'math_imul',
+        'math_log',
+        'math_log1p',
+        'math_log2',
+        'math_log10',
+        'math_max',
+        'math_min',
+        'math_pow',
+        'math_random',
+        'math_round',
+        'math_sign',
+        'math_sin',
+        'math_sinh',
+        'math_sqrt',
+        'math_tan',
+        'math_tanh',
+        'math_trunc',
+        'math_E',
+        'math_LN10',
+        'math_LN2',
+        'math_LOG10E',
+        'math_LOG2E',
+        'math_PI',
+        'math_SQRT1_2',
+        'math_SQRT2'
+      ]
 
+      function drawSceneFnObjects() {
+        fnObjects[0].layer.scene.clear();
+        for (let i = 0; i < fnObjects.length; i++) {
+          drawSceneFnObject(i);
+        }
+        viewport.render();
+      }
+
+      function drawHitFnObjects() {
+        for (let i = 0; i < fnObjects.length; i++) {
+          drawHitFnObject(i);
+        }
+      }
+
+      function drawSceneFrames() {
+        for (let i = 0; i < frames.length; i++) {
+          drawSceneFrame(i);
+        }
+        viewport.render();
+      }
+
+      function drawHitFrames() {
+        frames.forEach(function(frame) {
+          drawHitFrame(frame);
+        });
+      }
+
+      /*
+      For each frame, find params which have a function as their value.
+      For each such param, draw the arrow.
+      */
+      function drawSceneFrameFnArrows() {
+        for (let i = 0; i < frames.length; i++) {
+          params = frames[i].params;
+          for (let j = 0; j < params.length; j++) {
+            if (params[j].type === "function") {
+              targetFn = params[j].value;
+              /*
+              i: index of frame
+              targetFn: index of function
+              j: relative position of param within frame
+              */
+              drawSceneFrameFnArrow(i, targetFn, j);
+            }
+            
+          }
+        }
+        viewport.render();
+      }
+
+      function drawSceneFnFrameArrows() {
+        fnToFrameArrows.forEach(function(pair) {
+          drawSceneFnFrameArrow(pair);
+        });
+        viewport.render();
+      }
+        
+      function drawSceneFrameArrows() {
+        for (let i = 0; i < frames.length; i++) {
+          drawSceneFrameArrow(i);
+        }
+        viewport.render();
+      }
+
+      function drawSceneFnObject(pos) {
+        var config = fnObjects[pos];
+        var scene = config.layer.scene,
+            context = scene.context;
+        var parent = frames[config.parent];
+        
+        // find index position of function object within frame
+        var offset = parent.fnObjects.indexOf(pos);
+        var x = parent.x + parent.frameWidth + 60;
+        var y = parent.y + 25 + offset * 30;
+        config.x = x;
+        config.y = y;
+        config.offset = offset;
+        context.beginPath();
+        context.arc(x - fnRadius, y, fnRadius, 0, Math.PI*2, false);
+        
+        if (!config.hovered) {
+          context.strokeStyle = 'white';
+          context.lineWidth = 2;
+          context.stroke();
+        } else {
+          context.strokeStyle = 'green';
+          context.lineWidth = 2;
+          context.stroke();
+        }
+        
+        context.beginPath();
+        if (config.selected) {
+          context.font = "14px Roboto Mono Light";
+          context.fillText(`params: ${config.params}`, x + 50, y);
+          context.fillText(`body: ${config.body}`, x + 50, y + 20);
+        }
+        context.arc(x + fnRadius, y, fnRadius, 0, Math.PI*2, false);
+        if (!config.hovered) {
+          context.strokeStyle = 'white';
+          context.lineWidth = 2;
+          context.stroke();
+        } else {
+          context.strokeStyle = 'green';
+          context.lineWidth = 2;
+          context.stroke();
+        }
+
+      }
+
+      function drawHitFnObject(pos) {
+        var config = fnObjects[pos];
+        var hit = config.layer.hit,
+            context = hit.context;
+        var parent = frames[config.parent];
+
+        // find index position of function object within frame
+        var offset = parent.fnObjects.indexOf(pos);
+        var x = parent.x + parent.frameWidth + 60;
+        var y = parent.y + 25 + offset * 30;
+        config.x = x;
+        config.y = y;
+        config.offset = offset;
+        context.save();
+        context.beginPath();
+        context.arc(x - fnRadius, y, fnRadius, 0, Math.PI*2, false);
+        context.fillStyle = hit.getColorFromIndex(config.key);
+        context.fill();
+        context.restore();
+        
+        context.beginPath();
+        context.arc(x + fnRadius, y, fnRadius, 0, Math.PI*2, false);
+        context.fillStyle = hit.getColorFromIndex(config.key);
+        context.fill();
+        context.restore();
+      }
+
+      function drawSceneFrame(pos) {
+        var config = frames[pos];
+        var scene = config.layer.scene,
+            context = scene.context;
+        context.save();
+        context.font = frameFontSetting;
+        context.fillStyle = "white";
+        var x, y;
+        x = config.x;
+        y = config.y;
+        context.beginPath();
+        
+        // parse params
+        const params = config.params;
+        const frameHeight = 20 + 30 * params.length;
+        
+        // track length of longest param name to determine frame width
+        var maxLength = 0;
+        // create array to track objects that are pointed to from this frame
+        const fnObjects = [];
+        const listObjects = [];
+        // create arrays to track positions of various objects for easier
+        // drawing of arrows later
+        const fnIndex = [];
+        const listIndex = [];
+        for (var i = 0; i < params.length; i++) {
+          const param = params[i];
+          if (param.type === "value") {
+            context.fillText(`${param.name}: ${param.value}`, x + 10, y + 30 + (i * 30));
+            fnIndex.push(null);
+            fnObjects.push(null);
+            if ((param.name.length + param.value.toString().length + 1) > maxLength) maxLength = param.name.length + param.value.toString().length + 1;
+          } else if (param.type === "function") {
+            context.fillText(`${param.name}:`, x + 10, y + 30 + (i * 30));
+            fnIndex.push(param.value);
+            fnObjects.push(param.value);
+            if (param.name.length > maxLength) maxLength = param.name.length;
+          }
+        }
+        const frameWidth = maxLength * 20;
+        config.fnIndex = fnIndex;
+        config.listIndex = listIndex;
+        config.fnObjects = fnObjects;
+        config.frameHeight = frameHeight;
+        config.frameWidth = frameWidth;
+        
+        context.rect(x, y, frameWidth, frameHeight);
+        context.lineWidth = 2;
+        context.strokeStyle = 'white';
+        context.stroke();
+        
+        if (config.selected) {
+          context.strokeStyle = 'white';
+          context.lineWidth = 6;
+          context.stroke();
+        }
+
+        if (config.hovered) {
+          context.strokeStyle = 'green';
+          context.lineWidth = 2;
+          context.stroke();
+        }
+        //context.restore();
+        
+        // calculate positions for child frames
+        if (config.children == null) return;
+        childrenCount = config.children.length;
+        children = config.children;
+        for (i = 0; i < childrenCount; i++) {
+          frames[children[i]].y = y + frameHeight + 50;
+          totalWidth = childrenCount * 300;
+          startingX = x - (totalWidth / 2) + 150;
+          frames[children[i]].x = startingX + 300 * i;
+        }
+        
+      }
+
+      function drawHitFrame(config) {
+        var hit = config.layer.hit,
+            context = hit.context;
+
+        var x, y;
+        if (config.parent != null) {
+          x = frames[config.parent].x;
+          y = frames[config.parent].y + 200;
+          config.x = x;
+          config.y = y;
+        } else {
+          x = config.x;
+          y = config.y;
+        }
+        
+        context.beginPath();
+        context.rect(x, y, 150, 100);
+        context.fillStyle = hit.getColorFromIndex(config.key);
+        context.save();
+        context.fill();
+        context.restore();
+      }
+
+      /*
+      targetFrame: index of starting frame
+      targetFn: index of target function
+      frameOffset: relative position of starting param in frame
+      */
+      function drawSceneFrameFnArrow(targetFrame, targetFn, frameOffset) {
+        var scene = arrowLayer.scene,
+            context = scene.context;
+        var startCoord = [frames[targetFrame].x + frames[targetFrame].frameWidth, frames[targetFrame].y + frameOffset * 30];
+        var endCoord = [fnObjects[targetFn].x, fnObjects[targetFn].y];
+        //scene.clear();
+        context.save();
+        context.strokeStyle = "white";
+        context.beginPath();
+        const x0 = startCoord[0],
+              y0 = startCoord[1] + 25;
+              
+        if (fnObjects[targetFn].parent == targetFrame) {
+          // fnObject belongs to current frame
+          // simply draw straight arrow from frame to function
+          const x1 = endCoord[0] - (fnRadius * 2) - 3, // left circle
+                y1 = endCoord[1];
+          context.moveTo(x0, y0);
+          context.lineTo(x1, y1);
+
+          // draw arrow head
+          drawArrowHead(context, x0, y0, x1, y1);
+          context.stroke();
+        } else {
+          // fnObject belongs to different frame
+          
+          // fnOffset: relative position of target fnObject at target frame
+          const fnOffset = frames[fnObjects[targetFn].parent].fnObjects.indexOf(targetFn);
+          const xf = endCoord[0] + (fnRadius * 2) + 3, //right circle
+                yf = endCoord[1];
+          const x1 = x0 + frameOffset * 20,
+                y1 = y0;
+          const x2 = x1,
+                y2 = frames[targetFrame].y - 20 + fnOffset * 5;
+          const x3 = xf + 10 + fnOffset * 5,
+                y3 = y2;
+          const x4 = x3,
+                y4 = yf;
+          context.moveTo(x0, y0);
+          context.lineTo(x1, y1);
+          context.lineTo(x2, y2);
+          context.lineTo(x3, y3);
+          context.lineTo(x4, y4);
+          context.lineTo(xf, yf);
+          // draw arrow head
+          drawArrowHead(context, x4, y4, xf, yf);
+          context.stroke();
+        }
+      }
+
+      function drawSceneFnFrameArrow(pair) {
+        var scene = arrowLayer.scene,
+            context = scene.context;
+        //const offset = frames[pair[0]].fnIndex.indexOf(pair[1]);
+        
+        var startCoord = [fnObjects[pair[0]].x + 15, fnObjects[pair[0]].y];
+        var endX = frames[pair[1]].x + frames[pair[1]].frameWidth;
+
+        //scene.clear();
+        context.save();
+        context.strokeStyle = "white";
+        context.beginPath();
+        const x0 = startCoord[0],
+              y0 = startCoord[1],
+              x1 = x0,
+              y1 = y0 - 15,
+              x2 = endX,
+              y2 = y1;
+        context.moveTo(x0, y0);
+        context.lineTo(x1, y1);
+        context.lineTo(x2, y2);
+        // draw arrow head
+        drawArrowHead(context, x1, y1, x2, y2);
+        context.stroke();
+      }
+
+      function drawSceneFrameArrow(pos) {
+        var config = frames[pos];
+        var scene = arrowLayer.scene,
+            context = scene.context;
+        context.save();
+        context.strokeStyle = "white";
+        
+        if (config.parent == null) return null;
+        const x0 = config.x + (config.frameWidth / 2),
+              y0 = config.y,
+              x1 = x0,
+              y1 = (frames[config.parent].y 
+                   + frames[config.parent].frameHeight + y0) / 2,
+              /*
+              x2 = frames[config.parent].x
+                   + ((150 / frames[config.parent].children.length) * 
+                      frames[config.parent].children.indexOf(pos)),
+              */
+              x2 = frames[config.parent].x + (frames[config.parent].frameWidth / 2);
+              y2 = y1,
+              x3 = x2,
+              y3 = frames[config.parent].y 
+                   + frames[config.parent].frameHeight + 3; // offset by 3 for aesthetic reasons
+        context.beginPath();
+        context.moveTo(x0, y0);
+        context.lineTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.lineTo(x3, y3);
+        // draw arrow head
+        const gradient = (y3 - y2) / (x3 - x2);
+        const angle = Math.atan(gradient);
+        if (x1 - x0 >= 0) { // left to right arrow 
+          const xR = x3 - 10 * Math.cos(angle - Math.PI / 6);
+          const yR = y3 - 10 * Math.sin(angle - Math.PI / 6);
+          context.lineTo(xR, yR);
+          context.moveTo(x3, y3);
+          const xL = x3 - 10 * Math.cos(angle + Math.PI / 6);
+          const yL = y3 - 10 * Math.sin(angle + Math.PI / 6);
+          context.lineTo(xL, yL);
+        } else { // right to left arrow
+          // draw arrow head
+          const xR = x3 + 10 * Math.cos(angle - Math.PI / 6);
+          const yR = y3 + 10 * Math.sin(angle - Math.PI / 6);
+          context.lineTo(xR, yR);
+          context.moveTo(x3, y3);
+          const xL = x3 + 10 * Math.cos(angle + Math.PI / 6);
+          const yL = y3 + 10 * Math.sin(angle + Math.PI / 6);
+          context.lineTo(xL, yL);
+        }
+        context.stroke();
+      }
+
+      // var concreteContainer = document.getElementById('concreteContainer');
+
+      // create viewport
+      var viewport = new Concrete.Viewport({
+        width: 1000,
+        height: 1000,
+        container: container
+      });
+
+      // create layers
+      var layer1 = new Concrete.Layer();
+      var layer2 = new Concrete.Layer();
+      var layer3 = new Concrete.Layer();
+      var layer4 = new Concrete.Layer();
+      var arrowLayer = new Concrete.Layer();
+
+      // add layers
+      viewport.add(layer1).add(layer2).add(layer3).add(layer4).add(arrowLayer);
+
+      /*
+      fnObject fields:
+        parent: index # in frames array of frame that the function belongs to
+        offset: for determining position relative to other fnObjects. Default: 0
+        key: unique identifier for use with hit detection
+        params: String of parameters that function takes in
+        body: String containing function body
+      */
+
+      var fnObjects = [
+        {
+          hovered: false,
+          selected: false,
+          layer: layer2,
+          color: 'white',
+          parent: 0, // index of frames array
+          offset: 0,
+          key: 100,
+          params: "a",
+          body: "..."
+        },
+        {
+          hovered: false,
+          selected: false,
+          layer: layer2,
+          color: 'white',
+          parent: 0, // index of frames array
+          offset: 0,
+          key: 101,
+          params: "b",
+          body: "..."
+        },
+        {
+          hovered: false,
+          selected: false,
+          layer: layer2,
+          color: 'white',
+          parent: 0, // index of frames array
+          offset: 0,
+          key: 102,
+          params: "c",
+          body: "..."
+        }
+      ];
+
+      /*
+      frame fields:
+        key: unique identifier for use with hit detection
+        params: array of parameters in frame. Fields:
+          type: value (primitive/string), function, list
+          name: name of argument
+          value: primitive/string, or index # in fnObjects/listObjects arrays
+        parent: index # in frames array of parent frame, or null for global env
+      */
+
+      var frames = [
+        // global env
+        {
+          x: viewport.width/2 - 200,
+          y: 100,
+          hovered: false,
+          selected: false,
+          layer: layer4,
+          color: 'white',
+          key: 0,
+          params: [
+            {type: "value",
+            name: "x",
+            value: 1},
+            {type: "function",
+            name: "fn1",
+            value: 0},
+            {type: "function",
+            name: "fn2",
+            value: 1},
+            {type: "value",
+            name: "z",
+            value: 3},
+            {type: "function",
+            name: "fn3",
+            value: 2}
+          ],
+          parent: null,
+          children: [1, 2]
+        },
+        // first level child
+        {
+          x: 0,
+          y: 0,
+          hovered: false,
+          selected: false,
+          layer: layer4,
+          color: 'white',
+          key: 1,
+          callExpression: {
+            arguments: [
+              {type: "literal",
+              value: 10},
+              {type: "literal",
+              value: 20}
+            ],
+            __id: "node_297"
+          },
+          environment: {
+            param1: 10,
+            param2: 20
+          },
+          name: "a",
+          parent: {
+            callExpression: {
+              __id: "node_306"
+            }
+          },
+          params: [
+            {type: "value",
+            name: "y",
+            value: 2},
+            {type: "function",
+            name: "fn1",
+            value: 0},
+            {type: "function",
+            name: "fn2",
+            value: 1},
+          ],
+          parent: 0,
+        },
+        
+        {
+          x: 0,
+          y: 0,
+          hovered: false,
+          selected: false,
+          layer: layer4,
+          color: 'white',
+          key: 1,
+          params: [
+            {type: "value",
+            name: "a",
+            value: 5}
+          ],
+          parent: 0,
+          children: [3]
+        },
+        // second level child
+        {
+          x: 0,
+          y: 0,
+          hovered: false,
+          selected: false,
+          layer: layer4,
+          color: 'white',
+          key: 3,
+          params: [
+            {type: "value",
+            name: "b",
+            value: 6}
+          ],
+          parent: 2,
+        }
+        
+      ];
+
+      var input = [
+        {
+          name: "a",
+          environment: {
+            param1: 10,
+            param2: 20,
+          }
+        },
+        {
+          name: "global",
+          environment: {
+            a: {
+              functionName: "a",
+              body: "..."
+            },
+            x: 1,
+            accumulate: {}
+            // other built-ins
+          }
+        }
+      ];
+  
+      // parse input from interpreter
+      function parseInput(input) {
+        for (i in input) {
+          let frame = input[i];
+          frame.hovered = false;
+          frame.layer = layer4;
+          frame.color = white;
+          const environment = frame.environment;
+          for (param in environment) {
+            if (environment[param] == "functionName") {
+              const fnObject = {
+                hovered: false,
+                selected: false,
+                layer: layer2,
+                color: 'white',
+                parent: 0, // index of frames array
+                offset: 0,
+                key: 102,
+                params: "c",
+                body: "..."
+              };
+            }
+          }
+        }
+        // global frame
+        var global = input[input.length - 1];
+        global.x = viewport.width/2 - 200;
+        global.y = 100;
+      }
+
+      var fnToFrameArrows = [
+        [0, 0],
+        [1, 0],
+        [2, 0]
+      ];
+
+      drawSceneFrames();
+      drawSceneFnObjects();
+      drawSceneFrameFnArrows();
+      drawSceneFnFrameArrows();
+      drawSceneFrameArrows();
+      drawHitFrames();
+      drawHitFnObjects();
+
+      // add concrete container handlers
+      container.addEventListener('mousemove', function(evt) {
+        var boundingRect = container.getBoundingClientRect(),
+            x = evt.clientX - boundingRect.left,
+            y = evt.clientY - boundingRect.top,
+            key = viewport.getIntersection(x, y),
+            fnObject;
+        // unhover all circles
+        fnObjects.forEach(function(fnObject) {
+          fnObject.hovered = false;
+        });
+        
+        if (key >= 0) {
+          fnObject = getFnObjectFromKey(key);
+          fnObject.hovered = true;
+        }
+
+        drawSceneFnObjects();
+      });
+
+      container.addEventListener('click', function(evt) {
+        var boundingRect = container.getBoundingClientRect(),
+            x = evt.clientX - boundingRect.left,
+            y = evt.clientY - boundingRect.top,
+            key = viewport.getIntersection(x, y),
+            fnObject;
+       
+        // unselect all fnObjects
+        fnObjects.forEach(function(fnObject) {
+          fnObject.selected = false;
+        });
+        
+        if (key >= 0) {
+          fnObject = getFnObjectFromKey(key);
+          fnObject.selected = true;
+        }
+
+        drawSceneFnObjects();
+        
+      });
+
+      function getFnObjectFromKey(key) {
+        var len = fnObjects.length,
+            n, fnObject;
+
+        for (n=0; n<len; n++) {
+          fnObject = fnObjects[n];
+          if (fnObject.key === key) {
+            return fnObject;
+          }
+        }
+
+        return null;
+      }
+
+      function drawArrowHead(context, xi, yi, xf, yf) {
+        const gradient = (yf - yi) / (xf - xi);
+          const angle = Math.atan(gradient);
+          if (xf - xi > 0) { // left to right arrow 
+            const xR = xf - 10 * Math.cos(angle - Math.PI / 6);
+            const yR = yf - 10 * Math.sin(angle - Math.PI / 6);
+            context.lineTo(xR, yR);
+            context.moveTo(xf, yf);
+            const xL = xf - 10 * Math.cos(angle + Math.PI / 6);
+            const yL = yf - 10 * Math.sin(angle + Math.PI / 6);
+            context.lineTo(xL, yL);
+          } else { // right to left arrow
+            // draw arrow head
+            const xR = xf + 10 * Math.cos(angle - Math.PI / 6);
+            const yR = yf + 10 * Math.sin(angle - Math.PI / 6);
+            context.lineTo(xR, yR);
+            context.moveTo(xf, yf);
+            const xL = xf + 10 * Math.cos(angle + Math.PI / 6);
+            const yL = yf + 10 * Math.sin(angle + Math.PI / 6);
+            context.lineTo(xL, yL);
+          }
+      }
+
+  /*************************************************************************************************************/
+  /*************************************************************************************************************/
+      
   /**
    *  Converts a list, or a pair, to a tree object. Wrapper function.
    */
@@ -186,7 +988,7 @@
     }
     // shifts left accordingly
     x = parentX - tcon.distanceX - count * tcon.distanceX
-    y = parentY + tcon.distanceY
+    y =      + tcon.distanceY
 
     realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
 
@@ -708,7 +1510,7 @@
    *  For student use. Draws a list by converting it into a tree object, attempts to draw on the canvas,
    *  Then shift it to the left end.
    */
-  function draw(xs) {
+  /*function draw(xs) {
     minLeft = 500
     nodelist = []
     nodeLabel = 0
@@ -749,6 +1551,9 @@
     // update current ID
     currentListVisualizer = layerList.length - 1
     updateListVisualizerButtons()
+  }*/
+  function draw(context) {
+      // WIP
   }
   exports.draw = draw
 
@@ -767,15 +1572,15 @@
 
   function updateListVisualizerButtons() {
     if (currentListVisualizer <= 0) {
-      $('.sa-list-visualizer #previous').attr('disabled', 'disabled')
+      $('.sa-env-visualizer #previous').attr('disabled', 'disabled')
     } else {
-      $('.sa-list-visualizer #previous').removeAttr('disabled')
+      $('.sa-env-visualizer #previous').removeAttr('disabled')
     }
 
     if (currentListVisualizer >= layerList.length - 1) {
-      $('.sa-list-visualizer #next').attr('disabled', 'disabled')
+      $('.sa-env-visualizer #next').attr('disabled', 'disabled')
     } else {
-      $('.sa-list-visualizer #next').removeAttr('disabled')
+      $('.sa-env-visualizer #next').removeAttr('disabled')
     }
   }
 
@@ -788,7 +1593,7 @@
     updateListVisualizerButtons()
   }
 
-  exports.ListVisualizer = {
+  exports.EnvVisualizer = {
     draw: draw,
     clear: clearListVisualizer,
     init: function(parent) {
