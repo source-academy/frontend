@@ -143,19 +143,21 @@ $code-color-error: #ff4444;
       outline: 0;
     }
 
-    .side-content-header-button-alert{
+    .side-content-header-button-alert {
       -webkit-animation: alert 1s infinite;
       -moz-animation: alert 1s infinite;
       -o-animation: alert 1s infinite;
       animation: alert 1s infinite;
     }
 
-    @-webkit-keyframes alert{
-      0%, 50% {
-        background-color: rgba(200,100,50,0.5);
+    @-webkit-keyframes alert {
+      0%,
+      50% {
+        background-color: rgba(200, 100, 50, 0.5);
       }
-      51%, 100% {
-        background-image: rgba(138,155,168,0.3);
+      51%,
+      100% {
+        background-image: rgba(138, 155, 168, 0.3);
       }
     }
   }
@@ -229,12 +231,12 @@ $code-color-error: #ff4444;
      * Color code blocks. style is forced due to deep nesting,
      * and no access to the generated html to place classes.
      */
-.mde-preview .mde-preview-content pre {
-  background-color: $cadet-color-5 !important;
-  code {
-    color: black !important;
-  }
-}
+    .mde-preview .mde-preview-content pre {
+      background-color: $cadet-color-5 !important;
+      code {
+        color: black !important;
+      }
+    }
   }
 
   .resize-editor {
@@ -277,16 +279,16 @@ $code-color-error: #ff4444;
         /* white-space, word-wrap and word-break
          * are specified to allow all output to wrap.
          */
-white-space: pre-wrap;
-word-wrap: break-word;
-word-break: break-word;
-/**
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-word;
+        /**
  * Use same fonts as ace-editor for
  * output. Taken from react-ace
  * sourcecode, font size modified.
  */
-font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
-monospace;
+        font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+          monospace;
       }
 
       .codeOutput {

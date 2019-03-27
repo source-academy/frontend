@@ -36,8 +36,8 @@ export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComp
 export interface IStateProps {
   activeTab: number
   editorValue: string
-  breakpoints: string[];
-  highlightedLines: number[][];
+  breakpoints: string[]
+  highlightedLines: number[][]
   editorWidth: string
   isRunning: boolean
   isDebugging: boolean
@@ -58,7 +58,7 @@ export interface IDispatchProps {
   handleEditorEval: () => void
   handleEditorValueChange: (val: string) => void
   handleEditorWidthChange: (widthChange: number) => void
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void
   handleGenerateLz: () => void
   handleInterruptEval: () => void
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void

@@ -154,9 +154,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           editorWidth:
-          (
-            parseFloat(state[location].editorWidth.slice(0, -1)) + action.payload.widthChange
-          ).toString() + '%'
+            (
+              parseFloat(state[location].editorWidth.slice(0, -1)) + action.payload.widthChange
+            ).toString() + '%'
         }
       }
     case CHANGE_SIDE_CONTENT_HEIGHT:
@@ -219,10 +219,10 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         }
       }
-      /**
-       * This action is only meant for Playground usage, where
-       * the external library is displayed.
-       */
+    /**
+     * This action is only meant for Playground usage, where
+     * the external library is displayed.
+     */
     case CHANGE_PLAYGROUND_EXTERNAL:
       return {
         ...state,
@@ -329,11 +329,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       }
-      /**
-       * Called to signal the end of an interruption,
-       * i.e called after the interpreter is told to stop interruption,
-       * to cause UI changes.
-       */
+    /**
+     * Called to signal the end of an interruption,
+     * i.e called after the interpreter is told to stop interruption,
+     * to cause UI changes.
+     */
     case END_INTERRUPT_EXECUTION:
       /**
        * Set the isRunning property of the
@@ -380,11 +380,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       }
-      /**
-       * Resets the workspace to default settings,
-       * including the js-slang Context. Apply
-       * any specified settings (workspaceOptions)
-       */
+    /**
+     * Resets the workspace to default settings,
+     * including the js-slang Context. Apply
+     * any specified settings (workspaceOptions)
+     */
     case RESET_WORKSPACE:
       return {
         ...state,
@@ -427,7 +427,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           highlightedLines: action.payload.highlightedLines
         }
-      };
+      }
     case UPDATE_REPL_VALUE:
       return {
         ...state,

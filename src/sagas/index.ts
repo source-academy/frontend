@@ -86,7 +86,7 @@ function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context
     )
-    yield put(actions.highlightEditorLine([], location));
+    yield put(actions.highlightEditorLine([], location))
     yield* evalRestofCode(code, context, location)
   })
 
@@ -95,20 +95,22 @@ function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context
     )
+    inspectorUpdate(undefined)
+    highlightLine(0)
     yield put(actions.clearReplOutput(location))
     context.runtime.break = false
     lastDebuggerResult = undefined
   })
 
   yield takeEvery(actionTypes.HIGHLIGHT_LINE, function*(action) {
-    const location = (action as actionTypes.IAction).payload.highlightedLines;
-    highlightLine(location);
-    yield;
+    const location = (action as actionTypes.IAction).payload.highlightedLines
+    highlightLine(location)
+    yield
   })
 
   yield takeEvery(actionTypes.UPDATE_EDITOR_BREAKPOINTS, function*(action) {
-    setBreakpointAtLine((action as actionTypes.IAction).payload.breakpoints);
-    yield;
+    setBreakpointAtLine((action as actionTypes.IAction).payload.breakpoints)
+    yield
   })
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
@@ -162,14 +164,14 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => state.workspaces.playground.playgroundExternal
     )
     const symbols = externalLibraries.get(newExternalLibraryName)!
-      const library = {
-        chapter,
-        external: {
-          name: newExternalLibraryName,
-          symbols
-        },
-        globals
-      }
+    const library = {
+      chapter,
+      external: {
+        name: newExternalLibraryName,
+        symbols
+      },
+      globals
+    }
     if (newExternalLibraryName !== oldExternalLibraryName) {
       yield put(actions.changePlaygroundExternal(newExternalLibraryName))
       yield put(actions.beginClearContext(library, location))
@@ -281,12 +283,12 @@ function* playgroundSaga(): SagaIterator {
     const external = yield select((state: IState) => state.workspaces.playground.playgroundExternal)
     const newQueryString =
       code === '' || code === defaultEditorValue
-      ? undefined
-      : qs.stringify({
-        prgrm: compressToEncodedURIComponent(code),
-        chap: chapter,
-        ext: external
-      })
+        ? undefined
+        : qs.stringify({
+            prgrm: compressToEncodedURIComponent(code),
+            chap: chapter,
+            ext: external
+          })
     yield put(actions.changeQueryString(newQueryString))
   })
 }
@@ -314,20 +316,20 @@ function* evalCode(
         inspectorUpdate(result)
       }
       yield put(actions.evalInterpreterSuccess(result.value, location))
-      yield put(actions.highlightEditorLine([], location));
+      yield put(actions.highlightEditorLine([], location))
     } else if (result.status === 'suspended') {
       if (actionType === actionTypes.EVAL_EDITOR) {
         lastDebuggerResult = result
       }
       yield put(actions.endDebuggerPause(location))
-      const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-      const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-      yield put(actions.highlightEditorLine([start, end], location));
-        yield put(actions.evalInterpreterSuccess('Debugging enabled: Breakpoint hit!', location))
-        inspectorUpdate(result)
-      } else {
-        yield put(actions.evalInterpreterError(context.errors, location))
-      }
+      const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1
+      const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1
+      yield put(actions.highlightEditorLine([start, end], location))
+      yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location))
+      inspectorUpdate(result)
+    } else {
+      yield put(actions.evalInterpreterError(context.errors, location))
+    }
   } else if (interrupted) {
     interrupt(context)
     /* Redundancy, added ensure that interruption results in an error. */
@@ -338,11 +340,11 @@ function* evalCode(
   } else if (paused) {
     lastDebuggerResult = manualToggleDebugger(context)
     yield put(actions.endDebuggerPause(location))
-    const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-    const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-    yield put(actions.highlightEditorLine([start, end], location));
-      yield call(showWarningMessage, 'Debugger [312]', 750)
-    }
+    const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1
+    const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1
+    yield put(actions.highlightEditorLine([start, end], location))
+    yield call(showWarningMessage, 'Debugger [312]', 750)
+  }
 }
 
 function* evalRestofCode(code: string, context: Context, location: WorkspaceLocation) {
@@ -359,14 +361,14 @@ function* evalRestofCode(code: string, context: Context, location: WorkspaceLoca
   if (result) {
     if (result.status === 'finished') {
       yield put(actions.evalInterpreterSuccess(result.value, location))
-      yield put(actions.highlightEditorLine([], location));
+      yield put(actions.highlightEditorLine([], location))
       lastDebuggerResult = undefined
     } else if (result.status === 'suspended') {
       lastDebuggerResult = result
       yield put(actions.endDebuggerPause(location))
-      const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-      const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-      yield put(actions.highlightEditorLine([start, end], location));
+      const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1
+      const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1
+      yield put(actions.highlightEditorLine([start, end], location))
       yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location))
       inspectorUpdate(result)
     } else {
@@ -382,9 +384,9 @@ function* evalRestofCode(code: string, context: Context, location: WorkspaceLoca
   } else if (paused) {
     lastDebuggerResult = manualToggleDebugger(context)
     yield put(actions.endDebuggerPause(location))
-      const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-      const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-      yield put(actions.highlightEditorLine([start, end], location));
+    const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1
+    const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1
+    yield put(actions.highlightEditorLine([start, end], location))
     yield call(showWarningMessage, 'Debugging Interrupted. [347]', 750)
   }
 }

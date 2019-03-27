@@ -111,18 +111,23 @@
 
   function updateContext(context) {
     function dumpTable(env) {
-      var res = ''
+      var res = '';
       for (var k in env) {
         if (builtins.indexOf(''+k) < 0) {
-          res += '<tr><td>' + k + '</td>' + '<td><code>' + env[k].toString() + '</code></td></tr>'
+          res += '<tr><td>' + k + '</td>' + '<td><code>' + env[k].toString() + '</code></td></tr>';
         }
       }
-      return res.length > 0 ? res : undefined
+      return res.length > 0 ? res : undefined;
     }
     try {
-      var frames = context.context.context.runtime.frames
-      container.innerHTML = ""
+      const icon = document.getElementById("Inspector-icon");
+      container.innerHTML = "";
+      if (!context) {
+        icon.classList.remove("side-content-header-button-alert");
+        return;
+      }
 
+      var frames = context.context.runtime.frames;
       for (var i = 0; i < frames.length; ++i){
         var envtoString = dumpTable(frames[i].environment)
         if (envtoString == undefined){
@@ -135,7 +140,7 @@
         tbody.innerHTML = "</br><caption><strong>Frame: " + frames[i].name + "</strong></caption>" + envtoString
         newtable.appendChild(tbody)
         container.appendChild(newtable)
-        document.getElementById("Inspector-icon").classList.toggle("side-content-header-button-alert");
+        icon.classList.toggle("side-content-header-button-alert");
       }
     } catch (e) {
       container.innerHTML = e
@@ -154,17 +159,13 @@
   function highlightLine(number) {
     if (number == undefined) return;
     var gutterCells = document.getElementsByClassName("ace_gutter-cell");
-    if (gutterCells != undefined) {
-      for (cell of gutterCells) {
-        if (cell.innerText == number) cell.classList.add("ace_gutter-cell_hi");
-      }
-    }
-
-    // We are simply assuming they are sorted. This may change.
-    // Currently there is no better way to do this easily because unlike
-    // the guttercells, lines have no indices we can use.
     var aceLines = document.getElementsByClassName("ace_line");
-    if (aceLines != undefined) {
+
+    // We are simply assuming they are sorted.
+    // guttercells has inneHTML we could use. But as long as this still works,
+    // we can keep doing this. Highly doubt this property will ever change.
+    if (gutterCells != undefined && aceLines != undefined){
+      gutterCells[number - 1].classList.add("ace_gutter-cell_hi");
       aceLines[number - 1].classList.add("ace_line_hi");
     }
   }

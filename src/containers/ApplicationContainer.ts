@@ -47,7 +47,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
           workspaceLocation
         ),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) => setEditorBreakpoint(breakpoints, workspaceLocation),
+      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
+        setEditorBreakpoint(breakpoints, workspaceLocation),
       handleEnsureLibrariesLoaded: ensureLibrariesLoaded,
       handleLogOut: logOut,
       handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) =>

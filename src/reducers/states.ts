@@ -60,8 +60,8 @@ export interface IWorkspaceState {
   readonly context: Context
   readonly editorValue: string | null
   readonly editorWidth: string
-  readonly breakpoints: string[];
-  readonly highlightedLines: number[][];
+  readonly breakpoints: string[]
+  readonly highlightedLines: number[][]
   readonly isRunning: boolean
   readonly isDebugging: boolean
   readonly enableDebugging: boolean

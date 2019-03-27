@@ -31,7 +31,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.playground.sideContentActiveTab,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
-  breakpoints:  state.workspaces.playground.breakpoints,
+  breakpoints: state.workspaces.playground.breakpoints,
   highlightedLines: state.workspaces.playground.highlightedLines,
   isRunning: state.workspaces.playground.isRunning,
   isDebugging: state.workspaces.playground.isDebugging,
@@ -56,7 +56,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) => setEditorBreakpoint(breakpoints, location),
+      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
+        setEditorBreakpoint(breakpoints, location),
       handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>

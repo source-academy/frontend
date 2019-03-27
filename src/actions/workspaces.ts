@@ -168,7 +168,7 @@ export const setEditorBreakpoint: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.UPDATE_EDITOR_BREAKPOINTS,
   payload: { breakpoints, workspaceLocation }
-});
+})
 
 export const highlightEditorLine: ActionCreator<actionTypes.IAction> = (
   highlightedLines: number[],
@@ -176,7 +176,7 @@ export const highlightEditorLine: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.HIGHLIGHT_LINE,
   payload: { highlightedLines, workspaceLocation }
-});
+})
 
 export const updateReplValue: ActionCreator<actionTypes.IAction> = (
   newReplValue: string,
