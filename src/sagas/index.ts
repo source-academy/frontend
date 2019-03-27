@@ -15,7 +15,7 @@ import { externalLibraries } from '../reducers/externalLibraries'
 import { defaultEditorValue, IState, IWorkspaceState } from '../reducers/states'
 import { IVLE_KEY, USE_BACKEND } from '../utils/constants'
 import { showSuccessMessage, showWarningMessage } from '../utils/notification'
-import { highlightLine, inspectorUpdate } from '../utils/slangHelper'
+import { highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper'
 import backendSaga from './backend'
 
 function* mainSaga() {
@@ -314,6 +314,7 @@ function* evalCode(
     if (result.status === 'finished') {
       if (!context.runtime.debuggerOn) {
         inspectorUpdate(result)
+        visualiseEnv(result)
       }
       yield put(actions.evalInterpreterSuccess(result.value, location))
       yield put(actions.highlightEditorLine([], location))
@@ -327,6 +328,7 @@ function* evalCode(
       yield put(actions.highlightEditorLine([start, end], location))
       yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location))
       inspectorUpdate(result)
+      visualiseEnv(result)
     } else {
       yield put(actions.evalInterpreterError(context.errors, location))
     }
@@ -371,6 +373,7 @@ function* evalRestofCode(code: string, context: Context, location: WorkspaceLoca
       yield put(actions.highlightEditorLine([start, end], location))
       yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location))
       inspectorUpdate(result)
+      visualiseEnv(result)
     } else {
       yield put(actions.evalInterpreterError(context.errors, location))
     }
