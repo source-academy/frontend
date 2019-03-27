@@ -1,8 +1,7 @@
 /* tslint:disable: ban-types*/
 import createSlangContext from 'js-slang/dist/createContext';
 import { stringify } from 'js-slang/dist/interop';
-import { Value } from 'js-slang/dist/types';
-
+import { Context, Value } from 'js-slang/dist/types';
 import { handleConsoleLog } from '../actions';
 
 /**
@@ -83,6 +82,30 @@ function visualiseList(list: any) {
   }
 }
 
+export function visualiseEnv(context: Context) {
+  if ((window as any).EnvVisualizer) {
+    (window as any).EnvVisualizer.draw({ context });
+  } else {
+    throw new Error('Env Visualizer is not enabled');
+  }
+}
+
+export function highlightLine(line: number) {
+  if ((window as any).Inspector) {
+    (window as any).Inspector.highlightClean();
+    (window as any).Inspector.highlightLine(line[0]);
+  } else {
+    throw new Error('Inspector not loaded');
+  }
+}
+
+export function inspectorUpdate(context: Context | undefined) {
+  if ((window as any).Inspector) {
+    (window as any).Inspector.updateContext(context);
+  } else {
+    throw new Error('Inspector not loaded');
+  }
+}
 /**
  * A wrapper around js-slang's createContext. This
  * provides the original function with the required

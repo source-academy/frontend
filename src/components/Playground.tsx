@@ -9,6 +9,7 @@ import { ExternalLibraryName } from './assessment/assessmentShape';
 import Markdown from './commons/Markdown';
 import Workspace, { WorkspaceProps } from './workspace';
 import { SideContentTab } from './workspace/side-content';
+import Inspector from './workspace/side-content/Inspector';
 import ListVisualizer from './workspace/side-content/ListVisualizer';
 
 const CHAP = '\xa7';
@@ -36,8 +37,12 @@ export interface IStateProps {
   activeTab: number;
   editorValue: string;
   editorWidth: string;
+  breakpoints: string[];
+  highlightedLines: number[][];
   isEditorAutorun: boolean;
   isRunning: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
   output: InterpreterOutput[];
   queryString?: string;
   replValue: string;
@@ -54,6 +59,7 @@ export interface IDispatchProps {
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGenerateLz: () => void;
   handleInterruptEval: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
@@ -62,6 +68,9 @@ export interface IDispatchProps {
   handleReplValueChange: (newValue: string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
 }
 
 type PlaygroundState = {
@@ -93,12 +102,17 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
         handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
+        handleDebuggerPause: this.props.handleDebuggerPause,
+        handleDebuggerResume: this.props.handleDebuggerResume,
+        handleDebuggerReset: this.props.handleDebuggerReset,
         hasChapterSelect: true,
         hasEditorAutorunButton: true,
         hasSaveButton: false,
         hasShareButton: true,
         isEditorAutorun: this.props.isEditorAutorun,
         isRunning: this.props.isRunning,
+        isDebugging: this.props.isDebugging,
+        enableDebugging: this.props.enableDebugging,
         queryString: this.props.queryString,
         questionProgress: null,
         sourceChapter: this.props.sourceChapter
@@ -107,7 +121,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         editorValue: this.props.editorValue,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
-        isEditorAutorun: this.props.isEditorAutorun
+        isEditorAutorun: this.props.isEditorAutorun,
+        breakpoints: this.props.breakpoints,
+        highlightedLines: this.props.highlightedLines,
+        handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
       },
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
@@ -124,7 +141,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [playgroundIntroductionTab, listVisualizerTab]
+        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab ]
       }
     };
     return (
@@ -153,6 +170,12 @@ const listVisualizerTab: SideContentTab = {
   label: 'List Visualizer',
   icon: IconNames.EYE_OPEN,
   body: <ListVisualizer />
+};
+
+const inspectorTab: SideContentTab = {
+  label: 'Inspector',
+  icon: IconNames.SEARCH,
+  body: <Inspector />
 };
 
 export default Playground;
