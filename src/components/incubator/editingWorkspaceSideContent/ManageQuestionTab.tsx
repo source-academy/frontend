@@ -39,10 +39,11 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
             <br />
             <Button className="mcq-option col-xs-12" minimal={true}>
               <Markdown
-                content={q.content.length > 200 ? q.content.substring(0, 200) + '...' : q.content}
+                content={q.content.length > 200 ? q.content.substring(0, 300) + '...' : q.content}
               />
             </Button>
             {this.manageQuestionTab(index)}
+            <br />
             <br />
           </div>
         ))}
@@ -54,16 +55,26 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     return (
       <div>
         {controlButton(
-          `Clone Question ${index + 1}`,
+          `Clone`,
           IconNames.DOCUMENT,
           this.confirmSave(
             this.makeQuestion(() => deepCopy(this.props.assessment.questions[index]), index)
           )
         )}
+        {controlButton(`Delete`, IconNames.REMOVE, this.confirmSave(this.deleteQuestion(index)))}
         {controlButton(
-          `Delete Question ${index + 1}`,
-          IconNames.REMOVE,
-          this.confirmSave(this.deleteQuestion(index))
+          `Shift Up`,
+          IconNames.CARET_UP,
+          this.confirmSave(this.shiftQuestion(-1, index)),
+          {},
+          index === 0
+        )}
+        {controlButton(
+          `Shift Down`,
+          IconNames.CARET_DOWN,
+          this.confirmSave(this.shiftQuestion(1, index)),
+          {},
+          index >= this.props.assessment.questions.length - 1
         )}
         <br />
         {controlButton(
@@ -76,21 +87,6 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
           IconNames.CONFIRM,
           this.confirmSave(this.makeQuestion(mcqTemplate, index))
         )}
-        <br />
-        {index > 0
-          ? controlButton(
-              `Shift Question ${index + 1} Up`,
-              IconNames.CARET_UP,
-              this.confirmSave(this.shiftQuestion(-1, index))
-            )
-          : undefined}
-        {index < this.props.assessment.questions.length - 1
-          ? controlButton(
-              `Shift Question ${index + 1} Down`,
-              IconNames.CARET_DOWN,
-              this.confirmSave(this.shiftQuestion(1, index))
-            )
-          : undefined}
       </div>
     );
   };
