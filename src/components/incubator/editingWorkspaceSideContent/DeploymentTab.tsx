@@ -264,6 +264,10 @@ const removeSpaces = (str: string) => {
   return str.replace(/\s+/g, '');
 };
 
+const altEval = (str: string): any => {
+  return Function('"use strict";return (' + str + ')')();
+};
+
 function styliseChapter(chap: number) {
   return `Source \xa7${chap}`;
 }
@@ -288,10 +292,6 @@ const chapterSelect = (
     />
   </ChapterSelectComponent>
 );
-
-const altEval = (str: string): any => {
-  return Function('"use strict";return (' + str + ')')();
-};
 
 const ChapterSelectComponent = Select.ofType<IChapter>();
 

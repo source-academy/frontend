@@ -10,6 +10,7 @@ export interface IAssessmentOverview {
   category: AssessmentCategory;
   closeAt: string;
   coverImage: string;
+  fileName?: string;
   grade: number;
   id: number;
   maxGrade: number;

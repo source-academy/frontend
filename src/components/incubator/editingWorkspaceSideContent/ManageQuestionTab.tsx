@@ -1,4 +1,4 @@
-import { ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core';
+import { Button, ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -33,40 +33,59 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     return (
       <div>
         {this.confirmSaveOverlay()}
-        {this.manageQuestionTab()}
+        {this.props.assessment.questions.map((q, index) => (
+          <div key={index}>
+            Question {index + 1}
+            <br />
+            <Button className="mcq-option col-xs-12" minimal={true}>
+              <Markdown
+                content={q.content.length > 200 ? q.content.substring(0, 300) + '...' : q.content}
+              />
+            </Button>
+            {this.manageQuestionTab(index)}
+            <br />
+            <br />
+          </div>
+        ))}
       </div>
     );
   }
 
-  private manageQuestionTab = () => {
-    const index = this.props.questionId;
+  private manageQuestionTab = (index: number) => {
     return (
       <div>
         {controlButton(
-          'Clone Current Question',
+          `Clone`,
           IconNames.DOCUMENT,
           this.confirmSave(
-            this.makeQuestion(() =>
-              deepCopy(this.props.assessment.questions[this.props.questionId])
-            )
+            this.makeQuestion(() => deepCopy(this.props.assessment.questions[index]), index)
           )
+        )}
+        {controlButton(`Delete`, IconNames.REMOVE, this.confirmSave(this.deleteQuestion(index)))}
+        {controlButton(
+          `Shift Up`,
+          IconNames.CARET_UP,
+          this.confirmSave(this.shiftQuestion(-1, index)),
+          {},
+          index === 0
+        )}
+        {controlButton(
+          `Shift Down`,
+          IconNames.CARET_DOWN,
+          this.confirmSave(this.shiftQuestion(1, index)),
+          {},
+          index >= this.props.assessment.questions.length - 1
         )}
         <br />
         {controlButton(
           'Insert Programming Question',
           IconNames.FONT,
-          this.confirmSave(this.makeQuestion(programmingTemplate))
+          this.confirmSave(this.makeQuestion(programmingTemplate, index))
         )}
         {controlButton(
           'Insert MCQ Question',
           IconNames.CONFIRM,
-          this.confirmSave(this.makeQuestion(mcqTemplate))
-        )}
-        <br />
-        {controlButton(
-          'Delete Current Question',
-          IconNames.REMOVE,
-          this.confirmSave(this.deleteQuestion)
+          this.confirmSave(this.makeQuestion(mcqTemplate, index))
         )}
         <br />
         {index > 0
@@ -87,9 +106,8 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     );
   };
 
-  private shiftQuestion = (dir: number) => () => {
+  private shiftQuestion = (dir: number, index: number) => () => {
     const assessment = this.props.assessment;
-    const index = this.props.questionId;
     const newIndex = index + dir;
     if (newIndex >= 0 && newIndex < assessment.questions.length) {
       const question = assessment.questions[index];
@@ -102,9 +120,9 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     }
   };
 
-  private makeQuestion = (template: () => any) => () => {
+  private makeQuestion = (template: () => any, index: number) => () => {
     const assessment = this.props.assessment;
-    const index = this.props.questionId + 1;
+    index = index + 1;
     const questions = assessment.questions;
     questions.splice(index, 0, template());
     assessment.questions = questions;
@@ -112,10 +130,9 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     history.push('/incubator/-1/' + index.toString());
   };
 
-  private deleteQuestion = () => {
+  private deleteQuestion = (index: number) => () => {
     const assessment = this.props.assessment;
     let questions = assessment.questions;
-    const index = this.props.questionId;
     if (questions.length > 1) {
       questions = questions.slice(0, index).concat(questions.slice(index + 1));
     }

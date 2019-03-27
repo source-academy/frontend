@@ -30,11 +30,7 @@ const capitalizeFirstLetter = (str: string) => {
 export const retrieveLocalAssessment = (): IAssessment | null => {
   const assessment = localStorage.getItem('MissionEditingAssessmentSA');
   if (assessment) {
-    try {
-      return JSON.parse(assessment);
-    } catch (err) {
-      return null;
-    }
+    return JSON.parse(assessment);
   } else {
     return null;
   }
@@ -43,11 +39,7 @@ export const retrieveLocalAssessment = (): IAssessment | null => {
 export const retrieveLocalAssessmentOverview = (): IAssessmentOverview | null => {
   const assessment = localStorage.getItem('MissionEditingOverviewSA');
   if (assessment) {
-    try {
-      return JSON.parse(assessment);
-    } catch (err) {
-      return null;
-    }
+    return JSON.parse(assessment);
   } else {
     return null;
   }
@@ -84,7 +76,7 @@ const makeAssessmentOverview = (
     maxXp: maxXpVal,
     openAt: rawOverview.startdate,
     title: rawOverview.title,
-    reading: task.READING !== null ? task.READING[0] : '',
+    reading: task.READING ? task.READING[0] : '',
     shortSummary: task.WEBSUMMARY ? task.WEBSUMMARY[0] : '',
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
@@ -225,7 +217,7 @@ export const exportXml = () => {
   if (assessmentStr && overviewStr) {
     const assessment: IAssessment = JSON.parse(assessmentStr);
     const overview: IAssessmentOverview = JSON.parse(overviewStr);
-    const title = assessment.title;
+    const filename = overview.fileName || overview.title;
     const builder = new Builder();
     const xmlTask: IXmlParseStrTask = assessmentToXml(assessment, overview);
     const xml = {
@@ -238,7 +230,7 @@ export const exportXml = () => {
     };
     let xmlStr = builder.buildObject(xml);
     xmlStr = xmlStr.replace(/(&#xD;)+/g, '');
-    download(title + '.xml', xmlStr);
+    download(filename + '.xml', xmlStr);
   }
 };
 
