@@ -87,6 +87,21 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
           IconNames.CONFIRM,
           this.confirmSave(this.makeQuestion(mcqTemplate, index))
         )}
+        <br />
+        {index > 0
+          ? controlButton(
+              'Shift Question Left',
+              IconNames.CARET_LEFT,
+              this.confirmSave(this.shiftQuestion(-1))
+            )
+          : undefined}
+        {index < this.props.assessment.questions.length - 1
+          ? controlButton(
+              'Shift Question Right',
+              IconNames.CARET_RIGHT,
+              this.confirmSave(this.shiftQuestion(1))
+            )
+          : undefined}
       </div>
     );
   };
