@@ -1,11 +1,14 @@
 // tslint:disable:no-console
+import * as ace from 'brace';
 import * as React from 'react';
 import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
+import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
+import 'brace/snippets/javascript';
 import 'brace/theme/cobalt';
 
 /**
@@ -22,10 +25,6 @@ export interface IEditorProps {
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
-}
-
-export interface IJSONData {
-  id: number;
 }
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
@@ -52,7 +51,80 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   public componentDidMount() {
     // this editor is the same as the one in line 5 of index.js of sharedb-ace-example
     const editor = this.ace.current.editor;
-    // const session = editor.getSession();
+    const session = editor.getSession();
+    const sourceCompleter = {
+      getCompletions(editors, sessions, pos, prefix, callback) {
+        const wordList1 = ["function", "return", "const", "let", "display",
+                "null", "while", "for", "break", "continue", "if", "else",
+                "true", "false", "array_length"];
+        const completerList1 = wordList1.map(word => {
+          return {
+            caption: word,
+            value: word,
+            meta: "Source"
+          };
+        });
+        const wordList2 = ["show", "heart_bb", "sail_bb", "blank_bb", "black_bb"];
+        const completerList2 = wordList2.map(word => {
+          return {
+            caption: word,
+            value: word,
+            meta: "Rune"
+          };
+        });
+        const wordList3 = ["pair", "is_pair", "head", "tail", "is_empty_list", "is_list",
+                "list", "draw_list", "equal", "length", "map", "build_list",
+                "for_each", "list_to_string", "reverse", "append", "member",
+                "remove", "remove_all", "filter", "enum_list", "list_ref",
+                "accumulate", "set_head", "set_tail"];
+        const completerList3 = wordList3.map(word => {
+          return {
+            caption: word,
+            value: word,
+            meta: "List Support"
+          };
+        });
+        const wordList4 = ["stream_tail", "is_stream", "stream", "list_to_stream",
+                "stream_to_list", "stream_length", "stream_map", "build_stream",
+                "stream_for_each", "stream_reverse", "stream_append", "stream_member",
+                "stream_remove", "stream_remove_all", "stream_filter", "enum_stream",
+                "integers_from", "eval_stream", "stream_ref"];
+        const completerList4 = wordList4.map(word => {
+          return {
+            caption: word,
+            value: word,
+            meta: "Stream Support"
+          };
+        });
+        const completerList = completerList1.concat(completerList2)
+                .concat(completerList3).concat(completerList4);
+        callback(null, completerList);
+      }
+    };
+    const langTools = ace.acequire("ace/ext/language_tools");
+    // Alternative:
+    langTools.setCompleters([langTools.textCompleter, sourceCompleter]);
+    // langTools.addCompleter([sourceCompleter]);
+    // editor.completers = [sourceCompleter];
+    editor.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    });
+    session.on('changeAnnotation', () => {
+      const annotations = session.getAnnotations();
+      let count = 0;
+      for (const anno of annotations) {
+        if (anno.type === "info") {
+          anno.type = "error";
+          anno.className = "ace_error";
+          count++;
+        }
+      }
+      if (count !== 0) {
+        session.setAnnotations(annotations);
+      }
+    });
     if (this.props.editorSessionId !== '') {
       console.log('Component mounted with id = ' + this.props.editorSessionId);
       const ShareAce = new sharedbAce(this.props.editorSessionId, {
