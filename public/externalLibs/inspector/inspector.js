@@ -165,8 +165,8 @@
     // guttercells has inneHTML we could use. But as long as this still works,
     // we can keep doing this. Highly doubt this property will ever change.
     if (gutterCells != undefined && aceLines != undefined){
-      gutterCells[number - 1].classList.add("ace_gutter-cell_hi");
-      aceLines[number - 1].classList.add("ace_line_hi");
+      gutterCells[number].classList.add("ace_gutter-cell_hi");
+      aceLines[number].classList.add("ace_line_hi");
     }
   }
 
