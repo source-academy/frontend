@@ -93,9 +93,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       controlBarProps: {
         externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
-          this.props.handleChapterSelect(chapter),
+        this.props.handleChapterSelect(chapter),
         handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
-          this.props.handleExternalSelect(name),
+        this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
         handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,
@@ -146,11 +146,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     };
     return (
       <HotKeys
-        className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
-        keyMap={this.keyMap}
-        handlers={this.handlers}
+      className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
+      keyMap={this.keyMap}
+      handlers={this.handlers}
       >
-        <Workspace {...workspaceProps} />
+      <Workspace {...workspaceProps} />
       </HotKeys>
     );
   }

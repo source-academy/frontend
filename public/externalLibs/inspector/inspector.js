@@ -103,6 +103,10 @@
     'math_SQRT2'
   ]
 
+  filter = {
+    "Symbol(Used to implement hoisting)": " "
+  }
+
   setInterval(()=>{
     if(document.getElementById("inspector-container") != null){
       document.getElementById("Inspector-icon").classList.remove("side-content-header-button-alert");
@@ -114,7 +118,9 @@
       var res = '';
       for (var k in env) {
         if (builtins.indexOf(''+k) < 0) {
-          res += '<tr><td>' + k + '</td>' + '<td><code>' + env[k].toString() + '</code></td></tr>';
+          var str = env[k].toString();
+          str = filter[str] ? filter[str] : str;
+          res += '<tr><td>' + k + '</td>' + '<td><code>' + str + '</code></td></tr>';
         }
       }
       return res.length > 0 ? res : undefined;
@@ -127,9 +133,9 @@
         return;
       }
 
-      var frames = context.context.runtime.frames;
+      var frames = context.context.runtime.environments;
       for (var i = 0; i < frames.length; ++i){
-        var envtoString = dumpTable(frames[i].environment)
+        var envtoString = dumpTable(frames[i].head)
         if (envtoString == undefined){
           console.log("[Inspector] Skipped empty frame: " + frames[i].name)
           continue
