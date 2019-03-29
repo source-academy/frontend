@@ -1,17 +1,17 @@
-import * as React from 'react'
+import * as React from 'react';
 
-import { mount } from 'enzyme'
+import { mount } from 'enzyme';
 
-import Announcements, { IAnnouncementsProps } from '../Announcements'
+import Announcements, { IAnnouncementsProps } from '../Announcements';
 
 const mockUndefinedAnnouncements: IAnnouncementsProps = {
   handleAnnouncementsFetch: () => {}
-}
+};
 
 const mockEmptyAnnouncements: IAnnouncementsProps = {
   announcements: [],
   handleAnnouncementsFetch: () => {}
-}
+};
 
 const mockPresentAnnouncements: IAnnouncementsProps = {
   announcements: [
@@ -31,22 +31,22 @@ const mockPresentAnnouncements: IAnnouncementsProps = {
     }
   ],
   handleAnnouncementsFetch: () => {}
-}
+};
 
 test('Announcements page "loading" content renders correctly', () => {
-  const app = <Announcements {...mockUndefinedAnnouncements} />
-  const tree = mount(app)
-  expect(tree.debug()).toMatchSnapshot()
-})
+  const app = <Announcements {...mockUndefinedAnnouncements} />;
+  const tree = mount(app);
+  expect(tree.debug()).toMatchSnapshot();
+});
 
 test('Announcements page with 0 announcements renders correctly', () => {
-  const app = <Announcements {...mockEmptyAnnouncements} />
-  const tree = mount(app)
-  expect(tree.debug()).toMatchSnapshot()
-})
+  const app = <Announcements {...mockEmptyAnnouncements} />;
+  const tree = mount(app);
+  expect(tree.debug()).toMatchSnapshot();
+});
 
 test('Announcements page with multiple loaded announcements renders correctly', () => {
-  const app = <Announcements {...mockPresentAnnouncements} />
-  const tree = mount(app)
-  expect(tree.debug()).toMatchSnapshot()
-})
+  const app = <Announcements {...mockPresentAnnouncements} />;
+  const tree = mount(app);
+  expect(tree.debug()).toMatchSnapshot();
+});

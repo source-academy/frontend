@@ -1,23 +1,23 @@
-import { Text } from '@blueprintjs/core'
-import * as React from 'react'
-import { getPrettyDate } from '../../utils/dateHelpers'
-import Markdown from '../commons/Markdown'
+import { Text } from '@blueprintjs/core';
+import * as React from 'react';
+import { getPrettyDate } from '../../utils/dateHelpers';
+import Markdown from '../commons/Markdown';
 
-type GradingResultProps = OwnProps
+type GradingResultProps = OwnProps;
 
 export type OwnProps = {
-  comment: string | null
-  graderName: string
-  gradedAt: string
-  xp: number
-  grade: number
-  maxGrade: number
-  maxXp: number
-}
+  comment: string | null;
+  graderName: string;
+  gradedAt: string;
+  xp: number;
+  grade: number;
+  maxGrade: number;
+  maxXp: number;
+};
 
 class GradingResult extends React.Component<GradingResultProps, {}> {
   constructor(props: GradingResultProps) {
-    super(props)
+    super(props);
   }
 
   public render() {
@@ -67,8 +67,8 @@ class GradingResult extends React.Component<GradingResultProps, {}> {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default GradingResult
+export default GradingResult;
