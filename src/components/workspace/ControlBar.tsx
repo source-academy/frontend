@@ -147,7 +147,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
         ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
         : undefined;
     const editorPersistSwitch =
-      this.props.handleToggleEditorPersist !== null
+      this.props.handleToggleEditorPersist !== undefined
         ? controlButton(
             'Editor Persistence ' + (this.props.isEditorPersist ? 'Enabled' : 'Disabled'),
             this.props.isEditorPersist ? IconNames.TICK : IconNames.CROSS,
@@ -205,7 +205,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
             ' editing mode.'
           }
         >
-          {controlButton('Switch editing mode', IconNames.REFRESH, this.props.toggleEditMode)}
+          {controlButton(this.props.editingMode + ' editing mode', IconNames.REFRESH, this.props.toggleEditMode)}
         </Tooltip>
       ) : (
         undefined
