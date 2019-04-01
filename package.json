@@ -74,7 +74,7 @@
     "@types/acorn": "^4.0.3",
     "@types/classnames": "^2.2.3",
     "@types/common-tags": "^1.4.0",
-    "@types/dotenv": "^4.0.3",
+    "@types/dotenv": "^6.1.1",
     "@types/draft-js": "^0.10.23",
     "@types/enzyme": "3.1.17",
     "@types/enzyme-adapter-react-16": "^1.0.2",
