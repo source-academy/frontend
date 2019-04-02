@@ -82,6 +82,7 @@ export interface IMCQQuestion extends IQuestion {
 
 export interface IQuestion {
   answer: string | number | null;
+  editorValue?: string | null;
   comment: string | null;
   content: string;
   id: number;
