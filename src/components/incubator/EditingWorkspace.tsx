@@ -374,11 +374,11 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     });
   };
 
-  private toggleEditorPersist = () => {
-    this.setState({
-      editorPersist: !this.state.editorPersist
-    });
-  };
+  // private toggleEditorPersist = () => {
+  //   this.setState({
+  //     editorPersist: !this.state.editorPersist
+  //   });
+  // };
 
   /** Pre-condition: IAssessment has been loaded */
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
@@ -565,8 +565,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       sourceChapter: this.state.assessment!.questions[questionId].library.chapter,
       editingMode: this.state.editingMode,
       toggleEditMode: this.toggleEditingMode,
-      isEditorPersist: this.state.editorPersist,
-      handleToggleEditorPersist: this.toggleEditorPersist
+      // isEditorPersist: this.state.editorPersist,
+      // handleToggleEditorPersist: this.toggleEditorPersist
     };
   };
 }
