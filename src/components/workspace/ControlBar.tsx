@@ -205,7 +205,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
             ' editing mode.'
           }
         >
-          {controlButton(this.props.editingMode + ' editing mode', IconNames.REFRESH, this.props.toggleEditMode)}
+          {controlButton(
+            this.props.editingMode + ' editing mode',
+            IconNames.REFRESH,
+            this.props.toggleEditMode
+          )}
         </Tooltip>
       ) : (
         undefined

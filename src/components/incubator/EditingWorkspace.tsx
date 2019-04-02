@@ -292,7 +292,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         if (question.editorValue) {
           editorValue = question.editorValue;
         } else {
-          editorValue = ((question as IProgrammingQuestion).solutionTemplate as string);
+          editorValue = (question as IProgrammingQuestion).solutionTemplate as string;
         }
       } else {
         editorValue = '//If you see this, this is a bug. Please report bug.';
@@ -303,7 +303,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   };
 
   private handleSave = () => {
-    const assessment = this.state.assessment!; 
+    const assessment = this.state.assessment!;
     assessment.questions[this.formatedQuestionId()].editorValue = this.props.editorValue;
     this.setState({
       assessment,
@@ -564,7 +564,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       questionProgress: [questionId + 1, this.state.assessment!.questions.length],
       sourceChapter: this.state.assessment!.questions[questionId].library.chapter,
       editingMode: this.state.editingMode,
-      toggleEditMode: this.toggleEditingMode,
+      toggleEditMode: this.toggleEditingMode
       // isEditorPersist: this.state.editorPersist,
       // handleToggleEditorPersist: this.toggleEditorPersist
     };
