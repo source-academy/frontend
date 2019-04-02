@@ -17,6 +17,7 @@ const baseProps = {
   externalLibraryName: ExternalLibraryNames.NONE,
   output: [],
   replValue: '',
+  websocketStatus: 0,
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeActiveTab: (n: number) => {},
@@ -31,6 +32,7 @@ const baseProps = {
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
   handleSetEditorSessionId: (editorSessionId: string) => {},
+  handleSetWebsocketStatus: (websocketStatus: number) => {},
   handleSideContentHeightChange: (h: number) => {},
   handleToggleEditorAutorun: () => {}
 };

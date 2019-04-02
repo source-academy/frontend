@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 import { Reducer } from 'redux';
 
 import {
@@ -21,6 +22,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_SESSION_ID,
+  SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -363,6 +365,15 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           editorSessionId: action.payload.editorSessionId
+        }
+      };
+    case SET_WEBSOCKET_STATUS:
+      console.log('In reducer: ' + action.payload.websocketStatus);
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          websocketStatus: action.payload.websocketStatus
         }
       };
     case TOGGLE_EDITOR_AUTORUN:

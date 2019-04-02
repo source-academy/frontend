@@ -1,4 +1,5 @@
-import { Button, Intent, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core';
+// tslint:disable:no-console
+import { Button, Classes, Intent, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
@@ -37,6 +38,7 @@ export type ControlBarProps = {
   hasUnsavedChanges?: boolean;
   isEditorAutorun?: boolean;
   isRunning: boolean;
+  websocketStatus?: number;
   onClickNext?(): any;
   onClickPrevious?(): any;
   onClickReturn?(): any;
@@ -173,7 +175,9 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
         <>
           <form onSubmit={handleStartJoining}>
             <input defaultValue="" ref={this.joinInputElem} />
-            {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
+            <span className={Classes.POPOVER_DISMISS}>
+              {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
+            </span>
           </form>
         </>
       </Popover>
@@ -193,13 +197,19 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const stopAutorunButton = this.props.hasEditorAutorunButton
       ? controlButton('Autorun', IconNames.STOP, this.props.handleToggleEditorAutorun)
       : undefined;
+    const indicatorButton = controlButton(
+      this.props.websocketStatus === 1 ? 'Connected' : 'Disconnected',
+      IconNames.AIRPLANE,
+      null
+    );
+    console.log('Controbar rendering, ws status: ' + this.props.websocketStatus);
     return (
       <div className="ControlBar_editor pt-button-group">
         {this.props.isEditorAutorun ? undefined : this.props.isRunning ? stopButton : runButton}
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton}
         {this.props.isEditorAutorun ? stopAutorunButton : startAutorunButton}
-        {inviteButton} {joinButton}
+        {inviteButton} {joinButton} {indicatorButton}
       </div>
     );
   }

@@ -48,6 +48,7 @@ interface IGradingWorkspace extends IWorkspaceState {
 
 export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
+  readonly websocketStatus: number;
 }
 
 export interface IWorkspaceManagerState {
@@ -230,7 +231,8 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
-    playgroundExternal: ExternalLibraryNames.NONE
+    playgroundExternal: ExternalLibraryNames.NONE,
+    websocketStatus: 0
   }
 };
 

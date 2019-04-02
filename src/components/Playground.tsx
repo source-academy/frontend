@@ -44,6 +44,7 @@ export interface IStateProps {
   replValue: string;
   sideContentHeight?: number;
   sourceChapter: number;
+  websocketStatus: number;
   externalLibraryName: string;
 }
 
@@ -62,6 +63,7 @@ export interface IDispatchProps {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
+  handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
 }
@@ -107,13 +109,15 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         isRunning: this.props.isRunning,
         queryString: this.props.queryString,
         questionProgress: null,
-        sourceChapter: this.props.sourceChapter
+        sourceChapter: this.props.sourceChapter,
+        websocketStatus: this.props.websocketStatus
       },
       editorProps: {
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
+        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus,
         isEditorAutorun: this.props.isEditorAutorun
       },
       editorWidth: this.props.editorWidth,

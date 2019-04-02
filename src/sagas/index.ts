@@ -59,6 +59,14 @@ function* workspaceSaga(): SagaIterator {
     yield* evalCode(code, context, location);
   });
 
+  yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(action) {
+    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const isEditorAutorun = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).isEditorAutorun
+    );
+    yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
+  });
+
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
     const code: string = yield select(
