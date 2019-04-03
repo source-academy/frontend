@@ -67,6 +67,10 @@ function* workspaceSaga(): SagaIterator {
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
   });
 
+  yield takeEvery(actionTypes.INVALID_EDITOR_SESSION_ID, function*(action) {
+    yield call(showWarningMessage, 'Invalid ID Input', 1000);
+  });
+
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
     const code: string = yield select(

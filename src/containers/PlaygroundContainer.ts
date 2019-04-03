@@ -14,6 +14,7 @@ import {
   evalEditor,
   evalRepl,
   generateLzString,
+  invalidEditorSessionId,
   playgroundExternalSelect,
   setEditorSessionId,
   setWebsocketStatus,
@@ -56,6 +57,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
+      handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         playgroundExternalSelect(externalLibraryName, location),
       handleReplEval: () => evalRepl(location),

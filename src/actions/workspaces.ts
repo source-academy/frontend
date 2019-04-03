@@ -162,6 +162,10 @@ export const evalRepl = (workspaceLocation: WorkspaceLocation) => ({
   payload: { workspaceLocation }
 });
 
+export const invalidEditorSessionId = () => ({
+  type: actionTypes.INVALID_EDITOR_SESSION_ID
+});
+
 export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
   newEditorValue: string,
   workspaceLocation: WorkspaceLocation

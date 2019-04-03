@@ -184,15 +184,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     });
     if (this.props.editorSessionId !== '') {
       console.log('Component mounted with id = ' + this.props.editorSessionId);
-      const xmlhttp = new XMLHttpRequest();
-      xmlhttp.onreadystatechange = () => {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-          const state = JSON.parse(xmlhttp.responseText).state;
-          console.log(state ? 'Valid Id' : 'Invalid Id');
-        }
-      };
-      xmlhttp.open('GET', 'https://13.250.109.61/gists/' + this.props.editorSessionId, true);
-      xmlhttp.send();
 
       const ShareAce = new sharedbAce(this.props.editorSessionId!, {
         WsUrl: 'wss://13.250.109.61/ws',

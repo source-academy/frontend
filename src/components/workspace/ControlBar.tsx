@@ -25,6 +25,7 @@ export type ControlBarProps = {
   handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleGenerateLz?: () => void;
   handleInterruptEval: () => void;
+  handleInvalidEditorSessionId?: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleSetEditorSessionId?: (editorSessionId: string) => void;
@@ -107,7 +108,26 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       }
     };
     const handleStartJoining = (e: React.FormEvent<HTMLFormElement>) => {
-      this.props.handleSetEditorSessionId!(this.joinInputElem.current!.value);
+      const xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = () => {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+          console.log('Reached server to verify ID');
+          const state = JSON.parse(xmlhttp.responseText).state;
+          if (state === true) {
+            console.log('ID true');
+            this.props.handleSetEditorSessionId!(this.joinInputElem.current!.value);
+          } else {
+            this.props.handleInvalidEditorSessionId!();
+            this.props.handleSetEditorSessionId!('');
+          }
+        } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
+          console.log('Cannot reach server');
+          this.props.handleSetEditorSessionId!('');
+        }
+      };
+      xmlhttp.open('GET', 'https://13.250.109.61/gists/' + this.joinInputElem.current!.value, true);
+      xmlhttp.send();
+
       e.preventDefault();
     };
     const runButton = (

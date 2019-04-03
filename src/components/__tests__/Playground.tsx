@@ -28,6 +28,7 @@ const baseProps = {
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
   handleGenerateLz: () => {},
   handleInterruptEval: () => {},
+  handleInvalidEditorSessionId: () => {},
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},

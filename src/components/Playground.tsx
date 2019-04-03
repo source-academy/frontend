@@ -58,6 +58,7 @@ export interface IDispatchProps {
   handleEditorWidthChange: (widthChange: number) => void;
   handleGenerateLz: () => void;
   handleInterruptEval: () => void;
+  handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -95,6 +96,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleEditorEval: this.props.handleEditorEval,
         handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,
+        handleInvalidEditorSessionId: this.props.handleInvalidEditorSessionId,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
         handleSetEditorSessionId: this.props.handleSetEditorSessionId,
