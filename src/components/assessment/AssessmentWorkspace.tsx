@@ -136,10 +136,12 @@ class AssessmentWorkspace extends React.Component<
       editorProps:
         question.type === QuestionTypes.programming
           ? {
+              editorSessionId: '',
               editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+              isEditorAutorun: false
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -271,9 +273,8 @@ class AssessmentWorkspace extends React.Component<
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
       hasChapterSelect: false,
+      hasCollabEditing: false,
       hasEditorAutorunButton: false,
-      hasInviteButton: false,
-      hasJoinButton: false,
       hasSaveButton:
         !beforeNow(this.props.closeDate) &&
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,

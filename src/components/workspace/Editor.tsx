@@ -4,10 +4,8 @@ import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
-import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
-import 'brace/snippets/javascript';
 import 'brace/theme/cobalt';
 
 /**
@@ -18,8 +16,8 @@ import 'brace/theme/cobalt';
  *           of the editor's content, using `slang`
  */
 export interface IEditorProps {
-  isEditorAutorun?: boolean;
-  editorSessionId?: string;
+  isEditorAutorun: boolean;
+  editorSessionId: string;
   editorValue: string;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;

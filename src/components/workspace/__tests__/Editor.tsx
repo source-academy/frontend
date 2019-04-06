@@ -10,9 +10,11 @@ jest.spyOn(Editor.prototype, 'componentDidMount').mockImplementation(componentDi
 
 test('Editor renders correctly', () => {
   const props: IEditorProps = {
+    editorSessionId: '',
     editorValue: '',
     handleEditorEval: () => {},
-    handleEditorValueChange: newCode => {}
+    handleEditorValueChange: newCode => {},
+    isEditorAutorun: false
   };
   const app = <Editor {...props} />;
   const tree = shallow(app);
