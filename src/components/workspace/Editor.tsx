@@ -1,9 +1,8 @@
 /* tslint:disable */
-import * as ace from 'brace';
 import * as React from 'react';
 import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
-import sharedbAce from './sharedb-ace';
+import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
@@ -55,119 +54,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     // this editor is the same as the one in line 5 of index.js of sharedb-ace-example
     const editor = this.ace.current.editor;
     const session = editor.getSession();
-    const sourceCompleter = {
-      getCompletions(editors, sessions, pos, prefix, callback) {
-        const wordList1 = [
-          'function',
-          'return',
-          'const',
-          'let',
-          'display',
-          'null',
-          'while',
-          'for',
-          'break',
-          'continue',
-          'if',
-          'else',
-          'true',
-          'false',
-          'array_length'
-        ];
-        const completerList1 = wordList1.map(word => {
-          return {
-            caption: word,
-            value: word,
-            meta: 'Source'
-          };
-        });
-        const wordList2 = ['show', 'heart_bb', 'sail_bb', 'blank_bb', 'black_bb'];
-        const completerList2 = wordList2.map(word => {
-          return {
-            caption: word,
-            value: word,
-            meta: 'Rune'
-          };
-        });
-        const wordList3 = [
-          'pair',
-          'is_pair',
-          'head',
-          'tail',
-          'is_empty_list',
-          'is_list',
-          'list',
-          'draw_list',
-          'equal',
-          'length',
-          'map',
-          'build_list',
-          'for_each',
-          'list_to_string',
-          'reverse',
-          'append',
-          'member',
-          'remove',
-          'remove_all',
-          'filter',
-          'enum_list',
-          'list_ref',
-          'accumulate',
-          'set_head',
-          'set_tail'
-        ];
-        const completerList3 = wordList3.map(word => {
-          return {
-            caption: word,
-            value: word,
-            meta: 'List Support'
-          };
-        });
-        const wordList4 = [
-          'stream_tail',
-          'is_stream',
-          'stream',
-          'list_to_stream',
-          'stream_to_list',
-          'stream_length',
-          'stream_map',
-          'build_stream',
-          'stream_for_each',
-          'stream_reverse',
-          'stream_append',
-          'stream_member',
-          'stream_remove',
-          'stream_remove_all',
-          'stream_filter',
-          'enum_stream',
-          'integers_from',
-          'eval_stream',
-          'stream_ref'
-        ];
-        const completerList4 = wordList4.map(word => {
-          return {
-            caption: word,
-            value: word,
-            meta: 'Stream Support'
-          };
-        });
-        const completerList = completerList1
-          .concat(completerList2)
-          .concat(completerList3)
-          .concat(completerList4);
-        callback(null, completerList);
-      }
-    };
-    const langTools = ace.acequire('ace/ext/language_tools');
-    // Alternative:
-    langTools.setCompleters([langTools.textCompleter, sourceCompleter]);
-    // langTools.addCompleter([sourceCompleter]);
-    // editor.completers = [sourceCompleter];
-    editor.setOptions({
-      enableBasicAutocompletion: true,
-      enableSnippets: true,
-      enableLiveAutocompletion: true
-    });
     session.on('changeAnnotation', () => {
       const annotations = session.getAnnotations();
       let count = 0;
@@ -182,7 +68,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         session.setAnnotations(annotations);
       }
     });
+    console.log('Mounting with ID: ' + this.props.editorSessionId);
     if (this.props.editorSessionId !== '') {
+      console.log('In Mount, non-empty Session ID: ' + this.props.editorSessionId);
       console.log('Component mounted with id = ' + this.props.editorSessionId);
 
       const ShareAce = new sharedbAce(this.props.editorSessionId!, {
@@ -201,33 +89,37 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
           ]
         );
       });
-      ShareAce.WS.onopen = (event: any) => this.props.handleSetWebsocketStatus!(1);
-      ShareAce.WS.onclose = (event: any) => this.props.handleSetWebsocketStatus!(0);
-      // const checkAlive = () => {
-      //   setTimeout(() => {
-      //     const xmlhttp = new XMLHttpRequest();
-      //     xmlhttp.onreadystatechange = () => {
-      //       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-      //         console.log("Server alive");
-      //       } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
-      //         console.log("Error connecting to server");
-      //       }
-      //     };
-      //     xmlhttp.open('GET', 'https://13.250.109.61/ping/', true);
-      //     xmlhttp.send();
-      //     if(ShareAce.WS.readyState === 1 && this.props.editorSessionId !== '') {
-      //       checkAlive();
-      //     }
-      //   }, 5000);
-      // };
-      // checkAlive();
+      const WS = ShareAce.WS;
+      const handleDisconnect = () => {
+        if (this.ShareAce !== null) {
+          WS.reconnect();
+        }
+      };
+      let timeoutHandle = window.setTimeout(handleDisconnect, 8000);
+      WS.addEventListener('message', (event: any) => {
+        if ('a' in JSON.parse(event.data)) {
+          console.log('Received Ping');
+          window.clearTimeout(timeoutHandle);
+          timeoutHandle = window.setTimeout(handleDisconnect, 8000);
+        }
+      });
+      WS.addEventListener('open', (event: any) => {
+        console.log('Socket Opened');
+        this.props.handleSetWebsocketStatus!(1);
+      });
+      WS.addEventListener('close', (event: any) => {
+        console.log('Socket Closed');
+        this.props.handleSetWebsocketStatus!(0);
+      });
     }
   }
 
   public componentWillUnmount() {
     if (this.ShareAce !== null) {
+      console.log('Umounting... Closing websocket');
       this.ShareAce.WS.close();
     }
+    this.ShareAce = null;
   }
 
   public render() {
