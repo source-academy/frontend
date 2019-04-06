@@ -5,13 +5,13 @@
 
 ## Development Setup
 
-1. Install a stable version of Yarn and NodeJS (tested: Node 10.15.0).
-2. Run `yarn` to install dependencies. (tested: npm install, not yarn)
+1. Install a stable version of NodeJS (tested: Node 10.15.0).
+2. Run `npm install` to install dependencies.
 3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_IVLE_KEY`
    to contain your IVLE Lapi key.
-4. Run `yarn start` to start the server at `localhost:80`. Admin permissions may
+4. Run `npm start` to start the server at `localhost:80`. Admin permissions may
    be required for your OS to serve at port 80.
-5. If running cadet without ngix, `yarn cors-proxy` to solve CORS problems.
+5. If running cadet without ngix, `npm run cors-proxy` to solve CORS problems.
    
 ## IVLE LAPI Key
 For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
@@ -19,7 +19,7 @@ For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.
 ## For Windows Users
 
 ### Running cadet-frontend
-Run `yarn win-start`
+Run `npm run win-start`
 
 ### Dealing with hooks
 In package.json, change line 28:\
@@ -45,7 +45,7 @@ to toggle native.
 ### To run local copy of js-slang
 
 1. Follow the instructions on the js-slang repository to transpile your own copy
-2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
+2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `npm install`:
 
 `"js-slang": "file:path/to/js-slang",`
 
@@ -56,7 +56,7 @@ You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94
 ## For Editing And Creating New Local XML Missions
 
 1. Use the branch 'mission-editing' in cadet-frontend
-2. Run in browser with yarn start
+2. Run in browser with npm start
 2. Go to Incubator tab.
 
 ## Application Structure
