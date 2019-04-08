@@ -177,6 +177,28 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'eval_stream',
       'stream_ref'
     ]
+  ],
+  [
+    ExternalLibraryNames.VIDEO, // bookmark added
+    [
+      'red_of',
+      'green_of',
+      'blue_of',
+      'set_rgb',
+      'copy_pixel',
+      'copy_image',
+      'constrain_color',
+      'compose_filter',
+      'make_distortion_filter',
+      'pixel_similar',
+      'getTimeSinceStart',
+      'getTempArray',
+      'getVideoWidth',
+      'getVideoHeight',
+      'setVideoDimensions',
+      'apply_filter',
+      'stop_video'
+    ]
   ]
 ];
 

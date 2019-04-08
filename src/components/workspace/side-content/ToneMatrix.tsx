@@ -10,7 +10,7 @@ class ToneMatrix extends React.Component<{}, {}> {
 
   public componentDidMount() {
     if ((window as any).ToneMatrix) {
-      (window as any).ToneMatrix.initialise_matrix(this.$container!);
+      (window as any).ToneMatrix.initialise_matrix(this.$container!); // bookmark reference
     }
   }
 

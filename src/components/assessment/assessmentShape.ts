@@ -119,7 +119,8 @@ export enum ExternalLibraryNames {
   THREE_DIM_RUNES = 'THREE_DIM_RUNES',
   CURVES = 'CURVES',
   SOUND = 'SOUND',
-  STREAMS = 'STREAMS'
+  STREAMS = 'STREAMS',
+  VIDEO = 'VIDEO' // bookmark added
 }
 
 export type ExternalLibraryName = keyof typeof ExternalLibraryNames;

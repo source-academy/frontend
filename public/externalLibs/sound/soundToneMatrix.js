@@ -187,7 +187,7 @@ function initialise_matrix($container) {
     bind_events_to_rect($tone_matrix)
   }
   $tone_matrix.hidden = false
-  $container.appendChild($tone_matrix)
+  $container.appendChild($tone_matrix) // bookmark reference
 }
 ToneMatrix.initialise_matrix = initialise_matrix
 

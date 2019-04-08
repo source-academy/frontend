@@ -10,6 +10,7 @@ import Markdown from './commons/Markdown';
 import Workspace, { WorkspaceProps } from './workspace';
 import { SideContentTab } from './workspace/side-content';
 import ListVisualizer from './workspace/side-content/ListVisualizer';
+import VideoDisplay from './workspace/side-content/VideoDisplay';
 
 const CHAP = '\xa7';
 
@@ -138,7 +139,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [playgroundIntroductionTab, listVisualizerTab]
+        tabs: [playgroundIntroductionTab, listVisualizerTab, videoDisplayTab] // bookmark added
       }
     };
     return (
@@ -167,6 +168,12 @@ const listVisualizerTab: SideContentTab = {
   label: 'List Visualizer',
   icon: IconNames.EYE_OPEN,
   body: <ListVisualizer />
+};
+
+const videoDisplayTab: SideContentTab = { // bookmark added
+  label: 'Video Display',
+  icon: IconNames.MOBILE_VIDEO,
+  body: <VideoDisplay />
 };
 
 export default Playground;
