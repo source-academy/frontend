@@ -55,6 +55,23 @@ Note that this copies your files over, any future changes will not be reflected.
 
 You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
 
+## Inspector
+This requires the use of the `debugger` branch of js-slang to work. Clone both the frontend and the `debugger` slang to the same directory. You would want to `yarn build` the slang you just obtained and then `yarn && sudo yarn start` in the frontend and it should just work. The merge over there is still ongoing. Meanwhile, please try to break this.
+
+The mental model we are using is: A breakpoint means that the interpreter will stop right before it. Whatever is highlighted is going to be evaluated next. If you meet any inconsistencies with this, also please raise it up for discussion.
+
+### What you can do
+- Set breakpoints by clicking on the gutter
+- `debugger;` just like ECMAScript
+- Inspect!
+- Run stuff in the context of the paused program!
+
+### Usage
+Here's what happens: After you click run, if there the interpreter meets a breakpoint, the first thing you're going to notice is that the REPL feedbacks to you it hit a breakpoint, the line is highlighted, and one of the icons on the right pane is going to start blinking. If you click on the icon, it reveals the inspector. All the variables in every frame is exposed here. The REPL is also now in the context of where ever you are. So you can evaluate anything you would normally be able to in the REPL. It is all quite simple really.
+
+### Note
+Because we use a local version of `js-slang`, the CI just breaks all the time.
+
 ## For Editing And Creating New Local XML Missions
 
 1. Use the branch 'mission-editing' in cadet-frontend
