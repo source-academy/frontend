@@ -36,7 +36,10 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
   return {
     activeTab: state.workspaces.assessment.sideContentActiveTab,
     assessment: state.session.assessments.get(props.assessmentId),
+    editorPrepend: state.workspaces.assessment.editorPrepend,
     editorValue: state.workspaces.assessment.editorValue,
+    editorPostpend: state.workspaces.assessment.editorPostpend,
+    editorTestcases: state.workspaces.assessment.editorTestcases,
     editorWidth: state.workspaces.assessment.editorWidth,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
     isRunning: state.workspaces.assessment.isRunning,

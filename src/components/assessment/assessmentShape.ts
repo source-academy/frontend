@@ -64,8 +64,17 @@ export type AssessmentCategory = keyof typeof AssessmentCategories;
 
 export interface IProgrammingQuestion extends IQuestion {
   answer: string | null;
+  prepend: string;
   solutionTemplate: string;
+  postpend: string;
+  testcases: ITestcase[];
   type: 'programming';
+}
+
+export interface ITestcase {
+  answer: string;
+  score: number;
+  program: string;
 }
 
 export interface IMCQQuestion extends IQuestion {

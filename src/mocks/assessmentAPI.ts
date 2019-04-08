@@ -208,6 +208,9 @@ What's your favourite dinner food?
     comment: null,
     id: 0,
     library: mockSoundLibrary,
+    prepend: "",
+    postpend: "",
+    testcases: [],
     solutionTemplate: '0th question mock solution template',
     type: 'programming',
     grader: {
@@ -226,6 +229,9 @@ What's your favourite dinner food?
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mock3DRuneLibrary,
+    prepend: "",
+    postpend: "",
+    testcases: [],
     solutionTemplate: '1st question mock solution template',
     type: 'programming',
     grader: {
@@ -318,6 +324,9 @@ What's your favourite dinner food?
     content: 'You have reached the last question! Have some fun with the tone matrix...',
     id: 1,
     library: mockToneMatrixLibrary,
+    prepend: "",
+    postpend: "",
+    testcases: [],
     solutionTemplate: '5th question mock solution template',
     type: 'programming',
     grader: {

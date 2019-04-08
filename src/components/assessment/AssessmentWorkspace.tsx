@@ -16,6 +16,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  ITestcase,
   Library,
   QuestionTypes
 } from './assessmentShape';
@@ -26,7 +27,10 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 export type StateProps = {
   activeTab: number;
   assessment?: IAssessment;
+  editorPrepend: string | null;
   editorValue: string | null;
+  editorPostpend: string | null;
+  editorTestcases: ITestcase[] | null;
   editorWidth: string;
   hasUnsavedChanges: boolean;
   isRunning: boolean;
@@ -195,8 +199,33 @@ class AssessmentWorkspace extends React.Component<
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
           : null;
+      const editorPrepend = 
+        question.type === QuestionTypes.programming
+          ? (question as IProgrammingQuestion).prepend !== null
+            ? (question as IProgrammingQuestion).prepend
+            : ""
+          : "";
+      const editorPostpend = 
+        question.type === QuestionTypes.programming
+          ? (question as IProgrammingQuestion).postpend !== null
+            ? (question as IProgrammingQuestion).postpend
+            : ""
+          : "";
+      const editorTestcases =
+        question.type === QuestionTypes.programming
+          ? (question as IProgrammingQuestion).testcases !== null
+            ? (question as IProgrammingQuestion).testcases
+            : []
+          : [];
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
-      this.props.handleResetWorkspace({ editorValue });
+      this.props.handleResetWorkspace(
+        { 
+          editorPrepend,
+          editorValue,
+          editorPostpend,
+          editorTestcases
+        }
+      );
       this.props.handleClearContext(question.library);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (editorValue) {

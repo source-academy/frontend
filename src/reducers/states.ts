@@ -8,7 +8,8 @@ import {
   ExternalLibraryName,
   ExternalLibraryNames,
   IAssessment,
-  IAssessmentOverview
+  IAssessmentOverview,
+  ITestcase
 } from '../components/assessment/assessmentShape';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
@@ -58,7 +59,10 @@ export interface IWorkspaceManagerState {
 
 export interface IWorkspaceState {
   readonly context: Context;
+  readonly editorPrepend: string | null;
   readonly editorValue: string | null;
+  readonly editorPostpend: string | null;
+  readonly editorTestcases: ITestcase[];
   readonly editorWidth: string;
   readonly isEditorAutorun: boolean;
   readonly isRunning: boolean;
@@ -197,7 +201,10 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
+  editorPrepend: "",
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
+  editorPostpend: "",
+  editorTestcases: [],
   editorWidth: '50%',
   output: [],
   replHistory: {
