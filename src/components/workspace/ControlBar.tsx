@@ -111,7 +111,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
             this.props.handleSetEditorSessionId!(id);
           }
         };
-        xmlhttp.open('GET', 'https://13.250.109.61/gists/latest', true);
+        xmlhttp.open('GET', 'https://api2.sourceacademy.nus.edu.sg/gists/latest', true);
         xmlhttp.send();
       }
     };
@@ -133,7 +133,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
           this.props.handleSetEditorSessionId!('');
         }
       };
-      xmlhttp.open('GET', 'https://13.250.109.61/gists/' + this.joinInputElem.current!.value, true);
+      xmlhttp.open(
+        'GET',
+        'https://api2.sourceacademy.nus.edu.sg/gists/' + this.joinInputElem.current!.value,
+        true
+      );
       xmlhttp.send();
 
       e.preventDefault();

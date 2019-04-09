@@ -72,7 +72,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       console.log('Component mounted with id = ' + this.props.editorSessionId);
 
       const ShareAce = new sharedbAce(this.props.editorSessionId!, {
-        WsUrl: 'wss://13.250.109.61/ws',
+        WsUrl: 'wss://api2.sourceacademy.nus.edu.sg/ws',
         pluginWsUrl: null,
         namespace: 'codepad'
       });
