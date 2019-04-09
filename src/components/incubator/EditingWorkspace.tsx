@@ -81,7 +81,6 @@ interface IState {
   assessment: IAssessment | null;
   activeTab: number;
   editingMode: string;
-  editorPersist: boolean;
   hasUnsavedChanges: boolean;
   showResetOverlay: boolean;
   originalMaxGrade: number;
@@ -95,7 +94,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       assessment: retrieveLocalAssessment(),
       activeTab: 0,
       editingMode: 'question',
-      editorPersist: false,
       hasUnsavedChanges: false,
       showResetOverlay: false,
       originalMaxGrade: 0,
@@ -222,7 +220,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
                 originalMaxXp: this.getMaxMarks('maxXp')
               });
               this.handleRefreshLibrary();
-              this.resetEditorValue();
             },
             { minimal: false, intent: Intent.DANGER }
           )}
@@ -249,7 +246,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       this.props.storedAssessmentId !== assessmentId ||
       this.props.storedQuestionId !== questionId
     ) {
-      this.resetEditorValue(false);
+      this.resetEditorValue();
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (this.state.hasUnsavedChanges) {
@@ -284,22 +281,20 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.props.handleClearContext(library);
   };
 
-  private resetEditorValue = (checkPersist: boolean = true) => {
-    if (checkPersist || !this.state.editorPersist) {
-      const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
-      let editorValue: string;
-      if (question.type === QuestionTypes.programming) {
-        if (question.editorValue) {
-          editorValue = question.editorValue;
-        } else {
-          editorValue = (question as IProgrammingQuestion).solutionTemplate as string;
-        }
+  private resetEditorValue = () => {
+    const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
+    let editorValue: string;
+    if (question.type === QuestionTypes.programming) {
+      if (question.editorValue) {
+        editorValue = question.editorValue;
       } else {
-        editorValue = '//If you see this, this is a bug. Please report bug.';
+        editorValue = (question as IProgrammingQuestion).solutionTemplate as string;
       }
-      this.props.handleResetWorkspace({ editorValue });
-      this.props.handleEditorValueChange(editorValue);
+    } else {
+      editorValue = '//If you see this, this is a bug. Please report bug.';
     }
+    this.props.handleResetWorkspace({ editorValue });
+    this.props.handleEditorValueChange(editorValue);
   };
 
   private handleSave = () => {
@@ -373,12 +368,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       editingMode: toggle
     });
   };
-
-  // private toggleEditorPersist = () => {
-  //   this.setState({
-  //     editorPersist: !this.state.editorPersist
-  //   });
-  // };
 
   /** Pre-condition: IAssessment has been loaded */
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
@@ -565,8 +554,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       sourceChapter: this.state.assessment!.questions[questionId].library.chapter,
       editingMode: this.state.editingMode,
       toggleEditMode: this.toggleEditingMode
-      // isEditorPersist: this.state.editorPersist,
-      // handleToggleEditorPersist: this.toggleEditorPersist
     };
   };
 }
