@@ -28,12 +28,12 @@ export interface IEditorProps {
 class Editor extends React.PureComponent<IEditorProps, {}> {
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
-  private ace: any;
+  private AceEditor: React.RefObject<AceEditor>;
   private ShareAce: any;
 
   constructor(props: IEditorProps) {
     super(props);
-    this.ace = React.createRef();
+    this.AceEditor = React.createRef();
     this.ShareAce = null;
     this.onChangeMethod = (newCode: string) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
@@ -49,9 +49,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   }
 
   public componentDidMount() {
-    // this editor is the same as the one in line 5 of index.js of sharedb-ace-example
-    const editor = this.ace.current.editor;
+    const editor = (this.AceEditor.current! as any).editor;
     const session = editor.getSession();
+
+    // Change all info annotations to error annotations
     session.on('changeAnnotation', () => {
       const annotations = session.getAnnotations();
       let count = 0;
@@ -67,6 +68,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
     });
     console.log('Mounting with ID: ' + this.props.editorSessionId);
+
+    // Has valid session ID
     if (this.props.editorSessionId !== '') {
       console.log('In Mount, non-empty Session ID: ' + this.props.editorSessionId);
       console.log('Component mounted with id = ' + this.props.editorSessionId);
@@ -77,7 +80,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         namespace: 'codepad'
       });
       this.ShareAce = ShareAce;
-      (ShareAce as any).on('ready', () => {
+      ShareAce.on('ready', () => {
         ShareAce.add(
           editor,
           ['code'],
@@ -87,20 +90,38 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
           ]
         );
       });
+
+      // WebSocket connection status detection logic
       const WS = ShareAce.WS;
-      const handleDisconnect = () => {
+      let interval;
+      const checkStatus = () => {
         if (this.ShareAce !== null) {
-          WS.reconnect();
+          const xmlhttp = new XMLHttpRequest();
+          xmlhttp.onreadystatechange = () => {
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+              const state = JSON.parse(xmlhttp.responseText).state;
+              if (state !== true) {
+                // ID does not exist
+                clearInterval(interval);
+                WS.close();
+              }
+            } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
+              // Cannot reach server
+              // Force WS to check connection
+              WS.reconnect();
+            }
+          };
+          xmlhttp.open(
+            'GET',
+            'https://api2.sourceacademy.nus.edu.sg/gists/' + this.props.editorSessionId,
+            true
+          );
+          xmlhttp.send();
+          console.log('Calling handle timeout');
         }
       };
-      let timeoutHandle = window.setTimeout(handleDisconnect, 8000);
-      WS.addEventListener('message', (event: any) => {
-        if ('a' in JSON.parse(event.data)) {
-          console.log('Received Ping');
-          window.clearTimeout(timeoutHandle);
-          timeoutHandle = window.setTimeout(handleDisconnect, 8000);
-        }
-      });
+      interval = setInterval(checkStatus, 5000);
+
       WS.addEventListener('open', (event: any) => {
         console.log('Socket Opened');
         this.props.handleSetWebsocketStatus!(1);
@@ -141,7 +162,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             editorProps={{
               $blockScrolling: Infinity
             }}
-            ref={this.ace}
+            ref={this.AceEditor}
             fontSize={14}
             height="100%"
             highlightActiveLine={false}
