@@ -26,13 +26,11 @@ export type ControlBarProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleToggleEditorAutorun?: () => void;
-  handleToggleEditorPersist?: () => void;
   hasChapterSelect: boolean;
   hasEditorAutorunButton: boolean;
   hasSaveButton: boolean;
   hasShareButton: boolean;
   hasUnsavedChanges?: boolean;
-  isEditorPersist?: boolean;
   isEditorAutorun?: boolean;
   isRunning: boolean;
   editingMode?: string;
@@ -146,14 +144,6 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       this.props.onClickReset !== null
         ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
         : undefined;
-    const editorPersistSwitch =
-      this.props.handleToggleEditorPersist !== undefined
-        ? controlButton(
-            'Editor Persistence ' + (this.props.isEditorPersist ? 'Enabled' : 'Disabled'),
-            this.props.isEditorPersist ? IconNames.TICK : IconNames.CROSS,
-            this.props.handleToggleEditorPersist
-          )
-        : undefined;
     return (
       <div className="ControlBar_editor pt-button-group">
         {this.props.isEditorAutorun ? undefined : this.props.isRunning ? stopButton : runButton}
@@ -161,7 +151,6 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
         {shareButton} {chapterSelectButton} {externalSelectButton}
         {this.props.isEditorAutorun ? stopAutorunButton : startAutorunButton}
         {resetButton}
-        {editorPersistSwitch}
       </div>
     );
   }
