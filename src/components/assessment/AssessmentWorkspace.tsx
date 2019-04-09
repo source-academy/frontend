@@ -10,6 +10,7 @@ import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
+import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
   IAssessment,
@@ -65,6 +66,7 @@ export type DispatchProps = {
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleTestcaseEval: (testcaseId: number) => void;
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
 };
@@ -214,7 +216,9 @@ class AssessmentWorkspace extends React.Component<
       const editorTestcases =
         question.type === QuestionTypes.programming
           ? (question as IProgrammingQuestion).testcases !== null
-            ? (question as IProgrammingQuestion).testcases
+            ? (question as IProgrammingQuestion).testcases.map(testcase => {
+                return testcase;
+            })
             : []
           : [];
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
@@ -249,6 +253,11 @@ class AssessmentWorkspace extends React.Component<
         label: `${props.assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />
+      },
+      {
+        label: `${props.assessment!.category} Autograder`,
+        icon: IconNames.AIRPLANE,
+        body: <Autograder testcases={props.editorTestcases} handleTestcaseEval={this.props.handleTestcaseEval} />
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;

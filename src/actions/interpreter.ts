@@ -13,6 +13,11 @@ export const evalInterpreterSuccess = (value: Value, workspaceLocation: Workspac
   payload: { type: 'result', value, workspaceLocation }
 });
 
+export const evalTestcaseSuccess = (value: Value, workspaceLocation: WorkspaceLocation, index: number) => ({
+  type: actionTypes.EVAL_TESTCASE_SUCCESS,
+  payload: { type: 'result', value, workspaceLocation, index }
+});
+
 export const evalInterpreterError = (
   errors: SourceError[],
   workspaceLocation: WorkspaceLocation

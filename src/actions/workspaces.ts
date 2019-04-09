@@ -161,6 +161,11 @@ export const evalRepl = (workspaceLocation: WorkspaceLocation) => ({
   payload: { workspaceLocation }
 });
 
+export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: number) => ({
+  type: actionTypes.EVAL_TESTCASE,
+  payload: { workspaceLocation, testcaseId }
+});
+
 export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
   newEditorValue: string,
   workspaceLocation: WorkspaceLocation

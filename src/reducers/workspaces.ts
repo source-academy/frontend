@@ -15,6 +15,8 @@ import {
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
+  EVAL_TESTCASE,
+  EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
   IAction,
   LOG_OUT,
@@ -52,6 +54,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
 ) => {
   const location: WorkspaceLocation =
     action.payload !== undefined ? action.payload.workspaceLocation : undefined;
+  const index: number = action.payload !== undefined ? action.payload.index : undefined;
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
 
@@ -276,6 +279,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isRunning: true
         }
       };
+    case EVAL_TESTCASE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          isRunning: true
+        }
+      };
     case EVAL_INTERPRETER_SUCCESS:
       lastOutput = state[location].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
@@ -298,6 +309,37 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           output: newOutput,
           isRunning: false
         }
+      };
+    case EVAL_TESTCASE_SUCCESS: 
+      lastOutput = state[location].output.slice(-1)[0];
+      if (lastOutput !== undefined && lastOutput.type === 'running') {
+        newOutput = state[location].output.slice(0, -1).concat({
+          ...action.payload,
+          workspaceLocation: undefined,
+          consoleLogs: lastOutput.consoleLogs
+        });
+      } else {
+        newOutput = state[location].output.concat({
+          ...action.payload,
+          workspaceLocation: undefined,
+          consoleLogs: []
+        });
+      }
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorTestcases: state[location].editorTestcases.map(
+            (testcase, i) => {
+              if (i === index) {
+                testcase.actual = newOutput[0];
+                return testcase;
+              } else {
+                return testcase;
+              }
+            }),
+          isRunning: false
+        }   
       };
     case EVAL_INTERPRETER_ERROR:
       lastOutput = state[location].output.slice(-1)[0];

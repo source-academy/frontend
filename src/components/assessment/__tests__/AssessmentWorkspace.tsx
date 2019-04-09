@@ -32,6 +32,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleResetWorkspace: () => {},
   handleSave: (id: number, answer: string | number) => {},
   handleSideContentHeightChange: (heightChange: number) => {},
+  handleTestcaseEval: (testcaseId: number) => {},
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},
   handleUpdateCurrentAssessmentId: (a: number, q: number) => {},
   isRunning: false,
