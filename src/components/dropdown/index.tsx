@@ -1,31 +1,31 @@
-import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
+import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
 
-import Profile from '../../containers/ProfileContainer'
-import { controlButton } from '../commons/controlButton'
-import About from './About'
-import Help from './Help'
+import Profile from '../../containers/ProfileContainer';
+import { controlButton } from '../commons/controlButton';
+import About from './About';
+import Help from './Help';
 
 type DropdownProps = {
-  handleLogOut: () => void
-  name?: string
-}
+  handleLogOut: () => void;
+  name?: string;
+};
 
 type DropdownState = {
-  isAboutOpen: boolean
-  isHelpOpen: boolean
-  isProfileOpen: boolean
-}
+  isAboutOpen: boolean;
+  isHelpOpen: boolean;
+  isProfileOpen: boolean;
+};
 
 class Dropdown extends React.Component<DropdownProps, DropdownState> {
   constructor(props: DropdownProps) {
-    super(props)
+    super(props);
     this.state = {
       isAboutOpen: false,
       isHelpOpen: false,
       isProfileOpen: false
-    }
+    };
   }
 
   public render() {
@@ -42,7 +42,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
         <Help isOpen={this.state.isHelpOpen} onClose={this.toggleHelpOpen} />
         <Profile isOpen={this.state.isProfileOpen} onClose={this.toggleProfileOpen} />
       </>
-    )
+    );
   }
 
   private menu(props: DropdownProps) {
@@ -52,11 +52,11 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
         onClick={this.toggleProfileOpen}
         text={titleCase(this.props.name)}
       />
-    ) : null
+    ) : null;
 
     const logout = this.props.name ? (
       <MenuItem icon={IconNames.LOG_OUT} text="Logout" onClick={this.props.handleLogOut} />
-    ) : null
+    ) : null;
 
     return (
       <Menu>
@@ -65,21 +65,21 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
         <MenuItem icon={IconNames.ERROR} onClick={this.toggleHelpOpen} text="Help" />
         {logout}
       </Menu>
-    )
+    );
   }
 
   private toggleAboutOpen = () => {
-    this.setState({ ...this.state, isAboutOpen: !this.state.isAboutOpen })
-  }
+    this.setState({ ...this.state, isAboutOpen: !this.state.isAboutOpen });
+  };
 
   private toggleHelpOpen = () =>
-    this.setState({ ...this.state, isHelpOpen: !this.state.isHelpOpen })
+    this.setState({ ...this.state, isHelpOpen: !this.state.isHelpOpen });
 
   private toggleProfileOpen = () =>
-    this.setState({ ...this.state, isProfileOpen: !this.state.isProfileOpen })
+    this.setState({ ...this.state, isProfileOpen: !this.state.isProfileOpen });
 }
 
 const titleCase = (str: string) =>
-  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase())
+  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase());
 
-export default Dropdown
+export default Dropdown;

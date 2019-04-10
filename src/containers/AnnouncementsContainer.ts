@@ -3,19 +3,19 @@
  * source-academy/cadet which is able to download and relay news and material
  * from lumiNUS to us.
  */
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAnnouncements } from '../actions/session'
-import Announcements, { IAnnouncementsProps } from '../components/Announcements'
-import { IState } from '../reducers/states'
+import { fetchAnnouncements } from '../actions/session';
+import Announcements, { IAnnouncementsProps } from '../components/Announcements';
+import { IState } from '../reducers/states';
 
-type StateProps = Pick<IAnnouncementsProps, 'announcements'>
-type DispatchProps = Pick<IAnnouncementsProps, 'handleAnnouncementsFetch'>
+type StateProps = Pick<IAnnouncementsProps, 'announcements'>;
+type DispatchProps = Pick<IAnnouncementsProps, 'handleAnnouncementsFetch'>;
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   announcements: state.session.announcements
-})
+});
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -23,6 +23,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleAnnouncementsFetch: fetchAnnouncements
     },
     dispatch
-  )
+  );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Announcements)
+export default connect(mapStateToProps, mapDispatchToProps)(Announcements);

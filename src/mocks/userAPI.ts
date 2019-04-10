@@ -6,7 +6,7 @@ export enum Roles {
   trainer = 'trainer',
   admin = 'admin'
 }
-export type Role = keyof typeof Roles
+export type Role = keyof typeof Roles;
 
 /**
  * Mock for fetching a role, given an access token. A null
@@ -17,17 +17,17 @@ export type Role = keyof typeof Roles
  * @param mockRole a role to mock retrieval for.
  */
 export const mockFetchRole = (accessToken: string, role: Role = Roles.trainer): Role | null => {
-  return role
-}
+  return role;
+};
 
 /**
  * Represents the information for a student.
  * TODO move this to a separate file once API specs are confirmed.
  */
 export type StudentInfo = {
-  id: number
-  totalXP: number
-}
+  id: number;
+  totalXP: number;
+};
 
 const mockStudentInfo = [
   {
@@ -38,7 +38,7 @@ const mockStudentInfo = [
     id: 1,
     totalXP: 1000
   }
-]
+];
 
 /**
  * Mock for fetching a trainer/admin's student information. A null value
@@ -48,11 +48,11 @@ const mockStudentInfo = [
  */
 export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null => {
   // mocks backend role fetching
-  const permittedRoles: Role[] = [Roles.admin, Roles.trainer]
-  const role: Role | null = mockFetchRole(accessToken)
+  const permittedRoles: Role[] = [Roles.admin, Roles.trainer];
+  const role: Role | null = mockFetchRole(accessToken);
   if (role === null || !permittedRoles.includes(role)) {
-    return null
+    return null;
   } else {
-    return mockStudentInfo
+    return mockStudentInfo;
   }
-}
+};

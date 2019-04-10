@@ -1,6 +1,6 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
-import { withRouter } from 'react-router'
-import { bindActionCreators, Dispatch } from 'redux'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { withRouter } from 'react-router';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import {
   beginInterruptExecution,
@@ -15,18 +15,20 @@ import {
   evalRepl,
   generateLzString,
   playgroundExternalSelect,
+  toggleEditorAutorun,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
-} from '../actions'
-import { ExternalLibraryName } from '../components/assessment/assessmentShape'
-import Playground, { IDispatchProps, IStateProps } from '../components/Playground'
-import { IState } from '../reducers/states'
+} from '../actions';
+import { ExternalLibraryName } from '../components/assessment/assessmentShape';
+import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
+import { IState } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.playground.sideContentActiveTab,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
+  isEditorAutorun: state.workspaces.playground.isEditorAutorun,
   isRunning: state.workspaces.playground.isRunning,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
@@ -34,9 +36,9 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
   externalLibraryName: state.workspaces.playground.playgroundExternal
-})
+});
 
-const location: WorkspaceLocation = 'playground'
+const location: WorkspaceLocation = 'playground';
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -56,9 +58,10 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
       handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, location)
+        changeSideContentHeight(heightChange, location),
+      handleToggleEditorAutorun: () => toggleEditorAutorun(location)
     },
     dispatch
-  )
+  );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));

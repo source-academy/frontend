@@ -5,12 +5,61 @@
 
 ## Development Setup
 
-1. Install a stable version of Yarn and NodeJS.
+1. Install a stable version of Yarn and NodeJS (use node version 4-9 with nvm).
 2. Run `yarn` to install dependencies.
 3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_IVLE_KEY`
    to contain your IVLE Lapi key.
 4. Run `yarn start` to start the server at `localhost:80`. Admin permissions may
    be required for your OS to serve at port 80.
+   
+## IVLE LAPI Key
+For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
+
+## For Windows Users
+
+### Running cadet-frontend
+In package.json, change line 19:\
+"start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",\
+to:\
+"start-js": "set PORT=80 & react-scripts-ts start",\
+
+### Dealing with hooks
+In package.json, change line 28:\
+"pre-push": "bash scripts/test.sh",\
+to an empty line.
+
+Please note that doing this will disable the test suite, so you will need to run the tests manually instead. Using Git Bash (or any other UNIX-based command line), run the following:\
+cd scripts\
+bash test.sh
+
+## For Testing of js-slang
+
+### Alpha version
+
+Use branch js-slang-alpha-preview to see the new changes (native and verbose errors).
+
+Have `"enable verbose";` as the first line of your program to activate verbose messages.
+
+Edit https://github.com/source-academy/cadet-frontend/blob/57ba44f6b55c214d0f20339cd45bece57f24f48c/src/sagas/index.ts#L260
+
+to toggle native.
+
+### To run local copy of js-slang
+
+1. Follow the instructions on the js-slang repository to transpile your own copy
+2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
+
+`"js-slang": "file:path/to/js-slang",`
+
+Note that this copies your files over, any future changes will not be reflected. 
+
+You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
+
+## For Editing And Creating New Local XML Missions
+
+1. Use the branch 'mission-editing' in cadet-frontend
+2. Run in browser with yarn start
+2. Go to Incubator tab.
 
 ## Application Structure
 
