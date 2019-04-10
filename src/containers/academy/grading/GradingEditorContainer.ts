@@ -12,4 +12,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(null, mapDispatchToProps)(GradingEditor);
+export default connect(
+  null,
+  mapDispatchToProps
+)(GradingEditor);

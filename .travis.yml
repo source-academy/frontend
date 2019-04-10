@@ -1,12 +1,11 @@
 language: node_js
 node_js:
   - 9
-cache: yarn
 branches:
   except:
     - /^no-ci.*$/
 script:
-  - yarn format:ci
-  - yarn build-css
-  - yarn tslint -p .
-  - yarn test-coveralls
+  - npm run format:ci
+  - npm run build-css
+  - npm run tslint
+  - npm run test-coveralls
