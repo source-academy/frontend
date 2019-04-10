@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import Academy from '../containers/academy';
+import IncubatorContainer from '../containers/incubator';
 import Login from '../containers/LoginContainer';
 import Playground from '../containers/PlaygroundContainer';
 import { Role, sourceChapters } from '../reducers/states';
@@ -30,6 +31,8 @@ export interface IDispatchProps {
   handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void;
 }
 
+const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
+
 class Application extends React.Component<IApplicationProps, {}> {
   public componentDidMount() {
     parsePlayground(this.props);
@@ -47,6 +50,7 @@ class Application extends React.Component<IApplicationProps, {}> {
         <div className="Application__main">
           <Switch>
             <Route path="/academy" component={toAcademy(this.props)} />
+            <Route path={`/incubator/${assessmentRegExp}`} render={toIncubator} />
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
             <Route exact={true} path="/" render={this.redirectToAcademy} />
@@ -85,6 +89,8 @@ const parsePlayground = (props: IApplicationProps) => {
     props.handlePlaygroundExternalSelect(externalLibraryName);
   }
 };
+
+const toIncubator = (routerProps: RouteComponentProps<any>) => <IncubatorContainer />;
 
 const parsePrgrm = (props: RouteComponentProps<{}>) => {
   const qsParsed = qs.parse(props.location.hash);
