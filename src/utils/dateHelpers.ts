@@ -1,4 +1,4 @@
-import * as moment from 'moment'
+import * as moment from 'moment';
 
 /**
  * Checks if a date is before or at the current time.
@@ -9,10 +9,10 @@ import * as moment from 'moment'
  *   is before the time of execution of this function.
  */
 export const beforeNow = (dateString: string): boolean => {
-  const date = moment(dateString)
-  const now = moment()
-  return date.isBefore(now)
-}
+  const date = moment(dateString);
+  const now = moment();
+  return date.isBefore(now);
+};
 
 /**
  * Return a string representation of a date that is
@@ -25,7 +25,7 @@ export const beforeNow = (dateString: string): boolean => {
  *   e.g 7th June, 20:09
  */
 export const getPrettyDate = (dateString: string): string => {
-  const date = moment(dateString)
-  const prettyDate = date.format('Do MMMM, HH:mm')
-  return prettyDate
-}
+  const date = moment(dateString);
+  const prettyDate = date.format('Do MMMM, HH:mm');
+  return prettyDate;
+};

@@ -1,25 +1,25 @@
-import { Button } from '@blueprintjs/core'
-import * as React from 'react'
+import { Button } from '@blueprintjs/core';
+import * as React from 'react';
 
 class ToneMatrix extends React.Component<{}, {}> {
-  private $container: HTMLElement | null
+  private $container: HTMLElement | null;
 
   public shouldComponentUpdate() {
-    return false
+    return false;
   }
 
   public componentDidMount() {
     if ((window as any).ToneMatrix) {
-      ;(window as any).ToneMatrix.initialise_matrix(this.$container!)
+      (window as any).ToneMatrix.initialise_matrix(this.$container!);
     }
   }
 
   public handleClear() {
-    ;(window as any).ToneMatrix.clear_matrix()
+    (window as any).ToneMatrix.clear_matrix();
   }
 
   public handleRandomise() {
-    ;(window as any).ToneMatrix.randomise_matrix()
+    (window as any).ToneMatrix.randomise_matrix();
   }
 
   public render() {
@@ -39,8 +39,8 @@ class ToneMatrix extends React.Component<{}, {}> {
           <div className="col-xs-12" ref={r => (this.$container = r)} />
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default ToneMatrix
+export default ToneMatrix;

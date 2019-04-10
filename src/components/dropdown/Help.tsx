@@ -1,13 +1,13 @@
-import { Classes, Dialog } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
+import { Classes, Dialog } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
 
-import { LINKS } from '../../utils/constants'
+import { LINKS } from '../../utils/constants';
 
 type DialogProps = {
-  isOpen: boolean
-  onClose: () => void
-}
+  isOpen: boolean;
+  onClose: () => void;
+};
 
 const Help: React.SFC<DialogProps> = props => (
   <Dialog
@@ -38,6 +38,6 @@ const Help: React.SFC<DialogProps> = props => (
       </ul>
     </div>
   </Dialog>
-)
+);
 
-export default Help
+export default Help;

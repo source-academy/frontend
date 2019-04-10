@@ -1,35 +1,35 @@
-import { Colors, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid'
-import { AgGridReact } from 'ag-grid-react'
-import 'ag-grid/dist/styles/ag-grid.css'
-import 'ag-grid/dist/styles/ag-theme-balham.css'
-import { sortBy } from 'lodash'
-import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
+import { Colors, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid/dist/styles/ag-grid.css';
+import 'ag-grid/dist/styles/ag-theme-balham.css';
+import { sortBy } from 'lodash';
+import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 
-import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer'
-import { stringParamToInt } from '../../../utils/paramParseHelpers'
-import { controlButton } from '../../commons'
-import ContentDisplay from '../../commons/ContentDisplay'
-import GradingHistory from './GradingHistory'
-import GradingNavLink from './GradingNavLink'
-import { GradingOverview } from './gradingShape'
-import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace'
+import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
+import { stringParamToInt } from '../../../utils/paramParseHelpers';
+import { controlButton } from '../../commons';
+import ContentDisplay from '../../commons/ContentDisplay';
+import GradingHistory from './GradingHistory';
+import GradingNavLink from './GradingNavLink';
+import { GradingOverview } from './gradingShape';
+import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace';
 
 /**
  * Column Definitions are defined within the state, so that data
  * can be manipulated easier. See constructor for an example.
  */
 type State = {
-  columnDefs: ColDef[]
-  filterValue: string
-  groupFilterEnabled: boolean
-}
+  columnDefs: ColDef[];
+  filterValue: string;
+  groupFilterEnabled: boolean;
+};
 
 type GradingNavLinkProps = {
-  data: GradingOverview
-}
+  data: GradingOverview;
+};
 
 interface IGradingProps
   extends IDispatchProps,
@@ -37,33 +37,33 @@ interface IGradingProps
     RouteComponentProps<IGradingWorkspaceParams> {}
 
 export interface IGradingWorkspaceParams {
-  submissionId?: string
-  questionId?: string
+  submissionId?: string;
+  questionId?: string;
 }
 
 export interface IDispatchProps {
-  handleFetchGradingOverviews: (filterToGroup?: boolean) => void
+  handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
 }
 
 export interface IStateProps {
-  gradingOverviews?: GradingOverview[]
+  gradingOverviews?: GradingOverview[];
 }
 
 /** Component to render in table - marks */
 const GradingMarks = (props: GradingNavLinkProps) => {
-  return <GradingHistory data={props.data} exp={false} grade={true} />
-}
+  return <GradingHistory data={props.data} exp={false} grade={true} />;
+};
 
 /** Component to render in table - XP */
 const GradingExp = (props: GradingNavLinkProps) => {
-  return <GradingHistory data={props.data} exp={true} grade={false} />
-}
+  return <GradingHistory data={props.data} exp={true} grade={false} />;
+};
 
 class Grading extends React.Component<IGradingProps, State> {
-  private gridApi?: GridApi
+  private gridApi?: GridApi;
 
   public constructor(props: IGradingProps) {
-    super(props)
+    super(props);
 
     this.state = {
       columnDefs: [
@@ -77,16 +77,16 @@ class Grading extends React.Component<IGradingProps, State> {
           maxWidth: 100,
           cellStyle: params => {
             if (params.data.currentGrade < params.data.maxGrade) {
-              return { backgroundColor: Colors.RED5 }
+              return { backgroundColor: Colors.RED5 };
             } else {
-              return {}
+              return {};
             }
           },
           comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
             if (nodeA && nodeB) {
-              return nodeA.data.currentGrade - nodeB.data.currentGrade
+              return nodeA.data.currentGrade - nodeB.data.currentGrade;
             } else {
-              return valueA - valueB
+              return valueA - valueB;
             }
           }
         },
@@ -97,9 +97,9 @@ class Grading extends React.Component<IGradingProps, State> {
           maxWidth: 100,
           comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
             if (nodeA && nodeB) {
-              return nodeA.data.currentXp - nodeB.data.currentXp
+              return nodeA.data.currentXp - nodeB.data.currentXp;
             } else {
-              return valueA - valueB
+              return valueA - valueB;
             }
           }
         },
@@ -128,21 +128,21 @@ class Grading extends React.Component<IGradingProps, State> {
       filterValue: '',
 
       groupFilterEnabled: false
-    }
+    };
   }
 
   public render() {
-    const submissionId: number | null = stringParamToInt(this.props.match.params.submissionId)
+    const submissionId: number | null = stringParamToInt(this.props.match.params.submissionId);
     // default questionId is 0 (the first question)
-    const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0
+    const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0;
 
     /* Create a workspace to grade a submission. */
     if (submissionId !== null) {
       const props: GradingWorkspaceProps = {
         submissionId,
         questionId
-      }
-      return <GradingWorkspaceContainer {...props} />
+      };
+      return <GradingWorkspaceContainer {...props} />;
     }
 
     /* Display either a loading screen or a table with overviews. */
@@ -152,11 +152,11 @@ class Grading extends React.Component<IGradingProps, State> {
         description="Fetching submissions..."
         visual={<Spinner large={true} />}
       />
-    )
+    );
     const data = sortBy(this.props.gradingOverviews, [
       (a: GradingOverview) => -a.assessmentId,
       (a: GradingOverview) => -a.submissionId
-    ])
+    ]);
 
     const grid = (
       <div className="GradingContainer">
@@ -206,42 +206,42 @@ class Grading extends React.Component<IGradingProps, State> {
           </div>
         </div>
       </div>
-    )
+    );
     return (
       <ContentDisplay
         loadContentDispatch={this.props.handleFetchGradingOverviews}
         display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
         fullWidth={false}
       />
-    )
+    );
   }
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const changeVal = event.target.value
-    this.setState({ filterValue: changeVal })
+    const changeVal = event.target.value;
+    this.setState({ filterValue: changeVal });
 
     if (this.gridApi) {
-      this.gridApi.setQuickFilter(changeVal)
+      this.gridApi.setQuickFilter(changeVal);
     }
-  }
+  };
 
   private handleGroupsFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const checkStatus = event.target.checked
-    this.setState({ groupFilterEnabled: checkStatus })
-    this.props.handleFetchGradingOverviews(!checkStatus)
-  }
+    const checkStatus = event.target.checked;
+    this.setState({ groupFilterEnabled: checkStatus });
+    this.props.handleFetchGradingOverviews(!checkStatus);
+  };
 
   private onGridReady = (params: GridReadyEvent) => {
-    this.gridApi = params.api
-    this.gridApi.sizeColumnsToFit()
-  }
+    this.gridApi = params.api;
+    this.gridApi.sizeColumnsToFit();
+  };
 
   private exportCSV = () => {
     if (this.gridApi === undefined) {
-      return
+      return;
     }
-    this.gridApi.exportDataAsCsv({ allColumns: true })
-  }
+    this.gridApi.exportDataAsCsv({ allColumns: true });
+  };
 }
 
-export default Grading
+export default Grading;
