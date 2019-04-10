@@ -32,17 +32,13 @@ Please note that doing this will disable the test suite, so you will need to run
 cd scripts\
 bash test.sh
 
-## For Testing of js-slang
+## js-slang
 
-### Alpha version
-
-Use branch js-slang-alpha-preview to see the new changes (native and verbose errors).
-
-Have `"enable verbose";` as the first line of your program to activate verbose messages.
+Currently using a version of js-slang with native and verbose errors.
 
 Edit https://github.com/source-academy/cadet-frontend/blob/57ba44f6b55c214d0f20339cd45bece57f24f48c/src/sagas/index.ts#L260
 
-to toggle native.
+to toggle native (default is native enabled). 
 
 ### To run local copy of js-slang
 
