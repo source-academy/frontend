@@ -164,33 +164,31 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
           : null;
-      const editorPrepend = 
+      const editorPrepend =
         question.type === QuestionTypes.programming
           ? (question as IProgrammingQuestion).prepend !== null
             ? (question as IProgrammingQuestion).prepend
-            : ""
-          : "";
-      const editorPostpend = 
+            : ''
+          : '';
+      const editorPostpend =
         question.type === QuestionTypes.programming
           ? (question as IProgrammingQuestion).postpend !== null
             ? (question as IProgrammingQuestion).postpend
-            : ""
-          : "";
+            : ''
+          : '';
       const editorTestcases =
         question.type === QuestionTypes.programming
           ? (question as IProgrammingQuestion).testcases !== null
             ? (question as IProgrammingQuestion).testcases
             : []
-          : [];    
+          : [];
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
-      this.props.handleResetWorkspace(
-        { 
-          editorPrepend,
-          editorValue,
-          editorPostpend,
-          editorTestcases
-        }
-      );
+      this.props.handleResetWorkspace({
+        editorPrepend,
+        editorValue,
+        editorPostpend,
+        editorTestcases
+      });
       this.props.handleClearContext(question.library);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (editorValue) {

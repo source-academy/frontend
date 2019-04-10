@@ -201,35 +201,33 @@ class AssessmentWorkspace extends React.Component<
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
           : null;
-      const editorPrepend = 
+      const editorPrepend =
         question.type === QuestionTypes.programming
           ? (question as IProgrammingQuestion).prepend !== null
             ? (question as IProgrammingQuestion).prepend
-            : ""
-          : "";
-      const editorPostpend = 
+            : ''
+          : '';
+      const editorPostpend =
         question.type === QuestionTypes.programming
           ? (question as IProgrammingQuestion).postpend !== null
             ? (question as IProgrammingQuestion).postpend
-            : ""
-          : "";
+            : ''
+          : '';
       const editorTestcases =
         question.type === QuestionTypes.programming
           ? (question as IProgrammingQuestion).testcases !== null
             ? (question as IProgrammingQuestion).testcases.map(testcase => {
                 return testcase;
-            })
+              })
             : []
           : [];
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
-      this.props.handleResetWorkspace(
-        { 
-          editorPrepend,
-          editorValue,
-          editorPostpend,
-          editorTestcases
-        }
-      );
+      this.props.handleResetWorkspace({
+        editorPrepend,
+        editorValue,
+        editorPostpend,
+        editorTestcases
+      });
       this.props.handleClearContext(question.library);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (editorValue) {
@@ -257,7 +255,12 @@ class AssessmentWorkspace extends React.Component<
       {
         label: `${props.assessment!.category} Autograder`,
         icon: IconNames.AIRPLANE,
-        body: <Autograder testcases={props.editorTestcases} handleTestcaseEval={this.props.handleTestcaseEval} />
+        body: (
+          <Autograder
+            testcases={props.editorTestcases}
+            handleTestcaseEval={this.props.handleTestcaseEval}
+          />
+        )
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;

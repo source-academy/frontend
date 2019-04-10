@@ -310,7 +310,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isRunning: false
         }
       };
-    case EVAL_TESTCASE_SUCCESS: 
+    case EVAL_TESTCASE_SUCCESS:
       lastOutput = state[location].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
         newOutput = state[location].output.slice(0, -1).concat({
@@ -329,17 +329,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          editorTestcases: state[location].editorTestcases.map(
-            (testcase, i) => {
-              if (i === index) {
-                testcase.actual = newOutput[0];
-                return testcase;
-              } else {
-                return testcase;
-              }
-            }),
+          editorTestcases: state[location].editorTestcases.map((testcase, i) => {
+            if (i === index) {
+              testcase.actual = newOutput[0];
+              return testcase;
+            } else {
+              return testcase;
+            }
+          }),
           isRunning: false
-        }   
+        }
       };
     case EVAL_INTERPRETER_ERROR:
       lastOutput = state[location].output.slice(-1)[0];

@@ -29,9 +29,10 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
     const code: string = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).editorPrepend! + 
-                         (state.workspaces[location] as IWorkspaceState).editorValue! +
-                         (state.workspaces[location] as IWorkspaceState).editorPostpend!
+      (state: IState) =>
+        (state.workspaces[location] as IWorkspaceState).editorPrepend! +
+        (state.workspaces[location] as IWorkspaceState).editorValue! +
+        (state.workspaces[location] as IWorkspaceState).editorPostpend!
     );
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
@@ -79,10 +80,14 @@ function* workspaceSaga(): SagaIterator {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
     const index = (action as actionTypes.IAction).payload.testcaseId;
     const code: string = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).editorPrepend! + '\n' +
-                         (state.workspaces[location] as IWorkspaceState).editorValue! + '\n' +
-                         (state.workspaces[location] as IWorkspaceState).editorPostpend! + '\n' +
-                         (state.workspaces[location] as IWorkspaceState).editorTestcases[index].program!
+      (state: IState) =>
+        (state.workspaces[location] as IWorkspaceState).editorPrepend! +
+        '\n' +
+        (state.workspaces[location] as IWorkspaceState).editorValue! +
+        '\n' +
+        (state.workspaces[location] as IWorkspaceState).editorPostpend! +
+        '\n' +
+        (state.workspaces[location] as IWorkspaceState).editorTestcases[index].program!
     );
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter

@@ -201,9 +201,9 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
-  editorPrepend: "",
+  editorPrepend: '',
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
-  editorPostpend: "",
+  editorPostpend: '',
   editorTestcases: [],
   editorWidth: '50%',
   output: [],
