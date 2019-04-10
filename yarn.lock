@@ -5227,9 +5227,10 @@ js-base64@^2.1.9:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.3.tgz#2e545ec2b0f2957f41356510205214e98fad6582"
 
-js-slang@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.2.0.tgz#15b998d2e67bc2834421235f96408b4015bb322c"
+js-slang@0.2.1-alpha.3:
+  version "0.2.1-alpha.3"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.2.1-alpha.3.tgz#8e93828c67e0eb729ce229f66cadc5e081730541"
+  integrity sha512-iLEhlsrW1kbZ1OZ0rlVrhrFSsAacLAjqSqLuMqO+bAbdbZq2xc1wtQk+/xrj1hnRFRJhPqZH5qQetQm8vkQqFg==
   dependencies:
     "@types/estree" "0.0.39"
     acorn "^6.0.5"
@@ -5238,6 +5239,7 @@ js-slang@0.2.0:
     commander "^2.19.0"
     common-tags "^1.8.0"
     invariant "^2.2.4"
+    source-map "^0.7.3"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
@@ -8997,6 +8999,11 @@ source-map@^0.4.2, source-map@^0.4.4:
 source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+
+source-map@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
+  integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
 spdx-correct@^3.0.0:
   version "3.0.0"
