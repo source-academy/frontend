@@ -85,8 +85,8 @@ class AssessmentWorkspace extends React.Component<
       showOverlay: false,
       showResetOverlay: false
     };
-    this.props.handleEditorValueChange('')
-  };
+    this.props.handleEditorValueChange('');
+  }
 
   /**
    * After mounting (either an older copy of the assessment
@@ -103,14 +103,14 @@ class AssessmentWorkspace extends React.Component<
         this.props.questionId >= this.props.assessment.questions.length
           ? this.props.assessment.questions.length - 1
           : this.props.questionId
-      ]
+      ];
       this.props.handleEditorValueChange(
         question.type === QuestionTypes.programming
           ? question.answer !== null
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
           : ''
-      )
+      );
     }
   }
 
@@ -144,7 +144,7 @@ class AssessmentWorkspace extends React.Component<
           />
         </Card>
       </Dialog>
-    )
+    );
 
     const resetOverlay = (
       <Dialog
@@ -167,12 +167,12 @@ class AssessmentWorkspace extends React.Component<
               'Confirm',
               null,
               () => {
-                this.setState({ showResetOverlay: false })
+                this.setState({ showResetOverlay: false });
                 this.props.handleEditorValueChange(
                   (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
                     .solutionTemplate
-                )
-                this.props.handleUpdateHasUnsavedChanges(true)
+                );
+                this.props.handleUpdateHasUnsavedChanges(true);
               },
               { minimal: false, intent: Intent.DANGER }
             )}
@@ -185,7 +185,7 @@ class AssessmentWorkspace extends React.Component<
       this.props.questionId >= this.props.assessment.questions.length
         ? this.props.assessment.questions.length - 1
         : this.props.questionId;
-    const question: IQuestion = this.props.assessment.questions[questionId]
+    const question: IQuestion = this.props.assessment.questions[questionId];
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
@@ -250,14 +250,14 @@ class AssessmentWorkspace extends React.Component<
           ? question.answer !== null
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
-          : ''
+          : '';
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({ editorValue });
       this.props.handleClearContext(question.library);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (editorValue) {
         this.props.handleEditorValueChange(editorValue);
-      };
+      }
     }
   }
 
@@ -343,7 +343,7 @@ class AssessmentWorkspace extends React.Component<
           this.props.editorValue!
         ),
       onClickReset: () => {
-        this.setState({ showResetOverlay: true })
+        this.setState({ showResetOverlay: true });
       },
       questionProgress: [questionId + 1, this.props.assessment!.questions.length],
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter
