@@ -112,25 +112,138 @@ function get_duration(sourcesound) {
 }
 
 var _playing = false;
-var _audio = null;
+var player;
 
 function play(sourcesound) {
+    // If a sourcesound is already playing, terminate execution
+    if (_playing) return;
+    _playing = true;
+
+    // Declaring duration and wave variables
     var duration = get_duration(sourcesound);
     var wave = get_wave(sourcesound);
-    var data = discretize(wave, duration);
-    if (_playing) return;
-    _audio = raw_to_audio(data);
-    _audio.addEventListener('ended', stop);
-    _audio.play();
-    _playing = true;
+
+    // Create AudioContext
+    //const AudioContext = window.AudioContext || window.webkitAudioContext;
+    
+    // Main audio context
+    player = new AudioContext();
+
+    // Controls Length of buffer in seconds.
+    var buffer_length = 0.1;
+
+    // Define Buffer Size
+    var bufferSize = FS * buffer_length;
+
+    // Create two buffers
+    var buffer1 = player.createBuffer(1, bufferSize, FS);
+    var buffer2 = player.createBuffer(1, bufferSize, FS);
+
+    // Create Discretized Data Set
+    let data1 = buffer1.getChannelData(0);
+    let data2 = buffer2.getChannelData(0);
+
+    // Discretizes a sourcesound to a sound starting from elapsed_duration, for length seconds
+    function discretize_from(wave, duration, elapsed_duration, length, data) {
+        if (elapsed_duration + length > duration) {
+            for (var i = elapsed_duration * FS; i < duration * FS; i++) {
+                data[i - elapsed_duration * FS] = wave(i / FS);
+            }
+            return data;
+        } else if (duration - elapsed_duration > 0) {
+            for (var i = elapsed_duration * FS; i < (elapsed_duration + length) * FS; i++) {
+                data[i - elapsed_duration * FS] = wave(i / FS);
+            }
+            return data;
+        }
+    }
+
+    // Schedules playback of sounds (Once keeps track of whether first instance, first is first or second sound)
+    function ping_pong(wave, duration, elapsed_duration,
+            buffer_length, once, first, start_time, count,
+            sound1, sound2) {
+        // If sound has exceeded duration, early return to stop calls.
+        if (elapsed_duration > duration || !_playing) { 
+            stop();
+            return;
+        }
+        
+        if (once) {
+            // Fill 1st, Play 1st:
+            // Discretize first chunk, load into buffer1
+        let data1 = buffer1.getChannelData(0);
+            data1 = discretize_from(wave, duration, elapsed_duration, buffer_length, data1);
+            // Increment elapsed duration
+            elapsed_duration += buffer_length;
+            // Create sound1
+            var sound1 = new AudioBufferSourceNode(player);
+            // Set sound1's buffer to buffer1
+            sound1.buffer = buffer1;
+            // Play sound1
+            count += buffer_length;
+            sound1.connect(player.destination);
+            sound1.start();
+        }
+
+        if (first) {
+            // LOOP PART 1 ------>
+
+            // Fill 2nd while 1st is playing, schedule 2 to play:
+            // Discretize next chunk, load into buffer2
+        let data2 = buffer2.getChannelData(0);
+            data2 = discretize_from(wave, duration, elapsed_duration, buffer_length, data2);
+            // Increment elapsed duration
+            elapsed_duration += buffer_length;
+            // Create sound2
+            var sound2 = new AudioBufferSourceNode(player);
+            // Set sound2's buffer to buffer2
+            sound2.buffer = buffer2;
+            // Schedule sound2 to play after sound1
+            sound2.connect(player.destination);
+            sound2.start(start_time + count);
+            count += buffer_length;
+            // When sound1 ends, jump to LOOP PART 2 ------->
+            sound1.onended = function(event) {
+                //alert("SOUND1 ENDED");
+                ping_pong(wave, duration, elapsed_duration, buffer_length,
+                    false, false, start_time, count,
+                        sound1, sound2);
+            }
+        } else {
+            // LOOP PART 2 ------>
+            
+            // Fill 1st while 2nd is playing, schedule 1 to play:
+            // Discretize next chunk, load into buffer1
+            let data1 = buffer1.getChannelData(0);
+            data1 = discretize_from(wave, duration, elapsed_duration, buffer_length, data1);
+            // Increment elapsed duration
+            elapsed_duration += buffer_length;
+            // Create sound1
+            let sound1 = player.createBufferSource();
+            // Set sound1's buffer to buffer1
+            sound1.buffer = buffer1;
+            // Schedule sound1 to play after sound2
+            sound1.connect(player.destination);
+            sound1.start(start_time + count);
+            count += buffer_length;
+            // When sound2 ends, jump to LOOP PART 1 ------->
+            sound2.onended = function(event) {
+                //alert("SOUND2 ENDED");
+                ping_pong(wave, duration, elapsed_duration, buffer_length,
+                    false, true, start_time, count,
+                        sound1, sound2);
+            }
+        }
+    }
+    var start_time = player.currentTime;
+    ping_pong(wave, duration, 0, buffer_length, true, true, start_time, 0, null, null);
 }
 
 function stop() {
-  if (_playing) {
-    _audio.pause()
-    _audio = null
-  }
-  _playing = false
+    if (_playing) {
+        player.close();
+    }
+    _playing = false;
 }
 
 function cut_sourcesound(sourcesound, duration) {
@@ -156,11 +269,10 @@ function consec_two(ss1, ss2) {
     var dur1 = tail(ss1);
     var dur2 = tail(ss2);
     var new_wave = function(t) {
-        return t < dur1 ? wave1(t) : wave2(t-dur1);
+        return t < dur1 ? wave1(t) : wave2(t - dur1);
     }
     return pair(new_wave, dur1 + dur2);
 }
-
 
 // Concats a list of sourcesounds
 function consecutively(list_of_sourcesounds) {
