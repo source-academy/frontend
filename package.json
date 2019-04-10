@@ -26,6 +26,7 @@
     "test-coveralls": "./scripts/coverage-fix.sh do && react-scripts-ts test --env=jsdom --coverage --coverageReporters=text-lcov | coveralls",
     "update-ui-snapshots": "jest --updateSnapshot",
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
+    "tslint": "tslint -p .",
     "cors-proxy": "lcp --proxyUrl http://localhost:4000 --port 4001 --proxyPartial \"\""
   },
   "husky": {

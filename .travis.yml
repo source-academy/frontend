@@ -8,5 +8,5 @@ branches:
 script:
   - npm run format:ci
   - npm run build-css
-  - npm run tslint -p .
+  - npm run tslint
   - npm run test-coveralls
