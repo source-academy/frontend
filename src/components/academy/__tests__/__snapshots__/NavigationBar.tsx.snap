@@ -3,25 +3,25 @@
 exports[`Grading NavLink does NOT renders for Role.Student 1`] = `
 "<Blueprint2.Navbar className=\\"NavigationBar secondary-navbar\\">
   <Blueprint2.NavbarGroup align=\\"left\\">
-    <NavLink to=\\"/academy/missions\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/missions\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"flame\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Missions
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/quests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/quests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Quests
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Paths
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/contests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/contests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Contests
@@ -34,25 +34,25 @@ exports[`Grading NavLink does NOT renders for Role.Student 1`] = `
 exports[`Grading NavLink renders for Role.Admin 1`] = `
 "<Blueprint2.Navbar className=\\"NavigationBar secondary-navbar\\">
   <Blueprint2.NavbarGroup align=\\"left\\">
-    <NavLink to=\\"/academy/missions\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/missions\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"flame\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Missions
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/quests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/quests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Quests
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Paths
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/contests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/contests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Contests
@@ -60,7 +60,7 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
     </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/academy/grading\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/grading\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"endorsed\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Grading
@@ -73,25 +73,25 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
 exports[`Grading NavLink renders for Role.Staff 1`] = `
 "<Blueprint2.Navbar className=\\"NavigationBar secondary-navbar\\">
   <Blueprint2.NavbarGroup align=\\"left\\">
-    <NavLink to=\\"/academy/missions\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/missions\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"flame\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Missions
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/quests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/quests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Quests
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/paths\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Paths
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/contests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/contests\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Contests
@@ -99,7 +99,7 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
     </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/academy/grading\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" ariaCurrent=\\"true\\">
+    <NavLink to=\\"/academy/grading\\" activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"endorsed\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Grading

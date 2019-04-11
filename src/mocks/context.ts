@@ -1,8 +1,8 @@
 import { parse } from 'acorn';
-import { FunctionExpression } from 'estree';
+import { FunctionExpression, Node } from 'estree';
 import Closure from 'js-slang/dist/closure';
 import createContext from 'js-slang/dist/createContext';
-import { Context, Frame } from 'js-slang/dist/types';
+import { Context, Environment } from 'js-slang/dist/types';
 import { TypeError } from 'js-slang/dist/utils/rttc';
 
 export function mockContext(chapter = 1): Context {
@@ -13,7 +13,7 @@ export function mockRuntimeContext(): Context {
   const context = createContext();
   context.runtime = {
     isRunning: true,
-    frames: [],
+    environments: [],
     nodes: [
       {
         type: 'Literal',
@@ -31,9 +31,10 @@ export function mockRuntimeContext(): Context {
 }
 
 export function mockClosure(): Closure {
-  return new Closure({} as FunctionExpression, {} as Frame, {} as Context);
+  return new Closure({} as FunctionExpression, {} as Environment, {} as Context);
 }
 
 export function mockTypeError(): TypeError {
-  return new TypeError(parse(''), '', '', '');
+  // Typecast to Node to fix estree-acorn compatability.
+  return new TypeError(parse('') as Node, '', '', '');
 }
