@@ -6,6 +6,6 @@ branches:
     - /^no-ci.*$/
 script:
   - npm run format:ci
-  - npm run build-css
+  - npm run build
   - npm run tslint
   - npm run test-coveralls
