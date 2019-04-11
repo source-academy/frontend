@@ -78,4 +78,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(GradingWorkspace);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(GradingWorkspace);
