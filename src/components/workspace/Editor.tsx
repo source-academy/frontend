@@ -29,7 +29,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
   private AceEditor: React.RefObject<AceEditor>;
-  private ShareAce: any;
+  public ShareAce: any;
 
   constructor(props: IEditorProps) {
     super(props);

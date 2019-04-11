@@ -18,6 +18,7 @@ import { externalLibraries } from '../../reducers/externalLibraries';
 import { sourceChapters } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
+import Editor from './Editor';
 
 /**
  * @prop questionProgress a tuple of (current question number, question length) where
@@ -27,10 +28,13 @@ export type ControlBarProps = {
   queryString?: string;
   questionProgress: [number, number] | null;
   sourceChapter: number;
+  editorRef?: React.RefObject<Editor>;
   editorSessionId?: string;
+  editorValue?: string | null;
   externalLibraryName?: string;
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleEditorEval: () => void;
+  handleEditorValueChange?: (newCode: string) => void;
   handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleGenerateLz?: () => void;
   handleInterruptEval: () => void;
@@ -109,6 +113,12 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
           if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             const id = JSON.parse(xmlhttp.responseText).id;
             this.props.handleSetEditorSessionId!(id);
+            const code = this.props.editorValue
+              ? this.props.editorValue
+              : '// Collaborative Editing Mode!';
+            this.props.editorRef!.current!.ShareAce.on('ready', () =>
+              this.props.handleEditorValueChange!(code)
+            );
           }
         };
         xmlhttp.open('GET', 'https://api2.sourceacademy.nus.edu.sg/gists/latest', true);

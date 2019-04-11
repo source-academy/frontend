@@ -87,6 +87,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   public render() {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
+        editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
@@ -94,6 +95,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
           this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
+        handleEditorValueChange: this.props.handleEditorValueChange,
         handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,
         handleInvalidEditorSessionId: this.props.handleInvalidEditorSessionId,
