@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
@@ -234,16 +233,13 @@ export const setEditorSessionId: ActionCreator<actionTypes.IAction> = (
 export const setWebsocketStatus: ActionCreator<actionTypes.IAction> = (
   workspaceLocation: WorkspaceLocations,
   websocketStatus: number
-) => {
-  console.log('In workspace action, WS status: ' + websocketStatus);
-  return {
-    type: actionTypes.SET_WEBSOCKET_STATUS,
-    payload: {
-      workspaceLocation,
-      websocketStatus
-    }
-  };
-};
+) => ({
+  type: actionTypes.SET_WEBSOCKET_STATUS,
+  payload: {
+    workspaceLocation,
+    websocketStatus
+  }
+});
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
   type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,

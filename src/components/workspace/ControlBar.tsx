@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import {
   Button,
   Classes,
@@ -84,15 +83,17 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     onClickSave: () => {}
   };
 
-  private shareInputElem: HTMLInputElement;
+  private inviteInputElem: React.RefObject<HTMLInputElement>;
   private joinInputElem: React.RefObject<HTMLInputElement>;
-  private inviteInputElem: HTMLInputElement;
+  private shareInputElem: React.RefObject<HTMLInputElement>;
 
   constructor(props: ControlBarProps) {
     super(props);
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.selectInviteInputText = this.selectInviteInputText.bind(this);
+    this.inviteInputElem = React.createRef();
     this.joinInputElem = React.createRef();
+    this.shareInputElem = React.createRef();
   }
 
   public render() {
@@ -106,52 +107,6 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private editorControl() {
-    const handleStartInvite = () => {
-      if (this.props.editorSessionId === '') {
-        const xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = () => {
-          if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            const id = JSON.parse(xmlhttp.responseText).id;
-            this.props.handleSetEditorSessionId!(id);
-            const code = this.props.editorValue
-              ? this.props.editorValue
-              : '// Collaborative Editing Mode!';
-            this.props.editorRef!.current!.ShareAce.on('ready', () =>
-              this.props.handleEditorValueChange!(code)
-            );
-          }
-        };
-        xmlhttp.open('GET', 'https://api2.sourceacademy.nus.edu.sg/gists/latest', true);
-        xmlhttp.send();
-      }
-    };
-    const handleStartJoining = (e: React.FormEvent<HTMLFormElement>) => {
-      const xmlhttp = new XMLHttpRequest();
-      xmlhttp.onreadystatechange = () => {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-          console.log('Reached server to verify ID');
-          const state = JSON.parse(xmlhttp.responseText).state;
-          if (state === true) {
-            console.log('ID true');
-            this.props.handleSetEditorSessionId!(this.joinInputElem.current!.value);
-          } else {
-            this.props.handleInvalidEditorSessionId!();
-            this.props.handleSetEditorSessionId!('');
-          }
-        } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
-          console.log('Cannot reach server');
-          this.props.handleSetEditorSessionId!('');
-        }
-      };
-      xmlhttp.open(
-        'GET',
-        'https://api2.sourceacademy.nus.edu.sg/gists/' + this.joinInputElem.current!.value,
-        true
-      );
-      xmlhttp.send();
-
-      e.preventDefault();
-    };
     const runButton = (
       <Tooltip content="...or press shift-enter in the editor">
         {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
@@ -178,12 +133,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
           </Text>
         ) : (
           <>
-            <input
-              defaultValue={shareUrl}
-              readOnly={true}
-              ref={e => (this.shareInputElem = e!)}
-              onFocus={this.selectShareInputText}
-            />
+            <input defaultValue={shareUrl} readOnly={true} ref={this.shareInputElem} />
             <CopyToClipboard text={shareUrl}>
               {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
             </CopyToClipboard>
@@ -193,16 +143,57 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     ) : (
       undefined
     );
+    const handleStartInvite = () => {
+      if (this.props.editorSessionId === '') {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = () => {
+          if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            const id = JSON.parse(xmlhttp.responseText).id;
+            this.props.handleSetEditorSessionId!(id);
+            const code = this.props.editorValue
+              ? this.props.editorValue
+              : '// Collaborative Editing Mode!';
+            this.props.editorRef!.current!.ShareAce.on('ready', () =>
+              this.props.handleEditorValueChange!(code)
+            );
+          }
+        };
+        xmlhttp.open('GET', 'https://api2.sourceacademy.nus.edu.sg/gists/latest', true);
+        xmlhttp.send();
+      }
+    };
+    const handleStartJoining = (e: React.FormEvent<HTMLFormElement>) => {
+      const xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = () => {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+          // Successfully reached server to verify ID
+          const state = JSON.parse(xmlhttp.responseText).state;
+          if (state === true) {
+            // Session ID exists
+            this.props.handleSetEditorSessionId!(this.joinInputElem.current!.value);
+          } else {
+            this.props.handleInvalidEditorSessionId!();
+            this.props.handleSetEditorSessionId!('');
+          }
+        } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
+          // Cannot reach server
+          this.props.handleSetEditorSessionId!('');
+        }
+      };
+      xmlhttp.open(
+        'GET',
+        'https://api2.sourceacademy.nus.edu.sg/gists/' + this.joinInputElem.current!.value,
+        true
+      );
+      xmlhttp.send();
+
+      e.preventDefault();
+    };
     const inviteButton = this.props.hasCollabEditing ? (
       <Popover popoverClassName="Popover-custom" inheritDarkTheme={false}>
         {controlButton('Invite', IconNames.SHARE, handleStartInvite)}
         <>
-          <input
-            value={this.props.editorSessionId}
-            readOnly={true}
-            ref={e => (this.inviteInputElem = e!)}
-            onFocus={this.selectInviteInputText}
-          />
+          <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
           <CopyToClipboard text={'' + this.props.editorSessionId}>
             {controlButton('', IconNames.DUPLICATE, this.selectInviteInputText)}
           </CopyToClipboard>
@@ -244,7 +235,6 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const stopAutorunButton = this.props.hasEditorAutorunButton
       ? controlButton('Autorun', IconNames.STOP, this.props.handleToggleEditorAutorun)
       : undefined;
-    console.log('Controbar rendering, ws status: ' + this.props.websocketStatus);
     return (
       <div className="ControlBar_editor pt-button-group">
         {this.props.isEditorAutorun ? undefined : this.props.isRunning ? stopButton : runButton}
@@ -300,13 +290,17 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private selectShareInputText() {
-    this.shareInputElem.focus();
-    this.shareInputElem.select();
+    if (this.shareInputElem.current !== null) {
+      this.shareInputElem.current.focus();
+      this.shareInputElem.current.select();
+    }
   }
 
   private selectInviteInputText() {
-    this.inviteInputElem.focus();
-    this.inviteInputElem.select();
+    if (this.inviteInputElem.current !== null) {
+      this.inviteInputElem.current.focus();
+      this.inviteInputElem.current.select();
+    }
   }
 
   private hasNextButton() {

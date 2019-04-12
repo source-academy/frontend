@@ -1,4 +1,3 @@
-/* tslint:disable */
 import * as React from 'react';
 import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
@@ -26,10 +25,10 @@ export interface IEditorProps {
 }
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
+  public ShareAce: any;
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
   private AceEditor: React.RefObject<AceEditor>;
-  public ShareAce: any;
 
   constructor(props: IEditorProps) {
     super(props);
@@ -49,101 +48,95 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   }
 
   public componentDidMount() {
-    const editor = (this.AceEditor.current! as any).editor;
-    const session = editor.getSession();
+    if (this.AceEditor.current !== null) {
+      const editor = (this.AceEditor.current as any).editor;
+      const session = editor.getSession();
 
-    // Change all info annotations to error annotations
-    session.on('changeAnnotation', () => {
-      const annotations = session.getAnnotations();
-      let count = 0;
-      for (const anno of annotations) {
-        if (anno.type === 'info') {
-          anno.type = 'error';
-          anno.className = 'ace_error';
-          count++;
+      // Change all info annotations to error annotations
+      session.on('changeAnnotation', () => {
+        const annotations = session.getAnnotations();
+        let count = 0;
+        for (const anno of annotations) {
+          if (anno.type === 'info') {
+            anno.type = 'error';
+            anno.className = 'ace_error';
+            count++;
+          }
         }
-      }
-      if (count !== 0) {
-        session.setAnnotations(annotations);
-      }
-    });
-    console.log('Mounting with ID: ' + this.props.editorSessionId);
-
-    // Has valid session ID
-    if (this.props.editorSessionId !== '') {
-      console.log('In Mount, non-empty Session ID: ' + this.props.editorSessionId);
-      console.log('Component mounted with id = ' + this.props.editorSessionId);
-
-      const ShareAce = new sharedbAce(this.props.editorSessionId!, {
-        WsUrl: 'wss://api2.sourceacademy.nus.edu.sg/ws',
-        pluginWsUrl: null,
-        namespace: 'codepad'
-      });
-      this.ShareAce = ShareAce;
-      ShareAce.on('ready', () => {
-        ShareAce.add(
-          editor,
-          ['code'],
-          [
-            // SharedbAceRWControl,
-            // SharedbAceMultipleCursors
-          ]
-        );
+        if (count !== 0) {
+          session.setAnnotations(annotations);
+        }
       });
 
-      // WebSocket connection status detection logic
-      const WS = ShareAce.WS;
-      let interval;
-      const checkStatus = () => {
-        if (this.ShareAce !== null) {
-          const xmlhttp = new XMLHttpRequest();
-          xmlhttp.onreadystatechange = () => {
-            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-              const state = JSON.parse(xmlhttp.responseText).state;
-              if (state !== true) {
-                // ID does not exist
-                clearInterval(interval);
-                WS.close();
-              }
-            } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
-              // Cannot reach server
-              // Force WS to check connection
-              WS.reconnect();
-            }
-          };
-          xmlhttp.open(
-            'GET',
-            'https://api2.sourceacademy.nus.edu.sg/gists/' + this.props.editorSessionId,
-            true
+      // Has valid session ID
+      if (this.props.editorSessionId !== '') {
+        const ShareAce = new sharedbAce(this.props.editorSessionId!, {
+          WsUrl: 'wss://api2.sourceacademy.nus.edu.sg/ws',
+          pluginWsUrl: null,
+          namespace: 'codepad'
+        });
+        this.ShareAce = ShareAce;
+        ShareAce.on('ready', () => {
+          ShareAce.add(
+            editor,
+            ['code'],
+            [
+              // SharedbAceRWControl,
+              // SharedbAceMultipleCursors
+            ]
           );
-          xmlhttp.send();
-          console.log('Calling handle timeout');
-        }
-      };
-      interval = setInterval(checkStatus, 5000);
+        });
 
-      WS.addEventListener('open', (event: any) => {
-        console.log('Socket Opened');
-        this.props.handleSetWebsocketStatus!(1);
-      });
-      WS.addEventListener('close', (event: any) => {
-        console.log('Socket Closed');
-        this.props.handleSetWebsocketStatus!(0);
-      });
+        // WebSocket connection status detection logic
+        const WS = ShareAce.WS;
+        let interval: any;
+        const checkStatus = () => {
+          if (this.ShareAce !== null) {
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = () => {
+              if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                const state = JSON.parse(xmlhttp.responseText).state;
+                if (state !== true) {
+                  // ID does not exist
+                  clearInterval(interval);
+                  WS.close();
+                }
+              } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
+                // Cannot reach server
+                // Force WS to check connection
+                WS.reconnect();
+              }
+            };
+            xmlhttp.open(
+              'GET',
+              'https://api2.sourceacademy.nus.edu.sg/gists/' + this.props.editorSessionId,
+              true
+            );
+            xmlhttp.send();
+          }
+        };
+        // Checks connection status every 5sec
+        interval = setInterval(checkStatus, 5000);
+
+        WS.addEventListener('open', (event: Event) => {
+          this.props.handleSetWebsocketStatus!(1);
+        });
+        WS.addEventListener('close', (event: Event) => {
+          this.props.handleSetWebsocketStatus!(0);
+        });
+      }
     }
   }
 
   public componentWillUnmount() {
     if (this.ShareAce !== null) {
-      console.log('Umounting... Closing websocket');
+      // Umounting... Closing websocket
       this.ShareAce.WS.close();
     }
     this.ShareAce = null;
   }
 
   public render() {
-    console.log('Starting render: editorSessionId = ' + this.props.editorSessionId);
-    console.log('Starting render: key = ' + this.props.editorSessionId);
     return (
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">

@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { Reducer } from 'redux';
 
 import {
@@ -368,7 +367,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
     case SET_WEBSOCKET_STATUS:
-      console.log('In reducer: ' + action.payload.websocketStatus);
       return {
         ...state,
         [location]: {
