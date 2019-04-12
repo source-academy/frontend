@@ -18,7 +18,7 @@
     "format:tsx": "prettier --list-different \"src/**/*.{ts,tsx}\"",
     "format:scss": "prettier --list-different --parser scss \"src/**/*.scss\"",
     "format:ci": "npm run format:tsx && npm run format:scss",
-    "start-js": "set PORT=80 && react-scripts-ts start",
+    "start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",
     "win-start-js": "set PORT=80 & react-scripts-ts start",
     "start": "npm-run-all -p watch-css start-js",
     "win-start": "npm-run-all -p watch-css win-start-js",
