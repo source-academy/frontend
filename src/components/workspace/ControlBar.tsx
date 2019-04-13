@@ -126,7 +126,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     }`;
 
     const shareButton = this.props.hasShareButton ? (
-      <Popover popoverClassName="Popover-custom" inheritDarkTheme={false}>
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
         {this.props.queryString === undefined ? (
           <Text>
@@ -192,7 +192,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       e.preventDefault();
     };
     const inviteButton = this.props.hasCollabEditing ? (
-      <Popover popoverClassName="Popover-custom" inheritDarkTheme={false}>
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Invite', IconNames.SHARE, handleStartInvite)}
         <>
           <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
@@ -205,7 +205,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       undefined
     );
     const joinButton = this.props.hasCollabEditing ? (
-      <Popover popoverClassName="Popover-custom" inheritDarkTheme={false}>
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Join', IconNames.LOG_IN)}
         <>
           <form onSubmit={handleStartJoining}>
