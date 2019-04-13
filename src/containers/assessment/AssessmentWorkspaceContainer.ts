@@ -92,4 +92,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AssessmentWorkspace);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AssessmentWorkspace);

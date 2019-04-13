@@ -1,5 +1,5 @@
 import { Store } from 'redux';
-import * as mockStore from 'redux-mock-store';
+import mockStore from 'redux-mock-store';
 
 import {
   defaultAcademy,

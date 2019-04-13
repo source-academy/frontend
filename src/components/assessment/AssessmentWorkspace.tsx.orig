@@ -261,8 +261,12 @@ class AssessmentWorkspace extends React.Component<
           ? question.answer !== null
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
-          : '';
+<<<<<<< HEAD
+          : null;
       this.props.handleEditorUpdateBreakpoints([]);
+=======
+          : '';
+>>>>>>> master
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({ editorValue });
       this.props.handleClearContext(question.library);

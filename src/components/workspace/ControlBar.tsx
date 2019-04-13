@@ -42,6 +42,7 @@ export type ControlBarProps = {
   onClickPrevious?(): any;
   onClickReturn?(): any;
   onClickSave?(): any;
+  onClickReset?(): any;
 };
 
 interface IChapter {
@@ -67,7 +68,8 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     hasShareButton: true,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {}
+    onClickSave: () => {},
+    onClickReset: () => {}
   };
 
   private shareInputElem: HTMLInputElement;
@@ -96,7 +98,6 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval);
     const pauseButton = controlButton('Pause', IconNames.STOP, this.props.handleDebuggerPause);
     const resumeButton = controlButton('Resume', IconNames.CHEVRON_RIGHT, this.props.handleDebuggerResume);
-    const resetButton = controlButton('Reset', IconNames.STOP, this.props.handleDebuggerReset);
     const saveButtonOpts = this.props.hasUnsavedChanges
       ? { intent: Intent.WARNING, minimal: false }
       : {};
@@ -138,6 +139,9 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       this.props.hasChapterSelect && this.props.externalLibraryName !== undefined
         ? externalSelect(this.props.externalLibraryName, this.props.handleExternalSelect!)
         : undefined;
+    const resetButton = this.props.hasSaveButton
+      ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
+      : undefined;
     const startAutorunButton = this.props.hasEditorAutorunButton
       ? controlButton('Autorun', IconNames.PLAY, this.props.handleToggleEditorAutorun)
       : undefined;
@@ -159,7 +163,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
             ? resumeButton
             : null} 
         {saveButton}
-        {shareButton} {chapterSelectButton} {externalSelectButton}
+        {shareButton} {chapterSelectButton} {externalSelectButton} {resetButton}
         {this.props.isEditorAutorun ? stopAutorunButton : startAutorunButton}
       </div>
     );

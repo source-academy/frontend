@@ -294,11 +294,22 @@ function* playgroundSaga(): SagaIterator {
   });
 }
 
+<<<<<<< HEAD
 let lastDebuggerResult: any;
-function* evalCode( code: string, context: Context, location: WorkspaceLocation, actionType: string) {
+function* evalCode(
+  code: string,
+  context: Context,
+  location: WorkspaceLocation,
+  actionType: string
+) {
   context.runtime.debuggerOn = actionType === actionTypes.EVAL_EDITOR;
   const { result, interrupted, paused } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
+=======
+function* evalCode(code: string, context: Context, location: WorkspaceLocation) {
+  const { result, interrupted } = yield race({
+    result: call(runInContext, code, context, { scheduler: 'preemptive', isNativeRunnable: true }),
+>>>>>>> master
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.

@@ -146,7 +146,7 @@
         tbody.innerHTML = "</br><caption><strong>Frame: " + frames[i].name + "</strong></caption>" + envtoString
         newtable.appendChild(tbody)
         container.appendChild(newtable)
-        icon.classList.toggle("side-content-header-button-alert");
+        icon.classList.add("side-content-header-button-alert");
       }
     } catch (e) {
       container.innerHTML = e

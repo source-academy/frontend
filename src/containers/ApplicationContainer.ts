@@ -56,4 +56,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     dispatch
   );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Application));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Application)
+);
