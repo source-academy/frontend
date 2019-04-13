@@ -82,14 +82,6 @@ function visualiseList(list: any) {
   }
 }
 
-export function visualiseEnv(context: Context) {
-  if ((window as any).EnvVisualizer) {
-    (window as any).EnvVisualizer.draw({ context });
-  } else {
-    throw new Error('Env Visualizer is not enabled');
-  }
-}
-
 export function highlightLine(line: number) {
   if ((window as any).Inspector) {
     (window as any).Inspector.highlightClean();

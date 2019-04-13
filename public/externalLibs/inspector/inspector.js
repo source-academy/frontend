@@ -41,7 +41,7 @@
     'list_ref',
     'accumulate',
     'equal',
-    'draw_list',
+    'draw_data',
     'set_head',
     'set_tail',
     'array_length',
