@@ -5,38 +5,43 @@
 
 ## Development Setup
 
-1. Install a stable version of Yarn and NodeJS (use node version 4-9 with nvm).
-2. Run `yarn` to install dependencies.
+1. Install a stable version of NodeJS (tested: Node 10.15.0).
+2. Run `npm install` to install dependencies.
 3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_IVLE_KEY`
    to contain your IVLE Lapi key.
-4. Run `yarn start` to start the server at `localhost:80`. Admin permissions may
+4. Run `npm start` to start the server at `localhost:80`. Admin permissions may
    be required for your OS to serve at port 80.
+5. If running cadet without ngix, `npm run cors-proxy` to solve CORS problems.
    
 ## IVLE LAPI Key
 For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
 
 ## For Windows Users
-In package.json, change line 19:\
-"start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts-ts start",\
-to:\
-"start-js": "set PORT=80 & react-scripts-ts start",\
 
-## For Testing of js-slang
+### Running cadet-frontend
+Run `npm run win-start`
 
-### Alpha version
+### Dealing with hooks
+In package.json, change line 28:\
+"pre-push": "bash scripts/test.sh",\
+to an empty line.
 
-Use branch js-slang-alpha-preview to see the new changes (native and verbose errors).
+Please note that doing this will disable the test suite, so you will need to run the tests manually instead. Using Git Bash (or any other UNIX-based command line), run the following:\
+cd scripts\
+bash test.sh
 
-Have `"enable verbose";` as the first line of your program to activate verbose messages.
+## js-slang
+
+Currently using a version of js-slang with native and verbose errors.
 
 Edit https://github.com/source-academy/cadet-frontend/blob/57ba44f6b55c214d0f20339cd45bece57f24f48c/src/sagas/index.ts#L260
 
-to toggle native.
+to toggle native (default is native enabled). 
 
 ### To run local copy of js-slang
 
 1. Follow the instructions on the js-slang repository to transpile your own copy
-2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
+2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `npm install`:
 
 `"js-slang": "file:path/to/js-slang",`
 
@@ -44,11 +49,11 @@ Note that this copies your files over, any future changes will not be reflected.
 
 You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
 
-## For Previewing Local XML Missions Only
+## For Editing And Creating New Local XML Missions
 
-1. Use the branch 'mission-testing' in cadet-frontend
-2. Run in browser with yarn start
-2. Go to Missions page, and upload xml file to preview
+1. Use the branch 'mission-editing' in cadet-frontend
+2. Run in browser with npm start
+2. Go to Incubator tab.
 
 ## Application Structure
 

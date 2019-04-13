@@ -80,7 +80,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
 
   private editorResizableProps() {
     const onResizeStop: ResizeCallback = ({}, {}, {}, diff) =>
-      this.props.handleEditorWidthChange(diff.width * 100 / window.innerWidth);
+      this.props.handleEditorWidthChange((diff.width * 100) / window.innerWidth);
     const ref = (e: Resizable) => (this.leftParentResizable = e as Resizable);
     return {
       className: 'resize-editor left-parent',
@@ -121,7 +121,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private toggleEditorDividerDisplay: ResizeCallback = ({}, {}, ref) => {
     const leftThreshold = 2;
     const rightThreshold = 95;
-    const editorWidthPercentage = (ref as HTMLDivElement).clientWidth / window.innerWidth * 100;
+    const editorWidthPercentage = ((ref as HTMLDivElement).clientWidth / window.innerWidth) * 100;
     // update resizable size
     if (editorWidthPercentage > rightThreshold) {
       this.leftParentResizable.updateSize({ width: '100%', height: '100%' });
