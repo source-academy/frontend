@@ -15,6 +15,7 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { externalLibraries } from '../../reducers/externalLibraries';
 import { sourceChapters } from '../../reducers/states';
+import { LINKS } from '../../utils/constants';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
 import Editor from './Editor';
@@ -160,7 +161,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
             );
           }
         };
-        xmlhttp.open('GET', 'https://api2.sourceacademy.nus.edu.sg/gists/latest', true);
+        xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + '/gists/latest', true);
         xmlhttp.send();
       }
     };
@@ -184,7 +185,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       };
       xmlhttp.open(
         'GET',
-        'https://api2.sourceacademy.nus.edu.sg/gists/' + this.joinInputElem.current!.value,
+        'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.joinInputElem.current!.value,
         true
       );
       xmlhttp.send();
@@ -193,7 +194,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     };
     const inviteButton = this.props.hasCollabEditing ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
-        {controlButton('Invite', IconNames.SHARE, handleStartInvite)}
+        {controlButton('Invite', IconNames.GRAPH, handleStartInvite)}
         <>
           <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
           <CopyToClipboard text={'' + this.props.editorSessionId}>

@@ -7,6 +7,7 @@ import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
 
+import { LINKS } from '../../utils/constants';
 /**
  * @property editorValue - The string content of the react-ace editor
  * @property handleEditorChange  - A callback function
@@ -71,7 +72,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       // Has valid session ID
       if (this.props.editorSessionId !== '') {
         const ShareAce = new sharedbAce(this.props.editorSessionId!, {
-          WsUrl: 'wss://api2.sourceacademy.nus.edu.sg/ws',
+          WsUrl: 'wss://' + LINKS.SHAREDB_SERVER + 'ws',
           pluginWsUrl: null,
           namespace: 'codepad'
         });
@@ -109,7 +110,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             };
             xmlhttp.open(
               'GET',
-              'https://api2.sourceacademy.nus.edu.sg/gists/' + this.props.editorSessionId,
+              'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.props.editorSessionId,
               true
             );
             xmlhttp.send();
