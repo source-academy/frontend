@@ -5,11 +5,6 @@ import * as React from 'react';
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
 import { history } from '../../utils/history';
 import {
-  retrieveLocalAssessment,
-  storeLocalAssessment,
-  storeLocalAssessmentOverview
-} from '../../utils/xmlParser';
-import {
   IAssessment,
   IAssessmentOverview,
   IMCQQuestion,
@@ -32,6 +27,11 @@ import {
   ProgrammingQuestionTemplateTab,
   TextareaContentTab
 } from './editingWorkspaceSideContent';
+import {
+  retrieveLocalAssessment,
+  storeLocalAssessment,
+  storeLocalAssessmentOverview
+} from './xmlParseHelper';
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
@@ -143,7 +143,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         question.type === QuestionTypes.programming
           ? {
               editorValue:
-                this.props.editorValue || (question as IProgrammingQuestion).solutionTemplate,
+                this.props.editorValue ||
+                question.editorValue ||
+                (question as IProgrammingQuestion).solutionTemplate,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
@@ -529,7 +531,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const listingPath = '/incubator';
+    const listingPath = '/mission-control';
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
     return {
       handleEditorEval: this.props.handleEditorEval,

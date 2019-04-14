@@ -96,7 +96,6 @@ export class ProgrammingQuestionTemplateTab extends React.Component<IProps, ISta
         <br />
         <br />
         {editor}
-        }
       </div>
     );
   };

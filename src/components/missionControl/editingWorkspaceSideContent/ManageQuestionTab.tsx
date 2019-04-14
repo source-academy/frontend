@@ -6,7 +6,7 @@ import { history } from '../../../utils/history';
 import { IAssessment } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
 import Markdown from '../../commons/Markdown';
-import { mcqTemplate, programmingTemplate } from '../../incubator/assessmentTemplates';
+import { mcqTemplate, programmingTemplate } from '../../missionControl/assessmentTemplates';
 
 interface IProps {
   assessment: IAssessment;
@@ -101,7 +101,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
       questions[newIndex] = question;
       assessment.questions = questions;
       this.props.updateAssessment(assessment);
-      history.push('/incubator/-1/' + newIndex.toString());
+      history.push('/missionControl/-1/' + newIndex.toString());
     }
   };
 
@@ -112,7 +112,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     questions.splice(index, 0, template());
     assessment.questions = questions;
     this.props.updateAssessment(assessment);
-    history.push('/incubator/-1/' + index.toString());
+    history.push('/missionControl/-1/' + index.toString());
   };
 
   private deleteQuestion = (index: number) => () => {

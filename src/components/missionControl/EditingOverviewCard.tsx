@@ -19,7 +19,7 @@ import Textarea from 'react-textarea-autosize';
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import { getPrettyDate } from '../../utils/dateHelpers';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
-import { exportXml } from '../../utils/xmlParser';
+import { exportXml } from './xmlParseHelper';
 
 import {
   AssessmentCategories,

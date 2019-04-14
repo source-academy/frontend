@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { updateAssessment } from '../../actions/session';
 import { IAssessment } from '../../components/assessment/assessmentShape';
-import { ImportFromFileComponent } from '../../components/incubator/ImportFromFileComponent';
+import { ImportFromFileComponent } from '../../components/missionControl/ImportFromFileComponent';
 
 interface IDispatchProps {
   newAssessment: (assessment: IAssessment) => void;

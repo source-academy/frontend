@@ -185,24 +185,23 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private replControl() {
-    const toggleEditModeButton =
-      this.props.toggleEditMode !== null ? (
-        <Tooltip
-          content={
-            'Switch to ' +
-            (this.props.editingMode === 'question' ? 'global' : 'question specific') +
-            ' editing mode.'
-          }
-        >
-          {controlButton(
-            this.props.editingMode + ' editing mode',
-            IconNames.REFRESH,
-            this.props.toggleEditMode
-          )}
-        </Tooltip>
-      ) : (
-        undefined
-      );
+    const toggleEditModeButton = this.props.toggleEditMode ? (
+      <Tooltip
+        content={
+          'Switch to ' +
+          (this.props.editingMode === 'question' ? 'global' : 'question specific') +
+          ' editing mode.'
+        }
+      >
+        {controlButton(
+          this.props.editingMode + ' editing mode',
+          IconNames.REFRESH,
+          this.props.toggleEditMode
+        )}
+      </Tooltip>
+    ) : (
+      undefined
+    );
     const evalButton = (
       <Tooltip content="...or press shift-enter in the REPL">
         {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}

@@ -10,7 +10,7 @@ import {
   IQuestion,
   Library,
   MCQChoice
-} from '../components/assessment/assessmentShape';
+} from '../assessment/assessmentShape';
 import {
   IXmlParseStrCProblem,
   IXmlParseStrDeployment,
@@ -19,7 +19,7 @@ import {
   IXmlParseStrProblem,
   IXmlParseStrProblemChoice,
   IXmlParseStrTask
-} from '../utils/xmlParseStrShapes';
+} from './xmlParseStrShapes';
 
 const editingId = -1;
 

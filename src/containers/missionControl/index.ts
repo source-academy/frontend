@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { fetchAssessmentOverviews, submitAssessment } from '../../actions/session';
-import Assessment, { IDispatchProps, IStateProps } from '../../components/incubator';
+import Assessment, { IDispatchProps, IStateProps } from '../../components/missionControl';
 import { IState, Role } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state, props) => {

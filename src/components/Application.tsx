@@ -4,8 +4,8 @@ import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import Academy from '../containers/academy';
-import IncubatorContainer from '../containers/incubator';
 import Login from '../containers/LoginContainer';
+import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import { Role, sourceChapters } from '../reducers/states';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
@@ -50,7 +50,7 @@ class Application extends React.Component<IApplicationProps, {}> {
         <div className="Application__main">
           <Switch>
             <Route path="/academy" component={toAcademy(this.props)} />
-            <Route path={`/incubator/${assessmentRegExp}`} render={toIncubator} />
+            <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
             <Route exact={true} path="/" render={this.redirectToAcademy} />
@@ -90,7 +90,7 @@ const parsePlayground = (props: IApplicationProps) => {
   }
 };
 
-const toIncubator = (routerProps: RouteComponentProps<any>) => <IncubatorContainer />;
+const toIncubator = (routerProps: RouteComponentProps<any>) => <MissionControlContainer />;
 
 const parsePrgrm = (props: RouteComponentProps<{}>) => {
   const qsParsed = qs.parse(props.location.hash);

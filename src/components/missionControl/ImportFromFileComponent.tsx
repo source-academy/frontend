@@ -3,9 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { parseString } from 'xml2js';
 import { IAssessment, IAssessmentOverview } from '../../components/assessment/assessmentShape';
-import { makeEntireAssessment, retrieveLocalAssessment } from '../../utils/xmlParser';
 import { controlButton } from '../commons';
-import { assessmentTemplate, overviewTemplate } from '../incubator/assessmentTemplates';
+import { assessmentTemplate, overviewTemplate } from './assessmentTemplates';
+import { makeEntireAssessment, retrieveLocalAssessment } from './xmlParseHelper';
 
 type Props = {
   newAssessment: (assessment: IAssessment) => void;

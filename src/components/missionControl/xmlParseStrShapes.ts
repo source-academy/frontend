@@ -1,4 +1,4 @@
-import { ExternalLibraryName, IQuestion } from '../components/assessment/assessmentShape';
+import { ExternalLibraryName, IQuestion } from '../assessment/assessmentShape';
 
 export interface IXmlParseStrTask {
   $: IXmlParseStrOverview;

@@ -27,7 +27,7 @@ import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
   StateProps
-} from '../../components/incubator/EditingWorkspace';
+} from '../../components/missionControl/EditingWorkspace';
 import { IState, IWorkspaceState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {

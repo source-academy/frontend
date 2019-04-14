@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import EditingWorkspaceContainer from '../../containers/incubator/EditingWorkspaceContainer';
-import ImportFromFileComponent from '../../containers/incubator/ImportFromFileComponentContainer';
+import EditingWorkspaceContainer from '../../containers/missionControl/EditingWorkspaceContainer';
+import ImportFromFileComponent from '../../containers/missionControl/ImportFromFileComponentContainer';
 import { stringParamToInt } from '../../utils/paramParseHelpers';
-import { retrieveLocalAssessmentOverview } from '../../utils/xmlParser';
 import { AssessmentStatuses, IAssessmentOverview } from '../assessment/assessmentShape';
 import ContentDisplay from '../commons/ContentDisplay';
-import { EditingOverviewCard } from '../incubator/EditingOverviewCard';
-import { OwnProps as AssessmentProps } from '../incubator/EditingWorkspace';
+import { EditingOverviewCard } from './EditingOverviewCard';
+import { OwnProps as AssessmentProps } from './EditingWorkspace';
+import { retrieveLocalAssessmentOverview } from './xmlParseHelper';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
@@ -78,7 +78,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       <EditingOverviewCard
         overview={this.state.editingOverview}
         updateEditingOverview={this.updateEditingOverview}
-        listingPath="/incubator"
+        listingPath="/mission-control"
       />
     ) : null;
 
