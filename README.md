@@ -49,18 +49,6 @@ Note that this copies your files over, any future changes will not be reflected.
 
 You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
 
-## For Testing of js-slang
-
-1. For now, use the branch 'update-js-slang' in cadet-frontend
-2. Follow the instructions on js-slang to transpile your own copy
-3. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `yarn`:
-
-`"js-slang": "file:path/to/js-slang",`
-
-Note that this copies your files over, any future changes will not be reflected. 
-
-You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
-
 ## Application Structure
 
 1. `actions` contains action creators, one file per reducer, combined in index.
