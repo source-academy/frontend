@@ -72,7 +72,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       // Has valid session ID
       if (this.props.editorSessionId !== '') {
         const ShareAce = new sharedbAce(this.props.editorSessionId!, {
-          WsUrl: 'wss://' + LINKS.SHAREDB_SERVER + 'ws',
+          WsUrl: 'wss://' + LINKS.SHAREDB_SERVER + 'ws/',
           pluginWsUrl: null,
           namespace: 'codepad'
         });

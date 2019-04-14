@@ -161,7 +161,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
             );
           }
         };
-        xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + '/gists/latest', true);
+        xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/latest/', true);
         xmlhttp.send();
       }
     };
