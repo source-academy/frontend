@@ -86,7 +86,7 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context
     );
     yield put(actions.highlightEditorLine([], location));
-    yield* evalRestofCode(code, context, location);
+    yield* evalCode(code, context, location, actionTypes.DEBUG_RESUME);
   });
 
   yield takeEvery(actionTypes.DEBUG_RESET, function*(action) {
@@ -284,21 +284,35 @@ function* playgroundSaga(): SagaIterator {
     );
     const newQueryString =
       code === '' || code === defaultEditorValue
-        ? undefined
-        : qs.stringify({
-            prgrm: compressToEncodedURIComponent(code),
-            chap: chapter,
-            ext: external
-          });
+      ? undefined
+      : qs.stringify({
+        prgrm: compressToEncodedURIComponent(code),
+        chap: chapter,
+        ext: external
+      });
     yield put(actions.changeQueryString(newQueryString));
   });
 }
 
 let lastDebuggerResult: any;
-function* evalCode( code: string, context: Context, location: WorkspaceLocation, actionType: string) {
-  context.runtime.debuggerOn = actionType === actionTypes.EVAL_EDITOR;
+function updateInspector() {
+  if (lastDebuggerResult.status === 'finished') {
+    put(actions.highlightEditorLine([], location));
+  } else {
+    const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
+    const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
+    put(actions.highlightEditorLine([start, end], location));
+  }
+  inspectorUpdate(lastDebuggerResult);
+}
+
+function* evalCode(code: string, context: Context, location: WorkspaceLocation, actionType: string) {
+  context.runtime.debuggerOn = (actionType === actionTypes.EVAL_EDITOR ||
+    actionType === actionTypes.DEBUG_RESUME);
   const { result, interrupted, paused } = yield race({
-    result: call(runInContext, code, context, { scheduler: 'preemptive' }),
+    result: actionType === actionTypes.DEBUG_RESUME
+    ? call(resume, lastDebuggerResult)
+    : call(runInContext, code, context, { scheduler: 'preemptive' }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
@@ -307,22 +321,14 @@ function* evalCode( code: string, context: Context, location: WorkspaceLocation,
     paused: take(actionTypes.BEGIN_DEBUG_PAUSE)
   });
   if (result) {
+    lastDebuggerResult = result;
+    updateInspector();
     if (result.status === 'finished') {
-      if (!context.runtime.debuggerOn) {
-        inspectorUpdate(result);
-      }
       yield put(actions.evalInterpreterSuccess(result.value, location));
       yield put(actions.highlightEditorLine([], location));
     } else if (result.status === 'suspended') {
-      if (actionType === actionTypes.EVAL_EDITOR) {
-        lastDebuggerResult = result;
-      }
       yield put(actions.endDebuggerPause(location));
-      const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-      const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-      yield put(actions.highlightEditorLine([start, end], location));
       yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location));
-      inspectorUpdate(result);
     } else {
       yield put(actions.evalInterpreterError(context.errors, location));
     }
@@ -332,61 +338,14 @@ function* evalCode( code: string, context: Context, location: WorkspaceLocation,
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
     yield put(actions.debuggerReset(location));
     yield put(actions.endInterruptExecution(location));
-    yield call(showWarningMessage, 'Execution aborted by user [308]', 750);
+    yield call(showWarningMessage, 'Execution aborted', 750);
   } else if (paused) {
-    // lastDebuggerResult = manualToggleDebugger(context)
     yield put(actions.endDebuggerPause(location));
-    const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-    const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-    yield put(actions.highlightEditorLine([start, end], location));
-    yield call(showWarningMessage, 'Debugger [312]', 750);
+    lastDebuggerResult = manualToggleDebugger(context);
+    updateInspector();
+    yield call(showWarningMessage, 'Execution paused', 750);
   }
 }
 
-function* evalRestofCode(code: string, context: Context, location: WorkspaceLocation) {
-  context.runtime.debuggerOn = true;
-  const { result, interrupted, paused } = yield race({
-    result: call(resume, lastDebuggerResult),
-    /**
-     * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
-     * i.e the trigger for the interpreter to interrupt execution.
-     */
-    interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION),
-    paused: take(actionTypes.BEGIN_DEBUG_PAUSE)
-  });
-  if (result) {
-    if (result.status === 'finished') {
-      if (!context.runtime.debuggerOn) {
-        inspectorUpdate(result);
-      }
-      yield put(actions.evalInterpreterSuccess(result.value, location));
-      yield put(actions.highlightEditorLine([], location));
-    } else if (result.status === 'suspended') {
-      lastDebuggerResult = result;
-      yield put(actions.endDebuggerPause(location));
-      const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-      const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-      yield put(actions.highlightEditorLine([start, end], location));
-      yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location));
-      inspectorUpdate(result);
-    } else {
-      yield put(actions.evalInterpreterError(context.errors, location));
-    }
-  } else if (interrupted) {
-    interrupt(context);
-    /* Redundancy, added ensure that interruption results in an error. */
-    context.errors.push(new InterruptedError(context.runtime.nodes[0]));
-    yield put(actions.debuggerReset(location));
-    yield put(actions.endInterruptExecution(location));
-    yield call(showWarningMessage, 'Execution aborted by user [308]', 750);
-  } else if (paused) {
-    lastDebuggerResult = manualToggleDebugger(context);
-    yield put(actions.endDebuggerPause(location));
-    const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-    const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-    yield put(actions.highlightEditorLine([start, end], location));
-    yield call(showWarningMessage, 'Debugger [312]', 750);
-  }
-}
 
 export default mainSaga;

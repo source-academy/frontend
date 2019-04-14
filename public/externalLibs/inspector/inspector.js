@@ -125,31 +125,33 @@
       }
       return res.length > 0 ? res : undefined;
     }
-    try {
-      const icon = document.getElementById("Inspector-icon");
-      container.innerHTML = "";
-      if (!context) {
-        icon.classList.remove("side-content-header-button-alert");
-        return;
-      }
 
+    // blinks icon
+    const icon = document.getElementById("Inspector-icon");
+    if (!context) {
+      icon.classList.remove("side-content-header-button-alert");
+      return;
+    }
+
+    try {
       var frames = context.context.runtime.environments;
+      container.innerHTML = "";
       for (var i = 0; i < frames.length; ++i){
         var envtoString = dumpTable(frames[i].head)
         if (envtoString == undefined){
-          console.log("[Inspector] Skipped empty frame: " + frames[i].name)
+          // skipping either empty frame or perhaps the global
           continue
         }
         var newtable = document.createElement("table");
         var tbody = document.createElement("tbody");
         tbody.id = "inspect-scope"
-        tbody.innerHTML = "</br><caption><strong>Frame: " + frames[i].name + "</strong></caption>" + envtoString
+        tbody.innerHTML = "</br><caption><strong> " + frames[i].name + "</strong></caption>" + envtoString
         newtable.appendChild(tbody)
         container.appendChild(newtable)
         icon.classList.add("side-content-header-button-alert");
       }
     } catch (e) {
-      container.innerHTML = e
+        container.innerHTML = e
     }
   }
 
