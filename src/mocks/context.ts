@@ -1,8 +1,8 @@
-import { parse } from 'acorn';
 import { FunctionExpression } from 'estree';
 import Closure from 'js-slang/dist/closure';
 import createContext from 'js-slang/dist/createContext';
 import { Context, Environment } from 'js-slang/dist/types';
+import { locationDummyNode } from 'js-slang/dist/utils/astCreator';
 import { TypeError } from 'js-slang/dist/utils/rttc';
 
 export function mockContext(chapter = 1): Context {
@@ -35,5 +35,5 @@ export function mockClosure(): Closure {
 }
 
 export function mockTypeError(): TypeError {
-  return new TypeError(parse(''), '', '', '');
+  return new TypeError(locationDummyNode(0, 0), '', '', '');
 }
