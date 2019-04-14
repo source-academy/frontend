@@ -27,8 +27,7 @@ export class MCQQuestionTemplateTab extends React.Component<IProps, {}> {
     const question = this.props.assessment!.questions[questionId] as IMCQQuestion;
     const mcqButton = question.choices.map((choice, i) => (
       <div key={i} className="mcq-option col-xs-12">
-        Option {i}:
-        {this.textareaContent(['questions', questionId, 'choices', i, 'content'])}
+        Option {i}:{this.textareaContent(['questions', questionId, 'choices', i, 'content'])}
         <br />
         Hint:
         {this.textareaContent(['questions', questionId, 'choices', i, 'hint'])}

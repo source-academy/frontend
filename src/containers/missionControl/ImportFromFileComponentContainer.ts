@@ -18,4 +18,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImportFromFileComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ImportFromFileComponent);
