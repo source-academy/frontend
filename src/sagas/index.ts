@@ -296,14 +296,16 @@ function* playgroundSaga(): SagaIterator {
 
 let lastDebuggerResult: any;
 function updateInspector() {
-  if (lastDebuggerResult.status === 'finished') {
-    put(actions.highlightEditorLine([], location));
-  } else {
+  try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     put(actions.highlightEditorLine([start, end], location));
+  } catch(e) {
+    put(actions.highlightEditorLine([], location));
+    // most likely harmless, we can pretty much ignore this.
+    // half of the time this comes from execution ending or a stack overflow and
+    // the context goes missing.
   }
-  inspectorUpdate(lastDebuggerResult);
 }
 
 function* evalCode(code: string, context: Context, location: WorkspaceLocation, actionType: string) {
