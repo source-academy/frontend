@@ -101,7 +101,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
       questions[newIndex] = question;
       assessment.questions = questions;
       this.props.updateAssessment(assessment);
-      history.push('/missionControl/-1/' + newIndex.toString());
+      history.push('/mission-control/-1/' + newIndex.toString());
     }
   };
 
@@ -112,7 +112,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     questions.splice(index, 0, template());
     assessment.questions = questions;
     this.props.updateAssessment(assessment);
-    history.push('/missionControl/-1/' + index.toString());
+    history.push('/mission-control/-1/' + index.toString());
   };
 
   private deleteQuestion = (index: number) => () => {
