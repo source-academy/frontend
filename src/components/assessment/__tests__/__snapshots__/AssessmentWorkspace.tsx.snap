@@ -17,10 +17,10 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
     </div>
     <div className=\\"pt-dialog-footer\\">
       <Blueprint2.ButtonGroup>
-        <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" onClick={[Function]}>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type=\\"\\" onClick={[Function]}>
           Cancel
         </Blueprint2.Button>
-        <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" onClick={[Function]}>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type=\\"\\" onClick={[Function]}>
           Confirm
         </Blueprint2.Button>
       </Blueprint2.ButtonGroup>
@@ -45,10 +45,10 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
     </div>
     <div className=\\"pt-dialog-footer\\">
       <Blueprint2.ButtonGroup>
-        <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" onClick={[Function]}>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type=\\"\\" onClick={[Function]}>
           Cancel
         </Blueprint2.Button>
-        <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" onClick={[Function]}>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type=\\"\\" onClick={[Function]}>
           Confirm
         </Blueprint2.Button>
       </Blueprint2.ButtonGroup>
@@ -73,10 +73,10 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
     </div>
     <div className=\\"pt-dialog-footer\\">
       <Blueprint2.ButtonGroup>
-        <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" onClick={[Function]}>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type=\\"\\" onClick={[Function]}>
           Cancel
         </Blueprint2.Button>
-        <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" onClick={[Function]}>
+        <Blueprint2.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type=\\"\\" onClick={[Function]}>
           Confirm
         </Blueprint2.Button>
       </Blueprint2.ButtonGroup>

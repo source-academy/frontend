@@ -49,6 +49,7 @@ interface IGradingWorkspace extends IWorkspaceState {
 
 export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
+  readonly websocketStatus: number;
 }
 
 export interface IWorkspaceManagerState {
@@ -60,6 +61,7 @@ export interface IWorkspaceManagerState {
 export interface IWorkspaceState {
   readonly context: Context;
   readonly editorPrepend: string | null;
+  readonly editorSessionId: string;
   readonly editorValue: string | null;
   readonly editorPostpend: string | null;
   readonly editorTestcases: ITestcase[];
@@ -202,6 +204,7 @@ export const defaultEditorValue = '// Type your program in here!';
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
   editorPrepend: '',
+  editorSessionId: '',
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
   editorPostpend: '',
   editorTestcases: [],
@@ -235,7 +238,8 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
-    playgroundExternal: ExternalLibraryNames.NONE
+    playgroundExternal: ExternalLibraryNames.NONE,
+    websocketStatus: 0
   }
 };
 
