@@ -71,7 +71,7 @@ const toAcademy = (props: IApplicationProps) =>
     : () => <Academy accessToken={props.accessToken} role={props.role!} />;
 
 const toLogin = (props: IApplicationProps) => () => (
-  <Login ivleToken={qs.parse(props.location.search).token} />
+  <Login luminusCode={qs.parse(props.location.search).code} />
 );
 
 const parsePlayground = (props: IApplicationProps) => {

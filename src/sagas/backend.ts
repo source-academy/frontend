@@ -54,8 +54,8 @@ type Tokens = {
 
 function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
-    const ivleToken = (action as actionTypes.IAction).payload;
-    const tokens = yield call(postAuth, ivleToken);
+    const luminusCode = (action as actionTypes.IAction).payload;
+    const tokens = yield call(postAuth, luminusCode);
     const user = tokens ? yield call(getUser, tokens) : null;
     if (tokens && user) {
       // Use dispatch instead of saga's put to guarantee the reducer has
@@ -263,9 +263,9 @@ function* backendSaga(): SagaIterator {
 /**
  * POST /auth
  */
-async function postAuth(ivleToken: string): Promise<Tokens | null> {
+async function postAuth(luminusCode: string): Promise<Tokens | null> {
   const response = await request('auth', 'POST', {
-    body: { login: { ivle_token: ivleToken } },
+    body: { login: { luminusCode } },
     errorMessage: 'Could not login. Please contact the module administrator.'
   });
   if (response) {

@@ -6,17 +6,17 @@ import { NavLink } from 'react-router-dom';
 type LoginProps = DispatchProps & OwnProps;
 
 export type DispatchProps = {
-  handleFetchAuth: (ivleToken: string) => void;
+  handleFetchAuth: (luminusCode: string) => void;
   handleLogin: () => void;
 };
 
 export type OwnProps = {
-  ivleToken?: string;
+  luminusCode?: string;
 };
 
 const Login: React.SFC<LoginProps> = props => {
-  if (props.ivleToken) {
-    startFetchAuth(props.ivleToken, props.handleFetchAuth);
+  if (props.luminusCode) {
+    startFetchAuth(props.luminusCode, props.handleFetchAuth);
     return (
       <div className="Login pt-dark">
         <Card className="login-card pt-elevation-4">
@@ -48,12 +48,12 @@ const Login: React.SFC<LoginProps> = props => {
   }
 };
 
-const startFetchAuth = (ivleToken: string, handleFetchAuth: DispatchProps['handleFetchAuth']) =>
-  handleFetchAuth(ivleToken);
+const startFetchAuth = (luminusCode: string, handleFetchAuth: DispatchProps['handleFetchAuth']) =>
+  handleFetchAuth(luminusCode);
 
 const loginButton = (handleClick: () => void) => (
   <Button className="pt-large" rightIcon="log-in" onClick={handleClick}>
-    Log in with IVLE
+    Log in with LumiNUS
   </Button>
 );
 
