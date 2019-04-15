@@ -120,7 +120,7 @@ export enum ExternalLibraryNames {
   CURVES = 'CURVES',
   SOUND = 'SOUND',
   STREAMS = 'STREAMS',
-  VIDEO = 'VIDEO' // bookmark added
+  VIDEO = 'VIDEO'
 }
 
 export type ExternalLibraryName = keyof typeof ExternalLibraryNames;

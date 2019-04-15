@@ -13,7 +13,7 @@ class CanvasOutput extends React.Component<{}, {}> {
     const context = (window as any).RUNE_CONTEXT || '2d';
     if (context === '2d') {
       const ctx = this.$canvas!.getContext(context);
-      ctx!.drawImage(source, 0, 0); 
+      ctx!.drawImage(source, 0, 0);
     } else {
       this.$canvas!.hidden = true;
       this.$parent!.appendChild(source);

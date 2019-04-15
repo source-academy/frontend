@@ -14,7 +14,7 @@ function dynamicallyLoadScript(url) {
 /**
  * Loads all libraries, including sound and graphics.
  */
-function loadAllLibs() { 
+function loadAllLibs() {
   const files = [
     // list library
     '/externalLibs/list.js',
@@ -38,7 +38,7 @@ function loadAllLibs() {
     '/externalLibs/streams/stream.js',
     '/externalLibs/pe_library.js',
     '/externalLibs/assert_compiled.js',
-    // video   // bookmark added
+    // video
     '/externalLibs/video/p5.js',
     '/externalLibs/video/p5.dom.js',
     '/externalLibs/video/video_lib.js'

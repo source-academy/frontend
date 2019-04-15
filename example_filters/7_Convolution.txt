@@ -1,0 +1,65 @@
+// copy & paste into playground for testing
+
+const WIDTH = getVideoWidth();
+const HEIGHT = getVideoHeight();
+
+var sharpen_matrix = [[-1,-1,-1],
+                      [-1, 9,-1],
+    				  [-1,-1,-1]];
+var blur_matrix = [[1/9,1/9,1/9],
+				   [1/9,1/9,1/9],
+				   [1/9,1/9,1/9]];
+var horiz_edge_matrix = [[1,0,-1],
+							[2,0,-2],
+                            [1,0,-1]];
+var vert_edge_matrix = [[-1,-2,-1],
+							  [ 0, 0, 0],
+							  [ 1, 2, 1]];
+var random_matrix =     [[1, 0,-2],
+	    					  [ 1, 0, 0],
+							  [ 2, 1, 0]];
+		
+//apply the 3x3 matrix to every pixel and its neighbours
+function create_filter_with_convolution(matrix){	
+	function convolution(x,y,src, dest_px){
+		var r_total = 0;
+		var g_total = 0;
+		var b_total = 0;			
+		//loop through the convolution matrix
+		for (var i=0; i<3; i=i+1){
+			for (var j=0; j<3; j=j+1){
+				var pix = src[x+i-1][y+j-1];
+				r_total = r_total + red_of(pix) * matrix[i][j];
+				g_total = g_total + green_of(pix) * matrix[i][j];
+				b_total = b_total + blue_of(pix) * matrix[i][j];
+			}
+		}
+        r_total = constrain_color(r_total);	
+        g_total = constrain_color(g_total);
+		b_total = constrain_color(b_total);
+		set_rgb(dest_px, r_total, g_total, b_total);
+	}
+						
+	function filter(src, dest){
+		for (var i=1; i<WIDTH-1; i = i+1){
+			for (var j=1; j<HEIGHT-1; j = j+1){ 
+				convolution(i,j,src, dest[i][j]);					
+			}
+		}
+        for (var i = 0; i<WIDTH; i = i+1){
+            copy_pixel(src[i][0], dest[i][0]);
+            copy_pixel(src[i][HEIGHT-1], dest[i][HEIGHT-1]);
+        }
+        for (var j = 0; j<HEIGHT; j = j+1){
+            copy_pixel(src[0][j], dest[0][j]);
+            copy_pixel(src[HEIGHT-1][j], dest[HEIGHT-1][j]);
+        }
+	}
+    return filter;	
+}
+		
+		
+var my_filter = create_filter_with_convolution(sharpen_matrix);
+apply_filter(my_filter);
+
+

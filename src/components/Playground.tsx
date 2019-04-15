@@ -139,7 +139,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [playgroundIntroductionTab, listVisualizerTab, videoDisplayTab] // bookmark added
+        tabs: [playgroundIntroductionTab, listVisualizerTab, videoDisplayTab]
       }
     };
     return (
@@ -170,7 +170,7 @@ const listVisualizerTab: SideContentTab = {
   body: <ListVisualizer />
 };
 
-const videoDisplayTab: SideContentTab = { // bookmark added
+const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   icon: IconNames.MOBILE_VIDEO,
   body: <VideoDisplay />

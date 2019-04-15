@@ -179,7 +179,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
     ]
   ],
   [
-    ExternalLibraryNames.VIDEO, // bookmark added
+    ExternalLibraryNames.VIDEO,
     [
       'red_of',
       'green_of',
@@ -190,14 +190,13 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'constrain_color',
       'compose_filter',
       'make_distortion_filter',
+      'make_static_distortion_filter',
       'pixel_similar',
-      'getTimeSinceStart',
+      'currentFrameRuntime',
       'getTempArray',
       'getVideoWidth',
       'getVideoHeight',
-      'setVideoDimensions',
-      'apply_filter',
-      'stop_video'
+      'apply_filter'
     ]
   ]
 ];
