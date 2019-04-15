@@ -9,6 +9,7 @@ const baseProps = {
   editorValue: '',
   isRunning: false,
   activeTab: 0,
+  editorSessionId: '',
   editorWidth: '50%',
   isEditorAutorun: false,
   sideContentHeight: 40,
@@ -16,6 +17,7 @@ const baseProps = {
   externalLibraryName: ExternalLibraryNames.NONE,
   output: [],
   replValue: '',
+  websocketStatus: 0,
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeActiveTab: (n: number) => {},
@@ -26,9 +28,12 @@ const baseProps = {
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
   handleGenerateLz: () => {},
   handleInterruptEval: () => {},
+  handleInvalidEditorSessionId: () => {},
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
+  handleSetEditorSessionId: (editorSessionId: string) => {},
+  handleSetWebsocketStatus: (websocketStatus: number) => {},
   handleSideContentHeightChange: (h: number) => {},
   handleToggleEditorAutorun: () => {}
 };

@@ -15,6 +15,7 @@ export enum LINKS {
   GITHUB_ORG = 'https://github.com/source-academy',
   IVLE = 'https://ivle.nus.edu.sg/v1/Module/Student/default.aspx?CourseID=a6579f36-4d7d-41fb-b394-92a00b78148b',
   PIAZZA = 'https://piazza.com/nus.edu.sg/fall2018/cs1101s',
+  SHAREDB_SERVER = 'api2.sourceacademy.nus.edu.sg/',
   SOURCE_DOCS = 'https://www.comp.nus.edu.sg/~cs1101s/source/',
   TECH_SVC = 'mailto:techsvc@comp.nus.edu.sg',
   TEXTBOOK = 'https://www.comp.nus.edu.sg/~cs1101s/sicp/'
