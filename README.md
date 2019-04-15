@@ -49,12 +49,6 @@ Note that this copies your files over, any future changes will not be reflected.
 
 You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
 
-## For Editing And Creating New Local XML Missions
-
-1. Use the branch 'mission-editing' in cadet-frontend
-2. Run in browser with npm start
-2. Go to Incubator tab.
-
 ## Application Structure
 
 1. `actions` contains action creators, one file per reducer, combined in index.
