@@ -19,7 +19,7 @@ import Textarea from 'react-textarea-autosize';
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import { getPrettyDate } from '../../utils/dateHelpers';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
-import { exportXml } from './xmlParseHelper';
+import { exportXml, storeLocalAssessmentOverview } from './xmlParseHelper';
 
 import {
   AssessmentCategories,
@@ -71,7 +71,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
       editingOverviewField: '',
       fieldValue: ''
     });
-    localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overview));
+    storeLocalAssessmentOverview(overview);
     this.props.updateEditingOverview(overview);
   };
 
@@ -186,7 +186,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
       // tslint:disable-next-line:jsx-no-lambda
       onClick={this.handleExportXml}
     >
-      Export XML
+      Save as XML
     </Button>
   );
 
@@ -201,7 +201,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
       ...this.props.overview,
       category: i
     };
-    localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overview));
+    storeLocalAssessmentOverview(overview);
     this.props.updateEditingOverview(overview);
   };
 

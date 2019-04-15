@@ -142,13 +142,15 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       editorProps:
         question.type === QuestionTypes.programming
           ? {
+              editorSessionId: '',
               editorValue:
                 this.props.editorValue ||
                 question.editorValue ||
                 (question as IProgrammingQuestion).solutionTemplate,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+              isEditorAutorun: false
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -540,6 +542,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
       hasChapterSelect: false,
+      hasCollabEditing: false,
       hasEditorAutorunButton: false,
       hasSaveButton: true,
       hasShareButton: false,

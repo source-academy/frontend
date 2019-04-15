@@ -5,7 +5,12 @@ import { parseString } from 'xml2js';
 import { IAssessment, IAssessmentOverview } from '../../components/assessment/assessmentShape';
 import { controlButton } from '../commons';
 import { assessmentTemplate, overviewTemplate } from './assessmentTemplates';
-import { makeEntireAssessment, retrieveLocalAssessment } from './xmlParseHelper';
+import {
+  makeEntireAssessment,
+  retrieveLocalAssessment,
+  storeLocalAssessment,
+  storeLocalAssessmentOverview
+} from './xmlParseHelper';
 
 type Props = {
   newAssessment: (assessment: IAssessment) => void;
@@ -60,10 +65,10 @@ export class ImportFromFileComponent extends React.Component<Props, State> {
         try {
           const entireAssessment: [IAssessmentOverview, IAssessment] = makeEntireAssessment(result);
           entireAssessment[0].fileName = file.name.slice(0, -4);
-          localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(entireAssessment[0]));
+          storeLocalAssessmentOverview(entireAssessment[0]);
           this.props.updateEditingOverview(entireAssessment[0]);
 
-          localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(entireAssessment[1]));
+          storeLocalAssessment(entireAssessment[1]);
           this.props.newAssessment(entireAssessment[1]);
           this.setState({
             fileInputText: 'Success!'
@@ -89,9 +94,9 @@ export class ImportFromFileComponent extends React.Component<Props, State> {
   };
 
   private makeMission = () => {
-    localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overviewTemplate()));
+    storeLocalAssessmentOverview(overviewTemplate());
     this.props.updateEditingOverview(overviewTemplate());
-    localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessmentTemplate()));
+    storeLocalAssessment(assessmentTemplate());
     this.props.newAssessment(assessmentTemplate());
   };
 }
