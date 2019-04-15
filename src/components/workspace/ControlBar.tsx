@@ -1,4 +1,13 @@
-import { Button, Intent, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core';
+import {
+  Button,
+  Classes,
+  Colors,
+  Intent,
+  MenuItem,
+  Popover,
+  Text,
+  Tooltip
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
@@ -6,8 +15,10 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { externalLibraries } from '../../reducers/externalLibraries';
 import { sourceChapters } from '../../reducers/states';
+import { LINKS } from '../../utils/constants';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
+import Editor from './Editor';
 
 /**
  * @prop questionProgress a tuple of (current question number, question length) where
@@ -17,19 +28,26 @@ export type ControlBarProps = {
   queryString?: string;
   questionProgress: [number, number] | null;
   sourceChapter: number;
+  editorRef?: React.RefObject<Editor>;
+  editorSessionId?: string;
+  editorValue?: string | null;
   externalLibraryName?: string;
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleEditorEval: () => void;
+  handleEditorValueChange?: (newCode: string) => void;
   handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleGenerateLz?: () => void;
   handleInterruptEval: () => void;
+  handleInvalidEditorSessionId?: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handleSetEditorSessionId?: (editorSessionId: string) => void;
   handleToggleEditorAutorun?: () => void;
   hasChapterSelect: boolean;
+  hasCollabEditing: boolean;
   hasEditorAutorunButton: boolean;
   hasSaveButton: boolean;
   hasShareButton: boolean;
@@ -38,6 +56,7 @@ export type ControlBarProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
+  websocketStatus?: number;
   onClickNext?(): any;
   onClickPrevious?(): any;
   onClickReturn?(): any;
@@ -72,11 +91,17 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     onClickReset: () => {}
   };
 
-  private shareInputElem: HTMLInputElement;
+  private inviteInputElem: React.RefObject<HTMLInputElement>;
+  private joinInputElem: React.RefObject<HTMLInputElement>;
+  private shareInputElem: React.RefObject<HTMLInputElement>;
 
   constructor(props: ControlBarProps) {
     super(props);
     this.selectShareInputText = this.selectShareInputText.bind(this);
+    this.selectInviteInputText = this.selectInviteInputText.bind(this);
+    this.inviteInputElem = React.createRef();
+    this.joinInputElem = React.createRef();
+    this.shareInputElem = React.createRef();
   }
 
   public render() {
@@ -107,6 +132,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
       this.props.queryString
     }`;
+
     const shareButton = this.props.hasShareButton ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
@@ -117,12 +143,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
           </Text>
         ) : (
           <>
-            <input
-              defaultValue={shareUrl}
-              readOnly={true}
-              ref={e => (this.shareInputElem = e!)}
-              onFocus={this.selectShareInputText}
-            />
+            <input defaultValue={shareUrl} readOnly={true} ref={this.shareInputElem} />
             <CopyToClipboard text={shareUrl}>
               {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
             </CopyToClipboard>
@@ -132,6 +153,85 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     ) : (
       undefined
     );
+    const handleStartInvite = () => {
+      if (this.props.editorSessionId === '') {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = () => {
+          if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            const id = JSON.parse(xmlhttp.responseText).id;
+            this.props.handleSetEditorSessionId!(id);
+            const code = this.props.editorValue
+              ? this.props.editorValue
+              : '// Collaborative Editing Mode!';
+            this.props.editorRef!.current!.ShareAce.on('ready', () =>
+              this.props.handleEditorValueChange!(code)
+            );
+          }
+        };
+        xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/latest/', true);
+        xmlhttp.send();
+      }
+    };
+    const handleStartJoining = (e: React.FormEvent<HTMLFormElement>) => {
+      const xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = () => {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+          // Successfully reached server to verify ID
+          const state = JSON.parse(xmlhttp.responseText).state;
+          if (state === true) {
+            // Session ID exists
+            this.props.handleSetEditorSessionId!(this.joinInputElem.current!.value);
+          } else {
+            this.props.handleInvalidEditorSessionId!();
+            this.props.handleSetEditorSessionId!('');
+          }
+        } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
+          // Cannot reach server
+          this.props.handleSetEditorSessionId!('');
+        }
+      };
+      xmlhttp.open(
+        'GET',
+        'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.joinInputElem.current!.value,
+        true
+      );
+      xmlhttp.send();
+
+      e.preventDefault();
+    };
+    const inviteButton = this.props.hasCollabEditing ? (
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+        {controlButton('Invite', IconNames.GRAPH, handleStartInvite)}
+        <>
+          <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
+          <CopyToClipboard text={'' + this.props.editorSessionId}>
+            {controlButton('', IconNames.DUPLICATE, this.selectInviteInputText)}
+          </CopyToClipboard>
+        </>
+      </Popover>
+    ) : (
+      undefined
+    );
+    const joinButton = this.props.hasCollabEditing ? (
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+        {controlButton('Join', IconNames.LOG_IN)}
+        <>
+          <form onSubmit={handleStartJoining}>
+            <input defaultValue="" ref={this.joinInputElem} />
+            <span className={Classes.POPOVER_DISMISS}>
+              {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
+            </span>
+          </form>
+        </>
+      </Popover>
+    ) : (
+      undefined
+    );
+    const leaveButton = this.props.hasCollabEditing
+      ? controlButton('Leave', IconNames.FEED, () => this.props.handleSetEditorSessionId!(''), {
+          iconColor: this.props.websocketStatus === 0 ? Colors.RED3 : Colors.GREEN3
+        })
+      : undefined;
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
       : undefined;
@@ -163,8 +263,9 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
             ? resumeButton
             : null} 
         {saveButton}
-        {shareButton} {chapterSelectButton} {externalSelectButton} {resetButton}
+        {shareButton} {chapterSelectButton} {externalSelectButton}
         {this.props.isEditorAutorun ? stopAutorunButton : startAutorunButton}
+        {inviteButton} {this.props.editorSessionId === '' ? joinButton : leaveButton}
       </div>
     );
   }
@@ -213,8 +314,17 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private selectShareInputText() {
-    this.shareInputElem.focus();
-    this.shareInputElem.select();
+    if (this.shareInputElem.current !== null) {
+      this.shareInputElem.current.focus();
+      this.shareInputElem.current.select();
+    }
+  }
+
+  private selectInviteInputText() {
+    if (this.inviteInputElem.current !== null) {
+      this.inviteInputElem.current.focus();
+      this.inviteInputElem.current.select();
+    }
   }
 
   private hasNextButton() {

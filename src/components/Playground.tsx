@@ -35,6 +35,7 @@ export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComp
 
 export interface IStateProps {
   activeTab: number;
+  editorSessionId: string;
   editorValue: string;
   editorWidth: string;
   breakpoints: string[];
@@ -48,6 +49,7 @@ export interface IStateProps {
   replValue: string;
   sideContentHeight?: number;
   sourceChapter: number;
+  websocketStatus: number;
   externalLibraryName: string;
 }
 
@@ -62,10 +64,13 @@ export interface IDispatchProps {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGenerateLz: () => void;
   handleInterruptEval: () => void;
+  handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSetEditorSessionId: (editorSessionId: string) => void;
+  handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
@@ -91,21 +96,27 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   public render() {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
+        editorValue: this.props.editorValue,
+        editorSessionId: this.props.editorSessionId,
         externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
         this.props.handleChapterSelect(chapter),
         handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
         this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
+        handleEditorValueChange: this.props.handleEditorValueChange,
         handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,
+        handleInvalidEditorSessionId: this.props.handleInvalidEditorSessionId,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
+        handleSetEditorSessionId: this.props.handleSetEditorSessionId,
         handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
         handleDebuggerPause: this.props.handleDebuggerPause,
         handleDebuggerResume: this.props.handleDebuggerResume,
         handleDebuggerReset: this.props.handleDebuggerReset,
         hasChapterSelect: true,
+        hasCollabEditing: true,
         hasEditorAutorunButton: true,
         hasSaveButton: false,
         hasShareButton: true,
@@ -115,16 +126,19 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         enableDebugging: this.props.enableDebugging,
         queryString: this.props.queryString,
         questionProgress: null,
-        sourceChapter: this.props.sourceChapter
+        sourceChapter: this.props.sourceChapter,
+        websocketStatus: this.props.websocketStatus
       },
       editorProps: {
         editorValue: this.props.editorValue,
+        editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         isEditorAutorun: this.props.isEditorAutorun,
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
-        handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
+        handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus,
       },
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,

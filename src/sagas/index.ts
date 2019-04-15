@@ -4,8 +4,7 @@ import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
 import { delay, SagaIterator } from 'redux-saga';
-import { call, put, race, select, take, takeEvery } from 'redux-saga/effects';
-import * as actions from '../actions';
+import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'; import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
 import { ExternalLibraryNames } from '../components/assessment/assessmentShape';
@@ -58,6 +57,18 @@ function* workspaceSaga(): SagaIterator {
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context
     );
     yield* evalCode(code, context, location, actionTypes.EVAL_EDITOR);
+  });
+
+  yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(action) {
+    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const isEditorAutorun = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).isEditorAutorun
+    );
+    yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
+  });
+
+  yield takeEvery(actionTypes.INVALID_EDITOR_SESSION_ID, function*(action) {
+    yield call(showWarningMessage, 'Invalid ID Input', 1000);
   });
 
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
@@ -300,6 +311,7 @@ function updateInspector() {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     put(actions.highlightEditorLine([start, end], location));
+    inspectorUpdate(lastDebuggerResult);
   } catch(e) {
     put(actions.highlightEditorLine([], location));
     // most likely harmless, we can pretty much ignore this.

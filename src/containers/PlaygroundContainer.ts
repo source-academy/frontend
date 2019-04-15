@@ -17,8 +17,11 @@ import {
   evalEditor,
   evalRepl,
   generateLzString,
+  invalidEditorSessionId,
   playgroundExternalSelect,
   setEditorBreakpoint,
+  setEditorSessionId,
+  setWebsocketStatus,
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue,
@@ -30,6 +33,7 @@ import { IState } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.playground.sideContentActiveTab,
+  editorSessionId: state.workspaces.playground.editorSessionId,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
   isEditorAutorun: state.workspaces.playground.isEditorAutorun,
@@ -43,6 +47,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   replValue: state.workspaces.playground.replValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
+  websocketStatus: state.workspaces.playground.websocketStatus,
   externalLibraryName: state.workspaces.playground.playgroundExternal
 });
 
@@ -62,11 +67,16 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setEditorBreakpoint(breakpoints, location),
       handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
+      handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         playgroundExternalSelect(externalLibraryName, location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleSetEditorSessionId: (editorSessionId: string) =>
+        setEditorSessionId(location, editorSessionId),
+      handleSetWebsocketStatus: (websocketStatus: number) =>
+        setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
