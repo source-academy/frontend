@@ -161,6 +161,10 @@ export const evalRepl = (workspaceLocation: WorkspaceLocation) => ({
   payload: { workspaceLocation }
 });
 
+export const invalidEditorSessionId = () => ({
+  type: actionTypes.INVALID_EDITOR_SESSION_ID
+});
+
 export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
   newEditorValue: string,
   workspaceLocation: WorkspaceLocation
@@ -206,6 +210,34 @@ export const resetWorkspace = (
   payload: {
     workspaceLocation,
     workspaceOptions
+  }
+});
+
+export const setEditorSessionId: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  editorSessionId: string
+) => ({
+  type: actionTypes.SET_EDITOR_SESSION_ID,
+  payload: {
+    workspaceLocation,
+    editorSessionId
+  }
+});
+
+/**
+ * Sets sharedb websocket status.
+ *
+ * @param workspaceLocation the workspace to be reset
+ * @param websocketStatus 0: CLOSED 1: OPEN
+ */
+export const setWebsocketStatus: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocations,
+  websocketStatus: number
+) => ({
+  type: actionTypes.SET_WEBSOCKET_STATUS,
+  payload: {
+    workspaceLocation,
+    websocketStatus
   }
 });
 

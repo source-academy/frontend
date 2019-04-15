@@ -27,6 +27,12 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private leftParentResizable: Resizable;
   private maxDividerHeight: number;
   private sideDividerDiv: HTMLDivElement;
+  private editorRef: React.RefObject<Editor>;
+
+  public constructor(props: WorkspaceProps) {
+    super(props);
+    this.editorRef = React.createRef();
+  }
 
   public componentDidMount() {
     this.maxDividerHeight = this.sideDividerDiv.clientHeight;
@@ -67,6 +73,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private controlBarProps() {
     return {
       ...this.props.controlBarProps,
+      editorRef: this.editorRef,
       hasUnsavedChanges: this.props.hasUnsavedChanges
     };
   }
@@ -153,7 +160,14 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    */
   private createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.editorProps) {
-      return <Editor {...props.editorProps} />;
+      // Set key to force remount of Editor component when session id changes
+      return (
+        <Editor
+          {...props.editorProps}
+          key={props.editorProps.editorSessionId}
+          ref={this.editorRef}
+        />
+      );
     } else {
       return <MCQChooser {...props.mcqProps!} />;
     }

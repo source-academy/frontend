@@ -105,9 +105,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
+              editorSessionId: '',
               editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange
+              handleEditorValueChange: this.props.handleEditorValueChange,
+              isEditorAutorun: false
             }
           : undefined,
       editorWidth: this.props.editorWidth,
@@ -220,6 +222,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       hasChapterSelect: false,
+      hasCollabEditing: false,
       hasEditorAutorunButton: false,
       hasSaveButton: false,
       hasShareButton: false,
