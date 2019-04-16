@@ -51,12 +51,14 @@ export type ControlBarProps = {
   hasUnsavedChanges?: boolean;
   isEditorAutorun?: boolean;
   isRunning: boolean;
+  editingMode?: string;
   websocketStatus?: number;
   onClickNext?(): any;
   onClickPrevious?(): any;
   onClickReturn?(): any;
   onClickSave?(): any;
   onClickReset?(): any;
+  toggleEditMode?(): void;
 };
 
 interface IChapter {
@@ -282,15 +284,33 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private replControl() {
+    const toggleEditModeButton = this.props.toggleEditMode ? (
+      <Tooltip
+        content={
+          'Switch to ' +
+          (this.props.editingMode === 'question' ? 'global' : 'question specific') +
+          ' editing mode.'
+        }
+      >
+        {controlButton(
+          this.props.editingMode + ' editing mode',
+          IconNames.REFRESH,
+          this.props.toggleEditMode
+        )}
+      </Tooltip>
+    ) : (
+      undefined
+    );
     const evalButton = (
       <Tooltip content="...or press shift-enter in the REPL">
         {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}
       </Tooltip>
     );
     const clearButton = controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear);
+
     return (
       <div className="ControlBar_repl pt-button-group">
-        {this.props.isRunning ? null : evalButton} {clearButton}
+        {this.props.isRunning ? null : evalButton} {clearButton} {toggleEditModeButton}
       </div>
     );
   }
@@ -316,7 +336,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   }
 
   private hasPreviousButton() {
-    return this.props.questionProgress && this.props.questionProgress[0] > 0;
+    return this.props.questionProgress && this.props.questionProgress[0] > 1;
   }
 
   private hasReturnButton() {
