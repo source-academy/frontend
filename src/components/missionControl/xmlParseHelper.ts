@@ -8,6 +8,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  ITestcase,
   Library,
   MCQChoice
 } from '../assessment/assessmentShape';
@@ -18,7 +19,8 @@ import {
   IXmlParseStrPProblem,
   IXmlParseStrProblem,
   IXmlParseStrProblemChoice,
-  IXmlParseStrTask
+  IXmlParseStrTask,
+  IXmlParseStrTestcase
 } from './xmlParseStrShapes';
 
 const editingId = -1;
@@ -201,7 +203,10 @@ const makeProgramming = (
 ): IProgrammingQuestion => {
   const result: IProgrammingQuestion = {
     ...question,
+    prepend: problem.SNIPPET[0].PREPEND as string,
     solutionTemplate: problem.SNIPPET[0].TEMPLATE[0] as string,
+    postpend: problem.SNIPPET[0].POSTPEND as string,
+    testcases: problem.SNIPPET[0].TESTCASES.map(testcase => makeTestcase(testcase)),
     answer: problem.SNIPPET[0].SOLUTION[0] as string,
     type: 'programming'
   };
@@ -209,6 +214,14 @@ const makeProgramming = (
     result.graderTemplate = problem.SNIPPET[0].GRADER[0];
   }
   return result;
+};
+
+const makeTestcase = (testcase: IXmlParseStrTestcase): ITestcase => {
+  return {
+    answer: testcase.$.answer,
+    score: parseInt(testcase.$.score, 10),
+    program: testcase.TEXT
+  };
 };
 
 export const exportXml = () => {
