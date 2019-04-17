@@ -60,9 +60,9 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
-  handleDebuggerPause: () => void
-  handleDebuggerResume: () => void
-  handleDebuggerReset: () => void
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
 };

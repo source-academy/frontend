@@ -54,9 +54,12 @@ export type ControlBarProps = {
   hasUnsavedChanges?: boolean;
   isEditorAutorun?: boolean;
   isRunning: boolean;
+<<<<<<< HEAD
   isDebugging: boolean;
   enableDebugging: boolean;
+=======
   editingMode?: string;
+>>>>>>> master
   websocketStatus?: number;
   onClickNext?(): any;
   onClickPrevious?(): any;

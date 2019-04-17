@@ -58,6 +58,15 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       <NavLink
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
+        to="/mission-control"
+      >
+        <Icon icon={IconNames.CODE} />
+        <div className="navbar-button-text hidden-xs">Mission-Control</div>
+      </NavLink>
+
+      <NavLink
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
