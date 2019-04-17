@@ -306,11 +306,11 @@ function* playgroundSaga(): SagaIterator {
 }
 
 let lastDebuggerResult: any;
-function updateInspector() {
+function *updateInspector() {
   try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-    put(actions.highlightEditorLine([start, end], location));
+    yield put(actions.highlightEditorLine([start, end], location));
     inspectorUpdate(lastDebuggerResult);
   } catch(e) {
     put(actions.highlightEditorLine([], location));
@@ -336,7 +336,7 @@ function* evalCode(code: string, context: Context, location: WorkspaceLocation, 
   });
   if (result) {
     lastDebuggerResult = result;
-    updateInspector();
+    yield updateInspector();
     if (result.status === 'finished') {
       yield put(actions.evalInterpreterSuccess(result.value, location));
       yield put(actions.highlightEditorLine([], location));
@@ -356,7 +356,7 @@ function* evalCode(code: string, context: Context, location: WorkspaceLocation, 
   } else if (paused) {
     yield put(actions.endDebuggerPause(location));
     lastDebuggerResult = manualToggleDebugger(context);
-    updateInspector();
+    yield updateInspector();
     yield call(showWarningMessage, 'Execution paused', 750);
   }
 }
