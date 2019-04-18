@@ -14,7 +14,7 @@ import { externalLibraries } from '../reducers/externalLibraries';
 import { defaultEditorValue, IState, IWorkspaceState } from '../reducers/states';
 import { IVLE_KEY, USE_BACKEND } from '../utils/constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
-import { highlightLine, inspectorUpdate } from '../utils/slangHelper';
+import { highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper';
 import backendSaga from './backend';
 
 function* mainSaga() {
@@ -312,6 +312,7 @@ function* updateInspector() {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     yield put(actions.highlightEditorLine([start, end], location));
+    visualiseEnv(lastDebuggerResult);
     inspectorUpdate(lastDebuggerResult);
   } catch (e) {
     put(actions.highlightEditorLine([], location));
