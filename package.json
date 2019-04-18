@@ -29,6 +29,10 @@
     }
   },
   "dependencies": {
+    "@types/gapi": "^0.0.36",
+    "@types/gapi.client": "^1.0.1",
+    "@types/gapi.client.drive": "^3.0.3",
+    "@types/google.picker": "^0.0.33",
     "acorn": "^5.7.1",
     "ag-grid": "^18.0.1",
     "ag-grid-react": "^18.0.0",

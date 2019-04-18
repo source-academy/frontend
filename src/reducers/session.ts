@@ -1,6 +1,7 @@
 import { Reducer } from 'redux'
 
 import {
+  HANDLE_ACCESS_TOKEN,
   IAction,
   LOG_OUT,
   SET_TOKENS,
@@ -65,6 +66,12 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
       return {
         ...state,
         gradingOverviews: action.payload
+      }
+
+    case HANDLE_ACCESS_TOKEN:
+      return {
+        ...state,
+        storageToken: action.payload
       }
     default:
       return state

@@ -16,7 +16,6 @@ const baseProps = {
   output: [],
   replValue: '',
   storageToken: '',
-  storageTokenExpiresAt: '',
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeActiveTab: (n: number) => {},
@@ -31,8 +30,9 @@ const baseProps = {
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
   handleSideContentHeightChange: (h: number) => {},
-  handleOauthCallback: () => {},
-  handleOpenPicker: () => {}
+  handleAccessToken: () => {},
+  handleOpenPicker: () => {},
+  handleSavePicker: () => {}
 }
 
 const testValueProps: IPlaygroundProps = {

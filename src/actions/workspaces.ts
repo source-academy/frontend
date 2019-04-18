@@ -228,3 +228,8 @@ export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
     hasUnsavedChanges
   }
 })
+
+export const openFile = (fileId: string, filename: string) => ({
+  type: actionTypes.OPEN_FILE,
+  payload: { fileId }
+})

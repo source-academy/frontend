@@ -32,8 +32,6 @@ export interface IApplicationState {
 
 export interface IPlaygroundState {
   readonly queryString?: string
-  readonly storageToken?: string
-  readonly storageTokenExpiresAt?: string
 }
 
 interface IAssessmentWorkspace extends IWorkspaceState {
@@ -49,6 +47,7 @@ interface IGradingWorkspace extends IWorkspaceState {
 }
 
 export interface IPlaygroundWorkspace extends IWorkspaceState {
+  readonly filename: string
   readonly playgroundExternal: ExternalLibraryName
 }
 
@@ -87,6 +86,7 @@ export interface ISessionState {
   readonly story?: Story
   readonly name?: string
   readonly xp: number
+  readonly storageToken?: string
 }
 
 type ReplHistory = {
@@ -228,6 +228,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
+    filename: 'untitled.s',
     playgroundExternal: ExternalLibraryNames.NONE
   }
 }

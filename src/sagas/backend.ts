@@ -1,7 +1,7 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga'
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as actions from '../actions'
 import * as actionTypes from '../actions/actionTypes'
@@ -256,23 +256,6 @@ function* backendSaga(): SagaIterator {
     } else {
       // postGrading returns null for failed fetch
       yield call(showWarningMessage, "Couldn't reach our servers. Are you online?")
-    }
-  })
-
-  yield takeLatest(actionTypes.OAUTH_CALLBACK, function*(action) {
-    const tokens = yield select((state: IState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }))
-
-    const storageTokens = yield call(getOuathCallback, tokens)
-
-    if (storageTokens) {
-      yield call(showSuccessMessage, `Successfully link to Google Drive!`, 1000)
-
-      yield put(actions.updateStorageTokens(storageTokens.accessToken, storageTokens.expiresAt))
-    } else {
-      yield call(showWarningMessage, `Failed to link to Google Drive`, 1000)
     }
   })
 }
@@ -541,36 +524,6 @@ const postGrading = async (
     shouldRefresh: true
   })
   return resp
-}
-/**
- * GET /auth/google/callback
- */
-export async function getOuathCallback(tokens: Tokens): Promise<object | null> {
-  const query = window.location.search
-
-  if (query === '') {
-    return null
-  }
-
-  const cleanUri = location.protocol + '//' + location.host + location.pathname
-  window.history.replaceState({}, document.title, cleanUri)
-
-  const response = await request('auth/google/callback' + query, 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: false,
-    noHeaderAccept: true
-  })
-  if (response && response.ok) {
-    const token = await response.json()
-
-    return {
-      accessToken: token.access_token,
-      expiresAt: token.expires_at
-    }
-  } else {
-    return null
-  }
 }
 
 /**

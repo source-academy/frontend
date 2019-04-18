@@ -11,21 +11,15 @@ export const changeQueryString: ActionCreator<actionTypes.IAction> = (queryStrin
   payload: queryString
 })
 
-export const oauthCallback = () => ({
-  type: actionTypes.OAUTH_CALLBACK
+export const handleAccessToken = (accessToken: string) => ({
+  type: actionTypes.HANDLE_ACCESS_TOKEN,
+  payload: accessToken
 })
 
 export const openPicker = () => ({
   type: actionTypes.OPEN_PICKER
 })
 
-export const updateStorageTokens: ActionCreator<actionTypes.IAction> = (
-  token: string,
-  expiresAt: string
-) => ({
-  type: actionTypes.UPDATE_STORAGE_TOKENS,
-  payload: {
-    token,
-    expiresAt
-  }
+export const savePicker = () => ({
+  type: actionTypes.SAVE_TO_DRIVE
 })

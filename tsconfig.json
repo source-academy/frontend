@@ -16,7 +16,7 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "types": ["node", "jest" ,"gapi", "google.picker"]
+    "types": ["node", "jest" ,"gapi", "google.picker", "gapi.client", "gapi.client.drive"]
   },
   "exclude": [
     "node_modules",

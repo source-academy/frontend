@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons'
 import { ItemRenderer, Select } from '@blueprintjs/select'
 import * as React from 'react'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
+import { GOOGLE_CLIENT_ID } from '../../utils/constants'
 
 import { externalLibraries } from '../../reducers/externalLibraries'
 import { sourceChapters } from '../../reducers/states'
@@ -75,31 +76,9 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   public render() {
     return (
       <div className="ControlBar">
-        {this.storageControl()}
         {this.editorControl()}
         {this.flowControl()}
         {this.replControl()}
-      </div>
-    )
-  }
-
-  private storageControl() {
-    const linkButton = controlButton(
-      'Link to Google Drive',
-      IconNames.DOCUMENT_SHARE,
-      () => {
-        // todo externalize
-        window.location.assign('http://localhost:4000/auth/google')
-      },
-      {}
-    )
-    // TODO!!!
-    const openButton = this.props.hasOpenButton
-      ? controlButton('Open', IconNames.DOCUMENT_OPEN, this.props.onClickOpen, {})
-      : undefined
-    return (
-      <div className="ControlBar_storage pt-button-group">
-        {linkButton} {openButton}
       </div>
     )
   }
@@ -152,10 +131,36 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       this.props.hasChapterSelect && this.props.externalLibraryName !== undefined
         ? externalSelect(this.props.externalLibraryName, this.props.handleExternalSelect!)
         : undefined
+
+    const saveAsButton = this.props.hasOpenButton
+      ? controlButton('Save As', IconNames.FLOPPY_DISK, this.props.onClickSave, saveButtonOpts)
+      : saveButton
+
+    const linkButton = this.props.hasSaveButton
+      ? undefined
+      : controlButton(
+          'Link to Google Drive',
+          IconNames.DOCUMENT_SHARE,
+          () => {
+            const redirectUrl = `${window.location.protocol}//${
+              window.location.hostname
+            }/playground`
+            window.location.assign(
+              `https://accounts.google.com/o/oauth2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUrl}&response_type=token&scope=profile+email+https://www.googleapis.com/auth/drive.file`
+            )
+          },
+          {}
+        )
+
+    const openButton = this.props.hasOpenButton
+      ? controlButton('Open', IconNames.DOCUMENT_OPEN, this.props.onClickOpen, {})
+      : undefined
+
     return (
       <div className="ControlBar_editor pt-button-group">
-        {this.props.isRunning ? stopButton : runButton} {saveButton}
+        {this.props.isRunning ? stopButton : runButton} {saveAsButton}
         {shareButton} {chapterSelectButton} {externalSelectButton}
+        {linkButton} {openButton}
       </div>
     )
   }

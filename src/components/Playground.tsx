@@ -1,4 +1,5 @@
 import { IconNames } from '@blueprintjs/icons'
+import * as queryString from 'query-string'
 import * as React from 'react'
 import { HotKeys } from 'react-hotkeys'
 import { RouteComponentProps } from 'react-router'
@@ -44,7 +45,6 @@ export interface IStateProps {
   sourceChapter: number
   externalLibraryName: string
   storageToken?: string
-  storageTokenExpiresAt?: string
 }
 
 export interface IDispatchProps {
@@ -62,8 +62,9 @@ export interface IDispatchProps {
   handleReplOutputClear: () => void
   handleReplValueChange: (newValue: string) => void
   handleSideContentHeightChange: (heightChange: number) => void
-  handleOauthCallback: () => void
+  handleAccessToken: (accessToken: string) => void
   handleOpenPicker: () => void
+  handleSavePicker: () => void
 }
 
 type PlaygroundState = {
@@ -102,7 +103,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         queryString: this.props.queryString,
         questionProgress: null,
         sourceChapter: this.props.sourceChapter,
-        onClickOpen: this.props.handleOpenPicker
+        onClickOpen: this.props.handleOpenPicker,
+        onClickSave: this.props.handleSavePicker
       },
       editorProps: {
         editorValue: this.props.editorValue,
@@ -128,8 +130,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       }
     }
 
-    if (this.isOuathCallback()) {
-      this.props.handleOauthCallback()
+    if (this.hasAccessToken()) {
+      const parsed = queryString.parse(this.props.location.hash)
+      this.props.handleAccessToken(parsed.access_token)
     }
 
     return (
@@ -143,8 +146,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     )
   }
 
-  private isOuathCallback() {
-    return this.props.location.search.toString().startsWith('?code=')
+  private hasAccessToken() {
+    return window.location.hash.toString().startsWith('#access_token=')
   }
 
   private toggleIsGreen() {
