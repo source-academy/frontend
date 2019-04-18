@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CONTENT xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <TASK kind="mission" duedate="2019-05-07T23:59+08" coverimage="https://fakeimg.pl/300/" startdate="2019-05-01T00:00+08" title="Video Filters" story="mission">
+    <WEBSUMMARY>Practise using arrays!</WEBSUMMARY>
+    <TEXT>What is a video?
+
+A video consists of many frames(images) per second. 
+
+An image here, is a 2D array of pixels with dimension WIDTH, HEIGHT such that image[x][y] returns the pixel at the (x,y)th coordinate.
+
+For example, image[0][0] is the pixel at the top left corner,
+and image[WIDTH - 1][HEIGHT - 1] is the pixel at the bottom right corner.
+
+In this mission, you will be tasked to implement several filters.
+
+But what are filters?
+
+In this context, a filter is a function that takes in two arguments, src &amp; dest, which are both arrays with dimensions WIDTH x HEIGHT.
+src contains input data from the webcam, while dest is the array that you will write to and will ultimately be displayed. 
+
+Refer to the below example.
+
+function copy_image(src, dest){
+
+	for (var x=0; x&lt;_WIDTH; x = x+1){
+
+		for (var y=0; y&lt;_HEIGHT; y = y+1){
+
+			copy_pixel(src[x][y], dest[x][y]);
+
+		}
+
+	}
+
+}
+
+This filter sets the value of every pixel at x,y in dest to the same value of the pixel at x,y in src.
+
+Well this is a boring filter that does nothing, so let's move on to create more exciting filters!
+
+
+Important note:
+
+Do NOT assign one pixel to another directly, ie  "dest[x][y] = src[x][y];"
+
+Instead do "copy_pixel(src[x][y], dest[x][y]);"
+
+Same for images, do NOT use "dest = src;"
+
+Instead do "copy_image(src, dest);"
+
+</TEXT>
+    <PROBLEMS>
+      <PROBLEM type="programming" maxgrade="0">
+        <SNIPPET>
+          <SOLUTION>// [Marking Scheme]
+// ? mark for correct answer
+
+const WIDTH = getVideoWidth();
+const HEIGHT = getVideoHeight();
+function upside_down(src, dest){
+    for (var x=0; x&lt;WIDTH; x = x+1){
+        for (var y=0; y&lt;HEIGHT; y = y+1){
+            copy_pixel(
+                src[x][HEIGHT - 1 - y], 
+                dest[x][y]
+                );
+        }
+    }
+}
+
+</SOLUTION>
+          <TEMPLATE>// Task 1
+const WIDTH = getVideoWidth();
+const HEIGHT = getVideoHeight();
+function upside_down(src, dest){
+    // Your answer here
+}
+
+
+// Test
+// * click the play button
+// then give permission to access the webcam *
+// apply_filter(upside_down);</TEMPLATE>
+        </SNIPPET>
+        <TEXT>Implement a filter that flips the video upside-down.</TEXT>
+      </PROBLEM>
+      <PROBLEM type="programming" maxgrade="0">
+        <SNIPPET>
+          <SOLUTION>// [Marking Scheme]
+// ? mark for correct answer
+const WIDTH = getVideoWidth();
+const HEIGHT = getVideoHeight();
+const x_shift = math_floor(WIDTH/3);
+function translation(src, dest){
+    for (var x=0; x&lt;WIDTH; x = x+1){
+        for (var y=0; y&lt;HEIGHT; y = y+1){
+            var u = x &lt; x_shift 
+                        ? WIDTH - x_shift + x 
+                        : x - x_shift;
+            copy_pixel(
+                src[u][y], 
+                dest[x][y]
+                );
+        }
+    }
+}
+
+</SOLUTION>
+          <TEMPLATE>// Task 2
+const WIDTH = getVideoWidth();
+const HEIGHT = getVideoHeight();
+const x_shift = math_floor(WIDTH/3);
+function translation(src, dest){
+    // Your answer here
+}
+
+
+// Test
+// * click the play button
+// then give permission to access the webcam *
+// apply_filter(translation);</TEMPLATE>
+        </SNIPPET>
+        <TEXT>Implement a filter which translates the video one-third of the image width to the right.
+
+For example, if the original video was 
+(insert photo link here?) ,
+the resultant image after applying the filter should be
+(insert photo link here?)</TEXT>
+      </PROBLEM>
+      <PROBLEM type="programming" maxgrade="0">
+        <SNIPPET>
+          <SOLUTION>// [Marking Scheme]
+// ? mark for correct answer
+
+const WIDTH = getVideoWidth();
+const HEIGHT = getVideoHeight();
+function get_x_translation_filter(x_shift){
+    x_shift = x_shift &gt;= 0 
+                    ? x_shift % WIDTH
+                    : x_shift - math_floor(x_shift/WIDTH) * WIDTH;
+    function translation(src, dest){
+        for (var x=0; x&lt;WIDTH; x = x+1){
+            for (var y=0; y&lt;HEIGHT; y = y+1){
+                var u = x &lt; x_shift 
+                            ? WIDTH - x_shift + x 
+                            : x - x_shift;
+                copy_pixel(
+                    src[u][y], 
+                    dest[x][y]
+                    );
+            }
+        }
+    }
+    return translation;
+}
+</SOLUTION>
+          <TEMPLATE>// Task 3
+const WIDTH = getVideoWidth();
+const HEIGHT = getVideoHeight();
+function get_x_translation_filter(x_shift){
+    // Your answer here
+}
+
+
+// Test
+// * click the play button
+// then give permission to access the webcam *
+
+// apply_filter(get_x_translation_filter(math_floor(WIDTH/3)));
+
+// apply_filter(get_x_translation_filter(math_floor(WIDTH*4/3)));
+
+// apply_filter(get_x_translation_filter(math_floor(-WIDTH*2/5)));</TEMPLATE>
+        </SNIPPET>
+        <TEXT>Implement the function that will return a filter which translates the video by x_shift pixels to the right.
+
+Note: x_shift can be negative or more than WIDTH</TEXT>
+      </PROBLEM>
+      <PROBLEM type="programming" maxgrade="0">
+        <SNIPPET>
+          <SOLUTION>// [Marking Scheme]
+// ? mark for correct answer
+
+const WIDTH = getVideoWidth();
+const HEIGHT = getVideoHeight();
+function moving_translation(src, dest){
+    x_shift = math_floor(currentFrameRuntime()/50) % WIDTH;
+    for (var x=0; x&lt;WIDTH; x = x+1){
+        for (var y=0; y&lt;HEIGHT; y = y+1){
+            var u = x &lt; x_shift 
+                        ? WIDTH - x_shift + x 
+                        : x - x_shift;
+            copy_pixel(
+                src[u][y], 
+                dest[x][y]
+                );
+        }
+    }
+}
+
+
+</SOLUTION>
+          <TEMPLATE>// Task 4
+const WIDTH = getVideoWidth();
+const HEIGHT = getVideoHeight();
+function moving_translation(src, dest){
+    // Your answer here
+}
+
+
+// Test
+// * click the play button
+// then give permission to access the webcam *
+// apply_filter(moving_translation);</TEMPLATE>
+        </SNIPPET>
+        <TEXT>Implement moving_translation such that the amount of translation varies with time.
+
+You may make use of code from previous tasks.</TEXT>
+      </PROBLEM>
+    </PROBLEMS>
+    <DEPLOYMENT interpreter="4">
+      <EXTERNAL name="VIDEO">
+        <SYMBOL>copy_pixel</SYMBOL>
+        <SYMBOL>copy_image</SYMBOL>
+        <SYMBOL>compose_filter</SYMBOL>
+        <SYMBOL>currentFrameRuntime</SYMBOL>
+        <SYMBOL>getTempArray</SYMBOL>
+        <SYMBOL>getVideoWidth</SYMBOL>
+        <SYMBOL>getVideoHeight</SYMBOL>
+        <SYMBOL>apply_filter</SYMBOL>
+      </EXTERNAL>
+    </DEPLOYMENT>
+  </TASK>
+</CONTENT>

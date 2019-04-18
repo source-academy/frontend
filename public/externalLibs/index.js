@@ -43,7 +43,10 @@ function loadAllLibs() {
     '/externalLibs/video/p5.dom.js',
     '/externalLibs/video/video_lib.js',
     // inspector
-    '/externalLibs/inspector/inspector.js'
+    '/externalLibs/inspector/inspector.js',
+    // env visualizer
+    '/externalLibs/env_visualizer/ConcreteJS.js',
+    '/externalLibs/env_visualizer/visualizer.js'
   ]
 
   for (var i = 0; i < files.length; i++) {
