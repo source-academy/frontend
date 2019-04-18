@@ -156,8 +156,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab,
-							 envVisualizerTab]
+        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
       }
     };
     return (

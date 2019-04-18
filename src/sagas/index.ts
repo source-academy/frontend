@@ -312,8 +312,8 @@ function* updateInspector() {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     yield put(actions.highlightEditorLine([start, end], location));
-		visualiseEnv(lastDebuggerResult);
-		inspectorUpdate(lastDebuggerResult);
+    visualiseEnv(lastDebuggerResult);
+    inspectorUpdate(lastDebuggerResult);
   } catch (e) {
     put(actions.highlightEditorLine([], location));
     // most likely harmless, we can pretty much ignore this.
