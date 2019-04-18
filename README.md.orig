@@ -49,6 +49,7 @@ Note that this copies your files over, any future changes will not be reflected.
 
 You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
 
+<<<<<<< HEAD
 ## Inspector
 This requires the use of the `debugger` branch of js-slang to work. Clone both the frontend and the `debugger` slang to the same directory. You would want to `yarn build` the slang you just obtained and then `yarn && sudo yarn start` in the frontend and it should just work. The merge over there is still ongoing. Meanwhile, please try to break this.
 
@@ -72,6 +73,8 @@ Because we use a local version of `js-slang`, the CI just breaks all the time.
 2. Run in browser with npm start
 2. Go to Incubator tab.
 
+=======
+>>>>>>> master
 ## Application Structure
 
 1. `actions` contains action creators, one file per reducer, combined in index.

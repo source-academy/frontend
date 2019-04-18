@@ -41,7 +41,9 @@ function loadAllLibs() {
     // video
     '/externalLibs/video/p5.js',
     '/externalLibs/video/p5.dom.js',
-    '/externalLibs/video/video_lib.js'
+    '/externalLibs/video/video_lib.js',
+    // inspector
+    '/externalLibs/inspector/inspector.js'
   ]
 
   for (var i = 0; i < files.length; i++) {

@@ -9,6 +9,7 @@ import { ExternalLibraryName } from './assessment/assessmentShape';
 import Markdown from './commons/Markdown';
 import Workspace, { WorkspaceProps } from './workspace';
 import { SideContentTab } from './workspace/side-content';
+import Inspector from './workspace/side-content/Inspector';
 import ListVisualizer from './workspace/side-content/ListVisualizer';
 import VideoDisplay from './workspace/side-content/VideoDisplay';
 
@@ -38,8 +39,12 @@ export interface IStateProps {
   editorSessionId: string;
   editorValue: string;
   editorWidth: string;
+  breakpoints: string[];
+  highlightedLines: number[][];
   isEditorAutorun: boolean;
   isRunning: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
   output: InterpreterOutput[];
   queryString?: string;
   replValue: string;
@@ -57,6 +62,7 @@ export interface IDispatchProps {
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGenerateLz: () => void;
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
@@ -67,6 +73,9 @@ export interface IDispatchProps {
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
 }
 
@@ -104,6 +113,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleReplOutputClear: this.props.handleReplOutputClear,
         handleSetEditorSessionId: this.props.handleSetEditorSessionId,
         handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
+        handleDebuggerPause: this.props.handleDebuggerPause,
+        handleDebuggerResume: this.props.handleDebuggerResume,
+        handleDebuggerReset: this.props.handleDebuggerReset,
         hasChapterSelect: true,
         hasCollabEditing: true,
         hasEditorAutorunButton: true,
@@ -111,6 +123,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         hasShareButton: true,
         isEditorAutorun: this.props.isEditorAutorun,
         isRunning: this.props.isRunning,
+        isDebugging: this.props.isDebugging,
+        enableDebugging: this.props.enableDebugging,
         queryString: this.props.queryString,
         questionProgress: null,
         sourceChapter: this.props.sourceChapter,
@@ -121,8 +135,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
-        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus,
-        isEditorAutorun: this.props.isEditorAutorun
+        isEditorAutorun: this.props.isEditorAutorun,
+        breakpoints: this.props.breakpoints,
+        highlightedLines: this.props.highlightedLines,
+        handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
       },
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
@@ -139,7 +156,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [playgroundIntroductionTab, listVisualizerTab, videoDisplayTab]
+        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, videoDisplayTab]
       }
     };
     return (
@@ -174,6 +191,12 @@ const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   icon: IconNames.MOBILE_VIDEO,
   body: <VideoDisplay />
+};
+
+const inspectorTab: SideContentTab = {
+  label: 'Inspector',
+  icon: IconNames.SEARCH,
+  body: <Inspector />
 };
 
 export default Playground;
