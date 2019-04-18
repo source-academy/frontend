@@ -29,8 +29,12 @@ export type StateProps = {
   editorPostpend: string | null;
   editorTestcases: ITestcase[] | null;
   editorWidth: string;
+  breakpoints: string[];
+  highlightedLines: number[][];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -52,6 +56,7 @@ export type DispatchProps = {
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGradingFetch: (submissionId: number) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
@@ -59,6 +64,9 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
 };
@@ -113,6 +121,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
               editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
+              breakpoints: this.props.breakpoints,
+              highlightedLines: this.props.highlightedLines,
+              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               isEditorAutorun: false
             }
           : undefined,
@@ -184,6 +195,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             ? (question as IProgrammingQuestion).testcases
             : []
           : [];
+      this.props.handleEditorUpdateBreakpoints([]);
       this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
       this.props.handleResetWorkspace({
         editorPrepend,
@@ -248,12 +260,17 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleInterruptEval: this.props.handleInterruptEval,
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
+      handleDebuggerPause: this.props.handleDebuggerPause,
+      handleDebuggerResume: this.props.handleDebuggerResume,
+      handleDebuggerReset: this.props.handleDebuggerReset,
       hasChapterSelect: false,
       hasCollabEditing: false,
       hasEditorAutorunButton: false,
       hasSaveButton: false,
       hasShareButton: false,
       isRunning: this.props.isRunning,
+      isDebugging: this.props.isDebugging,
+      enableDebugging: this.props.enableDebugging,
       onClickNext: () => history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () => history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),
       onClickReturn: () => history.push(listingPath),

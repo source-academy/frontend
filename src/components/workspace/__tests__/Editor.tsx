@@ -12,8 +12,11 @@ test('Editor renders correctly', () => {
   const props: IEditorProps = {
     editorSessionId: '',
     editorValue: '',
+    breakpoints: [],
+    highlightedLines: [],
     handleEditorEval: () => {},
     handleEditorValueChange: newCode => {},
+    handleEditorUpdateBreakpoints: breakpoints => {},
     isEditorAutorun: false
   };
   const app = <Editor {...props} />;
