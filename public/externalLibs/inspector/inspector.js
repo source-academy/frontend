@@ -113,12 +113,12 @@
     }
   },1000)
 
-  function updateContext(context) {
+  function updateContext(context, stringify) {
     function dumpTable(env) {
       var res = '';
       for (var k in env) {
         if (builtins.indexOf(''+k) < 0) {
-          var str = env[k].toString();
+          var str = stringify(env[k]);
           str = filter[str] ? filter[str] : str;
           res += '<tr><td>' + k + '</td>' + '<td><code>' + str + '</code></td></tr>';
         }

@@ -93,7 +93,7 @@ export function highlightLine(line: number) {
 
 export function inspectorUpdate(context: Context | undefined) {
   if ((window as any).Inspector) {
-    (window as any).Inspector.updateContext(context);
+    (window as any).Inspector.updateContext(context, stringify);
   } else {
     throw new Error('Inspector not loaded');
   }
