@@ -54,9 +54,12 @@ export type ControlBarProps = {
   hasUnsavedChanges?: boolean;
   isEditorAutorun?: boolean;
   isRunning: boolean;
+<<<<<<< HEAD
   isDebugging: boolean;
   enableDebugging: boolean;
+=======
   editingMode?: string;
+>>>>>>> master
   websocketStatus?: number;
   onClickNext?(): any;
   onClickPrevious?(): any;
@@ -82,7 +85,7 @@ interface IExternal {
   symbols: string[];
 }
 
-class ControlBar extends React.PureComponent<ControlBarProps, { value: string }> {
+class ControlBar extends React.PureComponent<ControlBarProps, {}> {
   public static defaultProps: Partial<ControlBarProps> = {
     hasChapterSelect: false,
     hasSaveButton: false,
@@ -94,15 +97,15 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
   };
 
   private inviteInputElem: React.RefObject<HTMLInputElement>;
+  private joinInputElem: React.RefObject<HTMLInputElement>;
   private shareInputElem: React.RefObject<HTMLInputElement>;
 
   constructor(props: ControlBarProps) {
     super(props);
-    this.state = { value: '' };
-    this.handleChange = this.handleChange.bind(this);
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.selectInviteInputText = this.selectInviteInputText.bind(this);
     this.inviteInputElem = React.createRef();
+    this.joinInputElem = React.createRef();
     this.shareInputElem = React.createRef();
   }
 
@@ -124,11 +127,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
     );
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval);
     const pauseButton = controlButton('Pause', IconNames.STOP, this.props.handleDebuggerPause);
-    const resumeButton = controlButton(
-      'Resume',
-      IconNames.CHEVRON_RIGHT,
-      this.props.handleDebuggerResume
-    );
+    const resumeButton = controlButton('Resume', IconNames.CHEVRON_RIGHT, this.props.handleDebuggerResume);
     const saveButtonOpts = this.props.hasUnsavedChanges
       ? { intent: Intent.WARNING, minimal: false }
       : {};
@@ -178,7 +177,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
         xmlhttp.send();
       }
     };
-    const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleStartJoining = (e: React.FormEvent<HTMLFormElement>) => {
       const xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
@@ -186,7 +185,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
           const state = JSON.parse(xmlhttp.responseText).state;
           if (state === true) {
             // Session ID exists
-            this.props.handleSetEditorSessionId!(this.state!.value);
+            this.props.handleSetEditorSessionId!(this.joinInputElem.current!.value);
           } else {
             this.props.handleInvalidEditorSessionId!();
             this.props.handleSetEditorSessionId!('');
@@ -196,9 +195,14 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
           this.props.handleSetEditorSessionId!('');
         }
       };
-      xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.state!.value, true);
+      xmlhttp.open(
+        'GET',
+        'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.joinInputElem.current!.value,
+        true
+      );
       xmlhttp.send();
-      event.preventDefault();
+
+      e.preventDefault();
     };
     const inviteButton = this.props.hasCollabEditing ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
@@ -218,7 +222,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
         {controlButton('Join', IconNames.LOG_IN)}
         <>
           <form onSubmit={handleStartJoining}>
-            <input type="text" value={this.state.value} onChange={this.handleChange} />
+            <input defaultValue="" ref={this.joinInputElem} />
             <span className={Classes.POPOVER_DISMISS}>
               {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
             </span>
@@ -229,17 +233,9 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
       undefined
     );
     const leaveButton = this.props.hasCollabEditing
-      ? controlButton(
-          'Leave',
-          IconNames.FEED,
-          () => {
-            this.props.handleSetEditorSessionId!('');
-            this.setState({ value: '' });
-          },
-          {
-            iconColor: this.props.websocketStatus === 0 ? Colors.RED3 : Colors.GREEN3
-          }
-        )
+      ? controlButton('Leave', IconNames.FEED, () => this.props.handleSetEditorSessionId!(''), {
+          iconColor: this.props.websocketStatus === 0 ? Colors.RED3 : Colors.GREEN3
+        })
       : undefined;
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
@@ -259,14 +255,18 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
       : undefined;
     return (
       <div className="ControlBar_editor pt-button-group">
-        {this.props.isRunning ? stopButton : this.props.isDebugging ? resetButton : runButton}
-        {this.props.isRunning
-          ? this.props.isDebugging
+        {this.props.isRunning 
+          ? stopButton
+          : this.props.isDebugging 
+            ? resetButton
+            : runButton} 
+        {this.props.isRunning 
+          ? this.props.isDebugging 
             ? null
-            : pauseButton
+            : pauseButton 
           : this.props.isDebugging
             ? resumeButton
-            : null}
+            : null} 
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton}
         {this.props.isEditorAutorun ? stopAutorunButton : startAutorunButton}
@@ -334,10 +334,6 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
         {this.props.isRunning ? null : evalButton} {clearButton} {toggleEditModeButton}
       </div>
     );
-  }
-
-  private handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ value: event.target.value });
   }
 
   private selectShareInputText() {

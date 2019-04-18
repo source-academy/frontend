@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
+  beginDebuggerPause,
   beginInterruptExecution,
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -11,11 +12,14 @@ import {
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
+  debuggerReset,
+  debuggerResume,
   evalEditor,
   evalRepl,
   generateLzString,
   invalidEditorSessionId,
   playgroundExternalSelect,
+  setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
   toggleEditorAutorun,
@@ -33,7 +37,11 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
   isEditorAutorun: state.workspaces.playground.isEditorAutorun,
+  breakpoints: state.workspaces.playground.breakpoints,
+  highlightedLines: state.workspaces.playground.highlightedLines,
   isRunning: state.workspaces.playground.isRunning,
+  isDebugging: state.workspaces.playground.isDebugging,
+  enableDebugging: state.workspaces.playground.enableDebugging,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
   replValue: state.workspaces.playground.replValue,
@@ -55,6 +63,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
+      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
+        setEditorBreakpoint(breakpoints, location),
       handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
@@ -69,7 +79,10 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
-      handleToggleEditorAutorun: () => toggleEditorAutorun(location)
+      handleToggleEditorAutorun: () => toggleEditorAutorun(location),
+      handleDebuggerPause: () => beginDebuggerPause(location),
+      handleDebuggerResume: () => debuggerResume(location),
+      handleDebuggerReset: () => debuggerReset(location)
     },
     dispatch
   );
