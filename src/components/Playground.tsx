@@ -100,9 +100,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         editorSessionId: this.props.editorSessionId,
         externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
-        this.props.handleChapterSelect(chapter),
+          this.props.handleChapterSelect(chapter),
         handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
-        this.props.handleExternalSelect(name),
+          this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleGenerateLz: this.props.handleGenerateLz,
@@ -138,7 +138,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
         handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus,
+        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
       },
       editorWidth: this.props.editorWidth,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
@@ -155,16 +155,16 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab ]
+        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab]
       }
     };
     return (
       <HotKeys
-      className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
-      keyMap={this.keyMap}
-      handlers={this.handlers}
+        className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
+        keyMap={this.keyMap}
+        handlers={this.handlers}
       >
-      <Workspace {...workspaceProps} />
+        <Workspace {...workspaceProps} />
       </HotKeys>
     );
   }

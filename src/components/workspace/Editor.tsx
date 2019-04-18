@@ -63,7 +63,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   }
 
   public componentDidMount() {
-    if (!this.AceEditor.current){
+    if (!this.AceEditor.current) {
       return;
     }
     const editor = (this.AceEditor.current as any).editor;
@@ -71,22 +71,25 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     editor.on('gutterclick', (e: any) => {
       const target = e.domEvent.target;
-      if (target.className.indexOf('ace_gutter-cell') === -1
-        || (!editor.isFocused())
-        || (e.clientX > 35 + target.getBoundingClientRect().left)) {
+      if (
+        target.className.indexOf('ace_gutter-cell') === -1 ||
+        !editor.isFocused() ||
+        e.clientX > 35 + target.getBoundingClientRect().left
+      ) {
         return;
       }
 
       const row = e.getDocumentPosition().row;
       const content = e.editor.session.getLine(row);
       const breakpoints = e.editor.session.getBreakpoints(row, 0);
-      if (breakpoints[row] === undefined
-        && content.length !== 0
-        && !content.includes("//")
-        && !content.includes("debugger;")) {
+      if (
+        breakpoints[row] === undefined &&
+        content.length !== 0 &&
+        !content.includes('//') &&
+        !content.includes('debugger;')
+      ) {
         e.editor.session.setBreakpoint(row);
-      }
-      else {
+      } else {
         e.editor.session.clearBreakpoint(row);
       }
       e.stop();
@@ -176,16 +179,16 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   }
 
   public getMarkers = () => {
-    const markerProps= [];
-    for(const lineNum of this.props.highlightedLines) {
-      markerProps.push(
-        { startRow: lineNum[0],
-          startCol: 0,
-          endRow: lineNum[1],
-          endCol: 1,
-          className: 'myMarker',
-          type: 'fullLine'
-        });
+    const markerProps = [];
+    for (const lineNum of this.props.highlightedLines) {
+      markerProps.push({
+        startRow: lineNum[0],
+        startCol: 0,
+        endRow: lineNum[1],
+        endCol: 1,
+        className: 'myMarker',
+        type: 'fullLine'
+      });
     }
     return markerProps;
   };
@@ -193,35 +196,35 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   public render() {
     return (
       <HotKeys className="Editor" handlers={handlers}>
-      <div className="row editor-react-ace">
-      <AceEditor
-      className="react-ace"
-      commands={[
-        {
-          name: 'evaluate',
-          bindKey: {
-            win: 'Shift-Enter',
-            mac: 'Shift-Enter'
-          },
-          exec: this.props.handleEditorEval
-        }
-      ]}
-      editorProps={{
-        $blockScrolling: Infinity
-      }}
-      ref={this.AceEditor}
-      markers={this.getMarkers()}
-      fontSize={14}
-      height="100%"
-      highlightActiveLine={false}
-      mode="javascript"
-      onChange={this.onChangeMethod}
-      onValidate={this.onValidateMethod}
-      theme="cobalt"
-      value={this.props.editorValue}
-      width="100%"
-      />
-      </div>
+        <div className="row editor-react-ace">
+          <AceEditor
+            className="react-ace"
+            commands={[
+              {
+                name: 'evaluate',
+                bindKey: {
+                  win: 'Shift-Enter',
+                  mac: 'Shift-Enter'
+                },
+                exec: this.props.handleEditorEval
+              }
+            ]}
+            editorProps={{
+              $blockScrolling: Infinity
+            }}
+            ref={this.AceEditor}
+            markers={this.getMarkers()}
+            fontSize={14}
+            height="100%"
+            highlightActiveLine={false}
+            mode="javascript"
+            onChange={this.onChangeMethod}
+            onValidate={this.onValidateMethod}
+            theme="cobalt"
+            value={this.props.editorValue}
+            width="100%"
+          />
+        </div>
       </HotKeys>
     );
   }

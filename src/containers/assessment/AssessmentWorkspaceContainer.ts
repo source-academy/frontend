@@ -71,8 +71,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
-      changeEditorWidth(widthChange, workspaceLocation),
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) => setEditorBreakpoint(breakpoints, workspaceLocation),
+        changeEditorWidth(widthChange, workspaceLocation),
+      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
+        setEditorBreakpoint(breakpoints, workspaceLocation),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),

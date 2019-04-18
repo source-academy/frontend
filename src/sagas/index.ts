@@ -4,7 +4,8 @@ import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
 import { delay, SagaIterator } from 'redux-saga';
-import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'; import * as actions from '../actions';
+import { call, put, race, select, take, takeEvery } from 'redux-saga/effects';
+import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
 import { ExternalLibraryNames } from '../components/assessment/assessmentShape';
@@ -295,24 +296,24 @@ function* playgroundSaga(): SagaIterator {
     );
     const newQueryString =
       code === '' || code === defaultEditorValue
-      ? undefined
-      : qs.stringify({
-        prgrm: compressToEncodedURIComponent(code),
-        chap: chapter,
-        ext: external
-      });
+        ? undefined
+        : qs.stringify({
+            prgrm: compressToEncodedURIComponent(code),
+            chap: chapter,
+            ext: external
+          });
     yield put(actions.changeQueryString(newQueryString));
   });
 }
 
 let lastDebuggerResult: any;
-function *updateInspector() {
+function* updateInspector() {
   try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     yield put(actions.highlightEditorLine([start, end], location));
     inspectorUpdate(lastDebuggerResult);
-  } catch(e) {
+  } catch (e) {
     put(actions.highlightEditorLine([], location));
     // most likely harmless, we can pretty much ignore this.
     // half of the time this comes from execution ending or a stack overflow and
@@ -320,13 +321,19 @@ function *updateInspector() {
   }
 }
 
-function* evalCode(code: string, context: Context, location: WorkspaceLocation, actionType: string) {
-  context.runtime.debuggerOn = (actionType === actionTypes.EVAL_EDITOR ||
-    actionType === actionTypes.DEBUG_RESUME);
+function* evalCode(
+  code: string,
+  context: Context,
+  location: WorkspaceLocation,
+  actionType: string
+) {
+  context.runtime.debuggerOn =
+    actionType === actionTypes.EVAL_EDITOR || actionType === actionTypes.DEBUG_RESUME;
   const { result, interrupted, paused } = yield race({
-    result: actionType === actionTypes.DEBUG_RESUME
-    ? call(resume, lastDebuggerResult)
-    : call(runInContext, code, context, { scheduler: 'preemptive' }),
+    result:
+      actionType === actionTypes.DEBUG_RESUME
+        ? call(resume, lastDebuggerResult)
+        : call(runInContext, code, context, { scheduler: 'preemptive' }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
@@ -360,6 +367,5 @@ function* evalCode(code: string, context: Context, location: WorkspaceLocation, 
     yield call(showWarningMessage, 'Execution paused', 750);
   }
 }
-
 
 export default mainSaga;

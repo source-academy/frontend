@@ -30,7 +30,7 @@ export type StateProps = {
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
-  enableDebugging: boolean;  
+  enableDebugging: boolean;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;

@@ -3,17 +3,15 @@ import * as React from 'react';
 
 class Inspector extends React.Component<{}, {}> {
   private $parent: HTMLElement | null;
-  
+
   public componentDidMount() {
-      if (this.$parent) {
-        (window as any).Inspector.init(this.$parent);
-      }
+    if (this.$parent) {
+      (window as any).Inspector.init(this.$parent);
     }
+  }
 
   public render() {
-    return ( 
-        <div ref={r => (this.$parent = r)} className="sa-inspector" />
-    );
+    return <div ref={r => (this.$parent = r)} className="sa-inspector" />;
   }
 }
 
