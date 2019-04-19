@@ -41,6 +41,6 @@ resource "aws_s3_bucket" "stg-site" {
 }
 EOF
   provisioner "local-exec" {
-    command = "yarn build && ./sync-build.sh"
+    command = "npm run build && ./sync-build.sh"
   }
 }

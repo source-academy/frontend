@@ -1,8 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { beginClearContext, logOut, updateEditorValue } from '../actions';
+import { beginClearContext, logOut, setEditorBreakpoint, updateEditorValue } from '../actions';
 import {
   ensureLibrariesLoaded,
   playgroundExternalSelect,
@@ -47,6 +46,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
           workspaceLocation
         ),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
+        setEditorBreakpoint(breakpoints, workspaceLocation),
       handleEnsureLibrariesLoaded: ensureLibrariesLoaded,
       handleLogOut: logOut,
       handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) =>
@@ -55,4 +56,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     dispatch
   );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Application));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Application)
+);

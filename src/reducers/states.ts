@@ -48,6 +48,7 @@ interface IGradingWorkspace extends IWorkspaceState {
 
 export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
+  readonly websocketStatus: number;
 }
 
 export interface IWorkspaceManagerState {
@@ -58,10 +59,15 @@ export interface IWorkspaceManagerState {
 
 export interface IWorkspaceState {
   readonly context: Context;
+  readonly editorSessionId: string;
   readonly editorValue: string | null;
   readonly editorWidth: string;
-  readonly isEditorAutorun: boolean;
+  readonly breakpoints: string[];
+  readonly highlightedLines: number[][];
   readonly isRunning: boolean;
+  readonly isDebugging: boolean;
+  readonly enableDebugging: boolean;
+  readonly isEditorAutorun: boolean;
   readonly output: InterpreterOutput[];
   readonly replHistory: ReplHistory;
   readonly replValue: string;
@@ -197,8 +203,11 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
+  editorSessionId: '',
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
   editorWidth: '50%',
+  breakpoints: [],
+  highlightedLines: [],
   output: [],
   replHistory: {
     browseIndex: null,
@@ -208,7 +217,9 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   sideContentActiveTab: 0,
   globals: [],
   isEditorAutorun: false,
-  isRunning: false
+  isRunning: false,
+  isDebugging: false,
+  enableDebugging: true
 });
 
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!';
@@ -228,7 +239,8 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
-    playgroundExternal: ExternalLibraryNames.NONE
+    playgroundExternal: ExternalLibraryNames.NONE,
+    websocketStatus: 0
   }
 };
 

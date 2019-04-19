@@ -27,6 +27,12 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private leftParentResizable: Resizable;
   private maxDividerHeight: number;
   private sideDividerDiv: HTMLDivElement;
+  private editorRef: React.RefObject<Editor>;
+
+  public constructor(props: WorkspaceProps) {
+    super(props);
+    this.editorRef = React.createRef();
+  }
 
   public componentDidMount() {
     this.maxDividerHeight = this.sideDividerDiv.clientHeight;
@@ -67,13 +73,14 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private controlBarProps() {
     return {
       ...this.props.controlBarProps,
+      editorRef: this.editorRef,
       hasUnsavedChanges: this.props.hasUnsavedChanges
     };
   }
 
   private editorResizableProps() {
     const onResizeStop: ResizeCallback = ({}, {}, {}, diff) =>
-      this.props.handleEditorWidthChange(diff.width * 100 / window.innerWidth);
+      this.props.handleEditorWidthChange((diff.width * 100) / window.innerWidth);
     const ref = (e: Resizable) => (this.leftParentResizable = e as Resizable);
     return {
       className: 'resize-editor left-parent',
@@ -114,7 +121,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private toggleEditorDividerDisplay: ResizeCallback = ({}, {}, ref) => {
     const leftThreshold = 2;
     const rightThreshold = 95;
-    const editorWidthPercentage = (ref as HTMLDivElement).clientWidth / window.innerWidth * 100;
+    const editorWidthPercentage = ((ref as HTMLDivElement).clientWidth / window.innerWidth) * 100;
     // update resizable size
     if (editorWidthPercentage > rightThreshold) {
       this.leftParentResizable.updateSize({ width: '100%', height: '100%' });
@@ -153,7 +160,14 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    */
   private createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.editorProps) {
-      return <Editor {...props.editorProps} />;
+      // Set key to force remount of Editor component when session id changes
+      return (
+        <Editor
+          {...props.editorProps}
+          key={props.editorProps.editorSessionId}
+          ref={this.editorRef}
+        />
+      );
     } else {
       return <MCQChooser {...props.mcqProps!} />;
     }
