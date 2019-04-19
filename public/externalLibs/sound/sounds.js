@@ -111,6 +111,21 @@ function get_duration(sourcesound) {
   return tail(sourcesound)
 }
 
+function play_safe(sourcesound) {
+    // Discretize sourcesound into playable audio
+    var audio = discretize(head(sourcesound), tail(sourcesound))
+    var data = audio;
+    _safeaudio = raw_to_audio(data);
+    // Keep track of previous sound
+    _safesourcesound = sourcesound;
+    _previousaudio = _safeaudio;
+    
+    _safeaudio = _previousaudio;
+    _safeaudio.addEventListener('ended', stop);
+    _safeaudio.play();
+    _safeplaying = true;
+}
+
 var _playing = false;
 var player;
 
