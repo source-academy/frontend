@@ -24,7 +24,7 @@ exports[`Login renders correctly 1`] = `
         <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"log-in\\" onClick={[Function: handleLogin]}>
           Log in with IVLE
         </Blueprint2.Button>
-        <NavLink to=\\"/playground\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+        <NavLink to=\\"/playground\\" activeClassName=\\"active\\" ariaCurrent=\\"true\\">
           <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"code\\">
             Try out the playground
           </Blueprint2.Button>

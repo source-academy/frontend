@@ -14,7 +14,6 @@ test('Application renders correctly', () => {
     currentPlaygroundExternalLibrary: ExternalLibraryNames.NONE,
     handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => {},
     handleEditorValueChange: (val: string) => {},
-    handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
     handleEnsureLibrariesLoaded: () => {},
     handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) => {}
   };

@@ -74,24 +74,6 @@ $code-color-error: #ff4444;
         height: 100%;
       }
     }
-
-    .ace_gutter-cell {
-      padding-left: 0px;
-    }
-
-    .ace_gutter-cell_hi {
-      background-color: blue;
-    }
-
-    .ace_line_hi {
-      background-color: blue;
-    }
-
-    .ace_breakpoint:before {
-      content: ' \25CF';
-      margin-left: -10px;
-      color: red;
-    }
   }
 
   .MCQChooser {
@@ -141,24 +123,6 @@ $code-color-error: #ff4444;
     padding-bottom: 0.2rem;
     .side-content-header-button:focus {
       outline: 0;
-    }
-
-    .side-content-header-button-alert {
-      -webkit-animation: alert 1s infinite;
-      -moz-animation: alert 1s infinite;
-      -o-animation: alert 1s infinite;
-      animation: alert 1s infinite;
-    }
-
-    @-webkit-keyframes alert {
-      0%,
-      50% {
-        background-color: rgba(200, 100, 50, 0.5);
-      }
-      51%,
-      100% {
-        background-image: rgba(138, 155, 168, 0.3);
-      }
     }
   }
 
@@ -283,10 +247,10 @@ $code-color-error: #ff4444;
         word-wrap: break-word;
         word-break: break-word;
         /**
- * Use same fonts as ace-editor for
- * output. Taken from react-ace
- * sourcecode, font size modified.
- */
+         * Use same fonts as ace-editor for
+         * output. Taken from react-ace
+         * sourcecode, font size modified.
+         */
         font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
           monospace;
       }
