@@ -488,11 +488,3 @@ function sawtooth_sourcesound(freq, duration) {
     }, duration)
   )
 }
-
-function play_concurrently(sourcesound) {
-    var duration = get_duration(sourcesound);
-    var wave = get_wave(sourcesound);
-    var data = discretize(wave, duration);
-    var audio = raw_to_audio(data);
-    audio.play();
-}
