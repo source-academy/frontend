@@ -10,14 +10,12 @@ export interface IAssessmentOverview {
   category: AssessmentCategory;
   closeAt: string;
   coverImage: string;
-  fileName?: string;
   grade: number;
   id: number;
   maxGrade: number;
   maxXp: number;
   openAt: string;
   title: string;
-  reading?: string;
   shortSummary: string;
   status: AssessmentStatus;
   story: string | null;
@@ -47,8 +45,6 @@ export type GradingStatus = keyof typeof GradingStatuses;
  */
 export interface IAssessment {
   category: AssessmentCategory;
-  globalDeployment?: Library;
-  graderDeployment?: Library;
   id: number;
   longSummary: string;
   missionPDF: string;
@@ -70,7 +66,6 @@ export interface IProgrammingQuestion extends IQuestion {
   answer: string | null;
   solutionTemplate: string;
   type: 'programming';
-  graderTemplate?: string;
 }
 
 export interface IMCQQuestion extends IQuestion {
@@ -82,12 +77,10 @@ export interface IMCQQuestion extends IQuestion {
 
 export interface IQuestion {
   answer: string | number | null;
-  editorValue?: string | null;
   comment: string | null;
   content: string;
   id: number;
   library: Library;
-  graderLibrary?: Library;
   type: QuestionType;
   grader: {
     name: string;
@@ -132,9 +125,5 @@ type ExternalLibrary = {
 export type Library = {
   chapter: number;
   external: ExternalLibrary;
-  globals: Array<{
-    0: string;
-    1: any;
-    2?: string;
-  }>;
+  globals: Array<[string, any]>;
 };

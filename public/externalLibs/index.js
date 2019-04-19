@@ -37,12 +37,7 @@ function loadAllLibs() {
     // streams
     '/externalLibs/streams/stream.js',
     '/externalLibs/pe_library.js',
-    '/externalLibs/assert_compiled.js',
-    // inspector
-    '/externalLibs/inspector/inspector.js',
-    // env visualizer
-    '/externalLibs/env_visualizer/ConcreteJS.js',
-    '/externalLibs/env_visualizer/visualizer.js'
+    '/externalLibs/assert_compiled.js'
   ]
 
   for (var i = 0; i < files.length; i++) {

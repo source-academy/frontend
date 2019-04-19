@@ -7,9 +7,9 @@ main() {
     echo "  If you cancel this pre-push hook, use \`git stash pop\` to retrieve your"
     echo "  unstaged changes."
 
-    prettier_ts="npm run format:tsx"
-    prettier_scss="npm run format:scss"
-    jest_ts="npm test"
+    prettier_ts="yarn prettier --list-different src/**/*.{ts,tsx}"
+    prettier_scss="yarn prettier --list-different --parser scss src/**/*.scss"
+    jest_ts="yarn test"
 
     run_cmd "${prettier_ts}"; prettier_ts_exit=$?
     run_cmd "${prettier_scss}"; prettier_scss_exit=$?

@@ -129,8 +129,7 @@
   }
 }
 
-.betcha-dialog,
-.assessment-reset {
+.betcha-dialog {
   span.warning {
     font-weight: bold;
     color: firebrick;
@@ -238,11 +237,4 @@
 
 .md tr:nth-child(even) {
   background-color: #f2f2f2;
-}
-
-.editing-textarea {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  resize: none;
 }
