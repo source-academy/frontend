@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CONTENT xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <TASK kind="mission" duedate="2019-02-19T23:59+08" coverimage="https://s3-ap-southeast-1.amazonaws.com/mission-assets/missions/morseCode.png" startdate="2019-02-13T00:00+08" title="Premorseal Communications" story="mission-12">
+    <READING>Textbook Sections 2.2.1</READING>
+    <WEBSUMMARY/>
+    <TEXT>
+### The Sound Library
+In this mission we produce sounds and play them on our devices. We are distinguishing two kinds of sounds: *Sounds* and *SourceSounds* in our Source programs. You can think of a SourceSound as an inefficient analog sound, represented using a mathematical function, whereas a Sound is a digital sound that can be efficiently handled using your browser's built-in sound processing capabilities.
+
+To describe an analog SourceSound, you need an analog wave function, and the duration of the sound in seconds. The wave function takes a time *t* (in seconds) as argument and returns the amplitude of the wave (a number between -1 and 1) at time *t*. An example wave function `my_wave` has this type:
+
+`my_wave` : Number â†’ Number
+
+The following constructor and accessor functions are given:
+
+```
+function make_sourcesound(wave, duration) {
+    return pair(wave, duration);
+}
+
+function get_wave(sourcesound) {
+    return head(sourcesound);
+}
+
+function get_duration(sourcesound) {
+    return tail(sourcesound);
+}
+```
+
+As usual, make sure you do not break the data abstraction of a SourceSound and always use these functions to make and access SourceSounds.
+
+To try things out, you are given a function
+
+`noise` : Number â†’ SourceSound
+
+where the given Number is the duration of the noisy SourceSound to be created, in seconds.
+
+In order to convert between the inefficient analog SourceSounds and the efficient digital Sounds, you are provided the functions `sourcesound_to_sound` and `sound_to_sourcesound`:
+
+`sourcesound_to_sound` : SourceSound â†’ Sound
+
+`sound_to_sourcesound` : Sound â†’ SourceSound
+
+Note that the function `sourcesound_to_sound` carries out the digital sampling.
+
+The `play` function accepts digital Sounds and has the type:
+
+`play` : Sound â†’ `undefined`
+
+Note that a SourceSound is not a very efficient representation of sounds. Make sure that your SourceSounds are not longer than a couple of seconds.
+
+**Warning: In the following, we produce actual sounds that might be very loud! Turn down the volume of your speakers before you attempt to play sounds, especially in a public place or if you are wearing headphones.**
+
+You can test and play the following:
+
+```
+play(sourcesound_to_sound(noise(0.5)));
+```
+
+after which you should hear half a second of noise. (If you don't, your browser does not support sound; use a different one or ask your Avenger for advice).
+
+### SourceSound Discipline
+
+We require that all SourceSounds have the following property:
+
+```
+(get_wave(sourcesound))(get_duration(sourcesound) + t) === 0
+```
+for any number `t` &gt; 0. Thus the wave must return 0 when the duration is up. This SourceSound discipline will make your tasks a lot easier.
+
+
+This mission has **four** tasks.
+    </TEXT>
+    <PROBLEMS>
+      <PROBLEM type="programming" maxgrade="3" maxxp="255">
+        <SNIPPET>
+          <SOLUTION>
+// [Marking Scheme]
+// 1 mark for attempt
+// 1 mark for returning 0 after duration (no deduction for off by one error)
+// 1 mark for correctness
+// -1 mark for not using get_wave
+
+function noise(duration) {
+    const wave = t =&gt; t &gt; duration ? 0 : math_random() * 2 - 1;
+    return make_sourcesound(wave, duration);
+}
+
+
+function cut_sourcesound(sourcesound, duration) {
+    const wave = get_wave(sourcesound);
+    return make_sourcesound(t =&gt; t &gt; duration ? 0 : wave(t), duration);
+}
+
+// testing
+play(cut_sourcesound(noise(2), 1));
+ 
+                </SOLUTION>
+          <GRADER>
+                    function sound_testcase_cut_sourcesound() {
+                        function srange(start, next, pred) {
+                            return pred(start) 
+                                ? pair(start, srange(next(start), next, pred))
+                                : [];
+                        }
+
+                        __reset_function_count("play");
+                        __reset_function_count("sound_to_sourcesound");
+                        __reset_function_count("sourcesound_to_sound");
+                        __reset_function_count("get_wave");
+                        __reset_function_count("get_duration");
+
+                        // 0 marks if no attempt
+                        if (cut_sourcesound === undefined) {
+                            return 0;
+                        } else {}
+                        const long_sourcesound = sound_to_sourcesound(high(1));
+                        const short_sourcesound = cut_sourcesound(long_sourcesound, 0.1);
+                        if (short_sourcesound === undefined) {
+                            return 0;
+                        } else {}
+                        const attempt = 1;
+
+                        // -1 marks if get_wave was not used - violating abstractions
+                        const deductions = __get_function_count('get_wave') &gt; 0 ? 0 : -1;
+
+                        // 1 mark for correctness + 1 mark for cutting sourcesound
+                        const correctness = accumulate(function(t, final_marks) {
+                            if (t === 0.1) {
+                                return final_marks;
+                            } else if (t &lt; 0.1) {
+                                return (get_wave(short_sourcesound))(t) === 1 ? final_marks : 0;
+                            } else {
+                                return (get_wave(short_sourcesound))(t) === 0 ? final_marks : 0;
+                            }
+                        }, 2, srange(0.011, t =&gt; t + 0.1, t =&gt; t &lt; 0.15));
+
+                        return attempt + correctness + deductions;
+                    }
+                    sound_testcase_cut_sourcesound();
+                </GRADER>
+          <TEMPLATE>
+// Task 1
+function noise(duration) {
+    const wave = t =&gt; t &gt; duration ? 0 : math_random() * 2 - 1;
+    return make_sourcesound(wave, duration);
+}
+
+function cut_sourcesound(sourcesound, duration) {
+    /* your answer here */
+}
+
+
+const c = cut_sourcesound(noise(5), 0.5);
+play(c);
+                </TEMPLATE>
+        </SNIPPET>
+        <TEXT>
+Write a function `cut_sourcesound` that takes a SourceSound and a new duration (in seconds) as arguments. It returns a new SourceSound that ends at the new duration. You can assume that the new duration is shorter than the duration of the given SourceSound.
+
+`cut_sourcesound` : (SourceSound, Number) =&gt; SourceSound
+
+Note: Make sure your SourceSound follows the SourceSound discipline.
+            </TEXT>
+      </PROBLEM>
+      <PROBLEM type="programming" maxgrade="2" maxxp="170">
+        <SNIPPET>
+          <SOLUTION>
+// [Marking Scheme]
+// 1 mark for attempt
+// 1 mark for returning a sound and not a sourcesound
+// -1 mark for not returning 0 after duration (error carried forward, no
+//                                             decution for off by one error)
+
+function sine_sound(freq, duration) {
+    const sine_wave = t =&gt; t &gt; duration ? 0 : math_sin(2 * math_PI * freq * t);
+    return make_sourcesound(sine_wave, duration);
+}
+
+// testing
+play(sine_sound(500, 1));
+                </SOLUTION>
+          <GRADER>
+                    function sound_testcase_sine_sound() {
+                        function srange(start, next, pred) {
+                            return pred(start) 
+                                ? pair(start, srange(next(start), next, pred))
+                                : [];
+                        }
+
+                        function sine_sound_correct(frequency, duration) {
+                            const wave = t =&gt; t &gt; duration ? 0 : math_sin(2 * frequency * math_PI * t);
+                            return sourcesound_to_sound(make_sourcesound(wave, duration));
+                        }
+
+                        __reset_function_count("play");
+                        __reset_function_count("sound_to_sourcesound");
+                        __reset_function_count("sourcesound_to_sound");
+                        __reset_function_count("get_wave");
+                        __reset_function_count("get_duration");
+
+                        // 0 marks if no attempt
+                        if (sine_sound === undefined) {
+                            return 0;
+                        } else {}
+                        const dot_sound = sine_sound(750, 0.1);
+                        const dot_sound_correct = sine_sound_correct(750, 0.1);
+                        if (dot_sound === undefined) {
+                            return 0;
+                        } else {}
+                        const attempt = 1;
+
+                        // If not sound, give attempt marks
+                        if (!is_sound(dot_sound)) {
+                            return attempt;
+                        } else {}
+
+                        // 1 mark for correctness
+                        const dot_sourcesound = sound_to_sourcesound(dot_sound);
+                        const dot_sourcesound_correct = sound_to_sourcesound(dot_sound_correct);
+                        const correctness = accumulate(function(t, final_marks) {
+                            const difference = math_abs((get_wave(dot_sourcesound))(t) - (get_wave(dot_sourcesound_correct))(t));
+                            return difference &lt; 0.00001 ? final_marks : 0;
+                        }, 1, srange(0.011, t =&gt; t + 0.01, t =&gt; t &lt; 0.15));
+
+                        // -1 marks if did not cut off sound
+                        const deductions = accumulate(function(t, final_marks) {
+                            const has_correct_cut = (get_wave(dot_sourcesound))(t) === 0;
+                            return has_correct_cut ? final_marks : -1;
+                        }, 0, srange(0.11, t =&gt; t + 0.01, t =&gt; t &lt; 0.15));
+
+                        return attempt + correctness + deductions;
+                    }
+                    sound_testcase_sine_sound();
+                </GRADER>
+          <TEMPLATE>
+// Task 2
+function sine_sound(frequency, duration) {
+    /* your answer here */
+}
+
+play(sine_sound(500, 1));
+                </TEMPLATE>
+        </SNIPPET>
+        <TEXT>
+A sine wave is defined by
+
+*sinewave*(*t*) = *sin*(2 pi *f* *t*)
+
+where *t* is the time since the begining of the sound (in seconds), *f* is the frequency (in hertz) and *sin* is the trigonometric sine function whose argument is considered given in radians.
+
+Write a function `sine_sound` that takes a frequency (in hertz) and a duration (in seconds) as arguments. It returns a Sound of the given duration with the wave function *sinewave* defined above.
+
+`sine_sound` : (Number, Number) =&gt; Sound
+
+You will find the predeclared `math_sin` function useful for this task.
+
+Note: The return value is a Sound, not a SourceSound.
+            </TEXT>
+      </PROBLEM>
+      <PROBLEM type="programming" maxgrade="7" maxxp="590">
+        <SNIPPET>
+          <SOLUTION>
+// [Marking Scheme]
+// 1 mark for attempt
+// 1 mark for turning sounds to sourcesounds before sequencing
+// 1 mark for sequencing sourcesounds in correct order
+// 1 mark for sequencing sourcesounds in correct length (the length of silence
+//            will also be counted, so if its a silent sound of the correct
+//            length then it deserves this mark)
+// 1 mark for turning sourcesound to sound before returning
+// 1 mark for using consecutively to construct distress signal
+// 1 mark for distress signal correctness (no deduction for extra pause after
+//            the last tone)
+// -0.5 mark for not considering the basic case in `consecutively`. (should return silence(0) when the argument is empty list)
+// -1 mark for poor abstraction
+
+function append_sourcesounds(s1, s2) {
+    return make_sourcesound(t => {
+        if (t &lt; get_duration(s1)) {
+            return (get_wave(s1))(t);
+        } else {
+            return (get_wave(s2))(t - get_duration(s1));
+        }
+    }, get_duration(s1) + get_duration(s2));
+}
+
+function sine_sound(freq, duration) {
+    const sine_wave = t =&gt; t &gt; duration ? 0 : math_sin(2 * math_PI * freq * t);
+    return make_sourcesound(sine_wave, duration);
+}
+
+function silence_sourcesound(duration) {
+    return make_sourcesound(t => 0, duration);
+}
+
+function silence(duration) {
+    return silence_sourcesound(duration);
+}
+
+function consecutively(list_of_sounds) {
+    return accumulate(append_sourcesounds, silence_sourcesound(0), list_of_sounds);
+}
+
+// Create dot, dash and pause sounds first
+const dot_sound = sine_sound(750, 0.1);
+const dash_sound = sine_sound(750, 0.3);
+const dot_pause = silence(0.1);
+const dash_pause = silence(0.3);
+
+// Create sounds for each letter
+const S_sound = consecutively(list(dot_sound, dot_pause, dot_sound, dot_pause, dot_sound));
+const O_sound = consecutively(list(dash_sound, dot_pause, dash_sound, dot_pause, dash_sound));
+
+// Build the signal out of letter sounds and pauses
+const distress_signal = consecutively(list(S_sound, dash_pause, O_sound, dash_pause, S_sound));
+
+// Play distress signal
+play_safe(distress_signal);
+                </SOLUTION>
+          <GRADER>
+                    function sound_testcase_consecutively() {
+                        function srange(start, next, pred) {
+                            return pred(start) 
+                                ? pair(start, srange(next(start), next, pred))
+                                : [];
+                        }
+
+                        __reset_function_count("play");
+                        __reset_function_count("sound_to_sourcesound");
+                        __reset_function_count("sourcesound_to_sound");
+                        __reset_function_count("get_wave");
+                        __reset_function_count("get_duration");
+
+                        // 0 marks if no attempt
+                        if (consecutively === undefined) {
+                            return 0;
+                        } else {}
+                        const left_dot = consecutively(list(high(0.1), silence(0.1)));
+                        const right_dot = consecutively(list(silence(0.1), high(0.1)));
+                        if (left_dot === undefined || right_dot === undefined) {
+                            return 0;
+                        } else {}
+
+                        // Can't check for sequencing if it is 
+                        // neither sound nor sourcesound
+                        const is_sounds = is_sound(left_dot) &amp;&amp; is_sound(right_dot);
+                        const is_sourcesounds = is_pair(left_dot) &amp;&amp; is_pair(right_dot);
+                        if (!is_sounds &amp;&amp; !is_sourcesounds) {
+                            return 1;
+                        } else {}
+                        const attempt = 4;
+
+                        // 1 mark for returning a sound
+                        const typing = is_sounds ? 1 : 0;
+
+                        // 1 mark for correct sequence
+                        const left_sourcesound = is_sound(left_dot) ? sound_to_sourcesound(left_dot) : left_dot;
+                        const right_sourcesound = is_sound(right_dot) ? sound_to_sourcesound(right_dot) : right_dot;
+                        const ordering = accumulate(function(t, final_marks) {
+                            if (t === 0.1 || t &gt;= 0.2) {
+                                return final_marks;
+                            } else {
+                                const complement_t = (t + 0.1) % 0.2;
+                                const difference = math_abs((get_wave(left_sourcesound))(complement_t) - (get_wave(right_sourcesound))(t));
+                                return difference &lt; 0.00001 ? final_marks : 0;
+                            }
+                        }, 1, srange(0.011, t =&gt; t + 0.01, t =&gt; t &lt; 0.2));
+
+                        // 1 mark for correct length
+                        const length = get_duration(left_sourcesound) === 0.2 &amp;&amp; get_duration(right_sourcesound) === 0.2 ? 1 : 0;
+
+                        // -0.5 for inappropriate base case return value for consecutively
+                        const base_sound = consecutively(list());
+                        const base_sourcesound = sound_to_sourcesound(base_sound);
+                        const deductions = accumulate(function(t, final_marks) {
+                            const has_correct_cut = (get_wave(base_sourcesound))(t) === 0;
+                            const has_correct_duration = get_duration(base_sourcesound) === 0;
+                            return has_correct_cut &amp;&amp; has_correct_duration ? final_marks : -1;
+                        }, 0, srange(0.011, t =&gt; t + 0.01, t =&gt; t &lt; 0.05));
+
+                        return attempt + typing + ordering + length + deductions;
+                    }
+                    sound_testcase_consecutively();
+                </GRADER>
+          <TEMPLATE>
+// Task 3
+function consecutively(list_of_sounds) {
+    /* your answer here */
+}
+
+// Create dot, dash and pause sounds first
+const dot_sound = "your answer here";
+const dash_sound = "your answer here";
+const dot_pause = "your answer here";
+const dash_pause = "your answer here";
+
+// Create sounds for each letter
+const S_sound = "your answer here";
+const O_sound = "your answer here";
+
+// Build the signal out of letter sounds and pauses
+const distress_signal = "your answer here";
+
+// Play distress signal
+play(distress_signal);
+                </TEMPLATE>
+        </SNIPPET>
+        <TEXT>
+Write a function `consecutively` that takes a list of Sounds as argument. It returns a new Sound composed of the Sounds in the list in sequential order, considering their respective durations.
+
+Now, we need to set up the transmitter and call for help. You need to play "SOS" in Morse code. Morse code consists of short sounds called *dots*, long sounds called *dashes*, and pauses. The dot duration is the basic unit of time measurement; we require each dot to be 0.1s long. The duration of a dash is three times the duration of a dot. Dots or dashes within the same letter are separated by a silence that has the same length as a dot, and the letters of a word such as "SOS" are separated by a silence that has the same length as a dash.
+
+Use a sine wave of 750 Hz for the tone and don't place any pauses before or after the Morse code signal for the word "SOS".
+
+**The generated sound may sound a bit buggy. Use safe_play() to play the sound instead as there might be issues with buffering the sound**
+
+![Morse code letters](https://www.comp.nus.edu.sg/~cs1101s/images/morsecodeletters.png)
+            </TEXT>
+      </PROBLEM>
+    </PROBLEMS>
+    <DEPLOYMENT interpreter="2">
+      <EXTERNAL name="SOUND">
+        <SYMBOL>get_duration</SYMBOL>
+        <SYMBOL>get_wave</SYMBOL>
+        <SYMBOL>is_sound</SYMBOL>
+        <SYMBOL>make_sourcesound</SYMBOL>
+        <SYMBOL>play</SYMBOL>
+        <SYMBOL>sound_to_sourcesound</SYMBOL>
+        <SYMBOL>sourcesound_to_sound</SYMBOL>
+        <SYMBOL>play_safe</SYMBOL>
+      </EXTERNAL>
+    </DEPLOYMENT>
+    <GRADERDEPLOYMENT interpreter="2">
+      <EXTERNAL name="SOUND">
+        <SYMBOL>__get_function_count</SYMBOL>
+        <SYMBOL>__reset_function_count</SYMBOL>
+        <SYMBOL>__track_function</SYMBOL>
+        <SYMBOL>get_duration</SYMBOL>
+        <SYMBOL>get_wave</SYMBOL>
+        <SYMBOL>high</SYMBOL>
+        <SYMBOL>is_sound</SYMBOL>
+        <SYMBOL>make_sourcesound</SYMBOL>
+        <SYMBOL>play</SYMBOL>
+        <SYMBOL>silence</SYMBOL>
+        <SYMBOL>sound_to_sourcesound</SYMBOL>
+        <SYMBOL>sourcesound_to_sound</SYMBOL>
+      </EXTERNAL>
+      <GLOBAL>
+        <IDENTIFIER>__tracking_function</IDENTIFIER>
+        <VALUE>()=&gt;global.__track_function("get_duration")</VALUE>
+      </GLOBAL>
+      <GLOBAL>
+        <IDENTIFIER>__tracking_function</IDENTIFIER>
+        <VALUE>()=&gt;global.__track_function("get_wave")</VALUE>
+      </GLOBAL>
+      <GLOBAL>
+        <IDENTIFIER>__tracking_function</IDENTIFIER>
+        <VALUE>()=&gt;global.__track_function("play")</VALUE>
+      </GLOBAL>
+      <GLOBAL>
+        <IDENTIFIER>__tracking_function</IDENTIFIER>
+        <VALUE>()=&gt;global.__track_function("sourcesound_to_sound")</VALUE>
+      </GLOBAL>
+      <GLOBAL>
+        <IDENTIFIER>__tracking_function</IDENTIFIER>
+        <VALUE>()=&gt;global.__track_function("sound_to_sourcesound")</VALUE>
+      </GLOBAL>
+    </GRADERDEPLOYMENT>
+  </TASK>
+</CONTENT>
