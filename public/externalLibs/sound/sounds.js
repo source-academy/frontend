@@ -65,7 +65,7 @@ function discretize(wave, duration) {
     return vector;
 }
 
-// Discretizes a sourcesound to a sound starting from elapsed_duration, for sample_length seconds
+// Discretizes a sound to a sound starting from elapsed_duration, for sample_length seconds
 function discretize_from(wave, duration, elapsed_duration, sample_length, data) {
     if (elapsed_duration + sample_length > duration) {
         for (var i = elapsed_duration * FS; i < duration * FS; i++) {
@@ -139,30 +139,30 @@ function raw_to_audio(_data) {
 // duration: real value in seconds 0 < x < Infinity
 // sound: (time -> amplitude) x duration
 
-function make_sourcesound(wave, duration) {
+function make_sound(wave, duration) {
     return pair(wave, duration);
 }
 
-function get_wave(sourcesound) {
-    return head(sourcesound);
+function get_wave(sound) {
+    return head(sound);
 }
 
-function get_duration(sourcesound) {
-    return tail(sourcesound);
+function get_duration(sound) {
+    return tail(sound);
 }
 
 // Keeps track of whether play() is currently running, and the current audio context.
 var _playing = false;
 var _player;
 
-function play(sourcesound) {
-    // If a sourcesound is already playing, terminate execution
+function play(sound) {
+    // If a sound is already playing, terminate execution
     if (_playing) return;
     _playing = true;
 
     // Declaring duration and wave variables
-    var wave = get_wave(sourcesound);
-    var duration = get_duration(sourcesound);
+    var wave = get_wave(sound);
+    var duration = get_duration(sound);
 
     // Create AudioContext (test this out might fix safari issue)
     //const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -246,12 +246,12 @@ function play(sourcesound) {
 var _safeplaying = false;
 var _safeaudio = null;
 
-function play_safe(sourcesound) {
-    // If a sourcesound is already playing, terminate execution.
+function play_safe(sound) {
+    // If a sound is already playing, terminate execution.
     if (_safeplaying || _playing) return;
 
     // Discretize the input sound
-    var data = discretize(head(sourcesound), tail(sourcesound));
+    var data = discretize(head(sound), tail(sound));
     _safeaudio = raw_to_audio(data);
 
     _safeaudio.addEventListener('ended', stop);
@@ -273,9 +273,9 @@ function stop() {
     _safeplaying = false;
 }
 
-function cut_sourcesound(sourcesound, duration) {
-    var wave = get_wave(sourcesound);
-    return make_sourcesound(function(t) {
+function cut_sound(sound, duration) {
+    var wave = get_wave(sound);
+    return make_sound(function(t) {
         if (t >= duration) {
             return 0;
         } else {
@@ -284,12 +284,12 @@ function cut_sourcesound(sourcesound, duration) {
     }, duration);
 }
 
-function autocut_sourcesound(sourcesound) {
-    return cut_sourcesound(sourcesound, get_duration(sourcesound));
+function autocut_sound(sound) {
+    return cut_sound(sound, get_duration(sound));
 }
 
-// Concats a list of sourcesounds
-function consecutively(list_of_sourcesounds) {
+// Concats a list of sounds
+function consecutively(list_of_sounds) {
     function consec_two(ss1, ss2) {
         var wave1 = head(ss1);
         var wave2 = head(ss2);
@@ -300,11 +300,11 @@ function consecutively(list_of_sourcesounds) {
         }
         return pair(new_wave, dur1 + dur2);
     }
-    return accumulate(consec_two, silence_sourcesound(0), list_of_sourcesounds);
+    return accumulate(consec_two, silence_sound(0), list_of_sounds);
 }
 
-// Mushes a list of sourcesounds together
-function simultaneously(list_of_sourcesounds) {
+// Mushes a list of sounds together
+function simultaneously(list_of_sounds) {
     function musher(ss1, ss2) {
         var wave1 = head(ss1);
         var wave2 = head(ss2);
@@ -319,52 +319,52 @@ function simultaneously(list_of_sourcesounds) {
         return pair(new_wave, new_dur);
     }
 
-    var mushed_sounds = accumulate(musher, silence_sourcesound(0), list_of_sourcesounds);
+    var mushed_sounds = accumulate(musher, silence_sound(0), list_of_sounds);
     var normalised_wave =  function(t) {
-       return (head(mushed_sounds))(t) / length(list_of_sourcesounds);
+       return (head(mushed_sounds))(t) / length(list_of_sounds);
     }  
     var highest_duration = tail(mushed_sounds);
     return pair(normalised_wave, highest_duration);
 }
 
-function noise_sourcesound(duration) {
-    return autocut_sourcesound(make_sourcesound(function(t) {
+function noise_sound(duration) {
+    return autocut_sound(make_sound(function(t) {
         return Math.random()*2-1;
     }, duration));
 }
 
-function sine_sourcesound(freq, duration) {
-    return autocut_sourcesound(make_sourcesound(function(t) {
+function sine_sound(freq, duration) {
+    return autocut_sound(make_sound(function(t) {
         return Math.sin(2 * Math.PI * t * freq);
     }, duration));
 }
 
-function constant_sourcesound(constant, duration) {
-    return autocut_sourcesound(make_sourcesound(function(t) {
+function constant_sound(constant, duration) {
+    return autocut_sound(make_sound(function(t) {
         return 0;
     }, duration));
 }
 
-function silence_sourcesound(duration) {
-    return constant_sourcesound(0, duration);
+function silence_sound(duration) {
+    return constant_sound(0, duration);
 }
 
-function high_sourcesound(duration) {
-    return constant_sourcesound(1, duration);
+function high_sound(duration) {
+    return constant_sound(1, duration);
 }
 
-function invert_sourcesound(sourcesound) {
-    var wave = get_wave(sourcesound);
-    var duration = get_duration(sourcesound);
-    return make_sourcesound(function(t) {
+function invert_sound(sound) {
+    var wave = get_wave(sound);
+    var duration = get_duration(sound);
+    return make_sound(function(t) {
         return -wave(t);
     }, duration);
 }
 
-function clamp_sourcesound(sourcesound) {
-    var wave = get_wave(sourcesound);
-    var duration = get_duration(sourcesound);
-    return make_sourcesound(function(t) {
+function clamp_sound(sound) {
+    var wave = get_wave(sound);
+    var duration = get_duration(sound);
+    return make_sound(function(t) {
         var a = wave(t);
         if (a > 1) {
             return 1;
@@ -440,7 +440,7 @@ function midi_note_to_frequency(note) {
     return 8.1757989156 * Math.pow(2, (note / 12));
 }
 
-function square_sourcesound(freq, duration) {
+function square_sound(freq, duration) {
     function fourier_expansion_square(level, t) {
         var answer = 0;
         for (var i = 1; i <= level; i++) {
@@ -448,7 +448,7 @@ function square_sourcesound(freq, duration) {
         }
         return answer;
     }
-    return autocut_sourcesound(make_sourcesound(function(t) {
+    return autocut_sound(make_sound(function(t) {
         var x = (4 / Math.PI) * fourier_expansion_square(5, t);
         if (x > 1) {
             return 1;
@@ -460,7 +460,7 @@ function square_sourcesound(freq, duration) {
     }, duration));
 }
 
-function triangle_sourcesound(freq, duration) {
+function triangle_sound(freq, duration) {
     function fourier_expansion_triangle(level, t) {
         var answer = 0;
         for (var i = 0; i < level; i++) {
@@ -468,7 +468,7 @@ function triangle_sourcesound(freq, duration) {
         }
         return answer;
     }
-    return autocut_sourcesound(make_sourcesound(function(t) {
+    return autocut_sound(make_sound(function(t) {
         var x = (8 / Math.PI / Math.PI) * fourier_expansion_triangle(5, t);
         if (x > 1) {
             return 1;
@@ -480,7 +480,7 @@ function triangle_sourcesound(freq, duration) {
     }, duration));
 }
 
-function sawtooth_sourcesound(freq, duration) {
+function sawtooth_sound(freq, duration) {
     function fourier_expansion_sawtooth(level, t) {
         var answer = 0;
         for (var i = 1; i <= level; i++) {
@@ -488,7 +488,7 @@ function sawtooth_sourcesound(freq, duration) {
         }
         return answer;
     }
-    return autocut_sourcesound(make_sourcesound(function(t) {
+    return autocut_sound(make_sound(function(t) {
         var x = (1 / 2) - (1 / Math.PI) * fourier_expansion_sawtooth(5, t);
         if (x > 1) {
             return 1;
