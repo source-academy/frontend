@@ -100,7 +100,7 @@
     "@types/react-dom": "^16.0.5",
     "@types/react-redux": "^5.0.16",
     "@types/react-router": "^4.0.24",
-    "@types/react-router-dom": "^4.2.6",
+    "@types/react-router-dom": "^4.3.2",
     "@types/react-router-redux": "^5.0.13",
     "@types/react-test-renderer": "^16.0.1",
     "@types/react-textarea-autosize": "^4.3.3",
