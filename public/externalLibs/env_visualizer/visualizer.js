@@ -123,9 +123,9 @@
    */
   var builtinsToDraw = [];
 
-	/**
-	 * Helper functions for drawing different types of elements on the canvas.
-	 */
+  /**
+   * Helper functions for drawing different types of elements on the canvas.
+   */
   function drawSceneFnObjects() {
     fnObjectLayer.scene.clear();
     for (let i = 0; i < fnObjects.length; i++) {
@@ -320,11 +320,11 @@
     } else {
       context.strokeStyle = 'green';
       context.lineWidth = 2;
-			if (config.hovered) {
-				context.font = "14px Roboto Mono Light";
-				context.fillStyle = 'white';
-				context.fillText("Data Object", x0 + 20, y0 + 15);	
-			}
+      if (config.hovered) {
+	context.font = "14px Roboto Mono Light";
+	context.fillStyle = 'white';
+	context.fillText("Data Object", x0 + 20, y0 + 15);	
+      }
       context.stroke();
     }
   }
@@ -364,25 +364,25 @@
     y = config.y;
     context.beginPath();
 
-	  // render frame name
-		let frameName;
-		if (config.name == "forLoopEnvironment") {
-			frameName = "for loop";
-		} else if (config.name == "forBlockEnvironment") {
-			frameName = "for block";
-		} else if (config.name == "blockEnvironment") {
-			frameName = "block";
-		} else {
-			frameName = config.name;
-		}
-		if (frameName.length * 9 < config.width / 2 || frameName == "global") {
-			context.fillText(frameName, x, y - 10);
-		} else {
-			context.fillText(frameName, x - (frameName.length * 9 - config.width / 2),
-											  y - 10);
-		}
-		
-		// render text in frame
+    // render frame name
+    let frameName;
+    if (config.name == "forLoopEnvironment") {
+      frameName = "for loop";
+    } else if (config.name == "forBlockEnvironment") {
+      frameName = "for block";
+    } else if (config.name == "blockEnvironment") {
+      frameName = "block";
+    } else {
+      frameName = config.name;
+    }
+    if (frameName.length * 9 < config.width / 2 || frameName == "global") {
+      context.fillText(frameName, x, y - 10);
+    } else {
+      context.fillText(frameName, x - (frameName.length * 9 - config.width / 2),
+	   	       y - 10);
+    }
+
+    // render text in frame
     let env = config.headClone;
     let i = 0;
     for (let k in env) {
@@ -442,10 +442,10 @@
     context.restore();
   }
   
-	/**
-	 * Trivial - the arrow just points straight to a fixed position relative to 
-	 * the frame.
-	 */
+  /**
+   * Trivial - the arrow just points straight to a fixed position relative to 
+   * the frame.
+   */
   function drawSceneFrameDataArrow(frame, frameOffset) {
     var scene = arrowLayer.scene,
         context = scene.context;
@@ -464,15 +464,14 @@
   
   /**
    * For each function variable, either the function is defined in the scope
-	 * the same frame, in which case drawing the arrow is simple, or it is in
-	 * a different frame. If so, more care is needed to route the arrow back up
-	 * to its destination.
-	 */
-	function drawSceneFrameFnArrow(frame, fnObject, frameOffset) {
+   * the same frame, in which case drawing the arrow is simple, or it is in
+   * a different frame. If so, more care is needed to route the arrow back up
+   * to its destination.
+   */
+  function drawSceneFrameFnArrow(frame, fnObject, frameOffset) {
     var scene = arrowLayer.scene,
         context = scene.context;
     const yf = fnObject.y;
-    //scene.clear();
     context.save();
     context.strokeStyle = "#999999";
     context.beginPath();
@@ -491,14 +490,14 @@
       context.stroke();
     } else {
       /** 
-			 * fnObject belongs to different frame.
-			 * Two "offset" factors are used: frameOffset, the index position of
-			 * the source variable in the starting frame, and fnOffset, the position
-			 * of the target fnObject in the destination frame. Offsetting the line
-			 * by these factors prevents overlaps between arrows that are pointing to
-			 * different objects.
-			 */
-			const paramName = getKeyByValue(frame.headClone, frame.variables[frameOffset]);
+       * fnObject belongs to different frame.
+       * Two "offset" factors are used: frameOffset, the index position of
+       * the source variable in the starting frame, and fnOffset, the position
+       * of the target fnObject in the destination frame. Offsetting the line
+       * by these factors prevents overlaps between arrows that are pointing to
+       * different objects.
+       */
+      const paramName = getKeyByValue(frame.headClone, frame.variables[frameOffset]);
       const x0 = frame.x 
                  + paramName.length * 8 + 22,
             y0 = frame.y + frameOffset * 30 + 25;
@@ -512,13 +511,13 @@
       let x3 = xf + 10 + fnOffset * 7,
           y3 = y2;
       /**
-			 * From this position, the arrow needs to move upward to reach the
+       * From this position, the arrow needs to move upward to reach the
        * target fnObject. Make sure it does not intersect any other object
        * when doing so, or adjust its position if it does.
-			 * This currently only works for the frame level directly above the origin
-			 * frame, which suffices in most cases.
-			 * TO-DO: Improve implementation to handle any number of frame levels.
-			 */				 
+       * This currently only works for the frame level directly above the origin
+       * frame, which suffices in most cases.
+       * TO-DO: Improve implementation to handle any number of frame levels.
+       */				 
       levels[frame.level - 1].frames.forEach(function(frame) {
           const leftBound = frame.x;
           let rightBound = frame.x + frame.width;
@@ -544,9 +543,9 @@
   }
 
   /**
-	 * Trivial case (arrow goes straight back to the adjacent frame).
-	 */
-	function drawSceneFnFrameArrow(fnObject) {
+   * Trivial case (arrow goes straight back to the adjacent frame).
+   */
+  function drawSceneFnFrameArrow(fnObject) {
     var scene = arrowLayer.scene,
         context = scene.context;
     //const offset = frames[pair[0]].fnIndex.indexOf(pair[1]);
@@ -572,11 +571,11 @@
   }
 
   /**
-	 * Arrows between child and parent frames.
-	 * Uses an offset factor to prevent lines overlapping, similar to with
-	 * frame-function arrows.
-	 */
-	function drawSceneFrameArrow(frame) {
+   * Arrows between child and parent frames.
+   * Uses an offset factor to prevent lines overlapping, similar to with
+   * frame-function arrows.
+   */
+  function drawSceneFrameArrow(frame) {
     var config = frame;
     var scene = arrowLayer.scene,
         context = scene.context;
@@ -612,9 +611,9 @@
   });
 
   /**
-	 * Create a different layer for each type of element. May be more useful
-	 * in future for manipulating groups of elements.
-	 */
+   * Create a different layer for each type of element. May be more useful
+   * in future for manipulating groups of elements.
+    */
   var fnObjectLayer = new Concrete.Layer();
   var dataObjectLayer = new Concrete.Layer();
   var frameLayer = new Concrete.Layer();
@@ -623,10 +622,10 @@
   // add layers
   viewport.add(frameLayer).add(fnObjectLayer).add(dataObjectLayer).add(arrowLayer);
 
-	fnObjects = []
-	dataObjects = []
-	levels = {}
-	builtinsToDraw = []
+  fnObjects = []
+  dataObjects = []
+  levels = {}
+  builtinsToDraw = []
   
   var frames = [];
   // parse input from interpreter
@@ -638,15 +637,17 @@
       frame.layer = frameLayer;
       frame.color = white;
 			
-			// reset frame
-			frame.dataObjects = [];
-			frame.fnObjects = [];
-			frame.variables = [];
-			frame.children = [];
-			
-			// clone frame.head to avoid disrupting rest of interpreter
-			frame.headClone = {};
-			for (k in frame.head) frame.headClone[k] = frame.head[k];
+      // reset frame
+      frame.dataObjects = [];
+      frame.fnObjects = [];
+      frame.variables = [];
+      frame.children = [];
+
+      // clone frame.head to avoid disrupting rest of interpreter
+      frame.headClone = {};
+      for (k in frame.head) {
+        frame.headClone[k] = frame.head[k];
+      }
     }
 
     /**
@@ -670,7 +671,7 @@
      */ 
     let dataObjectKey = Math.pow(2, 24) - 1;
     let builtinFnObjectKey = Math.pow(2, 23) - 1;
-		frames.reverse(); // more natural ordering! Global frame now comes first
+    frames.reverse(); // more natural ordering! Global frame now comes first
     while (i < frames.length) {
         const frame = frames[i];
 
@@ -680,7 +681,7 @@
         frame.layer = frameLayer;
         frame.color = 'white';
         
-				// arrays to store keys of objects in scope of frame
+	// arrays to store keys of objects in scope of frame
         frame.fnObjects = [];
         frame.dataObjects = [];
         
@@ -692,11 +693,11 @@
         frame.children = []; // stores keys of child frames
         if (frame.tail !== null) frame.tail.children.push(frame.key);
         
-				/**
-				 * Frames are separated into distinct vertical "levels", where each frame
-				 * is always drawn one level below its parent and the global frame is at 
-				 * the top level (i.e. top of the screen/drawing).
-				 */
+	/**
+	 * Frames are separated into distinct vertical "levels", where each frame
+	 * is always drawn one level below its parent and the global frame is at 
+	 * the top level (i.e. top of the screen/drawing).
+	 */
         frame.level = frame.name === "global"
                            ? 0
                            : frame.tail.level + 1;
@@ -711,18 +712,20 @@
         }
 
         /**
-				 * Iterate through variables to find the length of the longest one, 
-				 * to determine the width of the frame. Calculate height of frame
-				 * from the number of variables.
-				 * Separately, if variable points to a function or data object,
-				 * add the required properties for drawing of the object.
-				 */
+	 * Iterate through variables to find the length of the longest one, 
+	 * to determine the width of the frame. Calculate height of frame
+	 * from the number of variables.
+	 * Separately, if variable points to a function or data object,
+	 * add the required properties for drawing of the object.
+	 */
         let env = frame.headClone;
-				
-				/* Array to store variables to be displayed. A separate array from head
-				   is used to maintain the ordering of variables, which is needed for
-					 determine the coordinates of function and data objects that need to
-					 be drawn. */
+
+	/** 
+	 * Array to store variables to be displayed. A separate array from head
+	 * is used to maintain the ordering of variables, which is needed for
+	 * determine the coordinates of function and data objects that need to
+         * be drawn.
+	 */
         frame.variables = []; 				
 				
         let maxLength = 0; // track length of longest variable in frame
@@ -738,11 +741,11 @@
                 maxLength = k.length;
               }
 			  
-							// update width of global frame
-							let newWidth = getFnName(env[k]).length * 10 + 50;
-							if (frames[0].width < newWidth) {
-								frames[0].width = newWidth;
-							}
+	      // update width of global frame
+	      let newWidth = getFnName(env[k]).length * 10 + 50;
+	      if (frames[0].width < newWidth) {
+	        frames[0].width = newWidth;
+	      }
             } else if (builtins.indexOf(''+k) < 0) {
                 heightFactor++;
                 varLength = (typeof(env[k]) == "number" 
@@ -861,14 +864,14 @@
     
     for (f in frames) {
         /**
-				 * x-coordinate
-				 * For each level, split the viewport width into n partitions where
-				 * n = number of frames in that level. Place each frame in the centre 
-				 * of each partition.
-				 *
-				 * Potential improvement: Assign space recursively to each frame and its
-				 * "tree" of child frames.
-				 */
+	 * x-coordinate
+	 * For each level, split the viewport width into n partitions where
+	 * n = number of frames in that level. Place each frame in the centre 
+	 * of each partition.
+	 *
+	 * Potential improvement: Assign space recursively to each frame and its
+	 * "tree" of child frames.
+	 */
         let frame = frames[f];
         let partitionWidth = viewport.width / levels[frame.level].count;
         frame.x = viewport.width - tempLevels[frame.level] * partitionWidth
@@ -876,10 +879,10 @@
         tempLevels[frame.level]--;
         
         /**
-				 * y-coordinate
-				 * Simply the total height of all levels above the frame, plus a
-				 * fixed factor (60) per level.
-				 */
+	 * y-coordinate
+	 * Simply the total height of all levels above the frame, plus a
+	 * fixed factor (60) per level.
+	 */
         let level = frame.level;
         let y = 30;
         for (i = 0; i < level; i++) {
@@ -931,117 +934,115 @@
       }
   }
 
-	// main function to be exported
+  // main function to be exported
   function draw_env(context) {
 		
-		// reset current drawing
-		fnObjectLayer.scene.clear()
-		dataObjectLayer.scene.clear()
-		frameLayer.scene.clear()
-		arrowLayer.scene.clear()
-		fnObjects = []
-		dataObjects = []
-		levels = {}
-		builtinsToDraw = []
+    // reset current drawing
+    fnObjectLayer.scene.clear()
+    dataObjectLayer.scene.clear()
+    frameLayer.scene.clear()
+    arrowLayer.scene.clear()
+    fnObjects = []
+    dataObjects = []
+    levels = {}
+    builtinsToDraw = []
 
     frames = parseInput(context)
-		drawSceneFrames()
-		drawSceneFnObjects()
-		drawHitFnObjects()
-		drawSceneDataObjects()
-		drawHitDataObjects()
-		drawSceneFrameArrows()
-		drawSceneFrameObjectArrows()
-		drawSceneFnFrameArrows()
-		// add concrete container handlers
-		container.addEventListener('mousemove', function(evt) {
-			var boundingRect = container.getBoundingClientRect(),
-					x = evt.clientX - boundingRect.left,
-					y = evt.clientY - boundingRect.top,
-					key = viewport.getIntersection(x, y),
-					fnObject,
-					dataObject;
-			// unhover all circles
-			fnObjects.forEach(function(fnObject) {
-				fnObject.hovered = false;
-			});
-			
-			dataObjects.forEach(function(dataObject) {
-				dataObject.hovered = false;
-			});
-			
-			if (key >= 0 && key < Math.pow(2, 23)) {
-				fnObject = getFnObjectFromKey(key);
-				try {
-						fnObject.hovered = true;
-				} catch (e) {};
-			}
+    drawSceneFrames()
+    drawSceneFnObjects()
+    drawHitFnObjects()
+    drawSceneDataObjects()
+    drawHitDataObjects()
+    drawSceneFrameArrows()
+    drawSceneFrameObjectArrows()
+    drawSceneFnFrameArrows()
+    // add concrete container handlers
+    container.addEventListener('mousemove', function(evt) {
+    var boundingRect = container.getBoundingClientRect(),
+        x = evt.clientX - boundingRect.left,
+        y = evt.clientY - boundingRect.top,
+        key = viewport.getIntersection(x, y),
+        fnObject,
+        dataObject;
+    // unhover all circles
+    fnObjects.forEach(function(fnObject) {
+      fnObject.hovered = false;
+    });
 
-			else if (key >= Math.pow(2, 23)) {
-				dataObject = getDataObjectFromKey(key);
-				try {
-						dataObject.hovered = true;
-				} catch (e) {};
-			}
-			drawSceneFnObjects();
-			drawSceneDataObjects();
-			
-		});
-		
-		container.addEventListener('click', function(evt) {
-			var boundingRect = container.getBoundingClientRect(),
-					x = evt.clientX - boundingRect.left,
-					y = evt.clientY - boundingRect.top,
-					key = viewport.getIntersection(x, y),
-					fnObject,
-					dataObject;
-			// unhover all circles
-			fnObjects.forEach(function(fnObject) {
-				fnObject.selected = false;
-			});
-			
-			dataObjects.forEach(function(dataObject) {
-				dataObject.selected = false;
-			});
-			
-			if (key >= 0 && key < Math.pow(2, 23)) {
-				fnObject = getFnObjectFromKey(key);
-				try {
-						fnObject.selected = true;
-				} catch (e) {};
-			}
+    dataObjects.forEach(function(dataObject) {
+      dataObject.hovered = false;
+    });
 
-			else if (key > Math.pow(2, 23)) {
-				dataObject = getDataObjectFromKey(key);
-				try {
-						dataObject.selected = true;
-						draw_data(dataObject.data);
-				} catch (e) {};
-				
-			}
-			
-			drawSceneFnObjects();
-			drawSceneDataObjects();
-			
-		});
-		frames.reverse();
+   if (key >= 0 && key < Math.pow(2, 23)) {
+    fnObject = getFnObjectFromKey(key);
+      try {
+        fnObject.hovered = true;
+      } catch (e) {};
+    }
+
+    else if (key >= Math.pow(2, 23)) {
+      dataObject = getDataObjectFromKey(key);
+      try {
+        dataObject.hovered = true;
+      } catch (e) {};
+    }
+    drawSceneFnObjects();
+    drawSceneDataObjects();
+    });
+
+    container.addEventListener('click', function(evt) {
+      var boundingRect = container.getBoundingClientRect(),
+          x = evt.clientX - boundingRect.left,
+  	  y = evt.clientY - boundingRect.top,
+          key = viewport.getIntersection(x, y),
+	  fnObject,
+	  dataObject;
+      // unhover all circles
+      fnObjects.forEach(function(fnObject) {
+        fnObject.selected = false;
+      });
+
+      dataObjects.forEach(function(dataObject) {
+        dataObject.selected = false;
+      });
+
+      if (key >= 0 && key < Math.pow(2, 23)) {
+        fnObject = getFnObjectFromKey(key);
+        try {
+          fnObject.selected = true;
+        } catch (e) {};
+      }
+
+      else if (key > Math.pow(2, 23)) {
+        dataObject = getDataObjectFromKey(key);
+        try {
+	  dataObject.selected = true;
+	  draw_data(dataObject.data);
+        } catch (e) {};
+      }
+
+      drawSceneFnObjects();
+      drawSceneDataObjects();
+    });
+
+    frames.reverse();
   }
   exports.draw_env = draw_env
   
   function getFnObjectFromKey(key) {
-       for (f in fnObjects) {
-           if (fnObjects[f].key === key) {
-               return fnObjects[f];
-           }               
-       }
+    for (f in fnObjects) {
+      if (fnObjects[f].key === key) {
+        return fnObjects[f];
+      }               
+    }
   }
   
   function getDataObjectFromKey(key) {
-       for (d in dataObjects) {
-           if (dataObjects[d].key === key) {
-               return dataObjects[d];
-           }               
-       }
+    for (d in dataObjects) {
+      if (dataObjects[d].key === key) {
+	return dataObjects[d];
+      }               
+    }
   }
   
   function getFnName(fn) {
@@ -1053,8 +1054,8 @@
   }
   
   function getKeyByValue(object, value) {
-		return Object.keys(object).find(key => object[key] === value);
-	}
+    return Object.keys(object).find(key => object[key] === value);
+  }
 
   exports.EnvVisualizer = {
     draw_env: draw_env,
