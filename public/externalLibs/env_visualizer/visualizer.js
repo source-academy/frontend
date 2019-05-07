@@ -149,13 +149,11 @@
     viewport.render();
   }
   
-	/* Not used right now (no use for clicking data objects).
   function drawHitDataObjects() {
       dataObjects.forEach(function(dataObject) {
           drawHitDataObject(dataObject);
       });
   }
-	*/
   
   function drawSceneFrames() {
     for (let i = 0; i < frames.length; i++) {
@@ -163,15 +161,6 @@
     }
     viewport.render();
   }
-
-  /**
-	 * Not used now (no use for clicking frames).
-	function drawHitFrames() {
-    frames.forEach(function(frame) {
-      drawHitFrame(frame);
-    });
-  }
-	*/
 	
   // For both function objects and data objects
   function drawSceneFrameObjectArrows() {
@@ -202,7 +191,6 @@
     });
     viewport.render();
   }
-
 	
 	/**
 	 * The actual drawing functions.
@@ -334,19 +322,15 @@
     } else {
       context.strokeStyle = 'green';
       context.lineWidth = 2;
+			if (config.hovered) {
+				context.font = "14px Roboto Mono Light";
+				context.fillStyle = 'white';
+				context.fillText("Data Object", x0 + 20, y0 + 15);	
+			}
       context.stroke();
-    }
-    if (config.selected) {
-      context.font = "14px Roboto Mono Light";
-      context.fillStyle = 'white';
-			context.fillText(config.data);
-      /**
-       * TO-DO: Implement some relevant action when data object is selected.
-       */
     }
   }
   
-  /* Not used right now (no use for clicking data objects).
 	function drawHitDataObject(dataObject) {
     var config = dataObject;
     var hit = dataObjectLayer.hit,
@@ -369,7 +353,6 @@
     context.fill();
     context.restore();
   }
-	*/
   
   function drawSceneFrame(pos) {
     var config = frames[pos];
@@ -383,6 +366,24 @@
     y = config.y;
     context.beginPath();
     
+	  // render frame name
+		let frameName;
+		if (config.name == "forLoopEnvironment") {
+			frameName = "for loop";
+		} else if (config.name == "forBlockEnvironment") {
+			frameName = "for block";
+		} else if (config.name == "blockEnvironment") {
+			frameName = "block";
+		} else {
+			frameName = config.name;
+		}
+		if (frameName.length * 9 < config.width / 2 || frameName == "global") {
+			context.fillText(frameName, x, y - 10);
+		} else {
+			context.fillText(frameName, x - (frameName.length * 9 - config.width / 2),
+											  y - 10);
+		}
+		
 		// render text in frame
     let env = config.headClone;
     let i = 0;
@@ -391,7 +392,8 @@
             || builtinsToDraw.indexOf(''+k) >= 0) {
             if (typeof(env[k]) == "number" 
                 || typeof(env[k]) == "string") {
-                    context.fillText(`${'' + k}: ${''  +env[k]}`, x + 10, y + 30 + (i * 30));
+                    context.fillText(`${'' + k}: ${''  +env[k]}`,
+																			x + 10, y + 30 + (i * 30));
                 } else if (typeof(env[k]) == "object") {
                     context.fillText(`${'' + k}:`, x + 10, y + 30 + (i * 30));
                 } else {
@@ -881,7 +883,7 @@
 				 * fixed factor (60) per level.
 				 */
         let level = frame.level;
-        let y = 0;
+        let y = 30;
         for (i = 0; i < level; i++) {
             y += levels[i].height + 60;
         }
@@ -949,6 +951,7 @@
 		drawSceneFnObjects()
 		drawHitFnObjects()
 		drawSceneDataObjects()
+		drawHitDataObjects()
 		drawSceneFrameArrows()
 		drawSceneFrameObjectArrows()
 		drawSceneFnFrameArrows()
