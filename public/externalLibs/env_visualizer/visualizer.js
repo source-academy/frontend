@@ -126,7 +126,6 @@
 	/**
 	 * Helper functions for drawing different types of elements on the canvas.
 	 */
-	 
   function drawSceneFnObjects() {
     fnObjectLayer.scene.clear();
     for (let i = 0; i < fnObjects.length; i++) {
@@ -191,13 +190,12 @@
     });
     viewport.render();
   }
-	
+
 	/**
 	 * The actual drawing functions.
 	 * "Scene" objects are the actual visible drawings.
 	 * "Hit" objects are the hitboxes (for mouseovers/clicks) for each scene.
 	 */
-	
   function drawSceneFnObject(pos) {
     var config = fnObjects[pos];
     var scene = config.layer.scene,
@@ -365,7 +363,7 @@
     x = config.x;
     y = config.y;
     context.beginPath();
-    
+
 	  // render frame name
 		let frameName;
 		if (config.name == "forLoopEnvironment") {
@@ -689,7 +687,7 @@
         // assign id to frame                
         frame.key = key_counter;
         key_counter++;
-        
+
         // update array of children keys of parent frame
         frame.children = []; // stores keys of child frames
         if (frame.tail !== null) frame.tail.children.push(frame.key);
@@ -711,7 +709,7 @@
             levels[frame.level] = {count: 1};
             levels[frame.level].frames = [frame];
         }
-                                        
+
         /**
 				 * Iterate through variables to find the length of the longest one, 
 				 * to determine the width of the frame. Calculate height of frame
@@ -932,7 +930,7 @@
         context.lineTo(xL, yL);
       }
   }
-      
+
 	// main function to be exported
   function draw_env(context) {
 		
@@ -945,7 +943,7 @@
 		dataObjects = []
 		levels = {}
 		builtinsToDraw = []
-		
+
     frames = parseInput(context)
 		drawSceneFrames()
 		drawSceneFnObjects()
@@ -955,7 +953,6 @@
 		drawSceneFrameArrows()
 		drawSceneFrameObjectArrows()
 		drawSceneFnFrameArrows()
-		
 		// add concrete container handlers
 		container.addEventListener('mousemove', function(evt) {
 			var boundingRect = container.getBoundingClientRect(),
