@@ -131,6 +131,9 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'sawtooth_sound',
       'play_concurrently',
       'play_safe',
+      /** Microphone Sounds */
+      'init_record',
+      'record_for',
       /** Contest functions */
       'adsr',
       'stacking_adsr',
