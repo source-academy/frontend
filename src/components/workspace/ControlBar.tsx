@@ -5,9 +5,11 @@ import {
   Intent,
   MenuItem,
   Popover,
+  Switch,
   Text,
   Tooltip
 } from '@blueprintjs/core';
+import { handleBooleanChange } from '@blueprintjs/docs-theme';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
@@ -82,7 +84,7 @@ interface IExternal {
   symbols: string[];
 }
 
-class ControlBar extends React.PureComponent<ControlBarProps, { value: string }> {
+class ControlBar extends React.PureComponent<ControlBarProps, { value: string; autorun: boolean }> {
   public static defaultProps: Partial<ControlBarProps> = {
     hasChapterSelect: false,
     hasSaveButton: false,
@@ -95,10 +97,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
 
   private inviteInputElem: React.RefObject<HTMLInputElement>;
   private shareInputElem: React.RefObject<HTMLInputElement>;
+  private handleAutorunChange = handleBooleanChange(autorun => this.setState({ autorun }));
 
   constructor(props: ControlBarProps) {
     super(props);
-    this.state = { value: '' };
+    this.state = { value: '', autorun: false };
     this.handleChange = this.handleChange.bind(this);
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.selectInviteInputText = this.selectInviteInputText.bind(this);
@@ -138,7 +141,6 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
     const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
       this.props.queryString
     }`;
-
     const shareButton = this.props.hasShareButton ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
@@ -257,9 +259,25 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
     const stopAutorunButton = this.props.hasEditorAutorunButton
       ? controlButton('Autorun', IconNames.STOP, this.props.handleToggleEditorAutorun)
       : undefined;
+    const toggleAutorunButton = this.props.hasEditorAutorunButton ? (
+      <div className="Switch">
+        <Switch label="" checked={this.state.autorun} onChange={this.handleAutorunChange} />
+      </div>
+    ) : (
+      undefined
+    );
     return (
       <div className="ControlBar_editor pt-button-group">
-        {this.props.isRunning ? stopButton : this.props.isDebugging ? resetButton : runButton}
+        {toggleAutorunButton}
+        {this.state.autorun
+          ? this.props.isEditorAutorun
+            ? stopAutorunButton
+            : startAutorunButton
+          : this.props.isRunning
+            ? stopButton
+            : this.props.isDebugging
+              ? resetButton
+              : runButton}
         {this.props.isRunning
           ? this.props.isDebugging
             ? null
@@ -269,7 +287,6 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string }>
             : null}
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton}
-        {this.props.isEditorAutorun ? stopAutorunButton : startAutorunButton}
         {inviteButton} {this.props.editorSessionId === '' ? joinButton : leaveButton}
       </div>
     );
