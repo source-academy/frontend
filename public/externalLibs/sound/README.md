@@ -1,4 +1,3 @@
-=====================================
 __**Documentation For Sound 1920**__
 =====================================
 
@@ -58,5 +57,7 @@ The following are known issues with the current implementation of Sound 1920 as 
 -Prompt user to save their work before pressing play_safe().
 
 -play_safe() "remembers" and immediately plays back the input sound if no changes were made since last run, in order to save processing time.
+
+-Prompt user to run init_record if microphone abstractions are called.
 
 -Further improvement of discretize function by using workers or multi-threading.
