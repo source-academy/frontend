@@ -242,7 +242,9 @@ function* loginSaga(): SagaIterator {
   yield takeEvery(actionTypes.LOGIN, function*() {
     const apiLogin = 'https://luminus.nus.edu.sg/v2/auth/connect/authorize';
     const clientId = LUMINUS_CLIENT_ID;
-    const callback = `${window.location.protocol}//${window.location.hostname}/login`;
+    const callback = `${window.location.protocol}//${window.location.hostname}:${
+      window.location.port
+    }/login`;
     window.location.href = `${apiLogin}?client_id=${clientId}&redirect_uri=${callback}&response_type=code&scope=profile`;
     yield undefined;
   });

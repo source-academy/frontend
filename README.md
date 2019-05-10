@@ -8,9 +8,9 @@
 1. Install a stable version of NodeJS (tested: Node 10.15.0).
 2. Run `npm install` to install dependencies.
 3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_CLIENT_ID`
-   to contain your Luminus api key.
-4. Run `npm start` to start the server at `localhost:80`. Admin permissions may
-   be required for your OS to serve at port 80.
+   to contain your LumiNUS api key.
+4. Run `npm start` to start the server at `localhost:8075`. Admin permissions may
+   be required for your OS to serve at port 8075.
 5. If running cadet without nginx, `npm run cors-proxy` to solve CORS problems.
    
 ## For Windows Users

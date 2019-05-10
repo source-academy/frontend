@@ -265,7 +265,7 @@ function* backendSaga(): SagaIterator {
  */
 async function postAuth(luminusCode: string): Promise<Tokens | null> {
   const response = await request('auth', 'POST', {
-    body: { login: { luminusCode } },
+    body: { login: { luminus_code: luminusCode } },
     errorMessage: 'Could not login. Please contact the module administrator.'
   });
   if (response) {

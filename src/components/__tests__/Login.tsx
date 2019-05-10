@@ -17,7 +17,7 @@ test('Loading login renders correctly', () => {
   const props = {
     handleLogin: () => {},
     handleFetchAuth: (luminusCode: string) => {},
-    luminusCode: '1VL3 T0K3N'
+    luminusCode: 'Luminus Code'
   };
   const app = <Login {...props} />;
   const tree = shallow(app);
