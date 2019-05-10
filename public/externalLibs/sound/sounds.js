@@ -1,5 +1,5 @@
 // Constants
-var FS = 32000; // Standard sampling rate for all problems
+var FS = 44100; // Standard sampling rate for all problems
 
 // ---------------------------------------------
 // Fast reimplementations of the list library
@@ -17,7 +17,7 @@ function vector_to_list(arr) {
 function list_to_vector(xs) {
     var vector = [];
 
-    while(!is_empty_list(xs)) {
+    while(!is_null(xs)) {
         vector.push(head(xs));
         xs = tail(xs);
     }
@@ -27,7 +27,7 @@ function list_to_vector(xs) {
 
 function length(xs) {
     var len = 0;
-    while(!is_empty_list(xs)) {
+    while(!is_null(xs)) {
         len++;
         xs = tail(xs);
     }
