@@ -134,6 +134,8 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       /** Microphone Sounds */
       'init_record',
       'record_for',
+      'start_record',
+      'stop_record',
       /** Contest functions */
       'adsr',
       'stacking_adsr',
