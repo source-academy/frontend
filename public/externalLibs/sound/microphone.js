@@ -2,7 +2,6 @@
 // // Microphone Functionality
 // // ---------------------------------------------
 
-
 // Get Microphone Input.
 function init_record(){
 	navigator.mediaDevices.getUserMedia({ audio: true }).then(attachEvents);
@@ -25,9 +24,15 @@ function stop_record() {
 
 function record_for(duration) {
     // Convert duration to seconds
-    duration *= 1000
-    start_record();
-    setTimeout(stop_record, duration);
+    play(sine_sound(330, 0.5));
+    setTimeout(() => {
+        duration *= 1000;
+        start_record();
+        setTimeout(() => {
+            stop_record();
+            play(sine_sound(330, 0.5));
+        }, duration);
+    }, 500);
 }
 
 function record(sourceStream) {
