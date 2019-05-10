@@ -9,7 +9,6 @@ import {
   Text,
   Tooltip
 } from '@blueprintjs/core';
-import { handleBooleanChange } from '@blueprintjs/docs-theme';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
@@ -84,7 +83,7 @@ interface IExternal {
   symbols: string[];
 }
 
-class ControlBar extends React.PureComponent<ControlBarProps, { value: string; autorun: boolean }> {
+class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: string }> {
   public static defaultProps: Partial<ControlBarProps> = {
     hasChapterSelect: false,
     hasSaveButton: false,
@@ -97,11 +96,10 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string; a
 
   private inviteInputElem: React.RefObject<HTMLInputElement>;
   private shareInputElem: React.RefObject<HTMLInputElement>;
-  private handleAutorunChange = handleBooleanChange(autorun => this.setState({ autorun }));
 
   constructor(props: ControlBarProps) {
     super(props);
-    this.state = { value: '', autorun: false };
+    this.state = { joinElemValue: '' };
     this.handleChange = this.handleChange.bind(this);
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.selectInviteInputText = this.selectInviteInputText.bind(this);
@@ -125,6 +123,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string; a
         {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
       </Tooltip>
     );
+    const autoRunButton = controlButton('Auto', IconNames.AUTOMATIC_UPDATES);
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval);
     const pauseButton = controlButton('Pause', IconNames.STOP, this.props.handleDebuggerPause);
     const resumeButton = controlButton(
@@ -188,7 +187,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string; a
           const state = JSON.parse(xmlhttp.responseText).state;
           if (state === true) {
             // Session ID exists
-            this.props.handleSetEditorSessionId!(this.state!.value);
+            this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
           } else {
             this.props.handleInvalidEditorSessionId!();
             this.props.handleSetEditorSessionId!('');
@@ -198,7 +197,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string; a
           this.props.handleSetEditorSessionId!('');
         }
       };
-      xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.state!.value, true);
+      xmlhttp.open(
+        'GET',
+        'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.state!.joinElemValue,
+        true
+      );
       xmlhttp.send();
       event.preventDefault();
     };
@@ -220,7 +223,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string; a
         {controlButton('Join', IconNames.LOG_IN)}
         <>
           <form onSubmit={handleStartJoining}>
-            <input type="text" value={this.state.value} onChange={this.handleChange} />
+            <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
             <span className={Classes.POPOVER_DISMISS}>
               {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
             </span>
@@ -236,7 +239,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string; a
           IconNames.FEED,
           () => {
             this.props.handleSetEditorSessionId!('');
-            this.setState({ value: '' });
+            this.setState({ joinElemValue: '' });
           },
           {
             iconColor: this.props.websocketStatus === 0 ? Colors.RED3 : Colors.GREEN3
@@ -253,26 +256,23 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string; a
     const resetButton = this.props.hasSaveButton
       ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
       : undefined;
-    const startAutorunButton = this.props.hasEditorAutorunButton
-      ? controlButton('Autorun', IconNames.PLAY, this.props.handleToggleEditorAutorun)
-      : undefined;
-    const stopAutorunButton = this.props.hasEditorAutorunButton
-      ? controlButton('Autorun', IconNames.STOP, this.props.handleToggleEditorAutorun)
-      : undefined;
     const toggleAutorunButton = this.props.hasEditorAutorunButton ? (
       <div className="Switch">
-        <Switch label="" checked={this.state.autorun} onChange={this.handleAutorunChange} />
+        <Switch
+          label=""
+          checked={this.props.isEditorAutorun}
+          onChange={this.props.handleToggleEditorAutorun}
+        />
       </div>
     ) : (
       undefined
     );
+
     return (
       <div className="ControlBar_editor pt-button-group">
         {toggleAutorunButton}
-        {this.state.autorun
-          ? this.props.isEditorAutorun
-            ? stopAutorunButton
-            : startAutorunButton
+        {this.props.isEditorAutorun
+          ? autoRunButton
           : this.props.isRunning
             ? stopButton
             : this.props.isDebugging
@@ -354,7 +354,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { value: string; a
   }
 
   private handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ value: event.target.value });
+    this.setState({ joinElemValue: event.target.value });
   }
 
   private selectShareInputText() {
