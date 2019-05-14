@@ -12,7 +12,7 @@
   drawDataButton.hidden = true
   document.body.appendChild(drawDataButton)
 
-  const frameFontSetting = "14px Roboto Mono";
+  const frameFontSetting = "14px Roboto Mono, Courier New";
   const fnRadius = 12;
   // List of built-in functions to ignore (i.e. not draw)
   var builtins = [
@@ -224,7 +224,7 @@
     
     context.beginPath();
     if (config.selected) {
-      context.font = "14px Roboto Mono Light";
+      context.font = "14px Roboto Mono Light, Courier New";
       context.fillStyle = 'white';
       let fnString;
       try {
@@ -310,7 +310,7 @@
     context.lineTo(x2, y2);
     context.lineTo(x0, y0);
     context.fillStyle = '#999999';
-    context.font = "14px Roboto Mono Light";
+    context.font = "14px Roboto Mono Light, Courier New";
     context.fillText("!", x0 - 4, y0 + 20);
     
     if (!config.hovered && !config.selected) {
@@ -321,7 +321,7 @@
       context.strokeStyle = 'green';
       context.lineWidth = 2;
       if (config.hovered) {
-	context.font = "14px Roboto Mono Light";
+	context.font = "14px Roboto Mono Light, Courier New";
 	context.fillStyle = 'white';
 	context.fillText("Data Object", x0 + 20, y0 + 15);	
       }
