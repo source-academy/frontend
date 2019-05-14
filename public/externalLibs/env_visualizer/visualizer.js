@@ -191,11 +191,11 @@
     viewport.render();
   }
 
-	/**
-	 * The actual drawing functions.
-	 * "Scene" objects are the actual visible drawings.
-	 * "Hit" objects are the hitboxes (for mouseovers/clicks) for each scene.
-	 */
+  /**
+   * The actual drawing functions.
+   * "Scene" objects are the actual visible drawings.
+   * "Hit" objects are the hitboxes (for mouseovers/clicks) for each scene.
+   */
   function drawSceneFnObject(pos) {
     var config = fnObjects[pos];
     var scene = config.layer.scene,
@@ -260,7 +260,7 @@
 
   }
 
-	function drawHitFnObject(pos) {
+  function drawHitFnObject(pos) {
     var config = fnObjects[pos];
     var hit = config.layer.hit,
         context = hit.context;
@@ -286,11 +286,11 @@
     context.restore();
   }
 
-	/**
-	 * Identities for data objects are not currently implemented in the
-	 * visualiser, so a separate icon (a triangle) is drawn for each variable
-	 * that points to data.
-	 */
+  /**
+   * Identities for data objects are not currently implemented in the
+   * visualiser, so a separate icon (a triangle) is drawn for each variable
+   * that points to data.
+   */
   function drawSceneDataObject(dataObject) {
     var config = dataObject;
     var scene = dataObjectLayer.scene,
@@ -329,7 +329,7 @@
     }
   }
   
-	function drawHitDataObject(dataObject) {
+  function drawHitDataObject(dataObject) {
     var config = dataObject;
     var hit = dataObjectLayer.hit,
         context = hit.context;
@@ -354,6 +354,9 @@
   
   function drawSceneFrame(pos) {
     var config = frames[pos];
+    if (config.variables.length == 0) {
+      return;
+    }
     var scene = config.layer.scene,
         context = scene.context;
     context.save();
@@ -420,6 +423,9 @@
   }
 
   function drawHitFrame(config) {
+    if (config.variables.length == 0) {
+      return;
+    }
     var hit = config.layer.hit,
         context = hit.context;
 
@@ -576,6 +582,9 @@
    * frame-function arrows.
    */
   function drawSceneFrameArrow(frame) {
+    if (frame.variables.length == 0) {
+      return;
+    }
     var config = frame;
     var scene = arrowLayer.scene,
         context = scene.context;
