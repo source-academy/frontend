@@ -13,15 +13,13 @@
     "build": "node-sass-chokidar src/ -o src/ && react-scripts-ts build",
     "build-css": "node-sass-chokidar src/ -o src/",
     "build-js": "react-scripts-ts build",
-    "coverage": "./scripts/coverage-fix.sh do && react-scripts-ts test --env=jsdom --coverage && ./scripts/coverage-fix.sh undo",
     "format": "prettier --write \"src/**/*.{ts,tsx}\" \"externalLibs/**/*.js\" \"!externalLibs/assert_compiled.js\" && prettier --write --parser scss \"src/**/*.scss\"",
     "format:tsx": "prettier --list-different \"src/**/*.{ts,tsx}\"",
     "format:scss": "prettier --list-different --parser scss \"src/**/*.scss\"",
     "format:ci": "npm run format:tsx && npm run format:scss",
     "start-js": "cross-env BROWSER=none PORT=80 react-scripts-ts start",
     "start": "npm-run-all -p watch-css start-js",
-    "test": "react-scripts-ts test --env=jsdom",
-    "test-coveralls": "./scripts/coverage-fix.sh do && react-scripts-ts test --env=jsdom --coverage --coverageReporters=text-lcov | coveralls",
+    "test": "jest --config jest.config.js --coverage --env=jsdom",
     "update-ui-snapshots": "jest --updateSnapshot",
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "tslint": "tslint -p .",
@@ -29,7 +27,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "bash scripts/test.sh"
+      "pre-push": "npm test && npm run format:ci"
     }
   },
   "dependencies": {
@@ -110,6 +108,7 @@
     "coveralls": "^3.0.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.5",
     "husky": "^1.3.1",
     "local-cors-proxy": "^1.0.2",
     "prettier": "^1.12.0",
