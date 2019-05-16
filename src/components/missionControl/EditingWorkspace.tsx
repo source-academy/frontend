@@ -90,7 +90,7 @@ interface IState {
   activeTab: number;
   editingMode: string;
   hasUnsavedChanges: boolean;
-  showResetOverlay: boolean;
+  showresetTemplateOverlay: boolean;
   originalMaxGrade: number;
   originalMaxXp: number;
 }
@@ -103,7 +103,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       activeTab: 0,
       editingMode: 'question',
       hasUnsavedChanges: false,
-      showResetOverlay: false,
+      showresetTemplateOverlay: false,
       originalMaxGrade: 0,
       originalMaxXp: 0
     };
@@ -186,7 +186,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
     return (
       <div className="WorkspaceParent pt-dark">
-        {this.resetOverlay()}
+        {this.resetTemplateOverlay()}
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -206,12 +206,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   /**
    * Resets to last save.
    */
-  private resetOverlay = () => (
+  private resetTemplateOverlay = () => (
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
       isCloseButtonShown={false}
-      isOpen={this.state.showResetOverlay}
+      isOpen={this.state.showresetTemplateOverlay}
       title="Confirmation: Reset editor?"
     >
       <div className={Classes.DIALOG_BODY}>
@@ -219,7 +219,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, () => this.setState({ showResetOverlay: false }), {
+          {controlButton('Cancel', null, () => this.setState({ showresetTemplateOverlay: false }), {
             minimal: false
           })}
           {controlButton(
@@ -230,7 +230,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               this.setState({
                 assessment,
                 hasUnsavedChanges: false,
-                showResetOverlay: false,
+                showresetTemplateOverlay: false,
                 originalMaxGrade: this.getMaxMarks('maxGrade'),
                 originalMaxXp: this.getMaxMarks('maxXp')
               });
@@ -568,8 +568,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
       onClickReturn: () => history.push(listingPath),
       onClickSave: this.handleSave,
-      onClickReset: () => {
-        this.setState({ showResetOverlay: this.state.hasUnsavedChanges });
+      onClickResetTemplate: () => {
+        this.setState({ showresetTemplateOverlay: this.state.hasUnsavedChanges });
       },
       questionProgress: [questionId + 1, this.state.assessment!.questions.length],
       sourceChapter: this.state.assessment!.questions[questionId].library.chapter,
