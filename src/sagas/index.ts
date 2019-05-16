@@ -31,7 +31,9 @@ function* workspaceSaga(): SagaIterator {
     const code: string = yield select(
       (state: IState) =>
         (state.workspaces[location] as IWorkspaceState).editorPrepend! +
+        '\n' +
         (state.workspaces[location] as IWorkspaceState).editorValue! +
+        '\n' +
         (state.workspaces[location] as IWorkspaceState).editorPostpend!
     );
     const chapter: number = yield select(
