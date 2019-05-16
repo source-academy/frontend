@@ -29,7 +29,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "node scripts/check.js"
+      "pre-push":  "npm run format:ci && npm test"
     }
   },
   "dependencies": {
