@@ -4,6 +4,8 @@ node_js:
 branches:
   except:
     - /^no-ci.*$/
+before_install:
+  - export TZ=Asia/Singapore
 script:
   - npm run format:ci
   - npm run build
