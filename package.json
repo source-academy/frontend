@@ -21,15 +21,15 @@
     "start-js": "cross-env BROWSER=none PORT=80 react-scripts-ts start",
     "start": "npm-run-all -p watch-css start-js",
     "test": "react-scripts-ts test --env=jsdom",
+    "test:ci": "cross-env CI=true react-scripts-ts test --env=jsdom",
     "test-coveralls": "react-scripts-ts test --env=jsdom --coverage --coverageReporters=text-lcov | coveralls",
-    "update-ui-snapshots": "react-scripts-ts test --env=jsdom  --updateSnapshot",
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "tslint": "tslint -p .",
     "cors-proxy": "lcp --proxyUrl http://localhost:4000 --port 4001 --proxyPartial \"\""
   },
   "husky": {
     "hooks": {
-      "pre-push":  "npm run format:ci && npm test"
+      "pre-push":  "npm run format:ci && npm run test:ci"
     }
   },
   "dependencies": {
