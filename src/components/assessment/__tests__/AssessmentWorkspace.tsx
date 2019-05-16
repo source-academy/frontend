@@ -9,7 +9,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   activeTab: 0,
   assessmentId: 0,
   notAttempted: true,
-  closeDate: '2048-06-18T05:24:26.026Z',
+  closeDate: '2048-06-18T13:24:26.026Z',
   editorValue: null,
   editorWidth: '50%',
   breakpoints: [],
