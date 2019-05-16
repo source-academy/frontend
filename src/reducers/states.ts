@@ -67,8 +67,12 @@ export interface IWorkspaceState {
   readonly editorTestcases: ITestcase[];
   readonly editorHeight: number;
   readonly editorWidth: string;
-  readonly isEditorAutorun: boolean;
+  readonly breakpoints: string[];
+  readonly highlightedLines: number[][];
   readonly isRunning: boolean;
+  readonly isDebugging: boolean;
+  readonly enableDebugging: boolean;
+  readonly isEditorAutorun: boolean;
   readonly output: InterpreterOutput[];
   readonly replHistory: ReplHistory;
   readonly replValue: string;
@@ -211,6 +215,8 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   editorTestcases: [],
   editorHeight: 150,
   editorWidth: '50%',
+  breakpoints: [],
+  highlightedLines: [],
   output: [],
   replHistory: {
     browseIndex: null,
@@ -220,7 +226,9 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   sideContentActiveTab: 0,
   globals: [],
   isEditorAutorun: false,
-  isRunning: false
+  isRunning: false,
+  isDebugging: false,
+  enableDebugging: true
 });
 
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!';

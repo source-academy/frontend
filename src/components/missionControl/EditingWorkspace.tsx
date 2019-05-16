@@ -41,8 +41,12 @@ export type StateProps = {
   editorHeight?: number;
   editorValue: string | null;
   editorWidth: string;
+  breakpoints: string[];
+  highlightedLines: number[][];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -68,6 +72,7 @@ export type DispatchProps = {
   handleEditorValueChange: (val: string) => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -75,6 +80,9 @@ export type DispatchProps = {
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
 };
@@ -153,6 +161,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
                 (question as IProgrammingQuestion).solutionTemplate,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
+              breakpoints: this.props.breakpoints,
+              highlightedLines: this.props.highlightedLines,
+              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
               isEditorAutorun: false
             }
@@ -547,12 +558,17 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
+      handleDebuggerPause: this.props.handleDebuggerPause,
+      handleDebuggerResume: this.props.handleDebuggerResume,
+      handleDebuggerReset: this.props.handleDebuggerReset,
       hasChapterSelect: false,
       hasCollabEditing: false,
       hasEditorAutorunButton: false,
       hasSaveButton: true,
       hasShareButton: false,
       isRunning: this.props.isRunning,
+      isDebugging: this.props.isDebugging,
+      enableDebugging: this.props.enableDebugging,
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),

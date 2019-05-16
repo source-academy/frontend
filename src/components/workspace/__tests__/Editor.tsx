@@ -14,8 +14,11 @@ test('Editor renders correctly', () => {
     editorPrepend: '',
     editorPrependLines: 0,
     editorValue: '',
+    breakpoints: [],
+    highlightedLines: [],
     handleEditorEval: () => {},
     handleEditorValueChange: newCode => {},
+    handleEditorUpdateBreakpoints: breakpoints => {},
     isEditorAutorun: false
   };
   const app = <Editor {...props} />;
