@@ -7,6 +7,7 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeActiveTab,
+  changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
@@ -41,6 +42,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     editorValue: state.workspaces.assessment.editorValue,
     editorPostpend: state.workspaces.assessment.editorPostpend,
     editorTestcases: state.workspaces.assessment.editorTestcases,
+    editorHeight: state.workspaces.assessment.editorHeight,
     editorWidth: state.workspaces.assessment.editorWidth,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
     isRunning: state.workspaces.assessment.isRunning,
@@ -66,6 +68,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
         changeEditorWidth(widthChange, workspaceLocation),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),

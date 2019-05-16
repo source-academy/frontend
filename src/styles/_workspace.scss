@@ -54,6 +54,16 @@ $code-color-error: #ff4444;
     padding-bottom: 0.6rem;
   }
 
+  .editor-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .editor-content-divider {
+    flex: initial;
+  }
+
   .editor-divider {
     flex: initial;
   }
@@ -61,7 +71,7 @@ $code-color-error: #ff4444;
   .Editor {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
     margin: 0 0.6rem 0.6rem 0.6rem;
     padding-bottom: 0.6rem;
     padding-left: 0.6rem;
@@ -69,6 +79,14 @@ $code-color-error: #ff4444;
     .editor-react-ace {
       flex: 1;
       height: 100%;
+
+      #brace-editor {
+        height: 100%;
+      }
+    }
+
+    .editor-prepend-react-ace {
+      flex: 1;
 
       #brace-editor {
         height: 100%;
@@ -110,6 +128,11 @@ $code-color-error: #ff4444;
   }
 
   .resize-side-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .resize-editor-content {
     display: flex;
     flex-direction: column;
   }
@@ -210,6 +233,11 @@ $code-color-error: #ff4444;
     .Editor {
       flex: 1 1 auto;
       margin: 0 0.5rem 0 0.5rem;
+      padding: 0;
+    }
+
+    .editor-content {
+      flex: 1 1 auto;
       padding: 0;
     }
   }

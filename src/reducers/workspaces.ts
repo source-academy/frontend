@@ -4,6 +4,7 @@ import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_ACTIVE_TAB,
+  CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
@@ -148,6 +149,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           sideContentActiveTab: action.payload.activeTab
+        }
+      };
+    case CHANGE_EDITOR_HEIGHT:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorHeight: action.payload.height
         }
       };
     case CHANGE_EDITOR_WIDTH:

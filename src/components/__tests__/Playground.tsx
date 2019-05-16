@@ -23,6 +23,7 @@ const baseProps = {
   handleChangeActiveTab: (n: number) => {},
   handleChapterSelect: (chapter: number) => {},
   handleEditorEval: () => {},
+  handleEditorHeightChange: (height: number) => {},
   handleEditorValueChange: () => {},
   handleEditorWidthChange: (widthChange: number) => {},
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},

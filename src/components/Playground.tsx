@@ -36,6 +36,7 @@ export interface IStateProps {
   activeTab: number;
   editorSessionId: string;
   editorValue: string;
+  editorHeight?: number;
   editorWidth: string;
   isEditorAutorun: boolean;
   isRunning: boolean;
@@ -54,6 +55,7 @@ export interface IDispatchProps {
   handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: number) => void;
   handleEditorEval: () => void;
+  handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleGenerateLz: () => void;
@@ -116,6 +118,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         websocketStatus: this.props.websocketStatus
       },
       editorProps: {
+        editorPrepend: '',
+        editorPrependLines: 0,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
@@ -123,7 +127,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleSetWebsocketStatus: this.props.handleSetWebsocketStatus,
         isEditorAutorun: this.props.isEditorAutorun
       },
+      editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
+      handleEditorHeightChange: this.props.handleEditorHeightChange,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {

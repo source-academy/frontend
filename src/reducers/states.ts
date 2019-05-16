@@ -65,6 +65,7 @@ export interface IWorkspaceState {
   readonly editorValue: string | null;
   readonly editorPostpend: string | null;
   readonly editorTestcases: ITestcase[];
+  readonly editorHeight: number;
   readonly editorWidth: string;
   readonly isEditorAutorun: boolean;
   readonly isRunning: boolean;
@@ -208,6 +209,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
   editorPostpend: '',
   editorTestcases: [],
+  editorHeight: 150,
   editorWidth: '50%',
   output: [],
   replHistory: {

@@ -38,6 +38,7 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 export type StateProps = {
   activeTab: number;
   assessment?: IAssessment;
+  editorHeight?: number;
   editorValue: string | null;
   editorWidth: string;
   hasUnsavedChanges: boolean;
@@ -65,6 +66,7 @@ export type DispatchProps = {
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
+  handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
@@ -142,6 +144,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       editorProps:
         question.type === QuestionTypes.programming
           ? {
+              editorPrepend: '',
+              editorPrependLines: 0,
               editorSessionId: '',
               editorValue:
                 this.props.editorValue ||
@@ -153,7 +157,9 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               isEditorAutorun: false
             }
           : undefined,
+      editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
+      handleEditorHeightChange: this.props.handleEditorHeightChange,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       hasUnsavedChanges: this.state.hasUnsavedChanges,

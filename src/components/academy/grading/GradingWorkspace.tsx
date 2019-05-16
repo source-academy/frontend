@@ -28,6 +28,7 @@ export type StateProps = {
   editorValue: string | null;
   editorPostpend: string | null;
   editorTestcases: ITestcase[] | null;
+  editorHeight?: number;
   editorWidth: string;
   hasUnsavedChanges: boolean;
   isRunning: boolean;
@@ -51,6 +52,7 @@ export type DispatchProps = {
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
+  handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleGradingFetch: (submissionId: number) => void;
   handleInterruptEval: () => void;
@@ -109,6 +111,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
+              editorPrepend: this.props.editorPrepend!,
+              editorPrependLines:
+                this.props.editorPrepend === null || this.props.editorPrepend.length === 0
+                  ? 0
+                  : this.props.editorPrepend.split('\n').length,
               editorSessionId: '',
               editorValue: editorValue!,
               handleEditorEval: this.props.handleEditorEval,
@@ -116,7 +123,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
               isEditorAutorun: false
             }
           : undefined,
+      editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
+      handleEditorHeightChange: this.props.handleEditorHeightChange,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcqProps: {

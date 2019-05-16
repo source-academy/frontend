@@ -6,6 +6,7 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeActiveTab,
+  changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
@@ -40,6 +41,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     editorValue: state.workspaces.assessment.editorValue,
     editorPostpend: state.workspaces.assessment.editorPostpend,
     editorTestcases: state.workspaces.assessment.editorTestcases,
+    editorHeight: state.workspaces.assessment.editorHeight,
     editorWidth: state.workspaces.grading.editorWidth,
     grading: state.session.gradings.get(props.submissionId),
     hasUnsavedChanges: state.workspaces.grading.hasUnsavedChanges,
@@ -63,6 +65,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
         changeEditorWidth(widthChange, workspaceLocation),
       handleGradingFetch: fetchGrading,

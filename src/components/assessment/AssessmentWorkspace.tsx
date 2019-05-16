@@ -42,6 +42,7 @@ export type StateProps = {
   editorValue: string | null;
   editorPostpend: string | null;
   editorTestcases: ITestcase[] | null;
+  editorHeight?: number;
   editorWidth: string;
   hasUnsavedChanges: boolean;
   isRunning: boolean;
@@ -68,6 +69,7 @@ export type DispatchProps = {
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
+  handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
@@ -198,6 +200,11 @@ class AssessmentWorkspace extends React.Component<
         question.type === QuestionTypes.programming
           ? {
               editorSessionId: '',
+              editorPrepend: this.props.editorPrepend!,
+              editorPrependLines:
+                this.props.editorPrepend === null || this.props.editorPrepend.length === 0
+                  ? 0
+                  : this.props.editorPrepend.split('\n').length,
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
@@ -205,7 +212,9 @@ class AssessmentWorkspace extends React.Component<
               isEditorAutorun: false
             }
           : undefined,
+      editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
+      handleEditorHeightChange: this.props.handleEditorHeightChange,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       hasUnsavedChanges: this.props.hasUnsavedChanges,

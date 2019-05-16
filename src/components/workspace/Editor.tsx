@@ -18,6 +18,8 @@ import { LINKS } from '../../utils/constants';
 export interface IEditorProps {
   isEditorAutorun: boolean;
   editorSessionId: string;
+  editorPrepend: string;
+  editorPrependLines: number;
   editorValue: string;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
@@ -166,6 +168,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             theme="cobalt"
             value={this.props.editorValue}
             width="100%"
+            setOptions={{ firstLineNumber: 1 + this.props.editorPrependLines }}
           />
         </div>
       </HotKeys>

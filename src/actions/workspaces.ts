@@ -51,6 +51,14 @@ export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
   payload: { newExternal }
 });
 
+export const changeEditorHeight: ActionCreator<actionTypes.IAction> = (
+  height: number,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.CHANGE_EDITOR_HEIGHT,
+  payload: { height, workspaceLocation }
+});
+
 export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
   widthChange: string,
   workspaceLocation: WorkspaceLocation

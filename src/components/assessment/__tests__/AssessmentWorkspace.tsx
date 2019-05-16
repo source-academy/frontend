@@ -24,6 +24,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleClearContext: (library: Library) => {},
   handleEditorEval: () => {},
   handleEditorValueChange: (val: string) => {},
+  handleEditorHeightChange: (height: number) => {},
   handleEditorWidthChange: (widthChange: number) => {},
   handleInterruptEval: () => {},
   handleReplEval: () => {},
