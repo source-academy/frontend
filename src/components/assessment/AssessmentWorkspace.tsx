@@ -85,13 +85,13 @@ export type DispatchProps = {
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean; showresetTemplateOverlay: boolean }
+  { showOverlay: boolean; showResetTemplateOverlay: boolean }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
-      showresetTemplateOverlay: false
+      showResetTemplateOverlay: false
     };
     this.props.handleEditorValueChange('');
   }
@@ -159,7 +159,7 @@ class AssessmentWorkspace extends React.Component<
         className="assessment-reset"
         icon={IconNames.ERROR}
         isCloseButtonShown={false}
-        isOpen={this.state.showresetTemplateOverlay}
+        isOpen={this.state.showResetTemplateOverlay}
         title="Confirmation: Reset editor?"
       >
         <div className={Classes.DIALOG_BODY}>
@@ -171,7 +171,7 @@ class AssessmentWorkspace extends React.Component<
             {controlButton(
               'Cancel',
               null,
-              () => this.setState({ showresetTemplateOverlay: false }),
+              () => this.setState({ showResetTemplateOverlay: false }),
               {
                 minimal: false
               }
@@ -180,7 +180,7 @@ class AssessmentWorkspace extends React.Component<
               'Confirm',
               null,
               () => {
-                this.setState({ showresetTemplateOverlay: false });
+                this.setState({ showResetTemplateOverlay: false });
                 this.props.handleEditorValueChange(
                   (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
                     .solutionTemplate
@@ -368,7 +368,7 @@ class AssessmentWorkspace extends React.Component<
           this.props.editorValue!
         ),
       onClickResetTemplate: () => {
-        this.setState({ showresetTemplateOverlay: true });
+        this.setState({ showResetTemplateOverlay: true });
       },
       questionProgress: [questionId + 1, this.props.assessment!.questions.length],
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter

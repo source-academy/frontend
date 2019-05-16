@@ -90,7 +90,7 @@ interface IState {
   activeTab: number;
   editingMode: string;
   hasUnsavedChanges: boolean;
-  showresetTemplateOverlay: boolean;
+  showResetTemplateOverlay: boolean;
   originalMaxGrade: number;
   originalMaxXp: number;
 }
@@ -103,7 +103,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       activeTab: 0,
       editingMode: 'question',
       hasUnsavedChanges: false,
-      showresetTemplateOverlay: false,
+      showResetTemplateOverlay: false,
       originalMaxGrade: 0,
       originalMaxXp: 0
     };
@@ -211,7 +211,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       className="assessment-reset"
       icon={IconNames.ERROR}
       isCloseButtonShown={false}
-      isOpen={this.state.showresetTemplateOverlay}
+      isOpen={this.state.showResetTemplateOverlay}
       title="Confirmation: Reset editor?"
     >
       <div className={Classes.DIALOG_BODY}>
@@ -219,7 +219,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, () => this.setState({ showresetTemplateOverlay: false }), {
+          {controlButton('Cancel', null, () => this.setState({ showResetTemplateOverlay: false }), {
             minimal: false
           })}
           {controlButton(
@@ -230,7 +230,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               this.setState({
                 assessment,
                 hasUnsavedChanges: false,
-                showresetTemplateOverlay: false,
+                showResetTemplateOverlay: false,
                 originalMaxGrade: this.getMaxMarks('maxGrade'),
                 originalMaxXp: this.getMaxMarks('maxXp')
               });
@@ -569,7 +569,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       onClickReturn: () => history.push(listingPath),
       onClickSave: this.handleSave,
       onClickResetTemplate: () => {
-        this.setState({ showresetTemplateOverlay: this.state.hasUnsavedChanges });
+        this.setState({ showResetTemplateOverlay: this.state.hasUnsavedChanges });
       },
       questionProgress: [questionId + 1, this.state.assessment!.questions.length],
       sourceChapter: this.state.assessment!.questions[questionId].library.chapter,
