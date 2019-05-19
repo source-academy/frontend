@@ -1,21 +1,24 @@
-import { Button, IButtonProps, IconName, Intent } from '@blueprintjs/core'
-import * as React from 'react'
+import { Button, IButtonProps, Icon, IconName, Intent } from '@blueprintjs/core';
+import * as React from 'react';
 
 type controlButtonOptionals = {
-  className?: string
-  fullWidth?: boolean
-  iconOnRight?: boolean
-  intent?: Intent
-  minimal?: boolean
-}
+  className?: string;
+  fullWidth?: boolean;
+  iconColor?: string;
+  iconOnRight?: boolean;
+  intent?: Intent;
+  minimal?: boolean;
+  type?: string;
+};
 
 const defaultOptions = {
   className: '',
   fullWidth: false,
   iconOnRight: false,
   intent: Intent.NONE,
-  minimal: true
-}
+  minimal: true,
+  type: ''
+};
 
 export function controlButton(
   label: string,
@@ -24,17 +27,19 @@ export function controlButton(
   options: controlButtonOptionals = {},
   disabled: boolean = false
 ) {
-  const opts: controlButtonOptionals = { ...defaultOptions, ...options }
-  const props: IButtonProps = { disabled }
-  props.fill = opts.fullWidth !== undefined && opts.fullWidth
-  props.intent = opts.intent === undefined ? Intent.NONE : opts.intent
-  props.minimal = opts.minimal !== undefined && opts.minimal
-  props.className = opts.className
+  const opts: controlButtonOptionals = { ...defaultOptions, ...options };
+  const props: IButtonProps = { disabled };
+  props.fill = opts.fullWidth !== undefined && opts.fullWidth;
+  props.intent = opts.intent === undefined ? Intent.NONE : opts.intent;
+  props.minimal = opts.minimal !== undefined && opts.minimal;
+  props.className = opts.className;
+  props.type = opts.type;
   if (icon) {
-    opts.iconOnRight ? (props.rightIcon = icon) : (props.icon = icon)
+    const ic: JSX.Element = <Icon icon={icon} color={opts.iconColor ? opts.iconColor : ''} />;
+    opts.iconOnRight ? (props.rightIcon = ic) : (props.icon = ic);
   }
   if (onClick) {
-    props.onClick = onClick
+    props.onClick = onClick;
   }
-  return <Button {...props}>{label}</Button>
+  return <Button {...props}>{label}</Button>;
 }

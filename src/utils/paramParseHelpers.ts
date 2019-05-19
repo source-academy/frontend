@@ -1,4 +1,4 @@
-import { AssessmentCategories, AssessmentCategory } from '../components/assessment/assessmentShape'
+import { AssessmentCategories, AssessmentCategory } from '../components/assessment/assessmentShape';
 
 /**
  * Converts an AssessmentCategory into a string for use in URLs.
@@ -11,7 +11,7 @@ import { AssessmentCategories, AssessmentCategory } from '../components/assessme
  *   retrieved from the AssessmentCategories enum
  */
 export const assessmentCategoryLink = (cat: AssessmentCategory): string =>
-  cat === AssessmentCategories.Sidequest ? 'quests' : cat.toLowerCase().concat('s')
+  cat === AssessmentCategories.Sidequest ? 'quests' : cat.toLowerCase().concat('s');
 
 /** Converts an optinal string
  *  parameter into an integer or null value.
@@ -21,8 +21,8 @@ export const assessmentCategoryLink = (cat: AssessmentCategory): string =>
  */
 export const stringParamToInt = (str?: string): number | null => {
   if (str === undefined) {
-    return null
+    return null;
   }
-  const num = parseInt(str, 10)
-  return Number.isInteger(num) ? num : null
-}
+  const num = parseInt(str, 10);
+  return Number.isInteger(num) ? num : null;
+};

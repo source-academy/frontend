@@ -1,47 +1,78 @@
-import { Button, Intent, MenuItem, Popover, Text, Tooltip } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import { ItemRenderer, Select } from '@blueprintjs/select'
-import * as React from 'react'
-import * as CopyToClipboard from 'react-copy-to-clipboard'
-import { GOOGLE_CLIENT_ID } from '../../utils/constants'
+import {
+  Button,
+  Classes,
+  Colors,
+  Intent,
+  MenuItem,
+  Popover,
+  Switch,
+  Text,
+  Tooltip
+} from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { ItemRenderer, Select } from '@blueprintjs/select';
+import * as React from 'react';
+import * as CopyToClipboard from 'react-copy-to-clipboard';
+import { GOOGLE_CLIENT_ID } from '../../utils/constants';
 
-import { externalLibraries } from '../../reducers/externalLibraries'
-import { sourceChapters } from '../../reducers/states'
-import { ExternalLibraryName } from '../assessment/assessmentShape'
-import { controlButton } from '../commons'
+import { externalLibraries } from '../../reducers/externalLibraries';
+import { sourceChapters } from '../../reducers/states';
+import { LINKS } from '../../utils/constants';
+import { ExternalLibraryName } from '../assessment/assessmentShape';
+import { controlButton } from '../commons';
+import Editor from './Editor';
 
 /**
  * @prop questionProgress a tuple of (current question number, question length) where
  *   the current question number is 1-based.
  */
 export type ControlBarProps = {
-  queryString?: string
-  questionProgress: [number, number] | null
-  sourceChapter: number
-  externalLibraryName?: string
-  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void
-  handleEditorEval: () => void
-  handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
-  handleGenerateLz?: () => void
-  handleInterruptEval: () => void
-  handleReplEval: () => void
-  handleReplOutputClear: () => void
-  hasChapterSelect: boolean
-  hasSaveButton: boolean
-  hasShareButton: boolean
-  hasOpenButton: boolean
-  hasUnsavedChanges?: boolean
-  isRunning: boolean
-  onClickNext?(): any
-  onClickPrevious?(): any
-  onClickReturn?(): any
-  onClickSave?(): any
-  onClickOpen?(): any
-}
+  queryString?: string;
+  questionProgress: [number, number] | null;
+  sourceChapter: number;
+  externalLibraryName?: string;
+  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleEditorEval: () => void;
+  handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleGenerateLz?: () => void;
+  handleInterruptEval: () => void;
+  handleReplEval: () => void;
+  handleReplOutputClear: () => void;
+  hasChapterSelect: boolean;
+  hasSaveButton: boolean;
+  hasShareButton: boolean;
+  hasOpenButton: boolean;
+  hasUnsavedChanges?: boolean;
+  isRunning: boolean;
+  editorRef?: React.RefObject<Editor>;
+  editorSessionId?: string;
+  editorValue?: string | null;
+  handleEditorValueChange?: (newCode: string) => void;
+  handleInvalidEditorSessionId?: () => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
+  handleSetEditorSessionId?: (editorSessionId: string) => void;
+  handleToggleEditorAutorun?: () => void;
+  hasCollabEditing: boolean;
+  hasEditorAutorunButton: boolean;
+  isEditorAutorun?: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
+  editingMode?: string;
+  websocketStatus?: number;
+  onClickNext?(): any;
+  onClickPrevious?(): any;
+  onClickReturn?(): any;
+  onClickSave?(): any;
+  onClickReset?(): any;
+  toggleEditMode?(): void;
+  onClickOpen?(): any;
+};
 
 interface IChapter {
-  chapter: number
-  displayName: string
+  chapter: number;
+  displayName: string;
 }
 
 /**
@@ -50,12 +81,12 @@ interface IChapter {
  *   the definition of a Library in an assessment.
  */
 interface IExternal {
-  key: number
-  name: ExternalLibraryName
-  symbols: string[]
+  key: number;
+  name: ExternalLibraryName;
+  symbols: string[];
 }
 
-class ControlBar extends React.PureComponent<ControlBarProps, {}> {
+class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: string }> {
   public static defaultProps: Partial<ControlBarProps> = {
     hasChapterSelect: false,
     hasSaveButton: false,
@@ -63,14 +94,21 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
     hasOpenButton: false,
     onClickNext: () => {},
     onClickPrevious: () => {},
-    onClickSave: () => {}
-  }
+    onClickSave: () => {},
+    onClickReset: () => {}
+  };
 
-  private shareInputElem: HTMLInputElement
+  private inviteInputElem: React.RefObject<HTMLInputElement>;
+  private shareInputElem: React.RefObject<HTMLInputElement>;
 
   constructor(props: ControlBarProps) {
-    super(props)
-    this.selectShareInputText = this.selectShareInputText.bind(this)
+    super(props);
+    this.state = { joinElemValue: '' };
+    this.handleChange = this.handleChange.bind(this);
+    this.selectShareInputText = this.selectShareInputText.bind(this);
+    this.selectInviteInputText = this.selectInviteInputText.bind(this);
+    this.inviteInputElem = React.createRef();
+    this.shareInputElem = React.createRef();
   }
 
   public render() {
@@ -80,7 +118,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
         {this.flowControl()}
         {this.replControl()}
       </div>
-    )
+    );
   }
 
   private editorControl() {
@@ -88,17 +126,24 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       <Tooltip content="...or press shift-enter in the editor">
         {controlButton('Run', IconNames.PLAY, this.props.handleEditorEval)}
       </Tooltip>
-    )
-    const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval)
+    );
+    const autoRunButton = controlButton('Auto', IconNames.AUTOMATIC_UPDATES);
+    const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval);
+    const pauseButton = controlButton('Pause', IconNames.STOP, this.props.handleDebuggerPause);
+    const resumeButton = controlButton(
+      'Resume',
+      IconNames.CHEVRON_RIGHT,
+      this.props.handleDebuggerResume
+    );
     const saveButtonOpts = this.props.hasUnsavedChanges
       ? { intent: Intent.WARNING, minimal: false }
-      : {}
+      : {};
     const saveButton = this.props.hasSaveButton
       ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave, saveButtonOpts)
-      : undefined
+      : undefined;
     const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
       this.props.queryString
-    }`
+    }`;
     const shareButton = this.props.hasShareButton ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
@@ -109,12 +154,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
           </Text>
         ) : (
           <>
-            <input
-              defaultValue={shareUrl}
-              readOnly={true}
-              ref={e => (this.shareInputElem = e!)}
-              onFocus={this.selectShareInputText}
-            />
+            <input defaultValue={shareUrl} readOnly={true} ref={this.shareInputElem} />
             <CopyToClipboard text={shareUrl}>
               {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
             </CopyToClipboard>
@@ -123,18 +163,104 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
       </Popover>
     ) : (
       undefined
-    )
+    );
+    const handleStartInvite = () => {
+      if (this.props.editorSessionId === '') {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = () => {
+          if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            const id = JSON.parse(xmlhttp.responseText).id;
+            this.props.handleSetEditorSessionId!(id);
+            const code = this.props.editorValue
+              ? this.props.editorValue
+              : '// Collaborative Editing Mode!';
+            this.props.editorRef!.current!.ShareAce.on('ready', () =>
+              this.props.handleEditorValueChange!(code)
+            );
+          }
+        };
+        xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/latest/', true);
+        xmlhttp.send();
+      }
+    };
+    const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
+      const xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = () => {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+          // Successfully reached server to verify ID
+          const state = JSON.parse(xmlhttp.responseText).state;
+          if (state === true) {
+            // Session ID exists
+            this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
+          } else {
+            this.props.handleInvalidEditorSessionId!();
+            this.props.handleSetEditorSessionId!('');
+          }
+        } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
+          // Cannot reach server
+          this.props.handleSetEditorSessionId!('');
+        }
+      };
+      xmlhttp.open(
+        'GET',
+        'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.state!.joinElemValue,
+        true
+      );
+      xmlhttp.send();
+      event.preventDefault();
+    };
+    const inviteButton = this.props.hasCollabEditing ? (
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+        {controlButton('Invite', IconNames.GRAPH, handleStartInvite)}
+        <>
+          <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
+          <CopyToClipboard text={'' + this.props.editorSessionId}>
+            {controlButton('', IconNames.DUPLICATE, this.selectInviteInputText)}
+          </CopyToClipboard>
+        </>
+      </Popover>
+    ) : (
+      undefined
+    );
+    const joinButton = this.props.hasCollabEditing ? (
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+        {controlButton('Join', IconNames.LOG_IN)}
+        <>
+          <form onSubmit={handleStartJoining}>
+            <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
+            <span className={Classes.POPOVER_DISMISS}>
+              {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
+            </span>
+          </form>
+        </>
+      </Popover>
+    ) : (
+      undefined
+    );
+    const leaveButton = this.props.hasCollabEditing
+      ? controlButton(
+          'Leave',
+          IconNames.FEED,
+          () => {
+            this.props.handleSetEditorSessionId!('');
+            this.setState({ joinElemValue: '' });
+          },
+          {
+            iconColor: this.props.websocketStatus === 0 ? Colors.RED3 : Colors.GREEN3
+          }
+        )
+      : undefined;
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
-      : undefined
+      : undefined;
     const externalSelectButton =
       this.props.hasChapterSelect && this.props.externalLibraryName !== undefined
         ? externalSelect(this.props.externalLibraryName, this.props.handleExternalSelect!)
-        : undefined
+        : undefined;
 
     const saveAsButton = this.props.hasOpenButton
       ? controlButton('Save As', IconNames.FLOPPY_DISK, this.props.onClickSave, saveButtonOpts)
-      : saveButton
+      : saveButton;
 
     const linkButton = this.props.hasSaveButton
       ? undefined
@@ -144,25 +270,51 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
           () => {
             const redirectUrl = `${window.location.protocol}//${
               window.location.hostname
-            }/playground`
+            }/playground`;
             window.location.assign(
               `https://accounts.google.com/o/oauth2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUrl}&response_type=token&scope=profile+email+https://www.googleapis.com/auth/drive.file`
-            )
+            );
           },
           {}
-        )
+        );
 
-    const openButton = this.props.hasOpenButton
-      ? controlButton('Open', IconNames.DOCUMENT_OPEN, this.props.onClickOpen, {})
-      : undefined
+    const resetButton = this.props.hasSaveButton
+      ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
+      : undefined;
+    const toggleAutorunButton = this.props.hasEditorAutorunButton ? (
+      <div className="Switch">
+        <Switch
+          label=""
+          checked={this.props.isEditorAutorun}
+          onChange={this.props.handleToggleEditorAutorun}
+        />
+      </div>
+    ) : (
+      undefined
+    );
 
     return (
       <div className="ControlBar_editor pt-button-group">
-        {this.props.isRunning ? stopButton : runButton} {saveAsButton}
-        {shareButton} {chapterSelectButton} {externalSelectButton}
-        {linkButton} {openButton}
+        {toggleAutorunButton}
+        {this.props.isEditorAutorun
+          ? autoRunButton
+          : this.props.isRunning
+            ? stopButton
+            : this.props.isDebugging
+              ? resetButton
+              : runButton}
+        {this.props.isRunning
+          ? this.props.isDebugging
+            ? null
+            : pauseButton
+          : this.props.isDebugging
+            ? resumeButton
+            : null}
+        {saveButton}
+        {shareButton} {chapterSelectButton} {externalSelectButton} {saveAsButton} {linkButton}
+        {inviteButton} {this.props.editorSessionId === '' ? joinButton : leaveButton}
       </div>
-    )
+    );
   }
 
   private flowControl() {
@@ -174,68 +326,99 @@ class ControlBar extends React.PureComponent<ControlBarProps, {}> {
           {},
           true
         )
-      : undefined
+      : undefined;
     const previousButton = this.hasPreviousButton()
       ? controlButton('Previous', IconNames.ARROW_LEFT, this.props.onClickPrevious)
-      : undefined
+      : undefined;
     const nextButton = this.hasNextButton()
       ? controlButton('Next', IconNames.ARROW_RIGHT, this.props.onClickNext, { iconOnRight: true })
-      : undefined
+      : undefined;
     const returnButton = this.hasReturnButton()
       ? controlButton('Return to Academy', IconNames.ARROW_RIGHT, this.props.onClickReturn, {
           iconOnRight: true
         })
-      : undefined
+      : undefined;
 
     return (
       <div className="ControlBar_flow pt-button-group">
         {previousButton} {questionView} {nextButton} {returnButton}
       </div>
-    )
+    );
   }
 
   private replControl() {
+    const toggleEditModeButton = this.props.toggleEditMode ? (
+      <Tooltip
+        content={
+          'Switch to ' +
+          (this.props.editingMode === 'question' ? 'global' : 'question specific') +
+          ' editing mode.'
+        }
+      >
+        {controlButton(
+          this.props.editingMode + ' editing mode',
+          IconNames.REFRESH,
+          this.props.toggleEditMode
+        )}
+      </Tooltip>
+    ) : (
+      undefined
+    );
     const evalButton = (
       <Tooltip content="...or press shift-enter in the REPL">
         {controlButton('Eval', IconNames.CODE, this.props.handleReplEval)}
       </Tooltip>
-    )
-    const clearButton = controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear)
+    );
+    const clearButton = controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear);
+
     return (
       <div className="ControlBar_repl pt-button-group">
-        {this.props.isRunning ? null : evalButton} {clearButton}
+        {this.props.isRunning ? null : evalButton} {clearButton} {toggleEditModeButton}
       </div>
-    )
+    );
+  }
+
+  private handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ joinElemValue: event.target.value });
   }
 
   private selectShareInputText() {
-    this.shareInputElem.focus()
-    this.shareInputElem.select()
+    if (this.shareInputElem.current !== null) {
+      this.shareInputElem.current.focus();
+      this.shareInputElem.current.select();
+    }
+  }
+
+  private selectInviteInputText() {
+    if (this.inviteInputElem.current !== null) {
+      this.inviteInputElem.current.focus();
+      this.inviteInputElem.current.select();
+    }
   }
 
   private hasNextButton() {
     return (
       this.props.questionProgress && this.props.questionProgress[0] < this.props.questionProgress[1]
-    )
+    );
   }
 
   private hasPreviousButton() {
-    return this.props.questionProgress && this.props.questionProgress[0] > 0
+    return this.props.questionProgress && this.props.questionProgress[0] > 1;
   }
 
   private hasReturnButton() {
     return (
       this.props.questionProgress &&
       this.props.questionProgress[0] === this.props.questionProgress[1]
-    )
+    );
   }
 }
 
 function styliseChapter(chap: number) {
-  return `Source \xa7${chap}`
+  return `Source \xa7${chap}`;
 }
 
-const chapters = sourceChapters.map(chap => ({ displayName: styliseChapter(chap), chapter: chap }))
+const chapters = sourceChapters.map(chap => ({ displayName: styliseChapter(chap), chapter: chap }));
 
 const chapterSelect = (
   currentChap: number,
@@ -254,19 +437,19 @@ const chapterSelect = (
       rightIcon="double-caret-vertical"
     />
   </ChapterSelectComponent>
-)
+);
 
-const ChapterSelectComponent = Select.ofType<IChapter>()
+const ChapterSelectComponent = Select.ofType<IChapter>();
 
 const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
-)
+);
 
 const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
   name: entry[0] as ExternalLibraryName,
   key: index,
   symbols: entry[1]
-}))
+}));
 
 const externalSelect = (
   currentExternal: string,
@@ -281,12 +464,12 @@ const externalSelect = (
   >
     <Button className="pt-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
   </ExternalSelectComponent>
-)
+);
 
-const ExternalSelectComponent = Select.ofType<IExternal>()
+const ExternalSelectComponent = Select.ofType<IExternal>();
 
 const externalRenderer: ItemRenderer<IExternal> = (external, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />
-)
+);
 
-export default ControlBar
+export default ControlBar;

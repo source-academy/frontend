@@ -431,7 +431,7 @@ function midi_note_to_frequency(note) {
   return 8.1757989156 * Math.pow(2, (note / 12));
 }
 
-function square_sourcesound(freq, duration) {
+function square_sound(freq, duration) {
   function fourier_expansion_square(level, t) {
     var answer = 0;
     for (var i = 1; i <= level; i++) {
@@ -439,7 +439,7 @@ function square_sourcesound(freq, duration) {
     }
     return answer;
   }
-  return autocut_sourcesound(make_sourcesound(function (t) {
+  return autocut_sound(make_sound(function (t) {
     var x = (4 / Math.PI) * fourier_expansion_square(5, t);
     if (x > 1) {
       return 1;
@@ -451,11 +451,7 @@ function square_sourcesound(freq, duration) {
   }, duration));
 }
 
-function square_sound(freq, duration) {
-  return sourcesound_to_sound(square_sourcesound(freq, duration));
-}
-
-function triangle_sourcesound(freq, duration) {
+function triangle_sound(freq, duration) {
   function fourier_expansion_triangle(level, t) {
     var answer = 0;
     for (var i = 0; i < level; i++) {
@@ -463,7 +459,7 @@ function triangle_sourcesound(freq, duration) {
     }
     return answer;
   }
-  return autocut_sourcesound(make_sourcesound(function (t) {
+  return autocut_sound(make_sound(function (t) {
     var x = (8 / Math.PI / Math.PI) * fourier_expansion_triangle(5, t);
     if (x > 1) {
       return 1;
@@ -475,11 +471,7 @@ function triangle_sourcesound(freq, duration) {
   }, duration));
 }
 
-function triangle_sound(freq, duration) {
-  return sourcesound_to_sound(triangle_sourcesound(freq, duration));
-}
-
-function sawtooth_sourcesound(freq, duration) {
+function sawtooth_sound(freq, duration) {
   function fourier_expansion_sawtooth(level, t) {
     var answer = 0;
     for (var i = 1; i <= level; i++) {
@@ -487,7 +479,7 @@ function sawtooth_sourcesound(freq, duration) {
     }
     return answer;
   }
-  return autocut_sourcesound(make_sourcesound(function (t) {
+  return autocut_sound(make_sound(function (t) {
     var x = (1 / 2) - (1 / Math.PI) * fourier_expansion_sawtooth(5, t);
     if (x > 1) {
       return 1;
@@ -497,10 +489,6 @@ function sawtooth_sourcesound(freq, duration) {
       return x;
     }
   }, duration));
-}
-
-function sawtooth_sound(freq, duration) {
-  return sourcesound_to_sound(sawtooth_sourcesound(freq, duration));
 }
 
 function exponential_decay(decay_period) {
@@ -517,10 +505,9 @@ function exponential_decay(decay_period) {
 
 function adsr(attack_time, decay_time, sustain_level, release_time) {
   return function (sound) {
-    var sourcesound = sound_to_sourcesound(sound);
-    var wave = get_wave(sourcesound);
-    var duration = get_duration(sourcesound);
-    return sourcesound_to_sound(make_sourcesound(function (x) {
+    var wave = get_wave(sound);
+    var duration = get_duration(sound);
+    return make_sound(function (x) {
       if (x < attack_time) {
         return wave(x) * (x / attack_time);
       } else if (x < attack_time + decay_time) {
@@ -532,10 +519,11 @@ function adsr(attack_time, decay_time, sustain_level, release_time) {
       } else {
         return 0;
       }
-    }, duration));
+    }, duration);
   };
 }
 
+// waveform is a function that accepts freq, dur and returns sound
 function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
   function zip(lst, n) {
     if (is_empty_list(lst)) {
@@ -545,9 +533,14 @@ function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
     }
   }
 
-  return simultaneously(accumulate(function (x, y) {
-    return pair((tail(x))(waveform(base_frequency * head(x), duration)), y);
-  }, [], zip(list_of_envelope, 1)));
+  return simultaneously(accumulate(
+    function (x, y) {
+      return pair((tail(x))
+    (waveform(base_frequency * head(x), duration))
+    , y);
+  }
+  , []
+  , zip(list_of_envelope, 1)));
 }
 
 // instruments for students

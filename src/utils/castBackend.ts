@@ -1,4 +1,4 @@
-import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape'
+import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
 
 /**
  * Casts a library returned by an API call to a
@@ -15,8 +15,8 @@ export const castLibrary = (lib: any): Library => ({
   globals: Object.entries(lib.globals as object).map(entry => {
     /** The value that is passed is evaluated into an actual JS value */
     try {
-      entry[1] = (window as any).eval(entry[1])
+      entry[1] = (window as any).eval(entry[1]);
     } catch (e) {}
-    return entry
+    return entry;
   })
-})
+});

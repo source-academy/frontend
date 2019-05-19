@@ -1,29 +1,29 @@
-import { Classes, Dialog, NonIdealState, ProgressBar, Spinner } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
+import { Classes, Dialog, NonIdealState, ProgressBar, Spinner } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
 
-import { Role } from '../../reducers/states'
+import { Role } from '../../reducers/states';
 
-type ProfileProps = OwnProps & StateProps
+type ProfileProps = OwnProps & StateProps;
 
 export type StateProps = {
-  grade: number
-  maxGrade: number
-  maxXp: number
-  name?: string
-  role?: Role
-  xp: number
-}
+  grade: number;
+  maxGrade: number;
+  maxXp: number;
+  name?: string;
+  role?: Role;
+  xp: number;
+};
 
 type OwnProps = {
-  isOpen: boolean
-  onClose: () => void
-}
+  isOpen: boolean;
+  onClose: () => void;
+};
 
 class Profile extends React.Component<ProfileProps> {
   public render() {
-    const isLoaded = this.props.name && this.props.role
-    let content: JSX.Element
+    const isLoaded = this.props.name && this.props.role;
+    let content: JSX.Element;
     if (isLoaded) {
       content = (
         <>
@@ -46,9 +46,9 @@ class Profile extends React.Component<ProfileProps> {
             <ProgressBar className="xp" animate={false} stripes={false} />
           </div>
         </>
-      )
+      );
     } else {
-      content = <NonIdealState description="Loading..." visual={<Spinner />} />
+      content = <NonIdealState description="Loading..." visual={<Spinner />} />;
     }
     return (
       <Dialog
@@ -61,8 +61,8 @@ class Profile extends React.Component<ProfileProps> {
       >
         <div className={Classes.DIALOG_BODY}>{content}</div>
       </Dialog>
-    )
+    );
   }
 }
 
-export default Profile
+export default Profile;

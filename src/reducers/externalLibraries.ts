@@ -1,4 +1,7 @@
-import { ExternalLibraryName, ExternalLibraryNames } from '../components/assessment/assessmentShape'
+import {
+  ExternalLibraryName,
+  ExternalLibraryNames
+} from '../components/assessment/assessmentShape';
 
 /**
  * Defines all the external symbols for playground, i.e full access to runes functionality.
@@ -44,7 +47,7 @@ const TwoDRunesExternals = [
   'heart_bb',
   'pentagram_bb',
   'ribbon_bb'
-]
+];
 
 /**
  * Defines which external libraries are available for usage, and what
@@ -104,42 +107,35 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [
     ExternalLibraryNames.SOUND,
     [
-      'make_sourcesound',
+      'make_sound',
       'get_wave',
       'get_duration',
-      'is_sound',
       'play',
       'stop',
-      'cut_sourcesound',
-      'cut',
-      'autocut_sourcesound',
-      'sourcesound_to_sound',
-      'sound_to_sourcesound',
+      'cut_sound',
+      'autocut_sound',
       'consecutively',
       'simultaneously',
-      'noise_sourcesound',
-      'noise',
-      'sine_sourcesound',
+      'noise_sound',
       'sine_sound',
-      'constant_sourcesound',
-      'silence_sourcesound',
-      'high_sourcesound',
-      'silence',
-      'high',
-      'invert_sourcesound',
-      'invert',
-      'clamp_sourcesound',
-      'clamp',
+      'constant_sound',
+      'silence_sound',
+      'high_sound',
+      'invert_sound',
+      'clamp_sound',
       'letter_name_to_midi_note',
       'letter_name_to_frequency',
       'midi_note_to_frequency',
-      'square_sourcesound',
       'square_sound',
-      'triangle_sourcesound',
       'triangle_sound',
-      'sawtooth_sourcesound',
       'sawtooth_sound',
       'play_concurrently',
+      'play_safe',
+      /** Microphone Sounds */
+      'init_record',
+      'record_for',
+      'start_record',
+      'stop_record',
       /** Contest functions */
       'adsr',
       'stacking_adsr',
@@ -175,6 +171,6 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'stream_ref'
     ]
   ]
-]
+];
 
-export const externalLibraries: Map<string, string[]> = new Map(libEntries)
+export const externalLibraries: Map<string, string[]> = new Map(libEntries);

@@ -1,22 +1,22 @@
-import { Button, ButtonGroup, Card, Icon, NonIdealState, Spinner } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
-import * as React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Button, ButtonGroup, Card, Icon, NonIdealState, Spinner } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 
-type LoginProps = DispatchProps & OwnProps
+type LoginProps = DispatchProps & OwnProps;
 
 export type DispatchProps = {
-  handleFetchAuth: (ivleToken: string) => void
-  handleLogin: () => void
-}
+  handleFetchAuth: (ivleToken: string) => void;
+  handleLogin: () => void;
+};
 
 export type OwnProps = {
-  ivleToken?: string
-}
+  ivleToken?: string;
+};
 
 const Login: React.SFC<LoginProps> = props => {
   if (props.ivleToken) {
-    startFetchAuth(props.ivleToken, props.handleFetchAuth)
+    startFetchAuth(props.ivleToken, props.handleFetchAuth);
     return (
       <div className="Login pt-dark">
         <Card className="login-card pt-elevation-4">
@@ -25,7 +25,7 @@ const Login: React.SFC<LoginProps> = props => {
           </div>
         </Card>
       </div>
-    )
+    );
   } else {
     return (
       <div className="Login pt-dark">
@@ -44,18 +44,18 @@ const Login: React.SFC<LoginProps> = props => {
           </div>
         </Card>
       </div>
-    )
+    );
   }
-}
+};
 
 const startFetchAuth = (ivleToken: string, handleFetchAuth: DispatchProps['handleFetchAuth']) =>
-  handleFetchAuth(ivleToken)
+  handleFetchAuth(ivleToken);
 
 const loginButton = (handleClick: () => void) => (
   <Button className="pt-large" rightIcon="log-in" onClick={handleClick}>
     Log in with IVLE
   </Button>
-)
+);
 
 const playgroundButton = (
   <NavLink to="/playground">
@@ -63,6 +63,6 @@ const playgroundButton = (
       Try out the playground
     </Button>
   </NavLink>
-)
+);
 
-export default Login
+export default Login;
