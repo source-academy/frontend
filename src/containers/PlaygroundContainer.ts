@@ -8,6 +8,7 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeActiveTab,
+  changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
@@ -62,6 +63,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),

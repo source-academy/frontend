@@ -4,6 +4,7 @@ import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_ACTIVE_TAB,
+  CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
@@ -18,6 +19,8 @@ import {
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
+  EVAL_TESTCASE,
+  EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
   IAction,
@@ -58,6 +61,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
 ) => {
   const location: WorkspaceLocation =
     action.payload !== undefined ? action.payload.workspaceLocation : undefined;
+  const index: number = action.payload !== undefined ? action.payload.index : undefined;
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
 
@@ -149,6 +153,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           sideContentActiveTab: action.payload.activeTab
+        }
+      };
+    case CHANGE_EDITOR_HEIGHT:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorHeight: action.payload.height
         }
       };
     case CHANGE_EDITOR_WIDTH:
@@ -283,6 +295,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isRunning: true
         }
       };
+    case EVAL_TESTCASE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          isRunning: true
+        }
+      };
     case EVAL_INTERPRETER_SUCCESS:
       lastOutput = state[location].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
@@ -306,6 +326,36 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isRunning: false,
           breakpoints: [],
           highlightedLines: []
+        }
+      };
+    case EVAL_TESTCASE_SUCCESS:
+      lastOutput = state[location].output.slice(-1)[0];
+      if (lastOutput !== undefined && lastOutput.type === 'running') {
+        newOutput = state[location].output.slice(0, -1).concat({
+          ...action.payload,
+          workspaceLocation: undefined,
+          consoleLogs: lastOutput.consoleLogs
+        });
+      } else {
+        newOutput = state[location].output.concat({
+          ...action.payload,
+          workspaceLocation: undefined,
+          consoleLogs: []
+        });
+      }
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorTestcases: state[location].editorTestcases.map((testcase, i) => {
+            if (i === index) {
+              testcase.actual = newOutput[0];
+              return testcase;
+            } else {
+              return testcase;
+            }
+          }),
+          isRunning: false
         }
       };
     case EVAL_INTERPRETER_ERROR:

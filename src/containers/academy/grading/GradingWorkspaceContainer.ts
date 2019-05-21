@@ -7,6 +7,7 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeActiveTab,
+  changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
@@ -40,7 +41,11 @@ const workspaceLocation: WorkspaceLocation = 'grading';
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     activeTab: state.workspaces.grading.sideContentActiveTab,
-    editorValue: state.workspaces.grading.editorValue,
+    editorPrepend: state.workspaces.assessment.editorPrepend,
+    editorValue: state.workspaces.assessment.editorValue,
+    editorPostpend: state.workspaces.assessment.editorPostpend,
+    editorTestcases: state.workspaces.assessment.editorTestcases,
+    editorHeight: state.workspaces.assessment.editorHeight,
     editorWidth: state.workspaces.grading.editorWidth,
     breakpoints: state.workspaces.grading.breakpoints,
     highlightedLines: state.workspaces.grading.highlightedLines,
@@ -68,6 +73,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
         changeEditorWidth(widthChange, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>

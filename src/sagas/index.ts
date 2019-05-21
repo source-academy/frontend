@@ -30,7 +30,12 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
     const code: string = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).editorValue
+      (state: IState) =>
+        (state.workspaces[location] as IWorkspaceState).editorPrepend! +
+        '\n' +
+        (state.workspaces[location] as IWorkspaceState).editorValue! +
+        '\n' +
+        (state.workspaces[location] as IWorkspaceState).editorPostpend!
     );
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
@@ -122,6 +127,47 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.UPDATE_EDITOR_BREAKPOINTS, function*(action) {
     setBreakpointAtLine((action as actionTypes.IAction).payload.breakpoints);
     yield;
+  });
+
+  yield takeEvery(actionTypes.EVAL_TESTCASE, function*(action) {
+    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const index = (action as actionTypes.IAction).payload.testcaseId;
+    const code: string = yield select(
+      (state: IState) =>
+        (state.workspaces[location] as IWorkspaceState).editorPrepend! +
+        '\n' +
+        (state.workspaces[location] as IWorkspaceState).editorValue! +
+        '\n' +
+        (state.workspaces[location] as IWorkspaceState).editorPostpend! +
+        '\n' +
+        (state.workspaces[location] as IWorkspaceState).editorTestcases[index].program!
+    );
+    const chapter: number = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
+    );
+    const symbols: string[] = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.externalSymbols
+    );
+    const globals: Array<[string, any]> = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
+    );
+    const library = {
+      chapter,
+      external: {
+        name: ExternalLibraryNames.NONE,
+        symbols
+      },
+      globals
+    };
+    /** End any code that is running right now. */
+    yield put(actions.beginInterruptExecution(location));
+    /** Clear the context, with the same chapter and externalSymbols as before. */
+    yield put(actions.beginClearContext(library, location));
+    yield put(actions.clearReplOutput(location));
+    context = yield select(
+      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+    );
+    yield* evalTestCode(code, context, location, index);
   });
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
@@ -366,6 +412,31 @@ function* evalCode(
     lastDebuggerResult = manualToggleDebugger(context);
     yield updateInspector();
     yield call(showWarningMessage, 'Execution paused', 750);
+  }
+}
+
+function* evalTestCode(code: string, context: Context, location: WorkspaceLocation, index: number) {
+  const { result, interrupted } = yield race({
+    result: call(runInContext, code, context, { scheduler: 'preemptive' }),
+    /**
+     * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
+     * i.e the trigger for the interpreter to interrupt execution.
+     */
+    interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION)
+  });
+  if (result) {
+    if (result.status === 'finished') {
+      yield put(actions.evalInterpreterSuccess(result.value, location));
+      yield put(actions.evalTestcaseSuccess(result.value, location, index));
+    } else {
+      yield put(actions.evalInterpreterError(context.errors, location));
+    }
+  } else if (interrupted) {
+    interrupt(context);
+    /* Redundancy, added ensure that interruption results in an error. */
+    context.errors.push(new InterruptedError(context.runtime.nodes[0]));
+    yield put(actions.endInterruptExecution(location));
+    yield call(showWarningMessage, 'Execution aborted by user', 750);
   }
 }
 

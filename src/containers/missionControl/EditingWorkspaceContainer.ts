@@ -7,6 +7,7 @@ import {
   beginInterruptExecution,
   browseReplHistoryDown,
   browseReplHistoryUp,
+  changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
@@ -39,6 +40,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     activeTab: state.workspaces.assessment.sideContentActiveTab,
     assessment: state.session.assessments.get(props.assessmentId),
     editorValue: state.workspaces.assessment.editorValue,
+    editorHeight: state.workspaces.assessment.editorHeight,
     editorWidth: state.workspaces.assessment.editorWidth,
     breakpoints: state.workspaces.assessment.breakpoints,
     highlightedLines: state.workspaces.assessment.highlightedLines,
@@ -66,6 +68,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
         changeEditorWidth(widthChange, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>

@@ -58,7 +58,10 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     id: 0,
     library: emptyLibrary(),
     graderLibrary: emptyLibrary(),
+    prepend: '',
     solutionTemplate: '//This is a mock solution template',
+    postpend: '',
+    testcases: [],
     type: 'programming',
     grader: {
       name: 'avenger',
