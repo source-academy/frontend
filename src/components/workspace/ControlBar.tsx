@@ -258,25 +258,25 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
         ? externalSelect(this.props.externalLibraryName, this.props.handleExternalSelect!)
         : undefined;
 
+    const linkButton = controlButton(
+      'Link to Google Drive',
+      IconNames.DOCUMENT_SHARE,
+      () => {
+        const redirectUrl = `${window.location.protocol}//${window.location.hostname}/playground`;
+        window.location.assign(
+          `https://accounts.google.com/o/oauth2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUrl}&response_type=token&scope=profile+email+https://www.googleapis.com/auth/drive.file`
+        );
+      },
+      {}
+    );
+
+    const openButton = this.props.hasOpenButton
+      ? controlButton('Open', IconNames.DOCUMENT_OPEN, this.props.onClickOpen, saveButtonOpts)
+      : linkButton;
+
     const saveAsButton = this.props.hasOpenButton
       ? controlButton('Save As', IconNames.FLOPPY_DISK, this.props.onClickSave, saveButtonOpts)
-      : saveButton;
-
-    const linkButton = this.props.hasSaveButton
-      ? undefined
-      : controlButton(
-          'Link to Google Drive',
-          IconNames.DOCUMENT_SHARE,
-          () => {
-            const redirectUrl = `${window.location.protocol}//${
-              window.location.hostname
-            }/playground`;
-            window.location.assign(
-              `https://accounts.google.com/o/oauth2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUrl}&response_type=token&scope=profile+email+https://www.googleapis.com/auth/drive.file`
-            );
-          },
-          {}
-        );
+      : undefined;
 
     const resetButton = this.props.hasSaveButton
       ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
@@ -311,7 +311,8 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
             ? resumeButton
             : null}
         {saveButton}
-        {shareButton} {chapterSelectButton} {externalSelectButton} {saveAsButton} {linkButton}
+        {shareButton} {chapterSelectButton} {externalSelectButton} {openButton} {saveAsButton}{' '}
+        {linkButton}
         {inviteButton} {this.props.editorSessionId === '' ? joinButton : leaveButton}
       </div>
     );
