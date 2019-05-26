@@ -47,7 +47,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   replValue: state.workspaces.playground.replValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
-  websocketStatus: state.workspaces.playground.websocketStatus,
+  websocketStatus: state.workspaces.playground.websocketStatus!,
   externalLibraryName: state.workspaces.playground.playgroundExternal
 });
 
