@@ -106,7 +106,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       className: 'resize-editor-prepend left-parent',
       enable: bottomResizeOnly,
       minHeight: 0,
-      onResize: this.toggleeditorPrependDividerDisplay,
+      onResize: this.toggleEditorPrependDividerDisplay,
       onResizeStop,
       size:
         this.props.editorHeight === undefined
@@ -183,7 +183,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     }
   };
 
-  private toggleeditorPrependDividerDisplay: ResizeCallback = ({}, {}, ref) => {
+  private toggleEditorPrependDividerDisplay: ResizeCallback = ({}, {}, ref) => {
     /* Guaranteed that there will be editor refs */
     // @ts-ignore
     this.editorPrependRef.current!.AceEditor.current!.editor.resize();
