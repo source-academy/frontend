@@ -27,7 +27,6 @@ export type WorkspaceProps = {
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
   private editorDividerDiv: HTMLDivElement;
-  private editorPrependDividerDiv: HTMLDivElement;
   private leftParentResizable: Resizable;
   private maxDividerHeight: number;
   private sideDividerDiv: HTMLDivElement;
@@ -210,10 +209,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
                 editorPrependValue={props.editorProps.editorPrepend}
                 ref={this.editorPrependRef}
               />
-              <div
-                className="editor-content-divider"
-                ref={e => (this.editorPrependDividerDiv = e!)}
-              />
+              <div className="editor-content-divider" />
             </Resizable>
             <Editor
               {...props.editorProps}
