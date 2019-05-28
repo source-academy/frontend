@@ -72,7 +72,7 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
       <div>
         <Card className="row listing" elevation={Elevation.ONE}>
           <div className="col-xs-9 listing-text">
-            <p>Testcase {this.props.index}</p>
+            <p>Testcase {this.props.index + 1}</p>
             {this.props.result.resultType === 'pass' ? showPass() :
               this.props.result.resultType === ' fail' ? showFail() :
                 showErrors()}
