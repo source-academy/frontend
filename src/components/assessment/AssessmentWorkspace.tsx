@@ -93,13 +93,13 @@ export type DispatchProps = {
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean; showResetOverlay: boolean }
+  { showOverlay: boolean; showResetTemplateOverlay: boolean }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
-      showResetOverlay: false
+      showResetTemplateOverlay: false
     };
     this.props.handleEditorValueChange('');
   }
@@ -162,12 +162,12 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     );
 
-    const resetOverlay = (
+    const resetTemplateOverlay = (
       <Dialog
         className="assessment-reset"
         icon={IconNames.ERROR}
         isCloseButtonShown={false}
-        isOpen={this.state.showResetOverlay}
+        isOpen={this.state.showResetTemplateOverlay}
         title="Confirmation: Reset editor?"
       >
         <div className={Classes.DIALOG_BODY}>
@@ -176,14 +176,19 @@ class AssessmentWorkspace extends React.Component<
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
-            {controlButton('Cancel', null, () => this.setState({ showResetOverlay: false }), {
-              minimal: false
-            })}
+            {controlButton(
+              'Cancel',
+              null,
+              () => this.setState({ showResetTemplateOverlay: false }),
+              {
+                minimal: false
+              }
+            )}
             {controlButton(
               'Confirm',
               null,
               () => {
-                this.setState({ showResetOverlay: false });
+                this.setState({ showResetTemplateOverlay: false });
                 this.props.handleEditorValueChange(
                   (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
                     .solutionTemplate
@@ -248,7 +253,7 @@ class AssessmentWorkspace extends React.Component<
     return (
       <div className="WorkspaceParent pt-dark">
         {overlay}
-        {resetOverlay}
+        {resetTemplateOverlay}
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -412,8 +417,8 @@ class AssessmentWorkspace extends React.Component<
           this.props.assessment!.questions[questionId].id,
           this.props.editorValue!
         ),
-      onClickReset: () => {
-        this.setState({ showResetOverlay: true });
+      onClickResetTemplate: () => {
+        this.setState({ showResetTemplateOverlay: true });
       },
       questionProgress: [questionId + 1, this.props.assessment!.questions.length],
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter

@@ -63,7 +63,7 @@ export type ControlBarProps = {
   onClickPrevious?(): any;
   onClickReturn?(): any;
   onClickSave?(): any;
-  onClickReset?(): any;
+  onClickResetTemplate?(): any;
   toggleEditMode?(): void;
 };
 
@@ -91,7 +91,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     onClickNext: () => {},
     onClickPrevious: () => {},
     onClickSave: () => {},
-    onClickReset: () => {}
+    onClickResetTemplate: () => {}
   };
 
   private inviteInputElem: React.RefObject<HTMLInputElement>;
@@ -253,8 +253,8 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
       this.props.hasChapterSelect && this.props.externalLibraryName !== undefined
         ? externalSelect(this.props.externalLibraryName, this.props.handleExternalSelect!)
         : undefined;
-    const resetButton = this.props.hasSaveButton
-      ? controlButton('Reset', IconNames.REPEAT, this.props.onClickReset)
+    const resetTemplateButton = this.props.hasSaveButton
+      ? controlButton('Reset', IconNames.REPEAT, this.props.onClickResetTemplate)
       : undefined;
     const toggleAutorunButton = this.props.hasEditorAutorunButton ? (
       <div className="Switch">
@@ -276,7 +276,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
           : this.props.isRunning
             ? stopButton
             : this.props.isDebugging
-              ? resetButton
+              ? null
               : runButton}
         {this.props.isRunning
           ? this.props.isDebugging
@@ -286,7 +286,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
             ? resumeButton
             : null}
         {saveButton}
-        {shareButton} {chapterSelectButton} {externalSelectButton}
+        {shareButton} {chapterSelectButton} {externalSelectButton} {resetTemplateButton}
         {inviteButton} {this.props.editorSessionId === '' ? joinButton : leaveButton}
       </div>
     );
