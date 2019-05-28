@@ -5,6 +5,7 @@ import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { Announcement } from '../components/Announcements';
 import {
+  AutogradingResult,
   ExternalLibraryName,
   ExternalLibraryNames,
   IAssessment,
@@ -58,6 +59,7 @@ export interface IWorkspaceManagerState {
 }
 
 export interface IWorkspaceState {
+  readonly autogradingResults?: AutogradingResult[];
   readonly context: Context;
   readonly editorPrepend: string | null;
   readonly editorSessionId: string;
@@ -287,3 +289,4 @@ export const defaultState: IState = {
   session: defaultSession,
   workspaces: defaultWorkspaceManager
 };
+

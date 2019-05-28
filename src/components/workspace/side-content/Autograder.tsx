@@ -1,15 +1,34 @@
+import { Collapse } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import { ITestcase } from '../../assessment/assessmentShape';
+import { AutogradingResult, ITestcase } from '../../assessment/assessmentShape';
+import { controlButton } from '../../commons';
 import AutograderCard from './AutograderCard';
+import ResultCard from './ResultCard';
+
 
 type AutograderProps = {
+  autogradingResults?: AutogradingResult[];
   testcases: ITestcase[] | null;
   handleTestcaseEval: (testcaseId: number) => void;
 };
 
-class Autograder extends React.Component<AutograderProps, {}> {
+type State = {
+  showTestcases: boolean,
+  showResults: boolean
+};
+
+class Autograder extends React.Component<AutograderProps, State> {
+  public constructor(props: AutograderProps) {
+    super(props);
+    this.state = {
+      showTestcases: true,
+      showResults: false
+    };
+  }
+  
   public render() {
-    return this.props.testcases != null ? (
+    const testcases = this.props.testcases != null ? (
       this.props.testcases.map((testcase, index) => (
         <div key={index}>
           <AutograderCard
@@ -22,7 +41,45 @@ class Autograder extends React.Component<AutograderProps, {}> {
     ) : (
       <div>There are no testcases provided for this mission.</div>
     );
+
+    const results = (this.props.autogradingResults !== undefined ?
+      this.props.autogradingResults.map((result, index) => (
+        <div key={index}>
+          <ResultCard
+            index={index}
+            result={result}
+          />
+        </div>
+      ))
+      : <div>'No results'</div>
+    );
+
+    const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
+      controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
+        minimal: true,
+        className: 'collapse-button'
+      });
+
+    return (<div>
+        {collapseButton('Testcases', this.state.showTestcases, this.toggleTestcases)}  
+        <Collapse isOpen={this.state.showTestcases}>{testcases}</Collapse>
+        {collapseButton('Autograder Results', this.state.showResults, this.toggleResults)}  
+        <Collapse isOpen={this.state.showResults}>{results}</Collapse>
+      </div>
+    );
   }
+
+  private toggleTestcases = () =>
+    this.setState({
+      ...this.state,
+      showTestcases: !this.state.showTestcases
+    });
+
+  private toggleResults = () =>
+    this.setState({
+      ...this.state,
+      showResults: !this.state.showResults
+    });
 }
 
 export default Autograder;

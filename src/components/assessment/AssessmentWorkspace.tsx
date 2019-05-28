@@ -23,6 +23,7 @@ import { SideContentProps } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
+  AutogradingResult,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -38,6 +39,7 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 export type StateProps = {
   activeTab: number;
   assessment?: IAssessment;
+  autogradingResults?: AutogradingResult[];
   editorPrepend: string | null;
   editorValue: string | null;
   editorPostpend: string | null;
@@ -278,6 +280,10 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedQuestionId !== questionId
     ) {
       const question = this.props.assessment.questions[questionId];
+      const autogradingResults = 
+        question.type === QuestionTypes.programming
+          ? (question as IProgrammingQuestion).autogradingResults
+          : undefined;
       const editorValue =
         question.type === QuestionTypes.programming
           ? question.answer !== null
@@ -307,6 +313,7 @@ class AssessmentWorkspace extends React.Component<
       this.props.handleEditorUpdateBreakpoints([]);
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleResetWorkspace({
+        autogradingResults,
         editorPrepend,
         editorValue,
         editorPostpend,
@@ -342,6 +349,7 @@ class AssessmentWorkspace extends React.Component<
         body: (
           <Autograder
             testcases={props.editorTestcases}
+            autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         )

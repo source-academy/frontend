@@ -68,6 +68,7 @@ export type AssessmentCategory = keyof typeof AssessmentCategories;
 
 export interface IProgrammingQuestion extends IQuestion {
   answer: string | null;
+  autogradingResults?: AutogradingResult[];
   prepend: string;
   solutionTemplate: string;
   postpend: string;
@@ -148,4 +149,19 @@ export type Library = {
     1: any;
     2?: string; // For mission control
   }>;
+};
+
+export type AutogradingResult = {
+  resultType: string,
+  expected?: string,
+  actual?: string,
+  errors?: AutogradingError[]
+};
+
+export type AutogradingError = {
+  errorType: string,
+  line?: number,
+  location?: string,
+  errorLine?: string,
+  errorExplanation?: string
 };

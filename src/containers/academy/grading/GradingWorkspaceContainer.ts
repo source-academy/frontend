@@ -41,6 +41,7 @@ const workspaceLocation: WorkspaceLocation = 'grading';
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     activeTab: state.workspaces.grading.sideContentActiveTab,
+    autogradingResults: state.workspaces.assessment.autogradingResults,
     editorPrepend: state.workspaces.assessment.editorPrepend,
     editorValue: state.workspaces.assessment.editorValue,
     editorPostpend: state.workspaces.assessment.editorPostpend,
