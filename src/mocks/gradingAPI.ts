@@ -91,6 +91,9 @@ Hello and welcome to this assessment! This is the *0th question*.
 >>> import this
 \`\`\`
 `,
+      prepend: '',
+      postpend: '',
+      testcases: [],
       comment: null,
       id: 0,
       library: mockLibrary,
@@ -121,6 +124,9 @@ Hello and welcome to this assessment! This is the *0th question*.
   },
   {
     question: {
+      prepend: '',
+      postpend: '',
+      testcases: [],
       answer: "This student's answer to the 1st question",
       comment: null,
       content: 'Hello and welcome to this assessment! This is the 1st question.',
@@ -154,6 +160,9 @@ Hello and welcome to this assessment! This is the *0th question*.
   {
     question: {
       // C is the answer
+      prepend: '',
+      postpend: '',
+      testcases: [],
       answer: 3,
       comment: null,
       solution: 2,
