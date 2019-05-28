@@ -185,7 +185,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       const question = this.props.grading[questionId].question as IQuestion;
       // tslint:disable:no-console
       console.log(question);
-      const autogradingResults = 
+      const autogradingResults =
         question.type === QuestionTypes.programming
           ? (question as IAnsweredQuestion).autogradingResults
           : undefined;
@@ -201,7 +201,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             ? (question as IAnsweredQuestion).prepend
             : ''
           : '';
-          // tslint:disable:no-console
+      // tslint:disable:no-console
       console.log(editorPrepend);
       const editorPostpend =
         question.type === QuestionTypes.programming

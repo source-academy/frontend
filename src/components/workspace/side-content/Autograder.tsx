@@ -6,7 +6,6 @@ import { controlButton } from '../../commons';
 import AutograderCard from './AutograderCard';
 import ResultCard from './ResultCard';
 
-
 type AutograderProps = {
   autogradingResults?: AutogradingResult[];
   testcases: ITestcase[] | null;
@@ -14,8 +13,8 @@ type AutograderProps = {
 };
 
 type State = {
-  showTestcases: boolean,
-  showResults: boolean
+  showTestcases: boolean;
+  showResults: boolean;
 };
 
 class Autograder extends React.Component<AutograderProps, State> {
@@ -26,33 +25,33 @@ class Autograder extends React.Component<AutograderProps, State> {
       showResults: false
     };
   }
-  
-  public render() {
-    const testcases = this.props.testcases != null ? (
-      this.props.testcases.map((testcase, index) => (
-        <div key={index}>
-          <AutograderCard
-            index={index}
-            testcase={testcase}
-            handleTestcaseEval={this.props.handleTestcaseEval}
-          />
-        </div>
-      ))
-    ) : (
-      <div>There are no testcases provided for this mission.</div>
-    );
 
-    const results = (this.props.autogradingResults !== undefined ?
-      this.props.autogradingResults.map((result, index) => (
-        <div key={index}>
-          <ResultCard
-            index={index}
-            result={result}
-          />
-        </div>
-      ))
-      : <div>'No results'</div>
-    );
+  public render() {
+    const testcases =
+      this.props.testcases != null ? (
+        this.props.testcases.map((testcase, index) => (
+          <div key={index}>
+            <AutograderCard
+              index={index}
+              testcase={testcase}
+              handleTestcaseEval={this.props.handleTestcaseEval}
+            />
+          </div>
+        ))
+      ) : (
+        <div>There are no testcases provided for this mission.</div>
+      );
+
+    const results =
+      this.props.autogradingResults !== undefined ? (
+        this.props.autogradingResults.map((result, index) => (
+          <div key={index}>
+            <ResultCard index={index} result={result} />
+          </div>
+        ))
+      ) : (
+        <div>'No results'</div>
+      );
 
     const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
       controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
@@ -60,10 +59,11 @@ class Autograder extends React.Component<AutograderProps, State> {
         className: 'collapse-button'
       });
 
-    return (<div>
-        {collapseButton('Testcases', this.state.showTestcases, this.toggleTestcases)}  
+    return (
+      <div>
+        {collapseButton('Testcases', this.state.showTestcases, this.toggleTestcases)}
         <Collapse isOpen={this.state.showTestcases}>{testcases}</Collapse>
-        {collapseButton('Autograder Results', this.state.showResults, this.toggleResults)}  
+        {collapseButton('Autograder Results', this.state.showResults, this.toggleResults)}
         <Collapse isOpen={this.state.showResults}>{results}</Collapse>
       </div>
     );

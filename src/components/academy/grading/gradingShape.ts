@@ -1,4 +1,10 @@
-import { AssessmentCategory, AutogradingResult, IQuestion, ITestcase, MCQChoice } from '../../assessment/assessmentShape';
+import {
+  AssessmentCategory,
+  AutogradingResult,
+  IQuestion,
+  ITestcase,
+  MCQChoice
+} from '../../assessment/assessmentShape';
 
 /**
  * Information on a Grading, for a particular student submission

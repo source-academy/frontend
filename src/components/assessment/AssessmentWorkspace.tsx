@@ -280,7 +280,7 @@ class AssessmentWorkspace extends React.Component<
       this.props.storedQuestionId !== questionId
     ) {
       const question = this.props.assessment.questions[questionId];
-      const autogradingResults = 
+      const autogradingResults =
         question.type === QuestionTypes.programming
           ? (question as IProgrammingQuestion).autogradingResults
           : undefined;

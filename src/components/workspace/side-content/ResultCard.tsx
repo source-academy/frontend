@@ -1,7 +1,4 @@
-import {
-  Card,
-  Elevation
-} from '@blueprintjs/core';
+import { Card, Elevation } from '@blueprintjs/core';
 import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
 // tslint:disable-next-line
@@ -17,7 +14,6 @@ type ResultCardProps = {
 };
 
 class ResultCard extends React.Component<ResultCardProps, {}> {
-
   public render() {
     const renderResult = (value: any) => {
       /** A class which is the output of the show() function */
@@ -29,41 +25,40 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
       }
     };
 
-    const showFail = () => (<div>
-      <div className="row listing-expected">
-        <h6>
-          <Markdown content={'Expected Answer: `' + this.props.result.expected! + '`'} />
-        </h6>
+    const showFail = () => (
+      <div>
+        <div className="row listing-expected">
+          <h6>
+            <Markdown content={'Expected Answer: `' + this.props.result.expected! + '`'} />
+          </h6>
+        </div>
+        <div className="row listing-actual">
+          <h6>
+            {'Actual Answer: '} <pre>{renderResult(this.props.result.actual!)}</pre>
+          </h6>
+        </div>
       </div>
-      <div className="row listing-actual">
-        <h6>
-          {'Actual Answer: '}{' '}
-          <pre>{renderResult(this.props.result.actual!)}</pre>
-        </h6>
-      </div>
-    </div>
     );
 
-    const showPass = () => (
-      <div> Pass </div>
-    );
+    const showPass = () => <div> Pass </div>;
 
     const showErrors = () => (
-      <div> 
+      <div>
         <h6>
-          <p>
-            {this.props.result.errors!.map(showError)}
-          </p>
+          <p>{this.props.result.errors!.map(showError)}</p>
         </h6>
       </div>
     );
 
-    const showError = (error : AutogradingError) => (
+    const showError = (error: AutogradingError) => (
       <div>
         <h6>
-          {'Error on line '}{error.errorLine}
-          {'Line: '}{error.line}
-          {'Error: '}{error.errorExplanation}
+          {'Error on line '}
+          {error.errorLine}
+          {'Line: '}
+          {error.line}
+          {'Error: '}
+          {error.errorExplanation}
         </h6>
       </div>
     );
@@ -73,9 +68,11 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
         <Card className="row listing" elevation={Elevation.ONE}>
           <div className="col-xs-9 listing-text">
             <p>Testcase {this.props.index + 1}</p>
-            {this.props.result.resultType === 'pass' ? showPass() :
-              this.props.result.resultType === ' fail' ? showFail() :
-                showErrors()}
+            {this.props.result.resultType === 'pass'
+              ? showPass()
+              : this.props.result.resultType === ' fail'
+                ? showFail()
+                : showErrors()}
           </div>
         </Card>
       </div>

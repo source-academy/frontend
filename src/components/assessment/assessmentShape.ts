@@ -152,16 +152,16 @@ export type Library = {
 };
 
 export type AutogradingResult = {
-  resultType: string,
-  expected?: string,
-  actual?: string,
-  errors?: AutogradingError[]
+  resultType: string;
+  expected?: string;
+  actual?: string;
+  errors?: AutogradingError[];
 };
 
 export type AutogradingError = {
-  errorType: string,
-  line?: number,
-  location?: string,
-  errorLine?: string,
-  errorExplanation?: string
+  errorType: string;
+  line?: number;
+  location?: string;
+  errorLine?: string;
+  errorExplanation?: string;
 };

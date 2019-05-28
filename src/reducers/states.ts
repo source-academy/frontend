@@ -289,4 +289,3 @@ export const defaultState: IState = {
   session: defaultSession,
   workspaces: defaultWorkspaceManager
 };
-
