@@ -27,7 +27,6 @@ export type WorkspaceProps = {
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
   private editorDividerDiv: HTMLDivElement;
-  private editorPrependDividerDiv: HTMLDivElement;
   private leftParentResizable: Resizable;
   private maxDividerHeight: number;
   private sideDividerDiv: HTMLDivElement;
@@ -107,7 +106,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       className: 'resize-editor-prepend left-parent',
       enable: bottomResizeOnly,
       minHeight: 0,
-      onResize: this.toggleeditorPrependDividerDisplay,
+      onResize: this.toggleEditorPrependDividerDisplay,
       onResizeStop,
       size:
         this.props.editorHeight === undefined
@@ -184,7 +183,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     }
   };
 
-  private toggleeditorPrependDividerDisplay: ResizeCallback = ({}, {}, ref) => {
+  private toggleEditorPrependDividerDisplay: ResizeCallback = ({}, {}, ref) => {
     /* Guaranteed that there will be editor refs */
     // @ts-ignore
     this.editorPrependRef.current!.AceEditor.current!.editor.resize();
@@ -210,10 +209,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
                 editorPrependValue={props.editorProps.editorPrepend}
                 ref={this.editorPrependRef}
               />
-              <div
-                className="editor-content-divider"
-                ref={e => (this.editorPrependDividerDiv = e!)}
-              />
+              <div className="editor-content-divider" />
             </Resizable>
             <Editor
               {...props.editorProps}
