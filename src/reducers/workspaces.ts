@@ -310,7 +310,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             } else {
               return testcase;
             }
-          }),
+          })
         }
       };
     case EVAL_INTERPRETER_SUCCESS:

@@ -1,7 +1,4 @@
-import {
-  Card,
-  Elevation
-} from '@blueprintjs/core';
+import { Card, Elevation } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
@@ -27,21 +24,19 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
       }
     };
 
-    const isCorrect = this.props.testcase.actual !== undefined
-      // tslint:disable-next-line
-      ? this.props.testcase.actual.value == this.props.testcase.answer
-        ? " correct"
-        : " wrong"
-      : "";
+    const isCorrect =
+      this.props.testcase.actual !== undefined
+        ? // tslint:disable-next-line
+          this.props.testcase.actual.value == this.props.testcase.answer
+          ? ' correct'
+          : ' wrong'
+        : '';
 
     return (
-      <div className={"AutograderCard" + isCorrect}>
+      <div className={'AutograderCard' + isCorrect}>
         <Card elevation={Elevation.ONE}>
           <div className="row autograder-controls">
-            {
-              'Testcase ' +
-              (this.props.index + 1)
-            }
+            {'Testcase ' + (this.props.index + 1)}
             <div className="listing-controls">
               {controlButton('Test', IconNames.PLAY, () =>
                 this.props.handleTestcaseEval(this.props.index)
@@ -61,8 +56,8 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
               {this.props.testcase.actual !== undefined ? (
                 <pre className="code">{renderResult(this.props.testcase.actual.value)}</pre>
               ) : (
-                  <pre>No Answer</pre>
-                )}
+                <pre>No Answer</pre>
+              )}
             </div>
           </div>
         </Card>

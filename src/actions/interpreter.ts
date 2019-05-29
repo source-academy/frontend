@@ -28,7 +28,7 @@ export const evalTestcaseFailure = (
   index: number
 ) => ({
   type: actionTypes.EVAL_TESTCASE_FAILURE,
-  payload: { type: 'result', value, workspaceLocation, index}
+  payload: { type: 'result', value, workspaceLocation, index }
 });
 
 export const evalInterpreterError = (
