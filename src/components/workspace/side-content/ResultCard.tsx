@@ -1,12 +1,8 @@
 import { Card, Elevation } from '@blueprintjs/core';
 import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
-// tslint:disable-next-line
 import { AutogradingError, AutogradingResult } from '../../assessment/assessmentShape';
-// tslint:disable-next-line
 import CanvasOutput from '../CanvasOutput';
-// tslint:disable-next-line
-import Markdown from '../../commons/Markdown';
 
 type ResultCardProps = {
   index: number;
@@ -25,55 +21,54 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
       }
     };
 
-    const showFail = () => (
-      <div>
-        <div className="row listing-expected">
-          <h6>
-            <Markdown content={'Expected Answer: `' + this.props.result.expected! + '`'} />
-          </h6>
+    const showResult = (result: string) => {
+      switch (result) {
+        case 'pass': return (<></>);
+        case 'fail': return (<div className="row autograder-program">
+        <div className="col autograder-expected">
+          Expected Answer:
+          <pre className="code">{this.props.result.expected!}</pre>
         </div>
-        <div className="row listing-actual">
-          <h6>
-            {'Actual Answer: '} <pre>{renderResult(this.props.result.actual!)}</pre>
-          </h6>
+        <div className="col autograder-actual">
+          Actual Answer:
+          <pre className="code">{renderResult(this.props.result.actual!)}</pre>
         </div>
+      </div>);
+      case 'error':
+        return (<div className="row autograder-errors">
+          {this.props.result.errors!.map(showError)}
       </div>
-    );
+        );
+      default: return null;
+      }
+    };
 
-    const showPass = () => <div> Pass </div>;
+    const showStatus = (result: string) => {
+      return (<div className="status">{result}</div>);
+    };
 
-    const showErrors = () => (
-      <div>
-        <h6>
-          <p>{this.props.result.errors!.map(showError)}</p>
-        </h6>
-      </div>
-    );
-
+    /* TODO: IMPROVE CSS */
     const showError = (error: AutogradingError) => (
-      <div>
-        <h6>
-          {'Error on line '}
-          {error.errorLine}
-          {'Line: '}
-          {error.line}
-          {'Error: '}
-          {error.errorExplanation}
-        </h6>
+      <div className="autograder-error">
+          {'Error on line '} {error.errorLine}
+          {'Line: '} {error.line}
+          {'Error: '} {error.errorExplanation}
       </div>
     );
+
+    // tslint:disable-next-line
+    const isCorrect = this.props.result.resultType == 'pass'
+      ? " correct"
+      : " wrong";
 
     return (
-      <div>
-        <Card className="row listing" elevation={Elevation.ONE}>
-          <div className="col-xs-9 listing-text">
-            <p>Testcase {this.props.index + 1}</p>
-            {this.props.result.resultType === 'pass'
-              ? showPass()
-              : this.props.result.resultType === ' fail'
-                ? showFail()
-                : showErrors()}
+      <div className={"ResultCard" + isCorrect}>
+        <Card elevation={Elevation.ONE}>
+          <div className="row">
+            Testcase {this.props.index + 1}
+            {showStatus(this.props.result.resultType)}
           </div>
+          {showResult(this.props.result.resultType)}
         </Card>
       </div>
     );

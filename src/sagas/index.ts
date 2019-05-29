@@ -438,6 +438,8 @@ function* evalTestCode(code: string, context: Context, location: WorkspaceLocati
       yield put(actions.evalTestcaseSuccess(result.value, location, index));
     } else {
       yield put(actions.evalInterpreterError(context.errors, location));
+      /* To indicate an error occured */
+      yield put(actions.evalTestcaseFailure("An error occured", location, index));
     }
   } else if (interrupted) {
     interrupt(context);

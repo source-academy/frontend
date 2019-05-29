@@ -20,6 +20,7 @@ import {
   EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
   EVAL_TESTCASE,
+  EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
@@ -301,7 +302,15 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          isRunning: true
+          isRunning: true,
+          editorTestcases: state[location].editorTestcases.map((testcase, i) => {
+            if (i === action.payload.testcaseId) {
+              testcase.actual = undefined;
+              return testcase;
+            } else {
+              return testcase;
+            }
+          }),
         }
       };
     case EVAL_INTERPRETER_SUCCESS:
@@ -357,6 +366,21 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             }
           }),
           isRunning: false
+        }
+      };
+    case EVAL_TESTCASE_FAILURE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorTestcases: state[location].editorTestcases.map((testcase, i) => {
+            if (i === index) {
+              testcase.actual = { value: action.payload.value };
+              return testcase;
+            } else {
+              return testcase;
+            }
+          })
         }
       };
     case EVAL_INTERPRETER_ERROR:

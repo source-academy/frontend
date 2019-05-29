@@ -372,6 +372,111 @@ $code-color-error: #ff4444;
       color: rgb(128, 145, 160);
     }
   }
+
+  .AutograderCard {
+    @keyframes correct {
+      from {
+        background: rgba(125, 255, 125, 0.5);
+      }
+
+      to {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+    
+    @keyframes wrong {
+      from {
+        background: rgba(255, 55, 55, 0.5);
+      }
+
+      to {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    &.wrong {
+      > .pt-card {
+        background: rgba(255, 55, 55, 0.2);
+        animation-name: wrong;
+        animation-duration: 4s;
+      }
+    }
+
+    &.correct {
+      > .pt-card {
+        background: rgba(125, 255, 125, 0.2);
+        animation-name: correct;
+        animation-duration: 4s;
+      }
+    }
+
+    .pt-card {
+      margin: 0 0 0 0;
+    }
+
+    .row {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      > pre {
+        flex: 1 1 auto;
+        margin-left: 0.4rem;
+      }
+    }
+
+    .col {
+      width: 50%;
+    }
+
+    .autograder-expected {
+      padding-right: 0.2rem;
+    }
+    .autograder-actual {
+      padding-left: 0.2rem;
+    }
+  }
+
+  .ResultCard {
+    &.wrong {
+      > .pt-card {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    &.correct {
+      > .pt-card {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    .pt-card {
+      margin: 0 0 0 0;
+    }
+
+    .row {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .col {
+      width: 50%;
+    }
+
+    .autograder-expected {
+      padding-right: 0.2rem;
+    }
+    .autograder-actual {
+      padding-left: 0.2rem;
+    }
+  }
 }
 
 .Popover-share {
