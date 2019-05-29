@@ -60,7 +60,7 @@ class Autograder extends React.Component<AutograderProps, State> {
       });
 
     return (
-      <div>
+      <div className="Autograder">
         {collapseButton('Testcases', this.state.showTestcases, this.toggleTestcases)}
         <Collapse isOpen={this.state.showTestcases}>{testcases}</Collapse>
         {collapseButton('Autograder Results', this.state.showResults, this.toggleResults)}
