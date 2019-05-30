@@ -39,9 +39,8 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
       return <div className="status">{result}</div>;
     };
 
-    /* TODO: IMPROVE CSS */
-    const showError = (error: AutogradingError) => (
-      <div className="autograder-error">
+    const showError = (error: AutogradingError, index: number) => (
+      <div key={index} className="autograder-error">
         <div className="row">
           {' '}
           {'Line: '} <pre className="code">{error.errorLine}</pre>

@@ -31,6 +31,7 @@ class Autograder extends React.Component<AutograderProps, State> {
       this.props.testcases != null ? (
         this.props.testcases.map((testcase, index) => (
           <AutograderCard
+            key={index}
             index={index}
             testcase={testcase}
             handleTestcaseEval={this.props.handleTestcaseEval}
@@ -43,7 +44,7 @@ class Autograder extends React.Component<AutograderProps, State> {
     const results =
       this.props.autogradingResults !== undefined ? (
         this.props.autogradingResults.map((result, index) => (
-          <ResultCard index={index} result={result} />
+          <ResultCard key={index} index={index} result={result} />
         ))
       ) : (
         <div>There are no results to show.</div>
