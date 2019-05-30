@@ -467,7 +467,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
       return {
         question: {
           answer: question.answer,
-          autogradingResults: grade.autogradingResults,
+          autogradingResults: question.autogradingResults,
           choices: question.choices,
           content: question.content,
           comment: null,
