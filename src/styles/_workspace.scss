@@ -423,6 +423,12 @@ $code-color-error: #ff4444;
       }
     }
 
+    &:not(:first-child) {
+      border-top-style: solid;
+      border-top-width: 2px;
+      border-color: #1a2530;
+    }
+
     .pt-card {
       margin: 0 0 0 0;
     }
@@ -454,6 +460,12 @@ $code-color-error: #ff4444;
   }
 
   .ResultCard {
+    &:not(:first-child) {
+      border-top-style: solid;
+      border-top-width: 2px;
+      border-color: #1a2530;
+    }
+
     &.wrong {
       > .pt-card {
         background: rgba(255, 55, 55, 0.2);
@@ -477,6 +489,11 @@ $code-color-error: #ff4444;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+
+      > pre {
+        flex: 1 1 auto;
+        margin-left: 0.4rem;
+      }
     }
 
     .col {
@@ -488,6 +505,22 @@ $code-color-error: #ff4444;
     }
     .autograder-actual {
       padding-left: 0.2rem;
+    }
+
+    .autograder-error {
+      width: 100%;
+
+      &:not(:first-child) {
+        border-top-style: solid;
+        border-top-width: 2px;
+        border-color: #1a2530;
+      }
+    }
+
+    .error-explanation {
+      pre {
+        color: $code-color-error;
+      }
     }
   }
 }

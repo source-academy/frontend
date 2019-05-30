@@ -42,9 +42,14 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
     /* TODO: IMPROVE CSS */
     const showError = (error: AutogradingError) => (
       <div className="autograder-error">
-        {'Error on line '} {error.errorLine}
-        {'Line: '} {error.line}
-        {'Error: '} {error.errorExplanation}
+        <div className="row">
+          {' '}
+          {'Line: '} <pre className="code">{error.errorLine}</pre>
+        </div>
+        <div className="row error-explanation">
+          {'Error: '}
+          <pre className="code">{'Line ' + error.line + ': ' + error.errorExplanation}</pre>
+        </div>
       </div>
     );
 

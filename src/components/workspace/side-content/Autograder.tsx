@@ -30,13 +30,11 @@ class Autograder extends React.Component<AutograderProps, State> {
     const testcases =
       this.props.testcases != null ? (
         this.props.testcases.map((testcase, index) => (
-          <div key={index}>
-            <AutograderCard
-              index={index}
-              testcase={testcase}
-              handleTestcaseEval={this.props.handleTestcaseEval}
-            />
-          </div>
+          <AutograderCard
+            index={index}
+            testcase={testcase}
+            handleTestcaseEval={this.props.handleTestcaseEval}
+          />
         ))
       ) : (
         <div>There are no testcases provided for this mission.</div>
@@ -45,12 +43,10 @@ class Autograder extends React.Component<AutograderProps, State> {
     const results =
       this.props.autogradingResults !== undefined ? (
         this.props.autogradingResults.map((result, index) => (
-          <div key={index}>
-            <ResultCard index={index} result={result} />
-          </div>
+          <ResultCard index={index} result={result} />
         ))
       ) : (
-        <div>'No results'</div>
+        <div>There are no results to show.</div>
       );
 
     const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
