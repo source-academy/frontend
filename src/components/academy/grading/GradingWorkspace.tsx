@@ -83,6 +83,23 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
    */
   public componentDidMount() {
     this.props.handleGradingFetch(this.props.submissionId);
+
+    if (this.props.grading) {
+      const questionId =
+        this.props.questionId >= this.props.grading.length
+          ? this.props.grading.length - 1
+          : this.props.questionId;
+
+      const question: IQuestion = this.props.grading[questionId].question;
+      const answer: string =
+        question.type === QuestionTypes.programming
+          ? question.answer !== null
+            ? ((question as IAnsweredQuestion).answer as string)
+            : (question as IAnsweredQuestion).solutionTemplate!
+          : '';
+
+      this.props.handleEditorValueChange(answer);
+    }
   }
 
   /**
@@ -111,12 +128,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         : this.props.questionId;
     /* Get the question to be graded */
     const question = this.props.grading[questionId].question as IQuestion;
-    const editorValue =
-      question.type === QuestionTypes.programming
-        ? question.answer !== null
-          ? ((question as IAnsweredQuestion).answer as string)
-          : (question as IAnsweredQuestion).solutionTemplate
-        : null;
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
@@ -128,7 +139,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
                   ? 0
                   : this.props.editorPrepend.split('\n').length,
               editorSessionId: '',
-              editorValue: editorValue!,
+              editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               breakpoints: this.props.breakpoints,
@@ -192,15 +203,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           ? question.answer !== null
             ? ((question as IAnsweredQuestion).answer as string)
             : (question as IAnsweredQuestion).solutionTemplate
-          : null;
+          : '';
       const editorPrepend =
         question.type === QuestionTypes.programming
-          ? (question as IAnsweredQuestion).prepend !== null
+          ? (question as IAnsweredQuestion).prepend
             ? (question as IAnsweredQuestion).prepend
             : ''
           : '';
-      // tslint:disable:no-console
-      console.log(editorPrepend);
       const editorPostpend =
         question.type === QuestionTypes.programming
           ? (question as IAnsweredQuestion).postpend !== null

@@ -212,7 +212,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
+  editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : '',
   editorPostpend: '',
   editorTestcases: [],
   editorHeight: 150,
