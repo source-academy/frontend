@@ -183,8 +183,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       this.props.storedQuestionId !== questionId
     ) {
       const question = this.props.grading[questionId].question as IQuestion;
-      // tslint:disable:no-console
-      console.log(question);
       const autogradingResults =
         question.type === QuestionTypes.programming
           ? (question as IAnsweredQuestion).autogradingResults
