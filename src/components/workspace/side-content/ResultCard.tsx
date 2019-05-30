@@ -1,8 +1,6 @@
 import { Card, Elevation } from '@blueprintjs/core';
-import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
 import { AutogradingError, AutogradingResult } from '../../assessment/assessmentShape';
-import CanvasOutput from '../CanvasOutput';
 
 type ResultCardProps = {
   index: number;
@@ -11,16 +9,6 @@ type ResultCardProps = {
 
 class ResultCard extends React.Component<ResultCardProps, {}> {
   public render() {
-    const renderResult = (value: any) => {
-      /** A class which is the output of the show() function */
-      const ShapeDrawn = (window as any).ShapeDrawn;
-      if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-        return <CanvasOutput />;
-      } else {
-        return stringify(value);
-      }
-    };
-
     const showResult = (result: string) => {
       switch (result) {
         case 'pass':
@@ -34,7 +22,7 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
               </div>
               <div className="col autograder-actual">
                 Actual Answer:
-                <pre className="code">{renderResult(this.props.result.actual!)}</pre>
+                <pre className="code">{this.props.result.actual!}</pre>
               </div>
             </div>
           );
