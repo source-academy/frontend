@@ -291,12 +291,8 @@ $code-color-error: #ff4444;
     display: flex;
     flex: 1 1;
     flex-direction: column;
-
-    .repl-output-parent {
-      flex: 1 1;
-      overflow-y: auto;
-      overflow-x: visible;
-    }
+    overflow-x: visible;
+    overflow-y: visible;
 
     .pt-card {
       background-color: $cadet-color-2;
@@ -378,6 +374,10 @@ $code-color-error: #ff4444;
       width: 100%;
       background: rgba(0, 0, 0, 0.2);
     }
+
+    pre {
+      color: $code-color-code;
+    }
   }
 
   .AutograderCard {
@@ -406,6 +406,12 @@ $code-color-error: #ff4444;
         background: rgba(255, 55, 55, 0.2);
         animation-name: wrong;
         animation-duration: 4s;
+      }
+
+      .autograder-actual {
+        pre {
+          color: $code-color-error;
+        }
       }
     }
 
