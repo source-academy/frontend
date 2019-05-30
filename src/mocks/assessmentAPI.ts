@@ -197,7 +197,7 @@ const mockToneMatrixLibrary: Library = {
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
-    answer: 'display("answer1");',
+    answer: null,
     content: `
 This question has an id of \`0\`.
 
@@ -208,10 +208,33 @@ What's your favourite dinner food?
     comment: null,
     id: 0,
     library: mockSoundLibrary,
-    prepend: '',
-    postpend: '',
-    testcases: [],
-    solutionTemplate: '0th question mock solution template',
+    prepend: `// This is a mock Prepend!
+function fibonacci(n) {
+  if (n <= 2) {
+    return 1;
+  } else {
+    return fibonacci(n-1) + fibonacci(n-2);
+  }
+}`,
+    postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
+    testcases: [
+      {
+        program: `fibonacci(3);`,
+        score: 1,
+        answer: `2`
+      },
+      {
+        program: `fibonacci(4);`,
+        score: 1,
+        answer: `3`
+      },
+      {
+        program: `fibonacci(5);`,
+        score: 1,
+        answer: `5`
+      }
+    ],
+    solutionTemplate: '//0th question mock solution template\n\n// Write Something Here!',
     type: 'programming',
     grader: {
       name: 'avenger',
@@ -224,7 +247,8 @@ What's your favourite dinner food?
     maxXp: 2
   },
   {
-    answer: null,
+    answer:
+      "display('I am a saved answer!!!');\ndisplay('You can click the reset button to get the template!');",
     comment: '`Great Job` **young padawan**',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
@@ -232,7 +256,7 @@ What's your favourite dinner food?
     prepend: '',
     postpend: '',
     testcases: [],
-    solutionTemplate: '1st question mock solution template',
+    solutionTemplate: '// 1st question mock solution template',
     type: 'programming',
     grader: {
       name: 'avenger',
@@ -304,7 +328,7 @@ What's your favourite dinner food?
         hint: null
       }
     ],
-    id: 2,
+    id: 3,
     library: mockCurveLibrary,
     type: 'mcq',
     solution: null,
@@ -322,7 +346,7 @@ What's your favourite dinner food?
     answer: null,
     comment: 'Wow you have come far! `Steady`',
     content: 'You have reached the last question! Have some fun with the tone matrix...',
-    id: 1,
+    id: 4,
     library: mockToneMatrixLibrary,
     prepend: '',
     postpend: '',
@@ -338,6 +362,78 @@ What's your favourite dinner food?
     grade: 0,
     maxGrade: 2,
     maxXp: 2
+  }
+];
+
+export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+  {
+    answer: null,
+    comment: 'Wow you have come far! `Steady`',
+    content: 'You can see autograding results!!!',
+    id: 0,
+    library: mockToneMatrixLibrary,
+    prepend: `// This is a mock Prepend!
+function fibonacci(n) {
+  if (n <= 2) {
+    return 1;
+  } else {
+    return fibonacci(n-1) + fibonacci(n-2);
+  }
+}`,
+    postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
+    testcases: [
+      {
+        program: `fibonacci(3);`,
+        score: 1,
+        answer: `2`
+      },
+      {
+        program: `fibonacci(4);`,
+        score: 1,
+        answer: `3`
+      },
+      {
+        program: `fibonacci(5);`,
+        score: 1,
+        answer: `5`
+      }
+    ],
+    solutionTemplate: 'Make Fibonacci!!!',
+    type: 'programming',
+    grader: {
+      name: 'avenger',
+      id: 1
+    },
+    gradedAt: '2038-06-18T05:24:26.026Z',
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2,
+    autogradingResults: [
+      {
+        resultType: 'pass'
+      },
+      {
+        resultType: 'fail',
+        expected: '8',
+        actual: '5'
+      },
+      {
+        resultType: 'error',
+        errors: [
+          {
+            errorType: 'timeout'
+          },
+          {
+            errorType: 'syntax',
+            line: 1,
+            location: 'student',
+            errorLine: 'function fibonacci(n) {',
+            errorExplanation: 'Just kidding!'
+          }
+        ]
+      }
+    ]
   }
 ];
 
@@ -395,7 +491,7 @@ sapien
     longSummary:
       'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
-    questions: mockAssessmentQuestions,
+    questions: mockClosedAssessmentQuestions,
     title: 'A Closed Mission'
   }
 ];
