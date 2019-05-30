@@ -378,6 +378,11 @@ $code-color-error: #ff4444;
     pre {
       color: $code-color-code;
     }
+
+    .noResults {
+      padding-top: 0.4rem;
+      padding-bottom: 0.4rem;
+    }
   }
 
   .AutograderCard {
