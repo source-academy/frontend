@@ -39,18 +39,32 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
       return <div className="status">{result}</div>;
     };
 
-    const showError = (error: AutogradingError, index: number) => (
-      <div key={index} className="autograder-error">
-        <div className="row">
-          {' '}
-          {'Line: '} <pre className="code">{error.errorLine}</pre>
-        </div>
-        <div className="row error-explanation">
-          {'Error: '}
-          <pre className="code">{'Line ' + error.line + ': ' + error.errorExplanation}</pre>
-        </div>
-      </div>
-    );
+    const showError = (error: AutogradingError, index: number) => {
+      switch (error.errorType) {
+        case 'timeout':
+          return (
+            <div key={index} className="autograder-error">
+              <div className="row error-explanation">
+                {'Error: '}
+                <pre className="code">{'Timeout... Your code ran for too long'}</pre>
+              </div>
+            </div>
+          );
+        default:
+          return (
+            <div key={index} className="autograder-error">
+              <div className="row">
+                {' '}
+                {'Line: '} <pre className="code">{error.errorLine}</pre>
+              </div>
+              <div className="row error-explanation">
+                {'Error: '}
+                <pre className="code">{'Line ' + error.line + ': ' + error.errorExplanation}</pre>
+              </div>
+            </div>
+          );
+      }
+    };
 
     // tslint:disable-next-line
     const isCorrect = this.props.result.resultType == 'pass' ? ' correct' : ' wrong';
