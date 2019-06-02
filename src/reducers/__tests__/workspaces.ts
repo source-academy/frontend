@@ -94,6 +94,10 @@ function generateDefaultWorkspace(payload: any = {}): IWorkspaceManagerState {
     playground: {
       ...defaultWorkspaceManager.playground,
       ...payload
+    },
+    sourceCastPlayback: {
+      ...defaultWorkspaceManager.sourceCastPlayback,
+      ...payload
     }
   };
 }

@@ -53,10 +53,15 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
 }
 
+export interface ISourceCastPlayback extends IWorkspaceState {
+  readonly isPlaying: boolean;
+}
+
 export interface IWorkspaceManagerState {
   readonly assessment: IAssessmentWorkspace;
   readonly grading: IGradingWorkspace;
   readonly playground: IPlaygroundWorkspace;
+  readonly sourceCastPlayback: ISourceCastPlayback;
 }
 
 export interface IWorkspaceState {
@@ -218,7 +223,10 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], workspaceLocation),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue: workspaceLocation === WorkspaceLocations.playground ? defaultEditorValue : '',
+  editorValue:
+    workspaceLocation === WorkspaceLocations.playground || WorkspaceLocations.sourceCastPlayback
+      ? defaultEditorValue
+      : '',
   editorPostpend: '',
   editorTestcases: [],
   editorHeight: 150,
@@ -261,6 +269,10 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
     playgroundExternal: ExternalLibraryNames.NONE
+  },
+  sourceCastPlayback: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourceCastPlayback),
+    isPlaying: false
   }
 };
 

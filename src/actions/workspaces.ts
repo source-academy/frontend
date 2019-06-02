@@ -17,7 +17,8 @@ import * as actionTypes from './actionTypes';
 export enum WorkspaceLocations {
   assessment = 'assessment',
   playground = 'playground',
-  grading = 'grading'
+  grading = 'grading',
+  sourceCastPlayback = 'sourceCastPlayback'
 }
 
 export type WorkspaceLocation = keyof typeof WorkspaceLocations;
@@ -93,6 +94,17 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
   type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
   payload: {
     externalLibraryName,
+    workspaceLocation
+  }
+});
+
+export const setSourcecastPlaybackIsPlaying: ActionCreator<actionTypes.IAction> = (
+  isPlaying: boolean,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.SET_SOURCECAST_PLAYBACK_IS_PLAYING,
+  payload: {
+    isPlaying,
     workspaceLocation
   }
 });
