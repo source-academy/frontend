@@ -71,7 +71,8 @@ class SourceCastPlayback extends React.Component<ISourceCastPlaybackProps> {
   public render() {
     const workspaceProps: WorkspaceProps = {
       sourcecastPlaybackControlbarProps: {
-        handleSetSourcecastPlaybackIsPlaying: this.props.handleSetSourcecastPlaybackIsPlaying
+        handleSetSourcecastPlaybackIsPlaying: this.props.handleSetSourcecastPlaybackIsPlaying,
+        isPlaying: this.props.isPlaying
       },
       controlBarProps: {
         editorValue: this.props.editorValue,

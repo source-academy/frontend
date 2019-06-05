@@ -4,3 +4,16 @@
   flex-direction: column;
   flex: 1 1 100%;
 }
+
+.Slider {
+  width: 90%;
+  justify-self: center;
+  margin:0 auto;
+}
+
+.PlayerControl {
+  display: flex;
+  width: 95%;
+  justify-content: center;
+  margin:0 auto;
+}

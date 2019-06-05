@@ -39,6 +39,12 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Contributors
       </div>
     </NavLink>
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/sourceCast\\" aria-current=\\"page\\">
+      <Blueprint2.Icon icon=\\"code\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        SourceCast
+      </div>
+    </NavLink>
     <div className=\\"visible-xs\\">
       <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
     </div>
@@ -87,6 +93,12 @@ exports[`NavigationBar renders correctly with username 1`] = `
       <Blueprint3.Icon icon=\\"heart\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Contributors
+      </div>
+    </NavLink>
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/sourceCast\\" aria-current=\\"page\\">
+      <Blueprint2.Icon icon=\\"code\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        SourceCast
       </div>
     </NavLink>
     <div className=\\"visible-xs\\">

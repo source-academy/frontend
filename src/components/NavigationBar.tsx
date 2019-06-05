@@ -90,6 +90,15 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <div className="navbar-button-text hidden-xs">Contributors</div>
       </NavLink>
 
+      <NavLink
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+        to="/sourceCast"
+      >
+        <Icon icon={IconNames.CODE} />
+        <div className="navbar-button-text hidden-xs">SourceCast</div>
+      </NavLink>
+
       <div className="visible-xs">
         <NavbarDivider className="thin-divider" />
       </div>
