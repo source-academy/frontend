@@ -47,7 +47,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
       { value: 'abcdefghijklmnopq', time: 10400 },
       { value: 'abcdefghijklmnopqr', time: 10600 },
       { value: 'abcdefghijklmnopqrs', time: 10900 },
-      { value: 'abcdefghijklmnopqrst', time: 11600 },
+      { value: 'abcdefghijklmnopqrst', time: 11600 }
     ];
   }
 
@@ -114,9 +114,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
   }
 
   private handleAudioLoaded = () => {
-    this.setState({
-      duration: this.audio.current!.duration
-    });
+    this.props.handleSetSourcecastPlaybackDuration(this.audio.current!.duration);
   };
 
   private handleSetPlayerMode = () => {
@@ -168,13 +166,13 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     const { currentTime }: { currentTime: number } = e.target as HTMLMediaElement;
     this.setState({
       currentPlayerTime: currentTime,
-      currentPlayerProgress: currentTime / this.state.duration
+      currentPlayerProgress: currentTime / this.props.duration
     });
   };
 
   private handlePlayerProgressBarChange = (value: number) => {
     if (this.audio.current) {
-      const currentTime = this.state.duration * value;
+      const currentTime = this.props.duration * value;
       this.audio.current.currentTime = currentTime;
       this.setState({
         currentPlayerTime: currentTime,
@@ -184,7 +182,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
   };
 
   private renderLabel = (value: number) => {
-    const totalTime = this.state.duration * value;
+    const totalTime = this.props.duration * value;
     const min = Math.floor(totalTime / 60);
     const sec = Math.floor(totalTime - min * 60);
     const minString = min < 10 ? '0' + min : min;
@@ -197,6 +195,8 @@ export interface ISourcecastPlaybackControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) => void;
+  handleSetSourcecastPlaybackDuration: (duration: number) => void;
+  duration: number;
   isPlaying: boolean;
 }
 

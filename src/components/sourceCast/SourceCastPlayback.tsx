@@ -29,6 +29,7 @@ export interface IStateProps {
   isPlaying: boolean;
   enableDebugging: boolean;
   output: InterpreterOutput[];
+  playbackDuration: number;
   queryString?: string;
   replValue: string;
   sideContentHeight?: number;
@@ -56,6 +57,7 @@ export interface IDispatchProps {
   handleReplValueChange: (newValue: string) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
+  handleSetSourcecastPlaybackDuration: (duration: number) => void;
   handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -75,7 +77,9 @@ class SourceCastPlayback extends React.Component<ISourceCastPlaybackProps> {
       sourcecastPlaybackControlbarProps: {
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
+        handleSetSourcecastPlaybackDuration: this.props.handleSetSourcecastPlaybackDuration,
         handleSetSourcecastPlaybackIsPlaying: this.props.handleSetSourcecastPlaybackIsPlaying,
+        duration: this.props.playbackDuration,
         isPlaying: this.props.isPlaying
       },
       controlBarProps: {

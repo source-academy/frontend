@@ -32,6 +32,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
+  SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_IS_PLAYING,
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
@@ -505,6 +506,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           editorSessionId: action.payload.editorSessionId
+        }
+      };
+    case SET_SOURCECAST_PLAYBACK_DURATION:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          playbackDuration: action.payload.duration
         }
       };
     case SET_SOURCECAST_PLAYBACK_IS_PLAYING:

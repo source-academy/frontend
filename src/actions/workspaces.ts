@@ -272,6 +272,17 @@ export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (
   }
 });
 
+export const setSourcecastPlaybackDuration: ActionCreator<actionTypes.IAction> = (
+  duration: number,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
+  payload: {
+    duration,
+    workspaceLocation
+  }
+});
+
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
   type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
   payload: {

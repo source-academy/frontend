@@ -22,6 +22,7 @@ import {
   setEditorBreakpoint,
   setEditorReadonly,
   setEditorSessionId,
+  setSourcecastPlaybackDuration,
   setSourcecastPlaybackIsPlaying,
   setWebsocketStatus,
   toggleEditorAutorun,
@@ -48,6 +49,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   isPlaying: state.workspaces.sourceCastPlayback.isPlaying,
   enableDebugging: state.workspaces.sourceCastPlayback.enableDebugging,
   output: state.workspaces.sourceCastPlayback.output,
+  playbackDuration: state.workspaces.sourceCastPlayback.playbackDuration,
   queryString: state.playground.queryString,
   replValue: state.workspaces.sourceCastPlayback.replValue,
   sideContentHeight: state.workspaces.sourceCastPlayback.sideContentHeight,
@@ -83,6 +85,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setEditorReadonly(location, editorReadonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
+      handleSetSourcecastPlaybackDuration: (duration: number) =>
+        setSourcecastPlaybackDuration(duration, location),
       handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) =>
         setSourcecastPlaybackIsPlaying(isPlaying, location),
       handleSetWebsocketStatus: (websocketStatus: number) =>
