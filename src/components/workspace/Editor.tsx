@@ -15,9 +15,11 @@ import { checkSessionIdExists } from './collabEditing/helper';
  *           for the react-ace editor's `onChange`
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
+ * @property editorReadonly - Used for sourcecastPlayback only
  */
 export interface IEditorProps {
   isEditorAutorun: boolean;
+  editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
   breakpoints: string[];
@@ -134,6 +136,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             mode="javascript"
             onChange={this.onChangeMethod}
             onValidate={this.onValidateMethod}
+            readOnly={this.props.editorReadonly ? this.props.editorReadonly : false}
             theme="cobalt"
             value={this.props.editorValue}
             width="100%"

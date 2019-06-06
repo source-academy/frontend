@@ -16,6 +16,7 @@ export interface ISourceCastPlaybackProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
+  editorReadonly: boolean;
   editorSessionId: string;
   editorValue: string;
   editorHeight?: number;
@@ -53,6 +54,7 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
@@ -72,6 +74,7 @@ class SourceCastPlayback extends React.Component<ISourceCastPlaybackProps> {
     const workspaceProps: WorkspaceProps = {
       sourcecastPlaybackControlbarProps: {
         handleEditorValueChange: this.props.handleEditorValueChange,
+        handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleSetSourcecastPlaybackIsPlaying: this.props.handleSetSourcecastPlaybackIsPlaying,
         isPlaying: this.props.isPlaying
       },
@@ -110,6 +113,7 @@ class SourceCastPlayback extends React.Component<ISourceCastPlaybackProps> {
       editorProps: {
         editorPrepend: '',
         editorPrependLines: 0,
+        editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,

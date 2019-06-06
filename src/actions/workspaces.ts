@@ -261,6 +261,17 @@ export const updateWorkspace = (
   }
 });
 
+export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  editorReadonly: boolean
+) => ({
+  type: actionTypes.SET_EDITOR_READONLY,
+  payload: {
+    workspaceLocation,
+    editorReadonly
+  }
+});
+
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
   type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
   payload: {

@@ -30,6 +30,7 @@ import {
   LOG_OUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
   SET_SOURCECAST_PLAYBACK_IS_PLAYING,
   SET_WEBSOCKET_STATUS,
@@ -512,6 +513,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           isPlaying: action.payload.isPlaying
+        }
+      };
+    case SET_EDITOR_READONLY:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorReadonly: action.payload.editorReadonly
         }
       };
     case SET_WEBSOCKET_STATUS:

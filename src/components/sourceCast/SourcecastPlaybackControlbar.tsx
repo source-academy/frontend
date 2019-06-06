@@ -5,11 +5,17 @@ import * as React from 'react';
 
 import { controlButton } from '../commons';
 
+interface IRecordingData {
+  value: string;
+  time: number;
+}
+
 class SourcecastPlaybackControlbar extends React.PureComponent<
   ISourcecastPlaybackControlbarProps,
   ISourcecastPlaybackControlbarState
 > {
   private audio: React.RefObject<HTMLAudioElement>;
+  private mockData: IRecordingData[];
 
   constructor(props: ISourcecastPlaybackControlbarProps) {
     super(props);
@@ -17,8 +23,32 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     this.state = {
       currentPlayerTime: 0,
       currentPlayerProgress: 0,
+      duration: 0,
       isPlayerMode: true
     };
+    this.mockData = [
+      { value: '', time: 0 },
+      { value: 'a', time: 1000 },
+      { value: 'ab', time: 2000 },
+      { value: 'abc', time: 3000 },
+      { value: 'abcd', time: 4000 },
+      { value: 'abcde', time: 4500 },
+      { value: 'abcdef', time: 4800 },
+      { value: 'abcdefg', time: 5100 },
+      { value: 'abcdefgh', time: 5400 },
+      { value: 'abcdefghi', time: 6400 },
+      { value: 'abcdefghij', time: 6900 },
+      { value: 'abcdefghijk', time: 7500 },
+      { value: 'abcdefghijkl', time: 7900 },
+      { value: 'abcdefghijklm', time: 8100 },
+      { value: 'abcdefghijklmn', time: 8500 },
+      { value: 'abcdefghijklmno', time: 9100 },
+      { value: 'abcdefghijklmnop', time: 9900 },
+      { value: 'abcdefghijklmnopq', time: 10400 },
+      { value: 'abcdefghijklmnopqr', time: 10600 },
+      { value: 'abcdefghijklmnopqrs', time: 10900 },
+      { value: 'abcdefghijklmnopqrst', time: 11600 },
+    ];
   }
 
   public render() {
@@ -37,9 +67,11 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     return (
       <div>
         <audio
-          src="http://www.amclassical.com/mp3/amclassical_beethoven_fur_elise.mp3"
+          src="https://www.salamisound.com/stream_file/49003902987136547878968146"
           ref={this.audio}
+          onLoadedMetadata={this.handleAudioLoaded}
           onTimeUpdate={this.updatePlayerTime}
+          preload="metadata"
           // controls={true}
         />
         <div className="PlayerControl">
@@ -81,6 +113,12 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     );
   }
 
+  private handleAudioLoaded = () => {
+    this.setState({
+      duration: this.audio.current!.duration
+    });
+  };
+
   private handleSetPlayerMode = () => {
     this.setState({
       isPlayerMode: true
@@ -99,12 +137,17 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     const audio = this.audio.current;
     audio!.play();
     handleSetSourcecastPlaybackIsPlaying(true);
+    this.props.handleSetEditorReadonly(true);
+    this.mockData.forEach(data =>
+      setTimeout(() => this.props.handleEditorValueChange(data.value), data.time)
+    );
   };
 
   private handlePlayerPausing = () => {
     const { handleSetSourcecastPlaybackIsPlaying } = this.props;
     const audio = this.audio.current;
     audio!.pause();
+    this.props.handleSetEditorReadonly(false);
     handleSetSourcecastPlaybackIsPlaying(false);
   };
 
@@ -114,6 +157,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     audio!.pause();
     audio!.currentTime = 0;
     handleSetSourcecastPlaybackIsPlaying(false);
+    this.props.handleSetEditorReadonly(false);
     this.setState({
       currentPlayerTime: 0,
       currentPlayerProgress: 0
@@ -124,13 +168,13 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     const { currentTime }: { currentTime: number } = e.target as HTMLMediaElement;
     this.setState({
       currentPlayerTime: currentTime,
-      currentPlayerProgress: currentTime / 211
+      currentPlayerProgress: currentTime / this.state.duration
     });
   };
 
   private handlePlayerProgressBarChange = (value: number) => {
     if (this.audio.current) {
-      const currentTime = 211 * value;
+      const currentTime = this.state.duration * value;
       this.audio.current.currentTime = currentTime;
       this.setState({
         currentPlayerTime: currentTime,
@@ -140,7 +184,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
   };
 
   private renderLabel = (value: number) => {
-    const totalTime = 211 * value;
+    const totalTime = this.state.duration * value;
     const min = Math.floor(totalTime / 60);
     const sec = Math.floor(totalTime - min * 60);
     const minString = min < 10 ? '0' + min : min;
@@ -151,6 +195,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
 
 export interface ISourcecastPlaybackControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
+  handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) => void;
   isPlaying: boolean;
 }
@@ -158,6 +203,7 @@ export interface ISourcecastPlaybackControlbarProps {
 export interface ISourcecastPlaybackControlbarState {
   currentPlayerTime: number;
   currentPlayerProgress: number;
+  duration: number;
   isPlayerMode: boolean;
 }
 

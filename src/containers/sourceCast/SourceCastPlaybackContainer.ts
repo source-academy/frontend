@@ -20,6 +20,7 @@ import {
   invalidEditorSessionId,
   playgroundExternalSelect,
   setEditorBreakpoint,
+  setEditorReadonly,
   setEditorSessionId,
   setSourcecastPlaybackIsPlaying,
   setWebsocketStatus,
@@ -35,6 +36,7 @@ import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.sourceCastPlayback.sideContentActiveTab,
+  editorReadonly: state.workspaces.sourceCastPlayback.editorReadonly,
   editorSessionId: state.workspaces.sourceCastPlayback.editorSessionId,
   editorWidth: state.workspaces.sourceCastPlayback.editorWidth,
   editorValue: state.workspaces.sourceCastPlayback.editorValue!,
@@ -77,6 +79,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleSetEditorReadonly: (editorReadonly: boolean) =>
+        setEditorReadonly(location, editorReadonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
       handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) =>

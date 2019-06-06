@@ -68,6 +68,7 @@ export interface IWorkspaceState {
   readonly autogradingResults: AutogradingResult[];
   readonly context: Context;
   readonly editorPrepend: string;
+  readonly editorReadonly: boolean;
   readonly editorSessionId: string;
   readonly editorValue: string | null;
   readonly editorPostpend: string;
@@ -228,6 +229,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
       ? defaultEditorValue
       : '',
   editorPostpend: '',
+  editorReadonly: false,
   editorTestcases: [],
   editorHeight: 150,
   editorWidth: '50%',
