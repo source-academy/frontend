@@ -16,6 +16,15 @@ $code-color-error: #ff4444;
     margin-left: 0px;
   }
 
+  .Switch {
+    position: relative;
+    width: 3rem;
+    height: 1rem;
+    left: 1rem;
+    right: 1rem;
+    top: 0.5rem;
+  }
+
   .ControlBar {
     display: flex;
     flex-direction: row;
@@ -54,6 +63,16 @@ $code-color-error: #ff4444;
     padding-bottom: 0.6rem;
   }
 
+  .editor-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .editor-content-divider {
+    flex: initial;
+  }
+
   .editor-divider {
     flex: initial;
   }
@@ -61,7 +80,7 @@ $code-color-error: #ff4444;
   .Editor {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
     margin: 0 0.6rem 0.6rem 0.6rem;
     padding-bottom: 0.6rem;
     padding-left: 0.6rem;
@@ -73,6 +92,32 @@ $code-color-error: #ff4444;
       #brace-editor {
         height: 100%;
       }
+    }
+
+    .editor-prepend-react-ace {
+      flex: 1;
+
+      #brace-editor {
+        height: 100%;
+      }
+    }
+
+    .ace_gutter-cell {
+      padding-left: 0px;
+    }
+
+    .ace_gutter-cell_hi {
+      background-color: blue;
+    }
+
+    .ace_line_hi {
+      background-color: blue;
+    }
+
+    .ace_breakpoint:before {
+      content: ' \25CF';
+      margin-left: -10px;
+      color: red;
     }
   }
 
@@ -114,6 +159,11 @@ $code-color-error: #ff4444;
     flex-direction: column;
   }
 
+  .resize-editor-content {
+    display: flex;
+    flex-direction: column;
+  }
+
   .side-content-header {
     align-items: center;
     display: flex;
@@ -123,6 +173,24 @@ $code-color-error: #ff4444;
     padding-bottom: 0.2rem;
     .side-content-header-button:focus {
       outline: 0;
+    }
+
+    .side-content-header-button-alert {
+      -webkit-animation: alert 1s infinite;
+      -moz-animation: alert 1s infinite;
+      -o-animation: alert 1s infinite;
+      animation: alert 1s infinite;
+    }
+
+    @-webkit-keyframes alert {
+      0%,
+      50% {
+        background-color: rgba(200, 100, 50, 0.5);
+      }
+      51%,
+      100% {
+        background-image: rgba(138, 155, 168, 0.3);
+      }
     }
   }
 
@@ -212,6 +280,11 @@ $code-color-error: #ff4444;
       margin: 0 0.5rem 0 0.5rem;
       padding: 0;
     }
+
+    .editor-content {
+      flex: 1 1 auto;
+      padding: 0;
+    }
   }
 
   hr {
@@ -247,10 +320,10 @@ $code-color-error: #ff4444;
         word-wrap: break-word;
         word-break: break-word;
         /**
-         * Use same fonts as ace-editor for
-         * output. Taken from react-ace
-         * sourcecode, font size modified.
-         */
+ * Use same fonts as ace-editor for
+ * output. Taken from react-ace
+ * sourcecode, font size modified.
+ */
         font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
           monospace;
       }

@@ -22,6 +22,7 @@ function loadAllLibs() {
     '/externalLibs/sound/sounds.js',
     '/externalLibs/sound/soundToneMatrix.js',
     '/externalLibs/sound/riffwave.js',
+    '/externalLibs/sound/microphone.js',
     // graphics
     '/externalLibs/graphics/gl-matrix.js',
     '/externalLibs/graphics/webGLhi_graph.js',
@@ -37,7 +38,12 @@ function loadAllLibs() {
     // streams
     '/externalLibs/streams/stream.js',
     '/externalLibs/pe_library.js',
-    '/externalLibs/assert_compiled.js'
+    '/externalLibs/assert_compiled.js',
+    // inspector
+    '/externalLibs/inspector/inspector.js',
+    // env visualizer
+    '/externalLibs/env_visualizer/ConcreteJS.js',
+    '/externalLibs/env_visualizer/visualizer.js'
   ]
 
   for (var i = 0; i < files.length; i++) {

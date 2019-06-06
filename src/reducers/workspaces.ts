@@ -4,18 +4,25 @@ import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_ACTIVE_TAB,
+  CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
+  DEBUG_RESET,
+  DEBUG_RESUME,
   END_CLEAR_CONTEXT,
+  END_DEBUG_PAUSE,
   END_INTERRUPT_EXECUTION,
   EVAL_EDITOR,
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
+  EVAL_TESTCASE,
+  EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
+  HIGHLIGHT_LINE,
   IAction,
   LOG_OUT,
   RESET_WORKSPACE,
@@ -54,6 +61,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
 ) => {
   const location: WorkspaceLocation =
     action.payload !== undefined ? action.payload.workspaceLocation : undefined;
+  const index: number = action.payload !== undefined ? action.payload.index : undefined;
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
 
@@ -145,6 +153,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           sideContentActiveTab: action.payload.activeTab
+        }
+      };
+    case CHANGE_EDITOR_HEIGHT:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorHeight: action.payload.height
         }
       };
     case CHANGE_EDITOR_WIDTH:
@@ -267,10 +283,19 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          isRunning: true
+          isRunning: true,
+          isDebugging: false
         }
       };
     case EVAL_REPL:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          isRunning: true
+        }
+      };
+    case EVAL_TESTCASE:
       return {
         ...state,
         [location]: {
@@ -298,6 +323,38 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           output: newOutput,
+          isRunning: false,
+          breakpoints: [],
+          highlightedLines: []
+        }
+      };
+    case EVAL_TESTCASE_SUCCESS:
+      lastOutput = state[location].output.slice(-1)[0];
+      if (lastOutput !== undefined && lastOutput.type === 'running') {
+        newOutput = state[location].output.slice(0, -1).concat({
+          ...action.payload,
+          workspaceLocation: undefined,
+          consoleLogs: lastOutput.consoleLogs
+        });
+      } else {
+        newOutput = state[location].output.concat({
+          ...action.payload,
+          workspaceLocation: undefined,
+          consoleLogs: []
+        });
+      }
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorTestcases: state[location].editorTestcases.map((testcase, i) => {
+            if (i === index) {
+              testcase.actual = newOutput[0];
+              return testcase;
+            } else {
+              return testcase;
+            }
+          }),
           isRunning: false
         }
       };
@@ -321,7 +378,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           output: newOutput,
-          isRunning: false
+          isRunning: false,
+          isDebugging: false
         }
       };
     /**
@@ -341,7 +399,38 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          isRunning: false
+          isRunning: false,
+          isDebugging: false
+        }
+      };
+
+    case END_DEBUG_PAUSE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          isRunning: false,
+          isDebugging: true
+        }
+      };
+
+    case DEBUG_RESUME:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          isRunning: true,
+          isDebugging: false
+        }
+      };
+
+    case DEBUG_RESET:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          isRunning: false,
+          isDebugging: false
         }
       };
     /**
@@ -406,6 +495,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           editorValue: action.payload.newEditorValue
+        }
+      };
+    case HIGHLIGHT_LINE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          highlightedLines: action.payload.highlightedLines
         }
       };
     case UPDATE_REPL_VALUE:

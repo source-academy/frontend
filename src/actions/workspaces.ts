@@ -51,6 +51,14 @@ export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
   payload: { newExternal }
 });
 
+export const changeEditorHeight: ActionCreator<actionTypes.IAction> = (
+  height: number,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.CHANGE_EDITOR_HEIGHT,
+  payload: { height, workspaceLocation }
+});
+
 export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
   widthChange: string,
   workspaceLocation: WorkspaceLocation
@@ -161,6 +169,11 @@ export const evalRepl = (workspaceLocation: WorkspaceLocation) => ({
   payload: { workspaceLocation }
 });
 
+export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: number) => ({
+  type: actionTypes.EVAL_TESTCASE,
+  payload: { workspaceLocation, testcaseId }
+});
+
 export const invalidEditorSessionId = () => ({
   type: actionTypes.INVALID_EDITOR_SESSION_ID
 });
@@ -171,6 +184,22 @@ export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.UPDATE_EDITOR_VALUE,
   payload: { newEditorValue, workspaceLocation }
+});
+
+export const setEditorBreakpoint: ActionCreator<actionTypes.IAction> = (
+  breakpoints: string[],
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.UPDATE_EDITOR_BREAKPOINTS,
+  payload: { breakpoints, workspaceLocation }
+});
+
+export const highlightEditorLine: ActionCreator<actionTypes.IAction> = (
+  highlightedLines: number[],
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.HIGHLIGHT_LINE,
+  payload: { highlightedLines, workspaceLocation }
 });
 
 export const updateReplValue: ActionCreator<actionTypes.IAction> = (

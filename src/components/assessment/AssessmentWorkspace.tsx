@@ -20,12 +20,14 @@ import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
+import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  ITestcase,
   Library,
   QuestionTypes
 } from './assessmentShape';
@@ -36,10 +38,18 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 export type StateProps = {
   activeTab: number;
   assessment?: IAssessment;
+  editorPrepend: string | null;
   editorValue: string | null;
+  editorPostpend: string | null;
+  editorTestcases: ITestcase[] | null;
+  editorHeight?: number;
   editorWidth: string;
+  breakpoints: string[];
+  highlightedLines: number[][];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -63,7 +73,9 @@ export type DispatchProps = {
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
+  handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -71,19 +83,23 @@ export type DispatchProps = {
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleTestcaseEval: (testcaseId: number) => void;
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
 };
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean; showResetOverlay: boolean }
+  { showOverlay: boolean; showResetTemplateOverlay: boolean }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
-      showResetOverlay: false
+      showResetTemplateOverlay: false
     };
     this.props.handleEditorValueChange('');
   }
@@ -146,12 +162,12 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     );
 
-    const resetOverlay = (
+    const resetTemplateOverlay = (
       <Dialog
         className="assessment-reset"
         icon={IconNames.ERROR}
         isCloseButtonShown={false}
-        isOpen={this.state.showResetOverlay}
+        isOpen={this.state.showResetTemplateOverlay}
         title="Confirmation: Reset editor?"
       >
         <div className={Classes.DIALOG_BODY}>
@@ -160,14 +176,19 @@ class AssessmentWorkspace extends React.Component<
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
-            {controlButton('Cancel', null, () => this.setState({ showResetOverlay: false }), {
-              minimal: false
-            })}
+            {controlButton(
+              'Cancel',
+              null,
+              () => this.setState({ showResetTemplateOverlay: false }),
+              {
+                minimal: false
+              }
+            )}
             {controlButton(
               'Confirm',
               null,
               () => {
-                this.setState({ showResetOverlay: false });
+                this.setState({ showResetTemplateOverlay: false });
                 this.props.handleEditorValueChange(
                   (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
                     .solutionTemplate
@@ -192,14 +213,24 @@ class AssessmentWorkspace extends React.Component<
         question.type === QuestionTypes.programming
           ? {
               editorSessionId: '',
+              editorPrepend: this.props.editorPrepend!,
+              editorPrependLines:
+                this.props.editorPrepend === null || this.props.editorPrepend.length === 0
+                  ? 0
+                  : this.props.editorPrepend.split('\n').length,
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+              breakpoints: this.props.breakpoints,
+              highlightedLines: this.props.highlightedLines,
+              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               isEditorAutorun: false
             }
           : undefined,
+      editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
+      handleEditorHeightChange: this.props.handleEditorHeightChange,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       hasUnsavedChanges: this.props.hasUnsavedChanges,
@@ -222,7 +253,7 @@ class AssessmentWorkspace extends React.Component<
     return (
       <div className="WorkspaceParent pt-dark">
         {overlay}
-        {resetOverlay}
+        {resetTemplateOverlay}
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -253,8 +284,34 @@ class AssessmentWorkspace extends React.Component<
             ? ((question as IProgrammingQuestion).answer as string)
             : (question as IProgrammingQuestion).solutionTemplate
           : '';
+      const editorPrepend =
+        question.type === QuestionTypes.programming
+          ? (question as IProgrammingQuestion).prepend !== null
+            ? (question as IProgrammingQuestion).prepend
+            : ''
+          : '';
+      const editorPostpend =
+        question.type === QuestionTypes.programming
+          ? (question as IProgrammingQuestion).postpend !== null
+            ? (question as IProgrammingQuestion).postpend
+            : ''
+          : '';
+      const editorTestcases =
+        question.type === QuestionTypes.programming
+          ? (question as IProgrammingQuestion).testcases !== null
+            ? (question as IProgrammingQuestion).testcases.map(testcase => {
+                return testcase;
+              })
+            : []
+          : [];
+      this.props.handleEditorUpdateBreakpoints([]);
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
-      this.props.handleResetWorkspace({ editorValue });
+      this.props.handleResetWorkspace({
+        editorPrepend,
+        editorValue,
+        editorPostpend,
+        editorTestcases
+      });
       this.props.handleClearContext(question.library);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (editorValue) {
@@ -278,6 +335,16 @@ class AssessmentWorkspace extends React.Component<
         label: `${props.assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />
+      },
+      {
+        label: `${props.assessment!.category} Autograder`,
+        icon: IconNames.AIRPLANE,
+        body: (
+          <Autograder
+            testcases={props.editorTestcases}
+            handleTestcaseEval={this.props.handleTestcaseEval}
+          />
+        )
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;
@@ -328,6 +395,9 @@ class AssessmentWorkspace extends React.Component<
       handleReplEval: this.props.handleReplEval,
       handleReplOutputClear: this.props.handleReplOutputClear,
       handleReplValueChange: this.props.handleReplValueChange,
+      handleDebuggerPause: this.props.handleDebuggerPause,
+      handleDebuggerResume: this.props.handleDebuggerResume,
+      handleDebuggerReset: this.props.handleDebuggerReset,
       hasChapterSelect: false,
       hasCollabEditing: false,
       hasEditorAutorunButton: false,
@@ -336,6 +406,8 @@ class AssessmentWorkspace extends React.Component<
         this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
       hasShareButton: false,
       isRunning: this.props.isRunning,
+      isDebugging: this.props.isDebugging,
+      enableDebugging: this.props.enableDebugging,
       onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
       onClickPrevious: () =>
         history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
@@ -345,8 +417,8 @@ class AssessmentWorkspace extends React.Component<
           this.props.assessment!.questions[questionId].id,
           this.props.editorValue!
         ),
-      onClickReset: () => {
-        this.setState({ showResetOverlay: true });
+      onClickResetTemplate: () => {
+        this.setState({ showResetTemplateOverlay: true });
       },
       questionProgress: [questionId + 1, this.props.assessment!.questions.length],
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter

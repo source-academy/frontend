@@ -8,7 +8,8 @@ import {
   ExternalLibraryName,
   ExternalLibraryNames,
   IAssessment,
-  IAssessmentOverview
+  IAssessmentOverview,
+  ITestcase
 } from '../components/assessment/assessmentShape';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
@@ -59,11 +60,19 @@ export interface IWorkspaceManagerState {
 
 export interface IWorkspaceState {
   readonly context: Context;
+  readonly editorPrepend: string | null;
   readonly editorSessionId: string;
   readonly editorValue: string | null;
+  readonly editorPostpend: string | null;
+  readonly editorTestcases: ITestcase[];
+  readonly editorHeight: number;
   readonly editorWidth: string;
-  readonly isEditorAutorun: boolean;
+  readonly breakpoints: string[];
+  readonly highlightedLines: number[][];
   readonly isRunning: boolean;
+  readonly isDebugging: boolean;
+  readonly enableDebugging: boolean;
+  readonly isEditorAutorun: boolean;
   readonly output: InterpreterOutput[];
   readonly replHistory: ReplHistory;
   readonly replValue: string;
@@ -199,9 +208,15 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
+  editorPrepend: '',
   editorSessionId: '',
   editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
+  editorPostpend: '',
+  editorTestcases: [],
+  editorHeight: 150,
   editorWidth: '50%',
+  breakpoints: [],
+  highlightedLines: [],
   output: [],
   replHistory: {
     browseIndex: null,
@@ -211,7 +226,9 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   sideContentActiveTab: 0,
   globals: [],
   isEditorAutorun: false,
-  isRunning: false
+  isRunning: false,
+  isDebugging: false,
+  enableDebugging: true
 });
 
 export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!';

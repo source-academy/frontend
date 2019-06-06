@@ -26,7 +26,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
       </Blueprint2.ButtonGroup>
     </div>
   </Blueprint2.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={[undefined]} editorWidth=\\"50%\\" handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={[undefined]} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
 
@@ -54,7 +54,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
       </Blueprint2.ButtonGroup>
     </div>
   </Blueprint2.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={{...}} editorWidth=\\"50%\\" handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
 
@@ -82,6 +82,6 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
       </Blueprint2.ButtonGroup>
     </div>
   </Blueprint2.Dialog>
-  <Workspace controlBarProps={{...}} editorProps={{...}} editorWidth=\\"50%\\" handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
+  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} hasUnsavedChanges={false} mcqProps={{...}} sideContentHeight={[undefined]} sideContentProps={{...}} replProps={{...}} />
 </div>"
 `;
