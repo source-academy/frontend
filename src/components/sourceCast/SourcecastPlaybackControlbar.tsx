@@ -150,6 +150,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
 }
 
 export interface ISourcecastPlaybackControlbarProps {
+  handleEditorValueChange: (newCode: string) => void;
   handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) => void;
   isPlaying: boolean;
 }

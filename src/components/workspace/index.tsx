@@ -53,7 +53,9 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   public render() {
     return (
       <div className="workspace">
-        <SourcecastPlaybackControlbar {...this.props.sourcecastPlaybackControlbarProps!} />
+        {this.props.sourcecastPlaybackControlbarProps ? (
+          <SourcecastPlaybackControlbar {...this.props.sourcecastPlaybackControlbarProps} />
+        ) : null}
         {this.props.hasUnsavedChanges ? (
           <Prompt
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
