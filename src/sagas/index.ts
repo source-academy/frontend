@@ -12,7 +12,7 @@ import { ExternalLibraryNames } from '../components/assessment/assessmentShape';
 import { mockBackendSaga } from '../mocks/backend';
 import { externalLibraries } from '../reducers/externalLibraries';
 import { defaultEditorValue, IState, IWorkspaceState } from '../reducers/states';
-import { IVLE_KEY, USE_BACKEND } from '../utils/constants';
+import { LUMINUS_CLIENT_ID, USE_BACKEND } from '../utils/constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper';
 import backendSaga from './backend';
@@ -325,10 +325,12 @@ function* workspaceSaga(): SagaIterator {
 
 function* loginSaga(): SagaIterator {
   yield takeEvery(actionTypes.LOGIN, function*() {
-    const apiLogin = 'https://ivle.nus.edu.sg/api/login/';
-    const key = IVLE_KEY;
-    const callback = `${window.location.protocol}//${window.location.hostname}/login`;
-    window.location.href = `${apiLogin}?apikey=${key}&url=${callback}`;
+    const apiLogin = 'https://luminus.nus.edu.sg/v2/auth/connect/authorize';
+    const clientId = LUMINUS_CLIENT_ID;
+    const callback = `${window.location.protocol}//${window.location.hostname}:${
+      window.location.port
+    }/login`;
+    window.location.href = `${apiLogin}?client_id=${clientId}&redirect_uri=${callback}&response_type=code&scope=profile`;
     yield undefined;
   });
 }

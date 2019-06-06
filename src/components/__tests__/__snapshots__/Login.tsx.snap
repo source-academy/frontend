@@ -22,7 +22,7 @@ exports[`Login renders correctly 1`] = `
     <div className=\\"login-body\\">
       <Blueprint2.ButtonGroup fill={true} vertical={true}>
         <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"log-in\\" onClick={[Function: handleLogin]}>
-          Log in with IVLE
+          Log in with LumiNUS
         </Blueprint2.Button>
         <NavLink to=\\"/playground\\" activeClassName=\\"active\\" aria-current=\\"page\\">
           <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"code\\">

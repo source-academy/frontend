@@ -23,19 +23,19 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
         case 'textbook':
           return window.open(LINKS.TEXTBOOK, '_blank');
         case 'announcements':
-          return window.open(LINKS.IVLE);
+          return window.open(LINKS.LUMINUS);
         case 'lesson_plan':
           return history.push('/academy/missions');
         case 'students':
           return history.push(LINKS.PIAZZA);
         case 'materials':
-          return window.open(LINKS.IVLE);
+          return window.open(LINKS.LUMINUS);
         case 'IDE':
           return history.push('/playground');
         case 'path':
           return history.push('/academy/paths');
         default:
-          return window.open(LINKS.IVLE);
+          return window.open(LINKS.LUMINUS);
       }
     },
     pickUpCollectible: function () { },
@@ -48,7 +48,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
   };
 
   function openWristDevice() {
-    window.open(LINKS.IVLE);
+    window.open(LINKS.LUMINUS);
   }
 
   function startGame(div, canvas, saveData) {

@@ -7,9 +7,9 @@ import * as actionTypes from './actionTypes';
 
 import { Role } from '../reducers/states';
 
-export const fetchAuth: ActionCreator<actionTypes.IAction> = (ivleToken: string) => ({
+export const fetchAuth: ActionCreator<actionTypes.IAction> = (luminusCode: string) => ({
   type: actionTypes.FETCH_AUTH,
-  payload: ivleToken
+  payload: luminusCode
 });
 
 export const fetchAnnouncements = () => ({
