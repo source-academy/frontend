@@ -4,3 +4,17 @@
   flex-direction: column;
   flex: 1 1 100%;
 }
+
+.Timer {
+  display: flex;
+  width: 80%;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.RecorderControl {
+  display: flex;
+  width: 95%;
+  justify-content: center;
+  margin: 0 auto;
+}

@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 import * as React from 'react';
 import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
@@ -18,25 +19,27 @@ import { checkSessionIdExists } from './collabEditing/helper';
  * @property editorReadonly - Used for sourcecastPlayback only
  */
 export interface IEditorProps {
-  isEditorAutorun: boolean;
+  breakpoints: string[];
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
-  breakpoints: string[];
   highlightedLines: number[][];
+  isEditorAutorun: boolean;
+  isRecording?: boolean;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
+  handleRecordEditorInput?: (time: number, data: any[]) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
-  private onChangeMethod: (newCode: string) => void;
+  private onChangeMethod: (newCode: string, delta: any) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
   private AceEditor: React.RefObject<AceEditor>;
 
@@ -44,11 +47,15 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
-    this.onChangeMethod = (newCode: string) => {
+    this.onChangeMethod = (newCode: string, delta: any) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
         this.props.handleUpdateHasUnsavedChanges(true);
       }
       this.props.handleEditorValueChange(newCode);
+      if (this.props.isRecording) {
+        console.log('Recording delta... ');
+        this.props.handleRecordEditorInput!(1, delta);
+      }
     };
     this.onValidateMethod = (annotations: Annotation[]) => {
       if (this.props.isEditorAutorun && annotations.length === 0) {

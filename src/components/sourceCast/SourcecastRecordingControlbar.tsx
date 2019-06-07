@@ -1,5 +1,5 @@
 /* tslint:disable:no-console */
-import { Slider } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -7,7 +7,8 @@ import { controlButton } from '../commons';
 import { Recorder } from './util';
 
 class SourcecastRecordingControlbar extends React.PureComponent<
-  ISourcecastRecordingControlbarProps
+  ISourcecastRecordingControlbarProps,
+  ISourcecastRecordingControlbarState
 > {
   private recorder: any;
   private audioContext: AudioContext;
@@ -15,7 +16,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
   constructor(props: ISourcecastRecordingControlbarProps) {
     super(props);
     this.state = {
-      fileDataBlob: null
+      duration: 0
     };
   }
 
@@ -26,7 +27,6 @@ class SourcecastRecordingControlbar extends React.PureComponent<
     try {
       getUserMediaNow = await navigator.mediaDevices.getUserMedia(constraints);
       this.startUserMedia(getUserMediaNow);
-      console.log(getUserMediaNow);
     } catch (error) {
       console.log('Microphone not found: ' + error);
     }
@@ -34,18 +34,29 @@ class SourcecastRecordingControlbar extends React.PureComponent<
 
   public render() {
     const RecorderPlayButton = controlButton('Record', IconNames.PLAY, this.handleRecorderStarting);
-    const RecorderPauseButton = controlButton('Pause', IconNames.PAUSE, this.handleRecorderPausing);
     const RecorderStopButton = controlButton('Stop', IconNames.STOP, this.handleRecorderStopping);
+    const RecorderResetButton = controlButton(
+      'Reset',
+      IconNames.REFRESH,
+      this.handleRecorderResetting
+    );
+    const RecorderDownloadButton = controlButton(
+      'Download',
+      IconNames.DOWNLOAD,
+      this.handleRecorderDownloading
+    );
     return (
       <div>
         <br />
-        <div className="Slider">
-          <Slider min={0} max={1} stepSize={0.001} value={1} labelRenderer={this.renderLabel} />
+        <div className="Timer">
+          <Card elevation={1}>
+            <h1>{this.renderLabel(this.state.duration)}</h1>
+          </Card>
         </div>
-        <div className="PlayerControl">
-          {RecorderPlayButton}
-          {RecorderPauseButton}
-          {RecorderStopButton}
+        <div className="RecorderControl">
+          {this.props.isRecording ? RecorderStopButton : RecorderPlayButton}
+          {!!this.state.fileDataBlob && RecorderDownloadButton}
+          {!this.props.isRecording && RecorderResetButton}
         </div>
       </div>
     );
@@ -58,38 +69,62 @@ class SourcecastRecordingControlbar extends React.PureComponent<
   };
 
   private handleRecorderStarting = () => {
+    console.log('Start recorder');
+    const { handleSetSourcecastIsRecording } = this.props;
+    handleSetSourcecastIsRecording(true);
+    this.setState({ duration: 0 });
+    const timer = setInterval(() => {
+      this.setState({ duration: this.state.duration + 1 });
+    }, 1000);
+    this.setState({ timer });
     this.recorder.record();
-    console.log('Start recording');
-  };
-
-  private handleRecorderPausing = () => {
-    this.recorder.stop();
-    console.log('Pause recording');
   };
 
   private handleRecorderStopping = () => {
+    console.log('Stop recorder');
+    const { handleSetSourcecastIsRecording } = this.props;
+    handleSetSourcecastIsRecording(false);
     this.recorder.stop();
-    console.log('Stop recording');
+    clearInterval(this.state.timer);
     this.createDownloadLink();
     this.recorder.clear();
   };
 
   private createDownloadLink = () => {
     this.recorder.exportWAV((blob: any) => {
-      console.log(blob);
       this.setState({
         fileDataBlob: blob
       });
-      if (!blob) {
-        console.log('No recording');
+      if (blob) {
+        console.log('Download link created: ' + window.URL.createObjectURL(blob));
       } else {
-        console.log('Download link created: ' + URL.createObjectURL(blob));
+        console.log('No recording found');
       }
     });
   };
 
+  private handleRecorderDownloading = () => {
+    const url = window.URL.createObjectURL(this.state.fileDataBlob);
+    const click = document.createEvent('Event');
+    click.initEvent('click', true, true);
+    const link = document.createElement('A') as HTMLAnchorElement;
+    link.href = url;
+    link.download = 'output.wav';
+    link.dispatchEvent(click);
+    link.click();
+    return link;
+  };
+
+  private handleRecorderResetting = () => {
+    console.log('Reset recorder');
+    this.recorder.clear();
+    this.setState({
+      duration: 0
+    });
+  };
+
   private renderLabel = (value: number) => {
-    const totalTime = 100 * value;
+    const totalTime = value;
     const min = Math.floor(totalTime / 60);
     const sec = Math.floor(totalTime - min * 60);
     const minString = min < 10 ? '0' + min : min;
@@ -100,16 +135,15 @@ class SourcecastRecordingControlbar extends React.PureComponent<
 
 export interface ISourcecastRecordingControlbarProps {
   handleRecordEditorInput: (time: number, data: any[]) => void;
+  handleSetSourcecastIsRecording: (isRecording: boolean) => void;
   isRecording: boolean;
   playbackData: any[];
 }
 
-export interface ISourcecastPlaybackControlbarState {
-  currentPlayerTime: number;
-  currentPlayerProgress: number;
+export interface ISourcecastRecordingControlbarState {
   duration: number;
-  isPlayerMode: boolean;
-  fileDataBlob: any;
+  timer?: any;
+  fileDataBlob?: Blob;
 }
 
 export default SourcecastRecordingControlbar;

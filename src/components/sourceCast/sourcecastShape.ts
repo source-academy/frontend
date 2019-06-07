@@ -1,4 +1,4 @@
-export const enum RecordingType {
+export enum RecordingType {
   code = 'code',
   run = 'run'
 }

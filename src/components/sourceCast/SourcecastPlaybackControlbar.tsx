@@ -17,8 +17,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     this.state = {
       currentPlayerTime: 0,
       currentPlayerProgress: 0,
-      duration: 0,
-      isPlayerMode: true
+      duration: 0
     };
   }
 
@@ -133,7 +132,6 @@ export interface ISourcecastPlaybackControlbarState {
   currentPlayerTime: number;
   currentPlayerProgress: number;
   duration: number;
-  isPlayerMode: boolean;
 }
 
 export default SourcecastPlaybackControlbar;

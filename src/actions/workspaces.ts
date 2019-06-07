@@ -100,15 +100,6 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const setSourcecastPlaybackIsPlaying: ActionCreator<actionTypes.IAction> = (
-  isPlaying: boolean
-) => ({
-  type: actionTypes.SET_SOURCECAST_PLAYBACK_IS_PLAYING,
-  payload: {
-    isPlaying
-  }
-});
-
 export const toggleEditorAutorun: ActionCreator<actionTypes.IAction> = (
   workspaceLocation: WorkspaceLocation
 ) => ({
@@ -283,9 +274,18 @@ export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (editorRead
 export const setSourcecastIsRecording: ActionCreator<actionTypes.IAction> = (
   isRecording: boolean
 ) => ({
-  type: actionTypes.SET_EDITOR_SESSION_ID,
+  type: actionTypes.SET_SOURCECAST_IS_RECORDING,
   payload: {
     isRecording
+  }
+});
+
+export const setSourcecastPlaybackIsPlaying: ActionCreator<actionTypes.IAction> = (
+  isPlaying: boolean
+) => ({
+  type: actionTypes.SET_SOURCECAST_PLAYBACK_IS_PLAYING,
+  payload: {
+    isPlaying
   }
 });
 

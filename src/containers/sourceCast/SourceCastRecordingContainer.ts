@@ -84,7 +84,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
-      handleSetSourcecastIsRecording: setSourcecastIsRecording,
+      handleSetSourcecastIsRecording: (isRecording: boolean) =>
+        setSourcecastIsRecording(isRecording),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>

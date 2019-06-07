@@ -112,9 +112,11 @@ class SourceCastRecording extends React.Component<ISourceCastRecordingProps> {
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         isEditorAutorun: this.props.isEditorAutorun,
+        isRecording: this.props.isRecording,
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
         handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+        handleRecordEditorInput: this.props.handleRecordEditorInput,
         handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
       },
       editorHeight: this.props.editorHeight,
@@ -144,7 +146,8 @@ class SourceCastRecording extends React.Component<ISourceCastRecordingProps> {
       sourcecastRecordingControlbarProps: {
         isRecording: this.props.isRecording,
         playbackData: this.props.playbackData,
-        handleRecordEditorInput: this.props.handleRecordEditorInput
+        handleRecordEditorInput: this.props.handleRecordEditorInput,
+        handleSetSourcecastIsRecording: this.props.handleSetSourcecastIsRecording
       }
     };
     return (

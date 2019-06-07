@@ -464,7 +464,13 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         sourceCastRecording: {
           ...state.sourceCastRecording,
-          playbackData: [...state.sourceCastRecording.playbackData, action.payload.data]
+          playbackData: [
+            ...state.sourceCastRecording.playbackData,
+            {
+              time: action.payload.time,
+              data: action.payload.data
+            }
+          ]
         }
       };
     /**

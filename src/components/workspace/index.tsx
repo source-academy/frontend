@@ -55,8 +55,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * REPL from being flush with the top of the editor
    */
   public render() {
-    /* tslint:disable:no-console */
-    console.log(this.props.sourcecastRecordingControlbarProps);
     return (
       <div className="workspace">
         {this.props.sourcecastPlaybackControlbarProps ? (
