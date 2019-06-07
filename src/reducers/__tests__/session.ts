@@ -17,8 +17,8 @@ import {
   IAssessment,
   IAssessmentOverview
 } from '../../components/assessment/assessmentShape';
+import { HistoryHelper } from '../../utils/history';
 import { reducer } from '../session';
-import { HistoryHelper } from 'src/utils/history';
 import { defaultSession, ISessionState, Role, Story } from '../states';
 
 test('LOG_OUT works correctly on default session', () => {
