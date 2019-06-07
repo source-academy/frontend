@@ -26,11 +26,17 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     };
   }
 
-  public componentDidMount() {
-    const getUserMediaNow = navigator.getUserMedia;
-    getUserMediaNow.call(navigator, { audio: true }, this.startUserMedia, (e: any) => {
-      console.log('Microphone not found: ' + e);
-    });
+  public async componentDidMount() {
+    const constraints = { audio: true, video: false };
+    let getUserMediaNow: MediaStream;
+
+    try {
+      getUserMediaNow = await navigator.mediaDevices.getUserMedia(constraints);
+      this.startUserMedia(getUserMediaNow);
+      console.log(getUserMediaNow);
+    } catch (error) {
+      console.log('Microphone not found: ' + error);
+    }
   }
 
   public render() {
@@ -160,7 +166,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     }
   };
 
-  private startUserMedia = (stream: any) => {
+  private startUserMedia = (stream: MediaStream) => {
     this.audioContext = new AudioContext();
     const input = this.audioContext.createMediaStreamSource(stream);
     this.recorder = new Recorder(input);

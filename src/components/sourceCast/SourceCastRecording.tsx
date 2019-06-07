@@ -16,7 +16,6 @@ export interface ISourceCastPlaybackProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
-  editorReadonly: boolean;
   editorSessionId: string;
   editorValue: string;
   editorHeight?: number;
@@ -108,7 +107,6 @@ class SourceCastPlayback extends React.Component<ISourceCastPlaybackProps> {
       editorProps: {
         editorPrepend: '',
         editorPrependLines: 0,
-        editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
