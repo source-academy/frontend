@@ -5,6 +5,9 @@ import { Prompt } from 'react-router';
 import SourcecastPlaybackControlbar, {
   ISourcecastPlaybackControlbarProps
 } from '../sourceCast/SourcecastPlaybackControlbar';
+import SourcecastRecordingControlbar, {
+  ISourcecastRecordingControlbarProps
+} from '../sourceCast/SourcecastRecordingControlbar';
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';
@@ -26,6 +29,7 @@ export type WorkspaceProps = {
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
   sourcecastPlaybackControlbarProps?: ISourcecastPlaybackControlbarProps;
+  sourcecastRecordingControlbarProps?: ISourcecastRecordingControlbarProps;
 };
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
@@ -51,10 +55,15 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * REPL from being flush with the top of the editor
    */
   public render() {
+    /* tslint:disable:no-console */
+    console.log(this.props.sourcecastRecordingControlbarProps);
     return (
       <div className="workspace">
         {this.props.sourcecastPlaybackControlbarProps ? (
           <SourcecastPlaybackControlbar {...this.props.sourcecastPlaybackControlbarProps} />
+        ) : null}
+        {this.props.sourcecastRecordingControlbarProps ? (
+          <SourcecastRecordingControlbar {...this.props.sourcecastRecordingControlbarProps} />
         ) : null}
         {this.props.hasUnsavedChanges ? (
           <Prompt

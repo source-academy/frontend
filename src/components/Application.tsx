@@ -8,6 +8,7 @@ import Login from '../containers/LoginContainer';
 import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import SourceCastPlayback from '../containers/sourceCast/SourceCastPlaybackContainer';
+import SourceCastRecording from '../containers/sourceCast/SourceCastRecordingContainer';
 import { Role, sourceChapters } from '../reducers/states';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Contributors from './contributors';
@@ -57,7 +58,8 @@ class Application extends React.Component<IApplicationProps, {}> {
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
             <Route path="/contributors" component={Contributors} />
-            <Route path="/sourceCast" component={SourceCastPlayback} />
+            <Route path="/sourceCastPlayback" component={SourceCastPlayback} />
+            <Route path="/sourceCastRecording" component={SourceCastRecording} />
             <Route exact={true} path="/" render={this.redirectToAcademy} />
             <Route component={NotFound} />
           </Switch>

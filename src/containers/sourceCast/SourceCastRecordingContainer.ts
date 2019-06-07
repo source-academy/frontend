@@ -38,24 +38,24 @@ import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.sourceCastRecording.sideContentActiveTab,
-  editorSessionId: state.workspaces.sourceCastRecording.editorSessionId,
-  editorWidth: state.workspaces.sourceCastRecording.editorWidth,
-  editorValue: state.workspaces.sourceCastRecording.editorValue!,
-  isEditorAutorun: state.workspaces.sourceCastRecording.isEditorAutorun,
   breakpoints: state.workspaces.sourceCastRecording.breakpoints,
-  highlightedLines: state.workspaces.sourceCastRecording.highlightedLines,
-  isRunning: state.workspaces.sourceCastRecording.isRunning,
-  isDebugging: state.workspaces.sourceCastRecording.isDebugging,
-  isRecording: state.workspaces.sourceCastRecording.isRecording,
+  editorSessionId: state.workspaces.sourceCastRecording.editorSessionId,
+  editorValue: state.workspaces.sourceCastRecording.editorValue!,
+  editorWidth: state.workspaces.sourceCastRecording.editorWidth,
   enableDebugging: state.workspaces.sourceCastRecording.enableDebugging,
+  externalLibraryName: state.workspaces.playground.playgroundExternal,
+  highlightedLines: state.workspaces.sourceCastRecording.highlightedLines,
+  isDebugging: state.workspaces.sourceCastRecording.isDebugging,
+  isEditorAutorun: state.workspaces.sourceCastRecording.isEditorAutorun,
+  isRecording: state.workspaces.sourceCastRecording.isRecording,
+  isRunning: state.workspaces.sourceCastRecording.isRunning,
   output: state.workspaces.sourceCastRecording.output,
   playbackData: state.workspaces.sourceCastRecording.playbackData,
   queryString: state.playground.queryString,
   replValue: state.workspaces.sourceCastRecording.replValue,
   sideContentHeight: state.workspaces.sourceCastRecording.sideContentHeight,
   sourceChapter: state.workspaces.sourceCastRecording.context.chapter,
-  websocketStatus: state.workspaces.playground.websocketStatus,
-  externalLibraryName: state.workspaces.playground.playgroundExternal
+  websocketStatus: state.workspaces.playground.websocketStatus
 });
 
 const location: WorkspaceLocation = 'sourceCastRecording';
@@ -84,8 +84,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
-      handleSetSourcecastIsRecording: (isRecording: boolean) =>
-        setSourcecastIsRecording(isRecording),
+      handleSetSourcecastIsRecording: setSourcecastIsRecording,
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>

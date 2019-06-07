@@ -10,23 +10,24 @@ import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 
-const INTRODUCTION = 'Welcome to Source Cast Playback!';
+const INTRODUCTION = 'Welcome to Source Cast Recording!';
 
-export interface ISourceCastPlaybackProps extends IDispatchProps, IStateProps {}
+export interface ISourceCastRecordingProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
-  editorSessionId: string;
-  editorValue: string;
-  editorHeight?: number;
-  editorWidth: string;
   breakpoints: string[];
-  highlightedLines: number[][];
-  isEditorAutorun: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  isRecording: boolean;
+  editorSessionId: string;
+  editorHeight?: string;
+  editorValue: string;
+  editorWidth: string;
   enableDebugging: boolean;
+  externalLibraryName: string;
+  highlightedLines: number[][];
+  isDebugging: boolean;
+  isEditorAutorun: boolean;
+  isRecording: boolean;
+  isRunning: boolean;
   output: InterpreterOutput[];
   playbackData: any[];
   queryString?: string;
@@ -34,7 +35,6 @@ export interface IStateProps {
   sideContentHeight?: number;
   sourceChapter: number;
   websocketStatus: number;
-  externalLibraryName: string;
 }
 
 export interface IDispatchProps {
@@ -48,10 +48,10 @@ export interface IDispatchProps {
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGenerateLz: () => void;
-  handleRecordEditorInput: (time: number, data: any[]) => void;
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleRecordEditorInput: (time: number, data: any[]) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
@@ -65,8 +65,8 @@ export interface IDispatchProps {
   handleToggleEditorAutorun: () => void;
 }
 
-class SourceCastPlayback extends React.Component<ISourceCastPlaybackProps> {
-  constructor(props: ISourceCastPlaybackProps) {
+class SourceCastRecording extends React.Component<ISourceCastRecordingProps> {
+  constructor(props: ISourceCastRecordingProps) {
     super(props);
   }
 
@@ -134,18 +134,28 @@ class SourceCastPlayback extends React.Component<ISourceCastPlaybackProps> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [sourceCastPlaybackIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
+        tabs: [
+          sourceCastRecordingIntroductionTab,
+          listVisualizerTab,
+          inspectorTab,
+          envVisualizerTab
+        ]
+      },
+      sourcecastRecordingControlbarProps: {
+        isRecording: this.props.isRecording,
+        playbackData: this.props.playbackData,
+        handleRecordEditorInput: this.props.handleRecordEditorInput
       }
     };
     return (
-      <div className={'SourceCastPlayback pt-dark'}>
+      <div className={'SourceCastRecording pt-dark'}>
         <Workspace {...workspaceProps} />
       </div>
     );
   }
 }
 
-const sourceCastPlaybackIntroductionTab: SideContentTab = {
+const sourceCastRecordingIntroductionTab: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
   body: <Markdown content={INTRODUCTION} />
@@ -169,4 +179,4 @@ const envVisualizerTab: SideContentTab = {
   body: <EnvVisualizer />
 };
 
-export default SourceCastPlayback;
+export default SourceCastRecording;
