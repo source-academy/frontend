@@ -21,21 +21,21 @@ import { HistoryHelper } from '../../utils/history';
 import { reducer } from '../session';
 import { defaultSession, ISessionState, Role, Story } from '../states';
 
- test('LOG_OUT works correctly on default session', () => {
+test('LOG_OUT works correctly on default session', () => {
   const action: IAction = {
     type: LOG_OUT,
     payload: {}
   };
   const result: ISessionState = reducer(defaultSession, action);
 
-   expect(result).toEqual(defaultSession);
+  expect(result).toEqual(defaultSession);
 });
 
- test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
+test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
   const accessToken = 'access_token_test';
   const refreshToken = 'refresh_token_test';
 
-   const action: IAction = {
+  const action: IAction = {
     type: SET_TOKENS,
     payload: {
       accessToken,
@@ -44,13 +44,13 @@ import { defaultSession, ISessionState, Role, Story } from '../states';
   };
   const result: ISessionState = reducer(defaultSession, action);
 
-   expect(result).toEqual({
+  expect(result).toEqual({
     ...defaultSession,
     ...action.payload
   });
 });
 
- test('SET_USER works correctly', () => {
+test('SET_USER works correctly', () => {
   const story: Story = {
     story: 'test story',
     playStory: true
@@ -62,26 +62,26 @@ import { defaultSession, ISessionState, Role, Story } from '../states';
     story
   };
 
-   const action: IAction = {
+  const action: IAction = {
     type: SET_USER,
     payload
   };
   const result: ISessionState = reducer(defaultSession, action);
 
-   expect(result).toEqual({
+  expect(result).toEqual({
     ...defaultSession,
     ...payload
   });
 });
 
- test('UPDATE_HISTORY_HELPERS works on non-academy location', () => {
+test('UPDATE_HISTORY_HELPERS works on non-academy location', () => {
   const payload = '/playground';
   const historyHelper: HistoryHelper = {
     lastAcademyLocations: ['/academy/1', '/academy/2'],
     lastGeneralLocations: ['/academy/1', '/academy/2']
   };
 
-   const newDefaultSession = {
+  const newDefaultSession = {
     ...defaultSession,
     historyHelper
   };
@@ -91,21 +91,21 @@ import { defaultSession, ISessionState, Role, Story } from '../states';
   };
   const resultHistory: HistoryHelper = reducer(newDefaultSession, action).historyHelper;
 
-   expect(resultHistory.lastGeneralLocations).toEqual([
+  expect(resultHistory.lastGeneralLocations).toEqual([
     historyHelper.lastGeneralLocations[1],
     payload
   ]);
   expect(resultHistory.lastAcademyLocations).toEqual(historyHelper.lastAcademyLocations);
 });
 
- test('UPDATE_HISTORY_HELPERS works on academy location', () => {
+test('UPDATE_HISTORY_HELPERS works on academy location', () => {
   const payload = '/academy/3';
   const historyHelper: HistoryHelper = {
     lastAcademyLocations: ['/academy/1', '/academy/2'],
     lastGeneralLocations: ['/academy/1', '/academy/2']
   };
 
-   const newDefaultSession: ISessionState = {
+  const newDefaultSession: ISessionState = {
     ...defaultSession,
     historyHelper
   };
@@ -115,7 +115,7 @@ import { defaultSession, ISessionState, Role, Story } from '../states';
   };
   const resultHistory: HistoryHelper = reducer(newDefaultSession, action).historyHelper;
 
-   expect(resultHistory.lastGeneralLocations).toEqual([
+  expect(resultHistory.lastGeneralLocations).toEqual([
     historyHelper.lastAcademyLocations[1],
     payload
   ]);
@@ -125,7 +125,7 @@ import { defaultSession, ISessionState, Role, Story } from '../states';
   ]);
 });
 
- // Test Data for UPDATE_ASSESSMENT
+// Test Data for UPDATE_ASSESSMENT
 const assessmentTest1: IAssessment = {
   category: 'Mission',
   globalDeployment: undefined,
@@ -137,7 +137,7 @@ const assessmentTest1: IAssessment = {
   title: 'first assessment'
 };
 
- const assessmentTest2: IAssessment = {
+const assessmentTest2: IAssessment = {
   category: 'Contest',
   globalDeployment: undefined,
   graderDeployment: undefined,
@@ -148,21 +148,21 @@ const assessmentTest1: IAssessment = {
   title: 'updated first assessment'
 };
 
- test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
+test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
   const action: IAction = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest1
   };
   const resultMap: Map<number, IAssessment> = reducer(defaultSession, action).assessments;
 
-   expect(resultMap.get(assessmentTest1.id)).toEqual(assessmentTest1);
+  expect(resultMap.get(assessmentTest1.id)).toEqual(assessmentTest1);
 });
 
- test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
+test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
   const assessments = new Map<number, IAssessment>();
   assessments.set(assessmentTest1.id, assessmentTest1);
 
-   const newDefaultSession = {
+  const newDefaultSession = {
     ...defaultSession,
     assessments
   };
@@ -172,10 +172,10 @@ const assessmentTest1: IAssessment = {
   };
   const resultMap: Map<number, IAssessment> = reducer(newDefaultSession, action).assessments;
 
-   expect(resultMap.get(assessmentTest2.id)).toEqual(assessmentTest2);
+  expect(resultMap.get(assessmentTest2.id)).toEqual(assessmentTest2);
 });
 
- // Test data for UPDATE_ASSESSMENT_OVERVIEWS
+// Test data for UPDATE_ASSESSMENT_OVERVIEWS
 const assessmentOverviewsTest1: IAssessmentOverview[] = [
   {
     category: AssessmentCategories.Mission,
@@ -195,7 +195,7 @@ const assessmentOverviewsTest1: IAssessmentOverview[] = [
   }
 ];
 
- const assessmentOverviewsTest2: IAssessmentOverview[] = [
+const assessmentOverviewsTest2: IAssessmentOverview[] = [
   {
     category: AssessmentCategories.Contest,
     closeAt: 'test_string_0',
@@ -215,21 +215,21 @@ const assessmentOverviewsTest1: IAssessmentOverview[] = [
   }
 ];
 
- test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in inserting assessment overviews', () => {
+test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in inserting assessment overviews', () => {
   const action: IAction = {
     type: UPDATE_ASSESSMENT_OVERVIEWS,
     payload: assessmentOverviewsTest1
   };
 
-   const result: ISessionState = reducer(defaultSession, action);
+  const result: ISessionState = reducer(defaultSession, action);
 
-   expect(result).toEqual({
+  expect(result).toEqual({
     ...defaultSession,
     assessmentOverviews: assessmentOverviewsTest1
   });
 });
 
- test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overviews', () => {
+test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overviews', () => {
   const newDefaultSession = {
     ...defaultSession,
     assessmentOverviews: assessmentOverviewsTest1
@@ -240,15 +240,15 @@ const assessmentOverviewsTest1: IAssessmentOverview[] = [
     payload: assessmentOverviewsPayload
   };
 
-   const result: ISessionState = reducer(newDefaultSession, action);
+  const result: ISessionState = reducer(newDefaultSession, action);
 
-   expect(result).toEqual({
+  expect(result).toEqual({
     ...defaultSession,
     assessmentOverviews: assessmentOverviewsPayload
   });
 });
 
- // Test data for UPDATE_GRADING
+// Test data for UPDATE_GRADING
 const gradingTest1: Grading = [
   {
     question: jest.genMockFromModule('../../components/academy/grading/gradingShape'),
@@ -266,7 +266,7 @@ const gradingTest1: Grading = [
   }
 ];
 
- const gradingTest2: Grading = [
+const gradingTest2: Grading = [
   {
     question: jest.genMockFromModule('../../components/academy/grading/gradingShape'),
     student: {
@@ -283,7 +283,7 @@ const gradingTest1: Grading = [
   }
 ];
 
- test('UPDATE_GRADING works correctly in inserting gradings', () => {
+test('UPDATE_GRADING works correctly in inserting gradings', () => {
   const submissionId = 23;
   const action: IAction = {
     type: UPDATE_GRADING,
@@ -293,11 +293,11 @@ const gradingTest1: Grading = [
     }
   };
 
-   const gradingMap: Map<number, Grading> = reducer(defaultSession, action).gradings;
+  const gradingMap: Map<number, Grading> = reducer(defaultSession, action).gradings;
   expect(gradingMap.get(submissionId)).toEqual(gradingTest1);
 });
 
- test('UPDATE_GRADING works correctly in updating gradings', () => {
+test('UPDATE_GRADING works correctly in updating gradings', () => {
   const submissionId = 23;
   const gradings = new Map<number, Grading>();
   gradings.set(submissionId, gradingTest1);
@@ -306,7 +306,7 @@ const gradingTest1: Grading = [
     gradings
   };
 
-   const action: IAction = {
+  const action: IAction = {
     type: UPDATE_GRADING,
     payload: {
       submissionId,
@@ -314,11 +314,11 @@ const gradingTest1: Grading = [
     }
   };
 
-   const gradingMap: Map<number, Grading> = reducer(newDefaultSession, action).gradings;
+  const gradingMap: Map<number, Grading> = reducer(newDefaultSession, action).gradings;
   expect(gradingMap.get(submissionId)).toEqual(gradingTest2);
 });
 
- // UPDATE_GRADING_OVERVIEWS test data
+// UPDATE_GRADING_OVERVIEWS test data
 const gradingOverviewTest1: GradingOverview[] = [
   {
     assessmentId: 1,
@@ -340,7 +340,7 @@ const gradingOverviewTest1: GradingOverview[] = [
   }
 ];
 
- const gradingOverviewTest2: GradingOverview[] = [
+const gradingOverviewTest2: GradingOverview[] = [
   {
     assessmentId: 2,
     assessmentName: 'another assessment',
@@ -361,17 +361,17 @@ const gradingOverviewTest1: GradingOverview[] = [
   }
 ];
 
- test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', () => {
+test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', () => {
   const action = {
     type: UPDATE_GRADING_OVERVIEWS,
     payload: gradingOverviewTest1
   };
   const result: ISessionState = reducer(defaultSession, action);
 
-   expect(result.gradingOverviews).toEqual(gradingOverviewTest1);
+  expect(result.gradingOverviews).toEqual(gradingOverviewTest1);
 });
 
- test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', () => {
+test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', () => {
   const newDefaultSession = {
     ...defaultSession,
     gradingOverviews: gradingOverviewTest1
@@ -383,5 +383,5 @@ const gradingOverviewTest1: GradingOverview[] = [
   };
   const result: ISessionState = reducer(newDefaultSession, action);
 
-   expect(result.gradingOverviews).toEqual(gradingOverviewsPayload);
+  expect(result.gradingOverviews).toEqual(gradingOverviewsPayload);
 });
