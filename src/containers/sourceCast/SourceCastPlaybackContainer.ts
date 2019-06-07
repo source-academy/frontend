@@ -81,14 +81,13 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSetEditorReadonly: (editorReadonly: boolean) =>
-        setEditorReadonly(location, editorReadonly),
+      handleSetEditorReadonly: (editorReadonly: boolean) => setEditorReadonly(editorReadonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
       handleSetSourcecastPlaybackDuration: (duration: number) =>
-        setSourcecastPlaybackDuration(duration, location),
+        setSourcecastPlaybackDuration(duration),
       handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) =>
-        setSourcecastPlaybackIsPlaying(isPlaying, location),
+        setSourcecastPlaybackIsPlaying(isPlaying),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>

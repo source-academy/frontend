@@ -28,10 +28,12 @@ import {
   IAction,
   INIT_INVITE,
   LOG_OUT,
+  RECORD_EDITOR_INPUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
+  SET_SOURCECAST_IS_RECORDING,
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_IS_PLAYING,
   SET_WEBSOCKET_STATUS,
@@ -457,6 +459,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       };
+    case RECORD_EDITOR_INPUT:
+      return {
+        ...state,
+        sourceCastRecording: {
+          ...state.sourceCastRecording,
+          playbackData: [...state.sourceCastRecording.playbackData, action.payload.data]
+        }
+      };
     /**
      * Resets the workspace to default settings,
      * including the js-slang Context. Apply
@@ -508,27 +518,35 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           editorSessionId: action.payload.editorSessionId
         }
       };
+    case SET_SOURCECAST_IS_RECORDING:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          isRecording: action.payload.isRecording
+        }
+      };
     case SET_SOURCECAST_PLAYBACK_DURATION:
       return {
         ...state,
-        [location]: {
-          ...state[location],
+        sourceCastPlayback: {
+          ...state.sourceCastPlayback,
           playbackDuration: action.payload.duration
         }
       };
     case SET_SOURCECAST_PLAYBACK_IS_PLAYING:
       return {
         ...state,
-        [location]: {
-          ...state[location],
+        sourceCastPlayback: {
+          ...state.sourceCastPlayback,
           isPlaying: action.payload.isPlaying
         }
       };
     case SET_EDITOR_READONLY:
       return {
         ...state,
-        [location]: {
-          ...state[location],
+        sourceCastPlayback: {
+          ...state.sourceCastPlayback,
           editorReadonly: action.payload.editorReadonly
         }
       };

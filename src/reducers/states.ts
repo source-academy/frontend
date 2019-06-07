@@ -58,11 +58,17 @@ export interface ISourceCastPlayback extends IWorkspaceState {
   readonly isPlaying: boolean;
 }
 
+export interface ISourceCastRecording extends IWorkspaceState {
+  readonly isRecording: boolean;
+  readonly playbackData: any[];
+}
+
 export interface IWorkspaceManagerState {
   readonly assessment: IAssessmentWorkspace;
   readonly grading: IGradingWorkspace;
   readonly playground: IPlaygroundWorkspace;
   readonly sourceCastPlayback: ISourceCastPlayback;
+  readonly sourceCastRecording: ISourceCastRecording;
 }
 
 export interface IWorkspaceState {
@@ -277,6 +283,11 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     ...createDefaultWorkspace(WorkspaceLocations.sourceCastPlayback),
     isPlaying: false,
     playbackDuration: 0
+  },
+  sourceCastRecording: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourceCastRecording),
+    isRecording: false,
+    playbackData: []
   }
 };
 

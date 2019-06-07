@@ -5,17 +5,11 @@ import * as React from 'react';
 
 import { controlButton } from '../commons';
 
-interface IRecordingData {
-  value: string;
-  time: number;
-}
-
 class SourcecastPlaybackControlbar extends React.PureComponent<
   ISourcecastPlaybackControlbarProps,
   ISourcecastPlaybackControlbarState
 > {
   private audio: React.RefObject<HTMLAudioElement>;
-  private mockData: IRecordingData[];
 
   constructor(props: ISourcecastPlaybackControlbarProps) {
     super(props);
@@ -26,29 +20,6 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
       duration: 0,
       isPlayerMode: true
     };
-    this.mockData = [
-      { value: '', time: 0 },
-      { value: 'a', time: 1000 },
-      { value: 'ab', time: 2000 },
-      { value: 'abc', time: 3000 },
-      { value: 'abcd', time: 4000 },
-      { value: 'abcde', time: 4500 },
-      { value: 'abcdef', time: 4800 },
-      { value: 'abcdefg', time: 5100 },
-      { value: 'abcdefgh', time: 5400 },
-      { value: 'abcdefghi', time: 6400 },
-      { value: 'abcdefghij', time: 6900 },
-      { value: 'abcdefghijk', time: 7500 },
-      { value: 'abcdefghijkl', time: 7900 },
-      { value: 'abcdefghijklm', time: 8100 },
-      { value: 'abcdefghijklmn', time: 8500 },
-      { value: 'abcdefghijklmno', time: 9100 },
-      { value: 'abcdefghijklmnop', time: 9900 },
-      { value: 'abcdefghijklmnopq', time: 10400 },
-      { value: 'abcdefghijklmnopqr', time: 10600 },
-      { value: 'abcdefghijklmnopqrs', time: 10900 },
-      { value: 'abcdefghijklmnopqrst', time: 11600 }
-    ];
   }
 
   public render() {
@@ -136,9 +107,6 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     audio!.play();
     handleSetSourcecastPlaybackIsPlaying(true);
     this.props.handleSetEditorReadonly(true);
-    this.mockData.forEach(data =>
-      setTimeout(() => this.props.handleEditorValueChange(data.value), data.time)
-    );
   };
 
   private handlePlayerPausing = () => {

@@ -1,6 +1,7 @@
 import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
+import { RecordingType } from '../components/sourceCast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -18,7 +19,8 @@ export enum WorkspaceLocations {
   assessment = 'assessment',
   playground = 'playground',
   grading = 'grading',
-  sourceCastPlayback = 'sourceCastPlayback'
+  sourceCastPlayback = 'sourceCastPlayback',
+  sourceCastRecording = 'sourceCastRecording'
 }
 
 export type WorkspaceLocation = keyof typeof WorkspaceLocations;
@@ -99,13 +101,11 @@ export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
 });
 
 export const setSourcecastPlaybackIsPlaying: ActionCreator<actionTypes.IAction> = (
-  isPlaying: boolean,
-  workspaceLocation: WorkspaceLocation
+  isPlaying: boolean
 ) => ({
   type: actionTypes.SET_SOURCECAST_PLAYBACK_IS_PLAYING,
   payload: {
-    isPlaying,
-    workspaceLocation
+    isPlaying
   }
 });
 
@@ -230,6 +230,18 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 });
 
+export const recordEditorInput: ActionCreator<actionTypes.IAction> = (
+  time: number,
+  data: any[]
+) => ({
+  type: actionTypes.RECORD_EDITOR_INPUT,
+  payload: {
+    type: RecordingType.code,
+    time,
+    data
+  }
+});
+
 /**
  * Resets a workspace to its default properties.
  *
@@ -261,25 +273,28 @@ export const updateWorkspace = (
   }
 });
 
-export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation,
-  editorReadonly: boolean
-) => ({
+export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (editorReadonly: boolean) => ({
   type: actionTypes.SET_EDITOR_READONLY,
   payload: {
-    workspaceLocation,
     editorReadonly
   }
 });
 
+export const setSourcecastIsRecording: ActionCreator<actionTypes.IAction> = (
+  isRecording: boolean
+) => ({
+  type: actionTypes.SET_EDITOR_SESSION_ID,
+  payload: {
+    isRecording
+  }
+});
+
 export const setSourcecastPlaybackDuration: ActionCreator<actionTypes.IAction> = (
-  duration: number,
-  workspaceLocation: WorkspaceLocation
+  duration: number
 ) => ({
   type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
   payload: {
-    duration,
-    workspaceLocation
+    duration
   }
 });
 
