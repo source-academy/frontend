@@ -1,4 +1,3 @@
-import { reducer } from '../session';
 import {
   IAction,
   LOG_OUT,
@@ -10,8 +9,7 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS
 } from '../../actions/actionTypes';
-import { defaultSession, ISessionState, Role, Story } from '../states';
-import { HistoryHelper } from 'src/utils/history';
+import { Grading, GradingOverview } from '../../components/academy/grading/gradingShape';
 import {
   AssessmentCategories,
   AssessmentStatuses,
@@ -19,7 +17,9 @@ import {
   IAssessment,
   IAssessmentOverview
 } from '../../components/assessment/assessmentShape';
-import { Grading, GradingOverview } from '../../components/academy/grading/gradingShape';
+import { reducer } from '../session';
+import { HistoryHelper } from 'src/utils/history';
+import { defaultSession, ISessionState, Role, Story } from '../states';
 
 test('LOG_OUT works correctly on default session', () => {
   const action: IAction = {
