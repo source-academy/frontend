@@ -4,6 +4,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { controlButton } from '../commons';
+import Editor from '../workspace/Editor';
 import { RecordingStatus } from './sourcecastShape';
 import { Recorder } from './util';
 
@@ -184,6 +185,7 @@ export interface ISourcecastRecordingControlbarProps {
   handleTimerResume: () => void;
   handleTimerStart: () => void;
   handleTimerStop: () => void;
+  editorRef?: React.RefObject<Editor>;
   playbackData: any[];
   recordingStatus: RecordingStatus;
   timeElapsedBeforePause: number;

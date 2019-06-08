@@ -4,6 +4,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { controlButton } from '../commons';
+import Editor from '../workspace/Editor';
 
 class SourcecastPlaybackControlbar extends React.PureComponent<
   ISourcecastPlaybackControlbarProps,
@@ -68,6 +69,17 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     audio!.play();
     handleSetSourcecastPlaybackIsPlaying(true);
     this.props.handleSetEditorReadonly(true);
+    const delta = {
+      start: { row: 0, column: 29 },
+      end: { row: 1, column: 18 },
+      action: 'insert',
+      lines: ['', '// This is a test!']
+    };
+    (this.props.editorRef!.current!.AceEditor.current! as any).editor
+      .getSession()
+      .getDocument()
+      .applyDelta(delta);
+    // use applyDelta for a single delta and applyDeltas for an array of deltas
   };
 
   private handlePlayerPausing = () => {
@@ -125,8 +137,10 @@ export interface ISourcecastPlaybackControlbarProps {
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) => void;
   handleSetSourcecastPlaybackDuration: (duration: number) => void;
+  editorRef?: React.RefObject<Editor>;
   duration: number;
   isPlaying: boolean;
+  playbackData: any[];
 }
 
 export interface ISourcecastPlaybackControlbarState {

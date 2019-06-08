@@ -55,6 +55,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 }
 
 export interface ISourcecastPlayback extends IWorkspaceState {
+  readonly playbackData: any[];
   readonly playbackDuration: number;
   readonly isPlaying: boolean;
 }
@@ -285,6 +286,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   sourcecastPlayback: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecastPlayback),
     isPlaying: false,
+    playbackData: [],
     playbackDuration: 0
   },
   sourcecastRecording: {

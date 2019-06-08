@@ -30,6 +30,7 @@ export interface IStateProps {
   enableDebugging: boolean;
   output: InterpreterOutput[];
   playbackDuration: number;
+  playbackData: any;
   queryString?: string;
   replValue: string;
   sideContentHeight?: number;
@@ -74,14 +75,6 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
 
   public render() {
     const workspaceProps: WorkspaceProps = {
-      sourcecastPlaybackControlbarProps: {
-        handleEditorValueChange: this.props.handleEditorValueChange,
-        handleSetEditorReadonly: this.props.handleSetEditorReadonly,
-        handleSetSourcecastPlaybackDuration: this.props.handleSetSourcecastPlaybackDuration,
-        handleSetSourcecastPlaybackIsPlaying: this.props.handleSetSourcecastPlaybackIsPlaying,
-        duration: this.props.playbackDuration,
-        isPlaying: this.props.isPlaying
-      },
       controlBarProps: {
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
@@ -123,6 +116,7 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         isEditorAutorun: this.props.isEditorAutorun,
+        isPlaying: this.props.isPlaying,
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
         handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
@@ -146,6 +140,15 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
         tabs: [sourcecastPlaybackIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
+      },
+      sourcecastPlaybackControlbarProps: {
+        handleEditorValueChange: this.props.handleEditorValueChange,
+        handleSetEditorReadonly: this.props.handleSetEditorReadonly,
+        handleSetSourcecastPlaybackDuration: this.props.handleSetSourcecastPlaybackDuration,
+        handleSetSourcecastPlaybackIsPlaying: this.props.handleSetSourcecastPlaybackIsPlaying,
+        duration: this.props.playbackDuration,
+        isPlaying: this.props.isPlaying,
+        playbackData: this.props.playbackData
       }
     };
     return (

@@ -8,6 +8,7 @@ import SourcecastPlaybackControlbar, {
 import SourcecastRecordingControlbar, {
   ISourcecastRecordingControlbarProps
 } from '../sourcecast/SourcecastRecordingControlbar';
+import { RecordingStatus } from '../sourcecast/sourcecastShape';
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';
@@ -58,10 +59,10 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     return (
       <div className="workspace">
         {this.props.sourcecastPlaybackControlbarProps ? (
-          <SourcecastPlaybackControlbar {...this.props.sourcecastPlaybackControlbarProps} />
+          <SourcecastPlaybackControlbar {...this.sourcecastPlaybackControlbarProps()} />
         ) : null}
         {this.props.sourcecastRecordingControlbarProps ? (
-          <SourcecastRecordingControlbar {...this.props.sourcecastRecordingControlbarProps} />
+          <SourcecastRecordingControlbar {...this.sourcecastRecordingControlbarProps()} />
         ) : null}
         {this.props.hasUnsavedChanges ? (
           <Prompt
@@ -84,6 +85,49 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         </div>
       </div>
     );
+  }
+
+  private sourcecastPlaybackControlbarProps() {
+    if (this.props.sourcecastPlaybackControlbarProps) {
+      return {
+        ...this.props.sourcecastPlaybackControlbarProps,
+        editorRef: this.editorRef
+      };
+    } else {
+      return {
+        handleEditorValueChange: (newCode: string) => {},
+        handleSetEditorReadonly: (editorReadonly: boolean) => {},
+        handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) => {},
+        handleSetSourcecastPlaybackDuration: (duration: number) => {},
+        editorRef: this.editorRef,
+        duration: 0,
+        isPlaying: false,
+        playbackData: []
+      };
+    }
+  }
+
+  private sourcecastRecordingControlbarProps() {
+    if (this.props.sourcecastRecordingControlbarProps) {
+      return {
+        ...this.props.sourcecastRecordingControlbarProps,
+        editorRef: this.editorRef
+      };
+    } else {
+      return {
+        handleRecordEditorInput: (time: number, data: any[]) => {},
+        handleSetEditorReadonly: (readonly: boolean) => {},
+        handleTimerPause: () => {},
+        handleTimerReset: () => {},
+        handleTimerResume: () => {},
+        handleTimerStart: () => {},
+        handleTimerStop: () => {},
+        editorRef: this.editorRef,
+        playbackData: [],
+        recordingStatus: RecordingStatus.notStarted,
+        timeElapsedBeforePause: 0
+      };
+    }
   }
 
   private controlBarProps() {

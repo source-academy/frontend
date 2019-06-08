@@ -25,6 +25,7 @@ export interface IEditorProps {
   editorValue: string;
   highlightedLines: number[][];
   isEditorAutorun: boolean;
+  isPlaying?: boolean;
   isRecording?: boolean;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
@@ -39,9 +40,9 @@ export interface IEditorProps {
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
+  public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string, delta: any) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
-  private AceEditor: React.RefObject<AceEditor>;
 
   constructor(props: IEditorProps) {
     super(props);
