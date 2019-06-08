@@ -10,5 +10,4 @@ script:
   - npm run format:ci
   - npm run build
   - npm run tslint
-  - npm test
   - npm run test-coveralls
