@@ -80,7 +80,7 @@
     "@blueprintjs/icons": "^3.6.0",
     "@blueprintjs/select": "^2.0.1",
     "@types/acorn": "^4.0.3",
-    "@types/classnames": "^2.2.3",
+    "@types/classnames": "^2.2.8",
     "@types/common-tags": "^1.4.0",
     "@types/dotenv": "^6.1.1",
     "@types/draft-js": "^0.10.23",
