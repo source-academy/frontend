@@ -125,6 +125,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     );
     const autoRunButton = controlButton('Auto', IconNames.AUTOMATIC_UPDATES);
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval);
+    const debuggerResetButton = controlButton('Stop Debugger', IconNames.STOP, this.props.handleDebuggerReset);
     const pauseButton = controlButton('Pause', IconNames.STOP, this.props.handleDebuggerPause);
     const resumeButton = controlButton(
       'Resume',
@@ -285,6 +286,9 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
           : this.props.isDebugging
             ? resumeButton
             : null}
+        {this.props.isDebugging
+          ? debuggerResetButton
+          : null}
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton} {resetTemplateButton}
         {inviteButton} {this.props.editorSessionId === '' ? joinButton : leaveButton}
