@@ -53,6 +53,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
             {PlayerStopButton}
           </div>
         </div>
+        <br />
       </div>
     );
   }

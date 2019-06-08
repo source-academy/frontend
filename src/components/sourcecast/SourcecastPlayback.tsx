@@ -12,7 +12,7 @@ import ListVisualizer from '../workspace/side-content/ListVisualizer';
 
 const INTRODUCTION = 'Welcome to Source Cast Playback!';
 
-export interface ISourceCastPlaybackProps extends IDispatchProps, IStateProps {}
+export interface ISourcecastPlaybackProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
@@ -67,8 +67,8 @@ export interface IDispatchProps {
   handleToggleEditorAutorun: () => void;
 }
 
-class SourceCastPlayback extends React.Component<ISourceCastPlaybackProps> {
-  constructor(props: ISourceCastPlaybackProps) {
+class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
+  constructor(props: ISourcecastPlaybackProps) {
     super(props);
   }
 
@@ -145,18 +145,18 @@ class SourceCastPlayback extends React.Component<ISourceCastPlaybackProps> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [sourceCastPlaybackIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
+        tabs: [sourcecastPlaybackIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
       }
     };
     return (
-      <div className={'SourceCastPlayback pt-dark'}>
+      <div className={'SourcecastPlayback pt-dark'}>
         <Workspace {...workspaceProps} />
       </div>
     );
   }
 }
 
-const sourceCastPlaybackIntroductionTab: SideContentTab = {
+const sourcecastPlaybackIntroductionTab: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
   body: <Markdown content={INTRODUCTION} />
@@ -180,4 +180,4 @@ const envVisualizerTab: SideContentTab = {
   body: <EnvVisualizer />
 };
 
-export default SourceCastPlayback;
+export default SourcecastPlayback;

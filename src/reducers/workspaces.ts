@@ -33,10 +33,14 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
-  SET_SOURCECAST_IS_RECORDING,
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_IS_PLAYING,
   SET_WEBSOCKET_STATUS,
+  TIMER_PAUSE,
+  TIMER_RESET,
+  TIMER_RESUME,
+  TIMER_START,
+  TIMER_STOP,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -46,6 +50,7 @@ import {
   UPDATE_WORKSPACE
 } from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
+import { RecordingStatus } from '../components/sourcecast/sourcecastShape';
 import { createContext } from '../utils/slangHelper';
 import {
   CodeOutput,
@@ -462,10 +467,10 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case RECORD_EDITOR_INPUT:
       return {
         ...state,
-        sourceCastRecording: {
-          ...state.sourceCastRecording,
+        sourcecastRecording: {
+          ...state.sourcecastRecording,
           playbackData: [
-            ...state.sourceCastRecording.playbackData,
+            ...state.sourcecastRecording.playbackData,
             {
               time: action.payload.time,
               data: action.payload.data
@@ -524,35 +529,27 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           editorSessionId: action.payload.editorSessionId
         }
       };
-    case SET_SOURCECAST_IS_RECORDING:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isRecording: action.payload.isRecording
-        }
-      };
     case SET_SOURCECAST_PLAYBACK_DURATION:
       return {
         ...state,
-        sourceCastPlayback: {
-          ...state.sourceCastPlayback,
+        sourcecastPlayback: {
+          ...state.sourcecastPlayback,
           playbackDuration: action.payload.duration
         }
       };
     case SET_SOURCECAST_PLAYBACK_IS_PLAYING:
       return {
         ...state,
-        sourceCastPlayback: {
-          ...state.sourceCastPlayback,
+        sourcecastPlayback: {
+          ...state.sourcecastPlayback,
           isPlaying: action.payload.isPlaying
         }
       };
     case SET_EDITOR_READONLY:
       return {
         ...state,
-        sourceCastPlayback: {
-          ...state.sourceCastPlayback,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           editorReadonly: action.payload.editorReadonly
         }
       };
@@ -562,6 +559,57 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           websocketStatus: action.payload.websocketStatus
+        }
+      };
+    case TIMER_PAUSE:
+      return {
+        ...state,
+        sourcecastRecording: {
+          ...state.sourcecastRecording,
+          recordingStatus: RecordingStatus.paused,
+          timeElapsedBeforePause:
+            state.sourcecastRecording.timeElapsedBeforePause +
+            action.payload.timeNow -
+            state.sourcecastRecording.timeResumed
+        }
+      };
+    case TIMER_RESET:
+      return {
+        ...state,
+        sourcecastRecording: {
+          ...state.sourcecastRecording,
+          recordingStatus: RecordingStatus.notStarted,
+          timeElapsedBeforePause: 0,
+          timeResumed: 0
+        }
+      };
+    case TIMER_RESUME:
+      return {
+        ...state,
+        sourcecastRecording: {
+          ...state.sourcecastRecording,
+          recordingStatus: RecordingStatus.recording,
+          timeResumed: action.payload.timeNow
+        }
+      };
+    case TIMER_START:
+      return {
+        ...state,
+        sourcecastRecording: {
+          ...state.sourcecastRecording,
+          recordingStatus: RecordingStatus.recording,
+          timeElapsedBeforePause: 0,
+          timeResumed: action.payload.timeNow
+        }
+      };
+    case TIMER_STOP:
+      return {
+        ...state,
+        sourcecastRecording: {
+          ...state.sourcecastRecording,
+          recordingStatus: RecordingStatus.finished,
+          timeElapsedBeforePause: 0,
+          timeResumed: 0
         }
       };
     case TOGGLE_EDITOR_AUTORUN:

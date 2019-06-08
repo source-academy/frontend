@@ -13,6 +13,7 @@ import {
   ITestcase
 } from '../components/assessment/assessmentShape';
 import { Notification } from '../components/notification/notificationShape';
+import { RecordingStatus } from '../components/sourcecast/sourcecastShape';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -53,22 +54,24 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
 }
 
-export interface ISourceCastPlayback extends IWorkspaceState {
+export interface ISourcecastPlayback extends IWorkspaceState {
   readonly playbackDuration: number;
   readonly isPlaying: boolean;
 }
 
-export interface ISourceCastRecording extends IWorkspaceState {
-  readonly isRecording: boolean;
+export interface ISourcecastRecording extends IWorkspaceState {
   readonly playbackData: any[];
+  readonly recordingStatus: RecordingStatus;
+  readonly timeElapsedBeforePause: number;
+  readonly timeResumed: number;
 }
 
 export interface IWorkspaceManagerState {
   readonly assessment: IAssessmentWorkspace;
   readonly grading: IGradingWorkspace;
   readonly playground: IPlaygroundWorkspace;
-  readonly sourceCastPlayback: ISourceCastPlayback;
-  readonly sourceCastRecording: ISourceCastRecording;
+  readonly sourcecastPlayback: ISourcecastPlayback;
+  readonly sourcecastRecording: ISourcecastRecording;
 }
 
 export interface IWorkspaceState {
@@ -232,7 +235,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   editorPrepend: '',
   editorSessionId: '',
   editorValue:
-    workspaceLocation === WorkspaceLocations.playground || WorkspaceLocations.sourceCastPlayback
+    workspaceLocation === WorkspaceLocations.playground || WorkspaceLocations.sourcecastPlayback
       ? defaultEditorValue
       : '',
   editorPostpend: '',
@@ -279,15 +282,17 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
     playgroundExternal: ExternalLibraryNames.NONE
   },
-  sourceCastPlayback: {
-    ...createDefaultWorkspace(WorkspaceLocations.sourceCastPlayback),
+  sourcecastPlayback: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourcecastPlayback),
     isPlaying: false,
     playbackDuration: 0
   },
-  sourceCastRecording: {
-    ...createDefaultWorkspace(WorkspaceLocations.sourceCastRecording),
-    isRecording: false,
-    playbackData: []
+  sourcecastRecording: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourcecastRecording),
+    playbackData: [],
+    recordingStatus: RecordingStatus.notStarted,
+    timeElapsedBeforePause: 0,
+    timeResumed: 0
   }
 };
 

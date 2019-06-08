@@ -84,16 +84,16 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/sourceCastPlayback"
+        to="/sourcecastPlayback"
       >
         <Icon icon={IconNames.MUSIC} />
-        <div className="navbar-button-text hidden-xs">SourceCast</div>
+        <div className="navbar-button-text hidden-xs">Sourcecast</div>
       </NavLink>
 
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/sourceCastRecording"
+        to="/sourcecastRecording"
       >
         <Icon icon={IconNames.MOBILE_VIDEO} />
         <div className="navbar-button-text hidden-xs">Recording</div>

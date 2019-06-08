@@ -4,10 +4,10 @@ import { Prompt } from 'react-router';
 
 import SourcecastPlaybackControlbar, {
   ISourcecastPlaybackControlbarProps
-} from '../sourceCast/SourcecastPlaybackControlbar';
+} from '../sourcecast/SourcecastPlaybackControlbar';
 import SourcecastRecordingControlbar, {
   ISourcecastRecordingControlbarProps
-} from '../sourceCast/SourcecastRecordingControlbar';
+} from '../sourcecast/SourcecastRecordingControlbar';
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';

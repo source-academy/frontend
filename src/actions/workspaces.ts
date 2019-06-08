@@ -1,7 +1,7 @@
 import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
-import { RecordingType } from '../components/sourceCast/sourcecastShape';
+import { RecordingType } from '../components/sourcecast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -19,8 +19,8 @@ export enum WorkspaceLocations {
   assessment = 'assessment',
   playground = 'playground',
   grading = 'grading',
-  sourceCastPlayback = 'sourceCastPlayback',
-  sourceCastRecording = 'sourceCastRecording'
+  sourcecastPlayback = 'sourcecastPlayback',
+  sourcecastRecording = 'sourcecastRecording'
 }
 
 export type WorkspaceLocation = keyof typeof WorkspaceLocations;
@@ -264,19 +264,14 @@ export const updateWorkspace = (
   }
 });
 
-export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (editorReadonly: boolean) => ({
+export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  editorReadonly: boolean
+) => ({
   type: actionTypes.SET_EDITOR_READONLY,
   payload: {
+    workspaceLocation,
     editorReadonly
-  }
-});
-
-export const setSourcecastIsRecording: ActionCreator<actionTypes.IAction> = (
-  isRecording: boolean
-) => ({
-  type: actionTypes.SET_SOURCECAST_IS_RECORDING,
-  payload: {
-    isRecording
   }
 });
 
@@ -295,6 +290,38 @@ export const setSourcecastPlaybackDuration: ActionCreator<actionTypes.IAction> =
   type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
   payload: {
     duration
+  }
+});
+
+export const timerPause: ActionCreator<actionTypes.IAction> = (timeNow: number) => ({
+  type: actionTypes.TIMER_PAUSE,
+  payload: {
+    timeNow: Date.now()
+  }
+});
+
+export const timerReset = () => ({
+  type: actionTypes.TIMER_RESET
+});
+
+export const timerResume: ActionCreator<actionTypes.IAction> = (timeNow: number) => ({
+  type: actionTypes.TIMER_RESUME,
+  payload: {
+    timeNow: Date.now()
+  }
+});
+
+export const timerStart: ActionCreator<actionTypes.IAction> = (timeNow: number) => ({
+  type: actionTypes.TIMER_START,
+  payload: {
+    timeNow: Date.now()
+  }
+});
+
+export const timerStop: ActionCreator<actionTypes.IAction> = (timeNow: number) => ({
+  type: actionTypes.TIMER_STOP,
+  payload: {
+    timeNow: Date.now()
   }
 });
 

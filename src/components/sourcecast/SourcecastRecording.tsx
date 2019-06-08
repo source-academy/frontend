@@ -9,16 +9,18 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
+import { RecordingStatus } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast Recording!';
 
-export interface ISourceCastRecordingProps extends IDispatchProps, IStateProps {}
+export interface ISourcecastRecordingProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
   breakpoints: string[];
   editorSessionId: string;
   editorHeight?: string;
+  editorReadonly: boolean;
   editorValue: string;
   editorWidth: string;
   enableDebugging: boolean;
@@ -26,12 +28,13 @@ export interface IStateProps {
   highlightedLines: number[][];
   isDebugging: boolean;
   isEditorAutorun: boolean;
-  isRecording: boolean;
   isRunning: boolean;
   output: InterpreterOutput[];
   playbackData: any[];
   queryString?: string;
+  recordingStatus: RecordingStatus;
   replValue: string;
+  timeElapsedBeforePause: number;
   sideContentHeight?: number;
   sourceChapter: number;
   websocketStatus: number;
@@ -55,18 +58,23 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSetEditorReadonly: (readonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
-  handleSetSourcecastIsRecording: (isRecording: boolean) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handleTimerPause: () => void;
+  handleTimerReset: () => void;
+  handleTimerResume: () => void;
+  handleTimerStart: () => void;
+  handleTimerStop: () => void;
   handleToggleEditorAutorun: () => void;
 }
 
-class SourceCastRecording extends React.Component<ISourceCastRecordingProps> {
-  constructor(props: ISourceCastRecordingProps) {
+class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
+  constructor(props: ISourcecastRecordingProps) {
     super(props);
   }
 
@@ -107,12 +115,13 @@ class SourceCastRecording extends React.Component<ISourceCastRecordingProps> {
       editorProps: {
         editorPrepend: '',
         editorPrependLines: 0,
+        editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         isEditorAutorun: this.props.isEditorAutorun,
-        isRecording: this.props.isRecording,
+        isRecording: this.props.recordingStatus === RecordingStatus.recording,
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
         handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
@@ -137,28 +146,34 @@ class SourceCastRecording extends React.Component<ISourceCastRecordingProps> {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
         tabs: [
-          sourceCastRecordingIntroductionTab,
+          sourcecastRecordingIntroductionTab,
           listVisualizerTab,
           inspectorTab,
           envVisualizerTab
         ]
       },
       sourcecastRecordingControlbarProps: {
-        isRecording: this.props.isRecording,
         playbackData: this.props.playbackData,
         handleRecordEditorInput: this.props.handleRecordEditorInput,
-        handleSetSourcecastIsRecording: this.props.handleSetSourcecastIsRecording
+        handleSetEditorReadonly: this.props.handleSetEditorReadonly,
+        handleTimerPause: this.props.handleTimerPause,
+        handleTimerReset: this.props.handleTimerReset,
+        handleTimerResume: this.props.handleTimerResume,
+        handleTimerStart: this.props.handleTimerStart,
+        handleTimerStop: this.props.handleTimerStop,
+        recordingStatus: this.props.recordingStatus,
+        timeElapsedBeforePause: this.props.timeElapsedBeforePause
       }
     };
     return (
-      <div className={'SourceCastRecording pt-dark'}>
+      <div className={'SourcecastRecording pt-dark'}>
         <Workspace {...workspaceProps} />
       </div>
     );
   }
 }
 
-const sourceCastRecordingIntroductionTab: SideContentTab = {
+const sourcecastRecordingIntroductionTab: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
   body: <Markdown content={INTRODUCTION} />
@@ -182,4 +197,4 @@ const envVisualizerTab: SideContentTab = {
   body: <EnvVisualizer />
 };
 
-export default SourceCastRecording;
+export default SourcecastRecording;

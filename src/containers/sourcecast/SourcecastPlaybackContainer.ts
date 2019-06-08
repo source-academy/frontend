@@ -31,34 +31,34 @@ import {
   WorkspaceLocation
 } from '../../actions';
 import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
-import { IDispatchProps, IStateProps } from '../../components/sourceCast/SourceCastPlayback';
-import SourceCastPlayback from '../../components/sourceCast/SourceCastPlayback';
+import { IDispatchProps, IStateProps } from '../../components/sourcecast/SourcecastPlayback';
+import SourcecastPlayback from '../../components/sourcecast/SourcecastPlayback';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  activeTab: state.workspaces.sourceCastPlayback.sideContentActiveTab,
-  editorReadonly: state.workspaces.sourceCastPlayback.editorReadonly,
-  editorSessionId: state.workspaces.sourceCastPlayback.editorSessionId,
-  editorWidth: state.workspaces.sourceCastPlayback.editorWidth,
-  editorValue: state.workspaces.sourceCastPlayback.editorValue!,
-  isEditorAutorun: state.workspaces.sourceCastPlayback.isEditorAutorun,
-  breakpoints: state.workspaces.sourceCastPlayback.breakpoints,
-  highlightedLines: state.workspaces.sourceCastPlayback.highlightedLines,
-  isRunning: state.workspaces.sourceCastPlayback.isRunning,
-  isDebugging: state.workspaces.sourceCastPlayback.isDebugging,
-  isPlaying: state.workspaces.sourceCastPlayback.isPlaying,
-  enableDebugging: state.workspaces.sourceCastPlayback.enableDebugging,
-  output: state.workspaces.sourceCastPlayback.output,
-  playbackDuration: state.workspaces.sourceCastPlayback.playbackDuration,
+  activeTab: state.workspaces.sourcecastPlayback.sideContentActiveTab,
+  editorReadonly: state.workspaces.sourcecastPlayback.editorReadonly,
+  editorSessionId: state.workspaces.sourcecastPlayback.editorSessionId,
+  editorWidth: state.workspaces.sourcecastPlayback.editorWidth,
+  editorValue: state.workspaces.sourcecastPlayback.editorValue!,
+  isEditorAutorun: state.workspaces.sourcecastPlayback.isEditorAutorun,
+  breakpoints: state.workspaces.sourcecastPlayback.breakpoints,
+  highlightedLines: state.workspaces.sourcecastPlayback.highlightedLines,
+  isRunning: state.workspaces.sourcecastPlayback.isRunning,
+  isDebugging: state.workspaces.sourcecastPlayback.isDebugging,
+  isPlaying: state.workspaces.sourcecastPlayback.isPlaying,
+  enableDebugging: state.workspaces.sourcecastPlayback.enableDebugging,
+  output: state.workspaces.sourcecastPlayback.output,
+  playbackDuration: state.workspaces.sourcecastPlayback.playbackDuration,
   queryString: state.playground.queryString,
-  replValue: state.workspaces.sourceCastPlayback.replValue,
-  sideContentHeight: state.workspaces.sourceCastPlayback.sideContentHeight,
-  sourceChapter: state.workspaces.sourceCastPlayback.context.chapter,
+  replValue: state.workspaces.sourcecastPlayback.replValue,
+  sideContentHeight: state.workspaces.sourcecastPlayback.sideContentHeight,
+  sourceChapter: state.workspaces.sourcecastPlayback.context.chapter,
   websocketStatus: state.workspaces.playground.websocketStatus,
   externalLibraryName: state.workspaces.playground.playgroundExternal
 });
 
-const location: WorkspaceLocation = 'sourceCastPlayback';
+const location: WorkspaceLocation = 'sourcecastPlayback';
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -81,7 +81,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSetEditorReadonly: (editorReadonly: boolean) => setEditorReadonly(editorReadonly),
+      handleSetEditorReadonly: (editorReadonly: boolean) =>
+        setEditorReadonly(location, editorReadonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
       handleSetSourcecastPlaybackDuration: (duration: number) =>
@@ -103,4 +104,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SourceCastPlayback);
+)(SourcecastPlayback);

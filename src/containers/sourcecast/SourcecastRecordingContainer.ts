@@ -21,44 +21,51 @@ import {
   playgroundExternalSelect,
   recordEditorInput,
   setEditorBreakpoint,
+  setEditorReadonly,
   setEditorSessionId,
-  setSourcecastIsRecording,
   setWebsocketStatus,
+  timerPause,
+  timerReset,
+  timerResume,
+  timerStart,
+  timerStop,
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
 import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
-import SourceCastRecording, {
+import SourcecastRecording, {
   IDispatchProps,
   IStateProps
-} from '../../components/sourceCast/SourceCastRecording';
+} from '../../components/sourcecast/SourcecastRecording';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  activeTab: state.workspaces.sourceCastRecording.sideContentActiveTab,
-  breakpoints: state.workspaces.sourceCastRecording.breakpoints,
-  editorSessionId: state.workspaces.sourceCastRecording.editorSessionId,
-  editorValue: state.workspaces.sourceCastRecording.editorValue!,
-  editorWidth: state.workspaces.sourceCastRecording.editorWidth,
-  enableDebugging: state.workspaces.sourceCastRecording.enableDebugging,
+  activeTab: state.workspaces.sourcecastRecording.sideContentActiveTab,
+  breakpoints: state.workspaces.sourcecastRecording.breakpoints,
+  editorSessionId: state.workspaces.sourcecastRecording.editorSessionId,
+  editorReadonly: state.workspaces.sourcecastRecording.editorReadonly,
+  editorValue: state.workspaces.sourcecastRecording.editorValue!,
+  editorWidth: state.workspaces.sourcecastRecording.editorWidth,
+  enableDebugging: state.workspaces.sourcecastRecording.enableDebugging,
   externalLibraryName: state.workspaces.playground.playgroundExternal,
-  highlightedLines: state.workspaces.sourceCastRecording.highlightedLines,
-  isDebugging: state.workspaces.sourceCastRecording.isDebugging,
-  isEditorAutorun: state.workspaces.sourceCastRecording.isEditorAutorun,
-  isRecording: state.workspaces.sourceCastRecording.isRecording,
-  isRunning: state.workspaces.sourceCastRecording.isRunning,
-  output: state.workspaces.sourceCastRecording.output,
-  playbackData: state.workspaces.sourceCastRecording.playbackData,
+  highlightedLines: state.workspaces.sourcecastRecording.highlightedLines,
+  isDebugging: state.workspaces.sourcecastRecording.isDebugging,
+  isEditorAutorun: state.workspaces.sourcecastRecording.isEditorAutorun,
+  isRunning: state.workspaces.sourcecastRecording.isRunning,
+  output: state.workspaces.sourcecastRecording.output,
+  playbackData: state.workspaces.sourcecastRecording.playbackData,
   queryString: state.playground.queryString,
-  replValue: state.workspaces.sourceCastRecording.replValue,
-  sideContentHeight: state.workspaces.sourceCastRecording.sideContentHeight,
-  sourceChapter: state.workspaces.sourceCastRecording.context.chapter,
+  recordingStatus: state.workspaces.sourcecastRecording.recordingStatus,
+  replValue: state.workspaces.sourcecastRecording.replValue,
+  sideContentHeight: state.workspaces.sourcecastRecording.sideContentHeight,
+  sourceChapter: state.workspaces.sourcecastRecording.context.chapter,
+  timeElapsedBeforePause: state.workspaces.sourcecastRecording.timeElapsedBeforePause,
   websocketStatus: state.workspaces.playground.websocketStatus
 });
 
-const location: WorkspaceLocation = 'sourceCastRecording';
+const location: WorkspaceLocation = 'sourcecastRecording';
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -82,14 +89,18 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
-      handleSetSourcecastIsRecording: (isRecording: boolean) =>
-        setSourcecastIsRecording(isRecording),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
+      handleTimerPause: timerPause,
+      handleTimerReset: timerReset,
+      handleTimerResume: timerResume,
+      handleTimerStart: timerStart,
+      handleTimerStop: timerStop,
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
       handleDebuggerPause: () => beginDebuggerPause(location),
       handleDebuggerResume: () => debuggerResume(location),
@@ -101,4 +112,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SourceCastRecording);
+)(SourcecastRecording);
