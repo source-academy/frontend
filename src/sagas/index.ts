@@ -360,8 +360,8 @@ function* updateInspector() {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     yield put(actions.highlightEditorLine([start, end], location));
-    visualiseEnv(lastDebuggerResult);
     inspectorUpdate(lastDebuggerResult);
+    visualiseEnv(lastDebuggerResult);
   } catch (e) {
     put(actions.highlightEditorLine([], location));
     // most likely harmless, we can pretty much ignore this.
@@ -391,11 +391,12 @@ function* evalCode(
     paused: take(actionTypes.BEGIN_DEBUG_PAUSE)
   });
   if (result) {
-    lastDebuggerResult = result;
+    if (actionType === actionTypes.EVAL_EDITOR) {
+      lastDebuggerResult = result;
+    }
     yield updateInspector();
     if (result.status === 'finished') {
       yield put(actions.evalInterpreterSuccess(result.value, location));
-      yield put(actions.highlightEditorLine([], location));
     } else if (result.status === 'suspended') {
       yield put(actions.endDebuggerPause(location));
       yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location));
