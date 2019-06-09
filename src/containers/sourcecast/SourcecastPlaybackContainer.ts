@@ -50,7 +50,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   enableDebugging: state.workspaces.sourcecastPlayback.enableDebugging,
   output: state.workspaces.sourcecastPlayback.output,
   playbackDuration: state.workspaces.sourcecastPlayback.playbackDuration,
-  playbackData: state.workspaces.sourcecastPlayback.playbackData,
+  playbackData: state.workspaces.sourcecastRecording.playbackData,
   queryString: state.playground.queryString,
   replValue: state.workspaces.sourcecastPlayback.replValue,
   sideContentHeight: state.workspaces.sourcecastPlayback.sideContentHeight,

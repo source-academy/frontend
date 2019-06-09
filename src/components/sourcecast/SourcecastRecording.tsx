@@ -9,7 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { IDelta, IPlaybackData, RecordingStatus } from './sourcecastShape';
+import { IDelta, RecordingStatus } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast Recording!';
 
@@ -30,7 +30,6 @@ export interface IStateProps {
   isEditorAutorun: boolean;
   isRunning: boolean;
   output: InterpreterOutput[];
-  playbackData: IPlaybackData;
   queryString?: string;
   recordingStatus: RecordingStatus;
   replValue: string;
@@ -162,7 +161,6 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
         handleTimerResume: this.props.handleTimerResume,
         handleTimerStart: this.props.handleTimerStart,
         handleTimerStop: this.props.handleTimerStop,
-        playbackData: this.props.playbackData,
         recordingStatus: this.props.recordingStatus
       }
     };

@@ -8,7 +8,7 @@ import SourcecastPlaybackControlbar, {
 import SourcecastRecordingControlbar, {
   ISourcecastRecordingControlbarProps
 } from '../sourcecast/SourcecastRecordingControlbar';
-import { IDelta, RecordingStatus } from '../sourcecast/sourcecastShape';
+// import { IDelta, RecordingStatus } from '../sourcecast/sourcecastShape';
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';
@@ -59,10 +59,13 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     return (
       <div className="workspace">
         {this.props.sourcecastPlaybackControlbarProps ? (
-          <SourcecastPlaybackControlbar {...this.sourcecastPlaybackControlbarProps()} />
+          <SourcecastPlaybackControlbar
+            {...this.props.sourcecastPlaybackControlbarProps}
+            editorRef={this.editorRef}
+          />
         ) : null}
         {this.props.sourcecastRecordingControlbarProps ? (
-          <SourcecastRecordingControlbar {...this.sourcecastRecordingControlbarProps()} />
+          <SourcecastRecordingControlbar {...this.props.sourcecastRecordingControlbarProps} />
         ) : null}
         {this.props.hasUnsavedChanges ? (
           <Prompt
@@ -85,49 +88,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         </div>
       </div>
     );
-  }
-
-  private sourcecastPlaybackControlbarProps() {
-    if (this.props.sourcecastPlaybackControlbarProps) {
-      return {
-        ...this.props.sourcecastPlaybackControlbarProps,
-        editorRef: this.editorRef
-      };
-    } else {
-      return {
-        handleEditorValueChange: (newCode: string) => {},
-        handleSetEditorReadonly: (editorReadonly: boolean) => {},
-        handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) => {},
-        handleSetSourcecastPlaybackDuration: (duration: number) => {},
-        editorRef: this.editorRef,
-        duration: 0,
-        isPlaying: false,
-        playbackData: { init: '', data: [] }
-      };
-    }
-  }
-
-  private sourcecastRecordingControlbarProps() {
-    if (this.props.sourcecastRecordingControlbarProps) {
-      return {
-        ...this.props.sourcecastRecordingControlbarProps,
-        editorRef: this.editorRef
-      };
-    } else {
-      return {
-        handleRecordEditorDelta: (time: number, delta: IDelta) => {},
-        handleSetEditorReadonly: (readonly: boolean) => {},
-        handleTimerPause: () => {},
-        handleTimerReset: () => {},
-        handleTimerResume: () => {},
-        handleTimerStart: () => {},
-        handleTimerStop: () => {},
-        editorRef: this.editorRef,
-        getTimerDuration: () => 0,
-        playbackData: { init: '', data: [] },
-        recordingStatus: RecordingStatus.notStarted
-      };
-    }
   }
 
   private controlBarProps() {

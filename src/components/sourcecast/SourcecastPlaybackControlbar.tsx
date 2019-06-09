@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { controlButton } from '../commons';
 import Editor from '../workspace/Editor';
-import { IPlaybackData } from './sourcecastShape';
+import { IDelta, IPlaybackData } from './sourcecastShape';
 
 class SourcecastPlaybackControlbar extends React.PureComponent<
   ISourcecastPlaybackControlbarProps,
@@ -64,23 +64,25 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     this.props.handleSetSourcecastPlaybackDuration(this.audio.current!.duration);
   };
 
+  private applyDelta = (delta: IDelta) => {
+    (this.props.editorRef!.current!.AceEditor.current! as any).editor
+      .getSession()
+      .getDocument()
+      .applyDelta(delta);
+  };
+
+  private applyPlaybackData = (playbackData: IPlaybackData) => {
+    playbackData.data.forEach(data => this.applyDelta(data.delta));
+  };
+
   private handlePlayerPlaying = () => {
     const { handleSetSourcecastPlaybackIsPlaying } = this.props;
     const audio = this.audio.current;
     audio!.play();
     handleSetSourcecastPlaybackIsPlaying(true);
     this.props.handleSetEditorReadonly(true);
-    const delta = {
-      start: { row: 0, column: 29 },
-      end: { row: 1, column: 18 },
-      action: 'insert',
-      lines: ['', '// This is a test!']
-    };
-    (this.props.editorRef!.current!.AceEditor.current! as any).editor
-      .getSession()
-      .getDocument()
-      .applyDelta(delta);
-    // use applyDelta for a single delta and applyDeltas for an array of deltas
+    this.props.handleEditorValueChange(this.props.playbackData.init);
+    this.applyPlaybackData(this.props.playbackData);
   };
 
   private handlePlayerPausing = () => {

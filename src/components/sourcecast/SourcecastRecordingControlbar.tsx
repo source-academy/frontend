@@ -4,8 +4,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { controlButton } from '../commons';
-import Editor from '../workspace/Editor';
-import { IPlaybackData, RecordingStatus } from './sourcecastShape';
+import { RecordingStatus } from './sourcecastShape';
 import { Recorder } from './util';
 
 class SourcecastRecordingControlbar extends React.PureComponent<
@@ -79,10 +78,6 @@ class SourcecastRecordingControlbar extends React.PureComponent<
       </div>
     );
   }
-
-  // private applyDeltasInstantly = () => {
-  //   // ...
-  // }
 
   private updateTimerDuration = () => {
     console.log('Updating...');
@@ -183,9 +178,7 @@ export interface ISourcecastRecordingControlbarProps {
   handleTimerResume: () => void;
   handleTimerStart: () => void;
   handleTimerStop: () => void;
-  editorRef?: React.RefObject<Editor>;
   getTimerDuration: () => number;
-  playbackData: IPlaybackData;
   recordingStatus: RecordingStatus;
 }
 
