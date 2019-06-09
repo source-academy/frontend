@@ -75,8 +75,20 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
       .applyDelta(delta);
   };
 
-  private applyPlaybackData = (playbackData: IPlaybackData) => {
-    playbackData.data.forEach(data => this.applyDelta(data.delta));
+  private applyPlaybackData = async (playbackData: IPlaybackData) => {
+    const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+    const len = playbackData.data.length;
+    const data = this.props.playbackData.data;
+    let i = 0;
+    while (i < len) {
+      const currentTime = this.audio.current!.currentTime * 1000;
+      if (data[i].time < currentTime) {
+        this.applyDelta(data[i].delta);
+        i++;
+        continue;
+      }
+      await sleep(10);
+    }
   };
 
   private handlePlayerPlaying = () => {
