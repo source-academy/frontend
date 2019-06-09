@@ -4,13 +4,13 @@ import {
   CHANGE_ACTIVE_TAB,
   CHANGE_EDITOR_HEIGHT,
   //   CHANGE_EDITOR_WIDTH,
-  //   CHANGE_PLAYGROUND_EXTERNAL,
+  CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
-  //   CLEAR_REPL_OUTPUT,
+  CLEAR_REPL_OUTPUT,
   DEBUG_RESET,
   DEBUG_RESUME,
-  //   END_CLEAR_CONTEXT,
+  END_CLEAR_CONTEXT,
   END_DEBUG_PAUSE,
   END_INTERRUPT_EXECUTION,
   EVAL_EDITOR,
@@ -20,13 +20,13 @@ import {
   EVAL_TESTCASE,
   //   EVAL_TESTCASE_SUCCESS,
   //   HANDLE_CONSOLE_LOG,
-  //   HIGHLIGHT_LINE,
+  HIGHLIGHT_LINE,
   IAction,
-  //   LOG_OUT,
+  LOG_OUT,
   //   RESET_WORKSPACE,
   //   SEND_REPL_INPUT_TO_OUTPUT,
-  //   SET_EDITOR_SESSION_ID,
-  //   SET_WEBSOCKET_STATUS,
+  SET_EDITOR_SESSION_ID,
+  SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -35,18 +35,20 @@ import {
   UPDATE_REPL_VALUE
 } from '../../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
-import { defaultWorkspaceManager, IWorkspaceManagerState } from '../states';
+import { Library } from '../../components/assessment/assessmentShape';
+import { createContext } from '../../utils/slangHelper';
+import {
+  createDefaultWorkspace,
+  defaultWorkspaceManager,
+  InterpreterOutput,
+  IPlaygroundWorkspace,
+  IWorkspaceManagerState
+} from '../states';
 import { reducer } from '../workspaces';
 
-let assessmentWorkspace: WorkspaceLocation;
-let gradingWorkspace: WorkspaceLocation;
-let playgroundWorkspace: WorkspaceLocation;
-
-beforeEach(() => {
-  assessmentWorkspace = WorkspaceLocations.assessment;
-  gradingWorkspace = WorkspaceLocations.grading;
-  playgroundWorkspace = WorkspaceLocations.playground;
-});
+const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
+const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
+const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
 
 test('BROWSE_REPL_HISTORY_DOWN works on non-null browseIndex and returns replValue to last value on no further records', () => {
   const browsingHistory = 'browsing history'; // last value before browsing
@@ -130,10 +132,7 @@ test('BROWSE_REPL_HISTORY_DOWN works on non-null browseIndex and returns replVal
 });
 
 test('BROWSE_REPL_HISTORY_DOWN returns unchanged state on null browseIndex', () => {
-  const browsingHistory = 'browsing history';
   const records = ['first history', 'second history'];
-  records[-1] = browsingHistory;
-
   const replHistory = {
     browseIndex: null,
     records
@@ -184,7 +183,7 @@ test('BROWSE_REPL_HISTORY_DOWN returns unchanged state on null browseIndex', () 
   });
 });
 
-test('BROWSE_REPL_HISTORY_UP works correctly on non-null browseIndex and does nothing when there is no more history', () => {
+test('BROWSE_REPL_HISTORY_UP works correctly on non-null browseIndex and returns unchanged state when there is no more history', () => {
   const replValue = 'repl history';
   const replHistoryWithoutRecords = ['first history', 'second history'];
   const replHistoryWithRecords = replHistoryWithoutRecords.slice(0);
@@ -360,6 +359,26 @@ test('CHANGE_EDITOR_HEIGHT works correctly', () => {
   });
 });
 
+test('CHANGE_PLAYGROUND_EXTERNAL works correctly', () => {
+  const newExternal = 'new_external_test';
+  const playgroundAction: IAction = {
+    type: CHANGE_PLAYGROUND_EXTERNAL,
+    payload: {
+      newExternal,
+      workspaceLocation: playgroundWorkspace
+    }
+  };
+
+  const result = reducer(defaultWorkspaceManager, playgroundAction);
+  expect(result).toEqual({
+    ...defaultWorkspaceManager,
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      playgroundExternal: newExternal
+    }
+  });
+});
+
 test('CHANGE_SIDE_CONTENT_HEIGHT works correctly', () => {
   const height = 100;
   const assessmentAction: IAction = {
@@ -445,6 +464,62 @@ test('CLEAR_REPL_INPUT clears replValue correctly', () => {
       [location]: {
         ...clearReplDefaultState[location],
         replValue: ''
+      }
+    });
+  });
+});
+
+test('CLEAR_REPL_OUTPUT clears replValue correctly', () => {
+  const output: InterpreterOutput[] = [
+    {
+      type: 'code',
+      value: 'test repl input'
+    }
+  ];
+  const clearReplDefaultState: IWorkspaceManagerState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: CLEAR_REPL_OUTPUT,
+    payload: {
+      workspaceLocation: assessmentWorkspace
+    }
+  };
+  const gradingAction: IAction = {
+    type: CLEAR_REPL_OUTPUT,
+    payload: {
+      workspaceLocation: gradingWorkspace
+    }
+  };
+  const playgroundAction: IAction = {
+    type: CLEAR_REPL_OUTPUT,
+    payload: {
+      workspaceLocation: playgroundWorkspace
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(clearReplDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...clearReplDefaultState,
+      [location]: {
+        ...clearReplDefaultState[location],
+        output: []
       }
     });
   });
@@ -550,6 +625,74 @@ test('DEBUG_RESUME works correctly', () => {
         ...debugResumeDefaultState[location],
         isRunning: true,
         isDebugging: false
+      }
+    });
+  });
+});
+
+test('END_CLEAR_CONTEXT works correctly', () => {
+  const mockGlobals: Array<[string, any]> = [
+    ['testNumber', 3.141592653589793],
+    ['testString', 'who dat boi'],
+    ['testBooleanTrue', true],
+    ['testBooleanFalse', false],
+    ['testBooleanUndefined', undefined],
+    ['testBooleanNull', null],
+    ['testObject', { a: 1, b: 2 }],
+    ['testArray', [1, 2, 'a', 'b']]
+  ];
+  const library: Library = {
+    chapter: 4,
+    external: {
+      name: 'STREAMS',
+      symbols: []
+    },
+    globals: mockGlobals
+  };
+
+  const assessmentAction: IAction = {
+    type: END_CLEAR_CONTEXT,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      library
+    }
+  };
+  const gradingAction: IAction = {
+    type: END_CLEAR_CONTEXT,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      library
+    }
+  };
+  const playgroundAction: IAction = {
+    type: END_CLEAR_CONTEXT,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      library
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(defaultWorkspaceManager, action);
+    const location = action.payload.workspaceLocation;
+    const context = createContext<WorkspaceLocation>(
+      library.chapter,
+      library.external.symbols,
+      location
+    );
+
+    expect(result).toEqual({
+      ...defaultWorkspaceManager,
+      [location]: {
+        ...defaultWorkspaceManager[location],
+        context: {
+          ...context,
+          runtime: expect.anything(),
+          contextId: expect.any(Number)
+        },
+        globals: mockGlobals
       }
     });
   });
@@ -776,6 +919,147 @@ test('EVAL_TESTCASE works correctly', () => {
       [location]: {
         ...defaultWorkspaceManager[location],
         isRunning: true
+      }
+    });
+  });
+});
+
+test('HIGHLIGHT_LINE works correctly', () => {
+  const highlightedLines = [12, 34, 56];
+  const assessmentAction: IAction = {
+    type: HIGHLIGHT_LINE,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      highlightedLines
+    }
+  };
+  const gradingAction: IAction = {
+    type: HIGHLIGHT_LINE,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      highlightedLines
+    }
+  };
+  const playgroundAction: IAction = {
+    type: HIGHLIGHT_LINE,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      highlightedLines
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(defaultWorkspaceManager, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...defaultWorkspaceManager,
+      [location]: {
+        ...defaultWorkspaceManager[location],
+        highlightedLines
+      }
+    });
+  });
+});
+
+test('LOG_OUT preserves playground workspace even after logout', () => {
+  const newPlayground: IPlaygroundWorkspace = {
+    ...createDefaultWorkspace(WorkspaceLocations.playground),
+    editorHeight: 200,
+    editorValue: 'test program here',
+    highlightedLines: [[1, 2], [3, 4]],
+    playgroundExternal: 'NONE',
+    replValue: 'test repl value here',
+    websocketStatus: 0
+  };
+
+  const logoutDefaultState: IWorkspaceManagerState = {
+    ...defaultWorkspaceManager,
+    playground: newPlayground
+  };
+
+  const playgroundAction: IAction = {
+    type: LOG_OUT,
+    payload: {}
+  };
+
+  const result = reducer(logoutDefaultState, playgroundAction);
+  expect(result).toEqual({
+    ...defaultWorkspaceManager,
+    playground: newPlayground
+  });
+});
+
+test('SET_EDITOR_SESSION_ID works correctly', () => {
+  const editorSessionId = 'test_editor_session_id';
+  const assessmentAction: IAction = {
+    type: SET_EDITOR_SESSION_ID,
+    payload: {
+      editorSessionId
+    }
+  };
+  const gradingAction: IAction = {
+    type: SET_EDITOR_SESSION_ID,
+    payload: {
+      editorSessionId
+    }
+  };
+  const playgroundAction: IAction = {
+    type: SET_EDITOR_SESSION_ID,
+    payload: {
+      editorSessionId
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(defaultWorkspaceManager, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...defaultWorkspaceManager,
+      [location]: {
+        ...defaultWorkspaceManager[location],
+        editorSessionId
+      }
+    });
+  });
+});
+
+test('SET_WEBSOCKET_STATUS works correctly', () => {
+  const assessmentAction: IAction = {
+    type: SET_WEBSOCKET_STATUS,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      websocketStatus: 1
+    }
+  };
+  const gradingAction: IAction = {
+    type: SET_WEBSOCKET_STATUS,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      websocketStatus: 1
+    }
+  };
+  const playgroundAction: IAction = {
+    type: SET_WEBSOCKET_STATUS,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      websocketStatus: 1
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(defaultWorkspaceManager, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...defaultWorkspaceManager,
+      [location]: {
+        ...defaultWorkspaceManager[location],
+        websocketStatus: 1
       }
     });
   });
