@@ -43,14 +43,14 @@ export interface IEditorProps {
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
-  private onChangeMethod: (newCode: string, delta: any) => void;
+  private onChangeMethod: (newCode: string, delta: IDelta) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
 
   constructor(props: IEditorProps) {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
-    this.onChangeMethod = (newCode: string, delta: any) => {
+    this.onChangeMethod = (newCode: string, delta: IDelta) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
         this.props.handleUpdateHasUnsavedChanges(true);
       }

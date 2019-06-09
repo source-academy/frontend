@@ -31,6 +31,7 @@ import {
   RECORD_EDITOR_DELTA,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SET_EDITOR_INIT_VALUE,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
   SET_SOURCECAST_PLAYBACK_DURATION,
@@ -530,6 +531,17 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           editorSessionId: action.payload.editorSessionId
+        }
+      };
+    case SET_EDITOR_INIT_VALUE:
+      return {
+        ...state,
+        sourcecastRecording: {
+          ...state.sourcecastRecording,
+          playbackData: {
+            ...state.sourcecastRecording.playbackData,
+            init: action.payload.editorValue
+          }
         }
       };
     case SET_SOURCECAST_PLAYBACK_DURATION:

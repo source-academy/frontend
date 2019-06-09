@@ -62,6 +62,10 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
 
   private handleAudioLoaded = () => {
     this.props.handleSetSourcecastPlaybackDuration(this.audio.current!.duration);
+
+    // DO NOT KEEP THE CODE BELOW!!!
+    // IT'S JUST A TEMPORARY SOLUTION TO SET INITIAL EDITOR VALUE FOR THE DEMO!!!
+    this.props.handleEditorValueChange(this.props.playbackData.init);
   };
 
   private applyDelta = (delta: IDelta) => {
@@ -81,7 +85,6 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     audio!.play();
     handleSetSourcecastPlaybackIsPlaying(true);
     this.props.handleSetEditorReadonly(true);
-    this.props.handleEditorValueChange(this.props.playbackData.init);
     this.applyPlaybackData(this.props.playbackData);
   };
 

@@ -21,6 +21,7 @@ import {
   playgroundExternalSelect,
   recordEditorDelta,
   setEditorBreakpoint,
+  setEditorInitValue,
   setEditorReadonly,
   setEditorSessionId,
   setWebsocketStatus,
@@ -93,6 +94,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
+      handleSetEditorInitValue: (editorValue: string) => setEditorInitValue(editorValue),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>

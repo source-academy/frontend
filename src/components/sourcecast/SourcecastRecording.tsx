@@ -58,6 +58,7 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSetEditorInitValue: (editorValue: string) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
@@ -154,7 +155,9 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
         ]
       },
       sourcecastRecordingControlbarProps: {
+        editorValue: this.props.editorValue,
         getTimerDuration: this.getTimerDuration,
+        handleSetEditorInitValue: this.props.handleSetEditorInitValue,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleTimerPause: this.props.handleTimerPause,
         handleTimerReset: this.props.handleTimerReset,
