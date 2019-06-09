@@ -37,6 +37,7 @@ export interface IStateProps {
   timeElapsedBeforePause: number;
   sideContentHeight?: number;
   sourceChapter: number;
+  timeResumed: number;
   websocketStatus: number;
 }
 
@@ -118,6 +119,7 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
         editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
+        getTimerDuration: this.getTimerDuration,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         isEditorAutorun: this.props.isEditorAutorun,
@@ -153,16 +155,15 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
         ]
       },
       sourcecastRecordingControlbarProps: {
-        playbackData: this.props.playbackData,
-        handleRecordEditorDelta: this.props.handleRecordEditorDelta,
+        getTimerDuration: this.getTimerDuration,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleTimerPause: this.props.handleTimerPause,
         handleTimerReset: this.props.handleTimerReset,
         handleTimerResume: this.props.handleTimerResume,
         handleTimerStart: this.props.handleTimerStart,
         handleTimerStop: this.props.handleTimerStop,
-        recordingStatus: this.props.recordingStatus,
-        timeElapsedBeforePause: this.props.timeElapsedBeforePause
+        playbackData: this.props.playbackData,
+        recordingStatus: this.props.recordingStatus
       }
     };
     return (
@@ -171,6 +172,9 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
       </div>
     );
   }
+
+  public getTimerDuration = () =>
+    this.props.timeElapsedBeforePause + Date.now() - this.props.timeResumed;
 }
 
 const sourcecastRecordingIntroductionTab: SideContentTab = {

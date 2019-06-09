@@ -123,9 +123,9 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         handleTimerStart: () => {},
         handleTimerStop: () => {},
         editorRef: this.editorRef,
+        getTimerDuration: () => 0,
         playbackData: { init: '', data: [] },
-        recordingStatus: RecordingStatus.notStarted,
-        timeElapsedBeforePause: 0
+        recordingStatus: RecordingStatus.notStarted
       };
     }
   }

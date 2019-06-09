@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { controlButton } from '../commons';
 import Editor from '../workspace/Editor';
-import { IDelta, IPlaybackData, RecordingStatus } from './sourcecastShape';
+import { IPlaybackData, RecordingStatus } from './sourcecastShape';
 import { Recorder } from './util';
 
 class SourcecastRecordingControlbar extends React.PureComponent<
@@ -18,8 +18,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
   constructor(props: ISourcecastRecordingControlbarProps) {
     super(props);
     this.state = {
-      timeOfResume: 0,
-      totalDuration: 0,
+      duration: 0,
       updater: undefined
     };
   }
@@ -64,7 +63,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
         <br />
         <div className="Timer">
           <Card elevation={1}>
-            <h1>{this.renderLabel(this.state.totalDuration)}</h1>
+            <h1>{this.renderLabel(this.state.duration)}</h1>
           </Card>
         </div>
         <br />
@@ -81,11 +80,13 @@ class SourcecastRecordingControlbar extends React.PureComponent<
     );
   }
 
+  // private applyDeltasInstantly = () => {
+  //   // ...
+  // }
+
   private updateTimerDuration = () => {
     console.log('Updating...');
-    this.setState({
-      totalDuration: this.props.timeElapsedBeforePause + Date.now() - this.state.timeOfResume
-    });
+    this.setState({ duration: this.props.getTimerDuration() });
   };
 
   private startUserMedia = (stream: MediaStream) => {
@@ -109,7 +110,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
     handleSetEditorReadonly(false);
     handleTimerStart();
     const updater = setInterval(this.updateTimerDuration, 100);
-    this.setState({ updater, timeOfResume: Date.now() });
+    this.setState({ updater });
     this.recorder.record();
   };
 
@@ -119,7 +120,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
     handleSetEditorReadonly(false);
     handleTimerResume();
     const updater = setInterval(this.updateTimerDuration, 100);
-    this.setState({ updater, timeOfResume: Date.now() });
+    this.setState({ updater });
     this.recorder.record();
   };
 
@@ -146,9 +147,6 @@ class SourcecastRecordingControlbar extends React.PureComponent<
     clearInterval(this.state.updater!);
     console.log('Reset recorder');
     this.recorder.clear();
-    this.setState({
-      totalDuration: 0
-    });
   };
 
   private handleRecorderDownloading = () => {
@@ -179,7 +177,6 @@ class SourcecastRecordingControlbar extends React.PureComponent<
 }
 
 export interface ISourcecastRecordingControlbarProps {
-  handleRecordEditorDelta: (time: number, delta: IDelta) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
@@ -187,15 +184,14 @@ export interface ISourcecastRecordingControlbarProps {
   handleTimerStart: () => void;
   handleTimerStop: () => void;
   editorRef?: React.RefObject<Editor>;
+  getTimerDuration: () => number;
   playbackData: IPlaybackData;
   recordingStatus: RecordingStatus;
-  timeElapsedBeforePause: number;
 }
 
 export interface ISourcecastRecordingControlbarState {
+  duration: number;
   fileDataBlob?: Blob;
-  timeOfResume: number;
-  totalDuration: number;
   updater?: NodeJS.Timeout;
 }
 

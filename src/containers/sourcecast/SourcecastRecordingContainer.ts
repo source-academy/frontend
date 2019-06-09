@@ -62,6 +62,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sideContentHeight: state.workspaces.sourcecastRecording.sideContentHeight,
   sourceChapter: state.workspaces.sourcecastRecording.context.chapter,
   timeElapsedBeforePause: state.workspaces.sourcecastRecording.timeElapsedBeforePause,
+  timeResumed: state.workspaces.sourcecastRecording.timeResumed,
   websocketStatus: state.workspaces.playground.websocketStatus
 });
 

@@ -24,6 +24,7 @@ export interface IEditorProps {
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
+  getTimerDuration?: () => number;
   highlightedLines: number[][];
   isEditorAutorun: boolean;
   isPlaying?: boolean;
@@ -56,7 +57,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       this.props.handleEditorValueChange(newCode);
       if (this.props.isRecording) {
         console.log('Recording delta... ');
-        this.props.handleRecordEditorDelta!(1, delta);
+        this.props.handleRecordEditorDelta!(this.props.getTimerDuration!(), delta);
       }
     };
     this.onValidateMethod = (annotations: Annotation[]) => {
