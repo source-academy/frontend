@@ -38,9 +38,9 @@ import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces'
 import { defaultWorkspaceManager, IWorkspaceManagerState } from '../states';
 import { reducer } from '../workspaces';
 
-let assessmentWorkspace: WorkspaceLocation,
-  gradingWorkspace: WorkspaceLocation,
-  playgroundWorkspace: WorkspaceLocation;
+let assessmentWorkspace: WorkspaceLocation;
+let gradingWorkspace: WorkspaceLocation;
+let playgroundWorkspace: WorkspaceLocation;
 
 beforeEach(() => {
   assessmentWorkspace = WorkspaceLocations.assessment;
@@ -51,7 +51,7 @@ beforeEach(() => {
 test('BROWSE_REPL_HISTORY_DOWN works on non-null browseIndex and returns replValue to last value on no further records', () => {
   const browsingHistory = 'browsing history'; // last value before browsing
   const replHistoryWithoutRecords = ['first history', 'second history'];
-  let replHistoryWithRecords = replHistoryWithoutRecords.slice(0);
+  const replHistoryWithRecords = replHistoryWithoutRecords.slice(0);
   replHistoryWithRecords[-1] = browsingHistory;
 
   const replHistory = {
@@ -131,7 +131,7 @@ test('BROWSE_REPL_HISTORY_DOWN works on non-null browseIndex and returns replVal
 
 test('BROWSE_REPL_HISTORY_DOWN returns unchanged state on null browseIndex', () => {
   const browsingHistory = 'browsing history';
-  let records = ['first history', 'second history'];
+  const records = ['first history', 'second history'];
   records[-1] = browsingHistory;
 
   const replHistory = {
@@ -187,7 +187,7 @@ test('BROWSE_REPL_HISTORY_DOWN returns unchanged state on null browseIndex', () 
 test('BROWSE_REPL_HISTORY_UP works correctly on non-null browseIndex and does nothing when there is no more history', () => {
   const replValue = 'repl history';
   const replHistoryWithoutRecords = ['first history', 'second history'];
-  let replHistoryWithRecords = replHistoryWithoutRecords.slice(0);
+  const replHistoryWithRecords = replHistoryWithoutRecords.slice(0);
   replHistoryWithRecords[-1] = replValue;
 
   const replHistory = {
@@ -836,7 +836,7 @@ test('UPDATE_CURRENT_ASSESSMENT_ID works correctly', () => {
     }
   };
 
-  let result = reducer(defaultWorkspaceManager, assessmentAction);
+  const result = reducer(defaultWorkspaceManager, assessmentAction);
   expect(result).toEqual({
     ...defaultWorkspaceManager,
     assessment: {
@@ -858,7 +858,7 @@ test('UPDATE_CURRENT_SUBMISSION_ID works correctly', () => {
     }
   };
 
-  let result = reducer(defaultWorkspaceManager, assessmentAction);
+  const result = reducer(defaultWorkspaceManager, assessmentAction);
   expect(result).toEqual({
     ...defaultWorkspaceManager,
     grading: {
