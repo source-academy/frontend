@@ -34,7 +34,8 @@ import {
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
-  UPDATE_REPL_VALUE
+  UPDATE_REPL_VALUE,
+  UPDATE_WORKSPACE
 } from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
 import { createContext } from '../utils/slangHelper';
@@ -444,6 +445,18 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           ...createDefaultWorkspace(location),
+          ...action.payload.workspaceOptions
+        }
+      };
+    /**
+     * Updates workspace without changing anything
+     * which has not been specified
+     */
+    case UPDATE_WORKSPACE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
           ...action.payload.workspaceOptions
         }
       };

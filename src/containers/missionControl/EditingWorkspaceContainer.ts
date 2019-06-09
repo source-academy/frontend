@@ -16,13 +16,16 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
+  evalTestcase,
   setEditorBreakpoint,
   submitAnswer,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
+  updateReplValue,
+  updateWorkspace
 } from '../../actions';
 import {
+
   resetWorkspace,
   updateCurrentAssessmentId,
   WorkspaceLocation
@@ -38,7 +41,6 @@ import { IState, IWorkspaceState } from '../../reducers/states';
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     activeTab: state.workspaces.assessment.sideContentActiveTab,
-    assessment: state.session.assessments.get(props.assessmentId),
     editorValue: state.workspaces.assessment.editorValue,
     editorHeight: state.workspaces.assessment.editorHeight,
     editorWidth: state.workspaces.assessment.editorWidth,
@@ -79,9 +81,12 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleResetWorkspace: (options: Partial<IWorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
+      handleUpdateWorkspace: (options: Partial<IWorkspaceState>) =>
+        updateWorkspace(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
+      handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId,

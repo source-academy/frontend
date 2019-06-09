@@ -10,6 +10,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  ITestcase,
   Library,
   QuestionTypes
 } from '../assessment/assessmentShape';
@@ -20,6 +21,7 @@ import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
+  AutograderTab,
   DeploymentTab,
   GradingTab,
   ManageQuestionTab,
@@ -37,7 +39,6 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
   activeTab: number;
-  assessment?: IAssessment;
   editorHeight?: number;
   editorValue: string | null;
   editorWidth: string;
@@ -78,8 +79,10 @@ export type DispatchProps = {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
+  handleUpdateWorkspace: (options: Partial<IWorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleTestcaseEval: (testcaseId: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
@@ -117,8 +120,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
    * and show the briefing.
    */
   public componentDidMount() {
-    if (this.props.assessment) {
-      this.resetEditorValue();
+    if (this.state.assessment) {
+      this.resetWorkspaceValues();
       this.setState({
         originalMaxGrade: this.getMaxMarks('maxGrade'),
         originalMaxXp: this.getMaxMarks('maxXp')
@@ -260,14 +263,14 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     }
 
     /* Reset assessment if it has changed.*/
-    const assessmentId = this.props.assessmentId;
+    const assessmentId = -1;
     const questionId = this.formatedQuestionId();
 
     if (
       this.props.storedAssessmentId !== assessmentId ||
       this.props.storedQuestionId !== questionId
     ) {
-      this.resetEditorValue();
+      this.resetWorkspaceValues();
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (this.state.hasUnsavedChanges) {
@@ -302,6 +305,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.props.handleClearContext(library);
   };
 
+  private resetWorkspaceValues = () => {
+    this.resetEditorValue();
+    this.resetPrependValue();
+    this.resetPostpendValue();
+  }
+
   private resetEditorValue = () => {
     const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
     let editorValue: string;
@@ -317,6 +326,30 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.props.handleResetWorkspace({ editorValue });
     this.props.handleEditorValueChange(editorValue);
   };
+
+  private resetPrependValue = () => {
+    const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
+    let editorPrepend = '';
+    if (question.type === QuestionTypes.programming) {
+      editorPrepend = (question as IProgrammingQuestion).prepend;
+    } 
+    this.props.handleResetWorkspace({ editorPrepend });
+  };
+
+  private resetPostpendValue = () => {
+    const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
+    let editorPostpend = '';
+    if (question.type === QuestionTypes.programming) {
+      editorPostpend = (question as IProgrammingQuestion).postpend;
+    } 
+    this.props.handleResetWorkspace({ editorPostpend });
+  };
+
+  private handleTestcaseEval = (testcase: ITestcase) => {
+    const editorTestcases = [testcase];
+    this.props.handleUpdateWorkspace({ editorTestcases });
+    this.props.handleTestcaseEval(0);
+  }
 
   private handleSave = () => {
     const assessment = this.state.assessment!;
@@ -373,7 +406,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     });
     this.handleRefreshLibrary();
     this.handleSave();
-    this.resetEditorValue();
+    this.resetWorkspaceValues();
   };
 
   private handleChangeActiveTab = (tab: number) => {
@@ -459,6 +492,18 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               pathToCopy={['questions', questionId, 'library']}
               updateAssessment={this.updateEditAssessmentState}
               isOptionalDeployment={true}
+            />
+          )
+        },
+        {
+          label: `Autograder`,
+          icon: IconNames.AIRPLANE,
+          body: (
+            <AutograderTab
+              assessment={assessment}
+              questionId={questionId}
+              handleTestcaseEval={this.handleTestcaseEval}
+              updateAssessment={this.updateEditAssessmentState}
             />
           )
         },

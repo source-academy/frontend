@@ -87,5 +87,5 @@ export interface IXmlParseStrTestcase {
     answer: string;
     score: string;
   };
-  TEXT: string;
+  _: string;
 }

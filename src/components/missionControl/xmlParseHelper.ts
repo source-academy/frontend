@@ -180,6 +180,7 @@ const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] =>
 
 const makeMCQ = (problem: IXmlParseStrCProblem, question: IQuestion): IMCQQuestion => {
   const choicesVal: MCQChoice[] = [];
+  const solution = problem.SNIPPET ? problem.SNIPPET[0].SOLUTION : undefined;
   let solutionVal = 0;
   problem.CHOICE.forEach((choice: IXmlParseStrProblemChoice, i: number) => {
     choicesVal.push({
@@ -191,7 +192,7 @@ const makeMCQ = (problem: IXmlParseStrCProblem, question: IQuestion): IMCQQuesti
   return {
     ...question,
     type: 'mcq',
-    answer: parseInt(problem.SNIPPET[0].SOLUTION[0], 10),
+    answer: solution ? parseInt(solution[0], 10) : 0,
     choices: choicesVal,
     solution: solutionVal
   };
@@ -204,14 +205,18 @@ const makeProgramming = (
   const testcases = problem.SNIPPET[0].TESTCASES;
   const publicTestcases = testcases ? ( testcases[0].PUBLIC || [] ) : [];
   const privateTestcases = testcases ? ( testcases[0].PRIVATE || [] ) : [];
+  const prepend = problem.SNIPPET[0].PREPEND;
+  const postpend = problem.SNIPPET[0].POSTPEND;
+  const solution = problem.SNIPPET[0].SOLUTION;
+
   const result: IProgrammingQuestion = {
     ...question,
-    prepend: problem.SNIPPET[0].PREPEND as string,
+    prepend: prepend ? prepend[0] as string : '',
     solutionTemplate: problem.SNIPPET[0].TEMPLATE[0] as string,
-    postpend: problem.SNIPPET[0].POSTPEND as string,
+    postpend: postpend ? postpend[0] as string : '',
     testcases: publicTestcases.map(testcase => makeTestcase(testcase)),
     testcasesPrivate: privateTestcases.map(testcase => makeTestcase(testcase)),
-    answer: problem.SNIPPET[0].SOLUTION[0] as string,
+    answer: solution ? solution[0] as string : '',
     type: 'programming'
   };
   if (problem.SNIPPET[0].GRADER) {
@@ -224,7 +229,7 @@ const makeTestcase = (testcase: IXmlParseStrTestcase): ITestcase => {
   return {
     answer: testcase.$.answer,
     score: parseInt(testcase.$.score, 10),
-    program: testcase.TEXT
+    program: testcase._
   };
 };
 
