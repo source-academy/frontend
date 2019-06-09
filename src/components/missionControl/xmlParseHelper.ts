@@ -201,12 +201,16 @@ const makeProgramming = (
   problem: IXmlParseStrPProblem,
   question: IQuestion
 ): IProgrammingQuestion => {
+  const testcases = problem.SNIPPET[0].TESTCASES;
+  const publicTestcases = testcases ? ( testcases[0].PUBLIC || [] ) : [];
+  const privateTestcases = testcases ? ( testcases[0].PRIVATE || [] ) : [];
   const result: IProgrammingQuestion = {
     ...question,
     prepend: problem.SNIPPET[0].PREPEND as string,
     solutionTemplate: problem.SNIPPET[0].TEMPLATE[0] as string,
     postpend: problem.SNIPPET[0].POSTPEND as string,
-    testcases: problem.SNIPPET[0].TESTCASES.map(testcase => makeTestcase(testcase)),
+    testcases: publicTestcases.map(testcase => makeTestcase(testcase)),
+    testcasesPrivate: privateTestcases.map(testcase => makeTestcase(testcase)),
     answer: problem.SNIPPET[0].SOLUTION[0] as string,
     type: 'programming'
   };

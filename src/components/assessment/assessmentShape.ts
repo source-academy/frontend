@@ -72,6 +72,7 @@ export interface IProgrammingQuestion extends IQuestion {
   solutionTemplate: string;
   postpend: string;
   testcases: ITestcase[];
+  testcasesPrivate?: ITestcase[]; // For mission control
   type: 'programming';
   graderTemplate?: string;
 }
