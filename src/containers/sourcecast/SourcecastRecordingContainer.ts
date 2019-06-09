@@ -19,7 +19,7 @@ import {
   generateLzString,
   invalidEditorSessionId,
   playgroundExternalSelect,
-  recordEditorInput,
+  recordEditorDelta,
   setEditorBreakpoint,
   setEditorReadonly,
   setEditorSessionId,
@@ -85,7 +85,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         playgroundExternalSelect(externalLibraryName, location),
-      handleRecordEditorInput: recordEditorInput,
+      handleRecordEditorDelta: recordEditorDelta,
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

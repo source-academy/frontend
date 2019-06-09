@@ -9,3 +9,24 @@ export enum RecordingStatus {
   paused = 'paused',
   finished = 'finished'
 }
+
+export interface IDelta {
+  start: {
+    row: number;
+    column: number;
+  };
+  end: {
+    row: number;
+    column: number;
+  };
+  action: string;
+  lines: string[];
+}
+
+export interface IPlaybackData {
+  init: string;
+  data: Array<{
+    time: number;
+    delta: IDelta;
+  }>;
+}

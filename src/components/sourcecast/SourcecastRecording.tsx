@@ -9,7 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { RecordingStatus } from './sourcecastShape';
+import { IDelta, IPlaybackData, RecordingStatus } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast Recording!';
 
@@ -30,7 +30,7 @@ export interface IStateProps {
   isEditorAutorun: boolean;
   isRunning: boolean;
   output: InterpreterOutput[];
-  playbackData: any[];
+  playbackData: IPlaybackData;
   queryString?: string;
   recordingStatus: RecordingStatus;
   replValue: string;
@@ -54,7 +54,7 @@ export interface IDispatchProps {
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
-  handleRecordEditorInput: (time: number, data: any[]) => void;
+  handleRecordEditorDelta: (time: number, delta: IDelta) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
@@ -125,7 +125,7 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
         handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-        handleRecordEditorInput: this.props.handleRecordEditorInput,
+        handleRecordEditorDelta: this.props.handleRecordEditorDelta,
         handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
       },
       editorHeight: this.props.editorHeight,
@@ -154,7 +154,7 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
       },
       sourcecastRecordingControlbarProps: {
         playbackData: this.props.playbackData,
-        handleRecordEditorInput: this.props.handleRecordEditorInput,
+        handleRecordEditorDelta: this.props.handleRecordEditorDelta,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleTimerPause: this.props.handleTimerPause,
         handleTimerReset: this.props.handleTimerReset,

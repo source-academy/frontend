@@ -9,6 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
+import { IPlaybackData } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast Playback!';
 
@@ -30,7 +31,7 @@ export interface IStateProps {
   enableDebugging: boolean;
   output: InterpreterOutput[];
   playbackDuration: number;
-  playbackData: any;
+  playbackData: IPlaybackData;
   queryString?: string;
   replValue: string;
   sideContentHeight?: number;

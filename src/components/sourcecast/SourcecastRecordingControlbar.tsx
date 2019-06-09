@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { controlButton } from '../commons';
 import Editor from '../workspace/Editor';
-import { RecordingStatus } from './sourcecastShape';
+import { IDelta, IPlaybackData, RecordingStatus } from './sourcecastShape';
 import { Recorder } from './util';
 
 class SourcecastRecordingControlbar extends React.PureComponent<
@@ -157,6 +157,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
       return;
     }
     const url = window.URL.createObjectURL(this.state.fileDataBlob);
+    console.log('Download URL: ' + url);
     const click = document.createEvent('Event');
     click.initEvent('click', true, true);
     const link = document.createElement('A') as HTMLAnchorElement;
@@ -178,7 +179,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
 }
 
 export interface ISourcecastRecordingControlbarProps {
-  handleRecordEditorInput: (time: number, data: any[]) => void;
+  handleRecordEditorDelta: (time: number, delta: IDelta) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
@@ -186,7 +187,7 @@ export interface ISourcecastRecordingControlbarProps {
   handleTimerStart: () => void;
   handleTimerStop: () => void;
   editorRef?: React.RefObject<Editor>;
-  playbackData: any[];
+  playbackData: IPlaybackData;
   recordingStatus: RecordingStatus;
   timeElapsedBeforePause: number;
 }

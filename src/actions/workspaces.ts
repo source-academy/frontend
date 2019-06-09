@@ -1,7 +1,7 @@
 import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
-import { RecordingType } from '../components/sourcecast/sourcecastShape';
+import { IDelta, RecordingType } from '../components/sourcecast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -221,15 +221,15 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const recordEditorInput: ActionCreator<actionTypes.IAction> = (
+export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
   time: number,
-  data: any[]
+  delta: IDelta
 ) => ({
-  type: actionTypes.RECORD_EDITOR_INPUT,
+  type: actionTypes.RECORD_EDITOR_DELTA,
   payload: {
     type: RecordingType.code,
     time,
-    data
+    delta
   }
 });
 

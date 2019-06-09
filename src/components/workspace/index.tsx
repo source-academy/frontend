@@ -8,7 +8,7 @@ import SourcecastPlaybackControlbar, {
 import SourcecastRecordingControlbar, {
   ISourcecastRecordingControlbarProps
 } from '../sourcecast/SourcecastRecordingControlbar';
-import { RecordingStatus } from '../sourcecast/sourcecastShape';
+import { IDelta, RecordingStatus } from '../sourcecast/sourcecastShape';
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';
@@ -102,7 +102,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         editorRef: this.editorRef,
         duration: 0,
         isPlaying: false,
-        playbackData: []
+        playbackData: { init: '', data: [] }
       };
     }
   }
@@ -115,7 +115,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       };
     } else {
       return {
-        handleRecordEditorInput: (time: number, data: any[]) => {},
+        handleRecordEditorDelta: (time: number, delta: IDelta) => {},
         handleSetEditorReadonly: (readonly: boolean) => {},
         handleTimerPause: () => {},
         handleTimerReset: () => {},
@@ -123,7 +123,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         handleTimerStart: () => {},
         handleTimerStop: () => {},
         editorRef: this.editorRef,
-        playbackData: [],
+        playbackData: { init: '', data: [] },
         recordingStatus: RecordingStatus.notStarted,
         timeElapsedBeforePause: 0
       };

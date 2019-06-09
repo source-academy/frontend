@@ -9,6 +9,7 @@ import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
 
 import { LINKS } from '../../utils/constants';
+import { IDelta } from '../sourcecast/sourcecastShape';
 import { checkSessionIdExists } from './collabEditing/helper';
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -33,7 +34,7 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
-  handleRecordEditorInput?: (time: number, data: any[]) => void;
+  handleRecordEditorDelta?: (time: number, delta: IDelta) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -55,7 +56,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       this.props.handleEditorValueChange(newCode);
       if (this.props.isRecording) {
         console.log('Recording delta... ');
-        this.props.handleRecordEditorInput!(1, delta);
+        this.props.handleRecordEditorDelta!(1, delta);
       }
     };
     this.onValidateMethod = (annotations: Annotation[]) => {

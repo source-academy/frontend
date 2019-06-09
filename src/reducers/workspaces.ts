@@ -28,7 +28,7 @@ import {
   IAction,
   INIT_INVITE,
   LOG_OUT,
-  RECORD_EDITOR_INPUT,
+  RECORD_EDITOR_DELTA,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_READONLY,
@@ -464,18 +464,21 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       };
-    case RECORD_EDITOR_INPUT:
+    case RECORD_EDITOR_DELTA:
       return {
         ...state,
         sourcecastRecording: {
           ...state.sourcecastRecording,
-          playbackData: [
+          playbackData: {
             ...state.sourcecastRecording.playbackData,
-            {
-              time: action.payload.time,
-              data: action.payload.data
-            }
-          ]
+            data: [
+              ...state.sourcecastRecording.playbackData.data,
+              {
+                time: action.payload.time,
+                delta: action.payload.delta
+              }
+            ]
+          }
         }
       };
     /**

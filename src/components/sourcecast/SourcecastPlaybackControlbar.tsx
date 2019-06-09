@@ -5,6 +5,7 @@ import * as React from 'react';
 
 import { controlButton } from '../commons';
 import Editor from '../workspace/Editor';
+import { IPlaybackData } from './sourcecastShape';
 
 class SourcecastPlaybackControlbar extends React.PureComponent<
   ISourcecastPlaybackControlbarProps,
@@ -140,7 +141,7 @@ export interface ISourcecastPlaybackControlbarProps {
   editorRef?: React.RefObject<Editor>;
   duration: number;
   isPlaying: boolean;
-  playbackData: any[];
+  playbackData: IPlaybackData;
 }
 
 export interface ISourcecastPlaybackControlbarState {
