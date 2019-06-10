@@ -26,7 +26,7 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
       <div key={index}>{this.autograderCard(publicTestPath, index)}</div>
     ));
 
-    const privateTestPath = ['questions', this.props.questionId, 'testcases'];
+    const privateTestPath = ['questions', this.props.questionId, 'testcasesPrivate'];
     const privateTestcases = question.testcasesPrivate!.map((testcase, index) => (
       <div key={index}>{this.autograderCard(privateTestPath, index)}</div>
     ));
