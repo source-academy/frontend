@@ -3,6 +3,7 @@ import {
   Classes,
   Colors,
   Intent,
+  Menu,
   MenuItem,
   Popover,
   Switch,
@@ -273,6 +274,21 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
       undefined
     );
 
+    const sessionMenuButton = this.props.hasCollabEditing ? (
+      <Popover
+        content={
+          <Menu large={true}>
+            {inviteButton}
+            {this.props.editorSessionId === '' ? joinButton : leaveButton}
+          </Menu>
+        }
+      >
+        {controlButton('Session', IconNames.SOCIAL_MEDIA)}
+      </Popover>
+    ) : (
+      undefined
+    );
+
     return (
       <div className="ControlBar_editor pt-button-group">
         {toggleAutorunButton}
@@ -293,7 +309,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
         {this.props.isDebugging ? debuggerResetButton : null}
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton} {resetTemplateButton}
-        {inviteButton} {this.props.editorSessionId === '' ? joinButton : leaveButton}
+        {sessionMenuButton}
       </div>
     );
   }
