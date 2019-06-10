@@ -244,6 +244,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
                 originalMaxXp: this.getMaxMarks('maxXp')
               });
               this.handleRefreshLibrary();
+              this.resetWorkspaceValues();
             },
             { minimal: false, intent: Intent.DANGER }
           )}
@@ -306,44 +307,29 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   };
 
   private resetWorkspaceValues = () => {
-    this.resetEditorValue();
-    // this.resetPrependValue();
-    // this.resetPostpendValue();
-  };
-
-  private resetEditorValue = () => {
     const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
     let editorValue: string;
+    let editorPrepend = '';
+    let editorPostpend = '';
     if (question.type === QuestionTypes.programming) {
       if (question.editorValue) {
         editorValue = question.editorValue;
       } else {
         editorValue = (question as IProgrammingQuestion).solutionTemplate as string;
       }
+      editorPrepend = (question as IProgrammingQuestion).prepend;
+      editorPostpend = (question as IProgrammingQuestion).postpend;
     } else {
       editorValue = '//If you see this, this is a bug. Please report bug.';
     }
-    this.props.handleResetWorkspace({ editorValue });
+
+    this.props.handleResetWorkspace({
+      editorPrepend,
+      editorValue,
+      editorPostpend
+    });
     this.props.handleEditorValueChange(editorValue);
   };
-
-  // private resetPrependValue = () => {
-  //   const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
-  //   let editorPrepend = '';
-  //   if (question.type === QuestionTypes.programming) {
-  //     editorPrepend = (question as IProgrammingQuestion).prepend;
-  //   }
-  //   this.props.handleResetWorkspace({ editorPrepend });
-  // };
-
-  // private resetPostpendValue = () => {
-  //   const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
-  //   let editorPostpend = '';
-  //   if (question.type === QuestionTypes.programming) {
-  //     editorPostpend = (question as IProgrammingQuestion).postpend;
-  //   }
-  //   this.props.handleResetWorkspace({ editorPostpend });
-  // };
 
   private handleTestcaseEval = (testcase: ITestcase) => {
     const editorTestcases = [testcase];
@@ -446,6 +432,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
             updateAssessment={this.updateEditAssessmentState}
             editorValue={this.props.editorValue}
             handleEditorValueChange={this.props.handleEditorValueChange}
+            handleUpdateWorkspace={this.props.handleUpdateWorkspace}
           />
         );
 
@@ -496,18 +483,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           )
         },
         {
-          label: `Autograder`,
-          icon: IconNames.AIRPLANE,
-          body: (
-            <AutograderTab
-              assessment={assessment}
-              questionId={questionId}
-              handleTestcaseEval={this.handleTestcaseEval}
-              updateAssessment={this.updateEditAssessmentState}
-            />
-          )
-        },
-        {
           label: `Grading`,
           icon: IconNames.TICK,
           body: (
@@ -519,6 +494,20 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           )
         }
       ];
+      if (qnType === 'programming') {
+        tabs.push({
+          label: `Autograder`,
+          icon: IconNames.AIRPLANE,
+          body: (
+            <AutograderTab
+              assessment={assessment}
+              questionId={questionId}
+              handleTestcaseEval={this.handleTestcaseEval}
+              updateAssessment={this.updateEditAssessmentState}
+            />
+          )
+        });
+      }
       const functionsAttached = assessment!.questions[questionId].library.external.symbols;
       if (functionsAttached.includes('get_matrix')) {
         tabs.push({

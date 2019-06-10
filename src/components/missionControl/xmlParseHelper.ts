@@ -211,12 +211,12 @@ const makeProgramming = (
 
   const result: IProgrammingQuestion = {
     ...question,
-    prepend: prepend ? (prepend[0] as string) : '',
-    solutionTemplate: problem.SNIPPET[0].TEMPLATE[0] as string,
-    postpend: postpend ? (postpend[0] as string) : '',
+    prepend: prepend ? (prepend[0] as string).trim() : '',
+    solutionTemplate: problem.SNIPPET[0].TEMPLATE[0].trim() as string,
+    postpend: postpend ? (postpend[0] as string).trim() : '',
     testcases: publicTestcases.map(testcase => makeTestcase(testcase)),
     testcasesPrivate: privateTestcases.map(testcase => makeTestcase(testcase)),
-    answer: solution ? (solution[0] as string) : '',
+    answer: solution ? (solution[0] as string).trim() : '',
     type: 'programming'
   };
   if (problem.SNIPPET[0].GRADER) {
