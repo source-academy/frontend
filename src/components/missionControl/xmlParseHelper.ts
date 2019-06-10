@@ -359,8 +359,45 @@ export const assessmentToXml = (
         /* tslint:disable:no-string-literal */
         problem.SNIPPET['GRADER'] = question.graderTemplate;
       }
-      /* tslint:disable:no-string-literal */
-      problem.SNIPPET['TEMPLATE'] = question.solutionTemplate;
+      const snippet = {
+        ...problem.SNIPPET,
+        TEMPLATE: question.solutionTemplate,
+        PREPEND: question.prepend,
+        POSTPEND: question.postpend,
+        TESTCASES: '' as any
+      };
+
+      if (question.testcases.length || question.testcasesPrivate!.length) {
+        /* tslint:disable:no-string-literal */
+        snippet.TESTCASES = {};
+        if (question.testcases.length) {
+          const publicTests = question.testcases.map(testcase => {
+            return {
+              $: {
+                answer: testcase.answer,
+                score: testcase.score
+              },
+              _: testcase.program
+            };
+          });
+          snippet.TESTCASES['PUBLIC'] = publicTests;
+        }
+
+        if (question.testcasesPrivate && question.testcasesPrivate.length) {
+          const privateTests = question.testcasesPrivate.map(testcase => {
+            return {
+              $: {
+                answer: testcase.answer,
+                score: testcase.score
+              },
+              _: testcase.program
+            };
+          });
+          snippet.TESTCASES['PRIVATE'] = privateTests;
+        }
+      }
+
+      problem.SNIPPET = snippet;
     }
 
     if (question.type === 'mcq') {
