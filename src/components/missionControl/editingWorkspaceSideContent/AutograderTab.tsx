@@ -3,14 +3,15 @@ import {
   Elevation
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { stringify } from 'js-slang/dist/interop';
+// import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
 import { IAssessment, IProgrammingQuestion, ITestcase } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
-import Markdown from '../../commons/Markdown';
-import CanvasOutput from '../../workspace/CanvasOutput';
+// import Markdown from '../../commons/Markdown';
+// import CanvasOutput from '../../workspace/CanvasOutput';
 import { testcaseTemplate } from '../assessmentTemplates';
 import { getValueFromPath } from './';
+import TextareaContent from './TextareaContent';
 
 type AutograderProps = {
   assessment: IAssessment;
@@ -27,14 +28,14 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
 
     const publicTestcases = question.testcases.map((testcase, index) => (
       <div key={index}>
-        {this.autograderCard(publicTestPath.concat(index))}
+        {this.autograderCard(publicTestPath, index)}
       </div>
     ));
 
     const privateTestPath = ["questions", this.props.questionId, "testcases"];
     const privateTestcases = question.testcasesPrivate!.map((testcase, index) => (
       <div key={index}>
-        {this.autograderCard(privateTestPath.concat(index))}
+        {this.autograderCard(privateTestPath, index)}
       </div>
     ));
 
@@ -43,6 +44,7 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
         Public Testcases
         {publicTestcases}
         {controlButton('New public testcase', IconNames.PLUS, this.addTestcase(question.testcases))}
+        <br/>
         <br/>
         Private Testcases
         {privateTestcases}
@@ -56,24 +58,24 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
     this.props.updateAssessment(this.props.assessment);
   }
 
-  // private removeTestcase = (testcases: ITestcase[], id: number) => {
-  //   testcases.splice(id, 1);
-  //   this.props.updateAssessment(this.props.assessment);
-  // }
+  private removeTestcase = (testcases: ITestcase[], id: number) => {
+    testcases.splice(id, 1);
+    this.props.updateAssessment(this.props.assessment);
+  }
 
-  private autograderCard = (testcasePath: Array<string | number>) => {
-    // testcase path = ["questions", questionId, "testcases", index]
-    const testcase = getValueFromPath(testcasePath, this.props.assessment) as ITestcase;
-    const index = testcasePath[3] as number;
-    const renderResult = (value: any) => {
-      /** A class which is the output of the show() function */
-      const ShapeDrawn = (window as any).ShapeDrawn;
-      if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-        return <CanvasOutput />;
-      } else {
-        return stringify(value);
-      }
-    };
+  private autograderCard = (testcasePath: Array<string | number>, index: number) => {
+    // testcasePath = ["questions", questionId, "testcases"]
+    const testcases = getValueFromPath(testcasePath, this.props.assessment) as ITestcase[];
+    const testcase = testcases[index]; 
+    // const renderResult = (value: any) => {
+    //   /** A class which is the output of the show() function */
+    //   const ShapeDrawn = (window as any).ShapeDrawn;
+    //   if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
+    //     return <CanvasOutput />;
+    //   } else {
+    //     return stringify(value);
+    //   }
+    // };
 
     return (
       <div>
@@ -82,36 +84,44 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
             {/* {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)} */}
             <div className="row listing-program">
               <h6>
-                <Markdown
-                  content={
-                    'Test Program ' +
-                    (index + 1) +
-                    ': `' +
-                    testcase.program +
-                    '`'
-                  }
+                Test Program:
+                <TextareaContent
+                  assessment={this.props.assessment}
+                  path={testcasePath.concat([index, "program"])}
+                  useRawValue={true}
+                  updateAssessment={this.props.updateAssessment}
                 />
               </h6>
             </div>
             <div className="row listing-expected">
               <h6>
-                <Markdown content={'Expected Answer: `' + testcase.answer + '`'} />
+                Score:
+                <TextareaContent
+                  assessment={this.props.assessment}
+                  isNumber={true}
+                  path={testcasePath.concat([index, "score"])}
+                  updateAssessment={this.props.updateAssessment}
+                />
               </h6>
             </div>
-            <div className="row listing-actual">
+            <div className="row listing-expected">
               <h6>
-                {'Actual Answer: '}{' '}
-                {testcase.actual !== undefined ? (
-                  <pre>{renderResult(testcase.actual.value)}</pre>
-                ) : (
-                  'No Answer'
-                )}
+                Expected Answer:
+                <TextareaContent
+                  assessment={this.props.assessment}
+                  path={testcasePath.concat([index, "answer"])}
+                  useRawValue={true}
+                  updateAssessment={this.props.updateAssessment}
+                />
               </h6>
             </div>
             <div className="listing-controls">
               <div>
                 {controlButton('Test', IconNames.PLAY, () =>
                   this.props.handleTestcaseEval(testcase)
+                )}
+                {controlButton('Delete', IconNames.DELETE, () =>
+                  this.removeTestcase(testcases, index)
                 )}
               </div>
             </div>

@@ -307,8 +307,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 
   private resetWorkspaceValues = () => {
     this.resetEditorValue();
-    this.resetPrependValue();
-    this.resetPostpendValue();
+    // this.resetPrependValue();
+    // this.resetPostpendValue();
   }
 
   private resetEditorValue = () => {
@@ -327,23 +327,23 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.props.handleEditorValueChange(editorValue);
   };
 
-  private resetPrependValue = () => {
-    const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
-    let editorPrepend = '';
-    if (question.type === QuestionTypes.programming) {
-      editorPrepend = (question as IProgrammingQuestion).prepend;
-    } 
-    this.props.handleResetWorkspace({ editorPrepend });
-  };
+  // private resetPrependValue = () => {
+  //   const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
+  //   let editorPrepend = '';
+  //   if (question.type === QuestionTypes.programming) {
+  //     editorPrepend = (question as IProgrammingQuestion).prepend;
+  //   } 
+  //   this.props.handleResetWorkspace({ editorPrepend });
+  // };
 
-  private resetPostpendValue = () => {
-    const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
-    let editorPostpend = '';
-    if (question.type === QuestionTypes.programming) {
-      editorPostpend = (question as IProgrammingQuestion).postpend;
-    } 
-    this.props.handleResetWorkspace({ editorPostpend });
-  };
+  // private resetPostpendValue = () => {
+  //   const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
+  //   let editorPostpend = '';
+  //   if (question.type === QuestionTypes.programming) {
+  //     editorPostpend = (question as IProgrammingQuestion).postpend;
+  //   } 
+  //   this.props.handleResetWorkspace({ editorPostpend });
+  // };
 
   private handleTestcaseEval = (testcase: ITestcase) => {
     const editorTestcases = [testcase];
