@@ -1,7 +1,4 @@
-import {
-  Card,
-  Elevation
-} from '@blueprintjs/core';
+import { Card, Elevation } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 // import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
@@ -21,22 +18,17 @@ type AutograderProps = {
 };
 
 class AutograderTab extends React.Component<AutograderProps, {}> {
-
   public render() {
     const question = this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion;
-    const publicTestPath = ["questions", this.props.questionId, "testcases"];
+    const publicTestPath = ['questions', this.props.questionId, 'testcases'];
 
     const publicTestcases = question.testcases.map((testcase, index) => (
-      <div key={index}>
-        {this.autograderCard(publicTestPath, index)}
-      </div>
+      <div key={index}>{this.autograderCard(publicTestPath, index)}</div>
     ));
 
-    const privateTestPath = ["questions", this.props.questionId, "testcases"];
+    const privateTestPath = ['questions', this.props.questionId, 'testcases'];
     const privateTestcases = question.testcasesPrivate!.map((testcase, index) => (
-      <div key={index}>
-        {this.autograderCard(privateTestPath, index)}
-      </div>
+      <div key={index}>{this.autograderCard(privateTestPath, index)}</div>
     ));
 
     return (
@@ -44,11 +36,15 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
         Public Testcases
         {publicTestcases}
         {controlButton('New public testcase', IconNames.PLUS, this.addTestcase(question.testcases))}
-        <br/>
-        <br/>
+        <br />
+        <br />
         Private Testcases
         {privateTestcases}
-        {controlButton('New private testcase', IconNames.PLUS, this.addTestcase(question.testcasesPrivate!))}
+        {controlButton(
+          'New private testcase',
+          IconNames.PLUS,
+          this.addTestcase(question.testcasesPrivate!)
+        )}
       </div>
     );
   }
@@ -56,17 +52,17 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
   private addTestcase = (testcases: ITestcase[]) => () => {
     testcases.push(testcaseTemplate());
     this.props.updateAssessment(this.props.assessment);
-  }
+  };
 
   private removeTestcase = (testcases: ITestcase[], id: number) => {
     testcases.splice(id, 1);
     this.props.updateAssessment(this.props.assessment);
-  }
+  };
 
   private autograderCard = (testcasePath: Array<string | number>, index: number) => {
     // testcasePath = ["questions", questionId, "testcases"]
     const testcases = getValueFromPath(testcasePath, this.props.assessment) as ITestcase[];
-    const testcase = testcases[index]; 
+    const testcase = testcases[index];
     // const renderResult = (value: any) => {
     //   /** A class which is the output of the show() function */
     //   const ShapeDrawn = (window as any).ShapeDrawn;
@@ -87,7 +83,7 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
                 Test Program:
                 <TextareaContent
                   assessment={this.props.assessment}
-                  path={testcasePath.concat([index, "program"])}
+                  path={testcasePath.concat([index, 'program'])}
                   useRawValue={true}
                   updateAssessment={this.props.updateAssessment}
                 />
@@ -99,7 +95,7 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
                 <TextareaContent
                   assessment={this.props.assessment}
                   isNumber={true}
-                  path={testcasePath.concat([index, "score"])}
+                  path={testcasePath.concat([index, 'score'])}
                   updateAssessment={this.props.updateAssessment}
                 />
               </h6>
@@ -109,7 +105,7 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
                 Expected Answer:
                 <TextareaContent
                   assessment={this.props.assessment}
-                  path={testcasePath.concat([index, "answer"])}
+                  path={testcasePath.concat([index, 'answer'])}
                   useRawValue={true}
                   updateAssessment={this.props.updateAssessment}
                 />
@@ -129,7 +125,7 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
         </Card>
       </div>
     );
-  }
+  };
 }
 
 export default AutograderTab;

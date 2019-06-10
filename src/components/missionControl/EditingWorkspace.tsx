@@ -309,7 +309,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.resetEditorValue();
     // this.resetPrependValue();
     // this.resetPostpendValue();
-  }
+  };
 
   private resetEditorValue = () => {
     const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
@@ -332,7 +332,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   //   let editorPrepend = '';
   //   if (question.type === QuestionTypes.programming) {
   //     editorPrepend = (question as IProgrammingQuestion).prepend;
-  //   } 
+  //   }
   //   this.props.handleResetWorkspace({ editorPrepend });
   // };
 
@@ -341,7 +341,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   //   let editorPostpend = '';
   //   if (question.type === QuestionTypes.programming) {
   //     editorPostpend = (question as IProgrammingQuestion).postpend;
-  //   } 
+  //   }
   //   this.props.handleResetWorkspace({ editorPostpend });
   // };
 
@@ -349,7 +349,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const editorTestcases = [testcase];
     this.props.handleUpdateWorkspace({ editorTestcases });
     this.props.handleTestcaseEval(0);
-  }
+  };
 
   private handleSave = () => {
     const assessment = this.state.assessment!;

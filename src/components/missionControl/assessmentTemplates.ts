@@ -79,9 +79,9 @@ export const programmingTemplate = (): IProgrammingQuestion => {
 
 export const testcaseTemplate = (): ITestcase => {
   return {
-    answer: "",
+    answer: '',
     score: 0,
-    program: ""
+    program: ''
   };
 };
 

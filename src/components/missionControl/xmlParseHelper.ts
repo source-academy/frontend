@@ -203,20 +203,20 @@ const makeProgramming = (
   question: IQuestion
 ): IProgrammingQuestion => {
   const testcases = problem.SNIPPET[0].TESTCASES;
-  const publicTestcases = testcases ? ( testcases[0].PUBLIC || [] ) : [];
-  const privateTestcases = testcases ? ( testcases[0].PRIVATE || [] ) : [];
+  const publicTestcases = testcases ? testcases[0].PUBLIC || [] : [];
+  const privateTestcases = testcases ? testcases[0].PRIVATE || [] : [];
   const prepend = problem.SNIPPET[0].PREPEND;
   const postpend = problem.SNIPPET[0].POSTPEND;
   const solution = problem.SNIPPET[0].SOLUTION;
 
   const result: IProgrammingQuestion = {
     ...question,
-    prepend: prepend ? prepend[0] as string : '',
+    prepend: prepend ? (prepend[0] as string) : '',
     solutionTemplate: problem.SNIPPET[0].TEMPLATE[0] as string,
-    postpend: postpend ? postpend[0] as string : '',
+    postpend: postpend ? (postpend[0] as string) : '',
     testcases: publicTestcases.map(testcase => makeTestcase(testcase)),
     testcasesPrivate: privateTestcases.map(testcase => makeTestcase(testcase)),
-    answer: solution ? solution[0] as string : '',
+    answer: solution ? (solution[0] as string) : '',
     type: 'programming'
   };
   if (problem.SNIPPET[0].GRADER) {

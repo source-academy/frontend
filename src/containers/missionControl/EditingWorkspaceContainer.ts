@@ -25,7 +25,6 @@ import {
   updateWorkspace
 } from '../../actions';
 import {
-
   resetWorkspace,
   updateCurrentAssessmentId,
   WorkspaceLocation
