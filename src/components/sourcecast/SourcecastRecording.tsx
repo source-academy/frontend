@@ -45,6 +45,9 @@ export interface IDispatchProps {
   handleBrowseHistoryUp: () => void;
   handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: number) => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
@@ -63,9 +66,6 @@ export interface IDispatchProps {
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
   handleTimerResume: () => void;

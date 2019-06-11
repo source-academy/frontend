@@ -35,7 +35,7 @@ import {
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
   SET_SOURCECAST_PLAYBACK_DURATION,
-  SET_SOURCECAST_PLAYBACK_IS_PLAYING,
+  SET_SOURCECAST_PLAYBACK_STATUS,
   SET_WEBSOCKET_STATUS,
   TIMER_PAUSE,
   TIMER_RESET,
@@ -552,12 +552,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           playbackDuration: action.payload.duration
         }
       };
-    case SET_SOURCECAST_PLAYBACK_IS_PLAYING:
+    case SET_SOURCECAST_PLAYBACK_STATUS:
       return {
         ...state,
         sourcecastPlayback: {
           ...state.sourcecastPlayback,
-          isPlaying: action.payload.isPlaying
+          playbackStatus: action.payload.playbackStatus
         }
       };
     case SET_EDITOR_READONLY:

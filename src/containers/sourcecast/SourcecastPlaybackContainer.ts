@@ -1,6 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { PlaybackStatus } from 'src/components/sourcecast/sourcecastShape';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -23,7 +24,7 @@ import {
   setEditorReadonly,
   setEditorSessionId,
   setSourcecastPlaybackDuration,
-  setSourcecastPlaybackIsPlaying,
+  setSourcecastPlaybackStatus,
   setWebsocketStatus,
   toggleEditorAutorun,
   updateEditorValue,
@@ -46,11 +47,11 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   highlightedLines: state.workspaces.sourcecastPlayback.highlightedLines,
   isRunning: state.workspaces.sourcecastPlayback.isRunning,
   isDebugging: state.workspaces.sourcecastPlayback.isDebugging,
-  isPlaying: state.workspaces.sourcecastPlayback.isPlaying,
   enableDebugging: state.workspaces.sourcecastPlayback.enableDebugging,
   output: state.workspaces.sourcecastPlayback.output,
   playbackDuration: state.workspaces.sourcecastPlayback.playbackDuration,
   playbackData: state.workspaces.sourcecastRecording.playbackData,
+  playbackStatus: state.workspaces.sourcecastPlayback.playbackStatus,
   queryString: state.playground.queryString,
   replValue: state.workspaces.sourcecastPlayback.replValue,
   sideContentHeight: state.workspaces.sourcecastPlayback.sideContentHeight,
@@ -88,8 +89,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setEditorSessionId(location, editorSessionId),
       handleSetSourcecastPlaybackDuration: (duration: number) =>
         setSourcecastPlaybackDuration(duration),
-      handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) =>
-        setSourcecastPlaybackIsPlaying(isPlaying),
+      handleSetSourcecastPlaybackStatus: (playbackStatus: PlaybackStatus) =>
+        setSourcecastPlaybackStatus(playbackStatus),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>

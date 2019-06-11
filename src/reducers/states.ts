@@ -13,7 +13,11 @@ import {
   ITestcase
 } from '../components/assessment/assessmentShape';
 import { Notification } from '../components/notification/notificationShape';
-import { IPlaybackData, RecordingStatus } from '../components/sourcecast/sourcecastShape';
+import {
+  IPlaybackData,
+  PlaybackStatus,
+  RecordingStatus
+} from '../components/sourcecast/sourcecastShape';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -57,7 +61,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 export interface ISourcecastPlayback extends IWorkspaceState {
   readonly playbackData: IPlaybackData;
   readonly playbackDuration: number;
-  readonly isPlaying: boolean;
+  readonly playbackStatus: PlaybackStatus;
 }
 
 export interface ISourcecastRecording extends IWorkspaceState {
@@ -285,9 +289,9 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   sourcecastPlayback: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecastPlayback),
-    isPlaying: false,
     playbackData: { init: '', data: [] },
-    playbackDuration: 0
+    playbackDuration: 0,
+    playbackStatus: PlaybackStatus.notStarted
   },
   sourcecastRecording: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecastRecording),

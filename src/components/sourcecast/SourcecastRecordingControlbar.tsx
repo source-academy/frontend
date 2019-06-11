@@ -67,12 +67,12 @@ class SourcecastRecordingControlbar extends React.PureComponent<
         </div>
         <br />
         <div className="RecorderControl">
-          {this.props.recordingStatus === RecordingStatus.notStarted ? RecorderStartButton : null}
-          {this.props.recordingStatus === RecordingStatus.paused ? RecorderResumeButton : null}
-          {this.props.recordingStatus === RecordingStatus.recording ? RecorderPauseButton : null}
-          {this.props.recordingStatus === RecordingStatus.paused ? RecorderStopButton : null}
-          {this.props.recordingStatus === RecordingStatus.finished ? RecorderDownloadButton : null}
-          {this.props.recordingStatus !== RecordingStatus.notStarted ? RecorderResetButton : null}
+          {this.props.recordingStatus === RecordingStatus.notStarted && RecorderStartButton}
+          {this.props.recordingStatus === RecordingStatus.paused && RecorderResumeButton}
+          {this.props.recordingStatus === RecordingStatus.recording && RecorderPauseButton}
+          {this.props.recordingStatus === RecordingStatus.paused && RecorderStopButton}
+          {this.props.recordingStatus === RecordingStatus.finished && RecorderDownloadButton}
+          {this.props.recordingStatus !== RecordingStatus.notStarted && RecorderResetButton}
         </div>
         <br />
       </div>

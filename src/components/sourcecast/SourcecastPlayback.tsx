@@ -9,7 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { IPlaybackData } from './sourcecastShape';
+import { IPlaybackData, PlaybackStatus } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast Playback!';
 
@@ -27,11 +27,11 @@ export interface IStateProps {
   isEditorAutorun: boolean;
   isRunning: boolean;
   isDebugging: boolean;
-  isPlaying: boolean;
   enableDebugging: boolean;
   output: InterpreterOutput[];
   playbackDuration: number;
   playbackData: IPlaybackData;
+  playbackStatus: PlaybackStatus;
   queryString?: string;
   replValue: string;
   sideContentHeight?: number;
@@ -45,6 +45,9 @@ export interface IDispatchProps {
   handleBrowseHistoryUp: () => void;
   handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: number) => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
@@ -60,12 +63,9 @@ export interface IDispatchProps {
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetSourcecastPlaybackDuration: (duration: number) => void;
-  handleSetSourcecastPlaybackIsPlaying: (isPlaying: boolean) => void;
+  handleSetSourcecastPlaybackStatus: (PlaybackStatus: PlaybackStatus) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
 }
 
@@ -117,7 +117,7 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         isEditorAutorun: this.props.isEditorAutorun,
-        isPlaying: this.props.isPlaying,
+        isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
         handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
@@ -146,10 +146,10 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleSetSourcecastPlaybackDuration: this.props.handleSetSourcecastPlaybackDuration,
-        handleSetSourcecastPlaybackIsPlaying: this.props.handleSetSourcecastPlaybackIsPlaying,
+        handleSetSourcecastPlaybackStatus: this.props.handleSetSourcecastPlaybackStatus,
         duration: this.props.playbackDuration,
-        isPlaying: this.props.isPlaying,
-        playbackData: this.props.playbackData
+        playbackData: this.props.playbackData,
+        playbackStatus: this.props.playbackStatus
       }
     };
     return (

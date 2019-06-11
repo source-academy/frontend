@@ -1,7 +1,7 @@
 import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
-import { IDelta, RecordingType } from '../components/sourcecast/sourcecastShape';
+import { IDelta, PlaybackStatus, RecordingType } from '../components/sourcecast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -275,21 +275,21 @@ export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const setSourcecastPlaybackIsPlaying: ActionCreator<actionTypes.IAction> = (
-  isPlaying: boolean
-) => ({
-  type: actionTypes.SET_SOURCECAST_PLAYBACK_IS_PLAYING,
-  payload: {
-    isPlaying
-  }
-});
-
 export const setSourcecastPlaybackDuration: ActionCreator<actionTypes.IAction> = (
   duration: number
 ) => ({
   type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
   payload: {
     duration
+  }
+});
+
+export const setSourcecastPlaybackStatus: ActionCreator<actionTypes.IAction> = (
+  playbackStatus: PlaybackStatus
+) => ({
+  type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,
+  payload: {
+    playbackStatus
   }
 });
 

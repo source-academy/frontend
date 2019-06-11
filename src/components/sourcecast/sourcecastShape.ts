@@ -10,6 +10,13 @@ export enum RecordingStatus {
   finished = 'finished'
 }
 
+export enum PlaybackStatus {
+  notStarted = 'notStarted',
+  playing = 'recording',
+  paused = 'paused',
+  finished = 'finished'
+}
+
 export interface IDelta {
   start: {
     row: number;
