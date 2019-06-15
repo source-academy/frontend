@@ -4,7 +4,6 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { controlButton } from '../commons';
-import Editor from '../workspace/Editor';
 import { IDelta, IPlaybackData, PlaybackStatus } from './sourcecastShape';
 
 class SourcecastPlaybackControlbar extends React.PureComponent<
@@ -70,10 +69,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
   };
 
   private applyDelta = (delta: IDelta) => {
-    (this.props.editorRef!.current!.AceEditor.current! as any).editor
-      .getSession()
-      .getDocument()
-      .applyDelta(delta);
+    this.props.handleSetDeltaToApply(delta);
   };
 
   private applyPlaybackDataFromStart = async (playbackData: IPlaybackData) => {
@@ -172,10 +168,10 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
 
 export interface ISourcecastPlaybackControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
+  handleSetDeltaToApply: (delta: IDelta) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastPlaybackDuration: (duration: number) => void;
   handleSetSourcecastPlaybackStatus: (playbackStatus: PlaybackStatus) => void;
-  editorRef?: React.RefObject<Editor>;
   duration: number;
   playbackData: IPlaybackData;
   playbackStatus: PlaybackStatus;

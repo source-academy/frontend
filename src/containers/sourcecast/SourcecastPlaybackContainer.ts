@@ -20,6 +20,7 @@ import {
   generateLzString,
   invalidEditorSessionId,
   playgroundExternalSelect,
+  setDeltaToApply,
   setEditorBreakpoint,
   setEditorReadonly,
   setEditorSessionId,
@@ -38,6 +39,7 @@ import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.sourcecastPlayback.sideContentActiveTab,
+  deltaToApply: state.workspaces.sourcecastPlayback.deltaToApply,
   editorReadonly: state.workspaces.sourcecastPlayback.editorReadonly,
   editorSessionId: state.workspaces.sourcecastPlayback.editorSessionId,
   editorWidth: state.workspaces.sourcecastPlayback.editorWidth,
@@ -83,6 +85,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleSetDeltaToApply: setDeltaToApply,
       handleSetEditorReadonly: (editorReadonly: boolean) =>
         setEditorReadonly(location, editorReadonly),
       handleSetEditorSessionId: (editorSessionId: string) =>

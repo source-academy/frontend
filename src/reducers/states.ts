@@ -14,6 +14,7 @@ import {
 } from '../components/assessment/assessmentShape';
 import { Notification } from '../components/notification/notificationShape';
 import {
+  IDelta,
   IPlaybackData,
   PlaybackStatus,
   RecordingStatus
@@ -59,6 +60,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 }
 
 export interface ISourcecastPlayback extends IWorkspaceState {
+  readonly deltaToApply: IDelta | null;
   readonly playbackData: IPlaybackData;
   readonly playbackDuration: number;
   readonly playbackStatus: PlaybackStatus;
@@ -289,6 +291,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   sourcecastPlayback: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecastPlayback),
+    deltaToApply: null,
     playbackData: { init: '', data: [] },
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.notStarted

@@ -9,7 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { IPlaybackData, PlaybackStatus } from './sourcecastShape';
+import { IDelta, IPlaybackData, PlaybackStatus } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast Playback!';
 
@@ -17,6 +17,7 @@ export interface ISourcecastPlaybackProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
+  deltaToApply: IDelta | null;
   editorReadonly: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -60,6 +61,7 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSetDeltaToApply: (delta: IDelta) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetSourcecastPlaybackDuration: (duration: number) => void;
@@ -109,6 +111,7 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
         sourceChapter: this.props.sourceChapter
       },
       editorProps: {
+        deltaToApply: this.props.deltaToApply,
         editorPrepend: '',
         editorPrependLines: 0,
         editorReadonly: this.props.editorReadonly,
@@ -144,6 +147,7 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
       },
       sourcecastPlaybackControlbarProps: {
         handleEditorValueChange: this.props.handleEditorValueChange,
+        handleSetDeltaToApply: this.props.handleSetDeltaToApply,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleSetSourcecastPlaybackDuration: this.props.handleSetSourcecastPlaybackDuration,
         handleSetSourcecastPlaybackStatus: this.props.handleSetSourcecastPlaybackStatus,

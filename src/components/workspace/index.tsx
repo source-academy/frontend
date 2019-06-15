@@ -59,10 +59,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     return (
       <div className="workspace">
         {this.props.sourcecastPlaybackControlbarProps ? (
-          <SourcecastPlaybackControlbar
-            {...this.props.sourcecastPlaybackControlbarProps}
-            editorRef={this.editorRef}
-          />
+          <SourcecastPlaybackControlbar {...this.props.sourcecastPlaybackControlbarProps} />
         ) : null}
         {this.props.sourcecastRecordingControlbarProps ? (
           <SourcecastRecordingControlbar {...this.props.sourcecastRecordingControlbarProps} />

@@ -21,6 +21,7 @@ import { checkSessionIdExists } from './collabEditing/helper';
  */
 export interface IEditorProps {
   breakpoints: string[];
+  deltaToApply?: IDelta | null;
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -65,6 +66,16 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         this.props.handleEditorEval();
       }
     };
+  }
+
+  public componentDidUpdate(prevProps: IEditorProps) {
+    if (!this.props.deltaToApply || this.props.deltaToApply === prevProps.deltaToApply) {
+      return;
+    }
+    (this.AceEditor.current as any).editor
+      .getSession()
+      .getDocument()
+      .applyDelta(this.props.deltaToApply);
   }
 
   public getBreakpoints() {
