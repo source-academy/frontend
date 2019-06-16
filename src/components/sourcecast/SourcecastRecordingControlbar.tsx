@@ -142,6 +142,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
     handleSetEditorReadonly(false);
     handleTimerReset();
     clearInterval(this.state.updater!);
+    this.setState({ duration: 0 });
     console.log('Reset recorder');
     this.recorder.clear();
   };
