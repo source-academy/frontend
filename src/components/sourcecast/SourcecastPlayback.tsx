@@ -17,7 +17,7 @@ export interface ISourcecastPlaybackProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
-  deltaToApply: IDelta | null;
+  deltasToApply: IDelta[] | null;
   editorReadonly: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -61,7 +61,7 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleSetDeltaToApply: (delta: IDelta) => void;
+  handleSetDeltasToApply: (delta: IDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetSourcecastPlaybackDuration: (duration: number) => void;
@@ -111,7 +111,7 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
         sourceChapter: this.props.sourceChapter
       },
       editorProps: {
-        deltaToApply: this.props.deltaToApply,
+        deltasToApply: this.props.deltasToApply,
         editorPrepend: '',
         editorPrependLines: 0,
         editorReadonly: this.props.editorReadonly,
@@ -147,7 +147,7 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
       },
       sourcecastPlaybackControlbarProps: {
         handleEditorValueChange: this.props.handleEditorValueChange,
-        handleSetDeltaToApply: this.props.handleSetDeltaToApply,
+        handleSetDeltasToApply: this.props.handleSetDeltasToApply,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleSetSourcecastPlaybackDuration: this.props.handleSetSourcecastPlaybackDuration,
         handleSetSourcecastPlaybackStatus: this.props.handleSetSourcecastPlaybackStatus,

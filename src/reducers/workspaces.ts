@@ -31,7 +31,7 @@ import {
   RECORD_EDITOR_DELTA,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
-  SET_DELTA_TO_APPLY,
+  SET_DELTAS_TO_APPLY,
   SET_EDITOR_INIT_VALUE,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
@@ -526,12 +526,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...action.payload.workspaceOptions
         }
       };
-    case SET_DELTA_TO_APPLY:
+    case SET_DELTAS_TO_APPLY:
       return {
         ...state,
         sourcecastPlayback: {
           ...state.sourcecastPlayback,
-          deltaToApply: action.payload.delta
+          deltasToApply: action.payload.deltas
         }
       };
     case SET_EDITOR_SESSION_ID:

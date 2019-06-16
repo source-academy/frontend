@@ -221,11 +221,11 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const setDeltaToApply: ActionCreator<actionTypes.IAction> = (delta: IDelta) => ({
-  type: actionTypes.SET_DELTA_TO_APPLY,
+export const setDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: IDelta[]) => ({
+  type: actionTypes.SET_DELTAS_TO_APPLY,
   payload: {
     type: RecordingType.code,
-    delta
+    deltas
   }
 });
 

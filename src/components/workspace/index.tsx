@@ -8,7 +8,6 @@ import SourcecastPlaybackControlbar, {
 import SourcecastRecordingControlbar, {
   ISourcecastRecordingControlbarProps
 } from '../sourcecast/SourcecastRecordingControlbar';
-// import { IDelta, RecordingStatus } from '../sourcecast/sourcecastShape';
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';

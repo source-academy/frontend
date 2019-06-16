@@ -60,7 +60,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 }
 
 export interface ISourcecastPlayback extends IWorkspaceState {
-  readonly deltaToApply: IDelta | null;
+  readonly deltasToApply: IDelta[] | null;
   readonly playbackData: IPlaybackData;
   readonly playbackDuration: number;
   readonly playbackStatus: PlaybackStatus;
@@ -291,7 +291,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   sourcecastPlayback: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecastPlayback),
-    deltaToApply: null,
+    deltasToApply: null,
     playbackData: { init: '', data: [] },
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.notStarted

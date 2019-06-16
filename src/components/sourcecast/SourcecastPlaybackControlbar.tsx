@@ -16,6 +16,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     super(props);
     this.audio = React.createRef();
     this.state = {
+      currentDeltaRevision: 0,
       currentPlayerTime: 0,
       currentPlayerProgress: 0,
       duration: 0
@@ -26,14 +27,14 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     const PlayerPlayButton = controlButton('Play', IconNames.PLAY, this.handlePlayerPlaying);
     const PlayerPauseButton = controlButton('Pause', IconNames.PAUSE, this.handlePlayerPausing);
     const PlayerResumeButton = controlButton('Resume', IconNames.PLAY, this.handlePlayerResuming);
-    const PlayerStopButton = controlButton('Stop', IconNames.STOP, this.handlePlayerStopping);
     return (
       <div>
         <audio
-          src="https://www.salamisound.com/stream_file/49003902987136547878968146"
+          src="https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3"
           ref={this.audio}
-          onEnded={this.handlePlayerStopping}
+          // onEnded={this.handlePlayerStopping}
           onLoadedMetadata={this.handleAudioLoaded}
+          onSeeked={this.handleSeeked}
           onTimeUpdate={this.updatePlayerTime}
           preload="metadata"
           // controls={true}
@@ -54,7 +55,6 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
             {this.props.playbackStatus === PlaybackStatus.notStarted && PlayerPlayButton}
             {this.props.playbackStatus === PlaybackStatus.playing && PlayerPauseButton}
             {this.props.playbackStatus === PlaybackStatus.paused && PlayerResumeButton}
-            {this.props.playbackStatus === PlaybackStatus.paused && PlayerStopButton}
           </div>
         </div>
         <br />
@@ -62,83 +62,99 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     );
   }
 
-  private handleAudioLoaded = () => {
-    this.props.handleSetSourcecastPlaybackDuration(this.audio.current!.duration);
-    // DO NOT KEEP THE CODE BELOW!!!
-    // IT'S JUST A TEMPORARY SOLUTION TO SET INITIAL EDITOR VALUE FOR THE DEMO!!!
+  private handleSeeked = () => {
+    // FIXME: loop in applyPlaybackDataFromStart keeps running if seeked from paused mode
+    this.stopPreviousPlaybackAndApplyFromStart(this.props.playbackData);
   };
 
-  private applyDelta = (delta: IDelta) => {
-    this.props.handleSetDeltaToApply(delta);
+  private handleAudioLoaded = () => {
+    this.props.handleSetSourcecastPlaybackDuration(this.audio.current!.duration);
+  };
+
+  private applyDeltas = (deltas: IDelta[]) => {
+    this.props.handleSetDeltasToApply(deltas);
+  };
+
+  private stopPreviousPlaybackAndApplyFromStart = (playbackData: IPlaybackData) => {
+    this.setState(
+      {
+        currentDeltaRevision: this.state.currentDeltaRevision + 1
+      },
+      () => this.applyPlaybackDataFromStart(playbackData)
+    );
   };
 
   private applyPlaybackDataFromStart = async (playbackData: IPlaybackData) => {
     const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
-    const len = playbackData.data.length;
-    const data = this.props.playbackData.data;
+    const currentRevision = this.state.currentDeltaRevision;
+    let currentTime = this.audio.current!.currentTime * 1000;
+    this.props.handleEditorValueChange(this.props.playbackData.init);
+    const deltasToApply = this.props.playbackData.data
+      .filter(deltaWithTime => deltaWithTime.time <= currentTime)
+      .map(deltaWithTime => deltaWithTime.delta);
+    this.applyDeltas(deltasToApply);
+
+    const data = this.props.playbackData.data.filter(
+      deltaWithTime => deltaWithTime.time > currentTime
+    );
+    const len = data.length;
     let i = 0;
-    while (i < len) {
-      const currentTime = this.audio.current!.currentTime * 1000;
+    while (i < len && this.state.currentDeltaRevision === currentRevision) {
+      console.log('Revision ' + currentRevision + 'trying to apply');
+      currentTime = this.audio.current!.currentTime * 1000;
       if (data[i].time < currentTime) {
-        this.applyDelta(data[i].delta);
+        this.applyDeltas([data[i].delta]);
         i++;
         continue;
       }
-      await sleep(10);
+      await sleep(50);
     }
   };
 
-  private applyPlaybackDataFromMiddle = (playbackData: IPlaybackData) => {
-    const currentTime = this.audio.current!.currentTime * 1000;
-    const playbackDataFiltered = playbackData.data.filter(data => data.time > currentTime);
-    this.applyPlaybackDataFromStart({
-      init: playbackData.init,
-      data: playbackDataFiltered
+  // // WE USE APPLY FROM START FOR ALL TIME SKIPPING OPERATIONS FIRST, THEN IMPLEMENT THIS TO IMPROVE EFFICIENCY
+  // private applyPlaybackDataFromMiddle = (playbackData: IPlaybackData) => {
+  //   const currentTime = this.audio.current!.currentTime * 1000;
+  //   const playbackDataFiltered = playbackData.data.filter(data => data.time > currentTime);
+  //   this.applyPlaybackDataFromStart({
+  //     init: playbackData.init,
+  //     data: playbackDataFiltered
+  //   });
+  // };
+
+  private stopCurrentPlayback() {
+    this.setState({
+      currentDeltaRevision: this.state.currentDeltaRevision + 1
     });
-  };
+  }
 
   private handlePlayerPlaying = () => {
-    const { handleSetSourcecastPlaybackStatus } = this.props;
     const audio = this.audio.current;
     audio!.play();
     this.props.handleSetEditorReadonly(true);
     this.props.handleEditorValueChange(this.props.playbackData.init);
-    handleSetSourcecastPlaybackStatus(PlaybackStatus.playing);
+    this.props.handleSetSourcecastPlaybackStatus(PlaybackStatus.playing);
     this.applyPlaybackDataFromStart(this.props.playbackData);
   };
 
   private handlePlayerPausing = () => {
-    const { handleSetSourcecastPlaybackStatus } = this.props;
     const audio = this.audio.current;
     audio!.pause();
     this.props.handleSetEditorReadonly(false);
-    handleSetSourcecastPlaybackStatus(PlaybackStatus.paused);
+    this.props.handleSetSourcecastPlaybackStatus(PlaybackStatus.paused);
+    this.stopCurrentPlayback();
   };
 
   private handlePlayerResuming = () => {
-    const { handleSetSourcecastPlaybackStatus } = this.props;
     const audio = this.audio.current;
     audio!.play();
     this.props.handleSetEditorReadonly(true);
-    handleSetSourcecastPlaybackStatus(PlaybackStatus.playing);
-    this.applyPlaybackDataFromMiddle(this.props.playbackData);
-  };
-
-  private handlePlayerStopping = () => {
-    const { handleSetSourcecastPlaybackStatus } = this.props;
-    const audio = this.audio.current;
-    audio!.pause();
-    audio!.currentTime = 0;
-    handleSetSourcecastPlaybackStatus(PlaybackStatus.notStarted);
-    this.props.handleSetEditorReadonly(false);
-    this.setState({
-      currentPlayerTime: 0,
-      currentPlayerProgress: 0
-    });
+    this.props.handleSetSourcecastPlaybackStatus(PlaybackStatus.playing);
+    this.stopPreviousPlaybackAndApplyFromStart(this.props.playbackData);
   };
 
   private updatePlayerTime: React.ReactEventHandler<HTMLAudioElement> = e => {
     const { currentTime }: { currentTime: number } = e.target as HTMLMediaElement;
+    console.log('calling updateplayertime');
     this.setState({
       currentPlayerTime: currentTime,
       currentPlayerProgress: currentTime / this.props.duration
@@ -168,7 +184,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
 
 export interface ISourcecastPlaybackControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
-  handleSetDeltaToApply: (delta: IDelta) => void;
+  handleSetDeltasToApply: (deltas: IDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastPlaybackDuration: (duration: number) => void;
   handleSetSourcecastPlaybackStatus: (playbackStatus: PlaybackStatus) => void;
@@ -178,6 +194,7 @@ export interface ISourcecastPlaybackControlbarProps {
 }
 
 export interface ISourcecastPlaybackControlbarState {
+  currentDeltaRevision: number;
   currentPlayerTime: number;
   currentPlayerProgress: number;
   duration: number;
