@@ -3,7 +3,7 @@ import {
   BROWSE_REPL_HISTORY_UP,
   CHANGE_ACTIVE_TAB,
   CHANGE_EDITOR_HEIGHT,
-  //   CHANGE_EDITOR_WIDTH,
+  CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
@@ -14,17 +14,17 @@ import {
   END_DEBUG_PAUSE,
   END_INTERRUPT_EXECUTION,
   EVAL_EDITOR,
-  //   EVAL_INTERPRETER_ERROR,
-  //   EVAL_INTERPRETER_SUCCESS,
+  EVAL_INTERPRETER_ERROR,
+  EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
   EVAL_TESTCASE,
-  //   EVAL_TESTCASE_SUCCESS,
-  //   HANDLE_CONSOLE_LOG,
+  EVAL_TESTCASE_SUCCESS,
+  HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
   IAction,
   LOG_OUT,
-  //   RESET_WORKSPACE,
-  //   SEND_REPL_INPUT_TO_OUTPUT,
+  RESET_WORKSPACE,
+  SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
@@ -35,14 +35,16 @@ import {
   UPDATE_REPL_VALUE
 } from '../../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
-import { Library } from '../../components/assessment/assessmentShape';
+import { ITestcase, Library } from '../../components/assessment/assessmentShape';
 import { createContext } from '../../utils/slangHelper';
 import {
   createDefaultWorkspace,
   defaultWorkspaceManager,
   InterpreterOutput,
   IPlaygroundWorkspace,
-  IWorkspaceManagerState
+  IWorkspaceManagerState,
+  maxBrowseIndex,
+  RunningOutput
 } from '../states';
 import { reducer } from '../workspaces';
 
@@ -354,6 +356,45 @@ test('CHANGE_EDITOR_HEIGHT works correctly', () => {
       [location]: {
         ...defaultWorkspaceManager[location],
         editorHeight: height
+      }
+    });
+  });
+});
+
+test('CHANGE_EDITOR_WIDTH works correctly', () => {
+  const widthChange = 20.5;
+  const assessmentAction: IAction = {
+    type: CHANGE_EDITOR_WIDTH,
+    payload: {
+      widthChange,
+      workspaceLocation: assessmentWorkspace
+    }
+  };
+  const gradingAction: IAction = {
+    type: CHANGE_EDITOR_WIDTH,
+    payload: {
+      widthChange,
+      workspaceLocation: gradingWorkspace
+    }
+  };
+  const playgroundAction: IAction = {
+    type: CHANGE_EDITOR_WIDTH,
+    payload: {
+      widthChange,
+      workspaceLocation: playgroundWorkspace
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(defaultWorkspaceManager, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...defaultWorkspaceManager,
+      [location]: {
+        ...defaultWorkspaceManager[location],
+        editorWidth: '70.5%'
       }
     });
   });
@@ -854,6 +895,307 @@ test('EVAL_EDITOR works correctly', () => {
   });
 });
 
+// Test data for EVAL_INTERPRETER_ERROR, EVAL_INTERPRETER_SUCCESS, EVAL_TESTCASE_SUCCESS and HANDLE_CONSOLE_OUTPUT
+const lastOutput1: RunningOutput[] = [
+  {
+    type: 'running',
+    consoleLogs: ['console-log-test']
+  },
+  {
+    type: 'running',
+    consoleLogs: ['console-log-test-2']
+  }
+];
+
+const lastOutput2: InterpreterOutput[] = [
+  {
+    type: 'running',
+    consoleLogs: ['console-log-test']
+  },
+  {
+    type: 'code',
+    value: 'sample code'
+  }
+];
+
+test('EVAL_INTERPRETER_ERROR works correctly with RunningOutput', () => {
+  const evalEditorDefaultState: IWorkspaceManagerState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output: lastOutput1,
+      isRunning: true,
+      isDebugging: true
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output: lastOutput1,
+      isRunning: true,
+      isDebugging: true
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output: lastOutput1,
+      isRunning: true,
+      isDebugging: true
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: EVAL_INTERPRETER_ERROR,
+    payload: {
+      workspaceLocation: assessmentWorkspace
+    }
+  };
+  const gradingAction: IAction = {
+    type: EVAL_INTERPRETER_ERROR,
+    payload: {
+      workspaceLocation: gradingWorkspace
+    }
+  };
+  const playgroundAction: IAction = {
+    type: EVAL_INTERPRETER_ERROR,
+    payload: {
+      workspaceLocation: playgroundWorkspace
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(evalEditorDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...evalEditorDefaultState,
+      [location]: {
+        ...evalEditorDefaultState[location],
+        isRunning: false,
+        isDebugging: false,
+        output: [
+          {
+            ...lastOutput1[0]
+          },
+          {
+            workspaceLocation: undefined,
+            consoleLogs: ['console-log-test-2']
+          }
+        ]
+      }
+    });
+  });
+});
+
+test('EVAL_INTERPRETER_ERROR works correctly with other outputs', () => {
+  const evalEditorDefaultState: IWorkspaceManagerState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output: lastOutput2,
+      isRunning: true,
+      isDebugging: true
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output: lastOutput2,
+      isRunning: true,
+      isDebugging: true
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output: lastOutput2,
+      isRunning: true,
+      isDebugging: true
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: EVAL_INTERPRETER_ERROR,
+    payload: {
+      workspaceLocation: assessmentWorkspace
+    }
+  };
+  const gradingAction: IAction = {
+    type: EVAL_INTERPRETER_ERROR,
+    payload: {
+      workspaceLocation: gradingWorkspace
+    }
+  };
+  const playgroundAction: IAction = {
+    type: EVAL_INTERPRETER_ERROR,
+    payload: {
+      workspaceLocation: playgroundWorkspace
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(evalEditorDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...evalEditorDefaultState,
+      [location]: {
+        ...evalEditorDefaultState[location],
+        isRunning: false,
+        isDebugging: false,
+        output: [
+          {
+            ...lastOutput2[0]
+          },
+          {
+            ...lastOutput2[1]
+          },
+          {
+            workspaceLocation: undefined,
+            consoleLogs: []
+          }
+        ]
+      }
+    });
+  });
+});
+
+test('EVAL_INTERPRETER_SUCCESS works correctly with RunningOutput', () => {
+  const evalEditorDefaultState: IWorkspaceManagerState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output: lastOutput1,
+      isRunning: true,
+      breakpoints: ['1', '2'],
+      highlightedLines: [[3], [5]]
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output: lastOutput1,
+      isRunning: true,
+      breakpoints: ['1', '2'],
+      highlightedLines: [[3], [5]]
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output: lastOutput1,
+      isRunning: true,
+      breakpoints: ['1', '2'],
+      highlightedLines: [[3], [5]]
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: EVAL_INTERPRETER_SUCCESS,
+    payload: {
+      workspaceLocation: assessmentWorkspace
+    }
+  };
+  const gradingAction: IAction = {
+    type: EVAL_INTERPRETER_SUCCESS,
+    payload: {
+      workspaceLocation: gradingWorkspace
+    }
+  };
+  const playgroundAction: IAction = {
+    type: EVAL_INTERPRETER_SUCCESS,
+    payload: {
+      workspaceLocation: playgroundWorkspace
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(evalEditorDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...evalEditorDefaultState,
+      [location]: {
+        ...evalEditorDefaultState[location],
+        isRunning: false,
+        breakpoints: [],
+        highlightedLines: [],
+        output: [
+          {
+            ...lastOutput1[0]
+          },
+          {
+            workspaceLocation: undefined,
+            consoleLogs: ['console-log-test-2']
+          }
+        ]
+      }
+    });
+  });
+});
+
+test('EVAL_INTERPRETER_SUCCESS works correctly with other outputs', () => {
+  const evalEditorDefaultState: IWorkspaceManagerState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output: lastOutput2,
+      isRunning: true,
+      breakpoints: ['1', '2'],
+      highlightedLines: [[3], [5]]
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output: lastOutput2,
+      isRunning: true,
+      breakpoints: ['1', '2'],
+      highlightedLines: [[3], [5]]
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output: lastOutput2,
+      isRunning: true,
+      breakpoints: ['1', '2'],
+      highlightedLines: [[3], [5]]
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: EVAL_INTERPRETER_SUCCESS,
+    payload: {
+      workspaceLocation: assessmentWorkspace
+    }
+  };
+  const gradingAction: IAction = {
+    type: EVAL_INTERPRETER_SUCCESS,
+    payload: {
+      workspaceLocation: gradingWorkspace
+    }
+  };
+  const playgroundAction: IAction = {
+    type: EVAL_INTERPRETER_SUCCESS,
+    payload: {
+      workspaceLocation: playgroundWorkspace
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(evalEditorDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...evalEditorDefaultState,
+      [location]: {
+        ...evalEditorDefaultState[location],
+        isRunning: false,
+        breakpoints: [],
+        highlightedLines: [],
+        output: [
+          {
+            ...lastOutput2[0]
+          },
+          {
+            ...lastOutput2[1]
+          },
+          {
+            workspaceLocation: undefined,
+            consoleLogs: []
+          }
+        ]
+      }
+    });
+  });
+});
+
 test('EVAL_REPL works correctly', () => {
   const assessmentAction: IAction = {
     type: EVAL_REPL,
@@ -924,6 +1266,340 @@ test('EVAL_TESTCASE works correctly', () => {
   });
 });
 
+// Test data for EVAL_TESTCASE_SUCCESS
+const editorTestcases: ITestcase[] = [
+  {
+    answer: 'abc',
+    score: 10,
+    program: 'test program'
+  },
+  {
+    answer: 'def',
+    score: 20,
+    program: 'another program'
+  }
+];
+
+test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput', () => {
+  const testcaseSuccessDefaultState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output: lastOutput1,
+      isRunning: true,
+      editorTestcases
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output: lastOutput1,
+      isRunning: true,
+      editorTestcases
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output: lastOutput1,
+      isRunning: true,
+      editorTestcases
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: EVAL_TESTCASE_SUCCESS,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      index: 1
+    }
+  };
+  const gradingAction: IAction = {
+    type: EVAL_TESTCASE_SUCCESS,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      index: 1
+    }
+  };
+  const playgroundAction: IAction = {
+    type: EVAL_TESTCASE_SUCCESS,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      index: 1
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(testcaseSuccessDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...testcaseSuccessDefaultState,
+      [location]: {
+        ...testcaseSuccessDefaultState[location],
+        isRunning: false,
+        output: lastOutput1,
+        editorTestcases: [
+          {
+            ...editorTestcases[0]
+          },
+          {
+            ...editorTestcases[1],
+            actual: {
+              ...lastOutput1[0]
+            }
+          }
+        ]
+      }
+    });
+  });
+});
+
+test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
+  const testcaseSuccessDefaultState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output: lastOutput2,
+      isRunning: true,
+      editorTestcases
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output: lastOutput2,
+      isRunning: true,
+      editorTestcases
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output: lastOutput2,
+      isRunning: true,
+      editorTestcases
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: EVAL_TESTCASE_SUCCESS,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      index: 0
+    }
+  };
+  const gradingAction: IAction = {
+    type: EVAL_TESTCASE_SUCCESS,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      index: 0
+    }
+  };
+  const playgroundAction: IAction = {
+    type: EVAL_TESTCASE_SUCCESS,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      index: 0
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(testcaseSuccessDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...testcaseSuccessDefaultState,
+      [location]: {
+        ...testcaseSuccessDefaultState[location],
+        isRunning: false,
+        output: lastOutput2,
+        editorTestcases: [
+          {
+            ...editorTestcases[0],
+            actual: {
+              ...lastOutput2[0]
+            }
+          },
+          {
+            ...editorTestcases[1]
+          }
+        ]
+      }
+    });
+  });
+});
+
+test('HANDLE_CONSOLE_LOG works correctly with RunningOutput', () => {
+  const logString = 'test-log-string';
+  const consoleLogDefaultState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output: lastOutput1
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output: lastOutput1
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output: lastOutput1
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: HANDLE_CONSOLE_LOG,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      logString
+    }
+  };
+  const gradingAction: IAction = {
+    type: HANDLE_CONSOLE_LOG,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      logString
+    }
+  };
+  const playgroundAction: IAction = {
+    type: HANDLE_CONSOLE_LOG,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      logString
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(consoleLogDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...consoleLogDefaultState,
+      [location]: {
+        ...consoleLogDefaultState[location],
+        output: [
+          {
+            ...lastOutput1[0]
+          },
+          {
+            ...lastOutput1[1],
+            consoleLogs: lastOutput1[1].consoleLogs.concat(logString)
+          }
+        ]
+      }
+    });
+  });
+});
+
+test('HANDLE_CONSOLE_LOG works correctly with other output', () => {
+  const logString = 'test-log-string-2';
+  const consoleLogDefaultState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output: lastOutput2
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output: lastOutput2
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output: lastOutput2
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: HANDLE_CONSOLE_LOG,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      logString
+    }
+  };
+  const gradingAction: IAction = {
+    type: HANDLE_CONSOLE_LOG,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      logString
+    }
+  };
+  const playgroundAction: IAction = {
+    type: HANDLE_CONSOLE_LOG,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      logString
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(consoleLogDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...consoleLogDefaultState,
+      [location]: {
+        ...consoleLogDefaultState[location],
+        output: lastOutput2.concat({
+          type: 'running',
+          consoleLogs: [logString]
+        })
+      }
+    });
+  });
+});
+
+test('HANDLE_CONSOLE_LOG works correctly with empty output', () => {
+  const logString = 'test-log-string-3';
+  const consoleLogDefaultState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      output: []
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      output: []
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      output: []
+    }
+  };
+
+  const assessmentAction: IAction = {
+    type: HANDLE_CONSOLE_LOG,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      logString
+    }
+  };
+  const gradingAction: IAction = {
+    type: HANDLE_CONSOLE_LOG,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      logString
+    }
+  };
+  const playgroundAction: IAction = {
+    type: HANDLE_CONSOLE_LOG,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      logString
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(consoleLogDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...consoleLogDefaultState,
+      [location]: {
+        ...consoleLogDefaultState[location],
+        output: [
+          {
+            type: 'running',
+            consoleLogs: [logString]
+          }
+        ]
+      }
+    });
+  });
+});
+
 test('HIGHLIGHT_LINE works correctly', () => {
   const highlightedLines = [12, 34, 56];
   const assessmentAction: IAction = {
@@ -988,6 +1664,214 @@ test('LOG_OUT preserves playground workspace even after logout', () => {
   expect(result).toEqual({
     ...defaultWorkspaceManager,
     playground: newPlayground
+  });
+});
+
+test('RESET_WORKSPACE works correctly', () => {
+  const resetWorkspaceDefaultState: IWorkspaceManagerState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      editorHeight: 200,
+      editorWidth: '70%'
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      editorHeight: 200,
+      editorWidth: '70%'
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      editorHeight: 200,
+      editorWidth: '70%'
+    }
+  };
+  const workspaceOptions = {
+    breakpoints: ['1', '3'],
+    highlightedLines: [[1], [10]],
+    replValue: 'test repl value'
+  };
+  const assessmentAction: IAction = {
+    type: RESET_WORKSPACE,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      workspaceOptions
+    }
+  };
+  const gradingAction: IAction = {
+    type: RESET_WORKSPACE,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      workspaceOptions
+    }
+  };
+  const playgroundAction: IAction = {
+    type: RESET_WORKSPACE,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      workspaceOptions
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(resetWorkspaceDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    const newContext = createDefaultWorkspace(location);
+    expect(result).toEqual({
+      ...resetWorkspaceDefaultState,
+      [location]: {
+        ...defaultWorkspaceManager[location],
+        ...newContext,
+        ...workspaceOptions,
+        context: {
+          ...newContext.context,
+          runtime: expect.anything(),
+          contextId: expect.any(Number)
+        }
+      }
+    });
+  });
+});
+
+test('SEND_REPL_INPUT_TO_OUTPUT works correctly and pops replHistory when exceeding maxBrowseIndex', () => {
+  const replHistory = {
+    browseIndex: null,
+    records: Array.from(Array(maxBrowseIndex), (x, index) => index + '') // Create an array with size maxBrowseIndex
+  };
+
+  const inputToOutputDefaultState: IWorkspaceManagerState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      replHistory
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      replHistory
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      replHistory
+    }
+  };
+  const newOutput = 'new-output-test';
+
+  const assessmentAction: IAction = {
+    type: SEND_REPL_INPUT_TO_OUTPUT,
+    payload: {
+      type: 'code',
+      workspaceLocation: assessmentWorkspace,
+      value: newOutput
+    }
+  };
+  const gradingAction: IAction = {
+    type: SEND_REPL_INPUT_TO_OUTPUT,
+    payload: {
+      type: 'code',
+      workspaceLocation: gradingWorkspace,
+      value: newOutput
+    }
+  };
+  const playgroundAction: IAction = {
+    type: SEND_REPL_INPUT_TO_OUTPUT,
+    payload: {
+      type: 'code',
+      workspaceLocation: playgroundWorkspace,
+      value: newOutput
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+  const newArray = [newOutput].concat(replHistory.records);
+  newArray.pop();
+
+  actions.forEach(action => {
+    const result = reducer(inputToOutputDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...inputToOutputDefaultState,
+      [location]: {
+        ...inputToOutputDefaultState[location],
+        output: [
+          {
+            type: 'code',
+            workspaceLocation: location,
+            value: newOutput
+          }
+        ],
+        replHistory: {
+          ...replHistory,
+          records: newArray
+        }
+      }
+    });
+  });
+});
+
+test('SEND_REPL_INPUT_TO_OUTPUT works correctly with empty newOutput value', () => {
+  const replHistory = {
+    browseIndex: null,
+    records: ['record-1', 'record-2']
+  };
+  const inputToOutputDefaultState: IWorkspaceManagerState = {
+    assessment: {
+      ...defaultWorkspaceManager.assessment,
+      replHistory
+    },
+    grading: {
+      ...defaultWorkspaceManager.grading,
+      replHistory
+    },
+    playground: {
+      ...defaultWorkspaceManager.playground,
+      replHistory
+    }
+  };
+  const newOutput = '';
+  const assessmentAction: IAction = {
+    type: SEND_REPL_INPUT_TO_OUTPUT,
+    payload: {
+      type: 'code',
+      workspaceLocation: assessmentWorkspace,
+      value: newOutput
+    }
+  };
+  const gradingAction: IAction = {
+    type: SEND_REPL_INPUT_TO_OUTPUT,
+    payload: {
+      type: 'code',
+      workspaceLocation: gradingWorkspace,
+      value: newOutput
+    }
+  };
+  const playgroundAction: IAction = {
+    type: SEND_REPL_INPUT_TO_OUTPUT,
+    payload: {
+      type: 'code',
+      workspaceLocation: playgroundWorkspace,
+      value: newOutput
+    }
+  };
+
+  const actions: IAction[] = [assessmentAction, gradingAction, playgroundAction];
+
+  actions.forEach(action => {
+    const result = reducer(inputToOutputDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...inputToOutputDefaultState,
+      [location]: {
+        ...inputToOutputDefaultState[location],
+        output: [
+          {
+            type: 'code',
+            workspaceLocation: location,
+            value: newOutput
+          }
+        ],
+        replHistory
+      }
+    });
   });
 });
 
