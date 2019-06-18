@@ -138,8 +138,7 @@ class Grading extends React.Component<IGradingProps, State> {
           suppressSorting: true,
           suppressMovable: true,
           suppressResize: true,
-          suppressMenu: true,
-          pinned: 'right'
+          suppressMenu: true
         },
         {
           headerName: 'Unsubmit',
@@ -150,7 +149,9 @@ class Grading extends React.Component<IGradingProps, State> {
           suppressMenu: true,
           suppressResize: true,
           maxWidth: 120,
-          pinned: 'right'
+          cellStyle: {
+            padding: 0
+          }
         },
         { headerName: 'Initial Grade', field: 'initialGrade', hide: true },
         { headerName: 'Grade Adjustment', field: 'gradeAdjustment', hide: true },
@@ -309,7 +310,7 @@ class Grading extends React.Component<IGradingProps, State> {
   private unsubmitButton = (props: GradingNavLinkProps) =>
     controlButton(
       '',
-      IconNames.CHEVRON_LEFT,
+      IconNames.ARROW_LEFT,
       () =>
         this.setState({ unsubmitAlertOpen: true, unsubmitSubmissionId: props.data.submissionId }),
       { fullWidth: true }
