@@ -82,6 +82,11 @@ export function* mockBackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Saved!', 1000);
   });
 
+  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(action) {
+    /* TODO */
+    yield call(showSuccessMessage, 'Unsubmitted!', 1000);
+  });
+
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
     const {
       submissionId,

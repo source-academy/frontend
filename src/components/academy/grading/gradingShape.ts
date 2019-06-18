@@ -20,6 +20,7 @@ export type GradingOverview = {
   studentId: number;
   studentName: string;
   submissionId: number;
+  submissionStatus: string;
   groupName: string;
 };
 

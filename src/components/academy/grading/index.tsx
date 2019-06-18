@@ -1,4 +1,4 @@
-import { Colors, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Alert, Colors, FormGroup, InputGroup, Intent, NonIdealState, Spinner} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
@@ -25,6 +25,8 @@ type State = {
   columnDefs: ColDef[];
   filterValue: string;
   groupFilterEnabled: boolean;
+  unsubmitAlertOpen: boolean;
+  unsubmitSubmissionId: number | null;
 };
 
 type GradingNavLinkProps = {
@@ -43,6 +45,7 @@ export interface IGradingWorkspaceParams {
 
 export interface IDispatchProps {
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
+  handleUnsubmitSubmission: (submissionId: number, overviews: GradingOverview[]) => void;
 }
 
 export interface IStateProps {
@@ -108,11 +111,17 @@ class Grading extends React.Component<IGradingProps, State> {
           field: 'groupName',
           maxWidth: 120
         },
+        { headerName: 'Submission Status', field: 'submissionStatus' },
         {
           headerName: 'Edit',
           field: '',
           cellRendererFramework: GradingNavLink,
           maxWidth: 70
+        },
+        {
+          headerName: 'Unsubmit',
+          field: '',
+          cellRendererFramework: this.unsubmitButton
         },
         { headerName: 'Initial Grade', field: 'initialGrade', hide: true },
         { headerName: 'Grade Adjustment', field: 'gradeAdjustment', hide: true },
@@ -124,10 +133,10 @@ class Grading extends React.Component<IGradingProps, State> {
         { headerName: 'Max XP', field: 'maxXp', hide: true },
         { headerName: 'Bonus XP', field: 'xpBonus', hide: true }
       ],
-
       filterValue: '',
-
-      groupFilterEnabled: false
+      groupFilterEnabled: false,
+      unsubmitAlertOpen: false,
+      unsubmitSubmissionId: null
     };
   }
 
@@ -208,11 +217,25 @@ class Grading extends React.Component<IGradingProps, State> {
       </div>
     );
     return (
-      <ContentDisplay
-        loadContentDispatch={this.props.handleFetchGradingOverviews}
-        display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
-        fullWidth={false}
-      />
+      <div>
+        <Alert
+          canEscapeKeyCancel={true}
+          canOutsideClickCancel={true}
+          cancelButtonText="Cancel"
+          className="unsubmit-alert alert"
+          intent={Intent.DANGER}
+          onConfirm={this.handleConfirmUnsubmit}
+          isOpen={this.state.unsubmitAlertOpen}
+          onCancel={this.handleUnsubmitAlertClose}
+        >
+          <p>Are you sure you want to unsubmit this submission?</p>
+        </Alert>
+        <ContentDisplay
+          loadContentDispatch={this.props.handleFetchGradingOverviews}
+          display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
+          fullWidth={false}
+        />
+      </div>
     );
   }
 
@@ -242,6 +265,29 @@ class Grading extends React.Component<IGradingProps, State> {
     }
     this.gridApi.exportDataAsCsv({ allColumns: true });
   };
+
+  private handleConfirmUnsubmit = () => {
+    this.props.handleUnsubmitSubmission(
+      this.state.unsubmitSubmissionId!,
+      this.props.gradingOverviews!
+    );
+    this.setState({ unsubmitAlertOpen: false, unsubmitSubmissionId: null });
+  };
+
+  private handleUnsubmitAlertClose = () =>
+    this.setState({ unsubmitAlertOpen: false, unsubmitSubmissionId: null });
+
+  private unsubmitButton = (props: GradingNavLinkProps) => (
+    <div>
+      {controlButton(
+        '',
+        IconNames.CHEVRON_LEFT,
+        () =>
+          this.setState({ unsubmitAlertOpen: true, unsubmitSubmissionId: props.data.submissionId }),
+        { minimal: true }
+      )}
+    </div>
+  );
 }
 
 export default Grading;

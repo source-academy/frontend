@@ -199,6 +199,43 @@ function* backendSaga(): SagaIterator {
     }
   });
 
+  /**
+   * Unsubmits the submission and updates the grading overviews of the new status.
+   */
+  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { submissionId, overviews } = (action as actionTypes.IAction).payload;
+    const resp: Response = yield postUnsubmit(submissionId, tokens);
+    const newOverviews = (overviews as GradingOverview[]).map(overview => {
+      if (overview.submissionId === submissionId) {
+        return { ...overview, submissionStatus: 'attempted' };
+      } else {
+        return overview;
+      }
+    });
+
+    if (resp && resp.ok) {
+      yield call(showSuccessMessage, 'Unsubmit successful', 1000);
+      yield put(actions.updateGradingOverviews(newOverviews));
+    } else if (resp !== null) {
+      let errorMessage: string;
+      switch (resp.status) {
+        case 401:
+          errorMessage = 'Session expired. Please login again.';
+          break;
+        default:
+          errorMessage = `Error ${resp.status}: ${resp.statusText}`;
+          break;
+      }
+      yield call(showWarningMessage, errorMessage);
+    } else {
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    }
+  });
+
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
@@ -429,6 +466,7 @@ async function getGradingOverviews(
         studentId: overview.student.id,
         studentName: overview.student.name,
         submissionId: overview.id,
+        submissionStatus: overview.status,
         groupName: overview.groupName,
         // Grade
         initialGrade: overview.grade,
@@ -525,6 +563,20 @@ const postGrading = async (
   });
   return resp;
 };
+
+/**
+ * POST /grading/{submissionId}/unsubmit
+ */
+async function postUnsubmit(submissionId: number, tokens: Tokens) {
+  const resp = await request(`grading/${submissionId}/unsubmit`, 'POST', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+}
 
 /**
  * @returns {(Response|null)} Response if successful, otherwise null.
