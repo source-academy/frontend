@@ -91,8 +91,8 @@ Hello and welcome to this assessment! This is the *0th question*.
 >>> import this
 \`\`\`
 `,
-      prepend: '',
-      postpend: '',
+      prepend: '// THIS IS A PREPEND',
+      postpend: '// THIS IS A POSTPEND',
       testcases: [],
       comment: null,
       id: 0,
@@ -108,7 +108,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1
+      grade: 1,
+      autogradingResults: [
+        {
+          resultType: 'pass'
+        },
+        {
+          resultType: 'fail',
+          expected: '8',
+          actual: '5'
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'timeout'
+            },
+            {
+              errorType: 'syntax',
+              line: 1,
+              location: 'student',
+              errorLine: 'function fibonacci(n) {',
+              errorExplanation: 'Just kidding!'
+            }
+          ]
+        }
+      ]
     },
     grade: {
       gradeAdjustment: 0,
@@ -143,7 +168,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1
+      grade: 1,
+      autogradingResults: [
+        {
+          resultType: 'pass'
+        },
+        {
+          resultType: 'fail',
+          expected: '8',
+          actual: '5'
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'timeout'
+            },
+            {
+              errorType: 'syntax',
+              line: 1,
+              location: 'student',
+              errorLine: 'function fibonacci(n) {',
+              errorExplanation: 'Just kidding!'
+            }
+          ]
+        }
+      ]
     },
     grade: {
       gradeAdjustment: 0,
@@ -197,7 +247,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1
+      grade: 1,
+      autogradingResults: [
+        {
+          resultType: 'pass'
+        },
+        {
+          resultType: 'fail',
+          expected: '8',
+          actual: '5'
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'timeout'
+            },
+            {
+              errorType: 'syntax',
+              line: 1,
+              location: 'student',
+              errorLine: 'function fibonacci(n) {',
+              errorExplanation: 'Just kidding!'
+            }
+          ]
+        }
+      ]
     },
     grade: {
       gradeAdjustment: 0,
