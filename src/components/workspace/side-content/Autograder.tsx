@@ -20,9 +20,12 @@ type State = {
 class Autograder extends React.Component<AutograderProps, State> {
   public constructor(props: AutograderProps) {
     super(props);
+
+    const hasResults: boolean = this.props.autogradingResults ? true : false;
+
     this.state = {
-      showTestcases: true,
-      showResults: false
+      showTestcases: !hasResults,
+      showResults: hasResults
     };
   }
 
