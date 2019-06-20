@@ -242,6 +242,17 @@ export const resetWorkspace = (
   }
 });
 
+export const updateWorkspace = (
+  workspaceLocation: WorkspaceLocation,
+  workspaceOptions?: Partial<IWorkspaceState>
+) => ({
+  type: actionTypes.UPDATE_WORKSPACE,
+  payload: {
+    workspaceLocation,
+    workspaceOptions
+  }
+});
+
 export const setEditorSessionId: ActionCreator<actionTypes.IAction> = (
   workspaceLocation: WorkspaceLocation,
   editorSessionId: string

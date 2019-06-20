@@ -10,14 +10,14 @@ export interface IAssessmentOverview {
   category: AssessmentCategory;
   closeAt: string;
   coverImage: string;
-  fileName?: string;
+  fileName?: string; // For mission control
   grade: number;
   id: number;
   maxGrade: number;
   maxXp: number;
   openAt: string;
   title: string;
-  reading?: string;
+  reading?: string; // For mission control
   shortSummary: string;
   status: AssessmentStatus;
   story: string | null;
@@ -47,8 +47,8 @@ export type GradingStatus = keyof typeof GradingStatuses;
  */
 export interface IAssessment {
   category: AssessmentCategory;
-  globalDeployment?: Library;
-  graderDeployment?: Library;
+  globalDeployment?: Library; // For mission control
+  graderDeployment?: Library; // For mission control
   id: number;
   longSummary: string;
   missionPDF: string;
@@ -72,6 +72,7 @@ export interface IProgrammingQuestion extends IQuestion {
   solutionTemplate: string;
   postpend: string;
   testcases: ITestcase[];
+  testcasesPrivate?: ITestcase[]; // For mission control
   type: 'programming';
   graderTemplate?: string;
 }
@@ -97,7 +98,7 @@ export interface IQuestion {
   content: string;
   id: number;
   library: Library;
-  graderLibrary?: Library;
+  graderLibrary?: Library; // For mission control
   type: QuestionType;
   grader: {
     name: string;
@@ -145,6 +146,6 @@ export type Library = {
   globals: Array<{
     0: string;
     1: any;
-    2?: string;
+    2?: string; // For mission control
   }>;
 };
