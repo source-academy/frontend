@@ -120,7 +120,7 @@ class Contributors extends Component<{}, IContributorsArrayState> {
                     return (
                         <div key={contributor.key}>
                             <img src={contributor.photo} alt="Image" height="200" width="200"/>
-                            <p><a href={contributor.githubPage}>{contributor.githubName}</a></p>
+                            <p><a href={contributor.githubPage} target="_blank">{contributor.githubName}</a></p>
                             <p>Number of commits: {contributor.commits}</p>
                         </div>
                     );
@@ -134,13 +134,31 @@ class Contributors extends Component<{}, IContributorsArrayState> {
                 );    
             })
         ) : (
-            <h2>No contributors to the Source Academy yet!</h2>
+            <h2>Loading...</h2>
         );
         return (
             <div>
-                <h1>You committed!</h1>
-                <p>Kudos to all our contributors to the Source Academy so far!</p>
+                <h1>Meet our Contributors!</h1>
+                <h2>Special thanks to...</h2>
+                <ul>
+                    <li>XXX - the architect behind the Source Academy</li>
+                    <li>XXX - who have made the module's textbook ever better and more interactive</li>
+                    <li>All our Avengers and tutors from the current and past iterations of the module</li>
+                </ul>
+                <h2>Our Developers</h2>
+                <p>The people who have...</p>
+                <ul>
+                    <li>Project Managers: Martin Henz, Evan Sebastian</li>
+                    <li>Frontend Team: Vignesh Shankar, Lee Ning Yuan, Rahul Rajesh</li>
+                    <li>Backend Team: Julius Putra Tanu Setiaji, Chen Shaowei, Liow Jia Chen</li>
+                    <li>Artistic Team: Ng Tse Pei, Joey Yeo, Tan Yu Wei</li>
+                </ul>
+                <h2>You committed!</h2>
+                <p>To thank all those who have contributed (and continue to contribute) to the development of the Source Academy under these various teams via Github! 
+                    Kudos to all our contributors to the Source Academy so far!</p>
                 <div>{contributorList}</div>
+                <h2>You can contribute too!</h2>
+                <p>What are you waiting for? Head down over to our source code on Github and make your first commit!</p>
             </div>
         );
     }
