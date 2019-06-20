@@ -42,7 +42,7 @@ function loadAllLibs() {
     // inspector
     '/externalLibs/inspector/inspector.js',
     // env visualizer
-    '/externalLibs/env_visualizer/ConcreteJS.js',
+    '/externalLibs/env_visualizer/ConcreteJs.js',
     '/externalLibs/env_visualizer/visualizer.js'
   ]
 
