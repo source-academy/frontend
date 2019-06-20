@@ -10,6 +10,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
+import { ValueFormatterParams } from 'ag-grid/dist/lib/entities/colDef';
 import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
 import { sortBy } from 'lodash';
@@ -122,6 +123,10 @@ class Grading extends React.Component<IGradingProps, State> {
       {
         headerName: 'Status',
         field: 'submissionStatus',
+        valueFormatter: (params: ValueFormatterParams) => {
+          const str = params.value as string;
+          return str.charAt(0).toUpperCase() + str.slice(1);
+        },
         cellStyle: (params: GradingNavLinkProps) => {
           if (params.data.submissionStatus === 'submitted') {
             return { backgroundColor: Colors.GREEN5 };
