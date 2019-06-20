@@ -229,6 +229,13 @@ export const setDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: IDe
   }
 });
 
+export const recordAudioUrl: ActionCreator<actionTypes.IAction> = (audioUrl: string) => ({
+  type: actionTypes.RECORD_AUDIO_URL,
+  payload: {
+    audioUrl
+  }
+});
+
 export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
   time: number,
   delta: IDelta

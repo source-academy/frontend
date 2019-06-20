@@ -67,6 +67,7 @@ export interface ISourcecastPlayback extends IWorkspaceState {
 }
 
 export interface ISourcecastRecording extends IWorkspaceState {
+  readonly audioUrl: string;
   readonly playbackData: IPlaybackData;
   readonly recordingStatus: RecordingStatus;
   readonly timeElapsedBeforePause: number;
@@ -298,6 +299,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   sourcecastRecording: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecastRecording),
+    audioUrl: 'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3',
     playbackData: { init: '', data: [] },
     recordingStatus: RecordingStatus.notStarted,
     timeElapsedBeforePause: 0,

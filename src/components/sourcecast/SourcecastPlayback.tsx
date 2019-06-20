@@ -17,6 +17,7 @@ export interface ISourcecastPlaybackProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
+  audioUrl: string;
   deltasToApply: IDelta[] | null;
   editorReadonly: boolean;
   editorSessionId: string;
@@ -151,6 +152,7 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleSetSourcecastPlaybackDuration: this.props.handleSetSourcecastPlaybackDuration,
         handleSetSourcecastPlaybackStatus: this.props.handleSetSourcecastPlaybackStatus,
+        audioUrl: this.props.audioUrl,
         duration: this.props.playbackDuration,
         playbackData: this.props.playbackData,
         playbackStatus: this.props.playbackStatus

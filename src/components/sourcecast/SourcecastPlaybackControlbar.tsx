@@ -30,7 +30,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     return (
       <div>
         <audio
-          src="https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3"
+          src={this.props.audioUrl}
           ref={this.audio}
           // onEnded={this.handlePlayerStopping}
           onLoadedMetadata={this.handleAudioLoaded}
@@ -188,6 +188,7 @@ export interface ISourcecastPlaybackControlbarProps {
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastPlaybackDuration: (duration: number) => void;
   handleSetSourcecastPlaybackStatus: (playbackStatus: PlaybackStatus) => void;
+  audioUrl: string;
   duration: number;
   playbackData: IPlaybackData;
   playbackStatus: PlaybackStatus;

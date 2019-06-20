@@ -39,6 +39,7 @@ import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.sourcecastPlayback.sideContentActiveTab,
+  audioUrl: state.workspaces.sourcecastRecording.audioUrl,
   deltasToApply: state.workspaces.sourcecastPlayback.deltasToApply,
   editorReadonly: state.workspaces.sourcecastPlayback.editorReadonly,
   editorSessionId: state.workspaces.sourcecastPlayback.editorSessionId,

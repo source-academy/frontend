@@ -28,6 +28,7 @@ import {
   IAction,
   INIT_INVITE,
   LOG_OUT,
+  RECORD_AUDIO_URL,
   RECORD_EDITOR_DELTA,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -464,6 +465,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[workspaceLocation],
           isRunning: false,
           isDebugging: false
+        }
+      };
+    case RECORD_AUDIO_URL:
+      return {
+        ...state,
+        sourcecastRecording: {
+          ...state.sourcecastRecording,
+          audioUrl: action.payload.audioUrl
         }
       };
     case RECORD_EDITOR_DELTA:

@@ -57,6 +57,7 @@ export interface IDispatchProps {
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleRecordAudioUrl: (audioUrl: string) => void;
   handleRecordEditorDelta: (time: number, delta: IDelta) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -157,6 +158,7 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
       sourcecastRecordingControlbarProps: {
         editorValue: this.props.editorValue,
         getTimerDuration: this.getTimerDuration,
+        handleRecordAudioUrl: this.props.handleRecordAudioUrl,
         handleSetEditorInitValue: this.props.handleSetEditorInitValue,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleTimerPause: this.props.handleTimerPause,

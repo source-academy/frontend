@@ -154,6 +154,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
     }
     const url = window.URL.createObjectURL(this.state.fileDataBlob);
     console.log('Download URL: ' + url);
+    this.props.handleRecordAudioUrl(url);
     const click = document.createEvent('Event');
     click.initEvent('click', true, true);
     const link = document.createElement('A') as HTMLAnchorElement;
@@ -175,6 +176,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
 }
 
 export interface ISourcecastRecordingControlbarProps {
+  handleRecordAudioUrl: (audioUrl: string) => void;
   handleSetEditorInitValue: (editorValue: string) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;
