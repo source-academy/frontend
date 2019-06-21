@@ -148,6 +148,17 @@ const assessmentTest2: IAssessment = {
   title: 'updated first assessment'
 };
 
+const assessmentTest3: IAssessment = {
+  category: 'Path',
+  globalDeployment: undefined,
+  graderDeployment: undefined,
+  id: 3,
+  longSummary: 'another long summary here',
+  missionPDF: 'www.yahoo.com',
+  questions: [],
+  title: 'path'
+};
+
 test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
   const action: IAction = {
     type: UPDATE_ASSESSMENT,
@@ -156,6 +167,25 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
   const resultMap: Map<number, IAssessment> = reducer(defaultSession, action).assessments;
 
   expect(resultMap.get(assessmentTest1.id)).toEqual(assessmentTest1);
+});
+
+test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old data', () => {
+  const assessments = new Map<number, IAssessment>();
+  assessments.set(assessmentTest3.id, assessmentTest3);
+
+  const newDefaultSession: ISessionState = {
+    ...defaultSession,
+    assessments
+  };
+
+  const action: IAction = {
+    type: UPDATE_ASSESSMENT,
+    payload: assessmentTest2
+  };
+  const resultMap: Map<number, IAssessment> = reducer(newDefaultSession, action).assessments;
+
+  expect(resultMap.get(assessmentTest2.id)).toEqual(assessmentTest2);
+  expect(resultMap.get(assessmentTest3.id)).toEqual(assessmentTest3);
 });
 
 test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
@@ -295,6 +325,30 @@ test('UPDATE_GRADING works correctly in inserting gradings', () => {
 
   const gradingMap: Map<number, Grading> = reducer(defaultSession, action).gradings;
   expect(gradingMap.get(submissionId)).toEqual(gradingTest1);
+});
+
+test('UPDATE_GRADING works correctly in inserting gradings and retains old data', () => {
+  const submissionId1 = 45;
+  const submissionId2 = 56;
+  const gradings = new Map<number, Grading>();
+  gradings.set(submissionId1, gradingTest1);
+
+  const newDefaultSession = {
+    ...defaultSession,
+    gradings
+  };
+
+  const action: IAction = {
+    type: UPDATE_GRADING,
+    payload: {
+      submissionId: submissionId2,
+      grading: gradingTest2
+    }
+  };
+
+  const gradingMap: Map<number, Grading> = reducer(newDefaultSession, action).gradings;
+  expect(gradingMap.get(submissionId1)).toEqual(gradingTest1);
+  expect(gradingMap.get(submissionId2)).toEqual(gradingTest2);
 });
 
 test('UPDATE_GRADING works correctly in updating gradings', () => {
