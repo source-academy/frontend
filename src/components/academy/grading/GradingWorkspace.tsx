@@ -2,11 +2,10 @@ import { NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
+import ChatApp from '../../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states';
 import { history } from '../../../utils/history';
-
 import {
   IMCQQuestion,
   IProgrammingQuestion,
@@ -15,7 +14,6 @@ import {
   Library,
   QuestionTypes
 } from '../../assessment/assessmentShape';
-import ChatApp from '../../chat/ChatApp';
 import Markdown from '../../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../../workspace';
 import { ControlBarProps } from '../../workspace/ControlBar';
@@ -257,12 +255,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         icon: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />
       },
-      {  
-        label: `Chat` ,
+      {
+        label: `Chat`,
         icon: IconNames.CHAT,
-        body: <ChatApp className="chatbox" currentUserId={'e321123f'} currentRoomId={'19421195'} />
-      },
-
+        body: <ChatApp />
+      }
     ]
   });
 

@@ -9,6 +9,7 @@ export const USE_BACKEND =
   process.env.REACT_APP_USE_BACKEND !== undefined &&
   process.env.REACT_APP_USE_BACKEND !== '' &&
   process.env.REACT_APP_USE_BACKEND!.toUpperCase() === 'TRUE';
+export const INSTANCE_LOCATOR = process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR;
 
 export enum LINKS {
   GITHUB_ISSUES = 'https://github.com/source-academy/cadet-frontend/issues',

@@ -2,6 +2,9 @@ import * as React from 'react';
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
 import MessageList from './MessageList';
 import Input from './Input';
+import { BACKEND_URL, INSTANCE_LOCATOR } from '../../utils/constants';
+import { IState } from '../../reducers/states';
+import jwt_decode from 'jwt-decode';
 
 export default class ChatApp extends React.Component {
   constructor(props) {
@@ -24,21 +27,21 @@ export default class ChatApp extends React.Component {
   } // for scrolling
 
   scrollToBottom = () => {
-    this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
-  }
-  componentDidMount() {
-    // tslint:disable-next-line:no-console
-    /*
-      TO MOVE instanceLocator and tokenProvider to backend
+    this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
-    */
+  componentDidMount() {
+    // If you are not working with the backend server running,
+    // use the test token url, and hardcode the userId and roomId
     const chatManager = new ChatManager({
-      instanceLocator: 'v1:us1:6fac6431-d3f3-4a32-b4e6-56a20bf6e500',
+      instanceLocator: INSTANCE_LOCATOR,
       tokenProvider: new TokenProvider({
-        url:
-          'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/6fac6431-d3f3-4a32-b4e6-56a20bf6e500/token'
+        headers: {
+          Authorization: `Bearer ${this.props.accessToken}`
+        },
+        url: `${BACKEND_URL}/v1/chat/token`
       }),
-      userId: this.props.currentUserId
+      userId: jwt_decode(this.props.accessToken).sub
     });
 
     chatManager
@@ -54,8 +57,7 @@ export default class ChatApp extends React.Component {
             }
           },
           messageLimit: 100,
-          roomId: this.props.currentRoomId
-
+          roomId: '19408932' // use roomId from your ChatKit instance
         });
       })
       .then(currentRoom => {
@@ -71,16 +73,17 @@ export default class ChatApp extends React.Component {
       roomId: this.state.currentRoom.id,
       text
     });
-
   }
 
   render() {
     return (
-      
       <div>
         <MessageList viewingUserId={this.state.currentUser.id} messages={this.state.messages} />
-        <Input className="input-field" onSubmit={this.addMessage} > add something</Input>
-          <div ref={this.messagesEndRef} />  
+        <Input className="input-field" onSubmit={this.addMessage}>
+          {' '}
+          add something
+        </Input>
+        <div ref={this.messagesEndRef} />
       </div>
     );
   }

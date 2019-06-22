@@ -14,9 +14,9 @@ import * as React from 'react';
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
 import { beforeNow } from '../../utils/dateHelpers';
 
+import ChatApp from '../../containers/ChatContainer';
 import { history } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
-import ChatApp from '../chat/ChatApp';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
@@ -36,7 +36,6 @@ import {
 } from './assessmentShape';
 
 import GradingResult from './GradingResult';
-
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
@@ -332,7 +331,6 @@ class AssessmentWorkspace extends React.Component<
     questionId: number
   ) => {
     const tabs = [
-     
       {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
@@ -353,11 +351,11 @@ class AssessmentWorkspace extends React.Component<
           />
         )
       },
-      {  
-        label: `Chat` ,
+      {
+        label: `Chat`,
         icon: IconNames.CHAT,
-        body: <ChatApp className="chatbox" currentUserId={'e123456f'} currentRoomId={'19421195'} />
-      },
+        body: <ChatApp />
+      }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;
     if (isGraded) {

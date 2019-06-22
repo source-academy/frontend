@@ -33,6 +33,8 @@
     }
   },
   "dependencies": {
+    "@pusher/chatkit-client": "^1.5.0",
+    "@types/jwt-decode": "^2.2.1",
     "acorn": "^4.0.13",
     "ag-grid": "^18.0.1",
     "ag-grid-react": "^18.0.0",
