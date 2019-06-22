@@ -1,7 +1,12 @@
 import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
-import { IDelta, PlaybackStatus, RecordingType } from '../components/sourcecast/sourcecastShape';
+import {
+  IDelta,
+  IPlaybackData,
+  PlaybackStatus,
+  RecordingType
+} from '../components/sourcecast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -221,33 +226,6 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const setDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: IDelta[]) => ({
-  type: actionTypes.SET_DELTAS_TO_APPLY,
-  payload: {
-    type: RecordingType.code,
-    deltas
-  }
-});
-
-export const recordAudioUrl: ActionCreator<actionTypes.IAction> = (audioUrl: string) => ({
-  type: actionTypes.RECORD_AUDIO_URL,
-  payload: {
-    audioUrl
-  }
-});
-
-export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
-  time: number,
-  delta: IDelta
-) => ({
-  type: actionTypes.RECORD_EDITOR_DELTA,
-  payload: {
-    type: RecordingType.code,
-    time,
-    delta
-  }
-});
-
 /**
  * Resets a workspace to its default properties.
  *
@@ -290,6 +268,56 @@ export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (
   }
 });
 
+export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
+  type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
+  payload: {
+    assessmentId,
+    questionId
+  }
+});
+
+export const updateCurrentSubmissionId = (submissionId: number, questionId: number) => ({
+  type: actionTypes.UPDATE_CURRENT_SUBMISSION_ID,
+  payload: {
+    submissionId,
+    questionId
+  }
+});
+
+export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  hasUnsavedChanges: boolean
+) => ({
+  type: actionTypes.UPDATE_HAS_UNSAVED_CHANGES,
+  payload: {
+    workspaceLocation,
+    hasUnsavedChanges
+  }
+});
+
+// SOURCECAST PLAYBACK
+export const loadPlaybackData = (playbackData: IPlaybackData) => ({
+  type: actionTypes.LOAD_PLAYBACK_DATA,
+  payload: {
+    playbackData
+  }
+});
+
+export const recordAudioUrl: ActionCreator<actionTypes.IAction> = (audioUrl: string) => ({
+  type: actionTypes.RECORD_AUDIO_URL,
+  payload: {
+    audioUrl
+  }
+});
+
+export const setDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: IDelta[]) => ({
+  type: actionTypes.SET_DELTAS_TO_APPLY,
+  payload: {
+    type: RecordingType.code,
+    deltas
+  }
+});
+
 export const setSourcecastPlaybackDuration: ActionCreator<actionTypes.IAction> = (
   duration: number
 ) => ({
@@ -305,6 +333,30 @@ export const setSourcecastPlaybackStatus: ActionCreator<actionTypes.IAction> = (
   type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,
   payload: {
     playbackStatus
+  }
+});
+
+// SOURCECAST RECORDING
+export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
+  time: number,
+  delta: IDelta
+) => ({
+  type: actionTypes.RECORD_EDITOR_DELTA,
+  payload: {
+    type: RecordingType.code,
+    time,
+    delta
+  }
+});
+
+export const savePlaybackData = (playbackData: IPlaybackData) => ({
+  type: actionTypes.SAVE_PLAYBACK_DATA
+});
+
+export const recordEditorInitValue: ActionCreator<actionTypes.IAction> = (editorValue: string) => ({
+  type: actionTypes.RECORD_EDITOR_INIT_VALUE,
+  payload: {
+    editorValue
   }
 });
 
@@ -337,32 +389,5 @@ export const timerStop: ActionCreator<actionTypes.IAction> = (timeNow: number) =
   type: actionTypes.TIMER_STOP,
   payload: {
     timeNow: Date.now()
-  }
-});
-
-export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
-  type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
-  payload: {
-    assessmentId,
-    questionId
-  }
-});
-
-export const updateCurrentSubmissionId = (submissionId: number, questionId: number) => ({
-  type: actionTypes.UPDATE_CURRENT_SUBMISSION_ID,
-  payload: {
-    submissionId,
-    questionId
-  }
-});
-
-export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation,
-  hasUnsavedChanges: boolean
-) => ({
-  type: actionTypes.UPDATE_HAS_UNSAVED_CHANGES,
-  payload: {
-    workspaceLocation,
-    hasUnsavedChanges
   }
 });

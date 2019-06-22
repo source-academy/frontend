@@ -21,8 +21,8 @@ import {
   playgroundExternalSelect,
   recordAudioUrl,
   recordEditorDelta,
+  recordEditorInitValue,
   setEditorBreakpoint,
-  setEditorInitValue,
   setEditorReadonly,
   setEditorSessionId,
   setWebsocketStatus,
@@ -96,7 +96,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
-      handleSetEditorInitValue: (editorValue: string) => setEditorInitValue(editorValue),
+      handleRecordEditorInitValue: (editorValue: string) => recordEditorInitValue(editorValue),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>

@@ -101,9 +101,9 @@ class SourcecastRecordingControlbar extends React.PureComponent<
 
   private handleRecorderStarting = () => {
     console.log('Start recorder');
-    const { handleSetEditorInitValue, handleSetEditorReadonly, handleTimerStart } = this.props;
+    const { handleRecordEditorInitValue, handleSetEditorReadonly, handleTimerStart } = this.props;
     console.log('Init value: ' + this.props.editorValue);
-    handleSetEditorInitValue(this.props.editorValue);
+    handleRecordEditorInitValue(this.props.editorValue);
     handleSetEditorReadonly(false);
     handleTimerStart();
     const updater = setInterval(this.updateTimerDuration, 100);
@@ -177,7 +177,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
 
 export interface ISourcecastRecordingControlbarProps {
   handleRecordAudioUrl: (audioUrl: string) => void;
-  handleSetEditorInitValue: (editorValue: string) => void;
+  handleRecordEditorInitValue: (editorValue: string) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
