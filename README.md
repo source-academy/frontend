@@ -85,3 +85,11 @@ Because we use a local version of `js-slang`, the CI just breaks all the time.
 ## TypeScript Coding Conventions
 
 We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
+
+## ChatKit
+
+The chat functionality replacing the previous comment field found in assignments is built on top of ChatKit. Its documentation can be found [here](https://pusher.com/docs/chatkit).
+
+If you are using ChatKit without the backend server running, use the [test token provider](https://pusher.com/docs/chatkit/reference/test-token-provider), and hardcode `userId` and `roomId`.
+
+Internet connection is required for usage.
