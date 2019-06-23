@@ -14,6 +14,7 @@ import {
   submitAnswer,
   submitAssessment,
   submitGrading,
+  unsubmitSubmission,
   updateAssessment,
   updateAssessmentOverviews,
   updateGrading,
@@ -172,6 +173,36 @@ test('submitGrading generates correct action object', () => {
   });
 });
 
+test('unsubmitSubmission generates correct action object', () => {
+  const submissionId = 10;
+  const overviews: IAssessmentOverview[] = [
+    {
+      category: 'Mission',
+      closeAt: 'test_string',
+      coverImage: 'test_string',
+      grade: 0,
+      id: 0,
+      maxGrade: 0,
+      maxXp: 0,
+      openAt: 'test_string',
+      title: 'test_string',
+      shortSummary: 'test_string',
+      status: 'not_attempted',
+      story: null,
+      xp: 0,
+      gradingStatus: 'none'
+    }
+  ];
+  const action = unsubmitSubmission(submissionId, overviews);
+  expect(action).toEqual({
+    type: actionTypes.UNSUBMIT_SUBMISSION,
+    payload: {
+      submissionId,
+      overviews
+    }
+  });
+});
+
 test('updateHistoryHelpers generates correct action object', () => {
   const loc = 'location';
   const action = updateHistoryHelpers(loc);
@@ -244,6 +275,7 @@ test('updateGradingOverviews generates correct action object', () => {
       studentId: 100,
       studentName: 'test student',
       submissionId: 1,
+      submissionStatus: 'attempting',
       groupName: 'group'
     }
   ];
