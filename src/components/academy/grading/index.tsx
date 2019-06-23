@@ -31,6 +31,7 @@ import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace';
  * can be manipulated easier. See constructor for an example.
  */
 type State = {
+  columnDefs: ColDef[];
   filterValue: string;
   groupFilterEnabled: boolean;
   unsubmitAlert: JSX.Element | null;
@@ -71,108 +72,99 @@ const GradingExp = (props: GradingNavLinkProps) => {
 
 class Grading extends React.Component<IGradingProps, State> {
   private columnApi: ColumnApi;
-  private columnDefs: ColDef[];
   private gridApi?: GridApi;
 
   public constructor(props: IGradingProps) {
     super(props);
 
-    this.columnDefs = [
-      { headerName: 'Assessment Name', field: 'assessmentName' },
-      { headerName: 'Category', field: 'assessmentCategory', maxWidth: 150 },
-      { headerName: 'Student Name', field: 'studentName' },
-      {
-        headerName: 'Group',
-        field: 'groupName',
-        maxWidth: 120
-      },
-      {
-        headerName: 'Grade',
-        field: '',
-        cellRendererFramework: GradingMarks,
-        maxWidth: 100,
-        cellStyle: (params: GradingNavLinkProps) => {
-          if (params.data.currentGrade < params.data.maxGrade) {
-            return { backgroundColor: Colors.RED5 };
-          } else {
-            return {};
-          }
-        },
-        comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
-          if (nodeA && nodeB) {
-            return nodeA.data.currentGrade - nodeB.data.currentGrade;
-          } else {
-            return valueA - valueB;
-          }
-        }
-      },
-      {
-        headerName: 'XP',
-        field: '',
-        cellRendererFramework: GradingExp,
-        maxWidth: 100,
-        comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
-          if (nodeA && nodeB) {
-            return nodeA.data.currentXp - nodeB.data.currentXp;
-          } else {
-            return valueA - valueB;
-          }
-        }
-      },
-
-      {
-        headerName: 'Status',
-        field: 'submissionStatus',
-        valueFormatter: (params: ValueFormatterParams) => {
-          const str = params.value as string;
-          return str.charAt(0).toUpperCase() + str.slice(1);
-        },
-        cellStyle: (params: GradingNavLinkProps) => {
-          if (params.data.submissionStatus === 'submitted') {
-            return { backgroundColor: Colors.GREEN5 };
-          } else {
-            return { backgroundColor: Colors.RED5 };
-          }
-        }
-      },
-      {
-        headerName: 'Edit',
-        width: 80,
-        field: '',
-        cellRendererFramework: GradingNavLink,
-        suppressSorting: true,
-        suppressMenu: true,
-        suppressResize: true,
-        suppressAutoSize: true,
-        suppressSizeToFit: true
-      },
-      {
-        headerName: 'Unsubmit',
-        colId: 'Unsubmit',
-        width: 110,
-        field: '',
-        cellRendererFramework: this.unsubmitButton,
-        suppressSorting: true,
-        suppressMenu: true,
-        suppressResize: true,
-        suppressAutoSize: true,
-        suppressSizeToFit: true,
-        cellStyle: {
-          padding: 0
-        }
-      },
-      { headerName: 'Initial Grade', field: 'initialGrade', hide: true },
-      { headerName: 'Grade Adjustment', field: 'gradeAdjustment', hide: true },
-      { headerName: 'Initial XP', field: 'initialXp', hide: true },
-      { headerName: 'XP Adjustment', field: 'xpAdjustment', hide: true },
-      { headerName: 'Current Grade', field: 'currentGrade', hide: true },
-      { headerName: 'Max Grade', field: 'maxGrade', hide: true },
-      { headerName: 'Current XP', field: 'currentXp', hide: true },
-      { headerName: 'Max XP', field: 'maxXp', hide: true },
-      { headerName: 'Bonus XP', field: 'xpBonus', hide: true }
-    ];
-
     this.state = {
+      columnDefs: [
+        { headerName: 'Assessment Name', field: 'assessmentName' },
+        { headerName: 'Category', field: 'assessmentCategory', maxWidth: 150 },
+        { headerName: 'Student Name', field: 'studentName' },
+        {
+          headerName: 'Grade',
+          field: '',
+          cellRendererFramework: GradingMarks,
+          maxWidth: 100,
+          cellStyle: params => {
+            if (params.data.currentGrade < params.data.maxGrade) {
+              return { backgroundColor: Colors.RED5 };
+            } else {
+              return {};
+            }
+          },
+          comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
+            if (nodeA && nodeB) {
+              return nodeA.data.currentGrade - nodeB.data.currentGrade;
+            } else {
+              return valueA - valueB;
+            }
+          }
+        },
+        {
+          headerName: 'XP',
+          field: '',
+          cellRendererFramework: GradingExp,
+          maxWidth: 100,
+          comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
+            if (nodeA && nodeB) {
+              return nodeA.data.currentXp - nodeB.data.currentXp;
+            } else {
+              return valueA - valueB;
+            }
+          }
+        },
+        {
+          headerName: 'Group',
+          field: 'groupName',
+          maxWidth: 120
+        },
+        {
+          headerName: 'Status',
+          field: 'submissionStatus',
+          valueFormatter: (params: ValueFormatterParams) => {
+            const str = params.value as string;
+            return str.charAt(0).toUpperCase() + str.slice(1);
+          },
+          cellStyle: (params: GradingNavLinkProps) => {
+            if (params.data.submissionStatus === 'submitted') {
+              return { backgroundColor: Colors.GREEN5 };
+            } else {
+              return { backgroundColor: Colors.RED5 };
+            }
+          }
+        },
+        {
+          headerName: 'Edit',
+          field: '',
+          cellRendererFramework: GradingNavLink,
+          maxWidth: 70
+        },
+        {
+          headerName: 'Unsubmit',
+          colId: 'Unsubmit',
+          width: 110,
+          field: '',
+          cellRendererFramework: this.unsubmitButton,
+          suppressSorting: true,
+          suppressMovable: true,
+          suppressMenu: true,
+          suppressResize: true,
+          cellStyle: {
+            padding: 0
+          }
+        },
+        { headerName: 'Initial Grade', field: 'initialGrade', hide: true },
+        { headerName: 'Grade Adjustment', field: 'gradeAdjustment', hide: true },
+        { headerName: 'Initial XP', field: 'initialXp', hide: true },
+        { headerName: 'XP Adjustment', field: 'xpAdjustment', hide: true },
+        { headerName: 'Current Grade', field: 'currentGrade', hide: true },
+        { headerName: 'Max Grade', field: 'maxGrade', hide: true },
+        { headerName: 'Current XP', field: 'currentXp', hide: true },
+        { headerName: 'Max XP', field: 'maxXp', hide: true },
+        { headerName: 'Bonus XP', field: 'xpBonus', hide: true }
+      ],
       filterValue: '',
       groupFilterEnabled: false,
       unsubmitAlert: null
@@ -236,18 +228,17 @@ class Grading extends React.Component<IGradingProps, State> {
         <br />
 
         <div className="Grading">
-          <div className="ag-grid-parent ag-theme-balham">
+          <div className="ag-grid-parent ag-theme-fresh">
             <AgGridReact
               gridAutoHeight={true}
               enableColResize={true}
               enableSorting={true}
               enableFilter={true}
-              columnDefs={this.columnDefs}
+              columnDefs={this.state.columnDefs}
               onGridReady={this.onGridReady}
               rowData={data}
               pagination={true}
               paginationPageSize={50}
-              suppressMovableColumns={true}
             />
           </div>
           <div className="ag-grid-export-button">
@@ -291,7 +282,6 @@ class Grading extends React.Component<IGradingProps, State> {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.gridApi.sizeColumnsToFit();
-    window.onresize = () => this.gridApi!.sizeColumnsToFit();
   };
 
   private exportCSV = () => {
