@@ -59,7 +59,10 @@ export interface IXmlParseStrPProblem extends IXmlParseStrProblem {
     PREPEND: string;
     SOLUTION: string[];
     POSTPEND: string;
-    TESTCASES: IXmlParseStrTestcase[];
+    TESTCASES: Array<{
+      PUBLIC?: IXmlParseStrTestcase[];
+      PRIVATE?: IXmlParseStrTestcase[];
+    }>;
     GRADER: string[];
   }>;
   TEXT: string[];
@@ -84,5 +87,5 @@ export interface IXmlParseStrTestcase {
     answer: string;
     score: string;
   };
-  TEXT: string;
+  _: string;
 }

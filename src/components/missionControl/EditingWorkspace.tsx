@@ -10,6 +10,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  ITestcase,
   Library,
   QuestionTypes
 } from '../assessment/assessmentShape';
@@ -20,6 +21,7 @@ import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
+  AutograderTab,
   DeploymentTab,
   GradingTab,
   ManageQuestionTab,
@@ -37,7 +39,6 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
   activeTab: number;
-  assessment?: IAssessment;
   editorHeight?: number;
   editorValue: string | null;
   editorWidth: string;
@@ -78,8 +79,10 @@ export type DispatchProps = {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
+  handleUpdateWorkspace: (options: Partial<IWorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleTestcaseEval: (testcaseId: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
@@ -117,8 +120,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
    * and show the briefing.
    */
   public componentDidMount() {
-    if (this.props.assessment) {
-      this.resetEditorValue();
+    if (this.state.assessment) {
+      this.resetWorkspaceValues();
       this.setState({
         originalMaxGrade: this.getMaxMarks('maxGrade'),
         originalMaxXp: this.getMaxMarks('maxXp')
@@ -241,6 +244,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
                 originalMaxXp: this.getMaxMarks('maxXp')
               });
               this.handleRefreshLibrary();
+              this.resetWorkspaceValues();
             },
             { minimal: false, intent: Intent.DANGER }
           )}
@@ -260,14 +264,14 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     }
 
     /* Reset assessment if it has changed.*/
-    const assessmentId = this.props.assessmentId;
+    const assessmentId = -1;
     const questionId = this.formatedQuestionId();
 
     if (
       this.props.storedAssessmentId !== assessmentId ||
       this.props.storedQuestionId !== questionId
     ) {
-      this.resetEditorValue();
+      this.resetWorkspaceValues();
       this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       this.props.handleUpdateHasUnsavedChanges(false);
       if (this.state.hasUnsavedChanges) {
@@ -302,20 +306,35 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.props.handleClearContext(library);
   };
 
-  private resetEditorValue = () => {
+  private resetWorkspaceValues = () => {
     const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
     let editorValue: string;
+    let editorPrepend = '';
+    let editorPostpend = '';
     if (question.type === QuestionTypes.programming) {
       if (question.editorValue) {
         editorValue = question.editorValue;
       } else {
         editorValue = (question as IProgrammingQuestion).solutionTemplate as string;
       }
+      editorPrepend = (question as IProgrammingQuestion).prepend;
+      editorPostpend = (question as IProgrammingQuestion).postpend;
     } else {
       editorValue = '//If you see this, this is a bug. Please report bug.';
     }
-    this.props.handleResetWorkspace({ editorValue });
+
+    this.props.handleResetWorkspace({
+      editorPrepend,
+      editorValue,
+      editorPostpend
+    });
     this.props.handleEditorValueChange(editorValue);
+  };
+
+  private handleTestcaseEval = (testcase: ITestcase) => {
+    const editorTestcases = [testcase];
+    this.props.handleUpdateWorkspace({ editorTestcases });
+    this.props.handleTestcaseEval(0);
   };
 
   private handleSave = () => {
@@ -373,7 +392,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     });
     this.handleRefreshLibrary();
     this.handleSave();
-    this.resetEditorValue();
+    this.resetWorkspaceValues();
   };
 
   private handleChangeActiveTab = (tab: number) => {
@@ -413,6 +432,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
             updateAssessment={this.updateEditAssessmentState}
             editorValue={this.props.editorValue}
             handleEditorValueChange={this.props.handleEditorValueChange}
+            handleUpdateWorkspace={this.props.handleUpdateWorkspace}
           />
         );
 
@@ -474,6 +494,20 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           )
         }
       ];
+      if (qnType === 'programming') {
+        tabs.push({
+          label: `Autograder`,
+          icon: IconNames.AIRPLANE,
+          body: (
+            <AutograderTab
+              assessment={assessment}
+              questionId={questionId}
+              handleTestcaseEval={this.handleTestcaseEval}
+              updateAssessment={this.updateEditAssessmentState}
+            />
+          )
+        });
+      }
       const functionsAttached = assessment!.questions[questionId].library.external.symbols;
       if (functionsAttached.includes('get_matrix')) {
         tabs.push({

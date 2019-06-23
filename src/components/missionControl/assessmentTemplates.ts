@@ -5,6 +5,7 @@ import {
   IAssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
+  ITestcase,
   Library
 } from '../../components/assessment/assessmentShape';
 
@@ -62,6 +63,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     solutionTemplate: '//This is a mock solution template',
     postpend: '',
     testcases: [],
+    testcasesPrivate: [],
     type: 'programming',
     grader: {
       name: 'avenger',
@@ -72,6 +74,14 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     grade: 0,
     maxGrade: 0,
     maxXp: 0
+  };
+};
+
+export const testcaseTemplate = (): ITestcase => {
+  return {
+    answer: '',
+    score: 0,
+    program: ''
   };
 };
 
