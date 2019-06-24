@@ -10,6 +10,7 @@ export default class ChatApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      connected: false,
       currentRoom: {},
       currentUser: {},
       messages: []
@@ -47,7 +48,7 @@ export default class ChatApp extends React.Component {
     chatManager
       .connect()
       .then(currentUser => {
-        this.setState({ currentUser });
+        this.setState({ currentUser, connected: true });
         return currentUser.subscribeToRoom({
           hooks: {
             onMessage: message => {
@@ -65,7 +66,7 @@ export default class ChatApp extends React.Component {
           currentRoom
         });
       });
-    this.scrollToBottom(); //for scrolling
+    if (this.state.connected) { this.scrollToBottom(); } //for scrolling
   }
 
   addMessage(text) {
@@ -77,14 +78,23 @@ export default class ChatApp extends React.Component {
 
   render() {
     return (
-      <div>
-        <MessageList viewingUserId={this.state.currentUser.id} messages={this.state.messages} />
-        <Input className="input-field" onSubmit={this.addMessage}>
-          {' '}
-          add something
-        </Input>
-        <div ref={this.messagesEndRef} />
-      </div>
+      this.state.connected 
+      ? 
+        <div>
+            <MessageList viewingUserId={this.state.currentUser.id} messages={this.state.messages} />
+            {this.state.currentRoom.id
+              ? <Input className="input-field" onSubmit={this.addMessage} > add something</Input>
+              : <p>Connected! Loading chat ... </p>
+            }
+          <div ref={this.messagesEndRef} />
+        </div>
+      : 
+        <p>
+          <br/>
+          Trying to connect to the chat service..
+          <br/>
+          If this is taking too long, check your Internet connection and reload.
+        </p>
     );
   }
 }
