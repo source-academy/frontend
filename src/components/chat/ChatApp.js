@@ -91,7 +91,7 @@ export default class ChatApp extends React.Component {
       : 
         <p>
           <br/>
-          Trying to connect to the chat service..
+          Trying to connect to the chat service ...
           <br/>
           If this is taking too long, check your Internet connection and reload.
         </p>
