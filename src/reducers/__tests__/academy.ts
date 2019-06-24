@@ -3,7 +3,7 @@ import { reducer } from '../academy';
 import { defaultAcademy, IAcademyState } from '../states';
 
 function createContext(width: number, height: number): HTMLCanvasElement {
-  let canvas = document.createElement('canvas');
+  const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   return canvas;
