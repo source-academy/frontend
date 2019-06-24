@@ -113,8 +113,6 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
       },
       editorProps: {
         deltasToApply: this.props.deltasToApply,
-        editorPrepend: '',
-        editorPrependLines: 0,
         editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,

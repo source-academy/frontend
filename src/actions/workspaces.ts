@@ -349,8 +349,12 @@ export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const savePlaybackData = (playbackData: IPlaybackData) => ({
-  type: actionTypes.SAVE_PLAYBACK_DATA
+export const savePlaybackData = (audio: Blob, playbackData: string) => ({
+  type: actionTypes.SAVE_PLAYBACK_DATA,
+  payload: {
+    audio,
+    deltas: playbackData
+  }
 });
 
 export const recordEditorInitValue: ActionCreator<actionTypes.IAction> = (editorValue: string) => ({

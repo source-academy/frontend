@@ -4,7 +4,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { controlButton } from '../commons';
-import { RecordingStatus } from './sourcecastShape';
+import { IPlaybackData, RecordingStatus } from './sourcecastShape';
 import { Recorder } from './util';
 
 class SourcecastRecordingControlbar extends React.PureComponent<
@@ -57,6 +57,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
       IconNames.DOWNLOAD,
       this.handleRecorderDownloading
     );
+    const RecorderSaveButton = controlButton('Save', IconNames.SAVED, this.handleRecorderSaving);
     return (
       <div>
         <br />
@@ -72,6 +73,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
           {this.props.recordingStatus === RecordingStatus.recording && RecorderPauseButton}
           {this.props.recordingStatus === RecordingStatus.paused && RecorderStopButton}
           {this.props.recordingStatus === RecordingStatus.finished && RecorderDownloadButton}
+          {this.props.recordingStatus === RecordingStatus.finished && RecorderSaveButton}
           {this.props.recordingStatus !== RecordingStatus.notStarted && RecorderResetButton}
         </div>
         <br />
@@ -147,6 +149,17 @@ class SourcecastRecordingControlbar extends React.PureComponent<
     this.recorder.clear();
   };
 
+  private handleRecorderSaving = () => {
+    if (!this.state.fileDataBlob) {
+      alert('No recording found');
+      return;
+    }
+    this.props.handleSavePlaybackData(
+      this.state.fileDataBlob,
+      JSON.stringify(this.props.playbackData)
+    );
+  };
+
   private handleRecorderDownloading = () => {
     if (!this.state.fileDataBlob) {
       alert('No recording found');
@@ -178,6 +191,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
 export interface ISourcecastRecordingControlbarProps {
   handleRecordAudioUrl: (audioUrl: string) => void;
   handleRecordEditorInitValue: (editorValue: string) => void;
+  handleSavePlaybackData: (audio: Blob, playbackData: string) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
@@ -186,6 +200,7 @@ export interface ISourcecastRecordingControlbarProps {
   handleTimerStop: () => void;
   editorValue: string;
   getTimerDuration: () => number;
+  playbackData: IPlaybackData;
   recordingStatus: RecordingStatus;
 }
 

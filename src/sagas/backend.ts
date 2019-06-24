@@ -336,6 +336,36 @@ function* backendSaga(): SagaIterator {
     const submissionId = (action as actionTypes.IAction).payload.submissionId;
     yield call(postNotify, tokens, assessmentId, submissionId);
   });
+
+  yield takeEvery(actionTypes.SAVE_PLAYBACK_DATA, function*(action) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can save sourcecast.');
+    }
+    const { audio, deltas } = (action as actionTypes.IAction).payload;
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const resp = yield postSourcecast(audio, deltas, tokens);
+    if (resp && resp.ok) {
+      yield call(showSuccessMessage, 'Saved!', 1000);
+      yield history.push('/sourcecastPlayback');
+    } else if (resp !== null) {
+      let errorMessage: string;
+      switch (resp.status) {
+        case 401:
+          errorMessage = 'Session expired. Please login again.';
+          break;
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`;
+          break;
+      }
+      yield call(showWarningMessage, errorMessage);
+    } else {
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    }
+  });
 }
 
 /**
@@ -690,6 +720,22 @@ export async function postNotify(tokens: Tokens, assessmentId?: number, submissi
     },
     shouldAutoLogout: false
   });
+}
+
+/**
+* POST /materials
+*/
+const postSourcecast = async (audio: Blob, deltas: string, tokens: Tokens) => {
+  const resp = await request(`materials`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: {
+      sourcecast: {
+        audio,
+        deltas
+      }
+    },
+  });
+  return resp;
 }
 
 /**

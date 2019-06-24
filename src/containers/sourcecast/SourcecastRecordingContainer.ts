@@ -22,6 +22,7 @@ import {
   recordAudioUrl,
   recordEditorDelta,
   recordEditorInitValue,
+  savePlaybackData,
   setEditorBreakpoint,
   setEditorReadonly,
   setEditorSessionId,
@@ -93,6 +94,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleSavePlaybackData: (audio: Blob, playbackData: string) =>
+        savePlaybackData(audio, playbackData),
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
