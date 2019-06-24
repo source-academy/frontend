@@ -6,6 +6,7 @@ import Profile from '../../containers/ProfileContainer';
 import { controlButton } from '../commons/controlButton';
 import About from './About';
 import Help from './Help';
+import Team from './Team';
 
 type DropdownProps = {
   handleLogOut: () => void;
@@ -14,6 +15,7 @@ type DropdownProps = {
 
 type DropdownState = {
   isAboutOpen: boolean;
+  isTeamOpen: boolean;
   isHelpOpen: boolean;
   isProfileOpen: boolean;
 };
@@ -23,6 +25,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
     super(props);
     this.state = {
       isAboutOpen: false,
+      isTeamOpen: false,
       isHelpOpen: false,
       isProfileOpen: false
     };
@@ -39,6 +42,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
           {controlButton('', IconNames.CARET_DOWN)}
         </Popover>
         <About isOpen={this.state.isAboutOpen} onClose={this.toggleAboutOpen} />
+        <Team isOpen={this.state.isTeamOpen} onClose={this.toggleTeamOpen} />
         <Help isOpen={this.state.isHelpOpen} onClose={this.toggleHelpOpen} />
         <Profile isOpen={this.state.isProfileOpen} onClose={this.toggleProfileOpen} />
       </>
@@ -62,6 +66,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
       <Menu>
         {profile}
         <MenuItem icon={IconNames.HELP} onClick={this.toggleAboutOpen} text="About" />
+        <MenuItem icon={IconNames.PEOPLE} onClick={this.toggleTeamOpen} text="Team" />
         <MenuItem icon={IconNames.ERROR} onClick={this.toggleHelpOpen} text="Help" />
         {logout}
       </Menu>
@@ -70,6 +75,10 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
 
   private toggleAboutOpen = () => {
     this.setState({ ...this.state, isAboutOpen: !this.state.isAboutOpen });
+  };
+
+  private toggleTeamOpen = () => {
+    this.setState({ ...this.state, isTeamOpen: !this.state.isTeamOpen });
   };
 
   private toggleHelpOpen = () =>
