@@ -12,7 +12,7 @@ import { ExternalLibraryNames } from '../components/assessment/assessmentShape';
 import { mockBackendSaga } from '../mocks/backend';
 import { externalLibraries } from '../reducers/externalLibraries';
 import { defaultEditorValue, IState, IWorkspaceState } from '../reducers/states';
-import { IVLE_KEY, USE_BACKEND } from '../utils/constants';
+import { LUMINUS_CLIENT_ID, USE_BACKEND } from '../utils/constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper';
 import backendSaga from './backend';
@@ -29,14 +29,13 @@ function* workspaceSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
-    const code: string = yield select(
-      (state: IState) =>
-        (state.workspaces[location] as IWorkspaceState).editorPrepend! +
-        '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorValue! +
-        '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorPostpend!
-    );
+    const code: string = yield select((state: IState) => {
+      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend!;
+      const value = (state.workspaces[location] as IWorkspaceState).editorValue!;
+      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend!;
+
+      return prepend + (prepend.length > 0 ? '\n' : '') + value + '\n' + postpend;
+    });
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
     );
@@ -132,16 +131,23 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_TESTCASE, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
     const index = (action as actionTypes.IAction).payload.testcaseId;
-    const code: string = yield select(
-      (state: IState) =>
-        (state.workspaces[location] as IWorkspaceState).editorPrepend! +
+    const code: string = yield select((state: IState) => {
+      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend!;
+      const value = (state.workspaces[location] as IWorkspaceState).editorValue!;
+      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend!;
+      const testcase = (state.workspaces[location] as IWorkspaceState).editorTestcases[index]
+        .program!;
+
+      return (
+        prepend +
+        (prepend.length > 0 ? '\n' : '') +
+        value +
         '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorValue! +
-        '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorPostpend! +
-        '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorTestcases[index].program!
-    );
+        postpend +
+        (postpend.length > 0 ? '\n' : '') +
+        testcase
+      );
+    });
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
     );
@@ -325,10 +331,11 @@ function* workspaceSaga(): SagaIterator {
 
 function* loginSaga(): SagaIterator {
   yield takeEvery(actionTypes.LOGIN, function*() {
-    const apiLogin = 'https://ivle.nus.edu.sg/api/login/';
-    const key = IVLE_KEY;
-    const callback = `${window.location.protocol}//${window.location.hostname}/login`;
-    window.location.href = `${apiLogin}?apikey=${key}&url=${callback}`;
+    const apiLogin = 'https://luminus.nus.edu.sg/v2/auth/connect/authorize';
+    const clientId = LUMINUS_CLIENT_ID;
+    const port = window.location.port === '' ? '' : `:${window.location.port}`;
+    const callback = `${window.location.protocol}//${window.location.hostname}${port}/login`;
+    window.location.href = `${apiLogin}?client_id=${clientId}&redirect_uri=${callback}&response_type=code&scope=profile`;
     yield undefined;
   });
 }
@@ -358,8 +365,8 @@ function* updateInspector() {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     yield put(actions.highlightEditorLine([start, end], location));
-    visualiseEnv(lastDebuggerResult);
     inspectorUpdate(lastDebuggerResult);
+    visualiseEnv(lastDebuggerResult);
   } catch (e) {
     put(actions.highlightEditorLine([], location));
     // most likely harmless, we can pretty much ignore this.
@@ -389,11 +396,12 @@ function* evalCode(
     paused: take(actionTypes.BEGIN_DEBUG_PAUSE)
   });
   if (result) {
-    lastDebuggerResult = result;
+    if (actionType === actionTypes.EVAL_EDITOR) {
+      lastDebuggerResult = result;
+    }
     yield updateInspector();
     if (result.status === 'finished') {
       yield put(actions.evalInterpreterSuccess(result.value, location));
-      yield put(actions.highlightEditorLine([], location));
     } else if (result.status === 'suspended') {
       yield put(actions.endDebuggerPause(location));
       yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location));

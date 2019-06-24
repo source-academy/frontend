@@ -49,7 +49,6 @@ interface IGradingWorkspace extends IWorkspaceState {
 
 export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
-  readonly websocketStatus: number;
 }
 
 export interface IWorkspaceManagerState {
@@ -78,6 +77,7 @@ export interface IWorkspaceState {
   readonly replValue: string;
   readonly sideContentActiveTab: number;
   readonly sideContentHeight?: number;
+  readonly websocketStatus: number;
   readonly globals: Array<[string, any]>;
 }
 
@@ -224,6 +224,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   },
   replValue: '',
   sideContentActiveTab: 0,
+  websocketStatus: 0,
   globals: [],
   isEditorAutorun: false,
   isRunning: false,
@@ -248,8 +249,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
-    playgroundExternal: ExternalLibraryNames.NONE,
-    websocketStatus: 0
+    playgroundExternal: ExternalLibraryNames.NONE
   }
 };
 

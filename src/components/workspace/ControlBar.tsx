@@ -3,6 +3,7 @@ import {
   Classes,
   Colors,
   Intent,
+  Menu,
   MenuItem,
   Popover,
   Switch,
@@ -16,9 +17,10 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { externalLibraries } from '../../reducers/externalLibraries';
 import { sourceChapters } from '../../reducers/states';
-import { LINKS } from '../../utils/constants';
+
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
+import { checkSessionIdExists, createNewSession } from './collabEditing/helper';
 import Editor from './Editor';
 
 /**
@@ -125,6 +127,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     );
     const autoRunButton = controlButton('Auto', IconNames.AUTOMATIC_UPDATES);
     const stopButton = controlButton('Stop', IconNames.STOP, this.props.handleInterruptEval);
+    const debuggerResetButton = controlButton(
+      'Stop Debugger',
+      IconNames.STOP,
+      this.props.handleDebuggerReset
+    );
     const pauseButton = controlButton('Pause', IconNames.STOP, this.props.handleDebuggerPause);
     const resumeButton = controlButton(
       'Resume',
@@ -162,49 +169,36 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     );
     const handleStartInvite = () => {
       if (this.props.editorSessionId === '') {
-        const xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = () => {
-          if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            const id = JSON.parse(xmlhttp.responseText).id;
-            this.props.handleSetEditorSessionId!(id);
-            const code = this.props.editorValue
-              ? this.props.editorValue
-              : '// Collaborative Editing Mode!';
-            this.props.editorRef!.current!.ShareAce.on('ready', () =>
-              this.props.handleEditorValueChange!(code)
-            );
-          }
+        const onSessionCreated = (sessionId: string) => {
+          this.props.handleSetEditorSessionId!(sessionId);
+          const code = this.props.editorValue
+            ? this.props.editorValue
+            : '// Collaborative Editing Mode!';
+          this.props.editorRef!.current!.ShareAce.on('ready', () =>
+            this.props.handleEditorValueChange!(code)
+          );
         };
-        xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/latest/', true);
-        xmlhttp.send();
+        createNewSession(onSessionCreated);
       }
     };
+
     const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
-      const xmlhttp = new XMLHttpRequest();
-      xmlhttp.onreadystatechange = () => {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-          // Successfully reached server to verify ID
-          const state = JSON.parse(xmlhttp.responseText).state;
-          if (state === true) {
-            // Session ID exists
-            this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
-          } else {
-            this.props.handleInvalidEditorSessionId!();
-            this.props.handleSetEditorSessionId!('');
-          }
-        } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
-          // Cannot reach server
-          this.props.handleSetEditorSessionId!('');
-        }
+      const onSessionIdExists = () =>
+        this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
+      const onSessionIdNotExist = () => {
+        this.props.handleInvalidEditorSessionId!();
+        this.props.handleSetEditorSessionId!('');
       };
-      xmlhttp.open(
-        'GET',
-        'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.state!.joinElemValue,
-        true
+      const onServerUnreachable = () => this.props.handleSetEditorSessionId!('');
+      checkSessionIdExists(
+        this.state.joinElemValue,
+        onSessionIdExists,
+        onSessionIdNotExist,
+        onServerUnreachable
       );
-      xmlhttp.send();
       event.preventDefault();
     };
+
     const inviteButton = this.props.hasCollabEditing ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Invite', IconNames.GRAPH, handleStartInvite)}
@@ -218,6 +212,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     ) : (
       undefined
     );
+
     const joinButton = this.props.hasCollabEditing ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Join', IconNames.LOG_IN)}
@@ -268,6 +263,21 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
       undefined
     );
 
+    const sessionMenuButton = this.props.hasCollabEditing ? (
+      <Popover
+        content={
+          <Menu large={true}>
+            {inviteButton}
+            {this.props.editorSessionId === '' ? joinButton : leaveButton}
+          </Menu>
+        }
+      >
+        {controlButton('Session', IconNames.SOCIAL_MEDIA)}
+      </Popover>
+    ) : (
+      undefined
+    );
+
     return (
       <div className="ControlBar_editor pt-button-group">
         {toggleAutorunButton}
@@ -285,9 +295,10 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
           : this.props.isDebugging
             ? resumeButton
             : null}
+        {this.props.isDebugging ? debuggerResetButton : null}
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton} {resetTemplateButton}
-        {inviteButton} {this.props.editorSessionId === '' ? joinButton : leaveButton}
+        {sessionMenuButton}
       </div>
     );
   }
