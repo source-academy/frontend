@@ -111,17 +111,17 @@ class Contributors extends Component<{}, ContributorsState> {
                 const arrayMapped = array.map((contributor: Contributor) => {
                     return (
                         <div key={contributor.key}>
-                            <img src={contributor.photo} alt="Image" height="200" width="200"/>
+                            <img src={contributor.photo} alt="Image" />
                             <p><a href={contributor.githubPage} target="_blank">{contributor.githubName}</a></p>
                             <p>Number of commits: {contributor.commits}</p>
                         </div>
                     );
                 });   
                 return (
-                    <div key={repo.key}>
-                        <h2><u>{repo.name}</u></h2>
-                        <h4>{repo.description}</h4>
-                        <div>{arrayMapped}</div>
+                    <div key={repo.key} className="repoDetails">
+                        <h3><u>{repo.name}</u></h3>
+                        <h5>{repo.description}</h5>
+                        <div className="contributorsByRepo">{arrayMapped}</div>
                     </div>
                 );    
             })

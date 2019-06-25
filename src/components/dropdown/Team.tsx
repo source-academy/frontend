@@ -19,7 +19,7 @@ const Team: React.SFC<DialogProps> = props => (
     isCloseButtonShown={false}
     isOpen={props.isOpen}
     onClose={props.onClose}
-    title="Team"
+    title="Contributors"
   >
     <div className={Classes.DIALOG_BODY}>
         <div className="leadership">
@@ -43,6 +43,7 @@ const Team: React.SFC<DialogProps> = props => (
             <br />
             <strong>(DevOps)</strong>
           </p>
+          {dot}
           <p>
             Daryl Tan
             <br />
@@ -69,10 +70,7 @@ const Team: React.SFC<DialogProps> = props => (
             <strong>Cadet core team</strong>
           </p>
           <p>
-            Julius Putra Tanu Setiaji {dot} Lee Ning Yuan {dot} Vignesh Shankar 
-          </p>
-          <p>
-            Thomas Tan {dot} Chen Shaowei
+            Julius Putra Tanu Setiaji {dot} Lee Ning Yuan {dot} Vignesh Shankar {dot} Thomas Tan {dot} Chen Shaowei
           </p>
           <p>
             <strong>Graphic design</strong>

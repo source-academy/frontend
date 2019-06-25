@@ -1,0 +1,26 @@
+div.repoDetails {
+    text-align: justify;
+}
+
+div.contributorsByRepo {
+    margin-inline-start: 5px;
+    margin-inline-end: 5px;
+    text-align: justify;
+
+    div {
+        text-align: center;
+        vertical-align: top;
+        display: inline-block;
+        width: 175px;
+        height: 215px;
+    }
+
+    img {
+        height: 150px;
+        width: 150px;      
+    }
+
+    p {
+        margin-bottom: 0.2rem;
+    }
+}

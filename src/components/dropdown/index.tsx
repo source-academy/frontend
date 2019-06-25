@@ -66,7 +66,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
       <Menu>
         {profile}
         <MenuItem icon={IconNames.HELP} onClick={this.toggleAboutOpen} text="About" />
-        <MenuItem icon={IconNames.PEOPLE} onClick={this.toggleTeamOpen} text="Team" />
+        <MenuItem icon={IconNames.PEOPLE} onClick={this.toggleTeamOpen} text="Contributors" />
         <MenuItem icon={IconNames.ERROR} onClick={this.toggleHelpOpen} text="Help" />
         {logout}
       </Menu>
