@@ -77,6 +77,10 @@ $code-color-error: #ff4444;
     flex: initial;
   }
 
+  .resize-editor-prepend {
+    padding-bottom: 0.2rem;
+  }
+
   .Editor {
     display: flex;
     flex-direction: column;
