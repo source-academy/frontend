@@ -66,8 +66,7 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
       }
     };
 
-    // tslint:disable-next-line
-    const isCorrect = this.props.result.resultType == 'pass' ? ' correct' : ' wrong';
+    const isCorrect = this.props.result.resultType === 'pass' ? ' correct' : ' wrong';
 
     return (
       <div className={'ResultCard' + isCorrect}>

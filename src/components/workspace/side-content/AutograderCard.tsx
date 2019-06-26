@@ -26,8 +26,7 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
 
     const isCorrect =
       this.props.testcase.actual !== undefined
-        ? // tslint:disable-next-line
-          this.props.testcase.actual.value == this.props.testcase.answer
+        ? renderResult(this.props.testcase.actual) === this.props.testcase.answer
           ? ' correct'
           : ' wrong'
         : '';
@@ -54,7 +53,7 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
             <div className="col autograder-actual">
               Actual Answer:
               {this.props.testcase.actual !== undefined ? (
-                <pre className="code">{renderResult(this.props.testcase.actual.value)}</pre>
+                <pre className="code">{renderResult(this.props.testcase.actual)}</pre>
               ) : (
                 <pre>No Answer</pre>
               )}

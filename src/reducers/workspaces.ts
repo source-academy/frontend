@@ -1,4 +1,5 @@
 import { Reducer } from 'redux';
+import { ITestcase } from 'src/components/assessment/assessmentShape';
 
 import {
   BROWSE_REPL_HISTORY_DOWN,
@@ -357,9 +358,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          editorTestcases: state[location].editorTestcases.map((testcase, i) => {
+          editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
             if (i === index) {
-              testcase.actual = newOutput[0];
+              testcase.actual = (newOutput[0] as CodeOutput).value;
               return testcase;
             } else {
               return testcase;
@@ -373,9 +374,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          editorTestcases: state[location].editorTestcases.map((testcase, i) => {
+          editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
             if (i === index) {
-              testcase.actual = { value: action.payload.value };
+              testcase.actual = action.payload.value;
               return testcase;
             } else {
               return testcase;

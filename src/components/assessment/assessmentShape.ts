@@ -82,7 +82,7 @@ export interface ITestcase {
   answer: string;
   score: number;
   program: string;
-  actual?: any;
+  actual?: string;
 }
 
 export interface IMCQQuestion extends IQuestion {
