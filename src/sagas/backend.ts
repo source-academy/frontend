@@ -467,7 +467,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
       return {
         question: {
           answer: question.answer,
-          autogradingResults: question.autogradingResults,
+          autogradingResults: question.autogradingResults || [],
           choices: question.choices,
           content: question.content,
           comment: null,
@@ -479,9 +479,9 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
               ? question.solution
               : null,
           solutionTemplate: question.solutionTemplate,
-          prepend: question.prepend,
-          postpend: question.postpend,
-          testcases: question.testcases,
+          prepend: question.prepend || '',
+          postpend: question.postpend || '',
+          testcases: question.testcases || [],
           type: question.type as QuestionType,
           maxGrade: question.maxGrade,
           maxXp: question.maxXp

@@ -24,12 +24,12 @@ export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
   activeTab: number;
-  autogradingResults?: AutogradingResult[];
+  autogradingResults: AutogradingResult[];
   grading?: Grading;
-  editorPrepend: string | null;
+  editorPrepend: string;
   editorValue: string | null;
-  editorPostpend: string | null;
-  editorTestcases: ITestcase[] | null;
+  editorPostpend: string;
+  editorTestcases: ITestcase[];
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
@@ -135,9 +135,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorPrepend: this.props.editorPrepend!,
+              editorPrepend: this.props.editorPrepend,
               editorPrependLines:
-                this.props.editorPrepend === null || this.props.editorPrepend.length === 0
+                this.props.editorPrepend.length === 0
                   ? 0
                   : this.props.editorPrepend.split('\n').length,
               editorSessionId: '',
@@ -199,10 +199,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     }
     const question = this.props.grading[questionId].question as IQuestion;
 
-    let autogradingResults: AutogradingResult[] | undefined;
-    let editorValue: string | undefined = '';
-    let editorPrepend: string | null = '';
-    let editorPostpend: string | null = '';
+    let autogradingResults: AutogradingResult[] = [];
+    let editorValue: string = '';
+    let editorPrepend: string = '';
+    let editorPostpend: string = '';
     let editorTestcases: ITestcase[] = [];
 
     if (question.type === QuestionTypes.programming) {
@@ -211,7 +211,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
       editorValue = questionData.answer as string;
       if (!editorValue) {
-        editorValue = questionData.solutionTemplate;
+        editorValue = questionData.solutionTemplate!;
       }
 
       if (questionData.prepend) {

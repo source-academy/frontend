@@ -7,7 +7,7 @@ import AutograderCard from './AutograderCard';
 import ResultCard from './ResultCard';
 
 type AutograderProps = {
-  autogradingResults?: AutogradingResult[];
+  autogradingResults: AutogradingResult[];
   testcases: ITestcase[] | null;
   handleTestcaseEval: (testcaseId: number) => void;
 };
@@ -21,7 +21,7 @@ class Autograder extends React.Component<AutograderProps, State> {
   public constructor(props: AutograderProps) {
     super(props);
 
-    const hasResults: boolean = this.props.autogradingResults ? true : false;
+    const hasResults: boolean = this.props.autogradingResults.length > 0 ? true : false;
 
     this.state = {
       showTestcases: !hasResults,
@@ -44,13 +44,14 @@ class Autograder extends React.Component<AutograderProps, State> {
         <div className="noResults">There are no testcases provided for this mission.</div>
       );
 
-    const results = this.props.autogradingResults ? (
-      this.props.autogradingResults.map((result, index) => (
-        <ResultCard key={index} index={index} result={result} />
-      ))
-    ) : (
-      <div className="noResults">There are no results to show.</div>
-    );
+    const results =
+      this.props.autogradingResults.length > 0 ? (
+        this.props.autogradingResults.map((result, index) => (
+          <ResultCard key={index} index={index} result={result} />
+        ))
+      ) : (
+        <div className="noResults">There are no results to show.</div>
+      );
 
     const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
       controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {

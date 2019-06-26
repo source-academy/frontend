@@ -197,6 +197,7 @@ const mockToneMatrixLibrary: Library = {
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
+    autogradingResults: [],
     answer: null,
     content: `
 This question has an id of \`0\`.
@@ -245,6 +246,7 @@ const chickenrice = "chicken rice";`,
     maxXp: 2
   },
   {
+    autogradingResults: [],
     answer: `function areaOfCircle(x) {
   return square(x) * pi;
 }
@@ -365,6 +367,7 @@ function volumeOfSphere(x) {
     maxXp: 2
   },
   {
+    autogradingResults: [],
     answer: null,
     comment: 'Wow you have come far! `Steady`',
     content: 'You have reached the last question! Have some fun with the tone matrix...',
