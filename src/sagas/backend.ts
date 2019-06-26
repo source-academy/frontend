@@ -17,8 +17,10 @@ import {
   ExternalLibraryName,
   IAssessment,
   IAssessmentOverview,
+  IProgrammingQuestion,
   IQuestion,
-  QuestionType
+  QuestionType,
+  QuestionTypes
 } from '../components/assessment/assessmentShape';
 import { store } from '../createStore';
 import { IState, Role } from '../reducers/states';
@@ -355,6 +357,15 @@ async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | 
     assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
     delete (assessment as any).type;
     assessment.questions = assessment.questions.map(q => {
+      if (q.type === QuestionTypes.programming) {
+        const question = q as IProgrammingQuestion;
+        question.autogradingResults = question.autogradingResults || [];
+        question.prepend = question.prepend || '';
+        question.postpend = question.postpend || '';
+        question.testcases = question.testcases || [];
+        q = question;
+      }
+
       // Make library.external.name uppercase
       q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
       // Make globals into an Array of (string, value)
