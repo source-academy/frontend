@@ -24,7 +24,7 @@ export default class ChatApp extends React.Component {
   messagesEndRef = React.createRef(); // for scrolling
 
   componentDidUpdate() {
-    this.scrollToBottom();
+    if (this.state.connected) { this.scrollToBottom(); }
   } // for scrolling
 
   scrollToBottom = () => {
@@ -48,7 +48,7 @@ export default class ChatApp extends React.Component {
     chatManager
       .connect()
       .then(currentUser => {
-        this.setState({ currentUser, connected: true });
+        this.setState({ currentUser });
         return currentUser.subscribeToRoom({
           hooks: {
             onMessage: message => {
@@ -58,11 +58,13 @@ export default class ChatApp extends React.Component {
             }
           },
           messageLimit: 100,
-          roomId: '19408932' // use roomId from your ChatKit instance
+          roomId: this.props.currentRoomId
+
         });
       })
       .then(currentRoom => {
         this.setState({
+          connected: true,
           currentRoom
         });
       });
@@ -74,25 +76,23 @@ export default class ChatApp extends React.Component {
       roomId: this.state.currentRoom.id,
       text
     });
+
   }
 
   render() {
     return (
-      this.state.connected 
-      ? 
+      (this.state.connected)
+        ?
         <div>
-            <MessageList viewingUserId={this.state.currentUser.id} messages={this.state.messages} />
-            {this.state.currentRoom.id
-              ? <Input className="input-field" onSubmit={this.addMessage} > add something</Input>
-              : <p>Connected! Loading chat ... </p>
-            }
+          <MessageList viewingUserId={this.state.currentUser.id} messages={this.state.messages} />
+          <Input className="input-field" onSubmit={this.addMessage} > add something</Input>
           <div ref={this.messagesEndRef} />
         </div>
-      : 
+        :
         <p>
-          <br/>
-          Trying to connect to the chat service ...
-          <br/>
+          <br />
+          Trying to connect to the chat service..
+          <br />
           If this is taking too long, check your Internet connection and reload.
         </p>
     );
