@@ -4,7 +4,6 @@ import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
 import { ITestcase } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
-import CanvasOutput from '../CanvasOutput';
 
 type AutograderCardProps = {
   testcase: ITestcase;
@@ -14,33 +13,23 @@ type AutograderCardProps = {
 
 class AutograderCard extends React.Component<AutograderCardProps, {}> {
   public render() {
-    const renderResult = (value: any) => {
-      /** A class which is the output of the show() function */
-      const ShapeDrawn = (window as any).ShapeDrawn;
-      if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-        return <CanvasOutput />;
-      } else {
-        return stringify(value);
-      }
-    };
+    let gradingStatus: string = '';
 
-    const isCorrect =
-      this.props.testcase.result !== undefined
-        ? renderResult(this.props.testcase.result) === this.props.testcase.answer
+    if (this.props.testcase.result) {
+      gradingStatus =
+        stringify(this.props.testcase.result) === this.props.testcase.answer
           ? ' correct'
-          : ' wrong'
-        : '';
+          : ' wrong';
+    }
 
     return (
-      <div className={'AutograderCard' + isCorrect}>
+      <div className={'AutograderCard' + gradingStatus}>
         <Card elevation={Elevation.ONE}>
           <div className="row autograder-controls">
             {'Testcase ' + (this.props.index + 1)}
-            <div className="listing-controls">
-              {controlButton('Test', IconNames.PLAY, () =>
-                this.props.handleTestcaseEval(this.props.index)
-              )}
-            </div>
+            {controlButton('Test', IconNames.PLAY, () =>
+              this.props.handleTestcaseEval(this.props.index)
+            )}
           </div>
           <div className="row autograder-program">
             <pre className="code">{this.props.testcase.program}</pre>
@@ -52,8 +41,8 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
             </div>
             <div className="col autograder-actual">
               Actual Answer:
-              {this.props.testcase.result !== undefined ? (
-                <pre className="code">{renderResult(this.props.testcase.result)}</pre>
+              {this.props.testcase.result ? (
+                <pre className="code">{stringify(this.props.testcase.result)}</pre>
               ) : (
                 <pre>No Answer</pre>
               )}
