@@ -84,22 +84,24 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   public componentDidMount() {
     this.props.handleGradingFetch(this.props.submissionId);
 
-    if (this.props.grading) {
-      const questionId =
-        this.props.questionId >= this.props.grading.length
-          ? this.props.grading.length - 1
-          : this.props.questionId;
-
-      const question: IQuestion = this.props.grading[questionId].question;
-      const answer: string =
-        question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IAnsweredQuestion).answer as string)
-            : (question as IAnsweredQuestion).solutionTemplate!
-          : '';
-
-      this.props.handleEditorValueChange(answer);
+    if (!this.props.grading) {
+      return;
     }
+
+    const questionId =
+      this.props.questionId >= this.props.grading.length
+        ? this.props.grading.length - 1
+        : this.props.questionId;
+
+    const question: IQuestion = this.props.grading[questionId].question;
+    const answer: string =
+      question.type === QuestionTypes.programming
+        ? question.answer !== null
+          ? ((question as IAnsweredQuestion).answer as string)
+          : (question as IAnsweredQuestion).solutionTemplate!
+        : '';
+
+    this.props.handleEditorValueChange(answer);
   }
 
   /**
@@ -190,52 +192,54 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const questionId = this.props.questionId;
 
     if (
-      this.props.storedSubmissionId !== submissionId ||
-      this.props.storedQuestionId !== questionId
+      this.props.storedSubmissionId === submissionId &&
+      this.props.storedQuestionId === questionId
     ) {
-      const question = this.props.grading[questionId].question as IQuestion;
-      const autogradingResults =
-        question.type === QuestionTypes.programming
-          ? (question as IAnsweredQuestion).autogradingResults
-          : undefined;
-      const editorValue =
-        question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IAnsweredQuestion).answer as string)
-            : (question as IAnsweredQuestion).solutionTemplate
-          : '';
-      const editorPrepend =
-        question.type === QuestionTypes.programming
-          ? (question as IAnsweredQuestion).prepend
-            ? (question as IAnsweredQuestion).prepend
-            : ''
-          : '';
-      const editorPostpend =
-        question.type === QuestionTypes.programming
-          ? (question as IAnsweredQuestion).postpend !== null
-            ? (question as IAnsweredQuestion).postpend
-            : ''
-          : '';
-      const editorTestcases =
-        question.type === QuestionTypes.programming
-          ? (question as IAnsweredQuestion).testcases !== null
-            ? (question as IAnsweredQuestion).testcases
-            : []
-          : [];
-      this.props.handleEditorUpdateBreakpoints([]);
-      this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
-      this.props.handleResetWorkspace({
-        autogradingResults,
-        editorPrepend,
-        editorValue,
-        editorPostpend,
-        editorTestcases
-      });
-      this.props.handleClearContext(question.library);
-      this.props.handleUpdateHasUnsavedChanges(false);
-      if (editorValue) {
-        this.props.handleEditorValueChange(editorValue);
+      return;
+    }
+    const question = this.props.grading[questionId].question as IQuestion;
+
+    let autogradingResults: AutogradingResult[] | undefined;
+    let editorValue: string | undefined = '';
+    let editorPrepend: string | null = '';
+    let editorPostpend: string | null = '';
+    let editorTestcases: ITestcase[] = [];
+
+    if (question.type === QuestionTypes.programming) {
+      const questionData = question as IAnsweredQuestion;
+      autogradingResults = questionData.autogradingResults;
+
+      editorValue = questionData.answer as string;
+      if (!editorValue) {
+        editorValue = questionData.solutionTemplate;
       }
+
+      if (questionData.prepend) {
+        editorPrepend = questionData.prepend;
+      }
+
+      if (questionData.postpend) {
+        editorPostpend = questionData.postpend;
+      }
+
+      if (questionData.testcases) {
+        editorTestcases = questionData.testcases;
+      }
+    }
+
+    this.props.handleEditorUpdateBreakpoints([]);
+    this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
+    this.props.handleResetWorkspace({
+      autogradingResults,
+      editorPrepend,
+      editorValue,
+      editorPostpend,
+      editorTestcases
+    });
+    this.props.handleClearContext(question.library);
+    this.props.handleUpdateHasUnsavedChanges(false);
+    if (editorValue) {
+      this.props.handleEditorValueChange(editorValue);
     }
   }
 
