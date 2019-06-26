@@ -25,8 +25,8 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
     };
 
     const isCorrect =
-      this.props.testcase.actual !== undefined
-        ? renderResult(this.props.testcase.actual) === this.props.testcase.answer
+      this.props.testcase.result !== undefined
+        ? renderResult(this.props.testcase.result) === this.props.testcase.answer
           ? ' correct'
           : ' wrong'
         : '';
@@ -52,8 +52,8 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
             </div>
             <div className="col autograder-actual">
               Actual Answer:
-              {this.props.testcase.actual !== undefined ? (
-                <pre className="code">{renderResult(this.props.testcase.actual)}</pre>
+              {this.props.testcase.result !== undefined ? (
+                <pre className="code">{renderResult(this.props.testcase.result)}</pre>
               ) : (
                 <pre>No Answer</pre>
               )}

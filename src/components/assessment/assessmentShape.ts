@@ -79,10 +79,10 @@ export interface IProgrammingQuestion extends IQuestion {
 }
 
 export interface ITestcase {
-  answer: string;
+  answer: string; // the correct answer to the testcase
   score: number;
-  program: string;
-  actual?: string;
+  program: string; // the program to be appended to the student's code
+  result?: string; // the result from the execution of the testcase
 }
 
 export interface IMCQQuestion extends IQuestion {

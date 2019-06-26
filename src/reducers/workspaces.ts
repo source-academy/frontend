@@ -305,7 +305,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isRunning: true,
           editorTestcases: state[location].editorTestcases.map((testcase, i) => {
             if (i === action.payload.testcaseId) {
-              testcase.actual = undefined;
+              testcase.result = undefined;
               return testcase;
             } else {
               return testcase;
@@ -359,7 +359,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
             if (i === action.payload.index) {
-              testcase.actual = (newOutput[0] as CodeOutput).value;
+              testcase.result = (newOutput[0] as CodeOutput).value;
               return testcase;
             } else {
               return testcase;
@@ -375,7 +375,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
             if (i === action.payload.index) {
-              testcase.actual = action.payload.value;
+              testcase.result = action.payload.value;
               return testcase;
             } else {
               return testcase;
