@@ -67,12 +67,6 @@ $code-color-error: #ff4444;
     display: flex;
     flex-direction: column;
     height: 100%;
-
-    .editor-title {
-      height: fit-content;
-      padding-bottom: 0.2rem;
-      margin-left: 0.5rem;
-    }
   }
 
   .editor-content-divider {

@@ -204,7 +204,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       ) {
         return (
           <div className="editor-content">
-            <div className="editor-title">Prepend Code</div>
             <Resizable {...this.editorPrependResizableProps()}>
               <EditorPrepend
                 editorPrependValue={props.editorProps.editorPrepend}
@@ -212,7 +211,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
               />
               <div className="editor-content-divider" />
             </Resizable>
-            <div className="editor-title">Your Code</div>
             <Editor
               {...props.editorProps}
               key={props.editorProps.editorSessionId}
