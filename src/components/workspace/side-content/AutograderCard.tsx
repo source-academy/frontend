@@ -43,7 +43,7 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
             </div>
           </div>
           <div className="row autograder-program">
-            Program: <pre className="code">{this.props.testcase.program}</pre>
+            <pre className="code">{this.props.testcase.program}</pre>
           </div>
           <div className="row">
             <div className="col autograder-expected">
