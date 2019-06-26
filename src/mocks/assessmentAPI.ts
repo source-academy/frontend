@@ -208,33 +208,31 @@ What's your favourite dinner food?
     comment: null,
     id: 0,
     library: mockSoundLibrary,
-    prepend: `// This is a mock Prepend!
-function fibonacci(n) {
-  if (n <= 2) {
-    return 1;
-  } else {
-    return fibonacci(n-1) + fibonacci(n-2);
-  }
-}`,
+    prepend: `const pizza = "pizza";
+const sushi = "sushi";
+const chickenrice = "chicken rice";`,
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
       {
-        program: `fibonacci(3);`,
+        program: `answer();`,
         score: 1,
-        answer: `2`
+        answer: `"pizza"`
       },
       {
-        program: `fibonacci(4);`,
+        program: `answer();`,
         score: 1,
-        answer: `3`
+        answer: `"sushi"`
       },
       {
-        program: `fibonacci(5);`,
+        program: `answer();`,
         score: 1,
-        answer: `5`
+        answer: `"chicken rice"`
       }
     ],
-    solutionTemplate: '//0th question mock solution template\n\n// Write Something Here!',
+    solutionTemplate: `function answer() {
+  // Write something here!
+}
+`,
     type: 'programming',
     grader: {
       name: 'avenger',
@@ -247,16 +245,40 @@ function fibonacci(n) {
     maxXp: 2
   },
   {
-    answer:
-      "display('I am a saved answer!!!');\ndisplay('You can click the reset button to get the template!');",
+    answer: `function areaOfCircle(x) {
+  return square(x) * pi;
+}
+
+function volumeOfSphere(x) {
+  return 4 / 3 * cube(x) * pi;
+}`,
     comment: '`Great Job` **young padawan**',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mock3DRuneLibrary,
-    prepend: '',
+    prepend: `const square = x => x * x;
+const cube = x => x * x * x;
+const pi = 3.1415928;`,
     postpend: '',
-    testcases: [],
-    solutionTemplate: '// 1st question mock solution template',
+    testcases: [
+      {
+        program: `areaOfCircle(5);`,
+        score: 1,
+        answer: `78.53982`
+      },
+      {
+        program: `volumeOfSphere(5);`,
+        score: 1,
+        answer: `523.5988`
+      }
+    ],
+    solutionTemplate: `function areaOfCircle(x) {
+  // return area of circle
+}
+
+function volumeOfSphere(x) {
+  // return volume of sphere
+}`,
     type: 'programming',
     grader: {
       name: 'avenger',
@@ -367,19 +389,18 @@ function fibonacci(n) {
 
 export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
-    answer: null,
-    comment: 'Wow you have come far! `Steady`',
-    content: 'You can see autograding results!!!',
-    id: 0,
-    library: mockToneMatrixLibrary,
-    prepend: `// This is a mock Prepend!
-function fibonacci(n) {
+    answer: `function fibonacci(n) {
   if (n <= 2) {
     return 1;
   } else {
     return fibonacci(n-1) + fibonacci(n-2);
   }
 }`,
+    comment: 'Wow you have come far! `Steady`',
+    content: 'You can see autograding results!!!',
+    id: 0,
+    library: mockToneMatrixLibrary,
+    prepend: '',
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
       {
