@@ -48,6 +48,7 @@ type RequestOptions = {
   errorMessage?: string;
   body?: object;
   noHeaderAccept?: boolean;
+  noContentType?: boolean;
   refreshToken?: string;
   shouldAutoLogout?: boolean;
   shouldRefresh?: boolean;
@@ -726,14 +727,19 @@ export async function postNotify(tokens: Tokens, assessmentId?: number, submissi
 * POST /materials
 */
 const postSourcecast = async (audio: Blob, deltas: string, tokens: Tokens) => {
+  const formData = new FormData();
+  formData.append('file', audio);
+  formData.append('deltas', deltas);
   const resp = await request(`materials`, 'POST', {
     accessToken: tokens.accessToken,
     body: {
-      sourcecast: {
-        audio,
-        deltas
-      }
+      sourcecast: formData
     },
+    noContentType: true,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
   });
   return resp;
 }
@@ -764,8 +770,12 @@ async function request(
   }
   const fetchOpts: any = { method, headers };
   if (opts.body) {
-    headers.append('Content-Type', 'application/json');
-    fetchOpts.body = JSON.stringify(opts.body);
+    if (opts.noContentType) {
+      fetchOpts.body = opts.body;
+    } else {
+      headers.append('Content-Type', 'application/json');
+      fetchOpts.body = JSON.stringify(opts.body);
+    }
   }
   try {
     const response = await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts);
