@@ -153,8 +153,8 @@ export type Library = {
 
 export type AutogradingResult = {
   resultType: string;
-  expected?: string;
-  actual?: string;
+  expected?: string; // the correct answer for the testcase
+  actual?: string; // the received answer from the student's code
   errors?: AutogradingError[];
 };
 
