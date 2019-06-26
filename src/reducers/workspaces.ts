@@ -64,7 +64,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
 ) => {
   const location: WorkspaceLocation =
     action.payload !== undefined ? action.payload.workspaceLocation : undefined;
-  const index: number = action.payload !== undefined ? action.payload.index : undefined;
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
 
@@ -359,7 +358,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
-            if (i === index) {
+            if (i === action.payload.index) {
               testcase.actual = (newOutput[0] as CodeOutput).value;
               return testcase;
             } else {
@@ -375,7 +374,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
-            if (i === index) {
+            if (i === action.payload.index) {
               testcase.actual = action.payload.value;
               return testcase;
             } else {
