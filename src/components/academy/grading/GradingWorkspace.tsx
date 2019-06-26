@@ -208,22 +208,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     if (question.type === QuestionTypes.programming) {
       const questionData = question as IAnsweredQuestion;
       autogradingResults = questionData.autogradingResults;
+      editorPrepend = questionData.prepend;
+      editorPostpend = questionData.postpend;
+      editorTestcases = questionData.testcases;
 
       editorValue = questionData.answer as string;
       if (!editorValue) {
         editorValue = questionData.solutionTemplate!;
-      }
-
-      if (questionData.prepend) {
-        editorPrepend = questionData.prepend;
-      }
-
-      if (questionData.postpend) {
-        editorPostpend = questionData.postpend;
-      }
-
-      if (questionData.testcases) {
-        editorTestcases = questionData.testcases;
       }
     }
 

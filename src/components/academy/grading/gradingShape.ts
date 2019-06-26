@@ -68,8 +68,8 @@ export type GradingQuestion = {
 export interface IAnsweredQuestion extends IQuestion {
   comment: null;
   autogradingResults: AutogradingResult[];
-  prepend: string | null;
-  postpend: string | null;
+  prepend: string;
+  postpend: string;
   testcases: ITestcase[];
   solution: number | string | null;
   answer: string | number | null;
