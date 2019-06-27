@@ -30,9 +30,9 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
     const code: string = yield select((state: IState) => {
-      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend!;
+      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend;
       const value = (state.workspaces[location] as IWorkspaceState).editorValue!;
-      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend!;
+      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend;
 
       return prepend + (prepend.length > 0 ? '\n' : '') + value + '\n' + postpend;
     });
@@ -132,11 +132,11 @@ function* workspaceSaga(): SagaIterator {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
     const index = (action as actionTypes.IAction).payload.testcaseId;
     const code: string = yield select((state: IState) => {
-      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend!;
+      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend;
       const value = (state.workspaces[location] as IWorkspaceState).editorValue!;
-      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend!;
+      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend;
       const testcase = (state.workspaces[location] as IWorkspaceState).editorTestcases[index]
-        .program!;
+        .program;
 
       return (
         prepend +
@@ -438,6 +438,7 @@ function* evalTestCode(code: string, context: Context, location: WorkspaceLocati
       yield put(actions.evalTestcaseSuccess(result.value, location, index));
     } else {
       yield put(actions.evalInterpreterError(context.errors, location));
+      yield put(actions.evalTestcaseFailure('An error occured', location, index));
     }
   } else if (interrupted) {
     interrupt(context);
