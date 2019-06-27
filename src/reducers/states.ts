@@ -77,6 +77,8 @@ export interface IWorkspaceState {
   readonly output: InterpreterOutput[];
   readonly replHistory: ReplHistory;
   readonly replValue: string;
+  readonly sharedbAceInitValue: string;
+  readonly sharedbAceIsInviting: boolean;
   readonly sideContentActiveTab: number;
   readonly sideContentHeight?: number;
   readonly websocketStatus: number;
@@ -226,6 +228,8 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
     records: []
   },
   replValue: '',
+  sharedbAceInitValue: '',
+  sharedbAceIsInviting: false,
   sideContentActiveTab: 0,
   websocketStatus: 0,
   globals: [],

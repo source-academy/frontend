@@ -38,3 +38,27 @@ export function createNewSession(onSessionCreated: (sessionId: string) => void) 
   xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/latest/', true);
   xmlhttp.send();
 }
+
+export function checkConnnectionAlive(
+  editorSessionId: string,
+  connectionOK: () => void,
+  sessionIdNotFound: () => void,
+  cannotReachServer: () => void
+) {
+  const xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = () => {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+      const state = JSON.parse(xmlhttp.responseText).state;
+      if (state !== true) {
+        // ID does not exist
+        sessionIdNotFound();
+      } else {
+        connectionOK();
+      }
+    } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
+      cannotReachServer();
+    }
+  };
+  xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/' + editorSessionId, true);
+  xmlhttp.send();
+}

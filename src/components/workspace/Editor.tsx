@@ -8,6 +8,7 @@ import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
 
 import { LINKS } from '../../utils/constants';
+import { checkConnnectionAlive } from './collabEditing/helper';
 /**
  * @property editorValue - The string content of the react-ace editor
  * @property handleEditorChange  - A callback function
@@ -23,9 +24,12 @@ export interface IEditorProps {
   editorValue: string;
   breakpoints: string[];
   highlightedLines: number[][];
+  sharedbAceInitValue?: string;
+  sharedbAceIsInviting?: boolean;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleFinishInvite?: () => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -130,34 +134,30 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             // SharedbAceMultipleCursors
           ]
         );
+        if (this.props.sharedbAceIsInviting) {
+          this.props.handleEditorValueChange(this.props.sharedbAceInitValue!);
+          this.props.handleFinishInvite!();
+        }
       });
 
       // WebSocket connection status detection logic
       const WS = ShareAce.WS;
       let interval: any;
+      const sessionIdNotFound = () => {
+        clearInterval(interval);
+        WS.close();
+      };
+      const cannotReachServer = () => {
+        WS.reconnect();
+      };
       const checkStatus = () => {
         if (this.ShareAce !== null) {
-          const xmlhttp = new XMLHttpRequest();
-          xmlhttp.onreadystatechange = () => {
-            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-              const state = JSON.parse(xmlhttp.responseText).state;
-              if (state !== true) {
-                // ID does not exist
-                clearInterval(interval);
-                WS.close();
-              }
-            } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
-              // Cannot reach server
-              // Force WS to check connection
-              WS.reconnect();
-            }
-          };
-          xmlhttp.open(
-            'GET',
-            'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.props.editorSessionId,
-            true
+          checkConnnectionAlive(
+            this.props.editorSessionId,
+            () => {},
+            sessionIdNotFound,
+            cannotReachServer
           );
-          xmlhttp.send();
         }
       };
       // Checks connection status every 5sec

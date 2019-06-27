@@ -178,6 +178,11 @@ export const invalidEditorSessionId = () => ({
   type: actionTypes.INVALID_EDITOR_SESSION_ID
 });
 
+export const finishInvite = (workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.FINISH_INVITE,
+  payload: { workspaceLocation }
+});
+
 export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
   newEditorValue: string,
   workspaceLocation: WorkspaceLocation
@@ -219,6 +224,17 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
     type: 'code',
     workspaceLocation,
     value: newOutput
+  }
+});
+
+export const initInvite: ActionCreator<actionTypes.IAction> = (
+  editorValue: string,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.INIT_INVITE,
+  payload: {
+    editorValue,
+    workspaceLocation
   }
 });
 

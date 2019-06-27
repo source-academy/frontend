@@ -23,9 +23,11 @@ import {
   EVAL_TESTCASE,
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
+  FINISH_INVITE,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
   IAction,
+  INIT_INVITE,
   LOG_OUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -470,6 +472,23 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[location],
           ...createDefaultWorkspace(location),
           ...action.payload.workspaceOptions
+        }
+      };
+    case INIT_INVITE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          sharedbAceInitValue: action.payload.editorValue,
+          sharedbAceIsInviting: true
+        }
+      };
+    case FINISH_INVITE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          sharedbAceIsInviting: false
         }
       };
     /**
