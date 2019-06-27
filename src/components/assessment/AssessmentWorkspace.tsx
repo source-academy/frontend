@@ -116,20 +116,27 @@ class AssessmentWorkspace extends React.Component<
     if (this.props.questionId === 0 && this.props.notAttempted) {
       this.setState({ showOverlay: true });
     }
-    if (this.props.assessment) {
-      const question: IQuestion = this.props.assessment.questions[
-        this.props.questionId >= this.props.assessment.questions.length
-          ? this.props.assessment.questions.length - 1
-          : this.props.questionId
-      ];
-      this.props.handleEditorValueChange(
-        question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IProgrammingQuestion).answer as string)
-            : (question as IProgrammingQuestion).solutionTemplate
-          : ''
-      );
+    if (!this.props.assessment) {
+      return;
     }
+
+    let questionId = this.props.questionId;
+    if (this.props.questionId >= this.props.assessment.questions.length) {
+      questionId = this.props.assessment.questions.length - 1;
+    }
+
+    const question: IQuestion = this.props.assessment.questions[questionId];
+
+    let answer = '';
+    if (question.type === QuestionTypes.programming) {
+      if (question.answer) {
+        answer = (question as IProgrammingQuestion).answer as string;
+      } else {
+        answer = (question as IProgrammingQuestion).solutionTemplate;
+      }
+    }
+
+    this.props.handleEditorValueChange(answer);
   }
 
   /**

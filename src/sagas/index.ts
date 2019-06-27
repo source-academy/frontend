@@ -136,7 +136,7 @@ function* workspaceSaga(): SagaIterator {
       const value = (state.workspaces[location] as IWorkspaceState).editorValue!;
       const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend;
       const testcase = (state.workspaces[location] as IWorkspaceState).editorTestcases[index]
-        .program!;
+        .program;
 
       return (
         prepend +
@@ -438,7 +438,6 @@ function* evalTestCode(code: string, context: Context, location: WorkspaceLocati
       yield put(actions.evalTestcaseSuccess(result.value, location, index));
     } else {
       yield put(actions.evalInterpreterError(context.errors, location));
-      /* To indicate an error occured */
       yield put(actions.evalTestcaseFailure('An error occured', location, index));
     }
   } else if (interrupted) {

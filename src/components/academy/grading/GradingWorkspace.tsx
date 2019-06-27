@@ -88,18 +88,21 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       return;
     }
 
-    const questionId =
-      this.props.questionId >= this.props.grading.length
-        ? this.props.grading.length - 1
-        : this.props.questionId;
+    let questionId = this.props.questionId;
+    if (this.props.questionId >= this.props.grading.length) {
+      questionId = this.props.grading.length - 1;
+    }
 
-    const question: IQuestion = this.props.grading[questionId].question;
-    const answer: string =
-      question.type === QuestionTypes.programming
-        ? question.answer !== null
-          ? ((question as IAnsweredQuestion).answer as string)
-          : (question as IAnsweredQuestion).solutionTemplate!
-        : '';
+    const question: IAnsweredQuestion = this.props.grading[questionId].question;
+    let answer: string = '';
+
+    if (question.type === QuestionTypes.programming) {
+      if (question.answer) {
+        answer = question.answer as string;
+      } else {
+        answer = question.solutionTemplate || '';
+      }
+    }
 
     this.props.handleEditorValueChange(answer);
   }
