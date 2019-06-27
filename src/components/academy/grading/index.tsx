@@ -8,7 +8,7 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
 import { ValueFormatterParams } from 'ag-grid/dist/lib/entities/colDef';
 import 'ag-grid/dist/styles/ag-grid.css';
@@ -71,7 +71,6 @@ const GradingExp = (props: GradingNavLinkProps) => {
 };
 
 class Grading extends React.Component<IGradingProps, State> {
-  private columnApi: ColumnApi;
   private gridApi?: GridApi;
 
   public constructor(props: IGradingProps) {
@@ -272,15 +271,10 @@ class Grading extends React.Component<IGradingProps, State> {
     const checkStatus = event.target.checked;
     this.setState({ groupFilterEnabled: checkStatus });
     this.props.handleFetchGradingOverviews(!checkStatus);
-
-    this.columnApi!.setColumnVisible('Unsubmit', !checkStatus);
-
-    this.gridApi!.sizeColumnsToFit();
   };
 
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
-    this.columnApi = params.columnApi;
     this.gridApi.sizeColumnsToFit();
   };
 
