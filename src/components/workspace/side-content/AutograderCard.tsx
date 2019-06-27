@@ -16,10 +16,10 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
     let gradingStatus: string = '';
 
     if (this.props.testcase.result) {
+      gradingStatus = ' wrong';
+
       if (stringify(this.props.testcase.result) === this.props.testcase.answer) {
         gradingStatus = ' correct';
-      } else {
-        gradingStatus = ' wrong';
       }
     }
 
