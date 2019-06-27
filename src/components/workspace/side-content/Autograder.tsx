@@ -8,7 +8,7 @@ import ResultCard from './ResultCard';
 
 type AutograderProps = {
   autogradingResults: AutogradingResult[];
-  testcases: ITestcase[] | null;
+  testcases: ITestcase[];
   handleTestcaseEval: (testcaseId: number) => void;
 };
 
@@ -31,7 +31,7 @@ class Autograder extends React.Component<AutograderProps, State> {
 
   public render() {
     const testcases =
-      this.props.testcases && this.props.testcases.length > 0 ? (
+      this.props.testcases.length > 0 ? (
         this.props.testcases.map((testcase, index) => (
           <AutograderCard
             key={index}
