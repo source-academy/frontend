@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
 import MessageList from './MessageList.tsx';
-import Input from './Input';
+import Input from './Input.tsx';
 import { BACKEND_URL, INSTANCE_LOCATOR } from '../../utils/constants';
 import { IState } from '../../reducers/states';
 import jwt_decode from 'jwt-decode';
@@ -36,9 +36,6 @@ class ChatApp extends React.Component {
   componentDidMount() {
     // If you are not working with the backend server running,
     // use the test token url, and hardcode the userId and roomId
-
-    // tslint:disable-next-line:no-console
-    console.log(this);
     const chatManager = new ChatManager({
       instanceLocator: INSTANCE_LOCATOR,
       tokenProvider: new TokenProvider({
@@ -86,16 +83,13 @@ class ChatApp extends React.Component {
 
   render() {
     return this.state.connected ? (
-      <div class="chat">
+      <div className="chat">
         <MessageList
           className="message-list"
           viewingUserId={this.state.currentUser.id}
           messages={this.state.messages}
         />
-        <Input className="input-field" onSubmit={this.addMessage}>
-          {' '}
-          add something
-        </Input>
+        <Input className="input-field" onSubmit={this.addMessage} />
         <div ref={this.messagesEndRef} />
       </div>
     ) : (

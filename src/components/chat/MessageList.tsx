@@ -1,20 +1,16 @@
 import * as React from 'react';
+
+import { getPrettyDate } from '../../utils/dateHelpers';
 import Markdown from '../commons/Markdown';
-/*
-  TO COLOR-CODE DIFFERENT ROLES
-  White for students
-  Blue for Avengers
-  Green for Admins
 
-*/
-
-export type Message = {
-  userStore: { users: { [x: string]: { name: React.ReactNode } } };
+type Message = {
+  userStore: { users: { [x: string]: { name: string } } };
   senderId: React.ReactText;
   text: string;
+  createdAt: string;
 };
 
-export type StateProps = {
+type StateProps = {
   messages: Message[];
 };
 
@@ -44,10 +40,14 @@ class MessageList extends React.Component<StateProps> {
     return (
       <div>
         <ul className="message-list" style={this.messageStyle.msgList}>
-          {this.props.messages.map((message: Message, index: string | number | undefined) => (
+          {this.props.messages.map((message: Message, index: number) => (
             <li className="chat-message" style={this.messageStyle.msgItem} key={index}>
               <pre style={this.messageStyle.dialogueBox}>
-                <p>{message.userStore.users[message.senderId].name} </p>
+                <span>
+                  <strong>{message.userStore.users[message.senderId].name}</strong>
+                  &emsp;
+                  <i>{getPrettyDate(message.createdAt)}</i>
+                </span>
                 <Markdown content={message.text} />
               </pre>
             </li>
