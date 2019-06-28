@@ -5,6 +5,7 @@ import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { Announcement } from '../components/Announcements';
 import {
+  AutogradingResult,
   ExternalLibraryName,
   ExternalLibraryNames,
   IAssessment,
@@ -58,11 +59,12 @@ export interface IWorkspaceManagerState {
 }
 
 export interface IWorkspaceState {
+  readonly autogradingResults: AutogradingResult[];
   readonly context: Context;
-  readonly editorPrepend: string | null;
+  readonly editorPrepend: string;
   readonly editorSessionId: string;
   readonly editorValue: string | null;
-  readonly editorPostpend: string | null;
+  readonly editorPostpend: string;
   readonly editorTestcases: ITestcase[];
   readonly editorHeight: number;
   readonly editorWidth: string;
@@ -207,10 +209,11 @@ export const defaultEditorValue = '// Type your program in here!';
  * @param location the location of the workspace, used for context
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
+  autogradingResults: [],
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
+  editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : '',
   editorPostpend: '',
   editorTestcases: [],
   editorHeight: 150,

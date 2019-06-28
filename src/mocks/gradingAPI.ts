@@ -91,6 +91,9 @@ Hello and welcome to this assessment! This is the *0th question*.
 >>> import this
 \`\`\`
 `,
+      prepend: '// THIS IS A PREPEND',
+      postpend: '// THIS IS A POSTPEND',
+      testcases: [],
       comment: null,
       id: 0,
       library: mockLibrary,
@@ -105,7 +108,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1
+      grade: 1,
+      autogradingResults: [
+        {
+          resultType: 'pass'
+        },
+        {
+          resultType: 'fail',
+          expected: '8',
+          actual: '5'
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'timeout'
+            },
+            {
+              errorType: 'syntax',
+              line: 1,
+              location: 'student',
+              errorLine: 'function fibonacci(n) {',
+              errorExplanation: 'Just kidding!'
+            }
+          ]
+        }
+      ]
     },
     grade: {
       gradeAdjustment: 0,
@@ -121,6 +149,9 @@ Hello and welcome to this assessment! This is the *0th question*.
   },
   {
     question: {
+      prepend: '',
+      postpend: '',
+      testcases: [],
       answer: "This student's answer to the 1st question",
       comment: null,
       content: 'Hello and welcome to this assessment! This is the 1st question.',
@@ -137,7 +168,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1
+      grade: 1,
+      autogradingResults: [
+        {
+          resultType: 'pass'
+        },
+        {
+          resultType: 'fail',
+          expected: '8',
+          actual: '5'
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'timeout'
+            },
+            {
+              errorType: 'syntax',
+              line: 1,
+              location: 'student',
+              errorLine: 'function fibonacci(n) {',
+              errorExplanation: 'Just kidding!'
+            }
+          ]
+        }
+      ]
     },
     grade: {
       gradeAdjustment: 0,
@@ -154,6 +210,9 @@ Hello and welcome to this assessment! This is the *0th question*.
   {
     question: {
       // C is the answer
+      prepend: '',
+      postpend: '',
+      testcases: [],
       answer: 3,
       comment: null,
       solution: 2,
@@ -188,7 +247,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1
+      grade: 1,
+      autogradingResults: [
+        {
+          resultType: 'pass'
+        },
+        {
+          resultType: 'fail',
+          expected: '8',
+          actual: '5'
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'timeout'
+            },
+            {
+              errorType: 'syntax',
+              line: 1,
+              location: 'student',
+              errorLine: 'function fibonacci(n) {',
+              errorExplanation: 'Just kidding!'
+            }
+          ]
+        }
+      ]
     },
     grade: {
       gradeAdjustment: 0,

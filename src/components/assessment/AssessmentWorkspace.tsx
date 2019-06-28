@@ -26,6 +26,7 @@ import Autograder from '../workspace/side-content/Autograder';
 
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
+  AutogradingResult,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -42,10 +43,11 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 export type StateProps = {
   activeTab: number;
   assessment?: IAssessment;
-  editorPrepend: string | null;
+  autogradingResults: AutogradingResult[];
+  editorPrepend: string;
   editorValue: string | null;
-  editorPostpend: string | null;
-  editorTestcases: ITestcase[] | null;
+  editorPostpend: string;
+  editorTestcases: ITestcase[];
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
@@ -118,20 +120,27 @@ class AssessmentWorkspace extends React.Component<
     if (this.props.questionId === 0 && this.props.notAttempted) {
       this.setState({ showOverlay: true });
     }
-    if (this.props.assessment) {
-      const question: IQuestion = this.props.assessment.questions[
-        this.props.questionId >= this.props.assessment.questions.length
-          ? this.props.assessment.questions.length - 1
-          : this.props.questionId
-      ];
-      this.props.handleEditorValueChange(
-        question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IProgrammingQuestion).answer as string)
-            : (question as IProgrammingQuestion).solutionTemplate
-          : ''
-      );
+    if (!this.props.assessment) {
+      return;
     }
+
+    let questionId = this.props.questionId;
+    if (this.props.questionId >= this.props.assessment.questions.length) {
+      questionId = this.props.assessment.questions.length - 1;
+    }
+
+    const question: IQuestion = this.props.assessment.questions[questionId];
+
+    let answer = '';
+    if (question.type === QuestionTypes.programming) {
+      if (question.answer) {
+        answer = (question as IProgrammingQuestion).answer as string;
+      } else {
+        answer = (question as IProgrammingQuestion).solutionTemplate;
+      }
+    }
+
+    this.props.handleEditorValueChange(answer);
   }
 
   /**
@@ -217,9 +226,9 @@ class AssessmentWorkspace extends React.Component<
         question.type === QuestionTypes.programming
           ? {
               editorSessionId: '',
-              editorPrepend: this.props.editorPrepend!,
+              editorPrepend: this.props.editorPrepend,
               editorPrependLines:
-                this.props.editorPrepend === null || this.props.editorPrepend.length === 0
+                this.props.editorPrepend.length === 0
                   ? 0
                   : this.props.editorPrepend.split('\n').length,
               editorValue: this.props.editorValue!,
@@ -278,49 +287,46 @@ class AssessmentWorkspace extends React.Component<
     const questionId = this.props.questionId;
 
     if (
-      this.props.storedAssessmentId !== assessmentId ||
-      this.props.storedQuestionId !== questionId
+      this.props.storedAssessmentId === assessmentId &&
+      this.props.storedQuestionId === questionId
     ) {
-      const question = this.props.assessment.questions[questionId];
-      const editorValue =
-        question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IProgrammingQuestion).answer as string)
-            : (question as IProgrammingQuestion).solutionTemplate
-          : '';
-      const editorPrepend =
-        question.type === QuestionTypes.programming
-          ? (question as IProgrammingQuestion).prepend !== null
-            ? (question as IProgrammingQuestion).prepend
-            : ''
-          : '';
-      const editorPostpend =
-        question.type === QuestionTypes.programming
-          ? (question as IProgrammingQuestion).postpend !== null
-            ? (question as IProgrammingQuestion).postpend
-            : ''
-          : '';
-      const editorTestcases =
-        question.type === QuestionTypes.programming
-          ? (question as IProgrammingQuestion).testcases !== null
-            ? (question as IProgrammingQuestion).testcases.map(testcase => {
-                return testcase;
-              })
-            : []
-          : [];
-      this.props.handleEditorUpdateBreakpoints([]);
-      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
-      this.props.handleResetWorkspace({
-        editorPrepend,
-        editorValue,
-        editorPostpend,
-        editorTestcases
-      });
-      this.props.handleClearContext(question.library);
-      this.props.handleUpdateHasUnsavedChanges(false);
-      if (editorValue) {
-        this.props.handleEditorValueChange(editorValue);
+      return;
+    }
+
+    const question = this.props.assessment.questions[questionId];
+
+    let autogradingResults: AutogradingResult[] = [];
+    let editorValue: string = '';
+    let editorPrepend: string = '';
+    let editorPostpend: string = '';
+    let editorTestcases: ITestcase[] = [];
+
+    if (question.type === QuestionTypes.programming) {
+      const questionData = question as IProgrammingQuestion;
+      autogradingResults = questionData.autogradingResults;
+      editorPrepend = questionData.prepend;
+      editorPostpend = questionData.postpend;
+      editorTestcases = questionData.testcases;
+
+      editorValue = questionData.answer as string;
+      if (!editorValue) {
+        editorValue = questionData.solutionTemplate!;
       }
+    }
+
+    this.props.handleEditorUpdateBreakpoints([]);
+    this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
+    this.props.handleResetWorkspace({
+      autogradingResults,
+      editorPrepend,
+      editorValue,
+      editorPostpend,
+      editorTestcases
+    });
+    this.props.handleClearContext(question.library);
+    this.props.handleUpdateHasUnsavedChanges(false);
+    if (editorValue) {
+      this.props.handleEditorValueChange(editorValue);
     }
   }
 
@@ -347,6 +353,7 @@ class AssessmentWorkspace extends React.Component<
         body: (
           <Autograder
             testcases={props.editorTestcases}
+            autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         )
