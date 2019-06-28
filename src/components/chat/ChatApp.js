@@ -11,7 +11,6 @@ class ChatApp extends React.Component {
     super(props);
     this.state = {
       connected: false,
-      hasError: false,
       currentRoom: {},
       currentUser: {},
       messages: []
@@ -34,13 +33,7 @@ class ChatApp extends React.Component {
     this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  componentDidCatch() {
-    this.setState({ hasError: true });
-  }
-
   componentDidMount() {
-    // If you are not working with the backend server running,
-    // use the test token url, and hardcode the userId and roomId
     const chatManager = new ChatManager({
       instanceLocator: INSTANCE_LOCATOR,
       tokenProvider: new TokenProvider({
@@ -74,6 +67,7 @@ class ChatApp extends React.Component {
           currentRoom
         });
       });
+
     if (this.state.connected) {
       this.scrollToBottom();
     } //for scrolling
@@ -87,7 +81,7 @@ class ChatApp extends React.Component {
   }
 
   render() {
-    return this.state.connected & !this.state.hasError ? (
+    return this.state.connected ? (
       <div className="chat">
         <MessageList
           className="message-list"
@@ -98,12 +92,11 @@ class ChatApp extends React.Component {
         <div ref={this.messagesEndRef} />
       </div>
     ) : (
-      <p>
+      <span>
+        Connecting to ChatKit...
         <br />
-        Trying to connect to the chat service..
-        <br />
-        If this is taking too long, check your Internet connection and reload.
-      </p>
+        If this is taking too long, refresh the page.
+      </span>
     );
   }
 }

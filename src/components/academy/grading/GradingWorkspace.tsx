@@ -5,6 +5,7 @@ import * as React from 'react';
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
 import ChatApp from '../../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states';
+import { USE_CHATKIT } from '../../../utils/constants';
 import { history } from '../../../utils/history';
 import {
   AutogradingResult,
@@ -274,7 +275,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       {
         label: `Chat`,
         icon: IconNames.CHAT,
-        body: <ChatApp />
+        body: USE_CHATKIT ? <ChatApp /> : <span>ChatKit disabled.</span>
       },
       {
         label: `Autograder`,

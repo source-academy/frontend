@@ -12,6 +12,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 
 import ChatApp from '../../containers/ChatContainer';
@@ -361,7 +362,7 @@ class AssessmentWorkspace extends React.Component<
       {
         label: `Chat`,
         icon: IconNames.CHAT,
-        body: <ChatApp />
+        body: USE_CHATKIT ? <ChatApp /> : <span>ChatKit disabled.</span>
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;
