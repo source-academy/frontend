@@ -1,11 +1,10 @@
-import React from 'react';
+import { Tooltip } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+
 import { controlButton } from '../commons';
 
-import { IconNames } from '@blueprintjs/icons';
-import { Link } from 'react-router-dom';
-import { Tooltip } from '@blueprintjs/core';
-
-export default class Input extends React.Component {
+class Input extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,3 +71,5 @@ export default class Input extends React.Component {
     );
   }
 }
+
+export default Input;

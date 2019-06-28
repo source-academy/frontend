@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
-import MessageList from './MessageList';
+import MessageList from './MessageList.tsx';
 import Input from './Input';
 import { BACKEND_URL, INSTANCE_LOCATOR } from '../../utils/constants';
 import { IState } from '../../reducers/states';
 import jwt_decode from 'jwt-decode';
 
-export default class ChatApp extends React.Component {
+class ChatApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +24,9 @@ export default class ChatApp extends React.Component {
   messagesEndRef = React.createRef(); // for scrolling
 
   componentDidUpdate() {
-    if (this.state.connected) { this.scrollToBottom(); }
+    if (this.state.connected) {
+      this.scrollToBottom();
+    }
   } // for scrolling
 
   scrollToBottom = () => {
@@ -34,6 +36,9 @@ export default class ChatApp extends React.Component {
   componentDidMount() {
     // If you are not working with the backend server running,
     // use the test token url, and hardcode the userId and roomId
+
+    // tslint:disable-next-line:no-console
+    console.log(this);
     const chatManager = new ChatManager({
       instanceLocator: INSTANCE_LOCATOR,
       tokenProvider: new TokenProvider({
@@ -58,8 +63,7 @@ export default class ChatApp extends React.Component {
             }
           },
           messageLimit: 100,
-          roomId: this.props.currentRoomId
-
+          roomId: '19411521'
         });
       })
       .then(currentRoom => {
@@ -68,7 +72,9 @@ export default class ChatApp extends React.Component {
           currentRoom
         });
       });
-    if (this.state.connected) { this.scrollToBottom(); } //for scrolling
+    if (this.state.connected) {
+      this.scrollToBottom();
+    } //for scrolling
   }
 
   addMessage(text) {
@@ -76,25 +82,31 @@ export default class ChatApp extends React.Component {
       roomId: this.state.currentRoom.id,
       text
     });
-
   }
 
   render() {
-    return (
-      (this.state.connected)
-        ?
-        <div>
-          <MessageList viewingUserId={this.state.currentUser.id} messages={this.state.messages} />
-          <Input className="input-field" onSubmit={this.addMessage} > add something</Input>
-          <div ref={this.messagesEndRef} />
-        </div>
-        :
-        <p>
-          <br />
-          Trying to connect to the chat service..
-          <br />
-          If this is taking too long, check your Internet connection and reload.
-        </p>
+    return this.state.connected ? (
+      <div class="chat">
+        <MessageList
+          className="message-list"
+          viewingUserId={this.state.currentUser.id}
+          messages={this.state.messages}
+        />
+        <Input className="input-field" onSubmit={this.addMessage}>
+          {' '}
+          add something
+        </Input>
+        <div ref={this.messagesEndRef} />
+      </div>
+    ) : (
+      <p>
+        <br />
+        Trying to connect to the chat service..
+        <br />
+        If this is taking too long, check your Internet connection and reload.
+      </p>
     );
   }
 }
+
+export default ChatApp;
