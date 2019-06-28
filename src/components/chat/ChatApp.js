@@ -11,6 +11,7 @@ class ChatApp extends React.Component {
     super(props);
     this.state = {
       connected: false,
+      hasError: false,
       currentRoom: {},
       currentUser: {},
       messages: []
@@ -32,6 +33,10 @@ class ChatApp extends React.Component {
   scrollToBottom = () => {
     this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
+
+  componentDidCatch() {
+    this.setState({ hasError: true });
+  }
 
   componentDidMount() {
     // If you are not working with the backend server running,
@@ -82,7 +87,7 @@ class ChatApp extends React.Component {
   }
 
   render() {
-    return this.state.connected ? (
+    return this.state.connected & !this.state.hasError ? (
       <div className="chat">
         <MessageList
           className="message-list"
