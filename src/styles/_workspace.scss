@@ -77,6 +77,10 @@ $code-color-error: #ff4444;
     flex: initial;
   }
 
+  .resize-editor-prepend {
+    padding-bottom: 0.2rem;
+  }
+
   .Editor {
     display: flex;
     flex-direction: column;
@@ -100,10 +104,6 @@ $code-color-error: #ff4444;
       #brace-editor {
         height: 100%;
       }
-    }
-
-    .ace_gutter-cell {
-      padding-left: 0px;
     }
 
     .ace_gutter-cell_hi {
@@ -295,12 +295,8 @@ $code-color-error: #ff4444;
     display: flex;
     flex: 1 1;
     flex-direction: column;
-
-    .repl-output-parent {
-      flex: 1 1;
-      overflow-y: auto;
-      overflow-x: visible;
-    }
+    overflow-x: visible;
+    overflow-y: visible;
 
     .pt-card {
       background-color: $cadet-color-2;
@@ -374,6 +370,171 @@ $code-color-error: #ff4444;
     .ace_gutter {
       background: $cadet-color-3;
       color: rgb(128, 145, 160);
+    }
+  }
+
+  .Autograder {
+    > .collapse-button {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    pre {
+      color: $code-color-code;
+    }
+
+    .noResults {
+      padding-top: 0.4rem;
+      padding-bottom: 0.4rem;
+    }
+  }
+
+  .AutograderCard {
+    @keyframes correct {
+      from {
+        background: rgba(125, 255, 125, 0.5);
+      }
+
+      to {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    @keyframes wrong {
+      from {
+        background: rgba(255, 55, 55, 0.5);
+      }
+
+      to {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    &.wrong {
+      > .pt-card {
+        background: rgba(255, 55, 55, 0.2);
+        animation-name: wrong;
+        animation-duration: 4s;
+      }
+
+      .autograder-actual {
+        pre {
+          color: $code-color-error;
+        }
+      }
+    }
+
+    &.correct {
+      > .pt-card {
+        background: rgba(125, 255, 125, 0.2);
+        animation-name: correct;
+        animation-duration: 4s;
+      }
+    }
+
+    &:not(:first-child) {
+      border-top-style: solid;
+      border-top-width: 2px;
+      border-color: #1a2530;
+    }
+
+    .pt-button {
+      border-color: rgb(26, 37, 48);
+      border-style: solid;
+      border-width: 1px;
+    }
+
+    .pt-card {
+      margin: 0 0 0 0;
+    }
+
+    .row {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      > pre {
+        flex: 1 1 auto;
+      }
+    }
+
+    .col {
+      width: 50%;
+    }
+
+    .autograder-expected {
+      padding-right: 0.2rem;
+    }
+    .autograder-actual {
+      padding-left: 0.2rem;
+    }
+  }
+
+  .ResultCard {
+    &:not(:first-child) {
+      border-top-style: solid;
+      border-top-width: 2px;
+      border-color: #1a2530;
+    }
+
+    &.wrong {
+      > .pt-card {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    &.correct {
+      > .pt-card {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    .pt-card {
+      margin: 0 0 0 0;
+    }
+
+    .row {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      > pre {
+        flex: 1 1 auto;
+        margin-left: 0.4rem;
+      }
+    }
+
+    .col {
+      width: 50%;
+    }
+
+    .autograder-expected {
+      padding-right: 0.2rem;
+    }
+    .autograder-actual {
+      padding-left: 0.2rem;
+    }
+
+    .autograder-error {
+      width: 100%;
+
+      &:not(:first-child) {
+        border-top-style: solid;
+        border-top-width: 2px;
+        border-color: #1a2530;
+      }
+    }
+
+    .error-explanation {
+      pre {
+        color: $code-color-error;
+      }
     }
   }
 }

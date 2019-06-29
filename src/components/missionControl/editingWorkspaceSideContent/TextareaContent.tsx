@@ -38,12 +38,15 @@ export class TextareaContent extends React.Component<IProps, IState> {
     if (this.state.isEditing) {
       display = this.makeEditingTextarea();
     } else {
+      const filler = 'Please enter value (if applicable)';
+      let value = getValueFromPath(this.props.path, this.props.assessment);
+      if (!this.props.isNumber) {
+        value = value || '';
+        value = value.match(/^\s*$/) ? filler : value;
+      }
       if (this.state.useRawValue) {
-        display = getValueFromPath(this.props.path, this.props.assessment);
+        display = value;
       } else {
-        const filler = 'Please enter value (if applicable)';
-        let value = getValueFromPath(this.props.path, this.props.assessment) || '';
-        value = value.match('^(\n| )*$') ? filler : value;
         display = <Markdown content={value} />;
       }
     }
