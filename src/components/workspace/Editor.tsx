@@ -17,7 +17,7 @@ import { checkSessionIdExists } from './collabEditing/helper';
  *           for the react-ace editor's `onChange`
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
- * @property editorReadonly - Used for sourcecastPlayback only
+ * @property editorReadonly - Used for sourcecast only
  */
 export interface IEditorProps {
   breakpoints: string[];

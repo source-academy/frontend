@@ -470,20 +470,20 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case RECORD_AUDIO_URL:
       return {
         ...state,
-        sourcecastRecording: {
-          ...state.sourcecastRecording,
+        sourcereel: {
+          ...state.sourcereel,
           audioUrl: action.payload.audioUrl
         }
       };
     case RECORD_EDITOR_DELTA:
       return {
         ...state,
-        sourcecastRecording: {
-          ...state.sourcecastRecording,
+        sourcereel: {
+          ...state.sourcereel,
           playbackData: {
-            ...state.sourcecastRecording.playbackData,
+            ...state.sourcereel.playbackData,
             data: [
-              ...state.sourcecastRecording.playbackData.data,
+              ...state.sourcereel.playbackData.data,
               {
                 time: action.payload.time,
                 delta: action.payload.delta
@@ -538,8 +538,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case SET_DELTAS_TO_APPLY:
       return {
         ...state,
-        sourcecastPlayback: {
-          ...state.sourcecastPlayback,
+        sourcecast: {
+          ...state.sourcecast,
           deltasToApply: action.payload.deltas
         }
       };
@@ -554,10 +554,10 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case RECORD_EDITOR_INIT_VALUE:
       return {
         ...state,
-        sourcecastRecording: {
-          ...state.sourcecastRecording,
+        sourcereel: {
+          ...state.sourcereel,
           playbackData: {
-            ...state.sourcecastRecording.playbackData,
+            ...state.sourcereel.playbackData,
             init: action.payload.editorValue
           }
         }
@@ -565,16 +565,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case SET_SOURCECAST_PLAYBACK_DURATION:
       return {
         ...state,
-        sourcecastPlayback: {
-          ...state.sourcecastPlayback,
+        sourcecast: {
+          ...state.sourcecast,
           playbackDuration: action.payload.duration
         }
       };
     case SET_SOURCECAST_PLAYBACK_STATUS:
       return {
         ...state,
-        sourcecastPlayback: {
-          ...state.sourcecastPlayback,
+        sourcecast: {
+          ...state.sourcecast,
           playbackStatus: action.payload.playbackStatus
         }
       };
@@ -597,20 +597,20 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case TIMER_PAUSE:
       return {
         ...state,
-        sourcecastRecording: {
-          ...state.sourcecastRecording,
+        sourcereel: {
+          ...state.sourcereel,
           recordingStatus: RecordingStatus.paused,
           timeElapsedBeforePause:
-            state.sourcecastRecording.timeElapsedBeforePause +
+            state.sourcereel.timeElapsedBeforePause +
             action.payload.timeNow -
-            state.sourcecastRecording.timeResumed
+            state.sourcereel.timeResumed
         }
       };
     case TIMER_RESET:
       return {
         ...state,
-        sourcecastRecording: {
-          ...state.sourcecastRecording,
+        sourcereel: {
+          ...state.sourcereel,
           recordingStatus: RecordingStatus.notStarted,
           timeElapsedBeforePause: 0,
           timeResumed: 0
@@ -619,8 +619,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case TIMER_RESUME:
       return {
         ...state,
-        sourcecastRecording: {
-          ...state.sourcecastRecording,
+        sourcereel: {
+          ...state.sourcereel,
           recordingStatus: RecordingStatus.recording,
           timeResumed: action.payload.timeNow
         }
@@ -628,8 +628,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case TIMER_START:
       return {
         ...state,
-        sourcecastRecording: {
-          ...state.sourcecastRecording,
+        sourcereel: {
+          ...state.sourcereel,
           recordingStatus: RecordingStatus.recording,
           timeElapsedBeforePause: 0,
           timeResumed: action.payload.timeNow
@@ -638,8 +638,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case TIMER_STOP:
       return {
         ...state,
-        sourcecastRecording: {
-          ...state.sourcecastRecording,
+        sourcereel: {
+          ...state.sourcereel,
           recordingStatus: RecordingStatus.finished,
           timeElapsedBeforePause: 0,
           timeResumed: 0

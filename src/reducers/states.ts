@@ -59,14 +59,14 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
 }
 
-export interface ISourcecastPlayback extends IWorkspaceState {
+export interface ISourcecast extends IWorkspaceState {
   readonly deltasToApply: IDelta[] | null;
   readonly playbackData: IPlaybackData;
   readonly playbackDuration: number;
   readonly playbackStatus: PlaybackStatus;
 }
 
-export interface ISourcecastRecording extends IWorkspaceState {
+export interface ISourcereel extends IWorkspaceState {
   readonly audioUrl: string;
   readonly playbackData: IPlaybackData;
   readonly recordingStatus: RecordingStatus;
@@ -78,8 +78,8 @@ export interface IWorkspaceManagerState {
   readonly assessment: IAssessmentWorkspace;
   readonly grading: IGradingWorkspace;
   readonly playground: IPlaygroundWorkspace;
-  readonly sourcecastPlayback: ISourcecastPlayback;
-  readonly sourcecastRecording: ISourcecastRecording;
+  readonly sourcecast: ISourcecast;
+  readonly sourcereel: ISourcereel;
 }
 
 export interface IWorkspaceState {
@@ -243,7 +243,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   editorPrepend: '',
   editorSessionId: '',
   editorValue:
-    workspaceLocation === WorkspaceLocations.playground || WorkspaceLocations.sourcecastPlayback
+    workspaceLocation === WorkspaceLocations.playground || WorkspaceLocations.sourcecast
       ? defaultEditorValue
       : '',
   editorPostpend: '',
@@ -290,15 +290,15 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
     playgroundExternal: ExternalLibraryNames.NONE
   },
-  sourcecastPlayback: {
-    ...createDefaultWorkspace(WorkspaceLocations.sourcecastPlayback),
+  sourcecast: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
     deltasToApply: null,
     playbackData: { init: '', data: [] },
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.notStarted
   },
-  sourcecastRecording: {
-    ...createDefaultWorkspace(WorkspaceLocations.sourcecastRecording),
+  sourcereel: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
     audioUrl: 'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3',
     playbackData: { init: '', data: [] },
     recordingStatus: RecordingStatus.notStarted,

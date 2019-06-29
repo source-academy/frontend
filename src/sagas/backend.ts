@@ -351,7 +351,7 @@ function* backendSaga(): SagaIterator {
     const resp = yield postSourcecast(audio, deltas, tokens);
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000);
-      yield history.push('/sourcecastPlayback');
+      yield history.push('/sourcecast');
     } else if (resp !== null) {
       let errorMessage: string;
       switch (resp.status) {

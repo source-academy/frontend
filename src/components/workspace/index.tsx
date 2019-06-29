@@ -2,12 +2,12 @@ import Resizable, { ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 import { Prompt } from 'react-router';
 
-import SourcecastPlaybackControlbar, {
-  ISourcecastPlaybackControlbarProps
-} from '../sourcecast/SourcecastPlaybackControlbar';
-import SourcecastRecordingControlbar, {
-  ISourcecastRecordingControlbarProps
-} from '../sourcecast/SourcecastRecordingControlbar';
+import SourcecastControlbar, {
+  ISourcecastControlbarProps
+} from '../sourcecast/SourcecastControlbar';
+import SourcereelControlbar, {
+  ISourcereelControlbarProps
+} from '../sourcecast/SourcereelControlbar';
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';
@@ -28,8 +28,8 @@ export type WorkspaceProps = {
   replProps: IReplProps;
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
-  sourcecastPlaybackControlbarProps?: ISourcecastPlaybackControlbarProps;
-  sourcecastRecordingControlbarProps?: ISourcecastRecordingControlbarProps;
+  sourcecastControlbarProps?: ISourcecastControlbarProps;
+  sourcereelControlbarProps?: ISourcereelControlbarProps;
 };
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
@@ -57,11 +57,11 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   public render() {
     return (
       <div className="workspace">
-        {this.props.sourcecastPlaybackControlbarProps ? (
-          <SourcecastPlaybackControlbar {...this.props.sourcecastPlaybackControlbarProps} />
+        {this.props.sourcecastControlbarProps ? (
+          <SourcecastControlbar {...this.props.sourcecastControlbarProps} />
         ) : null}
-        {this.props.sourcecastRecordingControlbarProps ? (
-          <SourcecastRecordingControlbar {...this.props.sourcecastRecordingControlbarProps} />
+        {this.props.sourcereelControlbarProps ? (
+          <SourcereelControlbar {...this.props.sourcereelControlbarProps} />
         ) : null}
         {this.props.hasUnsavedChanges ? (
           <Prompt

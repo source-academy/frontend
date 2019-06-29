@@ -24,8 +24,8 @@ export enum WorkspaceLocations {
   assessment = 'assessment',
   playground = 'playground',
   grading = 'grading',
-  sourcecastPlayback = 'sourcecastPlayback',
-  sourcecastRecording = 'sourcecastRecording'
+  sourcecast = 'sourcecast',
+  sourcereel = 'sourcereel'
 }
 
 export type WorkspaceLocation = keyof typeof WorkspaceLocations;
@@ -295,7 +295,7 @@ export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-// SOURCECAST PLAYBACK
+// SOURCECAST
 export const loadPlaybackData = (playbackData: IPlaybackData) => ({
   type: actionTypes.LOAD_PLAYBACK_DATA,
   payload: {
@@ -318,16 +318,14 @@ export const setDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: IDe
   }
 });
 
-export const setSourcecastPlaybackDuration: ActionCreator<actionTypes.IAction> = (
-  duration: number
-) => ({
+export const setSourcecastDuration: ActionCreator<actionTypes.IAction> = (duration: number) => ({
   type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
   payload: {
     duration
   }
 });
 
-export const setSourcecastPlaybackStatus: ActionCreator<actionTypes.IAction> = (
+export const setSourcecastStatus: ActionCreator<actionTypes.IAction> = (
   playbackStatus: PlaybackStatus
 ) => ({
   type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,
@@ -336,7 +334,7 @@ export const setSourcecastPlaybackStatus: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-// SOURCECAST RECORDING
+// SOURCEREEL
 export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
   time: number,
   delta: IDelta

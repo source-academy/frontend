@@ -6,13 +6,13 @@ import * as React from 'react';
 import { controlButton } from '../commons';
 import { IDelta, IPlaybackData, PlaybackStatus } from './sourcecastShape';
 
-class SourcecastPlaybackControlbar extends React.PureComponent<
-  ISourcecastPlaybackControlbarProps,
-  ISourcecastPlaybackControlbarState
+class SourcecastControlbar extends React.PureComponent<
+  ISourcecastControlbarProps,
+  ISourcecastControlbarState
 > {
   private audio: React.RefObject<HTMLAudioElement>;
 
-  constructor(props: ISourcecastPlaybackControlbarProps) {
+  constructor(props: ISourcecastControlbarProps) {
     super(props);
     this.audio = React.createRef();
     this.state = {
@@ -68,7 +68,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
   };
 
   private handleAudioLoaded = () => {
-    this.props.handleSetSourcecastPlaybackDuration(this.audio.current!.duration);
+    this.props.handleSetSourcecastDuration(this.audio.current!.duration);
   };
 
   private applyDeltas = (deltas: IDelta[]) => {
@@ -132,7 +132,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     audio!.play();
     this.props.handleSetEditorReadonly(true);
     this.props.handleEditorValueChange(this.props.playbackData.init);
-    this.props.handleSetSourcecastPlaybackStatus(PlaybackStatus.playing);
+    this.props.handleSetSourcecastStatus(PlaybackStatus.playing);
     this.applyPlaybackDataFromStart(this.props.playbackData);
   };
 
@@ -140,7 +140,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     const audio = this.audio.current;
     audio!.pause();
     this.props.handleSetEditorReadonly(false);
-    this.props.handleSetSourcecastPlaybackStatus(PlaybackStatus.paused);
+    this.props.handleSetSourcecastStatus(PlaybackStatus.paused);
     this.stopCurrentPlayback();
   };
 
@@ -148,7 +148,7 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
     const audio = this.audio.current;
     audio!.play();
     this.props.handleSetEditorReadonly(true);
-    this.props.handleSetSourcecastPlaybackStatus(PlaybackStatus.playing);
+    this.props.handleSetSourcecastStatus(PlaybackStatus.playing);
     this.stopPreviousPlaybackAndApplyFromStart(this.props.playbackData);
   };
 
@@ -182,23 +182,23 @@ class SourcecastPlaybackControlbar extends React.PureComponent<
   };
 }
 
-export interface ISourcecastPlaybackControlbarProps {
+export interface ISourcecastControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
   handleSetDeltasToApply: (deltas: IDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
-  handleSetSourcecastPlaybackDuration: (duration: number) => void;
-  handleSetSourcecastPlaybackStatus: (playbackStatus: PlaybackStatus) => void;
+  handleSetSourcecastDuration: (duration: number) => void;
+  handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
   audioUrl: string;
   duration: number;
   playbackData: IPlaybackData;
   playbackStatus: PlaybackStatus;
 }
 
-export interface ISourcecastPlaybackControlbarState {
+export interface ISourcecastControlbarState {
   currentDeltaRevision: number;
   currentPlayerTime: number;
   currentPlayerProgress: number;
   duration: number;
 }
 
-export default SourcecastPlaybackControlbar;
+export default SourcecastControlbar;

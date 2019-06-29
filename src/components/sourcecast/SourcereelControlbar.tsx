@@ -7,14 +7,14 @@ import { controlButton } from '../commons';
 import { IPlaybackData, RecordingStatus } from './sourcecastShape';
 import { Recorder } from './util';
 
-class SourcecastRecordingControlbar extends React.PureComponent<
-  ISourcecastRecordingControlbarProps,
-  ISourcecastRecordingControlbarState
+class SourcereelControlbar extends React.PureComponent<
+  ISourcereelControlbarProps,
+  ISourcereelControlbarState
 > {
   private recorder: any;
   private audioContext: AudioContext;
 
-  constructor(props: ISourcecastRecordingControlbarProps) {
+  constructor(props: ISourcereelControlbarProps) {
     super(props);
     this.state = {
       duration: 0,
@@ -188,7 +188,7 @@ class SourcecastRecordingControlbar extends React.PureComponent<
   };
 }
 
-export interface ISourcecastRecordingControlbarProps {
+export interface ISourcereelControlbarProps {
   handleRecordAudioUrl: (audioUrl: string) => void;
   handleRecordEditorInitValue: (editorValue: string) => void;
   handleSavePlaybackData: (audio: Blob, playbackData: string) => void;
@@ -204,10 +204,10 @@ export interface ISourcecastRecordingControlbarProps {
   recordingStatus: RecordingStatus;
 }
 
-export interface ISourcecastRecordingControlbarState {
+export interface ISourcereelControlbarState {
   duration: number;
   fileDataBlob?: Blob;
   updater?: NodeJS.Timeout;
 }
 
-export default SourcecastRecordingControlbar;
+export default SourcereelControlbar;

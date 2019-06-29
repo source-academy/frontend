@@ -11,9 +11,9 @@ import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import { IDelta, IPlaybackData, PlaybackStatus } from './sourcecastShape';
 
-const INTRODUCTION = 'Welcome to Source Cast Playback!';
+const INTRODUCTION = 'Welcome to Source Cast!';
 
-export interface ISourcecastPlaybackProps extends IDispatchProps, IStateProps {}
+export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
@@ -65,15 +65,15 @@ export interface IDispatchProps {
   handleSetDeltasToApply: (delta: IDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
-  handleSetSourcecastPlaybackDuration: (duration: number) => void;
-  handleSetSourcecastPlaybackStatus: (PlaybackStatus: PlaybackStatus) => void;
+  handleSetSourcecastDuration: (duration: number) => void;
+  handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
 }
 
-class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
-  constructor(props: ISourcecastPlaybackProps) {
+class Sourcecast extends React.Component<ISourcecastProps> {
+  constructor(props: ISourcecastProps) {
     super(props);
   }
 
@@ -142,14 +142,14 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [sourcecastPlaybackIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
+        tabs: [sourcecastIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
       },
-      sourcecastPlaybackControlbarProps: {
+      sourcecastControlbarProps: {
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleSetDeltasToApply: this.props.handleSetDeltasToApply,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
-        handleSetSourcecastPlaybackDuration: this.props.handleSetSourcecastPlaybackDuration,
-        handleSetSourcecastPlaybackStatus: this.props.handleSetSourcecastPlaybackStatus,
+        handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
+        handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
         audioUrl: this.props.audioUrl,
         duration: this.props.playbackDuration,
         playbackData: this.props.playbackData,
@@ -157,14 +157,14 @@ class SourcecastPlayback extends React.Component<ISourcecastPlaybackProps> {
       }
     };
     return (
-      <div className={'SourcecastPlayback pt-dark'}>
+      <div className={'Sourcecast pt-dark'}>
         <Workspace {...workspaceProps} />
       </div>
     );
   }
 }
 
-const sourcecastPlaybackIntroductionTab: SideContentTab = {
+const sourcecastIntroductionTab: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
   body: <Markdown content={INTRODUCTION} />
@@ -188,4 +188,4 @@ const envVisualizerTab: SideContentTab = {
   body: <EnvVisualizer />
 };
 
-export default SourcecastPlayback;
+export default Sourcecast;

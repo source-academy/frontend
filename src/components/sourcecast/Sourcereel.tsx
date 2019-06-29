@@ -13,7 +13,7 @@ import { IDelta, IPlaybackData, RecordingStatus } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast Recording!';
 
-export interface ISourcecastRecordingProps extends IDispatchProps, IStateProps {}
+export interface ISourcereelProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
@@ -77,8 +77,8 @@ export interface IDispatchProps {
   handleToggleEditorAutorun: () => void;
 }
 
-class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
-  constructor(props: ISourcecastRecordingProps) {
+class Sourcereel extends React.Component<ISourcereelProps> {
+  constructor(props: ISourcereelProps) {
     super(props);
   }
 
@@ -148,14 +148,9 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [
-          sourcecastRecordingIntroductionTab,
-          listVisualizerTab,
-          inspectorTab,
-          envVisualizerTab
-        ]
+        tabs: [sourcereelIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
       },
-      sourcecastRecordingControlbarProps: {
+      sourcereelControlbarProps: {
         editorValue: this.props.editorValue,
         getTimerDuration: this.getTimerDuration,
         playbackData: this.props.playbackData,
@@ -172,7 +167,7 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
       }
     };
     return (
-      <div className={'SourcecastRecording pt-dark'}>
+      <div className={'Sourcereel pt-dark'}>
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -182,7 +177,7 @@ class SourcecastRecording extends React.Component<ISourcecastRecordingProps> {
     this.props.timeElapsedBeforePause + Date.now() - this.props.timeResumed;
 }
 
-const sourcecastRecordingIntroductionTab: SideContentTab = {
+const sourcereelIntroductionTab: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
   body: <Markdown content={INTRODUCTION} />
@@ -206,4 +201,4 @@ const envVisualizerTab: SideContentTab = {
   body: <EnvVisualizer />
 };
 
-export default SourcecastRecording;
+export default Sourcereel;

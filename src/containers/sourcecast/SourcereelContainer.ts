@@ -1,7 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { PlaybackStatus } from 'src/components/sourcecast/sourcecastShape';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -20,50 +19,54 @@ import {
   generateLzString,
   invalidEditorSessionId,
   playgroundExternalSelect,
-  setDeltasToApply,
+  recordAudioUrl,
+  recordEditorDelta,
+  recordEditorInitValue,
+  savePlaybackData,
   setEditorBreakpoint,
   setEditorReadonly,
   setEditorSessionId,
-  setSourcecastPlaybackDuration,
-  setSourcecastPlaybackStatus,
   setWebsocketStatus,
+  timerPause,
+  timerReset,
+  timerResume,
+  timerStart,
+  timerStop,
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
 import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
-import { IDispatchProps, IStateProps } from '../../components/sourcecast/SourcecastPlayback';
-import SourcecastPlayback from '../../components/sourcecast/SourcecastPlayback';
+import Sourcereel, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcereel';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  activeTab: state.workspaces.sourcecastPlayback.sideContentActiveTab,
-  audioUrl: state.workspaces.sourcecastRecording.audioUrl,
-  deltasToApply: state.workspaces.sourcecastPlayback.deltasToApply,
-  editorReadonly: state.workspaces.sourcecastPlayback.editorReadonly,
-  editorSessionId: state.workspaces.sourcecastPlayback.editorSessionId,
-  editorWidth: state.workspaces.sourcecastPlayback.editorWidth,
-  editorValue: state.workspaces.sourcecastPlayback.editorValue!,
-  isEditorAutorun: state.workspaces.sourcecastPlayback.isEditorAutorun,
-  breakpoints: state.workspaces.sourcecastPlayback.breakpoints,
-  highlightedLines: state.workspaces.sourcecastPlayback.highlightedLines,
-  isRunning: state.workspaces.sourcecastPlayback.isRunning,
-  isDebugging: state.workspaces.sourcecastPlayback.isDebugging,
-  enableDebugging: state.workspaces.sourcecastPlayback.enableDebugging,
-  output: state.workspaces.sourcecastPlayback.output,
-  playbackDuration: state.workspaces.sourcecastPlayback.playbackDuration,
-  playbackData: state.workspaces.sourcecastRecording.playbackData,
-  playbackStatus: state.workspaces.sourcecastPlayback.playbackStatus,
+  activeTab: state.workspaces.sourcereel.sideContentActiveTab,
+  breakpoints: state.workspaces.sourcereel.breakpoints,
+  editorSessionId: state.workspaces.sourcereel.editorSessionId,
+  editorReadonly: state.workspaces.sourcereel.editorReadonly,
+  editorValue: state.workspaces.sourcereel.editorValue!,
+  editorWidth: state.workspaces.sourcereel.editorWidth,
+  enableDebugging: state.workspaces.sourcereel.enableDebugging,
+  externalLibraryName: state.workspaces.playground.playgroundExternal,
+  highlightedLines: state.workspaces.sourcereel.highlightedLines,
+  isDebugging: state.workspaces.sourcereel.isDebugging,
+  isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
+  isRunning: state.workspaces.sourcereel.isRunning,
+  output: state.workspaces.sourcereel.output,
+  playbackData: state.workspaces.sourcereel.playbackData,
   queryString: state.playground.queryString,
-  replValue: state.workspaces.sourcecastPlayback.replValue,
-  sideContentHeight: state.workspaces.sourcecastPlayback.sideContentHeight,
-  sourceChapter: state.workspaces.sourcecastPlayback.context.chapter,
-  websocketStatus: state.workspaces.playground.websocketStatus,
-  externalLibraryName: state.workspaces.playground.playgroundExternal
+  recordingStatus: state.workspaces.sourcereel.recordingStatus,
+  replValue: state.workspaces.sourcereel.replValue,
+  sideContentHeight: state.workspaces.sourcereel.sideContentHeight,
+  sourceChapter: state.workspaces.sourcereel.context.chapter,
+  timeElapsedBeforePause: state.workspaces.sourcereel.timeElapsedBeforePause,
+  timeResumed: state.workspaces.sourcereel.timeResumed,
+  websocketStatus: state.workspaces.playground.websocketStatus
 });
 
-const location: WorkspaceLocation = 'sourcecastPlayback';
+const location: WorkspaceLocation = 'sourcereel';
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -83,22 +86,26 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         playgroundExternalSelect(externalLibraryName, location),
+      handleRecordAudioUrl: recordAudioUrl,
+      handleRecordEditorDelta: recordEditorDelta,
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSetDeltasToApply: setDeltasToApply,
-      handleSetEditorReadonly: (editorReadonly: boolean) =>
-        setEditorReadonly(location, editorReadonly),
+      handleSavePlaybackData: (audio: Blob, playbackData: string) =>
+        savePlaybackData(audio, playbackData),
+      handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
-      handleSetSourcecastPlaybackDuration: (duration: number) =>
-        setSourcecastPlaybackDuration(duration),
-      handleSetSourcecastPlaybackStatus: (playbackStatus: PlaybackStatus) =>
-        setSourcecastPlaybackStatus(playbackStatus),
+      handleRecordEditorInitValue: (editorValue: string) => recordEditorInitValue(editorValue),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
+      handleTimerPause: timerPause,
+      handleTimerReset: timerReset,
+      handleTimerResume: timerResume,
+      handleTimerStart: timerStart,
+      handleTimerStop: timerStop,
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
       handleDebuggerPause: () => beginDebuggerPause(location),
       handleDebuggerResume: () => debuggerResume(location),
@@ -110,4 +117,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SourcecastPlayback);
+)(Sourcereel);

@@ -33,16 +33,16 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcecastPlayback\\" aria-current=\\"page\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcecast\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"music\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Sourcecast
       </div>
     </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcecastRecording\\" aria-current=\\"page\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcereel\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"mobile-video\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Recording
+        Sourcereel
       </div>
     </NavLink>
     <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
@@ -95,16 +95,16 @@ exports[`NavigationBar renders correctly with username 1`] = `
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcecastPlayback\\" aria-current=\\"page\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcecast\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"music\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Sourcecast
       </div>
     </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcecastRecording\\" aria-current=\\"page\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/sourcereel\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"mobile-video\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Recording
+        Sourcereel
       </div>
     </NavLink>
     <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
