@@ -1,3 +1,4 @@
+export * from './collabEditing';
 export * from './commons';
 export * from './game';
 export * from './interpreter';

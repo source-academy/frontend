@@ -1,5 +1,18 @@
 import { LINKS } from '../../../utils/constants';
 
+enum XMLHttpReadyState {
+  UNSENT = 0,
+  OPENED = 1,
+  HEADERS_RECEIVED = 2,
+  LOADING = 3,
+  DONE = 4
+}
+
+enum XMLHttpStatus {
+  OK = 200,
+  'Page not found' = 404
+}
+
 export function checkSessionIdExists(
   sessionId: string,
   onSessionIdExists: () => void,
@@ -8,7 +21,7 @@ export function checkSessionIdExists(
 ) {
   const xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+    if (xmlhttp.readyState === XMLHttpReadyState.DONE && xmlhttp.status === XMLHttpStatus.OK) {
       // Successfully reached server to verify ID
       const state = JSON.parse(xmlhttp.responseText).state;
       if (state === true) {
@@ -17,7 +30,10 @@ export function checkSessionIdExists(
       } else {
         onSessionIdNotExist();
       }
-    } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
+    } else if (
+      xmlhttp.readyState === XMLHttpReadyState.DONE &&
+      xmlhttp.status !== XMLHttpStatus.OK
+    ) {
       // Cannot reach server
       onServerUnreachable();
     }
@@ -30,7 +46,7 @@ export function checkSessionIdExists(
 export function createNewSession(onSessionCreated: (sessionId: string) => void) {
   const xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+    if (xmlhttp.readyState === XMLHttpReadyState.DONE && xmlhttp.status === XMLHttpStatus.OK) {
       const id = JSON.parse(xmlhttp.responseText).id;
       onSessionCreated(id);
     }
@@ -41,22 +57,25 @@ export function createNewSession(onSessionCreated: (sessionId: string) => void) 
 
 export function checkConnnectionAlive(
   editorSessionId: string,
-  connectionOK: () => void,
-  sessionIdNotFound: () => void,
-  cannotReachServer: () => void
+  handleConnectionOK: () => void,
+  handleSessionIdNotFound: () => void,
+  handleCannotReachServer: () => void
 ) {
   const xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+    if (xmlhttp.readyState === XMLHttpReadyState.DONE && xmlhttp.status === XMLHttpStatus.OK) {
       const state = JSON.parse(xmlhttp.responseText).state;
       if (state !== true) {
         // ID does not exist
-        sessionIdNotFound();
+        handleSessionIdNotFound();
       } else {
-        connectionOK();
+        handleConnectionOK();
       }
-    } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
-      cannotReachServer();
+    } else if (
+      xmlhttp.readyState === XMLHttpReadyState.DONE &&
+      xmlhttp.status !== XMLHttpStatus.OK
+    ) {
+      handleCannotReachServer();
     }
   };
   xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/' + editorSessionId, true);
