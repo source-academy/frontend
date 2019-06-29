@@ -175,30 +175,11 @@ test('submitGrading generates correct action object', () => {
 
 test('unsubmitSubmission generates correct action object', () => {
   const submissionId = 10;
-  const overviews: IAssessmentOverview[] = [
-    {
-      category: 'Mission',
-      closeAt: 'test_string',
-      coverImage: 'test_string',
-      grade: 0,
-      id: 0,
-      maxGrade: 0,
-      maxXp: 0,
-      openAt: 'test_string',
-      title: 'test_string',
-      shortSummary: 'test_string',
-      status: 'not_attempted',
-      story: null,
-      xp: 0,
-      gradingStatus: 'none'
-    }
-  ];
-  const action = unsubmitSubmission(submissionId, overviews);
+  const action = unsubmitSubmission(submissionId);
   expect(action).toEqual({
     type: actionTypes.UNSUBMIT_SUBMISSION,
     payload: {
-      submissionId,
-      overviews
+      submissionId
     }
   });
 });

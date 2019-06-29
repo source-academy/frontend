@@ -207,14 +207,14 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const { submissionId, overviews } = (action as actionTypes.IAction).payload;
+    const { submissionId } = (action as actionTypes.IAction).payload;
+    const overviews = yield select((state: IState) => state.session.gradingOverviews || []);
     const resp: Response = yield postUnsubmit(submissionId, tokens);
     const newOverviews = (overviews as GradingOverview[]).map(overview => {
       if (overview.submissionId === submissionId) {
         return { ...overview, submissionStatus: 'attempted' };
-      } else {
-        return overview;
       }
+      return overview;
     });
 
     if (resp && resp.ok) {
