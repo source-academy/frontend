@@ -3,8 +3,8 @@ import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
-import { delay, SagaIterator } from 'redux-saga';
-import { call, put, race, select, take, takeEvery } from 'redux-saga/effects';
+import { SagaIterator } from 'redux-saga';
+import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
@@ -267,14 +267,14 @@ function* workspaceSaga(): SagaIterator {
         if ((window as any).getReadyWebGLForCanvas !== undefined) {
           break;
         }
-        yield call(delay, 250);
+        yield delay(250);
       }
       return true;
     }
     /** Create a race condition between the js files being loaded and a timeout. */
     const { loadedScripts, timeout } = yield race({
       loadedScripts: call(helper),
-      timeout: call(delay, 4000)
+      timeout: delay(4000)
     });
     if (timeout !== undefined && loadedScripts === undefined) {
       yield call(showWarningMessage, 'Error loading libraries', 750);
