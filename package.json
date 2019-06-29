@@ -6,23 +6,16 @@
     "format": "Format source code",
     "start": "Start the Webpack development server",
     "build": "Build production bundle",
-    "test": "Run unit tests",
-    "update-ui-snapshots": "Update UI test snapshots"
+    "test": "Run unit tests"
   },
   "scripts": {
     "build": "node-sass-chokidar src/ -o src/ && react-scripts-ts build",
-    "build-css": "node-sass-chokidar src/ -o src/",
-    "build-js": "react-scripts-ts build",
-    "coverage": "./scripts/coverage-fix.sh do && react-scripts-ts test --env=jsdom --coverage && ./scripts/coverage-fix.sh undo",
     "format": "prettier --write \"src/**/*.{ts,tsx}\" \"externalLibs/**/*.js\" \"!externalLibs/assert_compiled.js\" && prettier --write --parser scss \"src/**/*.scss\"",
-    "format:tsx": "prettier --list-different \"src/**/*.{ts,tsx}\"",
-    "format:scss": "prettier --list-different --parser scss \"src/**/*.scss\"",
-    "format:ci": "npm run format:tsx && npm run format:scss",
+    "format:ci": "prettier --list-different \"src/**/*.{ts,tsx}\" && prettier --list-different --parser scss \"src/**/*.scss\"",
     "start-js": "cross-env BROWSER=none PORT=8075 react-scripts-ts start",
     "start": "npm-run-all -p watch-css start-js",
     "test": "react-scripts-ts test --env=jsdom",
-    "test-coveralls": "./scripts/coverage-fix.sh do && react-scripts-ts test --env=jsdom --coverage --coverageReporters=text-lcov | coveralls",
-    "update-ui-snapshots": "jest --updateSnapshot",
+    "test-coveralls": "react-scripts-ts test --env=jsdom --coverage --coverageReporters=text-lcov | coveralls",
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "tslint": "tslint -p .",
     "cors-proxy": "lcp --proxyUrl http://localhost:4000 --port 4001 --proxyPartial \"\""

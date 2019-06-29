@@ -7,25 +7,22 @@ main() {
     echo "  If you cancel this pre-push hook, use \`git stash pop\` to retrieve your"
     echo "  unstaged changes."
 
-    prettier_ts="npm run format:tsx"
-    prettier_scss="npm run format:scss"
+    prettier="npm run format:ci"
     jest_ts="npm test"
 
-    run_cmd "${prettier_ts}"; prettier_ts_exit=$?
-    run_cmd "${prettier_scss}"; prettier_scss_exit=$?
+    run_cmd "${prettier}"; prettier_exit=$?
     run_cmd_jest "${jest_ts}"; jest_ts_exit=$?
 
     run_cmd "git stash pop"
 
     ( >&2
         echo -ne "\033[0;31m"
-        [ "${prettier_ts_exit}" -eq "0" ] || echo "Prettier failed for *.{ts,tsx}"
-        [ "${prettier_scss_exit}" -eq "0" ] || echo "Prettier failed for *.scss"
+        [ "${prettier_exit}" -eq "0" ] || echo "Prettier failed"
         [ "${jest_ts_exit}" -eq "0" ] || echo "Jest failed"
         echo -ne "\033[0m"
     )
 
-    [[ $(( prettier_ts_exit + prettier_scss_exit + jest_ts_exit )) -eq "0" ]]
+    [[ $(( prettier_exit + jest_ts_exit )) -eq "0" ]]
 }
 
 run_cmd() {
