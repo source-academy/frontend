@@ -18,6 +18,7 @@ import {
   EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
   EVAL_TESTCASE,
+  EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
@@ -38,6 +39,7 @@ import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces'
 import { ITestcase, Library } from '../../components/assessment/assessmentShape';
 import { createContext } from '../../utils/slangHelper';
 import {
+  CodeOutput,
   createDefaultWorkspace,
   defaultWorkspaceManager,
   InterpreterOutput,
@@ -497,7 +499,7 @@ test('EVAL_EDITOR works correctly', () => {
 });
 
 // Test data for EVAL_INTERPRETER_ERROR, EVAL_INTERPRETER_SUCCESS, EVAL_TESTCASE_SUCCESS and HANDLE_CONSOLE_OUTPUT
-const outputWithRunningTasks: RunningOutput[] = [
+const outputWithRunningOutput: RunningOutput[] = [
   {
     type: 'running',
     consoleLogs: ['console-log-test']
@@ -508,7 +510,7 @@ const outputWithRunningTasks: RunningOutput[] = [
   }
 ];
 
-const outputWithRunningAndOtherTasks: InterpreterOutput[] = [
+const outputWithRunningAndCodeOutput: InterpreterOutput[] = [
   {
     type: 'running',
     consoleLogs: ['console-log-test']
@@ -524,7 +526,7 @@ test('EVAL_INTERPRETER_ERROR works correctly with RunningOutput', () => {
   const isDebugging = true;
 
   const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-    output: outputWithRunningTasks,
+    output: outputWithRunningOutput,
     isRunning,
     isDebugging
   });
@@ -541,7 +543,7 @@ test('EVAL_INTERPRETER_ERROR works correctly with RunningOutput', () => {
         isDebugging: false,
         output: [
           {
-            ...outputWithRunningTasks[0]
+            ...outputWithRunningOutput[0]
           },
           {
             workspaceLocation: undefined,
@@ -557,7 +559,7 @@ test('EVAL_INTERPRETER_ERROR works correctly with other outputs', () => {
   const isRunning = true;
   const isDebugging = true;
   const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-    output: outputWithRunningAndOtherTasks,
+    output: outputWithRunningAndCodeOutput,
     isRunning,
     isDebugging
   });
@@ -575,10 +577,10 @@ test('EVAL_INTERPRETER_ERROR works correctly with other outputs', () => {
         isDebugging: false,
         output: [
           {
-            ...outputWithRunningAndOtherTasks[0]
+            ...outputWithRunningAndCodeOutput[0]
           },
           {
-            ...outputWithRunningAndOtherTasks[1]
+            ...outputWithRunningAndCodeOutput[1]
           },
           {
             workspaceLocation: undefined,
@@ -596,7 +598,7 @@ test('EVAL_INTERPRETER_SUCCESS works correctly with RunningOutput', () => {
   const highlightedLines = [[3], [5]];
 
   const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-    output: outputWithRunningTasks,
+    output: outputWithRunningOutput,
     isRunning,
     breakpoints,
     highlightedLines
@@ -616,7 +618,7 @@ test('EVAL_INTERPRETER_SUCCESS works correctly with RunningOutput', () => {
         highlightedLines: [],
         output: [
           {
-            ...outputWithRunningTasks[0]
+            ...outputWithRunningOutput[0]
           },
           {
             workspaceLocation: undefined,
@@ -634,7 +636,7 @@ test('EVAL_INTERPRETER_SUCCESS works correctly with other outputs', () => {
   const highlightedLines = [[3], [5]];
 
   const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-    output: outputWithRunningAndOtherTasks,
+    output: outputWithRunningAndCodeOutput,
     isRunning,
     breakpoints,
     highlightedLines
@@ -654,10 +656,10 @@ test('EVAL_INTERPRETER_SUCCESS works correctly with other outputs', () => {
         highlightedLines: [],
         output: [
           {
-            ...outputWithRunningAndOtherTasks[0]
+            ...outputWithRunningAndCodeOutput[0]
           },
           {
-            ...outputWithRunningAndOtherTasks[1]
+            ...outputWithRunningAndCodeOutput[1]
           },
           {
             workspaceLocation: undefined,
@@ -701,29 +703,98 @@ test('EVAL_TESTCASE works correctly', () => {
   });
 });
 
+test('EVAL_TESTCASE_FAILURE works correctly', () => {
+  const editorTestcases: ITestcase[] = [
+    {
+      answer: 'abc',
+      score: 10,
+      program: 'test program'
+    },
+    {
+      answer: 'def',
+      score: 20,
+      program: 'another program'
+    }
+  ];
+  const value = 'test-value-failure';
+  const evalFailureDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    editorTestcases
+  });
+
+  const actions: IAction[] = generateActions(EVAL_TESTCASE_FAILURE, {
+    value,
+    index: 1
+  });
+  const arrCopy = JSON.parse(JSON.stringify(editorTestcases));
+
+  actions.forEach(action => {
+    const result = reducer(evalFailureDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...evalFailureDefaultState,
+      [location]: {
+        ...evalFailureDefaultState[location],
+        editorTestcases: [
+          {
+            ...arrCopy[0]
+          },
+          {
+            ...arrCopy[1],
+            result: value
+          }
+        ]
+      }
+    });
+  });
+});
+
 // Test data for EVAL_TESTCASE_SUCCESS
-const editorTestcases: ITestcase[] = [
+const outputWithCodeAndRunningOutput: InterpreterOutput[] = [
   {
-    answer: 'abc',
-    score: 10,
-    program: 'test program'
+    type: 'code',
+    value: 'sample code'
   },
   {
-    answer: 'def',
-    score: 20,
-    program: 'another program'
+    type: 'running',
+    consoleLogs: ['console-log-test']
   }
 ];
 
-test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput', () => {
+const outputWithCodeOutput: CodeOutput[] = [
+  {
+    type: 'code',
+    value: 'code 1'
+  },
+  {
+    type: 'code',
+    value: 'code 2'
+  }
+];
+
+test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput and CodeOutput', () => {
+  const editorTestcases: ITestcase[] = [
+    {
+      answer: 'abc',
+      score: 10,
+      program: 'test program'
+    },
+    {
+      answer: 'def',
+      score: 20,
+      program: 'another program'
+    }
+  ];
   const isRunning = true;
   const testcaseSuccessDefaultState = generateDefaultWorkspace({
-    output: outputWithRunningTasks,
+    output: outputWithCodeAndRunningOutput,
     isRunning,
     editorTestcases
   });
 
-  const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, { index: 1 });
+  const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
+    index: 1
+  });
+  const arrCopy = JSON.parse(JSON.stringify(editorTestcases));
 
   actions.forEach(action => {
     const result = reducer(testcaseSuccessDefaultState, action);
@@ -733,16 +804,14 @@ test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput', () => {
       [location]: {
         ...testcaseSuccessDefaultState[location],
         isRunning: false,
-        output: outputWithRunningTasks,
+        output: outputWithCodeAndRunningOutput,
         editorTestcases: [
           {
-            ...editorTestcases[0]
+            ...arrCopy[0]
           },
           {
-            ...editorTestcases[1],
-            actual: {
-              ...outputWithRunningTasks[0]
-            }
+            ...arrCopy[1],
+            result: (outputWithCodeAndRunningOutput[0] as CodeOutput).value
           }
         ]
       }
@@ -751,14 +820,29 @@ test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput', () => {
 });
 
 test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
+  const editorTestcases: ITestcase[] = [
+    {
+      answer: 'abc',
+      score: 10,
+      program: 'test program'
+    },
+    {
+      answer: 'def',
+      score: 20,
+      program: 'another program'
+    }
+  ];
   const isRunning = true;
   const testcaseSuccessDefaultState = generateDefaultWorkspace({
-    output: outputWithRunningAndOtherTasks,
+    output: outputWithCodeOutput,
     isRunning,
     editorTestcases
   });
 
-  const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, { index: 0 });
+  const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
+    index: 0
+  });
+  const arrCopy = JSON.parse(JSON.stringify(editorTestcases));
 
   actions.forEach(action => {
     const result = reducer(testcaseSuccessDefaultState, action);
@@ -768,16 +852,14 @@ test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
       [location]: {
         ...testcaseSuccessDefaultState[location],
         isRunning: false,
-        output: outputWithRunningAndOtherTasks,
+        output: outputWithCodeOutput,
         editorTestcases: [
           {
-            ...editorTestcases[0],
-            actual: {
-              ...outputWithRunningAndOtherTasks[0]
-            }
+            ...arrCopy[0],
+            result: outputWithCodeOutput[0].value
           },
           {
-            ...editorTestcases[1]
+            ...arrCopy[1]
           }
         ]
       }
@@ -787,7 +869,7 @@ test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
 
 test('HANDLE_CONSOLE_LOG works correctly with RunningOutput', () => {
   const logString = 'test-log-string';
-  const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningTasks });
+  const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningOutput });
   const actions: IAction[] = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
   actions.forEach(action => {
@@ -799,11 +881,11 @@ test('HANDLE_CONSOLE_LOG works correctly with RunningOutput', () => {
         ...consoleLogDefaultState[location],
         output: [
           {
-            ...outputWithRunningTasks[0]
+            ...outputWithRunningOutput[0]
           },
           {
-            ...outputWithRunningTasks[1],
-            consoleLogs: outputWithRunningTasks[1].consoleLogs.concat(logString)
+            ...outputWithRunningOutput[1],
+            consoleLogs: outputWithRunningOutput[1].consoleLogs.concat(logString)
           }
         ]
       }
@@ -814,7 +896,7 @@ test('HANDLE_CONSOLE_LOG works correctly with RunningOutput', () => {
 test('HANDLE_CONSOLE_LOG works correctly with other output', () => {
   const logString = 'test-log-string-2';
   const consoleLogDefaultState = generateDefaultWorkspace({
-    output: outputWithRunningAndOtherTasks
+    output: outputWithRunningAndCodeOutput
   });
   const actions: IAction[] = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
@@ -825,7 +907,7 @@ test('HANDLE_CONSOLE_LOG works correctly with other output', () => {
       ...consoleLogDefaultState,
       [location]: {
         ...consoleLogDefaultState[location],
-        output: outputWithRunningAndOtherTasks.concat({
+        output: outputWithRunningAndCodeOutput.concat({
           type: 'running',
           consoleLogs: [logString]
         })
