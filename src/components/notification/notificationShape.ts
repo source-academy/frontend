@@ -4,15 +4,15 @@ export interface AcademyNotification {
     question_id?: number;
     read: boolean;
     submission_id?: number;
-    type: NotificationType;
+    type: AcademyNotificationType;
 }
 
-export enum AcademyNotificationTypes {
+enum AcademyNotificationTypes {
     new = 'new',
     deadline = 'deadline',
     autograded = 'autograded',
-    manually_graded = 'manually_graded',
+    graded = 'graded',
     submitted = 'submitted'
   }
 
-export type AcademyNotificationType = keyof typeof AcademyNotificationTypes;
+type AcademyNotificationType = keyof typeof AcademyNotificationTypes;
