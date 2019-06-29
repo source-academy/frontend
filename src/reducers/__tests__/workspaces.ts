@@ -687,68 +687,7 @@ test('EVAL_REPL works correctly', () => {
   });
 });
 
-test('EVAL_TESTCASE works correctly', () => {
-  const actions: IAction[] = generateActions(EVAL_TESTCASE);
-
-  actions.forEach(action => {
-    const result = reducer(defaultWorkspaceManager, action);
-    const location = action.payload.workspaceLocation;
-    expect(result).toEqual({
-      ...defaultWorkspaceManager,
-      [location]: {
-        ...defaultWorkspaceManager[location],
-        isRunning: true
-      }
-    });
-  });
-});
-
-test('EVAL_TESTCASE_FAILURE works correctly', () => {
-  const editorTestcases: ITestcase[] = [
-    {
-      answer: 'abc',
-      score: 10,
-      program: 'test program'
-    },
-    {
-      answer: 'def',
-      score: 20,
-      program: 'another program'
-    }
-  ];
-  const value = 'test-value-failure';
-  const evalFailureDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-    editorTestcases
-  });
-
-  const actions: IAction[] = generateActions(EVAL_TESTCASE_FAILURE, {
-    value,
-    index: 1
-  });
-  const arrCopy = JSON.parse(JSON.stringify(editorTestcases));
-
-  actions.forEach(action => {
-    const result = reducer(evalFailureDefaultState, action);
-    const location = action.payload.workspaceLocation;
-    expect(result).toEqual({
-      ...evalFailureDefaultState,
-      [location]: {
-        ...evalFailureDefaultState[location],
-        editorTestcases: [
-          {
-            ...arrCopy[0]
-          },
-          {
-            ...arrCopy[1],
-            result: value
-          }
-        ]
-      }
-    });
-  });
-});
-
-// Test data for EVAL_TESTCASE_SUCCESS
+// Test data for EVAL_TESTCASE, EVAL_TESTCASE_FAILURE, EVAL_TESTCASE_SUCCESS
 const outputWithCodeAndRunningOutput: InterpreterOutput[] = [
   {
     type: 'code',
@@ -771,19 +710,79 @@ const outputWithCodeOutput: CodeOutput[] = [
   }
 ];
 
+const editorTestcases: ITestcase[] = [
+  {
+    answer: 'abc',
+    score: 10,
+    program: 'test program'
+  },
+  {
+    answer: 'def',
+    score: 20,
+    program: 'another program'
+  }
+];
+
+test('EVAL_TESTCASE works correctly', () => {
+  const evalTestcaseDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    editorTestcases
+  });
+  const actions: IAction[] = generateActions(EVAL_TESTCASE, { testcaseId: 1 });
+
+  actions.forEach(action => {
+    const result = reducer(evalTestcaseDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...evalTestcaseDefaultState,
+      [location]: {
+        ...evalTestcaseDefaultState[location],
+        isRunning: true,
+        editorTestcases: [
+          {
+            ...editorTestcases[0]
+          },
+          {
+            ...editorTestcases[1],
+            result: undefined
+          }
+        ]
+      }
+    });
+  });
+});
+
+test('EVAL_TESTCASE_FAILURE works correctly', () => {
+  const value = 'test-value-failure';
+  const evalFailureDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    editorTestcases
+  });
+  const actions: IAction[] = generateActions(EVAL_TESTCASE_FAILURE, {
+    value,
+    index: 1
+  });
+
+  actions.forEach(action => {
+    const result = reducer(evalFailureDefaultState, action);
+    const location = action.payload.workspaceLocation;
+    expect(result).toEqual({
+      ...evalFailureDefaultState,
+      [location]: {
+        ...evalFailureDefaultState[location],
+        editorTestcases: [
+          {
+            ...editorTestcases[0]
+          },
+          {
+            ...editorTestcases[1],
+            result: value
+          }
+        ]
+      }
+    });
+  });
+});
+
 test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput and CodeOutput', () => {
-  const editorTestcases: ITestcase[] = [
-    {
-      answer: 'abc',
-      score: 10,
-      program: 'test program'
-    },
-    {
-      answer: 'def',
-      score: 20,
-      program: 'another program'
-    }
-  ];
   const isRunning = true;
   const testcaseSuccessDefaultState = generateDefaultWorkspace({
     output: outputWithCodeAndRunningOutput,
@@ -794,7 +793,6 @@ test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput and CodeOutput', ()
   const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
     index: 1
   });
-  const arrCopy = JSON.parse(JSON.stringify(editorTestcases));
 
   actions.forEach(action => {
     const result = reducer(testcaseSuccessDefaultState, action);
@@ -807,10 +805,10 @@ test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput and CodeOutput', ()
         output: outputWithCodeAndRunningOutput,
         editorTestcases: [
           {
-            ...arrCopy[0]
+            ...editorTestcases[0]
           },
           {
-            ...arrCopy[1],
+            ...editorTestcases[1],
             result: (outputWithCodeAndRunningOutput[0] as CodeOutput).value
           }
         ]
@@ -820,18 +818,6 @@ test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput and CodeOutput', ()
 });
 
 test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
-  const editorTestcases: ITestcase[] = [
-    {
-      answer: 'abc',
-      score: 10,
-      program: 'test program'
-    },
-    {
-      answer: 'def',
-      score: 20,
-      program: 'another program'
-    }
-  ];
   const isRunning = true;
   const testcaseSuccessDefaultState = generateDefaultWorkspace({
     output: outputWithCodeOutput,
@@ -842,7 +828,6 @@ test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
   const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
     index: 0
   });
-  const arrCopy = JSON.parse(JSON.stringify(editorTestcases));
 
   actions.forEach(action => {
     const result = reducer(testcaseSuccessDefaultState, action);
@@ -855,11 +840,11 @@ test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
         output: outputWithCodeOutput,
         editorTestcases: [
           {
-            ...arrCopy[0],
+            ...editorTestcases[0],
             result: outputWithCodeOutput[0].value
           },
           {
-            ...arrCopy[1]
+            ...editorTestcases[1]
           }
         ]
       }

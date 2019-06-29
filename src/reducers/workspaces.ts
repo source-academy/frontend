@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Reducer } from 'redux';
 import { ITestcase } from 'src/components/assessment/assessmentShape';
 
@@ -339,6 +340,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
     case EVAL_TESTCASE_SUCCESS:
+      const testcaseSuccessCopy = cloneDeep(state[location].editorTestcases);
       lastOutput = state[location].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
         newOutput = state[location].output.slice(0, -1).concat({
@@ -357,7 +359,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
+          editorTestcases: testcaseSuccessCopy.map((testcase: ITestcase, i) => {
             if (i === action.payload.index) {
               testcase.result = (newOutput[0] as CodeOutput).value;
               return testcase;
@@ -369,11 +371,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
     case EVAL_TESTCASE_FAILURE:
+      const testcaseFailureCopy = cloneDeep(state[location].editorTestcases);
       return {
         ...state,
         [location]: {
           ...state[location],
-          editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
+          editorTestcases: testcaseFailureCopy.map((testcase: ITestcase, i: number) => {
             if (i === action.payload.index) {
               testcase.result = action.payload.value;
               return testcase;
