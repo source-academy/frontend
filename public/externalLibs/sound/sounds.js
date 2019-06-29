@@ -151,18 +151,29 @@ function get_duration(sound) {
     return tail(sound);
 }
 
+function is_sound(sound) {
+    return is_pair(sound) &&
+    ((typeof get_wave(sound)) === 'function') &&
+    ((typeof get_duration(sound)) === 'number');
+}
+
 // Keeps track of whether play() is currently running, and the current audio context.
 var _playing = false;
 var _player;
 
 function play(sound) {
-    // If a sound is already playing, terminate execution
-    if (_playing) return;
-    _playing = true;
-
+    // type-check sound
+    if ( !is_sound(sound) ) {
+	throw new Error("play is expecting sound, but encountered " + sound);
+    }	
+    
     // Declaring duration and wave variables
     var wave = get_wave(sound);
     var duration = get_duration(sound);
+
+    // If a sound is already playing, terminate execution
+    if (_playing) return;
+    _playing = true;
 
     // Create AudioContext (test this out might fix safari issue)
     //const AudioContext = window.AudioContext || window.webkitAudioContext;
