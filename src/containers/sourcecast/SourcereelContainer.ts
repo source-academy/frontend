@@ -96,7 +96,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
-      handleRecordEditorInitValue: (editorValue: string) => recordEditorInitValue(editorValue),
+      handleRecordEditorInitValue: recordEditorInitValue,
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>

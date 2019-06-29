@@ -9,7 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { IDelta, IPlaybackData, PlaybackStatus } from './sourcecastShape';
+import { ICodeDelta, IPlaybackData, PlaybackStatus } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast!';
 
@@ -18,7 +18,7 @@ export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 export interface IStateProps {
   activeTab: number;
   audioUrl: string;
-  deltasToApply: IDelta[] | null;
+  deltasToApply: ICodeDelta[] | null;
   editorReadonly: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -62,7 +62,7 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleSetDeltasToApply: (delta: IDelta[]) => void;
+  handleSetDeltasToApply: (delta: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetSourcecastDuration: (duration: number) => void;

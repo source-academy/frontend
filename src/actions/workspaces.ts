@@ -2,7 +2,8 @@ import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
 import {
-  IDelta,
+  ICodeDelta,
+  ICursorPosition,
   IPlaybackData,
   PlaybackStatus,
   RecordingType
@@ -310,7 +311,7 @@ export const recordAudioUrl: ActionCreator<actionTypes.IAction> = (audioUrl: str
   }
 });
 
-export const setDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: IDelta[]) => ({
+export const setDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: ICodeDelta[]) => ({
   type: actionTypes.SET_DELTAS_TO_APPLY,
   payload: {
     type: RecordingType.code,
@@ -336,12 +337,13 @@ export const setSourcecastStatus: ActionCreator<actionTypes.IAction> = (
 
 // SOURCEREEL
 export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
+  type: RecordingType,
   time: number,
-  delta: IDelta
+  delta: ICodeDelta | ICursorPosition
 ) => ({
   type: actionTypes.RECORD_EDITOR_DELTA,
   payload: {
-    type: RecordingType.code,
+    type,
     time,
     delta
   }
@@ -355,10 +357,14 @@ export const savePlaybackData = (audio: Blob, playbackData: string) => ({
   }
 });
 
-export const recordEditorInitValue: ActionCreator<actionTypes.IAction> = (editorValue: string) => ({
+export const recordEditorInitValue: ActionCreator<actionTypes.IAction> = (
+  editorValue: string,
+  cursorPosition: ICursorPosition
+) => ({
   type: actionTypes.RECORD_EDITOR_INIT_VALUE,
   payload: {
-    editorValue
+    editorValue,
+    cursorPosition
   }
 });
 

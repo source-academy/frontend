@@ -9,7 +9,7 @@ import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
 
 import { LINKS } from '../../utils/constants';
-import { IDelta } from '../sourcecast/sourcecastShape';
+import { ICodeDelta, RecordingType } from '../sourcecast/sourcecastShape';
 import { checkSessionIdExists } from './collabEditing/helper';
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -21,7 +21,7 @@ import { checkSessionIdExists } from './collabEditing/helper';
  */
 export interface IEditorProps {
   breakpoints: string[];
-  deltasToApply?: IDelta[] | null;
+  deltasToApply?: ICodeDelta[] | null;
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -36,7 +36,7 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
-  handleRecordEditorDelta?: (time: number, delta: IDelta) => void;
+  handleRecordEditorDelta?: (type: RecordingType, time: number, delta: ICodeDelta) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -44,21 +44,25 @@ export interface IEditorProps {
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
-  private onChangeMethod: (newCode: string, delta: IDelta) => void;
+  private onChangeMethod: (newCode: string, delta: ICodeDelta) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
 
   constructor(props: IEditorProps) {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
-    this.onChangeMethod = (newCode: string, delta: IDelta) => {
+    this.onChangeMethod = (newCode: string, delta: ICodeDelta) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
         this.props.handleUpdateHasUnsavedChanges(true);
       }
       this.props.handleEditorValueChange(newCode);
       if (this.props.isRecording) {
         console.log('Recording delta... ');
-        this.props.handleRecordEditorDelta!(this.props.getTimerDuration!(), delta);
+        this.props.handleRecordEditorDelta!(
+          RecordingType.code,
+          this.props.getTimerDuration!(),
+          delta
+        );
       }
     };
     this.onValidateMethod = (annotations: Annotation[]) => {

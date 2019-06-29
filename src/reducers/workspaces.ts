@@ -485,6 +485,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             data: [
               ...state.sourcereel.playbackData.data,
               {
+                type: action.payload.type,
                 time: action.payload.time,
                 delta: action.payload.delta
               }
@@ -558,7 +559,10 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state.sourcereel,
           playbackData: {
             ...state.sourcereel.playbackData,
-            init: action.payload.editorValue
+            init: {
+              editorValue: action.payload.editorValue,
+              cursorPosition: action.payload.cursorPosition
+            }
           }
         }
       };

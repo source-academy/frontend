@@ -4,7 +4,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { controlButton } from '../commons';
-import { IPlaybackData, RecordingStatus } from './sourcecastShape';
+import { ICursorPosition, IPlaybackData, RecordingStatus } from './sourcecastShape';
 import { Recorder } from './util';
 
 class SourcereelControlbar extends React.PureComponent<
@@ -105,7 +105,7 @@ class SourcereelControlbar extends React.PureComponent<
     console.log('Start recorder');
     const { handleRecordEditorInitValue, handleSetEditorReadonly, handleTimerStart } = this.props;
     console.log('Init value: ' + this.props.editorValue);
-    handleRecordEditorInitValue(this.props.editorValue);
+    handleRecordEditorInitValue(this.props.editorValue, { row: 0, column: 0 });
     handleSetEditorReadonly(false);
     handleTimerStart();
     const updater = setInterval(this.updateTimerDuration, 100);
@@ -190,7 +190,7 @@ class SourcereelControlbar extends React.PureComponent<
 
 export interface ISourcereelControlbarProps {
   handleRecordAudioUrl: (audioUrl: string) => void;
-  handleRecordEditorInitValue: (editorValue: string) => void;
+  handleRecordEditorInitValue: (editorValue: string, cursorPosition: ICursorPosition) => void;
   handleSavePlaybackData: (audio: Blob, playbackData: string) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;

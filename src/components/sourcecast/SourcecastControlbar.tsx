@@ -4,7 +4,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { controlButton } from '../commons';
-import { IDelta, IPlaybackData, PlaybackStatus } from './sourcecastShape';
+import { ICodeDelta, IPlaybackData, PlaybackStatus, RecordingType } from './sourcecastShape';
 
 class SourcecastControlbar extends React.PureComponent<
   ISourcecastControlbarProps,
@@ -71,7 +71,7 @@ class SourcecastControlbar extends React.PureComponent<
     this.props.handleSetSourcecastDuration(this.audio.current!.duration);
   };
 
-  private applyDeltas = (deltas: IDelta[]) => {
+  private applyDeltas = (deltas: ICodeDelta[]) => {
     this.props.handleSetDeltasToApply(deltas);
   };
 
@@ -88,10 +88,13 @@ class SourcecastControlbar extends React.PureComponent<
     const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
     const currentRevision = this.state.currentDeltaRevision;
     let currentTime = this.audio.current!.currentTime * 1000;
-    this.props.handleEditorValueChange(this.props.playbackData.init);
+    this.props.handleEditorValueChange(this.props.playbackData.init.editorValue);
     const deltasToApply = this.props.playbackData.data
-      .filter(deltaWithTime => deltaWithTime.time <= currentTime)
-      .map(deltaWithTime => deltaWithTime.delta);
+      .filter(
+        deltaWithTime =>
+          deltaWithTime.time <= currentTime && deltaWithTime.type === RecordingType.code
+      )
+      .map(deltaWithTime => deltaWithTime.delta as ICodeDelta);
     this.applyDeltas(deltasToApply);
 
     const data = this.props.playbackData.data.filter(
@@ -103,7 +106,7 @@ class SourcecastControlbar extends React.PureComponent<
       console.log('Revision ' + currentRevision + 'trying to apply');
       currentTime = this.audio.current!.currentTime * 1000;
       if (data[i].time < currentTime) {
-        this.applyDeltas([data[i].delta]);
+        this.applyDeltas([data[i].delta as ICodeDelta]);
         i++;
         continue;
       }
@@ -131,7 +134,7 @@ class SourcecastControlbar extends React.PureComponent<
     const audio = this.audio.current;
     audio!.play();
     this.props.handleSetEditorReadonly(true);
-    this.props.handleEditorValueChange(this.props.playbackData.init);
+    this.props.handleEditorValueChange(this.props.playbackData.init.editorValue);
     this.props.handleSetSourcecastStatus(PlaybackStatus.playing);
     this.applyPlaybackDataFromStart(this.props.playbackData);
   };
@@ -184,7 +187,7 @@ class SourcecastControlbar extends React.PureComponent<
 
 export interface ISourcecastControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
-  handleSetDeltasToApply: (deltas: IDelta[]) => void;
+  handleSetDeltasToApply: (deltas: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;

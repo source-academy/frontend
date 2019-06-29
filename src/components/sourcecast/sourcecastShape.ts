@@ -1,4 +1,5 @@
 export enum RecordingType {
+  cursorPosition = 'cursorPosition',
   code = 'code',
   run = 'run'
 }
@@ -17,7 +18,7 @@ export enum PlaybackStatus {
   finished = 'finished'
 }
 
-export interface IDelta {
+export interface ICodeDelta {
   start: {
     row: number;
     column: number;
@@ -30,10 +31,19 @@ export interface IDelta {
   lines: string[];
 }
 
+export interface ICursorPosition {
+  row: number;
+  column: number;
+}
+
 export interface IPlaybackData {
-  init: string;
+  init: {
+    editorValue: string;
+    cursorPosition: ICursorPosition;
+  };
   data: Array<{
+    type: RecordingType;
     time: number;
-    delta: IDelta;
+    delta: ICodeDelta | ICursorPosition;
   }>;
 }
