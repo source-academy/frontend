@@ -24,6 +24,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   accessToken: state.session.accessToken,
   role: state.session.role,
   name: state.session.name,
+  notifications: state.session.notifications,
   currentPlaygroundChapter: state.workspaces.playground.context.chapter,
   currentPlaygroundExternalLibrary: state.workspaces.playground.playgroundExternal
 });

@@ -31,7 +31,7 @@ const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?';
 
 export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
-    <AcademyNavigationBar role={props.role} />
+    <AcademyNavigationBar notifications={[]} role={props.role} />
     <Switch>
       <Route
         path={`/academy/${assessmentCategoryLink(

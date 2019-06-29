@@ -8,10 +8,14 @@ import { Role } from '../../reducers/states';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories } from '../assessment/assessmentShape';
 
+import { NotificationBadge } from '../notification/NotificationBadge';
+import { AcademyNotification } from '../notification/notificationShape';
+
 type NavigationBarProps = OwnProps;
 
 type OwnProps = {
   role: Role;
+  notifications: AcademyNotification[];
 };
 
 const NavigationBar: React.SFC<NavigationBarProps> = props => (
@@ -24,6 +28,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       >
         <Icon icon={IconNames.FLAME} />
         <div className="navbar-button-text hidden-xs">Missions</div>
+        <NotificationBadge notifications={props.notifications} />
       </NavLink>
 
       <NavLink
