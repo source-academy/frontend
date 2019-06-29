@@ -7,7 +7,7 @@ type OwnProps = {
 };
 
 export const NotificationBadge: React.SFC<OwnProps> = props => (
-  <Tooltip content="asdafasd">
+  <Tooltip content={makeNotificationTags(props.notifications)}>
     <Tag
       style={{
         padding: 0
@@ -18,4 +18,16 @@ export const NotificationBadge: React.SFC<OwnProps> = props => (
       {props.notifications.length}
     </Tag>
   </Tooltip>
+);
+
+const makeNotificationTags = (notifications: AcademyNotification[]) => (
+  <div>
+    {notifications.map(makeNotificationTag)}
+  </div>
+);
+
+const makeNotificationTag = (notification: AcademyNotification) => (
+  <Tag style={{padding: 0}}>
+    {notification.type}
+  </Tag>
 );
