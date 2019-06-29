@@ -1,12 +1,4 @@
-import {
-  Alert,
-  Colors,
-  FormGroup,
-  InputGroup,
-  Intent,
-  NonIdealState,
-  Spinner
-} from '@blueprintjs/core';
+import { Colors, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
@@ -25,6 +17,7 @@ import GradingHistory from './GradingHistory';
 import GradingNavLink from './GradingNavLink';
 import { GradingOverview } from './gradingShape';
 import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace';
+import UnsubmitCell from './UnsubmitCell';
 
 /**
  * Column Definitions are defined within the state, so that data
@@ -53,7 +46,7 @@ export interface IGradingWorkspaceParams {
 
 export interface IDispatchProps {
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
-  handleUnsubmitSubmission: (submissionId: number, overviews: GradingOverview[]) => void;
+  handleUnsubmitSubmission: (submissionId: number) => void;
 }
 
 export interface IStateProps {
@@ -145,7 +138,10 @@ class Grading extends React.Component<IGradingProps, State> {
           colId: 'Unsubmit',
           width: 110,
           field: '',
-          cellRendererFramework: this.unsubmitButton,
+          cellRendererFramework: UnsubmitCell,
+          cellRendererParams: {
+            handleUnsubmitSubmission: this.props.handleUnsubmitSubmission
+          },
           suppressSorting: true,
           suppressMovable: true,
           suppressMenu: true,
@@ -283,34 +279,6 @@ class Grading extends React.Component<IGradingProps, State> {
       return;
     }
     this.gridApi.exportDataAsCsv({ allColumns: true });
-  };
-
-  private handleUnsubmitAlertClose = () => this.setState({ unsubmitAlert: null });
-
-  private unsubmitButton = (props: GradingNavLinkProps) => {
-    const handleConfirmUnsubmit = () => {
-      this.props.handleUnsubmitSubmission(props.data.submissionId, this.props.gradingOverviews!);
-      this.setState({ unsubmitAlert: null });
-    };
-
-    const unsubmitAlert = (
-      <Alert
-        canEscapeKeyCancel={true}
-        canOutsideClickCancel={true}
-        cancelButtonText="Cancel"
-        className="unsubmit-alert alert"
-        intent={Intent.DANGER}
-        onConfirm={handleConfirmUnsubmit}
-        isOpen={true}
-        onCancel={this.handleUnsubmitAlertClose}
-      >
-        <p>Are you sure you want to unsubmit this submission?</p>
-      </Alert>
-    );
-
-    return controlButton('', IconNames.ARROW_LEFT, () => this.setState({ unsubmitAlert }), {
-      fullWidth: true
-    });
   };
 }
 
