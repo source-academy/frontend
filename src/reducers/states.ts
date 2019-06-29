@@ -1,6 +1,7 @@
 import { Context } from 'js-slang';
 import { SourceError } from 'js-slang/dist/types';
 
+import { AcademyNotification } from '../components/notification/notificationShape';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { Announcement } from '../components/Announcements';
@@ -101,6 +102,7 @@ export interface ISessionState {
   readonly story?: Story;
   readonly name?: string;
   readonly xp: number;
+  readonly notifications: AcademyNotification[];
 }
 
 type ReplHistory = {
@@ -286,7 +288,8 @@ export const defaultSession: ISessionState = {
   maxXp: 0,
   refreshToken: undefined,
   name: undefined,
-  xp: 0
+  xp: 0,
+  notifications: []
 };
 
 export const defaultState: IState = {
