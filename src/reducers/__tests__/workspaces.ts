@@ -497,7 +497,7 @@ test('EVAL_EDITOR works correctly', () => {
 });
 
 // Test data for EVAL_INTERPRETER_ERROR, EVAL_INTERPRETER_SUCCESS, EVAL_TESTCASE_SUCCESS and HANDLE_CONSOLE_OUTPUT
-const lastOutput1: RunningOutput[] = [
+const outputWithRunningTasks: RunningOutput[] = [
   {
     type: 'running',
     consoleLogs: ['console-log-test']
@@ -508,7 +508,7 @@ const lastOutput1: RunningOutput[] = [
   }
 ];
 
-const lastOutput2: InterpreterOutput[] = [
+const outputWithRunningAndOtherTasks: InterpreterOutput[] = [
   {
     type: 'running',
     consoleLogs: ['console-log-test']
@@ -524,7 +524,7 @@ test('EVAL_INTERPRETER_ERROR works correctly with RunningOutput', () => {
   const isDebugging = true;
 
   const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-    output: lastOutput1,
+    output: outputWithRunningTasks,
     isRunning,
     isDebugging
   });
@@ -541,7 +541,7 @@ test('EVAL_INTERPRETER_ERROR works correctly with RunningOutput', () => {
         isDebugging: false,
         output: [
           {
-            ...lastOutput1[0]
+            ...outputWithRunningTasks[0]
           },
           {
             workspaceLocation: undefined,
@@ -557,7 +557,7 @@ test('EVAL_INTERPRETER_ERROR works correctly with other outputs', () => {
   const isRunning = true;
   const isDebugging = true;
   const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-    output: lastOutput2,
+    output: outputWithRunningAndOtherTasks,
     isRunning,
     isDebugging
   });
@@ -575,10 +575,10 @@ test('EVAL_INTERPRETER_ERROR works correctly with other outputs', () => {
         isDebugging: false,
         output: [
           {
-            ...lastOutput2[0]
+            ...outputWithRunningAndOtherTasks[0]
           },
           {
-            ...lastOutput2[1]
+            ...outputWithRunningAndOtherTasks[1]
           },
           {
             workspaceLocation: undefined,
@@ -596,7 +596,7 @@ test('EVAL_INTERPRETER_SUCCESS works correctly with RunningOutput', () => {
   const highlightedLines = [[3], [5]];
 
   const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-    output: lastOutput1,
+    output: outputWithRunningTasks,
     isRunning,
     breakpoints,
     highlightedLines
@@ -616,7 +616,7 @@ test('EVAL_INTERPRETER_SUCCESS works correctly with RunningOutput', () => {
         highlightedLines: [],
         output: [
           {
-            ...lastOutput1[0]
+            ...outputWithRunningTasks[0]
           },
           {
             workspaceLocation: undefined,
@@ -634,7 +634,7 @@ test('EVAL_INTERPRETER_SUCCESS works correctly with other outputs', () => {
   const highlightedLines = [[3], [5]];
 
   const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-    output: lastOutput2,
+    output: outputWithRunningAndOtherTasks,
     isRunning,
     breakpoints,
     highlightedLines
@@ -654,10 +654,10 @@ test('EVAL_INTERPRETER_SUCCESS works correctly with other outputs', () => {
         highlightedLines: [],
         output: [
           {
-            ...lastOutput2[0]
+            ...outputWithRunningAndOtherTasks[0]
           },
           {
-            ...lastOutput2[1]
+            ...outputWithRunningAndOtherTasks[1]
           },
           {
             workspaceLocation: undefined,
@@ -718,7 +718,7 @@ const editorTestcases: ITestcase[] = [
 test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput', () => {
   const isRunning = true;
   const testcaseSuccessDefaultState = generateDefaultWorkspace({
-    output: lastOutput1,
+    output: outputWithRunningTasks,
     isRunning,
     editorTestcases
   });
@@ -733,7 +733,7 @@ test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput', () => {
       [location]: {
         ...testcaseSuccessDefaultState[location],
         isRunning: false,
-        output: lastOutput1,
+        output: outputWithRunningTasks,
         editorTestcases: [
           {
             ...editorTestcases[0]
@@ -741,7 +741,7 @@ test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput', () => {
           {
             ...editorTestcases[1],
             actual: {
-              ...lastOutput1[0]
+              ...outputWithRunningTasks[0]
             }
           }
         ]
@@ -753,7 +753,7 @@ test('EVAL_TESTCASE_SUCCESS works correctly on RunningOutput', () => {
 test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
   const isRunning = true;
   const testcaseSuccessDefaultState = generateDefaultWorkspace({
-    output: lastOutput2,
+    output: outputWithRunningAndOtherTasks,
     isRunning,
     editorTestcases
   });
@@ -768,12 +768,12 @@ test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
       [location]: {
         ...testcaseSuccessDefaultState[location],
         isRunning: false,
-        output: lastOutput2,
+        output: outputWithRunningAndOtherTasks,
         editorTestcases: [
           {
             ...editorTestcases[0],
             actual: {
-              ...lastOutput2[0]
+              ...outputWithRunningAndOtherTasks[0]
             }
           },
           {
@@ -787,7 +787,7 @@ test('EVAL_TESTCASE_SUCCESS works correctly on other output', () => {
 
 test('HANDLE_CONSOLE_LOG works correctly with RunningOutput', () => {
   const logString = 'test-log-string';
-  const consoleLogDefaultState = generateDefaultWorkspace({ output: lastOutput1 });
+  const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningTasks });
   const actions: IAction[] = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
   actions.forEach(action => {
@@ -799,11 +799,11 @@ test('HANDLE_CONSOLE_LOG works correctly with RunningOutput', () => {
         ...consoleLogDefaultState[location],
         output: [
           {
-            ...lastOutput1[0]
+            ...outputWithRunningTasks[0]
           },
           {
-            ...lastOutput1[1],
-            consoleLogs: lastOutput1[1].consoleLogs.concat(logString)
+            ...outputWithRunningTasks[1],
+            consoleLogs: outputWithRunningTasks[1].consoleLogs.concat(logString)
           }
         ]
       }
@@ -813,7 +813,9 @@ test('HANDLE_CONSOLE_LOG works correctly with RunningOutput', () => {
 
 test('HANDLE_CONSOLE_LOG works correctly with other output', () => {
   const logString = 'test-log-string-2';
-  const consoleLogDefaultState = generateDefaultWorkspace({ output: lastOutput2 });
+  const consoleLogDefaultState = generateDefaultWorkspace({
+    output: outputWithRunningAndOtherTasks
+  });
   const actions: IAction[] = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
   actions.forEach(action => {
@@ -823,7 +825,7 @@ test('HANDLE_CONSOLE_LOG works correctly with other output', () => {
       ...consoleLogDefaultState,
       [location]: {
         ...consoleLogDefaultState[location],
-        output: lastOutput2.concat({
+        output: outputWithRunningAndOtherTasks.concat({
           type: 'running',
           consoleLogs: [logString]
         })
