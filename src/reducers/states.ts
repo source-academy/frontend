@@ -1,7 +1,6 @@
 import { Context } from 'js-slang';
 import { SourceError } from 'js-slang/dist/types';
 
-import { AcademyNotification } from '../components/notification/notificationShape';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { Announcement } from '../components/Announcements';
@@ -13,6 +12,7 @@ import {
   IAssessmentOverview,
   ITestcase
 } from '../components/assessment/assessmentShape';
+import { AcademyNotification } from '../components/notification/notificationShape';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
