@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import * as React from 'react';
 import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
@@ -9,7 +8,7 @@ import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
 
 import { LINKS } from '../../utils/constants';
-import { ICodeDelta, RecordingType } from '../sourcecast/sourcecastShape';
+import { DeltaType, ICodeDelta, ICursorPosition } from '../sourcecast/sourcecastShape';
 import { checkSessionIdExists } from './collabEditing/helper';
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -22,6 +21,7 @@ import { checkSessionIdExists } from './collabEditing/helper';
 export interface IEditorProps {
   breakpoints: string[];
   deltasToApply?: ICodeDelta[] | null;
+  editorCursorPositionToBeApplied?: ICursorPosition;
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -36,7 +36,11 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
-  handleRecordEditorDelta?: (type: RecordingType, time: number, delta: ICodeDelta) => void;
+  handleRecordEditorDelta?: (
+    type: DeltaType,
+    time: number,
+    delta: ICodeDelta | ICursorPosition
+  ) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -44,8 +48,9 @@ export interface IEditorProps {
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
-  private onChangeMethod: (newCode: string, delta: ICodeDelta) => void;
+  private onChangeMethod: (newCode: string, delta: ICodeDelta | ICursorPosition) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
+  private onCursorChange: (selecction: any) => void;
 
   constructor(props: IEditorProps) {
     super(props);
@@ -57,9 +62,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
       this.props.handleEditorValueChange(newCode);
       if (this.props.isRecording) {
-        console.log('Recording delta... ');
         this.props.handleRecordEditorDelta!(
-          RecordingType.code,
+          DeltaType.codeDelta,
           this.props.getTimerDuration!(),
           delta
         );
@@ -70,15 +74,37 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         this.props.handleEditorEval();
       }
     };
+    this.onCursorChange = (selection: any) => {
+      const editorCursorPositionToBeApplied: ICursorPosition = selection.getCursor();
+      if (this.props.isRecording) {
+        this.props.handleRecordEditorDelta!(
+          DeltaType.cursorPositionChange,
+          this.props.getTimerDuration!(),
+          editorCursorPositionToBeApplied
+        );
+      }
+    };
   }
 
   public componentDidUpdate(prevProps: IEditorProps) {
-    if (!this.props.deltasToApply || this.props.deltasToApply === prevProps.deltasToApply) {
-      return;
+    if (this.props.deltasToApply && this.props.deltasToApply !== prevProps.deltasToApply) {
+      (this.AceEditor.current as any).editor.session
+        .getDocument()
+        .applyDeltas(this.props.deltasToApply);
     }
-    (this.AceEditor.current as any).editor.session
-      .getDocument()
-      .applyDeltas(this.props.deltasToApply);
+    if (
+      this.props.editorCursorPositionToBeApplied &&
+      this.props.editorCursorPositionToBeApplied !== prevProps.editorCursorPositionToBeApplied
+    ) {
+      (this.AceEditor.current as any).editor.moveCursorToPosition(
+        this.props.editorCursorPositionToBeApplied
+      );
+      (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();
+      (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(
+        this.props.editorCursorPositionToBeApplied,
+        0.5
+      );
+    }
   }
 
   public getBreakpoints() {
@@ -159,6 +185,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             highlightActiveLine={false}
             mode="javascript"
             onChange={this.onChangeMethod}
+            onCursorChange={this.onCursorChange}
             onValidate={this.onValidateMethod}
             readOnly={this.props.editorReadonly ? this.props.editorReadonly : false}
             theme="cobalt"

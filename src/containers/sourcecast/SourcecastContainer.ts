@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { PlaybackStatus } from 'src/components/sourcecast/sourcecastShape';
+import { ICursorPosition, PlaybackStatus } from 'src/components/sourcecast/sourcecastShape';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -28,19 +28,20 @@ import {
   setSourcecastStatus,
   setWebsocketStatus,
   toggleEditorAutorun,
+  updateEditorCursorPosition,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
 import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
-import { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcecast';
-import Sourcecast from '../../components/sourcecast/Sourcecast';
+import Sourcecast, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcecast';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.sourcecast.sideContentActiveTab,
   audioUrl: state.workspaces.sourcereel.audioUrl,
   deltasToApply: state.workspaces.sourcecast.deltasToApply,
+  editorCursorPositionToBeApplied: state.workspaces.sourcecast.editorCursorPositionToBeApplied,
   editorReadonly: state.workspaces.sourcecast.editorReadonly,
   editorSessionId: state.workspaces.sourcecast.editorSessionId,
   editorWidth: state.workspaces.sourcecast.editorWidth,
@@ -99,6 +100,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
+      handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: ICursorPosition) =>
+        updateEditorCursorPosition(location, editorCursorPositionToBeApplied),
       handleDebuggerPause: () => beginDebuggerPause(location),
       handleDebuggerResume: () => debuggerResume(location),
       handleDebuggerReset: () => debuggerReset(location)

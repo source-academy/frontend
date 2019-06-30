@@ -1,10 +1,15 @@
-/* tslint:disable:no-console */
 import { Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { controlButton } from '../commons';
-import { ICodeDelta, IPlaybackData, PlaybackStatus, RecordingType } from './sourcecastShape';
+import {
+  DeltaType,
+  ICodeDelta,
+  ICursorPosition,
+  IPlaybackData,
+  PlaybackStatus
+} from './sourcecastShape';
 
 class SourcecastControlbar extends React.PureComponent<
   ISourcecastControlbarProps,
@@ -89,24 +94,30 @@ class SourcecastControlbar extends React.PureComponent<
     const currentRevision = this.state.currentDeltaRevision;
     let currentTime = this.audio.current!.currentTime * 1000;
     this.props.handleEditorValueChange(this.props.playbackData.init.editorValue);
-    const deltasToApply = this.props.playbackData.data
+    const deltasToApply = this.props.playbackData.deltas
       .filter(
         deltaWithTime =>
-          deltaWithTime.time <= currentTime && deltaWithTime.type === RecordingType.code
+          deltaWithTime.time <= currentTime && deltaWithTime.type === DeltaType.codeDelta
       )
-      .map(deltaWithTime => deltaWithTime.delta as ICodeDelta);
+      .map(deltaWithTime => deltaWithTime.data as ICodeDelta);
     this.applyDeltas(deltasToApply);
 
-    const data = this.props.playbackData.data.filter(
+    const futureData = this.props.playbackData.deltas.filter(
       deltaWithTime => deltaWithTime.time > currentTime
     );
-    const len = data.length;
+    const len = futureData.length;
     let i = 0;
     while (i < len && this.state.currentDeltaRevision === currentRevision) {
-      console.log('Revision ' + currentRevision + 'trying to apply');
       currentTime = this.audio.current!.currentTime * 1000;
-      if (data[i].time < currentTime) {
-        this.applyDeltas([data[i].delta as ICodeDelta]);
+      if (futureData[i].time < currentTime) {
+        switch (futureData[i].type) {
+          case DeltaType.codeDelta:
+            this.applyDeltas([futureData[i].data as ICodeDelta]);
+            break;
+          case DeltaType.cursorPositionChange:
+            this.props.handleUpdateEditorCursorPosition(futureData[i].data as ICursorPosition);
+            break;
+        }
         i++;
         continue;
       }
@@ -157,7 +168,6 @@ class SourcecastControlbar extends React.PureComponent<
 
   private updatePlayerTime: React.ReactEventHandler<HTMLAudioElement> = e => {
     const { currentTime }: { currentTime: number } = e.target as HTMLMediaElement;
-    console.log('calling updateplayertime');
     this.setState({
       currentPlayerTime: currentTime,
       currentPlayerProgress: currentTime / this.props.duration
@@ -191,6 +201,7 @@ export interface ISourcecastControlbarProps {
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
+  handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: ICursorPosition) => void;
   audioUrl: string;
   duration: number;
   playbackData: IPlaybackData;

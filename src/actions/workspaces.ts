@@ -2,11 +2,11 @@ import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
 import {
+  DeltaType,
   ICodeDelta,
   ICursorPosition,
   IPlaybackData,
-  PlaybackStatus,
-  RecordingType
+  PlaybackStatus
 } from '../components/sourcecast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
 import * as actionTypes from './actionTypes';
@@ -314,7 +314,7 @@ export const recordAudioUrl: ActionCreator<actionTypes.IAction> = (audioUrl: str
 export const setDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: ICodeDelta[]) => ({
   type: actionTypes.SET_DELTAS_TO_APPLY,
   payload: {
-    type: RecordingType.code,
+    type: DeltaType.codeDelta,
     deltas
   }
 });
@@ -337,7 +337,7 @@ export const setSourcecastStatus: ActionCreator<actionTypes.IAction> = (
 
 // SOURCEREEL
 export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
-  type: RecordingType,
+  type: DeltaType,
   time: number,
   delta: ICodeDelta | ICursorPosition
 ) => ({
@@ -357,14 +357,10 @@ export const savePlaybackData = (audio: Blob, playbackData: string) => ({
   }
 });
 
-export const recordEditorInitValue: ActionCreator<actionTypes.IAction> = (
-  editorValue: string,
-  cursorPosition: ICursorPosition
-) => ({
+export const recordEditorInitValue: ActionCreator<actionTypes.IAction> = (editorValue: string) => ({
   type: actionTypes.RECORD_EDITOR_INIT_VALUE,
   payload: {
-    editorValue,
-    cursorPosition
+    editorValue
   }
 });
 
@@ -397,5 +393,16 @@ export const timerStop: ActionCreator<actionTypes.IAction> = (timeNow: number) =
   type: actionTypes.TIMER_STOP,
   payload: {
     timeNow: Date.now()
+  }
+});
+
+export const updateEditorCursorPosition: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  editorCursorPositionToBeApplied: ICursorPosition
+) => ({
+  type: actionTypes.UPDATE_EDITOR_CURSOR_POSITION,
+  payload: {
+    workspaceLocation,
+    editorCursorPositionToBeApplied
   }
 });

@@ -15,6 +15,7 @@ import {
 import { Notification } from '../components/notification/notificationShape';
 import {
   ICodeDelta,
+  ICursorPosition,
   IPlaybackData,
   PlaybackStatus,
   RecordingStatus
@@ -61,6 +62,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 
 export interface ISourcecast extends IWorkspaceState {
   readonly deltasToApply: ICodeDelta[] | null;
+  readonly editorCursorPositionToBeApplied: ICursorPosition;
   readonly playbackData: IPlaybackData;
   readonly playbackDuration: number;
   readonly playbackStatus: PlaybackStatus;
@@ -293,14 +295,21 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   sourcecast: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
     deltasToApply: null,
-    playbackData: { init: { editorValue: '', cursorPosition: { row: 0, column: 0 } }, data: [] },
+    editorCursorPositionToBeApplied: { row: 0, column: 0 },
+    playbackData: {
+      init: { editorValue: '' },
+      deltas: []
+    },
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.notStarted
   },
   sourcereel: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
     audioUrl: 'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3',
-    playbackData: { init: { editorValue: '', cursorPosition: { row: 0, column: 0 } }, data: [] },
+    playbackData: {
+      init: { editorValue: '' },
+      deltas: []
+    },
     recordingStatus: RecordingStatus.notStarted,
     timeElapsedBeforePause: 0,
     timeResumed: 0

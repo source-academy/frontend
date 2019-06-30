@@ -47,6 +47,7 @@ import {
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_EDITOR_CURSOR_POSITION,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
@@ -482,12 +483,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state.sourcereel,
           playbackData: {
             ...state.sourcereel.playbackData,
-            data: [
-              ...state.sourcereel.playbackData.data,
+            deltas: [
+              ...state.sourcereel.playbackData.deltas,
               {
                 type: action.payload.type,
                 time: action.payload.time,
-                delta: action.payload.delta
+                data: action.payload.delta
               }
             ]
           }
@@ -561,7 +562,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             ...state.sourcereel.playbackData,
             init: {
               editorValue: action.payload.editorValue,
-              cursorPosition: action.payload.cursorPosition
+              editorCursorPositionToBeApplied: action.payload.editorCursorPositionToBeApplied
             }
           }
         }
@@ -673,6 +674,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state.grading,
           currentSubmission: action.payload.submissionId,
           currentQuestion: action.payload.questionId
+        }
+      };
+    case UPDATE_EDITOR_CURSOR_POSITION:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorCursorPositionToBeApplied: action.payload.editorCursorPositionToBeApplied
         }
       };
     case UPDATE_EDITOR_VALUE:

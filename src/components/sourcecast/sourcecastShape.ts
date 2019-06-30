@@ -1,7 +1,6 @@
-export enum RecordingType {
-  cursorPosition = 'cursorPosition',
-  code = 'code',
-  run = 'run'
+export enum DeltaType {
+  cursorPositionChange = 'cursorPositionChange',
+  codeDelta = 'codeDelta'
 }
 
 export enum RecordingStatus {
@@ -39,11 +38,10 @@ export interface ICursorPosition {
 export interface IPlaybackData {
   init: {
     editorValue: string;
-    cursorPosition: ICursorPosition;
   };
-  data: Array<{
-    type: RecordingType;
+  deltas: Array<{
+    type: DeltaType;
     time: number;
-    delta: ICodeDelta | ICursorPosition;
+    data: ICodeDelta | ICursorPosition;
   }>;
 }

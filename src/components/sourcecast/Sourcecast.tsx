@@ -1,6 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-
 import { InterpreterOutput } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Markdown from '../commons/Markdown';
@@ -9,7 +8,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { ICodeDelta, IPlaybackData, PlaybackStatus } from './sourcecastShape';
+import { ICodeDelta, ICursorPosition, IPlaybackData, PlaybackStatus } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast!';
 
@@ -19,6 +18,7 @@ export interface IStateProps {
   activeTab: number;
   audioUrl: string;
   deltasToApply: ICodeDelta[] | null;
+  editorCursorPositionToBeApplied: ICursorPosition;
   editorReadonly: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -70,6 +70,7 @@ export interface IDispatchProps {
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
+  handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: ICursorPosition) => void;
 }
 
 class Sourcecast extends React.Component<ISourcecastProps> {
@@ -113,6 +114,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       },
       editorProps: {
         deltasToApply: this.props.deltasToApply,
+        editorCursorPositionToBeApplied: this.props.editorCursorPositionToBeApplied,
         editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
@@ -150,6 +152,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
         handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
+        handleUpdateEditorCursorPosition: this.props.handleUpdateEditorCursorPosition,
         audioUrl: this.props.audioUrl,
         duration: this.props.playbackDuration,
         playbackData: this.props.playbackData,

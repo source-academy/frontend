@@ -10,11 +10,11 @@ import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import {
+  DeltaType,
   ICodeDelta,
   ICursorPosition,
   IPlaybackData,
-  RecordingStatus,
-  RecordingType
+  RecordingStatus
 } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast Recording!';
@@ -65,11 +65,15 @@ export interface IDispatchProps {
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleRecordAudioUrl: (audioUrl: string) => void;
-  handleRecordEditorDelta: (type: RecordingType, time: number, delta: ICodeDelta) => void;
+  handleRecordEditorDelta: (
+    type: DeltaType,
+    time: number,
+    delta: ICodeDelta | ICursorPosition
+  ) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleRecordEditorInitValue: (editorValue: string, cursorPosition: ICursorPosition) => void;
+  handleRecordEditorInitValue: (editorValue: string) => void;
   handleSavePlaybackData: (audio: Blob, playbackData: string) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
