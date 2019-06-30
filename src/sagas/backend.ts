@@ -219,12 +219,12 @@ function* backendSaga(): SagaIterator {
       return overview;
     });
 
-    if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Unsubmit successful', 1000);
-      yield put(actions.updateGradingOverviews(newOverviews));
-    } else {
+    if (!resp || !resp.ok) {
       handleResponseError(resp);
+      return;
     }
+    yield call(showSuccessMessage, 'Unsubmit successful', 1000);
+    yield put(actions.updateGradingOverviews(newOverviews));
   });
 
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
@@ -630,20 +630,21 @@ async function request(
 }
 
 function* handleResponseError(resp: Response | null) {
-  if (resp) {
-    let errorMessage: string;
-    switch (resp.status) {
-      case 401:
-        errorMessage = 'Session expired. Please login again.';
-        break;
-      default:
-        errorMessage = `Error ${resp.status}: ${resp.statusText}`;
-        break;
-    }
-    yield call(showWarningMessage, errorMessage);
-  } else {
+  if (!resp) {
     yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    return;
   }
+  
+  let errorMessage: string;
+  switch (resp.status) {
+    case 401:
+      errorMessage = 'Session expired. Please login again.';
+      break;
+    default:
+      errorMessage = `Error ${resp.status}: ${resp.statusText}`;
+      break;
+  }
+  yield call(showWarningMessage, errorMessage);
 }
 
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
