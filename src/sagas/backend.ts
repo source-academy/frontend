@@ -634,7 +634,7 @@ function* handleResponseError(resp: Response | null) {
     yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
     return;
   }
-  
+
   let errorMessage: string;
   switch (resp.status) {
     case 401:

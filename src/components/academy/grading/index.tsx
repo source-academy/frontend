@@ -27,7 +27,6 @@ type State = {
   columnDefs: ColDef[];
   filterValue: string;
   groupFilterEnabled: boolean;
-  unsubmitAlert: JSX.Element | null;
 };
 
 type GradingNavLinkProps = {
@@ -161,8 +160,7 @@ class Grading extends React.Component<IGradingProps, State> {
         { headerName: 'Bonus XP', field: 'xpBonus', hide: true }
       ],
       filterValue: '',
-      groupFilterEnabled: false,
-      unsubmitAlert: null
+      groupFilterEnabled: false
     };
   }
 
@@ -244,7 +242,6 @@ class Grading extends React.Component<IGradingProps, State> {
     );
     return (
       <div>
-        {this.state.unsubmitAlert}
         <ContentDisplay
           loadContentDispatch={this.props.handleFetchGradingOverviews}
           display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
