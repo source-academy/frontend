@@ -143,7 +143,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         <NonIdealState
           className="WorkspaceParent pt-dark"
           description="Getting mission ready..."
-          icon={<Spinner large={true} />}
+          icon={<Spinner size={Spinner.SIZE_LARGE} />}
         />
       );
     }
