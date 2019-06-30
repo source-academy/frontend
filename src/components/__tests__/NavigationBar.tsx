@@ -18,7 +18,7 @@ test('NavigationBar renders correctly with username', () => {
   const props = {
     handleLogOut: () => {},
     title: 'Source Academy',
-    username: 'Evis Rucer'
+    username: 'Evis Rucer',
     notifications: []
   };
   const tree = shallow(<NavigationBar {...props} />);
