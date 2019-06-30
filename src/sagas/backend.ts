@@ -211,18 +211,19 @@ function* backendSaga(): SagaIterator {
     }));
     const { submissionId } = (action as actionTypes.IAction).payload;
     const overviews = yield select((state: IState) => state.session.gradingOverviews || []);
+
     const resp: Response = yield postUnsubmit(submissionId, tokens);
+    if (!resp || !resp.ok) {
+      handleResponseError(resp);
+      return;
+    }
+
     const newOverviews = (overviews as GradingOverview[]).map(overview => {
       if (overview.submissionId === submissionId) {
         return { ...overview, submissionStatus: 'attempted' };
       }
       return overview;
     });
-
-    if (!resp || !resp.ok) {
-      handleResponseError(resp);
-      return;
-    }
     yield call(showSuccessMessage, 'Unsubmit successful', 1000);
     yield put(actions.updateGradingOverviews(newOverviews));
   });
