@@ -95,18 +95,18 @@ export function* mockBackendSaga(): SagaIterator {
       overview =>
         overview.submissionId === submissionId && overview.submissionStatus === 'submitted'
     );
-    if (index >= 0) {
-      const newOverviews = (overviews as GradingOverview[]).map(overview => {
-        if (overview.submissionId === submissionId) {
-          return { ...overview, submissionStatus: 'attempted' };
-        }
-        return overview;
-      });
-      yield call(showSuccessMessage, 'Unsubmitted!', 1000);
-      yield put(actions.updateGradingOverviews(newOverviews));
-    } else {
-      yield call(showWarningMessage, 'Cannot unsubmit! Submission not submitted!');
+    if (index === -1) {
+      yield call(showWarningMessage, '400: Bad Request');
+      return;
     }
+    const newOverviews = (overviews as GradingOverview[]).map(overview => {
+      if (overview.submissionId === submissionId) {
+        return { ...overview, submissionStatus: 'attempted' };
+      }
+      return overview;
+    });
+    yield call(showSuccessMessage, 'Unsubmitted!', 1000);
+    yield put(actions.updateGradingOverviews(newOverviews));
   });
 
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
