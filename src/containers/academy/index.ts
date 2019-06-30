@@ -5,7 +5,8 @@ import Academy, { IStateProps } from '../../components/academy';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  historyHelper: state.session.historyHelper
+  historyHelper: state.session.historyHelper,
+  notifications: state.session.notifications
 });
 
 export default withRouter(connect(mapStateToProps)(Academy));

@@ -9,7 +9,6 @@ test('Application renders correctly', () => {
   const props: IApplicationProps = {
     ...mockRouterProps('/academy', {}),
     title: 'Cadet',
-    notifications: [],
     currentPlaygroundChapter: 2,
     handleLogOut: () => {},
     currentPlaygroundExternalLibrary: ExternalLibraryNames.NONE,

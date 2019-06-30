@@ -12,7 +12,6 @@ import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessme
 import Contributors from './contributors';
 import NavigationBar from './NavigationBar';
 import NotFound from './NotFound';
-import { AcademyNotification } from './notification/notificationShape';
 
 export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
@@ -23,7 +22,6 @@ export interface IStateProps {
   title: string;
   name?: string;
   currentPlaygroundExternalLibrary: ExternalLibraryName;
-  notifications: AcademyNotification[];
 }
 
 export interface IDispatchProps {
