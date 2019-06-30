@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, Icon, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Button, ButtonGroup, Card, H4, Icon, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
@@ -21,7 +21,10 @@ const Login: React.SFC<LoginProps> = props => {
       <div className="Login bp3-dark">
         <Card className="login-card bp3-elevation-4">
           <div className="login-body">
-            <NonIdealState description="Logging In..." icon={<Spinner size={Spinner.SIZE_LARGE} />} />
+            <NonIdealState
+              description="Logging In..."
+              icon={<Spinner size={Spinner.SIZE_LARGE} />}
+            />
           </div>
         </Card>
       </div>
@@ -31,10 +34,10 @@ const Login: React.SFC<LoginProps> = props => {
       <div className="Login bp3-dark">
         <Card className="login-card bp3-elevation-4">
           <div className="login-header">
-            <h4>
+            <H4>
               <Icon icon={IconNames.LOCK} />
               LOGIN
-            </h4>
+            </H4>
           </div>
           <div className="login-body">
             <ButtonGroup fill={true} vertical={true}>

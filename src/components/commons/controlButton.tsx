@@ -1,4 +1,4 @@
-import { Button, IButtonProps, Icon, IconName, Intent } from '@blueprintjs/core';
+import { Button, Classes, IButtonProps, Icon, IconName, Intent } from '@blueprintjs/core';
 import * as React from 'react';
 
 type controlButtonOptionals = {
@@ -8,16 +8,15 @@ type controlButtonOptionals = {
   iconOnRight?: boolean;
   intent?: Intent;
   minimal?: boolean;
-  type?: string;
+  type?: 'button' | 'submit' | 'reset';
 };
 
 const defaultOptions = {
-  className: '',
+  className: Classes.BUTTON,
   fullWidth: false,
   iconOnRight: false,
   intent: Intent.NONE,
-  minimal: true,
-  type: ''
+  minimal: true
 };
 
 export function controlButton(
@@ -35,7 +34,7 @@ export function controlButton(
   props.className = opts.className;
   props.type = opts.type;
   if (icon) {
-    const ic: JSX.Element = <Icon icon={icon} color={opts.iconColor ? opts.iconColor : ''} />;
+    const ic: JSX.Element = <Icon icon={icon} color={opts.iconColor} />;
     opts.iconOnRight ? (props.rightIcon = ic) : (props.icon = ic);
   }
   if (onClick) {

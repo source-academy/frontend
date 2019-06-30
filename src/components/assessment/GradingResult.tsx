@@ -1,4 +1,4 @@
-import { Text } from '@blueprintjs/core';
+import { Pre, Text } from '@blueprintjs/core';
 import * as React from 'react';
 import { getPrettyDate } from '../../utils/dateHelpers';
 import Markdown from '../commons/Markdown';
@@ -51,9 +51,9 @@ class GradingResult extends React.Component<GradingResultProps, {}> {
               <br />
               <th>Comment:</th>
               <p>
-                <pre>
+                <Pre>
                   <Markdown content={this.props.comment} />
-                </pre>
+                </Pre>
               </p>
             </div>
           ) : null}

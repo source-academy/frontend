@@ -6,6 +6,8 @@ import {
   Collapse,
   Dialog,
   Elevation,
+  H4,
+  H6,
   Icon,
   IconName,
   Intent,
@@ -298,20 +300,20 @@ const makeOverviewCard = (
       <div className="col-xs-9 listing-text">
         {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)}
         <div className="row listing-grade">
-          <h6>
+          <H6>
             {' '}
             {beforeNow(overview.openAt)
               ? `Grade: ${overview.grade} / ${overview.maxGrade}`
               : `Max Grade: ${overview.maxGrade}`}{' '}
-          </h6>
+          </H6>
         </div>
         <div className="row listing-xp">
-          <h6>
+          <H6>
             {' '}
             {beforeNow(overview.openAt)
               ? `XP: ${overview.xp} / ${overview.maxXp}`
               : `Max XP: ${overview.maxXp}`}{' '}
-          </h6>
+          </H6>
         </div>
         <div className="row listing-description">
           <Markdown content={overview.shortSummary} />
@@ -338,9 +340,9 @@ const makeOverviewCardTitle = (
 ) => (
   <div className="row listing-title">
     <Text ellipsize={true} className={'col-xs-10'}>
-      <h4>
+      <H4>
         {overview.title} {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
-      </h4>
+      </H4>
     </Text>
     <div className="col-xs-2">{makeSubmissionButton(overview, index, setBetchaAssessment)}</div>
   </div>
