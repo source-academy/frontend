@@ -222,19 +222,8 @@ function* backendSaga(): SagaIterator {
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Unsubmit successful', 1000);
       yield put(actions.updateGradingOverviews(newOverviews));
-    } else if (resp !== null) {
-      let errorMessage: string;
-      switch (resp.status) {
-        case 401:
-          errorMessage = 'Session expired. Please login again.';
-          break;
-        default:
-          errorMessage = `Error ${resp.status}: ${resp.statusText}`;
-          break;
-      }
-      yield call(showWarningMessage, errorMessage);
     } else {
-      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+      handleResponseError(resp);
     }
   });
 
@@ -281,20 +270,8 @@ function* backendSaga(): SagaIterator {
         return gradingQuestion;
       });
       yield put(actions.updateGrading(submissionId, newGrading));
-    } else if (resp !== null) {
-      let errorMessage: string;
-      switch (resp.status) {
-        case 401:
-          errorMessage = 'Session expired. Please login again.';
-          break;
-        default:
-          errorMessage = `Something went wrong (got ${resp.status} response)`;
-          break;
-      }
-      yield call(showWarningMessage, errorMessage);
     } else {
-      // postGrading returns null for failed fetch
-      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+      handleResponseError(resp);
     }
   });
 }
@@ -649,6 +626,23 @@ async function request(
     store.dispatch(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
     return null;
+  }
+}
+
+function* handleResponseError(resp: Response | null) {
+  if (resp) {
+    let errorMessage: string;
+    switch (resp.status) {
+      case 401:
+        errorMessage = 'Session expired. Please login again.';
+        break;
+      default:
+        errorMessage = `Error ${resp.status}: ${resp.statusText}`;
+        break;
+    }
+    yield call(showWarningMessage, errorMessage);
+  } else {
+    yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
   }
 }
 
