@@ -150,7 +150,7 @@ class Grading extends React.Component<IGradingProps, State> {
       <NonIdealState
         className="Grading"
         description="Fetching submissions..."
-        visual={<Spinner large={true} />}
+        icon={<Spinner large={true} />}
       />
     );
     const data = sortBy(this.props.gradingOverviews, [

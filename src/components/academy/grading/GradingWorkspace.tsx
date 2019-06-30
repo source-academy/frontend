@@ -121,7 +121,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         <NonIdealState
           className="WorkspaceParent pt-dark"
           description="Getting assessment ready..."
-          visual={<Spinner large={true} />}
+          icon={<Spinner large={true} />}
         />
       );
     }

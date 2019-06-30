@@ -21,7 +21,7 @@ const Login: React.SFC<LoginProps> = props => {
       <div className="Login pt-dark">
         <Card className="login-card pt-elevation-4">
           <div className="login-body">
-            <NonIdealState description="Logging In..." visual={<Spinner large={true} />} />
+            <NonIdealState description="Logging In..." icon={<Spinner large={true} />} />
           </div>
         </Card>
       </div>
