@@ -92,9 +92,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         // Browsing history, no earlier records to show; return replValue to
         // the last value when user started browsing
         const newIndex = null;
-        const newReplValue = state[location].replHistory.records[-1];
+        const newReplValue = state[location].replHistory.originalReplValue;
         const newRecords = state[location].replHistory.records.slice();
-        delete newRecords[-1];
         return {
           ...state,
           [location]: {
@@ -102,7 +101,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replValue: newReplValue,
             replHistory: {
               browseIndex: newIndex,
-              records: newRecords
+              records: newRecords,
+              originalReplValue: ''
             }
           }
         };
@@ -120,7 +120,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         // Not yet started browsing, initialise the index & array
         const newIndex = 0;
         const newRecords = lastRecords.slice();
-        newRecords[-1] = state[location].replValue;
+        const originalReplValue = state[location].replValue;
         const newReplValue = newRecords[newIndex];
         return {
           ...state,
@@ -130,7 +130,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replHistory: {
               ...state[location].replHistory,
               browseIndex: newIndex,
-              records: newRecords
+              records: newRecords,
+              originalReplValue
             }
           }
         };

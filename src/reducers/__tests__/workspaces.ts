@@ -98,14 +98,13 @@ function generateDefaultWorkspace(payload: any = {}): IWorkspaceManagerState {
 }
 
 test('BROWSE_REPL_HISTORY_DOWN works on non-null browseIndex and returns replValue to last value on no further records', () => {
-  const browsingHistory = 'browsing history'; // last value before browsing
-  const replHistoryWithoutRecords = ['first history', 'second history'];
-  const replHistoryWithRecords = replHistoryWithoutRecords.slice(0);
-  replHistoryWithRecords[-1] = browsingHistory;
+  const originalReplValue = 'browsing history';
+  const records = ['first history', 'second history'];
 
   const replHistory = {
     browseIndex: 1,
-    records: replHistoryWithRecords
+    records,
+    originalReplValue
   };
 
   const replDownDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replHistory });
@@ -132,10 +131,11 @@ test('BROWSE_REPL_HISTORY_DOWN works on non-null browseIndex and returns replVal
       ...replDownDefaultState,
       [location]: {
         ...replDownDefaultState[location],
-        replValue: browsingHistory,
+        replValue: originalReplValue,
         replHistory: {
           browseIndex: null,
-          records: replHistoryWithoutRecords
+          records,
+          originalReplValue: ''
         }
       }
     });
@@ -143,10 +143,12 @@ test('BROWSE_REPL_HISTORY_DOWN works on non-null browseIndex and returns replVal
 });
 
 test('BROWSE_REPL_HISTORY_DOWN returns unchanged state on null browseIndex', () => {
+  const originalReplValue = 'history';
   const records = ['first history', 'second history'];
   const replHistory = {
     browseIndex: null,
-    records
+    records,
+    originalReplValue
   };
 
   const replDownDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replHistory });
@@ -160,13 +162,11 @@ test('BROWSE_REPL_HISTORY_DOWN returns unchanged state on null browseIndex', () 
 
 test('BROWSE_REPL_HISTORY_UP works correctly on non-null browseIndex and returns unchanged state when there is no more history', () => {
   const replValue = 'repl history';
-  const replHistoryWithoutRecords = ['first history', 'second history'];
-  const replHistoryWithRecords = replHistoryWithoutRecords.slice(0);
-  replHistoryWithRecords[-1] = replValue;
+  const records = ['first history', 'second history'];
 
   const replHistory = {
     browseIndex: null,
-    records: replHistoryWithoutRecords
+    records
   };
 
   const replUpDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
@@ -184,8 +184,9 @@ test('BROWSE_REPL_HISTORY_UP works correctly on non-null browseIndex and returns
         ...replUpDefaultState[location],
         replValue: replHistory.records[0],
         replHistory: {
-          records: replHistoryWithRecords,
-          browseIndex: 0
+          records,
+          browseIndex: 0,
+          originalReplValue: replValue
         }
       }
     });
@@ -198,8 +199,9 @@ test('BROWSE_REPL_HISTORY_UP works correctly on non-null browseIndex and returns
         ...replUpDefaultState[location],
         replValue: replHistory.records[1],
         replHistory: {
-          records: replHistoryWithRecords,
-          browseIndex: 1
+          records,
+          browseIndex: 1,
+          originalReplValue: replValue
         }
       }
     });
@@ -212,8 +214,9 @@ test('BROWSE_REPL_HISTORY_UP works correctly on non-null browseIndex and returns
         ...replUpDefaultState[location],
         replValue: replHistory.records[1],
         replHistory: {
-          records: replHistoryWithRecords,
-          browseIndex: 1
+          records,
+          browseIndex: 1,
+          originalReplValue: replValue
         }
       }
     });
