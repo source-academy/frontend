@@ -6,6 +6,12 @@
   flex: 1 1 100%;
 }
 
+
+.#{$ns}-popover-content {
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
 .#{$ns}-non-ideal-state {
   padding-top: 0.7rem;
 

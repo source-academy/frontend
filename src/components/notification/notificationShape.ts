@@ -12,7 +12,8 @@ enum AcademyNotificationTypes {
   deadline = 'deadline',
   autograded = 'autograded',
   graded = 'graded',
-  submitted = 'submitted'
+  submitted = 'submitted',
+  unsubmitted = 'unsubmitted'
 }
 
-type AcademyNotificationType = keyof typeof AcademyNotificationTypes;
+export type AcademyNotificationType = keyof typeof AcademyNotificationTypes;

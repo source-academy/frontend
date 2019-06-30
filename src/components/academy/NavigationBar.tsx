@@ -8,7 +8,7 @@ import { Role } from '../../reducers/states';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories } from '../assessment/assessmentShape';
 
-import { NotificationBadge } from '../notification/NotificationBadge';
+import NotificationBadge from '../notification/NotificationBadge';
 import { AcademyNotification } from '../notification/notificationShape';
 
 type NavigationBarProps = OwnProps;

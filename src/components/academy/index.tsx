@@ -9,6 +9,7 @@ import { Role } from '../../reducers/states';
 import { HistoryHelper } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape';
+import { AcademyNotification } from '../notification/notificationShape';
 import AcademyNavigationBar from './NavigationBar';
 
 interface IAcademyProps extends IOwnProps, IStateProps, RouteComponentProps<{}> {}
@@ -20,6 +21,7 @@ export interface IOwnProps {
 
 export interface IStateProps {
   historyHelper: HistoryHelper;
+  notifications: AcademyNotification[];
 }
 
 const assessmentRenderFactory = (cat: AssessmentCategory) => (
@@ -31,7 +33,7 @@ const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?';
 
 export const Academy: React.SFC<IAcademyProps> = props => (
   <div className="Academy">
-    <AcademyNavigationBar notifications={[]} role={props.role} />
+    <AcademyNavigationBar notifications={props.notifications} role={props.role} />
     <Switch>
       <Route
         path={`/academy/${assessmentCategoryLink(
