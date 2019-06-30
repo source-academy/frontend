@@ -22,6 +22,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import { AcademyNotification } from '../components/notification/notificationShape';
 import { IState, Role } from '../reducers/states';
 import { castLibrary } from '../utils/castBackend';
 import { BACKEND_URL } from '../utils/constants';
@@ -275,6 +276,43 @@ function* backendSaga(): SagaIterator {
       yield put(actions.updateGrading(submissionId, newGrading));
     } else {
       handleResponseError(resp);
+    }
+  });
+
+  yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    if (!tokens.accessToken || !tokens.refreshToken) {
+      return;
+    }
+
+    const resp: Response | null = yield request('notifications', 'GET', {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken
+    });
+    if (resp && resp.ok) {
+      const newNotifications: AcademyNotification[] = yield resp.json();
+      yield put(actions.updateNotifications(newNotifications));
+    }
+  });
+
+  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = (action as actionTypes.IAction).payload;
+    const resp: Response | null = yield request(`notifications/${id}/acknowledge`, 'POST', {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken
+    });
+    if (resp && resp.ok) {
+      const notifications: AcademyNotification[] = yield select((state: IState) => state.session.notifications);
+      const newNotifications: AcademyNotification[] = notifications.filter(notification => notification.id !== id);
+      yield put(actions.updateNotifications(newNotifications));
     }
   });
 }

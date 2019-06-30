@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-import { beginClearContext, logOut, setEditorBreakpoint, updateEditorValue } from '../actions';
+import { beginClearContext, fetchNotifications, logOut, setEditorBreakpoint, updateEditorValue} from '../actions';
 import {
   ensureLibrariesLoaded,
   playgroundExternalSelect,
@@ -52,7 +52,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEnsureLibrariesLoaded: ensureLibrariesLoaded,
       handleLogOut: logOut,
       handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        playgroundExternalSelect(externalLibraryName, workspaceLocation)
+        playgroundExternalSelect(externalLibraryName, workspaceLocation),
+      handleFetchNotifications: fetchNotifications
     },
     dispatch
   );

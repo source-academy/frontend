@@ -2,6 +2,7 @@ import { ActionCreator } from 'redux';
 
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape';
+import { AcademyNotification } from '../components/notification/notificationShape';
 import { Story } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -131,4 +132,22 @@ export const unsubmitSubmission: ActionCreator<actionTypes.IAction> = (submissio
   payload: {
     submissionId
   }
+});
+
+/** 
+ * Notification actions
+ */
+
+export const fetchNotifications = () => ({
+  type: actionTypes.FETCH_NOTIFICATIONS
+});
+
+export const acknowledgeNotification = (notificationId: number) => ({
+  type: actionTypes.ACKNOWLEDGE_NOTIFICATION,
+  payload: notificationId
+});
+
+export const updateNotifications = (notifications: AcademyNotification[]) => ({
+  type: actionTypes.UPDATE_NOTIFICATIONS,
+  payload: notifications
 });
