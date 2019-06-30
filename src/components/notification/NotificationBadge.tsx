@@ -44,9 +44,6 @@ const NotificationBadge: React.SFC<OwnProps> = props => {
       isOpen={props.enableHover}
     >
       <Tag
-        style={{
-          padding: 0
-        }}
         intent={Intent.DANGER}
         round={true}
         large={props.large}
