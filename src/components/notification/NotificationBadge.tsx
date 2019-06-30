@@ -6,6 +6,8 @@ import { AcademyNotification, AcademyNotificationType } from './notificationShap
 
 type OwnProps = {
   dispatch: Dispatch<any>;
+  enableHover?: boolean; // enable or disable hover popover option
+  large?: boolean; // enable to use large style
   notifications: AcademyNotification[];
 };
 
@@ -39,6 +41,7 @@ const NotificationBadge: React.SFC<OwnProps> = props => {
       content={makeNotificationTags(props.notifications)}
       interactionKind={PopoverInteractionKind.HOVER}
       position={Position.RIGHT}
+      isOpen={props.enableHover}
     >
       <Tag
         style={{
@@ -46,6 +49,7 @@ const NotificationBadge: React.SFC<OwnProps> = props => {
         }}
         intent={Intent.DANGER}
         round={true}
+        large={props.large}
       >
         {props.notifications.length}
       </Tag>
@@ -55,17 +59,17 @@ const NotificationBadge: React.SFC<OwnProps> = props => {
 
 const makeNotificationMessage = (type: AcademyNotificationType) => {
   switch (type) {
-    case "new":
+    case 'new':
       return 'You have a new assessment.';
-    case "deadline":
+    case 'deadline':
       return 'You have an assessment closing soon.';
-    case "autograded":
+    case 'autograded':
       return 'Your assessment has been autograded.';
-    case "submitted":
+    case 'submitted':
       return 'You have a new submission.';
-    case "unsubmitted":
+    case 'unsubmitted':
       return 'You have an assessment that was unsubmitted.';
-    case "graded":
+    case 'graded':
       return 'Your assessment has been manually graded.';
     default:
       return 'Unknown notification';
