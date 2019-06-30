@@ -121,9 +121,8 @@ class Grading extends React.Component<IGradingProps, State> {
           cellStyle: (params: GradingNavLinkProps) => {
             if (params.data.submissionStatus === 'submitted') {
               return { backgroundColor: Colors.GREEN5 };
-            } else {
-              return { backgroundColor: Colors.RED5 };
             }
+            return { backgroundColor: Colors.RED5 };
           }
         },
         {
