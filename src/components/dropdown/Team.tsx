@@ -3,8 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import Contributors from '../Contributors';
 
-// import { LINKS } from '../../utils/constants';
-
 type DialogProps = {
   isOpen: boolean;
   onClose: () => void;

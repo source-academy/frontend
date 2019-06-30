@@ -1,26 +1,115 @@
-div.repoDetails {
-    text-align: justify;
+// Styling components of the Contributors Page
+
+.containerPermalink {
+    background-color: $cadet-color-1;
+    padding-bottom: 1%;
 }
 
-div.contributorsByRepo {
-    margin-inline-start: 5px;
-    margin-inline-end: 5px;
+.commonBody {
+    margin-inline-start: 0.5%;
+    margin-inline-end: 0.5%;
     text-align: justify;
 
     div {
         text-align: center;
         vertical-align: top;
         display: inline-block;
-        width: 175px;
-        height: 215px;
     }
 
     img {
-        height: 150px;
-        width: 150px;      
+        width: 90%;
+        height: 90%; 
     }
 
     p {
         margin-bottom: 0.2rem;
+    }
+
+    a {
+        text-decoration: none;
+        font-weight: bold;
+    }
+}
+
+div.inPermalink {
+    @extend .commonBody;
+    background-color: $cadet-color-3;
+    border-radius: 10px;
+
+    div {
+        width: (100% / 6);
+        height: (100% / 6);
+        margin-top: 1%;
+        margin-bottom: 0.5%;
+        @include mQ(800px) {
+            width: 25%;
+            height: 25%;
+        }
+    }
+
+    p {
+        color: $cadet-color-5;
+    }
+
+    a {
+        color: $cadet-color-4;
+        &:hover {
+            color: $cadet-color-5;
+        }
+    }
+}
+
+div.inPopup {
+    @extend .commonBody;
+
+    div {
+        width: 25%;
+        height: 25%; 
+        margin-bottom: 1%;
+        @include mQ(800px) {
+            width: 50%;
+            height: 50%;
+        }
+    }
+
+    a {
+        color: $cadet-color-1;
+        &:hover {
+            color: $cadet-color-3;
+        }
+    }
+}
+
+.commonHeading {
+    text-align: justify;
+
+    h3::first-letter{
+        text-transform: uppercase;
+    }
+}
+
+div.repoDetailsPermalink {
+    @extend .commonHeading;
+
+    h3 {
+        line-height: 175%;
+        margin-right: 0.5%;
+        margin-left: 0.5%;
+        margin-bottom: 0%;
+        color: $cadet-color-4;
+    }
+
+    h5 {
+        margin-right: 0.5%;
+        margin-left: 0.5%;
+        color: $cadet-color-4;
+    }
+}
+
+div.repoDetailsPopup {
+    @extend .commonHeading;
+
+    h3 {
+        text-decoration: underline;
     }
 }

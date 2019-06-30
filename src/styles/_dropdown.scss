@@ -5,30 +5,20 @@ div.pt-dialog.about {
     margin-top: 10px;
   }
 
-  div#pt-tab-panel_about_abt {
+  div.abt {
     margin-top: 10px;
     text-align: justify;
-  }
-
-  div#pt-tab-panel_about_devs {
-    margin-top: 10px;
-    text-align: center;
-  }
-
-  span.dot {
-    padding: 0 0.2rem 0 0.2rem;
-  }
-
-  div.pt-tab {
-    outline: 0;
   }
 }
 
 div.pt-dialog.team {
   padding: 0;
   text-align: justify;
-  width: 750px;
-
+  width: 65%; 
+  @include mQ(600px) {
+    width: 100%;
+  }
+  
   div.pt-dialog-body {
     margin-top: 10px;
   }

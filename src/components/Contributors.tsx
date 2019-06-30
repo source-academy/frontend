@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import * as React from 'react';
 
 type Contributor = {
@@ -17,26 +16,23 @@ type Repo = {
 };
 
 type ContributorsState = {
-    ignoreRepos: string[];
-    ignoreContributors: string[];
     repos: Repo[];
     contributors: Contributor[][];
 };
 
-class Contributors extends Component<{}, ContributorsState> {
-
-    constructor(props: any) {
-        super(props);
+class Contributors extends React.Component<{}, ContributorsState> {
     
+    private readonly ignoreRepos: string[] = ["sicp", "assessments", "tools", "source-academy2"];
+    private readonly ignoreContributors: string[] = ["dependabot[bot]", "dependabot-preview[bot]"];
+
+    constructor(props: {}) {
+        super(props);
+
         this.state = {
-            ignoreRepos: ["sicp", "assessments", "tools", "source-academy2"],
-            ignoreContributors: ["dependabot[bot]", "dependabot-preview[bot]"],
             repos: [],
             contributors: []
         };
     }
-
-    
 
     public componentDidMount() {
 
@@ -45,7 +41,7 @@ class Contributors extends Component<{}, ContributorsState> {
             return results.json();
         })
         .then(repos => {
-            const { ignoreRepos } = this.state;
+            const { ignoreRepos } = this;
             const contributorLinks = repos
                 .filter((repo: any) => {
                     return !ignoreRepos.includes(repo.name);
@@ -79,7 +75,7 @@ class Contributors extends Component<{}, ContributorsState> {
             .then(contributorsByRepo => {
                 return Promise.all(
                     contributorsByRepo.map((contributors: any) => {
-                        const { ignoreContributors } = this.state;
+                        const { ignoreContributors } = this;
                         const contributorList = contributors
                             .filter((contributor: any) => {
                                 return !ignoreContributors.includes(contributor.login);
@@ -113,15 +109,19 @@ class Contributors extends Component<{}, ContributorsState> {
                         <div key={contributor.key}>
                             <img src={contributor.photo} alt="Image" />
                             <p><a href={contributor.githubPage} target="_blank">{contributor.githubName}</a></p>
-                            <p>Number of commits: {contributor.commits}</p>
+                            <p>Commits: {contributor.commits}</p>
                         </div>
                     );
                 });   
                 return (
-                    <div key={repo.key} className="repoDetails">
-                        <h3><u>{repo.name}</u></h3>
-                        <h5>{repo.description}</h5>
-                        <div className="contributorsByRepo">{arrayMapped}</div>
+                    <div key={repo.key} className="containerPermalink">
+                        <div className="repoDetailsPermalink">
+                            <h3>{repo.name}</h3>
+                            <h5>{repo.description}</h5>
+                        </div>
+                        <div className="inPermalink">
+                            {arrayMapped}
+                        </div>
                     </div>
                 );    
             })
@@ -130,7 +130,7 @@ class Contributors extends Component<{}, ContributorsState> {
         );
         return (
             <div>
-                <div>{contributorList}</div>
+                {contributorList}
             </div>
         );
     }
