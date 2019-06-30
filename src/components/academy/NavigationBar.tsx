@@ -28,7 +28,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       >
         <Icon icon={IconNames.FLAME} />
         <div className="navbar-button-text hidden-xs">Missions</div>
-        <NotificationBadge notifications={props.notifications} />
+        <NotificationBadge notifications={props.notifications} enableHover={false} />
       </NavLink>
 
       <NavLink
@@ -38,7 +38,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       >
         <Icon icon={IconNames.LIGHTBULB} />
         <div className="navbar-button-text hidden-xs">Quests</div>
-        <NotificationBadge notifications={props.notifications} />
+        <NotificationBadge notifications={props.notifications} enableHover={false} />
       </NavLink>
 
       <NavLink
@@ -48,7 +48,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       >
         <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
         <div className="navbar-button-text hidden-xs">Paths</div>
-        <NotificationBadge notifications={props.notifications} />
+        <NotificationBadge notifications={props.notifications} enableHover={false} />
       </NavLink>
 
       <NavLink
@@ -58,7 +58,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       >
         <Icon icon={IconNames.COMPARISON} />
         <div className="navbar-button-text hidden-xs">Contests</div>
-        <NotificationBadge notifications={props.notifications} />
+        <NotificationBadge notifications={props.notifications} enableHover={false} />
       </NavLink>
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
@@ -70,7 +70,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         >
           <Icon icon={IconNames.ENDORSED} />
           <div className="navbar-button-text hidden-xs">Grading</div>
-          <NotificationBadge notifications={props.notifications} />
+          <NotificationBadge notifications={props.notifications} enableHover={false} />
         </NavLink>
       </NavbarGroup>
     ) : null}
