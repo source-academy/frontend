@@ -125,7 +125,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       bounds: 'parent',
       className: 'resize-side-content',
       enable: bottomResizeOnly,
-      minHeight: 0,
+      minHeight: '25%',
       onResize: this.toggleDividerDisplay,
       onResizeStop,
       size:

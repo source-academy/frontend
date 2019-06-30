@@ -3,8 +3,8 @@ import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
-import { delay, SagaIterator } from 'redux-saga';
-import { call, put, race, select, take, takeEvery } from 'redux-saga/effects';
+import { SagaIterator } from 'redux-saga';
+import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
@@ -29,14 +29,13 @@ function* workspaceSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
-    const code: string = yield select(
-      (state: IState) =>
-        (state.workspaces[location] as IWorkspaceState).editorPrepend! +
-        '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorValue! +
-        '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorPostpend!
-    );
+    const code: string = yield select((state: IState) => {
+      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend;
+      const value = (state.workspaces[location] as IWorkspaceState).editorValue!;
+      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend;
+
+      return prepend + (prepend.length > 0 ? '\n' : '') + value + '\n' + postpend;
+    });
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
     );
@@ -132,16 +131,23 @@ function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.EVAL_TESTCASE, function*(action) {
     const location = (action as actionTypes.IAction).payload.workspaceLocation;
     const index = (action as actionTypes.IAction).payload.testcaseId;
-    const code: string = yield select(
-      (state: IState) =>
-        (state.workspaces[location] as IWorkspaceState).editorPrepend! +
+    const code: string = yield select((state: IState) => {
+      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend;
+      const value = (state.workspaces[location] as IWorkspaceState).editorValue!;
+      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend;
+      const testcase = (state.workspaces[location] as IWorkspaceState).editorTestcases[index]
+        .program;
+
+      return (
+        prepend +
+        (prepend.length > 0 ? '\n' : '') +
+        value +
         '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorValue! +
-        '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorPostpend! +
-        '\n' +
-        (state.workspaces[location] as IWorkspaceState).editorTestcases[index].program!
-    );
+        postpend +
+        (postpend.length > 0 ? '\n' : '') +
+        testcase
+      );
+    });
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
     );
@@ -261,14 +267,14 @@ function* workspaceSaga(): SagaIterator {
         if ((window as any).getReadyWebGLForCanvas !== undefined) {
           break;
         }
-        yield call(delay, 250);
+        yield delay(250);
       }
       return true;
     }
     /** Create a race condition between the js files being loaded and a timeout. */
     const { loadedScripts, timeout } = yield race({
       loadedScripts: call(helper),
-      timeout: call(delay, 4000)
+      timeout: delay(4000)
     });
     if (timeout !== undefined && loadedScripts === undefined) {
       yield call(showWarningMessage, 'Error loading libraries', 750);
@@ -327,9 +333,8 @@ function* loginSaga(): SagaIterator {
   yield takeEvery(actionTypes.LOGIN, function*() {
     const apiLogin = 'https://luminus.nus.edu.sg/v2/auth/connect/authorize';
     const clientId = LUMINUS_CLIENT_ID;
-    const callback = `${window.location.protocol}//${window.location.hostname}:${
-      window.location.port
-    }/login`;
+    const port = window.location.port === '' ? '' : `:${window.location.port}`;
+    const callback = `${window.location.protocol}//${window.location.hostname}${port}/login`;
     window.location.href = `${apiLogin}?client_id=${clientId}&redirect_uri=${callback}&response_type=code&scope=profile`;
     yield undefined;
   });
@@ -433,6 +438,7 @@ function* evalTestCode(code: string, context: Context, location: WorkspaceLocati
       yield put(actions.evalTestcaseSuccess(result.value, location, index));
     } else {
       yield put(actions.evalInterpreterError(context.errors, location));
+      yield put(actions.evalTestcaseFailure('An error occured', location, index));
     }
   } else if (interrupted) {
     interrupt(context);

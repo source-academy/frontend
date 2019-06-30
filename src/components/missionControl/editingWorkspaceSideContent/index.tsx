@@ -1,3 +1,4 @@
+import AutograderTab from './AutograderTab';
 import DeploymentTab from './DeploymentTab';
 import GradingTab from './GradingTab';
 import ManageQuestionTab from './ManageQuestionTab';
@@ -6,6 +7,7 @@ import ProgrammingQuestionTemplateTab from './ProgrammingQuestionTemplateTab';
 import TextareaContentTab from './TextareaContent';
 
 export {
+  AutograderTab,
   DeploymentTab,
   GradingTab,
   ManageQuestionTab,

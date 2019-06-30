@@ -16,6 +16,7 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
+  evalTestcase,
   fetchGrading,
   setEditorBreakpoint,
   updateEditorValue,
@@ -41,11 +42,12 @@ const workspaceLocation: WorkspaceLocation = 'grading';
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     activeTab: state.workspaces.grading.sideContentActiveTab,
-    editorPrepend: state.workspaces.assessment.editorPrepend,
-    editorValue: state.workspaces.assessment.editorValue,
-    editorPostpend: state.workspaces.assessment.editorPostpend,
-    editorTestcases: state.workspaces.assessment.editorTestcases,
-    editorHeight: state.workspaces.assessment.editorHeight,
+    autogradingResults: state.workspaces.grading.autogradingResults,
+    editorPrepend: state.workspaces.grading.editorPrepend,
+    editorValue: state.workspaces.grading.editorValue,
+    editorPostpend: state.workspaces.grading.editorPostpend,
+    editorTestcases: state.workspaces.grading.editorTestcases,
+    editorHeight: state.workspaces.grading.editorHeight,
     editorWidth: state.workspaces.grading.editorWidth,
     breakpoints: state.workspaces.grading.breakpoints,
     highlightedLines: state.workspaces.grading.highlightedLines,
@@ -87,6 +89,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         resetWorkspace(workspaceLocation, options),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
+      handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
       handleUpdateCurrentSubmissionId: updateCurrentSubmissionId,
       handleUpdateHasUnsavedChanges: (unsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, unsavedChanges),

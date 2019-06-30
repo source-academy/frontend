@@ -5,6 +5,7 @@ import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { Announcement } from '../components/Announcements';
 import {
+  AutogradingResult,
   ExternalLibraryName,
   ExternalLibraryNames,
   IAssessment,
@@ -49,7 +50,6 @@ interface IGradingWorkspace extends IWorkspaceState {
 
 export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
-  readonly websocketStatus: number;
 }
 
 export interface IWorkspaceManagerState {
@@ -59,11 +59,12 @@ export interface IWorkspaceManagerState {
 }
 
 export interface IWorkspaceState {
+  readonly autogradingResults: AutogradingResult[];
   readonly context: Context;
-  readonly editorPrepend: string | null;
+  readonly editorPrepend: string;
   readonly editorSessionId: string;
   readonly editorValue: string | null;
-  readonly editorPostpend: string | null;
+  readonly editorPostpend: string;
   readonly editorTestcases: ITestcase[];
   readonly editorHeight: number;
   readonly editorWidth: string;
@@ -78,6 +79,7 @@ export interface IWorkspaceState {
   readonly replValue: string;
   readonly sideContentActiveTab: number;
   readonly sideContentHeight?: number;
+  readonly websocketStatus: number;
   readonly globals: Array<[string, any]>;
 }
 
@@ -207,10 +209,11 @@ export const defaultEditorValue = '// Type your program in here!';
  * @param location the location of the workspace, used for context
  */
 export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
+  autogradingResults: [],
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : null,
+  editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : '',
   editorPostpend: '',
   editorTestcases: [],
   editorHeight: 150,
@@ -224,6 +227,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   },
   replValue: '',
   sideContentActiveTab: 0,
+  websocketStatus: 0,
   globals: [],
   isEditorAutorun: false,
   isRunning: false,
@@ -248,8 +252,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
-    playgroundExternal: ExternalLibraryNames.NONE,
-    websocketStatus: 0
+    playgroundExternal: ExternalLibraryNames.NONE
   }
 };
 
