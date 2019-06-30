@@ -211,6 +211,7 @@ const makeProgramming = (
 
   const result: IProgrammingQuestion = {
     ...question,
+    autogradingResults: [],
     prepend: prepend ? (prepend[0] as string).trim() : '',
     solutionTemplate: problem.SNIPPET[0].TEMPLATE[0].trim() as string,
     postpend: postpend ? (postpend[0] as string).trim() : '',

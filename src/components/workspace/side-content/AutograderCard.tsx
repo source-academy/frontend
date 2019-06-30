@@ -1,33 +1,9 @@
-import {
-  // Button,
-  // ButtonGroup,
-  Card,
-  // Classes,
-  // Collapse,
-  // Dialog,
-  Elevation
-  // Icon,
-  // IconName
-  // Intent,
-  // NonIdealState,
-  // Position,
-  // Spinner,
-  // Text,
-  // Tooltip
-} from '@blueprintjs/core';
+import { Card, Elevation } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
-// tslint:disable-next-line
-import { controlButton } from '../../commons';
-// tslint:disable-next-line
 import { ITestcase } from '../../assessment/assessmentShape';
-// tslint:disable-next-line
-import CanvasOutput from '../CanvasOutput';
-// tslint:disable-next-line
-import Markdown from '../../commons/Markdown';
-
-// import { InterpreterOutput } from '../../../reducers/states';
+import { controlButton } from '../../commons';
 
 type AutograderCardProps = {
   testcase: ITestcase;
@@ -37,55 +13,40 @@ type AutograderCardProps = {
 
 class AutograderCard extends React.Component<AutograderCardProps, {}> {
   public render() {
-    const renderResult = (value: any) => {
-      /** A class which is the output of the show() function */
-      const ShapeDrawn = (window as any).ShapeDrawn;
-      if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-        return <CanvasOutput />;
-      } else {
-        return stringify(value);
+    let gradingStatus: string = '';
+
+    if (this.props.testcase.result) {
+      gradingStatus = ' wrong';
+
+      if (stringify(this.props.testcase.result) === this.props.testcase.answer) {
+        gradingStatus = ' correct';
       }
-    };
+    }
 
     return (
-      <div>
-        <Card className="row listing" elevation={Elevation.ONE}>
-          <div className="col-xs-9 listing-text">
-            {/* {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)} */}
-            <div className="row listing-program">
-              <h6>
-                <Markdown
-                  content={
-                    'Test Program ' +
-                    (this.props.index + 1) +
-                    ': `' +
-                    this.props.testcase.program +
-                    '`'
-                  }
-                />
-              </h6>
+      <div className={'AutograderCard' + gradingStatus}>
+        <Card elevation={Elevation.ONE}>
+          <div className="row autograder-controls">
+            {'Testcase ' + (this.props.index + 1)}
+            {controlButton('Test', IconNames.PLAY, () =>
+              this.props.handleTestcaseEval(this.props.index)
+            )}
+          </div>
+          <div className="row autograder-program">
+            <pre className="code">{this.props.testcase.program}</pre>
+          </div>
+          <div className="row">
+            <div className="col autograder-expected">
+              Expected Answer:
+              <pre className="code">{this.props.testcase.answer}</pre>
             </div>
-            <div className="row listing-expected">
-              <h6>
-                <Markdown content={'Expected Answer: `' + this.props.testcase.answer + '`'} />
-              </h6>
-            </div>
-            <div className="row listing-actual">
-              <h6>
-                {'Actual Answer: '}{' '}
-                {this.props.testcase.actual !== undefined ? (
-                  <pre>{renderResult(this.props.testcase.actual.value)}</pre>
-                ) : (
-                  'No Answer'
-                )}
-              </h6>
-            </div>
-            <div className="listing-controls">
-              <div>
-                {controlButton('Test', IconNames.PLAY, () =>
-                  this.props.handleTestcaseEval(this.props.index)
-                )}
-              </div>
+            <div className="col autograder-actual">
+              Actual Answer:
+              {this.props.testcase.result ? (
+                <pre className="code">{stringify(this.props.testcase.result)}</pre>
+              ) : (
+                <pre>No Answer</pre>
+              )}
             </div>
           </div>
         </Card>

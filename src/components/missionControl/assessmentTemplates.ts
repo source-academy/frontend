@@ -53,6 +53,7 @@ export const overviewTemplate = (): IAssessmentOverview => {
 
 export const programmingTemplate = (): IProgrammingQuestion => {
   return {
+    autogradingResults: [],
     answer: '// [Marking Scheme]\n// 1 mark for correct answer',
     comment: '`Great Job` **young padawan**',
     content: 'Enter content here',

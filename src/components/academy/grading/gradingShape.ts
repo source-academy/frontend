@@ -1,4 +1,10 @@
-import { AssessmentCategory, IQuestion, MCQChoice } from '../../assessment/assessmentShape';
+import {
+  AssessmentCategory,
+  AutogradingResult,
+  IQuestion,
+  ITestcase,
+  MCQChoice
+} from '../../assessment/assessmentShape';
 
 /**
  * Information on a Grading, for a particular student submission
@@ -60,8 +66,12 @@ export type GradingQuestion = {
  * @property solution this can be either the answer to the MCQ, the solution to
  *   a programming question, or null.
  */
-interface IAnsweredQuestion extends IQuestion {
+export interface IAnsweredQuestion extends IQuestion {
   comment: null;
+  autogradingResults: AutogradingResult[];
+  prepend: string;
+  postpend: string;
+  testcases: ITestcase[];
   solution: number | string | null;
   answer: string | number | null;
   maxGrade: number;
