@@ -285,16 +285,18 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    if (!tokens.accessToken || !tokens.refreshToken) {
+    if (!tokens.accessToken) {
       return;
     }
 
-    const resp: Response | null = yield request('notifications', 'GET', {
+    const resp: Response | null = yield request('notification', 'GET', {
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken
+      refreshToken: tokens.refreshToken,
+      shouldAutoLogout: false
     });
     if (resp && resp.ok) {
       const newNotifications: AcademyNotification[] = yield resp.json();
+      console.log(newNotifications);
       yield put(actions.updateNotifications(newNotifications));
     }
   });
@@ -302,10 +304,11 @@ function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
+      refreshToken: state.session.refreshToken,
+      shouldAutoLogout: false
     }));
     const id = (action as actionTypes.IAction).payload;
-    const resp: Response | null = yield request(`notifications/${id}/acknowledge`, 'POST', {
+    const resp: Response | null = yield request(`notification/${id}/acknowledge`, 'POST', {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken
     });
