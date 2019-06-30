@@ -42,7 +42,6 @@ class Application extends React.Component<IApplicationProps, {}> {
 
     /* TODO: REPLACE WITH LONG POLLING METHOD */
     this.props.handleFetchNotifications();
-    setInterval(() => this.props.handleFetchNotifications(), 60000);
   }
 
   public render() {
