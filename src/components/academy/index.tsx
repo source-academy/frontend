@@ -9,10 +9,9 @@ import { Role } from '../../reducers/states';
 import { HistoryHelper } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape';
-import { AcademyNotification } from '../notification/notificationShape';
 import AcademyNavigationBar from './NavigationBar';
 
-interface IAcademyProps extends IOwnProps, IStateProps, RouteComponentProps<{}> {}
+interface IAcademyProps extends IOwnProps, IStateProps, IDispatchProps, RouteComponentProps<{}> {}
 
 export interface IOwnProps {
   accessToken?: string;
@@ -21,7 +20,10 @@ export interface IOwnProps {
 
 export interface IStateProps {
   historyHelper: HistoryHelper;
-  notifications: AcademyNotification[];
+}
+
+export interface IDispatchProps {
+  handleFetchNotifications: () => void;
 }
 
 const assessmentRenderFactory = (cat: AssessmentCategory) => (
@@ -31,39 +33,49 @@ const assessmentRenderFactory = (cat: AssessmentCategory) => (
 const assessmentRegExp = ':assessmentId(\\d+)?/:questionId(\\d+)?';
 const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?';
 
-export const Academy: React.SFC<IAcademyProps> = props => (
-  <div className="Academy">
-    <AcademyNavigationBar notifications={props.notifications} role={props.role} />
-    <Switch>
-      <Route
-        path={`/academy/${assessmentCategoryLink(
-          AssessmentCategories.Contest
-        )}/${assessmentRegExp}`}
-        render={assessmentRenderFactory(AssessmentCategories.Contest)}
-      />
-      <Route path="/academy/game" component={Game} />
-      <Route
-        path={`/academy/${assessmentCategoryLink(
-          AssessmentCategories.Mission
-        )}/${assessmentRegExp}`}
-        render={assessmentRenderFactory(AssessmentCategories.Mission)}
-      />
-      <Route
-        path={`/academy/${assessmentCategoryLink(AssessmentCategories.Path)}/${assessmentRegExp}`}
-        render={assessmentRenderFactory(AssessmentCategories.Path)}
-      />
-      <Route
-        path={`/academy/${assessmentCategoryLink(
-          AssessmentCategories.Sidequest
-        )}/${assessmentRegExp}`}
-        render={assessmentRenderFactory(AssessmentCategories.Sidequest)}
-      />
-      <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
-      <Route exact={true} path="/academy" component={dynamicRedirect(props)} />
-      <Route component={redirectTo404} />
-    </Switch>
-  </div>
-);
+class Academy extends React.Component<IAcademyProps> {
+  public componentDidMount() {
+    /* TODO: REPLACE WITH LONG POLLING METHOD */
+    this.props.handleFetchNotifications();
+  }
+  public render() {
+    return (
+      <div className="Academy">
+        <AcademyNavigationBar role={this.props.role} />
+        <Switch>
+          <Route
+            path={`/academy/${assessmentCategoryLink(
+              AssessmentCategories.Contest
+            )}/${assessmentRegExp}`}
+            render={assessmentRenderFactory(AssessmentCategories.Contest)}
+          />
+          <Route path="/academy/game" component={Game} />
+          <Route
+            path={`/academy/${assessmentCategoryLink(
+              AssessmentCategories.Mission
+            )}/${assessmentRegExp}`}
+            render={assessmentRenderFactory(AssessmentCategories.Mission)}
+          />
+          <Route
+            path={`/academy/${assessmentCategoryLink(
+              AssessmentCategories.Path
+            )}/${assessmentRegExp}`}
+            render={assessmentRenderFactory(AssessmentCategories.Path)}
+          />
+          <Route
+            path={`/academy/${assessmentCategoryLink(
+              AssessmentCategories.Sidequest
+            )}/${assessmentRegExp}`}
+            render={assessmentRenderFactory(AssessmentCategories.Sidequest)}
+          />
+          <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
+          <Route exact={true} path="/academy" component={dynamicRedirect(this.props)} />
+          <Route component={redirectTo404} />
+        </Switch>
+      </div>
+    );
+  }
+}
 
 /**
  * 1. If user is in /academy.*, redirect to game

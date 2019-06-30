@@ -1,13 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-import {
-  beginClearContext,
-  fetchNotifications,
-  logOut,
-  setEditorBreakpoint,
-  updateEditorValue
-} from '../actions';
+import { beginClearContext, logOut, setEditorBreakpoint, updateEditorValue } from '../actions';
 import {
   ensureLibrariesLoaded,
   playgroundExternalSelect,
@@ -30,7 +24,6 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   accessToken: state.session.accessToken,
   role: state.session.role,
   name: state.session.name,
-  notifications: state.session.notifications,
   currentPlaygroundChapter: state.workspaces.playground.context.chapter,
   currentPlaygroundExternalLibrary: state.workspaces.playground.playgroundExternal
 });
@@ -58,8 +51,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEnsureLibrariesLoaded: ensureLibrariesLoaded,
       handleLogOut: logOut,
       handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        playgroundExternalSelect(externalLibraryName, workspaceLocation),
-      handleFetchNotifications: fetchNotifications
+        playgroundExternalSelect(externalLibraryName, workspaceLocation)
     },
     dispatch
   );

@@ -31,7 +31,6 @@ export interface IDispatchProps {
   handleEnsureLibrariesLoaded: () => void;
   handleLogOut: () => void;
   handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void;
-  handleFetchNotifications: () => void;
 }
 
 const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
@@ -39,9 +38,6 @@ const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
 class Application extends React.Component<IApplicationProps, {}> {
   public componentDidMount() {
     parsePlayground(this.props);
-
-    /* TODO: REPLACE WITH LONG POLLING METHOD */
-    this.props.handleFetchNotifications();
   }
 
   public render() {

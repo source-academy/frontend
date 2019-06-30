@@ -43,11 +43,7 @@ const NotificationBadge: React.SFC<OwnProps> = props => {
       position={Position.RIGHT}
       isOpen={props.enableHover}
     >
-      <Tag
-        intent={Intent.DANGER}
-        round={true}
-        large={props.large}
-      >
+      <Tag intent={Intent.DANGER} round={true} large={props.large}>
         {props.notifications.length}
       </Tag>
     </Popover>
