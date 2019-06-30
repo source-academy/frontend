@@ -7,7 +7,7 @@ import NavigationBar from '../NavigationBar';
 test('NavigationBar renders "Not logged in" correctly', () => {
   const props = {
     handleLogOut: () => {},
-    title: 'Source Academy'
+    title: 'Source Academy',
     notifications: []
   };
   const tree = shallow(<NavigationBar {...props} />);
