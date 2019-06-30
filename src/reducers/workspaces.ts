@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash';
 import { Reducer } from 'redux';
 import { ITestcase } from 'src/components/assessment/assessmentShape';
 
@@ -21,7 +20,6 @@ import {
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
-  EVAL_TESTCASE,
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
@@ -92,7 +90,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         // Browsing history, no earlier records to show; return replValue to
         // the last value when user started browsing
         const newIndex = null;
-        const newReplValue = state[location].replHistory.originalReplValue;
+        const newReplValue = state[location].replHistory.originalValue;
         const newRecords = state[location].replHistory.records.slice();
         return {
           ...state,
@@ -102,7 +100,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replHistory: {
               browseIndex: newIndex,
               records: newRecords,
-              originalReplValue: ''
+              originalValue: ''
             }
           }
         };
@@ -120,7 +118,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         // Not yet started browsing, initialise the index & array
         const newIndex = 0;
         const newRecords = lastRecords.slice();
-        const originalReplValue = state[location].replValue;
+        const originalValue = state[location].replValue;
         const newReplValue = newRecords[newIndex];
         return {
           ...state,
@@ -131,7 +129,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
               ...state[location].replHistory,
               browseIndex: newIndex,
               records: newRecords,
-              originalReplValue
+              originalValue
             }
           }
         };
@@ -299,22 +297,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isRunning: true
         }
       };
-    case EVAL_TESTCASE:
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          isRunning: true,
-          editorTestcases: state[location].editorTestcases.map((testcase, i) => {
-            if (i === action.payload.testcaseId) {
-              testcase.result = undefined;
-              return testcase;
-            } else {
-              return testcase;
-            }
-          })
-        }
-      };
     case EVAL_INTERPRETER_SUCCESS:
       lastOutput = state[location].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
@@ -341,7 +323,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
     case EVAL_TESTCASE_SUCCESS:
-      const testcaseSuccessCopy = cloneDeep(state[location].editorTestcases);
       lastOutput = state[location].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
         newOutput = state[location].output.slice(0, -1).concat({
@@ -360,10 +341,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [location]: {
           ...state[location],
-          editorTestcases: testcaseSuccessCopy.map((testcase: ITestcase, i) => {
+          editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
             if (i === action.payload.index) {
-              testcase.result = (newOutput[0] as CodeOutput).value;
-              return testcase;
+              return {
+                ...testcase,
+                result: (newOutput[0] as CodeOutput).value
+              };
             } else {
               return testcase;
             }
@@ -372,18 +355,18 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
     case EVAL_TESTCASE_FAILURE:
-      const testcaseFailureCopy = cloneDeep(state[location].editorTestcases);
       return {
         ...state,
         [location]: {
           ...state[location],
-          editorTestcases: testcaseFailureCopy.map((testcase: ITestcase, i: number) => {
+          editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i: number) => {
             if (i === action.payload.index) {
-              testcase.result = action.payload.value;
-              return testcase;
-            } else {
-              return testcase;
+              return {
+                ...testcase,
+                result: action.payload.value
+              };
             }
+            return testcase;
           })
         }
       };
