@@ -1,7 +1,13 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-import { beginClearContext, fetchNotifications, logOut, setEditorBreakpoint, updateEditorValue} from '../actions';
+import {
+  beginClearContext,
+  fetchNotifications,
+  logOut,
+  setEditorBreakpoint,
+  updateEditorValue
+} from '../actions';
 import {
   ensureLibrariesLoaded,
   playgroundExternalSelect,
