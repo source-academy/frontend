@@ -296,7 +296,6 @@ function* backendSaga(): SagaIterator {
     });
     if (resp && resp.ok) {
       const newNotifications: AcademyNotification[] = yield resp.json();
-      console.log(newNotifications);
       yield put(actions.updateNotifications(newNotifications));
     }
   });
@@ -304,18 +303,26 @@ function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken,
-      shouldAutoLogout: false
+      refreshToken: state.session.refreshToken
     }));
     const id = (action as actionTypes.IAction).payload;
+    const notifications: AcademyNotification[] = yield select(
+      (state: IState) => state.session.notifications
+    );
+    const newNotifications: AcademyNotification[] = notifications.filter(
+      notification => notification.id !== id
+    );
+    yield put(actions.updateNotifications(newNotifications));
     const resp: Response | null = yield request(`notification/${id}/acknowledge`, 'POST', {
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken
+      refreshToken: tokens.refreshToken,
+      shouldAutoLogout: false
     });
     if (resp && resp.ok) {
-      const notifications: AcademyNotification[] = yield select((state: IState) => state.session.notifications);
-      const newNotifications: AcademyNotification[] = notifications.filter(notification => notification.id !== id);
-      yield put(actions.updateNotifications(newNotifications));
+      return;
+    } else {
+      yield call(showWarningMessage, "Something went wrong, couldn't acknowledge");
+      yield put(actions.updateNotifications(notifications));
     }
   });
 }
