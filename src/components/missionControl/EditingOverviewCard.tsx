@@ -267,13 +267,13 @@ const categorySelect = (
   handleSelect = (i: AssessmentCategory, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <CategorySelectComponent
-    className="pt-minimal"
+    className="bp3-minimal"
     items={assessmentCategoriesArr}
     onItemSelect={handleSelect}
     itemRenderer={categoryRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={category} rightIcon="double-caret-vertical" />
+    <Button className="bp3-minimal" text={category} rightIcon="double-caret-vertical" />
   </CategorySelectComponent>
 );
 

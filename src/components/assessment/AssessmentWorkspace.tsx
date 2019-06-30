@@ -151,7 +151,7 @@ class AssessmentWorkspace extends React.Component<
     if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
       return (
         <NonIdealState
-          className="WorkspaceParent pt-dark"
+          className="WorkspaceParent #{$ns}-dark"
           description="Getting mission ready..."
           icon={<Spinner size={Spinner.SIZE_LARGE} />}
         />
@@ -260,7 +260,7 @@ class AssessmentWorkspace extends React.Component<
       }
     };
     return (
-      <div className="WorkspaceParent pt-dark">
+      <div className="WorkspaceParent #{$ns}-dark">
         {overlay}
         {resetTemplateOverlay}
         <Workspace {...workspaceProps} />

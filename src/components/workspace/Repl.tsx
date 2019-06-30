@@ -29,7 +29,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
       <div className="Repl">
         <div className="repl-output-parent">
           {cards}
-          <HotKeys className="repl-input-parent row pt-card pt-elevation-0" handlers={handlers}>
+          <HotKeys className="repl-input-parent row bp3-card bp3-elevation-0" handlers={handlers}>
             <ReplInput {...inputProps} />
           </HotKeys>
         </div>

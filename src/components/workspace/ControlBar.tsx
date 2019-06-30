@@ -279,7 +279,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     );
 
     return (
-      <div className="ControlBar_editor pt-button-group">
+      <div className="ControlBar_editor bp3-button-group">
         {toggleAutorunButton}
         {this.props.isEditorAutorun
           ? autoRunButton
@@ -326,7 +326,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
       : undefined;
 
     return (
-      <div className="ControlBar_flow pt-button-group">
+      <div className="ControlBar_flow bp3-button-group">
         {previousButton} {questionView} {nextButton} {returnButton}
       </div>
     );
@@ -358,7 +358,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     const clearButton = controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear);
 
     return (
-      <div className="ControlBar_repl pt-button-group">
+      <div className="ControlBar_repl bp3-button-group">
         {this.props.isRunning ? null : evalButton} {clearButton} {toggleEditModeButton}
       </div>
     );
@@ -411,14 +411,14 @@ const chapterSelect = (
   handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <ChapterSelectComponent
-    className="pt-minimal"
+    className="bp3-minimal"
     items={chapters}
     onItemSelect={handleSelect}
     itemRenderer={chapterRenderer}
     filterable={false}
   >
     <Button
-      className="pt-minimal"
+      className="bp3-minimal"
       text={styliseChapter(currentChap)}
       rightIcon="double-caret-vertical"
     />
@@ -442,13 +442,13 @@ const externalSelect = (
   handleSelect: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
 ) => (
   <ExternalSelectComponent
-    className="pt-minimal"
+    className="bp3-minimal"
     items={iExternals}
     onItemSelect={handleSelect}
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
+    <Button className="bp3-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
   </ExternalSelectComponent>
 );
 

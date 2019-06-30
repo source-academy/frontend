@@ -19,7 +19,7 @@ test('ApplicationContainer redirects from / to /academy', () => {
   )
   const tree = mount(app)
   expect(tree.find('.Game').length).toBe(1)
-  expect(tree.find('.NavigationBar__link.pt-active').contains('Game')).toBe(true)
+  expect(tree.find('.NavigationBar__link.bp3-active').contains('Game')).toBe(true)
 }) */
 
 test('ApplicationContainer renders NotFound on unknown routes', () => {
@@ -33,5 +33,5 @@ test('ApplicationContainer renders NotFound on unknown routes', () => {
   );
   const tree = mount(app);
   expect(tree.find('.NotFound').length).toBe(1);
-  expect(tree.find('.NavigationBar__link.pt-active').length).toBe(0);
+  expect(tree.find('.NavigationBar__link.bp3-active').length).toBe(0);
 });

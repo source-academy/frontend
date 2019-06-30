@@ -18,8 +18,8 @@ const Login: React.SFC<LoginProps> = props => {
   if (props.luminusCode) {
     startFetchAuth(props.luminusCode, props.handleFetchAuth);
     return (
-      <div className="Login pt-dark">
-        <Card className="login-card pt-elevation-4">
+      <div className="Login bp3-dark">
+        <Card className="login-card bp3-elevation-4">
           <div className="login-body">
             <NonIdealState description="Logging In..." icon={<Spinner size={Spinner.SIZE_LARGE} />} />
           </div>
@@ -28,8 +28,8 @@ const Login: React.SFC<LoginProps> = props => {
     );
   } else {
     return (
-      <div className="Login pt-dark">
-        <Card className="login-card pt-elevation-4">
+      <div className="Login bp3-dark">
+        <Card className="login-card bp3-elevation-4">
           <div className="login-header">
             <h4>
               <Icon icon={IconNames.LOCK} />
@@ -52,14 +52,14 @@ const startFetchAuth = (luminusCode: string, handleFetchAuth: DispatchProps['han
   handleFetchAuth(luminusCode);
 
 const loginButton = (handleClick: () => void) => (
-  <Button className="pt-large" rightIcon="log-in" onClick={handleClick}>
+  <Button className="bp3-large" rightIcon="log-in" onClick={handleClick}>
     Log in with LumiNUS
   </Button>
 );
 
 const playgroundButton = (
   <NavLink to="/playground">
-    <Button className="pt-large" rightIcon="code">
+    <Button className="bp3-large" rightIcon="code">
       Try out the playground
     </Button>
   </NavLink>

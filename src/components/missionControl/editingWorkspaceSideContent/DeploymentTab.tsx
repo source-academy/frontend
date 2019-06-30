@@ -279,14 +279,14 @@ const chapterSelect = (
   handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <ChapterSelectComponent
-    className="pt-minimal"
+    className="bp3-minimal"
     items={chapters}
     onItemSelect={handleSelect}
     itemRenderer={chapterRenderer}
     filterable={false}
   >
     <Button
-      className="pt-minimal"
+      className="bp3-minimal"
       text={styliseChapter(currentChap)}
       rightIcon="double-caret-vertical"
     />
@@ -310,13 +310,13 @@ const externalSelect = (
   handleSelect: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
 ) => (
   <ExternalSelectComponent
-    className="pt-minimal"
+    className="bp3-minimal"
     items={iExternals}
     onItemSelect={handleSelect}
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
+    <Button className="bp3-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
   </ExternalSelectComponent>
 );
 

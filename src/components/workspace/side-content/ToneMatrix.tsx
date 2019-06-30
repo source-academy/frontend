@@ -26,7 +26,7 @@ class ToneMatrix extends React.Component<{}, {}> {
     return (
       <div className="sa-tone-matrix">
         <div className="row">
-          <div className="controls col-xs-12 pt-dark pt-button-group">
+          <div className="controls col-xs-12 bp3-dark bp3-button-group">
             <Button id="clear-matrix" onClick={this.handleClear}>
               Clear
             </Button>

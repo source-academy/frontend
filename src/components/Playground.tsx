@@ -167,7 +167,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     };
     return (
       <HotKeys
-        className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
+        className={'Playground bp3-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
         keyMap={this.keyMap}
         handlers={this.handlers}
       >

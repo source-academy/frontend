@@ -6,14 +6,14 @@
   flex: 1 1 100%;
 }
 
-.pt-non-ideal-state {
+.bp3-non-ideal-state {
   padding-top: 0.7rem;
 
-  .pt-non-ideal-state-visual {
+  .bp3-non-ideal-state-visual {
     margin-bottom: 0.5rem;
   }
 
-  .pt-non-ideal-state-title {
+  .bp3-non-ideal-state-title {
     padding: 0.5rem 0 0 0;
   }
 }
@@ -28,7 +28,7 @@
 .Assessment {
   color: $cadet-color-3;
 
-  .contentdisplay-content.pt-card {
+  .contentdisplay-content.bp3-card {
     padding: 10px 20px 10px 20px;
 
     button.collapse-button {
@@ -38,7 +38,7 @@
     }
   }
 
-  .listing.pt-card {
+  .listing.bp3-card {
     margin: 0 0 1rem 0;
   }
 
@@ -87,7 +87,7 @@
     display: flex;
     margin-bottom: 2px;
 
-    .pt-text-overflow-ellipsis {
+    .bp3-text-overflow-ellipsis {
       /* Pushes button to the right of container */
       flex-grow: 1;
       display: flex;
@@ -100,7 +100,7 @@
     }
 
     .col-xs-2 {
-      /* flush menu button, span.pt-popover-wrapper, to right */
+      /* flush menu button, span.bp3-popover-wrapper, to right */
       text-align: right;
     }
 
@@ -136,12 +136,12 @@
     color: firebrick;
   }
 
-  div.pt-dialog-body {
+  div.bp3-dialog-body {
     margin: 15px 20px 15px 20px;
   }
 
-  div.pt-dialog-footer {
-    // align the div.pt-button-group right
+  div.bp3-dialog-footer {
+    // align the div.bp3-button-group right
     text-align: right;
   }
 }

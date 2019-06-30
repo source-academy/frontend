@@ -26,7 +26,7 @@ class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
     return (
       <NavLink
         to={`/academy/grading/${this.props.data.submissionId}`}
-        activeClassName="pt-active"
+        activeClassName="bp3-active"
         target="_blank"
       >
         <Icon className="grade-edit-icon" iconSize={16} icon={IconNames.ANNOTATION} />

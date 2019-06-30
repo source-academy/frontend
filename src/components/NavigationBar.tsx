@@ -22,11 +22,11 @@ export interface INavigationBarProps {
 }
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
-  <Navbar className="NavigationBar primary-navbar pt-dark">
+  <Navbar className="NavigationBar primary-navbar bp3-dark">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName="bp3-active"
+        className="NavigationBar__link bp3-button bp3-minimal"
         to="/academy"
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
@@ -34,8 +34,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </NavLink>
 
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName="bp3-active"
+        className="NavigationBar__link bp3-button bp3-minimal"
         target="_blank"
         to={LINKS.LUMINUS}
       >
@@ -44,8 +44,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </NavLink>
 
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName="bp3-active"
+        className="NavigationBar__link bp3-button bp3-minimal"
         target="_blank"
         to={LINKS.PIAZZA}
       >
@@ -56,8 +56,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
 
     <NavbarGroup align={Alignment.RIGHT}>
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName="bp3-active"
+        className="NavigationBar__link bp3-button bp3-minimal"
         to="/mission-control"
       >
         <Icon icon={IconNames.CODE} />
@@ -65,8 +65,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </NavLink>
 
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName="bp3-active"
+        className="NavigationBar__link bp3-button bp3-minimal"
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
