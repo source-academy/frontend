@@ -38,6 +38,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       >
         <Icon icon={IconNames.LIGHTBULB} />
         <div className="navbar-button-text hidden-xs">Quests</div>
+        <NotificationBadge notifications={props.notifications} />
       </NavLink>
 
       <NavLink
@@ -47,6 +48,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       >
         <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
         <div className="navbar-button-text hidden-xs">Paths</div>
+        <NotificationBadge notifications={props.notifications} />
       </NavLink>
 
       <NavLink
@@ -56,6 +58,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       >
         <Icon icon={IconNames.COMPARISON} />
         <div className="navbar-button-text hidden-xs">Contests</div>
+        <NotificationBadge notifications={props.notifications} />
       </NavLink>
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
@@ -67,6 +70,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         >
           <Icon icon={IconNames.ENDORSED} />
           <div className="navbar-button-text hidden-xs">Grading</div>
+          <NotificationBadge notifications={props.notifications} />
         </NavLink>
       </NavbarGroup>
     ) : null}

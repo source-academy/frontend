@@ -53,6 +53,7 @@ class Application extends React.Component<IApplicationProps, {}> {
           role={this.props.role}
           name={this.props.name}
           title={this.props.title}
+          notifications={this.props.notifications}  
         />
         <div className="Application__main">
           <Switch>
