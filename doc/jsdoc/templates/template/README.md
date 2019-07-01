@@ -21,3 +21,7 @@ publish.js:
 ```
 folder tmpl: see tmpl/README.md
 ```
+
+```
+folder static: see static/README.md
+```

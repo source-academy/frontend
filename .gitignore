@@ -27,4 +27,4 @@ terraform*
 npm-debug.log*
 
 # generated docs ignored
-/doc/jsdoc
+/doc/jsdoc/libraries
