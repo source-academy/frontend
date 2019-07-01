@@ -1,4 +1,5 @@
 export * from './commons';
+export * from './contributors';
 export * from './game';
 export * from './interpreter';
 export * from './playground';

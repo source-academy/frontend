@@ -1,7 +1,7 @@
 import { Classes, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import Contributors from '../Contributors';
+// import Contributors from '../Contributors'
 
 type DialogProps = {
   isOpen: boolean;
@@ -86,7 +86,7 @@ const Team: React.SFC<DialogProps> = props => (
             cadet, cadet-frontend, grader, js-slang, sharedb-ace-backend
           </p>
         </div>
-        <Contributors />
+        {/* <Contributors /> */}
     </div>
   </Dialog>
 );

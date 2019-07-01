@@ -22,6 +22,7 @@ function* mainSaga() {
   yield* workspaceSaga();
   yield* loginSaga();
   yield* playgroundSaga();
+  yield* contributorsSaga();
 }
 
 function* workspaceSaga(): SagaIterator {
@@ -441,6 +442,73 @@ function* evalTestCode(code: string, context: Context, location: WorkspaceLocati
     yield put(actions.endInterruptExecution(location));
     yield call(showWarningMessage, 'Execution aborted by user', 750);
   }
+}
+
+type Repo = {
+  key: number;
+  name: string;
+  description: string;
+  link: string;
+};
+
+const apiRepoDetails: string = 'https://api.github.com/orgs/source-academy/repos';
+const ignoreRepos: string[] = ["sicp", "assessments", "tools", "source-academy2"];
+const ignoreContributors: string[] = ["dependabot[bot]", "dependabot-preview[bot]"];
+
+const fetchRepos = async () => {
+  const response = await fetch(apiRepoDetails);
+  const results = await response.json();
+  const repos = await results.filter((repo: any) => {
+      return !ignoreRepos.includes(repo.name);
+  })
+  .map((repo: any) => {
+      return ({
+          key: repo.id,
+          name: repo.name,
+          description: repo.description,
+          link: repo.contributors_url
+      });
+  });
+  return repos;
+};
+
+const fetchContributors = async (endpoints: Repo[]) => {
+  const responses = await Promise.all(
+    endpoints.map((endpoint: Repo) => {
+      return fetch(endpoint.link);
+    })
+  );
+  const results = await Promise.all( 
+    responses.map((res: any) => {
+      return res.json();
+    }) 
+  );
+  const contributorsByRepo = await Promise.all(
+    results.map((contributors: any) => {
+      return contributors.filter((contributor: any) => {
+        return !ignoreContributors.includes(contributor.login);
+      })
+      .map((contributor: any) => {
+        return ({
+          key: contributor.id,
+          photo: contributor.avatar_url,
+          githubPage: contributor.html_url,
+          githubName: contributor.login,
+          commits: contributor.contributions
+        });
+      });
+    })
+  );
+  return contributorsByRepo;
+};
+
+function* contributorsSaga(): SagaIterator {
+  yield takeEvery(actionTypes.FETCH_REPOS, function* () {
+    const reposFetched = yield call(fetchRepos, {});
+    yield put(actions.addRepos(reposFetched));
+    const contributorsFetched = yield call(fetchContributors, reposFetched);
+    yield put(actions.addContributors(contributorsFetched));
+  });
 }
 
 export default mainSaga;

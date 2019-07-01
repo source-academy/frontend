@@ -17,6 +17,7 @@ import { createContext } from '../utils/slangHelper';
 export interface IState {
   readonly academy: IAcademyState;
   readonly application: IApplicationState;
+  readonly contributors: IContributorsState;
   readonly playground: IPlaygroundState;
   readonly session: ISessionState;
   readonly workspaces: IWorkspaceManagerState;
@@ -29,6 +30,26 @@ export interface IAcademyState {
 export interface IApplicationState {
   readonly title: string;
   readonly environment: ApplicationEnvironment;
+}
+
+type Contributor = {
+  key: number;
+  photo: string;
+  githubPage: string;
+  githubName: string;
+  commits: number;
+};
+
+type Repo = {
+  key: number;
+  name: string;
+  description: string;
+  link: string;
+};
+
+export interface IContributorsState {
+  repos: Repo[];
+  contributors: Contributor[][];
 }
 
 export interface IPlaygroundState {
@@ -196,6 +217,11 @@ export const defaultApplication: IApplicationState = {
   environment: currentEnvironment()
 };
 
+export const defaultContributors: IContributorsState = {
+  repos: [],
+  contributors: []
+};
+
 export const defaultPlayground: IPlaygroundState = {};
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -283,6 +309,7 @@ export const defaultSession: ISessionState = {
 export const defaultState: IState = {
   academy: defaultAcademy,
   application: defaultApplication,
+  contributors: defaultContributors,
   playground: defaultPlayground,
   session: defaultSession,
   workspaces: defaultWorkspaceManager
