@@ -37,7 +37,7 @@ install() {
 
     cd doc/jsdoc
 
-    scp -r libraries sicp@web1.comp.nus.edu.sg:public_html; echo "ssh sicp@web1.comp.nus.edu.sg; cd public_html; check that all is good"
+    scp -r libraries sicp@web1.comp.nus.edu.sg:public_html; echo "visit https://sicp.comp.nus.edu.sg/libraries to see all is good"
 
 }
 
