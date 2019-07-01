@@ -1,7 +1,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import { AcademyNotification } from 'src/components/notification/notificationShape';
+import { AcademyNotification } from '../components/notification/notificationShape';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import {

@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import { bindActionCreators } from 'redux';
-import { fetchNotifications } from 'src/actions';
+import { fetchNotifications } from '../../actions';
 import Academy, { IDispatchProps, IStateProps } from '../../components/academy';
 import { IState } from '../../reducers/states';
 

@@ -1,7 +1,7 @@
 import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { acknowledgeNotification } from 'src/actions';
+import { acknowledgeNotification } from '../../actions';
 import { AcademyNotification, AcademyNotificationType } from './notificationShape';
 
 type OwnProps = {

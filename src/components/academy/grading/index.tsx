@@ -18,8 +18,8 @@ import { sortBy } from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import NotificationBadge from 'src/components/notification/NotificationBadge';
-import { AcademyNotification } from 'src/components/notification/notificationShape';
+import NotificationBadge from '../../../components/notification/NotificationBadge';
+import { AcademyNotification } from '../../../components/notification/notificationShape';
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import ContentDisplay from '../../commons/ContentDisplay';
