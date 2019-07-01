@@ -85,16 +85,14 @@ class Grading extends React.Component<IGradingProps, State> {
         cellStyle: (params: GradingNavLinkProps) => {
           if (params.data.currentGrade < params.data.maxGrade) {
             return { backgroundColor: Colors.RED5 };
-          } else {
-            return {};
           }
+          return {};
         },
         comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
           if (nodeA && nodeB) {
             return nodeA.data.currentGrade - nodeB.data.currentGrade;
-          } else {
-            return valueA - valueB;
           }
+          return valueA - valueB;
         }
       },
       {
@@ -105,9 +103,8 @@ class Grading extends React.Component<IGradingProps, State> {
         comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
           if (nodeA && nodeB) {
             return nodeA.data.currentXp - nodeB.data.currentXp;
-          } else {
-            return valueA - valueB;
           }
+          return valueA - valueB;
         }
       },
       {
