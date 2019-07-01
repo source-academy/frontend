@@ -27,29 +27,21 @@ class Input extends React.Component<InputProps, StateProps> {
       fullWidth: true
     };
 
-    // TODO: move styling out into scss
-    const inputStyle = {
-      padding: { padding: '0px 0px 5px 0px' },
-      textarea: {
-        height: '90px',
-        outline: 'none',
-        width: '100%'
-      },
-      link: { color: 'inherit' }
-    };
-
     return (
-      <div>
-        <div style={inputStyle.padding}>
+      <div className = 'Input'>
+        <div className = 'input-zone'>
           <textarea
-            className="message-input"
-            style={inputStyle.textarea}
+            className="input-msg"
             placeholder="Type your message here"
             onChange={this.handleChange}
             value={this.state.message}
           />
         </div>
-        <a href="https://www.markdownguide.org" target="_blank" style={inputStyle.link}>
+        <a 
+          href="https://www.markdownguide.org" 
+          target="_blank" 
+          className = 'markdown-link'
+        >
           This chat uses Markdown. Click here to learn more.
         </a>
         {controlButton('Send', IconNames.PLAY, this.handleSubmit, sendButtonOpts)}
