@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import { Role } from '../../../reducers/states';
-import NavigationBar from '../NavigationBar';
+import { NavigationBar } from '../NavigationBar';
 
 test('Grading NavLink does NOT renders for Role.Student', () => {
   const props = { role: Role.Student, notifications: [] };

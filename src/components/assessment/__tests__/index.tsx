@@ -6,6 +6,8 @@ import Assessment, { IAssessmentProps } from '../';
 import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI';
 import { mockRouterProps } from '../../../mocks/components';
 import { AssessmentCategories } from '../assessmentShape';
+import { Provider } from 'react-redux';
+import { store } from '../../../createStore';
 
 const defaultProps: IAssessmentProps = {
   assessmentCategory: AssessmentCategories.Mission,
@@ -40,9 +42,11 @@ const mockPresentAssessmentForStudent: IAssessmentProps = {
 
 test('Assessment page "loading" content renders correctly', () => {
   const app = (
-    <MemoryRouter initialEntries={['/unknown']}>
-      <Assessment {...mockUndefinedAssessment} />
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/unknown']}>
+        <Assessment {...mockUndefinedAssessment} />
+      </MemoryRouter>
+    </Provider>
   );
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
@@ -50,9 +54,11 @@ test('Assessment page "loading" content renders correctly', () => {
 
 test('Assessment page with 0 missions renders correctly', () => {
   const app = (
-    <MemoryRouter initialEntries={['/unknown']}>
-      <Assessment {...mockEmptyAssessment} />
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/unknown']}>
+        <Assessment {...mockEmptyAssessment} />
+      </MemoryRouter>
+    </Provider>
   );
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
@@ -60,9 +66,11 @@ test('Assessment page with 0 missions renders correctly', () => {
 
 test('Assessment page with multiple loaded missions renders correctly', () => {
   const app = (
-    <MemoryRouter initialEntries={['/unknown']}>
-      <Assessment {...mockPresentAssessment} />
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/unknown']}>
+        <Assessment {...mockPresentAssessment} />
+      </MemoryRouter>
+    </Provider>
   );
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
@@ -70,9 +78,11 @@ test('Assessment page with multiple loaded missions renders correctly', () => {
 
 test('Assessment page does not show attempt Button for upcoming assessments for student user', () => {
   const app = (
-    <MemoryRouter initialEntries={['/unknown']}>
-      <Assessment {...mockPresentAssessmentForStudent} />
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/unknown']}>
+        <Assessment {...mockPresentAssessmentForStudent} />
+      </MemoryRouter>
+    </Provider>
   );
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();

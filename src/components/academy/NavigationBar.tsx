@@ -22,7 +22,7 @@ type StateProps = {
   notifications: AcademyNotification[];
 };
 
-const NavigationBar: React.SFC<NavigationBarProps> = props => (
+export const NavigationBar: React.SFC<NavigationBarProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
