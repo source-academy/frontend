@@ -4,12 +4,19 @@ import { expectSaga } from 'redux-saga-test-plan';
 import * as actions from '../../actions';
 import * as actionTypes from '../../actions/actionTypes';
 import { WorkspaceLocations } from '../../actions/workspaces';
-import { ExternalLibraryName, ExternalLibraryNames } from '../../components/assessment/assessmentShape';
-import { createDefaultWorkspace, defaultState, defaultWorkspaceManager, IState } from '../../reducers/states';
+import {
+  ExternalLibraryName,
+  ExternalLibraryNames
+} from '../../components/assessment/assessmentShape';
+import {
+  createDefaultWorkspace,
+  defaultState,
+  defaultWorkspaceManager,
+  IState
+} from '../../reducers/states';
 import playgroundSaga from '../playground';
 
 describe('Playground saga tests with the default and a dummy case', () => {
-
   test('Default: Playground puts changeQueryString action with undefined argument', () => {
     return (
       expectSaga(playgroundSaga)
@@ -37,17 +44,14 @@ describe('Playground saga tests with the default and a dummy case', () => {
       }
     };
     const expectedString: string = createQueryString(dummyEditorValue, dummyState);
-    return (
-      expectSaga(playgroundSaga)
-        .withState(dummyState)
-        .put(actions.changeQueryString(expectedString))
-        .dispatch({
-          type: actionTypes.GENERATE_LZ_STRING
-        })
-        .run()
-    );
+    return expectSaga(playgroundSaga)
+      .withState(dummyState)
+      .put(actions.changeQueryString(expectedString))
+      .dispatch({
+        type: actionTypes.GENERATE_LZ_STRING
+      })
+      .run();
   });
-
 });
 
 function createQueryString(code: string, state: IState): string {

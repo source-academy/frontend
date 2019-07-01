@@ -12,7 +12,9 @@ export default function* playgroundSaga(): SagaIterator {
 }
 
 function* updateQueryString() {
-  const code: string | null = yield select((state: IState) => state.workspaces.playground.editorValue);
+  const code: string | null = yield select(
+    (state: IState) => state.workspaces.playground.editorValue
+  );
   if (code === null || code === '' || code === defaultEditorValue) {
     yield put(actions.changeQueryString(undefined));
   } else {
