@@ -280,7 +280,7 @@ function* backendSaga(): SagaIterator {
 /**
  * POST /auth
  */
-async function postAuth(luminusCode: string): Promise<Tokens | null> {
+export async function postAuth(luminusCode: string): Promise<Tokens | null> {
   const response = await request('auth', 'POST', {
     body: { login: { luminus_code: luminusCode } },
     errorMessage: 'Could not login. Please contact the module administrator.'
@@ -333,7 +333,9 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
 /**
  * GET /assessments
  */
-async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+export async function getAssessmentOverviews(
+  tokens: Tokens
+): Promise<IAssessmentOverview[] | null> {
   const response = await request('assessments', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
@@ -359,7 +361,7 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
 /**
  * GET /assessments/${assessmentId}
  */
-async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
+export async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
   const response = await request(`assessments/${id}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
@@ -401,7 +403,7 @@ async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | 
 /**
  * POST /assessments/question/${questionId}/submit
  */
-async function postAnswer(
+export async function postAnswer(
   id: number,
   answer: string | number,
   tokens: Tokens
