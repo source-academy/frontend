@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-SOURCEFOLDERS="public/externalLibs/sound"
+SOUNDFOLDER="public/externalLibs/sound"
 JSDOC="node_modules/.bin/jsdoc"
 
 main() {
@@ -15,7 +15,7 @@ main() {
 
 run() {
 
-    ${JSDOC} -r -d doc/jsdoc ${SOURCEFOLDERS} 
+    ${JSDOC} -r -d doc/jsdoc/SOUND -c doc/jsdoc/conf.json -t doc/jsdoc/templates/template -R public/externalLibs/sound/README.md ${SOUNDFOLDER} 
 
 }
 
