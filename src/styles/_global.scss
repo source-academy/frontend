@@ -6,3 +6,14 @@ $cadet-color-4: #ced9e0;
 $cadet-color-5: #ffffff;
 
 $images-path: '../assets';
+
+.pt-tag {
+  text-align: center;
+}
+
+.badge {
+  left: -15px;
+  position: absolute;
+  top: -15px;
+  z-index: 3;
+}

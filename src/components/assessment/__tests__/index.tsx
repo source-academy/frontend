@@ -13,6 +13,7 @@ const defaultProps: IAssessmentProps = {
   handleAssessmentOverviewFetch: () => {},
   handleSubmitAssessment: (id: number) => {},
   isStudent: false,
+  notifications: [],
   ...mockRouterProps('/academy/missions', {})
 };
 

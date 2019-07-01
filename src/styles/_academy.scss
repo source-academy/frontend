@@ -8,8 +8,7 @@
 
 
 .#{$ns}-popover-content {
-  padding-left: 0.4rem;
-  padding-right: 0.4rem;
+  padding: 0.4rem;
 }
 
 .#{$ns}-non-ideal-state {
@@ -62,6 +61,7 @@
 
   .listing-picture {
     padding: 0;
+    position: relative;
 
     img {
       height: 100%;

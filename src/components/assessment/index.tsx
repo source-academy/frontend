@@ -36,6 +36,8 @@ import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace';
 import { controlButton } from '../commons';
 import ContentDisplay from '../commons/ContentDisplay';
 import Markdown from '../commons/Markdown';
+import NotificationBadge from '../notification/NotificationBadge';
+import { AcademyNotification } from '../notification/notificationShape';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
@@ -62,6 +64,7 @@ export interface IOwnProps {
 export interface IStateProps {
   assessmentOverviews?: IAssessmentOverview[];
   isStudent: boolean;
+  notifications: AcademyNotification[];
 }
 
 type State = {
@@ -116,7 +119,14 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const upcomingCards = this.props.assessmentOverviews
         .filter(isOverviewUpcoming)
         .map((overview, index) =>
-          makeOverviewCard(overview, index, this.setBetchaAssessment, !this.props.isStudent, false)
+          makeOverviewCard(
+            overview,
+            index,
+            this.setBetchaAssessment,
+            !this.props.isStudent,
+            false,
+            this.props.notifications
+          )
         );
 
       /** Opened assessments, that are released and can be attempted. */
@@ -127,14 +137,28 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const openedCards = this.props.assessmentOverviews
         .filter(overview => isOverviewOpened(overview))
         .map((overview, index) =>
-          makeOverviewCard(overview, index, this.setBetchaAssessment, true, false)
+          makeOverviewCard(
+            overview,
+            index,
+            this.setBetchaAssessment,
+            true,
+            false,
+            this.props.notifications
+          )
         );
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.props.assessmentOverviews
         .filter(overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview))
         .map((overview, index) =>
-          makeOverviewCard(overview, index, this.setBetchaAssessment, true, true)
+          makeOverviewCard(
+            overview,
+            index,
+            this.setBetchaAssessment,
+            true,
+            true,
+            this.props.notifications
+          )
         );
 
       /** Render cards */
@@ -287,18 +311,32 @@ const makeOverviewCard = (
   index: number,
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
   renderAttemptButton: boolean,
-  renderGradingStatus: boolean
+  renderGradingStatus: boolean,
+  notifications: AcademyNotification[]
 ) => (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
       <div className="col-xs-3 listing-picture">
+        <NotificationBadge
+          className="badge"
+          notifications={notifications.filter(
+            notification => notification.assessment_id && notification.assessment_id === overview.id
+          )}
+          large={true}
+        />
         <img
           className={`cover-image-${overview.status}`}
           src={overview.coverImage ? overview.coverImage : defaultCoverImage}
         />
       </div>
       <div className="col-xs-9 listing-text">
-        {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)}
+        {makeOverviewCardTitle(
+          overview,
+          index,
+          setBetchaAssessment,
+          renderGradingStatus,
+          notifications
+        )}
         <div className="row listing-grade">
           <H6>
             {' '}
@@ -336,7 +374,8 @@ const makeOverviewCardTitle = (
   overview: IAssessmentOverview,
   index: number,
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
-  renderGradingStatus: boolean
+  renderGradingStatus: boolean,
+  notifications: AcademyNotification[]
 ) => (
   <div className="row listing-title">
     <Text ellipsize={true} className={'col-xs-10'}>

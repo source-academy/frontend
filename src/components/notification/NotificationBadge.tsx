@@ -5,6 +5,7 @@ import { acknowledgeNotification } from 'src/actions';
 import { AcademyNotification, AcademyNotificationType } from './notificationShape';
 
 type OwnProps = {
+  className?: string;
   dispatch: Dispatch<any>;
   enableHover?: boolean; // enable or disable hover popover option
   large?: boolean; // enable to use large style
@@ -38,6 +39,7 @@ const NotificationBadge: React.SFC<OwnProps> = props => {
 
   return (
     <Popover
+      className={props.className}
       content={makeNotificationTags(props.notifications)}
       interactionKind={PopoverInteractionKind.HOVER}
       position={Position.RIGHT}

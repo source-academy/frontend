@@ -18,6 +18,8 @@ import { sortBy } from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import NotificationBadge from 'src/components/notification/NotificationBadge';
+import { AcademyNotification } from 'src/components/notification/notificationShape';
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -35,7 +37,7 @@ type State = {
 };
 
 type GradingNavLinkProps = {
-  data: GradingOverview;
+  data: GradingOverviewWithNotifications;
 };
 
 interface IGradingProps
@@ -55,7 +57,12 @@ export interface IDispatchProps {
 
 export interface IStateProps {
   gradingOverviews?: GradingOverview[];
+  notifications: AcademyNotification[];
 }
+
+type GradingOverviewWithNotifications = {
+  notifications: AcademyNotification[];
+} & GradingOverview;
 
 /** Component to render in table - grading status */
 const GradingStatus = (props: GradingNavLinkProps) => {
@@ -72,6 +79,10 @@ const GradingExp = (props: GradingNavLinkProps) => {
   return <XPCell data={props.data} />;
 };
 
+const NotificationBadgeCell = (props: GradingNavLinkProps) => {
+  return <NotificationBadge notifications={props.data.notifications} />;
+};
+
 class Grading extends React.Component<IGradingProps, State> {
   private columnDefs: ColDef[];
   private gridApi?: GridApi;
@@ -80,6 +91,15 @@ class Grading extends React.Component<IGradingProps, State> {
     super(props);
 
     this.columnDefs = [
+      {
+        headerName: '',
+        field: 'notifications',
+        cellRendererFramework: NotificationBadgeCell,
+        maxWidth: 30,
+        suppressResize: true,
+        suppressMovable: true,
+        suppressMenu: true
+      },
       { headerName: 'Assessment Name', field: 'assessmentName' },
       { headerName: 'Category', field: 'assessmentCategory', maxWidth: 100 },
       { headerName: 'Student Name', field: 'studentName' },
@@ -209,10 +229,22 @@ class Grading extends React.Component<IGradingProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
-    const data = sortBy(this.props.gradingOverviews, [
-      (a: GradingOverview) => -a.assessmentId,
-      (a: GradingOverview) => -a.submissionId
-    ]);
+    const data = sortBy(
+      this.props.gradingOverviews
+        ? this.props.gradingOverviews!.map(o => {
+            (o as GradingOverviewWithNotifications).notifications = this.props.notifications.filter(
+              n => n.submission_id && n.submission_id === o.submissionId
+            );
+
+            return o;
+          })
+        : this.props.gradingOverviews,
+      [
+        (a: GradingOverviewWithNotifications) => -a.notifications.length,
+        (a: GradingOverview) => -a.assessmentId,
+        (a: GradingOverview) => -a.submissionId
+      ]
+    );
 
     const grid = (
       <div className="GradingContainer">

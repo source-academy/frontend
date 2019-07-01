@@ -136,4 +136,47 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.updateGrading(submissionId, newGrading));
     yield call(showSuccessMessage, 'Saved!', 1000);
   });
+
+  yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
+    yield put(
+      actions.updateNotifications([
+        {
+          id: 1,
+          type: 'new',
+          assessment_id: 1,
+          read: false
+        },
+        {
+          id: 2,
+          type: 'new',
+          assessment_id: 2,
+          read: false
+        },
+        {
+          id: 3,
+          type: 'new',
+          assessment_id: 3,
+          read: false
+        },
+        {
+          id: 4,
+          type: 'submitted',
+          submission_id: 0,
+          read: false
+        },
+        {
+          id: 5,
+          type: 'submitted',
+          submission_id: 1,
+          read: false
+        },
+        {
+          id: 6,
+          type: 'submitted',
+          submission_id: 2,
+          read: false
+        }
+      ])
+    );
+  });
 }
