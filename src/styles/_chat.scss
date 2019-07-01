@@ -1,42 +1,41 @@
-.Chat {
-  .MessageList{
-    .dialogue-box {
-      font-family: inherit;
-      padding: 8px 15px 9px 15px;
-    }
-  
-    .msg-item {
-      list-style-type: none;
-    }
-  
-    .msg-list {
-      padding: 0px 0px 5px 0px;
-    }
-  
-    .msg-sender {
-      font-weight: bold;
-      margin: 0px 0px 7px 0px;
-    }
-    .msg-date{
-      font-size: 11px;
-      
-      font-family: monospace;
-    }
+.MessageList{
+  .dialogue-box {
+    font-family: inherit;
+    padding: 8px 15px 9px 15px;
   }
   
-  .Input {
-    .input-zone {
-      padding: 0px 0px 5px 0px;
-      .input-msg{
-        height: 90px;
-        outline: none;
-        resize: none;
-        width: 100%;
-      }
-    }
-    .markdown-link{
-      color: inherit;
-      font-style: italic;
-    }   
+  .msg-item {
+    list-style-type: none;
+  }
+  
+  .msg-list {
+    padding: 0px 0px 5px 0px;
+  }
+  
+  .msg-sender {
+    font-weight: bold;
+    margin: 0px 0px 7px 0px;
+  }
+  .msg-date{
+    font-size: 11px;
+      
+    font-family: monospace;
   }
 }
+  
+.Input {
+  .input-zone {
+    padding: 0px 0px 5px 0px;
+    .input-msg{
+      height: 90px;
+      outline: none;
+      resize: none;
+      width: 100%;
+    }
+  }
+  .markdown-link{
+    color: inherit;
+    font-style: italic;
+  }   
+}
+
