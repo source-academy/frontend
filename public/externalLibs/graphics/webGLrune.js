@@ -280,6 +280,10 @@ var sail_bb = new PrimaryShape(21, 3)
 var corner_bb = new PrimaryShape(24, 3)
 var nova_bb = new PrimaryShape(27, 6)
 var circle_bb = makeCircle()
+
+/** 
+ * primitive rune in the shape of a heart
+**/
 var heart_bb = makeHeart()
 var pentagram_bb = makePentagram()
 var ribbon_bb = makeRibbon()

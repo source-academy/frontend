@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
-SOUNDFOLDER="public/externalLibs/sound"
 JSDOC="node_modules/.bin/jsdoc"
+TMPL="doc/jsdoc/templates/template"
 
 main() {
     # make sure we are in the git root
@@ -15,7 +15,19 @@ main() {
 
 run() {
 
-    ${JSDOC} -r -d doc/jsdoc/SOUND -c doc/jsdoc/conf.json -t doc/jsdoc/templates/template -R public/externalLibs/sound/README.md ${SOUNDFOLDER} 
+    # SOUND
+    
+    ${JSDOC} -r -t ${TMPL} \
+	     -d doc/jsdoc/SOUND \
+	     -R public/externalLibs/sound/README.md \
+	     public/externalLibs/sound
+
+    # RUNES
+    
+    ${JSDOC} -r -t ${TMPL} \
+	     -d doc/jsdoc/RUNES \
+	     -R public/externalLibs/graphics/README.md \
+	     public/externalLibs/graphics/webGLrune.js
 
 }
 
