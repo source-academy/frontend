@@ -1,3 +1,5 @@
+// TODO: convert to TypeScript once this PR has been merged https://github.com/pusher/chatkit-client-js/pull/180
+
 import * as React from 'react';
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
 import MessageList from './MessageList.tsx';
