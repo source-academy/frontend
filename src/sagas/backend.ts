@@ -295,8 +295,18 @@ function* backendSaga(): SagaIterator {
       shouldAutoLogout: false
     });
     if (resp && resp.ok) {
-      const newNotifications: AcademyNotification[] = yield resp.json();
-      store.dispatch(actions.updateNotifications(newNotifications));
+      const newNotifications: AcademyNotification[] = ((yield resp.json()) as any[]).map(n => {
+        return {
+          id: n.id,
+          type: n.type,
+          assessment_id: n.assessment_id,
+          assessment_type: n.assessment ? capitalise(n.assessment.type) : undefined,
+          assesssment_title: n.assessment ? n.assessment.title : undefined,
+          question_id: n.question_id,
+          submission_id: n.submission_id
+        } as AcademyNotification;
+      });
+      yield put(actions.updateNotifications(newNotifications));
     }
   });
 

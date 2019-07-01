@@ -1,6 +1,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
+import { AcademyNotification } from 'src/components/notification/notificationShape';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import {
@@ -144,38 +145,44 @@ export function* mockBackendSaga(): SagaIterator {
           id: 1,
           type: 'new',
           assessment_id: 1,
-          read: false
-        },
+          assessment_type: 'Mission',
+          assesssment_title: 'The Secret to Streams'
+        } as AcademyNotification,
         {
           id: 2,
           type: 'new',
           assessment_id: 2,
-          read: false
-        },
+          assessment_type: 'Sidequest',
+          assessment_title: 'A sample Sidequest'
+        } as AcademyNotification,
         {
           id: 3,
           type: 'new',
           assessment_id: 3,
-          read: false
-        },
+          assessment_type: 'Mission',
+          assesssment_title: 'A Closed Mission'
+        } as AcademyNotification,
         {
           id: 4,
           type: 'submitted',
           submission_id: 0,
-          read: false
-        },
+          assessment_type: 'Mission',
+          assesssment_title: 'Mission 0'
+        } as AcademyNotification,
         {
           id: 5,
           type: 'submitted',
           submission_id: 1,
-          read: false
-        },
+          assessment_type: 'Mission',
+          assesssment_title: 'Mission 1'
+        } as AcademyNotification,
         {
           id: 6,
           type: 'submitted',
           submission_id: 2,
-          read: false
-        }
+          assessment_type: 'Mission',
+          assesssment_title: 'Mission 0'
+        } as AcademyNotification
       ])
     );
   });

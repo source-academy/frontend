@@ -1,8 +1,11 @@
+import { AssessmentCategory } from '../assessment/assessmentShape';
+
 export type AcademyNotification = {
   assessment_id?: number;
+  assessment_type?: AssessmentCategory;
+  assesssment_title?: string;
   id: number;
   question_id?: number;
-  read: boolean;
   submission_id?: number;
   type: AcademyNotificationType;
 };
