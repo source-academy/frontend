@@ -1,7 +1,6 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import { AcademyNotification } from '../components/notification/notificationShape';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import {
@@ -10,6 +9,7 @@ import {
   GradingQuestion
 } from '../components/academy/grading/gradingShape';
 import { IQuestion } from '../components/assessment/assessmentShape';
+import { AcademyNotification } from '../components/notification/notificationShape';
 import { store } from '../createStore';
 import { IState } from '../reducers/states';
 import { history } from '../utils/history';

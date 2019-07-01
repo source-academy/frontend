@@ -2,12 +2,12 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 import { MemoryRouter } from 'react-router';
 
+import { Provider } from 'react-redux';
 import Assessment, { IAssessmentProps } from '../';
+import { store } from '../../../createStore';
 import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI';
 import { mockRouterProps } from '../../../mocks/components';
 import { AssessmentCategories } from '../assessmentShape';
-import { Provider } from 'react-redux';
-import { store } from '../../../createStore';
 
 const defaultProps: IAssessmentProps = {
   assessmentCategory: AssessmentCategories.Mission,
