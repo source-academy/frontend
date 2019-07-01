@@ -37,16 +37,16 @@ const TwoDRunesExternals = [
   'flip_horiz',
   'make_cross',
   'repeat_pattern',
-  'black_bb',
-  'blank_bb',
-  'rcross_bb',
-  'sail_bb',
-  'corner_bb',
-  'nova_bb',
-  'circle_bb',
-  'heart_bb',
-  'pentagram_bb',
-  'ribbon_bb'
+  'square',
+  'blank',
+  'rcross',
+  'sail',
+  'corner',
+  'nova',
+  'circle',
+  'heart',
+  'pentagram',
+  'ribbon'
 ];
 
 /**
@@ -58,15 +58,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.TWO_DIM_RUNES, TwoDRunesExternals],
   [
     ExternalLibraryNames.THREE_DIM_RUNES,
-    [
-      ...TwoDRunesExternals,
-      'anaglyph',
-      'hollusion',
-      'animate',
-      'stereogram',
-      'overlay_frac',
-      'overlay'
-    ]
+    [...TwoDRunesExternals, 'anaglyph', 'hollusion', 'overlay_frac', 'overlay']
   ],
   [
     ExternalLibraryNames.CURVES,
@@ -112,30 +104,22 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'get_duration',
       'play',
       'stop',
-      'cut_sound',
-      'autocut_sound',
       'consecutively',
       'simultaneously',
       'noise_sound',
       'sine_sound',
-      'constant_sound',
       'silence_sound',
-      'high_sound',
-      'invert_sound',
-      'clamp_sound',
       'letter_name_to_midi_note',
       'letter_name_to_frequency',
       'midi_note_to_frequency',
       'square_sound',
       'triangle_sound',
       'sawtooth_sound',
-      'play_concurrently',
       'play_safe',
       /** Microphone Sounds */
       'init_record',
+      'record',
       'record_for',
-      'start_record',
-      'stop_record',
       /** Contest functions */
       'adsr',
       'stacking_adsr',
