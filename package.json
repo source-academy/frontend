@@ -25,7 +25,8 @@
     "update-ui-snapshots": "jest --updateSnapshot",
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "tslint": "tslint -p .",
-    "cors-proxy": "lcp --proxyUrl http://localhost:4000 --port 4001 --proxyPartial \"\""
+    "cors-proxy": "lcp --proxyUrl http://localhost:4000 --port 4001 --proxyPartial \"\"",
+    "jsdoc": "./scripts/jsdoc.sh"
   },
   "husky": {
     "hooks": {

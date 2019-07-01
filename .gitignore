@@ -1,5 +1,8 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# emacs backup copies
+*~
+
 # dependencies
 /node_modules
 
@@ -22,3 +25,6 @@ terraform*
 .env.production.local
 
 npm-debug.log*
+
+# generated docs ignored
+/doc/jsdoc
