@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { getPrettyDate } from '../../utils/dateHelpers';
+import { getPrettyDateChat } from '../../utils/dateHelpers';
 import Markdown from '../commons/Markdown';
 
 type Message = {
@@ -15,38 +15,18 @@ type StateProps = {
 };
 
 class MessageList extends React.Component<StateProps> {
-  // TODO: consolidate styles in scss file
-  private messageStyle = {
-    dialogueBox: {
-      fontFamily: 'inherit',
-      padding: '9px 15px 8px 15px'
-    },
-
-    msgItem: {
-      listStyleType: 'none'
-    },
-
-    msgList: {
-      padding: '0px 0px 5px 0px'
-    },
-
-    sender: {
-      fontWeight: 'bold',
-      margin: '0px 0px 6px 0px'
-    }
-  };
-
+  
   public render() {
     return (
-      <div>
-        <ul className="message-list" style={this.messageStyle.msgList}>
+      <div className ='MessageList'>
+        <ul className="msg-list" >
           {this.props.messages.map((message: Message, index: number) => (
-            <li className="chat-message" style={this.messageStyle.msgItem} key={index}>
-              <pre style={this.messageStyle.dialogueBox}>
+            <li className="msg-item" key={index}>
+              <pre className = 'dialogue-box'>
                 <span>
-                  <strong>{message.userStore.users[message.senderId].name}</strong>
+                  <strong className = 'msg-sender'>{message.userStore.users[message.senderId].name}</strong>
                   &emsp;
-                  <i>{getPrettyDate(message.createdAt)}</i>
+                  <i className = 'msg-date'>{getPrettyDateChat(message.createdAt)}</i>
                 </span>
                 <Markdown content={message.text} />
               </pre>
