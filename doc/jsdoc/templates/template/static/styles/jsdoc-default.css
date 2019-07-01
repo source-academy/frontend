@@ -1,4 +1,4 @@
-// modified by MH: 1/7/2019, see MH below
+/* modified by MH: 1/7/2019, see MH below */
 
 @font-face {
     font-family: 'Open Sans';
@@ -159,9 +159,9 @@ h1
     margin: 12px 24px 20px;
 }
 
-// added by MH: 1/7/2019
-//     support for overall library index,
-//     using library-page class
+/* added by MH: 1/7/2019
+     support for overall library index,
+     using library-page class */
 h2.libraries-page {
     margin: 16px 28px 24px;    
 }
