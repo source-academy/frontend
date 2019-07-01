@@ -724,17 +724,17 @@ export async function postNotify(tokens: Tokens, assessmentId?: number, submissi
 }
 
 /**
-* POST /materials
+* POST /sourcecast
 */
 const postSourcecast = async (audio: Blob, deltas: string, tokens: Tokens) => {
   const formData = new FormData();
-  formData.append('file', audio);
-  formData.append('deltas', deltas);
-  const resp = await request(`materials`, 'POST', {
+  const name = Date.now().toString() + '.wav';
+  formData.append('sourcecast[name]', name);
+  formData.append('sourcecast[audio]', audio, name);
+  formData.append('sourcecast[deltas]', deltas);
+  const resp = await request(`sourcecast`, 'POST', {
     accessToken: tokens.accessToken,
-    body: {
-      sourcecast: formData
-    },
+    body: formData,
     noContentType: true,
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
