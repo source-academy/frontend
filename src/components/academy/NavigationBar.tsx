@@ -34,7 +34,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         <div className="navbar-button-text hidden-xs">Missions</div>
         <NotificationBadge
           notifications={props.notifications.filter(
-            n => !n.submission_id && n.assessment_type && n.assessment_type === 'Mission'
+            n => n.type !== 'submitted' && n.assessment_type && n.assessment_type === 'Mission'
           )}
           enableHover={false}
         />
@@ -49,7 +49,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         <div className="navbar-button-text hidden-xs">Quests</div>
         <NotificationBadge
           notifications={props.notifications.filter(
-            n => !n.submission_id && n.assessment_type && n.assessment_type === 'Sidequest'
+            n => n.type !== 'submitted' && n.assessment_type && n.assessment_type === 'Sidequest'
           )}
           enableHover={false}
         />
@@ -64,7 +64,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         <div className="navbar-button-text hidden-xs">Paths</div>
         <NotificationBadge
           notifications={props.notifications.filter(
-            n => !n.submission_id && n.assessment_type && n.assessment_type === 'Path'
+            n => n.type !== 'submitted' && n.assessment_type && n.assessment_type === 'Path'
           )}
           enableHover={false}
         />
@@ -79,7 +79,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         <div className="navbar-button-text hidden-xs">Contests</div>
         <NotificationBadge
           notifications={props.notifications.filter(
-            n => !n.submission_id && n.assessment_type && n.assessment_type === 'Contest'
+            n => n.type !== 'submitted' && n.assessment_type && n.assessment_type === 'Contest'
           )}
           enableHover={false}
         />
@@ -95,7 +95,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           <Icon icon={IconNames.ENDORSED} />
           <div className="navbar-button-text hidden-xs">Grading</div>
           <NotificationBadge
-            notifications={props.notifications.filter(n => n.submission_id)}
+            notifications={props.notifications.filter(n => n.type === 'submitted')}
             enableHover={false}
           />
         </NavLink>
