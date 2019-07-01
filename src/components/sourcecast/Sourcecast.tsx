@@ -37,6 +37,7 @@ export interface IStateProps {
   queryString?: string;
   replValue: string;
   sideContentHeight?: number;
+  sourcecastIndex: any;
   sourceChapter: number;
   websocketStatus: number;
   externalLibraryName: string;
@@ -55,10 +56,12 @@ export interface IDispatchProps {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleFetchSourcecastIndex: () => void;
   handleGenerateLz: () => void;
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleRecordAudioUrl: (audioUrl: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
@@ -148,6 +151,8 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       },
       sourcecastControlbarProps: {
         handleEditorValueChange: this.props.handleEditorValueChange,
+        handleFetchSourcecastIndex: this.props.handleFetchSourcecastIndex,
+        handleRecordAudioUrl: this.props.handleRecordAudioUrl,
         handleSetDeltasToApply: this.props.handleSetDeltasToApply,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
@@ -156,7 +161,8 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         audioUrl: this.props.audioUrl,
         duration: this.props.playbackDuration,
         playbackData: this.props.playbackData,
-        playbackStatus: this.props.playbackStatus
+        playbackStatus: this.props.playbackStatus,
+        sourcecastIndex: this.props.sourcecastIndex
       }
     };
     return (

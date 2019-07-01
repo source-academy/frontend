@@ -17,9 +17,11 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
+  fetchSourcecastIndex,
   generateLzString,
   invalidEditorSessionId,
   playgroundExternalSelect,
+  recordAudioUrl,
   setDeltasToApply,
   setEditorBreakpoint,
   setEditorReadonly,
@@ -59,6 +61,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   queryString: state.playground.queryString,
   replValue: state.workspaces.sourcecast.replValue,
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
+  sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcecast.context.chapter,
   websocketStatus: state.workspaces.playground.websocketStatus,
   externalLibraryName: state.workspaces.playground.playgroundExternal
@@ -79,11 +82,13 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
+      handleFetchSourcecastIndex: fetchSourcecastIndex,
       handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         playgroundExternalSelect(externalLibraryName, location),
+      handleRecordAudioUrl: recordAudioUrl,
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

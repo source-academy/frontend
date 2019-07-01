@@ -51,6 +51,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_SOURCECAST_INDEX,
   UPDATE_WORKSPACE
 } from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
@@ -706,6 +707,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           replValue: action.payload.newReplValue
+        }
+      };
+    case UPDATE_SOURCECAST_INDEX:
+      return {
+        ...state,
+        sourcecast: {
+          ...state.sourcecast,
+          sourcecastIndex: action.payload.index
         }
       };
     case UPDATE_HAS_UNSAVED_CHANGES:

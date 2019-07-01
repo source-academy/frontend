@@ -29,6 +29,11 @@ class SourcecastControlbar extends React.PureComponent<
   }
 
   public render() {
+    const LoadIndexButton = controlButton(
+      'Load Index',
+      IconNames.LIST,
+      this.props.handleFetchSourcecastIndex
+    );
     const PlayerPlayButton = controlButton('Play', IconNames.PLAY, this.handlePlayerPlaying);
     const PlayerPauseButton = controlButton('Pause', IconNames.PAUSE, this.handlePlayerPausing);
     const PlayerResumeButton = controlButton('Resume', IconNames.PLAY, this.handlePlayerResuming);
@@ -46,6 +51,13 @@ class SourcecastControlbar extends React.PureComponent<
         />
         <br />
         <div>
+          <div className="PlayerControl">
+            {LoadIndexButton}
+            {this.props.sourcecastIndex &&
+              this.props.sourcecastIndex.map((item: any) =>
+                controlButton(item.id, IconNames.MUSIC, () => this.handleSetAudioUrl(item.url))
+              )}
+          </div>
           <div className="Slider">
             <Slider
               min={0}
@@ -141,6 +153,10 @@ class SourcecastControlbar extends React.PureComponent<
     });
   }
 
+  private handleSetAudioUrl = (url: string) => {
+    this.props.handleRecordAudioUrl(url);
+  };
+
   private handlePlayerPlaying = () => {
     const audio = this.audio.current;
     audio!.play();
@@ -197,6 +213,8 @@ class SourcecastControlbar extends React.PureComponent<
 
 export interface ISourcecastControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
+  handleFetchSourcecastIndex: () => void;
+  handleRecordAudioUrl: (audioUrl: string) => void;
   handleSetDeltasToApply: (deltas: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastDuration: (duration: number) => void;
@@ -206,6 +224,7 @@ export interface ISourcecastControlbarProps {
   duration: number;
   playbackData: IPlaybackData;
   playbackStatus: PlaybackStatus;
+  sourcecastIndex: any;
 }
 
 export interface ISourcecastControlbarState {

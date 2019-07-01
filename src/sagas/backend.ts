@@ -338,6 +338,17 @@ function* backendSaga(): SagaIterator {
     yield call(postNotify, tokens, assessmentId, submissionId);
   });
 
+  yield takeEvery(actionTypes.FETCH_SOURCECAST_INDEX, function*() {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const sourcecastIndex = yield call(getSourcecastIndex, tokens);
+    if (sourcecastIndex) {
+      yield put(actions.updateSourcecastIndex(sourcecastIndex));
+    }
+  });
+
   yield takeEvery(actionTypes.SAVE_PLAYBACK_DATA, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
@@ -724,8 +735,25 @@ export async function postNotify(tokens: Tokens, assessmentId?: number, submissi
 }
 
 /**
-* POST /sourcecast
-*/
+ * GET /sourcecast
+ */
+async function getSourcecastIndex(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+  const response = await request('sourcecast', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+  if (response && response.ok) {
+    const index = await response.json();
+    return index;
+  } else {
+    return null;
+  }
+}
+
+/**
+ * POST /sourcecast
+ */
 const postSourcecast = async (audio: Blob, deltas: string, tokens: Tokens) => {
   const formData = new FormData();
   const name = Date.now().toString() + '.wav';
@@ -742,7 +770,7 @@ const postSourcecast = async (audio: Blob, deltas: string, tokens: Tokens) => {
     shouldRefresh: true
   });
   return resp;
-}
+};
 
 /**
  * @returns {(Response|null)} Response if successful, otherwise null.

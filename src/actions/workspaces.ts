@@ -297,6 +297,17 @@ export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
 });
 
 // SOURCECAST
+export const fetchSourcecastIndex = () => ({
+  type: actionTypes.FETCH_SOURCECAST_INDEX
+});
+
+export const updateSourcecastIndex = (index: any) => ({
+  type: actionTypes.UPDATE_SOURCECAST_INDEX,
+  payload: {
+    index
+  }
+});
+
 export const loadPlaybackData = (playbackData: IPlaybackData) => ({
   type: actionTypes.LOAD_PLAYBACK_DATA,
   payload: {
