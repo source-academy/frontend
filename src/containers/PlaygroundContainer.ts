@@ -26,7 +26,8 @@ import {
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue,
-  WorkspaceLocation
+  WorkspaceLocation,
+  WorkspaceLocations
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
@@ -52,7 +53,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   externalLibraryName: state.workspaces.playground.playgroundExternal
 });
 
-const location: WorkspaceLocation = 'playground';
+const location: WorkspaceLocation = WorkspaceLocations.playground;
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
