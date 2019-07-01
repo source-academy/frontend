@@ -3,8 +3,13 @@ import { connect, MapStateToProps } from 'react-redux';
 import ChatApp from '../components/chat/ChatApp';
 import { IState } from '../reducers/states';
 
-const mapStateToProps: MapStateToProps<{}, {}, IState> = state => ({
-  accessToken: state.session.accessToken
+type OwnProps = {
+  roomId: string | null;
+};
+
+const mapStateToProps: MapStateToProps<{}, OwnProps, IState> = (state, props) => ({
+  accessToken: state.session.accessToken,
+  roomId: props.roomId
 });
 
 export default connect(

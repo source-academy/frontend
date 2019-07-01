@@ -275,7 +275,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       {
         label: `Chat`,
         icon: IconNames.CHAT,
-        body: USE_CHATKIT ? <ChatApp /> : <span>ChatKit disabled.</span>
+        body: USE_CHATKIT ? (
+          <ChatApp roomId={props.grading![questionId].grade.comment} />
+        ) : (
+          <span>ChatKit disabled.</span>
+        )
       },
       {
         label: `Autograder`,

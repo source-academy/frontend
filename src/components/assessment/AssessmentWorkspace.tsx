@@ -358,30 +358,36 @@ class AssessmentWorkspace extends React.Component<
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         )
-      },
-      {
-        label: `Chat`,
-        icon: IconNames.CHAT,
-        body: USE_CHATKIT ? <ChatApp /> : <span>ChatKit disabled.</span>
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;
     if (isGraded) {
-      tabs.push({
-        label: `Grading`,
-        icon: IconNames.TICK,
-        body: (
-          <GradingResult
-            comment={props.assessment!.questions[questionId].comment}
-            graderName={props.assessment!.questions[questionId].grader.name}
-            gradedAt={props.assessment!.questions[questionId].gradedAt}
-            xp={props.assessment!.questions[questionId].xp}
-            grade={props.assessment!.questions[questionId].grade}
-            maxGrade={props.assessment!.questions[questionId].maxGrade}
-            maxXp={props.assessment!.questions[questionId].maxXp}
-          />
-        )
-      });
+      tabs.push(
+        {
+          label: `Grading`,
+          icon: IconNames.TICK,
+          body: (
+            <GradingResult
+              comment={props.assessment!.questions[questionId].comment}
+              graderName={props.assessment!.questions[questionId].grader.name}
+              gradedAt={props.assessment!.questions[questionId].gradedAt}
+              xp={props.assessment!.questions[questionId].xp}
+              grade={props.assessment!.questions[questionId].grade}
+              maxGrade={props.assessment!.questions[questionId].maxGrade}
+              maxXp={props.assessment!.questions[questionId].maxXp}
+            />
+          )
+        },
+        {
+          label: `Comments`,
+          icon: IconNames.CHAT,
+          body: USE_CHATKIT ? (
+            <ChatApp roomId={props.assessment!.questions[questionId].comment} />
+          ) : (
+            <span>ChatKit disabled.</span>
+          )
+        }
+      );
     }
 
     const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;

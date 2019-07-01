@@ -58,7 +58,7 @@ class ChatApp extends React.Component {
             }
           },
           messageLimit: 100,
-          roomId: '19411521'
+          roomId: this.props.roomId
         });
       })
       .then(currentRoom => {
