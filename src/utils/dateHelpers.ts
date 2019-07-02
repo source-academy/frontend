@@ -29,11 +29,3 @@ export const getPrettyDate = (dateString: string): string => {
   const prettyDate = date.format('Do MMMM, HH:mm');
   return prettyDate;
 };
-/**
- * A format that fits into the message frame's limited space
- */
-export const getPrettyDateChat = (dateString: string): string => {
-  const date = moment(dateString);
-  const prettyDate = date.format('DD/MM/YY, HH:mm');
-  return prettyDate;
-};
