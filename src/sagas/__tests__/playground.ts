@@ -24,7 +24,7 @@ describe('Playground saga tests', () => {
       .dispatch({
         type: actionTypes.GENERATE_LZ_STRING
       })
-      .run();
+      .silentRun();
   });
 
   test('puts changeQueryString action with undefined argument when passed an empty string', () => {
@@ -46,7 +46,7 @@ describe('Playground saga tests', () => {
       .dispatch({
         type: actionTypes.GENERATE_LZ_STRING
       })
-      .run();
+      .silentRun();
   });
 
   test('puts changeQueryString action with correct string argument when passed a dummy string', () => {
@@ -69,7 +69,7 @@ describe('Playground saga tests', () => {
       .dispatch({
         type: actionTypes.GENERATE_LZ_STRING
       })
-      .run();
+      .silentRun();
   });
 });
 
