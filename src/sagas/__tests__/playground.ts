@@ -13,6 +13,6 @@ test('Playground puts changeQueryString action upon taking GENERATE_LZ_STRING', 
       .dispatch({
         type: actionTypes.GENERATE_LZ_STRING
       })
-      .run()
+      .silentRun()
   );
 });
