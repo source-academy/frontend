@@ -138,6 +138,15 @@ export function* mockBackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Saved!', 1000);
   });
 
+  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
+    const notifications: AcademyNotification[] = yield select(
+      (State: IState) => State.session.notifications
+    );
+    const id: number = (action as actionTypes.IAction).payload;
+    const newNotifications = notifications.filter(n => n.id !== id);
+    yield put(actions.updateNotifications(newNotifications));
+  });
+
   yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
     yield put(
       actions.updateNotifications([
