@@ -22,7 +22,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
-import { store } from '../createStore';
+// import { store } from '../createStore';
 import { IState, Role } from '../reducers/states';
 import { castLibrary } from '../utils/castBackend';
 import { BACKEND_URL } from '../utils/constants';
@@ -60,10 +60,11 @@ function* backendSaga(): SagaIterator {
     const tokens = yield call(postAuth, luminusCode);
     const user = tokens ? yield call(getUser, tokens) : null;
     if (tokens && user) {
-      // Use dispatch instead of saga's put to guarantee the reducer has
+      // Old: Use dispatch instead of saga's put to guarantee the reducer has
       // finished setting values in the state before /academy begins rendering
-      store.dispatch(actions.setTokens(tokens));
-      store.dispatch(actions.setUser(user));
+      // New: Changed to yield put
+      yield put(actions.setTokens(tokens));
+      yield put(actions.setUser(user));
       yield history.push('/academy');
     } else {
       yield history.push('/');
@@ -610,7 +611,8 @@ async function request(
       return response;
     } else if (opts.shouldRefresh && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
-      store.dispatch(actions.setTokens(newTokens));
+      // Changed put to put
+      put(actions.setTokens(newTokens));
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,
@@ -626,7 +628,8 @@ async function request(
       throw new Error('API call failed or got non-OK response');
     }
   } catch (e) {
-    store.dispatch(actions.logOut());
+    // Changed put to put
+    put(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
     return null;
   }
