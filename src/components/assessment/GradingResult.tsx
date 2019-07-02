@@ -5,7 +5,6 @@ import { getPrettyDate } from '../../utils/dateHelpers';
 type GradingResultProps = OwnProps;
 
 export type OwnProps = {
-  comment: string | null;
   graderName: string;
   gradedAt: string;
   xp: number;
