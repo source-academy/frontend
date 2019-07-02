@@ -359,7 +359,7 @@
         fill: 'white'
       })
       this.image.add(txt)
-    } else if (is_list(value) && is_null(value)) {
+    } else if (!is_list(value) && is_null(value)) {
       var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0)
       var emptyBox = empty.getRaw()
       this.image.add(emptyBox)
@@ -468,7 +468,7 @@
    */
   function backwardLeftEdge(x1, y1, x2, y2, layer) {
     // coordinates of all the turning points, execpt the first segment in the path
-    if (x1 > x2 && y1 > y2) {
+    if (x1 > x2 && y1 >= y2) {
       // lower right to upper left
       var path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
@@ -483,7 +483,7 @@
         x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
       ]
-    } else if (x1 <= x2 && y1 > y2) {
+    } else if (x1 <= x2 && y1 >= y2) {
       // lower left to upper right
       var path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
