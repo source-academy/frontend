@@ -39,7 +39,7 @@
     'filter',
     'enum_list',
     'list_ref',
-    'accumulate',
+    'reduce',
     'equal',
     'draw_data',
     'set_head',

@@ -309,19 +309,19 @@ function list_ref(xs, n) {
   return head(xs)
 }
 
-// accumulate applies given operation op to elements of a list
+// reduce applies given operation op to elements of a list
 // in a right-to-left order, first apply op to the last element
 // and an initial element, resulting in r1, then to the
 // second-last element and r1, resulting in r2, etc, and finally
 // to the first element and r_n-1, where n is the length of the
 // list.
-// accumulate(op,zero,list(1,2,3)) results in
+// reduce(op,zero,list(1,2,3)) results in
 // op(1, op(2, op(3, zero)))
-function accumulate(op, initial, sequence) {
+function reduce(op, initial, sequence) {
   if (is_null(sequence)) {
     return initial
   } else {
-    return op(head(sequence), accumulate(op, initial, tail(sequence)))
+    return op(head(sequence), reduce(op, initial, tail(sequence)))
   }
 }
 

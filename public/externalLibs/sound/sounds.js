@@ -311,7 +311,7 @@ function consecutively(list_of_sounds) {
         }
         return pair(new_wave, dur1 + dur2);
     }
-    return accumulate(consec_two, silence_sound(0), list_of_sounds);
+    return reduce(consec_two, silence_sound(0), list_of_sounds);
 }
 
 // Mushes a list of sounds together
@@ -330,7 +330,7 @@ function simultaneously(list_of_sounds) {
         return pair(new_wave, new_dur);
     }
 
-    var mushed_sounds = accumulate(musher, silence_sound(0), list_of_sounds);
+    var mushed_sounds = reduce(musher, silence_sound(0), list_of_sounds);
     var normalised_wave =  function(t) {
        return (head(mushed_sounds))(t) / length(list_of_sounds);
     }  

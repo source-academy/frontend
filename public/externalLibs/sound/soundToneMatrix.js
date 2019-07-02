@@ -533,7 +533,7 @@ function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
     }
   }
 
-  return simultaneously(accumulate(
+  return simultaneously(reduce(
     function (x, y) {
       return pair((tail(x))
     (waveform(base_frequency * head(x), duration))
