@@ -233,7 +233,7 @@ class Grading extends React.Component<IGradingProps, State> {
       this.props.gradingOverviews
         ? this.props.gradingOverviews!.map(o => {
             (o as GradingOverviewWithNotifications).notifications = this.props.notifications.filter(
-              n => n.submission_id && n.submission_id === o.submissionId
+              n => n.submission_id !== undefined && n.submission_id === o.submissionId
             );
 
             return o;
