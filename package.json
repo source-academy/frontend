@@ -28,7 +28,9 @@
     "cors-proxy": "lcp --proxyUrl http://localhost:4000 --port 4001 --proxyPartial \"\""
   },
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "pre-push": "bash scripts/test.sh"
+    }
   },
   "dependencies": {
     "@pusher/chatkit-client": "^1.5.0",
