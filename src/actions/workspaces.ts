@@ -4,8 +4,8 @@ import { ExternalLibraryName, Library } from '../components/assessment/assessmen
 import {
   DeltaType,
   ICodeDelta,
-  ICursorPosition,
   IPlaybackData,
+  IPosition,
   PlaybackStatus
 } from '../components/sourcecast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
@@ -350,7 +350,7 @@ export const setSourcecastStatus: ActionCreator<actionTypes.IAction> = (
 export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
   type: DeltaType,
   time: number,
-  delta: ICodeDelta | ICursorPosition
+  delta: ICodeDelta | IPosition
 ) => ({
   type: actionTypes.RECORD_EDITOR_DELTA,
   payload: {
@@ -409,7 +409,7 @@ export const timerStop: ActionCreator<actionTypes.IAction> = (timeNow: number) =
 
 export const updateEditorCursorPosition: ActionCreator<actionTypes.IAction> = (
   workspaceLocation: WorkspaceLocation,
-  editorCursorPositionToBeApplied: ICursorPosition
+  editorCursorPositionToBeApplied: IPosition
 ) => ({
   type: actionTypes.UPDATE_EDITOR_CURSOR_POSITION,
   payload: {

@@ -18,19 +18,18 @@ export enum PlaybackStatus {
 }
 
 export interface ICodeDelta {
-  start: {
-    row: number;
-    column: number;
-  };
-  end: {
-    row: number;
-    column: number;
-  };
+  start: IPosition;
+  end: IPosition;
   action: string;
   lines: string[];
 }
 
-export interface ICursorPosition {
+export interface ISelectionRange {
+  start: IPosition;
+  end: IPosition;
+}
+
+export interface IPosition {
   row: number;
   column: number;
 }
@@ -42,6 +41,6 @@ export interface IPlaybackData {
   deltas: Array<{
     type: DeltaType;
     time: number;
-    data: ICodeDelta | ICursorPosition;
+    data: ICodeDelta | IPosition;
   }>;
 }

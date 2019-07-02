@@ -8,7 +8,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { ICodeDelta, ICursorPosition, IPlaybackData, PlaybackStatus } from './sourcecastShape';
+import { ICodeDelta, IPlaybackData, IPosition, PlaybackStatus } from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast!';
 
@@ -18,7 +18,7 @@ export interface IStateProps {
   activeTab: number;
   audioUrl: string;
   deltasToApply: ICodeDelta[] | null;
-  editorCursorPositionToBeApplied: ICursorPosition;
+  editorCursorPositionToBeApplied: IPosition;
   editorReadonly: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -73,7 +73,7 @@ export interface IDispatchProps {
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
-  handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: ICursorPosition) => void;
+  handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) => void;
 }
 
 class Sourcecast extends React.Component<ISourcecastProps> {

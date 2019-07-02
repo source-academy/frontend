@@ -3,13 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { controlButton } from '../commons';
-import {
-  DeltaType,
-  ICodeDelta,
-  ICursorPosition,
-  IPlaybackData,
-  PlaybackStatus
-} from './sourcecastShape';
+import { DeltaType, ICodeDelta, IPlaybackData, IPosition, PlaybackStatus } from './sourcecastShape';
 
 class SourcecastControlbar extends React.PureComponent<
   ISourcecastControlbarProps,
@@ -127,7 +121,7 @@ class SourcecastControlbar extends React.PureComponent<
             this.applyDeltas([futureData[i].data as ICodeDelta]);
             break;
           case DeltaType.cursorPositionChange:
-            this.props.handleUpdateEditorCursorPosition(futureData[i].data as ICursorPosition);
+            this.props.handleUpdateEditorCursorPosition(futureData[i].data as IPosition);
             break;
         }
         i++;
@@ -219,7 +213,7 @@ export interface ISourcecastControlbarProps {
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
-  handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: ICursorPosition) => void;
+  handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) => void;
   audioUrl: string;
   duration: number;
   playbackData: IPlaybackData;

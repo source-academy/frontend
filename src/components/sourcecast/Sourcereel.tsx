@@ -12,8 +12,8 @@ import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import {
   DeltaType,
   ICodeDelta,
-  ICursorPosition,
   IPlaybackData,
+  IPosition,
   RecordingStatus
 } from './sourcecastShape';
 
@@ -65,11 +65,7 @@ export interface IDispatchProps {
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleRecordAudioUrl: (audioUrl: string) => void;
-  handleRecordEditorDelta: (
-    type: DeltaType,
-    time: number,
-    delta: ICodeDelta | ICursorPosition
-  ) => void;
+  handleRecordEditorDelta: (type: DeltaType, time: number, delta: ICodeDelta | IPosition) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;

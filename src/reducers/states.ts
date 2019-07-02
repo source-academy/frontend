@@ -15,8 +15,8 @@ import {
 import { Notification } from '../components/notification/notificationShape';
 import {
   ICodeDelta,
-  ICursorPosition,
   IPlaybackData,
+  IPosition,
   PlaybackStatus,
   RecordingStatus
 } from '../components/sourcecast/sourcecastShape';
@@ -63,7 +63,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 export interface ISourcecast extends IWorkspaceState {
   readonly sourcecastIndex: any;
   readonly deltasToApply: ICodeDelta[] | null;
-  readonly editorCursorPositionToBeApplied: ICursorPosition;
+  readonly editorCursorPositionToBeApplied: IPosition;
   readonly playbackData: IPlaybackData;
   readonly playbackDuration: number;
   readonly playbackStatus: PlaybackStatus;

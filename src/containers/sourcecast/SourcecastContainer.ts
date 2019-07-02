@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { ICursorPosition, PlaybackStatus } from 'src/components/sourcecast/sourcecastShape';
+import { IPosition, PlaybackStatus } from 'src/components/sourcecast/sourcecastShape';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -105,7 +105,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
-      handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: ICursorPosition) =>
+      handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) =>
         updateEditorCursorPosition(location, editorCursorPositionToBeApplied),
       handleDebuggerPause: () => beginDebuggerPause(location),
       handleDebuggerResume: () => debuggerResume(location),
