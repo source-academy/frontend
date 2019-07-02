@@ -77,6 +77,7 @@ function cadetAlert(value: any) {
 function visualiseList(list: any) {
   if ((window as any).ListVisualizer) {
     (window as any).ListVisualizer.draw(list);
+    return list;
   } else {
     throw new Error('List visualizer is not enabled');
   }
