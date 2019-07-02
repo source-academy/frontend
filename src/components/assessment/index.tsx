@@ -25,6 +25,7 @@ import { NavLink } from 'react-router-dom';
 import { sortBy } from 'lodash';
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer';
+import NotificationBadge from '../../containers/notification/NotificationBadge';
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers';
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers';
 import {
@@ -37,7 +38,6 @@ import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace';
 import { controlButton } from '../commons';
 import ContentDisplay from '../commons/ContentDisplay';
 import Markdown from '../commons/Markdown';
-import NotificationBadge from '../notification/NotificationBadge';
 import { filterNotificationsBy } from '../notification/NotificationHelpers';
 import { AcademyNotification } from '../notification/notificationShape';
 

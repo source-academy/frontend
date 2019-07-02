@@ -4,12 +4,11 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { IState, Role } from '../../reducers/states';
+import { Role } from '../../reducers/states';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories } from '../assessment/assessmentShape';
 
-import { connect } from 'react-redux';
-import NotificationBadge from '../notification/NotificationBadge';
+import NotificationBadge from '../../containers/notification/NotificationBadge';
 import { AcademyNotification } from '../notification/notificationShape';
 
 type NavigationBarProps = OwnProps & StateProps;
@@ -18,11 +17,11 @@ type OwnProps = {
   role: Role;
 };
 
-type StateProps = {
+export type StateProps = {
   notifications: AcademyNotification[];
 };
 
-export const NavigationBar: React.SFC<NavigationBarProps> = props => (
+const NavigationBar: React.SFC<NavigationBarProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
@@ -104,8 +103,4 @@ export const NavigationBar: React.SFC<NavigationBarProps> = props => (
   </Navbar>
 );
 
-const mapStateToProps = (state: IState) => ({
-  notifications: state.session.notifications
-});
-
-export default connect(mapStateToProps)(NavigationBar);
+export default NavigationBar;

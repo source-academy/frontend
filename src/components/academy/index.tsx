@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import Grading from '../../containers/academy/grading';
+import AcademyNavigationBar from '../../containers/academy/NavigationBar';
 import AssessmentContainer from '../../containers/assessment';
 import Game from '../../containers/GameContainer';
 import { isAcademyRe } from '../../reducers/session';
@@ -9,7 +10,6 @@ import { Role } from '../../reducers/states';
 import { HistoryHelper } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape';
-import AcademyNavigationBar from './NavigationBar';
 
 interface IAcademyProps extends IOwnProps, IStateProps, IDispatchProps, RouteComponentProps<{}> {}
 

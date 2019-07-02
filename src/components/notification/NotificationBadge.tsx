@@ -1,18 +1,19 @@
 import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
-import { acknowledgeNotification } from '../../actions';
 import { AcademyNotification, AcademyNotificationType } from './notificationShape';
 
 type OwnProps = {
   className?: string;
-  dispatch: Dispatch<any>;
   enableHover?: boolean; // enable or disable hover popover option
   large?: boolean; // enable to use large style
   notifications: AcademyNotification[];
 };
 
-const NotificationBadge: React.SFC<OwnProps> = props => {
+export type DispatchProps = {
+  handleAcknowledgeNotification: (notificationId: number) => void;
+};
+
+const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
   if (!props.notifications.length) {
     return null;
   }
@@ -22,7 +23,7 @@ const NotificationBadge: React.SFC<OwnProps> = props => {
   );
 
   const makeNotificationTag = (notification: AcademyNotification) => {
-    const onRemove = () => props.dispatch(acknowledgeNotification(notification.id));
+    const onRemove = () => props.handleAcknowledgeNotification(notification.id);
 
     return (
       <Tag
@@ -71,4 +72,4 @@ const makeNotificationMessage = (type: AcademyNotificationType) => {
   }
 };
 
-export default connect()(NotificationBadge);
+export default NotificationBadge;
