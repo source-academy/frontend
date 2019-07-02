@@ -15,21 +15,21 @@ function* updateQueryString() {
   const code: string | null = yield select(
     (state: IState) => state.workspaces.playground.editorValue
   );
-  if (code === null || code === '' || code === defaultEditorValue) {
+  if (!code || code === defaultEditorValue) {
     yield put(actions.changeQueryString(undefined));
-  } else {
-    const codeString: string = code as string;
-    const chapter: number = yield select(
-      (state: IState) => state.workspaces.playground.context.chapter
-    );
-    const external: ExternalLibraryName = yield select(
-      (state: IState) => state.workspaces.playground.playgroundExternal
-    );
-    const newQueryString: string = qs.stringify({
-      prgrm: compressToEncodedURIComponent(codeString),
-      chap: chapter,
-      ext: external
-    });
-    yield put(actions.changeQueryString(newQueryString));
+    return;
   }
+  const codeString: string = code as string;
+  const chapter: number = yield select(
+    (state: IState) => state.workspaces.playground.context.chapter
+  );
+  const external: ExternalLibraryName = yield select(
+    (state: IState) => state.workspaces.playground.playgroundExternal
+  );
+  const newQueryString: string = qs.stringify({
+    prgrm: compressToEncodedURIComponent(codeString),
+    chap: chapter,
+    ext: external
+  });
+  yield put(actions.changeQueryString(newQueryString));
 }
