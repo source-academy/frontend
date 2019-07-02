@@ -10,7 +10,6 @@ export const USE_BACKEND =
   process.env.REACT_APP_USE_BACKEND !== '' &&
   process.env.REACT_APP_USE_BACKEND!.toUpperCase() === 'TRUE';
 export const USE_CHATKIT =
-  USE_BACKEND &&
   process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== undefined &&
   process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== '';
 export const INSTANCE_LOCATOR = process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR;
