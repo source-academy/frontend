@@ -422,7 +422,7 @@ export async function postAnswer(
 /**
  * POST /assessments/${assessmentId}/submit
  */
-async function postAssessment(id: number, tokens: Tokens): Promise<Response | null> {
+export async function postAssessment(id: number, tokens: Tokens): Promise<Response | null> {
   const resp = await request(`assessments/${id}/submit`, 'POST', {
     accessToken: tokens.accessToken,
     noHeaderAccept: true,
