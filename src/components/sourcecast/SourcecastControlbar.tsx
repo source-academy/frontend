@@ -1,7 +1,9 @@
+/* tslint:disable:no-console */
 import { Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { BACKEND_URL } from '../../utils/constants';
 import { controlButton } from '../commons';
 import { DeltaType, ICodeDelta, IPlaybackData, IPosition, PlaybackStatus } from './sourcecastShape';
 
@@ -48,9 +50,18 @@ class SourcecastControlbar extends React.PureComponent<
           <div className="PlayerControl">
             {LoadIndexButton}
             {this.props.sourcecastIndex &&
-              this.props.sourcecastIndex.map((item: any) =>
-                controlButton(item.id, IconNames.MUSIC, () => this.handleSetAudioUrl(item.url))
-              )}
+              this.props.sourcecastIndex.map((item: any) => (
+                <div key={item.id}>
+                  {controlButton(item.id, IconNames.MUSIC, () => {
+                    const url = BACKEND_URL + item.url;
+                    console.log(url);
+                    this.props.handleRecordAudioUrl(url);
+                    const playbackData = JSON.parse(item.deltas);
+                    console.log(playbackData);
+                    this.props.handleSetSourcecastData(playbackData);
+                  })}
+                </div>
+              ))}
           </div>
           <div className="Slider">
             <Slider
@@ -147,10 +158,6 @@ class SourcecastControlbar extends React.PureComponent<
     });
   }
 
-  private handleSetAudioUrl = (url: string) => {
-    this.props.handleRecordAudioUrl(url);
-  };
-
   private handlePlayerPlaying = () => {
     const audio = this.audio.current;
     audio!.play();
@@ -211,6 +218,7 @@ export interface ISourcecastControlbarProps {
   handleRecordAudioUrl: (audioUrl: string) => void;
   handleSetDeltasToApply: (deltas: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetSourcecastData: (playbackData: IPlaybackData) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
   handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) => void;

@@ -135,8 +135,6 @@ class SourcereelControlbar extends React.PureComponent<
         fileDataBlob: blob
       });
     });
-    const url = window.URL.createObjectURL(this.state.fileDataBlob);
-    this.props.handleRecordAudioUrl(url);
     this.recorder.clear();
   };
 

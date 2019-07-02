@@ -68,6 +68,7 @@ export interface IDispatchProps {
   handleSetDeltasToApply: (delta: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
+  handleSetSourcecastData: (playbackData: IPlaybackData) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
@@ -155,6 +156,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         handleRecordAudioUrl: this.props.handleRecordAudioUrl,
         handleSetDeltasToApply: this.props.handleSetDeltasToApply,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
+        handleSetSourcecastData: this.props.handleSetSourcecastData,
         handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
         handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
         handleUpdateEditorCursorPosition: this.props.handleUpdateEditorCursorPosition,

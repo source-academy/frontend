@@ -1,7 +1,11 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { IPosition, PlaybackStatus } from 'src/components/sourcecast/sourcecastShape';
+import {
+  IPlaybackData,
+  IPosition,
+  PlaybackStatus
+} from 'src/components/sourcecast/sourcecastShape';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -26,6 +30,7 @@ import {
   setEditorBreakpoint,
   setEditorReadonly,
   setEditorSessionId,
+  setSourcecastData,
   setSourcecastDuration,
   setSourcecastStatus,
   setWebsocketStatus,
@@ -97,6 +102,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setEditorReadonly(location, editorReadonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
+      handleSetSourcecastData: (playbackData: IPlaybackData) => setSourcecastData(playbackData),
       handleSetSourcecastDuration: (duration: number) => setSourcecastDuration(duration),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         setSourcecastStatus(playbackStatus),
