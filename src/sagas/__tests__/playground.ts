@@ -17,7 +17,7 @@ import {
 import playgroundSaga from '../playground';
 
 describe('Playground saga tests', () => {
-  test('puts changeQueryString action with undefined argument when passed the default state', () => {
+  test('puts changeQueryString action with undefined argument when passed the default value', () => {
     return expectSaga(playgroundSaga)
       .withState(defaultState)
       .put(actions.changeQueryString(undefined))
@@ -27,7 +27,29 @@ describe('Playground saga tests', () => {
       .run();
   });
 
-  test('puts changeQueryString action with correct string argument when passed a dummy state', () => {
+  test('puts changeQueryString action with undefined argument when passed an empty string', () => {
+    const dummyEditorValue: string = '';
+    const dummyState: IState = {
+      ...defaultState,
+      workspaces: {
+        ...defaultWorkspaceManager,
+        playground: {
+          ...createDefaultWorkspace(WorkspaceLocations.playground),
+          playgroundExternal: ExternalLibraryNames.NONE,
+          editorValue: dummyEditorValue
+        }
+      }
+    };
+    return expectSaga(playgroundSaga)
+      .withState(dummyState)
+      .put(actions.changeQueryString(undefined))
+      .dispatch({
+        type: actionTypes.GENERATE_LZ_STRING
+      })
+      .run();
+  });
+
+  test('puts changeQueryString action with correct string argument when passed a dummy string', () => {
     const dummyEditorValue: string = '1 + 1;';
     const dummyState: IState = {
       ...defaultState,
