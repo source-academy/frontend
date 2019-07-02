@@ -156,43 +156,43 @@ export function* mockBackendSaga(): SagaIterator {
           assessment_id: 1,
           assessment_type: 'Mission',
           assesssment_title: 'The Secret to Streams'
-        } as AcademyNotification,
+        },
         {
           id: 2,
           type: 'new',
           assessment_id: 2,
           assessment_type: 'Sidequest',
           assessment_title: 'A sample Sidequest'
-        } as AcademyNotification,
+        },
         {
           id: 3,
           type: 'new',
           assessment_id: 3,
           assessment_type: 'Mission',
           assesssment_title: 'A Closed Mission'
-        } as AcademyNotification,
+        },
         {
           id: 4,
           type: 'submitted',
           submission_id: 0,
           assessment_type: 'Mission',
           assesssment_title: 'Mission 0'
-        } as AcademyNotification,
+        },
         {
           id: 5,
           type: 'submitted',
           submission_id: 1,
           assessment_type: 'Mission',
           assesssment_title: 'Mission 1'
-        } as AcademyNotification,
+        },
         {
           id: 6,
           type: 'submitted',
           submission_id: 2,
           assessment_type: 'Mission',
           assesssment_title: 'Mission 0'
-        } as AcademyNotification
-      ])
+        }
+      ] as AcademyNotification[])
     );
   });
 }
