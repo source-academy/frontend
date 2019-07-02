@@ -3,12 +3,16 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
-import { Grading, GradingQuestion } from '../components/academy/grading/gradingShape';
+import {
+  Grading,
+  GradingOverview,
+  GradingQuestion
+} from '../components/academy/grading/gradingShape';
 import { IQuestion } from '../components/assessment/assessmentShape';
 import { store } from '../createStore';
 import { IState } from '../reducers/states';
 import { history } from '../utils/history';
-import { showSuccessMessage } from '../utils/notification';
+import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { mockAssessmentOverviews, mockAssessments } from './assessmentAPI';
 import { mockFetchGrading, mockFetchGradingOverview } from './gradingAPI';
 
@@ -80,6 +84,29 @@ export function* mockBackendSaga(): SagaIterator {
     };
     yield put(actions.updateAssessment(newAssessment));
     yield call(showSuccessMessage, 'Saved!', 1000);
+  });
+
+  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(action) {
+    const { submissionId } = (action as actionTypes.IAction).payload;
+    const overviews: GradingOverview[] = yield select(
+      (state: IState) => state.session.gradingOverviews || []
+    );
+    const index = overviews.findIndex(
+      overview =>
+        overview.submissionId === submissionId && overview.submissionStatus === 'submitted'
+    );
+    if (index === -1) {
+      yield call(showWarningMessage, '400: Bad Request');
+      return;
+    }
+    const newOverviews = (overviews as GradingOverview[]).map(overview => {
+      if (overview.submissionId === submissionId) {
+        return { ...overview, submissionStatus: 'attempted' };
+      }
+      return overview;
+    });
+    yield call(showSuccessMessage, 'Unsubmitted!', 1000);
+    yield put(actions.updateGradingOverviews(newOverviews));
   });
 
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {

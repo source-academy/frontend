@@ -22,7 +22,8 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
-  WorkspaceLocation
+  WorkspaceLocation,
+  WorkspaceLocations
 } from '../../../actions';
 import {
   beginClearContext,
@@ -37,7 +38,7 @@ import GradingWorkspace, {
 import { Library } from '../../../components/assessment/assessmentShape';
 import { IState, IWorkspaceState } from '../../../reducers/states';
 
-const workspaceLocation: WorkspaceLocation = 'grading';
+const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {

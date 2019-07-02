@@ -201,6 +201,33 @@ function* backendSaga(): SagaIterator {
     }
   });
 
+  /**
+   * Unsubmits the submission and updates the grading overviews of the new status.
+   */
+  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { submissionId } = (action as actionTypes.IAction).payload;
+
+    const resp: Response = yield postUnsubmit(submissionId, tokens);
+    if (!resp || !resp.ok) {
+      yield handleResponseError(resp);
+      return;
+    }
+
+    const overviews = yield select((state: IState) => state.session.gradingOverviews || []);
+    const newOverviews = (overviews as GradingOverview[]).map(overview => {
+      if (overview.submissionId === submissionId) {
+        return { ...overview, submissionStatus: 'attempted' };
+      }
+      return overview;
+    });
+    yield call(showSuccessMessage, 'Unsubmit successful', 1000);
+    yield put(actions.updateGradingOverviews(newOverviews));
+  });
+
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
@@ -244,20 +271,8 @@ function* backendSaga(): SagaIterator {
         return gradingQuestion;
       });
       yield put(actions.updateGrading(submissionId, newGrading));
-    } else if (resp !== null) {
-      let errorMessage: string;
-      switch (resp.status) {
-        case 401:
-          errorMessage = 'Session expired. Please login again.';
-          break;
-        default:
-          errorMessage = `Something went wrong (got ${resp.status} response)`;
-          break;
-      }
-      yield call(showWarningMessage, errorMessage);
     } else {
-      // postGrading returns null for failed fetch
-      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+      handleResponseError(resp);
     }
   });
 }
@@ -440,6 +455,7 @@ async function getGradingOverviews(
         studentId: overview.student.id,
         studentName: overview.student.name,
         submissionId: overview.id,
+        submissionStatus: overview.status,
         groupName: overview.groupName,
         // Grade
         initialGrade: overview.grade,
@@ -542,6 +558,20 @@ const postGrading = async (
 };
 
 /**
+ * POST /grading/{submissionId}/unsubmit
+ */
+async function postUnsubmit(submissionId: number, tokens: Tokens) {
+  const resp = await request(`grading/${submissionId}/unsubmit`, 'POST', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+}
+
+/**
  * @returns {(Response|null)} Response if successful, otherwise null.
  *
  * @see @type{RequestOptions} for options to this function.
@@ -598,6 +628,24 @@ async function request(
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
     return null;
   }
+}
+
+function* handleResponseError(resp: Response | null) {
+  if (!resp) {
+    yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    return;
+  }
+
+  let errorMessage: string;
+  switch (resp.status) {
+    case 401:
+      errorMessage = 'Session expired. Please login again.';
+      break;
+    default:
+      errorMessage = `Error ${resp.status}: ${resp.statusText}`;
+      break;
+  }
+  yield call(showWarningMessage, errorMessage);
 }
 
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
