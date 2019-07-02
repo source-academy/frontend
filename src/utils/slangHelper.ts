@@ -22,8 +22,8 @@ import { handleConsoleLog } from '../actions';
  * @param workspaceLocation used to determine
  *   which REPL the value shows up in.
  */
-function display(value: Value, workspaceLocation: any) {
-  display(stringify(value), workspaceLocation);
+function display(value: Value, str: string, workspaceLocation: any) {
+  display((str === undefined ? '' : str + ' ') + stringify(value), '', workspaceLocation);
   return value;
 }
 
@@ -38,8 +38,8 @@ function display(value: Value, workspaceLocation: any) {
  * @param workspaceLocation used to determine
  *   which REPL the value shows up in.
  */
-function rawDisplay(value: Value, workspaceLocation: any) {
-  const output = String(value);
+function rawDisplay(value: Value, str: string, workspaceLocation: any) {
+  const output = (str === undefined ? '' : str + ' ') + String(value);
   // TODO in 2019: fix this hack
   if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
     (window as any).__REDUX_STORE__.dispatch(handleConsoleLog(output, workspaceLocation));
