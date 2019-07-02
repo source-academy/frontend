@@ -253,7 +253,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
-            comment={props.grading![questionId].grade.comment}
             solution={props.grading![questionId].question.solution}
             questionId={props.grading![questionId].question.id}
             submissionId={props.submissionId}

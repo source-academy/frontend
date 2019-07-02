@@ -19,7 +19,6 @@ export type DispatchProps = {
 };
 
 export type OwnProps = {
-  comment: string;
   solution: number | string | null;
   questionId: number;
   submissionId: number;
@@ -51,17 +50,12 @@ type State = {
 };
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
-
   constructor(props: GradingEditorProps) {
     super(props);
     this.state = {
       gradeAdjustmentInput: props.gradeAdjustment.toString(),
       xpAdjustmentInput: props.xpAdjustment.toString()
     };
-    /**
-     * The markdown-to-html converter for the editor.
-     */
-    // Converter now gone for there is no need for an MDE
   }
 
   public render() {
@@ -166,13 +160,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       </div>
     );
   }
-  /**
-   * A custom icons provider. It uses a bulky mapping function
-   * defined below.
-   *
-   * See {@link https://github.com/andrerpena/react-mde}
-   */
-  // Gone like the Showdown
+
   private onClickSaveButton = () => {
     const gradeAdjustmentInput =
       stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined;
@@ -235,15 +223,6 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       this.props.xpAdjustment !== xpAdjustmentInput
     );
   };
-
 }
-
-/**
- * Maps FontAwesome5 icon names to blueprintjs counterparts.
- * This is to reduce the number of dependencies on icons, and
- * keep a more consistent look.
- */
-// gone as well
-};
 
 export default GradingEditor;
