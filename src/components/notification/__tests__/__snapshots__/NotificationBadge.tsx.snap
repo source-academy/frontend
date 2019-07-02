@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Badge does not render with no notifications 1`] = `"<NotificationBadge notifications={{...}} handleAcknowledgeNotification={[Function: handleAcknowledgeNotification]} />"`;
+
+exports[`Badge renders properly with notifications 1`] = `
+"<NotificationBadge notifications={{...}} handleAcknowledgeNotification={[Function: handleAcknowledgeNotification]}>
+  <Blueprint2.Popover className={[undefined]} content={{...}} interactionKind=\\"hover\\" position=\\"right\\" isOpen={[undefined]} defaultIsOpen={false} disabled={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} rootElementTag=\\"span\\" targetElementTag=\\"div\\" transitionDuration={300} usePortal={true}>
+    <Manager tag=\\"span\\" className=\\"pt-popover-wrapper\\">
+      <span className=\\"pt-popover-wrapper\\">
+        <Target onBlur={[Function]} onFocus={[Function]} onMouseEnter={[Function]} onMouseLeave={[Function]} className=\\"pt-popover-target\\" component=\\"div\\" innerRef={[Function: target]}>
+          <div onBlur={[Function]} onFocus={[Function]} onMouseEnter={[Function]} onMouseLeave={[Function]} className=\\"pt-popover-target\\">
+            <Blueprint2.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+              <span disabled={[undefined]} tabIndex={0} className=\\"pt-tag pt-intent-danger pt-round\\">
+                2
+              </span>
+            </Blueprint2.Tag>
+          </div>
+        </Target>
+        <Blueprint2.Overlay autoFocus={true} backdropClassName=\\"pt-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} className={[undefined]} didClose={[undefined]} didOpen={[Function]} enforceFocus={true} hasBackdrop={false} usePortal={true} isOpen={false} onClose={[Function]} transitionDuration={300} transitionName=\\"pt-popover\\" lazy={true} />
+      </span>
+    </Manager>
+  </Blueprint2.Popover>
+</NotificationBadge>"
+`;
