@@ -230,7 +230,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <Component>
                                     <h6 className=\\"bp3-heading\\">
                                        
-                                      Grade: 2 / 3000
+                                      Grade: 4 / 3000
                                        
                                     </h6>
                                   </Component>
@@ -239,7 +239,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <Component>
                                     <h6 className=\\"bp3-heading\\">
                                        
-                                      XP: 1 / 1000
+                                      XP: 3 / 1000
                                        
                                     </h6>
                                   </Component>
@@ -452,7 +452,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <Component>
                                     <h6 className=\\"bp3-heading\\">
                                        
-                                      Grade: 4 / 3000
+                                      Grade: 2 / 3000
                                        
                                     </h6>
                                   </Component>
@@ -461,7 +461,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <Component>
                                     <h6 className=\\"bp3-heading\\">
                                        
-                                      XP: 3 / 1000
+                                      XP: 1 / 1000
                                        
                                     </h6>
                                   </Component>
@@ -820,7 +820,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <Component>
                                     <h6 className=\\"bp3-heading\\">
                                        
-                                      Grade: 2 / 3000
+                                      Grade: 4 / 3000
                                        
                                     </h6>
                                   </Component>
@@ -829,7 +829,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <Component>
                                     <h6 className=\\"bp3-heading\\">
                                        
-                                      XP: 1 / 1000
+                                      XP: 3 / 1000
                                        
                                     </h6>
                                   </Component>
@@ -1042,7 +1042,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <Component>
                                     <h6 className=\\"bp3-heading\\">
                                        
-                                      Grade: 4 / 3000
+                                      Grade: 2 / 3000
                                        
                                     </h6>
                                   </Component>
@@ -1051,7 +1051,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <Component>
                                     <h6 className=\\"bp3-heading\\">
                                        
-                                      XP: 3 / 1000
+                                      XP: 1 / 1000
                                        
                                     </h6>
                                   </Component>
