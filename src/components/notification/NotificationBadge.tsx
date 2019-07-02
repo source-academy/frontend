@@ -55,17 +55,17 @@ const NotificationBadge: React.SFC<OwnProps> = props => {
 const makeNotificationMessage = (type: AcademyNotificationType) => {
   switch (type) {
     case 'new':
-      return 'You have a new assessment.';
+      return 'This assessment is new.';
     case 'deadline':
-      return 'You have an assessment closing soon.';
+      return 'This assessment is closing soon.';
     case 'autograded':
-      return 'Your assessment has been autograded.';
+      return 'This assessment has been autograded.';
     case 'submitted':
-      return 'You have a new submission.';
+      return 'This submission is new.';
     case 'unsubmitted':
-      return 'You have an assessment that was unsubmitted.';
+      return 'This assessment has been unsubmitted.';
     case 'graded':
-      return 'Your assessment has been manually graded.';
+      return 'This assessment has been manually graded.';
     default:
       return 'Unknown notification';
   }
