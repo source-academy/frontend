@@ -28,8 +28,8 @@ class Input extends React.Component<InputProps, StateProps> {
     };
 
     return (
-      <div className = 'Input'>
-        <div className = 'input-zone'>
+      <div className="Input">
+        <div className="input-zone">
           <textarea
             className="input-msg"
             placeholder="Type your message here"
@@ -37,11 +37,7 @@ class Input extends React.Component<InputProps, StateProps> {
             value={this.state.message}
           />
         </div>
-        <a 
-          href="https://www.markdownguide.org" 
-          target="_blank" 
-          className = 'markdown-link'
-        >
+        <a href="https://www.markdownguide.org" target="_blank" className="markdown-link">
           This chat uses Markdown. Click here to learn more.
         </a>
         {controlButton('Send', IconNames.PLAY, this.handleSubmit, sendButtonOpts)}
