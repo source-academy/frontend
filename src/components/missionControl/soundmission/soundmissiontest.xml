@@ -193,7 +193,7 @@ function silence(duration) {
 }
 
 function consecutively(list_of_sounds) {
-    return accumulate(append_sounds, silence_sound(0), list_of_sounds);
+    return reduce(append_sounds, silence_sound(0), list_of_sounds);
 }
 
 // Create dot, dash and pause sounds first
