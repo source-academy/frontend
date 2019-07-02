@@ -121,7 +121,7 @@ describe('backendSaga receives an action with type FETCH_ASSESSMENT', () => {
   });
 });
 
-describe('backendSaga receives an action with type SUBMIT_ANSER', () => {
+describe('backendSaga receives an action with type SUBMIT_ANSWER', () => {
   test('Saga runs as intended', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     const mockNewQuestions = mockAssessment.questions.slice().map((question: IQuestion) => {
