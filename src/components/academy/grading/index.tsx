@@ -229,22 +229,7 @@ class Grading extends React.Component<IGradingProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
-    const data = sortBy(
-      this.props.gradingOverviews
-        ? this.props.gradingOverviews!.map(o => {
-            (o as GradingOverviewWithNotifications).notifications = this.props.notifications.filter(
-              n => n.submission_id !== undefined && n.submission_id === o.submissionId
-            );
-
-            return o;
-          })
-        : this.props.gradingOverviews,
-      [
-        (a: GradingOverviewWithNotifications) => -a.notifications.length,
-        (a: GradingOverview) => -a.assessmentId,
-        (a: GradingOverview) => -a.submissionId
-      ]
-    );
+    const data = this.preProcessData();
 
     const grid = (
       <div className="GradingContainer">
@@ -310,6 +295,13 @@ class Grading extends React.Component<IGradingProps, State> {
     );
   }
 
+  public componentDidUpdate() {
+    if (!this.gridApi) {
+      return;
+    }
+    this.gridApi.setRowData(this.preProcessData());
+  }
+
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const changeVal = event.target.value;
     this.setState({ filterValue: changeVal });
@@ -336,6 +328,24 @@ class Grading extends React.Component<IGradingProps, State> {
     }
     this.gridApi.exportDataAsCsv({ allColumns: true });
   };
+
+  private preProcessData = () =>
+    sortBy(
+      this.props.gradingOverviews
+        ? this.props.gradingOverviews!.map(o => {
+            (o as GradingOverviewWithNotifications).notifications = this.props.notifications.filter(
+              n => n.submission_id !== undefined && n.submission_id === o.submissionId
+            );
+
+            return o;
+          })
+        : this.props.gradingOverviews,
+      [
+        (a: GradingOverviewWithNotifications) => -a.notifications.length,
+        (a: GradingOverview) => -a.assessmentId,
+        (a: GradingOverview) => -a.submissionId
+      ]
+    );
 }
 
 export default Grading;
