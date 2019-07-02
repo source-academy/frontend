@@ -61,25 +61,21 @@ describe('backendSaga receives an action with type FETCH_AUTH', () => {
   test('Saga runs as intended', () => {
     const luminousCode = 'luminousCode';
     const user = mockTokens ? 'user' : null;
-    return (
-      expectSaga(backendSaga)
-        .put(actions.setTokens(mockTokens))
-        .put(actions.setUser(user))
-        .provide([[call(postAuth, luminousCode), mockTokens], [call(getUser, mockTokens), user]])
-        .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminousCode })
-        .silentRun()
-    );
+    return expectSaga(backendSaga)
+      .put(actions.setTokens(mockTokens))
+      .put(actions.setUser(user))
+      .provide([[call(postAuth, luminousCode), mockTokens], [call(getUser, mockTokens), user]])
+      .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminousCode })
+      .silentRun();
   });
   test('tokens and user are null', () => {
     const luminousCode = 'luminousCode';
-    return (
-      expectSaga(backendSaga)
-        .withState(mockStates)
-        .provide([[call(postAuth, luminousCode), null], [call(getUser, mockTokens), null]])
-        .hasFinalState(mockStates)
-        .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminousCode })
-        .silentRun()
-    );
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .provide([[call(postAuth, luminousCode), null], [call(getUser, mockTokens), null]])
+      .hasFinalState(mockStates)
+      .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminousCode })
+      .silentRun();
   });
 });
 
