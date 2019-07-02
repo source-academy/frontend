@@ -322,7 +322,7 @@ function* backendSaga(): SagaIterator {
     const newNotifications: AcademyNotification[] = notifications.filter(
       notification => notification.id !== id
     );
-    store.dispatch(actions.updateNotifications(newNotifications));
+    yield put(actions.updateNotifications(newNotifications));
     const resp: Response | null = yield request(`notification/${id}/acknowledge`, 'POST', {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
@@ -332,7 +332,7 @@ function* backendSaga(): SagaIterator {
       return;
     } else {
       yield call(showWarningMessage, "Something went wrong, couldn't acknowledge");
-      store.dispatch(actions.updateNotifications(notifications));
+      yield put(actions.updateNotifications(notifications));
     }
   });
 }
