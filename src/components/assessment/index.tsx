@@ -22,6 +22,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
+import { sortBy } from 'lodash';
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer';
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers';
@@ -37,6 +38,7 @@ import { controlButton } from '../commons';
 import ContentDisplay from '../commons/ContentDisplay';
 import Markdown from '../commons/Markdown';
 import NotificationBadge from '../notification/NotificationBadge';
+import { filterNotificationsBy } from '../notification/NotificationHelpers';
 import { AcademyNotification } from '../notification/notificationShape';
 
 const DEFAULT_QUESTION_ID: number = 0;
@@ -116,50 +118,61 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       /** Upcoming assessments, that are not released yet. */
       const isOverviewUpcoming = (overview: IAssessmentOverview) =>
         !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
-      const upcomingCards = this.props.assessmentOverviews
-        .filter(isOverviewUpcoming)
-        .map((overview, index) =>
-          makeOverviewCard(
-            overview,
-            index,
-            this.setBetchaAssessment,
-            !this.props.isStudent,
-            false,
-            this.props.notifications
-          )
-        );
+      const upcomingCards = sortBy(this.props.assessmentOverviews.filter(isOverviewUpcoming), [
+        a => -filterNotificationsBy(this.props.notifications, { assessment_id: a.id }).length,
+        a => -a.id
+      ]).map((overview, index) =>
+        makeOverviewCard(
+          overview,
+          index,
+          this.setBetchaAssessment,
+          !this.props.isStudent,
+          false,
+          this.props.notifications
+        )
+      );
 
       /** Opened assessments, that are released and can be attempted. */
       const isOverviewOpened = (overview: IAssessmentOverview) =>
         !beforeNow(overview.closeAt) &&
         beforeNow(overview.openAt) &&
         overview.status !== AssessmentStatuses.submitted;
-      const openedCards = this.props.assessmentOverviews
-        .filter(overview => isOverviewOpened(overview))
-        .map((overview, index) =>
-          makeOverviewCard(
-            overview,
-            index,
-            this.setBetchaAssessment,
-            true,
-            false,
-            this.props.notifications
-          )
-        );
+      const openedCards = sortBy(
+        this.props.assessmentOverviews.filter(overview => isOverviewOpened(overview)),
+        [
+          a => -filterNotificationsBy(this.props.notifications, { assessment_id: a.id }).length,
+          a => -a.id
+        ]
+      ).map((overview, index) =>
+        makeOverviewCard(
+          overview,
+          index,
+          this.setBetchaAssessment,
+          true,
+          false,
+          this.props.notifications
+        )
+      );
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
-      const closedCards = this.props.assessmentOverviews
-        .filter(overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview))
-        .map((overview, index) =>
-          makeOverviewCard(
-            overview,
-            index,
-            this.setBetchaAssessment,
-            true,
-            true,
-            this.props.notifications
-          )
-        );
+      const closedCards = sortBy(
+        this.props.assessmentOverviews.filter(
+          overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
+        ),
+        [
+          a => -filterNotificationsBy(this.props.notifications, { assessment_id: a.id }).length,
+          a => -a.id
+        ]
+      ).map((overview, index) =>
+        makeOverviewCard(
+          overview,
+          index,
+          this.setBetchaAssessment,
+          true,
+          true,
+          this.props.notifications
+        )
+      );
 
       /** Render cards */
       const upcomingCardsCollapsible =
@@ -319,9 +332,7 @@ const makeOverviewCard = (
       <div className="col-xs-3 listing-picture">
         <NotificationBadge
           className="badge"
-          notifications={notifications.filter(
-            notification => notification.assessment_id && notification.assessment_id === overview.id
-          )}
+          notifications={filterNotificationsBy(notifications, { assessment_id: overview.id })}
           large={true}
         />
         <img

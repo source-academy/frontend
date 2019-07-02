@@ -19,6 +19,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import NotificationBadge from '../../../components/notification/NotificationBadge';
+import { filterNotificationsBy } from '../../../components/notification/NotificationHelpers';
 import { AcademyNotification } from '../../../components/notification/notificationShape';
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
@@ -333,10 +334,10 @@ class Grading extends React.Component<IGradingProps, State> {
     sortBy(
       this.props.gradingOverviews
         ? this.props.gradingOverviews!.map(o => {
-            (o as GradingOverviewWithNotifications).notifications = this.props.notifications.filter(
-              n => n.submission_id !== undefined && n.submission_id === o.submissionId
+            (o as GradingOverviewWithNotifications).notifications = filterNotificationsBy(
+              this.props.notifications,
+              { submission_id: o.submissionId }
             );
-
             return o;
           })
         : this.props.gradingOverviews,
