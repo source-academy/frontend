@@ -1,4 +1,4 @@
-import { Context, IOptions, runInContext } from 'js-slang';
+import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
@@ -10,9 +10,9 @@ import { Library } from '../../components/assessment/assessmentShape';
 import { mockRuntimeContext } from '../../mocks/context';
 import { defaultState, IState } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
-import workspaceSaga, { evalCode } from '../workspaces';
+import workspaceSaga, { evalCode, evalTestCode } from '../workspaces';
 
-function generateDefaultState(workspaceLocation: WorkspaceLocations, payload: any = {}): IState {
+function generateDefaultState(workspaceLocation: WorkspaceLocation, payload: any = {}): IState {
   return {
     ...defaultState,
     workspaces: {
@@ -35,19 +35,21 @@ beforeEach(() => {
 
 describe('TOGGLE_EDITOR_AUTORUN', () => {
   test('calls showWarningMessage correctly when isEditorAutorun set to false', () => {
+    const workspaceLocation = WorkspaceLocations.assessment;
     return expectSaga(workspaceSaga)
       .withState(defaultState)
       .call(showWarningMessage, 'Autorun Stopped', 750)
       .dispatch({
         type: actionTypes.TOGGLE_EDITOR_AUTORUN,
-        payload: { workspaceLocation: WorkspaceLocations.assessment }
+        payload: { workspaceLocation }
       })
       .silentRun();
   });
 
   test('calls showWarningMessage correctly when isEditorAutorun set to true', () => {
     const workspaceLocation = WorkspaceLocations.grading;
-    const newDefaultState = generateDefaultState(workspaceLocation, { isEditorAutorun: true });
+    const isEditorAutorun = true;
+    const newDefaultState = generateDefaultState(workspaceLocation, { isEditorAutorun });
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
@@ -68,6 +70,39 @@ describe('INVALID_EDITOR_SESSION_ID', () => {
         type: actionTypes.INVALID_EDITOR_SESSION_ID
       })
       .silentRun();
+  });
+});
+
+describe('DEBUG_RESUME', () => {
+  test('puts beginInterruptExecution, clearReplOutput and highlightEditorLine correctly', () => {
+    const workspaceLocation = WorkspaceLocations.playground;
+    const editorValue = 'sample code here';
+    const context = mockRuntimeContext();
+
+    const newDefaultState = generateDefaultState(workspaceLocation, { editorValue, context });
+
+    return (
+      expectSaga(workspaceSaga)
+        .withState(newDefaultState)
+        .provide({
+          call(effect) {
+            if (effect.fn === resume) {
+              return { status: 'finished', value: 'abc' };
+            } else {
+              return;
+            }
+          }
+        })
+        .put(actions.beginInterruptExecution(workspaceLocation))
+        .put(actions.clearReplOutput(workspaceLocation))
+        .put(actions.highlightEditorLine([], workspaceLocation))
+        // also calls evalCode here
+        .dispatch({
+          type: actionTypes.DEBUG_RESUME,
+          payload: { workspaceLocation }
+        })
+        .silentRun()
+    );
   });
 });
 
@@ -107,26 +142,31 @@ describe('DEBUG_RESET', () => {
       })
       .silentRun()
       .then(result => {
-        // check final state
         expect(result.storeState.workspaces[workspaceLocation].context.runtime.break).toBe(false);
       });
   });
 });
 
 describe('CHAPTER_SELECT', () => {
-  test('puts beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
-    const workspaceLocation = WorkspaceLocations.playground;
-    const newChapter = 3;
+  let workspaceLocation: WorkspaceLocation;
+  let globals: Array<[string, any]>;
+  let context: Context;
 
-    const context = {
-      chapter: 4,
-      externalSymbols: ['abc', 'def']
-    };
-    const globals: Array<[string, any]> = [
+  beforeEach(() => {
+    workspaceLocation = WorkspaceLocations.playground;
+    globals = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
       ['testArray', [1, 2, 'a', 'b']]
     ];
+    context = {
+      ...mockRuntimeContext(),
+      chapter: 4
+    };
+  });
+
+  test('puts beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
+    const newChapter = 3;
     const library: Library = {
       chapter: newChapter,
       external: {
@@ -149,15 +189,41 @@ describe('CHAPTER_SELECT', () => {
       })
       .silentRun();
   });
+
+  test('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter', () => {
+    const newChapter = 4;
+    const library: Library = {
+      chapter: newChapter,
+      external: {
+        name: 'NONE',
+        symbols: context.externalSymbols
+      },
+      globals
+    };
+
+    const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
+
+    return expectSaga(workspaceSaga)
+      .withState(newDefaultState)
+      .not.put(actions.beginClearContext(library, workspaceLocation))
+      .not.put(actions.clearReplOutput(workspaceLocation))
+      .not.call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
+      .dispatch({
+        type: actionTypes.CHAPTER_SELECT,
+        payload: { chapter: newChapter, workspaceLocation }
+      })
+      .silentRun();
+  });
 });
 
-describe('EVAL_CODE', () => {
+describe('evalCode', () => {
   let workspaceLocation: WorkspaceLocation;
   let code: string;
   let actionType: string;
   let context: Context;
   let value: string;
   let options: Partial<IOptions>;
+  let lastDebuggerResult: Result;
 
   beforeEach(() => {
     workspaceLocation = WorkspaceLocations.assessment;
@@ -166,10 +232,11 @@ describe('EVAL_CODE', () => {
     context = mockRuntimeContext();
     value = 'test value';
     options = { scheduler: 'preemptive' };
+    lastDebuggerResult = { status: 'error' };
   });
 
-  describe('without interruptions or pausing', () => {
-    test('calls runInContext, puts evalInterpreterSuccess with EVAL_EDITOR action when runInContext returns finished', () => {
+  describe('on EVAL_EDITOR action without interruptions or pausing', () => {
+    test('calls runInContext, puts evalInterpreterSuccess when runInContext returns finished', () => {
       return expectSaga(evalCode, code, context, workspaceLocation, actionType)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
         .call(runInContext, code, context, { scheduler: 'preemptive' })
@@ -177,22 +244,50 @@ describe('EVAL_CODE', () => {
         .silentRun();
     });
 
-    test(
-      'calls runInContext, puts endDebuggerPause and evalInterpreterSuccess with EVAL_EDITOR action when ' +
-        'runInContext returns suspended',
-      () => {
-        return expectSaga(evalCode, code, context, workspaceLocation, actionType)
-          .provide([[call(runInContext, code, context, options), { status: 'suspended' }]])
-          .call(runInContext, code, context, { scheduler: 'preemptive' })
-          .put(actions.endDebuggerPause(workspaceLocation))
-          .put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
-          .silentRun();
-      }
-    );
+    test('calls runInContext, puts endDebuggerPause and evalInterpreterSuccess when runInContext returns suspended', () => {
+      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+        .provide([[call(runInContext, code, context, options), { status: 'suspended' }]])
+        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .put(actions.endDebuggerPause(workspaceLocation))
+        .put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
+        .silentRun();
+    });
 
-    test('calls runInContext and puts evalInterpreterError, with EVAL_EDITOR action when runInContext returns error', () => {
+    test('calls runInContext, puts evalInterpreterError when runInContext returns error', () => {
       return expectSaga(evalCode, code, context, workspaceLocation, actionType)
         .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .put.like({ action: { type: actionTypes.EVAL_INTERPRETER_ERROR } })
+        .silentRun();
+    });
+  });
+
+  describe('on DEBUG_RESUME action without interruptions or pausing', () => {
+    test('calls resume, puts evalInterpreterSuccess when resume returns finished', () => {
+      actionType = actionTypes.DEBUG_RESUME;
+
+      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+        .provide([[call(resume, lastDebuggerResult), { status: 'finished', value }]])
+        .call(resume, lastDebuggerResult)
+        .put(actions.evalInterpreterSuccess(value, workspaceLocation))
+        .silentRun();
+    });
+
+    test('calls resume, puts endDebuggerPause and evalInterpreterSuccess when resume returns suspended', () => {
+      actionType = actionTypes.DEBUG_RESUME;
+
+      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+        .provide([[call(resume, lastDebuggerResult), { status: 'suspended' }]])
+        .call(resume, lastDebuggerResult)
+        .put(actions.endDebuggerPause(workspaceLocation))
+        .put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
+        .silentRun();
+    });
+
+    test('calls resume, puts evalInterpreterError when resume returns error', () => {
+      actionType = actionTypes.DEBUG_RESUME;
+
+      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+        .call(resume, lastDebuggerResult)
         .put.like({ action: { type: actionTypes.EVAL_INTERPRETER_ERROR } })
         .silentRun();
     });
@@ -214,7 +309,6 @@ describe('EVAL_CODE', () => {
         .call(showWarningMessage, 'Execution aborted', 750)
         .silentRun()
         .then(result => {
-          // check final state
           expect(context.errors[0]).toBeInstanceOf(InterruptedError);
         });
     });
@@ -234,6 +328,62 @@ describe('EVAL_CODE', () => {
         .put(actions.endDebuggerPause(workspaceLocation))
         .call(showWarningMessage, 'Execution paused', 750)
         .silentRun();
+    });
+  });
+});
+
+describe('evalTestCode', () => {
+  let workspaceLocation: WorkspaceLocation;
+  let code: string;
+  let context: Context;
+  let value: string;
+  let options: Partial<IOptions>;
+  let index: number;
+
+  beforeEach(() => {
+    workspaceLocation = WorkspaceLocations.assessment;
+    code = 'more sample code';
+    context = mockRuntimeContext();
+    value = 'another test value';
+    options = { scheduler: 'preemptive' };
+    index = 1;
+  });
+
+  describe('without interrupt', () => {
+    test('puts evalInterpreterSuccess and evalTestcaseSuccess on finished status', () => {
+      return expectSaga(evalTestCode, code, context, workspaceLocation, index)
+        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
+        .put(actions.evalInterpreterSuccess(value, workspaceLocation))
+        .put(actions.evalTestcaseSuccess(value, workspaceLocation, index))
+        .silentRun();
+    });
+
+    test('puts evalInterpreterError and evalTestcaseFailure on other statuses', () => {
+      return expectSaga(evalTestCode, code, context, workspaceLocation, index)
+        .provide([[call(runInContext, code, context, options), { status: 'error' }]])
+        .put(actions.evalInterpreterError(context.errors, workspaceLocation))
+        .put(actions.evalTestcaseFailure('An error occured', workspaceLocation, index))
+        .silentRun();
+    });
+  });
+
+  describe('on interrupt', () => {
+    test('puts endInterruptExecution and calls showWarningMessage', () => {
+      return expectSaga(evalTestCode, code, context, workspaceLocation, index)
+        .provide({
+          race: () => ({
+            interrupted: {
+              type: actionTypes.BEGIN_INTERRUPT_EXECUTION,
+              payload: { workspaceLocation }
+            }
+          })
+        })
+        .put(actions.endInterruptExecution(workspaceLocation))
+        .call(showWarningMessage, 'Execution aborted by user', 750)
+        .silentRun()
+        .then(() => {
+          expect(context.errors[0]).toBeInstanceOf(InterruptedError);
+        });
     });
   });
 });

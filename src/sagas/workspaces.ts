@@ -381,7 +381,12 @@ export function* evalCode(
   }
 }
 
-function* evalTestCode(code: string, context: Context, location: WorkspaceLocation, index: number) {
+export function* evalTestCode(
+  code: string,
+  context: Context,
+  location: WorkspaceLocation,
+  index: number
+) {
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
     /**
