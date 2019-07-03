@@ -3,10 +3,10 @@ import {
   ExternalLibraryNames
 } from '../components/assessment/assessmentShape';
 
-/**
- * Defines which external libraries are available for usage, and what
+/** Defines which external libraries are available for usage, and what
  * external symbols (exposed functions) are under them.
  */
+
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.NONE, []],
   [
@@ -94,7 +94,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
     ]
   ],
   [
-    ExternalLibraryNames.SOUND,
+    ExternalLibraryNames.SOUNDS,
     [
       'make_sound',
       'get_wave',

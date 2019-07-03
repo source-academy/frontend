@@ -153,8 +153,8 @@ const mockGlobals: Array<[string, any]> = [
 const mockSoundLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryNames.SOUND,
-    symbols: externalLibraries.get(ExternalLibraryNames.SOUND)!
+    name: ExternalLibraryNames.SOUNDS,
+    symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
   },
   globals: mockGlobals
 };
@@ -180,7 +180,7 @@ const mockCurveLibrary: Library = {
 const mockToneMatrixLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryNames.SOUND,
+    name: ExternalLibraryNames.SOUNDS,
     symbols: ['get_matrix']
   },
   globals: mockGlobals
