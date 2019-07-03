@@ -1,14 +1,14 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-
 import { NavLink } from 'react-router-dom';
 
 import { controlButton } from '../../commons/controlButton';
-import { GradingOverview } from './gradingShape';
+import { GradingOverviewWithNotifications } from './gradingShape';
 
 type EditGradingCellProps = {
-  data: GradingOverview;
+  data: GradingOverviewWithNotifications;
+  handleAcknowledgeNotifications: (ids: number[]) => void;
 };
 
 /**
@@ -29,7 +29,10 @@ class EditGradingCell extends React.Component<EditGradingCellProps, {}> {
         to={`/academy/grading/${this.props.data.submissionId}`}
         activeClassName={Classes.ACTIVE}
       >
-        {controlButton('', IconNames.ANNOTATION, () => null, { fullWidth: true })}
+        {controlButton('', IconNames.ANNOTATION, () =>
+          this.props.handleAcknowledgeNotifications(this.props.data.notifications.map(n => n.id)),
+          { fullWidth: true }
+        )}
       </NavLink>
     );
   }

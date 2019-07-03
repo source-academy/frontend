@@ -52,6 +52,7 @@ export interface IGradingWorkspaceParams {
 }
 
 export interface IDispatchProps {
+  handleAcknowledgeNotifications: (ids: number[]) => void;
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
   handleUnsubmitSubmission: (submissionId: number) => void;
 }

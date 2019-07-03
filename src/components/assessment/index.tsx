@@ -55,6 +55,7 @@ export interface IAssessmentProps
     IStateProps {}
 
 export interface IDispatchProps {
+  handleAcknowledgeNotifications: (ids: number[]) => void;
   handleAssessmentOverviewFetch: () => void;
   handleSubmitAssessment: (id: number) => void;
 }
@@ -128,7 +129,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           !this.props.isStudent,
           false,
-          this.props.notifications
+          filterNotificationsBy(this.props.notifications, { assessment_id: overview.id }),
+          this.props.handleAcknowledgeNotifications
         )
       );
 
@@ -150,7 +152,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           true,
           false,
-          this.props.notifications
+          filterNotificationsBy(this.props.notifications, { assessment_id: overview.id }),
+          this.props.handleAcknowledgeNotifications
         )
       );
 
@@ -170,7 +173,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           true,
           true,
-          this.props.notifications
+          filterNotificationsBy(this.props.notifications, { assessment_id: overview.id }),
+          this.props.handleAcknowledgeNotifications
         )
       );
 
@@ -325,16 +329,13 @@ const makeOverviewCard = (
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
   renderAttemptButton: boolean,
   renderGradingStatus: boolean,
-  notifications: AcademyNotification[]
+  notifications: AcademyNotification[],
+  handleAcknowledgeNotifications: (ids: number[]) => void
 ) => (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
       <div className="col-xs-3 listing-picture">
-        <NotificationBadge
-          className="badge"
-          notifications={filterNotificationsBy(notifications, { assessment_id: overview.id })}
-          large={true}
-        />
+        <NotificationBadge className="badge" notifications={notifications} large={true} />
         <img
           className={`cover-image-${overview.status}`}
           src={overview.coverImage ? overview.coverImage : defaultCoverImage}
@@ -374,7 +375,9 @@ const makeOverviewCard = (
               ? `Due: ${getPrettyDate(overview.closeAt)}`
               : `Opens at: ${getPrettyDate(overview.openAt)}`}
           </Text>
-          {renderAttemptButton ? makeOverviewCardButton(overview) : null}
+          {renderAttemptButton
+            ? makeOverviewCardButton(overview, notifications, handleAcknowledgeNotifications)
+            : null}
         </div>
       </div>
     </Card>
@@ -455,7 +458,11 @@ const makeSubmissionButton = (
   </Button>
 );
 
-const makeOverviewCardButton = (overview: IAssessmentOverview) => {
+const makeOverviewCardButton = (
+  overview: IAssessmentOverview,
+  notifications: AcademyNotification[],
+  handleAcknowledgeNotifications: (ids: number[]) => void
+) => {
   let icon: IconName;
   let label: string;
   switch (overview.status) {
@@ -487,7 +494,9 @@ const makeOverviewCardButton = (overview: IAssessmentOverview) => {
         overview.category
       )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
     >
-      {controlButton(label, icon)}
+      {controlButton(label, icon, () =>
+        handleAcknowledgeNotifications(notifications.map(n => n.id))
+      )}
     </NavLink>
   );
 };
