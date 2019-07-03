@@ -610,6 +610,17 @@ describe('evalCode', () => {
   });
 
   describe('on DEBUG_RESUME action without interruptions or pausing', () => {
+    // Ensure that lastDebuggerResult is set correctly before running each of the tests below
+    beforeEach(() => {
+      return expectSaga(
+        evalCode,
+        code,
+        context,
+        workspaceLocation,
+        actionTypes.EVAL_EDITOR
+      ).silentRun();
+    });
+
     test('calls resume, puts evalInterpreterSuccess when resume returns finished', () => {
       actionType = actionTypes.DEBUG_RESUME;
 
@@ -638,27 +649,6 @@ describe('evalCode', () => {
         .call(resume, lastDebuggerResult)
         .put.like({ action: { type: actionTypes.EVAL_INTERPRETER_ERROR } })
         .silentRun();
-    });
-
-    test('calls resume correctly after EVAL_EDITOR action is dispatched', () => {
-      const firstInput = '1;';
-      const secondInput = '2;';
-      const result = { status: 'finished', context, value: 1 };
-
-      return expectSaga(evalCode, firstInput, context, workspaceLocation, actionType)
-        .provide([[call(runInContext, code, context, options), result]])
-        .silentRun()
-        .then(() => {
-          return expectSaga(
-            evalCode,
-            secondInput,
-            context,
-            workspaceLocation,
-            actionTypes.DEBUG_RESUME
-          )
-            .call(resume, result)
-            .silentRun();
-        });
     });
   });
 
