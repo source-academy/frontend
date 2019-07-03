@@ -1,12 +1,13 @@
 // TODO: convert to TypeScript once this PR has been merged https://github.com/pusher/chatkit-client-js/pull/180
-
-import * as React from 'react';
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
-import MessageList from './MessageList.tsx';
+import jwt_decode from 'jwt-decode';
+import * as React from 'react';
+
 import Input from './Input.tsx';
+import MessageList from './MessageList.tsx';
 import { BACKEND_URL, INSTANCE_LOCATOR } from '../../utils/constants';
 import { IState } from '../../reducers/states';
-import jwt_decode from 'jwt-decode';
+
 
 class ChatApp extends React.Component {
   constructor(props) {
@@ -90,6 +91,7 @@ class ChatApp extends React.Component {
           viewingUserId={this.state.currentUser.id}
           messages={this.state.messages}
         />
+        <hr/>
         <Input className="input-field" onSubmit={this.addMessage} />
         <div ref={this.messagesEndRef} />
       </div>
