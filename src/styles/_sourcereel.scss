@@ -18,3 +18,13 @@
   justify-content: center;
   margin: 0 auto;
 }
+
+.sourcereel-save-form {
+  list-style-type: none;
+  padding: 0;
+  .form-row {
+    display: flex;
+    justify-content: flex-end;
+    padding: 2px;
+  }
+}

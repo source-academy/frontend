@@ -1,5 +1,5 @@
 /* tslint:disable:no-console */
-import { Card } from '@blueprintjs/core';
+import { Card, Popover } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -57,7 +57,24 @@ class SourcereelControlbar extends React.PureComponent<
       IconNames.DOWNLOAD,
       this.handleRecorderDownloading
     );
-    const RecorderSaveButton = controlButton('Save', IconNames.SAVED, this.handleRecorderSaving);
+    const RecorderSaveButton = (
+      // Need custom CSS for Popover
+      // Submit need an onclickhandler
+      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
+        {controlButton('Save', IconNames.FLOPPY_DISK)}
+        <ul className="sourcereel-save-form">
+          <li className="form-row">
+            <label htmlFor="title">Title: </label>
+            <input defaultValue="Title" id="title" />
+          </li>
+          <li className="form-row">
+            <label htmlFor="description">Description: </label>
+            <input defaultValue="Description" id="description" />
+          </li>
+          <li>{controlButton('Submit', IconNames.TICK, this.handleRecorderSaving)}</li>
+        </ul>
+      </Popover>
+    );
     return (
       <div>
         <br />
