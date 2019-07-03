@@ -44,3 +44,14 @@ export interface IPlaybackData {
     data: ICodeDelta | IPosition;
   }>;
 }
+
+export interface ISourcecastData {
+  name: string;
+  inserted_at: string;
+  updated_at: string;
+  audio: string;
+  deltas: string;
+  id: number;
+  uploader_id: number;
+  url: string;
+}

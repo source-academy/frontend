@@ -6,26 +6,25 @@ import * as React from 'react';
 
 import { BACKEND_URL } from '../../utils/constants';
 import { controlButton } from '../commons';
-import { DeltaType, ICodeDelta, IPlaybackData, IPosition, PlaybackStatus } from './sourcecastShape';
+import {
+  DeltaType,
+  ICodeDelta,
+  IPlaybackData,
+  IPosition,
+  ISourcecastData,
+  PlaybackStatus
+} from './sourcecastShape';
 
-interface ISourcecast {
-  name: string;
-  inserted_at: string;
-  updated_at: string;
-  audio: string;
-  deltas: string;
-  id: number;
-  uploader_id: number;
-  url: string;
-}
+const SourcecastSelect = Select.ofType<ISourcecastData>();
 
-const SourcecastSelect = Select.ofType<ISourcecast>();
-
-const sourcecastPredicate: ItemPredicate<ISourcecast> = (query, item) => {
+const sourcecastPredicate: ItemPredicate<ISourcecastData> = (query, item) => {
   return item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
 };
 
-const sourcecastRenderer: ItemRenderer<ISourcecast> = (item, { handleClick, modifiers, query }) => (
+const sourcecastRenderer: ItemRenderer<ISourcecastData> = (
+  item,
+  { handleClick, modifiers, query }
+) => (
   <MenuItem active={false} key={item.id} onClick={handleClick} text={item.id + '. ' + item.name} />
 );
 
@@ -115,7 +114,7 @@ class SourcecastControlbar extends React.PureComponent<
     );
   }
 
-  private handleSelect = (item: ISourcecast, e: React.ChangeEvent<HTMLSelectElement>) => {
+  private handleSelect = (item: ISourcecastData, e: React.ChangeEvent<HTMLSelectElement>) => {
     const url = BACKEND_URL + item.url;
     console.log(url);
     this.props.handleRecordAudioUrl(url);
@@ -267,14 +266,14 @@ export interface ISourcecastControlbarProps {
   duration: number;
   playbackData: IPlaybackData;
   playbackStatus: PlaybackStatus;
-  sourcecastIndex: any;
+  sourcecastIndex: ISourcecastData[] | null;
 }
 
 export interface ISourcecastControlbarState {
   currentDeltaRevision: number;
   currentPlayerTime: number;
   currentPlayerProgress: number;
-  currentSourcecastItem: ISourcecast | null;
+  currentSourcecastItem: ISourcecastData | null;
   duration: number;
 }
 

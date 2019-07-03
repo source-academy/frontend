@@ -17,6 +17,7 @@ import {
   ICodeDelta,
   IPlaybackData,
   IPosition,
+  ISourcecastData,
   PlaybackStatus,
   RecordingStatus
 } from '../components/sourcecast/sourcecastShape';
@@ -61,7 +62,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 }
 
 export interface ISourcecast extends IWorkspaceState {
-  readonly sourcecastIndex: any;
+  readonly sourcecastIndex: ISourcecastData[] | null;
   readonly deltasToApply: ICodeDelta[] | null;
   readonly editorCursorPositionToBeApplied: IPosition;
   readonly playbackData: IPlaybackData;
