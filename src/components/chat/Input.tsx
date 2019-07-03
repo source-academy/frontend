@@ -1,3 +1,4 @@
+import { TextArea} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -30,7 +31,7 @@ class Input extends React.Component<InputProps, StateProps> {
     return (
       <div className="Input">
         <div className="input-zone">
-          <textarea
+          <TextArea
             className="input-msg"
             placeholder="Type your message here"
             onChange={this.handleChange}
