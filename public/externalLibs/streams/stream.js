@@ -95,7 +95,7 @@ function stream_length(xs) {
 // Lazy? Yes: The argument stream is only explored as forced by
 //            the result stream.
 function stream_map(f, s) {
-  if (is_null(s)) {
+  if (list.is_null(s)) {
     return null
   } else {
     return pair(f(head(s)), 
