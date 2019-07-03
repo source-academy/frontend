@@ -411,11 +411,12 @@ function drawWithWebGL(flattened_shape_list, drawFunction) {
 }
 
 /**
- * turns a given Rune into Picture
+ * stores a given Rune into the REPL picture frame
+ * and returns the picture frame
  * @param {Rune} shape - given Rune
  * @return {Picture}
- * If the result of evaluating a program is a Picture,
- * the REPL displays it graphically, instead of using text.
+ * If the result of evaluating a program is the REPL picture 
+ * frame, the REPL displays it graphically, instead of using text.
  */
 function show(shape) {
   clear_viewport()

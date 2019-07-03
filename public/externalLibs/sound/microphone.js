@@ -2,48 +2,105 @@
 // // Microphone Functionality
 // // ---------------------------------------------
 
-// Get Microphone Input.
+// permission initially undefined
+// set to true by granting microphone permission
+// set to false by denying microphone permission
+let permission = undefined;
+
+let recorded_sound = undefined;
+
+// check_permission is called whenever we try
+// to record a sound
+function check_permission() {
+    if (permission === undefined) {
+	throw new Error("Call init_record(); " +
+		    "to obtain permission to use microphone");
+    } else if (permission === false) {
+	throw new Error("Permission has been denied.\n" +
+		    "Re-start browser and call init_record();\n" +
+		    "to obtain permission to use microphone.");
+    } // (permission === true): do nothing
+}
+
+/**
+ * Initialize recording by obtaining permission
+ * to use the default device microphone
+ * @returns {undefined} 
+ */
 function init_record(){
-	navigator.mediaDevices.getUserMedia({ audio: true }).then(attachEvents);
+    navigator.mediaDevices.getUserMedia({ audio: true })
+	.then(rememberStream, setPermissionToFalse);
+    return "obtaining recording permission";
 }
 
-let mediaRecorder;
-let sStream;
+let globalStream;
 
-function attachEvents(sourceStream) {
-    sStream = sourceStream;
+function rememberStream(stream) {
+    permission = true;	
+    globalStream = stream;
 }
 
-function start_record() {
-    mediaRecorder = record(sStream);
+function setPermissionToFalse() {
+    permission = false;	
 }
 
-function stop_record() {
-    mediaRecorder.stop();
-}
-
-function record_for(duration) {
-    // Convert duration to seconds
-    play(sine_sound(330, 0.5));
-    setTimeout(() => {
-        duration *= 1000;
-        start_record();
-        setTimeout(() => {
-            stop_record();
-            play(sine_sound(330, 0.5));
-        }, duration);
-    }, 500);
-}
-
-function record(sourceStream) {
-    const mediaRecorder = new MediaRecorder(sourceStream);
+function start_recording(mediaRecorder) {
     const data = [];
-    
     mediaRecorder.ondataavailable = e => e.data.size && data.push(e.data);
-    mediaRecorder.start();
+    mediaRecorder.start(); 
     mediaRecorder.onstop = () => process(data);
-    
-    return mediaRecorder;
+}
+
+// there is a beep signal at the beginning and end
+// of each recording
+const recording_signal_duration_ms = 300;
+
+function play_recording_signal() {
+    play(sine_sound(500, recording_signal_duration_ms / 1000));
+}
+
+const buffer_ms = 40;
+
+function record() {
+    check_permission();
+    const mediaRecorder = new MediaRecorder(globalStream);
+    play_recording_signal();
+    setTimeout(() => {    
+	start_recording(mediaRecorder);
+    }, recording_signal_duration_ms + buffer_ms);
+    return () => {
+	mediaRecorder.stop();
+	play_recording_signal();
+	return () => {
+	    if (recorded_sound === undefined) {
+		throw new Error("recording still being processed")
+	    } else {
+		return recorded_sound;
+	    }
+	};
+    };
+}
+
+function record_for(duration_s) {
+    recorded_sound = undefined;
+    const duration_ms = duration_s * 1000;
+    check_permission();
+    const mediaRecorder = new MediaRecorder(globalStream);
+    play_recording_signal();
+    setTimeout(() => {
+	start_recording(mediaRecorder);
+        setTimeout(() => {
+	    mediaRecorder.stop();
+	    play_recording_signal();
+        }, duration_ms);
+    }, recording_signal_duration_ms + buffer_ms);
+    return () => {
+	    if (recorded_sound === undefined) {
+		throw new Error("recording still being processed")
+	    } else {
+		return recorded_sound;
+	    }
+    };
 }
 
 function process(data) {
@@ -63,9 +120,6 @@ function convertToArrayBuffer(blob) {
         return response.arrayBuffer();
     });
 }
-
-
-let recorded_sound;
 
 function save(audioBuffer) {
     const array = audioBuffer.getChannelData(0);
