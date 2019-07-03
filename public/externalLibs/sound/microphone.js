@@ -2,12 +2,6 @@
 // // Microphone Functionality
 // // ---------------------------------------------
 
-/**
- * @class {test} some class description
- *
- */
-class Microphone {}
-
 // permission initially undefined
 // set to true by granting microphone permission
 // set to false by denying microphone permission
