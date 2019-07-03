@@ -26,11 +26,11 @@ describe('loadStoredState', () => {
 });
 
 describe('saveState', () => {
-  test('Run normally', () => {
-    localStorage.removeItem('storedState');
+  test('Runs normally', () => {
     saveState(defaultState);
     expect(localStorage.getItem('storedState')).toBe(
       compressToUTF16(JSON.stringify(mockShortDefaultState))
     );
+    localStorage.removeItem('storedState');
   });
 });
