@@ -315,17 +315,18 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const id = (action as actionTypes.IAction).payload;
+    const ids = (action as actionTypes.IAction).payload as number[];
     const notifications: AcademyNotification[] = yield select(
       (state: IState) => state.session.notifications
     );
     const newNotifications: AcademyNotification[] = notifications.filter(
-      notification => notification.id !== id
+      notification => !ids.includes(notification.id)
     );
     yield put(actions.updateNotifications(newNotifications));
-    const resp: Response | null = yield request(`notification/${id}/acknowledge`, 'POST', {
+    const resp: Response | null = yield request(`notification/acknowledge`, 'POST', {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
+      body: { notificationIds: ids },
       shouldAutoLogout: false
     });
     if (resp && resp.ok) {

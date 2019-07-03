@@ -142,9 +142,9 @@ export const fetchNotifications = () => ({
   type: actionTypes.FETCH_NOTIFICATIONS
 });
 
-export const acknowledgeNotification = (notificationId: number) => ({
+export const acknowledgeNotification = (notificationIds: number[]) => ({
   type: actionTypes.ACKNOWLEDGE_NOTIFICATION,
-  payload: notificationId
+  payload: notificationIds
 });
 
 export const updateNotifications = (notifications: AcademyNotification[]) => ({

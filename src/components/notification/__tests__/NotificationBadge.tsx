@@ -46,7 +46,7 @@ const avengerNotifications: AcademyNotification[] = [
   }
 ];
 
-const handleAcknowledgeNotification = (id: number) => null;
+const handleAcknowledgeNotification = (ids: number[]) => null;
 
 describe('Badge', () => {
   test('renders properly for students', () => {

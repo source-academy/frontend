@@ -140,10 +140,12 @@ export function* mockBackendSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
     const notifications: AcademyNotification[] = yield select(
-      (State: IState) => State.session.notifications
+      (state: IState) => state.session.notifications
     );
-    const id: number = (action as actionTypes.IAction).payload;
-    const newNotifications = notifications.filter(n => n.id !== id);
+    const ids = (action as actionTypes.IAction).payload as number[];
+    const newNotifications: AcademyNotification[] = notifications.filter(
+      notification => !ids.includes(notification.id)
+    );
     yield put(actions.updateNotifications(newNotifications));
   });
 
@@ -166,27 +168,34 @@ export function* mockBackendSaga(): SagaIterator {
         },
         {
           id: 3,
-          type: 'new',
+          type: 'autograded',
           assessment_id: 3,
           assessment_type: 'Mission',
           assesssment_title: 'A Closed Mission'
         },
         {
           id: 4,
+          type: 'graded',
+          assessment_id: 3,
+          assessment_type: 'Mission',
+          assesssment_title: 'A Closed Mission'
+        },
+        {
+          id: 5,
           type: 'submitted',
           submission_id: 0,
           assessment_type: 'Mission',
           assesssment_title: 'Mission 0'
         },
         {
-          id: 5,
+          id: 6,
           type: 'submitted',
           submission_id: 1,
           assessment_type: 'Mission',
           assesssment_title: 'Mission 1'
         },
         {
-          id: 6,
+          id: 7,
           type: 'submitted',
           submission_id: 2,
           assessment_type: 'Mission',
