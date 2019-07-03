@@ -1,11 +1,33 @@
 /* tslint:disable:no-console */
-import { Slider } from '@blueprintjs/core';
+import { Button, MenuItem, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
 import { BACKEND_URL } from '../../utils/constants';
 import { controlButton } from '../commons';
 import { DeltaType, ICodeDelta, IPlaybackData, IPosition, PlaybackStatus } from './sourcecastShape';
+
+interface ISourcecast {
+  name: string;
+  inserted_at: string;
+  updated_at: string;
+  audio: string;
+  deltas: string;
+  id: number;
+  uploader_id: number;
+  url: string;
+}
+
+const SourcecastSelect = Select.ofType<ISourcecast>();
+
+const sourcecastPredicate: ItemPredicate<ISourcecast> = (query, item) => {
+  return item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+};
+
+const sourcecastRenderer: ItemRenderer<ISourcecast> = (item, { handleClick, modifiers, query }) => (
+  <MenuItem active={false} key={item.id} onClick={handleClick} text={item.id + '. ' + item.name} />
+);
 
 class SourcecastControlbar extends React.PureComponent<
   ISourcecastControlbarProps,
@@ -20,6 +42,7 @@ class SourcecastControlbar extends React.PureComponent<
       currentDeltaRevision: 0,
       currentPlayerTime: 0,
       currentPlayerProgress: 0,
+      currentSourcecastItem: null,
       duration: 0
     };
   }
@@ -49,19 +72,27 @@ class SourcecastControlbar extends React.PureComponent<
         <div>
           <div className="PlayerControl">
             {LoadIndexButton}
-            {this.props.sourcecastIndex &&
-              this.props.sourcecastIndex.map((item: any) => (
-                <div key={item.id}>
-                  {controlButton(item.id, IconNames.MUSIC, () => {
-                    const url = BACKEND_URL + item.url;
-                    console.log(url);
-                    this.props.handleRecordAudioUrl(url);
-                    const playbackData = JSON.parse(item.deltas);
-                    console.log(playbackData);
-                    this.props.handleSetSourcecastData(playbackData);
-                  })}
-                </div>
-              ))}
+            {this.props.sourcecastIndex && (
+              <SourcecastSelect
+                className="pt-minimal"
+                items={this.props.sourcecastIndex}
+                onItemSelect={this.handleSelect}
+                itemPredicate={sourcecastPredicate}
+                itemRenderer={sourcecastRenderer}
+                noResults={<MenuItem disabled={true} text="No recording matched" />}
+                filterable={true}
+              >
+                <Button
+                  className="pt-minimal"
+                  text={
+                    this.state.currentSourcecastItem
+                      ? this.state.currentSourcecastItem.name
+                      : 'No recording selected'
+                  }
+                  rightIcon="double-caret-vertical"
+                />
+              </SourcecastSelect>
+            )}
           </div>
           <div className="Slider">
             <Slider
@@ -83,6 +114,16 @@ class SourcecastControlbar extends React.PureComponent<
       </div>
     );
   }
+
+  private handleSelect = (item: ISourcecast, e: React.ChangeEvent<HTMLSelectElement>) => {
+    const url = BACKEND_URL + item.url;
+    console.log(url);
+    this.props.handleRecordAudioUrl(url);
+    const playbackData = JSON.parse(item.deltas);
+    console.log(playbackData);
+    this.props.handleSetSourcecastData(playbackData);
+    this.setState({ currentSourcecastItem: item });
+  };
 
   private handleSeeked = () => {
     // FIXME: loop in applyPlaybackDataFromStart keeps running if seeked from paused mode
@@ -233,6 +274,7 @@ export interface ISourcecastControlbarState {
   currentDeltaRevision: number;
   currentPlayerTime: number;
   currentPlayerProgress: number;
+  currentSourcecastItem: ISourcecast | null;
   duration: number;
 }
 
