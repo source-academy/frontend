@@ -4,61 +4,58 @@ import {
 } from '../components/assessment/assessmentShape';
 
 /**
- * Defines all the external symbols for playground, i.e full access to runes functionality.
- */
-const TwoDRunesExternals = [
-  'show',
-  'color',
-  'random_color',
-  'red',
-  'pink',
-  'purple',
-  'indigo',
-  'blue',
-  'green',
-  'yellow',
-  'orange',
-  'brown',
-  'black',
-  'white',
-  'scale_independent',
-  'scale',
-  'translate',
-  'rotate',
-  'stack_frac',
-  'stack',
-  'stackn',
-  'quarter_turn_right',
-  'quarter_turn_left',
-  'turn_upside_down',
-  'beside_frac',
-  'beside',
-  'flip_vert',
-  'flip_horiz',
-  'make_cross',
-  'repeat_pattern',
-  'square',
-  'blank',
-  'rcross',
-  'sail',
-  'corner',
-  'nova',
-  'circle',
-  'heart',
-  'pentagram',
-  'ribbon'
-];
-
-/**
  * Defines which external libraries are available for usage, and what
  * external symbols (exposed functions) are under them.
  */
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.NONE, []],
-  [ExternalLibraryNames.TWO_DIM_RUNES, TwoDRunesExternals],
   [
-    ExternalLibraryNames.THREE_DIM_RUNES,
-    [...TwoDRunesExternals, 'anaglyph', 'hollusion', 'overlay_frac', 'overlay']
+    ExternalLibraryNames.RUNES,
+    [
+      'show',
+      'color',
+      'random_color',
+      'red',
+      'pink',
+      'purple',
+      'indigo',
+      'blue',
+      'green',
+      'yellow',
+      'orange',
+      'brown',
+      'black',
+      'white',
+      'scale_independent',
+      'scale',
+      'translate',
+      'rotate',
+      'stack_frac',
+      'stack',
+      'stackn',
+      'quarter_turn_right',
+      'quarter_turn_left',
+      'turn_upside_down',
+      'beside_frac',
+      'beside',
+      'flip_vert',
+      'flip_horiz',
+      'make_cross',
+      'repeat_pattern',
+      'square',
+      'blank',
+      'rcross',
+      'sail',
+      'corner',
+      'nova',
+      'circle',
+      'heart',
+      'pentagram',
+      'ribbon',
+      'hollusion',
+      'overlay_frac',
+      'overlay'
+    ]
   ],
   [
     ExternalLibraryNames.CURVES,
