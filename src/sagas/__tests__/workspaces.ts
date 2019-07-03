@@ -6,8 +6,13 @@ import { call } from 'redux-saga/effects';
 import * as actions from '../../actions';
 import * as actionTypes from '../../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
-import { Library } from '../../components/assessment/assessmentShape';
+import {
+  ExternalLibraryNames,
+  ITestcase,
+  Library
+} from '../../components/assessment/assessmentShape';
 import { mockRuntimeContext } from '../../mocks/context';
+import { externalLibraries } from '../../reducers/externalLibraries';
 import { defaultState, IState } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import workspaceSaga, { evalCode, evalTestCode } from '../workspaces';
@@ -31,6 +36,54 @@ beforeEach(() => {
   (window as any).Inspector.updateContext = jest.fn();
   (window as any).Inspector.highlightClean = jest.fn();
   (window as any).Inspector.highlightLine = jest.fn();
+});
+
+describe('EVAL_EDITOR', () => {
+  test('puts beginInterruptExecution, beginClearContext, clearReplOutput and calls evalCode correctly', () => {
+    const workspaceLocation = WorkspaceLocations.playground;
+    const editorPrepend = 'prepend';
+    const editorValue = 'value';
+    const editorPostpend = 'postpend';
+    const context = mockRuntimeContext();
+    const globals: Array<[string, any]> = [
+      ['testNumber', 3.141592653589793],
+      ['testObject', { a: 1, b: 2 }],
+      ['testArray', [1, 2, 'a', 'b']]
+    ];
+
+    const code = editorPrepend + '\n' + editorValue + '\n' + editorPostpend;
+    const library = {
+      chapter: context.chapter,
+      external: {
+        name: ExternalLibraryNames.NONE,
+        symbols: context.externalSymbols
+      },
+      globals
+    };
+
+    const newDefaultState = generateDefaultState(workspaceLocation, {
+      editorPrepend,
+      editorPostpend,
+      editorValue,
+      context,
+      globals
+    });
+
+    return (
+      expectSaga(workspaceSaga)
+        .withState(newDefaultState)
+        .put(actions.beginInterruptExecution(workspaceLocation))
+        .put(actions.beginClearContext(library, workspaceLocation))
+        .put(actions.clearReplOutput(workspaceLocation))
+        // also calls evalCode here
+        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .dispatch({
+          type: actionTypes.EVAL_EDITOR,
+          payload: { workspaceLocation }
+        })
+        .silentRun()
+    );
+  });
 });
 
 describe('TOGGLE_EDITOR_AUTORUN', () => {
@@ -73,8 +126,33 @@ describe('INVALID_EDITOR_SESSION_ID', () => {
   });
 });
 
+describe('EVAL_REPL', () => {
+  test('puts beginInterruptExecution, clearReplInput, sendReplInputToOutput and calls evalCode correctly', () => {
+    const workspaceLocation = WorkspaceLocations.playground;
+    const replValue = 'sample code';
+    const newState = generateDefaultState(workspaceLocation, { replValue });
+    const context = newState.workspaces[workspaceLocation].context;
+
+    return (
+      expectSaga(workspaceSaga)
+        .withState(newState)
+        .put(actions.beginInterruptExecution(workspaceLocation))
+        .put(actions.clearReplInput(workspaceLocation))
+        .put(actions.sendReplInputToOutput(replValue, workspaceLocation))
+        // also calls evalCode here
+        .call(runInContext, replValue, context, { scheduler: 'preemptive' })
+        .dispatch({
+          type: actionTypes.EVAL_REPL,
+          payload: { workspaceLocation }
+        })
+
+        .silentRun()
+    );
+  });
+});
+
 describe('DEBUG_RESUME', () => {
-  test('puts beginInterruptExecution, clearReplOutput and highlightEditorLine correctly', () => {
+  test('puts beginInterruptExecution, clearReplOutput, highlightEditorLine and calls evalCode correctly', () => {
     const workspaceLocation = WorkspaceLocations.playground;
     const editorValue = 'sample code here';
     const context = mockRuntimeContext();
@@ -97,6 +175,7 @@ describe('DEBUG_RESUME', () => {
         .put(actions.clearReplOutput(workspaceLocation))
         .put(actions.highlightEditorLine([], workspaceLocation))
         // also calls evalCode here
+        .call(resume, undefined)
         .dispatch({
           type: actionTypes.DEBUG_RESUME,
           payload: { workspaceLocation }
@@ -106,30 +185,8 @@ describe('DEBUG_RESUME', () => {
   });
 });
 
-describe('EVAL_REPL', () => {
-  test('calls beginInterruptExecution, clearReplInput and sendReplInputToOutput correctly', () => {
-    const workspaceLocation = WorkspaceLocations.playground;
-    const replValue = 'sample code';
-    const newState = generateDefaultState(workspaceLocation, { replValue });
-
-    return (
-      expectSaga(workspaceSaga)
-        .withState(newState)
-        .put(actions.beginInterruptExecution(workspaceLocation))
-        .put(actions.clearReplInput(workspaceLocation))
-        .put(actions.sendReplInputToOutput(replValue, workspaceLocation))
-        // also calls evalCode here
-        .dispatch({
-          type: actionTypes.EVAL_REPL,
-          payload: { workspaceLocation }
-        })
-        .silentRun()
-    );
-  });
-});
-
 describe('DEBUG_RESET', () => {
-  test('calls setBreakpointAtLine correctly', () => {
+  test('puts clearReplOutput correctly', () => {
     const workspaceLocation = WorkspaceLocations.assessment;
     const newDefaultState = generateDefaultState(workspaceLocation, { editorValue: 'test-value' });
 
@@ -144,6 +201,65 @@ describe('DEBUG_RESET', () => {
       .then(result => {
         expect(result.storeState.workspaces[workspaceLocation].context.runtime.break).toBe(false);
       });
+  });
+});
+
+describe('EVAL_TESTCASE', () => {
+  test('puts beginInterruptExecution, beginClearContext and calls evalTestCode correctly', () => {
+    const workspaceLocation = WorkspaceLocations.grading;
+    const editorPrepend = 'prepend';
+    const editorValue = 'value';
+    const editorPostpend = 'postpend';
+    const testcaseId = 0;
+    const program = '123;';
+
+    const editorTestcases: ITestcase[] = [
+      {
+        answer: '123',
+        program,
+        score: 1
+      }
+    ];
+
+    const context = mockRuntimeContext();
+    const globals: Array<[string, any]> = [
+      ['testNumber', 3.141592653589793],
+      ['testObject', { a: 1, b: 2 }],
+      ['testArray', [1, 2, 'a', 'b']]
+    ];
+
+    const code = editorPrepend + '\n' + editorValue + '\n' + editorPostpend + '\n' + program;
+    const library = {
+      chapter: context.chapter,
+      external: {
+        name: ExternalLibraryNames.NONE,
+        symbols: context.externalSymbols
+      },
+      globals
+    };
+
+    const newDefaultState = generateDefaultState(workspaceLocation, {
+      editorPrepend,
+      editorPostpend,
+      editorValue,
+      editorTestcases,
+      context,
+      globals
+    });
+
+    return (
+      expectSaga(workspaceSaga)
+        .withState(newDefaultState)
+        .put(actions.beginInterruptExecution(workspaceLocation))
+        .put(actions.beginClearContext(library, workspaceLocation))
+        // also calls evalTestCode here
+        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .dispatch({
+          type: actionTypes.EVAL_TESTCASE,
+          payload: { workspaceLocation, testcaseId }
+        })
+        .silentRun()
+    );
   });
 });
 
@@ -213,6 +329,238 @@ describe('CHAPTER_SELECT', () => {
         payload: { chapter: newChapter, workspaceLocation }
       })
       .silentRun();
+  });
+});
+
+describe('PLAYGROUND_EXTERNAL_SELECT', () => {
+  let workspaceLocation: WorkspaceLocation;
+  let globals: Array<[string, any]>;
+  let chapter: number;
+  let context: Context;
+
+  beforeEach(() => {
+    workspaceLocation = WorkspaceLocations.playground;
+    globals = [
+      ['testNumber', 3.141592653589793],
+      ['testObject', { a: 1, b: 2 }],
+      ['testArray', [1, 2, 'a', 'b']]
+    ];
+    chapter = 4;
+    context = {
+      ...mockRuntimeContext(),
+      chapter
+    };
+  });
+
+  test('puts changePlaygroundExternal, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
+    const oldExternalLibraryName = ExternalLibraryNames.SOUND;
+    const newExternalLibraryName = ExternalLibraryNames.STREAMS;
+
+    const newDefaultState = generateDefaultState(workspaceLocation, {
+      context,
+      globals,
+      playgroundExternal: oldExternalLibraryName
+    });
+
+    const symbols = externalLibraries.get(newExternalLibraryName)!;
+    const library: Library = {
+      chapter,
+      external: {
+        name: newExternalLibraryName,
+        symbols
+      },
+      globals
+    };
+
+    return expectSaga(workspaceSaga)
+      .withState(newDefaultState)
+      .put(actions.changePlaygroundExternal(newExternalLibraryName))
+      .put(actions.beginClearContext(library, workspaceLocation))
+      .put(actions.clearReplOutput(workspaceLocation))
+      .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
+      .dispatch({
+        type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
+        payload: {
+          externalLibraryName: newExternalLibraryName,
+          workspaceLocation
+        }
+      })
+      .silentRun();
+  });
+
+  test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
+    const oldExternalLibraryName = ExternalLibraryNames.TWO_DIM_RUNES;
+    const newExternalLibraryName = ExternalLibraryNames.TWO_DIM_RUNES;
+
+    const newDefaultState = generateDefaultState(workspaceLocation, {
+      context,
+      globals,
+      playgroundExternal: oldExternalLibraryName
+    });
+
+    const symbols = externalLibraries.get(newExternalLibraryName)!;
+    const library: Library = {
+      chapter,
+      external: {
+        name: newExternalLibraryName,
+        symbols
+      },
+      globals
+    };
+
+    return expectSaga(workspaceSaga)
+      .withState(newDefaultState)
+      .not.put(actions.changePlaygroundExternal(newExternalLibraryName))
+      .not.put(actions.beginClearContext(library, workspaceLocation))
+      .not.put(actions.clearReplOutput(workspaceLocation))
+      .not.call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
+      .dispatch({
+        type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
+        payload: {
+          externalLibraryName: newExternalLibraryName,
+          workspaceLocation
+        }
+      })
+      .silentRun();
+  });
+});
+
+describe('ENSURE_LIBRARIES_LOADED', () => {
+  test('does not call showWarningMessage when getReadyWebGLForCanvas is not undefined', () => {
+    (window as any).getReadyWebGLForCanvas = jest.fn();
+
+    return expectSaga(workspaceSaga)
+      .not.call(showWarningMessage, 'Error loading libraries', 750)
+      .dispatch({
+        type: actionTypes.ENSURE_LIBRARIES_LOADED
+      })
+      .silentRun();
+  });
+
+  test('calls showWarningMessage when race condition timeouts', () => {
+    return expectSaga(workspaceSaga)
+      .provide({
+        race: () => ({
+          loadedScripts: undefined,
+          timeout: true
+        })
+      })
+      .call(showWarningMessage, 'Error loading libraries', 750)
+      .dispatch({
+        type: actionTypes.ENSURE_LIBRARIES_LOADED
+      })
+      .silentRun();
+  });
+});
+
+describe('BEGIN_CLEAR_CONTEXT', () => {
+  let loadLib: any;
+  let getReadyWebGLForCanvas: any;
+  let chapter: number;
+  let globals: Array<[string, any]>;
+  let workspaceLocation: WorkspaceLocation;
+
+  beforeEach(() => {
+    loadLib = jest.fn();
+    getReadyWebGLForCanvas = jest.fn();
+
+    (window as any).loadLib = loadLib;
+    (window as any).getReadyWebGLForCanvas = getReadyWebGLForCanvas;
+
+    workspaceLocation = WorkspaceLocations.grading;
+    chapter = 4;
+    globals = [
+      ['testNumber', 3.141592653589793],
+      ['testObject', { a: 1, b: 2 }],
+      ['testArray', [1, 2, 'a', 'b']]
+    ];
+  });
+
+  test('loads TWO_DIM_RUNES library correctly', () => {
+    const newExternalLibraryName = ExternalLibraryNames.TWO_DIM_RUNES;
+
+    const symbols = externalLibraries.get(newExternalLibraryName)!;
+    const library: Library = {
+      chapter,
+      external: {
+        name: newExternalLibraryName,
+        symbols
+      },
+      globals
+    };
+
+    return expectSaga(workspaceSaga)
+      .put(actions.endClearContext(library, workspaceLocation))
+      .dispatch({
+        type: actionTypes.BEGIN_CLEAR_CONTEXT,
+        payload: { library, workspaceLocation }
+      })
+      .silentRun()
+      .then(() => {
+        expect(loadLib).toHaveBeenCalledWith('TWO_DIM_RUNES');
+        expect(getReadyWebGLForCanvas).toHaveBeenCalledWith('2d');
+        globals.forEach(item => {
+          expect(window[item[0]]).toEqual(item[1]);
+        });
+      });
+  });
+
+  test('loads THREE_DIM_RUNES library correctly', () => {
+    const newExternalLibraryName = ExternalLibraryNames.THREE_DIM_RUNES;
+
+    const symbols = externalLibraries.get(newExternalLibraryName)!;
+    const library: Library = {
+      chapter,
+      external: {
+        name: newExternalLibraryName,
+        symbols
+      },
+      globals
+    };
+
+    return expectSaga(workspaceSaga)
+      .put(actions.endClearContext(library, workspaceLocation))
+      .dispatch({
+        type: actionTypes.BEGIN_CLEAR_CONTEXT,
+        payload: { library, workspaceLocation }
+      })
+      .silentRun()
+      .then(() => {
+        expect(loadLib).toHaveBeenCalledWith('THREE_DIM_RUNES');
+        expect(getReadyWebGLForCanvas).toHaveBeenCalledWith('3d');
+        globals.forEach(item => {
+          expect(window[item[0]]).toEqual(item[1]);
+        });
+      });
+  });
+
+  test('loads CURVES library correctly', () => {
+    const newExternalLibraryName = ExternalLibraryNames.CURVES;
+
+    const symbols = externalLibraries.get(newExternalLibraryName)!;
+    const library: Library = {
+      chapter,
+      external: {
+        name: newExternalLibraryName,
+        symbols
+      },
+      globals
+    };
+
+    return expectSaga(workspaceSaga)
+      .put(actions.endClearContext(library, workspaceLocation))
+      .dispatch({
+        type: actionTypes.BEGIN_CLEAR_CONTEXT,
+        payload: { library, workspaceLocation }
+      })
+      .silentRun()
+      .then(() => {
+        expect(loadLib).toHaveBeenCalledWith('CURVES');
+        expect(getReadyWebGLForCanvas).toHaveBeenCalledWith('curve');
+        globals.forEach(item => {
+          expect(window[item[0]]).toEqual(item[1]);
+        });
+      });
   });
 });
 
@@ -290,6 +638,27 @@ describe('evalCode', () => {
         .call(resume, lastDebuggerResult)
         .put.like({ action: { type: actionTypes.EVAL_INTERPRETER_ERROR } })
         .silentRun();
+    });
+
+    test('calls resume correctly after EVAL_EDITOR action is dispatched', () => {
+      const firstInput = '1;';
+      const secondInput = '2;';
+      const result = { status: 'finished', context, value: 1 };
+
+      return expectSaga(evalCode, firstInput, context, workspaceLocation, actionType)
+        .provide([[call(runInContext, code, context, options), result]])
+        .silentRun()
+        .then(() => {
+          return expectSaga(
+            evalCode,
+            secondInput,
+            context,
+            workspaceLocation,
+            actionTypes.DEBUG_RESUME
+          )
+            .call(resume, result)
+            .silentRun();
+        });
     });
   });
 
