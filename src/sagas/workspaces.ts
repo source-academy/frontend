@@ -333,7 +333,7 @@ function* updateInspector() {
   }
 }
 
-function* evalCode(
+export function* evalCode(
   code: string,
   context: Context,
   location: WorkspaceLocation,
