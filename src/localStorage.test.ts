@@ -13,19 +13,19 @@ const mockShortDefaultState: ISavedState = {
   playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun
 };
 
-describe('loadStoredState', () => {
-  test('Runs normally', () => {
+describe('LOADSTOREDSTATE', () => {
+  test('runs normally', () => {
     localStorage.setItem('storedState', compressToUTF16(JSON.stringify(mockShortDefaultState)));
     expect(loadStoredState()).toEqual(mockShortDefaultState);
     localStorage.removeItem('storedState');
   });
-  test('Returns undefined when there is no stored state', () => {
+  test('returns undefined when there is no stored state', () => {
     localStorage.removeItem('storedState');
     expect(loadStoredState()).toBe(undefined);
   });
 });
 
-describe('saveState', () => {
+describe('SAVESTATE', () => {
   test('Runs normally', () => {
     saveState(defaultState);
     expect(localStorage.getItem('storedState')).toBe(

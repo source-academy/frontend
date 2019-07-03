@@ -34,8 +34,8 @@ const mockChangedState: IState = {
   }
 };
 
-describe('createStore', () => {
-  test('createStore initialised states are correct', () => {
+describe('CREATESTORE', () => {
+  test('has defaultState when initialised', () => {
     expect(loadStoredState()).toEqual(undefined);
     expect(createStore(history).getState()).toEqual({
       ...defaultState,
@@ -43,7 +43,7 @@ describe('createStore', () => {
     });
     expect(loadStoredState()).toEqual(undefined);
   });
-  test('when called with stored states', () => {
+  test('has correct getState() when called with storedState', () => {
     localStorage.setItem('storedState', compressToUTF16(JSON.stringify(mockChangedStoredState)));
     expect(createStore(history).getState()).toEqual({
       ...mockChangedState,
