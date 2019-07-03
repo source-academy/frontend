@@ -57,8 +57,8 @@ const okResp = { ok: true };
 const errorResp = { ok: false };
 // ----------------------------------------
 
-describe('backendSaga receives an action with type FETCH_AUTH', () => {
-  test('Saga runs as intended', () => {
+describe('FETCH_AUTH ACTION DISPATCHED', () => {
+  test('and backendSaga runs as intended', () => {
     const luminousCode = 'luminousCode';
     const user = mockTokens ? 'user' : null;
     return expectSaga(backendSaga)
@@ -68,7 +68,7 @@ describe('backendSaga receives an action with type FETCH_AUTH', () => {
       .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminousCode })
       .silentRun();
   });
-  test('tokens and user are null', () => {
+  test('but token and users are null so no changes to state', () => {
     const luminousCode = 'luminousCode';
     return expectSaga(backendSaga)
       .withState(mockStates)
@@ -79,8 +79,8 @@ describe('backendSaga receives an action with type FETCH_AUTH', () => {
   });
 });
 
-describe('backendSaga receives an action with type FETCH_ASSESSMENT_OVERVIEWS', () => {
-  test('Saga runs as intended', () => {
+describe('FETCH_ASSESSMENT_OVERVIEWS ACTION DISPATCHED', () => {
+  test('and backendSaga runs as intended', () => {
     return expectSaga(backendSaga)
       .withState(mockStates)
       .provide([[call(getAssessmentOverviews, mockTokens), mockAssessmentOverviews]])
@@ -89,7 +89,7 @@ describe('backendSaga receives an action with type FETCH_ASSESSMENT_OVERVIEWS', 
       .silentRun();
   });
 
-  test('Fetch assessmentOverview returns null, no changes to state', () => {
+  test('and getAssessmentOverviews call returns null, no changes to state', () => {
     return expectSaga(backendSaga)
       .withState(mockStates)
       .provide([[call(getAssessmentOverviews, mockTokens), null]])
@@ -99,8 +99,8 @@ describe('backendSaga receives an action with type FETCH_ASSESSMENT_OVERVIEWS', 
   });
 });
 
-describe('backendSaga receives an action with type FETCH_ASSESSMENT', () => {
-  test('Saga runs as intended', () => {
+describe('FETCH_ASSESSMENT ACTION DISPATCHED', () => {
+  test('and backendSaga runs as intended', () => {
     const mockId = 0;
     return expectSaga(backendSaga)
       .withState(mockStates)
@@ -109,8 +109,7 @@ describe('backendSaga receives an action with type FETCH_ASSESSMENT', () => {
       .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: mockId })
       .silentRun();
   });
-
-  test('Fetch assignment returns null, no changes to state', () => {
+  test('and getAssessment call returns null, no changes to state', () => {
     const mockId = 0;
     return expectSaga(backendSaga)
       .withState(mockStates)
@@ -121,8 +120,8 @@ describe('backendSaga receives an action with type FETCH_ASSESSMENT', () => {
   });
 });
 
-describe('backendSaga receives an action with type SUBMIT_ANSWER', () => {
-  test('Saga runs as intended', () => {
+describe('SUBMIT_ANSWER ACTION DISPATCHED', () => {
+  test('and saga runs as intended', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     const mockNewQuestions = mockAssessment.questions.slice().map((question: IQuestion) => {
       if (question.id === mockAnsweredAssessmentQuestion.id) {
@@ -152,7 +151,7 @@ describe('backendSaga receives an action with type SUBMIT_ANSWER', () => {
       .dispatch({ type: actionTypes.SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
   });
-  test('Not a student', () => {
+  test('but role is not a student so no changes to state', () => {
     const mockStatesStaff: IState = {
       ...mockStates,
       session: { ...mockStates.session, role: Role.Staff }
@@ -165,7 +164,7 @@ describe('backendSaga receives an action with type SUBMIT_ANSWER', () => {
       .dispatch({ type: actionTypes.SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
   });
-  test('null response', () => {
+  test('but null response from postAnswer call so no changes to state', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     return expectSaga(backendSaga)
       .withState(mockStates)
@@ -185,7 +184,7 @@ describe('backendSaga receives an action with type SUBMIT_ANSWER', () => {
       .dispatch({ type: actionTypes.SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
   });
-  test('error response', () => {
+  test('but error response from postAnswer call so no changes to state', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     return expectSaga(backendSaga)
       .withState(mockStates)
@@ -206,8 +205,8 @@ describe('backendSaga receives an action with type SUBMIT_ANSWER', () => {
   });
 });
 
-describe('backendSaga receives an action with type SUBMIT_ASSESSMENT', () => {
-  test('Saga runs as intended', () => {
+describe('SUBMIT_ASSESSMENT ACTION DISPATCHED', () => {
+  test('and backendSaga runs as intended', () => {
     const mockAssessmentId = 0;
     const mockNewOverviews = mockAssessmentOverviews.map(overview => {
       if (overview.id === mockAssessmentId) {
@@ -223,7 +222,16 @@ describe('backendSaga receives an action with type SUBMIT_ASSESSMENT', () => {
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: mockAssessmentId })
       .silentRun();
   });
-  test('Cannot reach server', () => {
+  test('but error response for postAssessment call so no changes to state', () => {
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .provide([[call(postAssessment, 0, mockTokens), errorResp]])
+      .call(showWarningMessage, 'Something went wrong. Please try again.')
+      .hasFinalState(mockStates)
+      .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: 0 })
+      .silentRun();
+  });
+  test('but null response for postAssessment call so no changes to state', () => {
     return expectSaga(backendSaga)
       .withState(mockStates)
       .provide([[call(postAssessment, 0, mockTokens), null]])
@@ -232,7 +240,7 @@ describe('backendSaga receives an action with type SUBMIT_ASSESSMENT', () => {
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: 0 })
       .silentRun();
   });
-  test('Not a student', () => {
+  test('but role is not a student so no changes to state', () => {
     const mockStatesStaff: IState = {
       ...mockStates,
       session: { ...mockStates.session, role: Role.Staff }
