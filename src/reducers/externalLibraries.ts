@@ -3,8 +3,7 @@ import {
   ExternalLibraryNames
 } from '../components/assessment/assessmentShape';
 
-/**
- * Defines which external libraries are available for usage, and what
+/** Defines which external libraries are available for usage, and what
  * external symbols (exposed functions) are under them.
  */
 
