@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import NotificationBadge from '../NotificationBadge';
 import { AcademyNotification } from '../notificationShape';
 
-const notifications: AcademyNotification[] = [
+const studentNotifications: AcademyNotification[] = [
   {
     id: 1,
     type: 'new',
@@ -18,13 +18,54 @@ const notifications: AcademyNotification[] = [
     assessment_id: 1,
     assessment_type: 'Mission',
     assesssment_title: 'The Secret to Streams'
+  },
+  {
+    id: 3,
+    type: 'autograded',
+    assessment_id: 1,
+    assessment_type: 'Mission',
+    assesssment_title: 'The Secret to Streams'
+  },
+  {
+    id: 4,
+    type: 'unsubmitted',
+    assessment_id: 1,
+    assessment_type: 'Mission',
+    assesssment_title: 'The Secret to Streams'
   }
 ];
 
+const avengerNotifications: AcademyNotification[] = [
+  {
+    id: 1,
+    type: 'submitted',
+    assessment_id: 1,
+    assessment_type: 'Mission',
+    assesssment_title: 'The Secret to Streams',
+    submission_id: 1
+  }
+];
+
+const handleAcknowledgeNotification = (id: number) => null;
+
 describe('Badge', () => {
-  test('renders properly with notifications', () => {
+  test('renders properly for students', () => {
     const tree = mount(
-      <NotificationBadge notifications={notifications} handleAcknowledgeNotification={id => null} />
+      <NotificationBadge
+        notifications={studentNotifications}
+        handleAcknowledgeNotification={handleAcknowledgeNotification}
+      />
+    );
+
+    expect(tree.debug()).toMatchSnapshot();
+  });
+
+  test('renders properly for avengers', () => {
+    const tree = mount(
+      <NotificationBadge
+        notifications={avengerNotifications}
+        handleAcknowledgeNotification={handleAcknowledgeNotification}
+      />
     );
 
     expect(tree.debug()).toMatchSnapshot();
@@ -32,9 +73,12 @@ describe('Badge', () => {
 
   test('does not render with no notifications', () => {
     const tree = mount(
-        <NotificationBadge notifications={[]} handleAcknowledgeNotification={id => null} />
-      );
-  
-      expect(tree.debug()).toMatchSnapshot();
+      <NotificationBadge
+        notifications={[]}
+        handleAcknowledgeNotification={handleAcknowledgeNotification}
+      />
+    );
+
+    expect(tree.debug()).toMatchSnapshot();
   });
 });
