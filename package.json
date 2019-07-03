@@ -33,8 +33,6 @@
     }
   },
   "dependencies": {
-    "@pusher/chatkit-client": "^1.5.0",
-    "@types/jwt-decode": "^2.2.1",
     "acorn": "^4.0.13",
     "ag-grid": "^18.0.1",
     "ag-grid-react": "^18.0.0",
@@ -110,6 +108,8 @@
     "@types/redux-mock-store": "^0.0.13",
     "@types/showdown": "^1.7.5",
     "@types/xml2js": "^0.4.3",
+    "@pusher/chatkit-client": "^1.5.0",
+    "@types/jwt-decode": "^2.2.1",
     "babel-core": "6",
     "babel-runtime": "^6.23.0",
     "coveralls": "^3.0.1",
