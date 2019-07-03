@@ -126,44 +126,12 @@ test('chapterSelect generates correct action object', () => {
   });
 });
 
-test('playgroundExternalSelect generates correct action object', () => {
-  const externalLibraryName = 'STREAMS';
-  const action = playgroundExternalSelect(externalLibraryName, assessmentWorkspace);
-  expect(action).toEqual({
-    type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
-    payload: {
-      externalLibraryName,
-      workspaceLocation: assessmentWorkspace
-    }
-  });
-});
-
 test('toggleEditorAutorun generates correct action object', () => {
   const action = toggleEditorAutorun(gradingWorkspace);
   expect(action).toEqual({
     type: actionTypes.TOGGLE_EDITOR_AUTORUN,
     payload: {
       workspaceLocation: gradingWorkspace
-    }
-  });
-});
-
-test('beginClearContext generates correct action object', () => {
-  const library: Library = {
-    chapter: 4,
-    external: {
-      name: 'STREAMS',
-      symbols: []
-    },
-    globals: []
-  };
-
-  const action = beginClearContext(library, playgroundWorkspace);
-  expect(action).toEqual({
-    type: actionTypes.BEGIN_CLEAR_CONTEXT,
-    payload: {
-      library,
-      workspaceLocation: playgroundWorkspace
     }
   });
 });
@@ -184,26 +152,6 @@ test('clearReplOutput generates correct action object', () => {
     type: actionTypes.CLEAR_REPL_OUTPUT,
     payload: {
       workspaceLocation: gradingWorkspace
-    }
-  });
-});
-
-test('endClearContext generates correct action object', () => {
-  const library: Library = {
-    chapter: 4,
-    external: {
-      name: 'STREAMS',
-      symbols: []
-    },
-    globals: []
-  };
-
-  const action = endClearContext(library, playgroundWorkspace);
-  expect(action).toEqual({
-    type: actionTypes.END_CLEAR_CONTEXT,
-    payload: {
-      library,
-      workspaceLocation: playgroundWorkspace
     }
   });
 });
