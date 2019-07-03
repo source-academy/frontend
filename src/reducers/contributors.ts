@@ -8,12 +8,12 @@ export const reducer: Reducer<IContributorsState> = (state = defaultContributors
     case ADD_REPOS:
       return {
         ...state,
-        repos: [...state.repos, action.payload]
+        repos: action.payload
       };
     case ADD_CONTRIBUTORS:
       return {
         ...state,
-        contributors: [...state.contributors, action.payload]
+        contributors: action.payload
       };
     case FETCH_REPOS: 
       return state;

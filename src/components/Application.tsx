@@ -4,12 +4,12 @@ import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import Academy from '../containers/academy';
+import Contributors from '../containers/ContributorsContainer';
 import Login from '../containers/LoginContainer';
 import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import { Role, sourceChapters } from '../reducers/states';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
-import Contributors from './Contributors';
 import NavigationBar from './NavigationBar';
 import NotFound from './NotFound';
 

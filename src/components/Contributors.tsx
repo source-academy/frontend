@@ -51,12 +51,12 @@ class Contributors extends React.Component<IContributorsProps, {}> {
                     );
                 });   
                 return (
-                    <div key={repo.key}>
-                        <div className="repoDetailsPopup">
+                    <div key={repo.key} className="containerPermalink">
+                        <div className="repoDetailsPermalink">
                             <h3>{repo.name}</h3>
                             <h5>{repo.description}</h5>
                         </div>
-                        <div className="inPopup">
+                        <div className="inPermalink">
                             {arrayMapped}
                         </div>
                     </div>
