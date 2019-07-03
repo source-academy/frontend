@@ -1,4 +1,4 @@
-import { TextArea} from '@blueprintjs/core';
+import { TextArea } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
