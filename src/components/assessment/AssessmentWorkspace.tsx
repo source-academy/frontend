@@ -9,12 +9,13 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+import ChatApp from '../../containers/ChatContainer';
+import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
 import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
-import ChatApp from '../../containers/ChatContainer';
-import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
@@ -33,7 +34,6 @@ import {
   QuestionTypes
 } from './assessmentShape';
 import GradingResult from './GradingResult';
-import * as React from 'react';
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
