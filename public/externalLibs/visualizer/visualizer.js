@@ -35,14 +35,13 @@
           thisNode.left = construct_tree(head(lst))
         }
       } else if (is_function(head(lst))) { // draw the function object
-				if (perms.indexOf(head(lst)) > -1) { // check if function has been drawn
-					thisNode.leftid = perms.indexOf(head(lst))
-				} else { 
-					thisNode.left = construct_function(head(lst))
-				}
-			}				
-			else {
-				// otherwise, it's a data item
+	if (perms.indexOf(head(lst)) > -1) { // check if function has been drawn
+	  thisNode.leftid = perms.indexOf(head(lst))
+	} else { 
+	  thisNode.left = construct_function(head(lst))
+	}
+      }	else {
+	// otherwise, it's a data item
         thisNode.data = head(lst)
       }
       // similarly for right subtree.
@@ -53,37 +52,36 @@
           thisNode.right = construct_tree(tail(lst))
         }
       } else if (is_function(tail(lst))) {
-				if (perms.indexOf(tail(lst)) > -1) {
-					thisNode.rightid = perms.indexOf(tail(lst))
-				} else { 
-					thisNode.right = construct_function(tail(lst))
-				}
-			}	else {
+	if (perms.indexOf(tail(lst)) > -1) {
+		thisNode.rightid = perms.indexOf(tail(lst))
+	} else { 
+		thisNode.right = construct_function(tail(lst))
+	}
+      } else {
         thisNode.data2 = tail(lst)
       }
 
       return thisNode
     }
 
-		/** 
-		 * Returns a new TreeNode that represents a function object instead of a sublist
-		 */
-		function construct_function(fn) {
-			var thisNode = new TreeNode()
-			thisNode.data2 = " " // workaround to prevent nullbox from being drawn
-			
-			// memoise current function
-			perms[counter] = fn
-			thisNode.id = counter
-			thisNode.isFunction = true
-			counter++
-			
-			return thisNode
-		}
+    /** 
+     * Returns a new TreeNode that represents a function object instead of a sublist
+     */
+    function construct_function(fn) {
+      var thisNode = new TreeNode()
+      thisNode.data2 = " " // workaround to prevent nullbox from being drawn
+
+      // memoise current function
+      perms[counter] = fn
+      thisNode.id = counter
+      thisNode.isFunction = true
+      counter++
+
+      return thisNode
+    }
+
     // keeps track of all sublists in order to detect cycles
     var perms = []
-		// keeps track of functions (represented as pairs drawn with "eyeballs")
-		var permFunctions = []
     var tree = new Tree()
     var counter = 0
     tree.rootNode = construct_tree(lst)
@@ -102,7 +100,7 @@
     boxSpacingX: 50,
     boxSpacingY: 60,
 		
-		circleRadius: 12,
+    circleRadius: 12,
 
     arrowSpace: 5,
     arrowSpaceH: 13, // horizontal
@@ -176,11 +174,11 @@
   TreeDrawer.prototype.drawNode = function(node, x, y, layer) {
     if (node !== null) {
       // draws the content
-			if (node.isFunction) {
-				realDrawFunctionNode(node.id, x, y, x, y, layer)
-			} else {
-				realDrawNode(node.data, node.data2, node.id, x, y, x, y, layer)
-			}
+      if (node.isFunction) {
+        realDrawFunctionNode(node.id, x, y, x, y, layer)
+      } else {
+        realDrawNode(node.data, node.data2, node.id, x, y, x, y, layer)
+      }
 
       // if it has a left new child, draw it
       if (node.left !== null) {
@@ -226,19 +224,19 @@
     y = parentY + tcon.distanceY
 
     if (node.isFunction) {
-			realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
-		} else {
-			realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
-		}
+      realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+    } else {
+      realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+    }
     if (node.left !== null) {
       this.drawLeft(node.left, x, y, layer)
     } else if (node.leftid != null) {
-			backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
+      backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
     }
     if (node.right !== null) {
       this.drawRight(node.right, x, y, layer)
     } else if (node.rightid != null) {
-			backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
+      backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
     } else if (node.data2 === null) {
       var nullbox = new NodeEmpty_list(x, y)
       nullbox.put(layer)
@@ -264,10 +262,10 @@
     y = parentY + tcon.distanceY
 
     if (node.isFunction) {
-			realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
-		} else {
-			realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
-		}
+      realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+    } else {
+      realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+    }
 
     if (node.left !== null) {
       this.drawLeft(node.left, x, y, layer)
@@ -328,17 +326,17 @@
     minLeft = Math.min(minLeft, x1)
   }
 	
-	function realDrawFunctionNode(id, x1, y1, x2, y2, layer) {
-		var circle = new NodeCircles()
-		var node = new Kinetic.Group()
-		
-		circle.put(node)
-		
-		if (x2 !== x1) {
-			circle.connectTo(x2 - x1, y2 - y1)
-		}
-		
-		node.setX(x1)
+  function realDrawFunctionNode(id, x1, y1, x2, y2, layer) {
+    var circle = new NodeCircles()
+    var node = new Kinetic.Group()
+
+    circle.put(node)
+
+    if (x2 !== x1) {
+      circle.connectTo(x2 - x1, y2 - y1)
+    }
+
+    node.setX(x1)
     node.setY(y1)
     layer.add(node)
 
@@ -346,7 +344,7 @@
     nodelist[id] = node
     // update left extreme of the tree
     minLeft = Math.min(minLeft, x1)
-	}
+  }
 
   /**
    *   Draws a tree object on the canvas at x,y on a given layer
@@ -464,51 +462,51 @@
     }
   }
 
-	/**
-	 *  Creates a Kinetic.Group used to represent a function object. Similar to NodeBox().
-	 */
-	function NodeCircles() {
-		this.image = new Kinetic.Group()
-		
-		var leftCircle = new Kinetic.Circle({
-			radius: 15,
-			strokeWidth: tcon.strokeWidth,
-			stroke: 'white',
-			x: tcon.boxWidth / 2 - 20,
-			y: tcon.boxHeight / 2
-		})
-		
-		var rightCircle = new Kinetic.Circle({
-			radius: 15,
-			strokeWidth: tcon.strokeWidth,
-			stroke: 'white',
-			x: tcon.boxWidth / 2 + 10,
-			y: tcon.boxHeight / 2
-		})
-		
-		var leftDot = new Kinetic.Circle({
-			radius: 4,
-			strokeWidth: tcon.strokeWidth,
-			stroke: 'white',
-			fill: 'white',
-			x: tcon.boxWidth / 2 - 20,
-			y: tcon.boxHeight / 2
-		})
-		
-		var rightDot = new Kinetic.Circle({
-			radius: 4,
-			strokeWidth: tcon.strokeWidth,
-			stroke: 'white',
-			fill: 'white',
-			x: tcon.boxWidth / 2 + 10,
-			y: tcon.boxHeight / 2
-		})
-		
-		this.image.add(leftCircle)
-		this.image.add(rightCircle)
-		this.image.add(leftDot)
-		this.image.add(rightDot)
-	}
+  /**
+  *  Creates a Kinetic.Group used to represent a function object. Similar to NodeBox().
+  */
+  function NodeCircles() {
+    this.image = new Kinetic.Group()
+
+    var leftCircle = new Kinetic.Circle({
+      radius: 15,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      x: tcon.boxWidth / 2 - 20,
+      y: tcon.boxHeight / 2
+    })
+
+    var rightCircle = new Kinetic.Circle({
+      radius: 15,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      x: tcon.boxWidth / 2 + 10,
+      y: tcon.boxHeight / 2
+    })
+
+    var leftDot = new Kinetic.Circle({
+      radius: 4,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      fill: 'white',
+      x: tcon.boxWidth / 2 - 20,
+      y: tcon.boxHeight / 2
+    })
+
+    var rightDot = new Kinetic.Circle({
+      radius: 4,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      fill: 'white',
+      x: tcon.boxWidth / 2 + 10,
+      y: tcon.boxHeight / 2
+    })
+
+    this.image.add(leftCircle)
+    this.image.add(rightCircle)
+    this.image.add(leftDot)
+    this.image.add(rightDot)
+  }
 
   /**
    *  Connects a NodeBox to it's parent at x,y by using line segments with arrow head
