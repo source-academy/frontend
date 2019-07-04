@@ -82,7 +82,7 @@ export type ReposInApi = {
   has_wiki: boolean;
   has_pages: boolean;
   forks_count: number;
-  mirror_url: null; 
+  mirror_url: null;
   archived: boolean;
   disabled: boolean;
   open_issues_count: number;
