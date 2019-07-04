@@ -52,10 +52,10 @@ export interface IStateProps {
   gradingOverviews?: GradingOverview[];
 }
 
-// /** Component to render in table - grading status */
-// const GradingStatus = (props: GradingNavLinkProps) => {
-//   return <GradingHistory data={props.data} exp={false} grade={false} status={true} />;
-// };
+/** Component to render in table - grading status */
+const GradingStatus = (props: GradingNavLinkProps) => {
+  return <GradingHistory data={props.data} exp={false} grade={false} status={true} />;
+};
 
 /** Component to render in table - marks */
 const GradingMarks = (props: GradingNavLinkProps) => {
@@ -76,8 +76,14 @@ class Grading extends React.Component<IGradingProps, State> {
     this.state = {
       columnDefs: [
         { headerName: 'Assessment Name', field: 'assessmentName' },
-        { headerName: 'Category', field: 'assessmentCategory', maxWidth: 150 },
+        { headerName: 'Category', field: 'assessmentCategory', maxWidth: 120 },
         { headerName: 'Student Name', field: 'studentName' },
+        {
+          headerName: 'Grading',
+          field: 'gradingStatus',
+          cellRendererFramework: GradingStatus,
+          maxWidth: 105
+        },
         {
           headerName: 'Grade',
           field: '',
@@ -134,7 +140,7 @@ class Grading extends React.Component<IGradingProps, State> {
           headerName: 'Edit',
           field: '',
           cellRendererFramework: GradingNavLink,
-          maxWidth: 70
+          maxWidth: 75
         },
         {
           headerName: 'Unsubmit',
@@ -153,6 +159,8 @@ class Grading extends React.Component<IGradingProps, State> {
             padding: 0
           }
         },
+        { headerName: 'Question Count', field: 'questionCount', hide: true },
+        { headerName: 'Questions Graded', field: 'gradedCount', hide: true },
         { headerName: 'Initial Grade', field: 'initialGrade', hide: true },
         { headerName: 'Grade Adjustment', field: 'gradeAdjustment', hide: true },
         { headerName: 'Initial XP', field: 'initialXp', hide: true },
@@ -203,7 +211,7 @@ class Grading extends React.Component<IGradingProps, State> {
               id="filterBar"
               large={false}
               leftIcon="filter"
-              placeholder="Enter any text(e.g. mission)"
+              placeholder="Enter any text (e.g. mission)"
               value={this.state.filterValue}
               onChange={this.handleFilterChange}
             />
@@ -246,11 +254,11 @@ class Grading extends React.Component<IGradingProps, State> {
     );
     return (
       <div>
-        <ContentDisplay
-          loadContentDispatch={this.props.handleFetchGradingOverviews}
-          display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
-          fullWidth={false}
-        />
+      <ContentDisplay
+        loadContentDispatch={this.props.handleFetchGradingOverviews}
+        display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
+        fullWidth={false}
+      />
       </div>
     );
   }
