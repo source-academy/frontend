@@ -1,0 +1,138 @@
+// Mixins
+
+@mixin mQ($arg) {
+  @media screen and (max-width: $arg) {
+    @content;
+  }
+}
+
+// Styling components of the ContributorsDetails
+
+.outsideDetails {
+  background-color: $cadet-color-1;
+  text-align: center;
+
+  .contributorsDetails {
+    background-color: $cadet-color-4;
+    border-radius: 10px;
+    width: 96%;
+    height: 95%;
+    display: inline-block;
+    margin-top: 2%;
+    padding: 1% 1% 1% 1%;
+
+    h3 {
+      text-transform: capitalize;
+      font-weight: bold;
+      font-style: oblique;
+    }
+
+    p {
+        text-align: justify;
+        text-align-last: center;
+        margin-right: 0.5%;
+        margin-left: 0.5%;
+    }
+
+    span.dot {
+      padding: 0 0.2rem 0 0.2rem;
+    }
+
+    div.leadership {
+      margin-top: 10px;
+      text-align: center;
+
+      p {
+        vertical-align: top;
+        display: inline-block;
+        width: 120px;
+      }
+    }
+
+    div.hallOfFame {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    div.contributors {
+      margin-top: 10px;
+      text-align: center;
+
+      h5 {
+        text-align: center;
+      }
+    }
+  }
+}
+
+// Styling components of the ContributorsList
+
+.containerPermalink {
+  background-color: $cadet-color-1;
+  padding-bottom: 1%;
+}
+
+div.inPermalink {
+  margin-inline-start: 2%;
+  margin-inline-end: 2%;
+  text-align: justify;
+  background-color: $cadet-color-3;
+  border-radius: 10px;
+
+  div {
+    text-align: center;
+    vertical-align: top;
+    display: inline-block;
+    width: (100% / 6);
+    height: (100% / 6);
+    margin-top: 1%;
+    margin-bottom: 0.5%;
+    @include mQ(800px) {
+      width: 25%;
+      height: 25%;
+    }
+  }
+
+  img {
+    width: 90%;
+    height: 90%;
+  }
+
+  p {
+    margin-bottom: 0.2rem;
+    color: $cadet-color-5;
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: bold;
+    color: $cadet-color-4;
+    &:hover {
+      color: $cadet-color-5;
+    }
+  }
+}
+
+div.repoDetailsPermalink {
+  text-align: center;
+
+  h3 {
+    line-height: 175%;
+    margin-right: 2%;
+    margin-left: 2%;
+    margin-bottom: 0%;
+    color: $cadet-color-4;
+  }
+
+  h3::first-letter {
+    text-transform: uppercase;
+  }
+
+  h5 {
+    margin-right: 2%;
+    margin-left: 2%;
+    margin-bottom: 1%;
+    font-style: italic;
+    color: $cadet-color-5;
+  }
+}
