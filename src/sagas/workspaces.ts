@@ -340,7 +340,9 @@ function* evalCode(
   actionType: string
 ) {
   context.runtime.debuggerOn =
-    actionType === actionTypes.EVAL_EDITOR || actionType === actionTypes.DEBUG_RESUME;
+    (actionType === actionTypes.EVAL_EDITOR
+      || actionType === actionTypes.DEBUG_RESUME)
+    && context.chapter > 2;
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
