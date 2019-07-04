@@ -21,7 +21,7 @@ In package.json, change line 28:\
 to an empty line.
 
 Please note that doing this will disable the test suite, so you will need to run the tests manually instead. Using Git Bash (or any other UNIX-based command line), run the following:\
-`cd scripts\`
+`cd scripts`  
 `bash test.sh`
 
 ## js-slang
