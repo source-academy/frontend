@@ -287,6 +287,21 @@ function play_safe(sound) {
     _safeplaying = true;
 }
 
+/* sound_to_string and string_to_sound would be really cool!!!
+
+function sound_to_string(sound) {
+    let discretized_wave = discretize(wave(sound), duration(sound));
+    let discretized_sound = pair(discretized_wave, duration(sound));
+    return stringify(pair(data), tail(sound));
+}
+
+function string_to_sound(str) {
+    var discretized_sound = eval(str);
+    
+    return pair(t => ..., duration(data));
+}
+*/
+
 function stop() {
     // If using normal play()
     if (_playing) {

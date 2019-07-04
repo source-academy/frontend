@@ -159,7 +159,7 @@ const mockSoundLibrary: Library = {
   globals: mockGlobals
 };
 
-const mockRuneLibrary: Library = {
+export const mockRuneLibrary: Library = {
   chapter: 1,
   external: {
     name: ExternalLibraryNames.RUNES,
