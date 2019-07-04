@@ -34,8 +34,14 @@
         } else {
           thisNode.left = construct_tree(head(lst))
         }
-        // otherwise, it's a data item
-      } else {
+      } else if (is_function(head(lst))) { // draw the function object
+	if (perms.indexOf(head(lst)) > -1) { // check if function has been drawn
+	  thisNode.leftid = perms.indexOf(head(lst))
+	} else { 
+	  thisNode.left = construct_function(head(lst))
+	}
+      }	else {
+	// otherwise, it's a data item
         thisNode.data = head(lst)
       }
       // similarly for right subtree.
@@ -45,12 +51,35 @@
         } else if (!is_null(tail(lst))) {
           thisNode.right = construct_tree(tail(lst))
         }
+      } else if (is_function(tail(lst))) {
+	if (perms.indexOf(tail(lst)) > -1) {
+		thisNode.rightid = perms.indexOf(tail(lst))
+	} else { 
+		thisNode.right = construct_function(tail(lst))
+	}
       } else {
         thisNode.data2 = tail(lst)
       }
 
       return thisNode
     }
+
+    /** 
+     * Returns a new TreeNode that represents a function object instead of a sublist
+     */
+    function construct_function(fn) {
+      var thisNode = new TreeNode()
+      thisNode.data2 = " " // workaround to prevent nullbox from being drawn
+
+      // memoise current function
+      perms[counter] = fn
+      thisNode.id = counter
+      thisNode.isFunction = true
+      counter++
+
+      return thisNode
+    }
+
     // keeps track of all sublists in order to detect cycles
     var perms = []
     var tree = new Tree()
@@ -70,6 +99,8 @@
     vertBarPos: 0.5,
     boxSpacingX: 50,
     boxSpacingY: 60,
+		
+    circleRadius: 12,
 
     arrowSpace: 5,
     arrowSpaceH: 13, // horizontal
@@ -143,7 +174,11 @@
   TreeDrawer.prototype.drawNode = function(node, x, y, layer) {
     if (node !== null) {
       // draws the content
-      realDrawNode(node.data, node.data2, node.id, x, y, x, y, layer)
+      if (node.isFunction) {
+        realDrawFunctionNode(node.id, x, y, x, y, layer)
+      } else {
+        realDrawNode(node.data, node.data2, node.id, x, y, x, y, layer)
+      }
 
       // if it has a left new child, draw it
       if (node.left !== null) {
@@ -188,8 +223,11 @@
     x = parentX - tcon.distanceX - count * tcon.distanceX
     y = parentY + tcon.distanceY
 
-    realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
-
+    if (node.isFunction) {
+      realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+    } else {
+      realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+    }
     if (node.left !== null) {
       this.drawLeft(node.left, x, y, layer)
     } else if (node.leftid != null) {
@@ -223,7 +261,11 @@
     x = parentX + tcon.distanceX + count * tcon.distanceX
     y = parentY + tcon.distanceY
 
-    realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+    if (node.isFunction) {
+      realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+    } else {
+      realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+    }
 
     if (node.left !== null) {
       this.drawLeft(node.left, x, y, layer)
@@ -272,6 +314,26 @@
     // no pointer is drawn to root
     if (x2 !== x1) {
       box.connectTo(x2 - x1, y2 - y1)
+    }
+
+    node.setX(x1)
+    node.setY(y1)
+    layer.add(node)
+
+    // add node to the known list
+    nodelist[id] = node
+    // update left extreme of the tree
+    minLeft = Math.min(minLeft, x1)
+  }
+	
+  function realDrawFunctionNode(id, x1, y1, x2, y2, layer) {
+    var circle = new NodeCircles()
+    var node = new Kinetic.Group()
+
+    circle.put(node)
+
+    if (x2 !== x1) {
+      circle.connectTo(x2 - x1, y2 - y1)
     }
 
     node.setX(x1)
@@ -401,9 +463,105 @@
   }
 
   /**
+  *  Creates a Kinetic.Group used to represent a function object. Similar to NodeBox().
+  */
+  function NodeCircles() {
+    this.image = new Kinetic.Group()
+
+    var leftCircle = new Kinetic.Circle({
+      radius: 15,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      x: tcon.boxWidth / 2 - 20,
+      y: tcon.boxHeight / 2
+    })
+
+    var rightCircle = new Kinetic.Circle({
+      radius: 15,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      x: tcon.boxWidth / 2 + 10,
+      y: tcon.boxHeight / 2
+    })
+
+    var leftDot = new Kinetic.Circle({
+      radius: 4,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      fill: 'white',
+      x: tcon.boxWidth / 2 - 20,
+      y: tcon.boxHeight / 2
+    })
+
+    var rightDot = new Kinetic.Circle({
+      radius: 4,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      fill: 'white',
+      x: tcon.boxWidth / 2 + 10,
+      y: tcon.boxHeight / 2
+    })
+
+    this.image.add(leftCircle)
+    this.image.add(rightCircle)
+    this.image.add(leftDot)
+    this.image.add(rightDot)
+  }
+
+  /**
    *  Connects a NodeBox to it's parent at x,y by using line segments with arrow head
    */
   NodeBox.prototype.connectTo = function(x, y) {
+    // starting point
+    var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
+
+    // end point
+    if (x > 0) {
+      var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 }
+    } else {
+      var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 }
+    }
+
+    var pointer = new Kinetic.Line({
+      points: [start, end],
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white'
+    })
+    // the angle of the incoming arrow
+    var angle = Math.atan((end.y - start.y) / (end.x - start.x))
+
+    // left and right part of an arrow head, rotated to the calculated angle
+    if (x > 0) {
+      var left = {
+        x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+        y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+      }
+      var right = {
+        x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+        y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+      }
+    } else {
+      var left = {
+        x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+        y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+      }
+      var right = {
+        x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+        y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+      }
+    }
+
+    var arrow = new Kinetic.Line({
+      points: [left, start, right],
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white'
+    })
+
+    this.image.getParent().add(pointer)
+    this.image.getParent().add(arrow)
+  }
+	
+	NodeCircles.prototype.connectTo = function(x, y) {
     // starting point
     var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
 
@@ -459,6 +617,10 @@
   NodeBox.prototype.put = function(container) {
     container.add(this.image)
   }
+	
+	NodeCircles.prototype.put = function(container) {
+		container.add(this.image)
+	}
 
   /**
    *  Connects a box to a previously known box, the arrow path is more complicated.
@@ -468,7 +630,7 @@
    */
   function backwardLeftEdge(x1, y1, x2, y2, layer) {
     // coordinates of all the turning points, execpt the first segment in the path
-    if (x1 > x2 && y1 >= y2) {
+    if (x1 > x2 && y1 >= (y2 - tcon.boxHeight - 1)) {
       // lower right to upper left
       var path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
@@ -483,7 +645,7 @@
         x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
       ]
-    } else if (x1 <= x2 && y1 >= y2) {
+    } else if (x1 <= x2 && y1 >= (y2 - tcon.boxHeight - 1)) {
       // lower left to upper right
       var path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
@@ -571,7 +733,7 @@
    *  Same as backwardLeftEdge
    */
   function backwardRightEdge(x1, y1, x2, y2, layer) {
-    if (x1 > x2 && y1 > y2) {
+    if (x1 > x2 && y1 > (y2 - tcon.boxHeight - 1)) {
       var path = [
         //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
         x1 + tcon.boxWidth * 3 / 4,
@@ -585,7 +747,7 @@
         x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
       ]
-    } else if (x1 <= x2 && y1 > y2) {
+    } else if (x1 <= x2 && y1 > (y2 - tcon.boxHeight - 1)) {
       var path = [
         //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
         x1 + tcon.boxWidth * 3 / 4,
@@ -711,6 +873,7 @@
   function draw(xs) {
     minLeft = 500
     nodelist = []
+		fnNodeList = []
     nodeLabel = 0
     // hides all other layers
     for (var i = 0; i < layerList.length; i++) {
@@ -787,6 +950,10 @@
     layerList = []
     updateListVisualizerButtons()
   }
+	
+	function is_function(data) {
+		return typeof(data) == "function"
+	}
 
   exports.ListVisualizer = {
     draw: draw,
