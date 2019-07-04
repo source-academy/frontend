@@ -150,8 +150,8 @@ class SourcecastControlbar extends React.PureComponent<
     const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
     const currentRevision = this.state.currentDeltaRevision;
     let currentTime = this.audio.current!.currentTime * 1000;
-    this.props.handleEditorValueChange(this.props.playbackData.init.editorValue);
-    const deltasToApply = this.props.playbackData.deltas
+    this.props.handleEditorValueChange(playbackData.init.editorValue);
+    const deltasToApply = playbackData.deltas
       .filter(
         deltaWithTime =>
           deltaWithTime.time <= currentTime && deltaWithTime.type === DeltaType.codeDelta
@@ -159,7 +159,7 @@ class SourcecastControlbar extends React.PureComponent<
       .map(deltaWithTime => deltaWithTime.data as ICodeDelta);
     this.applyDeltas(deltasToApply);
 
-    const futureData = this.props.playbackData.deltas.filter(
+    const futureData = playbackData.deltas.filter(
       deltaWithTime => deltaWithTime.time > currentTime
     );
     const len = futureData.length;

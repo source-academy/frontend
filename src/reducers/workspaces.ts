@@ -561,11 +561,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         sourcereel: {
           ...state.sourcereel,
           playbackData: {
-            ...state.sourcereel.playbackData,
             init: {
               editorValue: action.payload.editorValue,
               editorCursorPositionToBeApplied: action.payload.editorCursorPositionToBeApplied
-            }
+            },
+            deltas: []
           }
         }
       };
