@@ -5,7 +5,6 @@ import * as React from 'react';
 import Profile from '../../containers/ProfileContainer';
 import { controlButton } from '../commons/controlButton';
 import About from './About';
-// import Contributors from '../Contributors'
 import Help from './Help';
 
 type DropdownProps = {
@@ -63,7 +62,6 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
       <Menu>
         {profile}
         <MenuItem icon={IconNames.HELP} onClick={this.toggleAboutOpen} text="About" />
-        <MenuItem icon={IconNames.HELP} onClick={this.toggleAboutOpen} text="Contributors" />
         <MenuItem icon={IconNames.ERROR} onClick={this.toggleHelpOpen} text="Help" />
         {logout}
       </Menu>

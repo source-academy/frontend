@@ -1,7 +1,7 @@
 import { ContributorsInApi, Repo, ReposInApi } from './ContributorsTypes';
 
 const apiRepoDetails: string = 'https://api.github.com/orgs/source-academy/repos';
-const ignoreRepos: string[] = ['sicp', 'assessments', 'tools', 'source-academy2'];
+const ignoreRepos: string[] = ['assessments', 'tools', 'source-academy2'];
 const ignoreContributors: string[] = ['dependabot[bot]', 'dependabot-preview[bot]'];
 
 export const fetchRepos = async () => {
