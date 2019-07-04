@@ -2,12 +2,10 @@
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
 import jwt_decode from 'jwt-decode';
 import * as React from 'react';
-
 import Input from './Input.tsx';
 import MessageList from './MessageList.tsx';
 import { BACKEND_URL, INSTANCE_LOCATOR } from '../../utils/constants';
 import { IState } from '../../reducers/states';
-
 
 class ChatApp extends React.Component {
   constructor(props) {
