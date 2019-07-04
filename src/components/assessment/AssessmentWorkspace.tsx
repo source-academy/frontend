@@ -9,7 +9,6 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
 import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
@@ -34,6 +33,7 @@ import {
   QuestionTypes
 } from './assessmentShape';
 import GradingResult from './GradingResult';
+import * as React from 'react';
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
@@ -328,7 +328,6 @@ class AssessmentWorkspace extends React.Component<
   }
 
   /** Pre-condition: IAssessment has been loaded */
-  // ADD CHAT COMPONENT
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
     questionId: number
