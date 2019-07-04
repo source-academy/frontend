@@ -269,7 +269,8 @@ function play(sound) {
 
 // "Safe" playing for overly complex sounds.
 // Discretizes full sound before playing
-// (i.e. plays sound properly, but very large delay).
+// (i.e. plays sound properly, but possibly with
+// a delay).
 var _safeplaying = false;
 var _safeaudio = null;
 
@@ -278,7 +279,7 @@ function play_safe(sound) {
     if (_safeplaying || _playing) return;
 
     // Discretize the input sound
-    var data = discretize(head(sound), tail(sound));
+    var data = discretize(wave(sound), duration(sound));
     _safeaudio = raw_to_audio(data);
 
     _safeaudio.addEventListener('ended', stop);

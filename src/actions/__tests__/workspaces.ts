@@ -136,6 +136,26 @@ test('toggleEditorAutorun generates correct action object', () => {
   });
 });
 
+test('beginClearContext generates correct action object', () => {
+  const library: Library = {
+    chapter: 4,
+    external: {
+      name: 'SOUNDS',
+      symbols: []
+    },
+    globals: []
+  };
+
+  const action = beginClearContext(library, playgroundWorkspace);
+  expect(action).toEqual({
+    type: actionTypes.BEGIN_CLEAR_CONTEXT,
+    payload: {
+      library,
+      workspaceLocation: playgroundWorkspace
+    }
+  });
+});
+
 test('clearReplInput generates correct action object', () => {
   const action = clearReplInput(assessmentWorkspace);
   expect(action).toEqual({
