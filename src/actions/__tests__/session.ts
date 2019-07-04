@@ -257,7 +257,10 @@ test('updateGradingOverviews generates correct action object', () => {
       studentName: 'test student',
       submissionId: 1,
       submissionStatus: 'attempting',
-      groupName: 'group'
+      groupName: 'group',
+      gradingStatus: 'excluded',
+      questionCount: 6,
+      gradedCount: 0
     }
   ];
 
