@@ -108,7 +108,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
     shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 4,
@@ -118,19 +118,53 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 6,
+    grade: 1500,
     id: 4,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
-    title: 'A closed sidequest',
+    title: 'Closed (partially graded) Sidequest',
     shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+      'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 5,
-    gradingStatus: 'none'
-  }
+    xp: 500,
+    gradingStatus: 'grading'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    closeAt: '2008-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
+    grade: 250,
+    id: 4,
+    maxGrade: 700,
+    maxXp: 500,
+    openAt: '2007-07-18T05:24:26.026Z',
+    title: 'Closed (fully graded) Sidequest',
+    shortSummary:
+      'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
+    status: AssessmentStatuses.submitted,
+    story: null,
+    xp: 500,
+    gradingStatus: 'graded'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    closeAt: '2008-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
+    grade: 0,
+    id: 4,
+    maxGrade: 0,
+    maxXp: 0,
+    openAt: '2007-07-18T05:24:26.026Z',
+    title: 'Ungraded assessment',
+    shortSummary:
+    'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
+    status: AssessmentStatuses.submitted,
+    story: null,
+    xp: 0,
+    gradingStatus: 'excluded'
+  },
 ];
 
 export const mockAssessmentOverviews = [
