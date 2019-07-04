@@ -54,7 +54,7 @@ function rawDisplay(value: Value, str: string, workspaceLocation: any) {
  * @param value the value to be displayed as a prompt
  */
 function cadetPrompt(value: any) {
-  return prompt(stringify(value));
+  return prompt(value);
 }
 
 /**
