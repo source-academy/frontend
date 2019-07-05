@@ -14,7 +14,7 @@ import {
   mockAssessmentQuestions,
   mockAssessments
 } from '../../mocks/assessmentAPI';
-import { defaultState, IState, Role } from '../../reducers/states';
+import { Role } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import backendSaga, {
   getAssessment,
@@ -37,10 +37,8 @@ const mockAssessmentQuestion = mockAssessmentQuestions[0];
 const mockTokens = { accessToken: 'access', refreshToken: 'refresherOrb' };
 
 // mock states here starts as student
-const mockStates: IState = {
-  ...defaultState,
+const mockStates = {
   session: {
-    ...defaultState.session,
     accessToken: 'access',
     assessmentOverviews: mockAssessmentOverviews,
     assessments: mockMapAssessments,
@@ -48,8 +46,7 @@ const mockStates: IState = {
     role: Role.Student
   },
   workspaces: {
-    ...defaultState.workspaces,
-    assessment: { ...defaultState.workspaces.assessment, currentAssessment: 0 }
+    assessment: { currentAssessment: 0 }
   }
 };
 
@@ -57,10 +54,10 @@ const okResp = { ok: true };
 const errorResp = { ok: false };
 // ----------------------------------------
 
-describe('FETCH_AUTH ACTION DISPATCHED', () => {
-  test('and backendSaga runs as intended', () => {
+describe('Test FETCH_AUTH Action', () => {
+  test('when tokens and user obtained', () => {
     const luminousCode = 'luminousCode';
-    const user = mockTokens ? 'user' : null;
+    const user = 'user';
     return expectSaga(backendSaga)
       .put(actions.setTokens(mockTokens))
       .put(actions.setUser(user))
@@ -68,64 +65,73 @@ describe('FETCH_AUTH ACTION DISPATCHED', () => {
       .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminousCode })
       .silentRun();
   });
-  test('but token and users are null so no changes to state', () => {
+  test('when tokens is null', () => {
+    const luminousCode = 'luminousCode';
+    const user = 'user';
+    return expectSaga(backendSaga)
+      .provide([[call(postAuth, luminousCode), null], [call(getUser, mockTokens), user]])
+      .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminousCode })
+      .silentRun();
+  });
+  test('when user is null', () => {
     const luminousCode = 'luminousCode';
     return expectSaga(backendSaga)
-      .withState(mockStates)
-      .provide([[call(postAuth, luminousCode), null], [call(getUser, mockTokens), null]])
-      .hasFinalState(mockStates)
+      .provide([[call(postAuth, luminousCode), mockTokens], [call(getUser, mockTokens), null]])
       .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminousCode })
       .silentRun();
   });
 });
 
-describe('FETCH_ASSESSMENT_OVERVIEWS ACTION DISPATCHED', () => {
-  test('and backendSaga runs as intended', () => {
+describe('Test FETCH_ASSESSMENT_OVERVIEWS Action', () => {
+  test('when assesments is obtained', () => {
     return expectSaga(backendSaga)
-      .withState(mockStates)
+      .withState({ session: mockTokens })
       .provide([[call(getAssessmentOverviews, mockTokens), mockAssessmentOverviews]])
       .put(actions.updateAssessmentOverviews(mockAssessmentOverviews))
+      .hasFinalState({ session: mockTokens })
       .dispatch({ type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS })
       .silentRun();
   });
 
-  test('and getAssessmentOverviews call returns null, no changes to state', () => {
+  test('when assesments is null', () => {
     return expectSaga(backendSaga)
-      .withState(mockStates)
+      .withState({ session: mockTokens })
       .provide([[call(getAssessmentOverviews, mockTokens), null]])
-      .hasFinalState(mockStates)
+      .hasFinalState({ session: mockTokens })
       .dispatch({ type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS })
       .silentRun();
   });
 });
 
-describe('FETCH_ASSESSMENT ACTION DISPATCHED', () => {
-  test('and backendSaga runs as intended', () => {
+describe('Test FETCH_ASSESSMENT Action', () => {
+  test('when assesment is obtained', () => {
     const mockId = 0;
     return expectSaga(backendSaga)
-      .withState(mockStates)
+      .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens), mockAssessment]])
       .put(actions.updateAssessment(mockAssessment))
+      .hasFinalState({ session: mockTokens })
       .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: mockId })
       .silentRun();
   });
-  test('and getAssessment call returns null, no changes to state', () => {
+
+  test('when assesment is null', () => {
     const mockId = 0;
     return expectSaga(backendSaga)
-      .withState(mockStates)
+      .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens), null]])
-      .hasFinalState(mockStates)
+      .hasFinalState({ session: mockTokens })
       .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: mockId })
       .silentRun();
   });
 });
 
-describe('SUBMIT_ANSWER ACTION DISPATCHED', () => {
-  test('and saga runs as intended', () => {
+describe('Test SUBMIT_ANSWER Action', () => {
+  test('when respond is ok', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     const mockNewQuestions = mockAssessment.questions.slice().map((question: IQuestion) => {
       if (question.id === mockAnsweredAssessmentQuestion.id) {
-        question.answer = mockAnsweredAssessmentQuestion.answer;
+        return { ...question, answer: mockAnsweredAssessmentQuestion.answer };
       }
       return question;
     });
@@ -133,7 +139,7 @@ describe('SUBMIT_ANSWER ACTION DISPATCHED', () => {
       ...mockAssessment,
       questions: mockNewQuestions
     };
-    return expectSaga(backendSaga)
+    expectSaga(backendSaga)
       .withState(mockStates)
       .provide([
         [
@@ -150,24 +156,24 @@ describe('SUBMIT_ANSWER ACTION DISPATCHED', () => {
       .put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: actionTypes.SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
+    // To make sure no changes in state
+    return expect(mockStates.session.assessments.get(0)!.questions[0].answer).toEqual(null);
   });
-  test('but role is not a student so no changes to state', () => {
-    const mockStatesStaff: IState = {
-      ...mockStates,
-      session: { ...mockStates.session, role: Role.Staff }
-    };
+
+  test('when role is not student', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     return expectSaga(backendSaga)
-      .withState(mockStatesStaff)
+      .withState({ session: { role: Role.Staff } })
       .call(showWarningMessage, 'Only students can submit answers.')
-      .hasFinalState(mockStatesStaff)
+      .hasFinalState({ session: { role: Role.Staff } })
       .dispatch({ type: actionTypes.SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
   });
-  test('but null response from postAnswer call so no changes to state', () => {
+
+  test('when respond is null', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     return expectSaga(backendSaga)
-      .withState(mockStates)
+      .withState({ session: { ...mockTokens, role: Role.Student } })
       .provide([
         [
           call(
@@ -180,14 +186,15 @@ describe('SUBMIT_ANSWER ACTION DISPATCHED', () => {
         ]
       ])
       .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
-      .hasFinalState(mockStates)
+      .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: actionTypes.SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
   });
-  test('but error response from postAnswer call so no changes to state', () => {
+
+  test('when respond is error', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     return expectSaga(backendSaga)
-      .withState(mockStates)
+      .withState({ session: { ...mockTokens, role: Role.Student } })
       .provide([
         [
           call(
@@ -199,14 +206,14 @@ describe('SUBMIT_ANSWER ACTION DISPATCHED', () => {
           errorResp
         ]
       ])
-      .hasFinalState(mockStates)
+      .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: actionTypes.SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
   });
 });
 
-describe('SUBMIT_ASSESSMENT ACTION DISPATCHED', () => {
-  test('and backendSaga runs as intended', () => {
+describe('Test SUBMIT_ASSESSMENT Action', () => {
+  test('when respond is ok', () => {
     const mockAssessmentId = 0;
     const mockNewOverviews = mockAssessmentOverviews.map(overview => {
       if (overview.id === mockAssessmentId) {
@@ -214,41 +221,44 @@ describe('SUBMIT_ASSESSMENT ACTION DISPATCHED', () => {
       }
       return overview;
     });
-    return expectSaga(backendSaga)
+    expectSaga(backendSaga)
       .withState(mockStates)
       .provide([[call(postAssessment, mockAssessmentId, mockTokens), okResp]])
       .call(showSuccessMessage, 'Submitted!', 2000)
       .put(actions.updateAssessmentOverviews(mockNewOverviews))
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: mockAssessmentId })
       .silentRun();
+    expect(mockStates.session.assessmentOverviews[0].id).toEqual(0);
+    return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
+      AssessmentStatuses.submitted
+    );
   });
-  test('but error response for postAssessment call so no changes to state', () => {
+
+  test('when respond is error', () => {
     return expectSaga(backendSaga)
-      .withState(mockStates)
+      .withState({ session: { ...mockTokens, role: Role.Student } })
       .provide([[call(postAssessment, 0, mockTokens), errorResp]])
       .call(showWarningMessage, 'Something went wrong. Please try again.')
-      .hasFinalState(mockStates)
+      .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: 0 })
       .silentRun();
   });
-  test('but null response for postAssessment call so no changes to state', () => {
+
+  test('when respond is null', () => {
     return expectSaga(backendSaga)
-      .withState(mockStates)
+      .withState({ session: { ...mockTokens, role: Role.Student } })
       .provide([[call(postAssessment, 0, mockTokens), null]])
       .call(showWarningMessage, 'Something went wrong. Please try again.')
-      .hasFinalState(mockStates)
+      .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: 0 })
       .silentRun();
   });
-  test('but role is not a student so no changes to state', () => {
-    const mockStatesStaff: IState = {
-      ...mockStates,
-      session: { ...mockStates.session, role: Role.Staff }
-    };
+
+  test('when role is not a student', () => {
     return expectSaga(backendSaga)
-      .withState(mockStatesStaff)
+      .withState({ session: { role: Role.Staff } })
       .call(showWarningMessage, 'Only students can submit assessments.')
-      .hasFinalState(mockStatesStaff)
+      .hasFinalState({ session: { role: Role.Staff } })
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: 0 })
       .silentRun();
   });
