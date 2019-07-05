@@ -21,6 +21,12 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Forum
       </div>
     </NavLink>
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
+      <Blueprint2.Icon icon=\\"code\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Playground
+      </div>
+    </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup align=\\"right\\">
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/mission-control\\" aria-current=\\"page\\">
@@ -29,10 +35,10 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Mission-Control
       </div>
     </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"code\\" />
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
+      <Blueprint2.Icon icon=\\"heart\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Playground
+        Contributors
       </div>
     </NavLink>
     <div className=\\"visible-xs\\">
@@ -67,6 +73,12 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Forum
       </div>
     </NavLink>
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
+      <Blueprint2.Icon icon=\\"code\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Playground
+      </div>
+    </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup align=\\"right\\">
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/mission-control\\" aria-current=\\"page\\">
@@ -75,10 +87,10 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Mission-Control
       </div>
     </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"code\\" />
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
+      <Blueprint2.Icon icon=\\"heart\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Playground
+        Contributors
       </div>
     </NavLink>
     <div className=\\"visible-xs\\">
