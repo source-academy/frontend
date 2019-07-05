@@ -18,6 +18,7 @@ export enum LINKS {
   GITHUB_ISSUES = 'https://github.com/source-academy/cadet-frontend/issues',
   GITHUB_ORG = 'https://github.com/source-academy',
 
+  MODULE_DETAILS = 'https://www.comp.nus.edu.sg/~cs1101s',
   LUMINUS = 'https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda',
   PIAZZA = 'https://piazza.com/nus.edu.sg/fall2019/cs1101s',
   SHAREDB_SERVER = 'api2.sourceacademy.nus.edu.sg/',
