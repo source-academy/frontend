@@ -1,5 +1,6 @@
 import {
   Alignment,
+  Button,
   Icon,
   Navbar,
   NavbarDivider,
@@ -33,25 +34,19 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
       </NavLink>
 
-      <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-        target="_blank"
-        to={LINKS.LUMINUS}
-      >
-        <Icon icon={IconNames.BOOK} />
-        <div className="navbar-button-text hidden-xs">News &amp; Material</div>
-      </NavLink>
+      <a className="NavigationBar__link" href={LINKS.LUMINUS} target="_blank">
+        <Button minimal={true}>
+          <Icon icon={IconNames.BOOK} />
+          <div className="navbar-button-text hidden-xs">News &amp; Material</div>
+        </Button>
+      </a>
 
-      <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-        target="_blank"
-        to={LINKS.PIAZZA}
-      >
-        <Icon icon={IconNames.CHAT} />
-        <div className="navbar-button-text hidden-xs">Forum</div>
-      </NavLink>
+      <a className="NavigationBar__link" href={LINKS.PIAZZA} target="_blank">
+        <Button minimal={true}>
+          <Icon icon={IconNames.CHAT} />
+          <div className="navbar-button-text hidden-xs">Forum</div>
+        </Button>
+      </a>
 
       <NavLink
         activeClassName="pt-active"
