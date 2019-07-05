@@ -1,6 +1,6 @@
 import { compressToUTF16 } from 'lz-string';
 import { createStore } from './createStore';
-import { ISavedState, loadStoredState } from './localStorage';
+import { ISavedState } from './localStorage';
 import { defaultState, IState } from './reducers/states';
 import { history } from './utils/history';
 
@@ -34,14 +34,13 @@ const mockChangedState: IState = {
   }
 };
 
-describe('CREATESTORE', () => {
+describe('createStore() function', () => {
   test('has defaultState when initialised', () => {
-    expect(loadStoredState()).toEqual(undefined);
+    localStorage.removeItem('storedState');
     expect(createStore(history).getState()).toEqual({
       ...defaultState,
       router: { location: null }
     });
-    expect(loadStoredState()).toEqual(undefined);
   });
   test('has correct getState() when called with storedState', () => {
     localStorage.setItem('storedState', compressToUTF16(JSON.stringify(mockChangedStoredState)));

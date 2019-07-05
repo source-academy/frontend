@@ -12,11 +12,10 @@ export type ISavedState = {
 export const loadStoredState = (): ISavedState | undefined => {
   try {
     const serializedState = localStorage.getItem('storedState');
-    if (serializedState === null) {
+    if (!serializedState) {
       return undefined;
-    } else {
-      return JSON.parse(decompressFromUTF16(serializedState)) as ISavedState;
     }
+    return JSON.parse(decompressFromUTF16(serializedState)) as ISavedState;
   } catch (err) {
     showWarningMessage('Error loading from local storage');
     return undefined;
