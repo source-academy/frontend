@@ -339,7 +339,7 @@ const makeOverviewCardTitle = (
   <div className="row listing-title">
     <Text ellipsize={true} className={'col-xs-10'}>
       <h4>
-      {overview.title} {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
+        {overview.title} {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
       </h4>
     </Text>
     <div className="col-xs-2">{makeSubmissionButton(overview, index, setBetchaAssessment)}</div>
@@ -369,9 +369,9 @@ const makeGradingStatus = (gradingStatus: string) => {
       intent = Intent.DANGER;
       tooltip = 'Not graded yet';
       break;
-    
+
     default:
-      // Shows default icon if this assessment 
+      // Shows default icon if this assessment is ungraded
       iconName = IconNames.DISABLE;
       intent = Intent.PRIMARY;
       tooltip = `Not applicable`;

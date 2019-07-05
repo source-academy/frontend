@@ -108,7 +108,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
     shortSummary:
-    'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
+      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 4,
@@ -159,12 +159,12 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Ungraded assessment',
     shortSummary:
-    'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
+      'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 0,
     gradingStatus: 'excluded'
-  },
+  }
 ];
 
 export const mockAssessmentOverviews = [

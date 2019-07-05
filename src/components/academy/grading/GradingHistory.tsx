@@ -54,7 +54,7 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
           break;
         default:
           iconName = IconNames.DISABLE;
-          tooltip = "Not applicable";
+          tooltip = 'Not applicable';
           intent = Intent.PRIMARY;
       }
 
@@ -113,7 +113,8 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
           <GradingMarks />
         ) : this.props.status ? (
           <GradingStatus />
-        ) : null}}
+        ) : null}
+        }
       </div>
     );
   }
