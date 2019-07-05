@@ -58,7 +58,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
         to="/playground"
       >
-        <Icon icon={IconNames.CODE} />
+        <Icon icon={IconNames.CODE} title={false} />
         <div className="navbar-button-text hidden-xs">Playground</div>
       </NavLink>
     </NavbarGroup>
@@ -79,10 +79,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
         to="/contributors"
       >
-
         <Icon icon={IconNames.HEART} title={false} />
         <div className="navbar-button-text hidden-xs">Contributors</div>
-
       </NavLink>
 
       <div className="visible-xs">

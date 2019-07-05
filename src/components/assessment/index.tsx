@@ -106,7 +106,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     if (this.props.assessmentOverviews === undefined) {
       display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />;
     } else if (this.props.assessmentOverviews.length === 0) {
-      display = <NonIdealState title="There are no assessments." visual={<Icon icon={IconNames.FLAME} title={false} />} />;
+      display = (
+        <NonIdealState
+          title="There are no assessments."
+          visual={<Icon icon={IconNames.FLAME} title={false} />}
+        />
+      );
     } else {
       /** Upcoming assessments, that are not released yet. */
       const isOverviewUpcoming = (overview: IAssessmentOverview) =>

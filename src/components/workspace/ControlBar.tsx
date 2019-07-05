@@ -451,7 +451,11 @@ const externalSelect = (
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={currentExternal} rightIcon={<Icon icon="double-caret-vertical" title={false} />} />
+    <Button
+      className="pt-minimal"
+      text={currentExternal}
+      rightIcon={<Icon icon="double-caret-vertical" title={false} />}
+    />
   </ExternalSelectComponent>
 );
 
