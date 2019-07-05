@@ -52,7 +52,11 @@ const startFetchAuth = (luminusCode: string, handleFetchAuth: DispatchProps['han
   handleFetchAuth(luminusCode);
 
 const loginButton = (handleClick: () => void) => (
-  <Button className="pt-large" rightIcon={<Icon icon={IconNames.LOG_IN} title={false} />} onClick={handleClick}>
+  <Button
+    className="pt-large"
+    rightIcon={<Icon icon={IconNames.LOG_IN} title={false} />}
+    onClick={handleClick}
+  >
     Log in with LumiNUS
   </Button>
 );

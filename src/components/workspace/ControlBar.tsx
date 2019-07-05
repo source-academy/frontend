@@ -144,12 +144,12 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     const saveButton = this.props.hasSaveButton
       ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave, saveButtonOpts)
       : undefined;
-    const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
-      this.props.queryString
-    }`;
+    const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${this.props.queryString}`;
     const shareButton = this.props.hasShareButton ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
-        {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
+        <Tooltip content="Get shareable link">
+          {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
+        </Tooltip>
         {this.props.queryString === undefined ? (
           <Text>
             Share your programs! Type something into the editor (left), then click on this button
@@ -158,9 +158,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
         ) : (
           <>
             <input defaultValue={shareUrl} readOnly={true} ref={this.shareInputElem} />
-            <CopyToClipboard text={shareUrl}>
-              {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
-            </CopyToClipboard>
+            <Tooltip content="Copy link to clipboard">
+              <CopyToClipboard text={shareUrl}>
+                {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
+              </CopyToClipboard>
+            </Tooltip>
           </>
         )}
       </Popover>
@@ -284,17 +286,17 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
         {this.props.isEditorAutorun
           ? autoRunButton
           : this.props.isRunning
-            ? stopButton
-            : this.props.isDebugging
-              ? null
-              : runButton}
+          ? stopButton
+          : this.props.isDebugging
+          ? null
+          : runButton}
         {this.props.isRunning
           ? this.props.isDebugging
             ? null
             : pauseButton
           : this.props.isDebugging
-            ? resumeButton
-            : null}
+          ? resumeButton
+          : null}
         {this.props.isDebugging ? debuggerResetButton : null}
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton} {resetTemplateButton}

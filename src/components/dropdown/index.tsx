@@ -55,14 +55,26 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
     ) : null;
 
     const logout = this.props.name ? (
-      <MenuItem icon={<Icon icon={IconNames.LOG_OUT} title={false} />} text="Logout" onClick={this.props.handleLogOut} />
+      <MenuItem
+        icon={<Icon icon={IconNames.LOG_OUT} title={false} />}
+        text="Logout"
+        onClick={this.props.handleLogOut}
+      />
     ) : null;
 
     return (
       <Menu>
         {profile}
-        <MenuItem icon={<Icon icon={IconNames.HELP} title={false} />} onClick={this.toggleAboutOpen} text="About" />
-        <MenuItem icon={<Icon icon={IconNames.ERROR} title={false} />} onClick={this.toggleHelpOpen} text="Help" />
+        <MenuItem
+          icon={<Icon icon={IconNames.HELP} title={false} />}
+          onClick={this.toggleAboutOpen}
+          text="About"
+        />
+        <MenuItem
+          icon={<Icon icon={IconNames.ERROR} title={false} />}
+          onClick={this.toggleHelpOpen}
+          text="Help"
+        />
         {logout}
       </Menu>
     );
