@@ -70,9 +70,9 @@ class GradingHistory extends React.Component<GradingHistoryProps, {}> {
     /** Component to render in table - marks */
     const GradingMarks = () => {
       if (this.props.data.maxGrade !== 0) {
-        const tooltip = `Initial Grade: ${this.props.data.initialXp}
-          (${this.props.data.xpAdjustment > 0 ? '+' : ''}${
-          this.props.data.xpAdjustment
+        const tooltip = `Initial Grade: ${this.props.data.initialGrade}
+          (${this.props.data.gradeAdjustment > 0 ? '+' : ''}${
+          this.props.data.gradeAdjustment
         } adjustment)`;
         return (
           <div>
