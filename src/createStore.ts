@@ -34,7 +34,7 @@ export function createStore(history: History): Store<IState> {
   });
   const enchancers = composeEnhancers(applyMiddleware(...middleware));
   const loadedStore = loadStoredState();
-  let initialStore: IState;
+  let initialStore: IState = defaultState;
   if (loadedStore) {
     initialStore = {
       ...defaultState,
@@ -55,8 +55,6 @@ export function createStore(history: History): Store<IState> {
         }
       }
     };
-  } else {
-    initialStore = defaultState;
   }
   const createdStore = _createStore<IState>(rootReducer, initialStore, enchancers);
 
