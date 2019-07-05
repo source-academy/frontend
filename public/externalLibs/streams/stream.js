@@ -35,8 +35,8 @@ function is_stream(xs) {
   return   is_null(xs) ||
            ( is_pair(xs) && 
              typeof tail(xs) === 'function' && 
-	     is_stream(stream_tail(xs))
-	   )
+             is_stream(stream_tail(xs))
+           )
 }
 
 // list_to_stream transforms a given list to a stream
@@ -94,12 +94,12 @@ function stream_length(xs) {
 // first argument is not a function.
 // Lazy? Yes: The argument stream is only explored as forced by
 //            the result stream.
-function stream_map(f: Function, s: Stream): Stream | null {
-  if (list.is_null(s)) {
+function stream_map(f, s) {
+  if (is_null(s)) {
     return null
   } else {
-    return list.pair(f(list.head(s)), 
-		     () => stream_map(f, stream_tail(s)))
+    return pair(f(head(s)), 
+                () => stream_map(f, stream_tail(s)))
   }
 }
 
