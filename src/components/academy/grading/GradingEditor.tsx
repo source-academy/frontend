@@ -199,7 +199,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * See {@link https://github.com/andrerpena/react-mde}
    */
   private blueprintIconProvider(name: string) {
-    return <Icon icon={faToBlueprintIconMapping(name)} />;
+    return <Icon icon={faToBlueprintIconMapping(name)} title={false} />;
   }
 
   private onClickSaveButton = () => {

@@ -106,7 +106,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     if (this.props.assessmentOverviews === undefined) {
       display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />;
     } else if (this.props.assessmentOverviews.length === 0) {
-      display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />;
+      display = <NonIdealState title="There are no assessments." visual={<Icon icon={IconNames.FLAME} title={false} />} />;
     } else {
       /** Upcoming assessments, that are not released yet. */
       const isOverviewUpcoming = (overview: IAssessmentOverview) =>
@@ -318,7 +318,7 @@ const makeOverviewCard = (
         </div>
         <div className="listing-controls">
           <Text className="listing-due-date">
-            <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+            <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} title={false} />
             {beforeNow(overview.openAt)
               ? `Due: ${getPrettyDate(overview.closeAt)}`
               : `Opens at: ${getPrettyDate(overview.openAt)}`}
@@ -385,7 +385,7 @@ const makeSubmissionButton = (
 ) => (
   <Button
     disabled={overview.status !== AssessmentStatuses.attempted}
-    icon={IconNames.CONFIRM}
+    icon={<Icon icon={IconNames.CONFIRM} title={false} />}
     intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
     minimal={true}
     // intentional: each menu renders own version of onClick

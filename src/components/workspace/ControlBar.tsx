@@ -2,6 +2,7 @@ import {
   Button,
   Classes,
   Colors,
+  Icon,
   Intent,
   Menu,
   MenuItem,
@@ -422,7 +423,7 @@ const chapterSelect = (
     <Button
       className="pt-minimal"
       text={styliseChapter(currentChap)}
-      rightIcon="double-caret-vertical"
+      rightIcon={<Icon icon="double-caret-vertical" title={false} />}
     />
   </ChapterSelectComponent>
 );
@@ -450,7 +451,7 @@ const externalSelect = (
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
+    <Button className="pt-minimal" text={currentExternal} rightIcon={<Icon icon="double-caret-vertical" title={false} />} />
   </ExternalSelectComponent>
 );
 
