@@ -216,15 +216,15 @@ class Grading extends React.Component<IGradingProps, State> {
             />
           </FormGroup>
 
-          <div className="ag-grid-button">
-            <div className="ag-grid-buttons left">
+          <div className="ag-grid-controls">
+            <div className="left-controls">
               <Button active={this.state.groupFilterEnabled} icon={IconNames.GIT_REPO}
                 intent={this.state.groupFilterEnabled ? Intent.PRIMARY : Intent.NONE}
                 onClick={this.handleGroupsFilter}>
                 <div className="ag-grid-button-text hidden-xs">Show all groups</div>
               </Button>
             </div>
-            <div className="ag-grid-buttons right">
+            <div className="right-controls">
               <Button icon={IconNames.EXPORT} onClick={this.exportCSV}>
                 <div className="ag-grid-button-text hidden-xs">Export to CSV</div>
               </Button>
