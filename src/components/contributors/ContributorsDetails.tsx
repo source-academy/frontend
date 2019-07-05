@@ -81,9 +81,7 @@ class ContributorsDetails extends React.Component {
                 <u>All Contributors</u>
               </strong>
             </h5>
-            <p>
-              Below are all contributors to the Github repositories of the Source Academy.
-            </p>
+            <p>Below are all contributors to the Github repositories of the Source Academy.</p>
           </div>
         </div>
       </div>
