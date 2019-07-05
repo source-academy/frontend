@@ -78,52 +78,14 @@ class Grading extends React.Component<IGradingProps, State> {
         { headerName: 'Category', field: 'assessmentCategory', maxWidth: 120 },
         { headerName: 'Student Name', field: 'studentName' },
         {
-          headerName: 'Grading',
-          field: 'gradingStatus',
-          cellRendererFramework: GradingStatus,
-          maxWidth: 105
-        },
-        {
-          headerName: 'Grade',
-          field: '',
-          cellRendererFramework: GradingMarks,
-          maxWidth: 100,
-          cellStyle: params => {
-            if (params.data.currentGrade < params.data.maxGrade) {
-              return { backgroundColor: Colors.RED5 };
-            } else {
-              return {};
-            }
-          },
-          comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
-            if (nodeA && nodeB) {
-              return nodeA.data.currentGrade - nodeB.data.currentGrade;
-            } else {
-              return valueA - valueB;
-            }
-          }
-        },
-        {
-          headerName: 'XP',
-          field: '',
-          cellRendererFramework: GradingExp,
-          maxWidth: 100,
-          comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
-            if (nodeA && nodeB) {
-              return nodeA.data.currentXp - nodeB.data.currentXp;
-            } else {
-              return valueA - valueB;
-            }
-          }
-        },
-        {
           headerName: 'Group',
           field: 'groupName',
-          maxWidth: 120
+          maxWidth: 100
         },
         {
           headerName: 'Status',
           field: 'submissionStatus',
+          maxWidth: 100,
           valueFormatter: (params: ValueFormatterParams) => {
             const str = params.value as string;
             return str.charAt(0).toUpperCase() + str.slice(1);
@@ -136,23 +98,62 @@ class Grading extends React.Component<IGradingProps, State> {
           }
         },
         {
-          headerName: 'Edit',
+          headerName: 'Grading',
+          field: 'gradingStatus',
+          cellRendererFramework: GradingStatus,
+          maxWidth: 110
+        },
+        {
+          headerName: 'Grade',
           field: '',
+          cellRendererFramework: GradingMarks,
+          maxWidth: 100,
+          cellStyle: params => {
+            if (params.data.currentGrade < params.data.maxGrade) {
+              return { backgroundColor: Colors.RED5 };
+            }
+            return {};
+          },
+          comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
+            if (nodeA && nodeB) {
+              return nodeA.data.currentGrade - nodeB.data.currentGrade;
+            }
+            return valueA - valueB;
+          }
+        },
+        {
+          headerName: 'XP',
+          field: '',
+          cellRendererFramework: GradingExp,
+          maxWidth: 100,
+          comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
+            if (nodeA && nodeB) {
+              return nodeA.data.currentXp - nodeB.data.currentXp;
+            }
+            return valueA - valueB;
+          }
+        },
+        {
+          headerName: 'Edit',
           cellRendererFramework: GradingNavLink,
-          maxWidth: 75
+          maxWidth: 65,
+          suppressSorting: true,
+          suppressFilter: true,
+          suppressMovable: true,
+          suppressResize: true,
         },
         {
           headerName: 'Unsubmit',
           colId: 'Unsubmit',
-          width: 110,
+          maxWidth: 100,
           field: '',
           cellRendererFramework: UnsubmitCell,
           cellRendererParams: {
             handleUnsubmitSubmission: this.props.handleUnsubmitSubmission
           },
           suppressSorting: true,
+          suppressFilter: true,
           suppressMovable: true,
-          suppressMenu: true,
           suppressResize: true,
           cellStyle: {
             padding: 0
