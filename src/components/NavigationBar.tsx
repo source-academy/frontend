@@ -64,14 +64,15 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
     </NavbarGroup>
 
     <NavbarGroup align={Alignment.RIGHT}>
-      <NavLink
+      {/* To be reintroduced in the future */}
+      {/* <NavLink
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
         to="/mission-control"
       >
         <Icon icon={IconNames.CODE} />
         <div className="navbar-button-text hidden-xs">Mission-Control</div>
-      </NavLink>
+      </NavLink> */}
 
       <NavLink
         activeClassName="pt-active"
