@@ -29,7 +29,7 @@ class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
         activeClassName="pt-active"
         target="_blank"
       >
-        <Icon className="grade-edit-icon" iconSize={16} icon={IconNames.ANNOTATION} title={false} />
+        <Icon className="grade-edit-icon" iconSize={16} icon={IconNames.ANNOTATION} />
       </NavLink>
     );
   }

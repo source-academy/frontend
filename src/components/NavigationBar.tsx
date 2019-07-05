@@ -29,7 +29,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
         to="/academy"
       >
-        <Icon icon={IconNames.SYMBOL_DIAMOND} title={false} />
+        <Icon icon={IconNames.SYMBOL_DIAMOND} />
         <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
       </NavLink>
 
@@ -39,7 +39,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         target="_blank"
         to={LINKS.LUMINUS}
       >
-        <Icon icon={IconNames.BOOK} title={false} />
+        <Icon icon={IconNames.BOOK} />
         <div className="navbar-button-text hidden-xs">News &amp; Material</div>
       </NavLink>
 
@@ -49,7 +49,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         target="_blank"
         to={LINKS.PIAZZA}
       >
-        <Icon icon={IconNames.CHAT} title={false} />
+        <Icon icon={IconNames.CHAT} />
         <div className="navbar-button-text hidden-xs">Forum</div>
       </NavLink>
 
@@ -58,7 +58,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
         to="/playground"
       >
-        <Icon icon={IconNames.CODE} title={false} />
+        <Icon icon={IconNames.CODE} />
         <div className="navbar-button-text hidden-xs">Playground</div>
       </NavLink>
     </NavbarGroup>
@@ -70,7 +70,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
         to="/mission-control"
       >
-        <Icon icon={IconNames.CODE} title={false} />
+        <Icon icon={IconNames.CODE} />
         <div className="navbar-button-text hidden-xs">Mission-Control</div>
       </NavLink> */}
 
@@ -79,7 +79,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         className="NavigationBar__link pt-button pt-minimal"
         to="/contributors"
       >
-        <Icon icon={IconNames.HEART} title={false} />
+        <Icon icon={IconNames.HEART} />
         <div className="navbar-button-text hidden-xs">Contributors</div>
       </NavLink>
 

@@ -1,4 +1,4 @@
-import { Icon, Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
+import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -48,33 +48,21 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
   private menu(props: DropdownProps) {
     const profile = this.props.name ? (
       <MenuItem
-        icon={<Icon icon={IconNames.USER} title={false} />}
+        icon={IconNames.USER}
         onClick={this.toggleProfileOpen}
         text={titleCase(this.props.name)}
       />
     ) : null;
 
     const logout = this.props.name ? (
-      <MenuItem
-        icon={<Icon icon={IconNames.LOG_OUT} title={false} />}
-        text="Logout"
-        onClick={this.props.handleLogOut}
-      />
+      <MenuItem icon={IconNames.LOG_OUT} text="Logout" onClick={this.props.handleLogOut} />
     ) : null;
 
     return (
       <Menu>
         {profile}
-        <MenuItem
-          icon={<Icon icon={IconNames.HELP} title={false} />}
-          onClick={this.toggleAboutOpen}
-          text="About"
-        />
-        <MenuItem
-          icon={<Icon icon={IconNames.ERROR} title={false} />}
-          onClick={this.toggleHelpOpen}
-          text="Help"
-        />
+        <MenuItem icon={IconNames.HELP} onClick={this.toggleAboutOpen} text="About" />
+        <MenuItem icon={IconNames.ERROR} onClick={this.toggleHelpOpen} text="Help" />
         {logout}
       </Menu>
     );

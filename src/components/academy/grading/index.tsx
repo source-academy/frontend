@@ -1,4 +1,4 @@
-import { Colors, FormGroup, Icon, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Colors, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
@@ -197,7 +197,7 @@ class Grading extends React.Component<IGradingProps, State> {
             <InputGroup
               id="filterBar"
               large={false}
-              leftIcon={<Icon icon={IconNames.FILTER} title={false} />}
+              leftIcon="filter"
               placeholder="Enter any text(e.g. mission)"
               value={this.state.filterValue}
               onChange={this.handleFilterChange}

@@ -21,7 +21,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon={IconNames.FLAME} title={false} />
+        <Icon icon={IconNames.FLAME} />
         <div className="navbar-button-text hidden-xs">Missions</div>
       </NavLink>
 
@@ -30,7 +30,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon={IconNames.LIGHTBULB} title={false} />
+        <Icon icon={IconNames.LIGHTBULB} />
         <div className="navbar-button-text hidden-xs">Quests</div>
       </NavLink>
 
@@ -39,7 +39,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon={IconNames.PREDICTIVE_ANALYSIS} title={false} />
+        <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
         <div className="navbar-button-text hidden-xs">Paths</div>
       </NavLink>
 
@@ -48,7 +48,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         activeClassName="pt-active"
         className="NavigationBar__link pt-button pt-minimal"
       >
-        <Icon icon={IconNames.COMPARISON} title={false} />
+        <Icon icon={IconNames.COMPARISON} />
         <div className="navbar-button-text hidden-xs">Contests</div>
       </NavLink>
     </NavbarGroup>
@@ -59,7 +59,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           activeClassName="pt-active"
           className="NavigationBar__link pt-button pt-minimal"
         >
-          <Icon icon={IconNames.ENDORSED} title={false} />
+          <Icon icon={IconNames.ENDORSED} />
           <div className="navbar-button-text hidden-xs">Grading</div>
         </NavLink>
       </NavbarGroup>

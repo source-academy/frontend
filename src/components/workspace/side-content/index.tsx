@@ -1,4 +1,4 @@
-import { Button, Card, Icon, IconName, Tooltip } from '@blueprintjs/core';
+import { Button, Card, IconName, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
 
 /**
@@ -48,7 +48,7 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
           <Button
             className="side-content-header-button"
             id={tab.label + '-icon'}
-            icon={<Icon icon={tab.icon as IconName} title={false} />}
+            icon={tab.icon as IconName}
             minimal={true}
             onClick={click(i)}
             active={i === this.props.activeTab}
