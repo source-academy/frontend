@@ -29,12 +29,6 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
     </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup align=\\"right\\">
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/mission-control\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"code\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Mission-Control
-      </div>
-    </NavLink>
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"heart\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
@@ -81,12 +75,6 @@ exports[`NavigationBar renders correctly with username 1`] = `
     </NavLink>
   </Blueprint2.NavbarGroup>
   <Blueprint2.NavbarGroup align=\\"right\\">
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/mission-control\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"code\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Mission-Control
-      </div>
-    </NavLink>
     <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
       <Blueprint2.Icon icon=\\"heart\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
