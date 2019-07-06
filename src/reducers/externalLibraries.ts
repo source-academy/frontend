@@ -93,8 +93,8 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'param_gosper',
       'param_gosperize',
       'rotate_around_origin',
-      'arc',                     // used in GOSPERIZE
-      'invert'                   // used in DRAGONIZE
+      'arc', // used in GOSPERIZE
+      'invert' // used in DRAGONIZE
     ]
   ],
   [
