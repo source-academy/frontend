@@ -1,7 +1,7 @@
 import {
   Alignment,
-  Classes,
   Button,
+  Classes,
   Icon,
   Navbar,
   NavbarDivider,
