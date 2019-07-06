@@ -9,7 +9,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Source Academy
       </Blueprint2.NavbarHeading>
     </NavLink>
-    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" target=\\"_blank\\">
+    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
       <Blueprint2.Button minimal={true}>
         <Blueprint2.Icon icon=\\"book\\" />
         <div className=\\"navbar-button-text hidden-xs\\">
@@ -17,7 +17,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         </div>
       </Blueprint2.Button>
     </a>
-    <a className=\\"NavigationBar__link\\" href=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" target=\\"_blank\\">
+    <a className=\\"NavigationBar__link\\" href=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
       <Blueprint2.Button minimal={true}>
         <Blueprint2.Icon icon=\\"chat\\" />
         <div className=\\"navbar-button-text hidden-xs\\">
@@ -65,7 +65,7 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Source Academy
       </Blueprint2.NavbarHeading>
     </NavLink>
-    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" target=\\"_blank\\">
+    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
       <Blueprint2.Button minimal={true}>
         <Blueprint2.Icon icon=\\"book\\" />
         <div className=\\"navbar-button-text hidden-xs\\">
@@ -73,7 +73,7 @@ exports[`NavigationBar renders correctly with username 1`] = `
         </div>
       </Blueprint2.Button>
     </a>
-    <a className=\\"NavigationBar__link\\" href=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" target=\\"_blank\\">
+    <a className=\\"NavigationBar__link\\" href=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
       <Blueprint2.Button minimal={true}>
         <Blueprint2.Icon icon=\\"chat\\" />
         <div className=\\"navbar-button-text hidden-xs\\">

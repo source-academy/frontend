@@ -34,14 +34,24 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
       </NavLink>
 
-      <a className="NavigationBar__link" href={LINKS.LUMINUS} target="_blank">
+      <a
+        className="NavigationBar__link"
+        href={LINKS.LUMINUS}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <Button minimal={true}>
           <Icon icon={IconNames.BOOK} />
           <div className="navbar-button-text hidden-xs">News &amp; Material</div>
         </Button>
       </a>
 
-      <a className="NavigationBar__link" href={LINKS.PIAZZA} target="_blank">
+      <a
+        className="NavigationBar__link"
+        href={LINKS.PIAZZA}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <Button minimal={true}>
           <Icon icon={IconNames.CHAT} />
           <div className="navbar-button-text hidden-xs">Forum</div>
