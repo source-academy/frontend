@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, Classes, Icon, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Button, ButtonGroup, Card, Classes, H4, Icon, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
@@ -32,10 +32,10 @@ const Login: React.SFC<LoginProps> = props => {
       <div className={classNames('Login', Classes.DARK)}>
         <Card className={classNames('login-card', Classes.ELEVATION_4)}>
           <div className="login-header">
-            <h4>
+            <H4>
               <Icon icon={IconNames.LOCK} />
               LOGIN
-            </h4>
+            </H4>
           </div>
           <div className="login-body">
             <ButtonGroup fill={true} vertical={true}>
