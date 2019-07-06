@@ -145,18 +145,33 @@ describe('EVAL_REPL', () => {
           type: actionTypes.EVAL_REPL,
           payload: { workspaceLocation }
         })
-
         .silentRun()
     );
   });
 });
 
 describe('DEBUG_RESUME', () => {
-  test('puts beginInterruptExecution, clearReplOutput, highlightEditorLine and calls evalCode correctly', () => {
-    const workspaceLocation = WorkspaceLocations.playground;
-    const editorValue = 'sample code here';
-    const context = mockRuntimeContext();
+  let workspaceLocation: WorkspaceLocation;
+  let editorValue: string;
+  let context: Context;
+  const status = { status: 'error' };
 
+  beforeEach(() => {
+    // Ensure that lastDebuggerResult is set correctly before running each of the tests below
+    workspaceLocation = WorkspaceLocations.playground;
+    editorValue = 'sample code here';
+    context = mockRuntimeContext();
+
+    return expectSaga(
+      evalCode,
+      editorValue,
+      context,
+      workspaceLocation,
+      actionTypes.EVAL_EDITOR
+    ).silentRun();
+  });
+
+  test('puts beginInterruptExecution, clearReplOutput, highlightEditorLine and calls evalCode correctly', () => {
     const newDefaultState = generateDefaultState(workspaceLocation, { editorValue, context });
 
     return (
@@ -175,7 +190,7 @@ describe('DEBUG_RESUME', () => {
         .put(actions.clearReplOutput(workspaceLocation))
         .put(actions.highlightEditorLine([], workspaceLocation))
         // also calls evalCode here
-        .call(resume, undefined)
+        .call(resume, status)
         .dispatch({
           type: actionTypes.DEBUG_RESUME,
           payload: { workspaceLocation }
