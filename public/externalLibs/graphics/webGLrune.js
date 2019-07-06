@@ -425,6 +425,73 @@ function show(shape) {
   return new ShapeDrawn()
 }
 
+/**
+ * turns a given Rune into an Anaglyph
+ * @param {Rune} shape - given Rune
+ * @return {Picture}
+ * If the result of evaluating a program is an Anaglyph,
+ * the REPL displays it graphically, using anaglyph
+ * technology, instead of using text. Use your 3D-glasses
+ * to view the Anaglyph.
+ */
+function anaglyph(shape) {
+  clear_viewport()
+  clearAnaglyphFramebuffer()
+  var flattened_shape_list = generateFlattenedShapeList(shape)
+  drawWithWebGL(flattened_shape_list, drawAnaglyph)
+  return new ShapeDrawn()
+}
+
+var hollusionTimeout
+/**
+ * turns a given Rune into Hollusion
+ * @param {Rune} shape - given Rune
+ * @return {Picture}
+ * If the result of evaluating a program is a Hollusion,
+ * the REPL displays it graphically, using hollusion
+ * technology, instead of using text. 
+ */
+function hollusion(shape, num) {
+  clear_viewport()
+  var num = num > 3 ? num : 3
+  var flattened_shape_list = generateFlattenedShapeList(shape)
+  var frame_list = []
+  for (var j = 0; j < num; j++) {
+    var frame = open_pixmap('frame' + j, viewport_size, viewport_size, false)
+    for (var i = 0; i < flattened_shape_list.length; i++) {
+      var shape = flattened_shape_list[i].shape
+      var instanceArray = flattened_shape_list[i].instanceArray
+      var cameraMatrix = mat4.create()
+      mat4.lookAt(
+        cameraMatrix,
+        vec3.fromValues(-halfEyeDistance + j / (num - 1) * 2 * halfEyeDistance, 0, 0),
+        vec3.fromValues(0, 0, -0.4),
+        vec3.fromValues(0, 1, 0)
+      )
+      draw3D(shape.first, shape.count, instanceArray, cameraMatrix, [1, 1, 1, 1], null, true)
+    }
+    gl.finish()
+    copy_viewport(gl.canvas, frame)
+    frame_list.push(frame)
+    clear_viewport()
+  }
+  for (var i = frame_list.length - 2; i > 0; i--) {
+    frame_list.push(frame_list[i])
+  }
+
+  function animate() {
+    var frame = frame_list.shift()
+    copy_viewport_webGL(frame)
+    frame_list.push(frame)
+    hollusionTimeout = setTimeout(animate, 500 / num)
+  }
+  animate()
+  return new ShapeDrawn()
+}
+
+function clearHollusion() {
+  clearTimeout(hollusionTimeout)
+}
 
 /*-----------------------Transformation functions----------------------*/
 function scale_independent(ratio_x, ratio_y, shape) {
@@ -831,74 +898,6 @@ function overlay_frac(frac, shape1, shape2) {
  */
 function overlay(shape1, shape2) {
   return overlay_frac(0.5, shape1, shape2)
-}
-
-/**
- * turns a given Rune into an Anaglyph
- * @param {Rune} shape - given Rune
- * @return {Picture}
- * If the result of evaluating a program is an Anaglyph,
- * the REPL displays it graphically, using anaglyph
- * technology, instead of using text. Use your 3D-glasses
- * to view the Anaglyph.
- */
-function anaglyph(shape) {
-  clear_viewport()
-  clearAnaglyphFramebuffer()
-  var flattened_shape_list = generateFlattenedShapeList(shape)
-  drawWithWebGL(flattened_shape_list, drawAnaglyph)
-  return new ShapeDrawn()
-}
-
-var hollusionTimeout
-/**
- * turns a given Rune into Hollusion
- * @param {Rune} shape - given Rune
- * @return {Picture}
- * If the result of evaluating a program is a Hollusion,
- * the REPL displays it graphically, using hollusion
- * technology, instead of using text. 
- */
-function hollusion(shape, num) {
-  clear_viewport()
-  var num = num > 3 ? num : 3
-  var flattened_shape_list = generateFlattenedShapeList(shape)
-  var frame_list = []
-  for (var j = 0; j < num; j++) {
-    var frame = open_pixmap('frame' + j, viewport_size, viewport_size, false)
-    for (var i = 0; i < flattened_shape_list.length; i++) {
-      var shape = flattened_shape_list[i].shape
-      var instanceArray = flattened_shape_list[i].instanceArray
-      var cameraMatrix = mat4.create()
-      mat4.lookAt(
-        cameraMatrix,
-        vec3.fromValues(-halfEyeDistance + j / (num - 1) * 2 * halfEyeDistance, 0, 0),
-        vec3.fromValues(0, 0, -0.4),
-        vec3.fromValues(0, 1, 0)
-      )
-      draw3D(shape.first, shape.count, instanceArray, cameraMatrix, [1, 1, 1, 1], null, true)
-    }
-    gl.finish()
-    copy_viewport(gl.canvas, frame)
-    frame_list.push(frame)
-    clear_viewport()
-  }
-  for (var i = frame_list.length - 2; i > 0; i--) {
-    frame_list.push(frame_list[i])
-  }
-
-  function animate() {
-    var frame = frame_list.shift()
-    copy_viewport_webGL(frame)
-    frame_list.push(frame)
-    hollusionTimeout = setTimeout(animate, 500 / num)
-  }
-  animate()
-  return new ShapeDrawn()
-}
-
-function clearHollusion() {
-  clearTimeout(hollusionTimeout)
 }
 
 /*

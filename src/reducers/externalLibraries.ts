@@ -54,6 +54,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'pentagram',
       'ribbon',
       'hollusion',
+      'anaglyph',
       'overlay_frac',
       'overlay'
     ]
@@ -91,7 +92,9 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'repeated',
       'param_gosper',
       'param_gosperize',
-      'rotate_around_origin'
+      'rotate_around_origin',
+      'arc',                     // used in GOSPERIZE
+      'invert'                   // used in DRAGONIZE
     ]
   ],
   [
