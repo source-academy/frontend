@@ -19,7 +19,7 @@ a.NavigationBar__link {
   color: inherit;
   text-decoration: none;
 
-  .pt-button-text {
+  .#{$ns}-button-text {
     display: flex;
   }
 }
