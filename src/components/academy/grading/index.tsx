@@ -147,7 +147,10 @@ class Grading extends React.Component<IGradingProps, State> {
         suppressFilter: true,
         suppressSorting: true,
         suppressSizeToFit: true,
-        suppressResize: true
+        suppressResize: true,
+        cellStyle: {
+          padding: 0
+        }
       },
       {
         headerName: 'Unsubmit',

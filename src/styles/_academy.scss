@@ -214,6 +214,11 @@
     font-weight: bold;
     padding: 10px;
   }
+
+  :focus {
+    /* Disable rendering blue border when a sub-component in grid is in focus */
+    outline: none;
+  }
 }
 
 .ag-grid-controls {
