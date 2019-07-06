@@ -110,31 +110,10 @@ function* backendSaga(): SagaIterator {
     const questionId = (action as actionTypes.IAction).payload.id;
     const answer = (action as actionTypes.IAction).payload.answer;
     const resp = yield call(postAnswer, questionId, answer, tokens);
-
-    if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Saved!', 1000);
-      // Now, update the answer for the question in the assessment in the store
-      const assessmentId = yield select(
-        (state: IState) => state.workspaces.assessment.currentAssessment!
-      );
-      const assessment = yield select((state: IState) =>
-        state.session.assessments.get(assessmentId)
-      );
-      const newQuestions = assessment.questions.slice().map((question: IQuestion) => {
-        if (question.id === questionId) {
-          return { ...question, answer };
-        }
-        return question;
-      });
-      const newAssessment = {
-        ...assessment,
-        questions: newQuestions
-      };
-      yield put(actions.updateAssessment(newAssessment));
-      return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
+    if (!resp) {
+      return yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
     }
-
-    if (resp !== null) {
+    if (!resp.ok) {
       let errorMessage: string;
       switch (resp.status) {
         case 401:
@@ -149,8 +128,24 @@ function* backendSaga(): SagaIterator {
       }
       return yield call(showWarningMessage, errorMessage);
     }
-
-    return yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    yield call(showSuccessMessage, 'Saved!', 1000);
+    // Now, update the answer for the question in the assessment in the store
+    const assessmentId = yield select(
+      (state: IState) => state.workspaces.assessment.currentAssessment!
+    );
+    const assessment = yield select((state: IState) => state.session.assessments.get(assessmentId));
+    const newQuestions = assessment.questions.slice().map((question: IQuestion) => {
+      if (question.id === questionId) {
+        return { ...question, answer };
+      }
+      return question;
+    });
+    const newAssessment = {
+      ...assessment,
+      questions: newQuestions
+    };
+    yield put(actions.updateAssessment(newAssessment));
+    return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   });
 
   yield takeEvery(actionTypes.SUBMIT_ASSESSMENT, function*(action) {
@@ -165,22 +160,21 @@ function* backendSaga(): SagaIterator {
     }));
     const assessmentId = (action as actionTypes.IAction).payload;
     const resp = yield call(postAssessment, assessmentId, tokens);
-    if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Submitted!', 2000);
-      // Now, update the status of the assessment overview in the store
-      const overviews: IAssessmentOverview[] = yield select(
-        (state: IState) => state.session.assessmentOverviews
-      );
-      const newOverviews = overviews.map(overview => {
-        if (overview.id === assessmentId) {
-          return { ...overview, status: AssessmentStatuses.submitted };
-        }
-        return overview;
-      });
-      return yield put(actions.updateAssessmentOverviews(newOverviews));
+    if (!resp || !resp.ok) {
+      return yield call(showWarningMessage, 'Something went wrong. Please try again.');
     }
-
-    return yield call(showWarningMessage, 'Something went wrong. Please try again.');
+    yield call(showSuccessMessage, 'Submitted!', 2000);
+    // Now, update the status of the assessment overview in the store
+    const overviews: IAssessmentOverview[] = yield select(
+      (state: IState) => state.session.assessmentOverviews
+    );
+    const newOverviews = overviews.map(overview => {
+      if (overview.id === assessmentId) {
+        return { ...overview, status: AssessmentStatuses.submitted };
+      }
+      return overview;
+    });
+    return yield put(actions.updateAssessmentOverviews(newOverviews));
   });
 
   yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*(action) {
