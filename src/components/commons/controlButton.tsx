@@ -8,7 +8,7 @@ type controlButtonOptionals = {
   iconOnRight?: boolean;
   intent?: Intent;
   minimal?: boolean;
-  type?: string;
+  type?: "submit" | "reset" | "button";
 };
 
 const defaultOptions = {
@@ -16,8 +16,7 @@ const defaultOptions = {
   fullWidth: false,
   iconOnRight: false,
   intent: Intent.NONE,
-  minimal: true,
-  type: ''
+  minimal: true
 };
 
 export function controlButton(

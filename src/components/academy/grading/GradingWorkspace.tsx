@@ -122,7 +122,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         <NonIdealState
           className={classNames('WorkspaceParent', Classes.DARK)}
           description="Getting assessment ready..."
-          visual={<Spinner large={true} />}
+          icon={<Spinner size={Spinner.SIZE_LARGE}/>}
         />
       );
     }

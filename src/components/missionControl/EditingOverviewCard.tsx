@@ -9,7 +9,7 @@ import {
   MenuItem,
   Text
 } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
@@ -244,12 +244,11 @@ const createPlaceholder = (str: string): string => {
 };
 
 const makeOverviewCardButton = (overview: IAssessmentOverview, listingPath: string | undefined) => {
-  const icon: IconName = IconNames.EDIT;
   const label: string = 'Edit mission';
   listingPath = listingPath || '/academy/' + assessmentCategoryLink(overview.category);
   return (
     <NavLink to={listingPath + `/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}>
-      {controlButton(label, icon)}
+      {controlButton(label, IconNames.EDIT)}
     </NavLink>
   );
 };
@@ -272,7 +271,7 @@ const categorySelect = (
     itemRenderer={categoryRenderer}
     filterable={false}
   >
-    <Button className={Classes.MINIMAL} text={category} rightIcon={IconName.DOUBLE_CARET_VERTICAL} />
+    <Button className={Classes.MINIMAL} text={category} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
   </CategorySelectComponent>
 );
 

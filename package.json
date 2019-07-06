@@ -33,7 +33,6 @@
     }
   },
   "dependencies": {
-    "@blueprintjs/tslint-config": "^1.8.1",
     "acorn": "^4.0.13",
     "ag-grid": "^18.0.1",
     "ag-grid-react": "^18.0.0",
@@ -73,15 +72,14 @@
     "redux-saga": "^1.0.0",
     "sharedb-ace": "^1.0.9",
     "showdown": "^1.9.0",
-    "tslint": "^5.18.0",
     "typesafe-actions": "^3.2.1",
     "utility-types": "^2.0.0",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "@blueprintjs/core": "^2.1.1",
-    "@blueprintjs/icons": "^3.6.0",
-    "@blueprintjs/select": "^2.0.1",
+    "@blueprintjs/core": "^3.17.1",
+    "@blueprintjs/icons": "^3.9.1",
+    "@blueprintjs/select": "^3.9.0",
     "@types/acorn": "^4.0.3",
     "@types/classnames": "^2.2.8",
     "@types/common-tags": "^1.4.0",
