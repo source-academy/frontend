@@ -200,17 +200,19 @@
    */
   .ag-body-container {
     display: block;
-    // Override ag-grid style to suppress unnecessary vertical scrollbar (bugfix)
+    /* Override ag-grid style to suppress unnecessary vertical scrollbar (bugfix) */
     margin-bottom: 0;
   }
 
   .pt-icon {
-    // Vertically centre appearance of blueprintjs icons in ag-grid
+    /* Vertically centre appearance of blueprintjs icons in ag-grid */
     margin-top: 5px;
   }
 
   .ag-paging-panel {
     border-top: none;
+    font-weight: bold;
+    padding: 10px;
   }
 }
 
@@ -219,7 +221,7 @@
   justify-content: space-between;
 
   .pt-icon {
-    // Remove unnecessary margin to right when button text is hidden
+    /* Remove unnecessary margin to right when button text is hidden */
     margin-right: 0;
   }
 
@@ -229,13 +231,12 @@
 }
 
 .ag-header-cell.ag-header-cell.ag-header-cell {
-  // Chain selectors for increased specificity
-  // Reduce internal padding of header cells
+  /* Chain selectors for increased specificity: reduce internal padding of header cells */
   padding-left: 0.375em;
   padding-right: 0.375em;
 
   .ag-header-cell-label {
-    // Increase font size of headers; pad left to centre with filter icon
+    /* Increase font size of headers; pad left to centre with filter icon */
     font-size: 1.1em;
     font-weight: bold;
     justify-content: center;
@@ -245,18 +246,20 @@
 
 .ag-cell {
   font-size: 1.1em;
-  // Override to reduce ag-grid default padding
+  /* Override to reduce ag-grid default padding */
   padding-left: 0.375em !important;
   padding-right: 0.375em !important;
   text-align: center;
 }
 
-#filterBar {
-  width: 400px;
+.ag-cell-focus,
+.ag-cell-no-focus {
+  /* Suppress blue border around focused cells from ag-grid stylesheet */
+  border: none !important;
 }
 
-.ag-paging-panel {
-  padding: 20px;
+#filterBar {
+  width: 400px;
 }
 
 .md th,
