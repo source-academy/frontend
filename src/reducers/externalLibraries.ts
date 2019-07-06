@@ -116,7 +116,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'square_sound',
       'triangle_sound',
       'sawtooth_sound',
-      'play_safe',
+      'play_unsafe',
       /** Microphone Sounds */
       'init_record',
       'record',

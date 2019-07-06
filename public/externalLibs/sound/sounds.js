@@ -168,7 +168,7 @@ function is_sound(sound) {
 var _playing = false;
 var _player;
 
-function play(sound) {
+function play_unsafe(sound) {
     // type-check sound
     if ( !is_sound(sound) ) {
 	throw new Error("play is expecting sound, but encountered " + sound);
@@ -274,7 +274,7 @@ function play(sound) {
 var _safeplaying = false;
 var _safeaudio = null;
 
-function play_safe(sound) {
+function play(sound) {
     // If a sound is already playing, terminate execution.
     if (_safeplaying || _playing) return;
 
