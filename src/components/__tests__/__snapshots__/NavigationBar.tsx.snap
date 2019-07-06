@@ -21,16 +21,16 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Forum
       </div>
     </NavLink>
-  </Blueprint3.NavbarGroup>
-  <Blueprint3.NavbarGroup align=\\"right\\">
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/mission-control\\" aria-current=\\"page\\">
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Playground
       </div>
     </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"code\\" />
+  </Blueprint3.NavbarGroup>
+  <Blueprint3.NavbarGroup align=\\"right\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"heart\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Contributors
       </div>
@@ -67,16 +67,16 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Forum
       </div>
     </NavLink>
-  </Blueprint3.NavbarGroup>
-  <Blueprint3.NavbarGroup align=\\"right\\">
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/mission-control\\" aria-current=\\"page\\">
+    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Playground
       </div>
     </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"code\\" />
+  </Blueprint3.NavbarGroup>
+  <Blueprint3.NavbarGroup align=\\"right\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"heart\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Contributors
       </div>
