@@ -1,6 +1,7 @@
 import {
   Alignment,
   Classes,
+  Button,
   Icon,
   Navbar,
   NavbarDivider,
@@ -35,25 +36,29 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
       </NavLink>
 
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+      <a
+        className="NavigationBar__link"
+        href={LINKS.LUMINUS}
         target="_blank"
-        to={LINKS.LUMINUS}
+        rel="noopener noreferrer"
       >
-        <Icon icon={IconNames.BOOK} />
-        <div className="navbar-button-text hidden-xs">News &amp; Material</div>
-      </NavLink>
+        <Button minimal={true}>
+          <Icon icon={IconNames.BOOK} />
+          <div className="navbar-button-text hidden-xs">News &amp; Material</div>
+        </Button>
+      </a>
 
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+      <a
+        className="NavigationBar__link"
+        href={LINKS.PIAZZA}
         target="_blank"
-        to={LINKS.PIAZZA}
+        rel="noopener noreferrer"
       >
-        <Icon icon={IconNames.CHAT} />
-        <div className="navbar-button-text hidden-xs">Forum</div>
-      </NavLink>
+        <Button minimal={true}>
+          <Icon icon={IconNames.CHAT} />
+          <div className="navbar-button-text hidden-xs">Forum</div>
+        </Button>
+      </a>
 
       <NavLink
         activeClassName={Classes.ACTIVE}
