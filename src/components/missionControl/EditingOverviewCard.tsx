@@ -5,12 +5,11 @@ import {
   Dialog,
   Elevation,
   Icon,
-  IconName,
   Intent,
   MenuItem,
   Text
 } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { IconName, IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
@@ -267,13 +266,13 @@ const categorySelect = (
   handleSelect = (i: AssessmentCategory, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <CategorySelectComponent
-    className="pt-minimal"
+    className={Classes.MINIMAL}
     items={assessmentCategoriesArr}
     onItemSelect={handleSelect}
     itemRenderer={categoryRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={category} rightIcon="double-caret-vertical" />
+    <Button className={Classes.MINIMAL} text={category} rightIcon={IconName.DOUBLE_CARET_VERTICAL} />
   </CategorySelectComponent>
 );
 

@@ -1,5 +1,6 @@
 import { ButtonGroup, Classes, Dialog, Intent, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
@@ -141,7 +142,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     if (this.state.assessment === null || this.state.assessment!.questions.length === 0) {
       return (
         <NonIdealState
-          className="WorkspaceParent pt-dark"
+          className={classNames('WorkspaceParent', Classes.DARK)}
           description="Getting mission ready..."
           visual={<Spinner large={true} />}
         />
@@ -194,7 +195,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       }
     };
     return (
-      <div className="WorkspaceParent pt-dark">
+      <div className={classNames('WorkspaceParent', Classes.DARK)}>
         {this.resetTemplateOverlay()}
         <Workspace {...workspaceProps} />
       </div>

@@ -12,6 +12,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
+import * as classNames from 'classnames';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -281,7 +282,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     );
 
     return (
-      <div className="ControlBar_editor pt-button-group">
+      <div className={classNames('ControlBar_editor', Classes.BUTTON_GROUP)}>
         {toggleAutorunButton}
         {this.props.isEditorAutorun
           ? autoRunButton
@@ -328,7 +329,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
       : undefined;
 
     return (
-      <div className="ControlBar_flow pt-button-group">
+      <div className={classNames('ControlBar_flow', Classes.BUTTON_GROUP)}>
         {previousButton} {questionView} {nextButton} {returnButton}
       </div>
     );
@@ -360,7 +361,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     const clearButton = controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear);
 
     return (
-      <div className="ControlBar_repl pt-button-group">
+      <div className={classNames('ControlBar_repl', Classes.BUTTON_GROUP)}>
         {this.props.isRunning ? null : evalButton} {clearButton} {toggleEditModeButton}
       </div>
     );
@@ -413,16 +414,16 @@ const chapterSelect = (
   handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <ChapterSelectComponent
-    className="pt-minimal"
+    className={Classes.MINIMAL}
     items={chapters}
     onItemSelect={handleSelect}
     itemRenderer={chapterRenderer}
     filterable={false}
   >
     <Button
-      className="pt-minimal"
+      className={Classes.MINIMAL}
       text={styliseChapter(currentChap)}
-      rightIcon="double-caret-vertical"
+      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
     />
   </ChapterSelectComponent>
 );
@@ -444,13 +445,13 @@ const externalSelect = (
   handleSelect: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
 ) => (
   <ExternalSelectComponent
-    className="pt-minimal"
+    className={Classes.MINIMAL}
     items={iExternals}
     onItemSelect={handleSelect}
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
+    <Button className={Classes.MINIMAL} text={currentExternal} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
   </ExternalSelectComponent>
 );
 

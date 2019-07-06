@@ -1,4 +1,5 @@
-import { Card } from '@blueprintjs/core';
+import { Card, Classes } from '@blueprintjs/core';
+import * as classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
@@ -29,7 +30,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
       <div className="Repl">
         <div className="repl-output-parent">
           {cards}
-          <HotKeys className="repl-input-parent row pt-card pt-elevation-0" handlers={handlers}>
+          <HotKeys className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)} handlers={handlers}>
             <ReplInput {...inputProps} />
           </HotKeys>
         </div>

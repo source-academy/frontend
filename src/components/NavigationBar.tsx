@@ -1,5 +1,6 @@
 import {
   Alignment,
+  Classes,
   Icon,
   Navbar,
   NavbarDivider,
@@ -7,6 +8,7 @@ import {
   NavbarHeading
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -22,11 +24,11 @@ export interface INavigationBarProps {
 }
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
-  <Navbar className="NavigationBar primary-navbar pt-dark">
+  <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/academy"
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
@@ -34,8 +36,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </NavLink>
 
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         target="_blank"
         to={LINKS.LUMINUS}
       >
@@ -44,8 +46,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </NavLink>
 
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         target="_blank"
         to={LINKS.PIAZZA}
       >
@@ -54,8 +56,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </NavLink>
 
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
@@ -66,8 +68,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
     <NavbarGroup align={Alignment.RIGHT}>
       {/* To be reintroduced in the future */}
       {/* <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/mission-control"
       >
         <Icon icon={IconNames.CODE} />
@@ -75,8 +77,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </NavLink> */}
 
       <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/contributors"
       >
         <Icon icon={IconNames.HEART} />
