@@ -1,9 +1,9 @@
-import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { NavLink } from 'react-router-dom';
 
+import { controlButton } from '../../../components/commons/controlButton';
 import { GradingOverview } from './gradingShape';
 
 type GradingNavLinkProps = {
@@ -29,7 +29,7 @@ class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
         activeClassName="pt-active"
         target="_blank"
       >
-        <Icon className="grade-edit-icon" iconSize={16} icon={IconNames.ANNOTATION} />
+        {controlButton('', IconNames.ANNOTATION, () => null, { fullWidth: true })}
       </NavLink>
     );
   }
