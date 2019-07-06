@@ -129,7 +129,10 @@ class Grading extends React.Component<IGradingProps, State> {
         suppressMenu: true,
         suppressResize: true,
         suppressSizeToFit: true,
-        suppressSorting: true
+        suppressSorting: true,
+        cellStyle: {
+          padding: 0
+        }
       },
       {
         headerName: 'Unsubmit',
@@ -231,6 +234,7 @@ class Grading extends React.Component<IGradingProps, State> {
               columnDefs={this.columnDefs}
               onGridReady={this.onGridReady}
               rowData={data}
+              rowHeight={30}
               pagination={true}
               paginationPageSize={50}
               suppressMovableColumns={true}
