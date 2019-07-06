@@ -19,8 +19,8 @@ class SourcereelControlbar extends React.PureComponent<
     this.state = {
       duration: 0,
       updater: undefined,
-      saveTitle: '',
-      saveDescription: ''
+      saveTitle: 'Title',
+      saveDescription: 'Description'
     };
   }
 
@@ -68,7 +68,6 @@ class SourcereelControlbar extends React.PureComponent<
           <li className="form-row">
             <label htmlFor="title">Title: </label>
             <input
-              defaultValue="Title"
               id="title"
               value={this.state.saveTitle}
               onChange={this.handleSaveTitleInputChange}
@@ -77,7 +76,6 @@ class SourcereelControlbar extends React.PureComponent<
           <li className="form-row">
             <label htmlFor="description">Description: </label>
             <input
-              defaultValue="Description"
               id="description"
               value={this.state.saveDescription}
               onChange={this.handleSaveDescriptionInputChange}
@@ -183,8 +181,11 @@ class SourcereelControlbar extends React.PureComponent<
       alert('No recording found');
       return;
     }
-    // TODO: MAKE THIS ASYNC
+    const tempUrl = window.URL.createObjectURL(this.state.fileDataBlob);
+    this.props.handleRecordAudioUrl(tempUrl);
     this.props.handleSavePlaybackData(
+      this.state.saveTitle,
+      this.state.saveDescription,
       this.state.fileDataBlob,
       JSON.stringify(this.props.playbackData)
     );
@@ -229,7 +230,12 @@ class SourcereelControlbar extends React.PureComponent<
 export interface ISourcereelControlbarProps {
   handleRecordAudioUrl: (audioUrl: string) => void;
   handleRecordEditorInitValue: (editorValue: string) => void;
-  handleSavePlaybackData: (audio: Blob, playbackData: string) => void;
+  handleSavePlaybackData: (
+    title: string,
+    description: string,
+    audio: Blob,
+    playbackData: string
+  ) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;

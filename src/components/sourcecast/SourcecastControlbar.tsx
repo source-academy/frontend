@@ -60,7 +60,7 @@ class SourcecastControlbar extends React.PureComponent<
         <audio
           src={this.props.audioUrl}
           ref={this.audio}
-          // onEnded={this.handlePlayerStopping}
+          onEnded={this.handlePlayerStopping}
           onLoadedMetadata={this.handleAudioLoaded}
           onSeeked={this.handleSeeked}
           onTimeUpdate={this.updatePlayerTime}
@@ -221,6 +221,15 @@ class SourcecastControlbar extends React.PureComponent<
     this.props.handleSetEditorReadonly(true);
     this.props.handleSetSourcecastStatus(PlaybackStatus.playing);
     this.stopPreviousPlaybackAndApplyFromStart(this.props.playbackData);
+  };
+
+  private handlePlayerStopping = () => {
+    this.props.handleSetEditorReadonly(false);
+    this.props.handleSetSourcecastStatus(PlaybackStatus.notStarted);
+    this.setState({
+      currentPlayerTime: 0,
+      currentPlayerProgress: 0
+    });
   };
 
   private updatePlayerTime: React.ReactEventHandler<HTMLAudioElement> = e => {

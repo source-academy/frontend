@@ -91,8 +91,12 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSavePlaybackData: (audio: Blob, playbackData: string) =>
-        savePlaybackData(audio, playbackData),
+      handleSavePlaybackData: (
+        title: string,
+        description: string,
+        audio: Blob,
+        playbackData: string
+      ) => savePlaybackData(title, description, audio, playbackData),
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),

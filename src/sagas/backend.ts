@@ -354,12 +354,12 @@ function* backendSaga(): SagaIterator {
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can save sourcecast.');
     }
-    const { audio, deltas } = (action as actionTypes.IAction).payload;
+    const { title, description, audio, deltas } = (action as actionTypes.IAction).payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield postSourcecast(audio, deltas, tokens);
+    const resp = yield postSourcecast(title, description, audio, deltas, tokens);
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000);
       yield history.push('/sourcecast');
@@ -754,11 +754,18 @@ async function getSourcecastIndex(tokens: Tokens): Promise<IAssessmentOverview[]
 /**
  * POST /sourcecast
  */
-const postSourcecast = async (audio: Blob, deltas: string, tokens: Tokens) => {
+const postSourcecast = async (
+  title: string,
+  description: string,
+  audio: Blob,
+  deltas: string,
+  tokens: Tokens
+) => {
   const formData = new FormData();
-  const name = Date.now().toString() + '.wav';
-  formData.append('sourcecast[name]', name);
-  formData.append('sourcecast[audio]', audio, name);
+  const filename = Date.now().toString() + '.wav';
+  formData.append('sourcecast[name]', title);
+  formData.append('sourcecast[description]', description);
+  formData.append('sourcecast[audio]', audio, filename);
   formData.append('sourcecast[deltas]', deltas);
   const resp = await request(`sourcecast`, 'POST', {
     accessToken: tokens.accessToken,

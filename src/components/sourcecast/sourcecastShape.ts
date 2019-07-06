@@ -47,6 +47,7 @@ export interface IPlaybackData {
 
 export interface ISourcecastData {
   name: string;
+  description: string;
   inserted_at: string;
   updated_at: string;
   audio: string;

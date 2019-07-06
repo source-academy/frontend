@@ -70,7 +70,12 @@ export interface IDispatchProps {
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleRecordEditorInitValue: (editorValue: string) => void;
-  handleSavePlaybackData: (audio: Blob, playbackData: string) => void;
+  handleSavePlaybackData: (
+    title: string,
+    description: string,
+    audio: Blob,
+    playbackData: string
+  ) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
