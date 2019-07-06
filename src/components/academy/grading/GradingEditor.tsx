@@ -1,4 +1,4 @@
-import { Icon, Intent, NumericInput, Position, Text } from '@blueprintjs/core';
+import { H3, HTMLTable, Icon, Intent, NumericInput, Position, Pre, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import ReactMde, { ReactMdeTypes } from 'react-mde';
@@ -95,15 +95,15 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         ) : null}
 
         <div className="grading-editor-student-name">
-          <h3>Currently Grading: {this.props.studentName}</h3>
+          <H3>Currently Grading: {this.props.studentName}</H3>
         </div>
         {this.props.solution !== null ? (
           <div className="grading-editor-solution">
-            <pre> {this.props.solution.toString()} </pre>
+            <Pre> {this.props.solution.toString()} </Pre>
           </div>
         ) : null}
         <div className="grading-editor-input-parent">
-          <table>
+          <HTMLTable>
             <tbody>
               <tr>
                 <th> {`Auto-grader's grade:`} </th>
@@ -174,7 +174,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                 </td>
               </tr>
             </tbody>
-          </table>
+          </HTMLTable>
         </div>
         <div className="react-mde-parent">
           <ReactMde

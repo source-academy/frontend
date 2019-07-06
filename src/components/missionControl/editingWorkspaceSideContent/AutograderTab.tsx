@@ -1,4 +1,4 @@
-import { Card, Elevation } from '@blueprintjs/core';
+import { Card, Elevation, H6 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 // import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
@@ -79,7 +79,7 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
           <div className="col-xs-9 listing-text">
             {/* {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)} */}
             <div className="row listing-program">
-              <h6>
+              <H6>
                 Test Program:
                 <TextareaContent
                   assessment={this.props.assessment}
@@ -87,10 +87,10 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
                   useRawValue={true}
                   updateAssessment={this.props.updateAssessment}
                 />
-              </h6>
+              </H6>
             </div>
             <div className="row listing-expected">
-              <h6>
+              <H6>
                 Score:
                 <TextareaContent
                   assessment={this.props.assessment}
@@ -98,10 +98,10 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
                   path={testcasePath.concat([index, 'score'])}
                   updateAssessment={this.props.updateAssessment}
                 />
-              </h6>
+              </H6>
             </div>
             <div className="row listing-expected">
-              <h6>
+              <H6>
                 Expected Answer:
                 <TextareaContent
                   assessment={this.props.assessment}
@@ -109,7 +109,7 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
                   useRawValue={true}
                   updateAssessment={this.props.updateAssessment}
                 />
-              </h6>
+              </H6>
             </div>
             <div className="listing-controls">
               <div>
