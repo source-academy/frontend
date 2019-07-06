@@ -18,7 +18,9 @@ class SourcereelControlbar extends React.PureComponent<
     super(props);
     this.state = {
       duration: 0,
-      updater: undefined
+      updater: undefined,
+      saveTitle: '',
+      saveDescription: ''
     };
   }
 
@@ -65,11 +67,21 @@ class SourcereelControlbar extends React.PureComponent<
         <ul className="sourcereel-save-form">
           <li className="form-row">
             <label htmlFor="title">Title: </label>
-            <input defaultValue="Title" id="title" />
+            <input
+              defaultValue="Title"
+              id="title"
+              value={this.state.saveTitle}
+              onChange={this.handleSaveTitleInputChange}
+            />
           </li>
           <li className="form-row">
             <label htmlFor="description">Description: </label>
-            <input defaultValue="Description" id="description" />
+            <input
+              defaultValue="Description"
+              id="description"
+              value={this.state.saveDescription}
+              onChange={this.handleSaveDescriptionInputChange}
+            />
           </li>
           <li>{controlButton('Submit', IconNames.TICK, this.handleRecorderSaving)}</li>
         </ul>
@@ -171,6 +183,7 @@ class SourcereelControlbar extends React.PureComponent<
       alert('No recording found');
       return;
     }
+    // TODO: MAKE THIS ASYNC
     this.props.handleSavePlaybackData(
       this.state.fileDataBlob,
       JSON.stringify(this.props.playbackData)
@@ -203,6 +216,14 @@ class SourcereelControlbar extends React.PureComponent<
     const secString = sec < 10 ? '0' + sec : sec;
     return minString + ':' + secString;
   };
+
+  private handleSaveTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ saveTitle: event.target.value });
+  };
+
+  private handleSaveDescriptionInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ saveDescription: event.target.value });
+  };
 }
 
 export interface ISourcereelControlbarProps {
@@ -225,6 +246,8 @@ export interface ISourcereelControlbarState {
   duration: number;
   fileDataBlob?: Blob;
   updater?: NodeJS.Timeout;
+  saveTitle: string;
+  saveDescription: string;
 }
 
 export default SourcereelControlbar;
