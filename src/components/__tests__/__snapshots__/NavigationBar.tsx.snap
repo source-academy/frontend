@@ -9,19 +9,23 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Source Academy
       </Blueprint3.NavbarHeading>
     </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" target=\\"_blank\\" to=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"book\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        News &amp; Material
-      </div>
-    </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" target=\\"_blank\\" to=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"chat\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Forum
-      </div>
-    </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
+    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+      <Blueprint3.Button minimal={true}>
+        <Blueprint3.Icon icon=\\"book\\" />
+        <div className=\\"navbar-button-text hidden-xs\\">
+          News &amp; Material
+        </div>
+      </Blueprint3.Button>
+    </a>
+    <a className=\\"NavigationBar__link\\" href=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+      <Blueprint3.Button minimal={true}>
+        <Blueprint3.Icon icon=\\"chat\\" />
+        <div className=\\"navbar-button-text hidden-xs\\">
+          Forum
+        </div>
+      </Blueprint3.Button>
+    </a>
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Playground
@@ -55,19 +59,23 @@ exports[`NavigationBar renders correctly with username 1`] = `
         Source Academy
       </Blueprint3.NavbarHeading>
     </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" target=\\"_blank\\" to=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"book\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        News &amp; Material
-      </div>
-    </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" target=\\"_blank\\" to=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"chat\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Forum
-      </div>
-    </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
+    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+      <Blueprint3.Button minimal={true}>
+        <Blueprint3.Icon icon=\\"book\\" />
+        <div className=\\"navbar-button-text hidden-xs\\">
+          News &amp; Material
+        </div>
+      </Blueprint3.Button>
+    </a>
+    <a className=\\"NavigationBar__link\\" href=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+      <Blueprint3.Button minimal={true}>
+        <Blueprint3.Icon icon=\\"chat\\" />
+        <div className=\\"navbar-button-text hidden-xs\\">
+          Forum
+        </div>
+      </Blueprint3.Button>
+    </a>
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Playground
