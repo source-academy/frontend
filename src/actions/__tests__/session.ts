@@ -14,6 +14,7 @@ import {
   submitAnswer,
   submitAssessment,
   submitGrading,
+  unsubmitSubmission,
   updateAssessment,
   updateAssessmentOverviews,
   updateGrading,
@@ -172,6 +173,17 @@ test('submitGrading generates correct action object', () => {
   });
 });
 
+test('unsubmitSubmission generates correct action object', () => {
+  const submissionId = 10;
+  const action = unsubmitSubmission(submissionId);
+  expect(action).toEqual({
+    type: actionTypes.UNSUBMIT_SUBMISSION,
+    payload: {
+      submissionId
+    }
+  });
+});
+
 test('updateHistoryHelpers generates correct action object', () => {
   const loc = 'location';
   const action = updateHistoryHelpers(loc);
@@ -244,6 +256,7 @@ test('updateGradingOverviews generates correct action object', () => {
       studentId: 100,
       studentName: 'test student',
       submissionId: 1,
+      submissionStatus: 'attempting',
       groupName: 'group'
     }
   ];

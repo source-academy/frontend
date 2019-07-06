@@ -52,25 +52,35 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <Icon icon={IconNames.CHAT} />
         <div className="navbar-button-text hidden-xs">Forum</div>
       </NavLink>
-    </NavbarGroup>
-
-    <NavbarGroup align={Alignment.RIGHT}>
-      <NavLink
-        activeClassName="bp3-active"
-        className="NavigationBar__link bp3-button bp3-minimal"
-        to="/mission-control"
-      >
-        <Icon icon={IconNames.CODE} />
-        <div className="navbar-button-text hidden-xs">Mission-Control</div>
-      </NavLink>
 
       <NavLink
-        activeClassName="bp3-active"
-        className="NavigationBar__link bp3-button bp3-minimal"
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
         <div className="navbar-button-text hidden-xs">Playground</div>
+      </NavLink>
+    </NavbarGroup>
+
+    <NavbarGroup align={Alignment.RIGHT}>
+      {/* To be reintroduced in the future */}
+      {/* <NavLink
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+        to="/mission-control"
+      >
+        <Icon icon={IconNames.CODE} />
+        <div className="navbar-button-text hidden-xs">Mission-Control</div>
+      </NavLink> */}
+
+      <NavLink
+        activeClassName="bp3-active"
+        className="NavigationBar__link bp3-button bp3-minimal"
+        to="/contributors"
+      >
+        <Icon icon={IconNames.HEART} />
+        <div className="navbar-button-text hidden-xs">Contributors</div>
       </NavLink>
 
       <div className="visible-xs">

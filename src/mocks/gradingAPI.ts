@@ -19,6 +19,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 0,
     studentName: 'Al Gorithm',
     submissionId: 0,
+    submissionStatus: 'attempted',
     groupName: '1D'
   },
   {
@@ -37,6 +38,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 0,
     studentName: 'Dee Sign',
     submissionId: 1,
+    submissionStatus: 'submitted',
     groupName: '1F'
   },
   {
@@ -55,6 +57,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 1,
     studentName: 'May Trix',
     submissionId: 2,
+    submissionStatus: 'submitted',
     groupName: '1F'
   }
 ];
