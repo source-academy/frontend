@@ -945,6 +945,10 @@
 
   // main function to be exported
   function draw_env(context) {
+    
+    // blink icon
+    const icon = document.getElementById("Env Visualizer-icon")
+    icon.classList.add("side-content-header-button-alert")
 		
     // reset current drawing
     fnObjectLayer.scene.clear()

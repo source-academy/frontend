@@ -18,13 +18,13 @@ const CHAP = '\xa7';
 const INTRODUCTION = `
 Welcome to the Source Academy playground!
 
-The language _Source_ is the official language of the textbook _Structure and
-Interpretation of Computer Programs, JavaScript Adaptation_. You have never
-heard of Source? No worries! It was invented just for the purpose of the book.
-Source is a sublanguage of ECMAScript 2016 (7th Edition) and defined in [the
-documents titled _"Source ${CHAP}x"_](${LINKS.SOURCE_DOCS}), where x refers to
-the respective textbook chapter. For example, Source ${CHAP}3 is suitable for
-textbook Chapter 3 and the preceeding chapters.
+The language _Source_ is the official language of the textbook [_Structure and
+Interpretation of Computer Programs, JavaScript Adaptation_](${LINKS.TEXTBOOK}).
+You have never heard of Source? No worries! It was invented just for the purpose
+of the book. Source is a sublanguage of ECMAScript 2016 (7th edition) and defined
+in [the documents titled _"Source ${CHAP}x"_](${LINKS.SOURCE_DOCS}), where x
+refers to the respective textbook chapter. For example, Source ${CHAP}3 is
+suitable for textbook chapter 3 and the preceeding chapters.
 
 The playground comes with an editor and a REPL, on the left and right of the
 screen, respectively. You may customise the layout of the playground by
@@ -201,7 +201,7 @@ const inspectorTab: SideContentTab = {
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.EYE_OPEN,
+  icon: IconNames.GLOBE,
   body: <EnvVisualizer />
 };
 
