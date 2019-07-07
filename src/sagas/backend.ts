@@ -263,7 +263,7 @@ function* backendSaga(): SagaIterator {
           gradingQuestion.grade = {
             gradeAdjustment,
             xpAdjustment,
-            comment,
+            comment: gradingQuestion.grade.comment,
             grade: gradingQuestion.grade.grade,
             xp: gradingQuestion.grade.xp
           };

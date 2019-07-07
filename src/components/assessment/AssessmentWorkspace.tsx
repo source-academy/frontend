@@ -10,8 +10,9 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-
+import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
@@ -356,21 +357,31 @@ class AssessmentWorkspace extends React.Component<
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;
     if (isGraded) {
-      tabs.push({
-        label: `Grading`,
-        icon: IconNames.TICK,
-        body: (
-          <GradingResult
-            comment={props.assessment!.questions[questionId].comment}
-            graderName={props.assessment!.questions[questionId].grader.name}
-            gradedAt={props.assessment!.questions[questionId].gradedAt}
-            xp={props.assessment!.questions[questionId].xp}
-            grade={props.assessment!.questions[questionId].grade}
-            maxGrade={props.assessment!.questions[questionId].maxGrade}
-            maxXp={props.assessment!.questions[questionId].maxXp}
-          />
-        )
-      });
+      tabs.push(
+        {
+          label: `Grading`,
+          icon: IconNames.TICK,
+          body: (
+            <GradingResult
+              graderName={props.assessment!.questions[questionId].grader.name}
+              gradedAt={props.assessment!.questions[questionId].gradedAt}
+              xp={props.assessment!.questions[questionId].xp}
+              grade={props.assessment!.questions[questionId].grade}
+              maxGrade={props.assessment!.questions[questionId].maxGrade}
+              maxXp={props.assessment!.questions[questionId].maxXp}
+            />
+          )
+        },
+        {
+          label: `Comments`,
+          icon: IconNames.CHAT,
+          body: USE_CHATKIT ? (
+            <ChatApp roomId={props.assessment!.questions[questionId].comment} />
+          ) : (
+            <span>Chatkit disabled.</span>
+          )
+        }
+      );
     }
 
     const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;
