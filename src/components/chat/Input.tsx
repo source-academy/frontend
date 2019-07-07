@@ -8,12 +8,12 @@ type StateProps = {
   message: string;
 };
 
-interface InputProps {
+interface IInputProps {
   onSubmit: (text: string) => void;
 }
 
-class Input extends React.Component<InputProps, StateProps> {
-  public constructor(props: InputProps) {
+class Input extends React.Component<IInputProps, StateProps> {
+  public constructor(props: IInputProps) {
     super(props);
     this.state = {
       message: ''

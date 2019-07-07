@@ -281,23 +281,34 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
       undefined
     );
 
+    const runButtonGrouping = () => {
+        if (this.props.isEditorAutorun) {
+          return autoRunButton;
+        }
+        if (this.props.isRunning) {
+          return stopButton;
+        }
+        if (this.props.isDebugging) {
+          return null;
+        }
+        return runButton;
+      };
+
+    const pauseButtonGrouping = () => {
+        if (this.props.isRunning && !this.props.isDebugging) {
+          return pauseButton;
+        }
+        if (!this.props.isRunning && this.props.isDebugging) {
+          return resumeButton;
+        }
+        return null;
+      };
+
     return (
       <div className={classNames('ControlBar_editor', Classes.BUTTON_GROUP)}>
         {toggleAutorunButton}
-        {this.props.isEditorAutorun
-          ? autoRunButton
-          : this.props.isRunning
-          ? stopButton
-          : this.props.isDebugging
-          ? null
-          : runButton}
-        {this.props.isRunning
-          ? this.props.isDebugging
-            ? null
-            : pauseButton
-          : this.props.isDebugging
-          ? resumeButton
-          : null}
+        {runButtonGrouping()}
+        {pauseButtonGrouping()}
         {this.props.isDebugging ? debuggerResetButton : null}
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton} {resetTemplateButton}

@@ -18,11 +18,11 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
             <div className="row autograder-program">
               <div className="col autograder-expected">
                 Expected Answer:
-                <Pre className="bp3-code-block">{this.props.result.expected!}</Pre>
+                <Pre>{this.props.result.expected!}</Pre>
               </div>
               <div className="col autograder-actual">
                 Actual Answer:
-                <Pre className="bp3-code-block">{this.props.result.actual!}</Pre>
+                <Pre>{this.props.result.actual!}</Pre>
               </div>
             </div>
           );
@@ -46,7 +46,7 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
             <div key={index} className="autograder-error">
               <div className="row error-explanation">
                 {'Error: '}
-                <Pre className="bp3-code-block">{'Timeout... Your code ran for too long'}</Pre>
+                <Pre>{'Timeout... Your code ran for too long'}</Pre>
               </div>
             </div>
           );
@@ -59,7 +59,7 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
               </div>
               <div className="row error-explanation">
                 {'Error: '}
-                <Pre className="bp3-code-block">
+                <Pre>
                   {'Line ' + error.line + ': ' + error.errorExplanation}
                 </Pre>
               </div>

@@ -33,19 +33,19 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
             )}
           </div>
           <div className="row autograder-program">
-            <Pre className="bp3-code-block">{this.props.testcase.program}</Pre>
+            <Pre>{this.props.testcase.program}</Pre>
           </div>
           <div className="row">
             <div className="col autograder-expected">
               Expected Answer:
-              <Pre className="bp3-code-block">{this.props.testcase.answer}</Pre>
+              <Pre>{this.props.testcase.answer}</Pre>
             </div>
             <div className="col autograder-actual">
               Actual Answer:
               {this.props.testcase.result ? (
-                <Pre className="bp3-code-block">{stringify(this.props.testcase.result)}</Pre>
+                <Pre>{stringify(this.props.testcase.result)}</Pre>
               ) : (
-                <Pre className="bp3-code-block">No Answer</Pre>
+                <Pre>No Answer</Pre>
               )}
             </div>
           </div>
