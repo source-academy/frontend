@@ -11,8 +11,6 @@ import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import { DeltaData, DeltaType, IPlaybackData, RecordingStatus } from './sourcecastShape';
 
-const INTRODUCTION = 'Welcome to Source Cast Recording!';
-
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
@@ -182,6 +180,8 @@ class Sourcereel extends React.Component<ISourcereelProps> {
     this.props.timeElapsedBeforePause + Date.now() - this.props.timeResumed;
 }
 
+const INTRODUCTION = 'Welcome to Sourcereel!';
+
 const sourcereelIntroductionTab: SideContentTab = {
   label: 'Introduction',
   icon: IconNames.COMPASS,
@@ -202,7 +202,7 @@ const inspectorTab: SideContentTab = {
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.EYE_OPEN,
+  icon: IconNames.GLOBE,
   body: <EnvVisualizer />
 };
 

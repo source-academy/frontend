@@ -121,7 +121,7 @@ class SourcecastControlbar extends React.PureComponent<
     this.props.handleRecordAudioUrl(url);
     const playbackData = JSON.parse(item.deltas);
     console.log(playbackData);
-    this.props.handleSetSourcecastData(playbackData);
+    this.props.handleSetSourcecastData(item.description, playbackData);
     this.setState({ currentSourcecastItem: item });
   };
 
@@ -271,7 +271,7 @@ export interface ISourcecastControlbarProps {
   handleRecordAudioUrl: (audioUrl: string) => void;
   handleSetCodeDeltasToApply: (deltas: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
-  handleSetSourcecastData: (playbackData: IPlaybackData) => void;
+  handleSetSourcecastData: (description: string, playbackData: IPlaybackData) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
   handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) => void;

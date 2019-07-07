@@ -16,14 +16,13 @@ import {
   PlaybackStatus
 } from './sourcecastShape';
 
-const INTRODUCTION = 'Welcome to Source Cast!';
-
 export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
   activeTab: number;
   audioUrl: string;
   codeDeltasToApply: ICodeDelta[] | null;
+  description: string | null;
   editorCursorPositionToBeApplied: IPosition;
   editorSelectionDataToBeApplied: ISelectionData;
   editorReadonly: boolean;
@@ -75,7 +74,7 @@ export interface IDispatchProps {
   handleSetCodeDeltasToApply: (delta: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
-  handleSetSourcecastData: (playbackData: IPlaybackData) => void;
+  handleSetSourcecastData: (description: string, playbackData: IPlaybackData) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
@@ -157,7 +156,18 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [sourcecastIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
+        tabs: [
+          {
+            label: 'Introduction',
+            icon: IconNames.COMPASS,
+            body: (
+              <Markdown content={this.props.description ? this.props.description : INTRODUCTION} />
+            )
+          },
+          listVisualizerTab,
+          inspectorTab,
+          envVisualizerTab
+        ]
       },
       sourcecastControlbarProps: {
         handleEditorValueChange: this.props.handleEditorValueChange,
@@ -185,11 +195,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
   }
 }
 
-const sourcecastIntroductionTab: SideContentTab = {
-  label: 'Introduction',
-  icon: IconNames.COMPASS,
-  body: <Markdown content={INTRODUCTION} />
-};
+const INTRODUCTION = 'Welcome to Sourcecast!';
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
@@ -205,7 +211,7 @@ const inspectorTab: SideContentTab = {
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.EYE_OPEN,
+  icon: IconNames.GLOBE,
   body: <EnvVisualizer />
 };
 

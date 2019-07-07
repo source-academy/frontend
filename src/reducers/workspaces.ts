@@ -36,7 +36,7 @@ import {
   SET_DELTAS_TO_APPLY,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
-  SET_SOURCECAST_PLAYBACK_DATA,
+  SET_SOURCECAST_DATA,
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_STATUS,
   SET_WEBSOCKET_STATUS,
@@ -570,9 +570,13 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         }
       };
-    case SET_SOURCECAST_PLAYBACK_DATA:
+    case SET_SOURCECAST_DATA:
       return {
         ...state,
+        sourcecast: {
+          ...state.sourcecast,
+          description: action.payload.description
+        },
         sourcereel: {
           ...state.sourcereel,
           playbackData: action.payload.playbackData

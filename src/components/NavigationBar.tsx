@@ -93,15 +93,6 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/sourcereel"
-      >
-        <Icon icon={IconNames.MOBILE_VIDEO} />
-        <div className="navbar-button-text hidden-xs">Sourcereel</div>
-      </NavLink>
-
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/contributors"
       >
         <Icon icon={IconNames.HEART} />
