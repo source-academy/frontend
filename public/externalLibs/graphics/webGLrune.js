@@ -519,15 +519,11 @@ function translate(x, y, shape) {
 }
 
 /**
- * makes a new Rune from two given Runes by
- * placing the first on top of the second
- * such that the first one occupies frac 
- * portion of the height of the result and 
- * the second the rest
- * @param {Rune} shape1 - given Rune
- * @param {Rune} shape2 - given Rune
- * @param {number} frac - fraction between 0 and 1
- * @return {Rune} - resulting Rune
+ * rotates a given rune by a given angle,
+ * given in radians, in anti-clockwise direction
+ * @param {number} rad - fraction between 0 and 1
+ * @param {Rune} shape - given Rune
+ * @returns {Rune} - rotated Rune
  */
 function rotate(rad, shape) {
   var rotateMat = mat4.create()
@@ -564,7 +560,6 @@ function stack_frac(frac, shape1, shape2) {
  * result
  * @param {Rune} shape1 - given Rune
  * @param {Rune} shape2 - given Rune
- * @param {number} frac - fraction between 0 and 1
  * @return {Rune} - resulting Rune
  */
 function stack(shape1, shape2) {
@@ -893,7 +888,6 @@ function overlay_frac(frac, shape1, shape2) {
  * result
  * @param {Rune} shape1 - given Rune
  * @param {Rune} shape2 - given Rune
- * @param {number} frac - fraction between 0 and 1
  * @return {Rune} - resulting Rune
  */
 function overlay(shape1, shape2) {
