@@ -8,7 +8,13 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { ICodeDelta, IPlaybackData, IPosition, PlaybackStatus } from './sourcecastShape';
+import {
+  ICodeDelta,
+  IPlaybackData,
+  IPosition,
+  ISelectionRange,
+  PlaybackStatus
+} from './sourcecastShape';
 
 const INTRODUCTION = 'Welcome to Source Cast!';
 
@@ -17,8 +23,9 @@ export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 export interface IStateProps {
   activeTab: number;
   audioUrl: string;
-  deltasToApply: ICodeDelta[] | null;
+  codeDeltasToApply: ICodeDelta[] | null;
   editorCursorPositionToBeApplied: IPosition;
+  editorSelectionRangeToBeApplied: ISelectionRange;
   editorReadonly: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -65,7 +72,7 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleSetDeltasToApply: (delta: ICodeDelta[]) => void;
+  handleSetCodeDeltasToApply: (delta: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetSourcecastData: (playbackData: IPlaybackData) => void;
@@ -75,6 +82,7 @@ export interface IDispatchProps {
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
   handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) => void;
+  handleUpdateEditorSelectionRange: (editorSelectionRangeToBeApplied: ISelectionRange) => void;
 }
 
 class Sourcecast extends React.Component<ISourcecastProps> {
@@ -117,8 +125,9 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         sourceChapter: this.props.sourceChapter
       },
       editorProps: {
-        deltasToApply: this.props.deltasToApply,
+        codeDeltasToApply: this.props.codeDeltasToApply,
         editorCursorPositionToBeApplied: this.props.editorCursorPositionToBeApplied,
+        editorSelectionRangeToBeApplied: this.props.editorSelectionRangeToBeApplied,
         editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
@@ -154,12 +163,13 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleFetchSourcecastIndex: this.props.handleFetchSourcecastIndex,
         handleRecordAudioUrl: this.props.handleRecordAudioUrl,
-        handleSetDeltasToApply: this.props.handleSetDeltasToApply,
+        handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
         handleSetSourcecastData: this.props.handleSetSourcecastData,
         handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
         handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
         handleUpdateEditorCursorPosition: this.props.handleUpdateEditorCursorPosition,
+        handleUpdateEditorSelectionRange: this.props.handleUpdateEditorSelectionRange,
         audioUrl: this.props.audioUrl,
         duration: this.props.playbackDuration,
         playbackData: this.props.playbackData,

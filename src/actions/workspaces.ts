@@ -2,10 +2,12 @@ import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
 import {
+  DeltaData,
   DeltaType,
   ICodeDelta,
   IPlaybackData,
   IPosition,
+  ISelectionRange,
   PlaybackStatus
 } from '../components/sourcecast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
@@ -359,7 +361,7 @@ export const setSourcecastStatus: ActionCreator<actionTypes.IAction> = (
 export const recordEditorDelta: ActionCreator<actionTypes.IAction> = (
   type: DeltaType,
   time: number,
-  delta: ICodeDelta | IPosition
+  delta: DeltaData
 ) => ({
   type: actionTypes.RECORD_EDITOR_DELTA,
   payload: {
@@ -431,5 +433,16 @@ export const updateEditorCursorPosition: ActionCreator<actionTypes.IAction> = (
   payload: {
     workspaceLocation,
     editorCursorPositionToBeApplied
+  }
+});
+
+export const updateEditorSelectionRange: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  editorSelectionRangeToBeApplied: ISelectionRange
+) => ({
+  type: actionTypes.UPDATE_EDITOR_SELECTION_RANGE,
+  payload: {
+    workspaceLocation,
+    editorSelectionRangeToBeApplied
   }
 });

@@ -17,6 +17,7 @@ import {
   ICodeDelta,
   IPlaybackData,
   IPosition,
+  ISelectionRange,
   ISourcecastData,
   PlaybackStatus,
   RecordingStatus
@@ -63,8 +64,9 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 
 export interface ISourcecast extends IWorkspaceState {
   readonly sourcecastIndex: ISourcecastData[] | null;
-  readonly deltasToApply: ICodeDelta[] | null;
+  readonly codeDeltasToApply: ICodeDelta[] | null;
   readonly editorCursorPositionToBeApplied: IPosition;
+  readonly editorSelectionRangeToBeApplied: ISelectionRange;
   readonly playbackData: IPlaybackData;
   readonly playbackDuration: number;
   readonly playbackStatus: PlaybackStatus;
@@ -296,8 +298,9 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   sourcecast: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
-    deltasToApply: null,
+    codeDeltasToApply: null,
     editorCursorPositionToBeApplied: { row: 0, column: 0 },
+    editorSelectionRangeToBeApplied: { start: { row: 0, column: 0 }, end: { row: 0, column: 0 } },
     playbackData: {
       init: { editorValue: '' },
       deltas: []

@@ -1,3 +1,4 @@
+import { isEqual } from 'lodash';
 import * as React from 'react';
 import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
@@ -7,7 +8,13 @@ import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
 
 import { LINKS } from '../../utils/constants';
-import { DeltaType, ICodeDelta, IPosition } from '../sourcecast/sourcecastShape';
+import {
+  DeltaData,
+  DeltaType,
+  ICodeDelta,
+  IPosition,
+  ISelectionRange
+} from '../sourcecast/sourcecastShape';
 import { checkSessionIdExists } from './collabEditing/helper';
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -19,8 +26,9 @@ import { checkSessionIdExists } from './collabEditing/helper';
  */
 export interface IEditorProps {
   breakpoints: string[];
-  deltasToApply?: ICodeDelta[] | null;
+  codeDeltasToApply?: ICodeDelta[] | null;
   editorCursorPositionToBeApplied?: IPosition;
+  editorSelectionRangeToBeApplied?: ISelectionRange;
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -35,7 +43,7 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
-  handleRecordEditorDelta?: (type: DeltaType, time: number, delta: ICodeDelta | IPosition) => void;
+  handleRecordEditorDelta?: (type: DeltaType, time: number, delta: DeltaData) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -43,7 +51,7 @@ export interface IEditorProps {
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
-  private onChangeMethod: (newCode: string, delta: ICodeDelta | IPosition) => void;
+  private onChangeMethod: (newCode: string, delta: DeltaData) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
   private onCursorChange: (selecction: any) => void;
   private onSelectionChange: (selection: any) => void;
@@ -71,26 +79,40 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
     };
     this.onCursorChange = (selection: any) => {
-      const editorCursorPositionToBeApplied: IPosition = selection.getCursor();
-      if (this.props.isRecording) {
-        this.props.handleRecordEditorDelta!(
-          DeltaType.cursorPositionChange,
-          this.props.getTimerDuration!(),
-          editorCursorPositionToBeApplied
-        );
+      if (!this.props.isRecording) {
+        return;
       }
+      const editorCursorPositionToBeApplied: IPosition = selection.getCursor();
+      this.props.handleRecordEditorDelta!(
+        DeltaType.cursorPositionChange,
+        this.props.getTimerDuration!(),
+        editorCursorPositionToBeApplied
+      );
     };
     this.onSelectionChange = (selection: any) => {
-      // tslint:disable-next-line: no-console
-      console.log(selection.getRange());
+      if (!this.props.isRecording) {
+        return;
+      }
+      const range: ISelectionRange = selection.getRange();
+      if (!isEqual(range.start, range.end)) {
+        this.props.handleRecordEditorDelta!(
+          DeltaType.selectionRangeChange,
+          this.props.getTimerDuration!(),
+          range
+        );
+      }
     };
   }
 
   public componentDidUpdate(prevProps: IEditorProps) {
-    if (this.props.deltasToApply && this.props.deltasToApply !== prevProps.deltasToApply) {
+    if (
+      this.props.codeDeltasToApply &&
+      this.props.codeDeltasToApply !== prevProps.codeDeltasToApply
+    ) {
       (this.AceEditor.current as any).editor.session
         .getDocument()
-        .applyDeltas(this.props.deltasToApply);
+        .applyDeltas(this.props.codeDeltasToApply);
+      (this.AceEditor.current as any).editor.selection.clearSelection();
     }
     if (
       this.props.editorCursorPositionToBeApplied &&
@@ -103,6 +125,16 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(
         this.props.editorCursorPositionToBeApplied,
         0.5
+      );
+    }
+    if (
+      this.props.editorSelectionRangeToBeApplied &&
+      this.props.editorSelectionRangeToBeApplied !== prevProps.editorSelectionRangeToBeApplied
+    ) {
+      // (this.AceEditor.current as any).editor.selection.clearSelection();
+      (this.AceEditor.current as any).editor.selection.setSelectionRange(
+        this.props.editorSelectionRangeToBeApplied,
+        false
       );
     }
   }

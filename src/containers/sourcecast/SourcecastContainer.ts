@@ -4,6 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import {
   IPlaybackData,
   IPosition,
+  ISelectionRange,
   PlaybackStatus
 } from 'src/components/sourcecast/sourcecastShape';
 import {
@@ -36,6 +37,7 @@ import {
   setWebsocketStatus,
   toggleEditorAutorun,
   updateEditorCursorPosition,
+  updateEditorSelectionRange,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -47,8 +49,9 @@ import { IState } from '../../reducers/states';
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.sourcecast.sideContentActiveTab,
   audioUrl: state.workspaces.sourcereel.audioUrl,
-  deltasToApply: state.workspaces.sourcecast.deltasToApply,
+  codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   editorCursorPositionToBeApplied: state.workspaces.sourcecast.editorCursorPositionToBeApplied,
+  editorSelectionRangeToBeApplied: state.workspaces.sourcecast.editorSelectionRangeToBeApplied,
   editorReadonly: state.workspaces.sourcecast.editorReadonly,
   editorSessionId: state.workspaces.sourcecast.editorSessionId,
   editorWidth: state.workspaces.sourcecast.editorWidth,
@@ -97,7 +100,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSetDeltasToApply: setDeltasToApply,
+      handleSetCodeDeltasToApply: setDeltasToApply,
       handleSetEditorReadonly: (editorReadonly: boolean) =>
         setEditorReadonly(location, editorReadonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
@@ -113,6 +116,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
       handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) =>
         updateEditorCursorPosition(location, editorCursorPositionToBeApplied),
+      handleUpdateEditorSelectionRange: (editorSelectionRangeToBeApplied: ISelectionRange) =>
+        updateEditorSelectionRange(location, editorSelectionRangeToBeApplied),
       handleDebuggerPause: () => beginDebuggerPause(location),
       handleDebuggerResume: () => debuggerResume(location),
       handleDebuggerReset: () => debuggerReset(location)

@@ -49,6 +49,7 @@ import {
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_CURSOR_POSITION,
+  UPDATE_EDITOR_SELECTION_RANGE,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
@@ -544,7 +545,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         sourcecast: {
           ...state.sourcecast,
-          deltasToApply: action.payload.deltas
+          codeDeltasToApply: action.payload.deltas
         }
       };
     case SET_EDITOR_SESSION_ID:
@@ -692,6 +693,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           editorCursorPositionToBeApplied: action.payload.editorCursorPositionToBeApplied
+        }
+      };
+    case UPDATE_EDITOR_SELECTION_RANGE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorSelectionRangeToBeApplied: action.payload.editorSelectionRangeToBeApplied
         }
       };
     case UPDATE_EDITOR_VALUE:
