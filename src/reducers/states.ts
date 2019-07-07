@@ -65,6 +65,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 export interface ISourcecast extends IWorkspaceState {
   readonly sourcecastIndex: ISourcecastData[] | null;
   readonly codeDeltasToApply: ICodeDelta[] | null;
+  readonly title: string | null;
   readonly description: string | null;
   readonly editorCursorPositionToBeApplied: IPosition;
   readonly editorSelectionDataToBeApplied: ISelectionData;
@@ -300,6 +301,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   sourcecast: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
     codeDeltasToApply: null,
+    title: null,
     description: null,
     editorCursorPositionToBeApplied: { row: 0, column: 0 },
     editorSelectionDataToBeApplied: {

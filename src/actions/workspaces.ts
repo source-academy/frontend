@@ -333,11 +333,13 @@ export const setDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: ICo
 });
 
 export const setSourcecastData: ActionCreator<actionTypes.IAction> = (
+  title: string,
   description: string,
   playbackData: IPlaybackData
 ) => ({
   type: actionTypes.SET_SOURCECAST_DATA,
   payload: {
+    title,
     description,
     playbackData
   }

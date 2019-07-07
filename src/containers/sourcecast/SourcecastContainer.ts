@@ -50,6 +50,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.sourcecast.sideContentActiveTab,
   audioUrl: state.workspaces.sourcereel.audioUrl,
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
+  title: state.workspaces.sourcecast.title,
   description: state.workspaces.sourcecast.description,
   editorCursorPositionToBeApplied: state.workspaces.sourcecast.editorCursorPositionToBeApplied,
   editorSelectionDataToBeApplied: state.workspaces.sourcecast.editorSelectionDataToBeApplied,
@@ -106,8 +107,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setEditorReadonly(location, editorReadonly),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(location, editorSessionId),
-      handleSetSourcecastData: (description: string, playbackData: IPlaybackData) =>
-        setSourcecastData(description, playbackData),
+      handleSetSourcecastData: (title: string, description: string, playbackData: IPlaybackData) =>
+        setSourcecastData(title, description, playbackData),
       handleSetSourcecastDuration: (duration: number) => setSourcecastDuration(duration),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         setSourcecastStatus(playbackStatus),

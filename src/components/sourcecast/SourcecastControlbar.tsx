@@ -1,10 +1,8 @@
 /* tslint:disable:no-console */
-import { Button, MenuItem, Slider } from '@blueprintjs/core';
+import { Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
-import { BACKEND_URL } from '../../utils/constants';
 import { controlButton } from '../commons';
 import {
   DeltaType,
@@ -15,19 +13,6 @@ import {
   ISourcecastData,
   PlaybackStatus
 } from './sourcecastShape';
-
-const SourcecastSelect = Select.ofType<ISourcecastData>();
-
-const sourcecastPredicate: ItemPredicate<ISourcecastData> = (query, item) => {
-  return item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
-};
-
-const sourcecastRenderer: ItemRenderer<ISourcecastData> = (
-  item,
-  { handleClick, modifiers, query }
-) => (
-  <MenuItem active={false} key={item.id} onClick={handleClick} text={item.id + '. ' + item.name} />
-);
 
 class SourcecastControlbar extends React.PureComponent<
   ISourcecastControlbarProps,
@@ -48,11 +33,6 @@ class SourcecastControlbar extends React.PureComponent<
   }
 
   public render() {
-    const LoadIndexButton = controlButton(
-      'Load Index',
-      IconNames.LIST,
-      this.props.handleFetchSourcecastIndex
-    );
     const PlayerPlayButton = controlButton('Play', IconNames.PLAY, this.handlePlayerPlaying);
     const PlayerPauseButton = controlButton('Pause', IconNames.PAUSE, this.handlePlayerPausing);
     const PlayerResumeButton = controlButton('Resume', IconNames.PLAY, this.handlePlayerResuming);
@@ -70,30 +50,6 @@ class SourcecastControlbar extends React.PureComponent<
         />
         <br />
         <div>
-          <div className="PlayerControl">
-            {LoadIndexButton}
-            {this.props.sourcecastIndex && (
-              <SourcecastSelect
-                className="pt-minimal"
-                items={this.props.sourcecastIndex}
-                onItemSelect={this.handleSelect}
-                itemPredicate={sourcecastPredicate}
-                itemRenderer={sourcecastRenderer}
-                noResults={<MenuItem disabled={true} text="No recording matched" />}
-                filterable={true}
-              >
-                <Button
-                  className="pt-minimal"
-                  text={
-                    this.state.currentSourcecastItem
-                      ? this.state.currentSourcecastItem.name
-                      : 'No recording selected'
-                  }
-                  rightIcon="double-caret-vertical"
-                />
-              </SourcecastSelect>
-            )}
-          </div>
           <div className="Slider">
             <Slider
               min={0}
@@ -114,16 +70,6 @@ class SourcecastControlbar extends React.PureComponent<
       </div>
     );
   }
-
-  private handleSelect = (item: ISourcecastData, e: React.ChangeEvent<HTMLSelectElement>) => {
-    const url = BACKEND_URL + item.url;
-    console.log(url);
-    this.props.handleRecordAudioUrl(url);
-    const playbackData = JSON.parse(item.deltas);
-    console.log(playbackData);
-    this.props.handleSetSourcecastData(item.description, playbackData);
-    this.setState({ currentSourcecastItem: item });
-  };
 
   private handleSeeked = () => {
     // FIXME: loop in applyPlaybackDataFromStart keeps running if seeked from paused mode
@@ -267,11 +213,8 @@ class SourcecastControlbar extends React.PureComponent<
 
 export interface ISourcecastControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
-  handleFetchSourcecastIndex: () => void;
-  handleRecordAudioUrl: (audioUrl: string) => void;
   handleSetCodeDeltasToApply: (deltas: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
-  handleSetSourcecastData: (description: string, playbackData: IPlaybackData) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
   handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) => void;
@@ -280,7 +223,6 @@ export interface ISourcecastControlbarProps {
   duration: number;
   playbackData: IPlaybackData;
   playbackStatus: PlaybackStatus;
-  sourcecastIndex: ISourcecastData[] | null;
 }
 
 export interface ISourcecastControlbarState {

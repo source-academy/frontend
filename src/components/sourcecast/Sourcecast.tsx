@@ -15,6 +15,7 @@ import {
   ISelectionData,
   PlaybackStatus
 } from './sourcecastShape';
+import SourcecastTable from './SourcecastTable';
 
 export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 
@@ -22,6 +23,7 @@ export interface IStateProps {
   activeTab: number;
   audioUrl: string;
   codeDeltasToApply: ICodeDelta[] | null;
+  title: string | null;
   description: string | null;
   editorCursorPositionToBeApplied: IPosition;
   editorSelectionDataToBeApplied: ISelectionData;
@@ -74,7 +76,11 @@ export interface IDispatchProps {
   handleSetCodeDeltasToApply: (delta: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
-  handleSetSourcecastData: (description: string, playbackData: IPlaybackData) => void;
+  handleSetSourcecastData: (
+    title: string,
+    description: string,
+    playbackData: IPlaybackData
+  ) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
@@ -161,7 +167,21 @@ class Sourcecast extends React.Component<ISourcecastProps> {
             label: 'Introduction',
             icon: IconNames.COMPASS,
             body: (
-              <Markdown content={this.props.description ? this.props.description : INTRODUCTION} />
+              <div>
+                <Markdown
+                  content={
+                    this.props.title
+                      ? 'Title: ' + this.props.title + '\nDescription: ' + this.props.description
+                      : INTRODUCTION
+                  }
+                />
+                <SourcecastTable
+                  handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
+                  handleRecordAudioUrl={this.props.handleRecordAudioUrl}
+                  handleSetSourcecastData={this.props.handleSetSourcecastData}
+                  sourcecastIndex={this.props.sourcecastIndex}
+                />
+              </div>
             )
           },
           listVisualizerTab,
@@ -171,11 +191,8 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       },
       sourcecastControlbarProps: {
         handleEditorValueChange: this.props.handleEditorValueChange,
-        handleFetchSourcecastIndex: this.props.handleFetchSourcecastIndex,
-        handleRecordAudioUrl: this.props.handleRecordAudioUrl,
         handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
         handleSetEditorReadonly: this.props.handleSetEditorReadonly,
-        handleSetSourcecastData: this.props.handleSetSourcecastData,
         handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
         handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
         handleUpdateEditorCursorPosition: this.props.handleUpdateEditorCursorPosition,
@@ -183,8 +200,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         audioUrl: this.props.audioUrl,
         duration: this.props.playbackDuration,
         playbackData: this.props.playbackData,
-        playbackStatus: this.props.playbackStatus,
-        sourcecastIndex: this.props.sourcecastIndex
+        playbackStatus: this.props.playbackStatus
       }
     };
     return (

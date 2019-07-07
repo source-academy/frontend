@@ -575,6 +575,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         sourcecast: {
           ...state.sourcecast,
+          title: action.payload.title,
           description: action.payload.description
         },
         sourcereel: {
