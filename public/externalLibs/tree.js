@@ -1,9 +1,13 @@
 // tree.js: Binary Tree abstraction for M5
 // requires list.js
 
-// Author: Joel Lee
+// Authors: Joel Lee, Martin Henz
 
-// make_empty_binary_tree returns an empty list
+/**
+ * returns an empty binary tree, represented by the empty list null
+ * @return {binarytree} empty binary tree
+ */
+
 function make_empty_binary_tree() {
   return null
 }

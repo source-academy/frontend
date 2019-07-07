@@ -64,6 +64,12 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
   return new ShapeDrawn()
 }
 
+/**
+ * returns a function that draws a given curve, using
+ * {num} sample points, and connects them with a line 
+ * @return {function} curve drawing function
+ */
+
 function draw_connected(num) {
   return function(func) {
     return generateCurve('none', 'lines', num, func)
