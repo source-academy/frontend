@@ -13,6 +13,7 @@ import {
   DeltaType,
   ICodeDelta,
   IPosition,
+  ISelectionData,
   ISelectionRange
 } from '../sourcecast/sourcecastShape';
 import { checkSessionIdExists } from './collabEditing/helper';
@@ -28,7 +29,7 @@ export interface IEditorProps {
   breakpoints: string[];
   codeDeltasToApply?: ICodeDelta[] | null;
   editorCursorPositionToBeApplied?: IPosition;
-  editorSelectionRangeToBeApplied?: ISelectionRange;
+  editorSelectionDataToBeApplied?: ISelectionData;
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -94,11 +95,12 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         return;
       }
       const range: ISelectionRange = selection.getRange();
+      const isBackwards: boolean = selection.isBackwards();
       if (!isEqual(range.start, range.end)) {
         this.props.handleRecordEditorDelta!(
-          DeltaType.selectionRangeChange,
+          DeltaType.selectionRangeData,
           this.props.getTimerDuration!(),
-          range
+          { range, isBackwards }
         );
       }
     };
@@ -128,14 +130,11 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       );
     }
     if (
-      this.props.editorSelectionRangeToBeApplied &&
-      this.props.editorSelectionRangeToBeApplied !== prevProps.editorSelectionRangeToBeApplied
+      this.props.editorSelectionDataToBeApplied &&
+      this.props.editorSelectionDataToBeApplied !== prevProps.editorSelectionDataToBeApplied
     ) {
-      // (this.AceEditor.current as any).editor.selection.clearSelection();
-      (this.AceEditor.current as any).editor.selection.setSelectionRange(
-        this.props.editorSelectionRangeToBeApplied,
-        false
-      );
+      const { range, isBackwards } = { ...this.props.editorSelectionDataToBeApplied };
+      (this.AceEditor.current as any).editor.selection.setSelectionRange(range, isBackwards);
     }
   }
 

@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import {
   IPlaybackData,
   IPosition,
-  ISelectionRange,
+  ISelectionData,
   PlaybackStatus
 } from 'src/components/sourcecast/sourcecastShape';
 import {
@@ -37,7 +37,7 @@ import {
   setWebsocketStatus,
   toggleEditorAutorun,
   updateEditorCursorPosition,
-  updateEditorSelectionRange,
+  updateEditorSelectionData,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -51,7 +51,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   audioUrl: state.workspaces.sourcereel.audioUrl,
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   editorCursorPositionToBeApplied: state.workspaces.sourcecast.editorCursorPositionToBeApplied,
-  editorSelectionRangeToBeApplied: state.workspaces.sourcecast.editorSelectionRangeToBeApplied,
+  editorSelectionDataToBeApplied: state.workspaces.sourcecast.editorSelectionDataToBeApplied,
   editorReadonly: state.workspaces.sourcecast.editorReadonly,
   editorSessionId: state.workspaces.sourcecast.editorSessionId,
   editorWidth: state.workspaces.sourcecast.editorWidth,
@@ -116,8 +116,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
       handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) =>
         updateEditorCursorPosition(location, editorCursorPositionToBeApplied),
-      handleUpdateEditorSelectionRange: (editorSelectionRangeToBeApplied: ISelectionRange) =>
-        updateEditorSelectionRange(location, editorSelectionRangeToBeApplied),
+      handleUpdateEditorSelectionData: (editorSelectionDataToBeApplied: ISelectionData) =>
+        updateEditorSelectionData(location, editorSelectionDataToBeApplied),
       handleDebuggerPause: () => beginDebuggerPause(location),
       handleDebuggerResume: () => debuggerResume(location),
       handleDebuggerReset: () => debuggerReset(location)

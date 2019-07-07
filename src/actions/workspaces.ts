@@ -7,7 +7,7 @@ import {
   ICodeDelta,
   IPlaybackData,
   IPosition,
-  ISelectionRange,
+  ISelectionData,
   PlaybackStatus
 } from '../components/sourcecast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
@@ -436,13 +436,13 @@ export const updateEditorCursorPosition: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const updateEditorSelectionRange: ActionCreator<actionTypes.IAction> = (
+export const updateEditorSelectionData: ActionCreator<actionTypes.IAction> = (
   workspaceLocation: WorkspaceLocation,
-  editorSelectionRangeToBeApplied: ISelectionRange
+  editorSelectionDataToBeApplied: ISelectionData
 ) => ({
-  type: actionTypes.UPDATE_EDITOR_SELECTION_RANGE,
+  type: actionTypes.UPDATE_EDITOR_SELECTION_DATA,
   payload: {
     workspaceLocation,
-    editorSelectionRangeToBeApplied
+    editorSelectionDataToBeApplied
   }
 });

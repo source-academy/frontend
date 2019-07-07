@@ -49,7 +49,7 @@ import {
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_CURSOR_POSITION,
-  UPDATE_EDITOR_SELECTION_RANGE,
+  UPDATE_EDITOR_SELECTION_DATA,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
@@ -695,12 +695,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           editorCursorPositionToBeApplied: action.payload.editorCursorPositionToBeApplied
         }
       };
-    case UPDATE_EDITOR_SELECTION_RANGE:
+    case UPDATE_EDITOR_SELECTION_DATA:
       return {
         ...state,
         [location]: {
           ...state[location],
-          editorSelectionRangeToBeApplied: action.payload.editorSelectionRangeToBeApplied
+          editorSelectionDataToBeApplied: action.payload.editorSelectionDataToBeApplied
         }
       };
     case UPDATE_EDITOR_VALUE:

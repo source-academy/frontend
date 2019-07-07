@@ -11,7 +11,7 @@ import {
   ICodeDelta,
   IPlaybackData,
   IPosition,
-  ISelectionRange,
+  ISelectionData,
   ISourcecastData,
   PlaybackStatus
 } from './sourcecastShape';
@@ -175,8 +175,8 @@ class SourcecastControlbar extends React.PureComponent<
           case DeltaType.cursorPositionChange:
             this.props.handleUpdateEditorCursorPosition(futureData[i].data as IPosition);
             break;
-          case DeltaType.selectionRangeChange:
-            this.props.handleUpdateEditorSelectionRange(futureData[i].data as ISelectionRange);
+          case DeltaType.selectionRangeData:
+            this.props.handleUpdateEditorSelectionData(futureData[i].data as ISelectionData);
             break;
         }
         i++;
@@ -275,7 +275,7 @@ export interface ISourcecastControlbarProps {
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
   handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) => void;
-  handleUpdateEditorSelectionRange: (editorSelectionRangeToBeApplied: ISelectionRange) => void;
+  handleUpdateEditorSelectionData: (editorSelectionDataToBeApplied: ISelectionData) => void;
   audioUrl: string;
   duration: number;
   playbackData: IPlaybackData;

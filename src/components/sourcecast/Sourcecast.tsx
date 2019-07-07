@@ -12,7 +12,7 @@ import {
   ICodeDelta,
   IPlaybackData,
   IPosition,
-  ISelectionRange,
+  ISelectionData,
   PlaybackStatus
 } from './sourcecastShape';
 
@@ -25,7 +25,7 @@ export interface IStateProps {
   audioUrl: string;
   codeDeltasToApply: ICodeDelta[] | null;
   editorCursorPositionToBeApplied: IPosition;
-  editorSelectionRangeToBeApplied: ISelectionRange;
+  editorSelectionDataToBeApplied: ISelectionData;
   editorReadonly: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -82,7 +82,7 @@ export interface IDispatchProps {
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
   handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) => void;
-  handleUpdateEditorSelectionRange: (editorSelectionRangeToBeApplied: ISelectionRange) => void;
+  handleUpdateEditorSelectionData: (editorSelectionDataToBeApplied: ISelectionData) => void;
 }
 
 class Sourcecast extends React.Component<ISourcecastProps> {
@@ -127,7 +127,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       editorProps: {
         codeDeltasToApply: this.props.codeDeltasToApply,
         editorCursorPositionToBeApplied: this.props.editorCursorPositionToBeApplied,
-        editorSelectionRangeToBeApplied: this.props.editorSelectionRangeToBeApplied,
+        editorSelectionDataToBeApplied: this.props.editorSelectionDataToBeApplied,
         editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
@@ -169,7 +169,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
         handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
         handleUpdateEditorCursorPosition: this.props.handleUpdateEditorCursorPosition,
-        handleUpdateEditorSelectionRange: this.props.handleUpdateEditorSelectionRange,
+        handleUpdateEditorSelectionData: this.props.handleUpdateEditorSelectionData,
         audioUrl: this.props.audioUrl,
         duration: this.props.playbackDuration,
         playbackData: this.props.playbackData,

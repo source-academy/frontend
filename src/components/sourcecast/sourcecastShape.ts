@@ -1,7 +1,7 @@
 export enum DeltaType {
   cursorPositionChange = 'cursorPositionChange',
   codeDelta = 'codeDelta',
-  selectionRangeChange = 'selectionRangeChange'
+  selectionRangeData = 'selectionRangeData'
 }
 
 export enum RecordingStatus {
@@ -30,6 +30,11 @@ export interface ISelectionRange {
   end: IPosition;
 }
 
+export interface ISelectionData {
+  range: ISelectionRange;
+  isBackwards: boolean;
+}
+
 export interface IPosition {
   row: number;
   column: number;
@@ -46,7 +51,7 @@ export interface IPlaybackData {
   }>;
 }
 
-export type DeltaData = ISelectionRange | ICodeDelta | IPosition;
+export type DeltaData = ISelectionData | ICodeDelta | IPosition;
 
 export interface ISourcecastData {
   name: string;
