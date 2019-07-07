@@ -19,9 +19,11 @@ import {
   EVAL_REPL,
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
+  FINISH_INVITE,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
   IAction,
+  INIT_INVITE,
   LOG_OUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -870,6 +872,28 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
   });
 });
 
+describe('INIT_INVITE', () => {
+  test('sets sharedbAceInitValue and sharedbAceIsInviting correctly', () => {
+    const sharedbAceInitValue = 'test sharedbAce init value';
+    const actions: IAction[] = generateActions(INIT_INVITE, {
+      editorValue: sharedbAceInitValue
+    });
+
+    actions.forEach(action => {
+      const result = reducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          sharedbAceInitValue,
+          sharedbAceIsInviting: true
+        }
+      });
+    });
+  });
+});
+
 describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with RunningOutput', () => {
     const logString = 'test-log-string';
@@ -958,6 +982,24 @@ describe('HIGHLIGHT_LINE', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           highlightedLines
+        }
+      });
+    });
+  });
+});
+
+describe('FINISH_INVITE', () => {
+  test('sets sharedbAceIsInviting to false', () => {
+    const actions: IAction[] = generateActions(FINISH_INVITE);
+
+    actions.forEach(action => {
+      const result = reducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          sharedbAceIsInviting: false
         }
       });
     });
