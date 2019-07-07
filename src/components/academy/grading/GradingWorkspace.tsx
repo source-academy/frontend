@@ -4,7 +4,9 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
+import ChatApp from '../../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states';
+import { USE_CHATKIT } from '../../../utils/constants';
 import { history } from '../../../utils/history';
 import {
   AutogradingResult,
@@ -252,7 +254,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
-            comment={props.grading![questionId].grade.comment}
             solution={props.grading![questionId].question.solution}
             questionId={props.grading![questionId].question.id}
             submissionId={props.submissionId}
@@ -270,6 +271,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />
+      },
+      {
+        label: `Chat`,
+        icon: IconNames.CHAT,
+        body: USE_CHATKIT ? (
+          <ChatApp roomId={props.grading![questionId].grade.comment} />
+        ) : (
+          <span>ChatKit disabled.</span>
+        )
       },
       {
         label: `Autograder`,

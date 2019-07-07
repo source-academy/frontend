@@ -1,12 +1,10 @@
-import { HTMLTable, Pre, Text } from '@blueprintjs/core';
+import { HTMLTable, Text } from '@blueprintjs/core';
 import * as React from 'react';
 import { getPrettyDate } from '../../utils/dateHelpers';
-import Markdown from '../commons/Markdown';
 
 type GradingResultProps = OwnProps;
 
 export type OwnProps = {
-  comment: string | null;
   graderName: string;
   gradedAt: string;
   xp: number;
@@ -45,18 +43,6 @@ class GradingResult extends React.Component<GradingResultProps, {}> {
               </tr>
             </tbody>
           </HTMLTable>
-
-          {this.props.comment !== null ? (
-            <div>
-              <br />
-              <th>Comment:</th>
-              <p>
-                <Pre>
-                  <Markdown content={this.props.comment} />
-                </Pre>
-              </p>
-            </div>
-          ) : null}
 
           <br />
 
