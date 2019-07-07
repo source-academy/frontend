@@ -30,9 +30,9 @@ class Input extends React.Component<InputProps, StateProps> {
 
     return (
       <div className="Input">
-        <div className="input-zone">
+        <div className="Input-zone">
           <TextArea
-            className="input-msg"
+            className="Input-msg"
             placeholder="Type your message here"
             onChange={this.handleChange}
             value={this.state.message}

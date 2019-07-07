@@ -1,4 +1,4 @@
-import { H3, HTMLTable, Icon, Intent, NumericInput, Position, Pre, Text } from '@blueprintjs/core';
+import { H3, HTMLTable, Intent, NumericInput, Position, Pre, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { Prompt } from 'react-router';
