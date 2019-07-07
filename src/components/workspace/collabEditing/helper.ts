@@ -10,7 +10,7 @@ enum XMLHttpReadyState {
 
 enum XMLHttpStatus {
   OK = 200,
-  'Page not found' = 404
+  PAGE_NOT_FOUND = 404
 }
 
 export function checkSessionIdExists(
@@ -21,21 +21,18 @@ export function checkSessionIdExists(
 ) {
   const xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState === XMLHttpReadyState.DONE && xmlhttp.status === XMLHttpStatus.OK) {
-      // Successfully reached server to verify ID
-      const state = JSON.parse(xmlhttp.responseText).state;
-      if (state === true) {
-        // Session ID exists
-        onSessionIdExists();
-      } else {
-        onSessionIdNotExist();
-      }
-    } else if (
-      xmlhttp.readyState === XMLHttpReadyState.DONE &&
-      xmlhttp.status !== XMLHttpStatus.OK
-    ) {
-      // Cannot reach server
+    if (xmlhttp.readyState !== XMLHttpReadyState.DONE) {
+      return;
+    }
+    if (xmlhttp.status !== XMLHttpStatus.OK) {
       onServerUnreachable();
+      return;
+    }
+    const state = JSON.parse(xmlhttp.responseText).state;
+    if (state === true) {
+      onSessionIdExists();
+    } else {
+      onSessionIdNotExist();
     }
   };
 
@@ -63,19 +60,18 @@ export function checkConnnectionAlive(
 ) {
   const xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState === XMLHttpReadyState.DONE && xmlhttp.status === XMLHttpStatus.OK) {
-      const state = JSON.parse(xmlhttp.responseText).state;
-      if (state !== true) {
-        // ID does not exist
-        handleSessionIdNotFound();
-      } else {
-        handleConnectionOK();
-      }
-    } else if (
-      xmlhttp.readyState === XMLHttpReadyState.DONE &&
-      xmlhttp.status !== XMLHttpStatus.OK
-    ) {
+    if (xmlhttp.readyState !== XMLHttpReadyState.DONE) {
+      return;
+    }
+    if (xmlhttp.status !== XMLHttpStatus.OK) {
       handleCannotReachServer();
+      return;
+    }
+    const state = JSON.parse(xmlhttp.responseText).state;
+    if (state !== true) {
+      handleSessionIdNotFound();
+    } else {
+      handleConnectionOK();
     }
   };
   xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/' + editorSessionId, true);
