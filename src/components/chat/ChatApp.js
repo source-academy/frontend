@@ -35,8 +35,6 @@ class ChatApp extends React.Component {
   };
 
   componentDidMount() {
-    // tslint:disable-next-line:no-console
-    console.log(this.props.roomId);
     const chatManager = new ChatManager({
       instanceLocator: INSTANCE_LOCATOR,
       tokenProvider: new TokenProvider({
