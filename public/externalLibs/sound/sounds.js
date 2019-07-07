@@ -277,9 +277,8 @@ var _safeaudio = null;
 function play(sound) {
     // If a sound is already playing, terminate execution.
     if (_safeplaying || _playing) return;
-
     // Discretize the input sound
-    var data = discretize(wave(sound), duration(sound));
+    var data = discretize(get_wave(sound), get_duration(sound));
     _safeaudio = raw_to_audio(data);
 
     _safeaudio.addEventListener('ended', stop);
