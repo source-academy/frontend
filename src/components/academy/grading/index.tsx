@@ -20,16 +20,14 @@ import { RouteComponentProps } from 'react-router';
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import ContentDisplay from '../../commons/ContentDisplay';
-import GradingHistory from './GradingHistory';
+import GradeTooltip from './GradeTooltip';
 import GradingNavLink from './GradingNavLink';
 import { GradingOverview } from './gradingShape';
+import GradingStatusTooltip from './GradingStatusTooltip';
 import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace';
 import UnsubmitCell from './UnsubmitCell';
+import XPTooltip from './XPTooltip';
 
-/**
- * Column Definitions are defined within the state, so that data
- * can be manipulated easier. See constructor for an example.
- */
 type State = {
   filterValue: string;
   groupFilterEnabled: boolean;
@@ -60,17 +58,17 @@ export interface IStateProps {
 
 /** Component to render in table - grading status */
 const GradingStatus = (props: GradingNavLinkProps) => {
-  return <GradingHistory data={props.data} exp={false} grade={false} status={true} />;
+  return <GradingStatusTooltip data={props.data} />;
 };
 
 /** Component to render in table - marks */
 const GradingMarks = (props: GradingNavLinkProps) => {
-  return <GradingHistory data={props.data} exp={false} grade={true} status={false} />;
+  return <GradeTooltip data={props.data} />;
 };
 
 /** Component to render in table - XP */
 const GradingExp = (props: GradingNavLinkProps) => {
-  return <GradingHistory data={props.data} exp={true} grade={false} status={false} />;
+  return <XPTooltip data={props.data} />;
 };
 
 class Grading extends React.Component<IGradingProps, State> {
