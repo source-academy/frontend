@@ -89,7 +89,7 @@ class ChatApp extends React.Component {
           viewingUserId={this.state.currentUser.id}
           messages={this.state.messages}
         />
-        <hr/>
+        <hr />
         <Input className="input-field" onSubmit={this.addMessage} />
         <div ref={this.messagesEndRef} />
       </div>

@@ -15,10 +15,19 @@
   }
 }
 
+a.NavigationBar__link {
+  color: inherit;
+  text-decoration: none;
+
+  .pt-button-text {
+    display: flex;
+  }
+}
+
 .NavigationBar__link :first-child {
   /* An even margin is kept (instead of the right side having a higher margin)
-   * to allow for even spacing when viewed on mobile.
-   */
+     * to allow for even spacing when viewed on mobile.
+     */
   margin-left: 0.1rem !important;
   margin-right: 0.1rem !important;
 }
