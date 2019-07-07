@@ -523,7 +523,7 @@ function translate(x, y, shape) {
  * given in radians, in anti-clockwise direction
  * @param {number} rad - fraction between 0 and 1
  * @param {Rune} shape - given Rune
- * @returns {Rune} - rotated Rune
+ * @return {Rune} - rotated Rune
  */
 function rotate(rad, shape) {
   var rotateMat = mat4.create()
