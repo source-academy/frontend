@@ -316,7 +316,11 @@ const externalSelect = (
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button className={Classes.MINIMAL} text={currentExternal} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
+    <Button
+      className={Classes.MINIMAL}
+      text={currentExternal}
+      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+    />
   </ExternalSelectComponent>
 );
 

@@ -12,7 +12,12 @@ class EnvVisualizer extends React.Component<{}, {}> {
   }
 
   public render() {
-    return <div ref={r => (this.$parent = r)} className={classNames('sa-env-visualizer', Classes.DARK)} />;
+    return (
+      <div
+        ref={r => (this.$parent = r)}
+        className={classNames('sa-env-visualizer', Classes.DARK)}
+      />
+    );
   }
 }
 

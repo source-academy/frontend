@@ -274,7 +274,11 @@ const categorySelect = (
     itemRenderer={categoryRenderer}
     filterable={false}
   >
-    <Button className={Classes.MINIMAL} text={category} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
+    <Button
+      className={Classes.MINIMAL}
+      text={category}
+      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+    />
   </CategorySelectComponent>
 );
 

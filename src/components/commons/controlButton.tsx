@@ -8,7 +8,7 @@ type controlButtonOptionals = {
   iconOnRight?: boolean;
   intent?: Intent;
   minimal?: boolean;
-  type?: "submit" | "reset" | "button";
+  type?: 'submit' | 'reset' | 'button';
 };
 
 const defaultOptions = {
@@ -34,7 +34,9 @@ export function controlButton(
   props.className = opts.className;
   props.type = opts.type;
   if (icon) {
-    const ic: JSX.Element = <Icon icon={icon} color={opts.iconColor ? opts.iconColor : undefined} />;
+    const ic: JSX.Element = (
+      <Icon icon={icon} color={opts.iconColor ? opts.iconColor : undefined} />
+    );
     opts.iconOnRight ? (props.rightIcon = ic) : (props.icon = ic);
   }
   if (onClick) {

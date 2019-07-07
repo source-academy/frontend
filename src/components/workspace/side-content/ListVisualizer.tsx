@@ -12,7 +12,12 @@ class ListVisualizer extends React.Component<{}, {}> {
   }
 
   public render() {
-    return <div ref={r => (this.$parent = r)} className={classNames('sa-list-visualizer', Classes.DARK)} />;
+    return (
+      <div
+        ref={r => (this.$parent = r)}
+        className={classNames('sa-list-visualizer', Classes.DARK)}
+      />
+    );
   }
 }
 

@@ -30,7 +30,10 @@ class Repl extends React.PureComponent<IReplProps, {}> {
       <div className="Repl">
         <div className="repl-output-parent">
           {cards}
-          <HotKeys className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)} handlers={handlers}>
+          <HotKeys
+            className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
+            handlers={handlers}
+          >
             <ReplInput {...inputProps} />
           </HotKeys>
         </div>

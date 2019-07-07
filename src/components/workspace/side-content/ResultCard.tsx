@@ -59,7 +59,9 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
               </div>
               <div className="row error-explanation">
                 {'Error: '}
-                <Pre className="bp3-code-block">{'Line ' + error.line + ': ' + error.errorExplanation}</Pre>
+                <Pre className="bp3-code-block">
+                  {'Line ' + error.line + ': ' + error.errorExplanation}
+                </Pre>
               </div>
             </div>
           );

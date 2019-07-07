@@ -36,7 +36,7 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
 
 export const AnnouncementCard: React.SFC<IAnnouncementCardProps> = props => {
   if (props.announcements === undefined) {
-    return <NonIdealState description="Fetching announcements..." icon={<Spinner/>} />;
+    return <NonIdealState description="Fetching announcements..." icon={<Spinner />} />;
   } else if (props.announcements.length === 0) {
     return <NonIdealState title="There are no announcements." icon={IconNames.FEED} />;
   } else {
