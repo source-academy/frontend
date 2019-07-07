@@ -124,7 +124,7 @@ test('chapterSelect generates correct action object', () => {
 });
 
 test('playgroundExternalSelect generates correct action object', () => {
-  const externalLibraryName = 'STREAMS';
+  const externalLibraryName = 'SOUNDS';
   const action = playgroundExternalSelect(externalLibraryName, assessmentWorkspace);
   expect(action).toEqual({
     type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
@@ -149,7 +149,7 @@ test('beginClearContext generates correct action object', () => {
   const library: Library = {
     chapter: 4,
     external: {
-      name: 'STREAMS',
+      name: 'SOUNDS',
       symbols: []
     },
     globals: []
@@ -189,7 +189,7 @@ test('endClearContext generates correct action object', () => {
   const library: Library = {
     chapter: 4,
     external: {
-      name: 'STREAMS',
+      name: 'SOUNDS',
       symbols: []
     },
     globals: []

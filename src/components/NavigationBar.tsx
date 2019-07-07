@@ -1,5 +1,6 @@
 import {
   Alignment,
+  Button,
   Icon,
   Navbar,
   NavbarDivider,
@@ -33,36 +34,29 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
       </NavLink>
 
-      <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+      <a
+        className="NavigationBar__link"
+        href={LINKS.LUMINUS}
         target="_blank"
-        to={LINKS.LUMINUS}
+        rel="noopener noreferrer"
       >
-        <Icon icon={IconNames.BOOK} />
-        <div className="navbar-button-text hidden-xs">News &amp; Material</div>
-      </NavLink>
+        <Button minimal={true}>
+          <Icon icon={IconNames.BOOK} />
+          <div className="navbar-button-text hidden-xs">News &amp; Material</div>
+        </Button>
+      </a>
 
-      <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+      <a
+        className="NavigationBar__link"
+        href={LINKS.PIAZZA}
         target="_blank"
-        to={LINKS.PIAZZA}
+        rel="noopener noreferrer"
       >
-        <Icon icon={IconNames.CHAT} />
-        <div className="navbar-button-text hidden-xs">Forum</div>
-      </NavLink>
-    </NavbarGroup>
-
-    <NavbarGroup align={Alignment.RIGHT}>
-      <NavLink
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
-        to="/mission-control"
-      >
-        <Icon icon={IconNames.CODE} />
-        <div className="navbar-button-text hidden-xs">Mission-Control</div>
-      </NavLink>
+        <Button minimal={true}>
+          <Icon icon={IconNames.CHAT} />
+          <div className="navbar-button-text hidden-xs">Forum</div>
+        </Button>
+      </a>
 
       <NavLink
         activeClassName="pt-active"
@@ -71,6 +65,27 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       >
         <Icon icon={IconNames.CODE} />
         <div className="navbar-button-text hidden-xs">Playground</div>
+      </NavLink>
+    </NavbarGroup>
+
+    <NavbarGroup align={Alignment.RIGHT}>
+      {/* To be reintroduced in the future */}
+      {/* <NavLink
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+        to="/mission-control"
+      >
+        <Icon icon={IconNames.CODE} />
+        <div className="navbar-button-text hidden-xs">Mission-Control</div>
+      </NavLink> */}
+
+      <NavLink
+        activeClassName="pt-active"
+        className="NavigationBar__link pt-button pt-minimal"
+        to="/contributors"
+      >
+        <Icon icon={IconNames.HEART} />
+        <div className="navbar-button-text hidden-xs">Contributors</div>
       </NavLink>
 
       <div className="visible-xs">

@@ -106,6 +106,7 @@ export interface ISessionState {
 type ReplHistory = {
   browseIndex: null | number; // [0, 49] if browsing, else null
   records: string[];
+  originalValue: string;
 };
 
 export const maxBrowseIndex = 50;
@@ -225,7 +226,8 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   output: [],
   replHistory: {
     browseIndex: null,
-    records: []
+    records: [],
+    originalValue: ''
   },
   replValue: '',
   sharedbAceInitValue: '',
