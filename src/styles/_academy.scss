@@ -150,16 +150,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-
-  .md {
-    pre {
-      > code {
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        background: transparent;
-      }
-    }
-  }
 }
 
 .GradingEditor {

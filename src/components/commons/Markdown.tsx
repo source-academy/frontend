@@ -1,4 +1,3 @@
-import { Classes } from '@blueprintjs/core';
 import * as React from 'react';
 import { Converter } from 'showdown';
 
@@ -9,7 +8,7 @@ type MarkdownProps = {
 
 const Markdown: React.SFC<MarkdownProps> = props => (
   <div
-    className={(props.className ? props.className : 'md') + ' ' + Classes.RUNNING_TEXT}
+    className={props.className ? props.className : 'md'}
     dangerouslySetInnerHTML={{ __html: converter.makeHtml(props.content) }}
   />
 );
