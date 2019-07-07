@@ -59,9 +59,7 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
               </div>
               <div className="row error-explanation">
                 {'Error: '}
-                <Pre>
-                  {'Line ' + error.line + ': ' + error.errorExplanation}
-                </Pre>
+                <Pre>{'Line ' + error.line + ': ' + error.errorExplanation}</Pre>
               </div>
             </div>
           );
