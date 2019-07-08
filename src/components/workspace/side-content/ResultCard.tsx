@@ -55,7 +55,7 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
             <div key={index} className="autograder-error">
               <div className="row">
                 {' '}
-                {'Line: '} <Pre className="bp3-code-block">{error.errorLine}</Pre>
+                {'Line: '} <Pre>{error.errorLine}</Pre>
               </div>
               <div className="row error-explanation">
                 {'Error: '}
