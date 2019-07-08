@@ -1,11 +1,12 @@
-import { NonIdealState } from '@blueprintjs/core';
+import { Classes, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 const NotFound: React.SFC<{}> = () => (
-  <div className="NotFound pt-dark">
+  <div className={classNames('NotFound', Classes.DARK)}>
     <NonIdealState
-      visual={IconNames.ERROR}
+      icon={IconNames.ERROR}
       title="404 Not Found"
       description="The requested resource could not be found"
     />

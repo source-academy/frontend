@@ -1,5 +1,6 @@
-import { NonIdealState, Spinner } from '@blueprintjs/core';
+import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
@@ -121,9 +122,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     if (this.props.grading === undefined) {
       return (
         <NonIdealState
-          className="WorkspaceParent pt-dark"
+          className={classNames('WorkspaceParent', Classes.DARK)}
           description="Getting assessment ready..."
-          visual={<Spinner large={true} />}
+          icon={<Spinner size={Spinner.SIZE_LARGE} />}
         />
       );
     }
@@ -176,7 +177,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       }
     };
     return (
-      <div className="WorkspaceParent pt-dark">
+      <div className={classNames('WorkspaceParent', Classes.DARK)}>
         <Workspace {...workspaceProps} />
       </div>
     );

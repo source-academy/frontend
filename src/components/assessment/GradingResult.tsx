@@ -1,4 +1,4 @@
-import { Text } from '@blueprintjs/core';
+import { HTMLTable, Text } from '@blueprintjs/core';
 import * as React from 'react';
 import { getPrettyDate } from '../../utils/dateHelpers';
 
@@ -22,7 +22,7 @@ class GradingResult extends React.Component<GradingResultProps, {}> {
     return (
       <div className="GradingResult">
         <div className="grading-result-table">
-          <table>
+          <HTMLTable>
             <tbody>
               <tr>
                 <th>Grade:</th>
@@ -42,7 +42,7 @@ class GradingResult extends React.Component<GradingResultProps, {}> {
                 </td>
               </tr>
             </tbody>
-          </table>
+          </HTMLTable>
 
           <br />
 

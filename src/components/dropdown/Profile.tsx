@@ -48,7 +48,7 @@ class Profile extends React.Component<ProfileProps> {
         </>
       );
     } else {
-      content = <NonIdealState description="Loading..." visual={<Spinner />} />;
+      content = <NonIdealState description="Loading..." icon={<Spinner />} />;
     }
     return (
       <Dialog

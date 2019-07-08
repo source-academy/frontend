@@ -1,36 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Loading login renders correctly 1`] = `
-"<div className=\\"Login pt-dark\\">
-  <Blueprint2.Card className=\\"login-card pt-elevation-4\\" elevation={0} interactive={false}>
+"<div className=\\"Login bp3-dark\\">
+  <Blueprint3.Card className=\\"login-card bp3-elevation-4\\" elevation={0} interactive={false}>
     <div className=\\"login-body\\">
-      <NonIdealState description=\\"Logging In...\\" visual={{...}} />
+      <Blueprint3.NonIdealState description=\\"Logging In...\\" icon={{...}} />
     </div>
-  </Blueprint2.Card>
+  </Blueprint3.Card>
 </div>"
 `;
 
 exports[`Login renders correctly 1`] = `
-"<div className=\\"Login pt-dark\\">
-  <Blueprint2.Card className=\\"login-card pt-elevation-4\\" elevation={0} interactive={false}>
+"<div className=\\"Login bp3-dark\\">
+  <Blueprint3.Card className=\\"login-card bp3-elevation-4\\" elevation={0} interactive={false}>
     <div className=\\"login-header\\">
-      <h4>
-        <Blueprint2.Icon icon=\\"lock\\" />
+      <Component>
+        <Blueprint3.Icon icon=\\"lock\\" />
         LOGIN
-      </h4>
+      </Component>
     </div>
     <div className=\\"login-body\\">
-      <Blueprint2.ButtonGroup fill={true} vertical={true}>
-        <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"log-in\\" onClick={[Function: handleLogin]}>
+      <Blueprint3.ButtonGroup fill={true} vertical={true}>
+        <Blueprint3.Button className=\\"bp3-large\\" rightIcon=\\"log-in\\" onClick={[Function: handleLogin]}>
           Log in with LumiNUS
-        </Blueprint2.Button>
+        </Blueprint3.Button>
         <NavLink to=\\"/playground\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-          <Blueprint2.Button className=\\"pt-large\\" rightIcon=\\"code\\">
+          <Blueprint3.Button className=\\"bp3-large\\" rightIcon=\\"code\\">
             Try out the playground
-          </Blueprint2.Button>
+          </Blueprint3.Button>
         </NavLink>
-      </Blueprint2.ButtonGroup>
+      </Blueprint3.ButtonGroup>
     </div>
-  </Blueprint2.Card>
+  </Blueprint3.Card>
 </div>"
 `;

@@ -1,3 +1,5 @@
+import { Classes } from '@blueprintjs/core';
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 class ListVisualizer extends React.Component<{}, {}> {
@@ -10,7 +12,12 @@ class ListVisualizer extends React.Component<{}, {}> {
   }
 
   public render() {
-    return <div ref={r => (this.$parent = r)} className="sa-list-visualizer pt-dark" />;
+    return (
+      <div
+        ref={r => (this.$parent = r)}
+        className={classNames('sa-list-visualizer', Classes.DARK)}
+      />
+    );
   }
 }
 

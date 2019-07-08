@@ -9,6 +9,7 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
@@ -152,9 +153,9 @@ class AssessmentWorkspace extends React.Component<
     if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
       return (
         <NonIdealState
-          className="WorkspaceParent pt-dark"
+          className={classNames('WorkspaceParent', Classes.DARK)}
           description="Getting mission ready..."
-          visual={<Spinner large={true} />}
+          icon={<Spinner size={Spinner.SIZE_LARGE} />}
         />
       );
     }
@@ -261,7 +262,7 @@ class AssessmentWorkspace extends React.Component<
       }
     };
     return (
-      <div className="WorkspaceParent pt-dark">
+      <div className={classNames('WorkspaceParent', Classes.DARK)}>
         {overlay}
         {resetTemplateOverlay}
         <Workspace {...workspaceProps} />

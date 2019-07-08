@@ -1,4 +1,5 @@
-import { Card } from '@blueprintjs/core';
+import { Card, Classes, Pre } from '@blueprintjs/core';
+import * as classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
@@ -29,7 +30,10 @@ class Repl extends React.PureComponent<IReplProps, {}> {
       <div className="Repl">
         <div className="repl-output-parent">
           {cards}
-          <HotKeys className="repl-input-parent row pt-card pt-elevation-0" handlers={handlers}>
+          <HotKeys
+            className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
+            handlers={handlers}
+          >
             <ReplInput {...inputProps} />
           </HotKeys>
         </div>
@@ -43,27 +47,27 @@ export const Output: React.SFC<IOutputProps> = props => {
     case 'code':
       return (
         <Card>
-          <pre className="codeOutput">{props.output.value}</pre>
+          <Pre className="codeOutput">{props.output.value}</Pre>
         </Card>
       );
     case 'running':
       return (
         <Card>
-          <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
+          <Pre className="logOutput">{props.output.consoleLogs.join('\n')}</Pre>
         </Card>
       );
     case 'result':
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <pre className="resultOutput">{renderResult(props.output.value)}</pre>
+            <Pre className="resultOutput">{renderResult(props.output.value)}</Pre>
           </Card>
         );
       } else {
         return (
           <Card>
-            <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
-            <pre className="resultOutput">{renderResult(props.output.value)}</pre>
+            <Pre className="logOutput">{props.output.consoleLogs.join('\n')}</Pre>
+            <Pre className="resultOutput">{renderResult(props.output.value)}</Pre>
           </Card>
         );
       }
@@ -71,15 +75,15 @@ export const Output: React.SFC<IOutputProps> = props => {
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <pre className="errorOutput">{parseError(props.output.errors)}</pre>
+            <Pre className="errorOutput">{parseError(props.output.errors)}</Pre>
           </Card>
         );
       } else {
         return (
           <Card>
-            <pre className="logOutput">{props.output.consoleLogs.join('\n')}</pre>
+            <Pre className="logOutput">{props.output.consoleLogs.join('\n')}</Pre>
             <br />
-            <pre className="errorOutput">{parseError(props.output.errors)}</pre>
+            <Pre className="errorOutput">{parseError(props.output.errors)}</Pre>
           </Card>
         );
       }

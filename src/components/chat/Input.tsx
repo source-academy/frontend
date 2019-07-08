@@ -8,12 +8,12 @@ type StateProps = {
   message: string;
 };
 
-interface InputProps {
+interface IInputProps {
   onSubmit: (text: string) => void;
 }
 
-class Input extends React.Component<InputProps, StateProps> {
-  public constructor(props: InputProps) {
+class Input extends React.Component<IInputProps, StateProps> {
+  public constructor(props: IInputProps) {
     super(props);
     this.state = {
       message: ''
@@ -30,9 +30,9 @@ class Input extends React.Component<InputProps, StateProps> {
 
     return (
       <div className="Input">
-        <div className="input-zone">
+        <div className="Input-zone">
           <TextArea
-            className="input-msg"
+            className="Input-msg"
             placeholder="Type your message here"
             onChange={this.handleChange}
             value={this.state.message}
