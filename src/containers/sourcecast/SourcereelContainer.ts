@@ -20,8 +20,8 @@ import {
   invalidEditorSessionId,
   playgroundExternalSelect,
   recordAudioUrl,
-  recordEditorDelta,
   recordEditorInitValue,
+  recordEditorInput,
   savePlaybackData,
   setEditorBreakpoint,
   setEditorReadonly,
@@ -87,7 +87,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         playgroundExternalSelect(externalLibraryName, location),
       handleRecordAudioUrl: recordAudioUrl,
-      handleRecordEditorDelta: recordEditorDelta,
+      handleRecordEditorInput: recordEditorInput,
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

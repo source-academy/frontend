@@ -5,8 +5,8 @@ import * as React from 'react';
 
 import { controlButton } from '../commons';
 import {
-  DeltaType,
   ICodeDelta,
+  InputType,
   IPlaybackData,
   IPosition,
   ISelectionData,
@@ -98,15 +98,15 @@ class SourcecastControlbar extends React.PureComponent<
     const currentRevision = this.state.currentDeltaRevision;
     let currentTime = this.audio.current!.currentTime * 1000;
     this.props.handleEditorValueChange(playbackData.init.editorValue);
-    const codeDeltasToApply = playbackData.deltas
+    const codeDeltasToApply = playbackData.inputs
       .filter(
         deltaWithTime =>
-          deltaWithTime.time <= currentTime && deltaWithTime.type === DeltaType.codeDelta
+          deltaWithTime.time <= currentTime && deltaWithTime.type === InputType.codeDelta
       )
       .map(deltaWithTime => deltaWithTime.data as ICodeDelta);
     this.applyDeltas(codeDeltasToApply);
 
-    const futureData = playbackData.deltas.filter(
+    const futureData = playbackData.inputs.filter(
       deltaWithTime => deltaWithTime.time > currentTime
     );
     const len = futureData.length;
@@ -115,13 +115,13 @@ class SourcecastControlbar extends React.PureComponent<
       currentTime = this.audio.current!.currentTime * 1000;
       if (futureData[i].time < currentTime) {
         switch (futureData[i].type) {
-          case DeltaType.codeDelta:
+          case InputType.codeDelta:
             this.applyDeltas([futureData[i].data as ICodeDelta]);
             break;
-          case DeltaType.cursorPositionChange:
+          case InputType.cursorPositionChange:
             this.props.handleUpdateEditorCursorPosition(futureData[i].data as IPosition);
             break;
-          case DeltaType.selectionRangeData:
+          case InputType.selectionRangeData:
             this.props.handleUpdateEditorSelectionData(futureData[i].data as ISelectionData);
             break;
         }

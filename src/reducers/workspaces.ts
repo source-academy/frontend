@@ -29,11 +29,11 @@ import {
   INIT_INVITE,
   LOG_OUT,
   RECORD_AUDIO_URL,
-  RECORD_EDITOR_DELTA,
   RECORD_EDITOR_INIT_VALUE,
+  RECORD_EDITOR_INPUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
-  SET_DELTAS_TO_APPLY,
+  SET_CODE_DELTAS_TO_APPLY,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
   SET_SOURCECAST_DATA,
@@ -479,21 +479,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           audioUrl: action.payload.audioUrl
         }
       };
-    case RECORD_EDITOR_DELTA:
+    case RECORD_EDITOR_INPUT:
       return {
         ...state,
         sourcereel: {
           ...state.sourcereel,
           playbackData: {
             ...state.sourcereel.playbackData,
-            deltas: [
-              ...state.sourcereel.playbackData.deltas,
-              {
-                type: action.payload.type,
-                time: action.payload.time,
-                data: action.payload.delta
-              }
-            ]
+            inputs: [...state.sourcereel.playbackData.inputs, action.payload.input]
           }
         }
       };
@@ -540,7 +533,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...action.payload.workspaceOptions
         }
       };
-    case SET_DELTAS_TO_APPLY:
+    case SET_CODE_DELTAS_TO_APPLY:
       return {
         ...state,
         sourcecast: {
@@ -566,7 +559,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
               editorValue: action.payload.editorValue,
               editorCursorPositionToBeApplied: action.payload.editorCursorPositionToBeApplied
             },
-            deltas: []
+            inputs: []
           }
         }
       };

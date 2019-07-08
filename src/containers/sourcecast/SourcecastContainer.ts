@@ -27,7 +27,7 @@ import {
   invalidEditorSessionId,
   playgroundExternalSelect,
   recordAudioUrl,
-  setDeltasToApply,
+  setCodeDeltasToApply,
   setEditorBreakpoint,
   setEditorReadonly,
   setEditorSessionId,
@@ -102,7 +102,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSetCodeDeltasToApply: setDeltasToApply,
+      handleSetCodeDeltasToApply: setCodeDeltasToApply,
       handleSetEditorReadonly: (editorReadonly: boolean) =>
         setEditorReadonly(location, editorReadonly),
       handleSetEditorSessionId: (editorSessionId: string) =>

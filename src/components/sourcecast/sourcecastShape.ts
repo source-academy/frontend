@@ -1,7 +1,12 @@
-export enum DeltaType {
+export enum InputType {
   cursorPositionChange = 'cursorPositionChange',
   codeDelta = 'codeDelta',
+  keyboardCommand = 'keyboardCommand',
   selectionRangeData = 'selectionRangeData'
+}
+
+export enum KeyboardCommand {
+  run = 'run'
 }
 
 export enum RecordingStatus {
@@ -40,18 +45,20 @@ export interface IPosition {
   column: number;
 }
 
+export interface IInput {
+  type: InputType;
+  time: number;
+  data: InputData;
+}
+
 export interface IPlaybackData {
   init: {
     editorValue: string;
   };
-  deltas: Array<{
-    type: DeltaType;
-    time: number;
-    data: DeltaData;
-  }>;
+  inputs: IInput[];
 }
 
-export type DeltaData = ISelectionData | ICodeDelta | IPosition;
+export type InputData = ISelectionData | ICodeDelta | IPosition | KeyboardCommand;
 
 export interface ISourcecastData {
   name: string;

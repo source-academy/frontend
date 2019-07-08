@@ -9,7 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { DeltaData, DeltaType, IPlaybackData, RecordingStatus } from './sourcecastShape';
+import { IInput, IPlaybackData, RecordingStatus } from './sourcecastShape';
 
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
 
@@ -57,7 +57,7 @@ export interface IDispatchProps {
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleRecordAudioUrl: (audioUrl: string) => void;
-  handleRecordEditorDelta: (type: DeltaType, time: number, delta: DeltaData) => void;
+  handleRecordEditorInput: (input: IInput) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
@@ -131,7 +131,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
         handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-        handleRecordEditorDelta: this.props.handleRecordEditorDelta,
+        handleRecordEditorInput: this.props.handleRecordEditorInput,
         handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
       },
       editorHeight: this.props.editorHeight,

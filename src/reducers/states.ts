@@ -310,7 +310,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     },
     playbackData: {
       init: { editorValue: '' },
-      deltas: []
+      inputs: []
     },
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.notStarted,
@@ -321,7 +321,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     audioUrl: 'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3',
     playbackData: {
       init: { editorValue: '' },
-      deltas: []
+      inputs: []
     },
     recordingStatus: RecordingStatus.notStarted,
     timeElapsedBeforePause: 0,

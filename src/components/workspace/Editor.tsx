@@ -9,12 +9,14 @@ import 'brace/theme/cobalt';
 
 import { LINKS } from '../../utils/constants';
 import {
-  DeltaData,
-  DeltaType,
   ICodeDelta,
+  IInput,
+  InputData,
+  InputType,
   IPosition,
   ISelectionData,
-  ISelectionRange
+  ISelectionRange,
+  KeyboardCommand
 } from '../sourcecast/sourcecastShape';
 import { checkSessionIdExists } from './collabEditing/helper';
 /**
@@ -44,7 +46,7 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
-  handleRecordEditorDelta?: (type: DeltaType, time: number, delta: DeltaData) => void;
+  handleRecordEditorInput?: (input: IInput) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -52,7 +54,7 @@ export interface IEditorProps {
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
-  private onChangeMethod: (newCode: string, delta: DeltaData) => void;
+  private onChangeMethod: (newCode: string, data: InputData) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
   private onCursorChange: (selecction: any) => void;
   private onSelectionChange: (selection: any) => void;
@@ -67,11 +69,11 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
       this.props.handleEditorValueChange(newCode);
       if (this.props.isRecording) {
-        this.props.handleRecordEditorDelta!(
-          DeltaType.codeDelta,
-          this.props.getTimerDuration!(),
-          delta
-        );
+        this.props.handleRecordEditorInput!({
+          type: InputType.codeDelta,
+          time: this.props.getTimerDuration!(),
+          data: delta
+        });
       }
     };
     this.onValidateMethod = (annotations: Annotation[]) => {
@@ -84,11 +86,11 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         return;
       }
       const editorCursorPositionToBeApplied: IPosition = selection.getCursor();
-      this.props.handleRecordEditorDelta!(
-        DeltaType.cursorPositionChange,
-        this.props.getTimerDuration!(),
-        editorCursorPositionToBeApplied
-      );
+      this.props.handleRecordEditorInput!({
+        type: InputType.cursorPositionChange,
+        time: this.props.getTimerDuration!(),
+        data: editorCursorPositionToBeApplied
+      });
     };
     this.onSelectionChange = (selection: any) => {
       if (!this.props.isRecording) {
@@ -97,11 +99,11 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       const range: ISelectionRange = selection.getRange();
       const isBackwards: boolean = selection.isBackwards();
       if (!isEqual(range.start, range.end)) {
-        this.props.handleRecordEditorDelta!(
-          DeltaType.selectionRangeData,
-          this.props.getTimerDuration!(),
-          { range, isBackwards }
-        );
+        this.props.handleRecordEditorInput!({
+          type: InputType.selectionRangeData,
+          time: this.props.getTimerDuration!(),
+          data: { range, isBackwards }
+        });
       }
     };
   }
@@ -203,7 +205,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   win: 'Shift-Enter',
                   mac: 'Shift-Enter'
                 },
-                exec: this.props.handleEditorEval
+                exec: this.handleEvaluate
               }
             ]}
             editorProps={{
@@ -322,6 +324,18 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     });
     WS.addEventListener('close', (event: Event) => {
       this.props.handleSetWebsocketStatus!(0);
+    });
+  };
+
+  private handleEvaluate = () => {
+    this.props.handleEditorEval();
+    if (!this.props.isRecording) {
+      return;
+    }
+    this.props.handleRecordEditorInput!({
+      type: InputType.keyboardCommand,
+      time: this.props.getTimerDuration!(),
+      data: KeyboardCommand.run
     });
   };
 }
