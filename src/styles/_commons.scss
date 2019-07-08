@@ -22,3 +22,13 @@
     }
   }
 }
+
+.bp3-running-text.md {
+  pre {
+    > code {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background: transparent;
+    }
+  }
+}
