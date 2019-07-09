@@ -1,3 +1,4 @@
+import { Card, Elevation } from '@blueprintjs/core';
 import * as React from 'react';
 
 import { LINKS } from '../../utils/constants';
@@ -8,7 +9,7 @@ class ContributorsDetails extends React.Component {
   public render() {
     return (
       <div className="outsideDetails">
-        <div className="contributorsDetails">
+        <Card className="contributorsDetails" elevation={Elevation.ONE}>
           <h3>The people behind Source Academy</h3>
           <p>
             The <i>Source Academy</i> is designed by and for students of the National University of
@@ -88,7 +89,7 @@ class ContributorsDetails extends React.Component {
               <a href={LINKS.GITHUB_ORG}>Github repositories of the Source Academy</a>.
             </p>
           </div>
-        </div>
+        </Card>
       </div>
     );
   }
