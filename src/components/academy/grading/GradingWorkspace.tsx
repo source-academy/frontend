@@ -30,7 +30,9 @@ export type StateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
   editorValue: string | null;
+  editorPrepend: string;
   editorTestcases: ITestcase[];
+  editorPostpend: string;
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
@@ -200,11 +202,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
+    let editorPrepend: string = '';
+    let editorPostpend: string = '';
     let editorTestcases: ITestcase[] = [];
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as IAnsweredQuestion;
       autogradingResults = questionData.autogradingResults;
+      editorPrepend = questionData.prepend;
+      editorPostpend = questionData.postpend;
       editorTestcases = questionData.testcases;
 
       editorValue = questionData.answer as string;
@@ -217,7 +223,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
     this.props.handleResetWorkspace({
       autogradingResults,
+      editorPrepend,
       editorValue,
+      editorPostpend,
       editorTestcases
     });
     this.props.handleClearContext(question.library);
