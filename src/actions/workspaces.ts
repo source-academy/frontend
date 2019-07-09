@@ -3,10 +3,8 @@ import { ActionCreator } from 'redux';
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
 import {
   ICodeDelta,
-  IInput,
+  Input,
   IPlaybackData,
-  IPosition,
-  ISelectionData,
   PlaybackStatus
 } from '../components/sourcecast/sourcecastShape';
 import { IWorkspaceState } from '../reducers/states';
@@ -330,6 +328,17 @@ export const setCodeDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas:
   }
 });
 
+export const setInputToApply: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  inputToApply: Input
+) => ({
+  type: actionTypes.SET_INPUT_TO_APPLY,
+  payload: {
+    workspaceLocation,
+    inputToApply
+  }
+});
+
 export const setSourcecastData: ActionCreator<actionTypes.IAction> = (
   title: string,
   description: string,
@@ -360,9 +369,13 @@ export const setSourcecastStatus: ActionCreator<actionTypes.IAction> = (
 });
 
 // SOURCEREEL
-export const recordEditorInput: ActionCreator<actionTypes.IAction> = (input: IInput) => ({
+export const recordEditorInput: ActionCreator<actionTypes.IAction> = (
+  location: WorkspaceLocation,
+  input: Input
+) => ({
   type: actionTypes.RECORD_EDITOR_INPUT,
   payload: {
+    location,
     input
   }
 });
@@ -418,27 +431,5 @@ export const timerStop: ActionCreator<actionTypes.IAction> = (timeNow: number) =
   type: actionTypes.TIMER_STOP,
   payload: {
     timeNow: Date.now()
-  }
-});
-
-export const updateEditorCursorPosition: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation,
-  editorCursorPositionToBeApplied: IPosition
-) => ({
-  type: actionTypes.UPDATE_EDITOR_CURSOR_POSITION,
-  payload: {
-    workspaceLocation,
-    editorCursorPositionToBeApplied
-  }
-});
-
-export const updateEditorSelectionData: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation,
-  editorSelectionDataToBeApplied: ISelectionData
-) => ({
-  type: actionTypes.UPDATE_EDITOR_SELECTION_DATA,
-  payload: {
-    workspaceLocation,
-    editorSelectionDataToBeApplied
   }
 });

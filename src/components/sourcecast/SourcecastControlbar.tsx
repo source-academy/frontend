@@ -6,10 +6,8 @@ import * as React from 'react';
 import { controlButton } from '../commons';
 import {
   ICodeDelta,
-  InputType,
+  Input,
   IPlaybackData,
-  IPosition,
-  ISelectionData,
   ISourcecastData,
   PlaybackStatus
 } from './sourcecastShape';
@@ -100,8 +98,7 @@ class SourcecastControlbar extends React.PureComponent<
     this.props.handleEditorValueChange(playbackData.init.editorValue);
     const codeDeltasToApply = playbackData.inputs
       .filter(
-        deltaWithTime =>
-          deltaWithTime.time <= currentTime && deltaWithTime.type === InputType.codeDelta
+        deltaWithTime => deltaWithTime.time <= currentTime && deltaWithTime.type === 'codeDelta'
       )
       .map(deltaWithTime => deltaWithTime.data as ICodeDelta);
     this.applyDeltas(codeDeltasToApply);
@@ -114,17 +111,7 @@ class SourcecastControlbar extends React.PureComponent<
     while (i < len && this.state.currentDeltaRevision === currentRevision) {
       currentTime = this.audio.current!.currentTime * 1000;
       if (futureData[i].time < currentTime) {
-        switch (futureData[i].type) {
-          case InputType.codeDelta:
-            this.applyDeltas([futureData[i].data as ICodeDelta]);
-            break;
-          case InputType.cursorPositionChange:
-            this.props.handleUpdateEditorCursorPosition(futureData[i].data as IPosition);
-            break;
-          case InputType.selectionRangeData:
-            this.props.handleUpdateEditorSelectionData(futureData[i].data as ISelectionData);
-            break;
-        }
+        this.props.handleSetInputToApply(futureData[i]);
         i++;
         continue;
       }
@@ -215,10 +202,9 @@ export interface ISourcecastControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
   handleSetCodeDeltasToApply: (deltas: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetInputToApply: (inputToApply: Input) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
-  handleUpdateEditorCursorPosition: (editorCursorPositionToBeApplied: IPosition) => void;
-  handleUpdateEditorSelectionData: (editorSelectionDataToBeApplied: ISelectionData) => void;
   audioUrl: string;
   duration: number;
   playbackData: IPlaybackData;

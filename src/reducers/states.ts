@@ -15,9 +15,8 @@ import {
 import { Notification } from '../components/notification/notificationShape';
 import {
   ICodeDelta,
+  Input,
   IPlaybackData,
-  IPosition,
-  ISelectionData,
   ISourcecastData,
   PlaybackStatus,
   RecordingStatus
@@ -67,8 +66,7 @@ export interface ISourcecast extends IWorkspaceState {
   readonly codeDeltasToApply: ICodeDelta[] | null;
   readonly title: string | null;
   readonly description: string | null;
-  readonly editorCursorPositionToBeApplied: IPosition;
-  readonly editorSelectionDataToBeApplied: ISelectionData;
+  readonly inputToApply: Input | null;
   readonly playbackData: IPlaybackData;
   readonly playbackDuration: number;
   readonly playbackStatus: PlaybackStatus;
@@ -303,11 +301,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     codeDeltasToApply: null,
     title: null,
     description: null,
-    editorCursorPositionToBeApplied: { row: 0, column: 0 },
-    editorSelectionDataToBeApplied: {
-      range: { start: { row: 0, column: 0 }, end: { row: 0, column: 0 } },
-      isBackwards: true
-    },
+    inputToApply: null,
     playbackData: {
       init: { editorValue: '' },
       inputs: []

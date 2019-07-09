@@ -10,11 +10,8 @@ import 'brace/theme/cobalt';
 import { LINKS } from '../../utils/constants';
 import {
   ICodeDelta,
-  IInput,
-  InputData,
-  InputType,
+  Input,
   IPosition,
-  ISelectionData,
   ISelectionRange,
   KeyboardCommand
 } from '../sourcecast/sourcecastShape';
@@ -30,14 +27,13 @@ import { checkSessionIdExists } from './collabEditing/helper';
 export interface IEditorProps {
   breakpoints: string[];
   codeDeltasToApply?: ICodeDelta[] | null;
-  editorCursorPositionToBeApplied?: IPosition;
-  editorSelectionDataToBeApplied?: ISelectionData;
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
   getTimerDuration?: () => number;
   highlightedLines: number[][];
   isEditorAutorun: boolean;
+  inputToApply?: Input | null;
   isPlaying?: boolean;
   isRecording?: boolean;
   sharedbAceInitValue?: string;
@@ -46,7 +42,7 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
-  handleRecordEditorInput?: (input: IInput) => void;
+  handleRecordEditorInput?: (input: Input) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -54,7 +50,7 @@ export interface IEditorProps {
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
-  private onChangeMethod: (newCode: string, data: InputData) => void;
+  private onChangeMethod: (newCode: string, delta: ICodeDelta) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
   private onCursorChange: (selecction: any) => void;
   private onSelectionChange: (selection: any) => void;
@@ -70,7 +66,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       this.props.handleEditorValueChange(newCode);
       if (this.props.isRecording) {
         this.props.handleRecordEditorInput!({
-          type: InputType.codeDelta,
+          type: 'codeDelta',
           time: this.props.getTimerDuration!(),
           data: delta
         });
@@ -87,7 +83,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
       const editorCursorPositionToBeApplied: IPosition = selection.getCursor();
       this.props.handleRecordEditorInput!({
-        type: InputType.cursorPositionChange,
+        type: 'cursorPositionChange',
         time: this.props.getTimerDuration!(),
         data: editorCursorPositionToBeApplied
       });
@@ -100,7 +96,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       const isBackwards: boolean = selection.isBackwards();
       if (!isEqual(range.start, range.end)) {
         this.props.handleRecordEditorInput!({
-          type: InputType.selectionRangeData,
+          type: 'selectionRangeData',
           time: this.props.getTimerDuration!(),
           data: { range, isBackwards }
         });
@@ -109,34 +105,42 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   }
 
   public componentDidUpdate(prevProps: IEditorProps) {
-    if (
-      this.props.codeDeltasToApply &&
-      this.props.codeDeltasToApply !== prevProps.codeDeltasToApply
-    ) {
-      (this.AceEditor.current as any).editor.session
-        .getDocument()
-        .applyDeltas(this.props.codeDeltasToApply);
+    const { codeDeltasToApply, inputToApply } = this.props;
+
+    if (codeDeltasToApply && codeDeltasToApply !== prevProps.codeDeltasToApply) {
+      (this.AceEditor.current as any).editor.session.getDocument().applyDeltas(codeDeltasToApply);
       (this.AceEditor.current as any).editor.selection.clearSelection();
     }
-    if (
-      this.props.editorCursorPositionToBeApplied &&
-      this.props.editorCursorPositionToBeApplied !== prevProps.editorCursorPositionToBeApplied
-    ) {
-      (this.AceEditor.current as any).editor.moveCursorToPosition(
-        this.props.editorCursorPositionToBeApplied
-      );
-      (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();
-      (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(
-        this.props.editorCursorPositionToBeApplied,
-        0.5
-      );
+
+    if (!inputToApply || inputToApply === prevProps.inputToApply) {
+      return;
     }
-    if (
-      this.props.editorSelectionDataToBeApplied &&
-      this.props.editorSelectionDataToBeApplied !== prevProps.editorSelectionDataToBeApplied
-    ) {
-      const { range, isBackwards } = { ...this.props.editorSelectionDataToBeApplied };
-      (this.AceEditor.current as any).editor.selection.setSelectionRange(range, isBackwards);
+
+    switch (inputToApply.type) {
+      case 'codeDelta':
+        (this.AceEditor.current as any).editor.session.getDocument().applyDelta(inputToApply.data);
+        (this.AceEditor.current as any).editor.selection.clearSelection();
+        break;
+      case 'cursorPositionChange':
+        (this.AceEditor.current as any).editor.moveCursorToPosition(inputToApply.data);
+        (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();
+        (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(
+          inputToApply.data,
+          0.5
+        );
+        break;
+      case 'selectionRangeData':
+        const { range, isBackwards } = inputToApply.data;
+        (this.AceEditor.current as any).editor.selection.setSelectionRange(range, isBackwards);
+        break;
+      case 'keyboardCommand':
+        const keyboardCommand = inputToApply.data;
+        switch (keyboardCommand) {
+          case 'run':
+            this.props.handleEditorEval();
+            break;
+        }
+        break;
     }
   }
 
@@ -333,7 +337,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       return;
     }
     this.props.handleRecordEditorInput!({
-      type: InputType.keyboardCommand,
+      type: 'keyboardCommand',
       time: this.props.getTimerDuration!(),
       data: KeyboardCommand.run
     });

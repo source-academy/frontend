@@ -36,6 +36,7 @@ import {
   SET_CODE_DELTAS_TO_APPLY,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
+  SET_INPUT_TO_APPLY,
   SET_SOURCECAST_DATA,
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_STATUS,
@@ -48,8 +49,6 @@ import {
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
-  UPDATE_EDITOR_CURSOR_POSITION,
-  UPDATE_EDITOR_SELECTION_DATA,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
@@ -556,11 +555,18 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state.sourcereel,
           playbackData: {
             init: {
-              editorValue: action.payload.editorValue,
-              editorCursorPositionToBeApplied: action.payload.editorCursorPositionToBeApplied
+              editorValue: action.payload.editorValue
             },
             inputs: []
           }
+        }
+      };
+    case SET_INPUT_TO_APPLY:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          inputToApply: action.payload.inputToApply
         }
       };
     case SET_SOURCECAST_DATA:
@@ -683,22 +689,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state.grading,
           currentSubmission: action.payload.submissionId,
           currentQuestion: action.payload.questionId
-        }
-      };
-    case UPDATE_EDITOR_CURSOR_POSITION:
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          editorCursorPositionToBeApplied: action.payload.editorCursorPositionToBeApplied
-        }
-      };
-    case UPDATE_EDITOR_SELECTION_DATA:
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          editorSelectionDataToBeApplied: action.payload.editorSelectionDataToBeApplied
         }
       };
     case UPDATE_EDITOR_VALUE:

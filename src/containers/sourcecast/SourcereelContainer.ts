@@ -1,6 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Input } from 'src/components/sourcecast/sourcecastShape';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -87,7 +88,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         playgroundExternalSelect(externalLibraryName, location),
       handleRecordAudioUrl: recordAudioUrl,
-      handleRecordEditorInput: recordEditorInput,
+      handleRecordEditorInput: (input: Input) => recordEditorInput(location, input),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

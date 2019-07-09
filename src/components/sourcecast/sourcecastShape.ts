@@ -1,19 +1,12 @@
-export enum InputType {
-  cursorPositionChange = 'cursorPositionChange',
-  codeDelta = 'codeDelta',
-  keyboardCommand = 'keyboardCommand',
-  selectionRangeData = 'selectionRangeData'
+export interface IInputTypeShape {
+  cursorPositionChange: IPosition;
+  codeDelta: ICodeDelta;
+  keyboardCommand: KeyboardCommand;
+  selectionRangeData: ISelectionData;
 }
 
 export enum KeyboardCommand {
   run = 'run'
-}
-
-export enum RecordingStatus {
-  notStarted = 'notStarted',
-  recording = 'recording',
-  paused = 'paused',
-  finished = 'finished'
 }
 
 export enum PlaybackStatus {
@@ -45,20 +38,17 @@ export interface IPosition {
   column: number;
 }
 
-export interface IInput {
-  type: InputType;
-  time: number;
-  data: InputData;
-}
+// Refer: https://stackoverflow.com/questions/55758713/match-pair-for-keyof-and-valueof-an-interface
+export type Input = keyof IInputTypeShape extends infer K
+  ? K extends keyof IInputTypeShape ? { time: number; type: K; data: IInputTypeShape[K] } : never
+  : never;
 
 export interface IPlaybackData {
   init: {
     editorValue: string;
   };
-  inputs: IInput[];
+  inputs: Input[];
 }
-
-export type InputData = ISelectionData | ICodeDelta | IPosition | KeyboardCommand;
 
 export interface ISourcecastData {
   name: string;
@@ -73,4 +63,11 @@ export interface ISourcecastData {
     name: string;
   };
   url: string;
+}
+
+export enum RecordingStatus {
+  notStarted = 'notStarted',
+  recording = 'recording',
+  paused = 'paused',
+  finished = 'finished'
 }

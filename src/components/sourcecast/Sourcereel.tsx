@@ -11,7 +11,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import { IInput, IPlaybackData, RecordingStatus } from './sourcecastShape';
+import { Input, IPlaybackData, RecordingStatus } from './sourcecastShape';
 
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
 
@@ -59,7 +59,7 @@ export interface IDispatchProps {
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleRecordAudioUrl: (audioUrl: string) => void;
-  handleRecordEditorInput: (input: IInput) => void;
+  handleRecordEditorInput: (input: Input) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
