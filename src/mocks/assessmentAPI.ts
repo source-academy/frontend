@@ -93,6 +93,24 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     story: 'sidequest-2.1',
     xp: 3,
     gradingStatus: 'none'
+  },
+  {
+    category: AssessmentCategories.Practical,
+    closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
+    grade: 4,
+    id: 5,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2018-07-18T05:24:26.026Z',
+    title: 'A sample Practical',
+    shortSummary:
+      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    status: AssessmentStatuses.not_attempted,
+    story: 'sidequest-2.1',
+    xp: 3,
+    gradingStatus: 'none',
+    private: true
   }
 ];
 
@@ -542,5 +560,23 @@ sapien
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
     title: 'A Closed Mission'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    id: 4,
+    longSummary:
+      'This is the closed mission briefi  ng. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    questions: mockClosedAssessmentQuestions,
+    title: 'A closed sidequest'
+  },
+  {
+    category: AssessmentCategories.Mission,
+    id: 5,
+    longSummary:
+      'This is the closed mission briefi  ng. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    questions: mockAssessmentQuestions,
+    title: 'A sample Practical'
   }
 ];

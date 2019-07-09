@@ -24,6 +24,7 @@ export interface IAssessmentOverview {
   story: string | null;
   xp: number;
   gradingStatus: GradingStatus;
+  private?: boolean;
 }
 
 export enum AssessmentStatuses {
@@ -63,7 +64,8 @@ export enum AssessmentCategories {
   Contest = 'Contest',
   Mission = 'Mission',
   Path = 'Path',
-  Sidequest = 'Sidequest'
+  Sidequest = 'Sidequest',
+  Practical = 'Practical'
 }
 
 export type AssessmentCategory = keyof typeof AssessmentCategories;
