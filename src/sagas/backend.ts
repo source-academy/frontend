@@ -55,7 +55,7 @@ type Tokens = {
 };
 
 function* backendSaga(): SagaIterator {
-  yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
+  yield takeEvery(actionTypes.FETCH_AUTH, function* (action) {
     const luminusCode = (action as actionTypes.IAction).payload;
     const tokens = yield call(postAuth, luminusCode);
     const user = tokens ? yield call(getUser, tokens) : null;
@@ -70,7 +70,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function*() {
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function* () {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -81,7 +81,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT, function* (action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -93,7 +93,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.SUBMIT_ANSWER, function*(action) {
+  yield takeEvery(actionTypes.SUBMIT_ANSWER, function* (action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role !== Role.Student) {
       return yield call(showWarningMessage, 'Only students can submit answers.');
@@ -146,7 +146,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.SUBMIT_ASSESSMENT, function*(action) {
+  yield takeEvery(actionTypes.SUBMIT_ASSESSMENT, function* (action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role !== Role.Student) {
       return yield call(showWarningMessage, 'Only students can submit assessments.');
@@ -175,7 +175,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*(action) {
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function* (action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -189,7 +189,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
+  yield takeEvery(actionTypes.FETCH_GRADING, function* (action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -204,31 +204,32 @@ function* backendSaga(): SagaIterator {
   /**
    * Unsubmits the submission and updates the grading overviews of the new status.
    */
-  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(action) {
+  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function* (action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const { submissionId } = (action as actionTypes.IAction).payload;
+    const submissionId = (action as actionTypes.IAction).payload;
 
-    const resp: Response = yield postUnsubmit(submissionId, tokens);
+    const resp: Response = yield call(postUnsubmit, submissionId, tokens);
     if (!resp || !resp.ok) {
       yield handleResponseError(resp);
       return;
     }
 
-    const overviews = yield select((state: IState) => state.session.gradingOverviews || []);
-    const newOverviews = (overviews as GradingOverview[]).map(overview => {
-      if (overview.submissionId === submissionId) {
-        return { ...overview, submissionStatus: 'attempted' };
-      }
-      return overview;
-    });
+    const overviews: GradingOverview[] = yield select((state: IState) => state.session.gradingOverviews || []);
+    const newOverviews: GradingOverview[] = overviews.map(
+      overview => {
+        if (overview.submissionId === submissionId) {
+          return { ...overview, submissionStatus: 'attempted' };
+        }
+        return overview;
+      });
     yield call(showSuccessMessage, 'Unsubmit successful', 1000);
     yield put(actions.updateGradingOverviews(newOverviews));
   });
 
-  yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
+  yield takeEvery(actionTypes.SUBMIT_GRADING, function* (action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
@@ -387,7 +388,7 @@ async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | 
       q.library.globals = Object.entries(q.library.globals as object).map(entry => {
         try {
           entry[1] = (window as any).eval(entry[1]);
-        } catch (e) {}
+        } catch (e) { }
         return entry;
       });
       return q;
@@ -436,7 +437,7 @@ async function postAssessment(id: number, tokens: Tokens): Promise<Response | nu
  * @params group - a boolean if true gets the submissions from the grader's group
  * @returns {Array} GradingOverview[]
  */
-async function getGradingOverviews(
+export async function getGradingOverviews(
   tokens: Tokens,
   group: boolean
 ): Promise<GradingOverview[] | null> {
@@ -480,7 +481,7 @@ async function getGradingOverviews(
  * GET /grading/${submissionId}
  * @returns {Grading}
  */
-async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading | null> {
+export async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading | null> {
   const response = await request(`grading/${submissionId}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
@@ -560,7 +561,7 @@ const postGrading = async (
 /**
  * POST /grading/{submissionId}/unsubmit
  */
-async function postUnsubmit(submissionId: number, tokens: Tokens) {
+export async function postUnsubmit(submissionId: number, tokens: Tokens) {
   const resp = await request(`grading/${submissionId}/unsubmit`, 'POST', {
     accessToken: tokens.accessToken,
     noHeaderAccept: true,
