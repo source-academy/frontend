@@ -1,4 +1,6 @@
+import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../../reducers/states';
@@ -170,7 +172,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       }
     };
     return (
-      <div className={'Sourcereel pt-dark'}>
+      <div className={classNames('Sourcereel', Classes.DARK)}>
         <Workspace {...workspaceProps} />
       </div>
     );

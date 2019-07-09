@@ -1,5 +1,5 @@
 /* tslint:disable:no-console */
-import { Card, Popover } from '@blueprintjs/core';
+import { Card, H1, Popover } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -90,7 +90,7 @@ class SourcereelControlbar extends React.PureComponent<
         <br />
         <div className="Timer">
           <Card elevation={1}>
-            <h1>{this.renderLabel(this.state.duration)}</h1>
+            <H1>{this.renderLabel(this.state.duration)}</H1>
           </Card>
         </div>
         <br />

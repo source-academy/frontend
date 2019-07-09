@@ -68,6 +68,9 @@ export interface ISourcecastData {
   audio: string;
   deltas: string;
   id: number;
-  uploader_id: number;
+  uploader: {
+    id: number;
+    name: string;
+  };
   url: string;
 }

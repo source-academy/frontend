@@ -74,8 +74,8 @@ const NavigationBar: React.SFC<OwnProps> = props => (
       <NavbarGroup align={Alignment.RIGHT}>
         <NavLink
           to={'/academy/sourcereel'}
-          activeClassName="pt-active"
-          className="NavigationBar__link pt-button pt-minimal"
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.MOBILE_VIDEO} />
           <div className="navbar-button-text hidden-xs">Sourcereel</div>

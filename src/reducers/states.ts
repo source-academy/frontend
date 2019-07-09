@@ -318,7 +318,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   sourcereel: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
-    audioUrl: 'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3',
+    audioUrl: '',
     playbackData: {
       init: { editorValue: '' },
       inputs: []

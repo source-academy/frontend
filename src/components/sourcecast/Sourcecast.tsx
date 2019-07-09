@@ -1,5 +1,8 @@
+import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
+
 import { InterpreterOutput } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Markdown from '../commons/Markdown';
@@ -204,7 +207,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       }
     };
     return (
-      <div className={'Sourcecast pt-dark'}>
+      <div className={classNames('Sourcecast', Classes.DARK)}>
         <Workspace {...workspaceProps} />
       </div>
     );

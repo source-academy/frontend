@@ -1,4 +1,4 @@
-import { FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Divider, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid/dist/styles/ag-grid.css';
@@ -44,16 +44,16 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
         {
           headerName: 'Title',
           field: 'name',
-          width: 150,
-          maxWidth: 150,
+          width: 200,
+          maxWidth: 200,
           suppressMovable: true,
           suppressMenu: true
         },
         {
           headerName: 'Uploader',
-          field: 'uploader_id',
-          width: 150,
-          maxWidth: 150,
+          field: 'uploader.name',
+          width: 200,
+          maxWidth: 200,
           suppressMovable: true,
           suppressMenu: true
         },
@@ -65,8 +65,8 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
             handleRecordAudioUrl: this.props.handleRecordAudioUrl,
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },
-          width: 110,
-          maxWidth: 110,
+          width: 200,
+          maxWidth: 200,
           suppressSorting: true,
           suppressMovable: true,
           suppressMenu: true,
@@ -93,13 +93,14 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
       <NonIdealState
         className="Sourcecast"
         description="Fetching sourcecast index..."
-        visual={<Spinner large={true} />}
+        icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
     const data = sortBy(this.props.sourcecastIndex, [(a: ISourcecastData) => -a.id]);
 
     const grid = (
       <div className="SourcecastContainer">
+        <br />
         <div>
           <FormGroup label="" labelFor="text-input" inline={true}>
             <InputGroup
@@ -112,11 +113,8 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
             />
           </FormGroup>
         </div>
-
-        <hr />
-        <br />
-
-        <div className="Sourcecast">
+        <Divider />
+        <div className="SourcecastTable">
           <div className="ag-grid-parent ag-theme-fresh">
             <AgGridReact
               gridAutoHeight={true}
@@ -126,11 +124,12 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
               columnDefs={this.state.columnDefs}
               onGridReady={this.onGridReady}
               rowData={data}
-              pagination={true}
+              pagination={false}
               paginationPageSize={50}
             />
           </div>
         </div>
+        <br />
       </div>
     );
     return (
