@@ -28,9 +28,10 @@ const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
     return (
       <Tag
         className="row"
-        style={{ backgroundColor: 'transparent' }}
+        style={{ backgroundColor: 'transparent', marginLeft: '0.4rem', marginRight: '0.4rem' }}
         key={`${notification.id}`}
         minimal={true}
+        multiline={true}
         onRemove={onRemove}
       >
         {makeNotificationMessage(notification.type)}
