@@ -112,6 +112,24 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     story: null,
     xp: 0,
     gradingStatus: GradingStatuses.excluded
+  },
+  {
+    category: AssessmentCategories.Practical,
+    closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
+    grade: 4,
+    id: 5,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2018-07-18T05:24:26.026Z',
+    title: 'A sample Practical',
+    shortSummary:
+      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    status: AssessmentStatuses.not_attempted,
+    story: 'sidequest-2.1',
+    xp: 3,
+    gradingStatus: GradingStatuses.none,
+    private: true
   }
 ];
 
