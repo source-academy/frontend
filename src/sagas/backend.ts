@@ -13,7 +13,6 @@ import {
 } from '../components/academy/grading/gradingShape';
 import {
   AssessmentStatuses,
-  IAssessment,
   IAssessmentOverview,
   IQuestion
 } from '../components/assessment/assessmentShape';
@@ -64,8 +63,14 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
     const id = (action as actionTypes.IAction).payload;
-    const assessment: IAssessment = yield call(request.getAssessment, id, tokens);
+    const { assessment, password } = yield call(
+      request.getAssessment,
+      id,
+      tokens,
+      yield select((state: IState) => state.session.assessmentPassword)
+    );
     if (assessment) {
+      yield put(actions.storeAssessmentPassword(password));
       yield put(actions.updateAssessment(assessment));
     }
   });

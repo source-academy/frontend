@@ -130,16 +130,34 @@ export async function getAssessmentOverviews(
 /**
  * GET /assessments/${assessmentId}
  */
-export async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
+export async function getAssessment(
+  id: number,
+  tokens: Tokens,
+  password: string | null
+): Promise<{ assessment: IAssessment | null; password: string | null }> {
   const response = await request(`assessments/${id}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (!response || !response.ok) {
-    return null;
+  let assessment: IAssessment | null = null;
+
+  if (response && response.status === 403) {
+    const input = window.prompt('Please enter password.', '');
+    if (!input) {
+      history.back();
+      return { assessment, password };
+    }
+    return getAssessment(id, tokens, input);
   }
-  const assessment = (await response.json()) as IAssessment;
+
+  if (!response || !response.ok) {
+    history.back();
+    handleResponseError(response);
+    return { assessment, password };
+  }
+
+  assessment = (await response.json()) as IAssessment;
   // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
   //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
   assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
@@ -165,7 +183,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
     });
     return q;
   });
-  return assessment;
+  return { assessment, password };
 }
 
 /**

@@ -129,7 +129,7 @@ describe('Test FETCH_ASSESSMENT Action', () => {
     const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
       .withState({ session: mockTokens })
-      .provide([[call(getAssessment, mockId, mockTokens), mockAssessment]])
+      .provide([[call(getAssessment, mockId, mockTokens, null), mockAssessment]])
       .put(actions.updateAssessment(mockAssessment))
       .hasFinalState({ session: mockTokens })
       .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: mockId })
@@ -140,7 +140,7 @@ describe('Test FETCH_ASSESSMENT Action', () => {
     const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
       .withState({ session: mockTokens })
-      .provide([[call(getAssessment, mockId, mockTokens), null]])
+      .provide([[call(getAssessment, mockId, mockTokens, null), null]])
       .call(getAssessment, mockId, mockTokens)
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT)
       .hasFinalState({ session: mockTokens })
