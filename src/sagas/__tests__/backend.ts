@@ -140,7 +140,9 @@ describe('Backend Sagas tests', () => {
         .put(actions.updateGradingOverviews(unsubmittedOverviews))
         .dispatch({
           type: actionTypes.UNSUBMIT_SUBMISSION,
-          payload: 1
+          payload: {
+            submissionId: 1
+          }
         })
         .silentRun();
     });

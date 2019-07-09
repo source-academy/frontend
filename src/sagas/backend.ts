@@ -209,7 +209,7 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const submissionId = (action as actionTypes.IAction).payload;
+    const { submissionId } = (action as actionTypes.IAction).payload;
 
     const resp: Response = yield call(postUnsubmit, submissionId, tokens);
     if (!resp || !resp.ok) {
