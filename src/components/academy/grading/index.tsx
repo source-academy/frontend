@@ -21,13 +21,13 @@ import { RouteComponentProps } from 'react-router';
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import ContentDisplay from '../../commons/ContentDisplay';
-import GradeTooltip from './GradeTooltip';
-import GradingNavLink from './GradingNavLink';
+import EditGradingCell from './EditGradingCell';
+import GradeCell from './GradeCell';
 import { GradingOverview } from './gradingShape';
-import GradingStatusTooltip from './GradingStatusTooltip';
+import GradingStatusCell from './GradingStatusCell';
 import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace';
 import UnsubmitCell from './UnsubmitCell';
-import XPTooltip from './XPTooltip';
+import XPCell from './XPCell';
 
 type State = {
   filterValue: string;
@@ -59,17 +59,17 @@ export interface IStateProps {
 
 /** Component to render in table - grading status */
 const GradingStatus = (props: GradingNavLinkProps) => {
-  return <GradingStatusTooltip data={props.data} />;
+  return <GradingStatusCell data={props.data} />;
 };
 
 /** Component to render in table - marks */
 const GradingMarks = (props: GradingNavLinkProps) => {
-  return <GradeTooltip data={props.data} />;
+  return <GradeCell data={props.data} />;
 };
 
 /** Component to render in table - XP */
 const GradingExp = (props: GradingNavLinkProps) => {
-  return <XPTooltip data={props.data} />;
+  return <XPCell data={props.data} />;
 };
 
 class Grading extends React.Component<IGradingProps, State> {
@@ -141,7 +141,7 @@ class Grading extends React.Component<IGradingProps, State> {
       },
       {
         headerName: 'Edit',
-        cellRendererFramework: GradingNavLink,
+        cellRendererFramework: EditGradingCell,
         width: 65,
         suppressFilter: true,
         suppressSorting: true,

@@ -4,10 +4,10 @@ import * as React from 'react';
 
 import { NavLink } from 'react-router-dom';
 
-import { controlButton } from '../../../components/commons/controlButton';
+import { controlButton } from '../../commons/controlButton';
 import { GradingOverview } from './gradingShape';
 
-type GradingNavLinkProps = {
+type EditGradingCellProps = {
   data: GradingOverview;
 };
 
@@ -18,8 +18,8 @@ type GradingNavLinkProps = {
  *
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
-class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
-  constructor(props: GradingNavLinkProps) {
+class EditGradingCell extends React.Component<EditGradingCellProps, {}> {
+  constructor(props: EditGradingCellProps) {
     super(props);
   }
 
@@ -36,4 +36,4 @@ class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
   }
 }
 
-export default GradingNavLink;
+export default EditGradingCell;

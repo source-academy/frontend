@@ -189,8 +189,13 @@
   }
 }
 
+/* Increase default margin of bp3's Divider for greater vertical spacing */
+.#{$ns}-divider {
+  margin: 12px 0 12px 0;
+}
+
 .Grading {
-  /* To show the table borders that get cut out by a Card  */
+  /* To show the table borders that get cut out by a Card */
   padding: 1px;
 
   /** 
@@ -204,7 +209,7 @@
     margin-bottom: 0;
   }
 
-  .pt-icon {
+  .#{$ns}-icon {
     /* Vertically centre appearance of blueprintjs icons in ag-grid */
     margin-top: 6px;
   }
@@ -225,7 +230,7 @@
   display: flex;
   justify-content: space-between;
 
-  .pt-icon {
+  .#{$ns}-icon {
     /* Remove unnecessary margin to right when button text is hidden */
     margin-right: 0;
   }

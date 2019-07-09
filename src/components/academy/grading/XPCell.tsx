@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { GradingOverview } from './gradingShape';
 
-type XPTooltipProps = {
+type XPCellProps = {
   data: GradingOverview;
 };
 
@@ -14,8 +14,8 @@ type XPTooltipProps = {
  *
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
-class XPTooltip extends React.Component<XPTooltipProps, {}> {
-  constructor(props: XPTooltipProps) {
+class XPCell extends React.Component<XPCellProps, {}> {
+  constructor(props: XPCellProps) {
     super(props);
   }
 
@@ -37,4 +37,4 @@ class XPTooltip extends React.Component<XPTooltipProps, {}> {
   }
 }
 
-export default XPTooltip;
+export default XPCell;

@@ -5,7 +5,7 @@ import * as React from 'react';
 import { GradingStatuses } from '../../assessment/assessmentShape';
 import { GradingOverview } from './gradingShape';
 
-type GradingStatusTooltipProps = {
+type GradingStatusCellProps = {
   data: GradingOverview;
 };
 
@@ -16,8 +16,8 @@ type GradingStatusTooltipProps = {
  *
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
-class GradingStatusTooltip extends React.Component<GradingStatusTooltipProps, {}> {
-  constructor(props: GradingStatusTooltipProps) {
+class GradingStatusCell extends React.Component<GradingStatusCellProps, {}> {
+  constructor(props: GradingStatusCellProps) {
     super(props);
   }
 
@@ -63,4 +63,4 @@ class GradingStatusTooltip extends React.Component<GradingStatusTooltipProps, {}
   }
 }
 
-export default GradingStatusTooltip;
+export default GradingStatusCell;
