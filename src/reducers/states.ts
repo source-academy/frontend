@@ -119,6 +119,7 @@ export interface IWorkspaceState {
 export interface ISessionState {
   readonly accessToken?: string;
   readonly assessmentOverviews?: IAssessmentOverview[];
+  readonly assessmentPassword: string | null;
   readonly assessments: Map<number, IAssessment>;
   readonly announcements?: Announcement[];
   readonly grade: number;
@@ -336,6 +337,7 @@ export const defaultSession: ISessionState = {
   ],
   assessments: new Map<number, IAssessment>(),
   assessmentOverviews: undefined,
+  assessmentPassword: null,
   grade: 0,
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
