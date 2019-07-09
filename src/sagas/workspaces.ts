@@ -1,8 +1,11 @@
 import { Context, interrupt, resume, runInContext, setBreakpointAtLine } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
+import { SourceError } from 'js-slang/dist/types';
+import { cloneDeep } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
+
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
@@ -360,7 +363,19 @@ function* evalCode(
       yield put(actions.endDebuggerPause(location));
       yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location));
     } else {
-      yield put(actions.evalInterpreterError(context.errors, location));
+      const prepend = yield select(
+        (state: IState) => (state.workspaces[location] as IWorkspaceState).editorPrepend
+      );
+      const prependLines = prepend.length > 0 ? prepend.split('\n').length : 0;
+
+      const errors = context.errors.map((error: SourceError) => {
+        const newError = cloneDeep(error);
+        newError.location.start.line = newError.location.start.line - prependLines;
+        newError.location.end.line = newError.location.end.line - prependLines;
+        return newError;
+      });
+
+      yield put(actions.evalInterpreterError(errors, location));
     }
   } else if (interrupted) {
     interrupt(context);
@@ -391,7 +406,19 @@ function* evalTestCode(code: string, context: Context, location: WorkspaceLocati
       yield put(actions.evalInterpreterSuccess(result.value, location));
       yield put(actions.evalTestcaseSuccess(result.value, location, index));
     } else {
-      yield put(actions.evalInterpreterError(context.errors, location));
+      const prepend = yield select(
+        (state: IState) => (state.workspaces[location] as IWorkspaceState).editorPrepend
+      );
+      const prependLines = prepend.length > 0 ? prepend.split('\n').length : 0;
+
+      const errors = context.errors.map((error: SourceError) => {
+        const newError = cloneDeep(error);
+        newError.location.start.line = newError.location.start.line - prependLines;
+        newError.location.end.line = newError.location.end.line - prependLines;
+        return newError;
+      });
+
+      yield put(actions.evalInterpreterError(errors, location));
       yield put(actions.evalTestcaseFailure('An error occured', location, index));
     }
   } else if (interrupted) {
