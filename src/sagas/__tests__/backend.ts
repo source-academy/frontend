@@ -3,10 +3,7 @@ import * as matchers from 'redux-saga-test-plan/matchers';
 import * as actions from '../../actions';
 import * as actionTypes from '../../actions/actionTypes';
 import { GradingOverview } from '../../components/academy/grading/gradingShape';
-import {
-  mockGrading,
-  mockGradingOverviews
-} from '../../mocks/gradingAPI';
+import { mockGrading, mockGradingOverviews } from '../../mocks/gradingAPI';
 import { defaultState, Role } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import backendSaga, { getGrading, getGradingOverviews, postUnsubmit } from '../backend';
@@ -14,7 +11,6 @@ import backendSaga, { getGrading, getGradingOverviews, postUnsubmit } from '../b
 describe('Backend Sagas tests', () => {
   describe('Response to FETCH_GRADING_OVERVIEWS', () => {
     test('puts updateGradingOverview with a dummy overview', () => {
-
       return expectSaga(backendSaga)
         .withState(defaultState)
         .provide([[matchers.call.fn(getGradingOverviews), mockGradingOverviews]])
