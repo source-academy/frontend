@@ -5,6 +5,7 @@ import {
   LOG_OUT,
   SET_TOKENS,
   SET_USER,
+  STORE_ASSESSMENT_PASSWORD,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
@@ -72,7 +73,11 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
         ...state,
         notifications: action.payload
       };
-
+    case STORE_ASSESSMENT_PASSWORD:
+      return {
+        ...state,
+        assessmentPassword: action.payload
+      };
     default:
       return state;
   }
