@@ -55,7 +55,7 @@ type Tokens = {
 };
 
 function* backendSaga(): SagaIterator {
-  yield takeEvery(actionTypes.FETCH_AUTH, function* (action) {
+  yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
     const luminusCode = (action as actionTypes.IAction).payload;
     const tokens = yield call(postAuth, luminusCode);
     const user = tokens ? yield call(getUser, tokens) : null;
@@ -70,7 +70,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function* () {
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function*() {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -81,7 +81,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_ASSESSMENT, function* (action) {
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -93,7 +93,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.SUBMIT_ANSWER, function* (action) {
+  yield takeEvery(actionTypes.SUBMIT_ANSWER, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role !== Role.Student) {
       return yield call(showWarningMessage, 'Only students can submit answers.');
@@ -146,7 +146,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.SUBMIT_ASSESSMENT, function* (action) {
+  yield takeEvery(actionTypes.SUBMIT_ASSESSMENT, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role !== Role.Student) {
       return yield call(showWarningMessage, 'Only students can submit assessments.');
@@ -175,7 +175,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function* (action) {
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -189,7 +189,7 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_GRADING, function* (action) {
+  yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -204,7 +204,7 @@ function* backendSaga(): SagaIterator {
   /**
    * Unsubmits the submission and updates the grading overviews of the new status.
    */
-  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function* (action) {
+  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -217,19 +217,20 @@ function* backendSaga(): SagaIterator {
       return;
     }
 
-    const overviews: GradingOverview[] = yield select((state: IState) => state.session.gradingOverviews || []);
-    const newOverviews: GradingOverview[] = overviews.map(
-      overview => {
-        if (overview.submissionId === submissionId) {
-          return { ...overview, submissionStatus: 'attempted' };
-        }
-        return overview;
-      });
+    const overviews: GradingOverview[] = yield select(
+      (state: IState) => state.session.gradingOverviews || []
+    );
+    const newOverviews: GradingOverview[] = overviews.map(overview => {
+      if (overview.submissionId === submissionId) {
+        return { ...overview, submissionStatus: 'attempted' };
+      }
+      return overview;
+    });
     yield call(showSuccessMessage, 'Unsubmit successful', 1000);
     yield put(actions.updateGradingOverviews(newOverviews));
   });
 
-  yield takeEvery(actionTypes.SUBMIT_GRADING, function* (action) {
+  yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
@@ -388,7 +389,7 @@ async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | 
       q.library.globals = Object.entries(q.library.globals as object).map(entry => {
         try {
           entry[1] = (window as any).eval(entry[1]);
-        } catch (e) { }
+        } catch (e) {}
         return entry;
       });
       return q;
