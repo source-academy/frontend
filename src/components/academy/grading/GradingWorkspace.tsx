@@ -29,10 +29,10 @@ export type StateProps = {
   activeTab: number;
   autogradingResults: AutogradingResult[];
   grading?: Grading;
-  editorValue: string | null;
   editorPrepend: string;
-  editorTestcases: ITestcase[];
+  editorValue: string | null;
   editorPostpend: string;
+  editorTestcases: ITestcase[];
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
