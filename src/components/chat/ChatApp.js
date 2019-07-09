@@ -79,6 +79,8 @@ class ChatApp extends React.Component {
       roomId: this.state.currentRoom.id,
       text
     });
+
+    this.props.handleNotifyUsers(this.props.assessmentId, this.props.submissionId);
   }
 
   render() {

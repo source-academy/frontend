@@ -336,6 +336,22 @@ function* backendSaga(): SagaIterator {
       yield put(actions.updateNotifications(notifications));
     }
   });
+
+  yield takeEvery(actionTypes.NOTIFY_CHATKIT_USERS, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    yield request(`chat/notify`, 'POST', {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      body: {
+        assessmentId: (action as actionTypes.IAction).payload.assessmentId || null,
+        submissionId: (action as actionTypes.IAction).payload.submissionId || null
+      },
+      shouldAutoLogout: false
+    });
+  });
 }
 
 /**

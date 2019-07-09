@@ -377,7 +377,10 @@ class AssessmentWorkspace extends React.Component<
           label: `Comments`,
           icon: IconNames.CHAT,
           body: USE_CHATKIT ? (
-            <ChatApp roomId={props.assessment!.questions[questionId].comment} />
+            <ChatApp
+              assessmentId={this.props.assessment!.id}
+              roomId={props.assessment!.questions[questionId].comment}
+            />
           ) : (
             <span>Chatkit disabled.</span>
           )

@@ -151,3 +151,11 @@ export const updateNotifications = (notifications: AcademyNotification[]) => ({
   type: actionTypes.UPDATE_NOTIFICATIONS,
   payload: notifications
 });
+
+export const notifyChatUsers = (assessmentId?: number, submissionId?: number) => ({
+  type: actionTypes.NOTIFY_CHATKIT_USERS,
+  payload: {
+    assessmentId,
+    submissionId
+  }
+});

@@ -276,7 +276,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         label: `Chat`,
         icon: IconNames.CHAT,
         body: USE_CHATKIT ? (
-          <ChatApp roomId={props.grading![questionId].grade.comment} />
+          <ChatApp
+            roomId={props.grading![questionId].grade.comment}
+            submissionId={this.props.submissionId}
+          />
         ) : (
           <span>ChatKit disabled.</span>
         )

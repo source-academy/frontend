@@ -67,6 +67,8 @@ const makeNotificationMessage = (type: AcademyNotificationType) => {
       return 'This assessment has been unsubmitted.';
     case 'graded':
       return 'This assessment has been manually graded.';
+    case 'new_message':
+      return 'There are new messages.';
     default:
       return 'Unknown notification';
   }
