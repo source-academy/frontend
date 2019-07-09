@@ -83,7 +83,10 @@ class ContributorsDetails extends React.Component {
                 <u>All Contributors</u>
               </strong>
             </h5>
-            <p>Below are all contributors to the <a href={LINKS.GITHUB_ORG}>Github repositories of the Source Academy</a>.</p>
+            <p>
+              Below are all contributors to the{' '}
+              <a href={LINKS.GITHUB_ORG}>Github repositories of the Source Academy</a>.
+            </p>
           </div>
         </div>
       </div>
