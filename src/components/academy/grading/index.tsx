@@ -1,6 +1,7 @@
 import {
   Button,
   Colors,
+  Divider,
   FormGroup,
   InputGroup,
   Intent,
@@ -205,7 +206,7 @@ class Grading extends React.Component<IGradingProps, State> {
       <NonIdealState
         className="Grading"
         description="Fetching submissions..."
-        visual={<Spinner large={true} />}
+        icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
     const data = sortBy(this.props.gradingOverviews, [
@@ -246,7 +247,7 @@ class Grading extends React.Component<IGradingProps, State> {
           </div>
         </div>
 
-        <hr />
+        <Divider />
 
         <div className="Grading">
           <div className="ag-grid-parent ag-theme-balham">

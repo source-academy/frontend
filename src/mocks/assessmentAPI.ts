@@ -187,26 +187,17 @@ const mockGlobals: Array<[string, any]> = [
 const mockSoundLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryNames.SOUND,
-    symbols: externalLibraries.get(ExternalLibraryNames.SOUND)!
+    name: ExternalLibraryNames.SOUNDS,
+    symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
   },
   globals: mockGlobals
 };
 
-export const mock2DRuneLibrary: Library = {
+export const mockRuneLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryNames.TWO_DIM_RUNES,
-    symbols: externalLibraries.get(ExternalLibraryNames.TWO_DIM_RUNES)!
-  },
-  globals: mockGlobals
-};
-
-const mock3DRuneLibrary: Library = {
-  chapter: 1,
-  external: {
-    name: ExternalLibraryNames.THREE_DIM_RUNES,
-    symbols: externalLibraries.get(ExternalLibraryNames.THREE_DIM_RUNES)!
+    name: ExternalLibraryNames.RUNES,
+    symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
   },
   globals: mockGlobals
 };
@@ -223,7 +214,7 @@ const mockCurveLibrary: Library = {
 const mockToneMatrixLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryNames.SOUND,
+    name: ExternalLibraryNames.SOUNDS,
     symbols: ['get_matrix']
   },
   globals: mockGlobals
@@ -291,7 +282,7 @@ function volumeOfSphere(x) {
     comment: '`Great Job` **young padawan**',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
-    library: mock3DRuneLibrary,
+    library: mockRuneLibrary,
     prepend: `const square = x => x * x;
 const cube = x => x * x * x;
 const pi = 3.1415928;`,

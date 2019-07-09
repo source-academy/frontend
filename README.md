@@ -15,17 +15,14 @@
    
 ## For Windows Users
 
-### Running cadet-frontend
-Run `npm run win-start`
-
 ### Dealing with hooks
 In package.json, change line 28:\
 "pre-push": "bash scripts/test.sh",\
 to an empty line.
 
 Please note that doing this will disable the test suite, so you will need to run the tests manually instead. Using Git Bash (or any other UNIX-based command line), run the following:\
-cd scripts\
-bash test.sh
+`cd scripts`  
+`bash test.sh`
 
 ## js-slang
 
@@ -85,3 +82,11 @@ Because we use a local version of `js-slang`, the CI just breaks all the time.
 ## TypeScript Coding Conventions
 
 We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
+
+## Chatkit
+
+The chat functionality replacing the previous comment field found in assignments is built on top of Chatkit. Its documentation can be found [here](https://pusher.com/docs/chatkit).
+
+If you are using Chatkit without the backend server running, use the [test token provider](https://pusher.com/docs/chatkit/reference/test-token-provider), and hardcode `userId` and `roomId`.
+
+Internet connection is required for usage.
