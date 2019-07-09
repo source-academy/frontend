@@ -15,6 +15,7 @@ import {
   notifyChatUsers,
   setTokens,
   setUser,
+  storeAssessmentPassword,
   submitAnswer,
   submitAssessment,
   submitGrading,
@@ -159,6 +160,16 @@ test('setUser generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.SET_USER,
     payload: user
+  });
+});
+
+test('storeAssessmentPassword generates correct action object', () => {
+  const password = 'password';
+
+  const action = storeAssessmentPassword(password);
+  expect(action).toEqual({
+    type: actionTypes.STORE_ASSESSMENT_PASSWORD,
+    payload: password
   });
 });
 

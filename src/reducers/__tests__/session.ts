@@ -3,6 +3,7 @@ import {
   LOG_OUT,
   SET_TOKENS,
   SET_USER,
+  STORE_ASSESSMENT_PASSWORD,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
@@ -74,6 +75,22 @@ test('SET_USER works correctly', () => {
     ...defaultSession,
     ...payload
   });
+});
+
+test('STORE_ASSESSMENT_PASSWORD works correctly in updating assessment password', () => {
+  const newDefaultSession = {
+    ...defaultSession
+  };
+
+  const password = 'password';
+
+  const action = {
+    type: STORE_ASSESSMENT_PASSWORD,
+    payload: 'password'
+  };
+  const result: ISessionState = reducer(newDefaultSession, action);
+
+  expect(result.assessmentPassword).toEqual(password);
 });
 
 test('UPDATE_HISTORY_HELPERS works on non-academy location', () => {
