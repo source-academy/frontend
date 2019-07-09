@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { LINKS } from '../../utils/constants';
+
 const dot = <span className="dot">&bull;</span>;
 
 class ContributorsDetails extends React.Component {
@@ -81,7 +83,7 @@ class ContributorsDetails extends React.Component {
                 <u>All Contributors</u>
               </strong>
             </h5>
-            <p>Below are all contributors to the Github repositories of the Source Academy.</p>
+            <p>Below are all contributors to the <a href={LINKS.GITHUB_ORG}>Github repositories of the Source Academy</a>.</p>
           </div>
         </div>
       </div>
