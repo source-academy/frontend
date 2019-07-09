@@ -83,7 +83,7 @@ export const mockFetchGradingOverview = (
   }
 };
 
-const mockGrading: Grading = [
+export const mockGrading: Grading = [
   {
     question: {
       answer: "This student's answer to the 0th question......",
