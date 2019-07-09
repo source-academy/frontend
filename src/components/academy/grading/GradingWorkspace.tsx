@@ -29,9 +29,7 @@ export type StateProps = {
   activeTab: number;
   autogradingResults: AutogradingResult[];
   grading?: Grading;
-  editorPrepend: string;
   editorValue: string | null;
-  editorPostpend: string;
   editorTestcases: ITestcase[];
   editorHeight?: number;
   editorWidth: string;
@@ -141,11 +139,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorPrepend: this.props.editorPrepend,
-              editorPrependLines:
-                this.props.editorPrepend.length === 0
-                  ? 0
-                  : this.props.editorPrepend.split('\n').length,
               editorSessionId: '',
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
@@ -207,15 +200,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
-    let editorPrepend: string = '';
-    let editorPostpend: string = '';
     let editorTestcases: ITestcase[] = [];
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as IAnsweredQuestion;
       autogradingResults = questionData.autogradingResults;
-      editorPrepend = questionData.prepend;
-      editorPostpend = questionData.postpend;
       editorTestcases = questionData.testcases;
 
       editorValue = questionData.answer as string;
@@ -228,9 +217,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
     this.props.handleResetWorkspace({
       autogradingResults,
-      editorPrepend,
       editorValue,
-      editorPostpend,
       editorTestcases
     });
     this.props.handleClearContext(question.library);
