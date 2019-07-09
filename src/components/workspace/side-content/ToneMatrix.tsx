@@ -1,4 +1,5 @@
-import { Button } from '@blueprintjs/core';
+import { Button, Classes } from '@blueprintjs/core';
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 class ToneMatrix extends React.Component<{}, {}> {
@@ -26,7 +27,7 @@ class ToneMatrix extends React.Component<{}, {}> {
     return (
       <div className="sa-tone-matrix">
         <div className="row">
-          <div className="controls col-xs-12 pt-dark pt-button-group">
+          <div className={classNames('controls', 'col-xs-12', Classes.DARK, Classes.BUTTON_GROUP)}>
             <Button id="clear-matrix" onClick={this.handleClear}>
               Clear
             </Button>

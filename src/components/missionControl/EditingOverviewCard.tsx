@@ -4,8 +4,10 @@ import {
   Classes,
   Dialog,
   Elevation,
+  H3,
+  H4,
+  H6,
   Icon,
-  IconName,
   Intent,
   MenuItem,
   Text
@@ -127,10 +129,10 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
         <div className="col-xs-9 listing-text">
           {this.makeEditingOverviewCardTitle(overview, overview.title)}
           <div className="row listing-grade">
-            <h6> {`Max Grade: ${overview.maxGrade}`} </h6>
+            <H6> {`Max Grade: ${overview.maxGrade}`} </H6>
           </div>
           <div className="row listing-xp">
-            <h6> {`Max XP: ${overview.maxXp}`} </h6>
+            <H6> {`Max XP: ${overview.maxXp}`} </H6>
           </div>
           <div className="row listing-description" onClick={this.toggleEditField('shortSummary')}>
             {this.state.editingOverviewField === 'shortSummary' ? (
@@ -167,11 +169,11 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
   private makeEditingOverviewCardTitle = (overview: IAssessmentOverview, title: string) => (
     <div className="row listing-title">
       <Text ellipsize={true} className={'col-xs-10'}>
-        <h4 onClick={this.toggleEditField('title')}>
+        <H4 onClick={this.toggleEditField('title')}>
           {this.state.editingOverviewField === 'title'
             ? this.makeEditingOverviewTextarea('title')
             : createPlaceholder(title)}
-        </h4>
+        </H4>
       </Text>
       <div className="col-xs-2">{this.makeExportButton(overview)}</div>
     </div>
@@ -216,16 +218,16 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
       title="Other options"
     >
       <div className={Classes.DIALOG_BODY}>
-        <h3>Category</h3>
+        <H3>Category</H3>
         {categorySelect(this.props.overview.category, this.saveCategory)}
-        <h3>Story</h3>
+        <H3>Story</H3>
         <div onClick={this.toggleEditField('story')}>
           {this.state.editingOverviewField === 'story'
             ? this.makeEditingOverviewTextarea('story')
             : createPlaceholder(this.props.overview.story || '')}
         </div>
         <br />
-        <h3>Filename</h3>
+        <H3>Filename</H3>
         <div onClick={this.toggleEditField('fileName')}>
           {this.state.editingOverviewField === 'fileName'
             ? this.makeEditingOverviewTextarea('fileName')
@@ -245,12 +247,11 @@ const createPlaceholder = (str: string): string => {
 };
 
 const makeOverviewCardButton = (overview: IAssessmentOverview, listingPath: string | undefined) => {
-  const icon: IconName = IconNames.EDIT;
   const label: string = 'Edit mission';
   listingPath = listingPath || '/academy/' + assessmentCategoryLink(overview.category);
   return (
     <NavLink to={listingPath + `/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}>
-      {controlButton(label, icon)}
+      {controlButton(label, IconNames.EDIT)}
     </NavLink>
   );
 };
@@ -267,13 +268,17 @@ const categorySelect = (
   handleSelect = (i: AssessmentCategory, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <CategorySelectComponent
-    className="pt-minimal"
+    className={Classes.MINIMAL}
     items={assessmentCategoriesArr}
     onItemSelect={handleSelect}
     itemRenderer={categoryRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={category} rightIcon="double-caret-vertical" />
+    <Button
+      className={Classes.MINIMAL}
+      text={category}
+      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+    />
   </CategorySelectComponent>
 );
 

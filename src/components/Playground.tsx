@@ -1,4 +1,6 @@
+import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
@@ -18,13 +20,13 @@ const CHAP = '\xa7';
 const INTRODUCTION = `
 Welcome to the Source Academy playground!
 
-The language _Source_ is the official language of the textbook _Structure and
-Interpretation of Computer Programs, JavaScript Adaptation_. You have never
-heard of Source? No worries! It was invented just for the purpose of the book.
-Source is a sublanguage of ECMAScript 2016 (7th Edition) and defined in [the
-documents titled _"Source ${CHAP}x"_](${LINKS.SOURCE_DOCS}), where x refers to
-the respective textbook chapter. For example, Source ${CHAP}3 is suitable for
-textbook Chapter 3 and the preceeding chapters.
+The language _Source_ is the official language of the textbook [_Structure and
+Interpretation of Computer Programs, JavaScript Adaptation_](${LINKS.TEXTBOOK}).
+You have never heard of Source? No worries! It was invented just for the purpose
+of the book. Source is a sublanguage of ECMAScript 2016 (7th edition) and defined
+in [the documents titled _"Source ${CHAP}x"_](${LINKS.SOURCE_DOCS}), where x
+refers to the respective textbook chapter. For example, Source ${CHAP}3 is
+suitable for textbook chapter 3 and the preceeding chapters.
 
 The playground comes with an editor and a REPL, on the left and right of the
 screen, respectively. You may customise the layout of the playground by
@@ -167,7 +169,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     };
     return (
       <HotKeys
-        className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
+        className={classNames(
+          'Playground',
+          Classes.DARK,
+          this.state.isGreen ? 'GreenScreen' : undefined
+        )}
         keyMap={this.keyMap}
         handlers={this.handlers}
       >
@@ -201,7 +207,7 @@ const inspectorTab: SideContentTab = {
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.EYE_OPEN,
+  icon: IconNames.GLOBE,
   body: <EnvVisualizer />
 };
 

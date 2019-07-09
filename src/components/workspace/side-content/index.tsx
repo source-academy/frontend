@@ -1,4 +1,4 @@
-import { Button, Card, IconName, Tooltip } from '@blueprintjs/core';
+import { Button, Card, Divider, IconName, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
 
 /**
@@ -58,7 +58,7 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
       return (
         <>
           <div className="side-content-header">{buttons}</div>
-          <hr />
+          <Divider />
         </>
       );
     }
