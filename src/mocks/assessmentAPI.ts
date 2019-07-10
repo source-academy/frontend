@@ -197,7 +197,7 @@ This question has an id of \`0\`.
 What's your favourite dinner food?
 \`\`\`
 `,
-    comment: null,
+    roomId: null,
     id: 0,
     library: mockSoundLibrary,
     prepend: `const pizza = "pizza";
@@ -245,7 +245,7 @@ const chickenrice = "chicken rice";`,
 function volumeOfSphere(x) {
   return 4 / 3 * cube(x) * pi;
 }`,
-    comment: '`Great Job` **young padawan**',
+    roomId: '19422043',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mockRuneLibrary,
@@ -285,7 +285,7 @@ function volumeOfSphere(x) {
   },
   {
     answer: 3,
-    comment: '## Money trees is the *perfect place for shade* and ``` thats just how i feel ``` ',
+    roomId: '19422046',
     content:
       'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
     choices: [
@@ -322,7 +322,7 @@ function volumeOfSphere(x) {
   },
   {
     answer: 3,
-    comment: null,
+    roomId: null,
     content:
       'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
     choices: [
@@ -360,7 +360,7 @@ function volumeOfSphere(x) {
   {
     autogradingResults: [],
     answer: null,
-    comment: 'Wow you have come far! `Steady`',
+    roomId: '19422032',
     content: 'You have reached the last question! Have some fun with the tone matrix...',
     id: 4,
     library: mockToneMatrixLibrary,
@@ -390,7 +390,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     return fibonacci(n-1) + fibonacci(n-2);
   }
 }`,
-    comment: 'Wow you have come far! `Steady`',
+    roomId: '19422032',
     content: 'You can see autograding results!!!',
     id: 0,
     library: mockToneMatrixLibrary,

@@ -236,7 +236,7 @@ function* backendSaga(): SagaIterator {
     const {
       submissionId,
       questionId,
-      comment,
+      roomId,
       gradeAdjustment,
       xpAdjustment
     } = (action as actionTypes.IAction).payload;
@@ -247,7 +247,7 @@ function* backendSaga(): SagaIterator {
     const resp = yield postGrading(
       submissionId,
       questionId,
-      comment,
+      roomId,
       gradeAdjustment,
       xpAdjustment,
       tokens
@@ -263,7 +263,7 @@ function* backendSaga(): SagaIterator {
           gradingQuestion.grade = {
             gradeAdjustment,
             xpAdjustment,
-            comment: gradingQuestion.grade.comment,
+            roomId: gradingQuestion.grade.roomId,
             grade: gradingQuestion.grade.grade,
             xp: gradingQuestion.grade.xp
           };
@@ -497,7 +497,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
           autogradingResults: question.autogradingResults || [],
           choices: question.choices,
           content: question.content,
-          comment: null,
+          roomId: null,
           id: question.id,
           library: castLibrary(question.library),
           solution: gradingQuestion.solution || question.solution || null,
@@ -513,7 +513,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
         grade: {
           grade: grade.grade,
           xp: grade.xp,
-          comment: grade.comment || '',
+          roomId: grade.roomId || '',
           gradeAdjustment: grade.adjustment,
           xpAdjustment: grade.xpAdjustment
         }
@@ -531,7 +531,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
 const postGrading = async (
   submissionId: number,
   questionId: number,
-  comment: string,
+  roomId: string,
   gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens
@@ -540,7 +540,7 @@ const postGrading = async (
     accessToken: tokens.accessToken,
     body: {
       grading: {
-        comment: `${comment}`,
+        roomId: `${roomId}`,
         adjustment: gradeAdjustment,
         xpAdjustment
       }

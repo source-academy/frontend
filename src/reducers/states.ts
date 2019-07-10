@@ -237,7 +237,7 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   enableDebugging: true
 });
 
-export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!';
+export const defaultRoomId = null;
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
   assessment: {

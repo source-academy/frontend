@@ -97,7 +97,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       prepend: '// THIS IS A PREPEND',
       postpend: '// THIS IS A POSTPEND',
       testcases: [],
-      comment: null,
+      roomId: null,
       id: 0,
       library: mockLibrary,
       solutionTemplate: '0th question mock solution template',
@@ -143,7 +143,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       xpAdjustment: 0,
       grade: 0,
       xp: 0,
-      comment: 'Good job!!'
+      roomId: '19422040'
     },
     student: {
       name: 'Al Gorithm',
@@ -156,7 +156,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       postpend: '',
       testcases: [],
       answer: "This student's answer to the 1st question",
-      comment: null,
+      roomId: null,
       content: 'Hello and welcome to this assessment! This is the 1st question.',
       id: 1,
       library: mockLibrary,
@@ -203,7 +203,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       xpAdjustment: 0,
       grade: 100,
       xp: 100,
-      comment: 'Good job!!'
+      roomId: '19422040'
     },
     student: {
       name: 'Al Gorithm',
@@ -217,7 +217,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       postpend: '',
       testcases: [],
       answer: 3,
-      comment: null,
+      roomId: null,
       solution: 2,
       content:
         'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
@@ -282,8 +282,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       xpAdjustment: 0,
       grade: 50,
       xp: 50,
-      comment:
-        'A Very long string. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a leo et lectus gravida sagittis a non neque. Phasellus consectetur arcu vitae metus vulputate commodo. Phasellus varius sollicitudin quam a porta. Pellentesque mollis molestie felis vitae imperdiet. Nam porta purus ac tellus luctus ultrices. Integer pellentesque nisl vel nunc ullamcorper, in vehicula est dapibus. Nunc dapibus neque dolor, ut mattis massa mattis in. Fusce nec risus nec ex pharetra lacinia. Mauris sit amet ullamcorper sapien. Suspendisse scelerisque neque sed nunc tincidunt, ac semper enim efficitur. Ut sit amet eleifend arcu. Donec viverra at justo vitae eleifend. Morbi ut erat ultricies, hendrerit mi ut, ornare mauris.'
+      roomId: '19422030'
     },
     student: {
       name: 'Al Gorithm',
