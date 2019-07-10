@@ -2,11 +2,20 @@ import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import * as actions from '../../actions';
 import * as actionTypes from '../../actions/actionTypes';
-import { GradingOverview } from '../../components/academy/grading/gradingShape';
+import {
+  Grading,
+  GradingOverview,
+  GradingQuestion
+} from '../../components/academy/grading/gradingShape';
 import { mockGrading, mockGradingOverviews } from '../../mocks/gradingAPI';
-import { defaultState, Role } from '../../reducers/states';
+import { defaultSession, defaultState, IState, Role } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
-import backendSaga, { getGrading, getGradingOverviews, postUnsubmit } from '../backend';
+import backendSaga, {
+  getGrading,
+  getGradingOverviews,
+  postGrading,
+  postUnsubmit
+} from '../backend';
 
 describe('Backend Sagas tests', () => {
   describe('Response to FETCH_GRADING_OVERVIEWS', () => {
@@ -66,73 +75,22 @@ describe('Backend Sagas tests', () => {
   });
 
   describe('Response to UNSUBMIT_SUBMISSION', () => {
-    test('for appropriate response to a successful unsubmit', () => {
-      const mockState = {
-        ...defaultState,
-        session: {
-          GradingOverview: mockGradingOverviews
-        }
-      };
-      const unsubmittedOverviews: GradingOverview[] = [
-        {
-          gradeAdjustment: 0,
-          xpAdjustment: 0,
-          assessmentCategory: 'Mission',
-          assessmentId: 0,
-          assessmentName: 'Mission 0 ',
-          currentGrade: 69,
-          currentXp: 69,
-          xpBonus: 10,
-          initialGrade: 69,
-          initialXp: 69,
-          maxGrade: 100,
-          maxXp: 100,
-          studentId: 0,
-          studentName: 'Al Gorithm',
-          submissionId: 0,
-          submissionStatus: 'attempted',
-          groupName: '1D'
-        },
-        {
-          gradeAdjustment: -2,
-          xpAdjustment: -2,
-          assessmentCategory: 'Mission',
-          assessmentId: 1,
-          assessmentName: 'Mission 1',
-          currentGrade: -2,
-          currentXp: -2,
-          xpBonus: 12,
-          initialGrade: 0,
-          initialXp: 0,
-          maxGrade: 400,
-          maxXp: 400,
-          studentId: 0,
-          studentName: 'Dee Sign',
-          submissionId: 1,
-          submissionStatus: 'attempted',
-          groupName: '1F'
-        },
-        {
-          gradeAdjustment: 4,
-          xpAdjustment: 4,
-          assessmentCategory: 'Mission',
-          assessmentId: 0,
-          assessmentName: 'Mission 0',
-          currentGrade: 1000,
-          currentXp: 1000,
-          xpBonus: 12,
-          initialGrade: 996,
-          initialXp: 996,
-          maxGrade: 1000,
-          maxXp: 1000,
-          studentId: 1,
-          studentName: 'May Trix',
-          submissionId: 2,
-          submissionStatus: 'submitted',
-          groupName: '1F'
-        }
-      ];
+    const mockState: IState = {
+      ...defaultState,
+      session: {
+        ...defaultSession,
+        gradingOverviews: mockGradingOverviews
+      }
+    };
+    const mockSubmissionId: number = 1;
+    const unsubmittedOverviews: GradingOverview[] = mockGradingOverviews.map(overview => {
+      if (overview.submissionId === mockSubmissionId) {
+        return { ...overview, submissionStatus: 'attempted' };
+      }
+      return overview;
+    });
 
+    test('for appropriate response to a successful unsubmit', () => {
       return expectSaga(backendSaga)
         .withState(mockState)
         .provide([[matchers.call.fn(postUnsubmit), { ok: true }]])
@@ -141,10 +99,230 @@ describe('Backend Sagas tests', () => {
         .dispatch({
           type: actionTypes.UNSUBMIT_SUBMISSION,
           payload: {
-            submissionId: 1
+            submissionId: mockSubmissionId
           }
         })
         .silentRun();
+    });
+
+    describe('Unsuccessful unsubmits', () => {
+      test('Server connection failed response', () => {
+        return expectSaga(backendSaga)
+          .withState(mockState)
+          .provide([[matchers.call.fn(postUnsubmit), null]])
+          .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
+          .not.put(actions.updateGradingOverviews(unsubmittedOverviews))
+          .not.call(showSuccessMessage, 'Unsubmit successful', 1000)
+          .dispatch({
+            type: actionTypes.UNSUBMIT_SUBMISSION,
+            payload: {
+              submissionId: mockSubmissionId
+            }
+          })
+          .silentRun();
+      });
+
+      test('401 session expiry response', () => {
+        return expectSaga(backendSaga)
+          .withState(mockState)
+          .provide([
+            [
+              matchers.call.fn(postUnsubmit),
+              {
+                ok: false,
+                status: 401
+              }
+            ]
+          ])
+          .call(showWarningMessage, 'Session expired. Please login again.')
+          .not.put(actions.updateGradingOverviews(unsubmittedOverviews))
+          .not.call(showSuccessMessage, 'Unsubmit successful', 1000)
+          .dispatch({
+            type: actionTypes.UNSUBMIT_SUBMISSION,
+            payload: {
+              submissionId: 0
+            }
+          })
+          .silentRun();
+      });
+
+      test('Other error responses', () => {
+        return expectSaga(backendSaga)
+          .withState(mockState)
+          .provide([
+            [
+              matchers.call.fn(postUnsubmit),
+              {
+                ok: false,
+                status: 42,
+                statusText: 'Servers exploded'
+              }
+            ]
+          ])
+          .call(showWarningMessage, 'Error 42: Servers exploded')
+          .not.put(actions.updateGradingOverviews(unsubmittedOverviews))
+          .not.call(showSuccessMessage, 'Unsubmit successful', 1000)
+          .dispatch({
+            type: actionTypes.UNSUBMIT_SUBMISSION,
+            payload: {
+              submissionId: 0
+            }
+          })
+          .silentRun();
+      });
+    });
+  });
+
+  describe('Response to SUBMIT_GRADING', () => {
+    const mockStateStaff: IState = {
+      ...defaultState,
+      session: {
+        ...defaultSession,
+        role: Role.Staff
+      }
+    };
+    const mockSubmissionId: number = 0;
+    const mockQuestionId: number = 0;
+    const mockGradeAdjustment: number = 42;
+    const mockXpAdjustment: number = 42;
+    const mockComment: string = 'Stop using global variables!';
+    mockStateStaff.session.gradings.set(mockSubmissionId, mockGrading);
+
+    const newGrading: Grading = mockGrading.slice().map((gradingQuestion: GradingQuestion) => {
+      if (gradingQuestion.question.id === mockQuestionId) {
+        gradingQuestion.grade = {
+          gradeAdjustment: mockGradeAdjustment,
+          xpAdjustment: mockXpAdjustment,
+          comment: mockComment,
+          grade: gradingQuestion.grade.grade,
+          xp: gradingQuestion.grade.xp
+        };
+      }
+      return gradingQuestion;
+    });
+
+    test('for appropriate response to successful grading', () => {
+      return expectSaga(backendSaga)
+        .withState(mockStateStaff)
+        .provide([[matchers.call.fn(postGrading), { ok: true }]])
+        .call(showSuccessMessage, 'Saved!', 1000)
+        .put(actions.updateGrading(mockSubmissionId, newGrading))
+        .dispatch({
+          type: actionTypes.SUBMIT_GRADING,
+          payload: {
+            submissionId: mockSubmissionId,
+            questionId: mockQuestionId,
+            comment: mockComment,
+            gradeAdjustment: mockGradeAdjustment,
+            xpAdjustment: mockXpAdjustment
+          }
+        })
+        .silentRun();
+    });
+
+    describe('Unsucessful grading', () => {
+      test('User is student error response', () => {
+        const mockStateStudent: IState = {
+          ...defaultState,
+          session: {
+            ...defaultSession,
+            role: Role.Student
+          }
+        };
+        return expectSaga(backendSaga)
+          .withState(mockStateStudent)
+          .call(showWarningMessage, 'Only staff can submit answers.')
+          .not.call(showSuccessMessage, 'Saved!', 1000)
+          .not.put(actions.updateGrading(mockSubmissionId, newGrading))
+          .dispatch({
+            type: actionTypes.SUBMIT_GRADING,
+            payload: {
+              submissionId: mockSubmissionId,
+              questionId: mockQuestionId,
+              comment: mockComment,
+              gradeAdjustment: mockGradeAdjustment,
+              xpAdjustment: mockXpAdjustment
+            }
+          })
+          .silentRun();
+      });
+
+      test('Server connection failed response', () => {
+        return expectSaga(backendSaga)
+          .withState(mockStateStaff)
+          .provide([[matchers.call.fn(postGrading), null]])
+          .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
+          .not.call(showSuccessMessage, 'Saved!', 1000)
+          .not.put(actions.updateGrading(mockSubmissionId, newGrading))
+          .dispatch({
+            type: actionTypes.SUBMIT_GRADING,
+            payload: {
+              submissionId: mockSubmissionId,
+              questionId: mockQuestionId,
+              comment: mockComment,
+              gradeAdjustment: mockGradeAdjustment,
+              xpAdjustment: mockXpAdjustment
+            }
+          })
+          .silentRun();
+      });
+
+      test('401 session expiry response', () => {
+        return expectSaga(backendSaga)
+          .withState(mockStateStaff)
+          .provide([
+            [
+              matchers.call.fn(postGrading),
+              {
+                ok: false,
+                status: 401
+              }
+            ]
+          ])
+          .call(showWarningMessage, 'Session expired. Please login again.')
+          .not.call(showSuccessMessage, 'Saved!', 1000)
+          .not.put(actions.updateGrading(mockSubmissionId, newGrading))
+          .dispatch({
+            type: actionTypes.SUBMIT_GRADING,
+            payload: {
+              submissionId: mockSubmissionId,
+              questionId: mockQuestionId,
+              comment: mockComment,
+              gradeAdjustment: mockGradeAdjustment,
+              xpAdjustment: mockXpAdjustment
+            }
+          })
+          .silentRun();
+      });
+
+      test('Other error responses', () => {
+        return expectSaga(backendSaga)
+          .withState(mockStateStaff)
+          .provide([
+            [
+              matchers.call.fn(postGrading),
+              {
+                ok: false,
+                status: 42,
+                statusText: 'Servers exploded'
+              }
+            ]
+          ])
+          .call(showWarningMessage, 'Error 42: Servers exploded')
+          .not.call(showSuccessMessage, 'Saved!', 1000)
+          .not.put(actions.updateGrading(mockSubmissionId, newGrading))
+          .dispatch({
+            type: actionTypes.SUBMIT_GRADING,
+            payload: {
+              submissionId: mockSubmissionId,
+              questionId: mockQuestionId,
+              comment: mockComment,
+              gradeAdjustment: mockGradeAdjustment,
+              xpAdjustment: mockXpAdjustment
+            }
+          })
+          .silentRun();
+      });
     });
   });
 });
