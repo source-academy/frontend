@@ -233,7 +233,8 @@ function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can submit answers.');
+      yield call(showWarningMessage, 'Only staff can submit answers.');
+      return;
     }
     const {
       submissionId,
@@ -246,7 +247,8 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield postGrading(
+    const resp = yield call(
+      postGrading,
       submissionId,
       questionId,
       comment,
@@ -274,7 +276,8 @@ function* backendSaga(): SagaIterator {
       });
       yield put(actions.updateGrading(submissionId, newGrading));
     } else {
-      handleResponseError(resp);
+      yield handleResponseError(resp);
+      return;
     }
   });
 }
@@ -530,14 +533,14 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
 /**
  * POST /grading/{submissionId}/{questionId}
  */
-const postGrading = async (
+export async function postGrading(
   submissionId: number,
   questionId: number,
   comment: string,
   gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens
-) => {
+) {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
     accessToken: tokens.accessToken,
     body: {
@@ -553,7 +556,7 @@ const postGrading = async (
     shouldRefresh: true
   });
   return resp;
-};
+}
 
 /**
  * POST /grading/{submissionId}/unsubmit
