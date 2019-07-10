@@ -7,6 +7,7 @@ import {
   beginInterruptExecution,
   browseReplHistoryDown,
   browseReplHistoryUp,
+  changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
@@ -15,11 +16,13 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
+  evalTestcase,
   setEditorBreakpoint,
   submitAnswer,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
+  updateReplValue,
+  updateWorkspace
 } from '../../actions';
 import {
   resetWorkspace,
@@ -37,8 +40,8 @@ import { IState, IWorkspaceState } from '../../reducers/states';
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     activeTab: state.workspaces.assessment.sideContentActiveTab,
-    assessment: state.session.assessments.get(props.assessmentId),
     editorValue: state.workspaces.assessment.editorValue,
+    editorHeight: state.workspaces.assessment.editorHeight,
     editorWidth: state.workspaces.assessment.editorWidth,
     breakpoints: state.workspaces.assessment.breakpoints,
     highlightedLines: state.workspaces.assessment.highlightedLines,
@@ -66,6 +69,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
         changeEditorWidth(widthChange, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
@@ -76,9 +80,12 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleResetWorkspace: (options: Partial<IWorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
+      handleUpdateWorkspace: (options: Partial<IWorkspaceState>) =>
+        updateWorkspace(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
+      handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId,

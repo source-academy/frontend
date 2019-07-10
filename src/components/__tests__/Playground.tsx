@@ -27,6 +27,7 @@ const baseProps = {
   handleChangeActiveTab: (n: number) => {},
   handleChapterSelect: (chapter: number) => {},
   handleEditorEval: () => {},
+  handleEditorHeightChange: (height: number) => {},
   handleEditorValueChange: () => {},
   handleEditorWidthChange: (widthChange: number) => {},
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},

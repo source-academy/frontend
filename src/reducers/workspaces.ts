@@ -1,9 +1,11 @@
 import { Reducer } from 'redux';
+import { ITestcase } from 'src/components/assessment/assessmentShape';
 
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_ACTIVE_TAB,
+  CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
@@ -18,6 +20,8 @@ import {
   EVAL_INTERPRETER_ERROR,
   EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
+  EVAL_TESTCASE_FAILURE,
+  EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
   IAction,
@@ -31,7 +35,8 @@ import {
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
-  UPDATE_REPL_VALUE
+  UPDATE_REPL_VALUE,
+  UPDATE_WORKSPACE
 } from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
 import { createContext } from '../utils/slangHelper';
@@ -85,9 +90,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         // Browsing history, no earlier records to show; return replValue to
         // the last value when user started browsing
         const newIndex = null;
-        const newReplValue = state[location].replHistory.records[-1];
+        const newReplValue = state[location].replHistory.originalValue;
         const newRecords = state[location].replHistory.records.slice();
-        delete newRecords[-1];
         return {
           ...state,
           [location]: {
@@ -95,7 +99,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replValue: newReplValue,
             replHistory: {
               browseIndex: newIndex,
-              records: newRecords
+              records: newRecords,
+              originalValue: ''
             }
           }
         };
@@ -113,7 +118,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         // Not yet started browsing, initialise the index & array
         const newIndex = 0;
         const newRecords = lastRecords.slice();
-        newRecords[-1] = state[location].replValue;
+        const originalValue = state[location].replValue;
         const newReplValue = newRecords[newIndex];
         return {
           ...state,
@@ -123,7 +128,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replHistory: {
               ...state[location].replHistory,
               browseIndex: newIndex,
-              records: newRecords
+              records: newRecords,
+              originalValue
             }
           }
         };
@@ -149,6 +155,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           sideContentActiveTab: action.payload.activeTab
+        }
+      };
+    case CHANGE_EDITOR_HEIGHT:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorHeight: action.payload.height
         }
       };
     case CHANGE_EDITOR_WIDTH:
@@ -308,6 +322,54 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           highlightedLines: []
         }
       };
+    case EVAL_TESTCASE_SUCCESS:
+      lastOutput = state[location].output.slice(-1)[0];
+      if (lastOutput !== undefined && lastOutput.type === 'running') {
+        newOutput = state[location].output.slice(0, -1).concat({
+          ...action.payload,
+          workspaceLocation: undefined,
+          consoleLogs: lastOutput.consoleLogs
+        });
+      } else {
+        newOutput = state[location].output.concat({
+          ...action.payload,
+          workspaceLocation: undefined,
+          consoleLogs: []
+        });
+      }
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i) => {
+            if (i === action.payload.index) {
+              return {
+                ...testcase,
+                result: (newOutput[0] as CodeOutput).value
+              };
+            } else {
+              return testcase;
+            }
+          }),
+          isRunning: false
+        }
+      };
+    case EVAL_TESTCASE_FAILURE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
+          editorTestcases: state[location].editorTestcases.map((testcase: ITestcase, i: number) => {
+            if (i === action.payload.index) {
+              return {
+                ...testcase,
+                result: action.payload.value
+              };
+            }
+            return testcase;
+          })
+        }
+      };
     case EVAL_INTERPRETER_ERROR:
       lastOutput = state[location].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
@@ -394,6 +456,18 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [location]: {
           ...state[location],
           ...createDefaultWorkspace(location),
+          ...action.payload.workspaceOptions
+        }
+      };
+    /**
+     * Updates workspace without changing anything
+     * which has not been specified
+     */
+    case UPDATE_WORKSPACE:
+      return {
+        ...state,
+        [location]: {
+          ...state[location],
           ...action.payload.workspaceOptions
         }
       };

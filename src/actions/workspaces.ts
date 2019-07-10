@@ -51,6 +51,14 @@ export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
   payload: { newExternal }
 });
 
+export const changeEditorHeight: ActionCreator<actionTypes.IAction> = (
+  height: number,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.CHANGE_EDITOR_HEIGHT,
+  payload: { height, workspaceLocation }
+});
+
 export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
   widthChange: string,
   workspaceLocation: WorkspaceLocation
@@ -161,6 +169,11 @@ export const evalRepl = (workspaceLocation: WorkspaceLocation) => ({
   payload: { workspaceLocation }
 });
 
+export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: number) => ({
+  type: actionTypes.EVAL_TESTCASE,
+  payload: { workspaceLocation, testcaseId }
+});
+
 export const invalidEditorSessionId = () => ({
   type: actionTypes.INVALID_EDITOR_SESSION_ID
 });
@@ -223,6 +236,17 @@ export const resetWorkspace = (
   workspaceOptions?: Partial<IWorkspaceState>
 ) => ({
   type: actionTypes.RESET_WORKSPACE,
+  payload: {
+    workspaceLocation,
+    workspaceOptions
+  }
+});
+
+export const updateWorkspace = (
+  workspaceLocation: WorkspaceLocation,
+  workspaceOptions?: Partial<IWorkspaceState>
+) => ({
+  type: actionTypes.UPDATE_WORKSPACE,
   payload: {
     workspaceLocation,
     workspaceOptions

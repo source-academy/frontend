@@ -8,6 +8,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  ITestcase,
   Library,
   MCQChoice
 } from '../assessment/assessmentShape';
@@ -18,7 +19,8 @@ import {
   IXmlParseStrPProblem,
   IXmlParseStrProblem,
   IXmlParseStrProblemChoice,
-  IXmlParseStrTask
+  IXmlParseStrTask,
+  IXmlParseStrTestcase
 } from './xmlParseStrShapes';
 
 const editingId = -1;
@@ -178,6 +180,7 @@ const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] =>
 
 const makeMCQ = (problem: IXmlParseStrCProblem, question: IQuestion): IMCQQuestion => {
   const choicesVal: MCQChoice[] = [];
+  const solution = problem.SNIPPET ? problem.SNIPPET[0].SOLUTION : undefined;
   let solutionVal = 0;
   problem.CHOICE.forEach((choice: IXmlParseStrProblemChoice, i: number) => {
     choicesVal.push({
@@ -189,7 +192,7 @@ const makeMCQ = (problem: IXmlParseStrCProblem, question: IQuestion): IMCQQuesti
   return {
     ...question,
     type: 'mcq',
-    answer: parseInt(problem.SNIPPET[0].SOLUTION[0], 10),
+    answer: solution ? parseInt(solution[0], 10) : 0,
     choices: choicesVal,
     solution: solutionVal
   };
@@ -199,16 +202,36 @@ const makeProgramming = (
   problem: IXmlParseStrPProblem,
   question: IQuestion
 ): IProgrammingQuestion => {
+  const testcases = problem.SNIPPET[0].TESTCASES;
+  const publicTestcases = testcases ? testcases[0].PUBLIC || [] : [];
+  const privateTestcases = testcases ? testcases[0].PRIVATE || [] : [];
+  const prepend = problem.SNIPPET[0].PREPEND;
+  const postpend = problem.SNIPPET[0].POSTPEND;
+  const solution = problem.SNIPPET[0].SOLUTION;
+
   const result: IProgrammingQuestion = {
     ...question,
-    solutionTemplate: problem.SNIPPET[0].TEMPLATE[0] as string,
-    answer: problem.SNIPPET[0].SOLUTION[0] as string,
+    autogradingResults: [],
+    prepend: prepend ? (prepend[0] as string).trim() : '',
+    solutionTemplate: problem.SNIPPET[0].TEMPLATE[0].trim() as string,
+    postpend: postpend ? (postpend[0] as string).trim() : '',
+    testcases: publicTestcases.map(testcase => makeTestcase(testcase)),
+    testcasesPrivate: privateTestcases.map(testcase => makeTestcase(testcase)),
+    answer: solution ? (solution[0] as string).trim() : '',
     type: 'programming'
   };
   if (problem.SNIPPET[0].GRADER) {
     result.graderTemplate = problem.SNIPPET[0].GRADER[0];
   }
   return result;
+};
+
+const makeTestcase = (testcase: IXmlParseStrTestcase): ITestcase => {
+  return {
+    answer: testcase.$.answer,
+    score: parseInt(testcase.$.score, 10),
+    program: testcase._
+  };
 };
 
 export const exportXml = () => {
@@ -337,8 +360,45 @@ export const assessmentToXml = (
         /* tslint:disable:no-string-literal */
         problem.SNIPPET['GRADER'] = question.graderTemplate;
       }
-      /* tslint:disable:no-string-literal */
-      problem.SNIPPET['TEMPLATE'] = question.solutionTemplate;
+      const snippet = {
+        ...problem.SNIPPET,
+        TEMPLATE: question.solutionTemplate,
+        PREPEND: question.prepend,
+        POSTPEND: question.postpend,
+        TESTCASES: '' as any
+      };
+
+      if (question.testcases.length || question.testcasesPrivate!.length) {
+        /* tslint:disable:no-string-literal */
+        snippet.TESTCASES = {};
+        if (question.testcases.length) {
+          const publicTests = question.testcases.map(testcase => {
+            return {
+              $: {
+                answer: testcase.answer,
+                score: testcase.score
+              },
+              _: testcase.program
+            };
+          });
+          snippet.TESTCASES['PUBLIC'] = publicTests;
+        }
+
+        if (question.testcasesPrivate && question.testcasesPrivate.length) {
+          const privateTests = question.testcasesPrivate.map(testcase => {
+            return {
+              $: {
+                answer: testcase.answer,
+                score: testcase.score
+              },
+              _: testcase.program
+            };
+          });
+          snippet.TESTCASES['PRIVATE'] = privateTests;
+        }
+      }
+
+      problem.SNIPPET = snippet;
     }
 
     if (question.type === 'mcq') {

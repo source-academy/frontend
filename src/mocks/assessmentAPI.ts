@@ -153,26 +153,17 @@ const mockGlobals: Array<[string, any]> = [
 const mockSoundLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryNames.SOUND,
-    symbols: externalLibraries.get(ExternalLibraryNames.SOUND)!
+    name: ExternalLibraryNames.SOUNDS,
+    symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
   },
   globals: mockGlobals
 };
 
-export const mock2DRuneLibrary: Library = {
+export const mockRuneLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryNames.TWO_DIM_RUNES,
-    symbols: externalLibraries.get(ExternalLibraryNames.TWO_DIM_RUNES)!
-  },
-  globals: mockGlobals
-};
-
-const mock3DRuneLibrary: Library = {
-  chapter: 1,
-  external: {
-    name: ExternalLibraryNames.THREE_DIM_RUNES,
-    symbols: externalLibraries.get(ExternalLibraryNames.THREE_DIM_RUNES)!
+    name: ExternalLibraryNames.RUNES,
+    symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
   },
   globals: mockGlobals
 };
@@ -189,7 +180,7 @@ const mockCurveLibrary: Library = {
 const mockToneMatrixLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryNames.SOUND,
+    name: ExternalLibraryNames.SOUNDS,
     symbols: ['get_matrix']
   },
   globals: mockGlobals
@@ -197,7 +188,8 @@ const mockToneMatrixLibrary: Library = {
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
-    answer: 'display("answer1");',
+    autogradingResults: [],
+    answer: null,
     content: `
 This question has an id of \`0\`.
 
@@ -208,7 +200,31 @@ What's your favourite dinner food?
     comment: null,
     id: 0,
     library: mockSoundLibrary,
-    solutionTemplate: '0th question mock solution template',
+    prepend: `const pizza = "pizza";
+const sushi = "sushi";
+const chickenrice = "chicken rice";`,
+    postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
+    testcases: [
+      {
+        program: `answer();`,
+        score: 1,
+        answer: `"pizza"`
+      },
+      {
+        program: `answer();`,
+        score: 1,
+        answer: `"sushi"`
+      },
+      {
+        program: `answer();`,
+        score: 1,
+        answer: `"chicken rice"`
+      }
+    ],
+    solutionTemplate: `function answer() {
+  // Write something here!
+}
+`,
     type: 'programming',
     grader: {
       name: 'avenger',
@@ -221,12 +237,41 @@ What's your favourite dinner food?
     maxXp: 2
   },
   {
-    answer: null,
+    autogradingResults: [],
+    answer: `function areaOfCircle(x) {
+  return square(x) * pi;
+}
+
+function volumeOfSphere(x) {
+  return 4 / 3 * cube(x) * pi;
+}`,
     comment: '`Great Job` **young padawan**',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
-    library: mock3DRuneLibrary,
-    solutionTemplate: '1st question mock solution template',
+    library: mockRuneLibrary,
+    prepend: `const square = x => x * x;
+const cube = x => x * x * x;
+const pi = 3.1415928;`,
+    postpend: '',
+    testcases: [
+      {
+        program: `areaOfCircle(5);`,
+        score: 1,
+        answer: `78.53982`
+      },
+      {
+        program: `volumeOfSphere(5);`,
+        score: 1,
+        answer: `523.5988`
+      }
+    ],
+    solutionTemplate: `function areaOfCircle(x) {
+  // return area of circle
+}
+
+function volumeOfSphere(x) {
+  // return volume of sphere
+}`,
     type: 'programming',
     grader: {
       name: 'avenger',
@@ -298,7 +343,7 @@ What's your favourite dinner food?
         hint: null
       }
     ],
-    id: 2,
+    id: 3,
     library: mockCurveLibrary,
     type: 'mcq',
     solution: null,
@@ -313,11 +358,15 @@ What's your favourite dinner food?
     maxXp: 2
   },
   {
+    autogradingResults: [],
     answer: null,
     comment: 'Wow you have come far! `Steady`',
     content: 'You have reached the last question! Have some fun with the tone matrix...',
-    id: 1,
+    id: 4,
     library: mockToneMatrixLibrary,
+    prepend: '',
+    postpend: '',
+    testcases: [],
     solutionTemplate: '5th question mock solution template',
     type: 'programming',
     grader: {
@@ -329,6 +378,77 @@ What's your favourite dinner food?
     grade: 0,
     maxGrade: 2,
     maxXp: 2
+  }
+];
+
+export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+  {
+    answer: `function fibonacci(n) {
+  if (n <= 2) {
+    return 1;
+  } else {
+    return fibonacci(n-1) + fibonacci(n-2);
+  }
+}`,
+    comment: 'Wow you have come far! `Steady`',
+    content: 'You can see autograding results!!!',
+    id: 0,
+    library: mockToneMatrixLibrary,
+    prepend: '',
+    postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
+    testcases: [
+      {
+        program: `fibonacci(3);`,
+        score: 1,
+        answer: `2`
+      },
+      {
+        program: `fibonacci(4);`,
+        score: 1,
+        answer: `3`
+      },
+      {
+        program: `fibonacci(5);`,
+        score: 1,
+        answer: `5`
+      }
+    ],
+    solutionTemplate: 'Make Fibonacci!!!',
+    type: 'programming',
+    grader: {
+      name: 'avenger',
+      id: 1
+    },
+    gradedAt: '2038-06-18T05:24:26.026Z',
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2,
+    autogradingResults: [
+      {
+        resultType: 'pass'
+      },
+      {
+        resultType: 'fail',
+        expected: '8',
+        actual: '5'
+      },
+      {
+        resultType: 'error',
+        errors: [
+          {
+            errorType: 'timeout'
+          },
+          {
+            errorType: 'syntax',
+            line: 1,
+            location: 'student',
+            errorLine: 'function fibonacci(n) {',
+            errorExplanation: 'Just kidding!'
+          }
+        ]
+      }
+    ]
   }
 ];
 
@@ -386,7 +506,7 @@ sapien
     longSummary:
       'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
-    questions: mockAssessmentQuestions,
+    questions: mockClosedAssessmentQuestions,
     title: 'A Closed Mission'
   }
 ];

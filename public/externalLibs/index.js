@@ -22,6 +22,7 @@ function loadAllLibs() {
     '/externalLibs/sound/sounds.js',
     '/externalLibs/sound/soundToneMatrix.js',
     '/externalLibs/sound/riffwave.js',
+    '/externalLibs/sound/microphone.js',
     // graphics
     '/externalLibs/graphics/gl-matrix.js',
     '/externalLibs/graphics/webGLhi_graph.js',
@@ -45,7 +46,7 @@ function loadAllLibs() {
     // inspector
     '/externalLibs/inspector/inspector.js',
     // env visualizer
-    '/externalLibs/env_visualizer/ConcreteJS.js',
+    '/externalLibs/env_visualizer/ConcreteJs.js',
     '/externalLibs/env_visualizer/visualizer.js'
   ]
 
@@ -62,15 +63,7 @@ function loadAllLibs() {
 function loadLib(externalLibraryName) {
   let files
   switch (externalLibraryName) {
-    case 'TWO_DIM_RUNES':
-      files = [
-        // graphics
-        '/externalLibs/graphics/gl-matrix.js',
-        '/externalLibs/graphics/webGLgraphics.js',
-        '/externalLibs/graphics/webGLrune.js'
-      ]
-      break
-    case 'THREE_DIM_RUNES':
+    case 'RUNES':
       files = [
         // graphics
         '/externalLibs/graphics/gl-matrix.js',

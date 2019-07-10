@@ -7,6 +7,7 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeActiveTab,
+  changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
@@ -15,12 +16,14 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
+  evalTestcase,
   fetchGrading,
   setEditorBreakpoint,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
-  WorkspaceLocation
+  WorkspaceLocation,
+  WorkspaceLocations
 } from '../../../actions';
 import {
   beginClearContext,
@@ -35,12 +38,17 @@ import GradingWorkspace, {
 import { Library } from '../../../components/assessment/assessmentShape';
 import { IState, IWorkspaceState } from '../../../reducers/states';
 
-const workspaceLocation: WorkspaceLocation = 'grading';
+const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     activeTab: state.workspaces.grading.sideContentActiveTab,
+    autogradingResults: state.workspaces.grading.autogradingResults,
+    editorPrepend: state.workspaces.grading.editorPrepend,
     editorValue: state.workspaces.grading.editorValue,
+    editorPostpend: state.workspaces.grading.editorPostpend,
+    editorTestcases: state.workspaces.grading.editorTestcases,
+    editorHeight: state.workspaces.grading.editorHeight,
     editorWidth: state.workspaces.grading.editorWidth,
     breakpoints: state.workspaces.grading.breakpoints,
     highlightedLines: state.workspaces.grading.highlightedLines,
@@ -68,6 +76,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
         changeEditorWidth(widthChange, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
@@ -81,6 +90,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         resetWorkspace(workspaceLocation, options),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
+      handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
       handleUpdateCurrentSubmissionId: updateCurrentSubmissionId,
       handleUpdateHasUnsavedChanges: (unsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, unsavedChanges),

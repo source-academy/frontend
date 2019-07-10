@@ -8,6 +8,7 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeActiveTab,
+  changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
@@ -16,6 +17,7 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
+  evalTestcase,
   fetchAssessment,
   setEditorBreakpoint,
   submitAnswer,
@@ -40,7 +42,12 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
   return {
     activeTab: state.workspaces.assessment.sideContentActiveTab,
     assessment: state.session.assessments.get(props.assessmentId),
+    autogradingResults: state.workspaces.assessment.autogradingResults,
+    editorPrepend: state.workspaces.assessment.editorPrepend,
     editorValue: state.workspaces.assessment.editorValue,
+    editorPostpend: state.workspaces.assessment.editorPostpend,
+    editorTestcases: state.workspaces.assessment.editorTestcases,
+    editorHeight: state.workspaces.assessment.editorHeight,
     editorWidth: state.workspaces.assessment.editorWidth,
     breakpoints: state.workspaces.assessment.breakpoints,
     highlightedLines: state.workspaces.assessment.highlightedLines,
@@ -70,6 +77,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
         changeEditorWidth(widthChange, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
@@ -83,6 +91,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
+      handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId,

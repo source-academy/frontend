@@ -1,14 +1,18 @@
-import { NonIdealState, Spinner } from '@blueprintjs/core';
+import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
+import ChatApp from '../../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states';
+import { USE_CHATKIT } from '../../../utils/constants';
 import { history } from '../../../utils/history';
 import {
+  AutogradingResult,
   IMCQQuestion,
-  IProgrammingQuestion,
   IQuestion,
+  ITestcase,
   Library,
   QuestionTypes
 } from '../../assessment/assessmentShape';
@@ -16,14 +20,20 @@ import Markdown from '../../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../../workspace';
 import { ControlBarProps } from '../../workspace/ControlBar';
 import { SideContentProps } from '../../workspace/side-content';
-import { Grading } from './gradingShape';
+import Autograder from '../../workspace/side-content/Autograder';
+import { Grading, IAnsweredQuestion } from './gradingShape';
 
 export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
   activeTab: number;
+  autogradingResults: AutogradingResult[];
   grading?: Grading;
+  editorPrepend: string;
   editorValue: string | null;
+  editorPostpend: string;
+  editorTestcases: ITestcase[];
+  editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
   highlightedLines: number[][];
@@ -51,6 +61,7 @@ export type DispatchProps = {
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
+  handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGradingFetch: (submissionId: number) => void;
@@ -60,6 +71,7 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleTestcaseEval: (testcaseId: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
@@ -74,6 +86,28 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
    */
   public componentDidMount() {
     this.props.handleGradingFetch(this.props.submissionId);
+
+    if (!this.props.grading) {
+      return;
+    }
+
+    let questionId = this.props.questionId;
+    if (this.props.questionId >= this.props.grading.length) {
+      questionId = this.props.grading.length - 1;
+    }
+
+    const question: IAnsweredQuestion = this.props.grading[questionId].question;
+    let answer: string = '';
+
+    if (question.type === QuestionTypes.programming) {
+      if (question.answer) {
+        answer = question.answer as string;
+      } else {
+        answer = question.solutionTemplate || '';
+      }
+    }
+
+    this.props.handleEditorValueChange(answer);
   }
 
   /**
@@ -88,9 +122,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     if (this.props.grading === undefined) {
       return (
         <NonIdealState
-          className="WorkspaceParent pt-dark"
+          className={classNames('WorkspaceParent', Classes.DARK)}
           description="Getting assessment ready..."
-          visual={<Spinner large={true} />}
+          icon={<Spinner size={Spinner.SIZE_LARGE} />}
         />
       );
     }
@@ -102,19 +136,18 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         : this.props.questionId;
     /* Get the question to be graded */
     const question = this.props.grading[questionId].question as IQuestion;
-    const editorValue =
-      question.type === QuestionTypes.programming
-        ? question.answer !== null
-          ? ((question as IProgrammingQuestion).answer as string)
-          : (question as IProgrammingQuestion).solutionTemplate
-        : null;
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
+              editorPrepend: this.props.editorPrepend,
+              editorPrependLines:
+                this.props.editorPrepend.length === 0
+                  ? 0
+                  : this.props.editorPrepend.split('\n').length,
               editorSessionId: '',
-              editorValue: editorValue!,
+              editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               breakpoints: this.props.breakpoints,
@@ -123,7 +156,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
               isEditorAutorun: false
             }
           : undefined,
+      editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
+      handleEditorHeightChange: this.props.handleEditorHeightChange,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcqProps: {
@@ -142,7 +177,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       }
     };
     return (
-      <div className="WorkspaceParent pt-dark">
+      <div className={classNames('WorkspaceParent', Classes.DARK)}>
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -163,24 +198,45 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const questionId = this.props.questionId;
 
     if (
-      this.props.storedSubmissionId !== submissionId ||
-      this.props.storedQuestionId !== questionId
+      this.props.storedSubmissionId === submissionId &&
+      this.props.storedQuestionId === questionId
     ) {
-      const question = this.props.grading[questionId].question as IQuestion;
-      const editorValue =
-        question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IProgrammingQuestion).answer as string)
-            : (question as IProgrammingQuestion).solutionTemplate
-          : null;
-      this.props.handleEditorUpdateBreakpoints([]);
-      this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
-      this.props.handleResetWorkspace({ editorValue });
-      this.props.handleClearContext(question.library);
-      this.props.handleUpdateHasUnsavedChanges(false);
-      if (editorValue) {
-        this.props.handleEditorValueChange(editorValue);
+      return;
+    }
+    const question = this.props.grading[questionId].question as IQuestion;
+
+    let autogradingResults: AutogradingResult[] = [];
+    let editorValue: string = '';
+    let editorPrepend: string = '';
+    let editorPostpend: string = '';
+    let editorTestcases: ITestcase[] = [];
+
+    if (question.type === QuestionTypes.programming) {
+      const questionData = question as IAnsweredQuestion;
+      autogradingResults = questionData.autogradingResults;
+      editorPrepend = questionData.prepend;
+      editorPostpend = questionData.postpend;
+      editorTestcases = questionData.testcases;
+
+      editorValue = questionData.answer as string;
+      if (!editorValue) {
+        editorValue = questionData.solutionTemplate!;
       }
+    }
+
+    this.props.handleEditorUpdateBreakpoints([]);
+    this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
+    this.props.handleResetWorkspace({
+      autogradingResults,
+      editorPrepend,
+      editorValue,
+      editorPostpend,
+      editorTestcases
+    });
+    this.props.handleClearContext(question.library);
+    this.props.handleUpdateHasUnsavedChanges(false);
+    if (editorValue) {
+      this.props.handleEditorValueChange(editorValue);
     }
   }
 
@@ -198,7 +254,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
-            comment={props.grading![questionId].grade.comment}
             solution={props.grading![questionId].question.solution}
             questionId={props.grading![questionId].question.id}
             submissionId={props.submissionId}
@@ -216,6 +271,26 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />
+      },
+      {
+        label: `Chat`,
+        icon: IconNames.CHAT,
+        body: USE_CHATKIT ? (
+          <ChatApp roomId={props.grading![questionId].grade.comment} />
+        ) : (
+          <span>ChatKit disabled.</span>
+        )
+      },
+      {
+        label: `Autograder`,
+        icon: IconNames.AIRPLANE,
+        body: (
+          <Autograder
+            testcases={props.editorTestcases}
+            autogradingResults={props.autogradingResults}
+            handleTestcaseEval={this.props.handleTestcaseEval}
+          />
+        )
       }
     ]
   });

@@ -9,6 +9,7 @@ import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import { Role, sourceChapters } from '../reducers/states';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
+import Contributors from './contributors';
 import NavigationBar from './NavigationBar';
 import NotFound from './NotFound';
 
@@ -54,6 +55,7 @@ class Application extends React.Component<IApplicationProps, {}> {
             <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
+            <Route path="/contributors" component={Contributors} />
             <Route exact={true} path="/" render={this.redirectToAcademy} />
             <Route component={NotFound} />
           </Switch>
@@ -76,7 +78,7 @@ const toAcademy = (props: IApplicationProps) =>
     : () => <Academy accessToken={props.accessToken} role={props.role!} />;
 
 const toLogin = (props: IApplicationProps) => () => (
-  <Login ivleToken={qs.parse(props.location.search).token} />
+  <Login luminusCode={qs.parse(props.location.search).code} />
 );
 
 const parsePlayground = (props: IApplicationProps) => {

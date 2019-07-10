@@ -23,19 +23,19 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
         case 'textbook':
           return window.open(LINKS.TEXTBOOK, '_blank');
         case 'announcements':
-          return window.open(LINKS.IVLE);
+          return window.open(LINKS.LUMINUS);
         case 'lesson_plan':
           return history.push('/academy/missions');
         case 'students':
           return history.push(LINKS.PIAZZA);
         case 'materials':
-          return window.open(LINKS.IVLE);
+          return window.open(LINKS.LUMINUS);
         case 'IDE':
           return history.push('/playground');
         case 'path':
           return history.push('/academy/paths');
         default:
-          return window.open(LINKS.IVLE);
+          return window.open(LINKS.LUMINUS);
       }
     },
     pickUpCollectible: function () { },
@@ -48,7 +48,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
   };
 
   function openWristDevice() {
-    window.open(LINKS.IVLE);
+    window.open(LINKS.LUMINUS);
   }
 
   function startGame(div, canvas, saveData) {
@@ -71,23 +71,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
   function initialize(div, canvas) {
     startGame(div, canvas);
-    var willPlayOpening = !attemptedAll;
-    var savedLocation;
-    if (typeof Storage !== 'undefined') {
-      // Code for localStorage/sessionStorage.
-      savedLocation = localStorage.cs1101s_source_academy_location;
-    }
-    if (story === 'contest-3.3') {
-      alert('Next contest: 3D Rune')
-    } else if (story === 'mission-1') {
-      StoryXMLPlayer.loadStory('spaceship', function () {
-        StoryXMLPlayer.loadStory('mission-1', function () { })
-      })
-    } else if (willPlayOpening) {
-      StoryXMLPlayer.loadStory(story, function () { }, savedLocation);
-    } else {
-      StoryXMLPlayer.loadStoryWithoutFirstQuest(story, function () { }, savedLocation)
-    }
+    StoryXMLPlayer.loadStory('default', function () { });
   }
 
   return initialize;

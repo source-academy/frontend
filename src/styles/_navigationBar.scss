@@ -15,10 +15,19 @@
   }
 }
 
+a.NavigationBar__link {
+  color: inherit;
+  text-decoration: none;
+
+  .#{$ns}-button-text {
+    display: flex;
+  }
+}
+
 .NavigationBar__link :first-child {
   /* An even margin is kept (instead of the right side having a higher margin)
-   * to allow for even spacing when viewed on mobile.
-   */
+     * to allow for even spacing when viewed on mobile.
+     */
   margin-left: 0.1rem !important;
   margin-right: 0.1rem !important;
 }
@@ -27,10 +36,10 @@
  * Style for the navigation bar of the entire site (used in Application)
  */
 .primary-navbar {
-  .pt-button {
+  .#{$ns}-button {
     font-weight: 500;
   }
-  .pt-navbar-heading {
+  .#{$ns}-navbar-heading {
     text-transform: uppercase;
     padding: 1.5px 0 0 4px;
   }
@@ -57,11 +66,11 @@
  */
 .secondary-navbar {
   height: 40px;
-  .pt-navbar-group {
+  .#{$ns}-navbar-group {
     height: 40px;
   }
   /* Create less emphasis on secondary navbar buttons */
-  .pt-button {
+  .#{$ns}-button {
     text-transform: initial;
     font-weight: 250;
   }

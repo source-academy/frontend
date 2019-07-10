@@ -7,19 +7,13 @@
 
 1. Install a stable version of NodeJS (tested: Node 10.15.0).
 2. Run `npm install` to install dependencies.
-3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_IVLE_KEY`
-   to contain your IVLE Lapi key.
-4. Run `npm start` to start the server at `localhost:80`. Admin permissions may
-   be required for your OS to serve at port 80.
-5. If running cadet without ngix, `npm run cors-proxy` to solve CORS problems.
+3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_CLIENT_ID`
+   to contain your LumiNUS api key.
+4. Run `npm start` to start the server at `localhost:8075`. Admin permissions may
+   be required for your OS to serve at port 8075.
+5. If running cadet without nginx, `npm run cors-proxy` to solve CORS problems.
    
-## IVLE LAPI Key
-For NUS students, you can access your IVLE LAPI key [here](https://ivle.nus.edu.sg/LAPI/default.aspx).
-
 ## For Windows Users
-
-### Running cadet-frontend
-Run `npm run win-start`
 
 ### Dealing with hooks
 In package.json, change line 28:\
@@ -27,8 +21,8 @@ In package.json, change line 28:\
 to an empty line.
 
 Please note that doing this will disable the test suite, so you will need to run the tests manually instead. Using Git Bash (or any other UNIX-based command line), run the following:\
-cd scripts\
-bash test.sh
+`cd scripts`  
+`bash test.sh`
 
 ## js-slang
 
@@ -88,3 +82,11 @@ Because we use a local version of `js-slang`, the CI just breaks all the time.
 ## TypeScript Coding Conventions
 
 We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
+
+## Chatkit
+
+The chat functionality replacing the previous comment field found in assignments is built on top of Chatkit. Its documentation can be found [here](https://pusher.com/docs/chatkit).
+
+If you are using Chatkit without the backend server running, use the [test token provider](https://pusher.com/docs/chatkit/reference/test-token-provider), and hardcode `userId` and `roomId`.
+
+Internet connection is required for usage.

@@ -1,5 +1,5 @@
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
-import { mock2DRuneLibrary as mockLibrary } from './assessmentAPI';
+import { mockRuneLibrary as mockLibrary } from './assessmentAPI';
 import { mockFetchRole, Role, Roles } from './userAPI';
 
 export const mockGradingOverviews: GradingOverview[] = [
@@ -19,6 +19,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 0,
     studentName: 'Al Gorithm',
     submissionId: 0,
+    submissionStatus: 'attempted',
     groupName: '1D'
   },
   {
@@ -37,6 +38,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 0,
     studentName: 'Dee Sign',
     submissionId: 1,
+    submissionStatus: 'submitted',
     groupName: '1F'
   },
   {
@@ -55,6 +57,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 1,
     studentName: 'May Trix',
     submissionId: 2,
+    submissionStatus: 'submitted',
     groupName: '1F'
   }
 ];
@@ -91,6 +94,9 @@ Hello and welcome to this assessment! This is the *0th question*.
 >>> import this
 \`\`\`
 `,
+      prepend: '// THIS IS A PREPEND',
+      postpend: '// THIS IS A POSTPEND',
+      testcases: [],
       comment: null,
       id: 0,
       library: mockLibrary,
@@ -105,7 +111,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1
+      grade: 1,
+      autogradingResults: [
+        {
+          resultType: 'pass'
+        },
+        {
+          resultType: 'fail',
+          expected: '8',
+          actual: '5'
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'timeout'
+            },
+            {
+              errorType: 'syntax',
+              line: 1,
+              location: 'student',
+              errorLine: 'function fibonacci(n) {',
+              errorExplanation: 'Just kidding!'
+            }
+          ]
+        }
+      ]
     },
     grade: {
       gradeAdjustment: 0,
@@ -121,6 +152,9 @@ Hello and welcome to this assessment! This is the *0th question*.
   },
   {
     question: {
+      prepend: '',
+      postpend: '',
+      testcases: [],
       answer: "This student's answer to the 1st question",
       comment: null,
       content: 'Hello and welcome to this assessment! This is the 1st question.',
@@ -137,7 +171,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1
+      grade: 1,
+      autogradingResults: [
+        {
+          resultType: 'pass'
+        },
+        {
+          resultType: 'fail',
+          expected: '8',
+          actual: '5'
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'timeout'
+            },
+            {
+              errorType: 'syntax',
+              line: 1,
+              location: 'student',
+              errorLine: 'function fibonacci(n) {',
+              errorExplanation: 'Just kidding!'
+            }
+          ]
+        }
+      ]
     },
     grade: {
       gradeAdjustment: 0,
@@ -154,6 +213,9 @@ Hello and welcome to this assessment! This is the *0th question*.
   {
     question: {
       // C is the answer
+      prepend: '',
+      postpend: '',
+      testcases: [],
       answer: 3,
       comment: null,
       solution: 2,
@@ -188,7 +250,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
-      grade: 1
+      grade: 1,
+      autogradingResults: [
+        {
+          resultType: 'pass'
+        },
+        {
+          resultType: 'fail',
+          expected: '8',
+          actual: '5'
+        },
+        {
+          resultType: 'error',
+          errors: [
+            {
+              errorType: 'timeout'
+            },
+            {
+              errorType: 'syntax',
+              line: 1,
+              location: 'student',
+              errorLine: 'function fibonacci(n) {',
+              errorExplanation: 'Just kidding!'
+            }
+          ]
+        }
+      ]
     },
     grade: {
       gradeAdjustment: 0,

@@ -16,6 +16,15 @@ $code-color-error: #ff4444;
     margin-left: 0px;
   }
 
+  .Switch {
+    position: relative;
+    width: 3rem;
+    height: 1rem;
+    left: 1rem;
+    right: 1rem;
+    top: 0.5rem;
+  }
+
   .ControlBar {
     display: flex;
     flex-direction: row;
@@ -54,14 +63,28 @@ $code-color-error: #ff4444;
     padding-bottom: 0.6rem;
   }
 
+  .editor-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .editor-content-divider {
+    flex: initial;
+  }
+
   .editor-divider {
     flex: initial;
+  }
+
+  .resize-editor-prepend {
+    padding-bottom: 0.2rem;
   }
 
   .Editor {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
     margin: 0 0.6rem 0.6rem 0.6rem;
     padding-bottom: 0.6rem;
     padding-left: 0.6rem;
@@ -75,8 +98,12 @@ $code-color-error: #ff4444;
       }
     }
 
-    .ace_gutter-cell {
-      padding-left: 0px;
+    .editor-prepend-react-ace {
+      flex: 1;
+
+      #brace-editor {
+        height: 100%;
+      }
     }
 
     .ace_gutter-cell_hi {
@@ -117,7 +144,7 @@ $code-color-error: #ff4444;
       }
     }
 
-    .pt-card {
+    .#{$ns}-card {
       background-color: $cadet-color-2;
     }
 
@@ -128,6 +155,11 @@ $code-color-error: #ff4444;
   }
 
   .resize-side-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .resize-editor-content {
     display: flex;
     flex-direction: column;
   }
@@ -173,7 +205,7 @@ $code-color-error: #ff4444;
     text-align: justify;
     overflow-y: auto;
 
-    .pt-card {
+    .#{$ns}-card {
       background-color: $cadet-color-2;
       color: $code-color-result;
       display: flex;
@@ -204,12 +236,12 @@ $code-color-error: #ff4444;
     /* Cause the 'save' button shift down when size is small. */
     margin-bottom: 0.5rem;
 
-    .pt-button-group {
+    .#{$ns}-button-group {
       flex-wrap: wrap;
     }
 
-    .pt-numeric-input {
-      .pt-button {
+    .#{$ns}-numeric-input {
+      .#{$ns}-button {
         background-color: $cadet-color-2;
       }
     }
@@ -248,9 +280,14 @@ $code-color-error: #ff4444;
       margin: 0 0.5rem 0 0.5rem;
       padding: 0;
     }
+
+    .editor-content {
+      flex: 1 1 auto;
+      padding: 0;
+    }
   }
 
-  hr {
+  .bp3-divider {
     margin: 0 0 0.5rem 0;
   }
 
@@ -258,14 +295,10 @@ $code-color-error: #ff4444;
     display: flex;
     flex: 1 1;
     flex-direction: column;
+    overflow-x: visible;
+    overflow-y: visible;
 
-    .repl-output-parent {
-      flex: 1 1;
-      overflow-y: auto;
-      overflow-x: visible;
-    }
-
-    .pt-card {
+    .#{$ns}-card {
       background-color: $cadet-color-2;
       padding: 0.4rem 0.6rem 0.4rem 0.6rem;
       margin: 0 0.5rem 0.5rem 0;
@@ -339,14 +372,179 @@ $code-color-error: #ff4444;
       color: rgb(128, 145, 160);
     }
   }
+
+  .Autograder {
+    > .collapse-button {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    pre {
+      color: $code-color-code;
+    }
+
+    .noResults {
+      padding-top: 0.4rem;
+      padding-bottom: 0.4rem;
+    }
+  }
+
+  .AutograderCard {
+    @keyframes correct {
+      from {
+        background: rgba(125, 255, 125, 0.5);
+      }
+
+      to {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    @keyframes wrong {
+      from {
+        background: rgba(255, 55, 55, 0.5);
+      }
+
+      to {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    &.wrong {
+      > .#{$ns}-card {
+        background: rgba(255, 55, 55, 0.2);
+        animation-name: wrong;
+        animation-duration: 4s;
+      }
+
+      .autograder-actual {
+        pre {
+          color: $code-color-error;
+        }
+      }
+    }
+
+    &.correct {
+      > .#{$ns}-card {
+        background: rgba(125, 255, 125, 0.2);
+        animation-name: correct;
+        animation-duration: 4s;
+      }
+    }
+
+    &:not(:first-child) {
+      border-top-style: solid;
+      border-top-width: 2px;
+      border-color: #1a2530;
+    }
+
+    .#{$ns}-button {
+      border-color: rgb(26, 37, 48);
+      border-style: solid;
+      border-width: 1px;
+    }
+
+    .#{$ns}-card {
+      margin: 0 0 0 0;
+    }
+
+    .row {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      > pre {
+        flex: 1 1 auto;
+      }
+    }
+
+    .col {
+      width: 50%;
+    }
+
+    .autograder-expected {
+      padding-right: 0.2rem;
+    }
+    .autograder-actual {
+      padding-left: 0.2rem;
+    }
+  }
+
+  .ResultCard {
+    &:not(:first-child) {
+      border-top-style: solid;
+      border-top-width: 2px;
+      border-color: #1a2530;
+    }
+
+    &.wrong {
+      > .#{$ns}-card {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    &.correct {
+      > .#{$ns}-card {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    .#{$ns}-card {
+      margin: 0 0 0 0;
+    }
+
+    .row {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      > pre {
+        flex: 1 1 auto;
+        margin-left: 0.4rem;
+      }
+    }
+
+    .col {
+      width: 50%;
+    }
+
+    .autograder-expected {
+      padding-right: 0.2rem;
+    }
+    .autograder-actual {
+      padding-left: 0.2rem;
+    }
+
+    .autograder-error {
+      width: 100%;
+
+      &:not(:first-child) {
+        border-top-style: solid;
+        border-top-width: 2px;
+        border-color: #1a2530;
+      }
+    }
+
+    .error-explanation {
+      pre {
+        color: $code-color-error;
+      }
+    }
+  }
 }
 
 .Popover-share {
-  .pt-popover-arrow-fill {
+  .#{$ns}-popover-arrow-fill {
     fill: $cadet-color-4;
   }
 
-  .pt-popover-content {
+  .#{$ns}-popover-content {
     background: $cadet-color-4;
     display: flex;
     padding: 0.4rem 0.8rem 0.4rem 0.8rem;

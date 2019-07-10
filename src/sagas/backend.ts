@@ -17,8 +17,10 @@ import {
   ExternalLibraryName,
   IAssessment,
   IAssessmentOverview,
+  IProgrammingQuestion,
   IQuestion,
-  QuestionType
+  QuestionType,
+  QuestionTypes
 } from '../components/assessment/assessmentShape';
 import { store } from '../createStore';
 import { IState, Role } from '../reducers/states';
@@ -54,8 +56,8 @@ type Tokens = {
 
 function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
-    const ivleToken = (action as actionTypes.IAction).payload;
-    const tokens = yield call(postAuth, ivleToken);
+    const luminusCode = (action as actionTypes.IAction).payload;
+    const tokens = yield call(postAuth, luminusCode);
     const user = tokens ? yield call(getUser, tokens) : null;
     if (tokens && user) {
       // Use dispatch instead of saga's put to guarantee the reducer has
@@ -199,6 +201,33 @@ function* backendSaga(): SagaIterator {
     }
   });
 
+  /**
+   * Unsubmits the submission and updates the grading overviews of the new status.
+   */
+  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { submissionId } = (action as actionTypes.IAction).payload;
+
+    const resp: Response = yield postUnsubmit(submissionId, tokens);
+    if (!resp || !resp.ok) {
+      yield handleResponseError(resp);
+      return;
+    }
+
+    const overviews = yield select((state: IState) => state.session.gradingOverviews || []);
+    const newOverviews = (overviews as GradingOverview[]).map(overview => {
+      if (overview.submissionId === submissionId) {
+        return { ...overview, submissionStatus: 'attempted' };
+      }
+      return overview;
+    });
+    yield call(showSuccessMessage, 'Unsubmit successful', 1000);
+    yield put(actions.updateGradingOverviews(newOverviews));
+  });
+
   yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
@@ -234,7 +263,7 @@ function* backendSaga(): SagaIterator {
           gradingQuestion.grade = {
             gradeAdjustment,
             xpAdjustment,
-            comment,
+            comment: gradingQuestion.grade.comment,
             grade: gradingQuestion.grade.grade,
             xp: gradingQuestion.grade.xp
           };
@@ -242,20 +271,8 @@ function* backendSaga(): SagaIterator {
         return gradingQuestion;
       });
       yield put(actions.updateGrading(submissionId, newGrading));
-    } else if (resp !== null) {
-      let errorMessage: string;
-      switch (resp.status) {
-        case 401:
-          errorMessage = 'Session expired. Please login again.';
-          break;
-        default:
-          errorMessage = `Something went wrong (got ${resp.status} response)`;
-          break;
-      }
-      yield call(showWarningMessage, errorMessage);
     } else {
-      // postGrading returns null for failed fetch
-      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+      handleResponseError(resp);
     }
   });
 }
@@ -263,9 +280,9 @@ function* backendSaga(): SagaIterator {
 /**
  * POST /auth
  */
-async function postAuth(ivleToken: string): Promise<Tokens | null> {
+async function postAuth(luminusCode: string): Promise<Tokens | null> {
   const response = await request('auth', 'POST', {
-    body: { login: { ivle_token: ivleToken } },
+    body: { login: { luminus_code: luminusCode } },
     errorMessage: 'Could not login. Please contact the module administrator.'
   });
   if (response) {
@@ -355,6 +372,15 @@ async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | 
     assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
     delete (assessment as any).type;
     assessment.questions = assessment.questions.map(q => {
+      if (q.type === QuestionTypes.programming) {
+        const question = q as IProgrammingQuestion;
+        question.autogradingResults = question.autogradingResults || [];
+        question.prepend = question.prepend || '';
+        question.postpend = question.postpend || '';
+        question.testcases = question.testcases || [];
+        q = question;
+      }
+
       // Make library.external.name uppercase
       q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
       // Make globals into an Array of (string, value)
@@ -429,6 +455,7 @@ async function getGradingOverviews(
         studentId: overview.student.id,
         studentName: overview.student.name,
         submissionId: overview.id,
+        submissionStatus: overview.status,
         groupName: overview.groupName,
         // Grade
         initialGrade: overview.grade,
@@ -467,17 +494,17 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
       return {
         question: {
           answer: question.answer,
+          autogradingResults: question.autogradingResults || [],
           choices: question.choices,
           content: question.content,
           comment: null,
           id: question.id,
           library: castLibrary(question.library),
-          solution: gradingQuestion.solution
-            ? gradingQuestion.solution
-            : question.solution !== undefined
-              ? question.solution
-              : null,
+          solution: gradingQuestion.solution || question.solution || null,
           solutionTemplate: question.solutionTemplate,
+          prepend: question.prepend || '',
+          postpend: question.postpend || '',
+          testcases: question.testcases || [],
           type: question.type as QuestionType,
           maxGrade: question.maxGrade,
           maxXp: question.maxXp
@@ -525,6 +552,20 @@ const postGrading = async (
   });
   return resp;
 };
+
+/**
+ * POST /grading/{submissionId}/unsubmit
+ */
+async function postUnsubmit(submissionId: number, tokens: Tokens) {
+  const resp = await request(`grading/${submissionId}/unsubmit`, 'POST', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+}
 
 /**
  * @returns {(Response|null)} Response if successful, otherwise null.
@@ -583,6 +624,24 @@ async function request(
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
     return null;
   }
+}
+
+function* handleResponseError(resp: Response | null) {
+  if (!resp) {
+    yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    return;
+  }
+
+  let errorMessage: string;
+  switch (resp.status) {
+    case 401:
+      errorMessage = 'Session expired. Please login again.';
+      break;
+    default:
+      errorMessage = `Error ${resp.status}: ${resp.statusText}`;
+      break;
+  }
+  yield call(showWarningMessage, errorMessage);
 }
 
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);

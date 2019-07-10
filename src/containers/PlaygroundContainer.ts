@@ -8,6 +8,7 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeActiveTab,
+  changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
   chapterSelect,
@@ -25,7 +26,8 @@ import {
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue,
-  WorkspaceLocation
+  WorkspaceLocation,
+  WorkspaceLocations
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
@@ -51,7 +53,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   externalLibraryName: state.workspaces.playground.playgroundExternal
 });
 
-const location: WorkspaceLocation = 'playground';
+const location: WorkspaceLocation = WorkspaceLocations.playground;
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -62,6 +64,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, location),
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),

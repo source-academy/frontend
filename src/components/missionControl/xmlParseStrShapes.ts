@@ -56,7 +56,13 @@ export interface IXmlParseStrProblem {
 export interface IXmlParseStrPProblem extends IXmlParseStrProblem {
   SNIPPET: Array<{
     TEMPLATE: string[];
+    PREPEND: string;
     SOLUTION: string[];
+    POSTPEND: string;
+    TESTCASES: Array<{
+      PUBLIC?: IXmlParseStrTestcase[];
+      PRIVATE?: IXmlParseStrTestcase[];
+    }>;
     GRADER: string[];
   }>;
   TEXT: string[];
@@ -74,4 +80,12 @@ export interface IXmlParseStrProblemChoice {
     correct: string;
   };
   TEXT: string[];
+}
+
+export interface IXmlParseStrTestcase {
+  $: {
+    answer: string;
+    score: string;
+  };
+  _: string;
 }

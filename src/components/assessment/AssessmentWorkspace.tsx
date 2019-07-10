@@ -9,9 +9,11 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
-
+import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
@@ -20,12 +22,15 @@ import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
 import { SideContentProps } from '../workspace/side-content';
+import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
+  AutogradingResult,
   IAssessment,
   IMCQQuestion,
   IProgrammingQuestion,
   IQuestion,
+  ITestcase,
   Library,
   QuestionTypes
 } from './assessmentShape';
@@ -36,7 +41,12 @@ export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 export type StateProps = {
   activeTab: number;
   assessment?: IAssessment;
+  autogradingResults: AutogradingResult[];
+  editorPrepend: string;
   editorValue: string | null;
+  editorPostpend: string;
+  editorTestcases: ITestcase[];
+  editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
   highlightedLines: number[][];
@@ -67,6 +77,7 @@ export type DispatchProps = {
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
+  handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleInterruptEval: () => void;
@@ -76,6 +87,7 @@ export type DispatchProps = {
   handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleTestcaseEval: (testcaseId: number) => void;
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handleDebuggerPause: () => void;
@@ -85,13 +97,13 @@ export type DispatchProps = {
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean; showResetOverlay: boolean }
+  { showOverlay: boolean; showResetTemplateOverlay: boolean }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
-      showResetOverlay: false
+      showResetTemplateOverlay: false
     };
     this.props.handleEditorValueChange('');
   }
@@ -106,20 +118,27 @@ class AssessmentWorkspace extends React.Component<
     if (this.props.questionId === 0 && this.props.notAttempted) {
       this.setState({ showOverlay: true });
     }
-    if (this.props.assessment) {
-      const question: IQuestion = this.props.assessment.questions[
-        this.props.questionId >= this.props.assessment.questions.length
-          ? this.props.assessment.questions.length - 1
-          : this.props.questionId
-      ];
-      this.props.handleEditorValueChange(
-        question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IProgrammingQuestion).answer as string)
-            : (question as IProgrammingQuestion).solutionTemplate
-          : ''
-      );
+    if (!this.props.assessment) {
+      return;
     }
+
+    let questionId = this.props.questionId;
+    if (this.props.questionId >= this.props.assessment.questions.length) {
+      questionId = this.props.assessment.questions.length - 1;
+    }
+
+    const question: IQuestion = this.props.assessment.questions[questionId];
+
+    let answer = '';
+    if (question.type === QuestionTypes.programming) {
+      if (question.answer) {
+        answer = (question as IProgrammingQuestion).answer as string;
+      } else {
+        answer = (question as IProgrammingQuestion).solutionTemplate;
+      }
+    }
+
+    this.props.handleEditorValueChange(answer);
   }
 
   /**
@@ -134,9 +153,9 @@ class AssessmentWorkspace extends React.Component<
     if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
       return (
         <NonIdealState
-          className="WorkspaceParent pt-dark"
+          className={classNames('WorkspaceParent', Classes.DARK)}
           description="Getting mission ready..."
-          visual={<Spinner large={true} />}
+          icon={<Spinner size={Spinner.SIZE_LARGE} />}
         />
       );
     }
@@ -154,12 +173,12 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     );
 
-    const resetOverlay = (
+    const resetTemplateOverlay = (
       <Dialog
         className="assessment-reset"
         icon={IconNames.ERROR}
         isCloseButtonShown={false}
-        isOpen={this.state.showResetOverlay}
+        isOpen={this.state.showResetTemplateOverlay}
         title="Confirmation: Reset editor?"
       >
         <div className={Classes.DIALOG_BODY}>
@@ -168,14 +187,19 @@ class AssessmentWorkspace extends React.Component<
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
-            {controlButton('Cancel', null, () => this.setState({ showResetOverlay: false }), {
-              minimal: false
-            })}
+            {controlButton(
+              'Cancel',
+              null,
+              () => this.setState({ showResetTemplateOverlay: false }),
+              {
+                minimal: false
+              }
+            )}
             {controlButton(
               'Confirm',
               null,
               () => {
-                this.setState({ showResetOverlay: false });
+                this.setState({ showResetTemplateOverlay: false });
                 this.props.handleEditorValueChange(
                   (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
                     .solutionTemplate
@@ -200,6 +224,11 @@ class AssessmentWorkspace extends React.Component<
         question.type === QuestionTypes.programming
           ? {
               editorSessionId: '',
+              editorPrepend: this.props.editorPrepend,
+              editorPrependLines:
+                this.props.editorPrepend.length === 0
+                  ? 0
+                  : this.props.editorPrepend.split('\n').length,
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
@@ -210,7 +239,9 @@ class AssessmentWorkspace extends React.Component<
               isEditorAutorun: false
             }
           : undefined,
+      editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
+      handleEditorHeightChange: this.props.handleEditorHeightChange,
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       hasUnsavedChanges: this.props.hasUnsavedChanges,
@@ -231,9 +262,9 @@ class AssessmentWorkspace extends React.Component<
       }
     };
     return (
-      <div className="WorkspaceParent pt-dark">
+      <div className={classNames('WorkspaceParent', Classes.DARK)}>
         {overlay}
-        {resetOverlay}
+        {resetTemplateOverlay}
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -254,24 +285,46 @@ class AssessmentWorkspace extends React.Component<
     const questionId = this.props.questionId;
 
     if (
-      this.props.storedAssessmentId !== assessmentId ||
-      this.props.storedQuestionId !== questionId
+      this.props.storedAssessmentId === assessmentId &&
+      this.props.storedQuestionId === questionId
     ) {
-      const question = this.props.assessment.questions[questionId];
-      const editorValue =
-        question.type === QuestionTypes.programming
-          ? question.answer !== null
-            ? ((question as IProgrammingQuestion).answer as string)
-            : (question as IProgrammingQuestion).solutionTemplate
-          : '';
-      this.props.handleEditorUpdateBreakpoints([]);
-      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
-      this.props.handleResetWorkspace({ editorValue });
-      this.props.handleClearContext(question.library);
-      this.props.handleUpdateHasUnsavedChanges(false);
-      if (editorValue) {
-        this.props.handleEditorValueChange(editorValue);
+      return;
+    }
+
+    const question = this.props.assessment.questions[questionId];
+
+    let autogradingResults: AutogradingResult[] = [];
+    let editorValue: string = '';
+    let editorPrepend: string = '';
+    let editorPostpend: string = '';
+    let editorTestcases: ITestcase[] = [];
+
+    if (question.type === QuestionTypes.programming) {
+      const questionData = question as IProgrammingQuestion;
+      autogradingResults = questionData.autogradingResults;
+      editorPrepend = questionData.prepend;
+      editorPostpend = questionData.postpend;
+      editorTestcases = questionData.testcases;
+
+      editorValue = questionData.answer as string;
+      if (!editorValue) {
+        editorValue = questionData.solutionTemplate!;
       }
+    }
+
+    this.props.handleEditorUpdateBreakpoints([]);
+    this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
+    this.props.handleResetWorkspace({
+      autogradingResults,
+      editorPrepend,
+      editorValue,
+      editorPostpend,
+      editorTestcases
+    });
+    this.props.handleClearContext(question.library);
+    this.props.handleUpdateHasUnsavedChanges(false);
+    if (editorValue) {
+      this.props.handleEditorValueChange(editorValue);
     }
   }
 
@@ -290,25 +343,46 @@ class AssessmentWorkspace extends React.Component<
         label: `${props.assessment!.category} Briefing`,
         icon: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />
+      },
+      {
+        label: `${props.assessment!.category} Autograder`,
+        icon: IconNames.AIRPLANE,
+        body: (
+          <Autograder
+            testcases={props.editorTestcases}
+            autogradingResults={props.autogradingResults}
+            handleTestcaseEval={this.props.handleTestcaseEval}
+          />
+        )
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;
     if (isGraded) {
-      tabs.push({
-        label: `Grading`,
-        icon: IconNames.TICK,
-        body: (
-          <GradingResult
-            comment={props.assessment!.questions[questionId].comment}
-            graderName={props.assessment!.questions[questionId].grader.name}
-            gradedAt={props.assessment!.questions[questionId].gradedAt}
-            xp={props.assessment!.questions[questionId].xp}
-            grade={props.assessment!.questions[questionId].grade}
-            maxGrade={props.assessment!.questions[questionId].maxGrade}
-            maxXp={props.assessment!.questions[questionId].maxXp}
-          />
-        )
-      });
+      tabs.push(
+        {
+          label: `Grading`,
+          icon: IconNames.TICK,
+          body: (
+            <GradingResult
+              graderName={props.assessment!.questions[questionId].grader.name}
+              gradedAt={props.assessment!.questions[questionId].gradedAt}
+              xp={props.assessment!.questions[questionId].xp}
+              grade={props.assessment!.questions[questionId].grade}
+              maxGrade={props.assessment!.questions[questionId].maxGrade}
+              maxXp={props.assessment!.questions[questionId].maxXp}
+            />
+          )
+        },
+        {
+          label: `Comments`,
+          icon: IconNames.CHAT,
+          body: USE_CHATKIT ? (
+            <ChatApp roomId={props.assessment!.questions[questionId].comment} />
+          ) : (
+            <span>Chatkit disabled.</span>
+          )
+        }
+      );
     }
 
     const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;
@@ -362,8 +436,8 @@ class AssessmentWorkspace extends React.Component<
           this.props.assessment!.questions[questionId].id,
           this.props.editorValue!
         ),
-      onClickReset: () => {
-        this.setState({ showResetOverlay: true });
+      onClickResetTemplate: () => {
+        this.setState({ showResetTemplateOverlay: true });
       },
       questionProgress: [questionId + 1, this.props.assessment!.questions.length],
       sourceChapter: this.props.assessment!.questions[questionId].library.chapter
