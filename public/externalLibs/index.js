@@ -40,8 +40,8 @@ function loadAllLibs() {
     '/externalLibs/pe_library.js',
     '/externalLibs/assert_compiled.js',
     // video
-    '/externalLibs/video/p5.js',
-    '/externalLibs/video/p5.dom.js',
+    '/externalLibs/video/p5.min.js',
+    '/externalLibs/video/p5.dom.min.js',
     '/externalLibs/video/video_lib.js',
     // inspector
     '/externalLibs/inspector/inspector.js',

@@ -1,3 +1,12 @@
+/*
+    Note: the following line should be deleted in p5.min.js
+        to solve the problem of excessive ram usage
+    this.createCanvas(
+      this._defaultCanvasSize.width,
+      this._defaultCanvasSize.height,
+      'p2d'
+    );
+*/
 function red_of(px){ // returns the red, green, blue values of px respectively
 	return px[0];
 }
