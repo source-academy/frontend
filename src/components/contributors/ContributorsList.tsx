@@ -55,9 +55,7 @@ class ContributorsList extends React.Component<{}, ContributorsState> {
               <h3>{repo.name}</h3>
               <h5>{repo.description}</h5>
             </div>
-            <div className="inPermalink">
-              {arrayMapped}
-            </div>
+            <div className="inPermalink">{arrayMapped}</div>
           </Card>
         );
       })
