@@ -368,8 +368,8 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   });
 
   test('puts changePlaygroundExternal, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
-    const oldExternalLibraryName = ExternalLibraryNames.SOUND;
-    const newExternalLibraryName = ExternalLibraryNames.STREAMS;
+    const oldExternalLibraryName = ExternalLibraryNames.SOUNDS;
+    const newExternalLibraryName = ExternalLibraryNames.RUNES;
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
       context,
@@ -404,8 +404,8 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   });
 
   test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
-    const oldExternalLibraryName = ExternalLibraryNames.TWO_DIM_RUNES;
-    const newExternalLibraryName = ExternalLibraryNames.TWO_DIM_RUNES;
+    const oldExternalLibraryName = ExternalLibraryNames.RUNES;
+    const newExternalLibraryName = ExternalLibraryNames.RUNES;
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
       context,
@@ -491,8 +491,8 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
     ];
   });
 
-  test('loads TWO_DIM_RUNES library correctly', () => {
-    const newExternalLibraryName = ExternalLibraryNames.TWO_DIM_RUNES;
+  test('loads RUNES library correctly', () => {
+    const newExternalLibraryName = ExternalLibraryNames.RUNES;
 
     const symbols = externalLibraries.get(newExternalLibraryName)!;
     const library: Library = {
@@ -512,36 +512,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
       })
       .silentRun()
       .then(() => {
-        expect(loadLib).toHaveBeenCalledWith('TWO_DIM_RUNES');
-        expect(getReadyWebGLForCanvas).toHaveBeenCalledWith('2d');
-        globals.forEach(item => {
-          expect(window[item[0]]).toEqual(item[1]);
-        });
-      });
-  });
-
-  test('loads THREE_DIM_RUNES library correctly', () => {
-    const newExternalLibraryName = ExternalLibraryNames.THREE_DIM_RUNES;
-
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols
-      },
-      globals
-    };
-
-    return expectSaga(workspaceSaga)
-      .put(actions.endClearContext(library, workspaceLocation))
-      .dispatch({
-        type: actionTypes.BEGIN_CLEAR_CONTEXT,
-        payload: { library, workspaceLocation }
-      })
-      .silentRun()
-      .then(() => {
-        expect(loadLib).toHaveBeenCalledWith('THREE_DIM_RUNES');
+        expect(loadLib).toHaveBeenCalledWith('RUNES');
         expect(getReadyWebGLForCanvas).toHaveBeenCalledWith('3d');
         globals.forEach(item => {
           expect(window[item[0]]).toEqual(item[1]);
