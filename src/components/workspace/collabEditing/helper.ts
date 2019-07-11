@@ -14,45 +14,6 @@ enum XMLHttpStatus {
 }
 
 export function checkSessionIdExists(
-  sessionId: string,
-  onSessionIdExists: () => void,
-  onSessionIdNotExist: () => void,
-  onServerUnreachable: () => void
-) {
-  const xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState !== XMLHttpReadyState.DONE) {
-      return;
-    }
-    if (xmlhttp.status !== XMLHttpStatus.OK) {
-      onServerUnreachable();
-      return;
-    }
-    const state = JSON.parse(xmlhttp.responseText).state;
-    if (state === true) {
-      onSessionIdExists();
-    } else {
-      onSessionIdNotExist();
-    }
-  };
-
-  xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/' + sessionId, true);
-  xmlhttp.send();
-}
-
-export function createNewSession(onSessionCreated: (sessionId: string) => void) {
-  const xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState === XMLHttpReadyState.DONE && xmlhttp.status === XMLHttpStatus.OK) {
-      const id = JSON.parse(xmlhttp.responseText).id;
-      onSessionCreated(id);
-    }
-  };
-  xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/latest/', true);
-  xmlhttp.send();
-}
-
-export function checkConnnectionAlive(
   editorSessionId: string,
   handleConnectionOK: () => void,
   handleSessionIdNotFound: () => void,
@@ -67,13 +28,25 @@ export function checkConnnectionAlive(
       handleCannotReachServer();
       return;
     }
-    const state = JSON.parse(xmlhttp.responseText).state;
-    if (state !== true) {
+    const sessionIdExists: boolean = JSON.parse(xmlhttp.responseText).state;
+    if (!sessionIdExists) {
       handleSessionIdNotFound();
-    } else {
-      handleConnectionOK();
+      return;
     }
+    handleConnectionOK();
   };
   xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/' + editorSessionId, true);
+  xmlhttp.send();
+}
+
+export function createNewSession(onSessionCreated: (sessionId: string) => void) {
+  const xmlhttp: XMLHttpRequest = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = () => {
+    if (xmlhttp.readyState === XMLHttpReadyState.DONE && xmlhttp.status === XMLHttpStatus.OK) {
+      const id = JSON.parse(xmlhttp.responseText).id;
+      onSessionCreated(id);
+    }
+  };
+  xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/latest/', true);
   xmlhttp.send();
 }

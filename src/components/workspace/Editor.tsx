@@ -8,7 +8,7 @@ import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
 
 import { LINKS } from '../../utils/constants';
-import { checkConnnectionAlive } from './collabEditing/helper';
+import { checkSessionIdExists } from './collabEditing/helper';
 /**
  * @property editorValue - The string content of the react-ace editor
  * @property handleEditorChange  - A callback function
@@ -224,7 +224,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       if (this.ShareAce === null) {
         return;
       }
-      checkConnnectionAlive(
+      checkSessionIdExists(
         this.props.editorSessionId,
         () => {},
         sessionIdNotFound,
