@@ -612,7 +612,6 @@ async function request(
       return response;
     } else if (opts.shouldRefresh && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
-      // Changed put to put
       put(actions.setTokens(newTokens));
       const newOpts = {
         ...opts,
@@ -629,7 +628,6 @@ async function request(
       throw new Error('API call failed or got non-OK response');
     }
   } catch (e) {
-    // Changed put to put
     put(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
     return null;
