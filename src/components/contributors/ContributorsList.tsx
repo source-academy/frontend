@@ -55,9 +55,9 @@ class ContributorsList extends React.Component<{}, ContributorsState> {
               <h3>{repo.name}</h3>
               <h5>{repo.description}</h5>
             </div>
-            <Card className="inPermalink" elevation={Elevation.ONE}>
+            <div className="inPermalink">
               {arrayMapped}
-            </Card>
+            </div>
           </Card>
         );
       })

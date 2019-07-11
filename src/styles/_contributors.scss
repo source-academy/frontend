@@ -83,13 +83,13 @@
 // Styling components of the ContributorsList
 
 .containerPermalink {
-  background-color: $cadet-color-1;
+  background-color: $cadet-color-4;
   margin-bottom: 2%;
 }
 
 div.inPermalink {
+  background-color: $cadet-color-4;
   text-align: justify;
-  background-color: $cadet-color-3;
 
   div {
     text-align: center;
@@ -112,15 +112,15 @@ div.inPermalink {
 
   p {
     margin-bottom: 0.2rem;
-    color: $cadet-color-5;
+    color: $cadet-color-2;
   }
 
   a {
     text-decoration: none;
     font-weight: bold;
-    color: $cadet-color-4;
+    color: $cadet-color-1;
     &:hover {
-      color: $cadet-color-5;
+      color: $cadet-color-3;
     }
   }
 }
@@ -130,7 +130,7 @@ div.repoDetailsPermalink {
 
   h3 {
     margin: 0% 2% 0.5% 2%;
-    color: $cadet-color-4;
+    color: $cadet-color-2;
   }
 
   h3::first-letter {
@@ -140,6 +140,6 @@ div.repoDetailsPermalink {
   h5 {
     margin: 0% 2% 1% 2%;
     font-style: italic;
-    color: $cadet-color-5;
+    color: $cadet-color-1;
   }
 }
