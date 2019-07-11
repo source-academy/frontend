@@ -32,7 +32,7 @@ $dark-green: #00e000;
   }
 
   /* repl specific */
-  .pt-card {
+  .#{$ns}-card {
     background: $pure-green !important;
     box-shadow: none !important;
     border: 0.1rem solid $dark-green !important;

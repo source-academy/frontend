@@ -1,7 +1,8 @@
-import { Colors, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Colors, Divider, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
+import { ValueFormatterParams } from 'ag-grid/dist/lib/entities/colDef';
 import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
 import { sortBy } from 'lodash';
@@ -16,6 +17,7 @@ import GradingHistory from './GradingHistory';
 import GradingNavLink from './GradingNavLink';
 import { GradingOverview } from './gradingShape';
 import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace';
+import UnsubmitCell from './UnsubmitCell';
 
 /**
  * Column Definitions are defined within the state, so that data
@@ -43,6 +45,7 @@ export interface IGradingWorkspaceParams {
 
 export interface IDispatchProps {
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
+  handleUnsubmitSubmission: (submissionId: number) => void;
 }
 
 export interface IStateProps {
@@ -109,10 +112,41 @@ class Grading extends React.Component<IGradingProps, State> {
           maxWidth: 120
         },
         {
+          headerName: 'Status',
+          field: 'submissionStatus',
+          valueFormatter: (params: ValueFormatterParams) => {
+            const str = params.value as string;
+            return str.charAt(0).toUpperCase() + str.slice(1);
+          },
+          cellStyle: (params: GradingNavLinkProps) => {
+            if (params.data.submissionStatus === 'submitted') {
+              return { backgroundColor: Colors.GREEN5 };
+            }
+            return { backgroundColor: Colors.RED5 };
+          }
+        },
+        {
           headerName: 'Edit',
           field: '',
           cellRendererFramework: GradingNavLink,
           maxWidth: 70
+        },
+        {
+          headerName: 'Unsubmit',
+          colId: 'Unsubmit',
+          width: 110,
+          field: '',
+          cellRendererFramework: UnsubmitCell,
+          cellRendererParams: {
+            handleUnsubmitSubmission: this.props.handleUnsubmitSubmission
+          },
+          suppressSorting: true,
+          suppressMovable: true,
+          suppressMenu: true,
+          suppressResize: true,
+          cellStyle: {
+            padding: 0
+          }
         },
         { headerName: 'Initial Grade', field: 'initialGrade', hide: true },
         { headerName: 'Grade Adjustment', field: 'gradeAdjustment', hide: true },
@@ -124,9 +158,7 @@ class Grading extends React.Component<IGradingProps, State> {
         { headerName: 'Max XP', field: 'maxXp', hide: true },
         { headerName: 'Bonus XP', field: 'xpBonus', hide: true }
       ],
-
       filterValue: '',
-
       groupFilterEnabled: false
     };
   }
@@ -150,7 +182,7 @@ class Grading extends React.Component<IGradingProps, State> {
       <NonIdealState
         className="Grading"
         description="Fetching submissions..."
-        visual={<Spinner large={true} />}
+        icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
     const data = sortBy(this.props.gradingOverviews, [
@@ -184,8 +216,7 @@ class Grading extends React.Component<IGradingProps, State> {
           </div>
         </div>
 
-        <hr />
-        <br />
+        <Divider />
 
         <div className="Grading">
           <div className="ag-grid-parent ag-theme-fresh">
@@ -208,11 +239,13 @@ class Grading extends React.Component<IGradingProps, State> {
       </div>
     );
     return (
-      <ContentDisplay
-        loadContentDispatch={this.props.handleFetchGradingOverviews}
-        display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
-        fullWidth={false}
-      />
+      <div>
+        <ContentDisplay
+          loadContentDispatch={this.props.handleFetchGradingOverviews}
+          display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
+          fullWidth={false}
+        />
+      </div>
     );
   }
 

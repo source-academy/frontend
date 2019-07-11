@@ -125,3 +125,10 @@ export const updateGrading = (submissionId: number, grading: Grading) => ({
     grading
   }
 });
+
+export const unsubmitSubmission: ActionCreator<actionTypes.IAction> = (submissionId: number) => ({
+  type: actionTypes.UNSUBMIT_SUBMISSION,
+  payload: {
+    submissionId
+  }
+});

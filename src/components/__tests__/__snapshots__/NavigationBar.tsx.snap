@@ -1,93 +1,101 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`NavigationBar renders "Not logged in" correctly 1`] = `
-"<Blueprint2.Navbar className=\\"NavigationBar primary-navbar pt-dark\\">
-  <Blueprint2.NavbarGroup align=\\"left\\">
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/academy\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"symbol-diamond\\" />
-      <Blueprint2.NavbarHeading className=\\"hidden-xs\\">
+"<Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
+  <Blueprint3.NavbarGroup align=\\"left\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/academy\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"symbol-diamond\\" />
+      <Blueprint3.NavbarHeading className=\\"hidden-xs\\">
         Source Academy
-      </Blueprint2.NavbarHeading>
+      </Blueprint3.NavbarHeading>
     </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" target=\\"_blank\\" to=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"book\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        News &amp; Material
-      </div>
-    </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" target=\\"_blank\\" to=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"chat\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Forum
-      </div>
-    </NavLink>
-  </Blueprint2.NavbarGroup>
-  <Blueprint2.NavbarGroup align=\\"right\\">
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/mission-control\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"code\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Mission-Control
-      </div>
-    </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"code\\" />
+    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+      <Blueprint3.Button minimal={true}>
+        <Blueprint3.Icon icon=\\"book\\" />
+        <div className=\\"navbar-button-text hidden-xs\\">
+          News &amp; Material
+        </div>
+      </Blueprint3.Button>
+    </a>
+    <a className=\\"NavigationBar__link\\" href=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+      <Blueprint3.Button minimal={true}>
+        <Blueprint3.Icon icon=\\"chat\\" />
+        <div className=\\"navbar-button-text hidden-xs\\">
+          Forum
+        </div>
+      </Blueprint3.Button>
+    </a>
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Playground
       </div>
     </NavLink>
+  </Blueprint3.NavbarGroup>
+  <Blueprint3.NavbarGroup align=\\"right\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"heart\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Contributors
+      </div>
+    </NavLink>
     <div className=\\"visible-xs\\">
-      <Blueprint2.NavbarDivider className=\\"thin-divider\\" />
+      <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
     </div>
     <div className=\\"hidden-xs\\">
-      <Blueprint2.NavbarDivider className=\\"default-divider\\" />
+      <Blueprint3.NavbarDivider className=\\"default-divider\\" />
     </div>
     <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
-  </Blueprint2.NavbarGroup>
-</Blueprint2.Navbar>"
+  </Blueprint3.NavbarGroup>
+</Blueprint3.Navbar>"
 `;
 
 exports[`NavigationBar renders correctly with username 1`] = `
-"<Blueprint2.Navbar className=\\"NavigationBar primary-navbar pt-dark\\">
-  <Blueprint2.NavbarGroup align=\\"left\\">
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/academy\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"symbol-diamond\\" />
-      <Blueprint2.NavbarHeading className=\\"hidden-xs\\">
+"<Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
+  <Blueprint3.NavbarGroup align=\\"left\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/academy\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"symbol-diamond\\" />
+      <Blueprint3.NavbarHeading className=\\"hidden-xs\\">
         Source Academy
-      </Blueprint2.NavbarHeading>
+      </Blueprint3.NavbarHeading>
     </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" target=\\"_blank\\" to=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"book\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        News &amp; Material
-      </div>
-    </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" target=\\"_blank\\" to=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"chat\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Forum
-      </div>
-    </NavLink>
-  </Blueprint2.NavbarGroup>
-  <Blueprint2.NavbarGroup align=\\"right\\">
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/mission-control\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"code\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Mission-Control
-      </div>
-    </NavLink>
-    <NavLink activeClassName=\\"pt-active\\" className=\\"NavigationBar__link pt-button pt-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
-      <Blueprint2.Icon icon=\\"code\\" />
+    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+      <Blueprint3.Button minimal={true}>
+        <Blueprint3.Icon icon=\\"book\\" />
+        <div className=\\"navbar-button-text hidden-xs\\">
+          News &amp; Material
+        </div>
+      </Blueprint3.Button>
+    </a>
+    <a className=\\"NavigationBar__link\\" href=\\"https://piazza.com/nus.edu.sg/fall2019/cs1101s\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
+      <Blueprint3.Button minimal={true}>
+        <Blueprint3.Icon icon=\\"chat\\" />
+        <div className=\\"navbar-button-text hidden-xs\\">
+          Forum
+        </div>
+      </Blueprint3.Button>
+    </a>
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Playground
       </div>
     </NavLink>
+  </Blueprint3.NavbarGroup>
+  <Blueprint3.NavbarGroup align=\\"right\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"heart\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Contributors
+      </div>
+    </NavLink>
     <div className=\\"visible-xs\\">
-      <Blueprint2.NavbarDivider className=\\"thin-divider\\" />
+      <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
     </div>
     <div className=\\"hidden-xs\\">
-      <Blueprint2.NavbarDivider className=\\"default-divider\\" />
+      <Blueprint3.NavbarDivider className=\\"default-divider\\" />
     </div>
     <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
-  </Blueprint2.NavbarGroup>
-</Blueprint2.Navbar>"
+  </Blueprint3.NavbarGroup>
+</Blueprint3.Navbar>"
 `;

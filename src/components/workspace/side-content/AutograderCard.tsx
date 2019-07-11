@@ -1,4 +1,4 @@
-import { Card, Elevation } from '@blueprintjs/core';
+import { Card, Elevation, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
@@ -33,19 +33,19 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
             )}
           </div>
           <div className="row autograder-program">
-            <pre className="code">{this.props.testcase.program}</pre>
+            <Pre>{this.props.testcase.program}</Pre>
           </div>
           <div className="row">
             <div className="col autograder-expected">
               Expected Answer:
-              <pre className="code">{this.props.testcase.answer}</pre>
+              <Pre>{this.props.testcase.answer}</Pre>
             </div>
             <div className="col autograder-actual">
               Actual Answer:
               {this.props.testcase.result ? (
-                <pre className="code">{stringify(this.props.testcase.result)}</pre>
+                <Pre>{stringify(this.props.testcase.result)}</Pre>
               ) : (
-                <pre>No Answer</pre>
+                <Pre>No Answer</Pre>
               )}
             </div>
           </div>
