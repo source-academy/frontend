@@ -71,23 +71,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
   function initialize(div, canvas) {
     startGame(div, canvas);
-    var willPlayOpening = !attemptedAll;
-    var savedLocation;
-    if (typeof Storage !== 'undefined') {
-      // Code for localStorage/sessionStorage.
-      savedLocation = localStorage.cs1101s_source_academy_location;
-    }
-    if (story === 'contest-3.3') {
-      alert('Next contest: 3D Rune')
-    } else if (story === 'mission-1') {
-      StoryXMLPlayer.loadStory('spaceship', function () {
-        StoryXMLPlayer.loadStory('mission-1', function () { })
-      })
-    } else if (willPlayOpening) {
-      StoryXMLPlayer.loadStory(story, function () { }, savedLocation);
-    } else {
-      StoryXMLPlayer.loadStoryWithoutFirstQuest(story, function () { }, savedLocation)
-    }
+    StoryXMLPlayer.loadStory('default', function () { });
   }
 
   return initialize;

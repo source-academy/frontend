@@ -22,3 +22,7 @@ terraform*
 .env.production.local
 
 npm-debug.log*
+
+# emacs backup files
+
+*~

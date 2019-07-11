@@ -59,15 +59,7 @@ function loadAllLibs() {
 function loadLib(externalLibraryName) {
   let files
   switch (externalLibraryName) {
-    case 'TWO_DIM_RUNES':
-      files = [
-        // graphics
-        '/externalLibs/graphics/gl-matrix.js',
-        '/externalLibs/graphics/webGLgraphics.js',
-        '/externalLibs/graphics/webGLrune.js'
-      ]
-      break
-    case 'THREE_DIM_RUNES':
+    case 'RUNES':
       files = [
         // graphics
         '/externalLibs/graphics/gl-matrix.js',
