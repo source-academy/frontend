@@ -1,5 +1,5 @@
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
-import { mock2DRuneLibrary as mockLibrary } from './assessmentAPI';
+import { mockRuneLibrary as mockLibrary } from './assessmentAPI';
 import { mockFetchRole, Role, Roles } from './userAPI';
 
 export const mockGradingOverviews: GradingOverview[] = [

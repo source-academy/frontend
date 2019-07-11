@@ -19,7 +19,7 @@ import { history as appHistory } from './utils/history';
 
 declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>;
 
-function createStore(history: History): Store<IState> {
+export function createStore(history: History): Store<IState> {
   let composeEnhancers: any = compose;
   const sagaMiddleware = createSagaMiddleware();
   const middleware = [sagaMiddleware, routerMiddleware(history)];
@@ -34,7 +34,7 @@ function createStore(history: History): Store<IState> {
   });
   const enchancers = composeEnhancers(applyMiddleware(...middleware));
   const loadedStore = loadStoredState();
-  let initialStore: IState;
+  let initialStore: IState = defaultState;
   if (loadedStore) {
     initialStore = {
       ...defaultState,
@@ -55,8 +55,6 @@ function createStore(history: History): Store<IState> {
         }
       }
     };
-  } else {
-    initialStore = defaultState;
   }
   const createdStore = _createStore<IState>(rootReducer, initialStore, enchancers);
 

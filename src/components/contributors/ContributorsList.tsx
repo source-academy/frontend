@@ -1,4 +1,5 @@
 import { Card, Elevation } from '@blueprintjs/core';
+import { H2, H3, H5 } from '@blueprintjs/core';
 import * as React from 'react';
 
 import { Contributor, ContributorsState, Repo } from './ContributorsTypes';
@@ -52,8 +53,8 @@ class ContributorsList extends React.Component<{}, ContributorsState> {
         return (
           <Card key={repo.key} className="containerPermalink" elevation={Elevation.ONE}>
             <div className="repoDetailsPermalink">
-              <h3>{repo.name}</h3>
-              <h5>{repo.description}</h5>
+              <H3>{repo.name}</H3>
+              <H5>{repo.description}</H5>
             </div>
             <Card className="inPermalink" elevation={Elevation.ONE}>
               {arrayMapped}
@@ -62,7 +63,7 @@ class ContributorsList extends React.Component<{}, ContributorsState> {
         );
       })
     ) : (
-      <h2>Loading...</h2>
+      <H2>Loading...</H2>
     );
     return <div>{contributorList}</div>;
   }
