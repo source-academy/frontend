@@ -28,7 +28,6 @@ class EditGradingCell extends React.Component<EditGradingCellProps, {}> {
       <NavLink
         to={`/academy/grading/${this.props.data.submissionId}`}
         activeClassName={Classes.ACTIVE}
-        target="_blank"
       >
         {controlButton('', IconNames.ANNOTATION, () => null, { fullWidth: true })}
       </NavLink>
