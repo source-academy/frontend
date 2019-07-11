@@ -1,7 +1,7 @@
-div.pt-dialog.about {
+div.#{$ns}-dialog.about {
   padding: 0;
 
-  div.pt-dialog-body {
+  div.#{$ns}-dialog-body {
     margin-top: 10px;
   }
 
@@ -11,11 +11,11 @@ div.pt-dialog.about {
   }
 }
 
-div.pt-dialog.help {
+div.#{$ns}-dialog.help {
   padding: 0;
   text-align: justify;
 
-  div.pt-dialog-body {
+  div.#{$ns}-dialog-body {
     margin-top: 15px;
   }
 
@@ -28,7 +28,7 @@ div.pt-dialog.help {
   }
 }
 
-div.pt-dialog.profile {
+div.#{$ns}-dialog.profile {
   padding: 0;
 
   div.header {

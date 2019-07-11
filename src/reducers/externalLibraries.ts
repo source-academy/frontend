@@ -130,6 +130,18 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'violin',
       'cello'
     ]
+  ],
+  [
+    ExternalLibraryNames.BINARYTREES,
+    [
+      'make_empty_binary_tree',
+      'is_binary_tree',
+      'make_binary_tree_node',
+      'is_empty_binary_tree',
+      'left_subtree_of',
+      'value_of',
+      'right_subtree_of'
+    ]
   ]
 ];
 

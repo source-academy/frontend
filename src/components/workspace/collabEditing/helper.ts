@@ -43,7 +43,7 @@ export function createNewSession(onSessionCreated: (sessionId: string) => void) 
   const xmlhttp: XMLHttpRequest = new XMLHttpRequest();
   xmlhttp.onreadystatechange = () => {
     if (xmlhttp.readyState === XMLHttpReadyState.DONE && xmlhttp.status === XMLHttpStatus.OK) {
-      const id = JSON.parse(xmlhttp.responseText).id;
+      const id: string = JSON.parse(xmlhttp.responseText).id;
       onSessionCreated(id);
     }
   };

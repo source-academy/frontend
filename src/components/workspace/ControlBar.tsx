@@ -12,6 +12,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
+import * as classNames from 'classnames';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -143,12 +144,12 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     const saveButton = this.props.hasSaveButton
       ? controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickSave, saveButtonOpts)
       : undefined;
-    const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${
-      this.props.queryString
-    }`;
+    const shareUrl = `${window.location.protocol}//${window.location.hostname}/playground#${this.props.queryString}`;
     const shareButton = this.props.hasShareButton ? (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
-        {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
+        <Tooltip content="Get shareable link">
+          {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
+        </Tooltip>
         {this.props.queryString === undefined ? (
           <Text>
             Share your programs! Type something into the editor (left), then click on this button
@@ -157,9 +158,11 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
         ) : (
           <>
             <input defaultValue={shareUrl} readOnly={true} ref={this.shareInputElem} />
-            <CopyToClipboard text={shareUrl}>
-              {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
-            </CopyToClipboard>
+            <Tooltip content="Copy link to clipboard">
+              <CopyToClipboard text={shareUrl}>
+                {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
+              </CopyToClipboard>
+            </Tooltip>
           </>
         )}
       </Popover>
@@ -267,31 +270,42 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
             this.props.editorSessionId === ''
               ? undefined
               : this.props.websocketStatus === 0
-                ? Colors.RED3
-                : Colors.GREEN3
+              ? Colors.RED3
+              : Colors.GREEN3
         })}
       </Popover>
     ) : (
       undefined
     );
 
+    const runButtonGrouping = () => {
+      if (this.props.isEditorAutorun) {
+        return autoRunButton;
+      }
+      if (this.props.isRunning) {
+        return stopButton;
+      }
+      if (this.props.isDebugging) {
+        return null;
+      }
+      return runButton;
+    };
+
+    const pauseButtonGrouping = () => {
+      if (this.props.isRunning && !this.props.isDebugging) {
+        return pauseButton;
+      }
+      if (!this.props.isRunning && this.props.isDebugging) {
+        return resumeButton;
+      }
+      return null;
+    };
+
     return (
-      <div className="ControlBar_editor pt-button-group">
+      <div className={classNames('ControlBar_editor', Classes.BUTTON_GROUP)}>
         {toggleAutorunButton}
-        {this.props.isEditorAutorun
-          ? autoRunButton
-          : this.props.isRunning
-            ? stopButton
-            : this.props.isDebugging
-              ? null
-              : runButton}
-        {this.props.isRunning
-          ? this.props.isDebugging
-            ? null
-            : pauseButton
-          : this.props.isDebugging
-            ? resumeButton
-            : null}
+        {runButtonGrouping()}
+        {pauseButtonGrouping()}
         {this.props.isDebugging ? debuggerResetButton : null}
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton} {resetTemplateButton}
@@ -323,7 +337,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
       : undefined;
 
     return (
-      <div className="ControlBar_flow pt-button-group">
+      <div className={classNames('ControlBar_flow', Classes.BUTTON_GROUP)}>
         {previousButton} {questionView} {nextButton} {returnButton}
       </div>
     );
@@ -355,7 +369,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
     const clearButton = controlButton('Clear', IconNames.REMOVE, this.props.handleReplOutputClear);
 
     return (
-      <div className="ControlBar_repl pt-button-group">
+      <div className={classNames('ControlBar_repl', Classes.BUTTON_GROUP)}>
         {this.props.isRunning ? null : evalButton} {clearButton} {toggleEditModeButton}
       </div>
     );
@@ -408,16 +422,16 @@ const chapterSelect = (
   handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <ChapterSelectComponent
-    className="pt-minimal"
+    className={Classes.MINIMAL}
     items={chapters}
     onItemSelect={handleSelect}
     itemRenderer={chapterRenderer}
     filterable={false}
   >
     <Button
-      className="pt-minimal"
+      className={Classes.MINIMAL}
       text={styliseChapter(currentChap)}
-      rightIcon="double-caret-vertical"
+      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
     />
   </ChapterSelectComponent>
 );
@@ -439,13 +453,17 @@ const externalSelect = (
   handleSelect: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
 ) => (
   <ExternalSelectComponent
-    className="pt-minimal"
+    className={Classes.MINIMAL}
     items={iExternals}
     onItemSelect={handleSelect}
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
+    <Button
+      className={Classes.MINIMAL}
+      text={currentExternal}
+      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+    />
   </ExternalSelectComponent>
 );
 

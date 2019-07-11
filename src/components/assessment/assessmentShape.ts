@@ -129,7 +129,8 @@ export enum ExternalLibraryNames {
   NONE = 'NONE',
   RUNES = 'RUNES',
   CURVES = 'CURVES',
-  SOUNDS = 'SOUNDS'
+  SOUNDS = 'SOUNDS',
+  BINARYTREES = 'BINARYTREES'
 }
 
 export type ExternalLibraryName = keyof typeof ExternalLibraryNames;

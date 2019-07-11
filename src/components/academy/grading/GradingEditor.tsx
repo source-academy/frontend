@@ -1,9 +1,7 @@
-import { Icon, Intent, NumericInput, Position, Text } from '@blueprintjs/core';
+import { H3, HTMLTable, Intent, NumericInput, Position, Pre, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import ReactMde, { ReactMdeTypes } from 'react-mde';
 import { Prompt } from 'react-router';
-import * as Showdown from 'showdown';
 
 import { showWarningMessage } from '../../../utils/notification';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
@@ -15,14 +13,12 @@ export type DispatchProps = {
   handleGradingSave: (
     submissionId: number,
     questionId: number,
-    comment: string,
     gradeAdjustment: number | undefined,
     xpAdjustment: number | undefined
   ) => void;
 };
 
 export type OwnProps = {
-  comment: string;
   solution: number | string | null;
   questionId: number;
   submissionId: number;
@@ -49,33 +45,17 @@ export type OwnProps = {
  *   so as to allow input such as the '-' character.
  */
 type State = {
-  mdeState: ReactMdeTypes.MdeState;
   gradeAdjustmentInput: string | null;
   xpAdjustmentInput: string | null;
 };
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
-  private converter: Showdown.Converter;
-
   constructor(props: GradingEditorProps) {
     super(props);
     this.state = {
-      mdeState: {
-        markdown: props.comment
-      },
       gradeAdjustmentInput: props.gradeAdjustment.toString(),
       xpAdjustmentInput: props.xpAdjustment.toString()
     };
-    /**
-     * The markdown-to-html converter for the editor.
-     */
-    this.converter = new Showdown.Converter({
-      tables: true,
-      simplifiedAutoLink: true,
-      strikethrough: true,
-      tasklists: true,
-      openLinksInNewWindow: true
-    });
   }
 
   public render() {
@@ -95,15 +75,15 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         ) : null}
 
         <div className="grading-editor-student-name">
-          <h3>Currently Grading: {this.props.studentName}</h3>
+          <H3>Currently Grading: {this.props.studentName}</H3>
         </div>
         {this.props.solution !== null ? (
           <div className="grading-editor-solution">
-            <pre> {this.props.solution.toString()} </pre>
+            <Pre> {this.props.solution.toString()} </Pre>
           </div>
         ) : null}
         <div className="grading-editor-input-parent">
-          <table>
+          <HTMLTable>
             <tbody>
               <tr>
                 <th> {`Auto-grader's grade:`} </th>
@@ -174,32 +154,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                 </td>
               </tr>
             </tbody>
-          </table>
-        </div>
-        <div className="react-mde-parent">
-          <ReactMde
-            buttonContentOptions={{
-              iconProvider: this.blueprintIconProvider
-            }}
-            layout={'vertical'}
-            onChange={this.handleValueChange}
-            editorState={this.state.mdeState}
-            generateMarkdownPreview={this.generateMarkdownPreview}
-          />
+          </HTMLTable>
         </div>
         {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
       </div>
     );
-  }
-
-  /**
-   * A custom icons provider. It uses a bulky mapping function
-   * defined below.
-   *
-   * See {@link https://github.com/andrerpena/react-mde}
-   */
-  private blueprintIconProvider(name: string) {
-    return <Icon icon={faToBlueprintIconMapping(name)} />;
   }
 
   private onClickSaveButton = () => {
@@ -221,7 +180,6 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       this.props.handleGradingSave(
         this.props.submissionId,
         this.props.questionId,
-        this.state.mdeState.markdown!,
         gradeAdjustmentInput,
         xpAdjustmentInput
       );
@@ -257,59 +215,14 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     });
   };
 
-  private handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
-    this.setState({
-      ...this.state,
-      mdeState
-    });
-  };
-
   private hasUnsavedChanges = () => {
     const gradeAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined);
     const xpAdjustmentInput = stringParamToInt(this.state.xpAdjustmentInput || undefined);
     return (
-      this.props.comment !== this.state.mdeState.markdown ||
       this.props.gradeAdjustment !== gradeAdjustmentInput ||
       this.props.xpAdjustment !== xpAdjustmentInput
     );
   };
-
-  private generateMarkdownPreview = (markdown: string) =>
-    Promise.resolve(this.converter.makeHtml(markdown));
 }
-
-/**
- * Maps FontAwesome5 icon names to blueprintjs counterparts.
- * This is to reduce the number of dependencies on icons, and
- * keep a more consistent look.
- */
-const faToBlueprintIconMapping = (name: string) => {
-  switch (name) {
-    case 'heading':
-      return IconNames.HEADER;
-    case 'bold':
-      return IconNames.BOLD;
-    case 'italic':
-      return IconNames.ITALIC;
-    case 'strikethrough':
-      return IconNames.STRIKETHROUGH;
-    case 'link':
-      return IconNames.LINK;
-    case 'quote-right':
-      return IconNames.CITATION;
-    case 'code':
-      return IconNames.CODE;
-    case 'image':
-      return IconNames.MEDIA;
-    case 'list-ul':
-      return IconNames.PROPERTIES;
-    case 'list-ol':
-      return IconNames.NUMBERED_LIST;
-    case 'tasks':
-      return IconNames.TICK;
-    default:
-      return IconNames.HELP;
-  }
-};
 
 export default GradingEditor;

@@ -1,4 +1,4 @@
-import { Icon } from '@blueprintjs/core';
+import { Classes, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -26,7 +26,7 @@ class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
     return (
       <NavLink
         to={`/academy/grading/${this.props.data.submissionId}`}
-        activeClassName="pt-active"
+        activeClassName={Classes.ACTIVE}
         target="_blank"
       >
         <Icon className="grade-edit-icon" iconSize={16} icon={IconNames.ANNOTATION} />
