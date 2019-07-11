@@ -1,4 +1,8 @@
+import { Card, Elevation } from '@blueprintjs/core';
+import { H3, H5 } from '@blueprintjs/core';
 import * as React from 'react';
+
+import { LINKS } from '../../utils/constants';
 
 const dot = <span className="dot">&bull;</span>;
 
@@ -6,8 +10,8 @@ class ContributorsDetails extends React.Component {
   public render() {
     return (
       <div className="outsideDetails">
-        <div className="contributorsDetails">
-          <h3>The people behind Source Academy</h3>
+        <Card className="contributorsDetails" elevation={Elevation.ONE}>
+          <H3>The people behind Source Academy</H3>
           <p>
             The <i>Source Academy</i> is designed by and for students of the National University of
             Singapore. Students who completed the CS1101S module come back to coach their juniors as
@@ -16,11 +20,11 @@ class ContributorsDetails extends React.Component {
             of its precursors, the original Source Academy (2016) and Source Academy 2 (2017).
           </p>
           <div className="leadership">
-            <h5>
+            <H5>
               <strong>
                 <u>2019 Leadership</u>
               </strong>
-            </h5>
+            </H5>
             <p>
               Liow Jia Chen
               <br />
@@ -52,11 +56,11 @@ class ContributorsDetails extends React.Component {
             </p>
           </div>
           <div className="hallOfFame">
-            <h5>
+            <H5>
               <strong>
                 <u>Hall of Fame</u>
               </strong>
-            </h5>
+            </H5>
             <p>
               <strong>Cadet architect</strong>
             </p>
@@ -76,17 +80,17 @@ class ContributorsDetails extends React.Component {
             </p>
           </div>
           <div className="contributors">
-            <h5>
+            <H5>
               <strong>
                 <u>All Contributors</u>
               </strong>
-            </h5>
+            </H5>
             <p>
-              Here goes the full list of contributors to the Source Academy with their pull requests
-              in the repos: cadet, cadet-frontend, grader, js-slang, sharedb-ace-backend
+              Below are all contributors to the{' '}
+              <a href={LINKS.GITHUB_ORG}>Github repositories of the Source Academy</a>.
             </p>
           </div>
-        </div>
+        </Card>
       </div>
     );
   }

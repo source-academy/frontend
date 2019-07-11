@@ -1,5 +1,6 @@
-import { Alignment, Icon, Navbar, NavbarGroup } from '@blueprintjs/core';
+import { Alignment, Classes, Icon, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -18,8 +19,8 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
         to={`/academy/${assessmentCategoryLink(AssessmentCategories.Mission)}`}
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
       >
         <Icon icon={IconNames.FLAME} />
         <div className="navbar-button-text hidden-xs">Missions</div>
@@ -27,8 +28,8 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
 
       <NavLink
         to={`/academy/${assessmentCategoryLink(AssessmentCategories.Sidequest)}`}
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
       >
         <Icon icon={IconNames.LIGHTBULB} />
         <div className="navbar-button-text hidden-xs">Quests</div>
@@ -36,8 +37,8 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
 
       <NavLink
         to={`/academy/${assessmentCategoryLink(AssessmentCategories.Path)}`}
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
       >
         <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
         <div className="navbar-button-text hidden-xs">Paths</div>
@@ -45,8 +46,8 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
 
       <NavLink
         to={`/academy/${assessmentCategoryLink(AssessmentCategories.Contest)}`}
-        activeClassName="pt-active"
-        className="NavigationBar__link pt-button pt-minimal"
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
       >
         <Icon icon={IconNames.COMPARISON} />
         <div className="navbar-button-text hidden-xs">Contests</div>
@@ -56,8 +57,8 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
       <NavbarGroup align={Alignment.RIGHT}>
         <NavLink
           to={'/academy/grading'}
-          activeClassName="pt-active"
-          className="NavigationBar__link pt-button pt-minimal"
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.ENDORSED} />
           <div className="navbar-button-text hidden-xs">Grading</div>

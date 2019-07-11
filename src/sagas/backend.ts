@@ -265,7 +265,7 @@ function* backendSaga(): SagaIterator {
           gradingQuestion.grade = {
             gradeAdjustment,
             xpAdjustment,
-            comment,
+            comment: gradingQuestion.grade.comment,
             grade: gradingQuestion.grade.grade,
             xp: gradingQuestion.grade.xp
           };
@@ -504,11 +504,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
           comment: null,
           id: question.id,
           library: castLibrary(question.library),
-          solution: gradingQuestion.solution
-            ? gradingQuestion.solution
-            : question.solution !== undefined
-              ? question.solution
-              : null,
+          solution: gradingQuestion.solution || question.solution || null,
           solutionTemplate: question.solutionTemplate,
           prepend: question.prepend || '',
           postpend: question.postpend || '',
