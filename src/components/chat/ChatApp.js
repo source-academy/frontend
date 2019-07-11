@@ -75,12 +75,13 @@ class ChatApp extends React.Component {
             connected: true,
             currentRoom
           });
-        });
+        })
+        .catch(); // do nothing
     }
 
     if (this.state.connected) {
       this.scrollToBottom();
-    } //for scrolling
+    }
   }
 
   addMessage(text) {
