@@ -53,39 +53,40 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   externalLibraryName: state.workspaces.playground.playgroundExternal
 });
 
-const location: WorkspaceLocation = WorkspaceLocations.playground;
+const wkspLocation: WorkspaceLocation = WorkspaceLocations.playground;
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleBrowseHistoryDown: () => browseReplHistoryDown(location),
-      handleBrowseHistoryUp: () => browseReplHistoryUp(location),
-      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
-      handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
-      handleEditorEval: () => evalEditor(location),
-      handleEditorValueChange: (val: string) => updateEditorValue(val, location),
-      handleEditorHeightChange: (height: number) => changeEditorHeight(height, location),
-      handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
+      handleBrowseHistoryDown: () => browseReplHistoryDown(wkspLocation),
+      handleBrowseHistoryUp: () => browseReplHistoryUp(wkspLocation),
+      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, wkspLocation),
+      handleChapterSelect: (chapter: number) => chapterSelect(chapter, wkspLocation),
+      handleEditorEval: () => evalEditor(wkspLocation),
+      handleEditorValueChange: (val: string) => updateEditorValue(val, wkspLocation),
+      handleEditorHeightChange: (height: number) => changeEditorHeight(height, wkspLocation),
+      handleEditorWidthChange: (widthChange: number) =>
+        changeEditorWidth(widthChange, wkspLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
-        setEditorBreakpoint(breakpoints, location),
+        setEditorBreakpoint(breakpoints, wkspLocation),
       handleGenerateLz: generateLzString,
-      handleInterruptEval: () => beginInterruptExecution(location),
+      handleInterruptEval: () => beginInterruptExecution(wkspLocation),
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        playgroundExternalSelect(externalLibraryName, location),
-      handleReplEval: () => evalRepl(location),
-      handleReplOutputClear: () => clearReplOutput(location),
-      handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+        playgroundExternalSelect(externalLibraryName, wkspLocation),
+      handleReplEval: () => evalRepl(wkspLocation),
+      handleReplOutputClear: () => clearReplOutput(wkspLocation),
+      handleReplValueChange: (newValue: string) => updateReplValue(newValue, wkspLocation),
       handleSetEditorSessionId: (editorSessionId: string) =>
-        setEditorSessionId(location, editorSessionId),
+        setEditorSessionId(wkspLocation, editorSessionId),
       handleSetWebsocketStatus: (websocketStatus: number) =>
-        setWebsocketStatus(location, websocketStatus),
+        setWebsocketStatus(wkspLocation, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, location),
-      handleToggleEditorAutorun: () => toggleEditorAutorun(location),
-      handleDebuggerPause: () => beginDebuggerPause(location),
-      handleDebuggerResume: () => debuggerResume(location),
-      handleDebuggerReset: () => debuggerReset(location)
+        changeSideContentHeight(heightChange, wkspLocation),
+      handleToggleEditorAutorun: () => toggleEditorAutorun(wkspLocation),
+      handleDebuggerPause: () => beginDebuggerPause(wkspLocation),
+      handleDebuggerResume: () => debuggerResume(wkspLocation),
+      handleDebuggerReset: () => debuggerReset(wkspLocation)
     },
     dispatch
   );

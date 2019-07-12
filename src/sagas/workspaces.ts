@@ -16,22 +16,22 @@ export default function* workspaceSaga(): SagaIterator {
   let context: Context;
 
   yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
-    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const wkspLocation = (action as actionTypes.IAction).payload.workspaceLocation;
     const code: string = yield select((state: IState) => {
-      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend;
-      const value = (state.workspaces[location] as IWorkspaceState).editorValue!;
-      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend;
+      const prepend = (state.workspaces[wkspLocation] as IWorkspaceState).editorPrepend;
+      const value = (state.workspaces[wkspLocation] as IWorkspaceState).editorValue!;
+      const postpend = (state.workspaces[wkspLocation] as IWorkspaceState).editorPostpend;
 
       return prepend + (prepend.length > 0 ? '\n' : '') + value + '\n' + postpend;
     });
     const chapter: number = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context.chapter
     );
     const symbols: string[] = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.externalSymbols
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context.externalSymbols
     );
     const globals: Array<[string, any]> = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).globals
     );
     const library = {
       chapter,
@@ -42,20 +42,20 @@ export default function* workspaceSaga(): SagaIterator {
       globals
     };
     /** End any code that is running right now. */
-    yield put(actions.beginInterruptExecution(location));
+    yield put(actions.beginInterruptExecution(wkspLocation));
     /** Clear the context, with the same chapter and externalSymbols as before. */
-    yield put(actions.beginClearContext(library, location));
-    yield put(actions.clearReplOutput(location));
+    yield put(actions.beginClearContext(library, wkspLocation));
+    yield put(actions.clearReplOutput(wkspLocation));
     context = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context
     );
-    yield* evalCode(code, context, location, actionTypes.EVAL_EDITOR);
+    yield* evalCode(code, context, wkspLocation, actionTypes.EVAL_EDITOR);
   });
 
   yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(action) {
-    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const wkspLocation = (action as actionTypes.IAction).payload.workspaceLocation;
     const isEditorAutorun = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).isEditorAutorun
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).isEditorAutorun
     );
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
   });
@@ -65,49 +65,49 @@ export default function* workspaceSaga(): SagaIterator {
   });
 
   yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
-    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const wkspLocation = (action as actionTypes.IAction).payload.workspaceLocation;
     const code: string = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).replValue
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).replValue
     );
-    yield put(actions.beginInterruptExecution(location));
-    yield put(actions.clearReplInput(location));
-    yield put(actions.sendReplInputToOutput(code, location));
+    yield put(actions.beginInterruptExecution(wkspLocation));
+    yield put(actions.clearReplInput(wkspLocation));
+    yield put(actions.sendReplInputToOutput(code, wkspLocation));
     context = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context
     );
-    yield* evalCode(code, context, location, actionTypes.EVAL_REPL);
+    yield* evalCode(code, context, wkspLocation, actionTypes.EVAL_REPL);
   });
 
   yield takeEvery(actionTypes.DEBUG_RESUME, function*(action) {
-    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const wkspLocation = (action as actionTypes.IAction).payload.workspaceLocation;
     const code: string = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).editorValue
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).editorValue
     );
-    yield put(actions.beginInterruptExecution(location));
+    yield put(actions.beginInterruptExecution(wkspLocation));
     /** Clear the context, with the same chapter and externalSymbols as before. */
-    yield put(actions.clearReplOutput(location));
+    yield put(actions.clearReplOutput(wkspLocation));
     context = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context
     );
-    yield put(actions.highlightEditorLine([], location));
-    yield* evalCode(code, context, location, actionTypes.DEBUG_RESUME);
+    yield put(actions.highlightEditorLine([], wkspLocation));
+    yield* evalCode(code, context, wkspLocation, actionTypes.DEBUG_RESUME);
   });
 
   yield takeEvery(actionTypes.DEBUG_RESET, function*(action) {
-    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const wkspLocation = (action as actionTypes.IAction).payload.workspaceLocation;
     context = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context
     );
     inspectorUpdate(undefined);
     highlightLine(0);
-    yield put(actions.clearReplOutput(location));
+    yield put(actions.clearReplOutput(wkspLocation));
     context.runtime.break = false;
     lastDebuggerResult = undefined;
   });
 
   yield takeEvery(actionTypes.HIGHLIGHT_LINE, function*(action) {
-    const location = (action as actionTypes.IAction).payload.highlightedLines;
-    highlightLine(location);
+    const wkspLocation = (action as actionTypes.IAction).payload.highlightedLines;
+    highlightLine(wkspLocation);
     yield;
   });
 
@@ -117,13 +117,13 @@ export default function* workspaceSaga(): SagaIterator {
   });
 
   yield takeEvery(actionTypes.EVAL_TESTCASE, function*(action) {
-    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const wkspLocation = (action as actionTypes.IAction).payload.workspaceLocation;
     const index = (action as actionTypes.IAction).payload.testcaseId;
     const code: string = yield select((state: IState) => {
-      const prepend = (state.workspaces[location] as IWorkspaceState).editorPrepend;
-      const value = (state.workspaces[location] as IWorkspaceState).editorValue!;
-      const postpend = (state.workspaces[location] as IWorkspaceState).editorPostpend;
-      const testcase = (state.workspaces[location] as IWorkspaceState).editorTestcases[index]
+      const prepend = (state.workspaces[wkspLocation] as IWorkspaceState).editorPrepend;
+      const value = (state.workspaces[wkspLocation] as IWorkspaceState).editorValue!;
+      const postpend = (state.workspaces[wkspLocation] as IWorkspaceState).editorPostpend;
+      const testcase = (state.workspaces[wkspLocation] as IWorkspaceState).editorTestcases[index]
         .program;
 
       return (
@@ -137,13 +137,13 @@ export default function* workspaceSaga(): SagaIterator {
       );
     });
     const chapter: number = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context.chapter
     );
     const symbols: string[] = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.externalSymbols
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context.externalSymbols
     );
     const globals: Array<[string, any]> = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).globals
     );
     const library = {
       chapter,
@@ -154,27 +154,27 @@ export default function* workspaceSaga(): SagaIterator {
       globals
     };
     /** End any code that is running right now. */
-    yield put(actions.beginInterruptExecution(location));
+    yield put(actions.beginInterruptExecution(wkspLocation));
     /** Clear the context, with the same chapter and externalSymbols as before. */
-    yield put(actions.beginClearContext(library, location));
-    yield put(actions.clearReplOutput(location));
+    yield put(actions.beginClearContext(library, wkspLocation));
+    yield put(actions.clearReplOutput(wkspLocation));
     context = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context
     );
-    yield* evalTestCode(code, context, location, index);
+    yield* evalTestCode(code, context, wkspLocation, index);
   });
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
-    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const wkspLocation = (action as actionTypes.IAction).payload.workspaceLocation;
     const newChapter = (action as actionTypes.IAction).payload.chapter;
     const oldChapter = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context.chapter
     );
     const symbols: string[] = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.externalSymbols
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context.externalSymbols
     );
     const globals: Array<[string, any]> = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).globals
     );
     if (newChapter !== oldChapter) {
       const library = {
@@ -185,8 +185,8 @@ export default function* workspaceSaga(): SagaIterator {
         },
         globals
       };
-      yield put(actions.beginClearContext(library, location));
-      yield put(actions.clearReplOutput(location));
+      yield put(actions.beginClearContext(library, wkspLocation));
+      yield put(actions.clearReplOutput(wkspLocation));
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000);
     }
   });
@@ -203,12 +203,12 @@ export default function* workspaceSaga(): SagaIterator {
    * @see IWorkspaceManagerState @see IWorkspaceState
    */
   yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function*(action) {
-    const location = (action as actionTypes.IAction).payload.workspaceLocation;
+    const wkspLocation = (action as actionTypes.IAction).payload.workspaceLocation;
     const chapter = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).context.chapter
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).context.chapter
     );
     const globals: Array<[string, any]> = yield select(
-      (state: IState) => (state.workspaces[location] as IWorkspaceState).globals
+      (state: IState) => (state.workspaces[wkspLocation] as IWorkspaceState).globals
     );
     const newExternalLibraryName = (action as actionTypes.IAction).payload.externalLibraryName;
     const oldExternalLibraryName = yield select(
@@ -225,8 +225,8 @@ export default function* workspaceSaga(): SagaIterator {
     };
     if (newExternalLibraryName !== oldExternalLibraryName) {
       yield put(actions.changePlaygroundExternal(newExternalLibraryName));
-      yield put(actions.beginClearContext(library, location));
-      yield put(actions.clearReplOutput(location));
+      yield put(actions.beginClearContext(library, wkspLocation));
+      yield put(actions.clearReplOutput(wkspLocation));
       yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
     }
   });
@@ -314,15 +314,15 @@ export default function* workspaceSaga(): SagaIterator {
 }
 
 let lastDebuggerResult: any;
-function* updateInspector() {
+function* updateInspector(wkspLocation: WorkspaceLocation) {
   try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-    yield put(actions.highlightEditorLine([start, end], location));
+    yield put(actions.highlightEditorLine([start, end], wkspLocation));
     inspectorUpdate(lastDebuggerResult);
     visualiseEnv(lastDebuggerResult);
   } catch (e) {
-    put(actions.highlightEditorLine([], location));
+    put(actions.highlightEditorLine([], wkspLocation));
     // most likely harmless, we can pretty much ignore this.
     // half of the time this comes from execution ending or a stack overflow and
     // the context goes missing.
@@ -332,7 +332,7 @@ function* updateInspector() {
 function* evalCode(
   code: string,
   context: Context,
-  location: WorkspaceLocation,
+  wkspLocation: WorkspaceLocation,
   actionType: string
 ) {
   context.runtime.debuggerOn =
@@ -353,31 +353,36 @@ function* evalCode(
     if (actionType === actionTypes.EVAL_EDITOR) {
       lastDebuggerResult = result;
     }
-    yield updateInspector();
+    yield updateInspector(wkspLocation);
     if (result.status === 'finished') {
-      yield put(actions.evalInterpreterSuccess(result.value, location));
+      yield put(actions.evalInterpreterSuccess(result.value, wkspLocation));
     } else if (result.status === 'suspended') {
-      yield put(actions.endDebuggerPause(location));
-      yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location));
+      yield put(actions.endDebuggerPause(wkspLocation));
+      yield put(actions.evalInterpreterSuccess('Breakpoint hit!', wkspLocation));
     } else {
-      yield put(actions.evalInterpreterError(context.errors, location));
+      yield put(actions.evalInterpreterError(context.errors, wkspLocation));
     }
   } else if (interrupted) {
     interrupt(context);
     /* Redundancy, added ensure that interruption results in an error. */
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
-    yield put(actions.debuggerReset(location));
-    yield put(actions.endInterruptExecution(location));
+    yield put(actions.debuggerReset(wkspLocation));
+    yield put(actions.endInterruptExecution(wkspLocation));
     yield call(showWarningMessage, 'Execution aborted', 750);
   } else if (paused) {
-    yield put(actions.endDebuggerPause(location));
+    yield put(actions.endDebuggerPause(wkspLocation));
     lastDebuggerResult = manualToggleDebugger(context);
-    yield updateInspector();
+    yield updateInspector(wkspLocation);
     yield call(showWarningMessage, 'Execution paused', 750);
   }
 }
 
-function* evalTestCode(code: string, context: Context, location: WorkspaceLocation, index: number) {
+function* evalTestCode(
+  code: string,
+  context: Context,
+  wkspLocation: WorkspaceLocation,
+  index: number
+) {
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
     /**
@@ -388,17 +393,17 @@ function* evalTestCode(code: string, context: Context, location: WorkspaceLocati
   });
   if (result) {
     if (result.status === 'finished') {
-      yield put(actions.evalInterpreterSuccess(result.value, location));
-      yield put(actions.evalTestcaseSuccess(result.value, location, index));
+      yield put(actions.evalInterpreterSuccess(result.value, wkspLocation));
+      yield put(actions.evalTestcaseSuccess(result.value, wkspLocation, index));
     } else {
-      yield put(actions.evalInterpreterError(context.errors, location));
-      yield put(actions.evalTestcaseFailure('An error occured', location, index));
+      yield put(actions.evalInterpreterError(context.errors, wkspLocation));
+      yield put(actions.evalTestcaseFailure('An error occured', wkspLocation, index));
     }
   } else if (interrupted) {
     interrupt(context);
     /* Redundancy, added ensure that interruption results in an error. */
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
-    yield put(actions.endInterruptExecution(location));
+    yield put(actions.endInterruptExecution(wkspLocation));
     yield call(showWarningMessage, 'Execution aborted by user', 750);
   }
 }
