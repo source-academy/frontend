@@ -7,37 +7,30 @@ import MessageList from './MessageList.tsx';
 import { BACKEND_URL, INSTANCE_LOCATOR } from '../../utils/constants';
 import { IState } from '../../reducers/states';
 
+const ConnectionStatus = {
+  CONNECTED: 'connected',
+  CONNECTING: 'connecting',
+  FAILED_TO_CONNECT: 'failed_to_connect'
+};
+
 class ChatApp extends React.Component {
+  messagesEndRef = React.createRef(); // for scrolling
+
   constructor(props) {
     super(props);
     this.state = {
-      chatManager: this.initialiseChatManager(),
-      connected: false,
+      connectionStatus: ConnectionStatus.CONNECTING,
       currentRoom: {},
       currentUser: {},
       messages: []
     };
     this.addMessage = this.addMessage.bind(this);
   }
-  /*
-  To keep the chat view at its bottom (and also where the input field is) we create a dummy div at the bottom.
-  It will be automatically rendered and scrolled to everytime the chat is updated.
-  */
-  messagesEndRef = React.createRef(); // for scrolling
 
-  componentDidUpdate() {
-    if (this.state.connected) {
-      this.scrollToBottom();
-    }
-  } // for scrolling
-
-  scrollToBottom() {
-    this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  initialiseChatManager() {
+  componentDidMount() {
+    var chatManager;
     try {
-      return new ChatManager({
+      chatManager = new ChatManager({
         instanceLocator: INSTANCE_LOCATOR,
         tokenProvider: new TokenProvider({
           headers: {
@@ -48,39 +41,39 @@ class ChatApp extends React.Component {
         userId: jwt_decode(this.props.accessToken).sub
       });
     } catch (error) {
-      return null;
+      this.setState({ connectionStatus: ConnectionStatus.FAILED_TO_CONNECT });
+      return;
     }
+
+    chatManager
+      .connect()
+      .then(currentUser => {
+        this.setState({ currentUser });
+        return currentUser.subscribeToRoom({
+          hooks: {
+            onMessage: message => {
+              this.setState({
+                messages: [...this.state.messages, message]
+              });
+            }
+          },
+          messageLimit: 100,
+          roomId: this.props.roomId
+        });
+      })
+      .then(currentRoom => {
+        this.setState({
+          connectionStatus: ConnectionStatus.CONNECTED,
+          currentRoom
+        });
+      })
+      .catch(() => this.setState({ connectionStatus: ConnectionStatus.FAILED_TO_CONNECT }));
   }
 
-  componentDidMount() {
-    if (this.state.chatManager) {
-      this.state.chatManager
-        .connect()
-        .then(currentUser => {
-          this.setState({ currentUser });
-          return currentUser.subscribeToRoom({
-            hooks: {
-              onMessage: message => {
-                this.setState({
-                  messages: [...this.state.messages, message]
-                });
-              }
-            },
-            messageLimit: 100,
-            roomId: this.props.roomId
-          });
-        })
-        .then(currentRoom => {
-          this.setState({
-            connected: true,
-            currentRoom
-          });
-        })
-        .catch(); // do nothing
-    }
-
-    if (this.state.connected) {
-      this.scrollToBottom();
+  componentDidUpdate() {
+    if (this.state.connectionStatus === ConnectionStatus.CONNECTED) {
+      // ensure that most recent message is in view
+      this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
@@ -92,24 +85,31 @@ class ChatApp extends React.Component {
   }
 
   render() {
-    return this.state.connected ? (
-      <div className="chat">
-        <MessageList
-          className="message-list"
-          viewingUserId={this.state.currentUser.id}
-          messages={this.state.messages}
-        />
-        <hr />
-        <Input className="input-field" onSubmit={this.addMessage} />
-        <div ref={this.messagesEndRef} />
-      </div>
-    ) : (
-      <span>
-        Connecting to ChatKit...
-        <br />
-        If this is taking too long, refresh the page.
-      </span>
-    );
+    switch (this.state.connectionStatus) {
+      case ConnectionStatus.CONNECTED:
+        return (
+          <div className="Chat">
+            <MessageList
+              className="message-list"
+              viewingUserId={this.state.currentUser.id}
+              messages={this.state.messages}
+            />
+            <hr />
+            <Input className="input-field" onSubmit={this.addMessage} />
+            <div ref={this.messagesEndRef} />
+          </div>
+        );
+      case ConnectionStatus.CONNECTING:
+        return (
+          <span>
+            Connecting to ChatKit...
+            <br />
+            If this is taking too long, refresh the page.
+          </span>
+        );
+      case ConnectionStatus.FAILED_TO_CONNECT:
+        return <span>Failed to connect. Try again later!</span>;
+    }
   }
 }
 
