@@ -270,7 +270,7 @@
                     // inputIndex++;
                   }
 
-                  console.log(valicount);
+                  // console.log(valicount);
                   return result;
                 }
 

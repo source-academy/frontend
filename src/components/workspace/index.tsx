@@ -5,9 +5,6 @@ import { Prompt } from 'react-router';
 import SourcecastControlbar, {
   ISourcecastControlbarProps
 } from '../sourcecast/SourcecastControlbar';
-import SourcereelControlbar, {
-  ISourcereelControlbarProps
-} from '../sourcecast/SourcereelControlbar';
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';
@@ -29,7 +26,6 @@ export type WorkspaceProps = {
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
   sourcecastControlbarProps?: ISourcecastControlbarProps;
-  sourcereelControlbarProps?: ISourcereelControlbarProps;
 };
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
@@ -59,9 +55,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       <div className="workspace">
         {this.props.sourcecastControlbarProps ? (
           <SourcecastControlbar {...this.props.sourcecastControlbarProps} />
-        ) : null}
-        {this.props.sourcereelControlbarProps ? (
-          <SourcereelControlbar {...this.props.sourcereelControlbarProps} />
         ) : null}
         {this.props.hasUnsavedChanges ? (
           <Prompt

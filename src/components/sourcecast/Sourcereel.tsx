@@ -1,17 +1,17 @@
-import { Classes } from '@blueprintjs/core';
+import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
-import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import { Input, IPlaybackData, RecordingStatus } from './sourcecastShape';
+import SourcereelControlbar from './SourcereelControlbar';
 
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
 
@@ -110,10 +110,10 @@ class Sourcereel extends React.Component<ISourcereelProps> {
         handleDebuggerResume: this.props.handleDebuggerResume,
         handleDebuggerReset: this.props.handleDebuggerReset,
         hasChapterSelect: true,
-        hasCollabEditing: true,
+        hasCollabEditing: false,
         hasEditorAutorunButton: true,
         hasSaveButton: false,
-        hasShareButton: true,
+        hasShareButton: false,
         isEditorAutorun: this.props.isEditorAutorun,
         isRunning: this.props.isRunning,
         isDebugging: this.props.isDebugging,
@@ -153,22 +153,37 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       sideContentProps: {
         activeTab: this.props.activeTab,
         handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [sourcereelIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
-      },
-      sourcereelControlbarProps: {
-        editorValue: this.props.editorValue,
-        getTimerDuration: this.getTimerDuration,
-        playbackData: this.props.playbackData,
-        handleRecordAudioUrl: this.props.handleRecordAudioUrl,
-        handleRecordEditorInitValue: this.props.handleRecordEditorInitValue,
-        handleSavePlaybackData: this.props.handleSavePlaybackData,
-        handleSetEditorReadonly: this.props.handleSetEditorReadonly,
-        handleTimerPause: this.props.handleTimerPause,
-        handleTimerReset: this.props.handleTimerReset,
-        handleTimerResume: this.props.handleTimerResume,
-        handleTimerStart: this.props.handleTimerStart,
-        handleTimerStop: this.props.handleTimerStop,
-        recordingStatus: this.props.recordingStatus
+        tabs: [
+          {
+            label: 'Introduction',
+            icon: IconNames.COMPASS,
+            body: (
+              <div>
+                <span className="Multi-line">
+                  <Pre> {INTRODUCTION} </Pre>
+                </span>
+                <SourcereelControlbar
+                  editorValue={this.props.editorValue}
+                  getTimerDuration={this.getTimerDuration}
+                  playbackData={this.props.playbackData}
+                  handleRecordAudioUrl={this.props.handleRecordAudioUrl}
+                  handleRecordEditorInitValue={this.props.handleRecordEditorInitValue}
+                  handleSavePlaybackData={this.props.handleSavePlaybackData}
+                  handleSetEditorReadonly={this.props.handleSetEditorReadonly}
+                  handleTimerPause={this.props.handleTimerPause}
+                  handleTimerReset={this.props.handleTimerReset}
+                  handleTimerResume={this.props.handleTimerResume}
+                  handleTimerStart={this.props.handleTimerStart}
+                  handleTimerStop={this.props.handleTimerStop}
+                  recordingStatus={this.props.recordingStatus}
+                />
+              </div>
+            )
+          },
+          listVisualizerTab,
+          inspectorTab,
+          envVisualizerTab
+        ]
       }
     };
     return (
@@ -183,12 +198,6 @@ class Sourcereel extends React.Component<ISourcereelProps> {
 }
 
 const INTRODUCTION = 'Welcome to Sourcereel!';
-
-const sourcereelIntroductionTab: SideContentTab = {
-  label: 'Introduction',
-  icon: IconNames.COMPASS,
-  body: <Markdown content={INTRODUCTION} />
-};
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',

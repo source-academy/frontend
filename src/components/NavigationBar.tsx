@@ -63,6 +63,15 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        to="/sourcecast"
+      >
+        <Icon icon={IconNames.MUSIC} />
+        <div className="navbar-button-text hidden-xs">Sourcecast</div>
+      </NavLink>
+
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
@@ -80,15 +89,6 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <Icon icon={IconNames.CODE} />
         <div className="navbar-button-text hidden-xs">Mission-Control</div>
       </NavLink> */}
-
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        to="/sourcecast"
-      >
-        <Icon icon={IconNames.MUSIC} />
-        <div className="navbar-button-text hidden-xs">Sourcecast</div>
-      </NavLink>
 
       <NavLink
         activeClassName={Classes.ACTIVE}

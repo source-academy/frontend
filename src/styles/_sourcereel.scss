@@ -19,7 +19,7 @@
   margin: 0 auto;
 }
 
-.sourcereel-save-form {
+.Sourcereel-save-form {
   list-style-type: none;
   padding: 0;
   .form-row {
@@ -27,4 +27,9 @@
     justify-content: flex-end;
     padding: 2px;
   }
+}
+
+.Multi-line {
+  white-space: 'pre-line';
+  overflow-wrap: 'break-word';
 }

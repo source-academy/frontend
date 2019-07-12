@@ -40,7 +40,9 @@ export interface IPosition {
 
 // Refer: https://stackoverflow.com/questions/55758713/match-pair-for-keyof-and-valueof-an-interface
 export type Input = keyof IInputTypeShape extends infer K
-  ? K extends keyof IInputTypeShape ? { time: number; type: K; data: IInputTypeShape[K] } : never
+  ? K extends keyof IInputTypeShape
+    ? { time: number; type: K; data: IInputTypeShape[K] }
+    : never
   : never;
 
 export interface IPlaybackData {

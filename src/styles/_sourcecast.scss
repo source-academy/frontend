@@ -34,3 +34,8 @@
     margin-top: 20px;
   }
 }
+
+.Multi-line {
+  white-space: 'pre-line';
+  overflow-wrap: 'break-word';
+}

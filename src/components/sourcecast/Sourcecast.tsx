@@ -1,11 +1,10 @@
-import { Classes } from '@blueprintjs/core';
+import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
-import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
@@ -113,10 +112,10 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         handleDebuggerResume: this.props.handleDebuggerResume,
         handleDebuggerReset: this.props.handleDebuggerReset,
         hasChapterSelect: true,
-        hasCollabEditing: true,
+        hasCollabEditing: false,
         hasEditorAutorunButton: true,
         hasSaveButton: false,
-        hasShareButton: true,
+        hasShareButton: false,
         isEditorAutorun: this.props.isEditorAutorun,
         isRunning: this.props.isRunning,
         isDebugging: this.props.isDebugging,
@@ -162,13 +161,13 @@ class Sourcecast extends React.Component<ISourcecastProps> {
             icon: IconNames.COMPASS,
             body: (
               <div>
-                <Markdown
-                  content={
-                    this.props.title
+                <span className="Multi-line">
+                  <Pre>
+                    {this.props.title
                       ? 'Title: ' + this.props.title + '\nDescription: ' + this.props.description
-                      : INTRODUCTION
-                  }
-                />
+                      : INTRODUCTION}
+                  </Pre>
+                </span>
                 <SourcecastTable
                   handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
                   handleRecordAudioUrl={this.props.handleRecordAudioUrl}

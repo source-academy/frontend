@@ -32,7 +32,7 @@ class SourcereelControlbar extends React.PureComponent<
       getUserMediaNow = await navigator.mediaDevices.getUserMedia(constraints);
       this.startUserMedia(getUserMediaNow);
     } catch (error) {
-      console.log('Microphone not found: ' + error);
+      alert('Microphone not found: ' + error);
     }
   }
 
@@ -54,17 +54,17 @@ class SourcereelControlbar extends React.PureComponent<
       IconNames.REFRESH,
       this.handleRecorderResetting
     );
-    const RecorderDownloadButton = controlButton(
-      'Download',
-      IconNames.DOWNLOAD,
-      this.handleRecorderDownloading
-    );
+    // const RecorderDownloadButton = controlButton(
+    //   'Download',
+    //   IconNames.DOWNLOAD,
+    //   this.handleRecorderDownloading
+    // );
     const RecorderSaveButton = (
       // Need custom CSS for Popover
       // Submit need an onclickhandler
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Save', IconNames.FLOPPY_DISK)}
-        <ul className="sourcereel-save-form">
+        <ul className="Sourcereel-save-form">
           <li className="form-row">
             <label htmlFor="title">Title: </label>
             <input
@@ -89,7 +89,7 @@ class SourcereelControlbar extends React.PureComponent<
       <div>
         <br />
         <div className="Timer">
-          <Card elevation={1}>
+          <Card elevation={2} style={{ background: '#24323F' }}>
             <H1>{this.renderLabel(this.state.duration)}</H1>
           </Card>
         </div>
@@ -99,7 +99,7 @@ class SourcereelControlbar extends React.PureComponent<
           {this.props.recordingStatus === RecordingStatus.paused && RecorderResumeButton}
           {this.props.recordingStatus === RecordingStatus.recording && RecorderPauseButton}
           {this.props.recordingStatus === RecordingStatus.paused && RecorderStopButton}
-          {this.props.recordingStatus === RecordingStatus.finished && RecorderDownloadButton}
+          {/* {this.props.recordingStatus === RecordingStatus.finished && RecorderDownloadButton} */}
           {this.props.recordingStatus === RecordingStatus.finished && RecorderSaveButton}
           {this.props.recordingStatus !== RecordingStatus.notStarted && RecorderResetButton}
         </div>
@@ -109,7 +109,6 @@ class SourcereelControlbar extends React.PureComponent<
   }
 
   private updateTimerDuration = () => {
-    console.log('Updating...');
     this.setState({ duration: this.props.getTimerDuration() });
   };
 
@@ -120,7 +119,6 @@ class SourcereelControlbar extends React.PureComponent<
   };
 
   private handleRecorderPausing = () => {
-    console.log('Pause recorder');
     const { handleSetEditorReadonly, handleTimerPause } = this.props;
     clearInterval(this.state.updater!);
     handleSetEditorReadonly(true);
@@ -129,9 +127,7 @@ class SourcereelControlbar extends React.PureComponent<
   };
 
   private handleRecorderStarting = () => {
-    console.log('Start recorder');
     const { handleRecordEditorInitValue, handleSetEditorReadonly, handleTimerStart } = this.props;
-    console.log('Init value: ' + this.props.editorValue);
     handleRecordEditorInitValue(this.props.editorValue);
     handleSetEditorReadonly(false);
     handleTimerStart();
@@ -141,7 +137,6 @@ class SourcereelControlbar extends React.PureComponent<
   };
 
   private handleRecorderResuming = () => {
-    console.log('Resume recorder');
     const { handleSetEditorReadonly, handleTimerResume } = this.props;
     handleSetEditorReadonly(false);
     handleTimerResume();
@@ -151,7 +146,6 @@ class SourcereelControlbar extends React.PureComponent<
   };
 
   private handleRecorderStopping = () => {
-    console.log('Stop recorder');
     const { handleSetEditorReadonly, handleTimerStop } = this.props;
     handleSetEditorReadonly(false);
     handleTimerStop();
@@ -166,13 +160,11 @@ class SourcereelControlbar extends React.PureComponent<
   };
 
   private handleRecorderResetting = () => {
-    console.log('Resetting...');
     const { handleSetEditorReadonly, handleTimerReset } = this.props;
     handleSetEditorReadonly(false);
     handleTimerReset();
     clearInterval(this.state.updater!);
     this.setState({ duration: 0 });
-    console.log('Reset recorder');
     this.recorder.clear();
   };
 
@@ -191,23 +183,22 @@ class SourcereelControlbar extends React.PureComponent<
     );
   };
 
-  private handleRecorderDownloading = () => {
-    if (!this.state.fileDataBlob) {
-      alert('No recording found');
-      return;
-    }
-    const url = window.URL.createObjectURL(this.state.fileDataBlob);
-    console.log('Download URL: ' + url);
-    this.props.handleRecordAudioUrl(url);
-    const click = document.createEvent('Event');
-    click.initEvent('click', true, true);
-    const link = document.createElement('A') as HTMLAnchorElement;
-    link.href = url;
-    link.download = 'output.wav';
-    link.dispatchEvent(click);
-    link.click();
-    return link;
-  };
+  // private handleRecorderDownloading = () => {
+  //   if (!this.state.fileDataBlob) {
+  //     alert('No recording found');
+  //     return;
+  //   }
+  //   const url = window.URL.createObjectURL(this.state.fileDataBlob);
+  //   this.props.handleRecordAudioUrl(url);
+  //   const click = document.createEvent('Event');
+  //   click.initEvent('click', true, true);
+  //   const link = document.createElement('A') as HTMLAnchorElement;
+  //   link.href = url;
+  //   link.download = 'output.wav';
+  //   link.dispatchEvent(click);
+  //   link.click();
+  //   return link;
+  // };
 
   private renderLabel = (value: number) => {
     const totalTime = value / 1000;
