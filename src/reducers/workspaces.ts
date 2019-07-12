@@ -61,27 +61,27 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
   state = defaultWorkspaceManager,
   action: IAction
 ) => {
-  const wkspLocation: WorkspaceLocation =
+  const workspaceLocation: WorkspaceLocation =
     action.payload !== undefined ? action.payload.workspaceLocation : undefined;
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
 
   switch (action.type) {
     case BROWSE_REPL_HISTORY_DOWN:
-      if (state[wkspLocation].replHistory.browseIndex === null) {
+      if (state[workspaceLocation].replHistory.browseIndex === null) {
         // Not yet started browsing history, nothing to do
         return state;
-      } else if (state[wkspLocation].replHistory.browseIndex !== 0) {
+      } else if (state[workspaceLocation].replHistory.browseIndex !== 0) {
         // Browsing history, and still have earlier records to show
-        const newIndex = state[wkspLocation].replHistory.browseIndex! - 1;
-        const newReplValue = state[wkspLocation].replHistory.records[newIndex];
+        const newIndex = state[workspaceLocation].replHistory.browseIndex! - 1;
+        const newReplValue = state[workspaceLocation].replHistory.records[newIndex];
         return {
           ...state,
-          [wkspLocation]: {
-            ...state[wkspLocation],
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
             replValue: newReplValue,
             replHistory: {
-              ...state[wkspLocation].replHistory,
+              ...state[workspaceLocation].replHistory,
               browseIndex: newIndex
             }
           }
@@ -90,12 +90,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         // Browsing history, no earlier records to show; return replValue to
         // the last value when user started browsing
         const newIndex = null;
-        const newReplValue = state[wkspLocation].replHistory.originalValue;
-        const newRecords = state[wkspLocation].replHistory.records.slice();
+        const newReplValue = state[workspaceLocation].replHistory.originalValue;
+        const newRecords = state[workspaceLocation].replHistory.records.slice();
         return {
           ...state,
-          [wkspLocation]: {
-            ...state[wkspLocation],
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
             replValue: newReplValue,
             replHistory: {
               browseIndex: newIndex,
@@ -106,8 +106,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         };
       }
     case BROWSE_REPL_HISTORY_UP:
-      const lastRecords = state[wkspLocation].replHistory.records;
-      const lastIndex = state[wkspLocation].replHistory.browseIndex;
+      const lastRecords = state[workspaceLocation].replHistory.records;
+      const lastIndex = state[workspaceLocation].replHistory.browseIndex;
       if (
         lastRecords.length === 0 ||
         (lastIndex !== null && lastRecords[lastIndex + 1] === undefined)
@@ -118,15 +118,15 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         // Not yet started browsing, initialise the index & array
         const newIndex = 0;
         const newRecords = lastRecords.slice();
-        const originalValue = state[wkspLocation].replValue;
+        const originalValue = state[workspaceLocation].replValue;
         const newReplValue = newRecords[newIndex];
         return {
           ...state,
-          [wkspLocation]: {
-            ...state[wkspLocation],
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
             replValue: newReplValue,
             replHistory: {
-              ...state[wkspLocation].replHistory,
+              ...state[workspaceLocation].replHistory,
               browseIndex: newIndex,
               records: newRecords,
               originalValue
@@ -139,11 +139,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         const newReplValue = lastRecords[newIndex];
         return {
           ...state,
-          [wkspLocation]: {
-            ...state[wkspLocation],
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
             replValue: newReplValue,
             replHistory: {
-              ...state[wkspLocation].replHistory,
+              ...state[workspaceLocation].replHistory,
               browseIndex: newIndex
             }
           }
@@ -152,88 +152,89 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case CHANGE_ACTIVE_TAB:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           sideContentActiveTab: action.payload.activeTab
         }
       };
     case CHANGE_EDITOR_HEIGHT:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           editorHeight: action.payload.height
         }
       };
     case CHANGE_EDITOR_WIDTH:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           editorWidth:
             (
-              parseFloat(state[wkspLocation].editorWidth.slice(0, -1)) + action.payload.widthChange
+              parseFloat(state[workspaceLocation].editorWidth.slice(0, -1)) +
+              action.payload.widthChange
             ).toString() + '%'
         }
       };
     case CHANGE_SIDE_CONTENT_HEIGHT:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           sideContentHeight: action.payload.height
         }
       };
     case CLEAR_REPL_INPUT:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           replValue: ''
         }
       };
     case CLEAR_REPL_OUTPUT:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           output: []
         }
       };
     case END_CLEAR_CONTEXT:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           context: createContext<WorkspaceLocation>(
             action.payload.library.chapter,
             action.payload.library.external.symbols,
-            wkspLocation
+            workspaceLocation
           ),
           globals: action.payload.library.globals
         }
       };
     case SEND_REPL_INPUT_TO_OUTPUT:
       // CodeOutput properties exist in parallel with workspaceLocation
-      newOutput = state[wkspLocation].output.concat(action.payload as CodeOutput);
+      newOutput = state[workspaceLocation].output.concat(action.payload as CodeOutput);
       let newReplHistoryRecords: string[];
       if (action.payload.value !== '') {
         newReplHistoryRecords = [action.payload.value].concat(
-          state[wkspLocation].replHistory.records
+          state[workspaceLocation].replHistory.records
         );
       } else {
-        newReplHistoryRecords = state[wkspLocation].replHistory.records;
+        newReplHistoryRecords = state[workspaceLocation].replHistory.records;
       }
       if (newReplHistoryRecords.length > maxBrowseIndex) {
         newReplHistoryRecords.pop();
       }
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           output: newOutput,
           replHistory: {
-            ...state[wkspLocation].replHistory,
+            ...state[workspaceLocation].replHistory,
             records: newReplHistoryRecords
           }
         }
@@ -252,12 +253,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       };
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:
-       * (1) state[wkspLocation].output === [], i.e. state[wkspLocation].output[-1] === undefined
-       * (2) state[wkspLocation].output[-1] is not RunningOutput
-       * (3) state[wkspLocation].output[-1] is RunningOutput */
-      lastOutput = state[wkspLocation].output.slice(-1)[0];
+       * (1) state[workspaceLocation].output === [], i.e. state[workspaceLocation].output[-1] === undefined
+       * (2) state[workspaceLocation].output[-1] is not RunningOutput
+       * (3) state[workspaceLocation].output[-1] is RunningOutput */
+      lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput === undefined || lastOutput.type !== 'running') {
-        newOutput = state[wkspLocation].output.concat({
+        newOutput = state[workspaceLocation].output.concat({
           type: 'running',
           consoleLogs: [action.payload.logString]
         });
@@ -266,12 +267,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           type: lastOutput.type,
           consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
         };
-        newOutput = state[wkspLocation].output.slice(0, -1).concat(updatedLastOutput);
+        newOutput = state[workspaceLocation].output.slice(0, -1).concat(updatedLastOutput);
       }
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           output: newOutput
         }
       };
@@ -285,8 +286,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case EVAL_EDITOR:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           isRunning: true,
           isDebugging: false
         }
@@ -294,21 +295,21 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case EVAL_REPL:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           isRunning: true
         }
       };
     case EVAL_INTERPRETER_SUCCESS:
-      lastOutput = state[wkspLocation].output.slice(-1)[0];
+      lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state[wkspLocation].output.slice(0, -1).concat({
+        newOutput = state[workspaceLocation].output.slice(0, -1).concat({
           ...action.payload,
           workspaceLocation: undefined,
           consoleLogs: lastOutput.consoleLogs
         });
       } else {
-        newOutput = state[wkspLocation].output.concat({
+        newOutput = state[workspaceLocation].output.concat({
           ...action.payload,
           workspaceLocation: undefined,
           consoleLogs: []
@@ -316,8 +317,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           output: newOutput,
           isRunning: false,
           breakpoints: [],
@@ -325,15 +326,15 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
     case EVAL_TESTCASE_SUCCESS:
-      lastOutput = state[wkspLocation].output.slice(-1)[0];
+      lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state[wkspLocation].output.slice(0, -1).concat({
+        newOutput = state[workspaceLocation].output.slice(0, -1).concat({
           ...action.payload,
           workspaceLocation: undefined,
           consoleLogs: lastOutput.consoleLogs
         });
       } else {
-        newOutput = state[wkspLocation].output.concat({
+        newOutput = state[workspaceLocation].output.concat({
           ...action.payload,
           workspaceLocation: undefined,
           consoleLogs: []
@@ -341,27 +342,29 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
-          editorTestcases: state[wkspLocation].editorTestcases.map((testcase: ITestcase, i) => {
-            if (i === action.payload.index) {
-              return {
-                ...testcase,
-                result: (newOutput[0] as CodeOutput).value
-              };
-            } else {
-              return testcase;
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTestcases: state[workspaceLocation].editorTestcases.map(
+            (testcase: ITestcase, i) => {
+              if (i === action.payload.index) {
+                return {
+                  ...testcase,
+                  result: (newOutput[0] as CodeOutput).value
+                };
+              } else {
+                return testcase;
+              }
             }
-          }),
+          ),
           isRunning: false
         }
       };
     case EVAL_TESTCASE_FAILURE:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
-          editorTestcases: state[wkspLocation].editorTestcases.map(
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTestcases: state[workspaceLocation].editorTestcases.map(
             (testcase: ITestcase, i: number) => {
               if (i === action.payload.index) {
                 return {
@@ -375,15 +378,15 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
     case EVAL_INTERPRETER_ERROR:
-      lastOutput = state[wkspLocation].output.slice(-1)[0];
+      lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state[wkspLocation].output.slice(0, -1).concat({
+        newOutput = state[workspaceLocation].output.slice(0, -1).concat({
           ...action.payload,
           workspaceLocation: undefined,
           consoleLogs: lastOutput.consoleLogs
         });
       } else {
-        newOutput = state[wkspLocation].output.concat({
+        newOutput = state[workspaceLocation].output.concat({
           ...action.payload,
           workspaceLocation: undefined,
           consoleLogs: []
@@ -391,8 +394,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           output: newOutput,
           isRunning: false,
           isDebugging: false
@@ -413,8 +416,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
        */
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           isRunning: false,
           isDebugging: false
         }
@@ -423,8 +426,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case END_DEBUG_PAUSE:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           isRunning: false,
           isDebugging: true
         }
@@ -433,8 +436,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case DEBUG_RESUME:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           isRunning: true,
           isDebugging: false
         }
@@ -443,8 +446,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case DEBUG_RESET:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           isRunning: false,
           isDebugging: false
         }
@@ -457,9 +460,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case RESET_WORKSPACE:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
-          ...createDefaultWorkspace(wkspLocation),
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          ...createDefaultWorkspace(workspaceLocation),
           ...action.payload.workspaceOptions
         }
       };
@@ -470,33 +473,33 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case UPDATE_WORKSPACE:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           ...action.payload.workspaceOptions
         }
       };
     case SET_EDITOR_SESSION_ID:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           editorSessionId: action.payload.editorSessionId
         }
       };
     case SET_WEBSOCKET_STATUS:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           websocketStatus: action.payload.websocketStatus
         }
       };
     case TOGGLE_EDITOR_AUTORUN:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
-          isEditorAutorun: !state[wkspLocation].isEditorAutorun
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          isEditorAutorun: !state[workspaceLocation].isEditorAutorun
         }
       };
     case UPDATE_CURRENT_ASSESSMENT_ID:
@@ -520,32 +523,32 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case UPDATE_EDITOR_VALUE:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           editorValue: action.payload.newEditorValue
         }
       };
     case HIGHLIGHT_LINE:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           highlightedLines: action.payload.highlightedLines
         }
       };
     case UPDATE_REPL_VALUE:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           replValue: action.payload.newReplValue
         }
       };
     case UPDATE_HAS_UNSAVED_CHANGES:
       return {
         ...state,
-        [wkspLocation]: {
-          ...state[wkspLocation],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           hasUnsavedChanges: action.payload.hasUnsavedChanges
         }
       };
