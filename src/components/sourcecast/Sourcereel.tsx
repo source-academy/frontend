@@ -4,7 +4,6 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../../reducers/states';
-import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
@@ -18,27 +17,23 @@ export interface ISourcereelProps extends IDispatchProps, IStateProps {}
 export interface IStateProps {
   activeTab: number;
   breakpoints: string[];
-  editorSessionId: string;
   editorHeight?: string;
   editorReadonly: boolean;
   editorValue: string;
   editorWidth: string;
   enableDebugging: boolean;
-  externalLibraryName: string;
   highlightedLines: number[][];
   isDebugging: boolean;
   isEditorAutorun: boolean;
   isRunning: boolean;
   output: InterpreterOutput[];
   playbackData: IPlaybackData;
-  queryString?: string;
   recordingStatus: RecordingStatus;
   replValue: string;
   timeElapsedBeforePause: number;
   sideContentHeight?: number;
   sourceChapter: number;
   timeResumed: number;
-  websocketStatus: number;
 }
 
 export interface IDispatchProps {
@@ -54,10 +49,7 @@ export interface IDispatchProps {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleGenerateLz: () => void;
   handleInterruptEval: () => void;
-  handleInvalidEditorSessionId: () => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleRecordAudioUrl: (audioUrl: string) => void;
   handleRecordEditorInput: (input: Input) => void;
   handleReplEval: () => void;
@@ -71,8 +63,6 @@ export interface IDispatchProps {
     playbackData: string
   ) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
-  handleSetEditorSessionId: (editorSessionId: string) => void;
-  handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
@@ -91,20 +81,13 @@ class Sourcereel extends React.Component<ISourcereelProps> {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
-        editorSessionId: this.props.editorSessionId,
-        externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
           this.props.handleChapterSelect(chapter),
-        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
-          this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
-        handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,
-        handleInvalidEditorSessionId: this.props.handleInvalidEditorSessionId,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
-        handleSetEditorSessionId: this.props.handleSetEditorSessionId,
         handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
         handleDebuggerPause: this.props.handleDebuggerPause,
         handleDebuggerResume: this.props.handleDebuggerResume,
@@ -124,7 +107,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       editorProps: {
         editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
-        editorSessionId: this.props.editorSessionId,
+        editorSessionId: '',
         getTimerDuration: this.getTimerDuration,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
@@ -133,8 +116,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
         handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-        handleRecordEditorInput: this.props.handleRecordEditorInput,
-        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
+        handleRecordEditorInput: this.props.handleRecordEditorInput
       },
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,

@@ -4,7 +4,6 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../../reducers/states';
-import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
@@ -22,7 +21,6 @@ export interface IStateProps {
   title: string | null;
   description: string | null;
   editorReadonly: boolean;
-  editorSessionId: string;
   editorValue: string;
   editorHeight?: number;
   editorWidth: string;
@@ -37,13 +35,11 @@ export interface IStateProps {
   playbackDuration: number;
   playbackData: IPlaybackData;
   playbackStatus: PlaybackStatus;
-  queryString?: string;
   replValue: string;
   sideContentHeight?: number;
   sourcecastIndex: any;
   sourceChapter: number;
   websocketStatus: number;
-  externalLibraryName: string;
 }
 
 export interface IDispatchProps {
@@ -60,17 +56,13 @@ export interface IDispatchProps {
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFetchSourcecastIndex: () => void;
-  handleGenerateLz: () => void;
   handleInterruptEval: () => void;
-  handleInvalidEditorSessionId: () => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleRecordAudioUrl: (audioUrl: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSetCodeDeltasToApply: (delta: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
-  handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetInputToApply: (inputToApply: Input) => void;
   handleSetSourcecastData: (
     title: string,
@@ -93,20 +85,13 @@ class Sourcecast extends React.Component<ISourcecastProps> {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
-        editorSessionId: this.props.editorSessionId,
-        externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
           this.props.handleChapterSelect(chapter),
-        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
-          this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
-        handleGenerateLz: this.props.handleGenerateLz,
         handleInterruptEval: this.props.handleInterruptEval,
-        handleInvalidEditorSessionId: this.props.handleInvalidEditorSessionId,
         handleReplEval: this.props.handleReplEval,
         handleReplOutputClear: this.props.handleReplOutputClear,
-        handleSetEditorSessionId: this.props.handleSetEditorSessionId,
         handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
         handleDebuggerPause: this.props.handleDebuggerPause,
         handleDebuggerResume: this.props.handleDebuggerResume,
@@ -127,7 +112,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         codeDeltasToApply: this.props.codeDeltasToApply,
         editorReadonly: this.props.editorReadonly,
         editorValue: this.props.editorValue,
-        editorSessionId: this.props.editorSessionId,
+        editorSessionId: '',
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         isEditorAutorun: this.props.isEditorAutorun,

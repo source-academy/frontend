@@ -18,14 +18,10 @@ import {
   evalEditor,
   evalRepl,
   fetchSourcecastIndex,
-  generateLzString,
-  invalidEditorSessionId,
-  playgroundExternalSelect,
   recordAudioUrl,
   setCodeDeltasToApply,
   setEditorBreakpoint,
   setEditorReadonly,
-  setEditorSessionId,
   setInputToApply,
   setSourcecastData,
   setSourcecastDuration,
@@ -36,7 +32,6 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
-import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
 import Sourcecast, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcecast';
 import { IState } from '../../reducers/states';
 
@@ -47,7 +42,6 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   title: state.workspaces.sourcecast.title,
   description: state.workspaces.sourcecast.description,
   editorReadonly: state.workspaces.sourcecast.editorReadonly,
-  editorSessionId: state.workspaces.sourcecast.editorSessionId,
   editorWidth: state.workspaces.sourcecast.editorWidth,
   editorValue: state.workspaces.sourcecast.editorValue!,
   isEditorAutorun: state.workspaces.sourcecast.isEditorAutorun,
@@ -61,13 +55,11 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   playbackDuration: state.workspaces.sourcecast.playbackDuration,
   playbackData: state.workspaces.sourcereel.playbackData,
   playbackStatus: state.workspaces.sourcecast.playbackStatus,
-  queryString: state.playground.queryString,
   replValue: state.workspaces.sourcecast.replValue,
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcecast.context.chapter,
-  websocketStatus: state.workspaces.playground.websocketStatus,
-  externalLibraryName: state.workspaces.playground.playgroundExternal
+  websocketStatus: state.workspaces.playground.websocketStatus
 });
 
 const location: WorkspaceLocation = 'sourcecast';
@@ -86,11 +78,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
       handleFetchSourcecastIndex: fetchSourcecastIndex,
-      handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
-      handleInvalidEditorSessionId: () => invalidEditorSessionId(),
-      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        playgroundExternalSelect(externalLibraryName, location),
       handleRecordAudioUrl: recordAudioUrl,
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
@@ -98,8 +86,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleSetCodeDeltasToApply: setCodeDeltasToApply,
       handleSetEditorReadonly: (editorReadonly: boolean) =>
         setEditorReadonly(location, editorReadonly),
-      handleSetEditorSessionId: (editorSessionId: string) =>
-        setEditorSessionId(location, editorSessionId),
       handleSetInputToApply: (inputToApply: Input) => setInputToApply(location, inputToApply),
       handleSetSourcecastData: (title: string, description: string, playbackData: IPlaybackData) =>
         setSourcecastData(title, description, playbackData),

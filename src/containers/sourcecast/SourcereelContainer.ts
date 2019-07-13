@@ -17,17 +17,12 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
-  generateLzString,
-  invalidEditorSessionId,
-  playgroundExternalSelect,
   recordAudioUrl,
   recordEditorInitValue,
   recordEditorInput,
   savePlaybackData,
   setEditorBreakpoint,
   setEditorReadonly,
-  setEditorSessionId,
-  setWebsocketStatus,
   timerPause,
   timerReset,
   timerResume,
@@ -38,33 +33,28 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
-import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
 import Sourcereel, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcereel';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.sourcereel.sideContentActiveTab,
   breakpoints: state.workspaces.sourcereel.breakpoints,
-  editorSessionId: state.workspaces.sourcereel.editorSessionId,
   editorReadonly: state.workspaces.sourcereel.editorReadonly,
   editorValue: state.workspaces.sourcereel.editorValue!,
   editorWidth: state.workspaces.sourcereel.editorWidth,
   enableDebugging: state.workspaces.sourcereel.enableDebugging,
-  externalLibraryName: state.workspaces.playground.playgroundExternal,
   highlightedLines: state.workspaces.sourcereel.highlightedLines,
   isDebugging: state.workspaces.sourcereel.isDebugging,
   isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
   isRunning: state.workspaces.sourcereel.isRunning,
   output: state.workspaces.sourcereel.output,
   playbackData: state.workspaces.sourcereel.playbackData,
-  queryString: state.playground.queryString,
   recordingStatus: state.workspaces.sourcereel.recordingStatus,
   replValue: state.workspaces.sourcereel.replValue,
   sideContentHeight: state.workspaces.sourcereel.sideContentHeight,
   sourceChapter: state.workspaces.sourcereel.context.chapter,
   timeElapsedBeforePause: state.workspaces.sourcereel.timeElapsedBeforePause,
-  timeResumed: state.workspaces.sourcereel.timeResumed,
-  websocketStatus: state.workspaces.playground.websocketStatus
+  timeResumed: state.workspaces.sourcereel.timeResumed
 });
 
 const location: WorkspaceLocation = 'sourcereel';
@@ -82,11 +72,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
-      handleGenerateLz: generateLzString,
       handleInterruptEval: () => beginInterruptExecution(location),
-      handleInvalidEditorSessionId: () => invalidEditorSessionId(),
-      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        playgroundExternalSelect(externalLibraryName, location),
       handleRecordAudioUrl: recordAudioUrl,
       handleRecordEditorInput: (input: Input) => recordEditorInput(location, input),
       handleReplEval: () => evalRepl(location),
@@ -99,11 +85,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         playbackData: string
       ) => savePlaybackData(title, description, audio, playbackData),
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
-      handleSetEditorSessionId: (editorSessionId: string) =>
-        setEditorSessionId(location, editorSessionId),
       handleRecordEditorInitValue: recordEditorInitValue,
-      handleSetWebsocketStatus: (websocketStatus: number) =>
-        setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleTimerPause: timerPause,

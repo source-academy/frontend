@@ -3,6 +3,7 @@ import * as React from 'react';
 import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
+
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
