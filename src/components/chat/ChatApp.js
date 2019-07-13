@@ -11,7 +11,6 @@ class ChatApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chatManager: this.initialiseChatManager(),
       connected: false,
       currentRoom: {},
       currentUser: {},
@@ -31,52 +30,44 @@ class ChatApp extends React.Component {
     }
   } // for scrolling
 
-  scrollToBottom() {
+  scrollToBottom = () => {
     this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  initialiseChatManager() {
-    try {
-      return new ChatManager({
-        instanceLocator: INSTANCE_LOCATOR,
-        tokenProvider: new TokenProvider({
-          headers: {
-            Authorization: `Bearer ${this.props.accessToken}`
-          },
-          url: `${BACKEND_URL}/v1/chat/token`
-        }),
-        userId: jwt_decode(this.props.accessToken).sub
-      });
-    } catch (error) {
-      return null;
-    }
-  }
+  };
 
   componentDidMount() {
-    if (this.state.chatManager) {
-      this.state.chatManager
-        .connect()
-        .then(currentUser => {
-          this.setState({ currentUser });
-          return currentUser.subscribeToRoom({
-            hooks: {
-              onMessage: message => {
-                this.setState({
-                  messages: [...this.state.messages, message]
-                });
-              }
-            },
-            messageLimit: 100,
-            roomId: this.props.roomId
-          });
-        })
-        .then(currentRoom => {
-          this.setState({
-            connected: true,
-            currentRoom
-          });
+    const chatManager = new ChatManager({
+      instanceLocator: INSTANCE_LOCATOR,
+      tokenProvider: new TokenProvider({
+        headers: {
+          Authorization: `Bearer ${this.props.accessToken}`
+        },
+        url: `${BACKEND_URL}/v1/chat/token`
+      }),
+      userId: jwt_decode(this.props.accessToken).sub
+    });
+
+    chatManager
+      .connect()
+      .then(currentUser => {
+        this.setState({ currentUser });
+        return currentUser.subscribeToRoom({
+          hooks: {
+            onMessage: message => {
+              this.setState({
+                messages: [...this.state.messages, message]
+              });
+            }
+          },
+          messageLimit: 100,
+          roomId: this.props.roomId
         });
-    }
+      })
+      .then(currentRoom => {
+        this.setState({
+          connected: true,
+          currentRoom
+        });
+      });
 
     if (this.state.connected) {
       this.scrollToBottom();
