@@ -87,6 +87,10 @@
     display: flex;
     margin-bottom: 2px;
 
+    .#{$ns}-icon {
+      vertical-align: baseline;
+    }
+
     .#{$ns}-text-overflow-ellipsis {
       /* Pushes button to the right of container */
       flex-grow: 1;
