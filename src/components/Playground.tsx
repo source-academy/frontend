@@ -1,4 +1,6 @@
+import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
@@ -167,7 +169,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     };
     return (
       <HotKeys
-        className={'Playground pt-dark' + (this.state.isGreen ? ' GreenScreen' : '')}
+        className={classNames(
+          'Playground',
+          Classes.DARK,
+          this.state.isGreen ? 'GreenScreen' : undefined
+        )}
         keyMap={this.keyMap}
         handlers={this.handlers}
       >
@@ -201,7 +207,7 @@ const inspectorTab: SideContentTab = {
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.EYE_OPEN,
+  icon: IconNames.GLOBE,
   body: <EnvVisualizer />
 };
 

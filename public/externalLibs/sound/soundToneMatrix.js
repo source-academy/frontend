@@ -432,63 +432,49 @@ function midi_note_to_frequency(note) {
 }
 
 function square_sound(freq, duration) {
-  function fourier_expansion_square(level, t) {
-    var answer = 0;
-    for (var i = 1; i <= level; i++) {
-      answer = answer + Math.sin(2 * Math.PI * (2 * i - 1) * freq * t) / (2 * i - 1);
+    function fourier_expansion_square(t) {
+        var answer = 0;
+        for (var i = 1; i <= fourier_expansion_level; i++) {
+            answer = answer +
+		Math.sin(2 * Math.PI * (2 * i - 1) * freq * t)
+		/
+		(2 * i - 1);
+        }
+        return answer;
     }
-    return answer;
-  }
-  return autocut_sound(make_sound(function (t) {
-    var x = (4 / Math.PI) * fourier_expansion_square(5, t);
-    if (x > 1) {
-      return 1;
-    } else if (x < -1) {
-      return -1;
-    } else {
-      return x;
-    }
-  }, duration));
+    return make_sound(t => 
+        (4 / Math.PI) * fourier_expansion_square(t),
+        duration);
 }
 
 function triangle_sound(freq, duration) {
-  function fourier_expansion_triangle(level, t) {
-    var answer = 0;
-    for (var i = 0; i < level; i++) {
-      answer = answer + Math.pow(-1, i) * Math.sin((2 * i + 1) * t * freq * Math.PI * 2) / Math.pow((2 * i + 1), 2);
+    function fourier_expansion_triangle(t) {
+        var answer = 0;
+        for (var i = 0; i < fourier_expansion_level; i++) {
+            answer = answer +
+		Math.pow(-1, i) *
+		Math.sin((2 * i + 1) * t * freq * Math.PI * 2)
+		/
+		Math.pow((2 * i + 1), 2);
+        }
+        return answer;
     }
-    return answer;
-  }
-  return autocut_sound(make_sound(function (t) {
-    var x = (8 / Math.PI / Math.PI) * fourier_expansion_triangle(5, t);
-    if (x > 1) {
-      return 1;
-    } else if (x < -1) {
-      return -1;
-    } else {
-      return x;
-    }
-  }, duration));
+    return make_sound(t => 
+        (8 / Math.PI / Math.PI) * fourier_expansion_triangle(t),
+        duration);
 }
 
 function sawtooth_sound(freq, duration) {
-  function fourier_expansion_sawtooth(level, t) {
-    var answer = 0;
-    for (var i = 1; i <= level; i++) {
-      answer = answer + Math.sin(2 * Math.PI * i * freq * t) / i;
+    function fourier_expansion_sawtooth(t) {
+        var answer = 0;
+        for (var i = 1; i <= fourier_expansion_level; i++) {
+            answer = answer + Math.sin(2 * Math.PI * i * freq * t) / i;
+        }
+        return answer;
     }
-    return answer;
-  }
-  return autocut_sound(make_sound(function (t) {
-    var x = (1 / 2) - (1 / Math.PI) * fourier_expansion_sawtooth(5, t);
-    if (x > 1) {
-      return 1;
-    } else if (x < -1) {
-      return -1;
-    } else {
-      return x;
-    }
-  }, duration));
+    return make_sound(t =>
+		      (1 / 2) - (1 / Math.PI) * fourier_expansion_sawtooth(t),
+		      duration);
 }
 
 function exponential_decay(decay_period) {

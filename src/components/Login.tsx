@@ -1,5 +1,15 @@
-import { Button, ButtonGroup, Card, Icon, NonIdealState, Spinner } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Classes,
+  H4,
+  Icon,
+  NonIdealState,
+  Spinner
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -18,23 +28,26 @@ const Login: React.SFC<LoginProps> = props => {
   if (props.luminusCode) {
     startFetchAuth(props.luminusCode, props.handleFetchAuth);
     return (
-      <div className="Login pt-dark">
-        <Card className="login-card pt-elevation-4">
+      <div className={classNames('Login', Classes.DARK)}>
+        <Card className={classNames('login-card', Classes.ELEVATION_4)}>
           <div className="login-body">
-            <NonIdealState description="Logging In..." visual={<Spinner large={true} />} />
+            <NonIdealState
+              description="Logging In..."
+              icon={<Spinner size={Spinner.SIZE_LARGE} />}
+            />
           </div>
         </Card>
       </div>
     );
   } else {
     return (
-      <div className="Login pt-dark">
-        <Card className="login-card pt-elevation-4">
+      <div className={classNames('Login', Classes.DARK)}>
+        <Card className={classNames('login-card', Classes.ELEVATION_4)}>
           <div className="login-header">
-            <h4>
+            <H4>
               <Icon icon={IconNames.LOCK} />
               LOGIN
-            </h4>
+            </H4>
           </div>
           <div className="login-body">
             <ButtonGroup fill={true} vertical={true}>
@@ -52,14 +65,14 @@ const startFetchAuth = (luminusCode: string, handleFetchAuth: DispatchProps['han
   handleFetchAuth(luminusCode);
 
 const loginButton = (handleClick: () => void) => (
-  <Button className="pt-large" rightIcon="log-in" onClick={handleClick}>
+  <Button className={Classes.LARGE} rightIcon={IconNames.LOG_IN} onClick={handleClick}>
     Log in with LumiNUS
   </Button>
 );
 
 const playgroundButton = (
   <NavLink to="/playground">
-    <Button className="pt-large" rightIcon="code">
+    <Button className={Classes.LARGE} rightIcon={IconNames.CODE}>
       Try out the playground
     </Button>
   </NavLink>

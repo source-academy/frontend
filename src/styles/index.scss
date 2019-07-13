@@ -4,12 +4,15 @@
 @import '~flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css';
 @import '~react-mde/lib/styles/css/react-mde-all.css';
 
+@import '../../node_modules/@blueprintjs/core/lib/scss/variables';
 @import 'global';
 @import 'blueprint';
 
 @import 'academy';
 @import 'application';
 @import 'commons';
+@import 'chat';
+@import 'contributors';
 @import 'dropdown';
 @import 'game';
 @import 'login';

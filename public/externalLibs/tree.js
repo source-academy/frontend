@@ -12,8 +12,10 @@ function make_empty_binary_tree() {
 function is_binary_tree(t) {
   return (
     is_empty_binary_tree(t) ||
-    (length(t) === 3 && is_binary_tree(left_subtree_of(t)) && is_binary_tree(right_subtree_of(t)))
-  )
+    (length(t) === 3 &&
+     is_binary_tree(left_subtree_of(t)) &&
+     is_binary_tree(right_subtree_of(t)))
+  );
 }
 
 // make_binary_tree_node returns a binary tree node composed of the

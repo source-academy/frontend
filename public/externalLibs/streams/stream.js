@@ -7,7 +7,6 @@
 
 // stream_tail returns the second component of the given pair
 // throws an exception if the argument is not a pair
-// LOW-LEVEL FUNCTION, NOT JEDISCRIPT
 function stream_tail(xs) {
   var tail
   if (is_pair(xs)) {
@@ -36,8 +35,8 @@ function is_stream(xs) {
   return   is_null(xs) ||
            ( is_pair(xs) && 
              typeof tail(xs) === 'function' && 
-	     is_stream(stream_tail(xs))
-	   )
+             is_stream(stream_tail(xs))
+           )
 }
 
 // list_to_stream transforms a given list to a stream
@@ -99,9 +98,8 @@ function stream_map(f, s) {
   if (is_null(s)) {
     return null
   } else {
-    return pair(f(head(s)), function() {
-      return stream_map(f, stream_tail(s))
-    })
+    return pair(f(head(s)), 
+                () => stream_map(f, stream_tail(s)))
   }
 }
 
@@ -159,20 +157,6 @@ function stream_reverse(xs) {
     }
   }
   return rev(xs, null)
-}
-
-// stream_to_vector returns vector that contains the elements of the argument
-// stream in the given order.
-// stream_to_vector throws an exception if the argument is not a stream
-// LOW-LEVEL FUNCTION, NOT JEDISCRIPT
-// Lazy? No: stream_to_vector forces the exploration of the entire stream
-function stream_to_vector(lst) {
-  var vector = []
-  while (!is_null(lst)) {
-    vector.push(head(lst))
-    lst = stream_tail(lst)
-  }
-  return vector
 }
 
 // stream_append appends first argument stream and second argument stream.

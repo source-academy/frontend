@@ -432,7 +432,7 @@ describe('END_CLEAR_CONTEXT', () => {
     const library: Library = {
       chapter: 4,
       external: {
-        name: 'STREAMS',
+        name: 'SOUNDS',
         symbols: []
       },
       globals: mockGlobals

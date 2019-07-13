@@ -9,6 +9,7 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: toIncubator]} />
       <Route path=\\"/playground\\" component={[Function: C]} />
       <Route path=\\"/login\\" render={[Function]} />
+      <Route path=\\"/contributors\\" component={[function]} />
       <Route exact={true} path=\\"/\\" render={[Function]} />
       <Route component={[Function: NotFound]} />
     </Switch>
