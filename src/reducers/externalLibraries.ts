@@ -134,13 +134,13 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [
     ExternalLibraryNames.BINARYTREES,
     [
-      'make_empty_binary_tree',
-      'is_binary_tree',
-      'make_binary_tree_node',
-      'is_empty_binary_tree',
-      'left_subtree_of',
-      'value_of',
-      'right_subtree_of'
+      'make_empty_tree',
+      'is_tree',
+      'make_tree',
+      'is_empty_tree',
+      'entry',
+      'left_branch',
+      'right_branch'
     ]
   ]
 ];
