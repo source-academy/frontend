@@ -90,7 +90,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'param_gosperize',
       'rotate_around_origin',
       'arc', // used in GOSPERIZE
-      'invert' // used in DRAGONIZE
+      'invert', // used in DRAGONIZE
       'alternative_unit_circle',    // undocumented
       'full_view_proportional',     // undocumented
       'squeeze_full_view',          // undocumented
