@@ -82,9 +82,9 @@ function alternative_unit_circle(t) {
 /**
  * this function is a curve: a function from a
  * fraction t to a point. The points lie on the
- * upper half of the unit circle. They start at Point (1,0) when
- * t is 0. When t is 0.5, they reach Point (0,1),
- * when t is 1, they reach Point (-1, 0).
+ * right half of the unit circle. They start at Point (0,1) when
+ * t is 0. When t is 0.5, they reach Point (1,0),
+ * when t is 1, they reach Point (0, -1).
  * 
  * @param {number} t - fraction between 0 and 1
  * @returns {Point} Point in the line at t
@@ -154,12 +154,12 @@ function translate(x0, y0) {
 
 // ROTATE-AROUND-ORIGIN is of type (JS-Num --> Curve-Transform)
 /**
- * this function returns a unary Curve operator: It
+ * this function 
  * takes an angle theta as parameter and returns a unary Curve operator:
  * a function that takes
  * a Curve a argument and returns
  * a new Curve, which is the original Curve rotated by the given angle
- * around the origin
+ * around the origin, in counter-clockwise direction.
  * @param {Curve} Curve - given Curve
  * @returns {Curve} result Curve
  */

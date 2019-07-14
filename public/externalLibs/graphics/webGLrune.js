@@ -541,9 +541,9 @@ function rotate(rad, rune) {
  * such that the first one occupies frac 
  * portion of the height of the result and 
  * the second the rest
+ * @param {number} frac - fraction between 0 and 1
  * @param {Rune} rune1 - given Rune
  * @param {Rune} rune2 - given Rune
- * @param {number} frac - fraction between 0 and 1
  * @return {Rune} resulting Rune
  */
 function stack_frac(frac, rune1, rune2) {
@@ -620,9 +620,9 @@ function turn_upside_down(rune) {
  * such that the first one occupies frac 
  * portion of the width of the result and 
  * the second the rest
+ * @param {number} frac - fraction between 0 and 1
  * @param {Rune} rune1 - given Rune
  * @param {Rune} rune2 - given Rune
- * @param {number} frac - fraction between 0 and 1
  * @return {Rune} resulting Rune
  */
 function beside_frac(frac, rune1, rune2) {
@@ -855,9 +855,9 @@ function white(rune) {
  * such that the first one occupies frac 
  * portion of the depth of the 3D result 
  * and the second the rest
+ * @param {number} frac - fraction between 0 and 1
  * @param {Rune} rune1 - given Rune
  * @param {Rune} rune2 - given Rune
- * @param {number} frac - fraction between 0 and 1
  * @return {Rune} resulting Rune
  */
 function overlay_frac(frac, rune1, rune2) {
