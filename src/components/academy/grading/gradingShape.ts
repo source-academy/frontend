@@ -1,6 +1,7 @@
 import {
   AssessmentCategory,
   AutogradingResult,
+  GradingStatus,
   IQuestion,
   ITestcase,
   MCQChoice
@@ -28,6 +29,9 @@ export type GradingOverview = {
   submissionId: number;
   submissionStatus: string;
   groupName: string;
+  gradingStatus: GradingStatus;
+  questionCount: number;
+  gradedCount: number;
 };
 
 /**
