@@ -22,7 +22,6 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
-import { store } from '../createStore';
 import { IState, Role } from '../reducers/states';
 import { castLibrary } from '../utils/castBackend';
 import { BACKEND_URL } from '../utils/constants';
@@ -58,16 +57,21 @@ function* backendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
     const luminusCode = (action as actionTypes.IAction).payload;
     const tokens = yield call(postAuth, luminusCode);
-    const user = tokens ? yield call(getUser, tokens) : null;
-    if (tokens && user) {
-      // Use dispatch instead of saga's put to guarantee the reducer has
-      // finished setting values in the state before /academy begins rendering
-      store.dispatch(actions.setTokens(tokens));
-      store.dispatch(actions.setUser(user));
-      yield history.push('/academy');
-    } else {
-      yield history.push('/');
+    if (!tokens) {
+      return yield history.push('/');
     }
+
+    const user = yield call(getUser, tokens);
+    if (!user) {
+      return yield history.push('/');
+    }
+
+    // Old: Use dispatch instead of saga's put to guarantee the reducer has
+    // finished setting values in the state before /academy begins rendering
+    // New: Changed to yield put
+    yield put(actions.setTokens(tokens));
+    yield put(actions.setUser(user));
+    yield history.push('/academy');
   });
 
   yield takeEvery(actionTypes.FETCH_ASSESSMENT_OVERVIEWS, function*() {
@@ -98,6 +102,7 @@ function* backendSaga(): SagaIterator {
     if (role !== Role.Student) {
       return yield call(showWarningMessage, 'Only students can submit answers.');
     }
+
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -105,28 +110,10 @@ function* backendSaga(): SagaIterator {
     const questionId = (action as actionTypes.IAction).payload.id;
     const answer = (action as actionTypes.IAction).payload.answer;
     const resp = yield call(postAnswer, questionId, answer, tokens);
-    if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Saved!', 1000);
-      // Now, update the answer for the question in the assessment in the store
-      const assessmentId = yield select(
-        (state: IState) => state.workspaces.assessment.currentAssessment!
-      );
-      const assessment = yield select((state: IState) =>
-        state.session.assessments.get(assessmentId)
-      );
-      const newQuestions = assessment.questions.slice().map((question: IQuestion) => {
-        if (question.id === questionId) {
-          question.answer = answer;
-        }
-        return question;
-      });
-      const newAssessment = {
-        ...assessment,
-        questions: newQuestions
-      };
-      yield put(actions.updateAssessment(newAssessment));
-      yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
-    } else if (resp !== null) {
+    if (!resp) {
+      return yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    }
+    if (!resp.ok) {
       let errorMessage: string;
       switch (resp.status) {
         case 401:
@@ -139,11 +126,26 @@ function* backendSaga(): SagaIterator {
           errorMessage = `Something went wrong (got ${resp.status} response)`;
           break;
       }
-      yield call(showWarningMessage, errorMessage);
-    } else {
-      // postAnswer returns null for failed fetch
-      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+      return yield call(showWarningMessage, errorMessage);
     }
+    yield call(showSuccessMessage, 'Saved!', 1000);
+    // Now, update the answer for the question in the assessment in the store
+    const assessmentId = yield select(
+      (state: IState) => state.workspaces.assessment.currentAssessment!
+    );
+    const assessment = yield select((state: IState) => state.session.assessments.get(assessmentId));
+    const newQuestions = assessment.questions.slice().map((question: IQuestion) => {
+      if (question.id === questionId) {
+        return { ...question, answer };
+      }
+      return question;
+    });
+    const newAssessment = {
+      ...assessment,
+      questions: newQuestions
+    };
+    yield put(actions.updateAssessment(newAssessment));
+    return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   });
 
   yield takeEvery(actionTypes.SUBMIT_ASSESSMENT, function*(action) {
@@ -151,28 +153,28 @@ function* backendSaga(): SagaIterator {
     if (role !== Role.Student) {
       return yield call(showWarningMessage, 'Only students can submit assessments.');
     }
+
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
     const assessmentId = (action as actionTypes.IAction).payload;
     const resp = yield call(postAssessment, assessmentId, tokens);
-    if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Submitted!', 2000);
-      // Now, update the status of the assessment overview in the store
-      const overviews: IAssessmentOverview[] = yield select(
-        (state: IState) => state.session.assessmentOverviews
-      );
-      const newOverviews = overviews.map(overview => {
-        if (overview.id === assessmentId) {
-          return { ...overview, status: AssessmentStatuses.submitted };
-        }
-        return overview;
-      });
-      yield put(actions.updateAssessmentOverviews(newOverviews));
-    } else {
-      yield call(showWarningMessage, 'Something went wrong. Please try again.');
+    if (!resp || !resp.ok) {
+      return yield call(showWarningMessage, 'Something went wrong. Please try again.');
     }
+    yield call(showSuccessMessage, 'Submitted!', 2000);
+    // Now, update the status of the assessment overview in the store
+    const overviews: IAssessmentOverview[] = yield select(
+      (state: IState) => state.session.assessmentOverviews
+    );
+    const newOverviews = overviews.map(overview => {
+      if (overview.id === assessmentId) {
+        return { ...overview, status: AssessmentStatuses.submitted };
+      }
+      return overview;
+    });
+    return yield put(actions.updateAssessmentOverviews(newOverviews));
   });
 
   yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*(action) {
@@ -280,7 +282,7 @@ function* backendSaga(): SagaIterator {
 /**
  * POST /auth
  */
-async function postAuth(luminusCode: string): Promise<Tokens | null> {
+export async function postAuth(luminusCode: string): Promise<Tokens | null> {
   const response = await request('auth', 'POST', {
     body: { login: { luminus_code: luminusCode } },
     errorMessage: 'Could not login. Please contact the module administrator.'
@@ -333,7 +335,9 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
 /**
  * GET /assessments
  */
-async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+export async function getAssessmentOverviews(
+  tokens: Tokens
+): Promise<IAssessmentOverview[] | null> {
   const response = await request('assessments', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
@@ -359,7 +363,7 @@ async function getAssessmentOverviews(tokens: Tokens): Promise<IAssessmentOvervi
 /**
  * GET /assessments/${assessmentId}
  */
-async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
+export async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
   const response = await request(`assessments/${id}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
@@ -401,7 +405,7 @@ async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | 
 /**
  * POST /assessments/question/${questionId}/submit
  */
-async function postAnswer(
+export async function postAnswer(
   id: number,
   answer: string | number,
   tokens: Tokens
@@ -420,7 +424,7 @@ async function postAnswer(
 /**
  * POST /assessments/${assessmentId}/submit
  */
-async function postAssessment(id: number, tokens: Tokens): Promise<Response | null> {
+export async function postAssessment(id: number, tokens: Tokens): Promise<Response | null> {
   const resp = await request(`assessments/${id}/submit`, 'POST', {
     accessToken: tokens.accessToken,
     noHeaderAccept: true,
@@ -607,7 +611,7 @@ async function request(
       return response;
     } else if (opts.shouldRefresh && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
-      store.dispatch(actions.setTokens(newTokens));
+      put(actions.setTokens(newTokens));
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,
@@ -623,7 +627,7 @@ async function request(
       throw new Error('API call failed or got non-OK response');
     }
   } catch (e) {
-    store.dispatch(actions.logOut());
+    put(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
     return null;
   }
