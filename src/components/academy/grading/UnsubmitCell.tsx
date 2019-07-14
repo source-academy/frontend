@@ -1,6 +1,7 @@
 import { Alert, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
+
 import { controlButton } from '../../commons';
 import { GradingOverview } from './gradingShape';
 
