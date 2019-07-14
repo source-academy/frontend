@@ -367,9 +367,7 @@ async function request(
     const response = await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts);
     // response.ok is (200 <= response.status <= 299)
     // response.status of > 299 does not raise error; so deal with in in the try clause
-    if (response && response.ok) {
-      return response;
-    } else if (opts.shouldRefresh && response.status === 401) {
+    if (opts.shouldRefresh && response && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
       put(actions.setTokens(newTokens));
       const newOpts = {
@@ -378,14 +376,17 @@ async function request(
         shouldRefresh: false
       };
       return request(path, method, newOpts);
-    } else if (response && opts.shouldAutoLogout === false) {
+    }
+    if (response && !response.ok && opts.shouldAutoLogout === false) {
       // this clause is mostly for SUBMIT_ANSWER; show an error message instead
       // and ask student to manually logout, so that they have a chance to save
       // their answers
       return response;
-    } else {
+    }
+    if (!response || !response.ok) {
       throw new Error('API call failed or got non-OK response');
     }
+    return response;
   } catch (e) {
     put(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
