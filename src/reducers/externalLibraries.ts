@@ -53,10 +53,10 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'heart',
       'pentagram',
       'ribbon',
-      'hollusion',
       'anaglyph',
       'overlay_frac',
-      'overlay'
+      'overlay',
+      'hollusion'     // currently not documented; animation not working
     ]
   ],
   [
@@ -77,13 +77,9 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'connect_rigidly',
       'connect_ends',
       'put_in_standard_position',
-      'full_view_proportional',
-      'squeeze_full_view',
-      'squeeze_rectangular_portion',
       'translate',
       'scale',
       /** Contest functions */
-      'alternative_unit_circle',
       'rotate_pi_over_2',
       'scale_x_y',
       'gosperize',
@@ -95,6 +91,10 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'rotate_around_origin',
       'arc', // used in GOSPERIZE
       'invert' // used in DRAGONIZE
+      'alternative_unit_circle',    // undocumented
+      'full_view_proportional',     // undocumented
+      'squeeze_full_view',          // undocumented
+      'squeeze_rectangular_portion' // undocumented
     ]
   ],
   [

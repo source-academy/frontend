@@ -65,55 +65,142 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
 }
 
 /**
- * returns a function that draws a given curve, using
- * {num} sample points, and connects them with a line 
- * @return {function} curve drawing function
+ * returns a function that turns a given Curve into a Drawing, 
+ * by sampling the Curve at <CODE>num</CODE> sample points 
+ * and connecting each pair with a line. 
+ * When a program evaluates to a Drawing, the Source system
+ * displays it graphically, in a window, instead of textually.
+ * The parts between (0,0) and (1,1) of the resulting Drawing 
+ * are shown in the window.
+ * @param {number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function from Curves to Drawings.
  */
-
 function draw_connected(num) {
   return function(func) {
     return generateCurve('none', 'lines', num, func)
   }
 }
 
+/**
+ * returns a function that turns a given Curve into a Drawing, 
+ * by sampling the Curve at <CODE>num</CODE> sample points.
+ * The Drawing consists of isolated points, and does not connect them.
+ * When a program evaluates to a Drawing, the Source system
+ * displays it graphically, in a window, instead of textually.
+ * The parts between (0,0) and (1,1) of the resulting Drawing 
+ * are shown in the window.
+ * @param {number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function from Curves to Drawings.
+ */
 function draw_points_on(num) {
-  return function(func) {
-    return generateCurve('none', 'points', num, func)
-  }
+  return curve => 
+	generateCurve('none', 'points', num, curve)
 }
 
+/**
+ * returns a function that turns a given Curve into a Drawing, 
+ * by sampling the Curve at <CODE>num</CODE> sample points.
+ * The Drawing consists of isolated points, and does not connect them.
+ * When a program evaluates to a Drawing, the Source system
+ * displays it graphically, in a window, instead of textually.
+ * The Drawing is squeezed such that all its parts are shown in the
+ * window.
+ * @param {number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function from Curves to Drawings.
+ */
 function draw_points_squeezed_to_window(num) {
   return function(func) {
     return generateCurve('fit', 'points', num, func)
   }
 }
 
+/**
+ * returns a function that turns a given Curve into a Drawing, 
+ * by sampling the Curve at <CODE>num</CODE> sample points 
+ * and connecting each pair with a line. 
+ * When a program evaluates to a Drawing, the Source system
+ * displays it graphically, in a window, instead of textually.
+ * The Drawing is squeezed such that all its parts are shown in the
+ * window.
+ * @param {number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function from Curves to Drawings.
+ */
 function draw_connected_squeezed_to_window(num) {
   return function(func) {
     return generateCurve('fit', 'lines', num, func)
   }
 }
 
+/**
+ * returns a function that turns a given Curve into a Drawing, 
+ * by sampling the Curve at <CODE>num</CODE> sample points 
+ * and connecting each pair with a line. 
+ * When a program evaluates to a Drawing, the Source system
+ * displays it graphically, in a window, instead of textually.
+ * The Drawing is squeezed such that all its parts are shown in the
+ * window.
+ * @param {number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function from Curves to Drawings.
+ */
 function draw_connected_full_view(num) {
   return function(func) {
     return generateCurve('stretch', 'lines', num, func, true)
   }
 }
 
+/**
+ * returns a function that turns a given Curve into a Drawing, 
+ * by sampling the Curve at <CODE>num</CODE> sample points 
+ * and connecting each pair with a line. 
+ * When a program evaluates to a Drawing, the Source system
+ * displays it graphically, in a window, instead of textually.
+ * The Drawing is squeezed such that all its parts are shown in the
+ * window.
+ * @param {number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function from Curves to Drawings.
+ */
 function draw_connected_full_view_proportional(num) {
   return function(func) {
     return generateCurve('fit', 'lines', num, func, true)
   }
 }
 
+/**
+ * makes a Point with given x and y coordinates
+ * @param {number} x - x-coordinate of new point
+ * @param {number} y - y-coordinate of new point
+ * @returns {Point} with x and y as coordinates
+ */
 function make_point(x, y) {
   return [x, y]
 }
 
+/**
+ * retrieves the x-coordinate a given Point
+ * @param {Point} p - given point
+ * @returns {number} x-coordinate of the Point
+ */
 function x_of(pt) {
   return pt[0]
 }
 
+/**
+ * retrieves the y-coordinate a given Point
+ * @param {Point} p - given point
+ * @returns {number} y-coordinate of the Point
+ */
 function y_of(pt) {
   return pt[1]
 }

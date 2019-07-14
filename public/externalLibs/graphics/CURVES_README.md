@@ -1,3 +1,3 @@
 ## Graphic Library
 
-this is the graphics library
+Curve-producing library for Source Academy.

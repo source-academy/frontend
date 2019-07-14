@@ -12,7 +12,11 @@ function make_empty_binary_tree() {
   return null
 }
 
-// checks if a given list is a valid binary tree, according to the abstraction
+/**
+ * checks whether a given value is a valid binary tree, according to the abstraction
+ * @param {value} x - given value
+ * @returns {boolean} 
+ */
 function is_binary_tree(t) {
   return (
     is_empty_binary_tree(t) ||
@@ -22,33 +26,55 @@ function is_binary_tree(t) {
   );
 }
 
-// make_binary_tree_node returns a binary tree node composed of the
-// three elements passed in
+/**
+ * returns a binary tree node composed of the
+ * three components passed in
+ * @param {value} val - value of the node
+ * @param {binary_tree} left - left subtree
+ * @param {binary_tree} right - right subtree
+ * @returns {boolean} 
+ */
 function make_binary_tree_node(left, value, right) {
   if (!is_binary_tree(left)) {
     throw new Error('Left subtree is not a valid binary tree')
-  } else if (!is_binary_tree(right)) {
+  } else if (!is_tree(right)) {
     throw new Error('Right subtree is not a valid binary tree')
   }
   return list(left, value, right)
 }
 
-// is_empty_binary_tree checks if given binary tree node is an empty list
+/**
+ * checks whether given binary tree `t` is empty
+ * @param {binary_tree} t - given binary tree
+ * @returns {boolean} 
+ */
 function is_empty_binary_tree(t) {
   return is_null(t)
 }
 
-// left_subtree_of returns the left subtree of a given binary tree node
+/**
+ * returns the left branch of a given binary tree
+ * @param {binary_tree} t - given binary tree
+ * @returns {binary_tree} left branch of `t`
+ */
 function left_subtree_of(t) {
   return list_ref(t, 0)
 }
 
-// value_of returns the value of a given binary tree node
+/**
+ * returns the value of a given binary tree
+ * @param {binary_tree} t - given binary tree
+ * @returns {value} value of `t`
+ */
 function value_of(t) {
   return list_ref(t, 1)
 }
 
-// right_subtree_of returns the right subtree of a given binary tree node
+/**
+ * returns the right branch of a given binary tree
+ * @param {binary_tree} t - given binary tree
+ * @returns {binary_tree} right branch of `t`
+ */
 function right_subtree_of(t) {
   return list_ref(t, 2)
 }

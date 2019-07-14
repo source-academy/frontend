@@ -2,12 +2,6 @@
 // // Microphone Functionality
 // // ---------------------------------------------
 
-/**
- * @class {test} some class description
- *
- */
-class Microphone {}
-
 // permission initially undefined
 // set to true by granting microphone permission
 // set to false by denying microphone permission
@@ -67,6 +61,20 @@ function play_recording_signal() {
 
 const buffer_ms = 40;
 
+/**
+ * returns a nullary stop function <CODE>stop</CODE>. A call
+ * <CODE>stop()</CODE> returns a sound promise: a nullary function
+ * that returns a sound. Example: <PRE><CODE>init_record();
+ * const stop = record();
+ * // record after the beep. Then in next query:
+ * const promise = stop();
+ * // In next query, you can play the promised sound, by
+ * // applying the promise:
+ * play(promise());</CODE></PRE>
+ * @returns {function} nullary <CODE>stop</CODE> function;
+ * <CODE>stop()</CODE> stops the recording and 
+ * returns a sound promise: a nullary function that returns the recorded sound
+ */
 function record() {
     check_permission();
     const mediaRecorder = new MediaRecorder(globalStream);
@@ -87,6 +95,17 @@ function record() {
     };
 }
 
+/**
+ * Records a sound of given <CODE>duration</CODE>, and
+ * returns a sound promise: a nullary function
+ * that returns a sound. Example: <PRE><CODE>init_record();
+ * const promise = record_for(2);
+ * // In next query, you can play the promised sound, by
+ * // applying the promise:
+ * play(promise());</CODE></PRE>
+ * @param {number} duration_s - duration in seconds
+ * @returns {function} <CODE>promise</CODE>: nullary function which returns the recorded sound
+ */
 function record_for(duration_s) {
     recorded_sound = undefined;
     const duration_ms = duration_s * 1000;
@@ -130,8 +149,8 @@ function convertToArrayBuffer(blob) {
 function save(audioBuffer) {
     const array = audioBuffer.getChannelData(0);
     const duration = array.length / FS;
-    recorded_sound = autocut_sound(
-        make_sound(function(t) {
+    recorded_sound = 
+        make_sound( t => {
             const index = t * FS
             const lowerIndex = Math.floor(index)
             const upperIndex = lowerIndex + 1
@@ -139,6 +158,5 @@ function save(audioBuffer) {
             const upper = array[upperIndex] ? array[upperIndex] : 0
             const lower = array[lowerIndex] ? array[lowerIndex] : 0
             return lower * (1 - ratio) + upper * ratio
-        }, duration)
-    );
+        }, duration);
 }
