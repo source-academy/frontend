@@ -56,7 +56,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'anaglyph',
       'overlay_frac',
       'overlay',
-      'hollusion'     // currently not documented; animation not working
+      'hollusion' // currently not documented; animation not working
     ]
   ],
   [
@@ -91,9 +91,9 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'rotate_around_origin',
       'arc', // used in GOSPERIZE
       'invert', // used in DRAGONIZE
-      'alternative_unit_circle',    // undocumented
-      'full_view_proportional',     // undocumented
-      'squeeze_full_view',          // undocumented
+      'alternative_unit_circle', // undocumented
+      'full_view_proportional', // undocumented
+      'squeeze_full_view', // undocumented
       'squeeze_rectangular_portion' // undocumented
     ]
   ],

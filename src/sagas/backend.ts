@@ -503,8 +503,8 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
           solution: gradingQuestion.solution
             ? gradingQuestion.solution
             : question.solution !== undefined
-              ? question.solution
-              : null,
+            ? question.solution
+            : null,
           solutionTemplate: question.solutionTemplate,
           prepend: question.prepend || '',
           postpend: question.postpend || '',
