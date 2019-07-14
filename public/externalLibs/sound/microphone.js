@@ -59,29 +59,29 @@ function play_recording_signal() {
     play(sine_sound(500, recording_signal_duration_ms / 1000));
 }
 
-const buffer_ms = 40;
-
 /**
+ * takes a <CODE>buffer</CODE> duration (in seconds) as argument, and
  * returns a nullary stop function <CODE>stop</CODE>. A call
  * <CODE>stop()</CODE> returns a sound promise: a nullary function
  * that returns a sound. Example: <PRE><CODE>init_record();
- * const stop = record();
- * // record after the beep. Then in next query:
+ * const stop = record(0.5);
+ * // record after 0.5 seconds. Then in next query:
  * const promise = stop();
  * // In next query, you can play the promised sound, by
  * // applying the promise:
  * play(promise());</CODE></PRE>
+ * @param {number} buffer - pause before recording, in seconds
  * @returns {function} nullary <CODE>stop</CODE> function;
  * <CODE>stop()</CODE> stops the recording and 
  * returns a sound promise: a nullary function that returns the recorded sound
  */
-function record() {
+function record(buffer) {
     check_permission();
     const mediaRecorder = new MediaRecorder(globalStream);
     play_recording_signal();
     setTimeout(() => {    
 	start_recording(mediaRecorder);
-    }, recording_signal_duration_ms + buffer_ms);
+    }, recording_signal_duration_ms + buffer * 1000);
     return () => {
 	mediaRecorder.stop();
 	play_recording_signal();
@@ -96,19 +96,21 @@ function record() {
 }
 
 /**
- * Records a sound of given <CODE>duration</CODE>, and
+ * Records a sound of given <CODE>duration</CODE> in seconds, after
+ * a <CODE>buffer</CODE> also in seconds, and
  * returns a sound promise: a nullary function
  * that returns a sound. Example: <PRE><CODE>init_record();
- * const promise = record_for(2);
+ * const promise = record_for(2, 0.5);
  * // In next query, you can play the promised sound, by
  * // applying the promise:
  * play(promise());</CODE></PRE>
- * @param {number} duration_s - duration in seconds
+ * @param {number} duration - duration in seconds
+ * @param {number} buffer - pause before recording, in seconds
  * @returns {function} <CODE>promise</CODE>: nullary function which returns the recorded sound
  */
-function record_for(duration_s) {
+function record_for(duration, buffer) {
     recorded_sound = undefined;
-    const duration_ms = duration_s * 1000;
+    const duration_ms = duration * 1000;
     check_permission();
     const mediaRecorder = new MediaRecorder(globalStream);
     play_recording_signal();
@@ -118,7 +120,7 @@ function record_for(duration_s) {
 	    mediaRecorder.stop();
 	    play_recording_signal();
         }, duration_ms);
-    }, recording_signal_duration_ms + buffer_ms);
+    }, recording_signal_duration_ms + buffer * 1000);
     return () => {
 	    if (recorded_sound === undefined) {
 		throw new Error("recording still being processed")
