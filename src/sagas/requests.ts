@@ -54,15 +54,14 @@ export async function postAuth(luminusCode: string): Promise<Tokens | null> {
     body: { login: { luminus_code: luminusCode } },
     errorMessage: 'Could not login. Please contact the module administrator.'
   });
-  if (response) {
-    const tokens = await response.json();
-    return {
-      accessToken: tokens.access_token,
-      refreshToken: tokens.refresh_token
-    };
-  } else {
+  if (!response) {
     return null;
   }
+  const tokens = await response.json();
+  return {
+    accessToken: tokens.access_token,
+    refreshToken: tokens.refresh_token
+  };
 }
 
 /**
@@ -72,15 +71,14 @@ async function postRefresh(refreshToken: string): Promise<Tokens | null> {
   const response = await request('auth/refresh', 'POST', {
     body: { refresh_token: refreshToken }
   });
-  if (response) {
-    const tokens = await response.json();
-    return {
-      accessToken: tokens.access_token,
-      refreshToken: tokens.refresh_token
-    };
-  } else {
+  if (!response) {
     return null;
   }
+  const tokens = await response.json();
+  return {
+    accessToken: tokens.access_token,
+    refreshToken: tokens.refresh_token
+  };
 }
 
 /**
@@ -92,11 +90,10 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (response && response.ok) {
-    return await response.json();
-  } else {
+  if (!response || !response.ok) {
     return null;
   }
+  return await response.json();
 }
 
 /**
@@ -110,21 +107,20 @@ export async function getAssessmentOverviews(
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (response && response.ok) {
-    const assessmentOverviews = await response.json();
-    return assessmentOverviews.map((overview: any) => {
-      /**
-       * backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
-       *              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
-       */
-      overview.category = capitalise(overview.type);
-      delete overview.type;
-
-      return overview as IAssessmentOverview;
-    });
-  } else {
+  if (!response || !response.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
+  const assessmentOverviews = await response.json();
+  return assessmentOverviews.map((overview: any) => {
+    /**
+     * backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
+     *              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+     */
+    overview.category = capitalise(overview.type);
+    delete overview.type;
+
+    return overview as IAssessmentOverview;
+  });
 }
 
 /**
@@ -136,37 +132,36 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (response && response.ok) {
-    const assessment = (await response.json()) as IAssessment;
-    // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
-    //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
-    assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
-    delete (assessment as any).type;
-    assessment.questions = assessment.questions.map(q => {
-      if (q.type === QuestionTypes.programming) {
-        const question = q as IProgrammingQuestion;
-        question.autogradingResults = question.autogradingResults || [];
-        question.prepend = question.prepend || '';
-        question.postpend = question.postpend || '';
-        question.testcases = question.testcases || [];
-        q = question;
-      }
-
-      // Make library.external.name uppercase
-      q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
-      // Make globals into an Array of (string, value)
-      q.library.globals = Object.entries(q.library.globals as object).map(entry => {
-        try {
-          entry[1] = (window as any).eval(entry[1]);
-        } catch (e) {}
-        return entry;
-      });
-      return q;
-    });
-    return assessment;
-  } else {
+  if (!response || !response.ok) {
     return null;
   }
+  const assessment = (await response.json()) as IAssessment;
+  // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
+  //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+  assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
+  delete (assessment as any).type;
+  assessment.questions = assessment.questions.map(q => {
+    if (q.type === QuestionTypes.programming) {
+      const question = q as IProgrammingQuestion;
+      question.autogradingResults = question.autogradingResults || [];
+      question.prepend = question.prepend || '';
+      question.postpend = question.postpend || '';
+      question.testcases = question.testcases || [];
+      q = question;
+    }
+
+    // Make library.external.name uppercase
+    q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
+    // Make globals into an Array of (string, value)
+    q.library.globals = Object.entries(q.library.globals as object).map(entry => {
+      try {
+        entry[1] = (window as any).eval(entry[1]);
+      } catch (e) {}
+      return entry;
+    });
+    return q;
+  });
+  return assessment;
 }
 
 /**
@@ -216,38 +211,37 @@ export async function getGradingOverviews(
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (response) {
-    const gradingOverviews = await response.json();
-    return gradingOverviews.map((overview: any) => {
-      const gradingOverview: GradingOverview = {
-        assessmentId: overview.assessment.id,
-        assessmentName: overview.assessment.title,
-        assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
-        studentId: overview.student.id,
-        studentName: overview.student.name,
-        submissionId: overview.id,
-        submissionStatus: overview.status,
-        groupName: overview.groupName,
-        // Grade
-        initialGrade: overview.grade,
-        gradeAdjustment: overview.adjustment,
-        currentGrade: overview.grade + overview.adjustment,
-        maxGrade: overview.assessment.maxGrade,
-        gradingStatus: overview.gradingStatus,
-        questionCount: overview.questionCount,
-        gradedCount: overview.gradedCount,
-        // XP
-        initialXp: overview.xp,
-        xpAdjustment: overview.xpAdjustment,
-        currentXp: overview.xp + overview.xpAdjustment,
-        maxXp: overview.assessment.maxXp,
-        xpBonus: overview.xpBonus
-      };
-      return gradingOverview;
-    });
-  } else {
+  if (!response) {
     return null; // invalid accessToken _and_ refreshToken
   }
+  const gradingOverviews = await response.json();
+  return gradingOverviews.map((overview: any) => {
+    const gradingOverview: GradingOverview = {
+      assessmentId: overview.assessment.id,
+      assessmentName: overview.assessment.title,
+      assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
+      studentId: overview.student.id,
+      studentName: overview.student.name,
+      submissionId: overview.id,
+      submissionStatus: overview.status,
+      groupName: overview.groupName,
+      // Grade
+      initialGrade: overview.grade,
+      gradeAdjustment: overview.adjustment,
+      currentGrade: overview.grade + overview.adjustment,
+      maxGrade: overview.assessment.maxGrade,
+      gradingStatus: overview.gradingStatus,
+      questionCount: overview.questionCount,
+      gradedCount: overview.gradedCount,
+      // XP
+      initialXp: overview.xp,
+      xpAdjustment: overview.xpAdjustment,
+      currentXp: overview.xp + overview.xpAdjustment,
+      maxXp: overview.assessment.maxXp,
+      xpBonus: overview.xpBonus
+    };
+    return gradingOverview;
+  });
 }
 
 /**
@@ -260,43 +254,42 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (response) {
-    const gradingResult = await response.json();
-    const grading: Grading = gradingResult.map((gradingQuestion: any) => {
-      const { student, question, grade } = gradingQuestion;
-
-      return {
-        question: {
-          answer: question.answer,
-          autogradingResults: question.autogradingResults || [],
-          choices: question.choices,
-          content: question.content,
-          comment: null,
-          id: question.id,
-          library: castLibrary(question.library),
-          solution: gradingQuestion.solution || question.solution || null,
-          solutionTemplate: question.solutionTemplate,
-          prepend: question.prepend || '',
-          postpend: question.postpend || '',
-          testcases: question.testcases || [],
-          type: question.type as QuestionType,
-          maxGrade: question.maxGrade,
-          maxXp: question.maxXp
-        },
-        student,
-        grade: {
-          grade: grade.grade,
-          xp: grade.xp,
-          comment: grade.comment || '',
-          gradeAdjustment: grade.adjustment,
-          xpAdjustment: grade.xpAdjustment
-        }
-      } as GradingQuestion;
-    });
-    return grading;
-  } else {
+  if (!response) {
     return null;
   }
+  const gradingResult = await response.json();
+  const grading: Grading = gradingResult.map((gradingQuestion: any) => {
+    const { student, question, grade } = gradingQuestion;
+
+    return {
+      question: {
+        answer: question.answer,
+        autogradingResults: question.autogradingResults || [],
+        choices: question.choices,
+        content: question.content,
+        comment: null,
+        id: question.id,
+        library: castLibrary(question.library),
+        solution: gradingQuestion.solution || question.solution || null,
+        solutionTemplate: question.solutionTemplate,
+        prepend: question.prepend || '',
+        postpend: question.postpend || '',
+        testcases: question.testcases || [],
+        type: question.type as QuestionType,
+        maxGrade: question.maxGrade,
+        maxXp: question.maxXp
+      },
+      student,
+      grade: {
+        grade: grade.grade,
+        xp: grade.xp,
+        comment: grade.comment || '',
+        gradeAdjustment: grade.adjustment,
+        xpAdjustment: grade.xpAdjustment
+      }
+    } as GradingQuestion;
+  });
+  return grading;
 }
 
 /**
