@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Profile renders "no XP, no Grade and Staff role" correctly 1`] = `
-"<Blueprint2.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
-  <div className=\\"pt-dialog-body\\">
+"<Blueprint3.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
+  <div className=\\"bp3-dialog-body\\">
     <div className=\\"header\\">
       <div>
         <span className=\\"name\\">
@@ -22,7 +22,7 @@ exports[`Profile renders "no XP, no Grade and Staff role" correctly 1`] = `
           0
         </span>
       </div>
-      <Blueprint2.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
+      <Blueprint3.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
       <div className=\\"xp\\">
         <span className=\\"label\\">
           XP
@@ -31,15 +31,15 @@ exports[`Profile renders "no XP, no Grade and Staff role" correctly 1`] = `
           0
         </span>
       </div>
-      <Blueprint2.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
+      <Blueprint3.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
     </div>
   </div>
-</Blueprint2.Dialog>"
+</Blueprint3.Dialog>"
 `;
 
 exports[`Profile renders "no XP, no Grade and Student role" correctly 1`] = `
-"<Blueprint2.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
-  <div className=\\"pt-dialog-body\\">
+"<Blueprint3.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
+  <div className=\\"bp3-dialog-body\\">
     <div className=\\"header\\">
       <div>
         <span className=\\"name\\">
@@ -59,7 +59,7 @@ exports[`Profile renders "no XP, no Grade and Student role" correctly 1`] = `
           0
         </span>
       </div>
-      <Blueprint2.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
+      <Blueprint3.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
       <div className=\\"xp\\">
         <span className=\\"label\\">
           XP
@@ -68,15 +68,15 @@ exports[`Profile renders "no XP, no Grade and Student role" correctly 1`] = `
           0
         </span>
       </div>
-      <Blueprint2.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
+      <Blueprint3.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
     </div>
   </div>
-</Blueprint2.Dialog>"
+</Blueprint3.Dialog>"
 `;
 
 exports[`Profile renders with XP, Grade and Staff role" correctly 1`] = `
-"<Blueprint2.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
-  <div className=\\"pt-dialog-body\\">
+"<Blueprint3.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
+  <div className=\\"bp3-dialog-body\\">
     <div className=\\"header\\">
       <div>
         <span className=\\"name\\">
@@ -96,7 +96,7 @@ exports[`Profile renders with XP, Grade and Staff role" correctly 1`] = `
           33
         </span>
       </div>
-      <Blueprint2.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
+      <Blueprint3.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
       <div className=\\"xp\\">
         <span className=\\"label\\">
           XP
@@ -105,15 +105,15 @@ exports[`Profile renders with XP, Grade and Staff role" correctly 1`] = `
           66
         </span>
       </div>
-      <Blueprint2.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
+      <Blueprint3.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
     </div>
   </div>
-</Blueprint2.Dialog>"
+</Blueprint3.Dialog>"
 `;
 
 exports[`Profile renders with XP, Grade and Student role" correctly 1`] = `
-"<Blueprint2.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
-  <div className=\\"pt-dialog-body\\">
+"<Blueprint3.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
+  <div className=\\"bp3-dialog-body\\">
     <div className=\\"header\\">
       <div>
         <span className=\\"name\\">
@@ -133,7 +133,7 @@ exports[`Profile renders with XP, Grade and Student role" correctly 1`] = `
           33
         </span>
       </div>
-      <Blueprint2.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
+      <Blueprint3.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
       <div className=\\"xp\\">
         <span className=\\"label\\">
           XP
@@ -142,8 +142,8 @@ exports[`Profile renders with XP, Grade and Student role" correctly 1`] = `
           66
         </span>
       </div>
-      <Blueprint2.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
+      <Blueprint3.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
     </div>
   </div>
-</Blueprint2.Dialog>"
+</Blueprint3.Dialog>"
 `;
