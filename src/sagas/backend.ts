@@ -466,6 +466,9 @@ async function getGradingOverviews(
         gradeAdjustment: overview.adjustment,
         currentGrade: overview.grade + overview.adjustment,
         maxGrade: overview.assessment.maxGrade,
+        gradingStatus: overview.gradingStatus,
+        questionCount: overview.questionCount,
+        gradedCount: overview.gradedCount,
         // XP
         initialXp: overview.xp,
         xpAdjustment: overview.xpAdjustment,

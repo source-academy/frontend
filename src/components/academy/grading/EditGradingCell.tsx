@@ -1,12 +1,13 @@
-import { Classes, Icon } from '@blueprintjs/core';
+import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { NavLink } from 'react-router-dom';
 
+import { controlButton } from '../../commons/controlButton';
 import { GradingOverview } from './gradingShape';
 
-type GradingNavLinkProps = {
+type EditGradingCellProps = {
   data: GradingOverview;
 };
 
@@ -17,8 +18,8 @@ type GradingNavLinkProps = {
  *
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
-class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
-  constructor(props: GradingNavLinkProps) {
+class EditGradingCell extends React.Component<EditGradingCellProps, {}> {
+  constructor(props: EditGradingCellProps) {
     super(props);
   }
 
@@ -27,12 +28,11 @@ class GradingNavLink extends React.Component<GradingNavLinkProps, {}> {
       <NavLink
         to={`/academy/grading/${this.props.data.submissionId}`}
         activeClassName={Classes.ACTIVE}
-        target="_blank"
       >
-        <Icon className="grade-edit-icon" iconSize={16} icon={IconNames.ANNOTATION} />
+        {controlButton('', IconNames.ANNOTATION, () => null, { fullWidth: true })}
       </NavLink>
     );
   }
 }
 
-export default GradingNavLink;
+export default EditGradingCell;
