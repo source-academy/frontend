@@ -22,7 +22,6 @@ import { sourceChapters } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
 import { checkSessionIdExists, createNewSession } from './collabEditing/helper';
-import Editor from './Editor';
 
 /**
  * @prop questionProgress a tuple of (current question number, question length) where
@@ -32,7 +31,6 @@ export type ControlBarProps = {
   queryString?: string;
   questionProgress: [number, number] | null;
   sourceChapter: number;
-  editorRef?: React.RefObject<Editor>;
   editorSessionId?: string;
   editorValue?: string | null;
   externalLibraryName?: string;
@@ -49,6 +47,7 @@ export type ControlBarProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handleSetEditorSessionId?: (editorSessionId: string) => void;
+  handleInitInvite?: (value: string) => void;
   handleToggleEditorAutorun?: () => void;
   hasChapterSelect: boolean;
   hasCollabEditing: boolean;
@@ -177,9 +176,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
           const code = this.props.editorValue
             ? this.props.editorValue
             : '// Collaborative Editing Mode!';
-          this.props.editorRef!.current!.ShareAce.on('ready', () =>
-            this.props.handleEditorValueChange!(code)
-          );
+          this.props.handleInitInvite!(code);
         };
         createNewSession(onSessionCreated);
       }
@@ -232,17 +229,10 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
       undefined
     );
     const leaveButton = this.props.hasCollabEditing
-      ? controlButton(
-          'Leave',
-          IconNames.FEED,
-          () => {
-            this.props.handleSetEditorSessionId!('');
-            this.setState({ joinElemValue: '' });
-          },
-          {
-            iconColor: this.props.websocketStatus === 0 ? Colors.RED3 : Colors.GREEN3
-          }
-        )
+      ? controlButton('Leave', IconNames.FEED, () => {
+          this.props.handleSetEditorSessionId!('');
+          this.setState({ joinElemValue: '' });
+        })
       : undefined;
     const chapterSelectButton = this.props.hasChapterSelect
       ? chapterSelect(this.props.sourceChapter, this.props.handleChapterSelect)
@@ -275,7 +265,14 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
           </Menu>
         }
       >
-        {controlButton('Session', IconNames.SOCIAL_MEDIA)}
+        {controlButton('Session', IconNames.SOCIAL_MEDIA, undefined, {
+          iconColor:
+            this.props.editorSessionId === ''
+              ? undefined
+              : this.props.websocketStatus === 0
+              ? Colors.RED3
+              : Colors.GREEN3
+        })}
       </Popover>
     ) : (
       undefined
