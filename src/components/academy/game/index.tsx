@@ -3,7 +3,7 @@ import * as React from 'react';
 import { setUser } from '../../../actions';
 import { store } from '../../../createStore';
 import { Story } from '../../../reducers/states';
-import { getUser } from '../../../sagas/backend';
+import { getUser } from '../../../sagas/requests';
 
 type GameProps = DispatchProps & StateProps;
 

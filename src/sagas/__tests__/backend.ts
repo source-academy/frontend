@@ -16,14 +16,15 @@ import {
 } from '../../mocks/assessmentAPI';
 import { Role } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
-import backendSaga, {
+import backendSaga from '../backend';
+import {
   getAssessment,
   getAssessmentOverviews,
   getUser,
   postAnswer,
   postAssessment,
   postAuth
-} from '../backend';
+} from '../requests';
 
 // ----------------------------------------
 // Constants to use for testing
