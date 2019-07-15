@@ -5,10 +5,7 @@ type filterOptions = {
   submission_id?: number;
 };
 
-export function filterNotificationsBy(
-  notifications: Notification[],
-  opts: filterOptions = {}
-) {
+export function filterNotificationsBy(notifications: Notification[], opts: filterOptions = {}) {
   return notifications.filter(
     n =>
       (opts.assessment_id !== undefined ? n.assessment_id === opts.assessment_id : true) &&
