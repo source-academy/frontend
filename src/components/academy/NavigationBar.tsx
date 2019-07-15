@@ -35,7 +35,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           notifications={props.notifications.filter(
             n => n.type !== 'submitted' && n.assessment_type && n.assessment_type === 'Mission'
           )}
-          enableHover={false}
+          disableHover={true}
         />
       </NavLink>
 
@@ -50,7 +50,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           notifications={props.notifications.filter(
             n => n.type !== 'submitted' && n.assessment_type && n.assessment_type === 'Sidequest'
           )}
-          enableHover={false}
+          disableHover={true}
         />
       </NavLink>
 
@@ -65,7 +65,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           notifications={props.notifications.filter(
             n => n.type !== 'submitted' && n.assessment_type && n.assessment_type === 'Path'
           )}
-          enableHover={false}
+          disableHover={true}
         />
       </NavLink>
 
@@ -80,7 +80,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           notifications={props.notifications.filter(
             n => n.type !== 'submitted' && n.assessment_type && n.assessment_type === 'Contest'
           )}
-          enableHover={false}
+          disableHover={true}
         />
       </NavLink>
     </NavbarGroup>
@@ -95,7 +95,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           <div className="navbar-button-text hidden-xs">Grading</div>
           <NotificationBadge
             notifications={props.notifications.filter(n => n.type === 'submitted')}
-            enableHover={false}
+            disableHover={true}
           />
         </NavLink>
       </NavbarGroup>

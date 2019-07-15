@@ -4,7 +4,7 @@ import { Notification, NotificationType } from './notificationShape';
 
 type OwnProps = {
   className?: string;
-  enableHover?: boolean; // enable or disable hover popover option
+  disableHover?: boolean; // if false or undefined, displays popover content, otherwise disables it
   large?: boolean; // enable to use large style
   notifications: Notification[];
 };
@@ -42,10 +42,10 @@ const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
   return (
     <Popover
       className={props.className}
-      content={props.enableHover ? makeNotificationTags(props.notifications) : undefined}
+      content={props.disableHover ? undefined : makeNotificationTags(props.notifications)}
       interactionKind={PopoverInteractionKind.HOVER}
       position={Position.RIGHT}
-      isOpen={props.enableHover}
+      isOpen={props.disableHover ? false : undefined}
     >
       <Tag intent={Intent.DANGER} round={true} large={props.large}>
         {props.notifications.length}
