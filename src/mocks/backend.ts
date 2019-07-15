@@ -9,7 +9,7 @@ import {
   GradingQuestion
 } from '../components/academy/grading/gradingShape';
 import { IQuestion } from '../components/assessment/assessmentShape';
-import { AcademyNotification } from '../components/notification/notificationShape';
+import { Notification } from '../components/notification/notificationShape';
 import { store } from '../createStore';
 import { IState } from '../reducers/states';
 import { history } from '../utils/history';
@@ -139,11 +139,11 @@ export function* mockBackendSaga(): SagaIterator {
   });
 
   yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
-    const notifications: AcademyNotification[] = yield select(
+    const notifications: Notification[] = yield select(
       (state: IState) => state.session.notifications
     );
     const ids = (action as actionTypes.IAction).payload as number[];
-    const newNotifications: AcademyNotification[] = notifications.filter(
+    const newNotifications: Notification[] = notifications.filter(
       notification => !ids.includes(notification.id)
     );
     yield put(actions.updateNotifications(newNotifications));
@@ -201,7 +201,7 @@ export function* mockBackendSaga(): SagaIterator {
           assessment_type: 'Mission',
           assesssment_title: 'Mission 0'
         }
-      ] as AcademyNotification[])
+      ] as Notification[])
     );
   });
 }

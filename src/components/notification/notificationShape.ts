@@ -1,16 +1,16 @@
 import { AssessmentCategory } from '../assessment/assessmentShape';
 
-export type AcademyNotification = {
+export type Notification = {
   assessment_id?: number;
   assessment_type?: AssessmentCategory;
   assesssment_title?: string;
   id: number;
   question_id?: number;
   submission_id?: number;
-  type: AcademyNotificationType;
+  type: NotificationType;
 };
 
-enum AcademyNotificationTypes {
+enum NotificationTypes {
   new = 'new',
   deadline = 'deadline',
   autograded = 'autograded',
@@ -20,4 +20,4 @@ enum AcademyNotificationTypes {
   new_message = 'new_message'
 }
 
-export type AcademyNotificationType = keyof typeof AcademyNotificationTypes;
+export type NotificationType = keyof typeof NotificationTypes;

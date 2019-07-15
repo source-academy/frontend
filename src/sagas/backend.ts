@@ -22,7 +22,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
-import { AcademyNotification } from '../components/notification/notificationShape';
+import { Notification } from '../components/notification/notificationShape';
 import { IState, Role } from '../reducers/states';
 import { castLibrary } from '../utils/castBackend';
 import { BACKEND_URL } from '../utils/constants';
@@ -295,7 +295,7 @@ function* backendSaga(): SagaIterator {
       shouldAutoLogout: false
     });
     if (resp && resp.ok) {
-      const newNotifications: AcademyNotification[] = ((yield resp.json()) as any[]).map(n => {
+      const newNotifications: Notification[] = ((yield resp.json()) as any[]).map(n => {
         return {
           id: n.id,
           type: n.type,
@@ -304,7 +304,7 @@ function* backendSaga(): SagaIterator {
           assesssment_title: n.assessment ? n.assessment.title : undefined,
           question_id: n.question_id,
           submission_id: n.submission_id
-        } as AcademyNotification;
+        } as Notification;
       });
       yield put(actions.updateNotifications(newNotifications));
     }
@@ -316,10 +316,10 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
     const ids = (action as actionTypes.IAction).payload as number[];
-    const notifications: AcademyNotification[] = yield select(
+    const notifications: Notification[] = yield select(
       (state: IState) => state.session.notifications
     );
-    const newNotifications: AcademyNotification[] = notifications.filter(
+    const newNotifications: Notification[] = notifications.filter(
       notification => !ids.includes(notification.id)
     );
     yield put(actions.updateNotifications(newNotifications));

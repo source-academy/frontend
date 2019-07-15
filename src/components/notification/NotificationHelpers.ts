@@ -1,4 +1,4 @@
-import { AcademyNotification } from './notificationShape';
+import { Notification } from './notificationShape';
 
 type filterOptions = {
   assessment_id?: number;
@@ -6,7 +6,7 @@ type filterOptions = {
 };
 
 export function filterNotificationsBy(
-  notifications: AcademyNotification[],
+  notifications: Notification[],
   opts: filterOptions = {}
 ) {
   return notifications.filter(

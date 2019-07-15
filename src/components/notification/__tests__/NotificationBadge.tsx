@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import { mount } from 'enzyme';
 import NotificationBadge from '../NotificationBadge';
-import { AcademyNotification } from '../notificationShape';
+import { Notification } from '../notificationShape';
 
-const studentNotifications: AcademyNotification[] = [
+const studentNotifications: Notification[] = [
   {
     id: 1,
     type: 'new',
@@ -35,7 +35,7 @@ const studentNotifications: AcademyNotification[] = [
   }
 ];
 
-const avengerNotifications: AcademyNotification[] = [
+const avengerNotifications: Notification[] = [
   {
     id: 1,
     type: 'submitted',

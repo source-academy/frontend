@@ -19,7 +19,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { filterNotificationsBy } from '../../../components/notification/NotificationHelpers';
-import { AcademyNotification } from '../../../components/notification/notificationShape';
+import { Notification } from '../../../components/notification/notificationShape';
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
 import NotificationBadge from '../../../containers/notification/NotificationBadge';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
@@ -59,11 +59,11 @@ export interface IDispatchProps {
 
 export interface IStateProps {
   gradingOverviews?: GradingOverview[];
-  notifications: AcademyNotification[];
+  notifications: Notification[];
 }
 
 type GradingOverviewWithNotifications = {
-  notifications: AcademyNotification[];
+  notifications: Notification[];
 } & GradingOverview;
 
 /** Component to render in table - grading status */

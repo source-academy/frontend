@@ -9,7 +9,7 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories } from '../assessment/assessmentShape';
 
 import NotificationBadge from '../../containers/notification/NotificationBadge';
-import { AcademyNotification } from '../notification/notificationShape';
+import { Notification } from '../notification/notificationShape';
 
 type NavigationBarProps = OwnProps & StateProps;
 
@@ -18,7 +18,7 @@ type OwnProps = {
 };
 
 export type StateProps = {
-  notifications: AcademyNotification[];
+  notifications: Notification[];
 };
 
 const NavigationBar: React.SFC<NavigationBarProps> = props => (

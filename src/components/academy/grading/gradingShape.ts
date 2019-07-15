@@ -1,4 +1,4 @@
-import { AcademyNotification } from '../../../components/notification/notificationShape';
+import { Notification } from '../../../components/notification/notificationShape';
 import {
   AssessmentCategory,
   AutogradingResult,
@@ -36,7 +36,7 @@ export type GradingOverview = {
 };
 
 export type GradingOverviewWithNotifications = {
-  notifications: AcademyNotification[];
+  notifications: Notification[];
 } & GradingOverview;
 
 /**

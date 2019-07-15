@@ -39,7 +39,7 @@ import { controlButton } from '../commons';
 import ContentDisplay from '../commons/ContentDisplay';
 import Markdown from '../commons/Markdown';
 import { filterNotificationsBy } from '../notification/NotificationHelpers';
-import { AcademyNotification } from '../notification/notificationShape';
+import { Notification } from '../notification/notificationShape';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
@@ -67,7 +67,7 @@ export interface IOwnProps {
 export interface IStateProps {
   assessmentOverviews?: IAssessmentOverview[];
   isStudent: boolean;
-  notifications: AcademyNotification[];
+  notifications: Notification[];
 }
 
 type State = {
@@ -329,7 +329,7 @@ const makeOverviewCard = (
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
   renderAttemptButton: boolean,
   renderGradingStatus: boolean,
-  notifications: AcademyNotification[],
+  notifications: Notification[],
   handleAcknowledgeNotifications: (ids: number[]) => void
 ) => (
   <div key={index}>
@@ -389,7 +389,7 @@ const makeOverviewCardTitle = (
   index: number,
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
   renderGradingStatus: boolean,
-  notifications: AcademyNotification[]
+  notifications: Notification[]
 ) => (
   <div className="row listing-title">
     <Text ellipsize={true} className={'col-xs-10'}>
@@ -460,7 +460,7 @@ const makeSubmissionButton = (
 
 const makeOverviewCardButton = (
   overview: IAssessmentOverview,
-  notifications: AcademyNotification[],
+  notifications: Notification[],
   handleAcknowledgeNotifications: (ids: number[]) => void
 ) => {
   let icon: IconName;

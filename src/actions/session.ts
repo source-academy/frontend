@@ -2,7 +2,7 @@ import { ActionCreator } from 'redux';
 
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape';
-import { AcademyNotification } from '../components/notification/notificationShape';
+import { Notification } from '../components/notification/notificationShape';
 import { Story } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -147,7 +147,7 @@ export const acknowledgeNotification = (notificationIds: number[]) => ({
   payload: notificationIds
 });
 
-export const updateNotifications = (notifications: AcademyNotification[]) => ({
+export const updateNotifications = (notifications: Notification[]) => ({
   type: actionTypes.UPDATE_NOTIFICATIONS,
   payload: notifications
 });

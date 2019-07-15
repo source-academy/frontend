@@ -1,12 +1,12 @@
 import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
 import * as React from 'react';
-import { AcademyNotification, AcademyNotificationType } from './notificationShape';
+import { Notification, NotificationType } from './notificationShape';
 
 type OwnProps = {
   className?: string;
   enableHover?: boolean; // enable or disable hover popover option
   large?: boolean; // enable to use large style
-  notifications: AcademyNotification[];
+  notifications: Notification[];
 };
 
 export type DispatchProps = {
@@ -18,11 +18,11 @@ const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
     return null;
   }
 
-  const makeNotificationTags = (notifications: AcademyNotification[]) => (
+  const makeNotificationTags = (notifications: Notification[]) => (
     <div className="col">{notifications.map(makeNotificationTag)}</div>
   );
 
-  const makeNotificationTag = (notification: AcademyNotification) => {
+  const makeNotificationTag = (notification: Notification) => {
     const onRemove = () => props.handleAcknowledgeNotification([notification.id]);
 
     return (
@@ -54,7 +54,7 @@ const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
   );
 };
 
-const makeNotificationMessage = (type: AcademyNotificationType) => {
+const makeNotificationMessage = (type: NotificationType) => {
   switch (type) {
     case 'new':
       return 'This assessment is new.';

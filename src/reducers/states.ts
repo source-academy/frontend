@@ -12,7 +12,7 @@ import {
   IAssessmentOverview,
   ITestcase
 } from '../components/assessment/assessmentShape';
-import { AcademyNotification } from '../components/notification/notificationShape';
+import { Notification } from '../components/notification/notificationShape';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -102,7 +102,7 @@ export interface ISessionState {
   readonly story?: Story;
   readonly name?: string;
   readonly xp: number;
-  readonly notifications: AcademyNotification[];
+  readonly notifications: Notification[];
 }
 
 type ReplHistory = {
