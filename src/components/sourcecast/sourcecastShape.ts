@@ -53,12 +53,12 @@ export interface IPlaybackData {
 }
 
 export interface ISourcecastData {
-  name: string;
+  title: string;
   description: string;
   inserted_at: string;
   updated_at: string;
   audio: string;
-  deltas: string;
+  playbackData: string;
   id: number;
   uploader: {
     id: number;

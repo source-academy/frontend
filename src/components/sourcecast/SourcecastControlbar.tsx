@@ -1,4 +1,3 @@
-/* tslint:disable:no-console */
 import { Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
@@ -118,16 +117,6 @@ class SourcecastControlbar extends React.PureComponent<
       await sleep(20);
     }
   };
-
-  // // WE USE APPLY FROM START FOR ALL TIME SKIPPING OPERATIONS FIRST, THEN IMPLEMENT THIS TO IMPROVE EFFICIENCY
-  // private applyPlaybackDataFromMiddle = (playbackData: IPlaybackData) => {
-  //   const currentTime = this.audio.current!.currentTime * 1000;
-  //   const playbackDataFiltered = playbackData.data.filter(data => data.time > currentTime);
-  //   this.applyPlaybackDataFromStart({
-  //     init: playbackData.init,
-  //     data: playbackDataFiltered
-  //   });
-  // };
 
   private stopCurrentPlayback() {
     this.setState({

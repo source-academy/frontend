@@ -1,7 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { Input } from 'src/components/sourcecast/sourcecastShape';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -17,10 +16,9 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
-  recordAudioUrl,
   recordEditorInitValue,
   recordEditorInput,
-  savePlaybackData,
+  saveSourcecastData,
   setEditorBreakpoint,
   setEditorReadonly,
   timerPause,
@@ -33,6 +31,7 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
+import { Input, IPlaybackData } from '../../components/sourcecast/sourcecastShape';
 import Sourcereel, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcereel';
 import { IState } from '../../reducers/states';
 
@@ -73,17 +72,16 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
       handleInterruptEval: () => beginInterruptExecution(location),
-      handleRecordAudioUrl: recordAudioUrl,
       handleRecordEditorInput: (input: Input) => recordEditorInput(location, input),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSavePlaybackData: (
+      handleSaveSourcecastData: (
         title: string,
         description: string,
         audio: Blob,
-        playbackData: string
-      ) => savePlaybackData(title, description, audio, playbackData),
+        playbackData: IPlaybackData
+      ) => saveSourcecastData(title, description, audio, playbackData),
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
       handleRecordEditorInitValue: recordEditorInitValue,
       handleSideContentHeightChange: (heightChange: number) =>

@@ -57,7 +57,6 @@ export interface IDispatchProps {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFetchSourcecastIndex: () => void;
   handleInterruptEval: () => void;
-  handleRecordAudioUrl: (audioUrl: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
@@ -67,6 +66,7 @@ export interface IDispatchProps {
   handleSetSourcecastData: (
     title: string,
     description: string,
+    audioUrl: string,
     playbackData: IPlaybackData
   ) => void;
   handleSetSourcecastDuration: (duration: number) => void;
@@ -155,7 +155,6 @@ class Sourcecast extends React.Component<ISourcecastProps> {
                 </span>
                 <SourcecastTable
                   handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
-                  handleRecordAudioUrl={this.props.handleRecordAudioUrl}
                   handleSetSourcecastData={this.props.handleSetSourcecastData}
                   sourcecastIndex={this.props.sourcecastIndex}
                 />

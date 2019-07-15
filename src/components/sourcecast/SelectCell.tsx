@@ -7,10 +7,10 @@ import { IPlaybackData, ISourcecastData } from './sourcecastShape';
 
 interface ISelectCellProps {
   data: ISourcecastData;
-  handleRecordAudioUrl: (audioUrl: string) => void;
   handleSetSourcecastData: (
     title: string,
     description: string,
+    audioUrl: string,
     playbackData: IPlaybackData
   ) => void;
 }
@@ -27,9 +27,8 @@ class SelectCell extends React.Component<ISelectCellProps, {}> {
   private handleSelect = () => {
     const { data } = this.props;
     const url = BACKEND_URL + data.url;
-    this.props.handleRecordAudioUrl(url);
-    const playbackData = JSON.parse(data.deltas);
-    this.props.handleSetSourcecastData(data.name, data.description, playbackData);
+    const playbackData = JSON.parse(data.playbackData);
+    this.props.handleSetSourcecastData(data.title, data.description, url, playbackData);
   };
 }
 

@@ -50,17 +50,16 @@ export interface IDispatchProps {
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleInterruptEval: () => void;
-  handleRecordAudioUrl: (audioUrl: string) => void;
   handleRecordEditorInput: (input: Input) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleRecordEditorInitValue: (editorValue: string) => void;
-  handleSavePlaybackData: (
+  handleSaveSourcecastData: (
     title: string,
     description: string,
     audio: Blob,
-    playbackData: string
+    playbackData: IPlaybackData
   ) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -148,9 +147,8 @@ class Sourcereel extends React.Component<ISourcereelProps> {
                   editorValue={this.props.editorValue}
                   getTimerDuration={this.getTimerDuration}
                   playbackData={this.props.playbackData}
-                  handleRecordAudioUrl={this.props.handleRecordAudioUrl}
                   handleRecordEditorInitValue={this.props.handleRecordEditorInitValue}
-                  handleSavePlaybackData={this.props.handleSavePlaybackData}
+                  handleSaveSourcecastData={this.props.handleSaveSourcecastData}
                   handleSetEditorReadonly={this.props.handleSetEditorReadonly}
                   handleTimerPause={this.props.handleTimerPause}
                   handleTimerReset={this.props.handleTimerReset}

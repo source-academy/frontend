@@ -1,7 +1,6 @@
 import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
-
 import { IWorkspaceState } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 

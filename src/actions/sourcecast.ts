@@ -19,13 +19,6 @@ export const updateSourcecastIndex = (index: any) => ({
   }
 });
 
-export const loadPlaybackData = (playbackData: IPlaybackData) => ({
-  type: actionTypes.LOAD_PLAYBACK_DATA,
-  payload: {
-    playbackData
-  }
-});
-
 export const setCodeDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: ICodeDelta[]) => ({
   type: actionTypes.SET_CODE_DELTAS_TO_APPLY,
   payload: {
@@ -47,12 +40,14 @@ export const setInputToApply: ActionCreator<actionTypes.IAction> = (
 export const setSourcecastData: ActionCreator<actionTypes.IAction> = (
   title: string,
   description: string,
+  audioUrl: string,
   playbackData: IPlaybackData
 ) => ({
   type: actionTypes.SET_SOURCECAST_DATA,
   payload: {
     title,
     description,
+    audioUrl,
     playbackData
   }
 });

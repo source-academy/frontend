@@ -28,10 +28,10 @@ import {
   IAction,
   INIT_INVITE,
   LOG_OUT,
-  RECORD_AUDIO_URL,
   RECORD_EDITOR_INIT_VALUE,
   RECORD_EDITOR_INPUT,
   RESET_WORKSPACE,
+  SAVE_SOURCECAST_DATA,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_CODE_DELTAS_TO_APPLY,
   SET_EDITOR_READONLY,
@@ -440,7 +440,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       };
-
     case END_DEBUG_PAUSE:
       return {
         ...state,
@@ -450,7 +449,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: true
         }
       };
-
     case DEBUG_RESUME:
       return {
         ...state,
@@ -460,7 +458,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       };
-
     case DEBUG_RESET:
       return {
         ...state,
@@ -468,14 +465,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[workspaceLocation],
           isRunning: false,
           isDebugging: false
-        }
-      };
-    case RECORD_AUDIO_URL:
-      return {
-        ...state,
-        sourcereel: {
-          ...state.sourcereel,
-          audioUrl: action.payload.audioUrl
         }
       };
     case RECORD_EDITOR_INPUT:
@@ -561,11 +550,22 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         }
       };
+    case SAVE_SOURCECAST_DATA:
+      return {
+        ...state,
+        sourcecast: {
+          ...state.sourcecast,
+          title: action.payload.title,
+          description: action.payload.description,
+          audioUrl: window.URL.createObjectURL(action.payload.audio),
+          playbackData: action.payload.playbackData
+        }
+      };
     case SET_INPUT_TO_APPLY:
       return {
         ...state,
-        [location]: {
-          ...state[location],
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           inputToApply: action.payload.inputToApply
         }
       };
@@ -575,10 +575,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         sourcecast: {
           ...state.sourcecast,
           title: action.payload.title,
-          description: action.payload.description
-        },
-        sourcereel: {
-          ...state.sourcereel,
+          description: action.payload.description,
+          audioUrl: action.payload.audioUrl,
           playbackData: action.payload.playbackData
         }
       };

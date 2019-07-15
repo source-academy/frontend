@@ -1,7 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { Input, IPlaybackData, PlaybackStatus } from 'src/components/sourcecast/sourcecastShape';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -18,7 +17,6 @@ import {
   evalEditor,
   evalRepl,
   fetchSourcecastIndex,
-  recordAudioUrl,
   setCodeDeltasToApply,
   setEditorBreakpoint,
   setEditorReadonly,
@@ -33,11 +31,12 @@ import {
   WorkspaceLocation
 } from '../../actions';
 import Sourcecast, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcecast';
+import { Input, IPlaybackData, PlaybackStatus } from '../../components/sourcecast/sourcecastShape';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   activeTab: state.workspaces.sourcecast.sideContentActiveTab,
-  audioUrl: state.workspaces.sourcereel.audioUrl,
+  audioUrl: state.workspaces.sourcecast.audioUrl,
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   title: state.workspaces.sourcecast.title,
   description: state.workspaces.sourcecast.description,
@@ -53,7 +52,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   enableDebugging: state.workspaces.sourcecast.enableDebugging,
   output: state.workspaces.sourcecast.output,
   playbackDuration: state.workspaces.sourcecast.playbackDuration,
-  playbackData: state.workspaces.sourcereel.playbackData,
+  playbackData: state.workspaces.sourcecast.playbackData,
   playbackStatus: state.workspaces.sourcecast.playbackStatus,
   replValue: state.workspaces.sourcecast.replValue,
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
@@ -79,7 +78,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setEditorBreakpoint(breakpoints, location),
       handleFetchSourcecastIndex: fetchSourcecastIndex,
       handleInterruptEval: () => beginInterruptExecution(location),
-      handleRecordAudioUrl: recordAudioUrl,
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
@@ -87,8 +85,12 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleSetEditorReadonly: (editorReadonly: boolean) =>
         setEditorReadonly(location, editorReadonly),
       handleSetInputToApply: (inputToApply: Input) => setInputToApply(location, inputToApply),
-      handleSetSourcecastData: (title: string, description: string, playbackData: IPlaybackData) =>
-        setSourcecastData(title, description, playbackData),
+      handleSetSourcecastData: (
+        title: string,
+        description: string,
+        audioUrl: string,
+        playbackData: IPlaybackData
+      ) => setSourcecastData(title, description, audioUrl, playbackData),
       handleSetSourcecastDuration: (duration: number) => setSourcecastDuration(duration),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         setSourcecastStatus(playbackStatus),

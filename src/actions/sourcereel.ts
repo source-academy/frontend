@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux';
 
-import { Input } from '../components/sourcecast/sourcecastShape';
+import { Input, IPlaybackData } from '../components/sourcecast/sourcecastShape';
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
@@ -15,25 +15,18 @@ export const recordEditorInput: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const savePlaybackData = (
+export const saveSourcecastData = (
   title: string,
   description: string,
   audio: Blob,
-  playbackData: string
+  playbackData: IPlaybackData
 ) => ({
-  type: actionTypes.SAVE_PLAYBACK_DATA,
+  type: actionTypes.SAVE_SOURCECAST_DATA,
   payload: {
     title,
     description,
     audio,
-    deltas: playbackData
-  }
-});
-
-export const recordAudioUrl: ActionCreator<actionTypes.IAction> = (audioUrl: string) => ({
-  type: actionTypes.RECORD_AUDIO_URL,
-  payload: {
-    audioUrl
+    playbackData
   }
 });
 

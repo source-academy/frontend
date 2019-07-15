@@ -62,18 +62,18 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 }
 
 export interface ISourcecast extends IWorkspaceState {
-  readonly sourcecastIndex: ISourcecastData[] | null;
+  readonly audioUrl: string;
   readonly codeDeltasToApply: ICodeDelta[] | null;
-  readonly title: string | null;
   readonly description: string | null;
   readonly inputToApply: Input | null;
   readonly playbackData: IPlaybackData;
   readonly playbackDuration: number;
   readonly playbackStatus: PlaybackStatus;
+  readonly sourcecastIndex: ISourcecastData[] | null;
+  readonly title: string | null;
 }
 
 export interface ISourcereel extends IWorkspaceState {
-  readonly audioUrl: string;
   readonly playbackData: IPlaybackData;
   readonly recordingStatus: RecordingStatus;
   readonly timeElapsedBeforePause: number;
@@ -298,8 +298,8 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   sourcecast: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
+    audioUrl: '',
     codeDeltasToApply: null,
-    title: null,
     description: null,
     inputToApply: null,
     playbackData: {
@@ -308,11 +308,11 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     },
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.notStarted,
-    sourcecastIndex: null
+    sourcecastIndex: null,
+    title: null
   },
   sourcereel: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
-    audioUrl: '',
     playbackData: {
       init: { editorValue: '' },
       inputs: []

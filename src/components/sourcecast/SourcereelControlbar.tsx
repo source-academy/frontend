@@ -1,4 +1,3 @@
-/* tslint:disable:no-console */
 import { Card, H1, Popover } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
@@ -60,8 +59,6 @@ class SourcereelControlbar extends React.PureComponent<
     //   this.handleRecorderDownloading
     // );
     const RecorderSaveButton = (
-      // Need custom CSS for Popover
-      // Submit need an onclickhandler
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Save', IconNames.FLOPPY_DISK)}
         <ul className="Sourcereel-save-form">
@@ -173,13 +170,11 @@ class SourcereelControlbar extends React.PureComponent<
       alert('No recording found');
       return;
     }
-    const tempUrl = window.URL.createObjectURL(this.state.fileDataBlob);
-    this.props.handleRecordAudioUrl(tempUrl);
-    this.props.handleSavePlaybackData(
+    this.props.handleSaveSourcecastData(
       this.state.saveTitle,
       this.state.saveDescription,
       this.state.fileDataBlob,
-      JSON.stringify(this.props.playbackData)
+      this.props.playbackData
     );
   };
 
@@ -219,13 +214,12 @@ class SourcereelControlbar extends React.PureComponent<
 }
 
 export interface ISourcereelControlbarProps {
-  handleRecordAudioUrl: (audioUrl: string) => void;
   handleRecordEditorInitValue: (editorValue: string) => void;
-  handleSavePlaybackData: (
+  handleSaveSourcecastData: (
     title: string,
     description: string,
     audio: Blob,
-    playbackData: string
+    playbackData: IPlaybackData
   ) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;

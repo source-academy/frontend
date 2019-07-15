@@ -24,10 +24,10 @@ type ISourcecastTableProps = IOwnProps;
 
 interface IOwnProps {
   handleFetchSourcecastIndex: () => void;
-  handleRecordAudioUrl: (audioUrl: string) => void;
   handleSetSourcecastData: (
     title: string,
     description: string,
+    audioUrl: string,
     playbackData: IPlaybackData
   ) => void;
   sourcecastIndex: ISourcecastData[] | null;
@@ -43,7 +43,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
       columnDefs: [
         {
           headerName: 'Title',
-          field: 'name',
+          field: 'title',
           width: 200,
           maxWidth: 200,
           suppressMovable: true,
@@ -62,7 +62,6 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
           field: '',
           cellRendererFramework: SelectCell,
           cellRendererParams: {
-            handleRecordAudioUrl: this.props.handleRecordAudioUrl,
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },
           width: 200,
@@ -79,7 +78,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
         { headerName: 'inserted_at', field: 'inserted_at', hide: true },
         { headerName: 'updated_at', field: 'updated_at', hide: true },
         { headerName: 'audio', field: 'audio', hide: true },
-        { headerName: 'deltas', field: 'deltas', hide: true },
+        { headerName: 'playbackData', field: 'playbackData', hide: true },
         { headerName: 'url', field: 'url', hide: true }
       ],
       filterValue: '',

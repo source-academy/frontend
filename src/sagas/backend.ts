@@ -26,6 +26,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../components/notification/notificationShape';
+import { IPlaybackData } from '../components/sourcecast/sourcecastShape';
 import { store } from '../createStore';
 import { IState, Role } from '../reducers/states';
 import { castLibrary } from '../utils/castBackend';
@@ -349,17 +350,17 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.SAVE_PLAYBACK_DATA, function*(action) {
+  yield takeEvery(actionTypes.SAVE_SOURCECAST_DATA, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can save sourcecast.');
     }
-    const { title, description, audio, deltas } = (action as actionTypes.IAction).payload;
+    const { title, description, audio, playbackData } = (action as actionTypes.IAction).payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield postSourcecast(title, description, audio, deltas, tokens);
+    const resp = yield postSourcecast(title, description, audio, playbackData, tokens);
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000);
       yield history.push('/sourcecast');
@@ -758,15 +759,15 @@ const postSourcecast = async (
   title: string,
   description: string,
   audio: Blob,
-  deltas: string,
+  playbackData: IPlaybackData,
   tokens: Tokens
 ) => {
   const formData = new FormData();
   const filename = Date.now().toString() + '.wav';
-  formData.append('sourcecast[name]', title);
+  formData.append('sourcecast[title]', title);
   formData.append('sourcecast[description]', description);
   formData.append('sourcecast[audio]', audio, filename);
-  formData.append('sourcecast[deltas]', deltas);
+  formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
   const resp = await request(`sourcecast`, 'POST', {
     accessToken: tokens.accessToken,
     body: formData,
