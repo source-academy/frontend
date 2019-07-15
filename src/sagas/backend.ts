@@ -627,7 +627,7 @@ async function request(
       throw new Error('API call failed or got non-OK response');
     }
   } catch (e) {
-    put(actions.logOut());
+    yield put(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
     return null;
   }
