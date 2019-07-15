@@ -42,7 +42,7 @@ const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
   return (
     <Popover
       className={props.className}
-      content={makeNotificationTags(props.notifications)}
+      content={props.enableHover ? makeNotificationTags(props.notifications) : undefined}
       interactionKind={PopoverInteractionKind.HOVER}
       position={Position.RIGHT}
       isOpen={props.enableHover}
