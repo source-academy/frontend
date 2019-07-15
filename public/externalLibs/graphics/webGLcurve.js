@@ -126,8 +126,9 @@ function draw_points_squeezed_to_window(num) {
  * and connecting each pair with a line. 
  * When a program evaluates to a Drawing, the Source system
  * displays it graphically, in a window, instead of textually.
- * The Drawing is squeezed such that all its parts are shown in the
- * window.
+ * The Drawing is resized proportionally such that it 
+ * is shown as big as possible, and still fits entirely 
+ * inside the window.
  * @param {number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
@@ -145,8 +146,9 @@ function draw_connected_squeezed_to_window(num) {
  * and connecting each pair with a line. 
  * When a program evaluates to a Drawing, the Source system
  * displays it graphically, in a window, instead of textually.
- * The Drawing is stretched or shrunk 
- * to show the full curve and maximize its width and height.
+ * The Drawing is stretched or shrunk
+ * to show the full curve
+ * and maximize its width and height, with some padding.
  * @param {number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
@@ -165,7 +167,7 @@ function draw_connected_full_view(num) {
  * When a program evaluates to a Drawing, the Source system
  * displays it graphically, in a window, instead of textually.
  * The Drawing is scaled proportionally to show the full curve
- * and maximize its size.
+ * and maximize its size, with some padding.
  * @param {number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
