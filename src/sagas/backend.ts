@@ -289,25 +289,9 @@ function* backendSaga(): SagaIterator {
       return;
     }
 
-    const resp: Response | null = yield request('notification', 'GET', {
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-      shouldAutoLogout: false
-    });
-    if (resp && resp.ok) {
-      const newNotifications: Notification[] = ((yield resp.json()) as any[]).map(n => {
-        return {
-          id: n.id,
-          type: n.type,
-          assessment_id: n.assessment_id,
-          assessment_type: n.assessment ? capitalise(n.assessment.type) : undefined,
-          assesssment_title: n.assessment ? n.assessment.title : undefined,
-          question_id: n.question_id,
-          submission_id: n.submission_id
-        } as Notification;
-      });
-      yield put(actions.updateNotifications(newNotifications));
-    }
+    const notifications = yield getNotifications(tokens);
+
+    yield put(actions.updateNotifications(notifications));
   });
 
   yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
@@ -323,12 +307,9 @@ function* backendSaga(): SagaIterator {
       notification => !ids.includes(notification.id)
     );
     yield put(actions.updateNotifications(newNotifications));
-    const resp: Response | null = yield request(`notification/acknowledge`, 'POST', {
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-      body: { notificationIds: ids },
-      shouldAutoLogout: false
-    });
+
+    const resp: Response | null = yield postAcknowledgeNotification(tokens, ids);
+
     if (resp && resp.ok) {
       return;
     } else {
@@ -342,15 +323,10 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    yield request(`chat/notify`, 'POST', {
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-      body: {
-        assessmentId: (action as actionTypes.IAction).payload.assessmentId || null,
-        submissionId: (action as actionTypes.IAction).payload.submissionId || null
-      },
-      shouldAutoLogout: false
-    });
+
+    const assessmentId = (action as actionTypes.IAction).payload.assessmentId || null;
+    const submissionId = (action as actionTypes.IAction).payload.submissionId || null;
+    yield postNotify(tokens, assessmentId, submissionId);
   });
 }
 
@@ -647,6 +623,70 @@ async function postUnsubmit(submissionId: number, tokens: Tokens) {
     shouldRefresh: true
   });
   return resp;
+}
+
+/**
+ * GET /notification
+ */
+async function getNotifications(tokens: Tokens) {
+  const resp: Response | null = await request('notification', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false
+  });
+  let notifications: Notification[] = [];
+
+  if (resp && resp.ok) {
+    const result = await resp.json();
+    notifications = result.map((notification: any) => {
+      return {
+        id: notification.id,
+        type: notification.type,
+        assessment_id: notification.assessment_id,
+        assessment_type: notification.assessment
+          ? capitalise(notification.assessment.type)
+          : undefined,
+        assesssment_title: notification.assessment ? notification.assessment.title : undefined,
+        question_id: notification.question_id,
+        submission_id: notification.submission_id
+      } as Notification;
+    });
+  }
+
+  return notifications;
+}
+
+/**
+ * POST /notification/acknowledge
+ */
+async function postAcknowledgeNotification(tokens: Tokens, ids: number[]) {
+  const resp: Response | null = await request(`notification/acknowledge`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: { notificationIds: ids },
+    shouldAutoLogout: false
+  });
+
+  return resp;
+}
+
+/**
+ * POST /chat/notify
+ */
+async function postNotify(
+  tokens: Tokens,
+  assessmentId: number | null,
+  submissionId: number | null
+) {
+  await request(`chat/notify`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: {
+      assessmentId,
+      submissionId
+    },
+    shouldAutoLogout: false
+  });
 }
 
 /**
