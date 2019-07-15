@@ -231,7 +231,7 @@ class Grading extends React.Component<IGradingProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
-    const data = this.preProcessData();
+    const data = this.sortSubmissions();
 
     const grid = (
       <div className="GradingContainer">
@@ -302,7 +302,7 @@ class Grading extends React.Component<IGradingProps, State> {
     if (!this.gridApi) {
       return;
     }
-    this.gridApi.setRowData(this.preProcessData());
+    this.gridApi.setRowData(this.sortSubmissions());
   }
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -332,7 +332,12 @@ class Grading extends React.Component<IGradingProps, State> {
     this.gridApi.exportDataAsCsv({ allColumns: true });
   };
 
-  private preProcessData = () =>
+  /* Submissions will be sorted in the following order:
+    - whether the submission has notifications
+    - the assessment id
+    - the submission id
+  */
+  private sortSubmissions = () =>
     sortBy(
       this.props.gradingOverviews
         ? this.props.gradingOverviews!.map(o => {
@@ -344,7 +349,7 @@ class Grading extends React.Component<IGradingProps, State> {
           })
         : this.props.gradingOverviews,
       [
-        (a: GradingOverviewWithNotifications) => -a.notifications.length,
+        (a: GradingOverviewWithNotifications) => (a.notifications.length > 0 ? -1 : 0),
         (a: GradingOverview) => -a.assessmentId,
         (a: GradingOverview) => -a.submissionId
       ]
