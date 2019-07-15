@@ -521,7 +521,9 @@ function translate(x, y, rune) {
 
 /**
  * rotates a given Rune by a given angle,
- * given in radians, in anti-clockwise direction
+ * given in radians, in anti-clockwise direction.
+ * Note that parts of the Rune
+ * may be cropped as a result.
  * @param {number} rad - fraction between 0 and 1
  * @param {Rune} rune - given Rune
  * @return {Rune} rotated Rune
@@ -584,8 +586,8 @@ function stackn(n, rune) {
 
 /**
  * makes a new Rune from a given Rune
- * by turning it a quarter-turn in
- * clockwise direction
+ * by turning it a quarter-turn around the centre in
+ * clockwise direction. 
  * @param {Rune} rune - given Rune
  * @return {Rune} resulting Rune
  */
@@ -596,7 +598,7 @@ function quarter_turn_right(rune) {
 /**
  * makes a new Rune from a given Rune
  * by turning it a quarter-turn in
- * anti-clockwise direction
+ * anti-clockwise direction.
  * @param {Rune} rune - given Rune
  * @return {Rune} resulting Rune
  */
@@ -711,12 +713,14 @@ function hexToColor(hex) {
 
 /**
  * adds color to rune by specifying 
- * the red, green, blue (RGB) value.
+ * the red, green, blue (RGB) value, ranging from 0.0 to 1.0.
+ * RGB is additive: if all values are 1, the color is white,
+ * and if all values are 0, the color is black.
  * Opacity is kept at default value of 1. (Full opacity)
  * @param {Rune} rune - the rune to add color to
- * @param {number} r - red value (0-255)
- * @param {number} g - green value (0-255)
- * @param {number} b - blue value (0-255)
+ * @param {number} r - red value (0.0-1.0)
+ * @param {number} g - green value (0.0-1.0)
+ * @param {number} b - blue value (0.0-1.0)
  */
 function color(rune, r, g, b) {
   var wrapper = new Rune()
