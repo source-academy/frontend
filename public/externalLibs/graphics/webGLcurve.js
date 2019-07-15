@@ -55,9 +55,9 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
     mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
   } else if (scaleMode == 'stretch') {
     var center = [(min_x + max_x) / 2, (min_y + max_y) / 2]
-    var x_scale = max_x === min_x ? 1 : 2 / (max_x - min_x)
-    var y_scale = max_y === min_y ? 1 : 2 / (max_y - min_y)
-    mat4.scale(transMat, transMat, vec3.fromValues(x_scale, y_scale, 0))
+    var x_scale = max_x === min_x ? 1 : (max_x - min_x)
+    var y_scale = max_y === min_y ? 1 : (max_y - min_y)
+    mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 0))
                                     // use 2 because the value is in [-1, 1]
     mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
   } else {
