@@ -29,8 +29,11 @@ class EditGradingCell extends React.Component<EditGradingCellProps, {}> {
         to={`/academy/grading/${this.props.data.submissionId}`}
         activeClassName={Classes.ACTIVE}
       >
-        {controlButton('', IconNames.ANNOTATION, () =>
-          this.props.handleAcknowledgeNotifications(this.props.data.notifications.map(n => n.id)),
+        {controlButton(
+          '',
+          IconNames.ANNOTATION,
+          () =>
+            this.props.handleAcknowledgeNotifications(this.props.data.notifications.map(n => n.id)),
           { fullWidth: true }
         )}
       </NavLink>

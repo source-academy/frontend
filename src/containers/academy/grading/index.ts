@@ -1,7 +1,11 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { acknowledgeNotification, fetchGradingOverviews, unsubmitSubmission } from '../../../actions/session';
+import {
+  acknowledgeNotification,
+  fetchGradingOverviews,
+  unsubmitSubmission
+} from '../../../actions/session';
 import Grading, { IDispatchProps, IStateProps } from '../../../components/academy/grading';
 import { IState } from '../../../reducers/states';
 

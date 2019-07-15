@@ -17,15 +17,11 @@ import { Role } from '../reducers/states';
 import { LINKS } from '../utils/constants';
 import Dropdown from './dropdown';
 
-import { NotificationBadge } from '../components/notification/NotificationBadge';
-import { AcademyNotification } from '../components/notification/notificationShape';
-
 export interface INavigationBarProps {
   handleLogOut: () => void;
   role?: Role;
   title: string;
   name?: string;
-  notifications: AcademyNotification[];
 }
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
@@ -37,7 +33,6 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         to="/academy"
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
-        <NotificationBadge notifications={props.notifications} />
         <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
       </NavLink>
 

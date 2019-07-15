@@ -134,7 +134,7 @@ export const unsubmitSubmission: ActionCreator<actionTypes.IAction> = (submissio
   }
 });
 
-/** 
+/**
  * Notification actions
  */
 
