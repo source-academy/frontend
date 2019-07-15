@@ -716,7 +716,6 @@ function hexToColor(hex) {
  * the red, green, blue (RGB) value, ranging from 0.0 to 1.0.
  * RGB is additive: if all values are 1, the color is white,
  * and if all values are 0, the color is black.
- * Opacity is kept at default value of 1. (Full opacity)
  * @param {Rune} rune - the rune to add color to
  * @param {number} r - red value (0.0-1.0)
  * @param {number} g - green value (0.0-1.0)
@@ -739,8 +738,8 @@ function addColorFromHex(rune, hex) {
 
 /**
  * Gives random color to the given rune.
- * The color is chosen randomly from the nine given 
- * colors below, where black and white are excluded.
+ * The color is chosen randomly from the following nine 
+ * colors: red, pink, purple, indigo, blue, green, yellow, orange, brown
  * @param {Rune} rune - the rune to color
  */
 function random_color(rune) {
@@ -766,88 +765,99 @@ var colorPalette = [
 ]
 
 /**
- * colors the give given rune red.
+ * colors the given rune red.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function red(rune) {
   return addColorFromHex(rune, '#F44336')
 }
 
 /**
- * colors the give given rune pink.
+ * colors the given rune pink.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function pink(rune) {
   return addColorFromHex(rune, '#E91E63')
 }
 
 /**
- * colors the give given rune purple.
+ * colors the given rune purple.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function purple(rune) {
   return addColorFromHex(rune, '#AA00FF')
 }
 
 /**
- * colors the give given rune indigo.
+ * colors the given rune indigo.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function indigo(rune) {
   return addColorFromHex(rune, '#3F51B5')
 }
 
 /**
- * colors the give given rune blue.
+ * colors the given rune blue.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function blue(rune) {
   return addColorFromHex(rune, '#2196F3')
 }
 
 /**
- * colors the give given rune green.
+ * colors the given rune green.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function green(rune) {
   return addColorFromHex(rune, '#4CAF50')
 }
 
 /**
- * colors the give given rune yellow.
+ * colors the given rune yellow.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function yellow(rune) {
   return addColorFromHex(rune, '#FFEB3B')
 }
 
 /**
- * colors the give given rune orange.
+ * colors the given rune orange.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function orange(rune) {
   return addColorFromHex(rune, '#FF9800')
 }
 
 /**
- * colors the give given rune brown.
+ * colors the given rune brown.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function brown(rune) {
   return addColorFromHex(rune, '#795548')
 }
 
 /**
- * colors the give given rune black.
+ * colors the given rune black.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function black(rune) {
   return addColorFromHex(rune, '#000000')
 }
 
 /**
- * colors the give given rune white.
+ * colors the given rune white.
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function white(rune) {
   return addColorFromHex(rune, '#FFFFFF')
