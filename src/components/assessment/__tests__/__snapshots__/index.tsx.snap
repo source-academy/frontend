@@ -86,7 +86,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
                                   <Connect(NotificationBadge) className=\\"badge\\" notifications={{...}} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotification={[Function]} />
+                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
@@ -198,7 +198,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
                                   <Connect(NotificationBadge) className=\\"badge\\" notifications={{...}} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotification={[Function]} />
+                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
@@ -312,7 +312,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
                                   <Connect(NotificationBadge) className=\\"badge\\" notifications={{...}} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotification={[Function]} />
+                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
@@ -426,7 +426,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
                                   <Connect(NotificationBadge) className=\\"badge\\" notifications={{...}} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotification={[Function]} />
+                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
@@ -664,7 +664,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
                                   <Connect(NotificationBadge) className=\\"badge\\" notifications={{...}} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotification={[Function]} />
+                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
@@ -804,7 +804,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
                                   <Connect(NotificationBadge) className=\\"badge\\" notifications={{...}} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotification={[Function]} />
+                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
@@ -918,7 +918,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
                                   <Connect(NotificationBadge) className=\\"badge\\" notifications={{...}} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotification={[Function]} />
+                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
@@ -1032,7 +1032,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
                                   <Connect(NotificationBadge) className=\\"badge\\" notifications={{...}} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotification={[Function]} />
+                                    <NotificationBadge className=\\"badge\\" notifications={{...}} large={true} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>

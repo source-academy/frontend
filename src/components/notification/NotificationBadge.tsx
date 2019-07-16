@@ -10,7 +10,7 @@ type OwnProps = {
 };
 
 export type DispatchProps = {
-  handleAcknowledgeNotification: (notificationIds: number[]) => void;
+  handleAcknowledgeNotifications: (notificationIds: number[]) => void;
 };
 
 const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
@@ -23,7 +23,7 @@ const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
   );
 
   const makeNotificationTag = (notification: Notification) => {
-    const onRemove = () => props.handleAcknowledgeNotification([notification.id]);
+    const onRemove = () => props.handleAcknowledgeNotifications([notification.id]);
 
     return (
       <Tag

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
-  acknowledgeNotification,
+  acknowledgeNotifications,
   fetchAssessmentOverviews,
   submitAssessment
 } from '../../actions/session';
@@ -27,7 +27,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state,
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleAcknowledgeNotifications: acknowledgeNotification,
+      handleAcknowledgeNotifications: acknowledgeNotifications,
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
       handleSubmitAssessment: submitAssessment
     },

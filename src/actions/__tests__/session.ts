@@ -3,7 +3,7 @@ import { IAssessment, IAssessmentOverview } from '../../components/assessment/as
 import { Notification } from '../../components/notification/notificationShape';
 import * as actionTypes from '../actionTypes';
 import {
-  acknowledgeNotification,
+  acknowledgeNotifications,
   fetchAnnouncements,
   fetchAssessment,
   fetchAssessmentOverviews,
@@ -27,10 +27,10 @@ import {
   updateNotifications
 } from '../session';
 
-test('acknowledgeNotification generates correct action object', () => {
+test('acknowledgeNotifications generates correct action object', () => {
   const notificationIds: number[] = [1, 2, 3];
 
-  const action = acknowledgeNotification(notificationIds);
+  const action = acknowledgeNotifications(notificationIds);
 
   expect(action).toEqual({
     type: actionTypes.ACKNOWLEDGE_NOTIFICATION,

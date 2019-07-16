@@ -1,13 +1,13 @@
 import { connect, Dispatch, MapDispatchToProps } from 'react-redux';
 
 import { bindActionCreators } from 'redux';
-import { acknowledgeNotification } from '../../actions';
+import { acknowledgeNotifications } from '../../actions';
 import NotificationBadge, { DispatchProps } from '../../components/notification/NotificationBadge';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleAcknowledgeNotification: acknowledgeNotification
+      handleAcknowledgeNotifications: acknowledgeNotifications
     },
     dispatch
   );

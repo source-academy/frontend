@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
-  acknowledgeNotification,
+  acknowledgeNotifications,
   fetchGradingOverviews,
   unsubmitSubmission
 } from '../../../actions/session';
@@ -17,7 +17,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleAcknowledgeNotifications: acknowledgeNotification,
+      handleAcknowledgeNotifications: acknowledgeNotifications,
       handleFetchGradingOverviews: fetchGradingOverviews,
       handleUnsubmitSubmission: unsubmitSubmission
     },

@@ -46,14 +46,14 @@ const avengerNotifications: Notification[] = [
   }
 ];
 
-const handleAcknowledgeNotification = (ids: number[]) => null;
+const handleAcknowledgeNotifications = (ids: number[]) => null;
 
 describe('Badge', () => {
   test('renders properly for students', () => {
     const tree = mount(
       <NotificationBadge
         notifications={studentNotifications}
-        handleAcknowledgeNotification={handleAcknowledgeNotification}
+        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
       />
     );
 
@@ -64,7 +64,7 @@ describe('Badge', () => {
     const tree = mount(
       <NotificationBadge
         notifications={avengerNotifications}
-        handleAcknowledgeNotification={handleAcknowledgeNotification}
+        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
       />
     );
 
@@ -75,7 +75,7 @@ describe('Badge', () => {
     const tree = mount(
       <NotificationBadge
         notifications={[]}
-        handleAcknowledgeNotification={handleAcknowledgeNotification}
+        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
       />
     );
 
