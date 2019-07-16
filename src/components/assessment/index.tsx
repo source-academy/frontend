@@ -38,7 +38,7 @@ import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace';
 import { controlButton } from '../commons';
 import ContentDisplay from '../commons/ContentDisplay';
 import Markdown from '../commons/Markdown';
-import { filterNotificationsBy } from '../notification/NotificationHelpers';
+import { filterNotificationsById } from '../notification/NotificationHelpers';
 import { Notification } from '../notification/notificationShape';
 
 const DEFAULT_QUESTION_ID: number = 0;
@@ -120,7 +120,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const isOverviewUpcoming = (overview: IAssessmentOverview) =>
         !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
       const upcomingCards = sortBy(this.props.assessmentOverviews.filter(isOverviewUpcoming), [
-        a => -filterNotificationsBy(this.props.notifications, { assessment_id: a.id }).length,
+        a => -filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length,
         a => -a.id
       ]).map((overview, index) =>
         makeOverviewCard(
@@ -129,7 +129,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           !this.props.isStudent,
           false,
-          filterNotificationsBy(this.props.notifications, { assessment_id: overview.id }),
+          filterNotificationsById(this.props.notifications, { assessment_id: overview.id }),
           this.props.handleAcknowledgeNotifications
         )
       );
@@ -142,7 +142,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const openedCards = sortBy(
         this.props.assessmentOverviews.filter(overview => isOverviewOpened(overview)),
         [
-          a => -filterNotificationsBy(this.props.notifications, { assessment_id: a.id }).length,
+          a => -filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length,
           a => -a.id
         ]
       ).map((overview, index) =>
@@ -152,7 +152,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           true,
           false,
-          filterNotificationsBy(this.props.notifications, { assessment_id: overview.id }),
+          filterNotificationsById(this.props.notifications, { assessment_id: overview.id }),
           this.props.handleAcknowledgeNotifications
         )
       );
@@ -163,7 +163,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
         ),
         [
-          a => -filterNotificationsBy(this.props.notifications, { assessment_id: a.id }).length,
+          a => -filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length,
           a => -a.id
         ]
       ).map((overview, index) =>
@@ -173,7 +173,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           true,
           true,
-          filterNotificationsBy(this.props.notifications, { assessment_id: overview.id }),
+          filterNotificationsById(this.props.notifications, { assessment_id: overview.id }),
           this.props.handleAcknowledgeNotifications
         )
       );

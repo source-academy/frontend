@@ -18,7 +18,7 @@ import { sortBy } from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { filterNotificationsBy } from '../../../components/notification/NotificationHelpers';
+import { filterNotificationsById } from '../../../components/notification/NotificationHelpers';
 import { Notification } from '../../../components/notification/notificationShape';
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
 import NotificationBadge from '../../../containers/notification/NotificationBadge';
@@ -344,7 +344,7 @@ class Grading extends React.Component<IGradingProps, State> {
     sortBy(
       this.props.gradingOverviews
         ? this.props.gradingOverviews!.map(o => {
-            (o as GradingOverviewWithNotifications).notifications = filterNotificationsBy(
+            (o as GradingOverviewWithNotifications).notifications = filterNotificationsById(
               this.props.notifications,
               { submission_id: o.submissionId }
             );
