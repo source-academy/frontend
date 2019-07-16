@@ -306,6 +306,11 @@ function* backendSaga(): SagaIterator {
     const newNotifications: Notification[] = notifications.filter(
       notification => !ids.includes(notification.id)
     );
+
+    /* 
+      For responsiveness, we update the store's state first, then
+      check if the server rejects the acknowledgement and undo the changes if necessary
+    */ 
     yield put(actions.updateNotifications(newNotifications));
 
     const resp: Response | null = yield postAcknowledgeNotification(tokens, ids);
