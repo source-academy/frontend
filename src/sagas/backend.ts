@@ -646,7 +646,7 @@ async function getNotifications(tokens: Tokens) {
         assessment_type: notification.assessment
           ? capitalise(notification.assessment.type)
           : undefined,
-        assesssment_title: notification.assessment ? notification.assessment.title : undefined,
+        assessment_title: notification.assessment ? notification.assessment.title : undefined,
         question_id: notification.question_id,
         submission_id: notification.submission_id
       } as Notification;

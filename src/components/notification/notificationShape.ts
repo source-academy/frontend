@@ -3,7 +3,7 @@ import { AssessmentCategory } from '../assessment/assessmentShape';
 export type Notification = {
   assessment_id?: number;
   assessment_type?: AssessmentCategory;
-  assesssment_title?: string;
+  assessment_title?: string;
   id: number;
   question_id?: number;
   submission_id?: number;

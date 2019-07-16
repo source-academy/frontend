@@ -157,7 +157,7 @@ export function* mockBackendSaga(): SagaIterator {
           type: 'new',
           assessment_id: 1,
           assessment_type: 'Mission',
-          assesssment_title: 'The Secret to Streams'
+          assessment_title: 'The Secret to Streams'
         },
         {
           id: 2,
@@ -171,35 +171,35 @@ export function* mockBackendSaga(): SagaIterator {
           type: 'autograded',
           assessment_id: 3,
           assessment_type: 'Mission',
-          assesssment_title: 'A Closed Mission'
+          assessment_title: 'A Closed Mission'
         },
         {
           id: 4,
           type: 'graded',
           assessment_id: 3,
           assessment_type: 'Mission',
-          assesssment_title: 'A Closed Mission'
+          assessment_title: 'A Closed Mission'
         },
         {
           id: 5,
           type: 'submitted',
           submission_id: 0,
           assessment_type: 'Mission',
-          assesssment_title: 'Mission 0'
+          assessment_title: 'Mission 0'
         },
         {
           id: 6,
           type: 'submitted',
           submission_id: 1,
           assessment_type: 'Mission',
-          assesssment_title: 'Mission 1'
+          assessment_title: 'Mission 1'
         },
         {
           id: 7,
           type: 'submitted',
           submission_id: 2,
           assessment_type: 'Mission',
-          assesssment_title: 'Mission 0'
+          assessment_title: 'Mission 0'
         }
       ] as Notification[])
     );
