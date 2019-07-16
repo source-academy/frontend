@@ -720,6 +720,7 @@ function hexToColor(hex) {
  * @param {number} r - red value (0.0-1.0)
  * @param {number} g - green value (0.0-1.0)
  * @param {number} b - blue value (0.0-1.0)
+ * @returns {Rune} the colored Rune
  */
 function color(rune, r, g, b) {
   var wrapper = new Rune()
@@ -741,6 +742,7 @@ function addColorFromHex(rune, hex) {
  * The color is chosen randomly from the following nine 
  * colors: red, pink, purple, indigo, blue, green, yellow, orange, brown
  * @param {Rune} rune - the rune to color
+ * @returns {Rune} the colored Rune
  */
 function random_color(rune) {
   var wrapper = new Rune()
