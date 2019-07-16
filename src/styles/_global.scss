@@ -17,3 +17,13 @@ $images-path: '../assets';
   top: -15px;
   z-index: 3;
 }
+
+.#{$ns}-overlay {
+  .#{$ns}-popover-content {
+    .badge-tag {
+      background-color: transparent;
+      margin-left: 0.4rem;
+      margin-right: 0.4rem;
+    }
+  }
+}
