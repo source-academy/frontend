@@ -28,7 +28,7 @@ class ChatApp extends React.Component {
   }
 
   componentDidMount() {
-    var chatManager;
+    let chatManager;
     try {
       chatManager = new ChatManager({
         instanceLocator: INSTANCE_LOCATOR,
