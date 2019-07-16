@@ -10,7 +10,7 @@ export type Notification = {
   type: NotificationType;
 };
 
-enum NotificationTypes {
+export enum NotificationTypes {
   new = 'new',
   deadline = 'deadline',
   autograded = 'autograded',

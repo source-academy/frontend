@@ -1,6 +1,6 @@
 import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
 import * as React from 'react';
-import { Notification, NotificationType } from './notificationShape';
+import { Notification, NotificationType, NotificationTypes } from './notificationShape';
 
 type OwnProps = {
   className?: string;
@@ -55,19 +55,19 @@ const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
 
 const makeNotificationMessage = (type: NotificationType) => {
   switch (type) {
-    case 'new':
+    case NotificationTypes.new:
       return 'This assessment is new.';
-    case 'deadline':
+    case NotificationTypes.deadline:
       return 'This assessment is closing soon.';
-    case 'autograded':
+    case NotificationTypes.autograded:
       return 'This assessment has been autograded.';
-    case 'submitted':
+    case NotificationTypes.submitted:
       return 'This submission is new.';
-    case 'unsubmitted':
+    case NotificationTypes.unsubmitted:
       return 'This assessment has been unsubmitted.';
-    case 'graded':
+    case NotificationTypes.graded:
       return 'This assessment has been manually graded.';
-    case 'new_message':
+    case NotificationTypes.new_message:
       return 'There are new messages.';
     default:
       return 'Unknown notification';
