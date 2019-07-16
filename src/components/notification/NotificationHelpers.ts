@@ -14,8 +14,8 @@ export function filterNotificationsById(
 ) {
   return notifications.filter(
     n =>
-      (opts.assessment_id !== undefined ? n.assessment_id === opts.assessment_id : true) &&
-      (opts.submission_id !== undefined ? n.submission_id === opts.submission_id : true)
+      (opts.assessment_id === undefined || n.assessment_id === opts.assessment_id) &&
+      (opts.submission_id === undefined || n.submission_id === opts.submission_id)
   );
 }
 

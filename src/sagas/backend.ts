@@ -648,13 +648,12 @@ async function getNotifications(tokens: Tokens) {
       return {
         id: notification.id,
         type: notification.type,
-        assessment_id: notification.assessment_id,
+        assessment_id: notification.assessment_id || undefined,
         assessment_type: notification.assessment
           ? capitalise(notification.assessment.type)
           : undefined,
         assessment_title: notification.assessment ? notification.assessment.title : undefined,
-        question_id: notification.question_id,
-        submission_id: notification.submission_id
+        submission_id: notification.submission_id || undefined
       } as Notification;
     });
   }

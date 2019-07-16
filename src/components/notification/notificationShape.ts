@@ -5,7 +5,6 @@ export type Notification = {
   assessment_type?: AssessmentCategory;
   assessment_title?: string;
   id: number;
-  question_id?: number;
   submission_id?: number;
   type: NotificationType;
 };

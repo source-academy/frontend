@@ -24,6 +24,8 @@ export type StateProps = {
 
 const NavigationBar: React.SFC<NavigationBarProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
+    {// tslint:disable-next-line
+    props.notifications.forEach(n => console.log(n.submission_id))}
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
         to={`/academy/${assessmentCategoryLink(AssessmentCategories.Mission)}`}
