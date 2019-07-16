@@ -164,6 +164,9 @@ class Grading extends React.Component<IGradingProps, State> {
       {
         headerName: 'Edit',
         cellRendererFramework: EditGradingCell,
+        cellRendererParams: {
+          handleAcknowledgeNotifications: this.props.handleAcknowledgeNotifications
+        },
         width: 65,
         suppressFilter: true,
         suppressSorting: true,
