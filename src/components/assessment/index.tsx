@@ -119,10 +119,17 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       /** Upcoming assessments, that are not released yet. */
       const isOverviewUpcoming = (overview: IAssessmentOverview) =>
         !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
-      const upcomingCards = sortBy(this.props.assessmentOverviews.filter(isOverviewUpcoming), [
-        a => -filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length,
-        a => -a.id
-      ]).map((overview, index) =>
+      const sortAssessments = (assessments: IAssessmentOverview[]) =>
+        sortBy(assessments, [
+          a =>
+            filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length > 0
+              ? -1
+              : 0,
+          a => -a.id
+        ]);
+      const upcomingCards = sortAssessments(
+        this.props.assessmentOverviews.filter(isOverviewUpcoming)
+      ).map((overview, index) =>
         makeOverviewCard(
           overview,
           index,
@@ -139,12 +146,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         !beforeNow(overview.closeAt) &&
         beforeNow(overview.openAt) &&
         overview.status !== AssessmentStatuses.submitted;
-      const openedCards = sortBy(
-        this.props.assessmentOverviews.filter(overview => isOverviewOpened(overview)),
-        [
-          a => -filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length,
-          a => -a.id
-        ]
+      const openedCards = sortAssessments(
+        this.props.assessmentOverviews.filter(overview => isOverviewOpened(overview))
       ).map((overview, index) =>
         makeOverviewCard(
           overview,
@@ -158,14 +161,10 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       );
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
-      const closedCards = sortBy(
+      const closedCards = sortAssessments(
         this.props.assessmentOverviews.filter(
           overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
-        ),
-        [
-          a => -filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length,
-          a => -a.id
-        ]
+        )
       ).map((overview, index) =>
         makeOverviewCard(
           overview,
