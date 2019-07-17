@@ -87,6 +87,10 @@
     display: flex;
     margin-bottom: 2px;
 
+    .#{$ns}-icon {
+      vertical-align: baseline;
+    }
+
     .#{$ns}-text-overflow-ellipsis {
       /* Pushes button to the right of container */
       flex-grow: 1;
@@ -189,8 +193,13 @@
   }
 }
 
+/* Increase default margin of bp3's Divider for greater vertical spacing */
+.#{$ns}-divider {
+  margin: 12px 0 12px 0;
+}
+
 .Grading {
-  /* To show the table borders that get cut out by a Card  */
+  /* To show the table borders that get cut out by a Card */
   padding: 1px;
 
   /** 
@@ -200,34 +209,71 @@
    */
   .ag-body-container {
     display: block;
+    /* Override ag-grid style to suppress unnecessary vertical scrollbar (bugfix) */
+    margin-bottom: 0;
   }
-  .ag-grid-export-button {
-    margin-top: 20px;
+
+  .#{$ns}-icon {
+    /* Vertically centre appearance of blueprintjs icons in ag-grid */
+    margin-top: 6px;
+  }
+
+  .ag-paging-panel {
+    border-top: none;
+    font-weight: bold;
+    padding: 10px;
+  }
+
+  :focus {
+    /* Disable rendering blue border when a sub-component in grid is in focus */
+    outline: none;
   }
 }
 
-.ag-header-cell-label {
-  justify-content: center;
-  font-weight: bold;
-  padding-left: 15px;
+.ag-grid-controls {
+  display: flex;
+  justify-content: space-between;
+
+  .#{$ns}-icon {
+    /* Remove unnecessary margin to right when button text is hidden */
+    margin-right: 0;
+  }
+
+  .ag-grid-button-text {
+    margin-left: 7px;
+  }
+}
+
+.ag-header-cell.ag-header-cell.ag-header-cell {
+  /* Chain selectors for increased specificity: reduce internal padding of header cells */
+  padding-left: 0.375em;
+  padding-right: 0.375em;
+
+  .ag-header-cell-label {
+    /* Increase font size of headers; pad left to centre with filter icon */
+    font-size: 1.1em;
+    font-weight: bold;
+    justify-content: center;
+    padding-left: 1em;
+  }
 }
 
 .ag-cell {
-  padding-top: 4px;
-  justify-content: center;
+  font-size: 1.1em;
+  /* Override to reduce ag-grid default padding */
+  padding-left: 0.375em !important;
+  padding-right: 0.375em !important;
   text-align: center;
+}
+
+.ag-cell-focus,
+.ag-cell-no-focus {
+  /* Suppress blue border around focused cells from ag-grid stylesheet */
+  border: none !important;
 }
 
 #filterBar {
   width: 400px;
-}
-
-.ag-paging-panel {
-  padding: 20px;
-}
-
-.checkboxPanel {
-  text-align: left;
 }
 
 .md th,

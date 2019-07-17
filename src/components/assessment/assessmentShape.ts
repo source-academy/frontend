@@ -37,7 +37,8 @@ export type AssessmentStatus = keyof typeof AssessmentStatuses;
 export enum GradingStatuses {
   none = 'none',
   grading = 'grading',
-  graded = 'graded'
+  graded = 'graded',
+  excluded = 'excluded'
 }
 
 export type GradingStatus = keyof typeof GradingStatuses;

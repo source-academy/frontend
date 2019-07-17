@@ -1,5 +1,8 @@
+import { Card, Elevation } from '@blueprintjs/core';
 import { H3, H5 } from '@blueprintjs/core';
 import * as React from 'react';
+
+import { LINKS } from '../../utils/constants';
 
 const dot = <span className="dot">&bull;</span>;
 
@@ -7,7 +10,7 @@ class ContributorsDetails extends React.Component {
   public render() {
     return (
       <div className="outsideDetails">
-        <div className="contributorsDetails">
+        <Card className="contributorsDetails" elevation={Elevation.ONE}>
           <H3>The people behind Source Academy</H3>
           <p>
             The <i>Source Academy</i> is designed by and for students of the National University of
@@ -83,11 +86,11 @@ class ContributorsDetails extends React.Component {
               </strong>
             </H5>
             <p>
-              Here goes the full list of contributors to the Source Academy with their pull requests
-              in the repos: cadet, cadet-frontend, grader, js-slang, sharedb-ace-backend
+              Below are all contributors to the{' '}
+              <a href={LINKS.GITHUB_ORG}>Github repositories of the Source Academy</a>.
             </p>
           </div>
-        </div>
+        </Card>
       </div>
     );
   }

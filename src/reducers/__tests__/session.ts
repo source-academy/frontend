@@ -391,7 +391,10 @@ const gradingOverviewTest1: GradingOverview[] = [
     studentName: 'test student',
     submissionId: 1,
     submissionStatus: 'attempting',
-    groupName: 'group'
+    groupName: 'group',
+    gradingStatus: 'excluded',
+    questionCount: 0,
+    gradedCount: 6
   }
 ];
 
@@ -413,7 +416,10 @@ const gradingOverviewTest2: GradingOverview[] = [
     studentName: 'another student',
     submissionId: 2,
     submissionStatus: 'attempted',
-    groupName: 'another group'
+    groupName: 'another group',
+    gradingStatus: 'excluded',
+    questionCount: 6,
+    gradedCount: 0
   }
 ];
 
