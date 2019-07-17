@@ -4,17 +4,17 @@ import * as React from 'react';
 /**
  * @property animate Set this to false to disable the movement
  * of the selected tab indicator.
- * 
+ *
  * @property defaultSelectedTabId The id of a SideContentTab to be
  *  selected initially when the SideContent component is mounted.
- * 
+ *
  * @property onChange A function that is called whenever the
  * active tab is changed by the user.
- * 
+ *
  * @property tabs An array of SideContentTabs.
  *  The tabs will be rendered in order of the array.
  *  If this array is empty, no tabs will be rendered.
- * 
+ *
  * @property renderActiveTabPanelOnly Set this property to
  * true to enable unmounting of tab panels whenever tabs are
  * switched. If it is left undefined, the tab panels will all
@@ -31,19 +31,19 @@ export type SideContentProps = {
 
 /**
  * @property label A string that will appear as the tooltip.
- * 
+ *
  * @property iconName BlueprintJS IconName element, used to render the
  *   icon which will be displayed over the SideContent panel.
- * 
+ *
  * @property body The element to be rendered in the SideContent panel
  *  when the tab is selected.
- * 
+ *
  * @property id A string/number that will be used as the tab ID and key.
  *  If id is undefined, id will be set to label by the renderTab function.
- * 
+ *
  * @property disabled Set this property to true to disable a tab. The
  * corresponding tab label will still be rendered on hover, but the
- * tab will be greyed out and cannot be selected. 
+ * tab will be greyed out and cannot be selected.
  */
 export type SideContentTab = {
   label: string;
@@ -57,7 +57,11 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
   public render() {
     const tabs = this.props.tabs.map(this.renderTab);
 
-    const changeTabsCallback = (newTabId: TabId, prevTabId: TabId, event: React.MouseEvent<HTMLElement>): void => {
+    const changeTabsCallback = (
+      newTabId: TabId,
+      prevTabId: TabId,
+      event: React.MouseEvent<HTMLElement>
+    ): void => {
       if (this.props.onChange === undefined) {
         this.resetAlert(prevTabId);
       } else {
@@ -70,13 +74,13 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
       <div className="side-content">
         <Card>
           <div className="side-content-tabs">
-            <Tabs 
+            <Tabs
               id="side-content-tabs"
               onChange={changeTabsCallback}
               defaultSelectedTabId={this.props.defaultSelectedTabId}
               renderActiveTabPanelOnly={this.props.renderActiveTabPanelOnly}
             >
-                {tabs}
+              {tabs}
             </Tabs>
           </div>
         </Card>
@@ -88,18 +92,16 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
     // This variable will be the height and width of the BlueprintJS
     // icon (in pixels) when rendered by a web browser.
     const size = 25;
-    
+
     const tabId = tab.id === undefined ? tab.label : tab.id;
     const tabTitle: JSX.Element = (
-      <Tooltip content={tab.label} >
+      <Tooltip content={tab.label}>
         <div className="side-content-tooltip" id={this.generateIconId(tabId)}>
           <Icon icon={tab.iconName} iconSize={size} />
         </div>
       </Tooltip>
     );
-    const tabPanel: JSX.Element = (
-      <div className="side-content-text">{tab.body}</div>
-    );
+    const tabPanel: JSX.Element = <div className="side-content-text">{tab.body}</div>;
 
     return (
       <Tab
@@ -118,7 +120,7 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
   private generateIconId(tabId: TabId) {
     return `${tabId}-icon`;
   }
-  
+
   // Function to remove the "side-content-tab-alert" class that makes the
   // tabs flash. This function is to be run when the tabs are changed.
   //
@@ -130,7 +132,7 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
     // Remove alert from previous tab (the new selected tab will still have
     // the "side-content-tab-alert" class, but the CSS makes it invisible)
     if (icon) {
-      icon.classList.remove("side-content-tab-alert");
+      icon.classList.remove('side-content-tab-alert');
     }
   };
 }

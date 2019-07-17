@@ -31,9 +31,9 @@ export type QuestionEditorId = typeof questionEditorPaths[number];
 const QuestionEditorSelect = Select.ofType<QuestionEditor>();
 
 export type QuestionEditor = {
-  label: string,
-  icon: IconName,
-  id: QuestionEditorId
+  label: string;
+  icon: IconName;
+  id: QuestionEditorId;
 };
 
 const questionEditors: QuestionEditor[] = [
@@ -62,7 +62,10 @@ const questionEditors: QuestionEditor[] = [
 /*
  * activeEditor is the default editor to show initially
  */
-export class ProgrammingQuestionTemplateTab extends React.Component<IQuestionEditorProps, IQuestionEditorState> {
+export class ProgrammingQuestionTemplateTab extends React.Component<
+  IQuestionEditorProps,
+  IQuestionEditorState
+> {
   public constructor(props: IQuestionEditorProps) {
     super(props);
     this.state = {
@@ -102,28 +105,34 @@ export class ProgrammingQuestionTemplateTab extends React.Component<IQuestionEdi
     );
 
     const menuRenderer: ItemRenderer<QuestionEditor> = (editor, { handleClick }) => (
-      <MenuItem active={false} key={editor.id} onClick={handleClick} text={editor.label} icon={editor.icon} />
+      <MenuItem
+        active={false}
+        key={editor.id}
+        onClick={handleClick}
+        text={editor.label}
+        icon={editor.icon}
+      />
     );
 
     const editorSelect = (
-        currentEditor: QuestionEditor,
-        handleSelect: (i: QuestionEditor) => void
-      ) => (
-        <QuestionEditorSelect
+      currentEditor: QuestionEditor,
+      handleSelect: (i: QuestionEditor) => void
+    ) => (
+      <QuestionEditorSelect
+        className={Classes.MINIMAL}
+        items={questionEditors}
+        itemRenderer={menuRenderer}
+        onItemSelect={handleSelect}
+        filterable={false}
+      >
+        <Button
           className={Classes.MINIMAL}
-          items={questionEditors}
-          itemRenderer={menuRenderer}
-          onItemSelect={handleSelect}
-          filterable={false}
-        >
-          <Button
-            className={Classes.MINIMAL}
-            text={currentEditor.label}
-            icon={IconNames.EDIT}
-            rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
-          />
-        </QuestionEditorSelect>
-      );
+          text={currentEditor.label}
+          icon={IconNames.EDIT}
+          rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+        />
+      </QuestionEditorSelect>
+    );
 
     return (
       <div className="side-content">
@@ -190,10 +199,10 @@ export class ProgrammingQuestionTemplateTab extends React.Component<IQuestionEdi
         this.props.updateAssessment(assessmentVal);
       }
 
-      if (this.state.activeEditor.id === "prepend") {
+      if (this.state.activeEditor.id === 'prepend') {
         const editorPrepend = this.state.templateValue;
         this.props.handleUpdateWorkspace({ editorPrepend });
-      } else if (this.state.activeEditor.id === "postpend") {
+      } else if (this.state.activeEditor.id === 'postpend') {
         const editorPostpend = this.state.templateValue;
         this.props.handleUpdateWorkspace({ editorPostpend });
       }

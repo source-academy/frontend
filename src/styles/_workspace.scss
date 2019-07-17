@@ -168,7 +168,7 @@ $code-color-error: #ff4444;
     height: 0.6rem;
     flex: initial;
   }
-  
+
   .side-content {
     flex: 1 1 auto;
     height: 100%;
@@ -184,10 +184,10 @@ $code-color-error: #ff4444;
       /* Fix card not wrapping content on OSX, Chrome */
       overflow-y: auto;
       padding: 0.4rem 0.6rem 0.4rem 0.6rem;
-      
+
       .#{$ns}-tabs {
         width: 100%;
-      } 
+      }
     }
   }
 
@@ -221,7 +221,7 @@ $code-color-error: #ff4444;
   .side-content-tab {
     // Set colour of icons in blueprintjs tabs
     color: #a7b6c2;
-    &[aria-selected="true"]{
+    &[aria-selected='true'] {
       .side-content-tooltip {
         background-color: #495a6b;
 
@@ -234,7 +234,7 @@ $code-color-error: #ff4444;
       }
     }
 
-    &[aria-disabled="true"]{
+    &[aria-disabled='true'] {
       .side-content-tooltip {
         // Set tooltip colour to always be the same as the background
         background-color: inherit;
@@ -261,7 +261,6 @@ $code-color-error: #ff4444;
     &:hover {
       background-color: #3a4c5d;
     }
-
 
     &.side-content-tab-alert {
       -webkit-animation: alert 1s infinite;
