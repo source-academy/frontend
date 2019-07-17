@@ -1,7 +1,6 @@
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_ACTIVE_TAB,
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
@@ -220,25 +219,6 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
             browseIndex: 1,
             originalValue: replValue
           }
-        }
-      });
-    });
-  });
-});
-
-describe('CHANGE_ACTIVE_TAB', () => {
-  test('sets sideContentActiveTab correctly', () => {
-    const activeTab = 2;
-    const actions: IAction[] = generateActions(CHANGE_ACTIVE_TAB, { activeTab });
-
-    actions.forEach(action => {
-      const result = reducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sideContentActiveTab: activeTab
         }
       });
     });

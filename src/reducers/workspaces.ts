@@ -4,7 +4,6 @@ import { ITestcase } from 'src/components/assessment/assessmentShape';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_ACTIVE_TAB,
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_PLAYGROUND_EXTERNAL,
@@ -149,14 +148,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         };
       }
-    case CHANGE_ACTIVE_TAB:
-      return {
-        ...state,
-        [location]: {
-          ...state[location],
-          sideContentActiveTab: action.payload.activeTab
-        }
-      };
     case CHANGE_EDITOR_HEIGHT:
       return {
         ...state,

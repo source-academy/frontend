@@ -12,7 +12,6 @@ const baseProps = {
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  activeTab: 0,
   editorSessionId: '',
   editorWidth: '50%',
   isEditorAutorun: false,

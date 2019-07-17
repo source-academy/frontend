@@ -26,7 +26,6 @@ import { Grading, IAnsweredQuestion } from './gradingShape';
 export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
-  activeTab: number;
   autogradingResults: AutogradingResult[];
   grading?: Grading;
   editorPrepend: string;
@@ -56,7 +55,6 @@ export type OwnProps = {
 export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
@@ -245,12 +243,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     props: GradingWorkspaceProps,
     questionId: number
   ) => ({
-    activeTab: props.activeTab,
-    handleChangeActiveTab: props.handleChangeActiveTab,
     tabs: [
       {
         label: `Grading: Question ${questionId}`,
-        icon: IconNames.TICK,
+        iconName: IconNames.TICK,
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
@@ -265,32 +261,36 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             maxXp={props.grading![questionId].question.maxXp}
             studentName={props.grading![questionId].student.name}
           />
-        )
+        ),
+        id: 'grading'
       },
       {
         label: `Task ${questionId + 1}`,
-        icon: IconNames.NINJA,
-        body: <Markdown content={props.grading![questionId].question.content} />
+        iconName: IconNames.NINJA,
+        body: <Markdown content={props.grading![questionId].question.content} />,
+        id: 'question_overview'
       },
       {
         label: `Chat`,
-        icon: IconNames.CHAT,
+        iconName: IconNames.CHAT,
         body: USE_CHATKIT ? (
           <ChatApp roomId={props.grading![questionId].grade.comment} />
         ) : (
           <span>ChatKit disabled.</span>
-        )
+        ),
+        id: 'chat'
       },
       {
         label: `Autograder`,
-        icon: IconNames.AIRPLANE,
+        iconName: IconNames.AIRPLANE,
         body: (
           <Autograder
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
-        )
+        ),
+        id: 'autograder'
       }
     ]
   });

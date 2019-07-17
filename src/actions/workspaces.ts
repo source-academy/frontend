@@ -36,14 +36,6 @@ export const browseReplHistoryUp: ActionCreator<actionTypes.IAction> = (
   payload: { workspaceLocation }
 });
 
-export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
-  activeTab: number,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHANGE_ACTIVE_TAB,
-  payload: { activeTab, workspaceLocation }
-});
-
 export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
   newExternal: string
 ) => ({

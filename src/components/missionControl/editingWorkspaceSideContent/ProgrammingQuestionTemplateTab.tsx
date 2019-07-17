@@ -1,15 +1,15 @@
-// import { Switch } from '@blueprintjs/core';
+import { Button, Card, Classes, Divider, IconName, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import { IWorkspaceState } from '../../../reducers/states';
 import { IAssessment } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
-import SideContent from '../../workspace/side-content';
 import { assignToPath, getValueFromPath } from './';
 
-interface IProps {
+interface IQuestionEditorProps {
   assessment: IAssessment;
   editorValue: string | null;
   questionId: number;
@@ -18,19 +18,55 @@ interface IProps {
   handleUpdateWorkspace: (options: Partial<IWorkspaceState>) => void;
 }
 
-interface IState {
-  activeTab: number;
+interface IQuestionEditorState {
+  activeEditor: QuestionEditor;
   templateValue: string;
   templateFocused: boolean;
 }
 
-const tabPaths = ['prepend', 'postpend', 'solutionTemplate', 'answer'];
+const questionEditorPaths = ['prepend', 'postpend', 'solutionTemplate', 'answer'] as const;
 
-export class ProgrammingQuestionTemplateTab extends React.Component<IProps, IState> {
-  public constructor(props: IProps) {
+export type QuestionEditorId = typeof questionEditorPaths[number];
+
+const QuestionEditorSelect = Select.ofType<QuestionEditor>();
+
+export type QuestionEditor = {
+  label: string,
+  icon: IconName,
+  id: QuestionEditorId
+};
+
+const questionEditors: QuestionEditor[] = [
+  {
+    label: 'Prepend',
+    icon: IconNames.CHEVRON_UP,
+    id: 'prepend'
+  },
+  {
+    label: 'Postpend',
+    icon: IconNames.CHEVRON_DOWN,
+    id: 'postpend'
+  },
+  {
+    label: 'Solution Template',
+    icon: IconNames.MANUAL,
+    id: 'solutionTemplate'
+  },
+  {
+    label: 'Suggested Answer',
+    icon: IconNames.TICK,
+    id: 'answer'
+  }
+];
+
+/*
+ * activeEditor is the default editor to show initially
+ */
+export class ProgrammingQuestionTemplateTab extends React.Component<IQuestionEditorProps, IQuestionEditorState> {
+  public constructor(props: IQuestionEditorProps) {
     super(props);
     this.state = {
-      activeTab: 0,
+      activeEditor: questionEditors[0],
       templateValue: '',
       templateFocused: false
     };
@@ -42,7 +78,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<IProps, ISta
 
   private programmingTab = () => {
     const qnPath = ['questions', this.props.questionId];
-    const path = qnPath.concat([tabPaths[this.state.activeTab]]);
+    const path = qnPath.concat(this.state.activeEditor.id);
 
     const copyFromEditorButton = controlButton(
       'Copy from Editor',
@@ -56,45 +92,47 @@ export class ProgrammingQuestionTemplateTab extends React.Component<IProps, ISta
       this.handleCopyToEditor(path)
     );
 
-    const tabComponent = (
+    const editorPanel = (
       <div>
         {copyFromEditorButton}
         {copyToEditorButton}
-        <br />
-        <br />
+        <Divider />
         {this.editor(path)}
       </div>
     );
 
-    const tabs = [
-      {
-        label: `Prepend`,
-        icon: IconNames.CHEVRON_UP,
-        body: tabComponent
-      },
-      {
-        label: `Postpend`,
-        icon: IconNames.CHEVRON_DOWN,
-        body: tabComponent
-      },
-      {
-        label: `Solution Template`,
-        icon: IconNames.MANUAL,
-        body: tabComponent
-      },
-      {
-        label: `Suggested Answer`,
-        icon: IconNames.TICK,
-        body: tabComponent
-      }
-    ];
+    const menuRenderer: ItemRenderer<QuestionEditor> = (editor, { handleClick }) => (
+      <MenuItem active={false} key={editor.id} onClick={handleClick} text={editor.label} icon={editor.icon} />
+    );
+
+    const editorSelect = (
+        currentEditor: QuestionEditor,
+        handleSelect: (i: QuestionEditor) => void
+      ) => (
+        <QuestionEditorSelect
+          className={Classes.MINIMAL}
+          items={questionEditors}
+          itemRenderer={menuRenderer}
+          onItemSelect={handleSelect}
+          filterable={false}
+        >
+          <Button
+            className={Classes.MINIMAL}
+            text={currentEditor.label}
+            icon={IconNames.EDIT}
+            rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+          />
+        </QuestionEditorSelect>
+      );
 
     return (
-      <SideContent
-        activeTab={this.state.activeTab}
-        handleChangeActiveTab={this.handleChangeActiveTab}
-        tabs={tabs}
-      />
+      <div className="side-content">
+        <Card>
+          {editorSelect(this.state.activeEditor, this.handleChangeActiveEditor)}
+          <Divider />
+          <div className="side-content-text">{editorPanel}</div>
+        </Card>
+      </div>
     );
   };
 
@@ -122,9 +160,9 @@ export class ProgrammingQuestionTemplateTab extends React.Component<IProps, ISta
     );
   };
 
-  private handleChangeActiveTab = (tab: number) => {
+  private handleChangeActiveEditor = (editor: QuestionEditor) => {
     this.setState({
-      activeTab: tab
+      activeEditor: editor
     });
   };
 
@@ -152,10 +190,10 @@ export class ProgrammingQuestionTemplateTab extends React.Component<IProps, ISta
         this.props.updateAssessment(assessmentVal);
       }
 
-      if (this.state.activeTab === 0) {
+      if (this.state.activeEditor.id === "prepend") {
         const editorPrepend = this.state.templateValue;
         this.props.handleUpdateWorkspace({ editorPrepend });
-      } else if (this.state.activeTab === 1) {
+      } else if (this.state.activeEditor.id === "postpend") {
         const editorPostpend = this.state.templateValue;
         this.props.handleUpdateWorkspace({ editorPostpend });
       }

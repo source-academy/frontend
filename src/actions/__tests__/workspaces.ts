@@ -6,7 +6,6 @@ import {
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeActiveTab,
   changeEditorHeight,
   changeEditorWidth,
   changePlaygroundExternal,
@@ -52,18 +51,6 @@ test('browseReplHistoryUp generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.BROWSE_REPL_HISTORY_UP,
     payload: { workspaceLocation: gradingWorkspace }
-  });
-});
-
-test('changeActiveTab generates correct action object', () => {
-  const activeTab = 3;
-  const action = changeActiveTab(activeTab, playgroundWorkspace);
-  expect(action).toEqual({
-    type: actionTypes.CHANGE_ACTIVE_TAB,
-    payload: {
-      activeTab,
-      workspaceLocation: playgroundWorkspace
-    }
   });
 });
 
