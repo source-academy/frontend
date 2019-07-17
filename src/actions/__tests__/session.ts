@@ -139,15 +139,13 @@ test('submitAssessment generates correct action object', () => {
 test('submitGrading generates correct action object with default values', () => {
   const submissionId = 8;
   const questionId = 2;
-  const roomId = 'test roomId here';
 
-  const action = submitGrading(submissionId, questionId, roomId);
+  const action = submitGrading(submissionId, questionId);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      roomId,
       gradeAdjustment: 0,
       xpAdjustment: 0
     }
@@ -157,16 +155,14 @@ test('submitGrading generates correct action object with default values', () => 
 test('submitGrading generates correct action object', () => {
   const submissionId = 10;
   const questionId = 3;
-  const roomId = 'another test roomId here';
   const gradeAdjustment = 10;
   const xpAdjustment = 100;
-  const action = submitGrading(submissionId, questionId, roomId, gradeAdjustment, xpAdjustment);
+  const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      roomId,
       gradeAdjustment,
       xpAdjustment
     }
