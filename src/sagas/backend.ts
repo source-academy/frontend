@@ -236,7 +236,6 @@ function* backendSaga(): SagaIterator {
     const {
       submissionId,
       questionId,
-      roomId,
       gradeAdjustment,
       xpAdjustment
     } = (action as actionTypes.IAction).payload;
@@ -247,7 +246,6 @@ function* backendSaga(): SagaIterator {
     const resp = yield postGrading(
       submissionId,
       questionId,
-      roomId,
       gradeAdjustment,
       xpAdjustment,
       tokens
@@ -531,7 +529,6 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
 const postGrading = async (
   submissionId: number,
   questionId: number,
-  roomId: string,
   gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens
@@ -540,7 +537,6 @@ const postGrading = async (
     accessToken: tokens.accessToken,
     body: {
       grading: {
-        roomId: `${roomId}`,
         adjustment: gradeAdjustment,
         xpAdjustment
       }
