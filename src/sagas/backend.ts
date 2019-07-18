@@ -22,6 +22,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import { store } from '../createStore';
 import { IState, Role } from '../reducers/states';
 import { castLibrary } from '../utils/castBackend';
 import { BACKEND_URL } from '../utils/constants';
@@ -610,7 +611,7 @@ async function request(
       return response;
     } else if (opts.shouldRefresh && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
-      put(actions.setTokens(newTokens));
+      store.dispatch(actions.setTokens(newTokens));
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,
@@ -626,7 +627,7 @@ async function request(
       throw new Error('API call failed or got non-OK response');
     }
   } catch (e) {
-    put(actions.logOut());
+    store.dispatch(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
     return null;
   }
