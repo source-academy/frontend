@@ -49,11 +49,16 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
   if (scaleMode == 'fit') {
     var center = [(min_x + max_x) / 2, (min_y + max_y) / 2]
     var scale = Math.max(max_x - min_x, max_y - min_y)
-    mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 0)) // use 2 because the value is in [-1, 1]
+    scale = scale === 0 ? 1 : scale;
+    mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 0))
+                                     // use 2 because the value is in [-1, 1]
     mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
   } else if (scaleMode == 'stretch') {
     var center = [(min_x + max_x) / 2, (min_y + max_y) / 2]
-    mat4.scale(transMat, transMat, vec3.fromValues(2 / (max_x - min_x), 2 / (max_y - min_y), 0)) // use 2 because the value is in [-1, 1]
+    var x_scale = max_x === min_x ? 1 : (max_x - min_x)
+    var y_scale = max_y === min_y ? 1 : (max_y - min_y)
+    mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 0))
+                                    // use 2 because the value is in [-1, 1]
     mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
   } else {
     // do nothing for normal situations
@@ -126,8 +131,9 @@ function draw_points_squeezed_to_window(num) {
  * and connecting each pair with a line. 
  * When a program evaluates to a Drawing, the Source system
  * displays it graphically, in a window, instead of textually.
- * The Drawing is squeezed such that all its parts are shown in the
- * window.
+ * The Drawing is resized proportionally such that it 
+ * is shown as big as possible, and still fits entirely 
+ * inside the window.
  * @param {number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
@@ -145,8 +151,9 @@ function draw_connected_squeezed_to_window(num) {
  * and connecting each pair with a line. 
  * When a program evaluates to a Drawing, the Source system
  * displays it graphically, in a window, instead of textually.
- * The Drawing is stretched or shrunk 
- * to show the full curve and maximize its width and height.
+ * The Drawing is stretched or shrunk
+ * to show the full curve
+ * and maximize its width and height, with some padding.
  * @param {number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
@@ -165,7 +172,7 @@ function draw_connected_full_view(num) {
  * When a program evaluates to a Drawing, the Source system
  * displays it graphically, in a window, instead of textually.
  * The Drawing is scaled proportionally to show the full curve
- * and maximize its size.
+ * and maximize its size, with some padding.
  * @param {number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
