@@ -470,8 +470,8 @@ const makeOverviewCardButton = (
   let label: string;
   switch (overview.status) {
     case AssessmentStatuses.not_attempted:
-      icon = IconNames.STEP_FORWARD;
-      label = overview.story ? 'Skip Story & Attempt' : 'Attempt';
+      icon = IconNames.PLAY;
+      label = 'Attempt';
       break;
     case AssessmentStatuses.attempting:
       icon = IconNames.PLAY;
