@@ -92,7 +92,7 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
   private renderTab = (tab: SideContentTab) => {
     // This variable will be the height and width of the BlueprintJS
     // icon (in pixels) when rendered by a web browser.
-    const size = 25;
+    const size = 20;
 
     const tabId = tab.id === undefined ? tab.label : tab.id;
     const tabTitle: JSX.Element = (
