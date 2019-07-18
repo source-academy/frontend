@@ -300,6 +300,11 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
     const ids = (action as actionTypes.IAction).payload as number[];
+
+    if (ids.length === 0) {
+      return;
+    }
+
     const notifications: Notification[] = yield select(
       (state: IState) => state.session.notifications
     );
