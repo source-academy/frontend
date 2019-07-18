@@ -3,7 +3,7 @@ import * as React from 'react';
 
 /**
  * @property animate Set this to false to disable the movement
- * of the selected tab indicator.
+ * of the selected tab indicator. Default value: true.
  *
  * @property defaultSelectedTabId The id of a SideContentTab to be
  *  selected initially when the SideContent component is mounted.
@@ -17,15 +17,16 @@ import * as React from 'react';
  *
  * @property renderActiveTabPanelOnly Set this property to
  * true to enable unmounting of tab panels whenever tabs are
- * switched. If it is left undefined, the tab panels will all
- * be loaded with the mounting of the SideContent component,
- * and switching tabs will merely hide them from view.
+ * switched. If it is left undefined, the value will default
+ * to false, and the tab panels will all be loaded with the
+ * mounting of the SideContent component. Switching tabs
+ * will merely hide them from view.
  */
 export type SideContentProps = {
-  animate?: false;
+  animate?: boolean;
   defaultSelectedTabId?: TabId;
   onChange?: (newTabId: TabId, prevTabId: TabId, event: React.MouseEvent<HTMLElement>) => void;
-  renderActiveTabPanelOnly?: true;
+  renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
 };
 
@@ -43,14 +44,14 @@ export type SideContentProps = {
  *
  * @property disabled Set this property to true to disable a tab. The
  * corresponding tab label will still be rendered on hover, but the
- * tab will be greyed out and cannot be selected.
+ * tab will be greyed out and cannot be selected. Default value: false.
  */
 export type SideContentTab = {
   label: string;
   iconName: IconName;
   body: JSX.Element;
   id?: TabId;
-  disabled?: true;
+  disabled?: boolean;
 };
 
 class SideContent extends React.PureComponent<SideContentProps, {}> {

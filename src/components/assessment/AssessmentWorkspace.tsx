@@ -383,7 +383,8 @@ class AssessmentWorkspace extends React.Component<
           ) : (
             <span>Chatkit disabled.</span>
           ),
-          id: 'chat'
+          id: 'chat',
+          disabled: !USE_CHATKIT
         }
       );
     }
