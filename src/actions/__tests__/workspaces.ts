@@ -19,13 +19,10 @@ import {
   evalRepl,
   evalTestcase,
   highlightEditorLine,
-  invalidEditorSessionId,
   playgroundExternalSelect,
   resetWorkspace,
   sendReplInputToOutput,
   setEditorBreakpoint,
-  setEditorSessionId,
-  setWebsocketStatus,
   toggleEditorAutorun,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
@@ -234,13 +231,6 @@ test('evalTestcase generates correct action object', () => {
   });
 });
 
-test('invalidEditorSessionId generates correct action object', () => {
-  const action = invalidEditorSessionId();
-  expect(action).toEqual({
-    type: actionTypes.INVALID_EDITOR_SESSION_ID
-  });
-});
-
 test('updateEditorValue generates correct action object', () => {
   const newEditorValue = 'new_editor_value';
   const action = updateEditorValue(newEditorValue, assessmentWorkspace);
@@ -320,30 +310,6 @@ test('resetWorkspace generates correct action object with provided workspace', (
     payload: {
       workspaceLocation: assessmentWorkspace,
       workspaceOptions
-    }
-  });
-});
-
-test('setEditorSessionId generates correct action object', () => {
-  const editorSessionId = 'test-editor-session-id';
-  const action = setEditorSessionId(gradingWorkspace, editorSessionId);
-  expect(action).toEqual({
-    type: actionTypes.SET_EDITOR_SESSION_ID,
-    payload: {
-      workspaceLocation: gradingWorkspace,
-      editorSessionId
-    }
-  });
-});
-
-test('setWebsocketStatus generates correct action object', () => {
-  const websocketStatus = 0;
-  const action = setWebsocketStatus(playgroundWorkspace, websocketStatus);
-  expect(action).toEqual({
-    type: actionTypes.SET_WEBSOCKET_STATUS,
-    payload: {
-      workspaceLocation: playgroundWorkspace,
-      websocketStatus
     }
   });
 });

@@ -329,7 +329,7 @@ function* updateInspector() {
   }
 }
 
-function* evalCode(
+export function* evalCode(
   code: string,
   context: Context,
   location: WorkspaceLocation,
@@ -349,35 +349,48 @@ function* evalCode(
     interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION),
     paused: take(actionTypes.BEGIN_DEBUG_PAUSE)
   });
-  if (result) {
-    if (actionType === actionTypes.EVAL_EDITOR) {
-      lastDebuggerResult = result;
-    }
-    yield updateInspector();
-    if (result.status === 'finished') {
-      yield put(actions.evalInterpreterSuccess(result.value, location));
-    } else if (result.status === 'suspended') {
-      yield put(actions.endDebuggerPause(location));
-      yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location));
-    } else {
-      yield put(actions.evalInterpreterError(context.errors, location));
-    }
-  } else if (interrupted) {
+
+  if (interrupted) {
     interrupt(context);
     /* Redundancy, added ensure that interruption results in an error. */
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
     yield put(actions.debuggerReset(location));
     yield put(actions.endInterruptExecution(location));
     yield call(showWarningMessage, 'Execution aborted', 750);
-  } else if (paused) {
+    return;
+  }
+
+  if (paused) {
     yield put(actions.endDebuggerPause(location));
     lastDebuggerResult = manualToggleDebugger(context);
     yield updateInspector();
     yield call(showWarningMessage, 'Execution paused', 750);
+    return;
   }
+
+  if (actionType === actionTypes.EVAL_EDITOR) {
+    lastDebuggerResult = result;
+  }
+  yield updateInspector();
+
+  if (result.status !== 'suspended' && result.status !== 'finished') {
+    yield put(actions.evalInterpreterError(context.errors, location));
+    return;
+  } else if (result.status === 'suspended') {
+    yield put(actions.endDebuggerPause(location));
+    yield put(actions.evalInterpreterSuccess('Breakpoint hit!', location));
+    return;
+  }
+
+  yield put(actions.evalInterpreterSuccess(result.value, location));
 }
 
-function* evalTestCode(code: string, context: Context, location: WorkspaceLocation, index: number) {
+export function* evalTestCode(
+  code: string,
+  context: Context,
+  location: WorkspaceLocation,
+  index: number
+) {
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
     /**
@@ -386,19 +399,22 @@ function* evalTestCode(code: string, context: Context, location: WorkspaceLocati
      */
     interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION)
   });
-  if (result) {
-    if (result.status === 'finished') {
-      yield put(actions.evalInterpreterSuccess(result.value, location));
-      yield put(actions.evalTestcaseSuccess(result.value, location, index));
-    } else {
-      yield put(actions.evalInterpreterError(context.errors, location));
-      yield put(actions.evalTestcaseFailure('An error occured', location, index));
-    }
-  } else if (interrupted) {
+
+  if (interrupted) {
     interrupt(context);
     /* Redundancy, added ensure that interruption results in an error. */
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
     yield put(actions.endInterruptExecution(location));
     yield call(showWarningMessage, 'Execution aborted by user', 750);
+    return;
   }
+
+  if (result.status !== 'finished') {
+    yield put(actions.evalInterpreterError(context.errors, location));
+    yield put(actions.evalTestcaseFailure('An error occured', location, index));
+    return;
+  }
+
+  yield put(actions.evalInterpreterSuccess(result.value, location));
+  yield put(actions.evalTestcaseSuccess(result.value, location, index));
 }
