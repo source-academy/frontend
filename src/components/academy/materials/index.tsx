@@ -25,6 +25,7 @@ interface IMaterialProps extends IDispatchProps, IStateProps {}
 export interface IDispatchProps {
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
   handleUnsubmitSubmission: (submissionId: number) => void;
+  handleUploadMaterial: (file: File) => void;
 }
 
 export interface IStateProps {
@@ -129,7 +130,7 @@ class Material extends React.Component<IMaterialProps, State> {
     );
     return (
       <div>
-        <Dropzone />
+        <Dropzone handleUploadMaterial={this.props.handleUploadMaterial} />
         <ContentDisplay
           loadContentDispatch={this.props.handleFetchGradingOverviews}
           display={this.props.data === undefined ? loadingDisplay : grid}

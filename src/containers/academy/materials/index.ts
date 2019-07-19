@@ -1,6 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { uploadMaterial } from '../../../actions/materials';
 import { fetchGradingOverviews, unsubmitSubmission } from '../../../actions/session';
 import Material, { IDispatchProps, IStateProps } from '../../../components/academy/materials';
 import { IState } from '../../../reducers/states';
@@ -13,7 +14,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
   bindActionCreators(
     {
       handleFetchGradingOverviews: fetchGradingOverviews,
-      handleUnsubmitSubmission: unsubmitSubmission
+      handleUnsubmitSubmission: unsubmitSubmission,
+      handleUploadMaterial: uploadMaterial
     },
     dispatch
   );
