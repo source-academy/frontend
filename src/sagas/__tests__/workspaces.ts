@@ -1,5 +1,7 @@
 import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
+import { Finished, SourceError } from 'js-slang/dist/types';
+import { cloneDeep } from 'lodash';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
 
@@ -594,6 +596,28 @@ describe('evalCode', () => {
         .withState(state)
         .call(runInContext, code, context, { scheduler: 'preemptive' })
         .put.like({ action: { type: actionTypes.EVAL_INTERPRETER_ERROR } })
+        .silentRun();
+    });
+
+    test('with error in the code, should return correct line number in error', () => {
+      code = '// Prepend\n error';
+      state = generateDefaultState(workspaceLocation, { editorPrepend: '// Prepend' });
+
+      runInContext(code, context, { scheduler: 'preemptive' }).then(
+        result => (context = (result as Finished).context)
+      );
+
+      const errors = context.errors.map((error: SourceError) => {
+        const newError = cloneDeep(error);
+        newError.location.start.line = newError.location.start.line - 1;
+        newError.location.end.line = newError.location.end.line - 1;
+        return newError;
+      });
+
+      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+        .withState(state)
+        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .put(actions.evalInterpreterError(errors, workspaceLocation))
         .silentRun();
     });
   });
