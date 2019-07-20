@@ -38,7 +38,7 @@ import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace';
 import { controlButton } from '../commons';
 import ContentDisplay from '../commons/ContentDisplay';
 import Markdown from '../commons/Markdown';
-import { filterNotificationsById } from '../notification/NotificationHelpers';
+import { filterNotificationsByAssessment } from '../notification/NotificationHelpers';
 import { Notification } from '../notification/notificationShape';
 
 const DEFAULT_QUESTION_ID: number = 0;
@@ -94,10 +94,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
   /** Sort assessments, first by whether notifications exist, then by assessment id. */
   private sortAssessments = (assessments: IAssessmentOverview[]) =>
     sortBy(assessments, [
-      a =>
-        filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length > 0
-          ? -1
-          : 0,
+      a => (filterNotificationsByAssessment(this.props.notifications, a.id).length > 0 ? -1 : 0),
       a => -a.id
     ]);
 
@@ -139,7 +136,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           !this.props.isStudent,
           false,
-          filterNotificationsById(this.props.notifications, { assessment_id: overview.id }),
+          filterNotificationsByAssessment(this.props.notifications, overview.id),
           this.props.handleAcknowledgeNotifications
         )
       );
@@ -158,7 +155,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           true,
           false,
-          filterNotificationsById(this.props.notifications, { assessment_id: overview.id }),
+          filterNotificationsByAssessment(this.props.notifications, overview.id),
           this.props.handleAcknowledgeNotifications
         )
       );
@@ -175,7 +172,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           true,
           true,
-          filterNotificationsById(this.props.notifications, { assessment_id: overview.id }),
+          filterNotificationsByAssessment(this.props.notifications, overview.id),
           this.props.handleAcknowledgeNotifications
         )
       );

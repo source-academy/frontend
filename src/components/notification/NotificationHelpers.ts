@@ -1,22 +1,20 @@
 import { AssessmentCategories } from '../assessment/assessmentShape';
 import { Notification } from './notificationShape';
 
-type filterByIdOptions = {
-  assessment_id?: number;
-  submission_id?: number;
-};
-
 type filterByTypeOptions = AssessmentCategories | 'Grading';
 
-export function filterNotificationsById(
+export function filterNotificationsByAssessment(
   notifications: Notification[],
-  opts: filterByIdOptions = {}
+  assessmentId: number
 ) {
-  return notifications.filter(
-    n =>
-      (opts.assessment_id === undefined || n.assessment_id === opts.assessment_id) &&
-      (opts.submission_id === undefined || n.submission_id === opts.submission_id)
-  );
+  return notifications.filter(n => n.assessment_id === assessmentId);
+}
+
+export function filterNotificationsBySubmission(
+  notifications: Notification[],
+  submissionId: number
+) {
+  return notifications.filter(n => n.submission_id === submissionId);
 }
 
 /*

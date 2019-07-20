@@ -22,7 +22,7 @@ import GradingWorkspaceContainer from '../../../containers/academy/grading/Gradi
 import NotificationBadgeWithPopover from '../../../containers/notification/NotificationBadgeWithPopover';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import ContentDisplay from '../../commons/ContentDisplay';
-import { filterNotificationsById } from '../../notification/NotificationHelpers';
+import { filterNotificationsBySubmission } from '../../notification/NotificationHelpers';
 import { Notification } from '../../notification/notificationShape';
 import EditGradingCell from './EditGradingCell';
 import GradeCell from './GradeCell';
@@ -343,9 +343,9 @@ class Grading extends React.Component<IGradingProps, State> {
 
     return sortBy(
       this.props.gradingOverviews!.map(o => {
-        (o as GradingOverviewWithNotifications).notifications = filterNotificationsById(
+        (o as GradingOverviewWithNotifications).notifications = filterNotificationsBySubmission(
           this.props.notifications,
-          { submission_id: o.submissionId }
+          o.submissionId
         );
         return o;
       }),
