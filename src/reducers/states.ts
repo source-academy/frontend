@@ -209,14 +209,14 @@ export const defaultEditorValue = '// Type your program in here!';
  * Create a default IWorkspaceState for 'resetting' a workspace.
  * Takes in parameters to set the js-slang library and chapter.
  *
- * @param location the location of the workspace, used for context
+ * @param workspaceLocation the location of the workspace, used for context
  */
-export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
+export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
-  context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
+  context: createContext<WorkspaceLocation>(latestSourceChapter, [], workspaceLocation),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : '',
+  editorValue: workspaceLocation === WorkspaceLocations.playground ? defaultEditorValue : '',
   editorPostpend: '',
   editorTestcases: [],
   editorHeight: 150,
