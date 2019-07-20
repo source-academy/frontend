@@ -647,21 +647,23 @@ async function getNotifications(tokens: Tokens) {
   });
   let notifications: Notification[] = [];
 
-  if (resp && resp.ok) {
-    const result = await resp.json();
-    notifications = result.map((notification: any) => {
-      return {
-        id: notification.id,
-        type: notification.type,
-        assessment_id: notification.assessment_id || undefined,
-        assessment_type: notification.assessment
-          ? capitalise(notification.assessment.type)
-          : undefined,
-        assessment_title: notification.assessment ? notification.assessment.title : undefined,
-        submission_id: notification.submission_id || undefined
-      } as Notification;
-    });
+  if (!resp || !resp.ok) {
+    return;
   }
+
+  const result = await resp.json();
+  notifications = result.map((notification: any) => {
+    return {
+      id: notification.id,
+      type: notification.type,
+      assessment_id: notification.assessment_id || undefined,
+      assessment_type: notification.assessment
+        ? capitalise(notification.assessment.type)
+        : undefined,
+      assessment_title: notification.assessment ? notification.assessment.title : undefined,
+      submission_id: notification.submission_id || undefined
+    } as Notification;
+  });
 
   return notifications;
 }
@@ -683,11 +685,7 @@ async function postAcknowledgeNotification(tokens: Tokens, ids: number[]) {
 /**
  * POST /chat/notify
  */
-async function postNotify(
-  tokens: Tokens,
-  assessmentId?: number,
-  submissionId?: number
-) {
+async function postNotify(tokens: Tokens, assessmentId?: number, submissionId?: number) {
   await request(`chat/notify`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
