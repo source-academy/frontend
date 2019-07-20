@@ -335,8 +335,8 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    const assessmentId = (action as actionTypes.IAction).payload.assessmentId || null;
-    const submissionId = (action as actionTypes.IAction).payload.submissionId || null;
+    const assessmentId = (action as actionTypes.IAction).payload.assessmentId;
+    const submissionId = (action as actionTypes.IAction).payload.submissionId;
     yield postNotify(tokens, assessmentId, submissionId);
   });
 }
@@ -685,8 +685,8 @@ async function postAcknowledgeNotification(tokens: Tokens, ids: number[]) {
  */
 async function postNotify(
   tokens: Tokens,
-  assessmentId: number | null,
-  submissionId: number | null
+  assessmentId?: number,
+  submissionId?: number
 ) {
   await request(`chat/notify`, 'POST', {
     accessToken: tokens.accessToken,
