@@ -46,7 +46,7 @@ const mockStates = {
     role: Role.Student
   },
   workspaces: {
-    assessment: { currentAssessment: 0 }
+    assessment: { currentAssessment: mockAssessment.id }
   }
 };
 
@@ -119,7 +119,7 @@ describe('Test FETCH_ASSESSMENT_OVERVIEWS Action', () => {
 
 describe('Test FETCH_ASSESSMENT Action', () => {
   test('when assesment is obtained', () => {
-    const mockId = 0;
+    const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
       .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens), mockAssessment]])
@@ -130,7 +130,7 @@ describe('Test FETCH_ASSESSMENT Action', () => {
   });
 
   test('when assesment is null', () => {
-    const mockId = 0;
+    const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
       .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens), null]])
@@ -175,7 +175,9 @@ describe('Test SUBMIT_ANSWER Action', () => {
       .dispatch({ type: actionTypes.SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
-    return expect(mockStates.session.assessments.get(0)!.questions[0].answer).toEqual(null);
+    return expect(
+      mockStates.session.assessments.get(mockNewAssessment.id)!.questions[0].answer
+    ).toEqual(null);
   });
 
   test('when role is not student', () => {
@@ -248,7 +250,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
 
 describe('Test SUBMIT_ASSESSMENT Action', () => {
   test('when respond is ok', () => {
-    const mockAssessmentId = 0;
+    const mockAssessmentId = mockAssessment.id;
     const mockNewOverviews = mockAssessmentOverviews.map(overview => {
       if (overview.id === mockAssessmentId) {
         return { ...overview, status: AssessmentStatuses.submitted };
@@ -263,7 +265,7 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
       .put(actions.updateAssessmentOverviews(mockNewOverviews))
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: mockAssessmentId })
       .silentRun();
-    expect(mockStates.session.assessmentOverviews[0].id).toEqual(0);
+    expect(mockStates.session.assessmentOverviews[0].id).toEqual(mockAssessmentId);
     return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
       AssessmentStatuses.submitted
     );
