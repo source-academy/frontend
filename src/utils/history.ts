@@ -21,6 +21,6 @@ type lastLocation = string | null;
 
 export const history = createBrowserHistory();
 
-history.listen((locat, action) => {
-  store.dispatch(updateHistoryHelpers(locat.pathname));
+history.listen((location, action) => {
+  store.dispatch(updateHistoryHelpers(location.pathname));
 });
