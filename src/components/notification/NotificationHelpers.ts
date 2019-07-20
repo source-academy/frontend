@@ -24,6 +24,6 @@ export function filterNotificationsByType(assessmentType: filterByTypeOptions) {
       if (assessmentType === 'Grading') {
         return n.submission_id !== undefined;
       }
-      return n.submission_id === undefined && assessmentType === n.assessment_type;
+      return !n.submission_id && assessmentType === n.assessment_type;
     });
 }
