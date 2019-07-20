@@ -33,10 +33,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         <Icon icon={IconNames.FLAME} />
         <div className="navbar-button-text hidden-xs">Missions</div>
         <NotificationBadge
-          notifications={filterNotificationsByType(
-            props.notifications,
-            AssessmentCategories.Mission
-          )}
+          filterNotifications={filterNotificationsByType(AssessmentCategories.Mission)}
           disableHover={true}
         />
       </NavLink>
@@ -49,10 +46,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         <Icon icon={IconNames.LIGHTBULB} />
         <div className="navbar-button-text hidden-xs">Quests</div>
         <NotificationBadge
-          notifications={filterNotificationsByType(
-            props.notifications,
-            AssessmentCategories.Sidequest
-          )}
+          filterNotifications={filterNotificationsByType(AssessmentCategories.Sidequest)}
           disableHover={true}
         />
       </NavLink>
@@ -65,7 +59,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
         <div className="navbar-button-text hidden-xs">Paths</div>
         <NotificationBadge
-          notifications={filterNotificationsByType(props.notifications, AssessmentCategories.Path)}
+          filterNotifications={filterNotificationsByType(AssessmentCategories.Path)}
           disableHover={true}
         />
       </NavLink>
@@ -78,10 +72,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         <Icon icon={IconNames.COMPARISON} />
         <div className="navbar-button-text hidden-xs">Contests</div>
         <NotificationBadge
-          notifications={filterNotificationsByType(
-            props.notifications,
-            AssessmentCategories.Contest
-          )}
+          filterNotifications={filterNotificationsByType(AssessmentCategories.Contest)}
           disableHover={true}
         />
       </NavLink>
@@ -96,7 +87,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           <Icon icon={IconNames.ENDORSED} />
           <div className="navbar-button-text hidden-xs">Grading</div>
           <NotificationBadge
-            notifications={filterNotificationsByType(props.notifications, 'Grading')}
+            filterNotifications={filterNotificationsByType('Grading')}
             disableHover={true}
           />
         </NavLink>

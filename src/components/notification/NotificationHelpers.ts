@@ -3,18 +3,14 @@ import { Notification } from './notificationShape';
 
 type filterByTypeOptions = AssessmentCategories | 'Grading';
 
-export function filterNotificationsByAssessment(
-  notifications: Notification[],
-  assessmentId: number
-) {
-  return notifications.filter(n => n.assessment_id === assessmentId);
+export function filterNotificationsByAssessment(assessmentId: number) {
+  return (notifications: Notification[]) =>
+    notifications.filter(n => n.assessment_id === assessmentId);
 }
 
-export function filterNotificationsBySubmission(
-  notifications: Notification[],
-  submissionId: number
-) {
-  return notifications.filter(n => n.submission_id === submissionId);
+export function filterNotificationsBySubmission(submissionId: number) {
+  return (notifications: Notification[]) =>
+    notifications.filter(n => n.submission_id === submissionId);
 }
 
 /*
@@ -22,14 +18,12 @@ export function filterNotificationsBySubmission(
 
   Notifications with a submission id belong to Grading.
 */
-export function filterNotificationsByType(
-  notifications: Notification[],
-  assessmentType: filterByTypeOptions
-) {
-  return notifications.filter(n => {
-    if (assessmentType === 'Grading') {
-      return n.submission_id !== undefined;
-    }
-    return n.submission_id === undefined && assessmentType === n.assessment_type;
-  });
+export function filterNotificationsByType(assessmentType: filterByTypeOptions) {
+  return (notifications: Notification[]) =>
+    notifications.filter(n => {
+      if (assessmentType === 'Grading') {
+        return n.submission_id !== undefined;
+      }
+      return n.submission_id === undefined && assessmentType === n.assessment_type;
+    });
 }

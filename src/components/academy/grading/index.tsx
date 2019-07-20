@@ -78,7 +78,11 @@ const GradingExp = (props: GradingNavLinkProps) => {
 };
 
 const NotificationBadgeCell = (props: GradingNavLinkProps) => {
-  return <NotificationBadge notifications={props.data.notifications} />;
+  return (
+    <NotificationBadge
+      filterNotifications={filterNotificationsBySubmission(props.data.submissionId)}
+    />
+  );
 };
 
 class Grading extends React.Component<IGradingProps, State> {
@@ -337,16 +341,15 @@ class Grading extends React.Component<IGradingProps, State> {
     - the submission id
   */
   private sortSubmissions = () => {
-    if (this.props.gradingOverviews) {
-      return this.props.gradingOverviews;
+    if (!this.props.gradingOverviews) {
+      return [];
     }
 
     return sortBy(
       this.props.gradingOverviews!.map(o => {
         (o as GradingOverviewWithNotifications).notifications = filterNotificationsBySubmission(
-          this.props.notifications,
           o.submissionId
-        );
+        )(this.props.notifications);
         return o;
       }),
       [

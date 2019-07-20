@@ -4,8 +4,12 @@ import { Notification, NotificationType, NotificationTypes } from './notificatio
 
 type OwnProps = {
   className?: string;
-  disableHover?: boolean; // if false or undefined, displays popover content, otherwise disables it
-  large?: boolean; // enable to use large style
+  disableHover?: boolean; // Set to true to disable popover content
+  large?: boolean; // Set to true to use large style
+  filterNotifications?: (notifications: Notification[]) => Notification[];
+};
+
+export type StateProps = {
   notifications: Notification[];
 };
 
@@ -13,44 +17,53 @@ export type DispatchProps = {
   handleAcknowledgeNotifications: (notificationIds: number[]) => void;
 };
 
-const NotificationBadge: React.SFC<OwnProps & DispatchProps> = props => {
-  if (!props.notifications.length) {
+const NotificationBadge: React.SFC<OwnProps & StateProps & DispatchProps> = props => {
+  const notifications = props.filterNotifications
+    ? props.filterNotifications(props.notifications)
+    : props.notifications;
+
+  if (!notifications.length) {
     return null;
   }
 
-  const makeNotificationTags = (notifications: Notification[]) => (
-    <div className="col">{notifications.map(makeNotificationTag)}</div>
+  const notificationIcon = (
+    <Tag intent={Intent.DANGER} round={true} large={props.large}>
+      {notifications.length}
+    </Tag>
   );
 
-  const makeNotificationTag = (notification: Notification) => {
-    const onRemove = () => props.handleAcknowledgeNotifications([notification.id]);
+  if (!props.disableHover) {
+    const makeNotificationTag = (notification: Notification) => {
+      const onRemove = () => props.handleAcknowledgeNotifications([notification.id]);
+
+      return (
+        <Tag
+          className="row badge-tag"
+          key={`${notification.id}`}
+          minimal={true}
+          multiline={true}
+          onRemove={onRemove}
+        >
+          {makeNotificationMessage(notification.type)}
+        </Tag>
+      );
+    };
+
+    const notificationTags = <div className="col">{notifications.map(makeNotificationTag)}</div>;
 
     return (
-      <Tag
-        className="row badge-tag"
-        key={`${notification.id}`}
-        minimal={true}
-        multiline={true}
-        onRemove={onRemove}
+      <Popover
+        className={props.className}
+        content={notificationTags}
+        interactionKind={PopoverInteractionKind.HOVER}
+        position={Position.RIGHT}
       >
-        {makeNotificationMessage(notification.type)}
-      </Tag>
+        {notificationIcon}
+      </Popover>
     );
-  };
+  }
 
-  return (
-    <Popover
-      className={props.className}
-      content={props.disableHover ? undefined : makeNotificationTags(props.notifications)}
-      interactionKind={PopoverInteractionKind.HOVER}
-      position={Position.RIGHT}
-      isOpen={props.disableHover ? false : undefined}
-    >
-      <Tag intent={Intent.DANGER} round={true} large={props.large}>
-        {props.notifications.length}
-      </Tag>
-    </Popover>
-  );
+  return notificationIcon;
 };
 
 const makeNotificationMessage = (type: NotificationType) => {

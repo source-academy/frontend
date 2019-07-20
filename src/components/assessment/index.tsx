@@ -91,13 +91,6 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     };
   }
 
-  /** Sort assessments, first by whether notifications exist, then by assessment id. */
-  private sortAssessments = (assessments: IAssessmentOverview[]) =>
-    sortBy(assessments, [
-      a => (filterNotificationsByAssessment(this.props.notifications, a.id).length > 0 ? -1 : 0),
-      a => -a.id
-    ]);
-
   public render() {
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId);
     const questionId: number =
@@ -136,7 +129,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           !this.props.isStudent,
           false,
-          filterNotificationsByAssessment(this.props.notifications, overview.id),
+          filterNotificationsByAssessment(overview.id)(this.props.notifications),
           this.props.handleAcknowledgeNotifications
         )
       );
@@ -155,7 +148,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           true,
           false,
-          filterNotificationsByAssessment(this.props.notifications, overview.id),
+          filterNotificationsByAssessment(overview.id)(this.props.notifications),
           this.props.handleAcknowledgeNotifications
         )
       );
@@ -172,7 +165,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           this.setBetchaAssessment,
           true,
           true,
-          filterNotificationsByAssessment(this.props.notifications, overview.id),
+          filterNotificationsByAssessment(overview.id)(this.props.notifications),
           this.props.handleAcknowledgeNotifications
         )
       );
@@ -310,6 +303,13 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       this.setBetchaAssessmentNull();
     }
   };
+
+  /** Sort assessments, first by whether notifications exist, then by assessment id. */
+  private sortAssessments = (assessments: IAssessmentOverview[]) =>
+    sortBy(assessments, [
+      a => (filterNotificationsByAssessment(a.id)(this.props.notifications).length > 0 ? -1 : 0),
+      a => -a.id
+    ]);
 }
 
 /**
@@ -336,7 +336,11 @@ const makeOverviewCard = (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
       <div className="col-xs-3 listing-picture">
-        <NotificationBadge className="badge" notifications={notifications} large={true} />
+        <NotificationBadge
+          className="badge"
+          filterNotifications={filterNotificationsByAssessment(overview.id)}
+          large={true}
+        />
         <img
           className={`cover-image-${overview.status}`}
           src={overview.coverImage ? overview.coverImage : defaultCoverImage}
