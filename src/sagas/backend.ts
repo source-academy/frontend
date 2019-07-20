@@ -312,11 +312,6 @@ function* backendSaga(): SagaIterator {
       notification => !ids.includes(notification.id)
     );
 
-    /* 
-      For responsiveness, we update the store's state first, then
-      check if the server rejects the acknowledgement and undo the changes if necessary
-    */
-
     yield put(actions.updateNotifications(newNotifications));
 
     const resp: Response | null = yield postAcknowledgeNotification(tokens, ids);
@@ -326,7 +321,6 @@ function* backendSaga(): SagaIterator {
     }
 
     yield call(showWarningMessage, "Something went wrong, couldn't acknowledge");
-    yield put(actions.updateNotifications(notifications));
   });
 
   yield takeEvery(actionTypes.NOTIFY_CHATKIT_USERS, function*(action) {
