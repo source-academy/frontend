@@ -1,3 +1,4 @@
+import { Classes, Pre } from '@blueprintjs/core';
 import * as React from 'react';
 
 import { getPrettyDate } from '../../utils/dateHelpers';
@@ -21,7 +22,7 @@ class MessageList extends React.Component<StateProps> {
         <ul className="msg-list">
           {this.props.messages.map((message: Message, index: number) => (
             <li className="msg-item" key={index}>
-              <pre className="dialogue-box">
+              <Pre className="dialogue-box">
                 <span>
                   <strong className="msg-sender">
                     {message.userStore.users[message.senderId].name}
@@ -29,8 +30,8 @@ class MessageList extends React.Component<StateProps> {
                   &emsp;
                   <i className="msg-date">{getPrettyDate(message.createdAt)}</i>
                 </span>
-                <Markdown content={message.text} />
-              </pre>
+                <Markdown className={Classes.RUNNING_TEXT} content={message.text} />
+              </Pre>
             </li>
           ))}
         </ul>
