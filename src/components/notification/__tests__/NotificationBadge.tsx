@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import NotificationBadge from '../NotificationBadge';
 import { Notification } from '../notificationShape';
 
-const studentNotifications: Notification[] = [
+const notifications: Notification[] = [
   {
     id: 1,
     type: 'new',
@@ -35,39 +35,16 @@ const studentNotifications: Notification[] = [
   }
 ];
 
-const avengerNotifications: Notification[] = [
-  {
-    id: 1,
-    type: 'submitted',
-    assessment_id: 1,
-    assessment_type: 'Mission',
-    assessment_title: 'The Secret to Streams',
-    submission_id: 1
-  }
-];
-
 const handleAcknowledgeNotifications = (ids: number[]) => null;
 
 describe('Badge', () => {
   test('renders properly for students', () => {
     const tree = mount(
       <NotificationBadge
-        notifications={studentNotifications}
+        notifications={notifications}
         handleAcknowledgeNotifications={handleAcknowledgeNotifications}
       />
     );
-
-    expect(tree.debug()).toMatchSnapshot();
-  });
-
-  test('renders properly for avengers', () => {
-    const tree = mount(
-      <NotificationBadge
-        notifications={avengerNotifications}
-        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-      />
-    );
-
     expect(tree.debug()).toMatchSnapshot();
   });
 
