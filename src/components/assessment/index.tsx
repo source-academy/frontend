@@ -25,7 +25,7 @@ import { NavLink } from 'react-router-dom';
 import { sortBy } from 'lodash';
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import AssessmentWorkspaceContainer from '../../containers/assessment/AssessmentWorkspaceContainer';
-import NotificationBadgeWithPopover from '../../containers/notification/NotificationBadgeWithPopover';
+import NotificationBadge from '../../containers/notification/NotificationBadge';
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers';
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers';
 import {
@@ -336,11 +336,7 @@ const makeOverviewCard = (
   <div key={index}>
     <Card className="row listing" elevation={Elevation.ONE}>
       <div className="col-xs-3 listing-picture">
-        <NotificationBadgeWithPopover
-          className="badge"
-          large={true}
-          notifications={notifications}
-        />
+        <NotificationBadge className="badge" notifications={notifications} large={true} />
         <img
           className={`cover-image-${overview.status}`}
           src={overview.coverImage ? overview.coverImage : defaultCoverImage}

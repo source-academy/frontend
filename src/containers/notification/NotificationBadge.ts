@@ -2,9 +2,7 @@ import { connect, Dispatch, MapDispatchToProps } from 'react-redux';
 
 import { bindActionCreators } from 'redux';
 import { acknowledgeNotifications } from '../../actions';
-import NotificationBadgeWithPopover, {
-  DispatchProps
-} from '../../components/notification/NotificationBadgeWithPopover';
+import NotificationBadge, { DispatchProps } from '../../components/notification/NotificationBadge';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
@@ -17,4 +15,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
 export default connect(
   null,
   mapDispatchToProps
-)(NotificationBadgeWithPopover);
+)(NotificationBadge);

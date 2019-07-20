@@ -46,21 +46,38 @@ const avengerNotifications: Notification[] = [
   }
 ];
 
+const handleAcknowledgeNotifications = (ids: number[]) => null;
+
 describe('Badge', () => {
   test('renders properly for students', () => {
-    const tree = mount(<NotificationBadge number={studentNotifications.length} />);
+    const tree = mount(
+      <NotificationBadge
+        notifications={studentNotifications}
+        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
+      />
+    );
 
     expect(tree.debug()).toMatchSnapshot();
   });
 
   test('renders properly for avengers', () => {
-    const tree = mount(<NotificationBadge number={avengerNotifications.length} />);
+    const tree = mount(
+      <NotificationBadge
+        notifications={avengerNotifications}
+        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
+      />
+    );
 
     expect(tree.debug()).toMatchSnapshot();
   });
 
   test('does not render with no notifications', () => {
-    const tree = mount(<NotificationBadge number={0} />);
+    const tree = mount(
+      <NotificationBadge
+        notifications={[]}
+        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
+      />
+    );
 
     expect(tree.debug()).toMatchSnapshot();
   });

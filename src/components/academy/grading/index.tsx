@@ -19,7 +19,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
-import NotificationBadgeWithPopover from '../../../containers/notification/NotificationBadgeWithPopover';
+import NotificationBadge from '../../../containers/notification/NotificationBadge';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { filterNotificationsBySubmission } from '../../notification/NotificationHelpers';
@@ -78,7 +78,7 @@ const GradingExp = (props: GradingNavLinkProps) => {
 };
 
 const NotificationBadgeCell = (props: GradingNavLinkProps) => {
-  return <NotificationBadgeWithPopover notifications={props.data.notifications} />;
+  return <NotificationBadge notifications={props.data.notifications} />;
 };
 
 class Grading extends React.Component<IGradingProps, State> {
