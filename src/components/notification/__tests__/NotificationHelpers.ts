@@ -2,7 +2,7 @@ import { AssessmentCategories } from '../../../components/assessment/assessmentS
 import * as NotificationHelpers from '../NotificationHelpers';
 import { Notification } from '../notificationShape';
 
-const notification_1: Notification = {
+const notification1: Notification = {
   id: 1,
   type: 'new',
   assessment_id: 1,
@@ -10,7 +10,7 @@ const notification_1: Notification = {
   assessment_title: 'Mission_1'
 };
 
-const notification_2: Notification = {
+const notification2: Notification = {
   id: 2,
   type: 'autograded',
   assessment_id: 2,
@@ -18,7 +18,7 @@ const notification_2: Notification = {
   assessment_title: 'Sidequest_1'
 };
 
-const notification_3: Notification = {
+const notification3: Notification = {
   id: 3,
   type: 'graded',
   assessment_id: 3,
@@ -26,7 +26,7 @@ const notification_3: Notification = {
   assessment_title: 'Path_1'
 };
 
-const notification_4: Notification = {
+const notification4: Notification = {
   id: 4,
   type: 'unsubmitted',
   assessment_id: 4,
@@ -34,7 +34,7 @@ const notification_4: Notification = {
   assessment_title: 'Contest_1'
 };
 
-const notification_5: Notification = {
+const notification5: Notification = {
   id: 5,
   type: 'submitted',
   assessment_id: 1,
@@ -43,7 +43,7 @@ const notification_5: Notification = {
   submission_id: 1
 };
 
-const notification_6: Notification = {
+const notification6: Notification = {
   id: 6,
   type: 'new_message',
   assessment_id: 2,
@@ -53,26 +53,26 @@ const notification_6: Notification = {
 };
 
 const notifications: Notification[] = [
-  notification_1,
-  notification_2,
-  notification_3,
-  notification_4,
-  notification_5,
-  notification_6
+  notification1,
+  notification2,
+  notification3,
+  notification4,
+  notification5,
+  notification6
 ];
 
 test('filterNotificationsByAssessment works properly', () => {
   const newNotifications = NotificationHelpers.filterNotificationsByAssessment(1)(notifications);
 
   expect(newNotifications.length).toEqual(1);
-  expect(newNotifications[0]).toEqual(notification_1);
+  expect(newNotifications[0]).toEqual(notification1);
 });
 
 test('filterNotificationsBySubmission works properly', () => {
   const newNotifications = NotificationHelpers.filterNotificationsBySubmission(1)(notifications);
 
   expect(newNotifications.length).toEqual(1);
-  expect(newNotifications[0]).toEqual(notification_5);
+  expect(newNotifications[0]).toEqual(notification5);
 });
 
 describe('filterNotificationsByType, ', () => {
@@ -82,7 +82,7 @@ describe('filterNotificationsByType, ', () => {
     )(notifications);
 
     expect(newNotifications.length).toEqual(1);
-    expect(newNotifications[0]).toEqual(notification_1);
+    expect(newNotifications[0]).toEqual(notification1);
   });
 
   test('Sidequest works properly', () => {
@@ -91,7 +91,7 @@ describe('filterNotificationsByType, ', () => {
     )(notifications);
 
     expect(newNotifications.length).toEqual(1);
-    expect(newNotifications[0]).toEqual(notification_2);
+    expect(newNotifications[0]).toEqual(notification2);
   });
 
   test('Path works properly', () => {
@@ -100,7 +100,7 @@ describe('filterNotificationsByType, ', () => {
     )(notifications);
 
     expect(newNotifications.length).toEqual(1);
-    expect(newNotifications[0]).toEqual(notification_3);
+    expect(newNotifications[0]).toEqual(notification3);
   });
 
   test('Contest works properly', () => {
@@ -109,7 +109,7 @@ describe('filterNotificationsByType, ', () => {
     )(notifications);
 
     expect(newNotifications.length).toEqual(1);
-    expect(newNotifications[0]).toEqual(notification_4);
+    expect(newNotifications[0]).toEqual(notification4);
   });
 
   test('Grading works properly', () => {
@@ -118,7 +118,7 @@ describe('filterNotificationsByType, ', () => {
     );
 
     expect(newNotifications.length).toEqual(2);
-    expect(newNotifications[0]).toEqual(notification_5);
-    expect(newNotifications[1]).toEqual(notification_6);
+    expect(newNotifications[0]).toEqual(notification5);
+    expect(newNotifications[1]).toEqual(notification6);
   });
 });
