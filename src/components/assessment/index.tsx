@@ -91,6 +91,16 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     };
   }
 
+  /** Sort assessments, first by whether notifications exist, then by assessment id. */
+  private sortAssessments = (assessments: IAssessmentOverview[]) =>
+    sortBy(assessments, [
+      a =>
+        filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length > 0
+          ? -1
+          : 0,
+      a => -a.id
+    ]);
+
   public render() {
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId);
     const questionId: number =
@@ -119,15 +129,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       /** Upcoming assessments, that are not released yet. */
       const isOverviewUpcoming = (overview: IAssessmentOverview) =>
         !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
-      const sortAssessments = (assessments: IAssessmentOverview[]) =>
-        sortBy(assessments, [
-          a =>
-            filterNotificationsById(this.props.notifications, { assessment_id: a.id }).length > 0
-              ? -1
-              : 0,
-          a => -a.id
-        ]);
-      const upcomingCards = sortAssessments(
+
+      const upcomingCards = this.sortAssessments(
         this.props.assessmentOverviews.filter(isOverviewUpcoming)
       ).map((overview, index) =>
         makeOverviewCard(
@@ -146,7 +149,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         !beforeNow(overview.closeAt) &&
         beforeNow(overview.openAt) &&
         overview.status !== AssessmentStatuses.submitted;
-      const openedCards = sortAssessments(
+      const openedCards = this.sortAssessments(
         this.props.assessmentOverviews.filter(overview => isOverviewOpened(overview))
       ).map((overview, index) =>
         makeOverviewCard(
@@ -161,7 +164,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       );
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
-      const closedCards = sortAssessments(
+      const closedCards = this.sortAssessments(
         this.props.assessmentOverviews.filter(
           overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
         )
@@ -321,6 +324,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
  *   is to be set for final submission ("betcha" functionality)
  * @param renderAttemptButton will only render the attempt button if true, regardless
  *   of attempt status.
+ * @param notifications the notifications to be passed in.
+ * @param handleAcknowledgeNotifications a function that handles the acknowledgement of notifications.
  */
 const makeOverviewCard = (
   overview: IAssessmentOverview,
@@ -345,13 +350,7 @@ const makeOverviewCard = (
         />
       </div>
       <div className="col-xs-9 listing-text">
-        {makeOverviewCardTitle(
-          overview,
-          index,
-          setBetchaAssessment,
-          renderGradingStatus,
-          notifications
-        )}
+        {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)}
         <div className="row listing-grade">
           <H6>
             {' '}
@@ -391,8 +390,7 @@ const makeOverviewCardTitle = (
   overview: IAssessmentOverview,
   index: number,
   setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
-  renderGradingStatus: boolean,
-  notifications: Notification[]
+  renderGradingStatus: boolean
 ) => (
   <div className="row listing-title">
     <Text ellipsize={true} className={'col-xs-10'}>

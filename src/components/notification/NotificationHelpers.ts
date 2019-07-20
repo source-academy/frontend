@@ -20,8 +20,6 @@ export function filterNotificationsById(
 }
 
 /*
-  For filtering notifications on the academy navigation bar.
-
   Notifications will be filtered to either one of the Assessment Category, or the Grading Category.
 
   Notifications with a submission id belong to Grading.

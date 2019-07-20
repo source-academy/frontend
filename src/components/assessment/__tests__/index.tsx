@@ -12,7 +12,7 @@ import { AssessmentCategories } from '../assessmentShape';
 const defaultProps: IAssessmentProps = {
   assessmentCategory: AssessmentCategories.Mission,
   assessmentOverviews: undefined,
-  handleAcknowledgeNotifications: (ids: number[]) => null,
+  handleAcknowledgeNotifications: (ids: number[]) => {},
   handleAssessmentOverviewFetch: () => {},
   handleSubmitAssessment: (id: number) => {},
   isStudent: false,

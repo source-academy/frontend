@@ -18,15 +18,15 @@ import { sortBy } from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { filterNotificationsById } from '../../../components/notification/NotificationHelpers';
-import { Notification } from '../../../components/notification/notificationShape';
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
 import NotificationBadgeWithPopover from '../../../containers/notification/NotificationBadgeWithPopover';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import ContentDisplay from '../../commons/ContentDisplay';
+import { filterNotificationsById } from '../../notification/NotificationHelpers';
+import { Notification } from '../../notification/notificationShape';
 import EditGradingCell from './EditGradingCell';
 import GradeCell from './GradeCell';
-import { GradingOverview } from './gradingShape';
+import { GradingOverview, GradingOverviewWithNotifications } from './gradingShape';
 import GradingStatusCell from './GradingStatusCell';
 import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace';
 import UnsubmitCell from './UnsubmitCell';
@@ -61,10 +61,6 @@ export interface IStateProps {
   gradingOverviews?: GradingOverview[];
   notifications: Notification[];
 }
-
-type GradingOverviewWithNotifications = {
-  notifications: Notification[];
-} & GradingOverview;
 
 /** Component to render in table - grading status */
 const GradingStatus = (props: GradingNavLinkProps) => {
@@ -340,23 +336,26 @@ class Grading extends React.Component<IGradingProps, State> {
     - the assessment id
     - the submission id
   */
-  private sortSubmissions = () =>
-    sortBy(
-      this.props.gradingOverviews
-        ? this.props.gradingOverviews!.map(o => {
-            (o as GradingOverviewWithNotifications).notifications = filterNotificationsById(
-              this.props.notifications,
-              { submission_id: o.submissionId }
-            );
-            return o;
-          })
-        : this.props.gradingOverviews,
+  private sortSubmissions = () => {
+    if (this.props.gradingOverviews) {
+      return this.props.gradingOverviews;
+    }
+
+    return sortBy(
+      this.props.gradingOverviews!.map(o => {
+        (o as GradingOverviewWithNotifications).notifications = filterNotificationsById(
+          this.props.notifications,
+          { submission_id: o.submissionId }
+        );
+        return o;
+      }),
       [
         (a: GradingOverviewWithNotifications) => (a.notifications.length > 0 ? -1 : 0),
         (a: GradingOverview) => -a.assessmentId,
         (a: GradingOverview) => -a.submissionId
       ]
     );
+  };
 }
 
 export default Grading;
