@@ -35,10 +35,10 @@ const notifications: Notification[] = [
   }
 ];
 
-const handleAcknowledgeNotifications = (ids: number[]) => null;
+const handleAcknowledgeNotifications = (ids: number[]) => {};
 
 describe('Badge', () => {
-  test('renders properly for students', () => {
+  test('renders properly with notifications', () => {
     const tree = mount(
       <NotificationBadge
         notifications={notifications}

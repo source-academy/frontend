@@ -2,7 +2,7 @@ import { AssessmentCategories } from '../../../components/assessment/assessmentS
 import * as NotificationHelpers from '../NotificationHelpers';
 import { Notification } from '../notificationShape';
 
-const notification1: Notification = {
+const notificationMission: Notification = {
   id: 1,
   type: 'new',
   assessment_id: 1,
@@ -10,7 +10,7 @@ const notification1: Notification = {
   assessment_title: 'Mission_1'
 };
 
-const notification2: Notification = {
+const notificationSidequest: Notification = {
   id: 2,
   type: 'autograded',
   assessment_id: 2,
@@ -18,7 +18,7 @@ const notification2: Notification = {
   assessment_title: 'Sidequest_1'
 };
 
-const notification3: Notification = {
+const notificationPath: Notification = {
   id: 3,
   type: 'graded',
   assessment_id: 3,
@@ -26,7 +26,7 @@ const notification3: Notification = {
   assessment_title: 'Path_1'
 };
 
-const notification4: Notification = {
+const notificationContest: Notification = {
   id: 4,
   type: 'unsubmitted',
   assessment_id: 4,
@@ -34,7 +34,7 @@ const notification4: Notification = {
   assessment_title: 'Contest_1'
 };
 
-const notification5: Notification = {
+const notificationSubmissionMission: Notification = {
   id: 5,
   type: 'submitted',
   assessment_id: 1,
@@ -43,7 +43,7 @@ const notification5: Notification = {
   submission_id: 1
 };
 
-const notification6: Notification = {
+const notificationSubmissionSidequest: Notification = {
   id: 6,
   type: 'new_message',
   assessment_id: 2,
@@ -53,26 +53,26 @@ const notification6: Notification = {
 };
 
 const notifications: Notification[] = [
-  notification1,
-  notification2,
-  notification3,
-  notification4,
-  notification5,
-  notification6
+  notificationMission,
+  notificationSidequest,
+  notificationPath,
+  notificationContest,
+  notificationSubmissionMission,
+  notificationSubmissionSidequest
 ];
 
 test('filterNotificationsByAssessment works properly', () => {
   const newNotifications = NotificationHelpers.filterNotificationsByAssessment(1)(notifications);
 
   expect(newNotifications.length).toEqual(1);
-  expect(newNotifications[0]).toEqual(notification1);
+  expect(newNotifications[0]).toEqual(notificationMission);
 });
 
 test('filterNotificationsBySubmission works properly', () => {
   const newNotifications = NotificationHelpers.filterNotificationsBySubmission(1)(notifications);
 
   expect(newNotifications.length).toEqual(1);
-  expect(newNotifications[0]).toEqual(notification5);
+  expect(newNotifications[0]).toEqual(notificationSubmissionMission);
 });
 
 describe('filterNotificationsByType, ', () => {
@@ -82,7 +82,7 @@ describe('filterNotificationsByType, ', () => {
     )(notifications);
 
     expect(newNotifications.length).toEqual(1);
-    expect(newNotifications[0]).toEqual(notification1);
+    expect(newNotifications[0]).toEqual(notificationMission);
   });
 
   test('Sidequest works properly', () => {
@@ -91,7 +91,7 @@ describe('filterNotificationsByType, ', () => {
     )(notifications);
 
     expect(newNotifications.length).toEqual(1);
-    expect(newNotifications[0]).toEqual(notification2);
+    expect(newNotifications[0]).toEqual(notificationSidequest);
   });
 
   test('Path works properly', () => {
@@ -100,7 +100,7 @@ describe('filterNotificationsByType, ', () => {
     )(notifications);
 
     expect(newNotifications.length).toEqual(1);
-    expect(newNotifications[0]).toEqual(notification3);
+    expect(newNotifications[0]).toEqual(notificationPath);
   });
 
   test('Contest works properly', () => {
@@ -109,7 +109,7 @@ describe('filterNotificationsByType, ', () => {
     )(notifications);
 
     expect(newNotifications.length).toEqual(1);
-    expect(newNotifications[0]).toEqual(notification4);
+    expect(newNotifications[0]).toEqual(notificationContest);
   });
 
   test('Grading works properly', () => {
@@ -118,7 +118,7 @@ describe('filterNotificationsByType, ', () => {
     );
 
     expect(newNotifications.length).toEqual(2);
-    expect(newNotifications[0]).toEqual(notification5);
-    expect(newNotifications[1]).toEqual(notification6);
+    expect(newNotifications[0]).toEqual(notificationSubmissionMission);
+    expect(newNotifications[1]).toEqual(notificationSubmissionSidequest);
   });
 });

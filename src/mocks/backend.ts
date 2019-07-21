@@ -183,21 +183,21 @@ export function* mockBackendSaga(): SagaIterator {
         {
           id: 5,
           type: 'submitted',
-          submission_id: 0,
+          submission_id: 1,
           assessment_type: 'Mission',
           assessment_title: 'Mission 0'
         },
         {
           id: 6,
           type: 'submitted',
-          submission_id: 1,
+          submission_id: 2,
           assessment_type: 'Mission',
           assessment_title: 'Mission 1'
         },
         {
           id: 7,
           type: 'submitted',
-          submission_id: 2,
+          submission_id: 3,
           assessment_type: 'Mission',
           assessment_title: 'Mission 0'
         }
