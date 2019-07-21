@@ -489,11 +489,25 @@ function exponential_decay(decay_period) {
   }
 }
 
+/**
+ * Returns an envelope: a function from sound to sound.
+ * When the envelope is applied to a sound, it returns
+ * a new sound that results from applying ADSR to
+ * the given sound. The Attack duration, Sustain duration and
+ * Release duration are given in the first, second and fourth
+ * arguments in seconds, and the Sustain level is given in 
+ * the third argument as a fraction between 0 and 1.
+ * @param {number} attack_time - duration of attack phase in seconds
+ * @param {number} decay_time - duration of decay phase in seconds
+ * @param {number} sustain_level - sustain level between 0 and 1
+ * @param {number} release_time - duration of release phase in seconds
+ * @returns {function} envelope: function from sound to sound
+ */
 function adsr(attack_time, decay_time, sustain_level, release_time) {
-  return function (sound) {
+  return sound => {
     var wave = get_wave(sound);
     var duration = get_duration(sound);
-    return make_sound(function (x) {
+    return make_sound( x => {
       if (x < attack_time) {
         return wave(x) * (x / attack_time);
       } else if (x < attack_time + decay_time) {
@@ -510,9 +524,23 @@ function adsr(attack_time, decay_time, sustain_level, release_time) {
 }
 
 // waveform is a function that accepts freq, dur and returns sound
-function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
+/**
+ * Returns a sound that results from applying a list of envelopes
+ * to a given wave form. The wave form should be a sound generator that
+ * takes a frequency and a duration as arguments and produces a
+ * sound with the given frequency and duration. Each evelope is
+ * applied to a harmonic: the first harmonic has the given frequency,
+ * the second has twice the frequency, the third three times the
+ * frequency etc.
+ * @param {function} waveform - function from frequency and duration to sound
+ * @param {number} base_frequency - frequency of the first harmonic
+ * @param {number} duration - duration of the produced sound, in seconds
+ * @param {list_of_envelope} envelopes - each a function from sound to sound
+ * @returns {sound} resulting sound
+ */
+function stacking_adsr(waveform, base_frequency, duration, envelopes) {
   function zip(lst, n) {
-    if (is_empty_list(lst)) {
+    if (is_null(lst)) {
       return lst;
     } else {
       return pair(pair(n, head(lst)), zip(tail(lst), n + 1));
@@ -520,22 +548,35 @@ function stacking_adsr(waveform, base_frequency, duration, list_of_envelope) {
   }
 
   return simultaneously(accumulate(
-    function (x, y) {
-      return pair((tail(x))
-    (waveform(base_frequency * head(x), duration))
-    , y);
-  }
-  , []
-  , zip(list_of_envelope, 1)));
+      (x, y) => pair((tail(x))
+		     (waveform(base_frequency * head(x), duration))
+		     , y)
+      , []
+      , zip(envelopes, 1)));
 }
 
 // instruments for students
+
+/**
+ * returns a sound that is reminiscent of a trombone, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {number} note - midi note
+ * @param {number} duration - duration in seconds
+ * @returns {function} <CODE>stop</CODE> to stop recording, 
+ */
 function trombone(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
     list(adsr(0.4, 0, 1, 0),
       adsr(0.6472, 1.2, 0, 0)));
 }
 
+/**
+ * returns a sound that is reminiscent of a piano, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {number} note - midi note
+ * @param {number} duration - duration in seconds
+ * @returns {function} <CODE>stop</CODE> to stop recording, 
+ */
 function piano(note, duration) {
   return stacking_adsr(triangle_sound, midi_note_to_frequency(note), duration,
     list(adsr(0, 1.03, 0, 0),
@@ -543,6 +584,13 @@ function piano(note, duration) {
       adsr(0, 0.4, 0, 0)));
 }
 
+/**
+ * returns a sound that is reminiscent of a bell, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {number} note - midi note
+ * @param {number} duration - duration in seconds
+ * @returns {function} <CODE>stop</CODE> to stop recording, 
+ */
 function bell(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
     list(adsr(0, 1.2, 0, 0),
@@ -551,6 +599,13 @@ function bell(note, duration) {
       adsr(0, 1.8142, 0, 0)));
 }
 
+/**
+ * returns a sound that is reminiscent of a violin, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {number} note - midi note
+ * @param {number} duration - duration in seconds
+ * @returns {function} <CODE>stop</CODE> to stop recording, 
+ */
 function violin(note, duration) {
   return stacking_adsr(sawtooth_sound, midi_note_to_frequency(note), duration,
     list(adsr(0.7, 0, 1, 0.3),
@@ -559,6 +614,13 @@ function violin(note, duration) {
       adsr(0.9, 0, 1, 0.3)));
 }
 
+/**
+ * returns a sound that is reminiscent of a cello, playing
+ * a given note for a given <CODE>duration</CODE> of seconds
+ * @param {number} note - midi note
+ * @param {number} duration - duration in seconds
+ * @returns {function} <CODE>stop</CODE> to stop recording, 
+ */
 function cello(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
     list(adsr(0.1, 0, 1, 0.2),
