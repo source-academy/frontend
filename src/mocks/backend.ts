@@ -43,7 +43,7 @@ export function* mockBackendSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
     const id = (action as actionTypes.IAction).payload;
-    const assessment = mockAssessments[id];
+    const assessment = mockAssessments[id - 1];
     yield put(actions.updateAssessment({ ...assessment }));
   });
 
@@ -155,28 +155,28 @@ export function* mockBackendSaga(): SagaIterator {
         {
           id: 1,
           type: 'new',
-          assessment_id: 1,
+          assessment_id: 2,
           assessment_type: 'Mission',
           assessment_title: 'The Secret to Streams'
         },
         {
           id: 2,
           type: 'new',
-          assessment_id: 2,
+          assessment_id: 3,
           assessment_type: 'Sidequest',
           assessment_title: 'A sample Sidequest'
         },
         {
           id: 3,
           type: 'autograded',
-          assessment_id: 3,
+          assessment_id: 4,
           assessment_type: 'Mission',
           assessment_title: 'A Closed Mission'
         },
         {
           id: 4,
           type: 'graded',
-          assessment_id: 3,
+          assessment_id: 4,
           assessment_type: 'Mission',
           assessment_title: 'A Closed Mission'
         },
