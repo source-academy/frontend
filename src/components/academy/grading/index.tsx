@@ -345,19 +345,20 @@ class Grading extends React.Component<IGradingProps, State> {
       return [];
     }
 
-    return sortBy(
-      this.props.gradingOverviews!.map(o => {
-        (o as GradingOverviewWithNotifications).notifications = filterNotificationsBySubmission(
-          o.submissionId
-        )(this.props.notifications);
-        return o;
-      }),
-      [
-        (a: GradingOverviewWithNotifications) => (a.notifications.length > 0 ? -1 : 0),
-        (a: GradingOverview) => -a.assessmentId,
-        (a: GradingOverview) => -a.submissionId
-      ]
+    const newOverviews = (this.props.gradingOverviews as GradingOverviewWithNotifications[]).map(
+      overview => ({
+        ...overview,
+        notifications: filterNotificationsBySubmission(overview.submissionId)(
+          this.props.notifications
+        )
+      })
     );
+
+    return sortBy(newOverviews, [
+      (a: GradingOverviewWithNotifications) => (a.notifications.length > 0 ? -1 : 0),
+      (a: GradingOverview) => -a.assessmentId,
+      (a: GradingOverview) => -a.submissionId
+    ]);
   };
 }
 
