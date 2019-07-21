@@ -57,7 +57,6 @@ export interface ISourcecastData {
   description: string;
   inserted_at: string;
   updated_at: string;
-  audio: string;
   playbackData: string;
   id: number;
   uploader: {

@@ -1,8 +1,8 @@
-import { ActionCreator } from 'redux';
 import {
   ICodeDelta,
   Input,
   IPlaybackData,
+  ISourcecastData,
   PlaybackStatus
 } from '../components/sourcecast/sourcecastShape';
 import * as actionTypes from './actionTypes';
@@ -12,24 +12,14 @@ export const fetchSourcecastIndex = () => ({
   type: actionTypes.FETCH_SOURCECAST_INDEX
 });
 
-export const updateSourcecastIndex = (index: any) => ({
-  type: actionTypes.UPDATE_SOURCECAST_INDEX,
-  payload: {
-    index
-  }
-});
-
-export const setCodeDeltasToApply: ActionCreator<actionTypes.IAction> = (deltas: ICodeDelta[]) => ({
+export const setCodeDeltasToApply = (deltas: ICodeDelta[]) => ({
   type: actionTypes.SET_CODE_DELTAS_TO_APPLY,
   payload: {
     deltas
   }
 });
 
-export const setInputToApply: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation,
-  inputToApply: Input
-) => ({
+export const setInputToApply = (workspaceLocation: WorkspaceLocation, inputToApply: Input) => ({
   type: actionTypes.SET_INPUT_TO_APPLY,
   payload: {
     workspaceLocation,
@@ -37,7 +27,7 @@ export const setInputToApply: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const setSourcecastData: ActionCreator<actionTypes.IAction> = (
+export const setSourcecastData = (
   title: string,
   description: string,
   audioUrl: string,
@@ -52,18 +42,23 @@ export const setSourcecastData: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const setSourcecastDuration: ActionCreator<actionTypes.IAction> = (duration: number) => ({
+export const setSourcecastDuration = (duration: number) => ({
   type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
   payload: {
     duration
   }
 });
 
-export const setSourcecastStatus: ActionCreator<actionTypes.IAction> = (
-  playbackStatus: PlaybackStatus
-) => ({
+export const setSourcecastStatus = (playbackStatus: PlaybackStatus) => ({
   type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,
   payload: {
     playbackStatus
+  }
+});
+
+export const updateSourcecastIndex = (index: ISourcecastData[]) => ({
+  type: actionTypes.UPDATE_SOURCECAST_INDEX,
+  payload: {
+    index
   }
 });
