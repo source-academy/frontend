@@ -123,14 +123,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const upcomingCards = this.sortAssessments(
         this.props.assessmentOverviews.filter(isOverviewUpcoming)
       ).map((overview, index) =>
-        makeOverviewCard(
+        this.makeOverviewCard(
           overview,
           index,
-          this.setBetchaAssessment,
           !this.props.isStudent,
           false,
-          filterNotificationsByAssessment(overview.id)(this.props.notifications),
-          this.props.handleAcknowledgeNotifications
+          filterNotificationsByAssessment(overview.id)(this.props.notifications)
         )
       );
 
@@ -142,14 +140,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const openedCards = this.sortAssessments(
         this.props.assessmentOverviews.filter(overview => isOverviewOpened(overview))
       ).map((overview, index) =>
-        makeOverviewCard(
+        this.makeOverviewCard(
           overview,
           index,
-          this.setBetchaAssessment,
           true,
           false,
-          filterNotificationsByAssessment(overview.id)(this.props.notifications),
-          this.props.handleAcknowledgeNotifications
+          filterNotificationsByAssessment(overview.id)(this.props.notifications)
         )
       );
 
@@ -159,14 +155,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
         )
       ).map((overview, index) =>
-        makeOverviewCard(
+        this.makeOverviewCard(
           overview,
           index,
-          this.setBetchaAssessment,
           true,
           true,
-          filterNotificationsByAssessment(overview.id)(this.props.notifications),
-          this.props.handleAcknowledgeNotifications
+          filterNotificationsByAssessment(overview.id)(this.props.notifications)
         )
       );
 
@@ -310,94 +304,142 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       a => (filterNotificationsByAssessment(a.id)(this.props.notifications).length > 0 ? -1 : 0),
       a => -a.id
     ]);
+
+  private makeSubmissionButton = (overview: IAssessmentOverview, index: number) => (
+    <Button
+      disabled={overview.status !== AssessmentStatuses.attempted}
+      icon={IconNames.CONFIRM}
+      intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
+      minimal={true}
+      // intentional: each menu renders own version of onClick
+      // tslint:disable-next-line:jsx-no-lambda
+      onClick={() => this.setBetchaAssessment(overview)}
+    >
+      Finalize Submission
+    </Button>
+  );
+
+  private makeOverviewCardButton = (
+    overview: IAssessmentOverview,
+    notifications: Notification[]
+  ) => {
+    let icon: IconName;
+    let label: string;
+    switch (overview.status) {
+      case AssessmentStatuses.not_attempted:
+        icon = IconNames.PLAY;
+        label = 'Attempt';
+        break;
+      case AssessmentStatuses.attempting:
+        icon = IconNames.PLAY;
+        label = 'Continue Attempt';
+        break;
+      case AssessmentStatuses.attempted:
+        icon = IconNames.EDIT;
+        label = 'Review Attempt';
+        break;
+      case AssessmentStatuses.submitted:
+        icon = IconNames.EYE_OPEN;
+        label = 'Review Submission';
+        break;
+      default:
+        // If we reach this case, backend data did not fit IAssessmentOverview
+        icon = IconNames.PLAY;
+        label = 'Review';
+        break;
+    }
+    return (
+      <NavLink
+        to={`/academy/${assessmentCategoryLink(
+          overview.category
+        )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+      >
+        {controlButton(label, icon, () =>
+          this.props.handleAcknowledgeNotifications(notifications.map(n => n.id))
+        )}
+      </NavLink>
+    );
+  };
+
+  /**
+   * Create a series of cards to display IAssessmentOverviews.
+   * @param {IAssessmentOverview} overview the assessment overview to display
+   * @param {number} index a unique number for this card (required for sequential rendering).
+   *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
+   * @param renderAttemptButton will only render the attempt button if true, regardless
+   *   of attempt status.
+   * @param notifications the notifications to be passed in.
+   */
+  private makeOverviewCard = (
+    overview: IAssessmentOverview,
+    index: number,
+    renderAttemptButton: boolean,
+    renderGradingStatus: boolean,
+    notifications: Notification[]
+  ) => (
+    <div key={index}>
+      <Card className="row listing" elevation={Elevation.ONE}>
+        <div className="col-xs-3 listing-picture">
+          <NotificationBadge
+            className="badge"
+            filterNotifications={filterNotificationsByAssessment(overview.id)}
+            large={true}
+          />
+          <img
+            className={`cover-image-${overview.status}`}
+            src={overview.coverImage ? overview.coverImage : defaultCoverImage}
+          />
+        </div>
+        <div className="col-xs-9 listing-text">
+          {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
+          <div className="row listing-grade">
+            <H6>
+              {' '}
+              {beforeNow(overview.openAt)
+                ? `Grade: ${overview.grade} / ${overview.maxGrade}`
+                : `Max Grade: ${overview.maxGrade}`}{' '}
+            </H6>
+          </div>
+          <div className="row listing-xp">
+            <H6>
+              {' '}
+              {beforeNow(overview.openAt)
+                ? `XP: ${overview.xp} / ${overview.maxXp}`
+                : `Max XP: ${overview.maxXp}`}{' '}
+            </H6>
+          </div>
+          <div className="row listing-description">
+            <Markdown content={overview.shortSummary} />
+          </div>
+          <div className="listing-controls">
+            <Text className="listing-due-date">
+              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+              {beforeNow(overview.openAt)
+                ? `Due: ${getPrettyDate(overview.closeAt)}`
+                : `Opens at: ${getPrettyDate(overview.openAt)}`}
+            </Text>
+            {renderAttemptButton ? this.makeOverviewCardButton(overview, notifications) : null}
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+
+  private makeOverviewCardTitle = (
+    overview: IAssessmentOverview,
+    index: number,
+    renderGradingStatus: boolean
+  ) => (
+    <div className="row listing-title">
+      <Text ellipsize={true} className={'col-xs-10'}>
+        <H4>
+          {overview.title} {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
+        </H4>
+      </Text>
+      <div className="col-xs-2">{this.makeSubmissionButton(overview, index)}</div>
+    </div>
+  );
 }
-
-/**
- * Create a series of cards to display IAssessmentOverviews.
- * @param {IAssessmentOverview} overview the assessment overview to display
- * @param {number} index a unique number for this card (required for sequential rendering).
- *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
- * @param setBetchaAssessment a function that handles the side-effect of setting which assessment
- *   is to be set for final submission ("betcha" functionality)
- * @param renderAttemptButton will only render the attempt button if true, regardless
- *   of attempt status.
- * @param notifications the notifications to be passed in.
- * @param handleAcknowledgeNotifications a function that handles the acknowledgement of notifications.
- */
-const makeOverviewCard = (
-  overview: IAssessmentOverview,
-  index: number,
-  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
-  renderAttemptButton: boolean,
-  renderGradingStatus: boolean,
-  notifications: Notification[],
-  handleAcknowledgeNotifications: (ids: number[]) => void
-) => (
-  <div key={index}>
-    <Card className="row listing" elevation={Elevation.ONE}>
-      <div className="col-xs-3 listing-picture">
-        <NotificationBadge
-          className="badge"
-          filterNotifications={filterNotificationsByAssessment(overview.id)}
-          large={true}
-        />
-        <img
-          className={`cover-image-${overview.status}`}
-          src={overview.coverImage ? overview.coverImage : defaultCoverImage}
-        />
-      </div>
-      <div className="col-xs-9 listing-text">
-        {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)}
-        <div className="row listing-grade">
-          <H6>
-            {' '}
-            {beforeNow(overview.openAt)
-              ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-              : `Max Grade: ${overview.maxGrade}`}{' '}
-          </H6>
-        </div>
-        <div className="row listing-xp">
-          <H6>
-            {' '}
-            {beforeNow(overview.openAt)
-              ? `XP: ${overview.xp} / ${overview.maxXp}`
-              : `Max XP: ${overview.maxXp}`}{' '}
-          </H6>
-        </div>
-        <div className="row listing-description">
-          <Markdown content={overview.shortSummary} />
-        </div>
-        <div className="listing-controls">
-          <Text className="listing-due-date">
-            <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-            {beforeNow(overview.openAt)
-              ? `Due: ${getPrettyDate(overview.closeAt)}`
-              : `Opens at: ${getPrettyDate(overview.openAt)}`}
-          </Text>
-          {renderAttemptButton
-            ? makeOverviewCardButton(overview, notifications, handleAcknowledgeNotifications)
-            : null}
-        </div>
-      </div>
-    </Card>
-  </div>
-);
-
-const makeOverviewCardTitle = (
-  overview: IAssessmentOverview,
-  index: number,
-  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void,
-  renderGradingStatus: boolean
-) => (
-  <div className="row listing-title">
-    <Text ellipsize={true} className={'col-xs-10'}>
-      <H4>
-        {overview.title} {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
-      </H4>
-    </Text>
-    <div className="col-xs-2">{makeSubmissionButton(overview, index, setBetchaAssessment)}</div>
-  </div>
-);
 
 const makeGradingStatus = (gradingStatus: string) => {
   let iconName: IconName;
@@ -435,67 +477,6 @@ const makeGradingStatus = (gradingStatus: string) => {
     <Tooltip content={tooltip} position={Position.RIGHT}>
       <Icon icon={iconName} intent={intent} />
     </Tooltip>
-  );
-};
-
-const makeSubmissionButton = (
-  overview: IAssessmentOverview,
-  index: number,
-  setBetchaAssessment: (assessment: IAssessmentOverview | null) => void
-) => (
-  <Button
-    disabled={overview.status !== AssessmentStatuses.attempted}
-    icon={IconNames.CONFIRM}
-    intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
-    minimal={true}
-    // intentional: each menu renders own version of onClick
-    // tslint:disable-next-line:jsx-no-lambda
-    onClick={() => setBetchaAssessment(overview)}
-  >
-    Finalize Submission
-  </Button>
-);
-
-const makeOverviewCardButton = (
-  overview: IAssessmentOverview,
-  notifications: Notification[],
-  handleAcknowledgeNotifications: (ids: number[]) => void
-) => {
-  let icon: IconName;
-  let label: string;
-  switch (overview.status) {
-    case AssessmentStatuses.not_attempted:
-      icon = IconNames.PLAY;
-      label = 'Attempt';
-      break;
-    case AssessmentStatuses.attempting:
-      icon = IconNames.PLAY;
-      label = 'Continue Attempt';
-      break;
-    case AssessmentStatuses.attempted:
-      icon = IconNames.EDIT;
-      label = 'Review Attempt';
-      break;
-    case AssessmentStatuses.submitted:
-      icon = IconNames.EYE_OPEN;
-      label = 'Review Submission';
-      break;
-    default:
-      // If we reach this case, backend data did not fit IAssessmentOverview
-      icon = IconNames.PLAY;
-      label = 'Review';
-      break;
-  }
-  return (
-    <NavLink
-      to={`/academy/${assessmentCategoryLink(
-        overview.category
-      )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
-    >
-      {controlButton(label, icon, () =>
-        handleAcknowledgeNotifications(notifications.map(n => n.id))
-      )}
-    </NavLink>
   );
 };
 
