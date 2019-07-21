@@ -1,13 +1,15 @@
-import { ActionCreator } from 'redux';
-
 import { Input, IPlaybackData } from '../components/sourcecast/sourcecastShape';
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
-export const recordEditorInput: ActionCreator<actionTypes.IAction> = (
-  location: WorkspaceLocation,
-  input: Input
-) => ({
+export const recordEditorInitValue = (editorValue: string) => ({
+  type: actionTypes.RECORD_EDITOR_INIT_VALUE,
+  payload: {
+    editorValue
+  }
+});
+
+export const recordEditorInput = (location: WorkspaceLocation, input: Input) => ({
   type: actionTypes.RECORD_EDITOR_INPUT,
   payload: {
     location,
@@ -30,14 +32,7 @@ export const saveSourcecastData = (
   }
 });
 
-export const recordEditorInitValue: ActionCreator<actionTypes.IAction> = (editorValue: string) => ({
-  type: actionTypes.RECORD_EDITOR_INIT_VALUE,
-  payload: {
-    editorValue
-  }
-});
-
-export const timerPause: ActionCreator<actionTypes.IAction> = (timeNow: number) => ({
+export const timerPause = () => ({
   type: actionTypes.TIMER_PAUSE,
   payload: {
     timeNow: Date.now()
@@ -48,21 +43,21 @@ export const timerReset = () => ({
   type: actionTypes.TIMER_RESET
 });
 
-export const timerResume: ActionCreator<actionTypes.IAction> = (timeNow: number) => ({
+export const timerResume = () => ({
   type: actionTypes.TIMER_RESUME,
   payload: {
     timeNow: Date.now()
   }
 });
 
-export const timerStart: ActionCreator<actionTypes.IAction> = (timeNow: number) => ({
+export const timerStart = () => ({
   type: actionTypes.TIMER_START,
   payload: {
     timeNow: Date.now()
   }
 });
 
-export const timerStop: ActionCreator<actionTypes.IAction> = (timeNow: number) => ({
+export const timerStop = () => ({
   type: actionTypes.TIMER_STOP,
   payload: {
     timeNow: Date.now()
