@@ -10,19 +10,12 @@ import { AssessmentCategories } from '../assessment/assessmentShape';
 
 import NotificationBadge from '../../containers/notification/NotificationBadge';
 import { filterNotificationsByType } from '../notification/NotificationHelpers';
-import { Notification } from '../notification/notificationShape';
-
-type NavigationBarProps = OwnProps & StateProps;
 
 type OwnProps = {
   role: Role;
 };
 
-export type StateProps = {
-  notifications: Notification[];
-};
-
-const NavigationBar: React.SFC<NavigationBarProps> = props => (
+const NavigationBar: React.SFC<OwnProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
