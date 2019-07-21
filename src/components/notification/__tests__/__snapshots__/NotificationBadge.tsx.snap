@@ -2,7 +2,7 @@
 
 exports[`Badge does not render with no notifications 1`] = `"<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} />"`;
 
-exports[`Badge renders properly for students 1`] = `
+exports[`Badge renders properly with notifications 1`] = `
 "<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]}>
   <Blueprint3.Popover className={[undefined]} content={{...}} interactionKind=\\"hover\\" position=\\"right\\" boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
     <Manager>
