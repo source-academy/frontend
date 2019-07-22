@@ -12,7 +12,7 @@ type OwnProps = {
   className?: string;
   disableHover?: boolean; // Set to true to disable popover content
   large?: boolean; // Set to true to use large style
-  filterNotifications?: (notifications: Notification[]) => Notification[];
+  notificationFilter?: (notifications: Notification[]) => Notification[];
 };
 
 export type StateProps = {
@@ -24,8 +24,8 @@ export type DispatchProps = {
 };
 
 const NotificationBadge: React.SFC<OwnProps & StateProps & DispatchProps> = props => {
-  const notifications = props.filterNotifications
-    ? props.filterNotifications(props.notifications)
+  const notifications = props.notificationFilter
+    ? props.notificationFilter(props.notifications)
     : props.notifications;
 
   if (!notifications.length) {

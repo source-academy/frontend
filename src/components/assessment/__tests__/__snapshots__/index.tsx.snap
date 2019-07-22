@@ -85,8 +85,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" filterNotifications={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" filterNotifications={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
@@ -197,8 +197,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" filterNotifications={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" filterNotifications={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
@@ -311,8 +311,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" filterNotifications={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" filterNotifications={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
@@ -425,8 +425,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" filterNotifications={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" filterNotifications={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
@@ -663,8 +663,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" filterNotifications={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" filterNotifications={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
@@ -803,8 +803,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" filterNotifications={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" filterNotifications={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
@@ -917,8 +917,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" filterNotifications={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" filterNotifications={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
@@ -1031,8 +1031,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp3-card bp3-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" filterNotifications={[Function]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" filterNotifications={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
                                   </Connect(NotificationBadge)>
                                   <img className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>

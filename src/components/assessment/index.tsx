@@ -351,7 +351,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         <div className="col-xs-3 listing-picture">
           <NotificationBadge
             className="badge"
-            filterNotifications={filterNotificationsByAssessment(overview.id)}
+            notificationFilter={filterNotificationsByAssessment(overview.id)}
             large={true}
           />
           <img

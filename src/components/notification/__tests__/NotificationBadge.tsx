@@ -3,12 +3,12 @@ import * as React from 'react';
 
 import { AssessmentCategories } from '../../../components/assessment/assessmentShape';
 import NotificationBadge from '../NotificationBadge';
-import { Notification } from '../notificationShape';
 import {
   filterNotificationsByAssessment,
   filterNotificationsBySubmission,
   filterNotificationsByType
 } from '../NotificationHelpers';
+import { Notification } from '../notificationShape';
 
 const notifications: Notification[] = [
   {
@@ -72,7 +72,7 @@ describe('Badge with filter,', () => {
       <NotificationBadge
         notifications={notifications}
         handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-        filterNotifications={filterNotificationsByAssessment(1)}
+        notificationFilter={filterNotificationsByAssessment(1)}
       />
     );
     expect(tree.debug()).toMatchSnapshot();
@@ -83,7 +83,7 @@ describe('Badge with filter,', () => {
       <NotificationBadge
         notifications={notifications}
         handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-        filterNotifications={filterNotificationsBySubmission(1)}
+        notificationFilter={filterNotificationsBySubmission(1)}
       />
     );
     expect(tree.debug()).toMatchSnapshot();
@@ -94,7 +94,7 @@ describe('Badge with filter,', () => {
       <NotificationBadge
         notifications={notifications}
         handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-        filterNotifications={filterNotificationsByType(AssessmentCategories.Mission)}
+        notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
       />
     );
     expect(tree.debug()).toMatchSnapshot();

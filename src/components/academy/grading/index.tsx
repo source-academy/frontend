@@ -80,7 +80,7 @@ const GradingExp = (props: GradingNavLinkProps) => {
 const NotificationBadgeCell = (props: GradingNavLinkProps) => {
   return (
     <NotificationBadge
-      filterNotifications={filterNotificationsBySubmission(props.data.submissionId)}
+      notificationFilter={filterNotificationsBySubmission(props.data.submissionId)}
     />
   );
 };

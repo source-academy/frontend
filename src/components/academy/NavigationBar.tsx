@@ -26,7 +26,7 @@ const NavigationBar: React.SFC<OwnProps> = props => (
         <Icon icon={IconNames.FLAME} />
         <div className="navbar-button-text hidden-xs">Missions</div>
         <NotificationBadge
-          filterNotifications={filterNotificationsByType(AssessmentCategories.Mission)}
+          notificationFilter={filterNotificationsByType(AssessmentCategories.Mission)}
           disableHover={true}
         />
       </NavLink>
@@ -39,7 +39,7 @@ const NavigationBar: React.SFC<OwnProps> = props => (
         <Icon icon={IconNames.LIGHTBULB} />
         <div className="navbar-button-text hidden-xs">Quests</div>
         <NotificationBadge
-          filterNotifications={filterNotificationsByType(AssessmentCategories.Sidequest)}
+          notificationFilter={filterNotificationsByType(AssessmentCategories.Sidequest)}
           disableHover={true}
         />
       </NavLink>
@@ -52,7 +52,7 @@ const NavigationBar: React.SFC<OwnProps> = props => (
         <Icon icon={IconNames.PREDICTIVE_ANALYSIS} />
         <div className="navbar-button-text hidden-xs">Paths</div>
         <NotificationBadge
-          filterNotifications={filterNotificationsByType(AssessmentCategories.Path)}
+          notificationFilter={filterNotificationsByType(AssessmentCategories.Path)}
           disableHover={true}
         />
       </NavLink>
@@ -65,7 +65,7 @@ const NavigationBar: React.SFC<OwnProps> = props => (
         <Icon icon={IconNames.COMPARISON} />
         <div className="navbar-button-text hidden-xs">Contests</div>
         <NotificationBadge
-          filterNotifications={filterNotificationsByType(AssessmentCategories.Contest)}
+          notificationFilter={filterNotificationsByType(AssessmentCategories.Contest)}
           disableHover={true}
         />
       </NavLink>
@@ -80,7 +80,7 @@ const NavigationBar: React.SFC<OwnProps> = props => (
           <Icon icon={IconNames.ENDORSED} />
           <div className="navbar-button-text hidden-xs">Grading</div>
           <NotificationBadge
-            filterNotifications={filterNotificationsByType('Grading')}
+            notificationFilter={filterNotificationsByType('Grading')}
             disableHover={true}
           />
         </NavLink>
