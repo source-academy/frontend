@@ -143,14 +143,19 @@ export function* mockBackendSaga(): SagaIterator {
   });
 
   yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
-    const notifications: Notification[] = yield select(
+    const notificationFilter:
+      | NotificationFilterFunction
+      | undefined = (action as actionTypes.IAction).payload.withFilter;
+
+    let notifications: Notification[] = yield select(
       (state: IState) => state.session.notifications
     );
 
-    const withFilter: NotificationFilterFunction =
-      (action as actionTypes.IAction).payload.withFilter || (n => n);
+    if (notificationFilter) {
+      notifications = notificationFilter(notifications);
+    }
 
-    const ids = withFilter(notifications).map(n => n.id);
+    const ids = notifications.map(n => n.id);
 
     if (ids.length === 0) {
       return;
