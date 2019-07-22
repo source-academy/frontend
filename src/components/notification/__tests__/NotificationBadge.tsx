@@ -1,8 +1,14 @@
+import { mount } from 'enzyme';
 import * as React from 'react';
 
-import { mount } from 'enzyme';
+import { AssessmentCategories } from '../../../components/assessment/assessmentShape';
 import NotificationBadge from '../NotificationBadge';
 import { Notification } from '../notificationShape';
+import {
+  filterNotificationsByAssessment,
+  filterNotificationsBySubmission,
+  filterNotificationsByType
+} from '../NotificationHelpers';
 
 const notifications: Notification[] = [
   {
@@ -56,6 +62,41 @@ describe('Badge', () => {
       />
     );
 
+    expect(tree.debug()).toMatchSnapshot();
+  });
+});
+
+describe('Badge with filter,', () => {
+  test('filterNotificationsByAssessment renders properly', () => {
+    const tree = mount(
+      <NotificationBadge
+        notifications={notifications}
+        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
+        filterNotifications={filterNotificationsByAssessment(1)}
+      />
+    );
+    expect(tree.debug()).toMatchSnapshot();
+  });
+
+  test('filterNotificationsBySubmission renders properly', () => {
+    const tree = mount(
+      <NotificationBadge
+        notifications={notifications}
+        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
+        filterNotifications={filterNotificationsBySubmission(1)}
+      />
+    );
+    expect(tree.debug()).toMatchSnapshot();
+  });
+
+  test('filterNotificationsByAssessment renders properly', () => {
+    const tree = mount(
+      <NotificationBadge
+        notifications={notifications}
+        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
+        filterNotifications={filterNotificationsByType(AssessmentCategories.Mission)}
+      />
+    );
     expect(tree.debug()).toMatchSnapshot();
   });
 });

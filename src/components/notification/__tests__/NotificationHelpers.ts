@@ -122,3 +122,10 @@ describe('filterNotificationsByType, ', () => {
     expect(newNotifications[1]).toEqual(notificationSubmissionSidequest);
   });
 });
+
+test('filterNotificationsById works properly', () => {
+  const newNotifications = NotificationHelpers.filterNotificationsById(1)(notifications);
+
+  expect(newNotifications.length).toEqual(1);
+  expect(newNotifications[0]).toEqual(notificationMission);
+});
