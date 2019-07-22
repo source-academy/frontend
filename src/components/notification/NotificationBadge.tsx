@@ -1,6 +1,12 @@
 import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
 import * as React from 'react';
-import { Notification, NotificationType, NotificationTypes } from './notificationShape';
+import { filterNotificationsById } from './NotificationHelpers';
+import {
+  Notification,
+  NotificationFilterFunction,
+  NotificationType,
+  NotificationTypes
+} from './notificationShape';
 
 type OwnProps = {
   className?: string;
@@ -14,7 +20,7 @@ export type StateProps = {
 };
 
 export type DispatchProps = {
-  handleAcknowledgeNotifications: (notificationIds: number[]) => void;
+  handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
 };
 
 const NotificationBadge: React.SFC<OwnProps & StateProps & DispatchProps> = props => {
@@ -34,7 +40,8 @@ const NotificationBadge: React.SFC<OwnProps & StateProps & DispatchProps> = prop
 
   if (!props.disableHover) {
     const makeNotificationTag = (notification: Notification) => {
-      const onRemove = () => props.handleAcknowledgeNotifications([notification.id]);
+      const onRemove = () =>
+        props.handleAcknowledgeNotifications(filterNotificationsById(notification.id));
 
       return (
         <Tag

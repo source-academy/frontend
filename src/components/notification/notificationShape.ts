@@ -20,3 +20,5 @@ export enum NotificationTypes {
 }
 
 export type NotificationType = keyof typeof NotificationTypes;
+
+export type NotificationFilterFunction = (notifications: Notification[]) => Notification[];

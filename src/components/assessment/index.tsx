@@ -39,7 +39,7 @@ import { controlButton } from '../commons';
 import ContentDisplay from '../commons/ContentDisplay';
 import Markdown from '../commons/Markdown';
 import { filterNotificationsByAssessment } from '../notification/NotificationHelpers';
-import { Notification } from '../notification/notificationShape';
+import { NotificationFilterFunction } from '../notification/notificationShape';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
@@ -55,7 +55,7 @@ export interface IAssessmentProps
     IStateProps {}
 
 export interface IDispatchProps {
-  handleAcknowledgeNotifications: (ids: number[]) => void;
+  handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
   handleAssessmentOverviewFetch: () => void;
   handleSubmitAssessment: (id: number) => void;
 }
@@ -67,7 +67,6 @@ export interface IOwnProps {
 export interface IStateProps {
   assessmentOverviews?: IAssessmentOverview[];
   isStudent: boolean;
-  notifications: Notification[];
 }
 
 type State = {
@@ -123,13 +122,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       const upcomingCards = this.sortAssessments(
         this.props.assessmentOverviews.filter(isOverviewUpcoming)
       ).map((overview, index) =>
-        this.makeOverviewCard(
-          overview,
-          index,
-          !this.props.isStudent,
-          false,
-          filterNotificationsByAssessment(overview.id)(this.props.notifications)
-        )
+        this.makeOverviewCard(overview, index, !this.props.isStudent, false)
       );
 
       /** Opened assessments, that are released and can be attempted. */
@@ -139,30 +132,14 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         overview.status !== AssessmentStatuses.submitted;
       const openedCards = this.sortAssessments(
         this.props.assessmentOverviews.filter(overview => isOverviewOpened(overview))
-      ).map((overview, index) =>
-        this.makeOverviewCard(
-          overview,
-          index,
-          true,
-          false,
-          filterNotificationsByAssessment(overview.id)(this.props.notifications)
-        )
-      );
+      ).map((overview, index) => this.makeOverviewCard(overview, index, true, false));
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.sortAssessments(
         this.props.assessmentOverviews.filter(
           overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
         )
-      ).map((overview, index) =>
-        this.makeOverviewCard(
-          overview,
-          index,
-          true,
-          true,
-          filterNotificationsByAssessment(overview.id)(this.props.notifications)
-        )
-      );
+      ).map((overview, index) => this.makeOverviewCard(overview, index, true, true));
 
       /** Render cards */
       const upcomingCardsCollapsible =
@@ -315,10 +292,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     </Button>
   );
 
-  private makeOverviewCardButton = (
-    overview: IAssessmentOverview,
-    notifications: Notification[]
-  ) => {
+  private makeOverviewCardButton = (overview: IAssessmentOverview) => {
     let icon: IconName;
     let label: string;
     switch (overview.status) {
@@ -351,7 +325,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
       >
         {controlButton(label, icon, () =>
-          this.props.handleAcknowledgeNotifications(notifications.map(n => n.id))
+          this.props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
         )}
       </NavLink>
     );
@@ -370,8 +344,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     overview: IAssessmentOverview,
     index: number,
     renderAttemptButton: boolean,
-    renderGradingStatus: boolean,
-    notifications: Notification[]
+    renderGradingStatus: boolean
   ) => (
     <div key={index}>
       <Card className="row listing" elevation={Elevation.ONE}>
@@ -414,7 +387,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
                 ? `Due: ${getPrettyDate(overview.closeAt)}`
                 : `Opens at: ${getPrettyDate(overview.openAt)}`}
             </Text>
-            {renderAttemptButton ? this.makeOverviewCardButton(overview, notifications) : null}
+            {renderAttemptButton ? this.makeOverviewCardButton(overview) : null}
           </div>
         </div>
       </Card>

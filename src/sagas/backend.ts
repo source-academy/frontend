@@ -22,7 +22,10 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
-import { Notification } from '../components/notification/notificationShape';
+import {
+  Notification,
+  NotificationFilterFunction
+} from '../components/notification/notificationShape';
 import { store } from '../createStore';
 import { IState, Role } from '../reducers/states';
 import { castLibrary } from '../utils/castBackend';
@@ -299,15 +302,20 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const ids = (action as actionTypes.IAction).payload as number[];
+
+    const notifications: Notification[] = yield select(
+      (state: IState) => state.session.notifications
+    );
+
+    const withFilter: NotificationFilterFunction =
+      (action as actionTypes.IAction).payload.withFilter || (n => n);
+
+    const ids = withFilter(notifications).map(n => n.id);
 
     if (ids.length === 0) {
       return;
     }
 
-    const notifications: Notification[] = yield select(
-      (state: IState) => state.session.notifications
-    );
     const newNotifications: Notification[] = notifications.filter(
       notification => !ids.includes(notification.id)
     );

@@ -3,12 +3,14 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { filterNotificationsBySubmission } from '../../../components/notification/NotificationHelpers';
+import { NotificationFilterFunction } from '../../../components/notification/notificationShape';
 import { controlButton } from '../../commons/controlButton';
 import { GradingOverviewWithNotifications } from './gradingShape';
 
 type EditGradingCellProps = {
   data: GradingOverviewWithNotifications;
-  handleAcknowledgeNotifications: (ids: number[]) => void;
+  handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
 };
 
 /**
@@ -33,7 +35,9 @@ class EditGradingCell extends React.Component<EditGradingCellProps, {}> {
           '',
           IconNames.ANNOTATION,
           () =>
-            this.props.handleAcknowledgeNotifications(this.props.data.notifications.map(n => n.id)),
+            this.props.handleAcknowledgeNotifications(
+              filterNotificationsBySubmission(this.props.data.submissionId)
+            ),
           { fullWidth: true }
         )}
       </NavLink>

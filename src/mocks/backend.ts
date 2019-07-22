@@ -9,7 +9,10 @@ import {
   GradingQuestion
 } from '../components/academy/grading/gradingShape';
 import { IQuestion } from '../components/assessment/assessmentShape';
-import { Notification } from '../components/notification/notificationShape';
+import {
+  Notification,
+  NotificationFilterFunction
+} from '../components/notification/notificationShape';
 import { store } from '../createStore';
 import { IState } from '../reducers/states';
 import { history } from '../utils/history';
@@ -143,7 +146,16 @@ export function* mockBackendSaga(): SagaIterator {
     const notifications: Notification[] = yield select(
       (state: IState) => state.session.notifications
     );
-    const ids = (action as actionTypes.IAction).payload as number[];
+
+    const withFilter: NotificationFilterFunction =
+      (action as actionTypes.IAction).payload.withFilter || (n => n);
+
+    const ids = withFilter(notifications).map(n => n.id);
+
+    if (ids.length === 0) {
+      return;
+    }
+
     const newNotifications: Notification[] = notifications.filter(
       notification => !ids.includes(notification.id)
     );

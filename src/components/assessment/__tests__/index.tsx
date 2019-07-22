@@ -12,11 +12,10 @@ import { AssessmentCategories } from '../assessmentShape';
 const defaultProps: IAssessmentProps = {
   assessmentCategory: AssessmentCategories.Mission,
   assessmentOverviews: undefined,
-  handleAcknowledgeNotifications: (ids: number[]) => {},
+  handleAcknowledgeNotifications: () => {},
   handleAssessmentOverviewFetch: () => {},
   handleSubmitAssessment: (id: number) => {},
   isStudent: false,
-  notifications: [],
   ...mockRouterProps('/academy/missions', {})
 };
 

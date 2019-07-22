@@ -1,5 +1,5 @@
 import { AssessmentCategories } from '../assessment/assessmentShape';
-import { Notification } from './notificationShape';
+import { Notification, NotificationFilterFunction } from './notificationShape';
 
 type filterByTypeOptions = AssessmentCategories | 'Grading';
 
@@ -8,7 +8,7 @@ type filterByTypeOptions = AssessmentCategories | 'Grading';
  *
  * @return A function that takes in an array of notification and filters it.
  */
-export function filterNotificationsByAssessment(assessmentId: number) {
+export function filterNotificationsByAssessment(assessmentId: number): NotificationFilterFunction {
   return (notifications: Notification[]) =>
     notifications.filter(n => !n.submission_id && n.assessment_id === assessmentId);
 }
@@ -18,7 +18,7 @@ export function filterNotificationsByAssessment(assessmentId: number) {
  *
  * @return A function that takes in an array of notification and filters it.
  */
-export function filterNotificationsBySubmission(submissionId: number) {
+export function filterNotificationsBySubmission(submissionId: number): NotificationFilterFunction {
   return (notifications: Notification[]) =>
     notifications.filter(n => n.submission_id === submissionId);
 }
@@ -32,7 +32,9 @@ export function filterNotificationsBySubmission(submissionId: number) {
  *
  * @return A function that takes in an array of notification and filters it.
  */
-export function filterNotificationsByType(assessmentType: filterByTypeOptions) {
+export function filterNotificationsByType(
+  assessmentType: filterByTypeOptions
+): NotificationFilterFunction {
   return (notifications: Notification[]) =>
     notifications.filter(n => {
       if (assessmentType === 'Grading') {
@@ -40,4 +42,13 @@ export function filterNotificationsByType(assessmentType: filterByTypeOptions) {
       }
       return !n.submission_id && assessmentType === n.assessment_type;
     });
+}
+
+/**
+ * @param id the notification id to filter the notifications with.
+ *
+ * @return A function that takes in an array of notification and filters it.
+ */
+export function filterNotificationsById(id: number): NotificationFilterFunction {
+  return (notifications: Notification[]) => notifications.filter(n => n.id === id);
 }

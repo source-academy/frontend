@@ -28,13 +28,13 @@ import {
 } from '../session';
 
 test('acknowledgeNotifications generates correct action object', () => {
-  const notificationIds: number[] = [1, 2, 3];
-
-  const action = acknowledgeNotifications(notificationIds);
+  const action = acknowledgeNotifications();
 
   expect(action).toEqual({
     type: actionTypes.ACKNOWLEDGE_NOTIFICATION,
-    payload: notificationIds
+    payload: {
+      withFilter: undefined
+    }
   });
 });
 

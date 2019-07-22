@@ -23,7 +23,7 @@ import NotificationBadge from '../../../containers/notification/NotificationBadg
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { filterNotificationsBySubmission } from '../../notification/NotificationHelpers';
-import { Notification } from '../../notification/notificationShape';
+import { Notification, NotificationFilterFunction } from '../../notification/notificationShape';
 import EditGradingCell from './EditGradingCell';
 import GradeCell from './GradeCell';
 import { GradingOverview, GradingOverviewWithNotifications } from './gradingShape';
@@ -52,7 +52,7 @@ export interface IGradingWorkspaceParams {
 }
 
 export interface IDispatchProps {
-  handleAcknowledgeNotifications: (ids: number[]) => void;
+  handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
   handleUnsubmitSubmission: (submissionId: number) => void;
 }

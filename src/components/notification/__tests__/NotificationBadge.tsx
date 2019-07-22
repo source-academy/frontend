@@ -35,7 +35,7 @@ const notifications: Notification[] = [
   }
 ];
 
-const handleAcknowledgeNotifications = (ids: number[]) => {};
+const handleAcknowledgeNotifications = () => {};
 
 describe('Badge', () => {
   test('renders properly with notifications', () => {

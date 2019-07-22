@@ -2,7 +2,10 @@ import { ActionCreator } from 'redux';
 
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape';
-import { Notification } from '../components/notification/notificationShape';
+import {
+  Notification,
+  NotificationFilterFunction
+} from '../components/notification/notificationShape';
 import { Story } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -140,9 +143,11 @@ export const fetchNotifications = () => ({
   type: actionTypes.FETCH_NOTIFICATIONS
 });
 
-export const acknowledgeNotifications = (notificationIds: number[]) => ({
+export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction) => ({
   type: actionTypes.ACKNOWLEDGE_NOTIFICATION,
-  payload: notificationIds
+  payload: {
+    withFilter
+  }
 });
 
 export const updateNotifications = (notifications: Notification[]) => ({
