@@ -16,6 +16,7 @@ import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { mockAssessmentOverviews, mockAssessments } from './assessmentAPI';
 import { mockFetchGrading, mockFetchGradingOverview } from './gradingAPI';
+import { mockNotifications } from './userAPI';
 
 export function* mockBackendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
@@ -150,58 +151,6 @@ export function* mockBackendSaga(): SagaIterator {
   });
 
   yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
-    yield put(
-      actions.updateNotifications([
-        {
-          id: 1,
-          type: 'new',
-          assessment_id: 2,
-          assessment_type: 'Mission',
-          assessment_title: 'The Secret to Streams'
-        },
-        {
-          id: 2,
-          type: 'new',
-          assessment_id: 3,
-          assessment_type: 'Sidequest',
-          assessment_title: 'A sample Sidequest'
-        },
-        {
-          id: 3,
-          type: 'autograded',
-          assessment_id: 4,
-          assessment_type: 'Mission',
-          assessment_title: 'A Closed Mission'
-        },
-        {
-          id: 4,
-          type: 'graded',
-          assessment_id: 4,
-          assessment_type: 'Mission',
-          assessment_title: 'A Closed Mission'
-        },
-        {
-          id: 5,
-          type: 'submitted',
-          submission_id: 1,
-          assessment_type: 'Mission',
-          assessment_title: 'Mission 0'
-        },
-        {
-          id: 6,
-          type: 'submitted',
-          submission_id: 2,
-          assessment_type: 'Mission',
-          assessment_title: 'Mission 1'
-        },
-        {
-          id: 7,
-          type: 'submitted',
-          submission_id: 3,
-          assessment_type: 'Mission',
-          assessment_title: 'Mission 0'
-        }
-      ] as Notification[])
-    );
+    yield put(actions.updateNotifications(mockNotifications));
   });
 }
