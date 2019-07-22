@@ -298,12 +298,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     }
   };
 
-  /** Sort assessments, first by whether notifications exist, then by assessment id. */
   private sortAssessments = (assessments: IAssessmentOverview[]) =>
-    sortBy(assessments, [
-      a => (filterNotificationsByAssessment(a.id)(this.props.notifications).length > 0 ? -1 : 0),
-      a => -a.id
-    ]);
+    sortBy(assessments, [a => -a.id]);
 
   private makeSubmissionButton = (overview: IAssessmentOverview, index: number) => (
     <Button
