@@ -28,19 +28,11 @@ import {
   IAction,
   INIT_INVITE,
   LOG_OUT,
-  RECORD_EDITOR_INIT_VALUE,
-  RECORD_EDITOR_INPUT,
   RESET_WORKSPACE,
-  SAVE_SOURCECAST_DATA,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS,
-  TIMER_PAUSE,
-  TIMER_RESET,
-  TIMER_RESUME,
-  TIMER_START,
-  TIMER_STOP,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -50,9 +42,9 @@ import {
   UPDATE_WORKSPACE
 } from '../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
-import { RecordingStatus } from '../components/sourcecast/sourcecastShape';
 import { createContext } from '../utils/slangHelper';
 import { reducer as sourcecastReducer } from './sourcecast';
+import { reducer as sourcereelReducer } from './sourcereel';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -87,7 +79,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
       return {
         ...state,
-        sourcecast: sourcecastReducer(state.sourcecast, action)
+        sourcecast: sourcecastState
+      };
+    case WorkspaceLocations.sourcereel:
+      const sourcereelState = sourcereelReducer(state.sourcereel, action);
+      if (sourcereelState === state.sourcereel) {
+        break;
+      }
+      return {
+        ...state,
+        sourcereel: sourcereelState
       };
     default:
       break;
@@ -476,17 +477,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       };
-    case RECORD_EDITOR_INPUT:
-      return {
-        ...state,
-        sourcereel: {
-          ...state.sourcereel,
-          playbackData: {
-            ...state.sourcereel.playbackData,
-            inputs: [...state.sourcereel.playbackData.inputs, action.payload.input]
-          }
-        }
-      };
+
     /**
      * Resets the workspace to default settings,
      * including the js-slang Context. Apply
@@ -538,30 +529,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           editorSessionId: action.payload.editorSessionId
         }
       };
-    case RECORD_EDITOR_INIT_VALUE:
-      return {
-        ...state,
-        sourcereel: {
-          ...state.sourcereel,
-          playbackData: {
-            init: {
-              editorValue: action.payload.editorValue
-            },
-            inputs: []
-          }
-        }
-      };
-    case SAVE_SOURCECAST_DATA:
-      return {
-        ...state,
-        sourcecast: {
-          ...state.sourcecast,
-          title: action.payload.title,
-          description: action.payload.description,
-          audioUrl: window.URL.createObjectURL(action.payload.audio),
-          playbackData: action.payload.playbackData
-        }
-      };
+
     case SET_EDITOR_READONLY:
       return {
         ...state,
@@ -576,57 +544,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           websocketStatus: action.payload.websocketStatus
-        }
-      };
-    case TIMER_PAUSE:
-      return {
-        ...state,
-        sourcereel: {
-          ...state.sourcereel,
-          recordingStatus: RecordingStatus.paused,
-          timeElapsedBeforePause:
-            state.sourcereel.timeElapsedBeforePause +
-            action.payload.timeNow -
-            state.sourcereel.timeResumed
-        }
-      };
-    case TIMER_RESET:
-      return {
-        ...state,
-        sourcereel: {
-          ...state.sourcereel,
-          recordingStatus: RecordingStatus.notStarted,
-          timeElapsedBeforePause: 0,
-          timeResumed: 0
-        }
-      };
-    case TIMER_RESUME:
-      return {
-        ...state,
-        sourcereel: {
-          ...state.sourcereel,
-          recordingStatus: RecordingStatus.recording,
-          timeResumed: action.payload.timeNow
-        }
-      };
-    case TIMER_START:
-      return {
-        ...state,
-        sourcereel: {
-          ...state.sourcereel,
-          recordingStatus: RecordingStatus.recording,
-          timeElapsedBeforePause: 0,
-          timeResumed: action.payload.timeNow
-        }
-      };
-    case TIMER_STOP:
-      return {
-        ...state,
-        sourcereel: {
-          ...state.sourcereel,
-          recordingStatus: RecordingStatus.finished,
-          timeElapsedBeforePause: 0,
-          timeResumed: 0
         }
       };
     case TOGGLE_EDITOR_AUTORUN:
