@@ -1,8 +1,9 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
-import { call, put } from 'redux-saga/effects';
+import { call } from 'redux-saga/effects';
 
 import * as actions from '../actions';
+import { store } from '../createStore';
 import {
   Grading,
   GradingOverview,
@@ -369,7 +370,7 @@ async function request(
     // response.status of > 299 does not raise error; so deal with in in the try clause
     if (opts.shouldRefresh && response && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
-      put(actions.setTokens(newTokens));
+      store.dispatch(actions.setTokens(newTokens));
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,
@@ -388,7 +389,7 @@ async function request(
     }
     return response;
   } catch (e) {
-    put(actions.logOut());
+    store.dispatch(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
     return null;
   }
