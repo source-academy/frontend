@@ -207,7 +207,6 @@ function* backendSaga(): SagaIterator {
     const {
       submissionId,
       questionId,
-      comment,
       gradeAdjustment,
       xpAdjustment
     } = (action as actionTypes.IAction).payload;
@@ -218,7 +217,7 @@ function* backendSaga(): SagaIterator {
     const resp = yield request.postGrading(
       submissionId,
       questionId,
-      comment,
+      '',
       gradeAdjustment,
       xpAdjustment,
       tokens
