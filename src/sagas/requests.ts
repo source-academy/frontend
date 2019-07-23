@@ -3,7 +3,6 @@
 import { call } from 'redux-saga/effects';
 
 import * as actions from '../actions';
-import { store } from '../createStore';
 import {
   Grading,
   GradingOverview,
@@ -18,6 +17,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import { store } from '../createStore';
 import { castLibrary } from '../utils/castBackend';
 import { BACKEND_URL } from '../utils/constants';
 import { showWarningMessage } from '../utils/notification';
