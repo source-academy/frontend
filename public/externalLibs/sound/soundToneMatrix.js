@@ -511,7 +511,7 @@ function adsr(attack_time, decay_time, sustain_level, release_time) {
       if (x < attack_time) {
         return wave(x) * (x / attack_time);
       } else if (x < attack_time + decay_time) {
-        return ((exponential_decay(1 - sustain_level, decay_time))(x - attack_time) + sustain_level) * wave(x);
+        return ((1 - sustain_level) * (exponential_decay(decay_time))(x - attack_time) + sustain_level) * wave(x);
       } else if (x < duration - release_time) {
         return wave(x) * sustain_level;
       } else if (x <= duration) {
@@ -551,7 +551,7 @@ function stacking_adsr(waveform, base_frequency, duration, envelopes) {
       (x, y) => pair((tail(x))
 		     (waveform(base_frequency * head(x), duration))
 		     , y)
-      , []
+      , null
       , zip(envelopes, 1)));
 }
 
