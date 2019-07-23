@@ -417,6 +417,35 @@ function* backendSaga(): SagaIterator {
       yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
     }
   });
+
+  yield takeEvery(actionTypes.UPLOAD_MATERIAL, function*(action) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can upload materials.');
+    }
+    const { file, title, description } = (action as actionTypes.IAction).payload;
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const resp = yield request.postMaterial(file, title, description, tokens);
+    if (resp && resp.ok) {
+      yield call(showSuccessMessage, 'Saved!', 1000);
+    } else if (resp !== null) {
+      let errorMessage: string;
+      switch (resp.status) {
+        case 401:
+          errorMessage = 'Session expired. Please login again.';
+          break;
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`;
+          break;
+      }
+      yield call(showWarningMessage, errorMessage);
+    } else {
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    }
+  });
 }
 
 export default backendSaga;

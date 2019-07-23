@@ -1,11 +1,13 @@
-/* tslint:disable:no-console */
-import { Card, Elevation } from '@blueprintjs/core';
+import { Card, EditableText, Elevation } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { FlexDirectionProperty } from 'csstype';
 import * as React from 'react';
 import { useDropzone } from 'react-dropzone';
 
+import { controlButton } from '../../commons';
+
 interface IDropzoneType {
-  handleUploadMaterial: (file: File) => void;
+  handleUploadMaterial: (file: File, title: string, description: string) => void;
 }
 
 // Dropzone styling
@@ -13,7 +15,7 @@ const dropZoneStyle = {
   baseStyle: {
     flex: 1,
     display: 'flex',
-    height: '40vh',
+    height: '30vh',
     flexDirection: 'column' as FlexDirectionProperty,
     alignItems: 'center',
     justifyContent: 'center',
@@ -42,9 +44,13 @@ const dropZoneStyle = {
 };
 
 const MaterialDropzone: React.FC<IDropzoneType> = props => {
-  const [state, setState] = React.useState({
-    files: [] as File[]
-  });
+  const [file, setFile] = React.useState<File>();
+  const [title, setTitle] = React.useState<string>();
+  const [description, setDescription] = React.useState<string>('');
+  const handleSetTitle = (value: string) => setTitle(value);
+  const handleSetDescription = (value: string) => setDescription(value);
+  const handleConfirmUpload = () => props.handleUploadMaterial(file!, title!, description);
+
   const {
     getRootProps,
     getInputProps,
@@ -54,11 +60,8 @@ const MaterialDropzone: React.FC<IDropzoneType> = props => {
     isFocused
   } = useDropzone({
     onDrop: acceptedFiles => {
-      console.log(acceptedFiles);
-      setState({
-        ...state,
-        files: acceptedFiles
-      });
+      setFile(acceptedFiles[0]);
+      setTitle(acceptedFiles[0].name);
     }
   });
   const style = React.useMemo(
@@ -80,12 +83,36 @@ const MaterialDropzone: React.FC<IDropzoneType> = props => {
           <p>Drag 'n' drop some files here, or click to select files</p>
         </div>
       </Card>
-      {state.files &&
-        state.files.map((file, index) => (
-          <Card key={index}>
-            <div>{file.name}</div>
-          </Card>
-        ))}
+      {file && (
+        <Card>
+          <EditableText
+            className="Input"
+            intent="none"
+            maxLines={1}
+            minLines={1}
+            multiline={true}
+            placeholder="Edit title..."
+            selectAllOnFocus={true}
+            value={title}
+            onChange={handleSetTitle}
+          />
+          <br />
+          <EditableText
+            className="Input"
+            intent="none"
+            maxLines={5}
+            minLines={1}
+            multiline={true}
+            placeholder="Edit description..."
+            selectAllOnFocus={true}
+            confirmOnEnterKey={false}
+            value={description}
+            onChange={handleSetDescription}
+          />
+          <br />
+          {controlButton('Confirm Upload', IconNames.UPLOAD, handleConfirmUpload)}
+        </Card>
+      )}
     </>
   );
 };

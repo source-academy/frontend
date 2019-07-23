@@ -460,6 +460,26 @@ export const postSourcecast = async (
 };
 
 /**
+ * POST /material
+ */
+export const postMaterial = async (file: File, title: string, description: string, tokens: Tokens) => {
+  const formData = new FormData();
+  formData.append('material[file]', file, title);
+  formData.append('material[title]', title);
+  formData.append('material[description]', description);
+  const resp = await request(`material`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: formData,
+    noContentType: true,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+};
+
+/**
  * @returns {(Response|null)} Response if successful, otherwise null.
  *
  * @see @type{RequestOptions} for options to this function.

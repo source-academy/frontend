@@ -1,4 +1,12 @@
-import { Divider, FormGroup, InputGroup, NonIdealState, Spinner } from '@blueprintjs/core';
+import {
+  Card,
+  Divider,
+  Elevation,
+  FormGroup,
+  InputGroup,
+  NonIdealState,
+  Spinner
+} from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid/dist/styles/ag-grid.css';
@@ -6,7 +14,6 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import ContentDisplay from '../../commons/ContentDisplay';
 import Dropzone from './Dropzone';
 import SelectCell from './SelectCell';
 
@@ -25,7 +32,7 @@ interface IMaterialProps extends IDispatchProps, IStateProps {}
 export interface IDispatchProps {
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
   handleUnsubmitSubmission: (submissionId: number) => void;
-  handleUploadMaterial: (file: File) => void;
+  handleUploadMaterial: (file: File, title: string, description: string) => void;
 }
 
 export interface IStateProps {
@@ -83,6 +90,10 @@ class Material extends React.Component<IMaterialProps, State> {
     };
   }
 
+  public componentDidMount() {
+    this.props.handleFetchGradingOverviews();
+  }
+
   public render() {
     /* Display either a loading screen or a table with overviews. */
     const loadingDisplay = (
@@ -129,13 +140,14 @@ class Material extends React.Component<IMaterialProps, State> {
       </div>
     );
     return (
-      <div>
-        <Dropzone handleUploadMaterial={this.props.handleUploadMaterial} />
-        <ContentDisplay
-          loadContentDispatch={this.props.handleFetchGradingOverviews}
-          display={this.props.data === undefined ? loadingDisplay : grid}
-          fullWidth={false}
-        />
+      <div className="ContentDisplay row center-xs">
+        <div className={`${'col-xs-10'} contentdisplay-content-parent`}>
+          <Dropzone handleUploadMaterial={this.props.handleUploadMaterial} />
+          <Divider />
+          <Card className="contentdisplay-content" elevation={Elevation.THREE}>
+            {this.props.data === undefined ? loadingDisplay : grid}
+          </Card>
+        </div>
       </div>
     );
   }
