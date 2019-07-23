@@ -8,22 +8,29 @@ import {
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
-export const fetchSourcecastIndex = () => ({
-  type: actionTypes.FETCH_SOURCECAST_INDEX
-});
-
-export const setCodeDeltasToApply = (deltas: ICodeDelta[]) => ({
-  type: actionTypes.SET_CODE_DELTAS_TO_APPLY,
+export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.FETCH_SOURCECAST_INDEX,
   payload: {
-    deltas
+    workspaceLocation
   }
 });
 
-export const setInputToApply = (workspaceLocation: WorkspaceLocation, inputToApply: Input) => ({
+export const setCodeDeltasToApply = (
+  deltas: ICodeDelta[],
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.SET_CODE_DELTAS_TO_APPLY,
+  payload: {
+    deltas,
+    workspaceLocation
+  }
+});
+
+export const setInputToApply = (inputToApply: Input, workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.SET_INPUT_TO_APPLY,
   payload: {
-    workspaceLocation,
-    inputToApply
+    inputToApply,
+    workspaceLocation
   }
 });
 
@@ -31,34 +38,45 @@ export const setSourcecastData = (
   title: string,
   description: string,
   audioUrl: string,
-  playbackData: IPlaybackData
+  playbackData: IPlaybackData,
+  workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.SET_SOURCECAST_DATA,
   payload: {
     title,
     description,
     audioUrl,
-    playbackData
+    playbackData,
+    workspaceLocation
   }
 });
 
-export const setSourcecastDuration = (duration: number) => ({
+export const setSourcecastDuration = (duration: number, workspaceLocation: WorkspaceLocation) => ({
   type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
   payload: {
-    duration
+    duration,
+    workspaceLocation
   }
 });
 
-export const setSourcecastStatus = (playbackStatus: PlaybackStatus) => ({
+export const setSourcecastStatus = (
+  playbackStatus: PlaybackStatus,
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,
   payload: {
-    playbackStatus
+    playbackStatus,
+    workspaceLocation
   }
 });
 
-export const updateSourcecastIndex = (index: ISourcecastData[]) => ({
+export const updateSourcecastIndex = (
+  index: ISourcecastData[],
+  workspaceLocation: WorkspaceLocation
+) => ({
   type: actionTypes.UPDATE_SOURCECAST_INDEX,
   payload: {
-    index
+    index,
+    workspaceLocation
   }
 });

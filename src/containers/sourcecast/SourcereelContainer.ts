@@ -72,7 +72,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
       handleInterruptEval: () => beginInterruptExecution(location),
-      handleRecordEditorInput: (input: Input) => recordEditorInput(location, input),
+      handleRecordEditorInput: (input: Input) => recordEditorInput(input, location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
@@ -81,16 +81,17 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         description: string,
         audio: Blob,
         playbackData: IPlaybackData
-      ) => saveSourcecastData(title, description, audio, playbackData),
+      ) => saveSourcecastData(title, description, audio, playbackData, location),
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
-      handleRecordEditorInitValue: recordEditorInitValue,
+      handleRecordEditorInitValue: (editorValue: string) =>
+        recordEditorInitValue(editorValue, location),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
-      handleTimerPause: timerPause,
-      handleTimerReset: timerReset,
-      handleTimerResume: timerResume,
-      handleTimerStart: timerStart,
-      handleTimerStop: timerStop,
+      handleTimerPause: () => timerPause(location),
+      handleTimerReset: () => timerReset(location),
+      handleTimerResume: () => timerResume(location),
+      handleTimerStart: () => timerStart(location),
+      handleTimerStop: () => timerStop(location),
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
       handleDebuggerPause: () => beginDebuggerPause(location),
       handleDebuggerResume: () => debuggerResume(location),

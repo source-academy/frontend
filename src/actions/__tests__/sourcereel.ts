@@ -20,11 +20,12 @@ function dateIsCloseEnough(dateA: number, dateB: number) {
 
 test('recordEditorInitValue generates correct action object', () => {
   const editorValue = 'Init Value';
-  const action = recordEditorInitValue(editorValue);
+  const action = recordEditorInitValue(editorValue, sourcereelWorkspace);
   expect(action).toEqual({
     type: actionTypes.RECORD_EDITOR_INIT_VALUE,
     payload: {
-      editorValue
+      editorValue,
+      workspaceLocation: sourcereelWorkspace
     }
   });
 });
@@ -47,12 +48,12 @@ test('recordEditorInput generates correct action object', () => {
     type: 'codeDelta',
     data: codeDelta
   };
-  const action = recordEditorInput(sourcereelWorkspace, input);
+  const action = recordEditorInput(input, sourcereelWorkspace);
   expect(action).toEqual({
     type: actionTypes.RECORD_EDITOR_INPUT,
     payload: {
-      location: sourcereelWorkspace,
-      input
+      input,
+      workspaceLocation: sourcereelWorkspace
     }
   });
 });
@@ -65,49 +66,55 @@ test('saveSourcecastData generates correct action object', () => {
     init: { editorValue: 'Editor Init Value' },
     inputs: []
   };
-  const action = saveSourcecastData(title, description, audio, playbackData);
+  const action = saveSourcecastData(title, description, audio, playbackData, sourcereelWorkspace);
   expect(action).toEqual({
     type: actionTypes.SAVE_SOURCECAST_DATA,
     payload: {
       title,
       description,
       audio,
-      playbackData
+      playbackData,
+      workspaceLocation: sourcereelWorkspace
     }
   });
 });
 
 test('timerPause generates correct action object', () => {
   const currentTime = Date.now();
-  const action = timerPause();
+  const action = timerPause(sourcereelWorkspace);
   expect(action.type).toEqual(actionTypes.TIMER_PAUSE);
+  expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
 
 test('timerReset generates correct action object', () => {
-  const action = timerReset();
+  const action = timerReset(sourcereelWorkspace);
   expect(action).toEqual({
-    type: actionTypes.TIMER_RESET
+    type: actionTypes.TIMER_RESET,
+    payload: { workspaceLocation: sourcereelWorkspace }
   });
 });
 
 test('timerResume generates correct action object', () => {
   const currentTime = Date.now();
-  const action = timerResume();
+  const action = timerResume(sourcereelWorkspace);
   expect(action.type).toEqual(actionTypes.TIMER_RESUME);
+  expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
 
 test('timerStart generates correct action object', () => {
   const currentTime = Date.now();
-  const action = timerStart();
+  const action = timerStart(sourcereelWorkspace);
   expect(action.type).toEqual(actionTypes.TIMER_START);
+  expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
 
 test('timerStop generates correct action object', () => {
   const currentTime = Date.now();
-  const action = timerStop();
+  const action = timerStop(sourcereelWorkspace);
   expect(action.type).toEqual(actionTypes.TIMER_STOP);
+  expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });

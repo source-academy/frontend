@@ -339,14 +339,19 @@ function* backendSaga(): SagaIterator {
     yield call(postNotify, tokens, assessmentId, submissionId);
   });
 
-  yield takeEvery(actionTypes.FETCH_SOURCECAST_INDEX, function*() {
+  yield takeEvery(actionTypes.FETCH_SOURCECAST_INDEX, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
     const sourcecastIndex = yield call(getSourcecastIndex, tokens);
     if (sourcecastIndex) {
-      yield put(actions.updateSourcecastIndex(sourcecastIndex));
+      yield put(
+        actions.updateSourcecastIndex(
+          sourcecastIndex,
+          (action as actionTypes.IAction).payload.workplaceLocation
+        )
+      );
     }
   });
 

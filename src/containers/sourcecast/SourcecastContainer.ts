@@ -31,7 +31,12 @@ import {
   WorkspaceLocation
 } from '../../actions';
 import Sourcecast, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcecast';
-import { Input, IPlaybackData, PlaybackStatus } from '../../components/sourcecast/sourcecastShape';
+import {
+  ICodeDelta,
+  Input,
+  IPlaybackData,
+  PlaybackStatus
+} from '../../components/sourcecast/sourcecastShape';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
@@ -76,24 +81,24 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
-      handleFetchSourcecastIndex: fetchSourcecastIndex,
+      handleFetchSourcecastIndex: () => fetchSourcecastIndex(location),
       handleInterruptEval: () => beginInterruptExecution(location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSetCodeDeltasToApply: setCodeDeltasToApply,
+      handleSetCodeDeltasToApply: (deltas: ICodeDelta[]) => setCodeDeltasToApply(deltas, location),
       handleSetEditorReadonly: (editorReadonly: boolean) =>
         setEditorReadonly(location, editorReadonly),
-      handleSetInputToApply: (inputToApply: Input) => setInputToApply(location, inputToApply),
+      handleSetInputToApply: (inputToApply: Input) => setInputToApply(inputToApply, location),
       handleSetSourcecastData: (
         title: string,
         description: string,
         audioUrl: string,
         playbackData: IPlaybackData
-      ) => setSourcecastData(title, description, audioUrl, playbackData),
-      handleSetSourcecastDuration: (duration: number) => setSourcecastDuration(duration),
+      ) => setSourcecastData(title, description, audioUrl, playbackData, location),
+      handleSetSourcecastDuration: (duration: number) => setSourcecastDuration(duration, location),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
-        setSourcecastStatus(playbackStatus),
+        setSourcecastStatus(playbackStatus, location),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>

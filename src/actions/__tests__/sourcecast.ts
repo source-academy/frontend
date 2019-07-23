@@ -20,9 +20,12 @@ import { WorkspaceLocation, WorkspaceLocations } from '../workspaces';
 const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
 
 test('fetchSourcecastIndex generates correct action object', () => {
-  const action = fetchSourcecastIndex();
+  const action = fetchSourcecastIndex(sourcecastWorkspace);
   expect(action).toEqual({
-    type: actionTypes.FETCH_SOURCECAST_INDEX
+    type: actionTypes.FETCH_SOURCECAST_INDEX,
+    payload: {
+      workspaceLocation: sourcecastWorkspace
+    }
   });
 });
 
@@ -41,11 +44,12 @@ test('setCodeDeltasToApply generates correct action object', () => {
       lines: ['a']
     }
   ];
-  const action = setCodeDeltasToApply(codeDeltas);
+  const action = setCodeDeltasToApply(codeDeltas, sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.SET_CODE_DELTAS_TO_APPLY,
     payload: {
-      deltas: codeDeltas
+      deltas: codeDeltas,
+      workspaceLocation: sourcecastWorkspace
     }
   });
 });
@@ -68,12 +72,12 @@ test('setInputToApply generates correct action object', () => {
     type: 'codeDelta',
     data: codeDelta
   };
-  const action = setInputToApply(sourcecastWorkspace, input);
+  const action = setInputToApply(input, sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.SET_INPUT_TO_APPLY,
     payload: {
-      workspaceLocation: sourcecastWorkspace,
-      inputToApply: input
+      inputToApply: input,
+      workspaceLocation: sourcecastWorkspace
     }
   });
 });
@@ -106,7 +110,8 @@ test('setSourcecastData generates correct action object', () => {
     'Test Title',
     'Test Description',
     'fakeAudioUrl.com/audio.mp3',
-    playbackData
+    playbackData,
+    sourcecastWorkspace
   );
   expect(action).toEqual({
     type: actionTypes.SET_SOURCECAST_DATA,
@@ -114,26 +119,27 @@ test('setSourcecastData generates correct action object', () => {
       title: 'Test Title',
       description: 'Test Description',
       audioUrl: 'fakeAudioUrl.com/audio.mp3',
-      playbackData
+      playbackData,
+      workspaceLocation: sourcecastWorkspace
     }
   });
 });
 
 test('setSourcecastDuration generates correct action object', () => {
   const duration = 5;
-  const action = setSourcecastDuration(duration);
+  const action = setSourcecastDuration(duration, sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
-    payload: { duration }
+    payload: { duration, workspaceLocation: sourcecastWorkspace }
   });
 });
 
 test('setSourcecastStatus generates correct action object', () => {
   const status = PlaybackStatus.notStarted;
-  const action = setSourcecastStatus(status);
+  const action = setSourcecastStatus(status, sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,
-    payload: { playbackStatus: status }
+    payload: { playbackStatus: status, workspaceLocation: sourcecastWorkspace }
   });
 });
 
@@ -151,9 +157,9 @@ test('updateSourcecastIndex generates correct action object', () => {
     },
     url: 'testurl.com'
   };
-  const action = updateSourcecastIndex([sourcecastData]);
+  const action = updateSourcecastIndex([sourcecastData], sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.UPDATE_SOURCECAST_INDEX,
-    payload: { index: [sourcecastData] }
+    payload: { index: [sourcecastData], workspaceLocation: sourcecastWorkspace }
   });
 });
