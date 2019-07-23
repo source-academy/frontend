@@ -349,7 +349,7 @@ function* backendSaga(): SagaIterator {
       yield put(
         actions.updateSourcecastIndex(
           sourcecastIndex,
-          (action as actionTypes.IAction).payload.workplaceLocation
+          (action as actionTypes.IAction).payload.workspaceLocation
         )
       );
     }

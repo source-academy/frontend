@@ -33,13 +33,8 @@ import {
   RESET_WORKSPACE,
   SAVE_SOURCECAST_DATA,
   SEND_REPL_INPUT_TO_OUTPUT,
-  SET_CODE_DELTAS_TO_APPLY,
   SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
-  SET_INPUT_TO_APPLY,
-  SET_SOURCECAST_DATA,
-  SET_SOURCECAST_PLAYBACK_DURATION,
-  SET_SOURCECAST_PLAYBACK_STATUS,
   SET_WEBSOCKET_STATUS,
   TIMER_PAUSE,
   TIMER_RESET,
@@ -52,12 +47,12 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  UPDATE_SOURCECAST_INDEX,
   UPDATE_WORKSPACE
 } from '../actions/actionTypes';
-import { WorkspaceLocation } from '../actions/workspaces';
+import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { RecordingStatus } from '../components/sourcecast/sourcecastShape';
 import { createContext } from '../utils/slangHelper';
+import { reducer as sourcecastReducer } from './sourcecast';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -83,6 +78,20 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     action.payload !== undefined ? action.payload.workspaceLocation : undefined;
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
+
+  switch (workspaceLocation) {
+    case WorkspaceLocations.sourcecast:
+      const sourcecastState = sourcecastReducer(state.sourcecast, action);
+      if (sourcecastState === state.sourcecast) {
+        break;
+      }
+      return {
+        ...state,
+        sourcecast: sourcecastReducer(state.sourcecast, action)
+      };
+    default:
+      break;
+  }
 
   switch (action.type) {
     case BROWSE_REPL_HISTORY_DOWN:
@@ -521,14 +530,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...action.payload.workspaceOptions
         }
       };
-    case SET_CODE_DELTAS_TO_APPLY:
-      return {
-        ...state,
-        sourcecast: {
-          ...state.sourcecast,
-          codeDeltasToApply: action.payload.deltas
-        }
-      };
     case SET_EDITOR_SESSION_ID:
       return {
         ...state,
@@ -559,41 +560,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           description: action.payload.description,
           audioUrl: window.URL.createObjectURL(action.payload.audio),
           playbackData: action.payload.playbackData
-        }
-      };
-    case SET_INPUT_TO_APPLY:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          inputToApply: action.payload.inputToApply
-        }
-      };
-    case SET_SOURCECAST_DATA:
-      return {
-        ...state,
-        sourcecast: {
-          ...state.sourcecast,
-          title: action.payload.title,
-          description: action.payload.description,
-          audioUrl: action.payload.audioUrl,
-          playbackData: action.payload.playbackData
-        }
-      };
-    case SET_SOURCECAST_PLAYBACK_DURATION:
-      return {
-        ...state,
-        sourcecast: {
-          ...state.sourcecast,
-          playbackDuration: action.payload.duration
-        }
-      };
-    case SET_SOURCECAST_PLAYBACK_STATUS:
-      return {
-        ...state,
-        sourcecast: {
-          ...state.sourcecast,
-          playbackStatus: action.payload.playbackStatus
         }
       };
     case SET_EDITOR_READONLY:
@@ -711,14 +677,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           replValue: action.payload.newReplValue
-        }
-      };
-    case UPDATE_SOURCECAST_INDEX:
-      return {
-        ...state,
-        sourcecast: {
-          ...state.sourcecast,
-          sourcecastIndex: action.payload.index
         }
       };
     case UPDATE_HAS_UNSAVED_CHANGES:
