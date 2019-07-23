@@ -3,6 +3,7 @@ import { SourceError } from 'js-slang/dist/types';
 
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
+import { MaterialData } from '../components/academy/materials/materialShape';
 import { Announcement } from '../components/Announcements';
 import {
   AutogradingResult,
@@ -126,6 +127,7 @@ export interface ISessionState {
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
   readonly historyHelper: HistoryHelper;
+  readonly materialIndex?: MaterialData[];
   readonly maxGrade: number;
   readonly maxXp: number;
   readonly refreshToken?: string;
@@ -368,6 +370,7 @@ export const defaultSession: ISessionState = {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
   },
+  materialIndex: undefined,
   maxGrade: 0,
   maxXp: 0,
   refreshToken: process.env.REACT_APP_REFRESH_TOKEN,

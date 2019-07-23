@@ -418,6 +418,17 @@ function* backendSaga(): SagaIterator {
     }
   });
 
+  yield takeEvery(actionTypes.FETCH_MATERIAL_INDEX, function*() {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const materialIndex = yield call(request.getMaterialIndex, tokens);
+    if (materialIndex) {
+      yield put(actions.updateMaterialIndex(materialIndex));
+    }
+  });
+
   yield takeEvery(actionTypes.UPLOAD_MATERIAL, function*(action) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {

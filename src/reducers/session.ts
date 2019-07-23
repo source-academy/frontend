@@ -11,6 +11,7 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
+  UPDATE_MATERIAL_INDEX,
   UPDATE_NOTIFICATIONS
 } from '../actions/actionTypes';
 import { defaultSession, ISessionState } from './states';
@@ -71,12 +72,16 @@ export const reducer: Reducer<ISessionState> = (
         ...state,
         gradingOverviews: action.payload
       };
+    case UPDATE_MATERIAL_INDEX:
+      return {
+        ...state,
+        materialIndex: action.payload.index
+      };
     case UPDATE_NOTIFICATIONS:
       return {
         ...state,
         notifications: action.payload
       };
-
     default:
       return state;
   }

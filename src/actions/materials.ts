@@ -1,11 +1,18 @@
-import { ActionCreator } from 'redux';
+import { MaterialData } from '../components/academy/materials/materialShape';
 import * as actionTypes from './actionTypes';
 
-export const uploadMaterial: ActionCreator<actionTypes.IAction> = (
-  file: File,
-  title: string,
-  description: string
-) => ({
+export const fetchMaterialIndex = () => ({
+  type: actionTypes.FETCH_MATERIAL_INDEX
+});
+
+export const updateMaterialIndex = (index: MaterialData[]) => ({
+  type: actionTypes.UPDATE_MATERIAL_INDEX,
+  payload: {
+    index
+  }
+});
+
+export const uploadMaterial = (file: File, title: string, description: string) => ({
   type: actionTypes.UPLOAD_MATERIAL,
   payload: { file, title, description }
 });

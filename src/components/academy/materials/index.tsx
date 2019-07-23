@@ -15,6 +15,7 @@ import { sortBy } from 'lodash';
 import * as React from 'react';
 
 import Dropzone from './Dropzone';
+import { MaterialData } from './materialShape';
 import SelectCell from './SelectCell';
 
 /**
@@ -30,13 +31,12 @@ type State = {
 interface IMaterialProps extends IDispatchProps, IStateProps {}
 
 export interface IDispatchProps {
-  handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
-  handleUnsubmitSubmission: (submissionId: number) => void;
+  handleFetchMaterialIndex: () => void;
   handleUploadMaterial: (file: File, title: string, description: string) => void;
 }
 
 export interface IStateProps {
-  data?: any;
+  data?: MaterialData[];
 }
 
 class Material extends React.Component<IMaterialProps, State> {
@@ -49,27 +49,38 @@ class Material extends React.Component<IMaterialProps, State> {
       columnDefs: [
         {
           headerName: 'Title',
-          field: 'name',
-          width: 200,
-          maxWidth: 200,
+          field: 'title',
+          maxWidth: 800,
           suppressMovable: true,
           suppressMenu: true
         },
         {
           headerName: 'Uploader',
           field: 'uploader.name',
-          width: 200,
-          maxWidth: 200,
+          maxWidth: 400,
           suppressMovable: true,
           suppressMenu: true
         },
         {
-          headerName: 'Select',
+          headerName: 'Download',
           field: '',
           cellRendererFramework: SelectCell,
           cellRendererParams: {},
-          width: 200,
-          maxWidth: 200,
+          maxWidth: 400,
+          suppressSorting: true,
+          suppressMovable: true,
+          suppressMenu: true,
+          suppressResize: true,
+          cellStyle: {
+            padding: 0
+          }
+        },
+        {
+          headerName: 'Delete',
+          field: '',
+          cellRendererFramework: SelectCell,
+          cellRendererParams: {},
+          maxWidth: 400,
           suppressSorting: true,
           suppressMovable: true,
           suppressMenu: true,
@@ -81,8 +92,6 @@ class Material extends React.Component<IMaterialProps, State> {
         { headerName: 'description', field: 'description', hide: true },
         { headerName: 'inserted_at', field: 'inserted_at', hide: true },
         { headerName: 'updated_at', field: 'updated_at', hide: true },
-        { headerName: 'audio', field: 'audio', hide: true },
-        { headerName: 'deltas', field: 'deltas', hide: true },
         { headerName: 'url', field: 'url', hide: true }
       ],
       filterValue: '',
@@ -91,7 +100,7 @@ class Material extends React.Component<IMaterialProps, State> {
   }
 
   public componentDidMount() {
-    this.props.handleFetchGradingOverviews();
+    this.props.handleFetchMaterialIndex();
   }
 
   public render() {
@@ -104,10 +113,8 @@ class Material extends React.Component<IMaterialProps, State> {
       />
     );
     const data = sortBy(this.props.data, [(a: any) => -a.id]);
-
     const grid = (
       <div className="MaterialContainer">
-        <br />
         <div>
           <FormGroup label="" labelFor="text-input" inline={true}>
             <InputGroup
@@ -121,8 +128,8 @@ class Material extends React.Component<IMaterialProps, State> {
           </FormGroup>
         </div>
         <Divider />
-        <div className="MaterialTable">
-          <div className="ag-grid-parent ag-theme-fresh">
+        <div className="Material">
+          <div className="ag-grid-parent ag-theme-balham">
             <AgGridReact
               gridAutoHeight={true}
               enableColResize={true}
@@ -131,12 +138,12 @@ class Material extends React.Component<IMaterialProps, State> {
               columnDefs={this.state.columnDefs}
               onGridReady={this.onGridReady}
               rowData={data}
-              pagination={false}
+              pagination={true}
               paginationPageSize={50}
+              suppressMovableColumns={true}
             />
           </div>
         </div>
-        <br />
       </div>
     );
     return (

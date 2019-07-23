@@ -50,6 +50,7 @@ const MaterialDropzone: React.FC<IDropzoneType> = props => {
   const handleSetTitle = (value: string) => setTitle(value);
   const handleSetDescription = (value: string) => setDescription(value);
   const handleConfirmUpload = () => props.handleUploadMaterial(file!, title!, description);
+  const handleCancelUpload = () => setFile(undefined);
 
   const {
     getRootProps,
@@ -111,6 +112,7 @@ const MaterialDropzone: React.FC<IDropzoneType> = props => {
           />
           <br />
           {controlButton('Confirm Upload', IconNames.UPLOAD, handleConfirmUpload)}
+          {controlButton('Cancel Upload', IconNames.DELETE, handleCancelUpload)}
         </Card>
       )}
     </>

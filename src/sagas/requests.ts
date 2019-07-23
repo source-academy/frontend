@@ -460,6 +460,23 @@ export const postSourcecast = async (
 };
 
 /**
+ * GET /material
+ */
+export async function getMaterialIndex(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+  const response = await request('material', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+  if (response && response.ok) {
+    const index = await response.json();
+    return index;
+  } else {
+    return null;
+  }
+}
+
+/**
  * POST /material
  */
 export const postMaterial = async (file: File, title: string, description: string, tokens: Tokens) => {
