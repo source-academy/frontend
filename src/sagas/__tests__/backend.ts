@@ -9,20 +9,25 @@ import {
   IAssessment,
   IQuestion
 } from '../../components/assessment/assessmentShape';
+import { Notification } from '../../components/notification/notificationShape';
 import {
   mockAssessmentOverviews,
   mockAssessmentQuestions,
   mockAssessments
 } from '../../mocks/assessmentAPI';
+import { mockNotifications } from '../../mocks/userAPI';
 import { Role } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import backendSaga, {
   getAssessment,
   getAssessmentOverviews,
+  getNotifications,
   getUser,
+  postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAuth
+  postAuth,
+  postNotify
 } from '../backend';
 
 // ----------------------------------------
@@ -42,6 +47,7 @@ const mockStates = {
     accessToken: 'access',
     assessmentOverviews: mockAssessmentOverviews,
     assessments: mockMapAssessments,
+    notifications: mockNotifications,
     refreshToken: 'refresherOrb',
     role: Role.Student
   },
@@ -303,6 +309,57 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT_OVERVIEWS)
       .hasFinalState({ session: { role: Role.Staff } })
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: 0 })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_NOTIFICATIONS Action', () => {
+  test('when notifications obtained', () => {
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .provide([[call(getNotifications, mockTokens), mockNotifications]])
+      .put(actions.updateNotifications(mockNotifications))
+      .dispatch({ type: actionTypes.FETCH_NOTIFICATIONS })
+      .silentRun();
+  });
+});
+
+describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
+  test('when respond is ok', () => {
+    const ids = [1, 2, 3];
+    const mockNewNotifications = mockNotifications.filter(n => !ids.includes(n.id));
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .provide([[call(postAcknowledgeNotifications, mockTokens, ids), okResp]])
+      .not.call(showWarningMessage)
+      .put(actions.updateNotifications(mockNewNotifications))
+      .dispatch({
+        type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
+        payload: {
+          withFilter: (notifications: Notification[]) =>
+            notifications.filter(notification => ids.includes(notification.id))
+        }
+      })
+      .silentRun();
+  });
+
+  test('when respond is error', () => {
+    const ids = mockNotifications.map(n => n.id);
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .provide([[call(postAcknowledgeNotifications, mockTokens, ids), errorResp]])
+      .call(showWarningMessage, "Something went wrong, couldn't acknowledge")
+      .dispatch({ type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS, payload: {} })
+      .silentRun();
+  });
+});
+
+describe('Test NOTIFY_CHATKIT_USERS Action', () => {
+  test('called', () => {
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .call(postNotify, mockTokens, 1, undefined)
+      .dispatch({ type: actionTypes.NOTIFY_CHATKIT_USERS, payload: { assessmentId: 1 } })
       .silentRun();
   });
 });
