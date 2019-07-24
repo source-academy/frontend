@@ -288,11 +288,7 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    if (!tokens.accessToken) {
-      return;
-    }
-
-    const notifications = yield getNotifications(tokens);
+    const notifications = yield call(getNotifications, tokens);
 
     yield put(actions.updateNotifications(notifications));
   });
@@ -307,19 +303,21 @@ function* backendSaga(): SagaIterator {
       | NotificationFilterFunction
       | undefined = (action as actionTypes.IAction).payload.withFilter;
 
-    let notifications: Notification[] = yield select(
+    const notifications: Notification[] = yield select(
       (state: IState) => state.session.notifications
     );
 
+    let notificationsToAcknowledge = notifications;
+
     if (notificationFilter) {
-      notifications = notificationFilter(notifications);
+      notificationsToAcknowledge = notificationFilter(notifications);
     }
 
-    const ids = notifications.map(n => n.id);
-
-    if (ids.length === 0) {
+    if (notificationsToAcknowledge.length === 0) {
       return;
     }
+
+    const ids = notificationsToAcknowledge.map(n => n.id);
 
     const newNotifications: Notification[] = notifications.filter(
       notification => !ids.includes(notification.id)
@@ -327,13 +325,12 @@ function* backendSaga(): SagaIterator {
 
     yield put(actions.updateNotifications(newNotifications));
 
-    const resp: Response | null = yield postAcknowledgeNotifications(tokens, ids);
+    const resp: Response | null = yield call(postAcknowledgeNotifications, tokens, ids);
 
-    if (resp && resp.ok) {
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, "Something went wrong, couldn't acknowledge");
       return;
     }
-
-    yield call(showWarningMessage, "Something went wrong, couldn't acknowledge");
   });
 
   yield takeEvery(actionTypes.NOTIFY_CHATKIT_USERS, function*(action) {
@@ -344,7 +341,7 @@ function* backendSaga(): SagaIterator {
 
     const assessmentId = (action as actionTypes.IAction).payload.assessmentId;
     const submissionId = (action as actionTypes.IAction).payload.submissionId;
-    yield postNotify(tokens, assessmentId, submissionId);
+    yield call(postNotify, tokens, assessmentId, submissionId);
   });
 }
 
@@ -646,7 +643,7 @@ async function postUnsubmit(submissionId: number, tokens: Tokens) {
 /**
  * GET /notification
  */
-async function getNotifications(tokens: Tokens) {
+export async function getNotifications(tokens: Tokens) {
   const resp: Response | null = await request('notification', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
@@ -678,7 +675,7 @@ async function getNotifications(tokens: Tokens) {
 /**
  * POST /notification/acknowledge
  */
-async function postAcknowledgeNotifications(tokens: Tokens, ids: number[]) {
+export async function postAcknowledgeNotifications(tokens: Tokens, ids: number[]) {
   const resp: Response | null = await request(`notification/acknowledge`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
@@ -692,7 +689,7 @@ async function postAcknowledgeNotifications(tokens: Tokens, ids: number[]) {
 /**
  * POST /chat/notify
  */
-async function postNotify(tokens: Tokens, assessmentId?: number, submissionId?: number) {
+export async function postNotify(tokens: Tokens, assessmentId?: number, submissionId?: number) {
   await request(`chat/notify`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
