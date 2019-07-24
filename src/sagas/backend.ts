@@ -297,7 +297,7 @@ function* backendSaga(): SagaIterator {
     yield put(actions.updateNotifications(notifications));
   });
 
-  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
+  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATIONS, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -327,7 +327,7 @@ function* backendSaga(): SagaIterator {
 
     yield put(actions.updateNotifications(newNotifications));
 
-    const resp: Response | null = yield postAcknowledgeNotification(tokens, ids);
+    const resp: Response | null = yield postAcknowledgeNotifications(tokens, ids);
 
     if (resp && resp.ok) {
       return;
@@ -678,7 +678,7 @@ async function getNotifications(tokens: Tokens) {
 /**
  * POST /notification/acknowledge
  */
-async function postAcknowledgeNotification(tokens: Tokens, ids: number[]) {
+async function postAcknowledgeNotifications(tokens: Tokens, ids: number[]) {
   const resp: Response | null = await request(`notification/acknowledge`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,

@@ -31,7 +31,7 @@ test('acknowledgeNotifications generates correct action object', () => {
   const action = acknowledgeNotifications();
 
   expect(action).toEqual({
-    type: actionTypes.ACKNOWLEDGE_NOTIFICATION,
+    type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
     payload: {
       withFilter: undefined
     }

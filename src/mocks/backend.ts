@@ -142,7 +142,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Saved!', 1000);
   });
 
-  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATION, function*(action) {
+  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATIONS, function*(action) {
     const notificationFilter:
       | NotificationFilterFunction
       | undefined = (action as actionTypes.IAction).payload.withFilter;

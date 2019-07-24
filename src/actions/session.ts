@@ -144,7 +144,7 @@ export const fetchNotifications = () => ({
 });
 
 export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction) => ({
-  type: actionTypes.ACKNOWLEDGE_NOTIFICATION,
+  type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
   payload: {
     withFilter
   }
