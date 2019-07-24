@@ -495,6 +495,13 @@ function clearHollusion() {
 }
 
 /*-----------------------Transformation functions----------------------*/
+/**
+ * scales a given Rune by separate factors in x and y direction
+ * @param {number} ratio_x - scaling factor in x direction
+ * @param {number} ratio_y - scaling factor in y direction
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting scaled Rune
+ */
 function scale_independent(ratio_x, ratio_y, rune) {
   var scaleVec = vec3.fromValues(ratio_x, ratio_y, 1)
   var scaleMat = mat4.create()
@@ -505,10 +512,26 @@ function scale_independent(ratio_x, ratio_y, rune) {
   return wrapper
 }
 
+
+/**
+ * scales a given Rune by a given factor in both x and y direction
+ * @param {number} ratio - scaling factor
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting scaled Rune
+ */
 function scale(ratio, rune) {
   return scale_independent(ratio, ratio, rune)
 }
 
+
+
+/**
+ * translates a given Rune by given values in x and y direction
+ * @param {number} x - translation in x direction
+ * @param {number} y - translation in y direction
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting translated Rune
+ */
 function translate(x, y, rune) {
   var translateVec = vec3.fromValues(x, -y, 0)
   var translateMat = mat4.create()
