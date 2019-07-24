@@ -140,8 +140,6 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         websocketStatus: this.props.websocketStatus
       },
       editorProps: {
-        editorPrepend: '',
-        editorPrependLines: 0,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
