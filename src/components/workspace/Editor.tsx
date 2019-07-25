@@ -19,8 +19,6 @@ import { checkSessionIdExists } from './collabEditing/helper';
 export interface IEditorProps {
   isEditorAutorun: boolean;
   editorSessionId: string;
-  editorPrepend: string;
-  editorPrependLines: number;
   editorValue: string;
   breakpoints: string[];
   highlightedLines: number[][];
@@ -139,7 +137,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             theme="cobalt"
             value={this.props.editorValue}
             width="100%"
-            setOptions={{ firstLineNumber: 1 + this.props.editorPrependLines }}
           />
         </div>
       </HotKeys>
