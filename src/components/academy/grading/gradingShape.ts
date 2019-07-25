@@ -1,3 +1,4 @@
+import { Notification } from '../../../components/notification/notificationShape';
 import {
   AssessmentCategory,
   AutogradingResult,
@@ -33,6 +34,10 @@ export type GradingOverview = {
   questionCount: number;
   gradedCount: number;
 };
+
+export type GradingOverviewWithNotifications = {
+  notifications: Notification[];
+} & GradingOverview;
 
 /**
  * The information fetched before

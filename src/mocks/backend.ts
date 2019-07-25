@@ -9,12 +9,17 @@ import {
   GradingQuestion
 } from '../components/academy/grading/gradingShape';
 import { IQuestion } from '../components/assessment/assessmentShape';
+import {
+  Notification,
+  NotificationFilterFunction
+} from '../components/notification/notificationShape';
 import { store } from '../createStore';
 import { IState } from '../reducers/states';
 import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { mockAssessmentOverviews, mockAssessments } from './assessmentAPI';
 import { mockFetchGrading, mockFetchGradingOverview } from './gradingAPI';
+import { mockNotifications } from './userAPI';
 
 export function* mockBackendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
@@ -42,7 +47,7 @@ export function* mockBackendSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
     const id = (action as actionTypes.IAction).payload;
-    const assessment = mockAssessments[id];
+    const assessment = mockAssessments[id - 1];
     yield put(actions.updateAssessment({ ...assessment }));
   });
 
@@ -135,5 +140,34 @@ export function* mockBackendSaga(): SagaIterator {
     });
     yield put(actions.updateGrading(submissionId, newGrading));
     yield call(showSuccessMessage, 'Saved!', 1000);
+  });
+
+  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATIONS, function*(action) {
+    const notificationFilter:
+      | NotificationFilterFunction
+      | undefined = (action as actionTypes.IAction).payload.withFilter;
+
+    let notifications: Notification[] = yield select(
+      (state: IState) => state.session.notifications
+    );
+
+    if (notificationFilter) {
+      notifications = notificationFilter(notifications);
+    }
+
+    const ids = notifications.map(n => n.id);
+
+    if (ids.length === 0) {
+      return;
+    }
+
+    const newNotifications: Notification[] = notifications.filter(
+      notification => !ids.includes(notification.id)
+    );
+    yield put(actions.updateNotifications(newNotifications));
+  });
+
+  yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
+    yield put(actions.updateNotifications(mockNotifications));
   });
 }

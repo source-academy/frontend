@@ -12,6 +12,7 @@ import {
   IAssessmentOverview,
   ITestcase
 } from '../components/assessment/assessmentShape';
+import { Notification } from '../components/notification/notificationShape';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -101,6 +102,7 @@ export interface ISessionState {
   readonly story?: Story;
   readonly name?: string;
   readonly xp: number;
+  readonly notifications: Notification[];
 }
 
 type ReplHistory = {
@@ -286,7 +288,8 @@ export const defaultSession: ISessionState = {
   maxXp: 0,
   refreshToken: undefined,
   name: undefined,
-  xp: 0
+  xp: 0,
+  notifications: []
 };
 
 export const defaultState: IState = {
