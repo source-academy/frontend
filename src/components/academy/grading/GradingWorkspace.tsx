@@ -141,11 +141,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorPrepend: this.props.editorPrepend,
-              editorPrependLines:
-                this.props.editorPrepend.length === 0
-                  ? 0
-                  : this.props.editorPrepend.split('\n').length,
               editorSessionId: '',
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
