@@ -325,7 +325,7 @@ test('updateGrading generates correct action object', () => {
         id: 234
       },
       grade: {
-        comment: 'test comment',
+        roomId: 'test roomId',
         grade: 10,
         gradeAdjustment: 0,
         xp: 100,

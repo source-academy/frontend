@@ -56,7 +56,7 @@ export type GradingQuestion = {
     id: number;
   };
   grade: {
-    comment: string;
+    roomId: string;
     grade: number;
     gradeAdjustment: number;
     xp: number;
@@ -70,13 +70,13 @@ export type GradingQuestion = {
  * either of (library & solutionTemplate) xor (choices) must
  * be present, and either of (solution) xor (answer) must be present.
  *
- * @property comment This property is already present in GradingQuestion,
+ * @property roomId This property is already present in GradingQuestion,
  *   and thus does not need to be used here, and is set to null
  * @property solution this can be either the answer to the MCQ, the solution to
  *   a programming question, or null.
  */
 export interface IAnsweredQuestion extends IQuestion {
-  comment: null;
+  roomId: null;
   autogradingResults: AutogradingResult[];
   prepend: string;
   postpend: string;

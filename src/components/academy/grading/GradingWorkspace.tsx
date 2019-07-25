@@ -272,7 +272,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         icon: IconNames.CHAT,
         body: USE_CHATKIT ? (
           <ChatApp
-            roomId={props.grading![questionId].grade.comment}
+            roomId={props.grading![questionId].grade.roomId}
             submissionId={this.props.submissionId}
           />
         ) : (

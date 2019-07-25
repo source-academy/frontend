@@ -250,14 +250,7 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield postGrading(
-      submissionId,
-      questionId,
-      '',
-      gradeAdjustment,
-      xpAdjustment,
-      tokens
-    );
+    const resp = yield postGrading(submissionId, questionId, gradeAdjustment, xpAdjustment, tokens);
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000);
       // Now, update the grade for the question in the Grading in the store
@@ -269,7 +262,7 @@ function* backendSaga(): SagaIterator {
           gradingQuestion.grade = {
             gradeAdjustment,
             xpAdjustment,
-            comment: gradingQuestion.grade.comment,
+            roomId: gradingQuestion.grade.roomId,
             grade: gradingQuestion.grade.grade,
             xp: gradingQuestion.grade.xp
           };
@@ -570,7 +563,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
           autogradingResults: question.autogradingResults || [],
           choices: question.choices,
           content: question.content,
-          comment: null,
+          roomId: null,
           id: question.id,
           library: castLibrary(question.library),
           solution: gradingQuestion.solution || question.solution || null,
@@ -586,7 +579,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
         grade: {
           grade: grade.grade,
           xp: grade.xp,
-          comment: grade.comment || '',
+          roomId: grade.roomId || '',
           gradeAdjustment: grade.adjustment,
           xpAdjustment: grade.xpAdjustment
         }
@@ -604,7 +597,6 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
 const postGrading = async (
   submissionId: number,
   questionId: number,
-  comment: string,
   gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens
@@ -613,7 +605,6 @@ const postGrading = async (
     accessToken: tokens.accessToken,
     body: {
       grading: {
-        comment: `${comment}`,
         adjustment: gradeAdjustment,
         xpAdjustment
       }
