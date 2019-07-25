@@ -1,14 +1,18 @@
 import { Grading, GradingOverview } from '../../components/academy/grading/gradingShape';
 import { IAssessment, IAssessmentOverview } from '../../components/assessment/assessmentShape';
+import { Notification } from '../../components/notification/notificationShape';
 import * as actionTypes from '../actionTypes';
 import {
+  acknowledgeNotifications,
   fetchAnnouncements,
   fetchAssessment,
   fetchAssessmentOverviews,
   fetchAuth,
   fetchGrading,
   fetchGradingOverviews,
+  fetchNotifications,
   login,
+  notifyChatUsers,
   setTokens,
   setUser,
   submitAnswer,
@@ -19,8 +23,20 @@ import {
   updateAssessmentOverviews,
   updateGrading,
   updateGradingOverviews,
-  updateHistoryHelpers
+  updateHistoryHelpers,
+  updateNotifications
 } from '../session';
+
+test('acknowledgeNotifications generates correct action object', () => {
+  const action = acknowledgeNotifications();
+
+  expect(action).toEqual({
+    type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
+    payload: {
+      withFilter: undefined
+    }
+  });
+});
 
 test('fetchAuth generates correct action object', () => {
   const luminusCode = 'luminus-code-test';
@@ -80,10 +96,42 @@ test('fetchGradingOverviews generates correct action object', () => {
   });
 });
 
+test('fetchNotifications generates correct action object', () => {
+  const action = fetchNotifications();
+
+  expect(action).toEqual({
+    type: actionTypes.FETCH_NOTIFICATIONS
+  });
+});
+
 test('login action generates correct action object', () => {
   const action = login();
   expect(action).toEqual({
     type: actionTypes.LOGIN
+  });
+});
+
+test('notifyChatUsers generates correct action object with undefined submission id', () => {
+  const action = notifyChatUsers(1, undefined);
+
+  expect(action).toEqual({
+    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    payload: {
+      assessmentId: 1,
+      submissionId: undefined
+    }
+  });
+});
+
+test('notifyChatUsers generates correct action object with undefined assessment id', () => {
+  const action = notifyChatUsers(undefined, 1);
+
+  expect(action).toEqual({
+    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    payload: {
+      assessmentId: undefined,
+      submissionId: 1
+    }
   });
 });
 
@@ -293,5 +341,31 @@ test('updateGrading generates correct action object', () => {
       submissionId,
       grading
     }
+  });
+});
+
+test('updateNotifications generates correct action object', () => {
+  const notifications: Notification[] = [
+    {
+      id: 1,
+      type: 'new',
+      assessment_id: 1,
+      assessment_type: 'Mission',
+      assessment_title: 'The Secret to Streams'
+    },
+    {
+      id: 2,
+      type: 'new',
+      assessment_id: 2,
+      assessment_type: 'Sidequest',
+      assessment_title: 'A sample Sidequest'
+    }
+  ];
+
+  const action = updateNotifications(notifications);
+
+  expect(action).toEqual({
+    type: actionTypes.UPDATE_NOTIFICATIONS,
+    payload: notifications
   });
 });

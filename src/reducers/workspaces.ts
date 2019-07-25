@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { ITestcase } from 'src/components/assessment/assessmentShape';
+import { ITestcase } from '../components/assessment/assessmentShape';
 
 import {
   BROWSE_REPL_HISTORY_DOWN,

@@ -19,11 +19,14 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
+import NotificationBadge from '../../../containers/notification/NotificationBadge';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import ContentDisplay from '../../commons/ContentDisplay';
+import { filterNotificationsBySubmission } from '../../notification/NotificationHelpers';
+import { Notification, NotificationFilterFunction } from '../../notification/notificationShape';
 import EditGradingCell from './EditGradingCell';
 import GradeCell from './GradeCell';
-import { GradingOverview } from './gradingShape';
+import { GradingOverview, GradingOverviewWithNotifications } from './gradingShape';
 import GradingStatusCell from './GradingStatusCell';
 import { OwnProps as GradingWorkspaceProps } from './GradingWorkspace';
 import UnsubmitCell from './UnsubmitCell';
@@ -35,7 +38,7 @@ type State = {
 };
 
 type GradingNavLinkProps = {
-  data: GradingOverview;
+  data: GradingOverviewWithNotifications;
 };
 
 interface IGradingProps
@@ -49,12 +52,14 @@ export interface IGradingWorkspaceParams {
 }
 
 export interface IDispatchProps {
+  handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
   handleUnsubmitSubmission: (submissionId: number) => void;
 }
 
 export interface IStateProps {
   gradingOverviews?: GradingOverview[];
+  notifications: Notification[];
 }
 
 /** Component to render in table - grading status */
@@ -72,6 +77,14 @@ const GradingExp = (props: GradingNavLinkProps) => {
   return <XPCell data={props.data} />;
 };
 
+const NotificationBadgeCell = (props: GradingNavLinkProps) => {
+  return (
+    <NotificationBadge
+      notificationFilter={filterNotificationsBySubmission(props.data.submissionId)}
+    />
+  );
+};
+
 class Grading extends React.Component<IGradingProps, State> {
   private columnDefs: ColDef[];
   private gridApi?: GridApi;
@@ -80,6 +93,15 @@ class Grading extends React.Component<IGradingProps, State> {
     super(props);
 
     this.columnDefs = [
+      {
+        headerName: '',
+        field: 'notifications',
+        cellRendererFramework: NotificationBadgeCell,
+        maxWidth: 30,
+        suppressResize: true,
+        suppressMovable: true,
+        suppressMenu: true
+      },
       { headerName: 'Assessment Name', field: 'assessmentName' },
       { headerName: 'Category', field: 'assessmentCategory', maxWidth: 100 },
       { headerName: 'Student Name', field: 'studentName' },
@@ -142,6 +164,9 @@ class Grading extends React.Component<IGradingProps, State> {
       {
         headerName: 'Edit',
         cellRendererFramework: EditGradingCell,
+        cellRendererParams: {
+          handleAcknowledgeNotifications: this.props.handleAcknowledgeNotifications
+        },
         width: 65,
         suppressFilter: true,
         suppressSorting: true,
@@ -209,10 +234,7 @@ class Grading extends React.Component<IGradingProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
-    const data = sortBy(this.props.gradingOverviews, [
-      (a: GradingOverview) => -a.assessmentId,
-      (a: GradingOverview) => -a.submissionId
-    ]);
+    const data = this.sortSubmissions();
 
     const grid = (
       <div className="GradingContainer">
@@ -259,6 +281,7 @@ class Grading extends React.Component<IGradingProps, State> {
               columnDefs={this.columnDefs}
               onGridReady={this.onGridReady}
               rowData={data}
+              rowHeight={30}
               pagination={true}
               paginationPageSize={50}
               suppressMovableColumns={true}
@@ -276,6 +299,13 @@ class Grading extends React.Component<IGradingProps, State> {
         />
       </div>
     );
+  }
+
+  public componentDidUpdate() {
+    if (!this.gridApi) {
+      return;
+    }
+    this.gridApi.setRowData(this.sortSubmissions());
   }
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -303,6 +333,32 @@ class Grading extends React.Component<IGradingProps, State> {
       return;
     }
     this.gridApi.exportDataAsCsv({ allColumns: true });
+  };
+
+  /* Submissions will be sorted in the following order:
+    - whether the submission has notifications
+    - the assessment id
+    - the submission id
+  */
+  private sortSubmissions = () => {
+    if (!this.props.gradingOverviews) {
+      return [];
+    }
+
+    const newOverviews = (this.props.gradingOverviews as GradingOverviewWithNotifications[]).map(
+      overview => ({
+        ...overview,
+        notifications: filterNotificationsBySubmission(overview.submissionId)(
+          this.props.notifications
+        )
+      })
+    );
+
+    return sortBy(newOverviews, [
+      (a: GradingOverviewWithNotifications) => (a.notifications.length > 0 ? -1 : 0),
+      (a: GradingOverview) => -a.assessmentId,
+      (a: GradingOverview) => -a.submissionId
+    ]);
   };
 }
 

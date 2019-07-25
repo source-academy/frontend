@@ -156,8 +156,6 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorPrepend: '',
-              editorPrependLines: 0,
               editorSessionId: '',
               editorValue:
                 this.props.editorValue ||

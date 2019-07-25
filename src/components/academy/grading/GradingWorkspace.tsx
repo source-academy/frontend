@@ -141,11 +141,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorPrepend: this.props.editorPrepend,
-              editorPrependLines:
-                this.props.editorPrepend.length === 0
-                  ? 0
-                  : this.props.editorPrepend.split('\n').length,
               editorSessionId: '',
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
@@ -276,7 +271,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         label: `Chat`,
         icon: IconNames.CHAT,
         body: USE_CHATKIT ? (
-          <ChatApp roomId={props.grading![questionId].grade.roomId} />
+          <ChatApp
+            roomId={props.grading![questionId].grade.roomId}
+            submissionId={this.props.submissionId}
+          />
         ) : (
           <span>ChatKit disabled.</span>
         )
