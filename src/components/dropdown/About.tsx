@@ -32,7 +32,7 @@ const About: React.SFC<DialogProps> = props => (
           .
         </p>
         <p>
-          The Source Academy is available under the MIT License at our GitHub organisation,{' '}
+          The Source Academy is available under the Apache License 2.0 at our GitHub organisation,{' '}
           <a href={LINKS.GITHUB_ORG}>Source Academy</a>. The National University of Singapore uses
           the Source Academy for teaching Programming Methodology to freshmen Computer Science
           students in the course <a href={LINKS.MODULE_DETAILS}>CS1101S</a>.

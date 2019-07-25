@@ -267,7 +267,7 @@ function resetCanvas() {
   }
 }
 
-/**
+/*
  * Gets the WebGL object (gl) ready for usage. Use this
  * to reset the mode of rendering i.e to change from 2d to 3d runes.
  *

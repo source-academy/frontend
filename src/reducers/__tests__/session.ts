@@ -7,7 +7,8 @@ import {
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_HISTORY_HELPERS
+  UPDATE_HISTORY_HELPERS,
+  UPDATE_NOTIFICATIONS
 } from '../../actions/actionTypes';
 import { Grading, GradingOverview } from '../../components/academy/grading/gradingShape';
 import {
@@ -17,6 +18,7 @@ import {
   IAssessment,
   IAssessmentOverview
 } from '../../components/assessment/assessmentShape';
+import { Notification } from '../../components/notification/notificationShape';
 import { HistoryHelper } from '../../utils/history';
 import { reducer } from '../session';
 import { defaultSession, ISessionState, Role, Story } from '../states';
@@ -287,7 +289,7 @@ const gradingTest1: Grading = [
       id: 234
     },
     grade: {
-      comment: 'test comment',
+      roomId: '19422030',
       grade: 10,
       gradeAdjustment: 0,
       xp: 100,
@@ -304,7 +306,7 @@ const gradingTest2: Grading = [
       id: 345
     },
     grade: {
-      comment: 'updated comment',
+      roomId: '19422030',
       grade: 30,
       gradeAdjustment: 10,
       xp: 500,
@@ -391,7 +393,10 @@ const gradingOverviewTest1: GradingOverview[] = [
     studentName: 'test student',
     submissionId: 1,
     submissionStatus: 'attempting',
-    groupName: 'group'
+    groupName: 'group',
+    gradingStatus: 'excluded',
+    questionCount: 0,
+    gradedCount: 6
   }
 ];
 
@@ -413,7 +418,10 @@ const gradingOverviewTest2: GradingOverview[] = [
     studentName: 'another student',
     submissionId: 2,
     submissionStatus: 'attempted',
-    groupName: 'another group'
+    groupName: 'another group',
+    gradingStatus: 'excluded',
+    questionCount: 6,
+    gradedCount: 0
   }
 ];
 
@@ -440,4 +448,32 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', (
   const result: ISessionState = reducer(newDefaultSession, action);
 
   expect(result.gradingOverviews).toEqual(gradingOverviewsPayload);
+});
+
+test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {
+  const notifications: Notification[] = [
+    {
+      id: 1,
+      type: 'new',
+      assessment_id: 1,
+      assessment_type: 'Mission',
+      assessment_title: 'The Secret to Streams'
+    },
+    {
+      id: 2,
+      type: 'new',
+      assessment_id: 2,
+      assessment_type: 'Sidequest',
+      assessment_title: 'A sample Sidequest'
+    }
+  ];
+
+  const action = {
+    type: UPDATE_NOTIFICATIONS,
+    payload: notifications
+  };
+
+  const result: ISessionState = reducer(defaultSession, action);
+
+  expect(result.notifications).toEqual(notifications);
 });

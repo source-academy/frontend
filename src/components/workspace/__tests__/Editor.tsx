@@ -11,8 +11,6 @@ jest.spyOn(Editor.prototype, 'componentDidMount').mockImplementation(componentDi
 test('Editor renders correctly', () => {
   const props: IEditorProps = {
     editorSessionId: '',
-    editorPrepend: '',
-    editorPrependLines: 0,
     editorValue: '',
     breakpoints: [],
     highlightedLines: [],

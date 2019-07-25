@@ -1,14 +1,18 @@
 import { Grading, GradingOverview } from '../../components/academy/grading/gradingShape';
 import { IAssessment, IAssessmentOverview } from '../../components/assessment/assessmentShape';
+import { Notification } from '../../components/notification/notificationShape';
 import * as actionTypes from '../actionTypes';
 import {
+  acknowledgeNotifications,
   fetchAnnouncements,
   fetchAssessment,
   fetchAssessmentOverviews,
   fetchAuth,
   fetchGrading,
   fetchGradingOverviews,
+  fetchNotifications,
   login,
+  notifyChatUsers,
   setTokens,
   setUser,
   submitAnswer,
@@ -19,8 +23,20 @@ import {
   updateAssessmentOverviews,
   updateGrading,
   updateGradingOverviews,
-  updateHistoryHelpers
+  updateHistoryHelpers,
+  updateNotifications
 } from '../session';
+
+test('acknowledgeNotifications generates correct action object', () => {
+  const action = acknowledgeNotifications();
+
+  expect(action).toEqual({
+    type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
+    payload: {
+      withFilter: undefined
+    }
+  });
+});
 
 test('fetchAuth generates correct action object', () => {
   const luminusCode = 'luminus-code-test';
@@ -80,10 +96,42 @@ test('fetchGradingOverviews generates correct action object', () => {
   });
 });
 
+test('fetchNotifications generates correct action object', () => {
+  const action = fetchNotifications();
+
+  expect(action).toEqual({
+    type: actionTypes.FETCH_NOTIFICATIONS
+  });
+});
+
 test('login action generates correct action object', () => {
   const action = login();
   expect(action).toEqual({
     type: actionTypes.LOGIN
+  });
+});
+
+test('notifyChatUsers generates correct action object with undefined submission id', () => {
+  const action = notifyChatUsers(1, undefined);
+
+  expect(action).toEqual({
+    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    payload: {
+      assessmentId: 1,
+      submissionId: undefined
+    }
+  });
+});
+
+test('notifyChatUsers generates correct action object with undefined assessment id', () => {
+  const action = notifyChatUsers(undefined, 1);
+
+  expect(action).toEqual({
+    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    payload: {
+      assessmentId: undefined,
+      submissionId: 1
+    }
   });
 });
 
@@ -139,15 +187,13 @@ test('submitAssessment generates correct action object', () => {
 test('submitGrading generates correct action object with default values', () => {
   const submissionId = 8;
   const questionId = 2;
-  const comment = 'test comment here';
 
-  const action = submitGrading(submissionId, questionId, comment);
+  const action = submitGrading(submissionId, questionId);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      comment,
       gradeAdjustment: 0,
       xpAdjustment: 0
     }
@@ -157,16 +203,14 @@ test('submitGrading generates correct action object with default values', () => 
 test('submitGrading generates correct action object', () => {
   const submissionId = 10;
   const questionId = 3;
-  const comment = 'another test comment here';
   const gradeAdjustment = 10;
   const xpAdjustment = 100;
-  const action = submitGrading(submissionId, questionId, comment, gradeAdjustment, xpAdjustment);
+  const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      comment,
       gradeAdjustment,
       xpAdjustment
     }
@@ -257,7 +301,10 @@ test('updateGradingOverviews generates correct action object', () => {
       studentName: 'test student',
       submissionId: 1,
       submissionStatus: 'attempting',
-      groupName: 'group'
+      groupName: 'group',
+      gradingStatus: 'excluded',
+      questionCount: 6,
+      gradedCount: 0
     }
   ];
 
@@ -278,7 +325,7 @@ test('updateGrading generates correct action object', () => {
         id: 234
       },
       grade: {
-        comment: 'test comment',
+        roomId: 'test roomId',
         grade: 10,
         gradeAdjustment: 0,
         xp: 100,
@@ -294,5 +341,31 @@ test('updateGrading generates correct action object', () => {
       submissionId,
       grading
     }
+  });
+});
+
+test('updateNotifications generates correct action object', () => {
+  const notifications: Notification[] = [
+    {
+      id: 1,
+      type: 'new',
+      assessment_id: 1,
+      assessment_type: 'Mission',
+      assessment_title: 'The Secret to Streams'
+    },
+    {
+      id: 2,
+      type: 'new',
+      assessment_id: 2,
+      assessment_type: 'Sidequest',
+      assessment_title: 'A sample Sidequest'
+    }
+  ];
+
+  const action = updateNotifications(notifications);
+
+  expect(action).toEqual({
+    type: actionTypes.UPDATE_NOTIFICATIONS,
+    payload: notifications
   });
 });
