@@ -1,5 +1,5 @@
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
-import { mock2DRuneLibrary as mockLibrary } from './assessmentAPI';
+import { mockRuneLibrary as mockLibrary } from './assessmentAPI';
 import { mockFetchRole, Role, Roles } from './userAPI';
 
 export const mockGradingOverviews: GradingOverview[] = [
@@ -19,7 +19,11 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 0,
     studentName: 'Al Gorithm',
     submissionId: 0,
-    groupName: '1D'
+    submissionStatus: 'submitted',
+    groupName: '1D',
+    gradingStatus: 'graded',
+    questionCount: 6,
+    gradedCount: 6
   },
   {
     gradeAdjustment: -2,
@@ -37,7 +41,11 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 0,
     studentName: 'Dee Sign',
     submissionId: 1,
-    groupName: '1F'
+    submissionStatus: 'submitted',
+    groupName: '1F',
+    gradingStatus: 'grading',
+    questionCount: 6,
+    gradedCount: 2
   },
   {
     gradeAdjustment: 4,
@@ -55,7 +63,11 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentId: 1,
     studentName: 'May Trix',
     submissionId: 2,
-    groupName: '1F'
+    submissionStatus: 'submitted',
+    groupName: '1F',
+    gradingStatus: 'none',
+    questionCount: 6,
+    gradedCount: 0
   }
 ];
 

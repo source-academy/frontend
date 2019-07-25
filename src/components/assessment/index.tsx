@@ -6,6 +6,8 @@ import {
   Collapse,
   Dialog,
   Elevation,
+  H4,
+  H6,
   Icon,
   IconName,
   Intent,
@@ -104,9 +106,9 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     // Otherwise, render a list of assessments to the user.
     let display: JSX.Element;
     if (this.props.assessmentOverviews === undefined) {
-      display = <NonIdealState description="Fetching assessment..." visual={<Spinner />} />;
+      display = <NonIdealState description="Fetching assessment..." icon={<Spinner />} />;
     } else if (this.props.assessmentOverviews.length === 0) {
-      display = <NonIdealState title="There are no assessments." visual={IconNames.FLAME} />;
+      display = <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />;
     } else {
       /** Upcoming assessments, that are not released yet. */
       const isOverviewUpcoming = (overview: IAssessmentOverview) =>
@@ -298,20 +300,20 @@ const makeOverviewCard = (
       <div className="col-xs-9 listing-text">
         {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)}
         <div className="row listing-grade">
-          <h6>
+          <H6>
             {' '}
             {beforeNow(overview.openAt)
               ? `Grade: ${overview.grade} / ${overview.maxGrade}`
               : `Max Grade: ${overview.maxGrade}`}{' '}
-          </h6>
+          </H6>
         </div>
         <div className="row listing-xp">
-          <h6>
+          <H6>
             {' '}
             {beforeNow(overview.openAt)
               ? `XP: ${overview.xp} / ${overview.maxXp}`
               : `Max XP: ${overview.maxXp}`}{' '}
-          </h6>
+          </H6>
         </div>
         <div className="row listing-description">
           <Markdown content={overview.shortSummary} />
@@ -338,9 +340,9 @@ const makeOverviewCardTitle = (
 ) => (
   <div className="row listing-title">
     <Text ellipsize={true} className={'col-xs-10'}>
-      <h4>
+      <H4>
         {overview.title} {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
-      </h4>
+      </H4>
     </Text>
     <div className="col-xs-2">{makeSubmissionButton(overview, index, setBetchaAssessment)}</div>
   </div>
@@ -364,10 +366,17 @@ const makeGradingStatus = (gradingStatus: string) => {
       tooltip = 'Grading in progress';
       break;
 
-    default:
+    case GradingStatuses.none:
       iconName = IconNames.CROSS;
       intent = Intent.DANGER;
       tooltip = 'Not graded yet';
+      break;
+
+    default:
+      // Shows default icon if this assessment is ungraded
+      iconName = IconNames.DISABLE;
+      intent = Intent.PRIMARY;
+      tooltip = `Not applicable`;
       break;
   }
 
@@ -401,8 +410,8 @@ const makeOverviewCardButton = (overview: IAssessmentOverview) => {
   let label: string;
   switch (overview.status) {
     case AssessmentStatuses.not_attempted:
-      icon = IconNames.STEP_FORWARD;
-      label = overview.story ? 'Skip Story & Attempt' : 'Attempt';
+      icon = IconNames.PLAY;
+      label = 'Attempt';
       break;
     case AssessmentStatuses.attempting:
       icon = IconNames.PLAY;

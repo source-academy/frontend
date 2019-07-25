@@ -4,48 +4,48 @@ var viewport_size = 512 // This is the height of the viewport
 var maxArcLength = 20
 
 /*-----------------------Some class definitions----------------------*/
-function PrimaryShape(first, count) {
-  this.isPrimary = true // this is a primary shape
+function PrimaryRune(first, count) {
+  this.isPrimary = true // this is a primary rune
   this.first = first // the first index in the index buffer
-  // that belongs to this shape
-  this.count = count // number of indices to draw the shape
+  // that belongs to this rune
+  this.count = count // number of indices to draw the rune
 }
 
-function Shape() {
+function Rune() {
   this.isPrimary = false
   this.transMatrix = mat4.create()
-  this.shapes = []
+  this.runes = []
   this.color = undefined
 }
 
-// set the transformation matrix related to the shape
-Shape.prototype.setM = function(matrix) {
+// set the transformation matrix related to the rune
+Rune.prototype.setM = function(matrix) {
   this.transMatrix = matrix
 }
 
-// get the transformation matrix related to the shape
-Shape.prototype.getM = function() {
+// get the transformation matrix related to the rune
+Rune.prototype.getM = function() {
   return this.transMatrix
 }
 
-// get the sub-shapes (array) of the shape
-Shape.prototype.getS = function() {
-  return this.shapes
+// get the sub-runes (array) of the rune
+Rune.prototype.getS = function() {
+  return this.runes
 }
 
-Shape.prototype.setS = function(shapes) {
-  this.shapes = shapes
+Rune.prototype.setS = function(runes) {
+  this.runes = runes
 }
 
-Shape.prototype.addS = function(shape) {
-  this.shapes.push(shape)
+Rune.prototype.addS = function(rune) {
+  this.runes.push(rune)
 }
 
-Shape.prototype.getColor = function() {
+Rune.prototype.getColor = function() {
   return this.color
 }
 
-Shape.prototype.setColor = function(color) {
+Rune.prototype.setColor = function(color) {
   this.color = color
 }
 
@@ -93,7 +93,7 @@ var vertices = [
   -1.0,
   0.0,
   1.0,
-  // for rcross_bb
+  // for rcross
   0.5,
   0.5,
   0.0,
@@ -110,7 +110,7 @@ var vertices = [
   -0.5,
   0.0,
   1.0,
-  // for nova_bb
+  // for nova
   0.0,
   0.5,
   0.0,
@@ -123,14 +123,14 @@ var vertices = [
 // indices is an array of indices, each refer to a point in vertices
 // (will be converted to Uint16Array later)
 var indices = [
-  // black_bb
+  // square
   2,
   4,
   6,
   2,
   6,
   8,
-  // rcross_bb
+  // rcross
   2,
   4,
   10,
@@ -146,15 +146,15 @@ var indices = [
   10,
   11,
   12,
-  // sail_bb
+  // sail
   7,
   8,
   3,
-  // corner_bb
+  // corner
   1,
   2,
   3,
-  // nova_bb
+  // nova
   3,
   0,
   14,
@@ -180,7 +180,7 @@ function makeCircle() {
   }
   indices.push(centerVerInd, firstVer, firstVer + numPoints - 1)
   var count = 3 * numPoints
-  return new PrimaryShape(firstInd, count)
+  return new PrimaryRune(firstInd, count)
 }
 
 function makeHeart() {
@@ -220,7 +220,7 @@ function makeHeart() {
     indices.push(bottomMidInd, i, i + 1)
   }
   var count = 3 * 2 * numPoints
-  return new PrimaryShape(firstInd, count)
+  return new PrimaryRune(firstInd, count)
 }
 
 function makePentagram() {
@@ -243,7 +243,7 @@ function makePentagram() {
     indices.push(0, firstVer + i, firstVer + (i + 2) % 5)
   }
 
-  return new PrimaryShape(firstInd, 15)
+  return new PrimaryRune(firstInd, 15)
 }
 
 function makeRibbon() {
@@ -270,29 +270,75 @@ function makeRibbon() {
     indices.push(i, i + 1, i + 2)
   }
 
-  return new PrimaryShape(firstInd, 3 * totalPoints - 6)
+  return new PrimaryRune(firstInd, 3 * totalPoints - 6)
 }
 
-var black_bb = new PrimaryShape(0, 6)
-var blank_bb = new PrimaryShape(0, 0)
-var rcross_bb = new PrimaryShape(6, 15)
-var sail_bb = new PrimaryShape(21, 3)
-var corner_bb = new PrimaryShape(24, 3)
-var nova_bb = new PrimaryShape(27, 6)
-var circle_bb = makeCircle()
-var heart_bb = makeHeart()
-var pentagram_bb = makePentagram()
-var ribbon_bb = makeRibbon()
+/** 
+ * primitive Rune in the rune of a full square
+**/
+var square = new PrimaryRune(0, 6)
+
+/** 
+ * primitive Rune in the rune of a blank square
+**/
+var blank = new PrimaryRune(0, 0)
+
+/** 
+ * primitive Rune in the rune of a 
+ * smallsquare inside a large square,
+ * each diagonally split into a
+ * black and white half
+**/
+var rcross = new PrimaryRune(6, 15)
+
+/** 
+ * primitive Rune in the rune of a sail
+**/
+var sail = new PrimaryRune(21, 3)
+
+/** 
+ * primitive Rune with black triangle,
+ * filling upper right corner
+**/
+var corner = new PrimaryRune(24, 3)
+
+/** 
+ * primitive Rune in the rune of two overlapping
+ * triangles, residing in the upper half
+ * of 
+**/
+var nova = new PrimaryRune(27, 6)
+
+/** 
+ * primitive Rune in the rune of a circle
+**/
+var circle = makeCircle()
+
+/** 
+ * primitive Rune in the rune of a heart
+**/
+var heart = makeHeart()
+
+/** 
+ * primitive Rune in the rune of a pentagram
+**/
+var pentagram = makePentagram()
+
+/** 
+ * primitive Rune in the rune of a ribbon
+ * winding outwards in an anticlockwise spiral
+**/
+var ribbon = makeRibbon()
 
 // convert vertices and indices to typed arrays
 vertices = new Float32Array(vertices)
 indices = new Uint16Array(indices)
 
 /*-----------------------Drawing functions----------------------*/
-function generateFlattenedShapeList(shape) {
+function generateFlattenedRuneList(rune) {
   var matStack = []
   var matrix = mat4.create()
-  var shape_list = {}
+  var rune_list = {}
   function pushMat() {
     matStack.push(mat4.clone(matrix))
   }
@@ -303,30 +349,30 @@ function generateFlattenedShapeList(shape) {
       matrix = matStack.pop()
     }
   }
-  function helper(shape, color) {
-    if (shape.isPrimary) {
-      if (shape.count === 0) {
-        // this is blank_bb, do nothing
+  function helper(rune, color) {
+    if (rune.isPrimary) {
+      if (rune.count === 0) {
+        // this is blank, do nothing
         return
       }
-      if (!shape_list[shape.first]) {
-        shape_list[shape.first] = {
-          shape: shape,
+      if (!rune_list[rune.first]) {
+        rune_list[rune.first] = {
+          rune: rune,
           matrices: [],
           colors: []
         }
       }
-      shape_list[shape.first].matrices.push(matrix)
-      shape_list[shape.first].colors.push(color || [0, 0, 0, 1])
+      rune_list[rune.first].matrices.push(matrix)
+      rune_list[rune.first].colors.push(color || [0, 0, 0, 1])
     } else {
-      if (color === undefined && shape.getColor() !== undefined) {
-        color = shape.getColor()
+      if (color === undefined && rune.getColor() !== undefined) {
+        color = rune.getColor()
       }
       pushMat()
-      mat4.multiply(matrix, matrix, shape.getM())
-      var childShapes = shape.getS()
-      for (var i = 0; i < childShapes.length; i++) {
-        helper(childShapes[i], color)
+      mat4.multiply(matrix, matrix, rune.getM())
+      var childRunes = rune.getS()
+      for (var i = 0; i < childRunes.length; i++) {
+        helper(childRunes[i], color)
       }
       popMat()
     }
@@ -339,57 +385,83 @@ function generateFlattenedShapeList(shape) {
     }
     return instanceArray
   }
-  helper(shape)
-  var flattened_shape_list = []
+  helper(rune)
+  var flattened_rune_list = []
   // draw a white square background first
-  flattened_shape_list.push({
-    shape: black_bb,
+  flattened_rune_list.push({
+    rune: square,
     instanceArray: new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1, 1, 1, 1, 1, 1])
   })
-  for (var key in shape_list) {
-    if (shape_list.hasOwnProperty(key)) {
-      var shape = shape_list[key].shape
-      var instanceArray = flatten(shape_list[key].matrices, shape_list[key].colors)
-      flattened_shape_list.push({ shape: shape, instanceArray: instanceArray })
+  for (var key in rune_list) {
+    if (rune_list.hasOwnProperty(key)) {
+      var rune = rune_list[key].rune
+      var instanceArray = flatten(rune_list[key].matrices, rune_list[key].colors)
+      flattened_rune_list.push({ rune: rune, instanceArray: instanceArray })
     }
   }
-  return flattened_shape_list
+  return flattened_rune_list
 }
 
-function drawWithWebGL(flattened_shape_list, drawFunction) {
-  for (var i = 0; i < flattened_shape_list.length; i++) {
-    var shape = flattened_shape_list[i].shape
-    var instanceArray = flattened_shape_list[i].instanceArray
-    drawFunction(shape.first, shape.count, instanceArray)
+function drawWithWebGL(flattened_rune_list, drawFunction) {
+  for (var i = 0; i < flattened_rune_list.length; i++) {
+    var rune = flattened_rune_list[i].rune
+    var instanceArray = flattened_rune_list[i].instanceArray
+    drawFunction(rune.first, rune.count, instanceArray)
   }
 }
 
-function show(shape) {
+/**
+ * turns a given Rune into a two-dimensional Picture
+ * @param {Rune} rune - given Rune
+ * @return {Picture}
+ * If the result of evaluating a program is a Picture,
+ * the REPL displays it graphically, instead of textually.
+ */
+function show(rune) {
   clear_viewport()
-  var flattened_shape_list = generateFlattenedShapeList(shape)
-  drawWithWebGL(flattened_shape_list, drawRune)
+  var flattened_rune_list = generateFlattenedRuneList(rune)
+  drawWithWebGL(flattened_rune_list, drawRune)
   return new ShapeDrawn()
 }
 
-function anaglyph(shape) {
+/**
+ * turns a given Rune into an Anaglyph
+ * @param {Rune} rune - given Rune
+ * @return {Picture}
+ * If the result of evaluating a program is an Anaglyph,
+ * the REPL displays it graphically, using anaglyph
+ * technology, instead of textually. Use your 3D-glasses
+ * to view the Anaglyph.
+ */
+function anaglyph(rune) {
   clear_viewport()
   clearAnaglyphFramebuffer()
-  var flattened_shape_list = generateFlattenedShapeList(shape)
-  drawWithWebGL(flattened_shape_list, drawAnaglyph)
+  var flattened_rune_list = generateFlattenedRuneList(rune)
+  drawWithWebGL(flattened_rune_list, drawAnaglyph)
   return new ShapeDrawn()
 }
 
 var hollusionTimeout
-function hollusion(shape, num) {
+/* // to view documentation, put two * in this line
+ * // currently, this function is not documented; 
+ * // animation not working
+ * turns a given Rune into Hollusion
+ * @param {Rune} rune - given Rune
+ * @return {Picture}
+ * If the result of evaluating a program is a Hollusion,
+ * the REPL displays it graphically, using hollusion
+ * technology, instead of textually.
+ */
+function hollusion(rune, num) {
   clear_viewport()
   var num = num > 3 ? num : 3
-  var flattened_shape_list = generateFlattenedShapeList(shape)
+  var flattened_rune_list = generateFlattenedRuneList(rune)
   var frame_list = []
   for (var j = 0; j < num; j++) {
     var frame = open_pixmap('frame' + j, viewport_size, viewport_size, false)
-    for (var i = 0; i < flattened_shape_list.length; i++) {
-      var shape = flattened_shape_list[i].shape
-      var instanceArray = flattened_shape_list[i].instanceArray
+    for (var i = 0; i < flattened_rune_list.length; i++) {
+      var rune = flattened_rune_list[i].rune
+      var instanceArray = flattened_rune_list[i].instanceArray
       var cameraMatrix = mat4.create()
       mat4.lookAt(
         cameraMatrix,
@@ -397,7 +469,7 @@ function hollusion(shape, num) {
         vec3.fromValues(0, 0, -0.4),
         vec3.fromValues(0, 1, 0)
       )
-      draw3D(shape.first, shape.count, instanceArray, cameraMatrix, [1, 1, 1, 1], null, true)
+      draw3D(rune.first, rune.count, instanceArray, cameraMatrix, [1, 1, 1, 1], null, true)
     }
     gl.finish()
     copy_viewport(gl.canvas, frame)
@@ -422,15 +494,417 @@ function clearHollusion() {
   clearTimeout(hollusionTimeout)
 }
 
-function stereogram(shape) {
+/*-----------------------Transformation functions----------------------*/
+function scale_independent(ratio_x, ratio_y, rune) {
+  var scaleVec = vec3.fromValues(ratio_x, ratio_y, 1)
+  var scaleMat = mat4.create()
+  mat4.scale(scaleMat, scaleMat, scaleVec)
+  var wrapper = new Rune()
+  wrapper.addS(rune)
+  wrapper.setM(scaleMat)
+  return wrapper
+}
+
+function scale(ratio, rune) {
+  return scale_independent(ratio, ratio, rune)
+}
+
+function translate(x, y, rune) {
+  var translateVec = vec3.fromValues(x, -y, 0)
+  var translateMat = mat4.create()
+  mat4.translate(translateMat, translateMat, translateVec)
+  var wrapper = new Rune()
+  wrapper.addS(rune)
+  wrapper.setM(translateMat)
+  return wrapper
+}
+
+/**
+ * rotates a given Rune by a given angle,
+ * given in radians, in anti-clockwise direction
+ * @param {number} rad - fraction between 0 and 1
+ * @param {Rune} rune - given Rune
+ * @return {Rune} rotated Rune
+ */
+function rotate(rad, rune) {
+  var rotateMat = mat4.create()
+  mat4.rotateZ(rotateMat, rotateMat, rad)
+  var wrapper = new Rune()
+  wrapper.addS(rune)
+  wrapper.setM(rotateMat)
+  return wrapper
+}
+
+/**
+ * makes a new Rune from two given Runes by
+ * placing the first on top of the second
+ * such that the first one occupies frac 
+ * portion of the height of the result and 
+ * the second the rest
+ * @param {number} frac - fraction between 0 and 1
+ * @param {Rune} rune1 - given Rune
+ * @param {Rune} rune2 - given Rune
+ * @return {Rune} resulting Rune
+ */
+function stack_frac(frac, rune1, rune2) {
+  var upper = translate(0, -(1 - frac), scale_independent(1, frac, rune1))
+  var lower = translate(0, frac, scale_independent(1, 1 - frac, rune2))
+  var combined = new Rune()
+  combined.setS([upper, lower])
+  return combined
+}
+
+/**
+ * makes a new Rune from two given Runes by
+ * placing the first on top of the second, each
+ * occupying equal parts of the height of the 
+ * result
+ * @param {Rune} rune1 - given Rune
+ * @param {Rune} rune2 - given Rune
+ * @return {Rune} resulting Rune
+ */
+function stack(rune1, rune2) {
+  return stack_frac(1 / 2, rune1, rune2)
+}
+
+/**
+ * makes a new Rune from a given Rune
+ * by vertically stacking n copies of it
+ * @param {number} n - positive integer
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting Rune
+ */
+function stackn(n, rune) {
+  if (n === 1) {
+    return rune
+  } else {
+    return stack_frac(1 / n, rune, stackn(n - 1, rune))
+  }
+}
+
+/**
+ * makes a new Rune from a given Rune
+ * by turning it a quarter-turn in
+ * clockwise direction
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting Rune
+ */
+function quarter_turn_right(rune) {
+  return rotate(-Math.PI / 2, rune)
+}
+
+/**
+ * makes a new Rune from a given Rune
+ * by turning it a quarter-turn in
+ * anti-clockwise direction
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting Rune
+ */
+function quarter_turn_left(rune) {
+  return rotate(Math.PI / 2, rune)
+}
+
+/**
+ * makes a new Rune from a given Rune
+ * by turning it upside-down
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting Rune
+ */
+function turn_upside_down(rune) {
+  return rotate(Math.PI, rune)
+}
+
+/**
+ * makes a new Rune from two given Runes by
+ * placing the first on the left of the second
+ * such that the first one occupies frac 
+ * portion of the width of the result and 
+ * the second the rest
+ * @param {number} frac - fraction between 0 and 1
+ * @param {Rune} rune1 - given Rune
+ * @param {Rune} rune2 - given Rune
+ * @return {Rune} resulting Rune
+ */
+function beside_frac(frac, rune1, rune2) {
+  var left = translate(-(1 - frac), 0, scale_independent(frac, 1, rune1))
+  var right = translate(frac, 0, scale_independent(1 - frac, 1, rune2))
+  var combined = new Rune()
+  combined.setS([left, right])
+  return combined
+}
+
+/**
+ * makes a new Rune from two given Runes by
+ * placing the first on the left of the second,
+ * both occupying equal portions of the width 
+ * of the result
+ * @param {Rune} rune1 - given Rune
+ * @param {Rune} rune2 - given Rune
+ * @return {Rune} resulting Rune
+ */
+function beside(rune1, rune2) {
+  return beside_frac(1 / 2, rune1, rune2)
+}
+
+/**
+ * makes a new Rune from a given Rune by
+ * flipping it around a horizontal axis,
+ * turning it upside down
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting Rune
+ */
+function flip_vert(rune) {
+  return scale_independent(1, -1, rune)
+}
+
+/**
+ * makes a new Rune from a given Rune by
+ * flipping it around a vertical axis,
+ * creating a mirror image
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting Rune
+ */
+function flip_horiz(rune) {
+  return scale_independent(-1, 1, rune)
+}
+
+/**
+ * makes a new Rune from a given Rune by
+ * arranging into a square for copies of the 
+ * given Rune in different orientations
+ * @param {Rune} rune - given Rune
+ * @return {Rune} resulting Rune
+ */
+function make_cross(rune) {
+  return stack(
+    beside(quarter_turn_right(rune), rotate(Math.PI, rune)),
+    beside(rune, rotate(Math.PI / 2, rune))
+  )
+}
+
+/**
+ * applies a given function n times to an initial value
+ * @param {number} n - a non-negative integer
+ * @param {function} f - unary function from t to t
+ * @param {t} initial - argument
+ * @return {t} - result of n times application of 
+ *               f to rune: f(f(...f(f(rune))...))
+ */
+function repeat_pattern(n, pattern, initial) {
+  if (n === 0) {
+    return initial
+  } else {
+    return pattern(repeat_pattern(n - 1, pattern, initial))
+  }
+}
+
+/*-----------------------Color functions----------------------*/
+function hexToColor(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  return [
+    parseInt(result[1], 16) / 255,
+    parseInt(result[2], 16) / 255,
+    parseInt(result[3], 16) / 255,
+    1
+  ]
+}
+
+/**
+ * adds color to rune by specifying 
+ * the red, green, blue (RGB) value.
+ * Opacity is kept at default value of 1. (Full opacity)
+ * @param {Rune} rune - the rune to add color to
+ * @param {number} r - red value (0-255)
+ * @param {number} g - green value (0-255)
+ * @param {number} b - blue value (0-255)
+ */
+function color(rune, r, g, b) {
+  var wrapper = new Rune()
+  wrapper.addS(rune)
+  var color = [r, g, b, 1]
+  wrapper.setColor(color)
+  return wrapper
+}
+
+function addColorFromHex(rune, hex) {
+  var wrapper = new Rune()
+  wrapper.addS(rune)
+  wrapper.setColor(hexToColor(hex))
+  return wrapper
+}
+
+/**
+ * Gives random color to the given rune.
+ * The color is chosen randomly from the nine given 
+ * colors below, where black and white are excluded.
+ * @param {Rune} rune - the rune to color
+ */
+function random_color(rune) {
+  var wrapper = new Rune()
+  wrapper.addS(rune)
+  var randomColor = hexToColor(colorPalette[Math.floor(Math.random() * colorPalette.length)])
+  wrapper.setColor(randomColor)
+  return wrapper
+}
+
+// black and white not included because they are boring colors
+// colorPalette is used in generateFlattenedRuneList to generate a random color
+var colorPalette = [
+  '#F44336',
+  '#E91E63',
+  '#AA00FF',
+  '#3F51B5',
+  '#2196F3',
+  '#4CAF50',
+  '#FFEB3B',
+  '#FF9800',
+  '#795548'
+]
+
+/**
+ * colors the give given rune red.
+ * @param {Rune} rune - the rune to color
+ */
+function red(rune) {
+  return addColorFromHex(rune, '#F44336')
+}
+
+/**
+ * colors the give given rune pink.
+ * @param {Rune} rune - the rune to color
+ */
+function pink(rune) {
+  return addColorFromHex(rune, '#E91E63')
+}
+
+/**
+ * colors the give given rune purple.
+ * @param {Rune} rune - the rune to color
+ */
+function purple(rune) {
+  return addColorFromHex(rune, '#AA00FF')
+}
+
+/**
+ * colors the give given rune indigo.
+ * @param {Rune} rune - the rune to color
+ */
+function indigo(rune) {
+  return addColorFromHex(rune, '#3F51B5')
+}
+
+/**
+ * colors the give given rune blue.
+ * @param {Rune} rune - the rune to color
+ */
+function blue(rune) {
+  return addColorFromHex(rune, '#2196F3')
+}
+
+/**
+ * colors the give given rune green.
+ * @param {Rune} rune - the rune to color
+ */
+function green(rune) {
+  return addColorFromHex(rune, '#4CAF50')
+}
+
+/**
+ * colors the give given rune yellow.
+ * @param {Rune} rune - the rune to color
+ */
+function yellow(rune) {
+  return addColorFromHex(rune, '#FFEB3B')
+}
+
+/**
+ * colors the give given rune orange.
+ * @param {Rune} rune - the rune to color
+ */
+function orange(rune) {
+  return addColorFromHex(rune, '#FF9800')
+}
+
+/**
+ * colors the give given rune brown.
+ * @param {Rune} rune - the rune to color
+ */
+function brown(rune) {
+  return addColorFromHex(rune, '#795548')
+}
+
+/**
+ * colors the give given rune black.
+ * @param {Rune} rune - the rune to color
+ */
+function black(rune) {
+  return addColorFromHex(rune, '#000000')
+}
+
+/**
+ * colors the give given rune white.
+ * @param {Rune} rune - the rune to color
+ */
+function white(rune) {
+  return addColorFromHex(rune, '#FFFFFF')
+}
+
+/**
+ * makes a 3D-Rune from two given Runes by
+ * overlaying the first with the second
+ * such that the first one occupies frac 
+ * portion of the depth of the 3D result 
+ * and the second the rest
+ * @param {number} frac - fraction between 0 and 1
+ * @param {Rune} rune1 - given Rune
+ * @param {Rune} rune2 - given Rune
+ * @return {Rune} resulting Rune
+ */
+function overlay_frac(frac, rune1, rune2) {
+  var front = new Rune()
+  front.addS(rune1)
+  var frontMat = front.getM()
+  // z: scale by frac
+  mat4.scale(frontMat, frontMat, vec3.fromValues(1, 1, frac))
+
+  var back = new Rune()
+  back.addS(rune2)
+  var backMat = back.getM()
+  // z: scale by (1-frac), translate by -frac
+  mat4.scale(
+    backMat,
+    mat4.translate(backMat, backMat, vec3.fromValues(0, 0, -frac)),
+    vec3.fromValues(1, 1, 1 - frac)
+  )
+
+  var combined = new Rune()
+  combined.setS([front, back]) // render front first to avoid redrawing
+  return combined
+}
+
+/**
+ * makes a 3D-Rune from two given Runes by
+ * overlaying the first with the second, each
+ * occupying equal parts of the depth of the
+ * result
+ * @param {Rune} rune1 - given Rune
+ * @param {Rune} rune2 - given Rune
+ * @return {Rune} resulting Rune
+ */
+function overlay(rune1, rune2) {
+  return overlay_frac(0.5, rune1, rune2)
+}
+
+/*
+function stereogram(rune) {
   clear_viewport()
-  var flattened_shape_list = generateFlattenedShapeList(shape)
+  var flattened_rune_list = generateFlattenedRuneList(rune)
   var depth_map = open_pixmap('depth_map', viewport_size, viewport_size, true)
   // draw the depth map
-  for (var i = 0; i < flattened_shape_list.length; i++) {
-    var shape = flattened_shape_list[i].shape
-    var instanceArray = flattened_shape_list[i].instanceArray
-    drawRune(shape.first, shape.count, instanceArray)
+  for (var i = 0; i < flattened_rune_list.length; i++) {
+    var rune = flattened_rune_list[i].rune
+    var instanceArray = flattened_rune_list[i].instanceArray
+    drawRune(rune.first, rune.count, instanceArray)
   }
   gl.finish()
   copy_viewport(gl.canvas, depth_map)
@@ -506,230 +980,4 @@ function stereogram(shape) {
   copy_viewport_webGL(depth_map)
   return new ShapeDrawn()
 }
-
-/*-----------------------Color functions----------------------*/
-function hexToColor(hex) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-  return [
-    parseInt(result[1], 16) / 255,
-    parseInt(result[2], 16) / 255,
-    parseInt(result[3], 16) / 255,
-    1
-  ]
-}
-
-/**
- * Function to add color to shape by specifying the red, green, blue value.
- * Opacity is kept at default value of 1. (Full opacity)
- * @param {*} shape The shape to add color to.
- * @param {*} r The red value.
- * @param {*} g The green value.
- * @param {*} b The blue value.
- */
-function color(shape, r, g, b) {
-  var wrapper = new Shape()
-  wrapper.addS(shape)
-  var color = [r, g, b, 1]
-  wrapper.setColor(color)
-  return wrapper
-}
-
-function addColorFromHex(shape, hex) {
-  var wrapper = new Shape()
-  wrapper.addS(shape)
-  wrapper.setColor(hexToColor(hex))
-  return wrapper
-}
-
-function random_color(shape) {
-  var wrapper = new Shape()
-  wrapper.addS(shape)
-  var randomColor = hexToColor(colorPalette[Math.floor(Math.random() * colorPalette.length)])
-  wrapper.setColor(randomColor)
-  return wrapper
-}
-
-// black and white not included because they are boring colors
-// colorPalette is used in generateFlattenedShapeList to generate a random color
-var colorPalette = [
-  '#F44336',
-  '#E91E63',
-  '#AA00FF',
-  '#3F51B5',
-  '#2196F3',
-  '#4CAF50',
-  '#FFEB3B',
-  '#FF9800',
-  '#795548'
-]
-
-function red(shape) {
-  return addColorFromHex(shape, '#F44336')
-}
-
-function pink(shape) {
-  return addColorFromHex(shape, '#E91E63')
-}
-
-function purple(shape) {
-  return addColorFromHex(shape, '#AA00FF')
-}
-
-function indigo(shape) {
-  return addColorFromHex(shape, '#3F51B5')
-}
-
-function blue(shape) {
-  return addColorFromHex(shape, '#2196F3')
-}
-
-function green(shape) {
-  return addColorFromHex(shape, '#4CAF50')
-}
-
-function yellow(shape) {
-  return addColorFromHex(shape, '#FFEB3B')
-}
-
-function orange(shape) {
-  return addColorFromHex(shape, '#FF9800')
-}
-
-function brown(shape) {
-  return addColorFromHex(shape, '#795548')
-}
-
-function black(shape) {
-  return addColorFromHex(shape, '#000000')
-}
-
-function white(shape) {
-  return addColorFromHex(shape, '#FFFFFF')
-}
-
-/*-----------------------Transformation functions----------------------*/
-function scale_independent(ratio_x, ratio_y, shape) {
-  var scaleVec = vec3.fromValues(ratio_x, ratio_y, 1)
-  var scaleMat = mat4.create()
-  mat4.scale(scaleMat, scaleMat, scaleVec)
-  var wrapper = new Shape()
-  wrapper.addS(shape)
-  wrapper.setM(scaleMat)
-  return wrapper
-}
-
-function scale(ratio, shape) {
-  return scale_independent(ratio, ratio, shape)
-}
-
-function translate(x, y, shape) {
-  var translateVec = vec3.fromValues(x, -y, 0)
-  var translateMat = mat4.create()
-  mat4.translate(translateMat, translateMat, translateVec)
-  var wrapper = new Shape()
-  wrapper.addS(shape)
-  wrapper.setM(translateMat)
-  return wrapper
-}
-
-function rotate(rad, shape) {
-  var rotateMat = mat4.create()
-  mat4.rotateZ(rotateMat, rotateMat, rad)
-  var wrapper = new Shape()
-  wrapper.addS(shape)
-  wrapper.setM(rotateMat)
-  return wrapper
-}
-
-function stack_frac(frac, shape1, shape2) {
-  var upper = translate(0, -(1 - frac), scale_independent(1, frac, shape1))
-  var lower = translate(0, frac, scale_independent(1, 1 - frac, shape2))
-  var combined = new Shape()
-  combined.setS([upper, lower])
-  return combined
-}
-
-function stack(shape1, shape2) {
-  return stack_frac(1 / 2, shape1, shape2)
-}
-
-function stackn(n, shape) {
-  if (n === 1) {
-    return shape
-  } else {
-    return stack_frac(1 / n, shape, stackn(n - 1, shape))
-  }
-}
-
-function quarter_turn_right(shape) {
-  return rotate(-Math.PI / 2, shape)
-}
-
-function quarter_turn_left(shape) {
-  return rotate(Math.PI / 2, shape)
-}
-
-function turn_upside_down(shape) {
-  return rotate(Math.PI, shape)
-}
-
-function beside_frac(frac, shape1, shape2) {
-  var left = translate(-(1 - frac), 0, scale_independent(frac, 1, shape1))
-  var right = translate(frac, 0, scale_independent(1 - frac, 1, shape2))
-  var combined = new Shape()
-  combined.setS([left, right])
-  return combined
-}
-
-function beside(shape1, shape2) {
-  return beside_frac(1 / 2, shape1, shape2)
-}
-
-function flip_vert(shape) {
-  return scale_independent(1, -1, shape)
-}
-
-function flip_horiz(shape) {
-  return scale_independent(-1, 1, shape)
-}
-
-function make_cross(shape) {
-  return stack(
-    beside(quarter_turn_right(shape), rotate(Math.PI, shape)),
-    beside(shape, rotate(Math.PI / 2, shape))
-  )
-}
-
-function repeat_pattern(n, pattern, shape) {
-  if (n === 0) {
-    return shape
-  } else {
-    return pattern(repeat_pattern(n - 1, pattern, shape))
-  }
-}
-
-function overlay_frac(frac, shape1, shape2) {
-  var front = new Shape()
-  front.addS(shape1)
-  var frontMat = front.getM()
-  // z: scale by frac
-  mat4.scale(frontMat, frontMat, vec3.fromValues(1, 1, frac))
-
-  var back = new Shape()
-  back.addS(shape2)
-  var backMat = back.getM()
-  // z: scale by (1-frac), translate by -frac
-  mat4.scale(
-    backMat,
-    mat4.translate(backMat, backMat, vec3.fromValues(0, 0, -frac)),
-    vec3.fromValues(1, 1, 1 - frac)
-  )
-
-  var combined = new Shape()
-  combined.setS([front, back]) // render front first to avoid redrawing
-  return combined
-}
-
-function overlay(shape1, shape2) {
-  return overlay_frac(0.5, shape1, shape2)
-}
+*/

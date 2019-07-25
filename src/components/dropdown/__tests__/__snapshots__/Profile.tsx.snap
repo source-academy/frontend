@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Profile renders "no XP, no Grade and Staff role" correctly 1`] = `
+"<Blueprint3.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
+  <div className=\\"bp3-dialog-body\\">
+    <div className=\\"header\\">
+      <div>
+        <span className=\\"name\\">
+          yeet
+        </span>
+        <span className=\\"role\\">
+          staff
+        </span>
+      </div>
+    </div>
+    <div className=\\"progress\\">
+      <div className=\\"grade\\">
+        <span className=\\"label\\">
+          Grade
+        </span>
+        <span className=\\"value\\">
+          0
+        </span>
+      </div>
+      <Blueprint3.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
+      <div className=\\"xp\\">
+        <span className=\\"label\\">
+          XP
+        </span>
+        <span className=\\"value\\">
+          0
+        </span>
+      </div>
+      <Blueprint3.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
+    </div>
+  </div>
+</Blueprint3.Dialog>"
+`;
+
+exports[`Profile renders "no XP, no Grade and Student role" correctly 1`] = `
+"<Blueprint3.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
+  <div className=\\"bp3-dialog-body\\">
+    <div className=\\"header\\">
+      <div>
+        <span className=\\"name\\">
+          yeeet
+        </span>
+        <span className=\\"role\\">
+          student
+        </span>
+      </div>
+    </div>
+    <div className=\\"progress\\">
+      <div className=\\"grade\\">
+        <span className=\\"label\\">
+          Grade
+        </span>
+        <span className=\\"value\\">
+          0
+        </span>
+      </div>
+      <Blueprint3.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
+      <div className=\\"xp\\">
+        <span className=\\"label\\">
+          XP
+        </span>
+        <span className=\\"value\\">
+          0
+        </span>
+      </div>
+      <Blueprint3.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
+    </div>
+  </div>
+</Blueprint3.Dialog>"
+`;
+
+exports[`Profile renders with XP, Grade and Staff role" correctly 1`] = `
+"<Blueprint3.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
+  <div className=\\"bp3-dialog-body\\">
+    <div className=\\"header\\">
+      <div>
+        <span className=\\"name\\">
+          yeeeeet
+        </span>
+        <span className=\\"role\\">
+          staff
+        </span>
+      </div>
+    </div>
+    <div className=\\"progress\\">
+      <div className=\\"grade\\">
+        <span className=\\"label\\">
+          Grade
+        </span>
+        <span className=\\"value\\">
+          33
+        </span>
+      </div>
+      <Blueprint3.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
+      <div className=\\"xp\\">
+        <span className=\\"label\\">
+          XP
+        </span>
+        <span className=\\"value\\">
+          66
+        </span>
+      </div>
+      <Blueprint3.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
+    </div>
+  </div>
+</Blueprint3.Dialog>"
+`;
+
+exports[`Profile renders with XP, Grade and Student role" correctly 1`] = `
+"<Blueprint3.Dialog className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={false} isOpen={true} onClose={[Function: onClose]} title=\\"Profile\\" canOutsideClickClose={true}>
+  <div className=\\"bp3-dialog-body\\">
+    <div className=\\"header\\">
+      <div>
+        <span className=\\"name\\">
+          yeeeet
+        </span>
+        <span className=\\"role\\">
+          student
+        </span>
+      </div>
+    </div>
+    <div className=\\"progress\\">
+      <div className=\\"grade\\">
+        <span className=\\"label\\">
+          Grade
+        </span>
+        <span className=\\"value\\">
+          33
+        </span>
+      </div>
+      <Blueprint3.ProgressBar className=\\"grade\\" animate={false} stripes={false} />
+      <div className=\\"xp\\">
+        <span className=\\"label\\">
+          XP
+        </span>
+        <span className=\\"value\\">
+          66
+        </span>
+      </div>
+      <Blueprint3.ProgressBar className=\\"xp\\" animate={false} stripes={false} />
+    </div>
+  </div>
+</Blueprint3.Dialog>"
+`;

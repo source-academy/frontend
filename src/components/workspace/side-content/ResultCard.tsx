@@ -1,4 +1,4 @@
-import { Card, Elevation } from '@blueprintjs/core';
+import { Card, Elevation, Pre } from '@blueprintjs/core';
 import * as React from 'react';
 import { AutogradingError, AutogradingResult } from '../../assessment/assessmentShape';
 
@@ -18,11 +18,11 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
             <div className="row autograder-program">
               <div className="col autograder-expected">
                 Expected Answer:
-                <pre className="code">{this.props.result.expected!}</pre>
+                <Pre>{this.props.result.expected!}</Pre>
               </div>
               <div className="col autograder-actual">
                 Actual Answer:
-                <pre className="code">{this.props.result.actual!}</pre>
+                <Pre>{this.props.result.actual!}</Pre>
               </div>
             </div>
           );
@@ -46,7 +46,7 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
             <div key={index} className="autograder-error">
               <div className="row error-explanation">
                 {'Error: '}
-                <pre className="code">{'Timeout... Your code ran for too long'}</pre>
+                <Pre>{'Timeout... Your code ran for too long'}</Pre>
               </div>
             </div>
           );
@@ -55,11 +55,11 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
             <div key={index} className="autograder-error">
               <div className="row">
                 {' '}
-                {'Line: '} <pre className="code">{error.errorLine}</pre>
+                {'Line: '} <Pre>{error.errorLine}</Pre>
               </div>
               <div className="row error-explanation">
                 {'Error: '}
-                <pre className="code">{'Line ' + error.line + ': ' + error.errorExplanation}</pre>
+                <Pre>{'Line ' + error.line + ': ' + error.errorExplanation}</Pre>
               </div>
             </div>
           );

@@ -1,9 +1,12 @@
-import { NonIdealState, Spinner } from '@blueprintjs/core';
+import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
+import ChatApp from '../../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states';
+import { USE_CHATKIT } from '../../../utils/constants';
 import { history } from '../../../utils/history';
 import {
   AutogradingResult,
@@ -119,9 +122,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     if (this.props.grading === undefined) {
       return (
         <NonIdealState
-          className="WorkspaceParent pt-dark"
+          className={classNames('WorkspaceParent', Classes.DARK)}
           description="Getting assessment ready..."
-          visual={<Spinner large={true} />}
+          icon={<Spinner size={Spinner.SIZE_LARGE} />}
         />
       );
     }
@@ -138,11 +141,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorPrepend: this.props.editorPrepend,
-              editorPrependLines:
-                this.props.editorPrepend.length === 0
-                  ? 0
-                  : this.props.editorPrepend.split('\n').length,
               editorSessionId: '',
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
@@ -174,7 +172,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       }
     };
     return (
-      <div className="WorkspaceParent pt-dark">
+      <div className={classNames('WorkspaceParent', Classes.DARK)}>
         <Workspace {...workspaceProps} />
       </div>
     );
@@ -251,7 +249,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
-            comment={props.grading![questionId].grade.comment}
             solution={props.grading![questionId].question.solution}
             questionId={props.grading![questionId].question.id}
             submissionId={props.submissionId}
@@ -269,6 +266,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         label: `Task ${questionId + 1}`,
         icon: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />
+      },
+      {
+        label: `Chat`,
+        icon: IconNames.CHAT,
+        body: USE_CHATKIT ? (
+          <ChatApp roomId={props.grading![questionId].grade.comment} />
+        ) : (
+          <span>ChatKit disabled.</span>
+        )
       },
       {
         label: `Autograder`,

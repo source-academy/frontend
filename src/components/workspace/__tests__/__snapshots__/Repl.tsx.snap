@@ -1,40 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Code output renders correctly 1`] = `
-"<Blueprint2.Card elevation={0} interactive={false}>
-  <pre className=\\"codeOutput\\">
+"<Blueprint3.Card elevation={0} interactive={false}>
+  <Component className=\\"codeOutput\\">
     display(&#39;&#39;);
-  </pre>
-</Blueprint2.Card>"
+  </Component>
+</Blueprint3.Card>"
 `;
 
 exports[`Empty output renders an empty card 1`] = `
-"<Blueprint2.Card elevation={0} interactive={false}>
+"<Blueprint3.Card elevation={0} interactive={false}>
   &#39;&#39;
-</Blueprint2.Card>"
+</Blueprint3.Card>"
 `;
 
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
-"<Blueprint2.Card elevation={0} interactive={false}>
-  <pre className=\\"errorOutput\\">
+"<Blueprint3.Card elevation={0} interactive={false}>
+  <Component className=\\"errorOutput\\">
     Line &lt;unknown&gt;: Expected , got .
-  </pre>
-</Blueprint2.Card>"
+  </Component>
+</Blueprint3.Card>"
 `;
 
 exports[`Error output (with consoleLogs) renders correctly 1`] = `
-"<Blueprint2.Card elevation={0} interactive={false}>
-  <pre className=\\"logOutput\\">
+"<Blueprint3.Card elevation={0} interactive={false}>
+  <Component className=\\"logOutput\\">
     a
     bb
     cccccccccccccccccccccccccccccccc
     d
-  </pre>
+  </Component>
   <br />
-  <pre className=\\"errorOutput\\">
+  <Component className=\\"errorOutput\\">
     Line &lt;unknown&gt;: Expected , got .
-  </pre>
-</Blueprint2.Card>"
+  </Component>
+</Blueprint3.Card>"
 `;
 
 exports[`Repl renders correctly 1`] = `
@@ -44,7 +44,7 @@ exports[`Repl renders correctly 1`] = `
     <Component output={{...}} />
     <Component output={{...}} />
     <Component output={{...}} />
-    <HotKeys className=\\"repl-input-parent row pt-card pt-elevation-0\\" handlers={{...}}>
+    <HotKeys className=\\"repl-input-parent row bp3-card bp3-elevation-0\\" handlers={{...}}>
       <ReplInput handleBrowseHistoryDown={[Function: handleBrowseHistoryDown]} handleBrowseHistoryUp={[Function: handleBrowseHistoryUp]} handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} output={{...}} replValue=\\"\\" />
     </HotKeys>
   </div>
@@ -52,34 +52,34 @@ exports[`Repl renders correctly 1`] = `
 `;
 
 exports[`Result output (no consoleLogs) renders correctly 1`] = `
-"<Blueprint2.Card elevation={0} interactive={false}>
-  <pre className=\\"resultOutput\\">
+"<Blueprint3.Card elevation={0} interactive={false}>
+  <Component className=\\"resultOutput\\">
     42
-  </pre>
-</Blueprint2.Card>"
+  </Component>
+</Blueprint3.Card>"
 `;
 
 exports[`Result output (with consoleLogs) renders correctly 1`] = `
-"<Blueprint2.Card elevation={0} interactive={false}>
-  <pre className=\\"logOutput\\">
+"<Blueprint3.Card elevation={0} interactive={false}>
+  <Component className=\\"logOutput\\">
     a
     bb
     cccccccccccccccccccccccccccccccc
     d
-  </pre>
-  <pre className=\\"resultOutput\\">
+  </Component>
+  <Component className=\\"resultOutput\\">
     42
-  </pre>
-</Blueprint2.Card>"
+  </Component>
+</Blueprint3.Card>"
 `;
 
 exports[`Running output renders correctly 1`] = `
-"<Blueprint2.Card elevation={0} interactive={false}>
-  <pre className=\\"logOutput\\">
+"<Blueprint3.Card elevation={0} interactive={false}>
+  <Component className=\\"logOutput\\">
     a
     bb
     cccccccccccccccccccccccccccccccc
     d
-  </pre>
-</Blueprint2.Card>"
+  </Component>
+</Blueprint3.Card>"
 `;

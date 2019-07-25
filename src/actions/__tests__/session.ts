@@ -14,6 +14,7 @@ import {
   submitAnswer,
   submitAssessment,
   submitGrading,
+  unsubmitSubmission,
   updateAssessment,
   updateAssessmentOverviews,
   updateGrading,
@@ -138,15 +139,13 @@ test('submitAssessment generates correct action object', () => {
 test('submitGrading generates correct action object with default values', () => {
   const submissionId = 8;
   const questionId = 2;
-  const comment = 'test comment here';
 
-  const action = submitGrading(submissionId, questionId, comment);
+  const action = submitGrading(submissionId, questionId);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      comment,
       gradeAdjustment: 0,
       xpAdjustment: 0
     }
@@ -156,18 +155,27 @@ test('submitGrading generates correct action object with default values', () => 
 test('submitGrading generates correct action object', () => {
   const submissionId = 10;
   const questionId = 3;
-  const comment = 'another test comment here';
   const gradeAdjustment = 10;
   const xpAdjustment = 100;
-  const action = submitGrading(submissionId, questionId, comment, gradeAdjustment, xpAdjustment);
+  const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      comment,
       gradeAdjustment,
       xpAdjustment
+    }
+  });
+});
+
+test('unsubmitSubmission generates correct action object', () => {
+  const submissionId = 10;
+  const action = unsubmitSubmission(submissionId);
+  expect(action).toEqual({
+    type: actionTypes.UNSUBMIT_SUBMISSION,
+    payload: {
+      submissionId
     }
   });
 });
@@ -244,7 +252,11 @@ test('updateGradingOverviews generates correct action object', () => {
       studentId: 100,
       studentName: 'test student',
       submissionId: 1,
-      groupName: 'group'
+      submissionStatus: 'attempting',
+      groupName: 'group',
+      gradingStatus: 'excluded',
+      questionCount: 6,
+      gradedCount: 0
     }
   ];
 

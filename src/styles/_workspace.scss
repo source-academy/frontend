@@ -144,7 +144,7 @@ $code-color-error: #ff4444;
       }
     }
 
-    .pt-card {
+    .#{$ns}-card {
       background-color: $cadet-color-2;
     }
 
@@ -205,7 +205,7 @@ $code-color-error: #ff4444;
     text-align: justify;
     overflow-y: auto;
 
-    .pt-card {
+    .#{$ns}-card {
       background-color: $cadet-color-2;
       color: $code-color-result;
       display: flex;
@@ -236,12 +236,12 @@ $code-color-error: #ff4444;
     /* Cause the 'save' button shift down when size is small. */
     margin-bottom: 0.5rem;
 
-    .pt-button-group {
+    .#{$ns}-button-group {
       flex-wrap: wrap;
     }
 
-    .pt-numeric-input {
-      .pt-button {
+    .#{$ns}-numeric-input {
+      .#{$ns}-button {
         background-color: $cadet-color-2;
       }
     }
@@ -287,7 +287,7 @@ $code-color-error: #ff4444;
     }
   }
 
-  hr {
+  .bp3-divider {
     margin: 0 0 0.5rem 0;
   }
 
@@ -296,12 +296,13 @@ $code-color-error: #ff4444;
     flex: 1 1;
     flex-direction: column;
     overflow-x: visible;
-    overflow-y: visible;
+    overflow-y: auto;
+    margin: 0 0.5rem 0 0;
 
-    .pt-card {
+    .#{$ns}-card {
       background-color: $cadet-color-2;
       padding: 0.4rem 0.6rem 0.4rem 0.6rem;
-      margin: 0 0.5rem 0.5rem 0;
+      margin: 0 0 0.5rem 0;
 
       pre {
         background-color: transparent;
@@ -411,7 +412,7 @@ $code-color-error: #ff4444;
     }
 
     &.wrong {
-      > .pt-card {
+      > .#{$ns}-card {
         background: rgba(255, 55, 55, 0.2);
         animation-name: wrong;
         animation-duration: 4s;
@@ -425,7 +426,7 @@ $code-color-error: #ff4444;
     }
 
     &.correct {
-      > .pt-card {
+      > .#{$ns}-card {
         background: rgba(125, 255, 125, 0.2);
         animation-name: correct;
         animation-duration: 4s;
@@ -438,13 +439,13 @@ $code-color-error: #ff4444;
       border-color: #1a2530;
     }
 
-    .pt-button {
+    .#{$ns}-button {
       border-color: rgb(26, 37, 48);
       border-style: solid;
       border-width: 1px;
     }
 
-    .pt-card {
+    .#{$ns}-card {
       margin: 0 0 0 0;
     }
 
@@ -481,18 +482,18 @@ $code-color-error: #ff4444;
     }
 
     &.wrong {
-      > .pt-card {
+      > .#{$ns}-card {
         background: rgba(255, 55, 55, 0.2);
       }
     }
 
     &.correct {
-      > .pt-card {
+      > .#{$ns}-card {
         background: rgba(125, 255, 125, 0.2);
       }
     }
 
-    .pt-card {
+    .#{$ns}-card {
       margin: 0 0 0 0;
     }
 
@@ -540,11 +541,11 @@ $code-color-error: #ff4444;
 }
 
 .Popover-share {
-  .pt-popover-arrow-fill {
+  .#{$ns}-popover-arrow-fill {
     fill: $cadet-color-4;
   }
 
-  .pt-popover-content {
+  .#{$ns}-popover-content {
     background: $cadet-color-4;
     display: flex;
     padding: 0.4rem 0.8rem 0.4rem 0.8rem;

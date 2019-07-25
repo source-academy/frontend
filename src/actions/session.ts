@@ -80,7 +80,6 @@ export const submitAssessment: ActionCreator<actionTypes.IAction> = (id: number)
 export const submitGrading: ActionCreator<actionTypes.IAction> = (
   submissionId: number,
   questionId: number,
-  comment: string,
   gradeAdjustment: number = 0,
   xpAdjustment: number = 0
 ) => ({
@@ -88,7 +87,6 @@ export const submitGrading: ActionCreator<actionTypes.IAction> = (
   payload: {
     submissionId,
     questionId,
-    comment,
     gradeAdjustment,
     xpAdjustment
   }
@@ -123,5 +121,12 @@ export const updateGrading = (submissionId: number, grading: Grading) => ({
   payload: {
     submissionId,
     grading
+  }
+});
+
+export const unsubmitSubmission: ActionCreator<actionTypes.IAction> = (submissionId: number) => ({
+  type: actionTypes.UNSUBMIT_SUBMISSION,
+  payload: {
+    submissionId
   }
 });

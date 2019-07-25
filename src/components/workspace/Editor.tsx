@@ -8,6 +8,7 @@ import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
 
 import { LINKS } from '../../utils/constants';
+import { checkSessionIdExists } from './collabEditing/helper';
 /**
  * @property editorValue - The string content of the react-ace editor
  * @property handleEditorChange  - A callback function
@@ -18,14 +19,15 @@ import { LINKS } from '../../utils/constants';
 export interface IEditorProps {
   isEditorAutorun: boolean;
   editorSessionId: string;
-  editorPrepend: string;
-  editorPrependLines: number;
   editorValue: string;
   breakpoints: string[];
   highlightedLines: number[][];
+  sharedbAceInitValue?: string;
+  sharedbAceIsInviting?: boolean;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleFinishInvite?: () => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -71,104 +73,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const editor = (this.AceEditor.current as any).editor;
     const session = editor.getSession();
 
-    editor.on('gutterclick', (e: any) => {
-      const target = e.domEvent.target;
-      if (
-        target.className.indexOf('ace_gutter-cell') === -1 ||
-        !editor.isFocused() ||
-        e.clientX > 35 + target.getBoundingClientRect().left
-      ) {
-        return;
-      }
+    editor.on('gutterclick', this.handleGutterClick);
 
-      const row = e.getDocumentPosition().row;
-      const content = e.editor.session.getLine(row);
-      const breakpoints = e.editor.session.getBreakpoints(row, 0);
-      if (
-        breakpoints[row] === undefined &&
-        content.length !== 0 &&
-        !content.includes('//') &&
-        !content.includes('debugger;')
-      ) {
-        e.editor.session.setBreakpoint(row);
-      } else {
-        e.editor.session.clearBreakpoint(row);
-      }
-      e.stop();
-      this.props.handleEditorUpdateBreakpoints(e.editor.session.$breakpoints);
-    });
     // Change all info annotations to error annotations
-    session.on('changeAnnotation', () => {
-      const annotations = session.getAnnotations();
-      let count = 0;
-      for (const anno of annotations) {
-        if (anno.type === 'info') {
-          anno.type = 'error';
-          anno.className = 'ace_error';
-          count++;
-        }
-      }
-      if (count !== 0) {
-        session.setAnnotations(annotations);
-      }
-    });
+    session.on('changeAnnotation', this.handleAnnotationChange(session));
 
-    // Has valid session ID
+    // Has session ID
     if (this.props.editorSessionId !== '') {
-      const ShareAce = new sharedbAce(this.props.editorSessionId!, {
-        WsUrl: 'wss://' + LINKS.SHAREDB_SERVER + 'ws/',
-        pluginWsUrl: null,
-        namespace: 'codepad'
-      });
-      this.ShareAce = ShareAce;
-      ShareAce.on('ready', () => {
-        ShareAce.add(
-          editor,
-          ['code'],
-          [
-            // SharedbAceRWControl,
-            // SharedbAceMultipleCursors
-          ]
-        );
-      });
-
-      // WebSocket connection status detection logic
-      const WS = ShareAce.WS;
-      let interval: any;
-      const checkStatus = () => {
-        if (this.ShareAce !== null) {
-          const xmlhttp = new XMLHttpRequest();
-          xmlhttp.onreadystatechange = () => {
-            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-              const state = JSON.parse(xmlhttp.responseText).state;
-              if (state !== true) {
-                // ID does not exist
-                clearInterval(interval);
-                WS.close();
-              }
-            } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
-              // Cannot reach server
-              // Force WS to check connection
-              WS.reconnect();
-            }
-          };
-          xmlhttp.open(
-            'GET',
-            'https://' + LINKS.SHAREDB_SERVER + 'gists/' + this.props.editorSessionId,
-            true
-          );
-          xmlhttp.send();
-        }
-      };
-      // Checks connection status every 5sec
-      interval = setInterval(checkStatus, 5000);
-
-      WS.addEventListener('open', (event: Event) => {
-        this.props.handleSetWebsocketStatus!(1);
-      });
-      WS.addEventListener('close', (event: Event) => {
-        this.props.handleSetWebsocketStatus!(0);
-      });
+      this.handleStartCollabEditing(editor);
     }
   }
 
@@ -225,12 +137,107 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             theme="cobalt"
             value={this.props.editorValue}
             width="100%"
-            setOptions={{ firstLineNumber: 1 + this.props.editorPrependLines }}
           />
         </div>
       </HotKeys>
     );
   }
+
+  private handleGutterClick = (e: any) => {
+    const target = e.domEvent.target;
+    if (
+      target.className.indexOf('ace_gutter-cell') === -1 ||
+      !e.editor.isFocused() ||
+      e.clientX > 35 + target.getBoundingClientRect().left
+    ) {
+      return;
+    }
+
+    const row = e.getDocumentPosition().row;
+    const content = e.editor.session.getLine(row);
+    const breakpoints = e.editor.session.getBreakpoints(row, 0);
+    if (
+      breakpoints[row] === undefined &&
+      content.length !== 0 &&
+      !content.includes('//') &&
+      !content.includes('debugger;')
+    ) {
+      e.editor.session.setBreakpoint(row);
+    } else {
+      e.editor.session.clearBreakpoint(row);
+    }
+    e.stop();
+    this.props.handleEditorUpdateBreakpoints(e.editor.session.$breakpoints);
+  };
+
+  private handleAnnotationChange = (session: any) => () => {
+    const annotations = session.getAnnotations();
+    let count = 0;
+    for (const anno of annotations) {
+      if (anno.type === 'info') {
+        anno.type = 'error';
+        anno.className = 'ace_error';
+        count++;
+      }
+    }
+    if (count !== 0) {
+      session.setAnnotations(annotations);
+    }
+  };
+
+  private handleStartCollabEditing = (editor: any) => {
+    const ShareAce = new sharedbAce(this.props.editorSessionId!, {
+      WsUrl: 'wss://' + LINKS.SHAREDB_SERVER + 'ws/',
+      pluginWsUrl: null,
+      namespace: 'codepad'
+    });
+    this.ShareAce = ShareAce;
+    ShareAce.on('ready', () => {
+      ShareAce.add(
+        editor,
+        ['code'],
+        [
+          // SharedbAceRWControl,
+          // SharedbAceMultipleCursors
+        ]
+      );
+      if (this.props.sharedbAceIsInviting) {
+        this.props.handleEditorValueChange(this.props.sharedbAceInitValue!);
+        this.props.handleFinishInvite!();
+      }
+    });
+
+    // WebSocket connection status detection logic
+    const WS = ShareAce.WS;
+    let interval: any;
+    const sessionIdNotFound = () => {
+      clearInterval(interval);
+      WS.close();
+    };
+    const cannotReachServer = () => {
+      WS.reconnect();
+    };
+    const checkStatus = () => {
+      if (this.ShareAce === null) {
+        return;
+      }
+      checkSessionIdExists(
+        this.props.editorSessionId,
+        () => {},
+        sessionIdNotFound,
+        cannotReachServer
+      );
+    };
+    // Checks connection status every 5sec
+    interval = setInterval(checkStatus, 5000);
+
+    WS.addEventListener('open', (event: Event) => {
+      this.props.handleSetWebsocketStatus!(1);
+    });
+    WS.addEventListener('close', (event: Event) => {
+      this.props.handleSetWebsocketStatus!(0);
+    });
+  };
 }
 
 /* Override handler, so does not trigger when focus is in editor */

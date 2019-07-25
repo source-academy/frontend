@@ -4,68 +4,59 @@ import {
 } from '../components/assessment/assessmentShape';
 
 /**
- * Defines all the external symbols for playground, i.e full access to runes functionality.
- */
-const TwoDRunesExternals = [
-  'show',
-  'color',
-  'random_color',
-  'red',
-  'pink',
-  'purple',
-  'indigo',
-  'blue',
-  'green',
-  'yellow',
-  'orange',
-  'brown',
-  'black',
-  'white',
-  'scale_independent',
-  'scale',
-  'translate',
-  'rotate',
-  'stack_frac',
-  'stack',
-  'stackn',
-  'quarter_turn_right',
-  'quarter_turn_left',
-  'turn_upside_down',
-  'beside_frac',
-  'beside',
-  'flip_vert',
-  'flip_horiz',
-  'make_cross',
-  'repeat_pattern',
-  'black_bb',
-  'blank_bb',
-  'rcross_bb',
-  'sail_bb',
-  'corner_bb',
-  'nova_bb',
-  'circle_bb',
-  'heart_bb',
-  'pentagram_bb',
-  'ribbon_bb'
-];
-
-/**
  * Defines which external libraries are available for usage, and what
  * external symbols (exposed functions) are under them.
  */
+
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.NONE, []],
-  [ExternalLibraryNames.TWO_DIM_RUNES, TwoDRunesExternals],
   [
-    ExternalLibraryNames.THREE_DIM_RUNES,
+    ExternalLibraryNames.RUNES,
     [
-      ...TwoDRunesExternals,
+      'show',
+      'color',
+      'random_color',
+      'red',
+      'pink',
+      'purple',
+      'indigo',
+      'blue',
+      'green',
+      'yellow',
+      'orange',
+      'brown',
+      'black',
+      'white',
+      'scale_independent',
+      'scale',
+      'translate',
+      'rotate',
+      'stack_frac',
+      'stack',
+      'stackn',
+      'quarter_turn_right',
+      'quarter_turn_left',
+      'turn_upside_down',
+      'beside_frac',
+      'beside',
+      'flip_vert',
+      'flip_horiz',
+      'make_cross',
+      'repeat_pattern',
+      'square',
+      'blank',
+      'rcross',
+      'sail',
+      'corner',
+      'nova',
+      'circle',
+      'heart',
+      'pentagram',
+      'ribbon',
       'anaglyph',
-      'hollusion',
-      'animate',
-      'stereogram',
       'overlay_frac',
-      'overlay'
+      'overlay',
+      'hollusion' // currently not documented; animation not working
     ]
   ],
   [
@@ -86,13 +77,9 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'connect_rigidly',
       'connect_ends',
       'put_in_standard_position',
-      'full_view_proportional',
-      'squeeze_full_view',
-      'squeeze_rectangular_portion',
       'translate',
       'scale',
       /** Contest functions */
-      'alternative_unit_circle',
       'rotate_pi_over_2',
       'scale_x_y',
       'gosperize',
@@ -101,41 +88,39 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
       'repeated',
       'param_gosper',
       'param_gosperize',
-      'rotate_around_origin'
+      'rotate_around_origin',
+      'arc', // used in GOSPERIZE
+      'invert', // used in DRAGONIZE
+      'alternative_unit_circle', // undocumented
+      'full_view_proportional', // undocumented
+      'squeeze_full_view', // undocumented
+      'squeeze_rectangular_portion' // undocumented
     ]
   ],
   [
-    ExternalLibraryNames.SOUND,
+    ExternalLibraryNames.SOUNDS,
     [
       'make_sound',
       'get_wave',
       'get_duration',
       'play',
       'stop',
-      'cut_sound',
-      'autocut_sound',
       'consecutively',
       'simultaneously',
       'noise_sound',
       'sine_sound',
-      'constant_sound',
       'silence_sound',
-      'high_sound',
-      'invert_sound',
-      'clamp_sound',
       'letter_name_to_midi_note',
       'letter_name_to_frequency',
       'midi_note_to_frequency',
       'square_sound',
       'triangle_sound',
       'sawtooth_sound',
-      'play_concurrently',
-      'play_safe',
+      'play_unsafe',
       /** Microphone Sounds */
       'init_record',
+      'record',
       'record_for',
-      'start_record',
-      'stop_record',
       /** Contest functions */
       'adsr',
       'stacking_adsr',
@@ -147,28 +132,15 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
     ]
   ],
   [
-    ExternalLibraryNames.STREAMS,
+    ExternalLibraryNames.BINARYTREES,
     [
-      'stream_tail',
-      'is_stream',
-      'list_to_stream',
-      'stream_to_list',
-      'stream',
-      'stream_length',
-      'stream_map',
-      'build_stream',
-      'stream_for_each',
-      'stream_reverse',
-      'stream_to_vector',
-      'stream_append',
-      'stream_member',
-      'stream_remove',
-      'stream_remove_all',
-      'stream_filter',
-      'enum_stream',
-      'integers_from',
-      'eval_stream',
-      'stream_ref'
+      'make_empty_tree',
+      'is_tree',
+      'make_tree',
+      'is_empty_tree',
+      'entry',
+      'left_branch',
+      'right_branch'
     ]
   ]
 ];

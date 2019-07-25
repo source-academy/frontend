@@ -18,13 +18,13 @@ After years of anticipation, it is finally your turn. The instructors will give 
 
 In Lecture L1, we discussed how to generate runes. Today we will practice drawing them in Task 2, 3 and 4.
 
-For this mission, the Playground loads the `TWO_DIM_RUNES` library. This provides the four runes discussed in class: `rcross_bb`, `sail_bb`, `heart_bb`, and `nova_bb`. For example, you can display `rcross_bb` with the following command in the REPL:
+For this mission, the Playground loads the `RUNES` library. This provides the four runes discussed in class: `rcross`, `sail`, `heart`, and `nova`. For example, you can display `rcross` with the following command in the REPL:
 
 ```
-show(rcross_bb);
+show(rcross);
 ```
 
-Also defined in the `TWO_DIM_RUNES` library are the following functions as discussed in class:
+Also defined in the `RUNES` library are the following functions as discussed in class:
 
 * `stack`
 * `stack_frac`
@@ -40,10 +40,10 @@ Also defined in the `TWO_DIM_RUNES` library are the following functions as discu
 
 In addition to the ones you saw in lecture, we have also defined a few more basic runes that you can use:
 
-* black_bb
-* blank_bb
-* circle_bb
-* pentagram_bb
+* square
+* blank
+* circle
+* pentagram
 
 In writing rather large, complex programs, one does not often understand (or even see) every single line of the program, since such programs are usually written by several people, each in charge of smaller components. The key idea in functional abstraction is that as the programmer, you need not understand how each function works. All you need to know is what each function does and its signature (such as what parameters to pass). More specifically, **you need not read the source for the predefined functions listed above**. You may refer to the lecture slides to understand what arguments each function requires and its corresponding effect. You can also see the signature of the function by entering the function name with a semicolon in the REPL, for example,
 ```
@@ -73,7 +73,7 @@ function quarter_turnleft(picture) {
                turn_upside_down(picture));
 }
 // example usage
-quarter_turnleft(heart_bb);
+quarter_turnleft(heart);
 
 ```
             </TEXT>
@@ -82,7 +82,7 @@ quarter_turnleft(heart_bb);
 function flipvert(picture) {
     return turn_upside_down(flip_horiz(picture));
 }
-show(flipvert(sail_bb));
+show(flipvert(sail));
                 </TEMPLATE>
                 <SOLUTION>
 // [Marking Scheme]
@@ -97,7 +97,7 @@ function flipvert(picture) {
     return turn_upside_down(flip_horiz(picture));
 }
 // example usage
-show(flipvert(sail_bb));
+show(flipvert(sail));
 
                 </SOLUTION>
             </SNIPPET>
@@ -107,7 +107,7 @@ show(flipvert(sail_bb));
 Write a function `mosaic` that takes four runes as arguments and arranges them in a 2 by 2 square, starting with the top-right corner, going clockwise. In particular, the command
 
 ```
-show(mosaic(rcross_bb, sail_bb, corner_bb, nova_bb));
+show(mosaic(rcross, sail, corner, nova));
 ```
 
 should draw the following:
@@ -123,7 +123,7 @@ function mosaic(p1, p2, p3, p4) {
 }
 
 // Test
-show(mosaic(rcross_bb, sail_bb, corner_bb, nova_bb));
+show(mosaic(rcross, sail, corner, nova));
             </TEMPLATE>
             <SOLUTION>
 // [Marking Scheme]
@@ -147,7 +147,7 @@ show(mosaic(rcross_bb, sail_bb, corner_bb, nova_bb));
 Write a function `upside_down_mosaic` that takes four runes as arguments and creates a mosaic that is rotated a 180 degrees.
 
 ```
-show(upside_down_mosaic(rcross_bb, sail_bb, corner_bb, nova_bb));
+show(upside_down_mosaic(rcross, sail, corner, nova));
 ```
 
 should draw the following:
@@ -167,7 +167,7 @@ function upside_down_mosaic(p1, p2, p3, p4) {
 }
 
 // Test
-show(upside_down_mosaic(rcross_bb, sail_bb, corner_bb, nova_bb));
+show(upside_down_mosaic(rcross, sail, corner, nova));
             </TEMPLATE>
             <SOLUTION>
 // [Marking Scheme]
@@ -193,7 +193,7 @@ Suppose we now want to apply a different transformation to the mosaic pattern, i
 Write a function that takes four runes as arguments and creates a mosaic, after which you apply a _given_ transformation function to the mosaic and return the resultant image. In particular, the command
 
 ```
-show(transform_mosaic(rcross_bb, sail_bb, corner_bb, nova_bb, make_cross));
+show(transform_mosaic(rcross, sail, corner, nova, make_cross));
 ```
 
 should draw the following:
@@ -213,7 +213,7 @@ function transform_mosaic(p1, p2, p3, p4, transform) {
 }
 
 // Test
-show(transform_mosaic(rcross_bb, sail_bb, corner_bb, nova_bb, make_cross));
+show(transform_mosaic(rcross, sail, corner, nova, make_cross));
             </TEMPLATE>
             <SOLUTION>
 // [Marking Scheme]
@@ -244,7 +244,7 @@ Make sure that everything for your programs to work is on the left hand side and
           <IDENTIFIER>add_one</IDENTIFIER>
           <VALUE>(x) => {return x+1;}</VALUE>
         </GLOBAL>
-        <EXTERNAL name="TWO_DIM_RUNES">
+        <EXTERNAL name="RUNES">
         
             <SYMBOL>show</SYMBOL>
 
@@ -260,20 +260,20 @@ Make sure that everything for your programs to work is on the left hand side and
             <SYMBOL>repeat_pattern</SYMBOL>
             <SYMBOL>make_cross</SYMBOL>
 
-            <SYMBOL>rcross_bb</SYMBOL>
-            <SYMBOL>sail_bb</SYMBOL>
-            <SYMBOL>corner_bb</SYMBOL>
-            <SYMBOL>nova_bb</SYMBOL>
-            <SYMBOL>heart_bb</SYMBOL>
-            <SYMBOL>circle_bb</SYMBOL>
-            <SYMBOL>ribbon_bb</SYMBOL>
-            <SYMBOL>black_bb</SYMBOL>
-            <SYMBOL>blank_bb</SYMBOL>
-            <SYMBOL>pentagram_bb</SYMBOL>
+            <SYMBOL>rcross</SYMBOL>
+            <SYMBOL>sail</SYMBOL>
+            <SYMBOL>corner</SYMBOL>
+            <SYMBOL>nova</SYMBOL>
+            <SYMBOL>heart</SYMBOL>
+            <SYMBOL>circle</SYMBOL>
+            <SYMBOL>ribbon</SYMBOL>
+            <SYMBOL>square</SYMBOL>
+            <SYMBOL>blank</SYMBOL>
+            <SYMBOL>pentagram</SYMBOL>
         </EXTERNAL>
     </DEPLOYMENT>
     <GRADERDEPLOYMENT interpreter="1">
-        <EXTERNAL name="TWO_DIM_RUNES">
+        <EXTERNAL name="RUNES">
           <SYMBOL>red</SYMBOL>
           <SYMBOL>pink</SYMBOL>
           <SYMBOL>purple</SYMBOL>
@@ -285,16 +285,16 @@ Make sure that everything for your programs to work is on the left hand side and
           <SYMBOL>brown</SYMBOL>
           <SYMBOL>black</SYMBOL>
           <SYMBOL>white</SYMBOL>
-          <SYMBOL>black_bb</SYMBOL>
-          <SYMBOL>blank_bb</SYMBOL>
-          <SYMBOL>rcross_bb</SYMBOL>
-          <SYMBOL>sail_bb</SYMBOL>
-          <SYMBOL>corner_bb</SYMBOL>
-          <SYMBOL>nova_bb</SYMBOL>
-          <SYMBOL>circle_bb</SYMBOL>
-          <SYMBOL>heart_bb</SYMBOL>
-          <SYMBOL>pentagram_bb</SYMBOL>
-          <SYMBOL>ribbon_bb</SYMBOL>
+          <SYMBOL>square</SYMBOL>
+          <SYMBOL>blank</SYMBOL>
+          <SYMBOL>rcross</SYMBOL>
+          <SYMBOL>sail</SYMBOL>
+          <SYMBOL>corner</SYMBOL>
+          <SYMBOL>nova</SYMBOL>
+          <SYMBOL>circle</SYMBOL>
+          <SYMBOL>heart</SYMBOL>
+          <SYMBOL>pentagram</SYMBOL>
+          <SYMBOL>ribbon</SYMBOL>
           <SYMBOL>quarter_turn_left</SYMBOL>
           <SYMBOL>quarter_turn_right</SYMBOL>
           <SYMBOL>turn_upside_down</SYMBOL>
