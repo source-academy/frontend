@@ -16,7 +16,7 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     grade: 1,
-    id: 0,
+    id: 1,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2038-06-18T05:24:26.026Z',
@@ -36,7 +36,7 @@ const mockOpenedAssessmentsOverviews: IAssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     grade: 2,
-    id: 0,
+    id: 1,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-06-18T05:24:26.026Z',
@@ -65,7 +65,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     grade: 3,
-    id: 1,
+    id: 2,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
@@ -82,7 +82,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     grade: 4,
-    id: 2,
+    id: 3,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
@@ -102,7 +102,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     grade: 5,
-    id: 3,
+    id: 4,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
@@ -119,7 +119,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     grade: 1500,
-    id: 4,
+    id: 5,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
@@ -136,7 +136,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     grade: 250,
-    id: 4,
+    id: 5,
     maxGrade: 700,
     maxXp: 500,
     openAt: '2007-07-18T05:24:26.026Z',
@@ -153,7 +153,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     grade: 0,
-    id: 4,
+    id: 5,
     maxGrade: 0,
     maxXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
@@ -231,7 +231,7 @@ This question has an id of \`0\`.
 What's your favourite dinner food?
 \`\`\`
 `,
-    comment: null,
+    roomId: null,
     id: 0,
     library: mockSoundLibrary,
     prepend: `const pizza = "pizza";
@@ -279,7 +279,7 @@ const chickenrice = "chicken rice";`,
 function volumeOfSphere(x) {
   return 4 / 3 * cube(x) * pi;
 }`,
-    comment: '`Great Job` **young padawan**',
+    roomId: '19422043',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mockRuneLibrary,
@@ -319,7 +319,7 @@ function volumeOfSphere(x) {
   },
   {
     answer: 3,
-    comment: '## Money trees is the *perfect place for shade* and ``` thats just how i feel ``` ',
+    roomId: '19422046',
     content:
       'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
     choices: [
@@ -356,7 +356,7 @@ function volumeOfSphere(x) {
   },
   {
     answer: 3,
-    comment: null,
+    roomId: null,
     content:
       'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
     choices: [
@@ -394,7 +394,7 @@ function volumeOfSphere(x) {
   {
     autogradingResults: [],
     answer: null,
-    comment: 'Wow you have come far! `Steady`',
+    roomId: '19422032',
     content: 'You have reached the last question! Have some fun with the tone matrix...',
     id: 4,
     library: mockToneMatrixLibrary,
@@ -424,7 +424,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     return fibonacci(n-1) + fibonacci(n-2);
   }
 }`,
-    comment: 'Wow you have come far! `Steady`',
+    roomId: '19422032',
     content: 'You can see autograding results!!!',
     id: 0,
     library: mockToneMatrixLibrary,
@@ -492,7 +492,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
 export const mockAssessments: IAssessment[] = [
   {
     category: 'Mission',
-    id: 0,
+    id: 1,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
@@ -501,7 +501,7 @@ export const mockAssessments: IAssessment[] = [
   },
   {
     category: 'Mission',
-    id: 1,
+    id: 2,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
@@ -510,7 +510,7 @@ export const mockAssessments: IAssessment[] = [
   },
   {
     category: AssessmentCategories.Sidequest,
-    id: 2,
+    id: 3,
     longSummary: `###This is the sidequest briefing.
 
 *Lorem ipsum* dolor sit amet, consectetur adipiscing elit.
@@ -536,7 +536,7 @@ sapien
   },
   {
     category: AssessmentCategories.Mission,
-    id: 3,
+    id: 4,
     longSummary:
       'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',

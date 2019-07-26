@@ -120,32 +120,34 @@
       return res.length > 0 ? res : undefined;
     }
 
-    // blinks icon
+    // icon to blink
     const icon = document.getElementById("inspector-icon");
+
     if (!context) {
       icon.classList.remove("side-content-tab-alert");
-      return;
+      container.innerHTML = "";
+      return
     }
 
     try {
       var frames = context.context.runtime.environments;
       container.innerHTML = "";
       for (var i = 0; i < frames.length; ++i){
-        var envtoString = dumpTable(frames[i].head)
+        var envtoString = dumpTable(frames[i].head);
         if (envtoString == undefined){
           // skipping either empty frame or perhaps the global
           continue
         }
         var newtable = document.createElement("table");
         var tbody = document.createElement("tbody");
-        tbody.id = "inspect-scope"
-        tbody.innerHTML = "</br><caption><strong> " + frames[i].name + "</strong></caption>" + envtoString
-        newtable.appendChild(tbody)
-        container.appendChild(newtable)
+        tbody.id = "inspect-scope";
+        tbody.innerHTML = "</br><caption><strong> " + frames[i].name + "</strong></caption>" + envtoString;
+        newtable.appendChild(tbody);
+        container.appendChild(newtable);
         icon.classList.add("side-content-tab-alert");
       }
     } catch (e) {
-        container.innerHTML = e
+        container.innerHTML = e;
     }
   }
 
@@ -163,7 +165,7 @@
     var gutterCells = document.getElementsByClassName("ace_gutter-cell");
     var aceLines = document.getElementsByClassName("ace_line");
 
-    // We are simply assuming they are sorted.
+    // We are simply assuming they are sorted (they are).
     // guttercells has inneHTML we could use. But as long as this still works,
     // we can keep doing this. Highly doubt this property will ever change.
     if (gutterCells != undefined && aceLines != undefined){

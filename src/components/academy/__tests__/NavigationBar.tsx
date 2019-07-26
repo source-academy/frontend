@@ -5,7 +5,7 @@ import { Role } from '../../../reducers/states';
 import NavigationBar from '../NavigationBar';
 
 test('Grading NavLink does NOT renders for Role.Student', () => {
-  const props = { role: Role.Student };
+  const props = { role: Role.Student, notifications: [] };
   const tree = shallow(<NavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();
   expect(
@@ -14,7 +14,7 @@ test('Grading NavLink does NOT renders for Role.Student', () => {
 });
 
 test('Grading NavLink renders for Role.Staff', () => {
-  const props = { role: Role.Staff };
+  const props = { role: Role.Staff, notifications: [] };
   const tree = shallow(<NavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();
   expect(
@@ -23,7 +23,7 @@ test('Grading NavLink renders for Role.Staff', () => {
 });
 
 test('Grading NavLink renders for Role.Admin', () => {
-  const props = { role: Role.Admin };
+  const props = { role: Role.Admin, notifications: [] };
   const tree = shallow(<NavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();
   expect(

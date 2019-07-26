@@ -2,7 +2,11 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAssessmentOverviews, submitAssessment } from '../../actions/session';
+import {
+  acknowledgeNotifications,
+  fetchAssessmentOverviews,
+  submitAssessment
+} from '../../actions/session';
 import Assessment, { IDispatchProps, IOwnProps, IStateProps } from '../../components/assessment';
 import { IAssessmentOverview } from '../../components/assessment/assessmentShape';
 import { IState, Role } from '../../reducers/states';
@@ -22,6 +26,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state,
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
+      handleAcknowledgeNotifications: acknowledgeNotifications,
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
       handleSubmitAssessment: submitAssessment
     },

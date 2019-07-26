@@ -1,11 +1,26 @@
-import { connect, MapStateToProps } from 'react-redux';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 
-import Academy, { IStateProps } from '../../components/academy';
+import { bindActionCreators } from 'redux';
+import { fetchNotifications } from '../../actions';
+import Academy, { IDispatchProps, IStateProps } from '../../components/academy';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   historyHelper: state.session.historyHelper
 });
 
-export default withRouter(connect(mapStateToProps)(Academy));
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = dispatch =>
+  bindActionCreators(
+    {
+      handleFetchNotifications: fetchNotifications
+    },
+    dispatch
+  );
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Academy)
+);

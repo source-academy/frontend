@@ -22,6 +22,10 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import {
+  Notification,
+  NotificationFilterFunction
+} from '../components/notification/notificationShape';
 import { store } from '../createStore';
 import { IState, Role } from '../reducers/states';
 import { castLibrary } from '../utils/castBackend';
@@ -246,14 +250,7 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield postGrading(
-      submissionId,
-      questionId,
-      '',
-      gradeAdjustment,
-      xpAdjustment,
-      tokens
-    );
+    const resp = yield postGrading(submissionId, questionId, gradeAdjustment, xpAdjustment, tokens);
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000);
       // Now, update the grade for the question in the Grading in the store
@@ -265,7 +262,7 @@ function* backendSaga(): SagaIterator {
           gradingQuestion.grade = {
             gradeAdjustment,
             xpAdjustment,
-            comment: gradingQuestion.grade.comment,
+            roomId: gradingQuestion.grade.roomId,
             grade: gradingQuestion.grade.grade,
             xp: gradingQuestion.grade.xp
           };
@@ -276,6 +273,68 @@ function* backendSaga(): SagaIterator {
     } else {
       handleResponseError(resp);
     }
+  });
+
+  yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const notifications = yield call(getNotifications, tokens);
+
+    yield put(actions.updateNotifications(notifications));
+  });
+
+  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATIONS, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const notificationFilter:
+      | NotificationFilterFunction
+      | undefined = (action as actionTypes.IAction).payload.withFilter;
+
+    const notifications: Notification[] = yield select(
+      (state: IState) => state.session.notifications
+    );
+
+    let notificationsToAcknowledge = notifications;
+
+    if (notificationFilter) {
+      notificationsToAcknowledge = notificationFilter(notifications);
+    }
+
+    if (notificationsToAcknowledge.length === 0) {
+      return;
+    }
+
+    const ids = notificationsToAcknowledge.map(n => n.id);
+
+    const newNotifications: Notification[] = notifications.filter(
+      notification => !ids.includes(notification.id)
+    );
+
+    yield put(actions.updateNotifications(newNotifications));
+
+    const resp: Response | null = yield call(postAcknowledgeNotifications, tokens, ids);
+
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, "Something went wrong, couldn't acknowledge");
+      return;
+    }
+  });
+
+  yield takeEvery(actionTypes.NOTIFY_CHATKIT_USERS, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const assessmentId = (action as actionTypes.IAction).payload.assessmentId;
+    const submissionId = (action as actionTypes.IAction).payload.submissionId;
+    yield call(postNotify, tokens, assessmentId, submissionId);
   });
 }
 
@@ -504,7 +563,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
           autogradingResults: question.autogradingResults || [],
           choices: question.choices,
           content: question.content,
-          comment: null,
+          roomId: null,
           id: question.id,
           library: castLibrary(question.library),
           solution: gradingQuestion.solution || question.solution || null,
@@ -520,7 +579,7 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
         grade: {
           grade: grade.grade,
           xp: grade.xp,
-          comment: grade.comment || '',
+          roomId: grade.roomId || '',
           gradeAdjustment: grade.adjustment,
           xpAdjustment: grade.xpAdjustment
         }
@@ -538,7 +597,6 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
 const postGrading = async (
   submissionId: number,
   questionId: number,
-  comment: string,
   gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens
@@ -547,7 +605,6 @@ const postGrading = async (
     accessToken: tokens.accessToken,
     body: {
       grading: {
-        comment: `${comment}`,
         adjustment: gradeAdjustment,
         xpAdjustment
       }
@@ -572,6 +629,67 @@ async function postUnsubmit(submissionId: number, tokens: Tokens) {
     shouldRefresh: true
   });
   return resp;
+}
+
+/**
+ * GET /notification
+ */
+export async function getNotifications(tokens: Tokens) {
+  const resp: Response | null = await request('notification', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false
+  });
+  let notifications: Notification[] = [];
+
+  if (!resp || !resp.ok) {
+    return;
+  }
+
+  const result = await resp.json();
+  notifications = result.map((notification: any) => {
+    return {
+      id: notification.id,
+      type: notification.type,
+      assessment_id: notification.assessment_id || undefined,
+      assessment_type: notification.assessment
+        ? capitalise(notification.assessment.type)
+        : undefined,
+      assessment_title: notification.assessment ? notification.assessment.title : undefined,
+      submission_id: notification.submission_id || undefined
+    } as Notification;
+  });
+
+  return notifications;
+}
+
+/**
+ * POST /notification/acknowledge
+ */
+export async function postAcknowledgeNotifications(tokens: Tokens, ids: number[]) {
+  const resp: Response | null = await request(`notification/acknowledge`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: { notificationIds: ids },
+    shouldAutoLogout: false
+  });
+
+  return resp;
+}
+
+/**
+ * POST /chat/notify
+ */
+export async function postNotify(tokens: Tokens, assessmentId?: number, submissionId?: number) {
+  await request(`chat/notify`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: {
+      assessmentId,
+      submissionId
+    },
+    shouldAutoLogout: false
+  });
 }
 
 /**
