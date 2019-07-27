@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { ISourcecast } from './states';
+import { ISourcecastWorkspace } from './states';
 
 import {
   IAction,
@@ -11,7 +11,10 @@ import {
   UPDATE_SOURCECAST_INDEX
 } from '../actions/actionTypes';
 
-export const reducer: Reducer<ISourcecast> = (state: ISourcecast, action: IAction) => {
+export const reducer: Reducer<ISourcecastWorkspace> = (
+  state: ISourcecastWorkspace,
+  action: IAction
+) => {
   switch (action.type) {
     case SET_CODE_DELTAS_TO_APPLY:
       return {

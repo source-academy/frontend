@@ -61,7 +61,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
 }
 
-export interface ISourcecast extends IWorkspaceState {
+export interface ISourcecastWorkspace extends IWorkspaceState {
   readonly audioUrl: string;
   readonly codeDeltasToApply: ICodeDelta[] | null;
   readonly description: string | null;
@@ -73,7 +73,7 @@ export interface ISourcecast extends IWorkspaceState {
   readonly title: string | null;
 }
 
-export interface ISourcereel extends IWorkspaceState {
+export interface ISourcereelWorkspace extends IWorkspaceState {
   readonly playbackData: IPlaybackData;
   readonly recordingStatus: RecordingStatus;
   readonly timeElapsedBeforePause: number;
@@ -84,8 +84,8 @@ export interface IWorkspaceManagerState {
   readonly assessment: IAssessmentWorkspace;
   readonly grading: IGradingWorkspace;
   readonly playground: IPlaygroundWorkspace;
-  readonly sourcecast: ISourcecast;
-  readonly sourcereel: ISourcereel;
+  readonly sourcecast: ISourcecastWorkspace;
+  readonly sourcereel: ISourcereelWorkspace;
 }
 
 export interface IWorkspaceState {

@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { ISourcereel } from './states';
+import { ISourcereelWorkspace } from './states';
 
 import {
   IAction,
@@ -14,7 +14,10 @@ import {
 } from '../actions/actionTypes';
 import { RecordingStatus } from '../components/sourcecast/sourcecastShape';
 
-export const reducer: Reducer<ISourcereel> = (state: ISourcereel, action: IAction) => {
+export const reducer: Reducer<ISourcereelWorkspace> = (
+  state: ISourcereelWorkspace,
+  action: IAction
+) => {
   switch (action.type) {
     case RECORD_EDITOR_INIT_VALUE:
       return {

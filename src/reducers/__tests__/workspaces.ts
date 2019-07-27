@@ -54,6 +54,8 @@ import { reducer } from '../workspaces';
 const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
 const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
 const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
+const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
+const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
 
 function generateActions(type: string, payload: any = {}): IAction[] {
   return [
@@ -76,6 +78,20 @@ function generateActions(type: string, payload: any = {}): IAction[] {
       payload: {
         ...payload,
         workspaceLocation: playgroundWorkspace
+      }
+    },
+    {
+      type,
+      payload: {
+        ...payload,
+        workspaceLocation: sourcecastWorkspace
+      }
+    },
+    {
+      type,
+      payload: {
+        ...payload,
+        workspaceLocation: sourcereelWorkspace
       }
     }
   ];
