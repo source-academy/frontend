@@ -37,7 +37,8 @@ export type AssessmentStatus = keyof typeof AssessmentStatuses;
 export enum GradingStatuses {
   none = 'none',
   grading = 'grading',
-  graded = 'graded'
+  graded = 'graded',
+  excluded = 'excluded'
 }
 
 export type GradingStatus = keyof typeof GradingStatuses;
@@ -95,7 +96,7 @@ export interface IMCQQuestion extends IQuestion {
 export interface IQuestion {
   answer: string | number | null;
   editorValue?: string | null;
-  comment: string | null;
+  roomId: string | null;
   content: string;
   id: number;
   library: Library;

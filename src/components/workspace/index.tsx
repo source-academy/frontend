@@ -4,7 +4,6 @@ import { Prompt } from 'react-router';
 
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
-import EditorPrepend from './EditorPrepend';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';
 import Repl, { IReplProps } from './Repl';
 import SideContent, { SideContentProps } from './side-content';
@@ -30,13 +29,11 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private leftParentResizable: Resizable;
   private maxDividerHeight: number;
   private sideDividerDiv: HTMLDivElement;
-  private editorPrependRef: React.RefObject<EditorPrepend>;
   private editorRef: React.RefObject<Editor>;
 
   public constructor(props: WorkspaceProps) {
     super(props);
     this.editorRef = React.createRef();
-    this.editorPrependRef = React.createRef();
   }
 
   public componentDidMount() {
@@ -78,7 +75,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private controlBarProps() {
     return {
       ...this.props.controlBarProps,
-      editorRef: this.editorRef,
       hasUnsavedChanges: this.props.hasUnsavedChanges
     };
   }
@@ -95,26 +91,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       onResizeStop,
       ref,
       size: { width: this.props.editorWidth, height: '100%' }
-    } as ResizableProps;
-  }
-
-  private editorPrependResizableProps() {
-    const onResizeStop: ResizeCallback = ({}, {}, ref, {}) =>
-      this.props.handleEditorHeightChange(ref.clientHeight);
-    return {
-      bounds: 'parent',
-      className: 'resize-editor-prepend left-parent',
-      enable: bottomResizeOnly,
-      minHeight: 0,
-      onResize: this.toggleEditorPrependDividerDisplay,
-      onResizeStop,
-      size:
-        this.props.editorHeight === undefined
-          ? undefined
-          : {
-              height: this.props.editorHeight,
-              width: '100%'
-            }
     } as ResizableProps;
   }
 
@@ -182,50 +158,19 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     }
   };
 
-  private toggleEditorPrependDividerDisplay: ResizeCallback = ({}, {}, ref) => {
-    /* Guaranteed that there will be editor refs */
-    // @ts-ignore
-    this.editorPrependRef.current!.AceEditor.current!.editor.resize();
-    // @ts-ignore
-    this.editorRef.current!.AceEditor.current!.editor.resize();
-  };
-
   /**
    * Pre-condition: `this.props.editorProps`
    * XOR `this.props.mcq` are defined.
    */
   private createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.editorProps) {
-      // Set key to force remount of Editor component when session id changes
-      if (
-        props.editorProps.editorPrepend !== null &&
-        props.editorProps.editorPrepend.length !== 0
-      ) {
-        return (
-          <div className="editor-content">
-            <Resizable {...this.editorPrependResizableProps()}>
-              <EditorPrepend
-                editorPrependValue={props.editorProps.editorPrepend}
-                ref={this.editorPrependRef}
-              />
-              <div className="editor-content-divider" />
-            </Resizable>
-            <Editor
-              {...props.editorProps}
-              key={props.editorProps.editorSessionId}
-              ref={this.editorRef}
-            />
-          </div>
-        );
-      } else {
-        return (
-          <Editor
-            {...props.editorProps}
-            key={props.editorProps.editorSessionId}
-            ref={this.editorRef}
-          />
-        );
-      }
+      return (
+        <Editor
+          {...props.editorProps}
+          key={props.editorProps.editorSessionId}
+          ref={this.editorRef}
+        />
+      );
     } else {
       return <MCQChooser {...props.mcqProps!} />;
     }

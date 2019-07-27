@@ -53,6 +53,8 @@ export interface IStateProps {
   queryString?: string;
   replValue: string;
   sideContentHeight?: number;
+  sharedbAceInitValue: string;
+  sharedbAceIsInviting: boolean;
   sourceChapter: number;
   websocketStatus: number;
   externalLibraryName: string;
@@ -68,10 +70,12 @@ export interface IDispatchProps {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleFinishInvite: () => void;
   handleGenerateLz: () => void;
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleInitInvite: (value: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
@@ -112,6 +116,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleGenerateLz: this.props.handleGenerateLz,
+        handleInitInvite: this.props.handleInitInvite,
         handleInterruptEval: this.props.handleInterruptEval,
         handleInvalidEditorSessionId: this.props.handleInvalidEditorSessionId,
         handleReplEval: this.props.handleReplEval,
@@ -136,12 +141,13 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         websocketStatus: this.props.websocketStatus
       },
       editorProps: {
-        editorPrepend: '',
-        editorPrependLines: 0,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
+        handleFinishInvite: this.props.handleFinishInvite,
+        sharedbAceInitValue: this.props.sharedbAceInitValue,
+        sharedbAceIsInviting: this.props.sharedbAceIsInviting,
         isEditorAutorun: this.props.isEditorAutorun,
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
