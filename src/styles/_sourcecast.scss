@@ -6,17 +6,25 @@
   flex: 1 1 100%;
 }
 
-.Slider {
-  width: 90%;
-  justify-self: center;
+.Bar {
+  width: 95%;
   margin: 0 auto;
 }
 
 .PlayerControl {
-  display: flex;
-  width: 95%;
-  justify-content: center;
+  align-items: center;
+  float: left;
+  justify-content: flex-start;
   margin: 0 auto;
+  width: 5%;
+}
+
+.Slider {
+  align-items: center;
+  float: right;
+  justify-self: flex-end;
+  margin: 0 auto;
+  width: 92%;
 }
 
 .SourcecastTable {

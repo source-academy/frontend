@@ -34,7 +34,7 @@ class SourcecastControlbar extends React.PureComponent<
     const PlayerPauseButton = controlButton('Pause', IconNames.PAUSE, this.handlePlayerPausing);
     const PlayerResumeButton = controlButton('Resume', IconNames.PLAY, this.handlePlayerResuming);
     return (
-      <div>
+      <div className="Bar">
         <audio
           src={this.props.audioUrl}
           ref={this.audio}
@@ -47,6 +47,11 @@ class SourcecastControlbar extends React.PureComponent<
         />
         <br />
         <div>
+          <div className="PlayerControl">
+            {this.props.playbackStatus === PlaybackStatus.notStarted && PlayerPlayButton}
+            {this.props.playbackStatus === PlaybackStatus.playing && PlayerPauseButton}
+            {this.props.playbackStatus === PlaybackStatus.paused && PlayerResumeButton}
+          </div>
           <div className="Slider">
             <Slider
               min={0}
@@ -56,11 +61,6 @@ class SourcecastControlbar extends React.PureComponent<
               value={this.state.currentPlayerProgress}
               labelRenderer={this.renderLabel}
             />
-          </div>
-          <div className="PlayerControl">
-            {this.props.playbackStatus === PlaybackStatus.notStarted && PlayerPlayButton}
-            {this.props.playbackStatus === PlaybackStatus.playing && PlayerPauseButton}
-            {this.props.playbackStatus === PlaybackStatus.paused && PlayerResumeButton}
           </div>
         </div>
         <br />
