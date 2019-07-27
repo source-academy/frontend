@@ -1,12 +1,3 @@
-/*
-    Note: the following line should be deleted in p5.min.js
-        to solve the problem of excessive ram usage
-    this.createCanvas(
-      this._defaultCanvasSize.width,
-      this._defaultCanvasSize.height,
-      'p2d'
-    );
-*/
 function red_of(px){ // returns the red, green, blue values of px respectively
 	return px[0];
 }
@@ -59,16 +50,14 @@ function pixel_similar(p1,p2, threshold){
 			math_abs(p1[2] - p2[2]) < threshold;
 }
 
-var _timeInCurrentFrame = 0;
 // returns the number of milliseconds passed since (you know when) at the start of this frame
 // for usage in time-dependent filters
 // since each frame takes non-negligible milliseconds to compute
-function currentFrameRuntime(){ return _timeInCurrentFrame; } 
+function currentFrameRuntime(){ return VD._timeInCurrentFrame; } 
 
-const _TEMP = [];
 // returns an array that can be used to store temporary values
 // this array retains its values from frame to frame
-function getTempArray(){ return _TEMP; }
+function getTempArray(){ return VD._TEMP; }
 
 var _WIDTH = 100;
 var _HEIGHT = 75;
@@ -83,11 +72,10 @@ function getVideoWidth(){
 	return _WIDTH;
 }
 
-var _student_filter = copy_image;
 // changes the current filter to my_filter
 // default filter is copy_image
 function apply_filter(filter){ 
-	_student_filter = filter;
+	VD._student_filter = filter;
 }
 /*
     make_distortion_filter(reverse_mapping)
@@ -151,137 +139,170 @@ function make_static_distortion_filter(reverse_mapping){
 	}
 	return filter;
 }
-var _s = function( sketch ) {
-	const SRCIMG = [];
-	const DESTIMG = [];
-	const IMAGE = sketch.createImage(_WIDTH, _HEIGHT);
-	
-	
-	//load the data from the 1D array into the 2D array SRCIMG
-	function make_image_abstraction(arr){
-		for (var i=0; i<_WIDTH; i++){
-			for (var j=0; j<_HEIGHT; j++){
-				var pix = SRCIMG[i][j];
-				var red = (j * _WIDTH + i)*4;
-				pix[0] = arr[red];
-				pix[1] = arr[red + 1];
-				pix[2] = arr[red + 2];
-			}
+VD = {};
+VD._SRCIMG = [];
+VD._DESTIMG = [];
+VD._TEMP = [];
+VD._timeInCurrentFrame = 0;
+VD._student_filter = copy_image;
+VD._requestID = null;
+VD._pixelData = null;
+VD._video_playing = false;
+VD._video = null;
+VD._canvas = null;
+VD._context = null;
+
+
+VD._setup = function(){
+	//create the two image arrays that will be used throughout 
+	for (var i=0; i<_WIDTH; i = i+1){
+		VD._SRCIMG[i] = [];
+		VD._DESTIMG[i] = [];
+		VD._TEMP[i] = [];
+		for (var j=0; j<_HEIGHT; j = j+1){
+			VD._SRCIMG[i][j] = [0,0,0];
+			VD._DESTIMG[i][j] = [0,0,0];
+			VD._TEMP[i][j] = [0,0,0];
+		}
+	}	
+}
+
+//load the data from the 1D array into the 2D array VD._SRCIMG
+VD._make_image_abstraction = function(arr){
+	for (var i=0; i<_WIDTH; i++){
+		for (var j=0; j<_HEIGHT; j++){
+			var pix = VD._SRCIMG[i][j];
+			var red = (j * _WIDTH + i)*4;
+			pix[0] = arr[red];
+			pix[1] = arr[red + 1];
+			pix[2] = arr[red + 2];
 		}
 	}
-	//load the data from the 2D array DESTIMG into the 1D pixel array of IMAGE
-	function make_p5js_image(){
-		IMAGE.loadPixels();
-		for (var i=0; i<_WIDTH; i++){
-			for (var j=0; j<_HEIGHT; j++){
-				var pix = DESTIMG[i][j];
-				var red = (j * _WIDTH + i)*4;
-				IMAGE.pixels[red] = pix[0];
-				IMAGE.pixels[red+1] = pix[1];
-				IMAGE.pixels[red+2] = pix[2];
-				IMAGE.pixels[red+3] = 255;
-			}
+}
+//load the data from the 2D array VD._DESTIMG into the 1D pixel array pixelData
+VD._make_pixelData = function(pixelData){
+	for (var i=0; i<_WIDTH; i++){
+		for (var j=0; j<_HEIGHT; j++){
+			var pix = VD._DESTIMG[i][j];
+			var red = (j * _WIDTH + i)*4;
+			pixelData.data[red] = pix[0];
+			pixelData.data[red+1] = pix[1];
+			pixelData.data[red+2] = pix[2];
+			pixelData.data[red+3] = 255;
 		}
-		IMAGE.updatePixels();
 	}
-	
-	sketch.preload = function(){
-		if (capture === null){
-			capture = sketch.createCapture(sketch.VIDEO);
-			capture.size(_WIDTH,_HEIGHT);
-			capture.hide(); //hide the live camera feed
-		}
-		
-		//create the two image arrays that will be used throughout 
-		for (var i=0; i<_WIDTH; i = i+1){
-			SRCIMG[i] = [];
-			DESTIMG[i] = [];
-			_TEMP[i] = [];
-			for (var j=0; j<_HEIGHT; j = j+1){
-				SRCIMG[i][j] = [0,0,0];
-				DESTIMG[i][j] = [0,0,0];
-				_TEMP[i][j] = [0,0,0];
-			}
-		}		
-	}
+}
 
-	sketch.setup = function() {
-		video_canvas = sketch.createCanvas(_WIDTH, _HEIGHT);
-		video_canvas.parent(canvas_parent);
-		sketch.background(100);
-		sketch.pixelDensity(1);
-		_startTime = Date.now();
-	};
+/**
+ * The main loop
+ */
+VD._draw = function() {	
+	VD._requestID = window.requestAnimationFrame(VD._draw);
 
-	var frameNo = 0;
-	var sumTime = 0;
-	sketch.draw = function() {	
-		_timeInCurrentFrame = Date.now();
-		sketch.image(capture, 0, 0, _WIDTH,_HEIGHT);
-		sketch.loadPixels();
-		
-		make_image_abstraction(sketch.pixels);//from 1D to 2D
-		_student_filter(SRCIMG, DESTIMG);//process the image
-		make_p5js_image(); //from 2D to 1D
-		sketch.image(IMAGE,0,0,_WIDTH,_HEIGHT); //displays the image
-		
-		// for debugging purposes
-		frameNo++;	
-        var timeSpent = Date.now() - _timeInCurrentFrame;
-		sumTime += timeSpent;
-		// console.log("Average: " + (sumTime/frameNo).toFixed(2) + "    Current frame: " + timeSpent);
+	VD._timeInCurrentFrame = Date.now();
 
-	};
-	my_sketch = sketch;
+	VD._context.drawImage(VD._video, 0, 0, _WIDTH, _HEIGHT);
+	VD._pixelData = VD._context.getImageData(0, 0, _WIDTH, _HEIGHT);
+		
+	VD._make_image_abstraction(VD._pixelData.data);//from 1D to 2D
+	VD._student_filter(VD._SRCIMG, VD._DESTIMG);//process the image
+	VD._make_pixelData(VD._pixelData); //from 2D to 1D
+	VD._context.putImageData(VD._pixelData, 0, 0);
+		
+	// for debugging purposes
+	// _frameNo++;	
+    // var timeSpent = Date.now() - VD._timeInCurrentFrame;
+	// _sumTime += timeSpent;
+	// console.log("Average: " + (_sumTime/_frameNo).toFixed(2) + "    Current frame: " + timeSpent);
 };
+// var _frameNo = 0;
+// var _sumTime = 0;
 
-var canvas_parent;
-var video_canvas = null;
-var capture = null;
-var myp5 = null;
-VideoDisplay = {};
-var my_sketch;
-VideoDisplay.init = function(parent){ 
-	canvas_parent = parent;
-	if (video_canvas != null){
-		video_canvas.parent(canvas_parent);
+//stops the looping
+VD._noLoop = function(){
+	if (VD._video_playing){
+		VD._video_playing = false;
+		window.cancelAnimationFrame(VD._requestID);
 	}
 }
-VideoDisplay.deinit = function(){ 
-	if (myp5 !== null){
-		my_sketch.noLoop();
+//starts the main loop
+VD._loop = function(){
+	if (!VD._video_playing){
+		VD._video_playing = true;
+		VD._requestID = window.requestAnimationFrame(VD._draw);
 	}
 }
-VideoDisplay.handleStartVideo = function(){
-	if (myp5 === null){
-		myp5 = new p5(_s);
+
+VD.init = function($video, $canvas){ 
+	VD._video = $video;
+	VD._canvas = $canvas;
+	VD._context = VD._canvas.getContext('2d');
+	VD._setup();
+}
+VD.deinit = function(){ 
+	VD._noLoop();
+	VD._closeWebcam();
+	VD._video = null;
+	VD._canvas = null;
+	VD._context = null;
+}
+VD._closeWebcam = function(){
+	let stream = VD._video.srcObject;
+	if (stream !== null){
+		let tracks = stream.getTracks();
+		tracks.forEach((track) => {
+			track.stop();
+		});
+		VD._video.srcObject = null;
+	}
+}
+VD.handleCloseVideo = function(){
+	VD._noLoop();
+	VD._closeWebcam();
+	VD._requestID = window.requestAnimationFrame(() => {
+		VD._context.clearRect(0, 0, VD._canvas.width, VD._canvas.height);
+	});
+}
+VD.handleStartVideo = function(){
+	if (!VD._video.srcObject){
+		if (navigator.mediaDevices.getUserMedia) {
+			navigator.mediaDevices.getUserMedia({ video: true })
+				.then(function (stream) {
+					VD._video.srcObject = stream;
+					VD._loop();
+				})
+				.catch(function (error) {
+					console.log('Hmm, something went wrong. (error code ' + error.code + ')');
+				});
+			} else {
+				console.log('The browser you are using does not support getUserMedia');
+		}
 	} else {
-		my_sketch.loop();
+		VD._loop();
 	}
 }
-VideoDisplay.handlePauseVideo = function(){
-	if (myp5 !== null){
-
-		my_sketch.noLoop();
-	}
+VD.handlePauseVideo = function(){
+	VD._noLoop();
 }
-VideoDisplay.handleUpdateDimensions = function(w, h){
+VD.handleUpdateDimensions = function(w, h){
 	if (w === _WIDTH && h === _HEIGHT){ return; }
-	if (myp5 !== null){
-		my_sketch.noLoop();
-		my_sketch.remove();
-	}
-	VideoDisplay.handleResetFilter();
+	const wasLooping = VD._video_playing;
+	VD._noLoop();
+	VD.handleResetFilter();
 	_WIDTH = w;
 	_HEIGHT = h;
-	if (myp5 !== null){
-		myp5 = null;
-		capture = null;
-		VideoDisplay.handleStartVideo();
+	VD._video.width = w;
+	VD._video.height = h;
+	VD._canvas.width = w;
+	VD._canvas.height = h;
+	
+	VD._setup();
+	if (wasLooping) {
+		VD._loop();
 	}
 }
-VideoDisplay.handleResetFilter = function(){
-	_student_filter = copy_image;
+VD.handleResetFilter = function(){
+	VD._student_filter = copy_image;
 }
 
 /* run this in playground for testing

@@ -9,7 +9,8 @@ interface IState {
 }
 
 class VideoDisplay extends React.Component<{}, IState> {
-  private $parent: HTMLElement | null;
+  private $video: HTMLElement | null;
+  private $canvas: HTMLElement | null;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -21,18 +22,21 @@ class VideoDisplay extends React.Component<{}, IState> {
     this.handleHeightChange = this.handleHeightChange.bind(this);
   }
   public componentDidMount() {
-    if (this.$parent) {
-      (window as any).VideoDisplay.init(this.$parent);
+    if (this.$video && this.$canvas) {
+      (window as any).VD.init(this.$video, this.$canvas);
     }
   }
   public componentWillUnmount() {
-    (window as any).VideoDisplay.deinit();
+    (window as any).VD.deinit();
   }
   public handleStartVideo() {
-    (window as any).VideoDisplay.handleStartVideo();
+    (window as any).VD.handleStartVideo();
   }
   public handlePauseVideo() {
-    (window as any).VideoDisplay.handlePauseVideo();
+    (window as any).VD.handlePauseVideo();
+  }
+  public handleCloseVideo() {
+    (window as any).VD.handleCloseVideo();
   }
   public handleWidthChange(event: any) {
     this.setState({
@@ -47,23 +51,27 @@ class VideoDisplay extends React.Component<{}, IState> {
     });
   }
   public handleUpdateDimensions() {
-    (window as any).VideoDisplay.handleUpdateDimensions(
+    (window as any).VD.handleUpdateDimensions(
       parseInt(this.state.width, 10),
       parseInt(this.state.height, 10)
     );
   }
   public handleResetFilter() {
-    (window as any).VideoDisplay.handleResetFilter();
+    (window as any).VD.handleResetFilter();
   }
   // UI can be improved
   public render() {
+    const hideVideo = {
+      display: 'none'
+    };
     return (
       <div>
         <div>
           {controlButton('', IconNames.PLAY, this.handleStartVideo)}
           {controlButton('', IconNames.PAUSE, this.handlePauseVideo)}
-          {controlButton('Reset filter', IconNames.REFRESH, this.handleResetFilter)}
+          {controlButton('Stop and close webcam', IconNames.STOP, this.handleCloseVideo)}
         </div>
+        {controlButton('Reset filter', IconNames.REFRESH, this.handleResetFilter)}
         <div>
           Width:
           <Textarea value={this.state.width} onChange={this.handleWidthChange} />
@@ -72,10 +80,21 @@ class VideoDisplay extends React.Component<{}, IState> {
           Height:
           <Textarea value={this.state.height} onChange={this.handleHeightChange} />
         </div>
-        <div>
-          {controlButton('Update video dimensions', IconNames.REFRESH, this.handleUpdateDimensions)}
+        {controlButton('Update video dimensions', IconNames.REFRESH, this.handleUpdateDimensions)}
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          <video
+            ref={r => (this.$video = r)}
+            style={hideVideo}
+            autoPlay={true}
+            width={(window as any)._WIDTH}
+            height={(window as any)._HEIGHT}
+          />
+          <canvas
+            ref={r => (this.$canvas = r)}
+            width={(window as any)._WIDTH}
+            height={(window as any)._HEIGHT}
+          />
         </div>
-        <div ref={r => (this.$parent = r)} style={{ width: '100%', textAlign: 'center' }} />
       </div>
     );
   }
