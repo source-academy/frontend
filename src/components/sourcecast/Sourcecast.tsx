@@ -9,6 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
+import SourcecastControlbar, { ISourcecastControlbarProps } from './SourcecastControlbar';
 import { ICodeDelta, Input, IPlaybackData, PlaybackStatus } from './sourcecastShape';
 import SourcecastTable from './SourcecastTable';
 
@@ -165,22 +166,23 @@ class Sourcecast extends React.Component<ISourcecastProps> {
           inspectorTab,
           envVisualizerTab
         ]
-      },
-      sourcecastControlbarProps: {
-        handleEditorValueChange: this.props.handleEditorValueChange,
-        handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
-        handleSetEditorReadonly: this.props.handleSetEditorReadonly,
-        handleSetInputToApply: this.props.handleSetInputToApply,
-        handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
-        handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
-        audioUrl: this.props.audioUrl,
-        duration: this.props.playbackDuration,
-        playbackData: this.props.playbackData,
-        playbackStatus: this.props.playbackStatus
       }
+    };
+    const sourcecastControlbarProps: ISourcecastControlbarProps = {
+      handleEditorValueChange: this.props.handleEditorValueChange,
+      handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
+      handleSetEditorReadonly: this.props.handleSetEditorReadonly,
+      handleSetInputToApply: this.props.handleSetInputToApply,
+      handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
+      handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
+      audioUrl: this.props.audioUrl,
+      duration: this.props.playbackDuration,
+      playbackData: this.props.playbackData,
+      playbackStatus: this.props.playbackStatus
     };
     return (
       <div className={classNames('Sourcecast', Classes.DARK)}>
+        <SourcecastControlbar {...sourcecastControlbarProps} />
         <Workspace {...workspaceProps} />
       </div>
     );

@@ -2,9 +2,6 @@ import Resizable, { ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 import { Prompt } from 'react-router';
 
-import SourcecastControlbar, {
-  ISourcecastControlbarProps
-} from '../sourcecast/SourcecastControlbar';
 import ControlBar, { ControlBarProps } from './ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';
@@ -25,7 +22,6 @@ export type WorkspaceProps = {
   replProps: IReplProps;
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
-  sourcecastControlbarProps?: ISourcecastControlbarProps;
 };
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
@@ -53,9 +49,6 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   public render() {
     return (
       <div className="workspace">
-        {this.props.sourcecastControlbarProps ? (
-          <SourcecastControlbar {...this.props.sourcecastControlbarProps} />
-        ) : null}
         {this.props.hasUnsavedChanges ? (
           <Prompt
             message={'You have changes that may not be saved. Are you sure you want to leave?'}
