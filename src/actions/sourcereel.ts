@@ -33,6 +33,7 @@ export const saveSourcecastData = (
     title,
     description,
     audio,
+    audiourl: window.URL.createObjectURL(audio),
     playbackData,
     workspaceLocation
   }

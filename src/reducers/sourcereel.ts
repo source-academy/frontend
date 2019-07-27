@@ -42,7 +42,7 @@ export const reducer: Reducer<ISourcereelWorkspace> = (
         ...state,
         title: action.payload.title,
         description: action.payload.description,
-        audioUrl: window.URL.createObjectURL(action.payload.audio),
+        audioUrl: action.payload.audioUrl,
         playbackData: action.payload.playbackData
       };
     case TIMER_PAUSE:
