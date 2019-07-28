@@ -5,7 +5,7 @@ import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
-import 'brace/theme/cobalt';
+import './source';
 
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
@@ -134,7 +134,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             mode="javascript"
             onChange={this.onChangeMethod}
             onValidate={this.onValidateMethod}
-            theme="cobalt"
+            theme="source"
             value={this.props.editorValue}
             width="100%"
           />
