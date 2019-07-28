@@ -135,7 +135,7 @@ test('setSourcecastDuration generates correct action object', () => {
 });
 
 test('setSourcecastStatus generates correct action object', () => {
-  const status = PlaybackStatus.notStarted;
+  const status = PlaybackStatus.paused;
   const action = setSourcecastStatus(status, sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,

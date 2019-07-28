@@ -307,7 +307,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
       inputs: []
     },
     playbackDuration: 0,
-    playbackStatus: PlaybackStatus.notStarted,
+    playbackStatus: PlaybackStatus.paused,
     sourcecastIndex: null,
     title: null
   },

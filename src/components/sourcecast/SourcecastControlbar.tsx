@@ -32,7 +32,6 @@ class SourcecastControlbar extends React.PureComponent<
   public render() {
     const PlayerPlayButton = controlButton('Play', IconNames.PLAY, this.handlePlayerPlaying);
     const PlayerPauseButton = controlButton('Pause', IconNames.PAUSE, this.handlePlayerPausing);
-    const PlayerResumeButton = controlButton('Resume', IconNames.PLAY, this.handlePlayerResuming);
     return (
       <div className="Bar">
         <audio
@@ -48,9 +47,10 @@ class SourcecastControlbar extends React.PureComponent<
         <br />
         <div>
           <div className="PlayerControl">
-            {this.props.playbackStatus === PlaybackStatus.notStarted && PlayerPlayButton}
-            {this.props.playbackStatus === PlaybackStatus.playing && PlayerPauseButton}
-            {this.props.playbackStatus === PlaybackStatus.paused && PlayerResumeButton}
+            <div className="PlayerControl">
+              {this.props.playbackStatus === PlaybackStatus.paused && PlayerPlayButton}
+              {this.props.playbackStatus === PlaybackStatus.playing && PlayerPauseButton}
+            </div>
           </div>
           <div className="Slider">
             <Slider
@@ -124,15 +124,6 @@ class SourcecastControlbar extends React.PureComponent<
     });
   }
 
-  private handlePlayerPlaying = () => {
-    const audio = this.audio.current;
-    audio!.play();
-    this.props.handleSetEditorReadonly(true);
-    this.props.handleEditorValueChange(this.props.playbackData.init.editorValue);
-    this.props.handleSetSourcecastStatus(PlaybackStatus.playing);
-    this.applyPlaybackDataFromStart(this.props.playbackData);
-  };
-
   private handlePlayerPausing = () => {
     const audio = this.audio.current;
     audio!.pause();
@@ -141,7 +132,7 @@ class SourcecastControlbar extends React.PureComponent<
     this.stopCurrentPlayback();
   };
 
-  private handlePlayerResuming = () => {
+  private handlePlayerPlaying = () => {
     const audio = this.audio.current;
     audio!.play();
     this.props.handleSetEditorReadonly(true);
@@ -151,7 +142,7 @@ class SourcecastControlbar extends React.PureComponent<
 
   private handlePlayerStopping = () => {
     this.props.handleSetEditorReadonly(false);
-    this.props.handleSetSourcecastStatus(PlaybackStatus.notStarted);
+    this.props.handleSetSourcecastStatus(PlaybackStatus.paused);
     this.setState({
       currentPlayerTime: 0,
       currentPlayerProgress: 0

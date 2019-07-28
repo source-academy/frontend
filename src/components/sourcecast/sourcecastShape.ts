@@ -10,10 +10,8 @@ export enum KeyboardCommand {
 }
 
 export enum PlaybackStatus {
-  notStarted = 'notStarted',
   playing = 'recording',
-  paused = 'paused',
-  finished = 'finished'
+  paused = 'paused'
 }
 
 export interface ICodeDelta {
