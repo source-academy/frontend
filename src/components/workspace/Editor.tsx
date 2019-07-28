@@ -43,7 +43,7 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
-  handleRecordEditorInput?: (input: Input) => void;
+  handleRecordInput?: (input: Input) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -66,7 +66,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
       this.props.handleEditorValueChange(newCode);
       if (this.props.isRecording) {
-        this.props.handleRecordEditorInput!({
+        this.props.handleRecordInput!({
           type: 'codeDelta',
           time: this.props.getTimerDuration!(),
           data: delta
@@ -83,7 +83,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         return;
       }
       const editorCursorPositionToBeApplied: IPosition = selection.getCursor();
-      this.props.handleRecordEditorInput!({
+      this.props.handleRecordInput!({
         type: 'cursorPositionChange',
         time: this.props.getTimerDuration!(),
         data: editorCursorPositionToBeApplied
@@ -96,7 +96,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       const range: ISelectionRange = selection.getRange();
       const isBackwards: boolean = selection.isBackwards();
       if (!isEqual(range.start, range.end)) {
-        this.props.handleRecordEditorInput!({
+        this.props.handleRecordInput!({
           type: 'selectionRangeData',
           time: this.props.getTimerDuration!(),
           data: { range, isBackwards }
@@ -337,7 +337,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     if (!this.props.isRecording) {
       return;
     }
-    this.props.handleRecordEditorInput!({
+    this.props.handleRecordInput!({
       type: 'keyboardCommand',
       time: this.props.getTimerDuration!(),
       data: KeyboardCommand.run

@@ -82,6 +82,20 @@ class Sourcecast extends React.Component<ISourcecastProps> {
     super(props);
   }
 
+  public componentDidUpdate(prevProps: ISourcecastProps) {
+    const { inputToApply } = this.props;
+
+    if (!inputToApply || inputToApply === prevProps.inputToApply) {
+      return;
+    }
+
+    switch (inputToApply.type) {
+      case 'chapterSelect':
+        this.props.handleChapterSelect(inputToApply.data);
+        break;
+    }
+  }
+
   public render() {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {

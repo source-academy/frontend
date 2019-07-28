@@ -17,7 +17,7 @@ import {
   evalEditor,
   evalRepl,
   recordEditorInitValue,
-  recordEditorInput,
+  recordInput,
   saveSourcecastData,
   setEditorBreakpoint,
   setEditorReadonly,
@@ -72,7 +72,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
       handleInterruptEval: () => beginInterruptExecution(location),
-      handleRecordEditorInput: (input: Input) => recordEditorInput(input, location),
+      handleRecordInput: (input: Input) => recordInput(input, location),
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),

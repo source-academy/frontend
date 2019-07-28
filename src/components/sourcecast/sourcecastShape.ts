@@ -1,4 +1,5 @@
 export interface IInputTypeShape {
+  chapterSelect: number;
   cursorPositionChange: IPosition;
   codeDelta: ICodeDelta;
   keyboardCommand: KeyboardCommand;
@@ -10,7 +11,7 @@ export enum KeyboardCommand {
 }
 
 export enum PlaybackStatus {
-  playing = 'recording',
+  playing = 'playing',
   paused = 'paused'
 }
 

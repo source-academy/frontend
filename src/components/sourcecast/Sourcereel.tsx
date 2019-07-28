@@ -50,7 +50,7 @@ export interface IDispatchProps {
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleInterruptEval: () => void;
-  handleRecordEditorInput: (input: Input) => void;
+  handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
@@ -80,8 +80,17 @@ class Sourcereel extends React.Component<ISourcereelProps> {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
-        handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
-          this.props.handleChapterSelect(chapter),
+        handleChapterSelect: ({ chapter }: { chapter: number }, e: any) => {
+          this.props.handleChapterSelect(chapter);
+          if (this.props.recordingStatus !== RecordingStatus.recording) {
+            return;
+          }
+          this.props.handleRecordInput({
+            time: this.getTimerDuration(),
+            type: 'chapterSelect',
+            data: chapter
+          });
+        },
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleInterruptEval: this.props.handleInterruptEval,
@@ -115,7 +124,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
         handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-        handleRecordEditorInput: this.props.handleRecordEditorInput
+        handleRecordInput: this.props.handleRecordInput
       },
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,

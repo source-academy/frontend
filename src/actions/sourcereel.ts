@@ -13,8 +13,8 @@ export const recordEditorInitValue = (
   }
 });
 
-export const recordEditorInput = (input: Input, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.RECORD_EDITOR_INPUT,
+export const recordInput = (input: Input, workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.RECORD_INPUT,
   payload: {
     input,
     workspaceLocation

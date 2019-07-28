@@ -2,7 +2,7 @@ import { ICodeDelta, Input, IPlaybackData } from '../../components/sourcecast/so
 import * as actionTypes from '../actionTypes';
 import {
   recordEditorInitValue,
-  recordEditorInput,
+  recordInput,
   saveSourcecastData,
   timerPause,
   timerReset,
@@ -30,7 +30,7 @@ test('recordEditorInitValue generates correct action object', () => {
   });
 });
 
-test('recordEditorInput generates correct action object', () => {
+test('recordInput generates correct action object', () => {
   const codeDelta: ICodeDelta = {
     start: {
       row: 0,
@@ -48,9 +48,9 @@ test('recordEditorInput generates correct action object', () => {
     type: 'codeDelta',
     data: codeDelta
   };
-  const action = recordEditorInput(input, sourcereelWorkspace);
+  const action = recordInput(input, sourcereelWorkspace);
   expect(action).toEqual({
-    type: actionTypes.RECORD_EDITOR_INPUT,
+    type: actionTypes.RECORD_INPUT,
     payload: {
       input,
       workspaceLocation: sourcereelWorkspace

@@ -1,7 +1,7 @@
 import {
   IAction,
   RECORD_EDITOR_INIT_VALUE,
-  RECORD_EDITOR_INPUT,
+  RECORD_INPUT,
   SAVE_SOURCECAST_DATA,
   TIMER_PAUSE,
   TIMER_RESET,
@@ -43,8 +43,8 @@ describe('RECORD_EDITOR_INIT_VALUE', () => {
   });
 });
 
-describe('RECORD_EDITOR_INPUT', () => {
-  test('records editorInput correctly', () => {
+describe('RECORD_INPUT', () => {
+  test('records input correctly', () => {
     const delta: ICodeDelta = {
       start: {
         row: 0,
@@ -64,7 +64,7 @@ describe('RECORD_EDITOR_INPUT', () => {
       data: delta
     };
 
-    const action: IAction = generateAction(RECORD_EDITOR_INPUT, { input });
+    const action: IAction = generateAction(RECORD_INPUT, { input });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,

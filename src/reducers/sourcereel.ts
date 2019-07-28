@@ -4,7 +4,7 @@ import { ISourcereelWorkspace } from './states';
 import {
   IAction,
   RECORD_EDITOR_INIT_VALUE,
-  RECORD_EDITOR_INPUT,
+  RECORD_INPUT,
   SAVE_SOURCECAST_DATA,
   TIMER_PAUSE,
   TIMER_RESET,
@@ -29,7 +29,7 @@ export const reducer: Reducer<ISourcereelWorkspace> = (
           inputs: []
         }
       };
-    case RECORD_EDITOR_INPUT:
+    case RECORD_INPUT:
       return {
         ...state,
         playbackData: {
