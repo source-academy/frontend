@@ -59,6 +59,9 @@ test('recordEditorInput generates correct action object', () => {
 });
 
 test('saveSourcecastData generates correct action object', () => {
+  const fakeUrl = 'someFakeAudioUrl.com';
+  const noOp = () => fakeUrl;
+  window.URL.createObjectURL = noOp;
   const title = 'Test Title';
   const description = 'Test Description';
   const audio = new Blob();
@@ -73,6 +76,7 @@ test('saveSourcecastData generates correct action object', () => {
       title,
       description,
       audio,
+      audioUrl: fakeUrl,
       playbackData,
       workspaceLocation: sourcereelWorkspace
     }
