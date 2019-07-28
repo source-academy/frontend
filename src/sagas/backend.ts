@@ -643,7 +643,7 @@ export async function getNotifications(tokens: Tokens) {
   let notifications: Notification[] = [];
 
   if (!resp || !resp.ok) {
-    return;
+    return notifications;
   }
 
   const result = await resp.json();
