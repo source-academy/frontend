@@ -107,6 +107,7 @@ export function inspectorUpdate(context: Context | undefined) {
     throw new Error('Inspector not loaded');
   }
 }
+
 /**
  * A wrapper around js-slang's createContext. This
  * provides the original function with the required

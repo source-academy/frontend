@@ -150,7 +150,7 @@ const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] =>
     const localMaxXp = problem.$.maxxp ? parseInt(problem.$.maxxp, 10) : 0;
     const question: IQuestion = {
       answer: null,
-      comment: null,
+      roomId: null,
       content: problem.TEXT[0],
       id: curId,
       library: makeLibrary(problem.DEPLOYMENT),
