@@ -5,3 +5,5 @@ export * from './interpreter';
 export * from './playground';
 export * from './session';
 export * from './workspaces';
+export * from './sourcecast';
+export * from './sourcereel';

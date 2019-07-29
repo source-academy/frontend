@@ -160,8 +160,8 @@ function translate(x0, y0) {
  * a Curve a argument and returns
  * a new Curve, which is the original Curve rotated by the given angle
  * around the origin, in counter-clockwise direction.
- * @param {Curve} Curve - given Curve
- * @returns {Curve} result Curve
+ * @param {number} theta - given angle
+ * @returns {unary_Curve_operator} function that takes a Curve and returns a Curve
  */
 function rotate_around_origin(theta) {
   var cth = Math.cos(theta)
@@ -397,7 +397,7 @@ function gosperize(curve) {
  * the function <CODE>gosper_curve</CODE>
  * 
  * @param {number} level - number of repeated applications
- * @returns {curve_operator} 
+ * @returns {Curve} 
  */
 function gosper_curve(level) {
   return repeated(gosperize, level)(unit_line)
@@ -410,7 +410,7 @@ function gosper_curve(level) {
  * with suitable parameters
  * 
  * @param {number} level - number of repeated applications of gosperize to the unit line
- * @returns {curve_operator} 
+ * @returns {Drawing} 
  */
 function show_connected_gosper(level) {
   return draw_connected(200)(squeeze_rectangular_portion(-0.5, 1.5, -0.5, 1.5)(gosper_curve(level)))

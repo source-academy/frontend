@@ -17,7 +17,9 @@ import * as actionTypes from './actionTypes';
 export enum WorkspaceLocations {
   assessment = 'assessment',
   playground = 'playground',
-  grading = 'grading'
+  grading = 'grading',
+  sourcecast = 'sourcecast',
+  sourcereel = 'sourcereel'
 }
 
 export type WorkspaceLocation = keyof typeof WorkspaceLocations;
@@ -238,6 +240,17 @@ export const updateWorkspace = (
   payload: {
     workspaceLocation,
     workspaceOptions
+  }
+});
+
+export const setEditorReadonly: ActionCreator<actionTypes.IAction> = (
+  workspaceLocation: WorkspaceLocation,
+  editorReadonly: boolean
+) => ({
+  type: actionTypes.SET_EDITOR_READONLY,
+  payload: {
+    workspaceLocation,
+    editorReadonly
   }
 });
 
