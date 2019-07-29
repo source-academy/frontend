@@ -2,6 +2,10 @@ import { ActionCreator } from 'redux';
 
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape';
+import {
+  Notification,
+  NotificationFilterFunction
+} from '../components/notification/notificationShape';
 import { Story } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -127,6 +131,34 @@ export const updateGrading = (submissionId: number, grading: Grading) => ({
 export const unsubmitSubmission: ActionCreator<actionTypes.IAction> = (submissionId: number) => ({
   type: actionTypes.UNSUBMIT_SUBMISSION,
   payload: {
+    submissionId
+  }
+});
+
+/**
+ * Notification actions
+ */
+
+export const fetchNotifications = () => ({
+  type: actionTypes.FETCH_NOTIFICATIONS
+});
+
+export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction) => ({
+  type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
+  payload: {
+    withFilter
+  }
+});
+
+export const updateNotifications = (notifications: Notification[]) => ({
+  type: actionTypes.UPDATE_NOTIFICATIONS,
+  payload: notifications
+});
+
+export const notifyChatUsers = (assessmentId?: number, submissionId?: number) => ({
+  type: actionTypes.NOTIFY_CHATKIT_USERS,
+  payload: {
+    assessmentId,
     submissionId
   }
 });

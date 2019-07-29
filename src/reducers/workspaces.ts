@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { ITestcase } from 'src/components/assessment/assessmentShape';
+import { ITestcase } from '../components/assessment/assessmentShape';
 
 import {
   BROWSE_REPL_HISTORY_DOWN,
@@ -30,6 +30,7 @@ import {
   LOG_OUT,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SET_EDITOR_READONLY,
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
@@ -40,8 +41,10 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
 } from '../actions/actionTypes';
-import { WorkspaceLocation } from '../actions/workspaces';
+import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { createContext } from '../utils/slangHelper';
+import { reducer as sourcecastReducer } from './sourcecast';
+import { reducer as sourcereelReducer } from './sourcereel';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -67,6 +70,29 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     action.payload !== undefined ? action.payload.workspaceLocation : undefined;
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
+
+  switch (workspaceLocation) {
+    case WorkspaceLocations.sourcecast:
+      const sourcecastState = sourcecastReducer(state.sourcecast, action);
+      if (sourcecastState === state.sourcecast) {
+        break;
+      }
+      return {
+        ...state,
+        sourcecast: sourcecastState
+      };
+    case WorkspaceLocations.sourcereel:
+      const sourcereelState = sourcereelReducer(state.sourcereel, action);
+      if (sourcereelState === state.sourcereel) {
+        break;
+      }
+      return {
+        ...state,
+        sourcereel: sourcereelState
+      };
+    default:
+      break;
+  }
 
   switch (action.type) {
     case BROWSE_REPL_HISTORY_DOWN:
@@ -424,7 +450,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       };
-
     case END_DEBUG_PAUSE:
       return {
         ...state,
@@ -434,7 +459,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: true
         }
       };
-
     case DEBUG_RESUME:
       return {
         ...state,
@@ -444,7 +468,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       };
-
     case DEBUG_RESET:
       return {
         ...state,
@@ -454,6 +477,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           isDebugging: false
         }
       };
+
     /**
      * Resets the workspace to default settings,
      * including the js-slang Context. Apply
@@ -503,6 +527,15 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           editorSessionId: action.payload.editorSessionId
+        }
+      };
+
+    case SET_EDITOR_READONLY:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorReadonly: action.payload.editorReadonly
         }
       };
     case SET_WEBSOCKET_STATUS:

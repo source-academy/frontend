@@ -17,13 +17,11 @@ import { checkSessionIdExists } from './collabEditing/helper';
  *           of the editor's content, using `slang`
  */
 export interface IEditorProps {
-  isEditorAutorun: boolean;
-  editorSessionId: string;
-  editorPrepend: string;
-  editorPrependLines: number;
-  editorValue: string;
   breakpoints: string[];
+  editorSessionId: string;
+  editorValue: string;
   highlightedLines: number[][];
+  isEditorAutorun: boolean;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   handleEditorEval: () => void;
@@ -36,9 +34,9 @@ export interface IEditorProps {
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
+  public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
-  private AceEditor: React.RefObject<AceEditor>;
 
   constructor(props: IEditorProps) {
     super(props);
@@ -139,7 +137,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             theme="cobalt"
             value={this.props.editorValue}
             width="100%"
-            setOptions={{ firstLineNumber: 1 + this.props.editorPrependLines }}
           />
         </div>
       </HotKeys>

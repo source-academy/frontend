@@ -12,6 +12,15 @@ import {
   IAssessmentOverview,
   ITestcase
 } from '../components/assessment/assessmentShape';
+import { Notification } from '../components/notification/notificationShape';
+import {
+  ICodeDelta,
+  Input,
+  IPlaybackData,
+  ISourcecastData,
+  PlaybackStatus,
+  RecordingStatus
+} from '../components/sourcecast/sourcecastShape';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -52,16 +61,38 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
   readonly playgroundExternal: ExternalLibraryName;
 }
 
+export interface ISourcecastWorkspace extends IWorkspaceState {
+  readonly audioUrl: string;
+  readonly codeDeltasToApply: ICodeDelta[] | null;
+  readonly description: string | null;
+  readonly inputToApply: Input | null;
+  readonly playbackData: IPlaybackData;
+  readonly playbackDuration: number;
+  readonly playbackStatus: PlaybackStatus;
+  readonly sourcecastIndex: ISourcecastData[] | null;
+  readonly title: string | null;
+}
+
+export interface ISourcereelWorkspace extends IWorkspaceState {
+  readonly playbackData: IPlaybackData;
+  readonly recordingStatus: RecordingStatus;
+  readonly timeElapsedBeforePause: number;
+  readonly timeResumed: number;
+}
+
 export interface IWorkspaceManagerState {
   readonly assessment: IAssessmentWorkspace;
   readonly grading: IGradingWorkspace;
   readonly playground: IPlaygroundWorkspace;
+  readonly sourcecast: ISourcecastWorkspace;
+  readonly sourcereel: ISourcereelWorkspace;
 }
 
 export interface IWorkspaceState {
   readonly autogradingResults: AutogradingResult[];
   readonly context: Context;
   readonly editorPrepend: string;
+  readonly editorReadonly: boolean;
   readonly editorSessionId: string;
   readonly editorValue: string | null;
   readonly editorPostpend: string;
@@ -101,6 +132,7 @@ export interface ISessionState {
   readonly story?: Story;
   readonly name?: string;
   readonly xp: number;
+  readonly notifications: Notification[];
 }
 
 type ReplHistory = {
@@ -216,8 +248,12 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], workspaceLocation),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue: workspaceLocation === WorkspaceLocations.playground ? defaultEditorValue : '',
+  editorValue:
+    workspaceLocation === WorkspaceLocations.playground || WorkspaceLocations.sourcecast
+      ? defaultEditorValue
+      : '',
   editorPostpend: '',
+  editorReadonly: false,
   editorTestcases: [],
   editorHeight: 150,
   editorWidth: '50%',
@@ -241,7 +277,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   enableDebugging: true
 });
 
-export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!';
+export const defaultRoomId = null;
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
   assessment: {
@@ -259,6 +295,31 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
     playgroundExternal: ExternalLibraryNames.NONE
+  },
+  sourcecast: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
+    audioUrl: '',
+    codeDeltasToApply: null,
+    description: null,
+    inputToApply: null,
+    playbackData: {
+      init: { editorValue: '' },
+      inputs: []
+    },
+    playbackDuration: 0,
+    playbackStatus: PlaybackStatus.paused,
+    sourcecastIndex: null,
+    title: null
+  },
+  sourcereel: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
+    playbackData: {
+      init: { editorValue: '' },
+      inputs: []
+    },
+    recordingStatus: RecordingStatus.notStarted,
+    timeElapsedBeforePause: 0,
+    timeResumed: 0
   }
 };
 
@@ -286,7 +347,8 @@ export const defaultSession: ISessionState = {
   maxXp: 0,
   refreshToken: undefined,
   name: undefined,
-  xp: 0
+  xp: 0,
+  notifications: []
 };
 
 export const defaultState: IState = {
