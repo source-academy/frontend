@@ -2,7 +2,7 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import 'brace/mode/javascript';
-import 'brace/theme/terminal';
+import './editorTheme/source';
 
 export interface IReplInputProps {
   replValue: string;
@@ -50,7 +50,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
         <AceEditor
           className="repl-react-ace react-ace"
           mode="javascript"
-          theme="cobalt"
+          theme="source"
           height="1px"
           width="100%"
           value={this.props.replValue}
