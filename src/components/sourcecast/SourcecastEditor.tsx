@@ -16,13 +16,12 @@ import { ICodeDelta, Input, IPosition, ISelectionRange, KeyboardCommand } from '
  *           of the editor's content, using `slang`
  * @property editorReadonly - Used for sourcecast only
  */
-export interface IEditorProps {
+export interface ISourcecastEditorProps {
   breakpoints: string[];
   codeDeltasToApply?: ICodeDelta[] | null;
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
-  getTimerDuration?: () => number;
   highlightedLines: number[][];
   isEditorAutorun: boolean;
   inputToApply?: Input | null;
@@ -30,6 +29,7 @@ export interface IEditorProps {
   isRecording?: boolean;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
+  getTimerDuration?: () => number;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
@@ -39,7 +39,7 @@ export interface IEditorProps {
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
 
-class SourcecastEditor extends React.PureComponent<IEditorProps, {}> {
+class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string, delta: ICodeDelta) => void;
@@ -47,7 +47,7 @@ class SourcecastEditor extends React.PureComponent<IEditorProps, {}> {
   private onCursorChange: (selecction: any) => void;
   private onSelectionChange: (selection: any) => void;
 
-  constructor(props: IEditorProps) {
+  constructor(props: ISourcecastEditorProps) {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
@@ -96,7 +96,7 @@ class SourcecastEditor extends React.PureComponent<IEditorProps, {}> {
     };
   }
 
-  public componentDidUpdate(prevProps: IEditorProps) {
+  public componentDidUpdate(prevProps: ISourcecastEditorProps) {
     const { codeDeltasToApply, inputToApply } = this.props;
 
     if (codeDeltasToApply && codeDeltasToApply !== prevProps.codeDeltasToApply) {

@@ -324,7 +324,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
 };
 
 export const defaultSession: ISessionState = {
-  accessToken: process.env.REACT_APP_ACCESS_TOKEN,
+  accessToken: undefined,
   announcements: [
     {
       author: 'Aministrator',
@@ -345,8 +345,7 @@ export const defaultSession: ISessionState = {
   },
   maxGrade: 0,
   maxXp: 0,
-  refreshToken: process.env.REACT_APP_REFRESH_TOKEN,
-  role: Role.Admin,
+  refreshToken: undefined,
   name: undefined,
   xp: 0,
   notifications: []

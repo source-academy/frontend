@@ -10,7 +10,7 @@ import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastControlbar, { ISourcecastControlbarProps } from './SourcecastControlbar';
-import SourcecastEditor, { IEditorProps } from './SourcecastEditor';
+import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
 import { ICodeDelta, Input, IPlaybackData, PlaybackStatus } from './sourcecastShape';
 import SourcecastTable from './SourcecastTable';
 
@@ -98,7 +98,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
   }
 
   public render() {
-    const editorProps: IEditorProps = {
+    const editorProps: ISourcecastEditorProps = {
       codeDeltasToApply: this.props.codeDeltasToApply,
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,

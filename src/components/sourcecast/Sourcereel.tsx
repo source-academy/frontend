@@ -9,7 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
-import SourcecastEditor, { IEditorProps } from './SourcecastEditor';
+import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
 import { Input, IPlaybackData, RecordingStatus } from './sourcecastShape';
 import SourcereelControlbar from './SourcereelControlbar';
 
@@ -78,7 +78,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
   }
 
   public render() {
-    const editorProps: IEditorProps = {
+    const editorProps: ISourcecastEditorProps = {
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,
       editorSessionId: '',
