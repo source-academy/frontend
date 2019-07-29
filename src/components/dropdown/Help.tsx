@@ -20,6 +20,11 @@ const Help: React.SFC<DialogProps> = props => (
   >
     <div className={Classes.DIALOG_BODY}>
       <p>Please use the following resources when you encounter issues with this system.</p>
+      <p>
+        As of August 2019, we recommend the browsers <b>Google Chrome</b>, Version 75 or higher, or <b>Firefox</b>,
+        Version 68 or higher, to visit the Source Academy. If you encounter issues with the Source Academy using these
+        browsers, please use the following resources.
+      </p>
       <ul>
         <li>
           For critical technical issues that seriously affect your learning experience, email the
