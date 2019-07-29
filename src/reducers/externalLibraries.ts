@@ -159,7 +159,10 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.SOUNDS, soundsLibrary],
   [ExternalLibraryNames.BINARYTREES, binaryTreesLibrary],
   [ExternalLibraryNames.VIDEO, videoLibrary],
-  [ExternalLibraryNames.ALL, runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary)]
+  [
+    ExternalLibraryNames.ALL,
+    runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary)
+  ]
 ];
 
 export const externalLibraries: Map<string, string[]> = new Map(libEntries);
