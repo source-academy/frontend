@@ -9,6 +9,7 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
+import SourcecastEditor, { IEditorProps } from './SourcecastEditor';
 import { Input, IPlaybackData, RecordingStatus } from './sourcecastShape';
 import SourcereelControlbar from './SourcereelControlbar';
 
@@ -77,6 +78,20 @@ class Sourcereel extends React.Component<ISourcereelProps> {
   }
 
   public render() {
+    const editorProps: IEditorProps = {
+      editorReadonly: this.props.editorReadonly,
+      editorValue: this.props.editorValue,
+      editorSessionId: '',
+      getTimerDuration: this.getTimerDuration,
+      handleEditorEval: this.props.handleEditorEval,
+      handleEditorValueChange: this.props.handleEditorValueChange,
+      isEditorAutorun: this.props.isEditorAutorun,
+      isRecording: this.props.recordingStatus === RecordingStatus.recording,
+      breakpoints: this.props.breakpoints,
+      highlightedLines: this.props.highlightedLines,
+      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+      handleRecordInput: this.props.handleRecordInput
+    };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
@@ -112,20 +127,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
         questionProgress: null,
         sourceChapter: this.props.sourceChapter
       },
-      editorProps: {
-        editorReadonly: this.props.editorReadonly,
-        editorValue: this.props.editorValue,
-        editorSessionId: '',
-        getTimerDuration: this.getTimerDuration,
-        handleEditorEval: this.props.handleEditorEval,
-        handleEditorValueChange: this.props.handleEditorValueChange,
-        isEditorAutorun: this.props.isEditorAutorun,
-        isRecording: this.props.recordingStatus === RecordingStatus.recording,
-        breakpoints: this.props.breakpoints,
-        highlightedLines: this.props.highlightedLines,
-        handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-        handleRecordInput: this.props.handleRecordInput
-      },
+      customEditor: <SourcecastEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
       handleEditorHeightChange: this.props.handleEditorHeightChange,

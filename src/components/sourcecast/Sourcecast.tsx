@@ -10,6 +10,7 @@ import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastControlbar, { ISourcecastControlbarProps } from './SourcecastControlbar';
+import SourcecastEditor, { IEditorProps } from './SourcecastEditor';
 import { ICodeDelta, Input, IPlaybackData, PlaybackStatus } from './sourcecastShape';
 import SourcecastTable from './SourcecastTable';
 
@@ -97,6 +98,21 @@ class Sourcecast extends React.Component<ISourcecastProps> {
   }
 
   public render() {
+    const editorProps: IEditorProps = {
+      codeDeltasToApply: this.props.codeDeltasToApply,
+      editorReadonly: this.props.editorReadonly,
+      editorValue: this.props.editorValue,
+      editorSessionId: '',
+      handleEditorEval: this.props.handleEditorEval,
+      handleEditorValueChange: this.props.handleEditorValueChange,
+      isEditorAutorun: this.props.isEditorAutorun,
+      inputToApply: this.props.inputToApply,
+      isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
+      breakpoints: this.props.breakpoints,
+      highlightedLines: this.props.highlightedLines,
+      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+      handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
+    };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
@@ -123,21 +139,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         questionProgress: null,
         sourceChapter: this.props.sourceChapter
       },
-      editorProps: {
-        codeDeltasToApply: this.props.codeDeltasToApply,
-        editorReadonly: this.props.editorReadonly,
-        editorValue: this.props.editorValue,
-        editorSessionId: '',
-        handleEditorEval: this.props.handleEditorEval,
-        handleEditorValueChange: this.props.handleEditorValueChange,
-        isEditorAutorun: this.props.isEditorAutorun,
-        inputToApply: this.props.inputToApply,
-        isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
-        breakpoints: this.props.breakpoints,
-        highlightedLines: this.props.highlightedLines,
-        handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
-      },
+      customEditor: <SourcecastEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
       handleEditorHeightChange: this.props.handleEditorHeightChange,
