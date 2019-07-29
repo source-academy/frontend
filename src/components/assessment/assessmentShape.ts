@@ -15,6 +15,7 @@ export interface IAssessmentOverview {
   id: number;
   maxGrade: number;
   maxXp: number;
+  number?: string; // For mission control
   openAt: string;
   title: string;
   reading?: string; // For mission control
