@@ -244,7 +244,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     handleChangeActiveTab: props.handleChangeActiveTab,
     tabs: [
       {
-        label: `Grading: Question ${questionId}`,
+        label: `Grading: Question ${questionId + 1}`,
         icon: IconNames.TICK,
         /* Render an editor with the xp given to the current question. */
         body: (
@@ -259,6 +259,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             xpAdjustment={props.grading![questionId].grade.xpAdjustment}
             maxXp={props.grading![questionId].question.maxXp}
             studentName={props.grading![questionId].student.name}
+            comments={props.grading![questionId].grade.comments!}
           />
         )
       },

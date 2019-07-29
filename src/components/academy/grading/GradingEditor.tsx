@@ -1,11 +1,23 @@
-import { H3, HTMLTable, Intent, NumericInput, Position, Pre, Text } from '@blueprintjs/core';
+import {
+  H3,
+  HTMLTable,
+  Icon,
+  IconName,
+  Intent,
+  NumericInput,
+  Position,
+  Pre,
+  Text
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
+import ReactMde, { ReactMdeProps } from 'react-mde';
 import { Prompt } from 'react-router';
 
 import { showWarningMessage } from '../../../utils/notification';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import { controlButton } from '../../commons';
+import Markdown from '../../commons/Markdown';
 
 type GradingEditorProps = DispatchProps & OwnProps;
 
@@ -14,7 +26,8 @@ export type DispatchProps = {
     submissionId: number,
     questionId: number,
     gradeAdjustment: number | undefined,
-    xpAdjustment: number | undefined
+    xpAdjustment: number | undefined,
+    comments?: string
   ) => void;
 };
 
@@ -29,6 +42,7 @@ export type OwnProps = {
   xpAdjustment: number;
   maxXp: number;
   studentName: string;
+  comments?: string;
 };
 
 /**
@@ -40,13 +54,17 @@ export type OwnProps = {
  *   will show the hint text in the NumericInput. This property is a string
  *   so as to allow input such as the '-' character.
  * @prop xpAdjustmentInput a potentially null string which defines the
- *   result for the number grade input. This property being null
+ *   result for the number XP input. This property being null
  *   will show the hint text in the NumericInput. This property is a string
  *   so as to allow input such as the '-' character.
+ * @prop editorValue the text in the react-mde editor, that will be saved
+ *   to a comment displayed below the numerical grade and XP
  */
 type State = {
   gradeAdjustmentInput: string | null;
   xpAdjustmentInput: string | null;
+  editorValue?: string;
+  selectedTab: ReactMdeProps['selectedTab'];
 };
 
 class GradingEditor extends React.Component<GradingEditorProps, State> {
@@ -54,7 +72,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     super(props);
     this.state = {
       gradeAdjustmentInput: props.gradeAdjustment.toString(),
-      xpAdjustmentInput: props.xpAdjustment.toString()
+      xpAdjustmentInput: props.xpAdjustment.toString(),
+      editorValue: props.comments,
+      selectedTab: 'write'
     };
   }
 
@@ -66,6 +86,12 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       fullWidth: true,
       className: 'grading-editor-save-button'
     };
+    const onTabChange = (tab: ReactMdeProps['selectedTab']) =>
+      this.setState({
+        ...this.state,
+        selectedTab: tab
+      });
+
     return (
       <div className="GradingEditor">
         {hasUnsavedChanges ? (
@@ -156,9 +182,33 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             </tbody>
           </HTMLTable>
         </div>
+        <div className="react-mde-parent">
+          <ReactMde
+            value={this.state.editorValue}
+            onChange={this.handleEditorValueChange}
+            selectedTab={this.state.selectedTab}
+            onTabChange={onTabChange}
+            generateMarkdownPreview={this.generateMarkdownPreview}
+            minEditorHeight={250}
+            maxEditorHeight={1000}
+            minPreviewHeight={250}
+            getIcon={this.blueprintIconProvider}
+          />
+        </div>
         {controlButton('Save', IconNames.FLOPPY_DISK, this.onClickSaveButton, saveButtonOpts)}
       </div>
     );
+  }
+
+  /**
+   * A custom icons provider. It uses a bulky mapping function
+   * defined below.
+   *
+   * See {@link https://github.com/andrerpena/react-mde}
+   */
+  private blueprintIconProvider(name: string) {
+    const blueprintIcon = mdeToBlueprintIconMapping(name);
+    return <Icon icon={blueprintIcon.iconName} htmlTitle={blueprintIcon.title} />;
   }
 
   private onClickSaveButton = () => {
@@ -181,7 +231,8 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         this.props.submissionId,
         this.props.questionId,
         gradeAdjustmentInput,
-        xpAdjustmentInput
+        xpAdjustmentInput,
+        this.state.editorValue!
       );
     }
   };
@@ -215,14 +266,108 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     });
   };
 
+  private handleEditorValueChange = (editorValue: string) => {
+    this.setState({
+      ...this.state,
+      editorValue
+    });
+  };
+
   private hasUnsavedChanges = () => {
     const gradeAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined);
     const xpAdjustmentInput = stringParamToInt(this.state.xpAdjustmentInput || undefined);
     return (
       this.props.gradeAdjustment !== gradeAdjustmentInput ||
-      this.props.xpAdjustment !== xpAdjustmentInput
+      this.props.xpAdjustment !== xpAdjustmentInput ||
+      this.props.comments !== this.state.editorValue
     );
   };
+
+  private generateMarkdownPreview = (markdown: string) =>
+    Promise.resolve(
+      <Markdown
+        content={markdown}
+        simplifiedAutoLink={true}
+        strikethrough={true}
+        tasklists={true}
+        openLinksInNewWindow={true}
+      />
+    );
 }
+
+/**
+ * Maps react-mde icon names to blueprintjs counterparts
+ * to reduce the number of dependencies on icons and
+ * keep a more consistent look
+ *
+ * Also, generate a HTML title for the icon to be shown on mouse hover
+ *
+ * By default, react-mde would use FontAwesome5 icons if this
+ * icon mapping is not provided
+ */
+const mdeToBlueprintIconMapping = (name: string): { iconName: IconName; title?: string } => {
+  switch (name) {
+    case 'header':
+      return {
+        iconName: IconNames.HEADER,
+        title: 'Header Styles'
+      };
+    case 'bold':
+      return {
+        iconName: IconNames.BOLD,
+        title: 'Bold'
+      };
+    case 'italic':
+      return {
+        iconName: IconNames.ITALIC,
+        title: 'Italic'
+      };
+    case 'strikethrough':
+      return {
+        iconName: IconNames.STRIKETHROUGH,
+        title: 'Strikethrough'
+      };
+    case 'link':
+      return {
+        iconName: IconNames.LINK,
+        title: 'Link'
+      };
+    case 'quote':
+      return {
+        iconName: IconNames.CITATION,
+        title: 'Quote'
+      };
+    case 'code':
+      return {
+        iconName: IconNames.CODE,
+        title: 'Monospaced'
+      };
+    case 'image':
+      return {
+        iconName: IconNames.MEDIA,
+        title: 'Image'
+      };
+    case 'unordered-list':
+      return {
+        iconName: IconNames.UNGROUP_OBJECTS,
+        title: 'Bullets'
+      };
+    case 'ordered-list':
+      return {
+        iconName: IconNames.NUMBERED_LIST,
+        title: 'Numbering'
+      };
+    case 'checked-list':
+      return {
+        iconName: IconNames.SQUARE,
+        title: 'Checkboxes'
+      };
+    default:
+      // For unknown icons, a question mark icon is returned
+      return {
+        iconName: IconNames.HELP
+      };
+  }
+};
 
 export default GradingEditor;

@@ -244,13 +244,21 @@ function* backendSaga(): SagaIterator {
       submissionId,
       questionId,
       gradeAdjustment,
-      xpAdjustment
+      xpAdjustment,
+      comments
     } = (action as actionTypes.IAction).payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield postGrading(submissionId, questionId, gradeAdjustment, xpAdjustment, tokens);
+    const resp = yield postGrading(
+      submissionId,
+      questionId,
+      gradeAdjustment,
+      xpAdjustment,
+      tokens,
+      comments
+    );
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Saved!', 1000);
       // Now, update the grade for the question in the Grading in the store
@@ -264,7 +272,8 @@ function* backendSaga(): SagaIterator {
             xpAdjustment,
             roomId: gradingQuestion.grade.roomId,
             grade: gradingQuestion.grade.grade,
-            xp: gradingQuestion.grade.xp
+            xp: gradingQuestion.grade.xp,
+            comments
           };
         }
         return gradingQuestion;
@@ -581,7 +590,8 @@ async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading
           xp: grade.xp,
           roomId: grade.roomId || '',
           gradeAdjustment: grade.adjustment,
-          xpAdjustment: grade.xpAdjustment
+          xpAdjustment: grade.xpAdjustment,
+          comments: grade.comments
         }
       } as GradingQuestion;
     });
@@ -599,14 +609,16 @@ const postGrading = async (
   questionId: number,
   gradeAdjustment: number,
   xpAdjustment: number,
-  tokens: Tokens
+  tokens: Tokens,
+  comments?: string
 ) => {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
     accessToken: tokens.accessToken,
     body: {
       grading: {
         adjustment: gradeAdjustment,
-        xpAdjustment
+        xpAdjustment,
+        comments
       }
     },
     noHeaderAccept: true,

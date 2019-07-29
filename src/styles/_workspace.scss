@@ -247,26 +247,63 @@ $code-color-error: #ff4444;
     }
   }
 
+  .grading-result-table {
+    // Hide grey line appearing in grading result tables
+    table.bp3-html-table tbody tr:first-child {
+      td,
+      th {
+        -webkit-box-shadow: inset 0 0 1px 0 $cadet-color-2;
+        box-shadow: inset 0 0 1px 0 $cadet-color-2;
+      }
+    }
+  }
+
   .react-mde {
-    /* Color the borders */
-    border-color: $cadet-color-5;
+    /* Colour the borders */
+    border-color: #1b2530;
     border-radius: 3px;
     /* Override side-content's default text justify*/
     text-align: initial;
 
     .mde-header {
-      /* Color the toolbar */
-      background-color: $cadet-color-5;
+      /* Colour the toolbar */
+      background-color: rgba(16, 22, 26, 0.3);
+
+      /* Colour the editor button text */
+      .mde-tabs button {
+        color: $cadet-color-5;
+      }
+
+      /* Colour the selected button */
+      .mde-tabs button.selected {
+        background: rgba(138, 155, 168, 0.3);
+      }
+
+      /* Colour the editor icons */
+      .#{$ns}-icon {
+        color: #a7b6c2;
+      }
     }
 
-    /**
-     * Color code blocks. style is forced due to deep nesting,
-     * and no access to the generated html to place classes.
-     */
-    .mde-preview .mde-preview-content pre {
-      background-color: $cadet-color-5 !important;
-      code {
-        color: black !important;
+    /* Add padding to editor preview */
+    .mde-preview {
+      padding: 11px;
+    }
+
+    /* Set colour of editor text box */
+    textarea.mde-text {
+      background-color: rgba(16, 22, 26, 0.3);
+      color: $cadet-color-5;
+    }
+
+    /* Set colour of editor resize drag bar */
+    .grip {
+      background: rgba(138, 155, 168, 0.3);
+      color: #a7b6c2;
+
+      /* Fix ellipsis icon not aligned with drag bar */
+      .icon {
+        vertical-align: top;
       }
     }
   }
