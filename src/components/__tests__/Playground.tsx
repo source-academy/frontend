@@ -25,7 +25,6 @@ const baseProps = {
   websocketStatus: 0,
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
-  handleChangeActiveTab: (n: number) => {},
   handleChapterSelect: (chapter: number) => {},
   handleEditorEval: () => {},
   handleEditorHeightChange: (height: number) => {},
