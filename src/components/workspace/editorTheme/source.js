@@ -1,3 +1,12 @@
+/**
+ * Source Theme for Ace Editor
+ * (Modified from cobalt theme in default brace package)
+ * 
+ * Changes includes:
+ * 1)
+ * Use background highlighting for bracket matching to make it more prominent.
+ * Reference: https://github.com/source-academy/cadet-frontend/pull/767
+ */
 ace.define("ace/theme/source",["require","exports","module","ace/lib/dom"], function(acequire, exports, module) {
 
 exports.isDark = true;

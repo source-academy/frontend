@@ -5,7 +5,7 @@ import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
-import './source';
+import './editorTheme/source';
 
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
