@@ -1020,3 +1020,13 @@ function stereogram(rune) {
   return new ShapeDrawn()
 }
 */
+
+function string_to_list(str) {
+  const arr = str.split("");
+  function array_to_list(count) {
+    return count === arr.length
+      ? null
+      : pair(arr[count], array_to_list(count + 1));
+  }
+  return array_to_list(0);
+}
