@@ -15,6 +15,7 @@ export interface IAssessmentOverview {
   id: number;
   maxGrade: number;
   maxXp: number;
+  number?: string; // For mission control
   openAt: string;
   title: string;
   reading?: string; // For mission control
@@ -132,7 +133,8 @@ export enum ExternalLibraryNames {
   CURVES = 'CURVES',
   SOUNDS = 'SOUNDS',
   BINARYTREES = 'BINARYTREES',
-  VIDEO = 'VIDEO'
+  VIDEO = 'VIDEO',
+  ALL = 'ALL'
 }
 
 export type ExternalLibraryName = keyof typeof ExternalLibraryNames;

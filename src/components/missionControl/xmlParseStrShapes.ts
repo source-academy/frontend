@@ -37,6 +37,7 @@ export interface IXmlParseStrOverview {
   coverimage: string;
   duedate: string;
   kind: string;
+  number: string;
   title: string;
   startdate: string;
   story: string | null;
