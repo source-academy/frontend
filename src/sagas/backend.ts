@@ -17,6 +17,10 @@ import {
   IAssessmentOverview,
   IQuestion
 } from '../components/assessment/assessmentShape';
+import {
+  Notification,
+  NotificationFilterFunction
+} from '../components/notification/notificationShape';
 import { IState, Role } from '../reducers/states';
 import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
@@ -217,7 +221,6 @@ function* backendSaga(): SagaIterator {
     const resp = yield request.postGrading(
       submissionId,
       questionId,
-      '',
       gradeAdjustment,
       xpAdjustment,
       tokens
@@ -233,7 +236,7 @@ function* backendSaga(): SagaIterator {
           gradingQuestion.grade = {
             gradeAdjustment,
             xpAdjustment,
-            comment: gradingQuestion.grade.comment,
+            roomId: gradingQuestion.grade.roomId,
             grade: gradingQuestion.grade.grade,
             xp: gradingQuestion.grade.xp
           };
@@ -243,6 +246,114 @@ function* backendSaga(): SagaIterator {
       yield put(actions.updateGrading(submissionId, newGrading));
     } else {
       request.handleResponseError(resp);
+    }
+  });
+
+  yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const notifications = yield call(request.getNotifications, tokens);
+
+    yield put(actions.updateNotifications(notifications));
+  });
+
+  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATIONS, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const notificationFilter:
+      | NotificationFilterFunction
+      | undefined = (action as actionTypes.IAction).payload.withFilter;
+
+    const notifications: Notification[] = yield select(
+      (state: IState) => state.session.notifications
+    );
+
+    let notificationsToAcknowledge = notifications;
+
+    if (notificationFilter) {
+      notificationsToAcknowledge = notificationFilter(notifications);
+    }
+
+    if (notificationsToAcknowledge.length === 0) {
+      return;
+    }
+
+    const ids = notificationsToAcknowledge.map(n => n.id);
+
+    const newNotifications: Notification[] = notifications.filter(
+      notification => !ids.includes(notification.id)
+    );
+
+    yield put(actions.updateNotifications(newNotifications));
+
+    const resp: Response | null = yield call(request.postAcknowledgeNotifications, tokens, ids);
+
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, "Something went wrong, couldn't acknowledge");
+      return;
+    }
+  });
+
+  yield takeEvery(actionTypes.NOTIFY_CHATKIT_USERS, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const assessmentId = (action as actionTypes.IAction).payload.assessmentId;
+    const submissionId = (action as actionTypes.IAction).payload.submissionId;
+    yield call(request.postNotify, tokens, assessmentId, submissionId);
+  });
+
+  yield takeEvery(actionTypes.FETCH_SOURCECAST_INDEX, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const sourcecastIndex = yield call(request.getSourcecastIndex, tokens);
+    if (sourcecastIndex) {
+      yield put(
+        actions.updateSourcecastIndex(
+          sourcecastIndex,
+          (action as actionTypes.IAction).payload.workspaceLocation
+        )
+      );
+    }
+  });
+
+  yield takeEvery(actionTypes.SAVE_SOURCECAST_DATA, function*(action) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can save sourcecast.');
+    }
+    const { title, description, audio, playbackData } = (action as actionTypes.IAction).payload;
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const resp = yield request.postSourcecast(title, description, audio, playbackData, tokens);
+    if (resp && resp.ok) {
+      yield call(showSuccessMessage, 'Saved!', 1000);
+      yield history.push('/sourcecast');
+    } else if (resp !== null) {
+      let errorMessage: string;
+      switch (resp.status) {
+        case 401:
+          errorMessage = 'Session expired. Please login again.';
+          break;
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`;
+          break;
+      }
+      yield call(showWarningMessage, errorMessage);
+    } else {
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
     }
   });
 }

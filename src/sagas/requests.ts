@@ -17,6 +17,8 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import { Notification } from '../components/notification/notificationShape';
+import { IPlaybackData } from '../components/sourcecast/sourcecastShape';
 import { store } from '../createStore';
 import { castLibrary } from '../utils/castBackend';
 import { BACKEND_URL } from '../utils/constants';
@@ -37,6 +39,7 @@ type RequestOptions = {
   errorMessage?: string;
   body?: object;
   noHeaderAccept?: boolean;
+  noContentType?: boolean;
   refreshToken?: string;
   shouldAutoLogout?: boolean;
   shouldRefresh?: boolean;
@@ -46,7 +49,6 @@ type Tokens = {
   accessToken: string;
   refreshToken: string;
 };
-
 /**
  * POST /auth
  */
@@ -268,7 +270,7 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
         autogradingResults: question.autogradingResults || [],
         choices: question.choices,
         content: question.content,
-        comment: null,
+        roomId: null,
         id: question.id,
         library: castLibrary(question.library),
         solution: gradingQuestion.solution || question.solution || null,
@@ -284,7 +286,7 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
       grade: {
         grade: grade.grade,
         xp: grade.xp,
-        comment: grade.comment || '',
+        roomId: grade.roomId || '',
         gradeAdjustment: grade.adjustment,
         xpAdjustment: grade.xpAdjustment
       }
@@ -299,7 +301,6 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
 export const postGrading = async (
   submissionId: number,
   questionId: number,
-  comment: string,
   gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens
@@ -308,7 +309,6 @@ export const postGrading = async (
     accessToken: tokens.accessToken,
     body: {
       grading: {
-        comment: `${comment}`,
         adjustment: gradeAdjustment,
         xpAdjustment
       }
@@ -334,6 +334,111 @@ export async function postUnsubmit(submissionId: number, tokens: Tokens) {
   });
   return resp;
 }
+
+/**
+ * GET /notification
+ */
+export async function getNotifications(tokens: Tokens) {
+  const resp: Response | null = await request('notification', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false
+  });
+  let notifications: Notification[] = [];
+
+  if (!resp || !resp.ok) {
+    return notifications;
+  }
+
+  const result = await resp.json();
+  notifications = result.map((notification: any) => {
+    return {
+      id: notification.id,
+      type: notification.type,
+      assessment_id: notification.assessment_id || undefined,
+      assessment_type: notification.assessment
+        ? capitalise(notification.assessment.type)
+        : undefined,
+      assessment_title: notification.assessment ? notification.assessment.title : undefined,
+      submission_id: notification.submission_id || undefined
+    } as Notification;
+  });
+
+  return notifications;
+}
+
+/**
+ * POST /notification/acknowledge
+ */
+export async function postAcknowledgeNotifications(tokens: Tokens, ids: number[]) {
+  const resp: Response | null = await request(`notification/acknowledge`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: { notificationIds: ids },
+    shouldAutoLogout: false
+  });
+
+  return resp;
+}
+
+/**
+ * POST /chat/notify
+ */
+export async function postNotify(tokens: Tokens, assessmentId?: number, submissionId?: number) {
+  await request(`chat/notify`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: {
+      assessmentId,
+      submissionId
+    },
+    shouldAutoLogout: false
+  });
+}
+
+/**
+ * GET /sourcecast
+ */
+export async function getSourcecastIndex(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+  const response = await request('sourcecast', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+  if (!response || !response.ok) {
+    return null;
+  }
+  const index = await response.json();
+  return index;
+}
+
+/**
+ * POST /sourcecast
+ */
+export const postSourcecast = async (
+  title: string,
+  description: string,
+  audio: Blob,
+  playbackData: IPlaybackData,
+  tokens: Tokens
+) => {
+  const formData = new FormData();
+  const filename = Date.now().toString() + '.wav';
+  formData.append('sourcecast[title]', title);
+  formData.append('sourcecast[description]', description);
+  formData.append('sourcecast[audio]', audio, filename);
+  formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
+  const resp = await request(`sourcecast`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: formData,
+    noContentType: true,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+};
 
 /**
  * @returns {(Response|null)} Response if successful, otherwise null.

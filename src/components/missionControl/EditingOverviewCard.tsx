@@ -220,6 +220,12 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
       <div className={Classes.DIALOG_BODY}>
         <H3>Category</H3>
         {categorySelect(this.props.overview.category, this.saveCategory)}
+        <H3>Number</H3>
+        <div onClick={this.toggleEditField('number')}>
+          {this.state.editingOverviewField === 'number'
+            ? this.makeEditingOverviewTextarea('number')
+            : createPlaceholder(this.props.overview.number || '')}
+        </div>
         <H3>Story</H3>
         <div onClick={this.toggleEditField('story')}>
           {this.state.editingOverviewField === 'story'

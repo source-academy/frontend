@@ -224,11 +224,6 @@ class AssessmentWorkspace extends React.Component<
         question.type === QuestionTypes.programming
           ? {
               editorSessionId: '',
-              editorPrepend: this.props.editorPrepend,
-              editorPrependLines:
-                this.props.editorPrepend.length === 0
-                  ? 0
-                  : this.props.editorPrepend.split('\n').length,
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
@@ -374,10 +369,13 @@ class AssessmentWorkspace extends React.Component<
           )
         },
         {
-          label: `Comments`,
+          label: `Chat`,
           icon: IconNames.CHAT,
           body: USE_CHATKIT ? (
-            <ChatApp roomId={props.assessment!.questions[questionId].comment} />
+            <ChatApp
+              assessmentId={this.props.assessment!.id}
+              roomId={props.assessment!.questions[questionId].roomId}
+            />
           ) : (
             <span>Chatkit disabled.</span>
           )

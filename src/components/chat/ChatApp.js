@@ -75,10 +75,16 @@ class ChatApp extends React.Component {
   }
 
   addMessage(text) {
+    if (text.length === 0) {
+      return;
+    }
+    
     this.state.currentUser.sendMessage({
       roomId: this.state.currentRoom.id,
       text
     });
+
+    this.props.handleNotifyUsers(this.props.assessmentId, this.props.submissionId);
   }
 
   render() {

@@ -50,6 +50,12 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p>
+              She Jiayu
+              <br />
+              <strong>(Tools)</strong>
+            </p>
+            {dot}
+            <p>
               Martin Henz
               <br />
               <strong>(Coordination)</strong>

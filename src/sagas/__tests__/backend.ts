@@ -9,21 +9,26 @@ import {
   IAssessment,
   IQuestion
 } from '../../components/assessment/assessmentShape';
+import { Notification } from '../../components/notification/notificationShape';
 import {
   mockAssessmentOverviews,
   mockAssessmentQuestions,
   mockAssessments
 } from '../../mocks/assessmentAPI';
+import { mockNotifications } from '../../mocks/userAPI';
 import { Role } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import backendSaga from '../backend';
 import {
   getAssessment,
   getAssessmentOverviews,
+  getNotifications,
   getUser,
+  postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAuth
+  postAuth,
+  postNotify
 } from '../requests';
 
 // ----------------------------------------
@@ -43,11 +48,12 @@ const mockStates = {
     accessToken: 'access',
     assessmentOverviews: mockAssessmentOverviews,
     assessments: mockMapAssessments,
+    notifications: mockNotifications,
     refreshToken: 'refresherOrb',
     role: Role.Student
   },
   workspaces: {
-    assessment: { currentAssessment: 0 }
+    assessment: { currentAssessment: mockAssessment.id }
   }
 };
 
@@ -120,7 +126,7 @@ describe('Test FETCH_ASSESSMENT_OVERVIEWS Action', () => {
 
 describe('Test FETCH_ASSESSMENT Action', () => {
   test('when assesment is obtained', () => {
-    const mockId = 0;
+    const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
       .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens), mockAssessment]])
@@ -131,7 +137,7 @@ describe('Test FETCH_ASSESSMENT Action', () => {
   });
 
   test('when assesment is null', () => {
-    const mockId = 0;
+    const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
       .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens), null]])
@@ -176,7 +182,9 @@ describe('Test SUBMIT_ANSWER Action', () => {
       .dispatch({ type: actionTypes.SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
-    return expect(mockStates.session.assessments.get(0)!.questions[0].answer).toEqual(null);
+    return expect(
+      mockStates.session.assessments.get(mockNewAssessment.id)!.questions[0].answer
+    ).toEqual(null);
   });
 
   test('when role is not student', () => {
@@ -249,7 +257,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
 
 describe('Test SUBMIT_ASSESSMENT Action', () => {
   test('when respond is ok', () => {
-    const mockAssessmentId = 0;
+    const mockAssessmentId = mockAssessment.id;
     const mockNewOverviews = mockAssessmentOverviews.map(overview => {
       if (overview.id === mockAssessmentId) {
         return { ...overview, status: AssessmentStatuses.submitted };
@@ -264,7 +272,7 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
       .put(actions.updateAssessmentOverviews(mockNewOverviews))
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: mockAssessmentId })
       .silentRun();
-    expect(mockStates.session.assessmentOverviews[0].id).toEqual(0);
+    expect(mockStates.session.assessmentOverviews[0].id).toEqual(mockAssessmentId);
     return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
       AssessmentStatuses.submitted
     );
@@ -302,6 +310,57 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT_OVERVIEWS)
       .hasFinalState({ session: { role: Role.Staff } })
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: 0 })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_NOTIFICATIONS Action', () => {
+  test('when notifications obtained', () => {
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .provide([[call(getNotifications, mockTokens), mockNotifications]])
+      .put(actions.updateNotifications(mockNotifications))
+      .dispatch({ type: actionTypes.FETCH_NOTIFICATIONS })
+      .silentRun();
+  });
+});
+
+describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
+  test('when respond is ok', () => {
+    const ids = [1, 2, 3];
+    const mockNewNotifications = mockNotifications.filter(n => !ids.includes(n.id));
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .provide([[call(postAcknowledgeNotifications, mockTokens, ids), okResp]])
+      .not.call(showWarningMessage)
+      .put(actions.updateNotifications(mockNewNotifications))
+      .dispatch({
+        type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
+        payload: {
+          withFilter: (notifications: Notification[]) =>
+            notifications.filter(notification => ids.includes(notification.id))
+        }
+      })
+      .silentRun();
+  });
+
+  test('when respond is error', () => {
+    const ids = mockNotifications.map(n => n.id);
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .provide([[call(postAcknowledgeNotifications, mockTokens, ids), errorResp]])
+      .call(showWarningMessage, "Something went wrong, couldn't acknowledge")
+      .dispatch({ type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS, payload: {} })
+      .silentRun();
+  });
+});
+
+describe('Test NOTIFY_CHATKIT_USERS Action', () => {
+  test('called', () => {
+    return expectSaga(backendSaga)
+      .withState(mockStates)
+      .call(postNotify, mockTokens, 1, undefined)
+      .dispatch({ type: actionTypes.NOTIFY_CHATKIT_USERS, payload: { assessmentId: 1 } })
       .silentRun();
   });
 });

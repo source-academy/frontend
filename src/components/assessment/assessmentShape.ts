@@ -15,6 +15,7 @@ export interface IAssessmentOverview {
   id: number;
   maxGrade: number;
   maxXp: number;
+  number?: string; // For mission control
   openAt: string;
   title: string;
   reading?: string; // For mission control
@@ -96,7 +97,7 @@ export interface IMCQQuestion extends IQuestion {
 export interface IQuestion {
   answer: string | number | null;
   editorValue?: string | null;
-  comment: string | null;
+  roomId: string | null;
   content: string;
   id: number;
   library: Library;
@@ -131,7 +132,8 @@ export enum ExternalLibraryNames {
   RUNES = 'RUNES',
   CURVES = 'CURVES',
   SOUNDS = 'SOUNDS',
-  BINARYTREES = 'BINARYTREES'
+  BINARYTREES = 'BINARYTREES',
+  ALL = 'ALL'
 }
 
 export type ExternalLibraryName = keyof typeof ExternalLibraryNames;
