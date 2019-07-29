@@ -26,6 +26,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../components/notification/notificationShape';
+import { IPlaybackData } from '../components/sourcecast/sourcecastShape';
 import { store } from '../createStore';
 import { IState, Role } from '../reducers/states';
 import { castLibrary } from '../utils/castBackend';
@@ -48,6 +49,7 @@ type RequestOptions = {
   errorMessage?: string;
   body?: object;
   noHeaderAccept?: boolean;
+  noContentType?: boolean;
   refreshToken?: string;
   shouldAutoLogout?: boolean;
   shouldRefresh?: boolean;
@@ -335,6 +337,52 @@ function* backendSaga(): SagaIterator {
     const assessmentId = (action as actionTypes.IAction).payload.assessmentId;
     const submissionId = (action as actionTypes.IAction).payload.submissionId;
     yield call(postNotify, tokens, assessmentId, submissionId);
+  });
+
+  yield takeEvery(actionTypes.FETCH_SOURCECAST_INDEX, function*(action) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const sourcecastIndex = yield call(getSourcecastIndex, tokens);
+    if (sourcecastIndex) {
+      yield put(
+        actions.updateSourcecastIndex(
+          sourcecastIndex,
+          (action as actionTypes.IAction).payload.workspaceLocation
+        )
+      );
+    }
+  });
+
+  yield takeEvery(actionTypes.SAVE_SOURCECAST_DATA, function*(action) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can save sourcecast.');
+    }
+    const { title, description, audio, playbackData } = (action as actionTypes.IAction).payload;
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const resp = yield postSourcecast(title, description, audio, playbackData, tokens);
+    if (resp && resp.ok) {
+      yield call(showSuccessMessage, 'Saved!', 1000);
+      yield history.push('/sourcecast');
+    } else if (resp !== null) {
+      let errorMessage: string;
+      switch (resp.status) {
+        case 401:
+          errorMessage = 'Session expired. Please login again.';
+          break;
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`;
+          break;
+      }
+      yield call(showWarningMessage, errorMessage);
+    } else {
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    }
   });
 }
 
@@ -693,6 +741,51 @@ export async function postNotify(tokens: Tokens, assessmentId?: number, submissi
 }
 
 /**
+ * GET /sourcecast
+ */
+async function getSourcecastIndex(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+  const response = await request('sourcecast', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+  if (response && response.ok) {
+    const index = await response.json();
+    return index;
+  } else {
+    return null;
+  }
+}
+
+/**
+ * POST /sourcecast
+ */
+const postSourcecast = async (
+  title: string,
+  description: string,
+  audio: Blob,
+  playbackData: IPlaybackData,
+  tokens: Tokens
+) => {
+  const formData = new FormData();
+  const filename = Date.now().toString() + '.wav';
+  formData.append('sourcecast[title]', title);
+  formData.append('sourcecast[description]', description);
+  formData.append('sourcecast[audio]', audio, filename);
+  formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
+  const resp = await request(`sourcecast`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: formData,
+    noContentType: true,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+};
+
+/**
  * @returns {(Response|null)} Response if successful, otherwise null.
  *
  * @see @type{RequestOptions} for options to this function.
@@ -718,8 +811,12 @@ async function request(
   }
   const fetchOpts: any = { method, headers };
   if (opts.body) {
-    headers.append('Content-Type', 'application/json');
-    fetchOpts.body = JSON.stringify(opts.body);
+    if (opts.noContentType) {
+      fetchOpts.body = opts.body;
+    } else {
+      headers.append('Content-Type', 'application/json');
+      fetchOpts.body = JSON.stringify(opts.body);
+    }
   }
   try {
     const response = await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts);

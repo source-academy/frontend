@@ -1,58 +1,139 @@
+import { isEqual } from 'lodash';
 import * as React from 'react';
 import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
-import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
 import 'brace/theme/cobalt';
 
-import { LINKS } from '../../utils/constants';
-import { checkSessionIdExists } from './collabEditing/helper';
+import { ICodeDelta, Input, IPosition, ISelectionRange, KeyboardCommand } from './sourcecastShape';
 /**
  * @property editorValue - The string content of the react-ace editor
  * @property handleEditorChange  - A callback function
  *           for the react-ace editor's `onChange`
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
+ * @property editorReadonly - Used for sourcecast only
  */
-export interface IEditorProps {
+export interface ISourcecastEditorProps {
   breakpoints: string[];
+  codeDeltasToApply?: ICodeDelta[] | null;
+  editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
   highlightedLines: number[][];
   isEditorAutorun: boolean;
+  inputToApply?: Input | null;
+  isPlaying?: boolean;
+  isRecording?: boolean;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
+  getTimerDuration?: () => number;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
+  handleRecordInput?: (input: Input) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
 
-class Editor extends React.PureComponent<IEditorProps, {}> {
+class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
-  private onChangeMethod: (newCode: string) => void;
+  private onChangeMethod: (newCode: string, delta: ICodeDelta) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
+  private onCursorChange: (selecction: any) => void;
+  private onSelectionChange: (selection: any) => void;
 
-  constructor(props: IEditorProps) {
+  constructor(props: ISourcecastEditorProps) {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
-    this.onChangeMethod = (newCode: string) => {
+    this.onChangeMethod = (newCode: string, delta: ICodeDelta) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
         this.props.handleUpdateHasUnsavedChanges(true);
       }
       this.props.handleEditorValueChange(newCode);
+      if (this.props.isRecording) {
+        this.props.handleRecordInput!({
+          type: 'codeDelta',
+          time: this.props.getTimerDuration!(),
+          data: delta
+        });
+      }
     };
     this.onValidateMethod = (annotations: Annotation[]) => {
       if (this.props.isEditorAutorun && annotations.length === 0) {
         this.props.handleEditorEval();
       }
     };
+    this.onCursorChange = (selection: any) => {
+      if (!this.props.isRecording) {
+        return;
+      }
+      const editorCursorPositionToBeApplied: IPosition = selection.getCursor();
+      this.props.handleRecordInput!({
+        type: 'cursorPositionChange',
+        time: this.props.getTimerDuration!(),
+        data: editorCursorPositionToBeApplied
+      });
+    };
+    this.onSelectionChange = (selection: any) => {
+      if (!this.props.isRecording) {
+        return;
+      }
+      const range: ISelectionRange = selection.getRange();
+      const isBackwards: boolean = selection.isBackwards();
+      if (!isEqual(range.start, range.end)) {
+        this.props.handleRecordInput!({
+          type: 'selectionRangeData',
+          time: this.props.getTimerDuration!(),
+          data: { range, isBackwards }
+        });
+      }
+    };
+  }
+
+  public componentDidUpdate(prevProps: ISourcecastEditorProps) {
+    const { codeDeltasToApply, inputToApply } = this.props;
+
+    if (codeDeltasToApply && codeDeltasToApply !== prevProps.codeDeltasToApply) {
+      (this.AceEditor.current as any).editor.session.getDocument().applyDeltas(codeDeltasToApply);
+      (this.AceEditor.current as any).editor.selection.clearSelection();
+    }
+
+    if (!inputToApply || inputToApply === prevProps.inputToApply) {
+      return;
+    }
+
+    switch (inputToApply.type) {
+      case 'codeDelta':
+        (this.AceEditor.current as any).editor.session.getDocument().applyDelta(inputToApply.data);
+        (this.AceEditor.current as any).editor.selection.clearSelection();
+        break;
+      case 'cursorPositionChange':
+        (this.AceEditor.current as any).editor.moveCursorToPosition(inputToApply.data);
+        (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();
+        (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(
+          inputToApply.data,
+          0.5
+        );
+        break;
+      case 'selectionRangeData':
+        const { range, isBackwards } = inputToApply.data;
+        (this.AceEditor.current as any).editor.selection.setSelectionRange(range, isBackwards);
+        break;
+      case 'keyboardCommand':
+        const keyboardCommand = inputToApply.data;
+        switch (keyboardCommand) {
+          case 'run':
+            this.props.handleEditorEval();
+            break;
+        }
+        break;
+    }
   }
 
   public getBreakpoints() {
@@ -77,11 +158,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     // Change all info annotations to error annotations
     session.on('changeAnnotation', this.handleAnnotationChange(session));
-
-    // Has session ID
-    if (this.props.editorSessionId !== '') {
-      this.handleStartCollabEditing(editor);
-    }
   }
 
   public componentWillUnmount() {
@@ -120,7 +196,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   win: 'Shift-Enter',
                   mac: 'Shift-Enter'
                 },
-                exec: this.props.handleEditorEval
+                exec: this.handleEvaluate
               }
             ]}
             editorProps={{
@@ -133,7 +209,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             highlightActiveLine={false}
             mode="javascript"
             onChange={this.onChangeMethod}
+            onCursorChange={this.onCursorChange}
+            onSelectionChange={this.onSelectionChange}
             onValidate={this.onValidateMethod}
+            readOnly={this.props.editorReadonly ? this.props.editorReadonly : false}
             theme="cobalt"
             value={this.props.editorValue}
             width="100%"
@@ -185,57 +264,15 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     }
   };
 
-  private handleStartCollabEditing = (editor: any) => {
-    const ShareAce = new sharedbAce(this.props.editorSessionId!, {
-      WsUrl: 'wss://' + LINKS.SHAREDB_SERVER + 'ws/',
-      pluginWsUrl: null,
-      namespace: 'codepad'
-    });
-    this.ShareAce = ShareAce;
-    ShareAce.on('ready', () => {
-      ShareAce.add(
-        editor,
-        ['code'],
-        [
-          // SharedbAceRWControl,
-          // SharedbAceMultipleCursors
-        ]
-      );
-      if (this.props.sharedbAceIsInviting) {
-        this.props.handleEditorValueChange(this.props.sharedbAceInitValue!);
-        this.props.handleFinishInvite!();
-      }
-    });
-
-    // WebSocket connection status detection logic
-    const WS = ShareAce.WS;
-    let interval: any;
-    const sessionIdNotFound = () => {
-      clearInterval(interval);
-      WS.close();
-    };
-    const cannotReachServer = () => {
-      WS.reconnect();
-    };
-    const checkStatus = () => {
-      if (this.ShareAce === null) {
-        return;
-      }
-      checkSessionIdExists(
-        this.props.editorSessionId,
-        () => {},
-        sessionIdNotFound,
-        cannotReachServer
-      );
-    };
-    // Checks connection status every 5sec
-    interval = setInterval(checkStatus, 5000);
-
-    WS.addEventListener('open', (event: Event) => {
-      this.props.handleSetWebsocketStatus!(1);
-    });
-    WS.addEventListener('close', (event: Event) => {
-      this.props.handleSetWebsocketStatus!(0);
+  private handleEvaluate = () => {
+    this.props.handleEditorEval();
+    if (!this.props.isRecording) {
+      return;
+    }
+    this.props.handleRecordInput!({
+      type: 'keyboardCommand',
+      time: this.props.getTimerDuration!(),
+      data: KeyboardCommand.run
     });
   };
 }
@@ -245,4 +282,4 @@ const handlers = {
   goGreen: () => {}
 };
 
-export default Editor;
+export default SourcecastEditor;
