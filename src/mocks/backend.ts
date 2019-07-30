@@ -146,23 +146,26 @@ export function* mockBackendSaga(): SagaIterator {
       | NotificationFilterFunction
       | undefined = (action as actionTypes.IAction).payload.withFilter;
 
-    let notifications: Notification[] = yield select(
+    const notifications: Notification[] = yield select(
       (state: IState) => state.session.notifications
     );
 
+    let notificationsToAcknowledge = notifications;
+
     if (notificationFilter) {
-      notifications = notificationFilter(notifications);
+      notificationsToAcknowledge = notificationFilter(notifications);
     }
 
-    const ids = notifications.map(n => n.id);
-
-    if (ids.length === 0) {
+    if (notificationsToAcknowledge.length === 0) {
       return;
     }
+
+    const ids = notificationsToAcknowledge.map(n => n.id);
 
     const newNotifications: Notification[] = notifications.filter(
       notification => !ids.includes(notification.id)
     );
+
     yield put(actions.updateNotifications(newNotifications));
   });
 
