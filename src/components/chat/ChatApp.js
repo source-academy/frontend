@@ -7,44 +7,43 @@ import MessageList from './MessageList.tsx';
 import { BACKEND_URL, INSTANCE_LOCATOR } from '../../utils/constants';
 import { IState } from '../../reducers/states';
 
+const ConnectionStatus = {
+  CONNECTED: 'connected',
+  CONNECTING: 'connecting',
+  FAILED_TO_CONNECT: 'failed_to_connect'
+};
+
 class ChatApp extends React.Component {
+  messagesEndRef = React.createRef(); // for scrolling
+
   constructor(props) {
     super(props);
     this.state = {
-      connected: false,
+      connectionStatus: ConnectionStatus.CONNECTING,
       currentRoom: {},
       currentUser: {},
       messages: []
     };
     this.addMessage = this.addMessage.bind(this);
   }
-  /*
-  To keep the chat view at its bottom (and also where the input field is) we create a dummy div at the bottom.
-  It will be automatically rendered and scrolled to everytime the chat is updated.
-  */
-  messagesEndRef = React.createRef(); // for scrolling
-
-  componentDidUpdate() {
-    if (this.state.connected) {
-      this.scrollToBottom();
-    }
-  } // for scrolling
-
-  scrollToBottom = () => {
-    this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
 
   componentDidMount() {
-    const chatManager = new ChatManager({
-      instanceLocator: INSTANCE_LOCATOR,
-      tokenProvider: new TokenProvider({
-        headers: {
-          Authorization: `Bearer ${this.props.accessToken}`
-        },
-        url: `${BACKEND_URL}/v1/chat/token`
-      }),
-      userId: jwt_decode(this.props.accessToken).sub
-    });
+    let chatManager;
+    try {
+      chatManager = new ChatManager({
+        instanceLocator: INSTANCE_LOCATOR,
+        tokenProvider: new TokenProvider({
+          headers: {
+            Authorization: `Bearer ${this.props.accessToken}`
+          },
+          url: `${BACKEND_URL}/v1/chat/token`
+        }),
+        userId: jwt_decode(this.props.accessToken).sub
+      });
+    } catch (error) {
+      this.setState({ connectionStatus: ConnectionStatus.FAILED_TO_CONNECT });
+      return;
+    }
 
     chatManager
       .connect()
@@ -64,14 +63,18 @@ class ChatApp extends React.Component {
       })
       .then(currentRoom => {
         this.setState({
-          connected: true,
+          connectionStatus: ConnectionStatus.CONNECTED,
           currentRoom
         });
-      });
+      })
+      .catch(() => this.setState({ connectionStatus: ConnectionStatus.FAILED_TO_CONNECT }));
+  }
 
-    if (this.state.connected) {
-      this.scrollToBottom();
-    } //for scrolling
+  componentDidUpdate() {
+    if (this.state.connectionStatus === ConnectionStatus.CONNECTED) {
+      // ensure that most recent message is in view
+      this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   addMessage(text) {
@@ -88,24 +91,31 @@ class ChatApp extends React.Component {
   }
 
   render() {
-    return this.state.connected ? (
-      <div className="chat">
-        <MessageList
-          className="message-list"
-          viewingUserId={this.state.currentUser.id}
-          messages={this.state.messages}
-        />
-        <hr />
-        <Input className="input-field" onSubmit={this.addMessage} />
-        <div ref={this.messagesEndRef} />
-      </div>
-    ) : (
-      <span>
-        Connecting to ChatKit...
-        <br />
-        If this is taking too long, refresh the page.
-      </span>
-    );
+    switch (this.state.connectionStatus) {
+      case ConnectionStatus.CONNECTED:
+        return (
+          <div className="Chat">
+            <MessageList
+              className="message-list"
+              viewingUserId={this.state.currentUser.id}
+              messages={this.state.messages}
+            />
+            <hr />
+            <Input className="input-field" onSubmit={this.addMessage} />
+            <div ref={this.messagesEndRef} />
+          </div>
+        );
+      case ConnectionStatus.CONNECTING:
+        return (
+          <span>
+            Connecting to ChatKit...
+            <br />
+            If this is taking too long, refresh the page.
+          </span>
+        );
+      case ConnectionStatus.FAILED_TO_CONNECT:
+        return <span>Failed to connect. Try again later!</span>;
+    }
   }
 }
 
