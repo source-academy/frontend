@@ -71,7 +71,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
   function initialize(div, canvas) {
     startGame(div, canvas);
-    StoryXMLPlayer.loadStory('default', function () { });
+    StoryXMLPlayer.loadStory('spaceship', function () { });
   }
 
   return initialize;
