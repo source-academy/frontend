@@ -129,7 +129,7 @@
     // icon to blink
     const icon = document.getElementById("Inspector-icon");
 
-    if (!context) {
+    if (!context && icon) {
       icon.classList.remove("side-content-header-button-alert");
       container.innerHTML = "";
       return
@@ -150,7 +150,9 @@
         tbody.innerHTML = "</br><caption><strong> " + frames[i].name + "</strong></caption>" + envtoString;
         newtable.appendChild(tbody);
         container.appendChild(newtable);
-        icon.classList.add("side-content-header-button-alert");
+        if (icon) {
+          icon.classList.add("side-content-header-button-alert");
+        }
       }
     } catch (e) {
         container.innerHTML = e;
