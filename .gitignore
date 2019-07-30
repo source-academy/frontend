@@ -20,6 +20,8 @@ terraform*
 .env.development.local
 .env.test.local
 .env.production.local
+/.idea
+cadet-frontend.iml
 
 npm-debug.log*
 
