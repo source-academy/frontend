@@ -354,20 +354,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
     case EVAL_TESTCASE_SUCCESS:
-      lastOutput = state[workspaceLocation].output.slice(-1)[0];
-      if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state[workspaceLocation].output.slice(0, -1).concat({
-          ...action.payload,
-          workspaceLocation: undefined,
-          consoleLogs: lastOutput.consoleLogs
-        });
-      } else {
-        newOutput = state[workspaceLocation].output.concat({
-          ...action.payload,
-          workspaceLocation: undefined,
-          consoleLogs: []
-        });
-      }
       return {
         ...state,
         [workspaceLocation]: {
@@ -377,7 +363,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
               if (i === action.payload.index) {
                 return {
                   ...testcase,
-                  result: (newOutput[0] as CodeOutput).value,
+                  result: action.payload.value,
                   errors: undefined
                 };
               } else {
