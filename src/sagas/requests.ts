@@ -28,6 +28,7 @@ import { showWarningMessage } from '../utils/notification';
  * @property accessToken - backend access token
  * @property errorMessage - message to showWarningMessage on failure
  * @property body - request body, for HTTP POST
+ * @property noContentType - set to true when sending multipart data
  * @property noHeaderAccept - if Accept: application/json should be omitted
  * @property refreshToken - backend refresh token
  * @property shouldRefresh - if should attempt to refresh access token
@@ -38,8 +39,8 @@ type RequestOptions = {
   accessToken?: string;
   errorMessage?: string;
   body?: object;
-  noHeaderAccept?: boolean;
   noContentType?: boolean;
+  noHeaderAccept?: boolean;
   refreshToken?: string;
   shouldAutoLogout?: boolean;
   shouldRefresh?: boolean;
@@ -466,8 +467,13 @@ async function request(
   }
   const fetchOpts: any = { method, headers };
   if (opts.body) {
-    headers.append('Content-Type', 'application/json');
-    fetchOpts.body = JSON.stringify(opts.body);
+    if (opts.noContentType) {
+      // Content Type is not needed for sending multipart data
+      fetchOpts.body = opts.body;
+    } else {
+      headers.append('Content-Type', 'application/json');
+      fetchOpts.body = JSON.stringify(opts.body);
+    }
   }
   try {
     const response = await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts);
