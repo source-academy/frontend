@@ -123,8 +123,8 @@
     // icon to blink
     const icon = document.getElementById("inspector-icon");
 
-    if (!context) {
-      icon.classList.remove("side-content-tab-alert");
+    if (!context && icon) {
+      icon.classList.remove("side-content-tab-alert");\
       container.innerHTML = "";
       return
     }
@@ -144,7 +144,9 @@
         tbody.innerHTML = "</br><caption><strong> " + frames[i].name + "</strong></caption>" + envtoString;
         newtable.appendChild(tbody);
         container.appendChild(newtable);
-        icon.classList.add("side-content-tab-alert");
+        if (icon) {
+          icon.classList.add("side-content-tab-alert");
+        }
       }
     } catch (e) {
         container.innerHTML = e;
