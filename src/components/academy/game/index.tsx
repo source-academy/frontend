@@ -1,9 +1,7 @@
 import * as React from 'react';
 
-import { setUser } from '../../../actions';
 import { store } from '../../../createStore';
 import { Story } from '../../../reducers/states';
-import { getUser } from '../../../sagas/requests';
 
 type GameProps = DispatchProps & StateProps;
 
@@ -67,15 +65,11 @@ export class Game extends React.Component<GameProps, {}> {
     } else {
       // this.props.story is null if creating 'fresh' store from localStorage
       const state = store.getState();
-      const tokens = {
-        accessToken: state.session.accessToken!,
-        refreshToken: state.session.refreshToken!
-      };
-      const user: any = await getUser(tokens);
-      if (user) {
-        store.dispatch(setUser(user));
+      if (state.session.story) {
         // no missions, no story from backend, just play intro
-        return user.story.story ? [user.story.story, !user.story.playStory] : ['mission-1', true];
+        return state.session.story.story
+          ? [state.session.story.story, !state.session.story.playStory]
+          : ['mission-1', true];
       } else {
         // if user is null, actions.logOut is called anyways; nonetheless we
         // return a storyOpts, otherwise typescript complains about using storyOpts
