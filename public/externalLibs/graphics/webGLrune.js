@@ -1023,10 +1023,9 @@ function stereogram(rune) {
 
 function string_to_list(str) {
   const arr = str.split("");
-  function array_to_list(count) {
-    return count === arr.length
-      ? null
-      : pair(arr[count], array_to_list(count + 1));
+  let result = null;
+  for(i = 0; i < arr.length; i++) {
+    result = pair(arr[i], result);
   }
-  return array_to_list(0);
+  return result;
 }
