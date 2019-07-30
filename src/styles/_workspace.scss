@@ -394,6 +394,42 @@ $code-color-error: #ff4444;
       }
     }
 
+    .testcases-header {
+      .header-fn, .header-actual {
+        width: 37.5%;
+      }
+
+      .header-expected {
+        width: 24%;
+      }
+    }
+
+    .results-header {
+      .header-data {
+        width: 37.5%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
+
+        .header-sn {
+          width: 20%;
+        }
+
+        .header-status {
+          width: 78.5%;
+        }
+      }
+
+      .header-expected {
+        width: 24%;
+      }
+      
+      .header-actual {
+        width: 37.5%;
+      }
+    }
+
     pre {
       color: $code-color-code;
     }
