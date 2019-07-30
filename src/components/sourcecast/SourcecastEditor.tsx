@@ -5,7 +5,7 @@ import { HotKeys } from 'react-hotkeys';
 
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
-import 'brace/theme/cobalt';
+import '../workspace/editorTheme/source';
 
 import { ICodeDelta, Input, IPosition, ISelectionRange, KeyboardCommand } from './sourcecastShape';
 /**
@@ -213,9 +213,10 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
             onSelectionChange={this.onSelectionChange}
             onValidate={this.onValidateMethod}
             readOnly={this.props.editorReadonly ? this.props.editorReadonly : false}
-            theme="cobalt"
+            theme="source"
             value={this.props.editorValue}
             width="100%"
+            setOptions={{ fontFamily: "'Droid Sans Mono','CPMono_v07 Bold','Droid Sans'" }}
           />
         </div>
       </HotKeys>

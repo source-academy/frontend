@@ -20,20 +20,28 @@ class MessageList extends React.Component<StateProps> {
     return (
       <div className="MessageList">
         <ul className="msg-list">
-          {this.props.messages.map((message: Message, index: number) => (
-            <li className="msg-item" key={index}>
+          {this.props.messages.length > 0 ? (
+            this.props.messages.map((message: Message, index: number) => (
+              <li className="msg-item" key={index}>
+                <Pre className="dialogue-box">
+                  <span>
+                    <strong className="msg-sender">
+                      {message.userStore.users[message.senderId].name}
+                    </strong>
+                    &emsp;
+                    <i className="msg-date">{getPrettyDate(message.createdAt)}</i>
+                  </span>
+                  <Markdown className={Classes.RUNNING_TEXT} content={message.text} />
+                </Pre>
+              </li>
+            ))
+          ) : (
+            <li className="msg-item" key="no-message">
               <Pre className="dialogue-box">
-                <span>
-                  <strong className="msg-sender">
-                    {message.userStore.users[message.senderId].name}
-                  </strong>
-                  &emsp;
-                  <i className="msg-date">{getPrettyDate(message.createdAt)}</i>
-                </span>
-                <Markdown className={Classes.RUNNING_TEXT} content={message.text} />
+                <span>There are no messages.</span>
               </Pre>
             </li>
-          ))}
+          )}
         </ul>
       </div>
     );
