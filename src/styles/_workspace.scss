@@ -525,6 +525,18 @@ $code-color-error: #ff4444;
       .testcase-expected {
         width: 24%;
       }
+      
+      /* Following two are styles for rendered WebGL elements (runes, curves) */
+      .canvas-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      canvas {
+        height: 10rem;
+        width: 10rem;
+      }
     }
   }
 

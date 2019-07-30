@@ -2,6 +2,7 @@ import { Card, Elevation, Pre } from '@blueprintjs/core';
 import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
 import { ITestcase } from '../../assessment/assessmentShape';
+import CanvasOutput from '../CanvasOutput';
 
 type AutograderCardProps = {
   testcase: ITestcase;
@@ -12,6 +13,16 @@ type AutograderCardProps = {
 class AutograderCard extends React.Component<AutograderCardProps, {}> {
   public render() {
     let gradingStatus: string = '';
+
+    const renderResult = (value: any) => {
+      /** A class which is the output of the show() function */
+      const ShapeDrawn = (window as any).ShapeDrawn;
+      if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
+        return <CanvasOutput />;
+      } else {
+        return stringify(value);
+      }
+    };
 
     if (this.props.testcase.result) {
       gradingStatus = ' wrong';
@@ -27,7 +38,9 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
           <Pre className="testcase-program">{this.props.testcase.program}</Pre>
           <Pre className="testcase-expected">{this.props.testcase.answer}</Pre>
           <Pre className="testcase-actual">
-            {this.props.testcase.result ? stringify(this.props.testcase.result) : 'No Answer'}
+            {this.props.testcase.result
+              ? renderResult(this.props.testcase.result)
+              : 'No Answer'}
           </Pre>
         </Card>
       </div>
