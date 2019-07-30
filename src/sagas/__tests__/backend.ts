@@ -18,7 +18,8 @@ import {
 import { mockNotifications } from '../../mocks/userAPI';
 import { Role } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
-import backendSaga, {
+import backendSaga from '../backend';
+import {
   getAssessment,
   getAssessmentOverviews,
   getNotifications,
@@ -28,7 +29,7 @@ import backendSaga, {
   postAssessment,
   postAuth,
   postNotify
-} from '../backend';
+} from '../requests';
 
 // ----------------------------------------
 // Constants to use for testing
