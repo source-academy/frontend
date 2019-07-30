@@ -1024,7 +1024,7 @@ function stereogram(rune) {
 function string_to_list(str) {
   const arr = str.split("");
   let result = null;
-  for(i = 0; i < arr.length; i++) {
+  for(i = arr.length - 1; i >= 0; i--) {
     result = pair(arr[i], result);
   }
   return result;
