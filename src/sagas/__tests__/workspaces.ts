@@ -739,7 +739,7 @@ describe('evalTestCode', () => {
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'error' }]])
         .put(actions.evalInterpreterError(context.errors, workspaceLocation))
-        .put(actions.evalTestcaseFailure('An error occured', workspaceLocation, index))
+        .put(actions.evalTestcaseFailure(context.errors, workspaceLocation, index))
         .silentRun();
     });
   });

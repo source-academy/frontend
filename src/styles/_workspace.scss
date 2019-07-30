@@ -382,20 +382,22 @@ $code-color-error: #ff4444;
       background: rgba(0, 0, 0, 0.2);
     }
 
-    .testcases-header, .results-header {
+    .testcases-header,
+    .results-header {
       width: 100%;
       display: flex;
       justify-content: space-between;
       text-align: center;
       padding: 0.4rem 0.6rem;
-      
+
       .#{$ns}-icon {
         margin-right: 4px;
       }
     }
 
     .testcases-header {
-      .header-fn, .header-actual {
+      .header-fn,
+      .header-actual {
         width: 37.5%;
       }
 
@@ -424,7 +426,7 @@ $code-color-error: #ff4444;
       .header-expected {
         width: 24%;
       }
-      
+
       .header-actual {
         width: 37.5%;
       }
@@ -439,7 +441,7 @@ $code-color-error: #ff4444;
       padding-bottom: 0.4rem;
     }
   }
-  
+
   .AutograderCard,
   .ResultCard {
     /* Wrapper container (bp3's Card) for each testcase and autograder result */
@@ -518,14 +520,15 @@ $code-color-error: #ff4444;
   .AutograderCard {
     /* Nested bp3 Card component (with onClick attached) */
     .#{$ns}-card {
-      .testcase-program, .testcase-actual {
+      .testcase-program,
+      .testcase-actual {
         width: 37.5%;
       }
 
       .testcase-expected {
         width: 24%;
       }
-      
+
       /* Following two are styles for rendered WebGL elements (runes, curves) */
       .canvas-container {
         display: flex;
@@ -560,7 +563,7 @@ $code-color-error: #ff4444;
           text-align: center;
           vertical-align: baseline;
         }
-        
+
         .result-idx {
           width: 20%;
         }

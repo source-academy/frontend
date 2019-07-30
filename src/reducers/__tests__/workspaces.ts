@@ -815,7 +815,8 @@ describe('EVAL_TESTCASE_FAILURE', () => {
             },
             {
               ...editorTestcases[1],
-              result: value
+              result: undefined,
+              errors: value
             }
           ]
         }
@@ -827,6 +828,7 @@ describe('EVAL_TESTCASE_FAILURE', () => {
 describe('EVAL_TESTCASE_SUCCESS', () => {
   test('works correctly on RunningOutput and CodeOutput', () => {
     const isRunning = true;
+    const value = (outputWithCodeAndRunningOutput[0] as CodeOutput).value;
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeAndRunningOutput,
       isRunning,
@@ -834,6 +836,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
     });
 
     const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
+      value,
       index: 1
     });
 
@@ -852,7 +855,8 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
             },
             {
               ...editorTestcases[1],
-              result: (outputWithCodeAndRunningOutput[0] as CodeOutput).value
+              result: value,
+              errors: undefined
             }
           ]
         }
@@ -862,6 +866,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
 
   test('works correctly on other output', () => {
     const isRunning = true;
+    const value = (outputWithCodeAndRunningOutput[0] as CodeOutput).value;
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeOutput,
       isRunning,
@@ -869,6 +874,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
     });
 
     const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
+      value,
       index: 0
     });
 
@@ -884,7 +890,8 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
           editorTestcases: [
             {
               ...editorTestcases[0],
-              result: outputWithCodeOutput[0].value
+              result: value,
+              errors: undefined
             },
             {
               ...editorTestcases[1]
