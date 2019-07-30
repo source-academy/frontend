@@ -1,5 +1,7 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
+import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/interop';
+import { SourceError } from 'js-slang/dist/types';
 import * as React from 'react';
 import { ITestcase } from '../../assessment/assessmentShape';
 import CanvasOutput from '../CanvasOutput';
@@ -14,6 +16,10 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
   public render() {
     let gradingStatus: string = '';
 
+    const buildErrorString = (errors: SourceError[]) => {
+      return parseError(errors);
+    };
+
     const renderResult = (value: any) => {
       /** A class which is the output of the show() function */
       const ShapeDrawn = (window as any).ShapeDrawn;
@@ -24,7 +30,7 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
       }
     };
 
-    if (this.props.testcase.result) {
+    if (this.props.testcase.result || this.props.testcase.errors) {
       gradingStatus = ' wrong';
 
       if (stringify(this.props.testcase.result) === this.props.testcase.answer) {
@@ -38,7 +44,9 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
           <Pre className="testcase-program">{this.props.testcase.program}</Pre>
           <Pre className="testcase-expected">{this.props.testcase.answer}</Pre>
           <Pre className="testcase-actual">
-            {this.props.testcase.result
+            {this.props.testcase.errors
+              ? buildErrorString(this.props.testcase.errors)
+              : this.props.testcase.result
               ? renderResult(this.props.testcase.result)
               : 'No Answer'}
           </Pre>

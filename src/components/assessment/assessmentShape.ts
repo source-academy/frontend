@@ -1,3 +1,5 @@
+import { SourceError } from 'js-slang/dist/types';
+
 /*
  * Used to display information regarding an assessment in the UI.
  *
@@ -85,6 +87,7 @@ export interface ITestcase {
   score: number;
   program: string; // the program to be appended to the student's code
   result?: string; // the result from the execution of the testcase
+  errors?: SourceError[]; // errors raised by interpreter during execution
 }
 
 export interface IMCQQuestion extends IQuestion {

@@ -377,7 +377,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
               if (i === action.payload.index) {
                 return {
                   ...testcase,
-                  result: (newOutput[0] as CodeOutput).value
+                  result: (newOutput[0] as CodeOutput).value,
+                  errors: undefined
                 };
               } else {
                 return testcase;
@@ -397,7 +398,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
               if (i === action.payload.index) {
                 return {
                   ...testcase,
-                  result: action.payload.value
+                  result: undefined,
+                  errors: action.payload.value
                 };
               }
               return testcase;

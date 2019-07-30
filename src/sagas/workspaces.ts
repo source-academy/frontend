@@ -422,7 +422,7 @@ export function* evalTestCode(
      */
     interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION)
   });
-
+  
   if (interrupted) {
     interrupt(context);
     /* Redundancy, added ensure that interruption results in an error. */
@@ -446,7 +446,7 @@ export function* evalTestCode(
     });
 
     yield put(actions.evalInterpreterError(errors, workspaceLocation));
-    yield put(actions.evalTestcaseFailure('An error occured', workspaceLocation, index));
+    yield put(actions.evalTestcaseFailure(errors, workspaceLocation, index));
     return;
   }
 
