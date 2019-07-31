@@ -11,6 +11,7 @@ import SideContent, { SideContentProps } from './side-content';
 export type WorkspaceProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
+  customEditor?: JSX.Element;
   editorProps?: IEditorProps;
   editorHeight?: string | number;
   editorWidth: string;
@@ -163,7 +164,9 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * XOR `this.props.mcq` are defined.
    */
   private createWorkspaceInput = (props: WorkspaceProps) => {
-    if (props.editorProps) {
+    if (props.customEditor) {
+      return props.customEditor;
+    } else if (props.editorProps) {
       return (
         <Editor
           {...props.editorProps}

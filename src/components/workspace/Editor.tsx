@@ -5,7 +5,7 @@ import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
-import 'brace/theme/cobalt';
+import './editorTheme/source';
 
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
@@ -17,11 +17,11 @@ import { checkSessionIdExists } from './collabEditing/helper';
  *           of the editor's content, using `slang`
  */
 export interface IEditorProps {
-  isEditorAutorun: boolean;
+  breakpoints: string[];
   editorSessionId: string;
   editorValue: string;
-  breakpoints: string[];
   highlightedLines: number[][];
+  isEditorAutorun: boolean;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   handleEditorEval: () => void;
@@ -34,9 +34,9 @@ export interface IEditorProps {
 
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
+  public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
-  private AceEditor: React.RefObject<AceEditor>;
 
   constructor(props: IEditorProps) {
     super(props);
@@ -134,9 +134,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             mode="javascript"
             onChange={this.onChangeMethod}
             onValidate={this.onValidateMethod}
-            theme="cobalt"
+            theme="source"
             value={this.props.editorValue}
             width="100%"
+            setOptions={{ fontFamily: "'Droid Sans Mono','CPMono_v07 Bold','Droid Sans'" }}
           />
         </div>
       </HotKeys>

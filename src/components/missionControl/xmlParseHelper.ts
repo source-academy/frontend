@@ -76,6 +76,7 @@ const makeAssessmentOverview = (
     id: editingId,
     maxGrade: maxGradeVal,
     maxXp: maxXpVal,
+    number: rawOverview.number || '',
     openAt: rawOverview.startdate,
     title: rawOverview.title,
     reading: task.READING ? task.READING[0] : '',
@@ -304,12 +305,13 @@ export const assessmentToXml = (
 ): IXmlParseStrTask => {
   const task: any = {};
   const rawOverview: IXmlParseStrOverview = {
-    kind: overview.category.toLowerCase(),
-    duedate: overview.closeAt,
     coverimage: overview.coverImage,
+    duedate: overview.closeAt,
+    kind: overview.category.toLowerCase(),
+    number: overview.number || '',
     startdate: overview.openAt,
-    title: overview.title,
-    story: overview.story
+    story: overview.story,
+    title: overview.title
   };
   task.$ = rawOverview;
 
