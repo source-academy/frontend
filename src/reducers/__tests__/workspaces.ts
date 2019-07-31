@@ -25,6 +25,7 @@ import {
   IAction,
   INIT_INVITE,
   LOG_OUT,
+  RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_SESSION_ID,
@@ -1063,6 +1064,39 @@ describe('LOG_OUT', () => {
     expect(result).toEqual({
       ...defaultWorkspaceManager,
       playground: newPlayground
+    });
+  });
+});
+
+describe('RESET_TESTCASE', () => {
+  test('correctly resets the targeted testcase to its default state', () => {
+    const resetTestcaseDefaultState = generateDefaultWorkspace({
+      editorTestcases
+    });
+
+    const actions: IAction[] = generateActions(RESET_TESTCASE, {
+      index: 1
+    });
+
+    actions.forEach(action => {
+      const result = reducer(resetTestcaseDefaultState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...resetTestcaseDefaultState,
+        [location]: {
+          ...resetTestcaseDefaultState[location],
+          editorTestcases: [
+            {
+              ...editorTestcases[0]
+            },
+            {
+              ...editorTestcases[1],
+              result: undefined,
+              errors: undefined
+            }
+          ]
+        }
+      });
     });
   });
 });

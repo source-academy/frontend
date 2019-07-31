@@ -21,6 +21,7 @@ import {
   evalTestcase,
   highlightEditorLine,
   playgroundExternalSelect,
+  resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
   setEditorBreakpoint,
@@ -301,6 +302,18 @@ test('sendReplInputToOutput generates correct action object', () => {
       type: 'code',
       value: newOutput,
       workspaceLocation: gradingWorkspace
+    }
+  });
+});
+
+test('resetTestcase generates correct action object', () => {
+  const index = 420;
+  const action = resetTestcase(assessmentWorkspace, index);
+  expect(action).toEqual({
+    type: actionTypes.RESET_TESTCASE,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      index
     }
   });
 });
