@@ -30,7 +30,7 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
       }
     };
 
-    if (this.props.testcase.result || this.props.testcase.errors) {
+    if (this.props.testcase.result !== undefined || this.props.testcase.errors) {
       gradingStatus = ' wrong';
 
       if (stringify(this.props.testcase.result) === this.props.testcase.answer) {
@@ -46,7 +46,7 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
           <Pre className="testcase-actual">
             {this.props.testcase.errors
               ? buildErrorString(this.props.testcase.errors)
-              : this.props.testcase.result
+              : this.props.testcase.result !== undefined
               ? renderResult(this.props.testcase.result)
               : 'No Answer'}
           </Pre>

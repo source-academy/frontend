@@ -1,7 +1,7 @@
+import { ITestcase } from 'src/components/assessment/assessmentShape';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { mockRuneLibrary as mockLibrary } from './assessmentAPI';
 import { mockFetchRole, Role, Roles } from './userAPI';
-import { ITestcase } from 'src/components/assessment/assessmentShape';
 
 export const mockGradingOverviews: GradingOverview[] = [
   {
@@ -97,13 +97,13 @@ const mockTestcases: ITestcase[] = [
   { program: `remainder(12, 7);`, score: 1, answer: `5` },
   { program: `remainder(6, 1);`, score: 2, answer: `0` },
   { program: `remainder(-15, 6);`, score: 2, answer: `-3` },
+  { program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
 ];
 
 const mockGrading: Grading = [
   {
     question: {
-      answer:
-`function remainder(n, d) {
+      answer: `function remainder(n, d) {
   return (n - d) < 0 ? n : remainder(n - d, d);
 }`,
       content: `
@@ -120,8 +120,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       id: 0,
       library: mockLibrary,
       solutionTemplate: '0th question mock solution template',
-      solution:
-`This is how the 0th question is solved. [5 points]
+      solution: `This is how the 0th question is solved. [7 points]
 
 function remainder(n, d) {
   return n % d;
