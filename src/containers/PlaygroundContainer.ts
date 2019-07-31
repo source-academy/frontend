@@ -9,6 +9,7 @@ import {
   browseReplHistoryUp,
   changeEditorHeight,
   changeEditorWidth,
+  changeExecTime,
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
@@ -38,6 +39,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorSessionId: state.workspaces.playground.editorSessionId,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
+  execTime: state.workspaces.playground.execTime,
   isEditorAutorun: state.workspaces.playground.isEditorAutorun,
   breakpoints: state.workspaces.playground.breakpoints,
   highlightedLines: state.workspaces.playground.highlightedLines,
@@ -62,6 +64,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
+      handleChangeExecTime: (execTime: number) => changeExecTime(execTime, workspaceLocation),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),

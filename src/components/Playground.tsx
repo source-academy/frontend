@@ -41,6 +41,7 @@ export interface IStateProps {
   editorValue: string;
   editorHeight?: number;
   editorWidth: string;
+  execTime: number;
   breakpoints: string[];
   highlightedLines: number[][];
   isEditorAutorun: boolean;
@@ -61,6 +62,7 @@ export interface IStateProps {
 export interface IDispatchProps {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
+  handleChangeExecTime: (execTime: number) => void;
   handleChapterSelect: (chapter: number) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -105,7 +107,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       controlBarProps: {
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
+        execTime: this.props.execTime,
         externalLibraryName: this.props.externalLibraryName,
+        handleChangeExecTime: (execTime: number) => this.props.handleChangeExecTime(execTime),
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
           this.props.handleChapterSelect(chapter),
         handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
@@ -123,6 +127,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleDebuggerPause: this.props.handleDebuggerPause,
         handleDebuggerResume: this.props.handleDebuggerResume,
         handleDebuggerReset: this.props.handleDebuggerReset,
+        hasChangeExecTime: true,
         hasChapterSelect: true,
         hasCollabEditing: true,
         hasEditorAutorunButton: true,

@@ -90,6 +90,7 @@ export interface IWorkspaceManagerState {
 
 export interface IWorkspaceState {
   readonly autogradingResults: AutogradingResult[];
+  readonly breakpoints: string[];
   readonly context: Context;
   readonly editorPrepend: string;
   readonly editorReadonly: boolean;
@@ -99,7 +100,7 @@ export interface IWorkspaceState {
   readonly editorTestcases: ITestcase[];
   readonly editorHeight: number;
   readonly editorWidth: string;
-  readonly breakpoints: string[];
+  readonly execTime: number;
   readonly highlightedLines: number[][];
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
@@ -244,6 +245,7 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
+  breakpoints: [],
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], workspaceLocation),
   editorPrepend: '',
   editorSessionId: '',
@@ -256,7 +258,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   editorTestcases: [],
   editorHeight: 150,
   editorWidth: '50%',
-  breakpoints: [],
+  execTime: 1000,
   highlightedLines: [],
   output: [],
   replHistory: {

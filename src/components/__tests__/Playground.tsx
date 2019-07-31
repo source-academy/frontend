@@ -7,6 +7,7 @@ import Playground, { IPlaygroundProps } from '../Playground';
 
 const baseProps = {
   editorValue: '',
+  execTime: 1000,
   breakpoints: [],
   highlightedLines: [],
   isRunning: false,
@@ -25,6 +26,7 @@ const baseProps = {
   websocketStatus: 0,
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
+  handleChangeExecTime: (execTime: number) => {},
   handleChapterSelect: (chapter: number) => {},
   handleEditorEval: () => {},
   handleEditorHeightChange: (height: number) => {},
