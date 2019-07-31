@@ -30,6 +30,9 @@ export default function* workspaceSaga(): SagaIterator {
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
+    const execTime: number = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).execTime
+    );
     const symbols: string[] = yield select(
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
@@ -53,7 +56,7 @@ export default function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
-    yield* evalCode(code, context, workspaceLocation, actionTypes.EVAL_EDITOR);
+    yield* evalCode(code, context, execTime, workspaceLocation, actionTypes.EVAL_EDITOR);
   });
 
   yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(action) {
@@ -73,19 +76,25 @@ export default function* workspaceSaga(): SagaIterator {
     const code: string = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).replValue
     );
+    const execTime: number = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).execTime
+    );
     yield put(actions.beginInterruptExecution(workspaceLocation));
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
-    yield* evalCode(code, context, workspaceLocation, actionTypes.EVAL_REPL);
+    yield* evalCode(code, context, execTime, workspaceLocation, actionTypes.EVAL_REPL);
   });
 
   yield takeEvery(actionTypes.DEBUG_RESUME, function*(action) {
     const workspaceLocation = (action as actionTypes.IAction).payload.workspaceLocation;
     const code: string = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue
+    );
+    const execTime: number = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).execTime
     );
     yield put(actions.beginInterruptExecution(workspaceLocation));
     /** Clear the context, with the same chapter and externalSymbols as before. */
@@ -94,7 +103,7 @@ export default function* workspaceSaga(): SagaIterator {
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
     yield put(actions.highlightEditorLine([], workspaceLocation));
-    yield* evalCode(code, context, workspaceLocation, actionTypes.DEBUG_RESUME);
+    yield* evalCode(code, context, execTime, workspaceLocation, actionTypes.DEBUG_RESUME);
   });
 
   yield takeEvery(actionTypes.DEBUG_RESET, function*(action) {
@@ -339,6 +348,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation) {
 export function* evalCode(
   code: string,
   context: Context,
+  execTime: number,
   workspaceLocation: WorkspaceLocation,
   actionType: string
 ) {
@@ -352,7 +362,10 @@ export function* evalCode(
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
-        : call(runInContext, code, context, { scheduler: 'preemptive' }),
+        : call(runInContext, code, context, {
+            scheduler: 'preemptive',
+            originalMaxExecTime: execTime
+          }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.

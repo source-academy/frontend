@@ -5,6 +5,7 @@ import {
   Intent,
   Menu,
   MenuItem,
+  NumericInput,
   Popover,
   Switch,
   Text,
@@ -33,7 +34,9 @@ export type ControlBarProps = {
   sourceChapter: number;
   editorSessionId?: string;
   editorValue?: string | null;
+  execTime?: number;
   externalLibraryName?: string;
+  handleChangeExecTime?: (execTime: number) => void;
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleEditorEval: () => void;
   handleEditorValueChange?: (newCode: string) => void;
@@ -49,6 +52,7 @@ export type ControlBarProps = {
   handleSetEditorSessionId?: (editorSessionId: string) => void;
   handleInitInvite?: (value: string) => void;
   handleToggleEditorAutorun?: () => void;
+  hasChangeExecTime?: boolean;
   hasChapterSelect: boolean;
   hasCollabEditing: boolean;
   hasEditorAutorunButton: boolean;
@@ -278,6 +282,20 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
       undefined
     );
 
+    const changeExecTimeButton = this.props.hasChangeExecTime ? (
+      <Tooltip content="Execution Time">
+        <NumericInput
+          leftIcon={IconNames.TIME}
+          style={{ width: 80 }}
+          min={1000}
+          value={this.props.execTime}
+          onValueChange={this.props.handleChangeExecTime}
+        />
+      </Tooltip>
+    ) : (
+      undefined
+    );
+
     const runButtonGrouping = () => {
       if (this.props.isEditorAutorun) {
         return autoRunButton;
@@ -310,6 +328,7 @@ class ControlBar extends React.PureComponent<ControlBarProps, { joinElemValue: s
         {saveButton}
         {shareButton} {chapterSelectButton} {externalSelectButton} {resetTemplateButton}
         {sessionMenuButton}
+        {changeExecTimeButton}
       </div>
     );
   }
