@@ -150,6 +150,9 @@ export default function* workspaceSaga(): SagaIterator {
         testcase
       );
     });
+    const execTime: number = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).execTime
+    );
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
@@ -176,7 +179,7 @@ export default function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
-    yield* evalTestCode(code, context, workspaceLocation, index);
+    yield* evalTestCode(code, context, execTime, workspaceLocation, index);
   });
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
@@ -424,11 +427,15 @@ export function* evalCode(
 export function* evalTestCode(
   code: string,
   context: Context,
+  execTime: number,
   workspaceLocation: WorkspaceLocation,
   index: number
 ) {
   const { result, interrupted } = yield race({
-    result: call(runInContext, code, context, { scheduler: 'preemptive' }),
+    result: call(runInContext, code, context, {
+      scheduler: 'preemptive',
+      originalMaxExecTime: execTime
+    }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
