@@ -115,7 +115,25 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
    * if a workspace reset is needed.
    */
   public componentDidUpdate() {
-    this.checkWorkspaceReset(this.props);
+    /* Don't reset workspace if grading not fetched yet. */
+    if (this.props.grading === undefined) {
+      return;
+    }
+    const questionId = this.props.questionId;
+
+    /**
+     * Check if questionId is out of bounds, if it is, redirect to the
+     * grading overview page
+     *
+     * This occurs if the grading is submitted on the last question,
+     * as the function to move to the next question does not check
+     * if that question exists
+     */
+    if (this.props.grading[questionId] === undefined) {
+      history.push('/academy/grading');
+    } else {
+      this.checkWorkspaceReset(this.props);
+    }
   }
 
   public render() {
@@ -181,24 +199,18 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   /**
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
+   *
+   * Assumes that 'props.grading' is defined
    */
   private checkWorkspaceReset(props: GradingWorkspaceProps) {
-    /* Don't reset workspace if grading not fetched yet. */
-    if (this.props.grading === undefined) {
-      return;
-    }
-
     /* Reset grading if it has changed.*/
-    const submissionId = this.props.submissionId;
-    const questionId = this.props.questionId;
+    const submissionId = props.submissionId;
+    const questionId = props.questionId;
 
-    if (
-      this.props.storedSubmissionId === submissionId &&
-      this.props.storedQuestionId === questionId
-    ) {
+    if (props.storedSubmissionId === submissionId && props.storedQuestionId === questionId) {
       return;
     }
-    const question = this.props.grading[questionId].question as IQuestion;
+    const question = props.grading![questionId].question as IQuestion;
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
@@ -219,19 +231,19 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       }
     }
 
-    this.props.handleEditorUpdateBreakpoints([]);
-    this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
-    this.props.handleResetWorkspace({
+    props.handleEditorUpdateBreakpoints([]);
+    props.handleUpdateCurrentSubmissionId(submissionId, questionId);
+    props.handleResetWorkspace({
       autogradingResults,
       editorPrepend,
       editorValue,
       editorPostpend,
       editorTestcases
     });
-    this.props.handleClearContext(question.library);
-    this.props.handleUpdateHasUnsavedChanges(false);
+    props.handleClearContext(question.library);
+    props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
-      this.props.handleEditorValueChange(editorValue);
+      props.handleEditorValueChange(editorValue);
     }
   }
 

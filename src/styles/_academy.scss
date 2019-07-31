@@ -192,9 +192,34 @@
       width: 150px;
     }
   }
-  .grading-editor-save-button {
-    margin-top: 0.4rem;
-    width: 100% !important;
+
+  .grading-editor-draft-buttons {
+    margin-top: 10px;
+
+    table {
+      margin: auto;
+      width: 100%;
+
+      td {
+        padding: 0 5px 0 5px;
+
+        &:first-child {
+          padding-left: 0;
+        }
+
+        &:last-child {
+          padding-right: 0;
+        }
+      }
+    }
+  }
+
+  .grading-editor-button {
+    width: 100%;
+
+    &.grading-editor-submit {
+      margin-top: 0.4rem;
+    }
   }
 }
 
