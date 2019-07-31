@@ -14,6 +14,7 @@ import {
   Library
 } from '../../components/assessment/assessmentShape';
 import { mockRuntimeContext } from '../../mocks/context';
+import { mockTestcases } from '../../mocks/gradingAPI';
 import { externalLibraries } from '../../reducers/externalLibraries';
 import { defaultState, IState } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
@@ -41,7 +42,7 @@ beforeEach(() => {
 });
 
 describe('EVAL_EDITOR', () => {
-  test('puts beginInterruptExecution, beginClearContext, clearReplOutput and calls evalCode correctly', () => {
+  test('puts beginClearContext and calls evalCode correctly', () => {
     const workspaceLocation = WorkspaceLocations.playground;
     const editorPrepend = 'prepend';
     const editorValue = 'value';
@@ -220,7 +221,7 @@ describe('DEBUG_RESET', () => {
 });
 
 describe('EVAL_TESTCASE', () => {
-  test('puts beginInterruptExecution, beginClearContext and calls evalTestCode correctly', () => {
+  test('puts beginClearContext and calls evalTestCode correctly', () => {
     const workspaceLocation = WorkspaceLocations.grading;
     const editorPrepend = 'prepend';
     const editorValue = 'value';
@@ -265,7 +266,6 @@ describe('EVAL_TESTCASE', () => {
     return (
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
-        .put(actions.beginInterruptExecution(workspaceLocation))
         .put(actions.beginClearContext(library, workspaceLocation))
         // also calls evalTestCode here
         .call(runInContext, code, context, { scheduler: 'preemptive' })
@@ -581,6 +581,61 @@ describe('evalCode', () => {
         .silentRun();
     });
 
+    // The above test is for an assessment without any editorTestcases
+    test('does not put evalTestcase (assessment has testcases and Autograder tab is inactive)', () => {
+      state = generateDefaultState(workspaceLocation, {
+        editorTestcases: mockTestcases.slice(0, 1),
+        sideContentActiveTab: 0
+      });
+
+      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+        .withState(state)
+        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
+        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .put(actions.evalInterpreterSuccess(value, workspaceLocation))
+        .not.call(showSuccessMessage, 'Running all testcases!', 750)
+        .not.put(actions.evalTestcase(workspaceLocation, 0))
+        .silentRun();
+    });
+
+    test('puts evalTestcase (assessment has testcases and Autograder tab is active)', () => {
+      state = generateDefaultState(workspaceLocation, {
+        editorTestcases: mockTestcases.slice(0, 3),
+        sideContentActiveTab: 2
+      });
+
+      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+        .withState(state)
+        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
+        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .put(actions.evalInterpreterSuccess(value, workspaceLocation))
+        .call(showSuccessMessage, 'Running all testcases!', 750)
+        .put(actions.evalTestcase(workspaceLocation, 0))
+        .put(actions.evalTestcase(workspaceLocation, 1))
+        .put(actions.evalTestcase(workspaceLocation, 2))
+        .silentRun();
+    });
+
+    test('puts evalTestcase (submission has testcases and Autograder tab is active)', () => {
+      workspaceLocation = WorkspaceLocations.grading;
+      state = generateDefaultState(workspaceLocation, {
+        editorTestcases: mockTestcases,
+        sideContentActiveTab: 3
+      });
+
+      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+        .withState(state)
+        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
+        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .put(actions.evalInterpreterSuccess(value, workspaceLocation))
+        .call(showSuccessMessage, 'Running all testcases!', 750)
+        .put(actions.evalTestcase(workspaceLocation, 0))
+        .put(actions.evalTestcase(workspaceLocation, 1))
+        .put(actions.evalTestcase(workspaceLocation, 2))
+        .put(actions.evalTestcase(workspaceLocation, 3))
+        .silentRun();
+    });
+
     test('calls runInContext, puts endDebuggerPause and evalInterpreterSuccess when runInContext returns suspended', () => {
       return expectSaga(evalCode, code, context, workspaceLocation, actionType)
         .withState(state)
@@ -757,7 +812,7 @@ describe('evalTestCode', () => {
           })
         })
         .put(actions.endInterruptExecution(workspaceLocation))
-        .call(showWarningMessage, 'Execution aborted by user', 750)
+        .call(showWarningMessage, `Execution of testcase ${index} aborted`, 750)
         .silentRun()
         .then(() => {
           expect(context.errors[0]).toBeInstanceOf(InterruptedError);

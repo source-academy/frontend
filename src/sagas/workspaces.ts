@@ -159,7 +159,7 @@ export default function* workspaceSaga(): SagaIterator {
       },
       globals
     };
-    /** Do not interrupt execution of other testcases. */
+    /** Do not interrupt execution of other testcases (potential race condition). */
     /** Clear the context, with the same chapter and externalSymbols as before. */
     yield put(actions.beginClearContext(library, workspaceLocation));
     /** Do NOT clear the REPL output! */
@@ -431,8 +431,8 @@ export function* evalCode(
       /** Avoid displaying message if there are no testcases */
       if (testcases.length > 0) {
         /** Display a message to the user */
-        yield call(showSuccessMessage, `Running all ${testcases.length} testcases!`);
-        for (const [idx] of testcases.entries()) {
+        yield call(showSuccessMessage, `Running all testcases!`, 750);
+        for (const idx of testcases.keys()) {
           yield put(actions.evalTestcase(workspaceLocation, idx));
         }
       }
