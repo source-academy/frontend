@@ -422,7 +422,7 @@ export function* evalTestCode(
      */
     interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION)
   });
-  
+
   if (interrupted) {
     interrupt(context);
     /* Redundancy, added ensure that interruption results in an error. */

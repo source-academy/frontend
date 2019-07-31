@@ -83,10 +83,10 @@ export interface IProgrammingQuestion extends IQuestion {
 }
 
 export interface ITestcase {
-  answer: string;   // the correct answer to the testcase
+  answer: string; // the correct answer to the testcase
   score: number;
-  program: string;  // the program to be appended to the student's code
-  result?: any;     // the result from the execution of the testcase
+  program: string; // the program to be appended to the student's code
+  result?: any; // the result from the execution of the testcase
   errors?: SourceError[]; // errors raised by interpreter during execution
 }
 
