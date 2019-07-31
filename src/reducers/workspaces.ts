@@ -28,6 +28,7 @@ import {
   IAction,
   INIT_INVITE,
   LOG_OUT,
+  RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_READONLY,
@@ -463,6 +464,26 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[workspaceLocation],
           isRunning: false,
           isDebugging: false
+        }
+      };
+    case RESET_TESTCASE:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTestcases: state[workspaceLocation].editorTestcases.map(
+            (testcase: ITestcase, i) => {
+              if (i === action.payload.index) {
+                return {
+                  ...testcase,
+                  result: undefined,
+                  errors: undefined
+                };
+              } else {
+                return testcase;
+              }
+            }
+          )
         }
       };
 

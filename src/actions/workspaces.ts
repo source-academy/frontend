@@ -220,6 +220,11 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
   }
 });
 
+export const resetTestcase = (workspaceLocation: WorkspaceLocation, index: number) => ({
+  type: actionTypes.RESET_TESTCASE,
+  payload: { workspaceLocation, index }
+});
+
 /**
  * Resets a workspace to its default properties.
  *

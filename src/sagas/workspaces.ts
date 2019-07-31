@@ -414,6 +414,8 @@ export function* evalTestCode(
   workspaceLocation: WorkspaceLocation,
   index: number
 ) {
+  yield put(actions.resetTestcase(workspaceLocation, index));
+
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, { scheduler: 'preemptive' }),
     /**

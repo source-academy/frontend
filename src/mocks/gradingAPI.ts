@@ -93,7 +93,7 @@ export const mockFetchGradingOverview = (
   }
 };
 
-const mockTestcases: ITestcase[] = [
+export const mockTestcases: ITestcase[] = [
   { program: `remainder(12, 7);`, score: 1, answer: `5` },
   { program: `remainder(6, 1);`, score: 2, answer: `0` },
   { program: `remainder(-15, 6);`, score: 2, answer: `-3` },
