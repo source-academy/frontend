@@ -229,6 +229,80 @@ $code-color-error: #ff4444;
         margin-bottom: 0;
       }
     }
+
+    .GradingEditor {
+      .grading-editor-student-name {
+        text-align: center;
+      }
+      .grading-editor-solution {
+        pre {
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          word-break: break-word;
+        }
+      }
+      .grading-editor-input-parent {
+        /** Center the text for numeric input and showing grades. */
+        table.bp3-html-table {
+          border-spacing: 5px;
+          width: 100%;
+          tbody {
+            text-align: center;
+
+            button {
+              width: 100%;
+            }
+
+            tr:first-child td,
+            th {
+              /** Aligns the numeric input */
+              text-align: -webkit-center;
+              // Hide grey line
+              -webkit-box-shadow: inset 0 0 0 0;
+              box-shadow: inset 0 0 0 0;
+              background: $cadet-color-2;
+            }
+          }
+        }
+        .grading-adjustment-input {
+          width: 150px;
+        }
+      }
+
+      .grading-editor-draft-buttons {
+        margin-top: 10px;
+
+        table.bp3-html-table {
+          margin: auto;
+          width: 100%;
+
+          tbody tr:first-child td {
+            // Hide grey line
+            -webkit-box-shadow: inset 0 0 0 0;
+            box-shadow: inset 0 0 0 0;
+            background: $cadet-color-2;
+            // Create space between buttons
+            padding: 0 5px 0 5px;
+
+            &:first-child {
+              padding-left: 0;
+            }
+
+            &:last-child {
+              padding-right: 0;
+            }
+          }
+        }
+      }
+
+      .grading-editor-button {
+        width: 100%;
+
+        &.grading-editor-submit {
+          margin-top: 0.4rem;
+        }
+      }
+    }
   }
 
   .grading-editor-input-parent {

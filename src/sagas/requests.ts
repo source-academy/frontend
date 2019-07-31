@@ -306,7 +306,7 @@ export const postGrading = async (
   gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens,
-  comments? :string
+  comments?: string
 ) => {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
     accessToken: tokens.accessToken,

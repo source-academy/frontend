@@ -266,24 +266,26 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           <div className="grading-editor-draft-buttons">
             <HTMLTable>
               <tbody>
-                <td>
-                  {controlButton(
-                    'Save Draft',
-                    IconNames.FLOPPY_DISK,
-                    this.validateGradesBeforeSave(this.saveToLocalStorage),
-                    saveButtonOpts
-                  )}
-                </td>
-                {this.state.draft && (
+                <tr>
                   <td>
                     {controlButton(
-                      'Load Draft',
-                      IconNames.DOCUMENT_OPEN,
-                      hasUnsavedChanges ? this.loadWarning : this.loadDraft,
-                      loadButtonOpts
+                      'Save Draft',
+                      IconNames.FLOPPY_DISK,
+                      this.validateGradesBeforeSave(this.saveToLocalStorage),
+                      saveButtonOpts
                     )}
                   </td>
-                )}
+                  {this.state.draft && (
+                    <td>
+                      {controlButton(
+                        'Load Draft',
+                        IconNames.DOCUMENT_OPEN,
+                        hasUnsavedChanges ? this.loadWarning : this.loadDraft,
+                        loadButtonOpts
+                      )}
+                    </td>
+                  )}
+                </tr>
               </tbody>
             </HTMLTable>
           </div>
@@ -314,9 +316,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * returning the relevant saving function (for the 'Save Draft'
    * and 'Submit and Continue' buttons)
    */
-  private validateGradesBeforeSave = (
-    handleSaving: GradingSaveFunction
-  ): (() => void) | undefined => {
+  private validateGradesBeforeSave = (handleSaving: GradingSaveFunction): (() => void) => () => {
     const gradeAdjustmentInput =
       stringParamToInt(this.state.gradeAdjustmentInput || undefined) || undefined;
     const grade = this.props.initialGrade + (gradeAdjustmentInput || 0);
@@ -334,14 +334,13 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       );
       return;
     } else {
-      return () =>
-        handleSaving(
-          this.props.submissionId,
-          this.props.questionId,
-          gradeAdjustmentInput,
-          xpAdjustmentInput,
-          this.state.editorValue!
-        );
+      handleSaving(
+        this.props.submissionId,
+        this.props.questionId,
+        gradeAdjustmentInput,
+        xpAdjustmentInput,
+        this.state.editorValue!
+      );
     }
   };
 
