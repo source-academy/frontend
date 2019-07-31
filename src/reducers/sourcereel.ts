@@ -5,7 +5,6 @@ import {
   IAction,
   RECORD_EDITOR_INIT_VALUE,
   RECORD_INPUT,
-  SAVE_SOURCECAST_DATA,
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,
@@ -36,14 +35,6 @@ export const reducer: Reducer<ISourcereelWorkspace> = (
           ...state.playbackData,
           inputs: [...state.playbackData.inputs, action.payload.input]
         }
-      };
-    case SAVE_SOURCECAST_DATA:
-      return {
-        ...state,
-        title: action.payload.title,
-        description: action.payload.description,
-        audioUrl: action.payload.audioUrl,
-        playbackData: action.payload.playbackData
       };
     case TIMER_PAUSE:
       return {
