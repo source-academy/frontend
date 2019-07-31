@@ -6,7 +6,7 @@ import { controlButton } from '../../commons';
 import AutograderCard from './AutograderCard';
 import ResultCard from './ResultCard';
 
-type AutograderProps = {
+export type AutograderProps = {
   autogradingResults: AutogradingResult[];
   testcases: ITestcase[];
   handleTestcaseEval: (testcaseId: number) => void;
