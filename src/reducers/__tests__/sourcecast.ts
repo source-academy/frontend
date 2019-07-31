@@ -1,5 +1,6 @@
 import {
   IAction,
+  SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
   SET_INPUT_TO_APPLY,
   SET_SOURCECAST_DATA,
@@ -23,6 +24,48 @@ function generateAction(type: string, payload: any = {}): IAction {
     payload
   };
 }
+
+describe('SAVE_SOURCECAST_DATA', () => {
+  test('saves sourcecastData correctly', () => {
+    const codeDelta: ICodeDelta = {
+      start: {
+        row: 0,
+        column: 1
+      },
+      end: {
+        row: 0,
+        column: 2
+      },
+      action: 'insert',
+      lines: ['a']
+    };
+    const input: Input = {
+      time: 1,
+      type: 'codeDelta',
+      data: codeDelta
+    };
+    const playbackData: IPlaybackData = {
+      init: {
+        editorValue: ''
+      },
+      inputs: [input]
+    };
+
+    const payload = {
+      title: 'Test Title',
+      description: 'Test Description',
+      audioUrl: 'someUrl.com',
+      playbackData
+    };
+
+    const action: IAction = generateAction(SAVE_SOURCECAST_DATA, payload);
+    const result = reducer(defaultWorkspaceManager.sourcecast, action);
+    expect(result).toEqual({
+      ...defaultWorkspaceManager.sourcereel,
+      ...payload
+    });
+  });
+});
 
 describe('SET_CODE_DELTAS_TO_APPLY', () => {
   test('sets codeDeltasToApply correctly', () => {
