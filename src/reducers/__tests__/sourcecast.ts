@@ -61,7 +61,7 @@ describe('SAVE_SOURCECAST_DATA', () => {
     const action: IAction = generateAction(SAVE_SOURCECAST_DATA, payload);
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcereel,
+      ...defaultWorkspaceManager.sourcecast,
       ...payload
     });
   });
