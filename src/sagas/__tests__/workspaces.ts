@@ -47,6 +47,7 @@ describe('EVAL_EDITOR', () => {
     const editorPrepend = 'prepend';
     const editorValue = 'value';
     const editorPostpend = 'postpend';
+    const execTime = 1000;
     const context = mockRuntimeContext();
     const globals: Array<[string, any]> = [
       ['testNumber', 3.141592653589793],
@@ -68,6 +69,7 @@ describe('EVAL_EDITOR', () => {
       editorPrepend,
       editorPostpend,
       editorValue,
+      execTime,
       context,
       globals
     });
@@ -79,7 +81,10 @@ describe('EVAL_EDITOR', () => {
         .put(actions.beginClearContext(library, workspaceLocation))
         .put(actions.clearReplOutput(workspaceLocation))
         // also calls evalCode here
-        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
         .dispatch({
           type: actionTypes.EVAL_EDITOR,
           payload: { workspaceLocation }
@@ -143,7 +148,10 @@ describe('EVAL_REPL', () => {
         .put(actions.clearReplInput(workspaceLocation))
         .put(actions.sendReplInputToOutput(replValue, workspaceLocation))
         // also calls evalCode here
-        .call(runInContext, replValue, context, { scheduler: 'preemptive' })
+        .call(runInContext, replValue, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: 1000
+        })
         .dispatch({
           type: actionTypes.EVAL_REPL,
           payload: { workspaceLocation }
@@ -156,6 +164,7 @@ describe('EVAL_REPL', () => {
 describe('DEBUG_RESUME', () => {
   let workspaceLocation: WorkspaceLocation;
   let editorValue: string;
+  let execTime: number;
   let context: Context;
   let state: IState;
   const status = { status: 'error' };
@@ -164,10 +173,18 @@ describe('DEBUG_RESUME', () => {
     // Ensure that lastDebuggerResult is set correctly before running each of the tests below
     workspaceLocation = WorkspaceLocations.playground;
     editorValue = 'sample code here';
+    execTime = 1000;
     context = mockRuntimeContext();
     state = generateDefaultState(workspaceLocation);
 
-    return expectSaga(evalCode, editorValue, context, workspaceLocation, actionTypes.EVAL_EDITOR)
+    return expectSaga(
+      evalCode,
+      editorValue,
+      context,
+      execTime,
+      workspaceLocation,
+      actionTypes.EVAL_EDITOR
+    )
       .withState(state)
       .silentRun();
   });
@@ -226,6 +243,7 @@ describe('EVAL_TESTCASE', () => {
     const editorPrepend = 'prepend';
     const editorValue = 'value';
     const editorPostpend = 'postpend';
+    const execTime = 1000;
     const testcaseId = 0;
     const program = '123;';
 
@@ -259,6 +277,7 @@ describe('EVAL_TESTCASE', () => {
       editorPostpend,
       editorValue,
       editorTestcases,
+      execTime,
       context,
       globals
     });
@@ -268,7 +287,10 @@ describe('EVAL_TESTCASE', () => {
         .withState(newDefaultState)
         .put(actions.beginClearContext(library, workspaceLocation))
         // also calls evalTestCode here
-        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
         .dispatch({
           type: actionTypes.EVAL_TESTCASE,
           payload: { workspaceLocation, testcaseId }
@@ -553,6 +575,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
 describe('evalCode', () => {
   let workspaceLocation: WorkspaceLocation;
   let code: string;
+  let execTime: number;
   let actionType: string;
   let context: Context;
   let value: string;
@@ -563,20 +586,24 @@ describe('evalCode', () => {
   beforeEach(() => {
     workspaceLocation = WorkspaceLocations.assessment;
     code = 'sample code';
+    execTime = 1000;
     actionType = actionTypes.EVAL_EDITOR;
     context = mockRuntimeContext();
     value = 'test value';
-    options = { scheduler: 'preemptive' };
+    options = { scheduler: 'preemptive', originalMaxExecTime: 1000 };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation);
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {
     test('calls runInContext, puts evalInterpreterSuccess when runInContext returns finished', () => {
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .silentRun();
     });
@@ -654,19 +681,25 @@ describe('evalCode', () => {
     });
 
     test('calls runInContext, puts endDebuggerPause and evalInterpreterSuccess when runInContext returns suspended', () => {
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'suspended' }]])
-        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
         .put(actions.endDebuggerPause(workspaceLocation))
         .put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
         .silentRun();
     });
 
     test('calls runInContext, puts evalInterpreterError when runInContext returns error', () => {
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
-        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
         .put.like({ action: { type: actionTypes.EVAL_INTERPRETER_ERROR } })
         .silentRun();
     });
@@ -675,7 +708,7 @@ describe('evalCode', () => {
       code = '// Prepend\n error';
       state = generateDefaultState(workspaceLocation, { editorPrepend: '// Prepend' });
 
-      runInContext(code, context, { scheduler: 'preemptive' }).then(
+      runInContext(code, context, { scheduler: 'preemptive', originalMaxExecTime: 1000 }).then(
         result => (context = (result as Finished).context)
       );
 
@@ -686,9 +719,12 @@ describe('evalCode', () => {
         return newError;
       });
 
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
-        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
         .put(actions.evalInterpreterError(errors, workspaceLocation))
         .silentRun();
     });
@@ -697,7 +733,14 @@ describe('evalCode', () => {
   describe('on DEBUG_RESUME action without interruptions or pausing', () => {
     // Ensure that lastDebuggerResult is set correctly before running each of the tests below
     beforeEach(() => {
-      return expectSaga(evalCode, code, context, workspaceLocation, actionTypes.EVAL_EDITOR)
+      return expectSaga(
+        evalCode,
+        code,
+        context,
+        execTime,
+        workspaceLocation,
+        actionTypes.EVAL_EDITOR
+      )
         .withState(state)
         .silentRun();
     });
@@ -705,7 +748,7 @@ describe('evalCode', () => {
     test('calls resume, puts evalInterpreterSuccess when resume returns finished', () => {
       actionType = actionTypes.DEBUG_RESUME;
 
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'finished', value }]])
         .call(resume, lastDebuggerResult)
@@ -716,7 +759,7 @@ describe('evalCode', () => {
     test('calls resume, puts endDebuggerPause and evalInterpreterSuccess when resume returns suspended', () => {
       actionType = actionTypes.DEBUG_RESUME;
 
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'suspended' }]])
         .call(resume, lastDebuggerResult)
@@ -728,7 +771,7 @@ describe('evalCode', () => {
     test('calls resume, puts evalInterpreterError when resume returns error', () => {
       actionType = actionTypes.DEBUG_RESUME;
 
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .call(resume, lastDebuggerResult)
         .put.like({ action: { type: actionTypes.EVAL_INTERPRETER_ERROR } })
@@ -738,7 +781,7 @@ describe('evalCode', () => {
 
   describe('on interrupt', () => {
     test('puts debuggerReset, endInterruptExecution and calls showWarningMessage', () => {
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .provide({
           race: () => ({
@@ -760,7 +803,7 @@ describe('evalCode', () => {
 
   describe('on paused', () => {
     test('puts endDebuggerPause and calls showWarningMessage', () => {
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .provide({
           race: () => ({
@@ -780,6 +823,7 @@ describe('evalCode', () => {
 describe('evalTestCode', () => {
   let workspaceLocation: WorkspaceLocation;
   let code: string;
+  let execTime: number;
   let context: Context;
   let value: string;
   let options: Partial<IOptions>;
@@ -789,16 +833,17 @@ describe('evalTestCode', () => {
   beforeEach(() => {
     workspaceLocation = WorkspaceLocations.assessment;
     code = 'more sample code';
+    execTime = 1000;
     context = mockRuntimeContext();
     value = 'another test value';
-    options = { scheduler: 'preemptive' };
+    options = { scheduler: 'preemptive', originalMaxExecTime: 1000 };
     index = 1;
     state = generateDefaultState(workspaceLocation);
   });
 
   describe('without interrupt', () => {
     test('puts evalInterpreterSuccess and evalTestcaseSuccess on finished status', () => {
-      return expectSaga(evalTestCode, code, context, workspaceLocation, index)
+      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
@@ -807,7 +852,7 @@ describe('evalTestCode', () => {
     });
 
     test('puts evalInterpreterError and evalTestcaseFailure on other statuses', () => {
-      return expectSaga(evalTestCode, code, context, workspaceLocation, index)
+      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'error' }]])
         .put(actions.evalInterpreterError(context.errors, workspaceLocation))
@@ -818,7 +863,7 @@ describe('evalTestCode', () => {
 
   describe('on interrupt', () => {
     test('puts endInterruptExecution and calls showWarningMessage', () => {
-      return expectSaga(evalTestCode, code, context, workspaceLocation, index)
+      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index)
         .withState(state)
         .provide({
           race: () => ({

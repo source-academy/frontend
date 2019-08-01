@@ -81,7 +81,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         description: string,
         audio: Blob,
         playbackData: IPlaybackData
-      ) => saveSourcecastData(title, description, audio, playbackData, location),
+      ) => saveSourcecastData(title, description, audio, playbackData, 'sourcecast'),
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
       handleRecordEditorInitValue: (editorValue: string) =>
         recordEditorInitValue(editorValue, location),

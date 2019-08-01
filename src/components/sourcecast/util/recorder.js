@@ -152,7 +152,7 @@
                   sampleRate = undefined,
                   numChannels = undefined;
 
-                self.onmessage = function(e) {
+                this.onmessage = function(e) {
                   switch (e.data.command) {
                     case 'init':
                       init(e.data.config);
@@ -196,12 +196,12 @@
                   // console.log(interleaved)
 
                   if (!interleaved) {
-                    self.postMessage({ command: 'exportWAV', data: false });
+                    this.postMessage({ command: 'exportWAV', data: false });
                   } else {
                     var dataview = encodeWAV(interleaved);
                     var audioBlob = new Blob([dataview], { type: type });
                     // console.log(audioBlob)
-                    self.postMessage({ command: 'exportWAV', data: audioBlob });
+                    this.postMessage({ command: 'exportWAV', data: audioBlob });
                   }
 
                   // if (numChannels === 2) {
@@ -216,7 +216,7 @@
                   for (var channel = 0; channel < numChannels; channel++) {
                     buffers.push(mergeBuffers(recBuffers[channel], recLength));
                   }
-                  self.postMessage({ command: 'getBuffer', data: buffers });
+                  this.postMessage({ command: 'getBuffer', data: buffers });
                 }
 
                 function clear() {
