@@ -615,10 +615,13 @@ describe('evalCode', () => {
         sideContentActiveTab: 0
       });
 
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .not.call(showSuccessMessage, 'Running all testcases!', 750)
         .not.put(actions.evalTestcase(workspaceLocation, 0))
@@ -627,15 +630,19 @@ describe('evalCode', () => {
 
     test('puts evalTestcase (assessment has testcases and Autograder tab is active)', () => {
       const type = 'result';
+
       state = generateDefaultState(workspaceLocation, {
         editorTestcases: mockTestcases.slice(0, 2),
         sideContentActiveTab: 2
       });
 
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .call(showSuccessMessage, 'Running all testcases!', 750)
         .put(actions.evalTestcase(workspaceLocation, 0))
@@ -655,10 +662,13 @@ describe('evalCode', () => {
         sideContentActiveTab: 3
       });
 
-      return expectSaga(evalCode, code, context, workspaceLocation, actionType)
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .call(runInContext, code, context, { scheduler: 'preemptive' })
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .call(showSuccessMessage, 'Running all testcases!', 750)
         .put(actions.evalTestcase(workspaceLocation, 0))
