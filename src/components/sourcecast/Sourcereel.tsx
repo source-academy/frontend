@@ -10,7 +10,7 @@ import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
-import { Input, IPlaybackData, RecordingStatus } from './sourcecastShape';
+import { Input, IPlaybackData, KeyboardCommand, RecordingStatus } from './sourcecastShape';
 import SourcereelControlbar from './SourcereelControlbar';
 
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
@@ -106,7 +106,17 @@ class Sourcereel extends React.Component<ISourcereelProps> {
             data: chapter
           });
         },
-        handleEditorEval: this.props.handleEditorEval,
+        handleEditorEval: () => {
+          this.props.handleEditorEval();
+          if (this.props.recordingStatus !== RecordingStatus.recording) {
+            return;
+          }
+          this.props.handleRecordInput({
+            time: this.getTimerDuration(),
+            type: 'keyboardCommand',
+            data: KeyboardCommand.run
+          });
+        },
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleInterruptEval: this.props.handleInterruptEval,
         handleReplEval: this.props.handleReplEval,
