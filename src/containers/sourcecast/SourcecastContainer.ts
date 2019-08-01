@@ -25,6 +25,7 @@ import {
   setSourcecastStatus,
   setWebsocketStatus,
   toggleEditorAutorun,
+  updateActiveTab,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
@@ -36,7 +37,7 @@ import {
   IPlaybackData,
   PlaybackStatus
 } from '../../components/sourcecast/sourcecastShape';
-import { IState } from '../../reducers/states';
+import { IState, SideContentType } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   audioUrl: state.workspaces.sourcecast.audioUrl,
@@ -69,6 +70,7 @@ const location: WorkspaceLocation = 'sourcecast';
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
+      handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),

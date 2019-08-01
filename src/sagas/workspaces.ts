@@ -11,7 +11,7 @@ import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { ExternalLibraryNames, ITestcase } from '../components/assessment/assessmentShape';
 import { externalLibraries } from '../reducers/externalLibraries';
-import { IState, IWorkspaceState } from '../reducers/states';
+import { IState, IWorkspaceState, SideContentType } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper';
 
@@ -427,7 +427,7 @@ export function* evalCode(
    * Retrieve the index of the active side-content tab
    */
   if (actionType === actionTypes.EVAL_EDITOR) {
-    const activeTab: number = yield select(
+    const activeTab: SideContentType = yield select(
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).sideContentActiveTab
     );
@@ -438,8 +438,9 @@ export function* evalCode(
      *    so side-effects from one testcase don't affect others
      */
     if (
-      (workspaceLocation === WorkspaceLocations.assessment && activeTab === 2) ||
-      (workspaceLocation === WorkspaceLocations.grading && activeTab === 3)
+      activeTab === SideContentType.autograder &&
+      (workspaceLocation === WorkspaceLocations.assessment ||
+        workspaceLocation === WorkspaceLocations.grading)
     ) {
       const testcases: ITestcase[] = yield select(
         (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorTestcases

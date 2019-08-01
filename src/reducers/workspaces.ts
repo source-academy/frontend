@@ -35,6 +35,7 @@ import {
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
+  UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -562,6 +563,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           isEditorAutorun: !state[workspaceLocation].isEditorAutorun
+        }
+      };
+    case UPDATE_ACTIVE_TAB:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          sideContentActiveTab: action.payload.activeTab
         }
       };
     case UPDATE_CURRENT_ASSESSMENT_ID:

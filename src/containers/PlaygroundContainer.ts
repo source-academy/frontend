@@ -26,6 +26,7 @@ import {
   setEditorSessionId,
   setWebsocketStatus,
   toggleEditorAutorun,
+  updateActiveTab,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation,
@@ -33,7 +34,7 @@ import {
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
-import { IState } from '../reducers/states';
+import { IState, SideContentType } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorSessionId: state.workspaces.playground.editorSessionId,
@@ -62,6 +63,8 @@ const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
+      handleActiveTabChange: (activeTab: SideContentType) =>
+        updateActiveTab(activeTab, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) => changeExecTime(execTime, workspaceLocation),

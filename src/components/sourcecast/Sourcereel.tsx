@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput } from '../../reducers/states';
+import { InterpreterOutput, SideContentType } from '../../reducers/states';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
@@ -37,6 +37,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: number) => void;
@@ -151,6 +152,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
+        handleActiveTabChange: this.props.handleActiveTabChange,
         tabs: [
           {
             label: 'Introduction',
@@ -200,21 +202,21 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <ListVisualizer />,
-  id: 'data'
+  id: SideContentType.dataVisualiser
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <Inspector />,
-  id: 'inspector'
+  id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
-  id: 'env'
+  id: SideContentType.envVisualiser
 };
 
 export default Sourcereel;

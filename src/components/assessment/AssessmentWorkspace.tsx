@@ -12,7 +12,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
-import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
 import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
@@ -68,6 +68,7 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
@@ -331,13 +332,13 @@ class AssessmentWorkspace extends React.Component<
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.assessment!.questions[questionId].content} />,
-        id: 'question_overview'
+        id: SideContentType.questionOverview
       },
       {
         label: `${props.assessment!.category} Briefing`,
         iconName: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />,
-        id: 'briefing'
+        id: SideContentType.briefing
       },
       {
         label: `${props.assessment!.category} Autograder`,
@@ -349,7 +350,7 @@ class AssessmentWorkspace extends React.Component<
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
-        id: 'autograder'
+        id: SideContentType.autograder
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;
@@ -368,7 +369,7 @@ class AssessmentWorkspace extends React.Component<
               maxXp={props.assessment!.questions[questionId].maxXp}
             />
           ),
-          id: 'grading'
+          id: SideContentType.grading
         },
         {
           label: `Chat`,
@@ -381,7 +382,7 @@ class AssessmentWorkspace extends React.Component<
           ) : (
             <span>Chatkit disabled.</span>
           ),
-          id: 'chat',
+          id: SideContentType.chat,
           disabled: !USE_CHATKIT
         }
       );
@@ -393,10 +394,10 @@ class AssessmentWorkspace extends React.Component<
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <ToneMatrix />,
-        id: 'tone_matrix'
+        id: SideContentType.toneMatrix
       });
     }
-    return { tabs };
+    return { handleActiveTabChange: props.handleActiveTabChange, tabs };
   };
 
   /** Pre-condition: IAssessment has been loaded */

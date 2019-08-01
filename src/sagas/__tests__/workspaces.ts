@@ -16,7 +16,7 @@ import {
 import { mockRuntimeContext } from '../../mocks/context';
 import { mockTestcases } from '../../mocks/gradingAPI';
 import { externalLibraries } from '../../reducers/externalLibraries';
-import { defaultState, IState } from '../../reducers/states';
+import { defaultState, IState, SideContentType } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import workspaceSaga, { evalCode, evalTestCode } from '../workspaces';
 
@@ -633,7 +633,7 @@ describe('evalCode', () => {
 
       state = generateDefaultState(workspaceLocation, {
         editorTestcases: mockTestcases.slice(0, 2),
-        sideContentActiveTab: 2
+        sideContentActiveTab: SideContentType.autograder
       });
 
       return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
@@ -659,7 +659,7 @@ describe('evalCode', () => {
       workspaceLocation = WorkspaceLocations.grading;
       state = generateDefaultState(workspaceLocation, {
         editorTestcases: mockTestcases,
-        sideContentActiveTab: 3
+        sideContentActiveTab: SideContentType.autograder
       });
 
       return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)

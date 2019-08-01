@@ -26,13 +26,14 @@ import {
   timerStart,
   timerStop,
   toggleEditorAutorun,
+  updateActiveTab,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
 import { Input, IPlaybackData } from '../../components/sourcecast/sourcecastShape';
 import Sourcereel, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcereel';
-import { IState } from '../../reducers/states';
+import { IState, SideContentType } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   breakpoints: state.workspaces.sourcereel.breakpoints,
@@ -59,6 +60,7 @@ const location: WorkspaceLocation = 'sourcereel';
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
+      handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),

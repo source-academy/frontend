@@ -30,6 +30,7 @@ import {
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
+  UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -47,7 +48,8 @@ import {
   IPlaygroundWorkspace,
   IWorkspaceManagerState,
   maxBrowseIndex,
-  RunningOutput
+  RunningOutput,
+  SideContentType
 } from '../states';
 import { reducer } from '../workspaces';
 
@@ -1257,6 +1259,25 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           isEditorAutorun: false
+        }
+      });
+    });
+  });
+});
+
+describe('UPDATE_ACTIVE_TAB', () => {
+  test('writes correct value of sideContentActiveTab', () => {
+    const activeTab = SideContentType.questionOverview;
+    const actions: IAction[] = generateActions(UPDATE_ACTIVE_TAB, { activeTab });
+
+    actions.forEach(action => {
+      const result = reducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          sideContentActiveTab: activeTab
         }
       });
     });
