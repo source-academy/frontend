@@ -275,8 +275,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
     case CHANGE_PLAYGROUND_EXTERNAL:
       return {
         ...state,
-        playground: {
-          ...state.playground,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           playgroundExternal: action.payload.newExternal
         }
       };

@@ -16,6 +16,7 @@ import {
   evalEditor,
   evalRepl,
   fetchSourcecastIndex,
+  playgroundExternalSelect,
   setCodeDeltasToApply,
   setEditorBreakpoint,
   setEditorReadonly,
@@ -29,6 +30,7 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
+import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
 import Sourcecast, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcecast';
 import {
   ICodeDelta,
@@ -46,6 +48,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorReadonly: state.workspaces.sourcecast.editorReadonly,
   editorWidth: state.workspaces.sourcecast.editorWidth,
   editorValue: state.workspaces.sourcecast.editorValue!,
+  externalLibraryName: state.workspaces.sourcecast.playgroundExternal,
   isEditorAutorun: state.workspaces.sourcecast.isEditorAutorun,
   inputToApply: state.workspaces.sourcecast.inputToApply,
   breakpoints: state.workspaces.sourcecast.breakpoints,
@@ -61,7 +64,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcecast.context.chapter,
-  websocketStatus: state.workspaces.playground.websocketStatus
+  websocketStatus: state.workspaces.sourcecast.websocketStatus
 });
 
 const location: WorkspaceLocation = 'sourcecast';
@@ -78,6 +81,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
+      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
+        playgroundExternalSelect(externalLibraryName, location),
       handleFetchSourcecastIndex: () => fetchSourcecastIndex(location),
       handleInterruptEval: () => beginInterruptExecution(location),
       handleReplEval: () => evalRepl(location),

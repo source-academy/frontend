@@ -411,7 +411,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .put(actions.changePlaygroundExternal(newExternalLibraryName))
+      .put(actions.changePlaygroundExternal(newExternalLibraryName, workspaceLocation))
       .put(actions.beginClearContext(library, workspaceLocation))
       .put(actions.clearReplOutput(workspaceLocation))
       .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)

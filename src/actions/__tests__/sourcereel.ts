@@ -1,7 +1,8 @@
+import { ExternalLibraryNames } from '../../components/assessment/assessmentShape';
 import { ICodeDelta, Input, IPlaybackData } from '../../components/sourcecast/sourcecastShape';
 import * as actionTypes from '../actionTypes';
 import {
-  recordEditorInitValue,
+  recordInit,
   recordInput,
   saveSourcecastData,
   timerPause,
@@ -18,13 +19,17 @@ function dateIsCloseEnough(dateA: number, dateB: number) {
   return Math.abs(dateA - dateB) <= 1000;
 }
 
-test('recordEditorInitValue generates correct action object', () => {
-  const editorValue = 'Init Value';
-  const action = recordEditorInitValue(editorValue, sourcereelWorkspace);
+test('recordInit generates correct action object', () => {
+  const initData: IPlaybackData['init'] = {
+    editorValue: 'Init Value',
+    chapter: 1,
+    externalLibrary: ExternalLibraryNames.NONE
+  };
+  const action = recordInit(initData, sourcereelWorkspace);
   expect(action).toEqual({
-    type: actionTypes.RECORD_EDITOR_INIT_VALUE,
+    type: actionTypes.RECORD_INIT,
     payload: {
-      editorValue,
+      initData,
       workspaceLocation: sourcereelWorkspace
     }
   });
@@ -66,7 +71,11 @@ test('saveSourcecastData generates correct action object', () => {
   const description = 'Test Description';
   const audio = new Blob();
   const playbackData: IPlaybackData = {
-    init: { editorValue: 'Editor Init Value' },
+    init: {
+      editorValue: 'Editor Init Value',
+      chapter: 1,
+      externalLibrary: ExternalLibraryNames.NONE
+    },
     inputs: []
   };
   const action = saveSourcecastData(title, description, audio, playbackData, sourcereelWorkspace);

@@ -39,10 +39,11 @@ export const browseReplHistoryUp: ActionCreator<actionTypes.IAction> = (
 });
 
 export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
-  newExternal: string
+  newExternal: string,
+  workspaceLocation: WorkspaceLocation
 ) => ({
   type: actionTypes.CHANGE_PLAYGROUND_EXTERNAL,
-  payload: { newExternal }
+  payload: { newExternal, workspaceLocation }
 });
 
 export const changeEditorHeight: ActionCreator<actionTypes.IAction> = (
