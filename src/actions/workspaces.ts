@@ -38,14 +38,6 @@ export const browseReplHistoryUp: ActionCreator<actionTypes.IAction> = (
   payload: { workspaceLocation }
 });
 
-export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
-  activeTab: number,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHANGE_ACTIVE_TAB,
-  payload: { activeTab, workspaceLocation }
-});
-
 export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
   newExternal: string
 ) => ({
@@ -67,6 +59,14 @@ export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.CHANGE_EDITOR_WIDTH,
   payload: { widthChange, workspaceLocation }
+});
+
+export const changeExecTime: ActionCreator<actionTypes.IAction> = (
+  execTime: string,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.CHANGE_EXEC_TIME,
+  payload: { execTime, workspaceLocation }
 });
 
 export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (

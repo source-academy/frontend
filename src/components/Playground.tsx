@@ -38,11 +38,11 @@ the REPL.
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
-  activeTab: number;
   editorSessionId: string;
   editorValue: string;
   editorHeight?: number;
   editorWidth: string;
+  execTime: number;
   breakpoints: string[];
   highlightedLines: number[][];
   isEditorAutorun: boolean;
@@ -63,7 +63,7 @@ export interface IStateProps {
 export interface IDispatchProps {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
+  handleChangeExecTime: (execTime: number) => void;
   handleChapterSelect: (chapter: number) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -108,7 +108,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       controlBarProps: {
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
+        execTime: this.props.execTime,
         externalLibraryName: this.props.externalLibraryName,
+        handleChangeExecTime: (execTime: number) => this.props.handleChangeExecTime(execTime),
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
           this.props.handleChapterSelect(chapter),
         handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
@@ -126,6 +128,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleDebuggerPause: this.props.handleDebuggerPause,
         handleDebuggerResume: this.props.handleDebuggerResume,
         handleDebuggerReset: this.props.handleDebuggerReset,
+        hasChangeExecTime: true,
         hasChapterSelect: true,
         hasCollabEditing: true,
         hasEditorAutorunButton: true,
@@ -169,15 +172,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        activeTab: this.props.activeTab,
-        handleChangeActiveTab: this.props.handleChangeActiveTab,
-        tabs: [
-          playgroundIntroductionTab,
-          listVisualizerTab,
-          inspectorTab,
-          envVisualizerTab,
-          videoDisplayTab
-        ]
+        defaultSelectedTabId: 'introduction',
+        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
       }
     };
     return (
@@ -202,14 +198,16 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 
 const playgroundIntroductionTab: SideContentTab = {
   label: 'Introduction',
-  icon: IconNames.COMPASS,
-  body: <Markdown content={INTRODUCTION} />
+  iconName: IconNames.COMPASS,
+  body: <Markdown content={INTRODUCTION} />,
+  id: 'introduction'
 };
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
-  icon: IconNames.EYE_OPEN,
-  body: <ListVisualizer />
+  iconName: IconNames.EYE_OPEN,
+  body: <ListVisualizer />,
+  id: 'data'
 };
 
 const videoDisplayTab: SideContentTab = {
@@ -220,14 +218,16 @@ const videoDisplayTab: SideContentTab = {
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
-  icon: IconNames.SEARCH,
-  body: <Inspector />
+  iconName: IconNames.SEARCH,
+  body: <Inspector />,
+  id: 'inspector'
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.GLOBE,
-  body: <EnvVisualizer />
+  iconName: IconNames.GLOBE,
+  body: <EnvVisualizer />,
+  id: 'env'
 };
 
 export default Playground;

@@ -4,9 +4,9 @@ import { ITestcase } from '../components/assessment/assessmentShape';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_ACTIVE_TAB,
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
+  CHANGE_EXEC_TIME,
   CHANGE_PLAYGROUND_EXTERNAL,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
@@ -177,14 +177,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         };
       }
-    case CHANGE_ACTIVE_TAB:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContentActiveTab: action.payload.activeTab
-        }
-      };
+
     case CHANGE_EDITOR_HEIGHT:
       return {
         ...state,
@@ -203,6 +196,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
               parseFloat(state[workspaceLocation].editorWidth.slice(0, -1)) +
               action.payload.widthChange
             ).toString() + '%'
+        }
+      };
+    case CHANGE_EXEC_TIME:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          execTime: action.payload.execTime
         }
       };
     case CHANGE_SIDE_CONTENT_HEIGHT:

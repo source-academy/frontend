@@ -7,9 +7,9 @@ import {
   beginInterruptExecution,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeActiveTab,
   changeEditorHeight,
   changeEditorWidth,
+  changeExecTime,
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
@@ -36,10 +36,10 @@ import Playground, { IDispatchProps, IStateProps } from '../components/Playgroun
 import { IState } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  activeTab: state.workspaces.playground.sideContentActiveTab,
   editorSessionId: state.workspaces.playground.editorSessionId,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
+  execTime: state.workspaces.playground.execTime,
   isEditorAutorun: state.workspaces.playground.isEditorAutorun,
   breakpoints: state.workspaces.playground.breakpoints,
   highlightedLines: state.workspaces.playground.highlightedLines,
@@ -64,7 +64,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, workspaceLocation),
+      handleChangeExecTime: (execTime: number) => changeExecTime(execTime, workspaceLocation),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, workspaceLocation),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
