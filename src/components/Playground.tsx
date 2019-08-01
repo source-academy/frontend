@@ -212,7 +212,7 @@ const listVisualizerTab: SideContentTab = {
 
 const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
-  icon: IconNames.MOBILE_VIDEO,
+  iconName: IconNames.MOBILE_VIDEO,
   body: <VideoDisplay />
 };
 

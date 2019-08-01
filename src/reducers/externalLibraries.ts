@@ -140,10 +140,8 @@ const videoLibrary = [
   'make_distortion_filter',
   'make_static_distortion_filter',
   'pixel_similar',
-  'currentFrameRuntime',
-  'getTempArray',
-  'getVideoWidth',
-  'getVideoHeight',
+  'get_video_width',
+  'get_video_height',
   'apply_filter'
 ];
 
