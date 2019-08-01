@@ -42,7 +42,6 @@ export interface IStateProps {
   sideContentHeight?: number;
   sourcecastIndex: any;
   sourceChapter: number;
-  websocketStatus: number;
 }
 
 export interface IDispatchProps {
@@ -74,7 +73,6 @@ export interface IDispatchProps {
   ) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
-  handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
 }
@@ -114,8 +112,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
       breakpoints: this.props.breakpoints,
       highlightedLines: this.props.highlightedLines,
-      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-      handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
+      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
     };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {

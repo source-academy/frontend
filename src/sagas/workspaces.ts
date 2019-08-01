@@ -231,7 +231,7 @@ export default function* workspaceSaga(): SagaIterator {
     );
     const newExternalLibraryName = (action as actionTypes.IAction).payload.externalLibraryName;
     const oldExternalLibraryName = yield select(
-      (state: IState) => state.workspaces[workspaceLocation].playgroundExternal
+      (state: IState) => state.workspaces[workspaceLocation].externalLibrary
     );
     const symbols = externalLibraries.get(newExternalLibraryName)!;
     const library = {
@@ -243,7 +243,7 @@ export default function* workspaceSaga(): SagaIterator {
       globals
     };
     if (newExternalLibraryName !== oldExternalLibraryName) {
-      yield put(actions.changePlaygroundExternal(newExternalLibraryName, workspaceLocation));
+      yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);

@@ -106,7 +106,7 @@ export interface IWorkspaceState {
   readonly enableDebugging: boolean;
   readonly isEditorAutorun: boolean;
   readonly output: InterpreterOutput[];
-  readonly playgroundExternal: ExternalLibraryName;
+  readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
   readonly sharedbAceInitValue: string;
@@ -258,7 +258,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   editorTestcases: [],
   editorHeight: 150,
   editorWidth: '50%',
-  playgroundExternal: ExternalLibraryNames.NONE,
+  externalLibrary: ExternalLibraryNames.NONE,
   execTime: 1000,
   highlightedLines: [],
   output: [],

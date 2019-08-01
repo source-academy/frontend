@@ -7,7 +7,7 @@ import {
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_EXEC_TIME,
-  CHANGE_PLAYGROUND_EXTERNAL,
+  CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -272,12 +272,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
      * This action is only meant for Playground usage, where
      * the external library is displayed.
      */
-    case CHANGE_PLAYGROUND_EXTERNAL:
+    case CHANGE_EXTERNAL_LIBRARY:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          playgroundExternal: action.payload.newExternal
+          externalLibrary: action.payload.newExternal
         }
       };
     case HANDLE_CONSOLE_LOG:

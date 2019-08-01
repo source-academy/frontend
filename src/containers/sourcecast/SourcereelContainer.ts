@@ -15,7 +15,7 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
-  playgroundExternalSelect,
+  externalLibrarySelect,
   recordInit,
   recordInput,
   saveSourcecastData,
@@ -42,7 +42,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorValue: state.workspaces.sourcereel.editorValue!,
   editorWidth: state.workspaces.sourcereel.editorWidth,
   enableDebugging: state.workspaces.sourcereel.enableDebugging,
-  externalLibraryName: state.workspaces.sourcereel.playgroundExternal,
+  externalLibraryName: state.workspaces.sourcereel.externalLibrary,
   highlightedLines: state.workspaces.sourcereel.highlightedLines,
   isDebugging: state.workspaces.sourcereel.isDebugging,
   isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
@@ -72,7 +72,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        playgroundExternalSelect(externalLibraryName, location),
+        externalLibrarySelect(externalLibraryName, location),
       handleInterruptEval: () => beginInterruptExecution(location),
       handleRecordInput: (input: Input) => recordInput(input, location),
       handleReplEval: () => evalRepl(location),
