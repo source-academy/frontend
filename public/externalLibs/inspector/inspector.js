@@ -124,7 +124,7 @@
     const icon = document.getElementById("inspector-icon");
 
     if (!context && icon) {
-      icon.classList.remove("side-content-tab-alert");\
+      icon.classList.remove("side-content-tab-alert");
       container.innerHTML = "";
       return
     }
