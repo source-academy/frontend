@@ -25,7 +25,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   role: state.session.role,
   name: state.session.name,
   currentPlaygroundChapter: state.workspaces.playground.context.chapter,
-  currentExternalLibraryLibrary: state.workspaces.playground.externalLibrary
+  currentExternalLibrary: state.workspaces.playground.externalLibrary
 });
 
 const workspaceLocation = WorkspaceLocations.playground;

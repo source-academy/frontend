@@ -11,7 +11,7 @@ test('Application renders correctly', () => {
     title: 'Cadet',
     currentPlaygroundChapter: 2,
     handleLogOut: () => {},
-    currentExternalLibraryLibrary: ExternalLibraryNames.NONE,
+    currentExternalLibrary: ExternalLibraryNames.NONE,
     handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => {},
     handleEditorValueChange: (val: string) => {},
     handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},

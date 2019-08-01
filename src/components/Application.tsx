@@ -22,7 +22,7 @@ export interface IStateProps {
   role?: Role;
   title: string;
   name?: string;
-  currentExternalLibraryLibrary: ExternalLibraryName;
+  currentExternalLibrary: ExternalLibraryName;
 }
 
 export interface IDispatchProps {
@@ -86,7 +86,7 @@ const toLogin = (props: IApplicationProps) => () => (
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props);
   const chapter = parseChapter(props) || props.currentPlaygroundChapter;
-  const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibraryLibrary;
+  const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibrary;
   if (prgrm) {
     props.handleEditorValueChange(prgrm);
     props.handleEnsureLibrariesLoaded();
