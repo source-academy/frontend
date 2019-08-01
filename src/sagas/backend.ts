@@ -6,7 +6,6 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
-import { generateGradingEditorDraftKey } from '../components/academy/grading/GradingEditor';
 import {
   Grading,
   GradingOverview,
@@ -204,7 +203,7 @@ function* backendSaga(): SagaIterator {
     yield put(actions.updateGradingOverviews(newOverviews));
   });
 
-  yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
+  const sendGrade = function*(action: actionTypes.IAction) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
@@ -230,19 +229,6 @@ function* backendSaga(): SagaIterator {
     );
     if (resp && resp.ok) {
       yield call(showSuccessMessage, 'Submitted!', 1000);
-      yield (() => {
-        /**
-         * Move to next question for grading: this only works because the SUBMIT_GRADING
-         * Redux action is currently only used in the Grading Workspace
-         *
-         * If the questionId is out of bounds, the componentDidUpdate callback of
-         * GradingWorkspace will cause a redirect back to '/academy/grading'
-         */
-        history.push(`/academy/grading` + `/${submissionId}` + `/${questionId + 1}`);
-
-        // Delete the draft saved in the local storage, if any
-        localStorage.removeItem(generateGradingEditorDraftKey(submissionId, questionId));
-      })();
 
       // Now, update the grade for the question in the Grading in the store
       const grading: Grading = yield select((state: IState) =>
@@ -265,7 +251,25 @@ function* backendSaga(): SagaIterator {
     } else {
       request.handleResponseError(resp);
     }
-  });
+  };
+
+  const sendGradeAndContinue = function*(action: actionTypes.IAction) {
+    const { submissionId, questionId } = action.payload;
+    yield* sendGrade(action);
+    /**
+     * Move to next question for grading: this only works because the
+     * SUBMIT_GRADING_AND_CONTINUE Redux action is currently only
+     * used in the Grading Workspace
+     *
+     * If the questionId is out of bounds, the componentDidUpdate callback of
+     * GradingWorkspace will cause a redirect back to '/academy/grading'
+     */
+    yield history.push(`/academy/grading` + `/${submissionId}` + `/${questionId + 1}`);
+  };
+
+  yield takeEvery(actionTypes.SUBMIT_GRADING, sendGrade);
+
+  yield takeEvery(actionTypes.SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
 
   yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
     const tokens = yield select((state: IState) => ({

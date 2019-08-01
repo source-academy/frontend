@@ -98,6 +98,23 @@ export const submitGrading: ActionCreator<actionTypes.IAction> = (
   }
 });
 
+export const submitGradingAndContinue: ActionCreator<actionTypes.IAction> = (
+  submissionId: number,
+  questionId: number,
+  gradeAdjustment: number = 0,
+  xpAdjustment: number = 0,
+  comments?: string
+) => ({
+  type: actionTypes.SUBMIT_GRADING_AND_CONTINUE,
+  payload: {
+    submissionId,
+    questionId,
+    gradeAdjustment,
+    xpAdjustment,
+    comments
+  }
+});
+
 export const updateHistoryHelpers: ActionCreator<actionTypes.IAction> = (loc: string) => ({
   type: actionTypes.UPDATE_HISTORY_HELPERS,
   payload: loc

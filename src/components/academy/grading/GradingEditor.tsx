@@ -11,7 +11,6 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
-import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import * as React from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { Prompt } from 'react-router';
@@ -31,14 +30,9 @@ type GradingSaveFunction = (
   comments?: string
 ) => void;
 
-type GradingEditorDraft = {
-  gradeAdjustment: string;
-  xpAdjustment: string;
-  comments?: string;
-};
-
 export type DispatchProps = {
   handleGradingSave: GradingSaveFunction;
+  handleGradingSaveAndContinue: GradingSaveFunction;
 };
 
 export type OwnProps = {
@@ -75,25 +69,14 @@ export type OwnProps = {
  * @prop selectedTab the selected tab for the react-mde editor
  *   (either 'write' or 'preview')
  *
- * @prop draft a cache for the local draft stored on the user's system, to allow for
- *   easy comparison between the local draft and the current grading editor values.
- *   'draft' can be undefined. But if it is defined, 'draft.gradeAdjustmentInput'
- *   and 'draft.xpAdjustmentInput' cannot be undefined.
- *
- *   To reflect no changes they are set to '0', so when the draft is loaded
- *   '0' will be seen in the input boxes
- *
- * @prop highlightLoadDraft determines whether the 'Load Draft' button
- *   has an orange colour, or should remain in the background
- *
  * @prop currentlySaving determines whether the 'You have unsaved changes'
  *   prompt should appear on page navigation, to prevent the
- *   'Submit and Continue' button from activating the prompt
+ *   'Save and Continue' button from activating the prompt
  *   in cases where navigation occurs before Redux has
  *   updated the props of the Editor component
  *
- *   This may pose a problem if the user clicks 'Submit and Continue'
- *   and the 'Submit' process fails. The prompt would no longer
+ *   This may pose a problem if the user clicks 'Save and Continue'
+ *   and the saving process fails. The prompt would no longer
  *   appear although there exist unsaved changes
  */
 type State = {
@@ -101,28 +84,12 @@ type State = {
   xpAdjustmentInput: string | null;
   editorValue?: string;
   selectedTab: ReactMdeProps['selectedTab'];
-  draft?: GradingEditorDraft;
-  highlightLoadDraft: boolean;
   currentlySaving: boolean;
 };
 
 const gradingEditorButtonClass = 'grading-editor-button';
 
-/**
- * Function to generate a unique string for every instance of
- * the grading editor, assuming that each grade corresponds
- * to a unique submissionId and questionId
- *
- * This function is used in the Redux Sagas, so the local draft
- * can be removed when the Grading has been submitted
- */
-export const generateGradingEditorDraftKey = (submissionId: number, questionId: number): string => {
-  return `gradingDraftS${submissionId}Q${questionId}`;
-};
-
 class GradingEditor extends React.Component<GradingEditorProps, State> {
-  private draftId = generateGradingEditorDraftKey(this.props.submissionId, this.props.questionId);
-
   constructor(props: GradingEditorProps) {
     super(props);
     this.state = {
@@ -130,30 +97,26 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       xpAdjustmentInput: props.xpAdjustment.toString(),
       editorValue: props.comments,
       selectedTab: 'write',
-      draft: this.loadFromLocalStorage(),
-      highlightLoadDraft: true,
       currentlySaving: false
     };
   }
 
   public render() {
-    const hasNotSubmitted = this.hasNotSubmitted();
-    const hasUnsavedChanges = hasNotSubmitted && this.hasUnsavedDraft();
+    const hasUnsavedChanges = this.hasUnsavedChanges();
     const saveButtonOpts = {
       intent: hasUnsavedChanges ? Intent.WARNING : Intent.NONE,
       minimal: !hasUnsavedChanges,
       className: gradingEditorButtonClass
     };
-    const loadButtonOpts = {
-      intent: this.state.highlightLoadDraft ? Intent.WARNING : Intent.NONE,
-      minimal: !this.state.highlightLoadDraft,
+    const discardButtonOpts = {
+      intent: hasUnsavedChanges ? Intent.DANGER : Intent.NONE,
+      minimal: !hasUnsavedChanges,
       className: gradingEditorButtonClass
     };
-    const submitButtonOpts = {
-      intent: hasNotSubmitted ? Intent.SUCCESS : Intent.NONE,
-      minimal: !hasNotSubmitted,
-      fullWidth: true,
-      className: classNames(gradingEditorButtonClass, 'grading-editor-submit')
+    const saveAndContinueButtonOpts = {
+      intent: hasUnsavedChanges ? Intent.SUCCESS : Intent.NONE,
+      minimal: !hasUnsavedChanges,
+      className: classNames(gradingEditorButtonClass, 'grading-editor-save-and-continue')
     };
     const onTabChange = (tab: ReactMdeProps['selectedTab']) =>
       this.setState({
@@ -269,32 +232,30 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                 <tr>
                   <td>
                     {controlButton(
-                      'Save Draft',
+                      'Save Changes',
                       IconNames.FLOPPY_DISK,
-                      this.validateGradesBeforeSave(this.saveToLocalStorage),
+                      this.validateGradesBeforeSave(this.props.handleGradingSave),
                       saveButtonOpts
                     )}
                   </td>
-                  {this.state.draft && (
-                    <td>
-                      {controlButton(
-                        'Load Draft',
-                        IconNames.DOCUMENT_OPEN,
-                        hasUnsavedChanges ? this.loadWarning : this.loadDraft,
-                        loadButtonOpts
-                      )}
-                    </td>
-                  )}
+                  <td>
+                    {controlButton(
+                      'Discard Changes',
+                      IconNames.TRASH,
+                      this.discardChanges,
+                      discardButtonOpts
+                    )}
+                  </td>
                 </tr>
               </tbody>
             </HTMLTable>
           </div>
         )}
         {controlButton(
-          'Submit and Continue',
+          'Save and Continue',
           IconNames.UPDATED,
-          this.validateGradesBeforeSave(this.onClickSubmitAndContinue),
-          submitButtonOpts
+          this.validateGradesBeforeSave(this.onClickSaveAndContinue),
+          saveAndContinueButtonOpts
         )}
       </div>
     );
@@ -348,7 +309,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * Sets the state currentlySaving to true to disable
    * the 'You have unsaved changes' prompt
    */
-  private onClickSubmitAndContinue: GradingSaveFunction = (
+  private onClickSaveAndContinue: GradingSaveFunction = (
     submissionId: number,
     questionId: number,
     gradeAdjustment: number | undefined,
@@ -356,7 +317,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     comments?: string
   ) => {
     const callback = (): void => {
-      this.props.handleGradingSave(
+      this.props.handleGradingSaveAndContinue(
         submissionId,
         questionId,
         gradeAdjustment,
@@ -368,90 +329,22 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   };
 
   /**
-   * Function to save grading data to local storage, as
-   * well as cache it in the 'draft' component state
-   */
-  private saveToLocalStorage: GradingSaveFunction = (
-    submissionId: number,
-    questionId: number,
-    gradeAdjustment: number | undefined,
-    xpAdjustment: number | undefined,
-    comments?: string
-  ) => {
-    const numToString = (adjustment: number | undefined) =>
-      adjustment === undefined ? '0' : adjustment.toString();
-    const draft: GradingEditorDraft = {
-      gradeAdjustment: numToString(gradeAdjustment),
-      xpAdjustment: numToString(xpAdjustment),
-      comments: comments || ''
-    };
-    try {
-      localStorage.setItem(this.draftId, compressToUTF16(JSON.stringify(draft)));
-      this.setState({ ...this.state, draft, highlightLoadDraft: false });
-      showSuccessMessage('Saved local copy of draft!', 1000);
-    } catch (err) {
-      showWarningMessage('Error: Saving draft to local storage failed');
-    }
-  };
-
-  /**
    * Send a warning prompt that loading from a local draft
    * will overwrite any unsaved changes
    */
-  private loadWarning = (): void => {
-    if (confirm('Loading from a local draft will overwrite your unsaved changes. Are you sure?')) {
-      this.loadDraft();
-    }
-  };
-
-  /**
-   * Set the text in the editor to the current saved comments
-   * in the 'draft' state
-   */
-  private loadDraft = (): void => {
-    this.setState(
-      state => {
-        if (state.draft) {
-          return {
-            ...state,
-            gradeAdjustmentInput: state.draft.gradeAdjustment,
-            xpAdjustmentInput: state.draft.xpAdjustment,
-            editorValue: state.draft.comments,
-            highlightLoadDraft: false
-          };
-        } else {
-          return state;
+  private discardChanges = (): void => {
+    if (!this.hasUnsavedChanges() || confirm('This will reset the editor. Are you sure?')) {
+      this.setState(
+        {
+          ...this.state,
+          gradeAdjustmentInput: this.props.gradeAdjustment!.toString(),
+          xpAdjustmentInput: this.props.xpAdjustment!.toString(),
+          editorValue: this.props.comments || ''
+        },
+        () => {
+          showSuccessMessage('Discarded!', 1000);
         }
-      },
-      () => {
-        showSuccessMessage('Loaded!', 1000);
-      }
-    );
-  };
-
-  /**
-   * Function to retrieve grading data from local storage
-   *
-   * Should only need to be called once when the component is
-   * rendered, to set the value of the 'draft' state, as
-   * further draft saves will be stored in the current
-   * state of the component
-   */
-  private loadFromLocalStorage = (): GradingEditorDraft | undefined => {
-    try {
-      const serialized = localStorage.getItem(this.draftId);
-      if (!serialized) {
-        return undefined;
-      }
-      const draft = JSON.parse(decompressFromUTF16(serialized)) as GradingEditorDraft;
-      showSuccessMessage(
-        "Local draft of grading found! Select 'Load Draft' to load it into the editor",
-        2500
       );
-      return draft;
-    } catch (err) {
-      showWarningMessage('Error: Loading draft from local storage failed');
-      return undefined;
     }
   };
 
@@ -491,7 +384,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     });
   };
 
-  private hasNotSubmitted = () => {
+  private hasUnsavedChanges = () => {
     const gradeAdjustmentInput = stringParamToInt(this.state.gradeAdjustmentInput || undefined);
     const xpAdjustmentInput = stringParamToInt(this.state.xpAdjustmentInput || undefined);
     return (
@@ -499,14 +392,6 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       this.props.xpAdjustment !== xpAdjustmentInput ||
       this.props.comments !== this.state.editorValue
     );
-  };
-
-  private hasUnsavedDraft = () => {
-    return this.state.draft
-      ? this.state.draft.gradeAdjustment !== this.state.gradeAdjustmentInput ||
-          this.state.draft.xpAdjustment !== this.state.xpAdjustmentInput ||
-          this.state.draft.comments !== this.state.editorValue
-      : this.state.gradeAdjustmentInput || this.state.xpAdjustmentInput || this.state.editorValue;
   };
 
   private generateMarkdownPreview = (markdown: string) =>

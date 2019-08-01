@@ -18,6 +18,7 @@ import {
   submitAnswer,
   submitAssessment,
   submitGrading,
+  submitGradingAndContinue,
   unsubmitSubmission,
   updateAssessment,
   updateAssessmentOverviews,
@@ -201,6 +202,23 @@ test('submitGrading generates correct action object with default values', () => 
   });
 });
 
+test('submitGradingAndContinue generates correct action object with default values', () => {
+  const submissionId = 8;
+  const questionId = 2;
+
+  const action = submitGradingAndContinue(submissionId, questionId);
+  expect(action).toEqual({
+    type: actionTypes.SUBMIT_GRADING_AND_CONTINUE,
+    payload: {
+      submissionId,
+      questionId,
+      gradeAdjustment: 0,
+      xpAdjustment: 0,
+      comments: undefined
+    }
+  });
+});
+
 test('submitGrading generates correct action object', () => {
   const submissionId = 10;
   const questionId = 3;
@@ -210,6 +228,31 @@ test('submitGrading generates correct action object', () => {
   const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment, comments);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
+    payload: {
+      submissionId,
+      questionId,
+      gradeAdjustment,
+      xpAdjustment,
+      comments
+    }
+  });
+});
+
+test('submitGradingAndContinue generates correct action object', () => {
+  const submissionId = 4;
+  const questionId = 7;
+  const gradeAdjustment = 90;
+  const xpAdjustment = 55;
+  const comments = 'another comment';
+  const action = submitGradingAndContinue(
+    submissionId,
+    questionId,
+    gradeAdjustment,
+    xpAdjustment,
+    comments
+  );
+  expect(action).toEqual({
+    type: actionTypes.SUBMIT_GRADING_AND_CONTINUE,
     payload: {
       submissionId,
       questionId,

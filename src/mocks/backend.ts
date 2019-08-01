@@ -3,7 +3,6 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
-import { generateGradingEditorDraftKey } from '../components/academy/grading/GradingEditor';
 import {
   Grading,
   GradingOverview,
@@ -115,7 +114,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.updateGradingOverviews(newOverviews));
   });
 
-  yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
+  const sendGrade = function*(action: actionTypes.IAction) {
     const {
       submissionId,
       questionId,
@@ -142,20 +141,25 @@ export function* mockBackendSaga(): SagaIterator {
     });
     yield put(actions.updateGrading(submissionId, newGrading));
     yield call(showSuccessMessage, 'Submitted!', 1000);
-    yield (() => {
-      /**
-       * Move to next question for grading: this only works because the SUBMIT_GRADING
-       * Redux action is currently only used in the Grading Workspace
-       *
-       * If the questionId is out of bounds, the componentDidUpdate callback of
-       * GradingWorkspace will cause a redirect back to '/academy/grading'
-       */
-      history.push(`/academy/grading` + `/${submissionId}` + `/${questionId + 1}`);
+  };
 
-      // Delete the draft saved in the local storage, if any
-      localStorage.removeItem(generateGradingEditorDraftKey(submissionId, questionId));
-    })();
-  });
+  const sendGradeAndContinue = function*(action: actionTypes.IAction) {
+    const { submissionId, questionId } = action.payload;
+    yield* sendGrade(action);
+    /**
+     * Move to next question for grading: this only works because the
+     * SUBMIT_GRADING_AND_CONTINUE Redux action is currently only
+     * used in the Grading Workspace
+     *
+     * If the questionId is out of bounds, the componentDidUpdate callback of
+     * GradingWorkspace will cause a redirect back to '/academy/grading'
+     */
+    yield history.push(`/academy/grading` + `/${submissionId}` + `/${questionId + 1}`);
+  };
+
+  yield takeEvery(actionTypes.SUBMIT_GRADING, sendGrade);
+
+  yield takeEvery(actionTypes.SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
 
   yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATIONS, function*(action) {
     const notificationFilter:
