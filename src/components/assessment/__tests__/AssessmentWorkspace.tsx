@@ -6,7 +6,6 @@ import { Library } from '../assessmentShape';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
 
 const defaultProps: AssessmentWorkspaceProps = {
-  activeTab: 0,
   assessmentId: 0,
   autogradingResults: [],
   notAttempted: true,
@@ -22,7 +21,6 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleAssessmentFetch: (assessmentId: number) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
-  handleChangeActiveTab: (activeTab: number) => {},
   handleChapterSelect: (chapter: any, changeEvent: any) => {},
   handleClearContext: (library: Library) => {},
   handleEditorEval: () => {},

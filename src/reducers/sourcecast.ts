@@ -3,6 +3,7 @@ import { ISourcecastWorkspace } from './states';
 
 import {
   IAction,
+  SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
   SET_INPUT_TO_APPLY,
   SET_SOURCECAST_DATA,
@@ -16,18 +17,24 @@ export const reducer: Reducer<ISourcecastWorkspace> = (
   action: IAction
 ) => {
   switch (action.type) {
+    case SAVE_SOURCECAST_DATA:
+      return {
+        ...state,
+        title: action.payload.title,
+        description: action.payload.description,
+        audioUrl: action.payload.audioUrl,
+        playbackData: action.payload.playbackData
+      };
     case SET_CODE_DELTAS_TO_APPLY:
       return {
         ...state,
         codeDeltasToApply: action.payload.deltas
       };
-
     case SET_INPUT_TO_APPLY:
       return {
         ...state,
         inputToApply: action.payload.inputToApply
       };
-
     case SET_SOURCECAST_DATA:
       return {
         ...state,

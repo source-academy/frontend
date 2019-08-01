@@ -107,12 +107,6 @@
     "Symbol(Used to implement hoisting)": " "
   }
 
-  setInterval(()=>{
-    if(document.getElementById("inspector-container") != null){
-      document.getElementById("Inspector-icon").classList.remove("side-content-header-button-alert");
-    }
-  },1000)
-
   function updateContext(context, stringify) {
     function dumpTable(env) {
       var res = '';
@@ -127,10 +121,10 @@
     }
 
     // icon to blink
-    const icon = document.getElementById("Inspector-icon");
+    const icon = document.getElementById("inspector-icon");
 
     if (!context && icon) {
-      icon.classList.remove("side-content-header-button-alert");
+      icon.classList.remove("side-content-tab-alert");
       container.innerHTML = "";
       return
     }
@@ -151,7 +145,7 @@
         newtable.appendChild(tbody);
         container.appendChild(newtable);
         if (icon) {
-          icon.classList.add("side-content-header-button-alert");
+          icon.classList.add("side-content-tab-alert");
         }
       }
     } catch (e) {
