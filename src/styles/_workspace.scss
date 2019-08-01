@@ -164,36 +164,6 @@ $code-color-error: #ff4444;
     flex-direction: column;
   }
 
-  .side-content-header {
-    align-items: center;
-    display: flex;
-    flex: none;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding-bottom: 0.2rem;
-    .side-content-header-button:focus {
-      outline: 0;
-    }
-
-    .side-content-header-button-alert {
-      -webkit-animation: alert 1s infinite;
-      -moz-animation: alert 1s infinite;
-      -o-animation: alert 1s infinite;
-      animation: alert 1s infinite;
-    }
-
-    @-webkit-keyframes alert {
-      0%,
-      50% {
-        background-color: rgba(200, 100, 50, 0.5);
-      }
-      51%,
-      100% {
-        background-image: rgba(138, 155, 168, 0.3);
-      }
-    }
-  }
-
   .side-content-divider {
     height: 0.6rem;
     flex: initial;
@@ -202,7 +172,6 @@ $code-color-error: #ff4444;
   .side-content {
     flex: 1 1 auto;
     height: 100%;
-    text-align: justify;
     overflow-y: auto;
 
     .#{$ns}-card {
@@ -215,6 +184,10 @@ $code-color-error: #ff4444;
       /* Fix card not wrapping content on OSX, Chrome */
       overflow-y: auto;
       padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+
+      .#{$ns}-tabs {
+        width: 100%;
+      }
     }
   }
 
@@ -223,6 +196,8 @@ $code-color-error: #ff4444;
     /* word-wrap and word-break are added to make text wrap. */
     word-wrap: break-word;
     word-break: break-word;
+    color: $code-color-result;
+    text-align: justify;
 
     div {
       p:last-child {
@@ -302,6 +277,81 @@ $code-color-error: #ff4444;
         &.grading-editor-save-and-continue {
           margin-top: 0.4rem;
         }
+      }
+    }
+  }
+
+  .side-content-tabs {
+    flex: 1 1 auto;
+    height: 100%;
+    overflow-y: auto;
+    justify-content: center;
+    display: flex;
+
+    .#{$ns}-tab-list {
+      justify-content: center;
+    }
+  }
+
+  .side-content-tab {
+    // Set colour of icons in blueprintjs tabs
+    color: #a7b6c2;
+    &[aria-selected='true'] {
+      .side-content-tooltip {
+        background-color: #495a6b;
+
+        // Hide alert animation when the tab is currently selected
+        // (the alert will be cleared by the code if any tab change occurs)
+        -webkit-animation: none;
+        -moz-animation: none;
+        -o-animation: none;
+        animation: none;
+      }
+    }
+
+    &[aria-disabled='true'] {
+      .side-content-tooltip {
+        // Set tooltip colour to always be the same as the background
+        background-color: inherit;
+        // Set colour of icons to be more faded
+        color: #3b4d5e;
+
+        // Prevent alert animation for disabled tabs
+        -webkit-animation: none;
+        -moz-animation: none;
+        -o-animation: none;
+        animation: none;
+      }
+    }
+  }
+
+  .side-content-tooltip {
+    border-radius: 3px;
+    // size of rounded box under tab icon
+    height: 25px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      background-color: #3a4c5d;
+    }
+
+    &.side-content-tab-alert {
+      -webkit-animation: alert 1s infinite;
+      -moz-animation: alert 1s infinite;
+      -o-animation: alert 1s infinite;
+      animation: alert 1s infinite;
+    }
+
+    @-webkit-keyframes alert {
+      0%,
+      50% {
+        background-color: rgba(200, 100, 50, 0.5);
+      }
+      51%,
+      100% {
+        background-image: rgba(138, 155, 168, 0.3);
       }
     }
   }

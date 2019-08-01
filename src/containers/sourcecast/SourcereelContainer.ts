@@ -6,7 +6,6 @@ import {
   beginInterruptExecution,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeActiveTab,
   changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
@@ -36,7 +35,6 @@ import Sourcereel, { IDispatchProps, IStateProps } from '../../components/source
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  activeTab: state.workspaces.sourcereel.sideContentActiveTab,
   breakpoints: state.workspaces.sourcereel.breakpoints,
   editorReadonly: state.workspaces.sourcereel.editorReadonly,
   editorValue: state.workspaces.sourcereel.editorValue!,
@@ -63,7 +61,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
-      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),

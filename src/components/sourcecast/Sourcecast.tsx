@@ -17,7 +17,6 @@ import SourcecastTable from './SourcecastTable';
 export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
-  activeTab: number;
   audioUrl: string;
   codeDeltasToApply: ICodeDelta[] | null;
   title: string | null;
@@ -47,7 +46,6 @@ export interface IStateProps {
 export interface IDispatchProps {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
@@ -155,12 +153,10 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        activeTab: this.props.activeTab,
-        handleChangeActiveTab: this.props.handleChangeActiveTab,
         tabs: [
           {
             label: 'Introduction',
-            icon: IconNames.COMPASS,
+            iconName: IconNames.COMPASS,
             body: (
               <div>
                 <span className="Multi-line">
@@ -209,20 +205,23 @@ const INTRODUCTION = 'Welcome to Sourcecast!';
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
-  icon: IconNames.EYE_OPEN,
-  body: <ListVisualizer />
+  iconName: IconNames.EYE_OPEN,
+  body: <ListVisualizer />,
+  id: 'data'
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
-  icon: IconNames.SEARCH,
-  body: <Inspector />
+  iconName: IconNames.SEARCH,
+  body: <Inspector />,
+  id: 'inspector'
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.GLOBE,
-  body: <EnvVisualizer />
+  iconName: IconNames.GLOBE,
+  body: <EnvVisualizer />,
+  id: 'env'
 };
 
 export default Sourcecast;
