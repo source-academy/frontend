@@ -269,7 +269,7 @@ $code-color-error: #ff4444;
       animation: alert 1s infinite;
     }
 
-    @-webkit-keyframes alert {
+    @keyframes alert {
       0%,
       50% {
         background-color: rgba(200, 100, 50, 0.5);
