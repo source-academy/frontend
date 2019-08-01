@@ -947,8 +947,8 @@
   function draw_env(context) {
     
     // blink icon
-    const icon = document.getElementById("Env Visualizer-icon")
-    icon.classList.add("side-content-header-button-alert")
+    const icon = document.getElementById("env-icon")
+    icon.classList.add("side-content-tab-alert")
 		
     // reset current drawing
     fnObjectLayer.scene.clear()
