@@ -173,7 +173,13 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
         defaultSelectedTabId: 'introduction',
-        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab, videoDisplayTab]
+        tabs: [
+          playgroundIntroductionTab,
+          listVisualizerTab,
+          inspectorTab,
+          envVisualizerTab,
+          videoDisplayTab
+        ]
       }
     };
     return (
