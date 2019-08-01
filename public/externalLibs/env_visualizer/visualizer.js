@@ -882,7 +882,9 @@
     Object.keys(levels).forEach(function(level) {
       tempLevels[level] = levels[level].count;
     });
-
+    
+    /**
+     * Not working :( to fix
     let drawingWidth = 0,
       drawingHeight = 0;
     for (l in levels) {
@@ -891,7 +893,8 @@
         drawingWidth += (levels[l].frames[f].width + 72);
       }
     }
-    //viewport.setSize(drawingWidth, drawingHeight);
+    viewport.setSize(drawingWidth, drawingHeight);
+    */
     
     for (f in frames) {
       /**
