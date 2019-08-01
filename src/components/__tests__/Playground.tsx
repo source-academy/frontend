@@ -7,12 +7,12 @@ import Playground, { IPlaygroundProps } from '../Playground';
 
 const baseProps = {
   editorValue: '',
+  execTime: 1000,
   breakpoints: [],
   highlightedLines: [],
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  activeTab: 0,
   editorSessionId: '',
   editorWidth: '50%',
   isEditorAutorun: false,
@@ -26,7 +26,7 @@ const baseProps = {
   websocketStatus: 0,
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
-  handleChangeActiveTab: (n: number) => {},
+  handleChangeExecTime: (execTime: number) => {},
   handleChapterSelect: (chapter: number) => {},
   handleEditorEval: () => {},
   handleEditorHeightChange: (height: number) => {},
