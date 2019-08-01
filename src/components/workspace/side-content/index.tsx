@@ -9,7 +9,9 @@ import { SideContentType } from 'src/reducers/states';
  * @property defaultSelectedTabId The id of a SideContentTab to be
  *  selected initially when the SideContent component is mounted.
  *
- * @property handleActiveTabChange
+ * @property handleActiveTabChange A dispatch bound to the
+ * UPDATE_ACTIVE_TAB action creator; updates the Redux store with
+ * the id of the active side content tab in the current workspace.
  *
  * @property onChange A function that is called whenever the
  * active tab is changed by the user.
