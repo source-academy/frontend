@@ -599,8 +599,9 @@ describe('evalCode', () => {
     });
 
     test('puts evalTestcase (assessment has testcases and Autograder tab is active)', () => {
+      const type = 'result';
       state = generateDefaultState(workspaceLocation, {
-        editorTestcases: mockTestcases.slice(0, 3),
+        editorTestcases: mockTestcases.slice(0, 2),
         sideContentActiveTab: 2
       });
 
@@ -611,12 +612,16 @@ describe('evalCode', () => {
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .call(showSuccessMessage, 'Running all testcases!', 750)
         .put(actions.evalTestcase(workspaceLocation, 0))
+        .dispatch({
+          type: actionTypes.EVAL_TESTCASE_SUCCESS,
+          payload: { type, value, workspaceLocation, index: 0 }
+        })
         .put(actions.evalTestcase(workspaceLocation, 1))
-        .put(actions.evalTestcase(workspaceLocation, 2))
         .silentRun();
     });
 
     test('puts evalTestcase (submission has testcases and Autograder tab is active)', () => {
+      const type = 'result';
       workspaceLocation = WorkspaceLocations.grading;
       state = generateDefaultState(workspaceLocation, {
         editorTestcases: mockTestcases,
@@ -630,8 +635,20 @@ describe('evalCode', () => {
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .call(showSuccessMessage, 'Running all testcases!', 750)
         .put(actions.evalTestcase(workspaceLocation, 0))
+        .dispatch({
+          type: actionTypes.EVAL_TESTCASE_SUCCESS,
+          payload: { type, value, workspaceLocation, index: 0 }
+        })
         .put(actions.evalTestcase(workspaceLocation, 1))
+        .dispatch({
+          type: actionTypes.EVAL_TESTCASE_SUCCESS,
+          payload: { type, value, workspaceLocation, index: 0 }
+        })
         .put(actions.evalTestcase(workspaceLocation, 2))
+        .dispatch({
+          type: actionTypes.EVAL_TESTCASE_SUCCESS,
+          payload: { type, value, workspaceLocation, index: 0 }
+        })
         .put(actions.evalTestcase(workspaceLocation, 3))
         .silentRun();
     });
