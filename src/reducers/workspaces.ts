@@ -268,10 +268,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         }
       };
-    /**
-     * This action is only meant for Playground usage, where
-     * the external library is displayed.
-     */
     case CHANGE_EXTERNAL_LIBRARY:
       return {
         ...state,
