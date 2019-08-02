@@ -104,6 +104,17 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 
   public render() {
+    const tabs: SideContentTab[] = [
+      playgroundIntroductionTab,
+      listVisualizerTab,
+      inspectorTab,
+      envVisualizerTab
+    ];
+
+    if (this.props.externalLibraryName === 'VIDEO') {
+      tabs.push(videoDisplayTab);
+    }
+
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
@@ -173,15 +184,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
         defaultSelectedTabId: 'introduction',
-        tabs: [
-          playgroundIntroductionTab,
-          listVisualizerTab,
-          inspectorTab,
-          envVisualizerTab,
-          videoDisplayTab
-        ]
+        tabs
       }
     };
+
     return (
       <HotKeys
         className={classNames(
