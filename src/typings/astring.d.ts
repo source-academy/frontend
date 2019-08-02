@@ -1,1 +1,1 @@
-declare module 'astring'
+declare module 'astring';

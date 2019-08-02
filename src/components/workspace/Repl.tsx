@@ -25,8 +25,7 @@ export interface IOutputProps {
 }
 
 class Repl extends React.PureComponent<IReplProps, {}> {
-
-  public constructor(props : IReplProps) {
+  public constructor(props: IReplProps) {
     super(props);
   }
 
@@ -65,20 +64,14 @@ export const Output: React.SFC<IOutputProps> = props => {
       );
     case 'result':
       if (props.output.value instanceof Array) {
-          
         const theSubstTimeline = (window as any).SubstTimeline;
 
         if (theSubstTimeline) {
           theSubstTimeline.updateTrees(props.output.value);
         }
 
-        return (
-          <Card>
-            {theSubstTimeline? theSubstTimeline.getFinalValue() : ""}
-          </Card>
-        );
-      }  
-      else if (props.output.consoleLogs.length === 0) {
+        return <Card>{theSubstTimeline ? theSubstTimeline.getFinalValue() : ''}</Card>;
+      } else if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
             <Pre className="resultOutput">{renderResult(props.output.value)}</Pre>

@@ -2,18 +2,17 @@ import { Keys } from '@blueprintjs/core';
 import * as React from 'react';
 
 export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISubstTimelineState> {
-
-  private trees? : Array<String>;
+  private trees?: String[];
   private mounted = false;
-  private slider : HTMLInputElement | null;
-  
-  constructor(props : ISubstTimelineProps) {
+  private slider: HTMLInputElement | null;
+
+  constructor(props: ISubstTimelineProps) {
     super(props);
     this.trees = props.trees;
-    
+
     this.updateTrees = this.updateTrees.bind(this);
     this.getFinalValue = this.getFinalValue.bind(this);
-    
+
     this.sliderChanged = this.sliderChanged.bind(this);
     this.sliderShift = this.sliderShift.bind(this);
     this.stepFirst = this.stepFirst.bind(this);
@@ -31,94 +30,117 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
   }
 
   public render() {
-
-    const value = (this.state && this.state.value) ? this.state.value : 0;
+    const value = this.state && this.state.value ? this.state.value : 0;
     return (
       <div>
         <div>
           {this.trees
             ? this.generateFromTree(this.trees[value])
-            : "Start writing some code on the left, then drag the slider below to see it's evaluation."
-          }
+            : "Start writing some code on the left, then drag the slider below to see it's evaluation."}
         </div>
-        <br/>
+        <br />
         <div>
-          <button className="pt-button" onClick={this.stepFirst} onKeyDown={this.handleKeyDown} disabled={!this.enableFirstAndPrevButton()}>{"|<"}</button>
-          <button className="pt-button" onClick={this.stepPrev} onKeyDown={this.handleKeyDown} disabled={!this.enableFirstAndPrevButton()}>{"<"}</button>
-          <button className="pt-button" onClick={this.stepNext} onKeyDown={this.handleKeyDown} disabled={!this.enableLastAndNextButton()}>{">"}</button>
-          <button className="pt-button" onClick={this.stepLast} onKeyDown={this.handleKeyDown} disabled={!this.enableLastAndNextButton()}>{">|"}</button>
-          <input className="slider" ref={x=>this.slider=x} type="range" min="0" max={this.trees? this.trees.length-1 : 0} defaultValue="0" onChange={this.sliderChanged} onKeyDown={this.handleKeyDown}/>
+          <button
+            className="pt-button"
+            onClick={this.stepFirst}
+            onKeyDown={this.handleKeyDown}
+            disabled={!this.enableFirstAndPrevButton()}
+          >
+            {'|<'}
+          </button>
+          <button
+            className="pt-button"
+            onClick={this.stepPrev}
+            onKeyDown={this.handleKeyDown}
+            disabled={!this.enableFirstAndPrevButton()}
+          >
+            {'<'}
+          </button>
+          <button
+            className="pt-button"
+            onClick={this.stepNext}
+            onKeyDown={this.handleKeyDown}
+            disabled={!this.enableLastAndNextButton()}
+          >
+            {'>'}
+          </button>
+          <button
+            className="pt-button"
+            onClick={this.stepLast}
+            onKeyDown={this.handleKeyDown}
+            disabled={!this.enableLastAndNextButton()}
+          >
+            {'>|'}
+          </button>
+          <input
+            className="slider"
+            ref={x => (this.slider = x)}
+            type="range"
+            min="0"
+            max={this.trees ? this.trees.length - 1 : 0}
+            defaultValue="0"
+            onChange={this.sliderChanged}
+            onKeyDown={this.handleKeyDown}
+          />
         </div>
       </div>
     );
   }
 
-  public updateTrees(newTrees : Array<String>){
-    
+  public updateTrees(newTrees: String[]) {
     this.trees = newTrees;
 
     if (this.mounted) {
       this.trees = newTrees;
 
       if (this.slider) {
-        this.slider.value = "0";
+        this.slider.value = '0';
         this.slider.focus();
       }
 
-      this.setState({trees: this.trees});
+      this.setState({ trees: this.trees });
 
       if (this.slider) {
         this.slider.max = (this.trees.length - 1).toString();
         this.slider.value = (this.trees.length - 1).toString();
-        this.setState({value: this.sliderValue()});
+        this.setState({ value: this.sliderValue() });
       }
-    }
-    else {
-      alert("unmounted");
+    } else {
+      alert('unmounted');
     }
   }
 
   public getFinalValue() {
-
     if (this.trees) {
-      return this.generateFromTree(this.trees[this.trees.length-1][0]);
-    }
-    else {
-      return "";
+      return this.generateFromTree(this.trees[this.trees.length - 1][0]);
+    } else {
+      return '';
     }
   }
 
-  private sliderChanged(event : React.ChangeEvent<HTMLInputElement>) {
-
+  private sliderChanged(event: React.ChangeEvent<HTMLInputElement>) {
     const newValue = parseInt(event.target.value, 10);
-    this.setState({value: newValue, trees: this.state.trees});
+    this.setState({ value: newValue, trees: this.state.trees });
   }
 
-  private sliderShift(newValue : number) {
-
+  private sliderShift(newValue: number) {
     if (this.slider) {
-
       if (newValue < 0 || newValue > parseInt(this.slider.max, 10)) {
-        alert("Slider is already at most extreme value.");
-      }
-      else {
+        alert('Slider is already at most extreme value.');
+      } else {
         this.slider.value = newValue.toString();
-        this.setState({value: newValue, trees: this.state.trees});
+        this.setState({ value: newValue, trees: this.state.trees });
       }
     }
   }
 
-
-  private generateFromTree(tree : String) : String {
-    return tree
+  private generateFromTree(tree: String): String {
+    return tree;
   }
 
   private sliderValue() {
     return this.slider ? parseInt(this.slider.value, 10) : -1;
   }
-
-
-
 
   private stepFirst() {
     this.sliderShift(0);
@@ -141,35 +163,37 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
   }
 
   private enableLastAndNextButton() {
-    return this.trees && this.state && this.mounted && this.sliderValue() < this.trees.length-1 && this.sliderValue() >= 0;
+    return (
+      this.trees &&
+      this.state &&
+      this.mounted &&
+      this.sliderValue() < this.trees.length - 1 &&
+      this.sliderValue() >= 0
+    );
   }
 
-  private handleKeyDown(event : React.KeyboardEvent<HTMLButtonElement | HTMLInputElement>) {
-
+  private handleKeyDown(event: React.KeyboardEvent<HTMLButtonElement | HTMLInputElement>) {
     event.preventDefault();
 
     if (event.keyCode === Keys.ARROW_DOWN) {
       this.stepLast();
-    }
-    else if (event.keyCode === Keys.ARROW_UP) {
+    } else if (event.keyCode === Keys.ARROW_UP) {
       this.stepFirst();
-    }
-    else if (event.keyCode === Keys.ARROW_LEFT) {
+    } else if (event.keyCode === Keys.ARROW_LEFT) {
       this.stepPrev();
-    }
-    else if (event.keyCode === Keys.ARROW_RIGHT) {
+    } else if (event.keyCode === Keys.ARROW_RIGHT) {
       this.stepNext();
     }
   }
 }
 
 export interface ISubstTimelineState {
-  value : number;
-  trees : Array<String>;
+  value: number;
+  trees: String[];
 }
 
 export interface ISubstTimelineProps {
-  trees? : Array<String>; 
+  trees?: String[];
 }
 
 export default SubstTimeline;

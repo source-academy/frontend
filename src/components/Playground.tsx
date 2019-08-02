@@ -173,7 +173,13 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
         defaultSelectedTabId: 'introduction',
-        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab, substVisualizerTab]
+        tabs: [
+          playgroundIntroductionTab,
+          listVisualizerTab,
+          inspectorTab,
+          envVisualizerTab,
+          substVisualizerTab
+        ]
       }
     };
     return (
@@ -191,7 +197,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     );
   }
 
-  public usingSubst() : boolean { 
+  public usingSubst(): boolean {
     return true; // this.props.activeTab === 2;
   }
 
