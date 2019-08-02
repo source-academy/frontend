@@ -65,21 +65,20 @@ class VideoDisplay extends React.Component<{}, IState> {
       display: 'none'
     };
     return (
-      <div> 
+      <div>
         <div>
           {controlButton('', IconNames.VIDEO, this.handleStartVideo)}
           {controlButton('', IconNames.CAMERA, this.handleSnapPicture)}
-	  {controlButton('Remove filter', IconNames.FILTER_REMOVE, this.handleResetFilter)}
+          {controlButton('Remove filter', IconNames.FILTER_REMOVE, this.handleResetFilter)}
           {controlButton('Close webcam', IconNames.STOP, this.handleCloseVideo)}
         </div>
         <div>
           Width:
           <Textarea cols={5} value={this.state.width} onChange={this.handleWidthChange} />
-	  &nbsp;
-          Height:
+          &nbsp; Height:
           <Textarea cols={5} value={this.state.height} onChange={this.handleHeightChange} />
-	   &nbsp; 
-	   {controlButton('Update', IconNames.REFRESH, this.handleUpdateDimensions)}
+          &nbsp;
+          {controlButton('Update', IconNames.REFRESH, this.handleUpdateDimensions)}
         </div>
         <div style={{ width: '100%', textAlign: 'center' }}>
           <video
