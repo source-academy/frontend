@@ -1,12 +1,9 @@
 import { Keys } from '@blueprintjs/core';
-import { generate } from 'astring';
-import * as es from 'estree';
-import { Context } from 'js-slang/dist/types';
 import * as React from 'react';
 
 export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISubstTimelineState> {
 
-  private trees? : Array<[es.Node, Context]>;
+  private trees? : Array<String>;
   private mounted = false;
   private slider : HTMLInputElement | null;
   
@@ -36,12 +33,11 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
   public render() {
 
     const value = (this.state && this.state.value) ? this.state.value : 0;
-
     return (
       <div>
         <div>
           {this.trees
-            ? this.generateFromTree(this.trees[value][0])
+            ? this.generateFromTree(this.trees[value])
             : "Start writing some code on the left, then drag the slider below to see it's evaluation."
           }
         </div>
@@ -57,7 +53,7 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
     );
   }
 
-  public updateTrees(newTrees : Array<[es.Node, Context]>){
+  public updateTrees(newTrees : Array<String>){
     
     this.trees = newTrees;
 
@@ -113,8 +109,8 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
   }
 
 
-  private generateFromTree(tree : es.Node) : string {
-    return generate(tree);
+  private generateFromTree(tree : String) : String {
+    return tree
   }
 
   private sliderValue() {
@@ -169,11 +165,11 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
 
 export interface ISubstTimelineState {
   value : number;
-  trees : Array<[es.Node, Context]>;
+  trees : Array<String>;
 }
 
 export interface ISubstTimelineProps {
-  trees? : Array<[es.Node, Context]>; 
+  trees? : Array<String>; 
 }
 
 export default SubstTimeline;

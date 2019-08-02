@@ -1,5 +1,3 @@
-import { Node } from 'estree';
-import { Context } from 'js-slang';
 import * as React from 'react';
 import { ISubstTimelineProps, ISubstTimelineState, SubstTimeline } from './../../SubstTimeline';
 
@@ -18,7 +16,7 @@ class SubstVisualizer extends React.Component<ISubstTimelineProps, ISubstTimelin
     }
   }
 
-  public updateTrees(newTrees : Array<[Node, Context]>) {
+  public updateTrees(newTrees : Array<String>) {
     if (this.timeline) {
       this.timeline.updateTrees(newTrees);
     }
