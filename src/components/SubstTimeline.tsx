@@ -112,7 +112,7 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
 
   public getFinalValue() {
     if (this.trees) {
-      return this.generateFromTree(this.trees[this.trees.length - 1][0]);
+      return this.generateFromTree(this.trees[this.trees.length - 1]);
     } else {
       return '';
     }
