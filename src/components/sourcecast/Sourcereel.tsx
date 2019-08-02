@@ -4,6 +4,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 import { InterpreterOutput, SideContentType } from '../../reducers/states';
+import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
@@ -22,6 +23,7 @@ export interface IStateProps {
   editorValue: string;
   editorWidth: string;
   enableDebugging: boolean;
+  externalLibraryName: string;
   highlightedLines: number[][];
   isDebugging: boolean;
   isEditorAutorun: boolean;
@@ -49,12 +51,13 @@ export interface IDispatchProps {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleInterruptEval: () => void;
   handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleRecordEditorInitValue: (editorValue: string) => void;
+  handleRecordInit: (initData: IPlaybackData['init']) => void;
   handleSaveSourcecastData: (
     title: string,
     description: string,
@@ -94,6 +97,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
+        externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) => {
           this.props.handleChapterSelect(chapter);
           if (this.props.recordingStatus !== RecordingStatus.recording) {
@@ -105,6 +109,18 @@ class Sourcereel extends React.Component<ISourcereelProps> {
             data: chapter
           });
         },
+        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) => {
+          this.props.handleExternalSelect(name);
+          if (this.props.recordingStatus !== RecordingStatus.recording) {
+            return;
+          }
+          this.props.handleRecordInput({
+            time: this.getTimerDuration(),
+            type: 'externalLibrarySelect',
+            data: name
+          });
+        },
+
         handleEditorEval: () => {
           this.props.handleEditorEval();
           if (this.props.recordingStatus !== RecordingStatus.recording) {
@@ -166,7 +182,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
                   editorValue={this.props.editorValue}
                   getTimerDuration={this.getTimerDuration}
                   playbackData={this.props.playbackData}
-                  handleRecordEditorInitValue={this.props.handleRecordEditorInitValue}
+                  handleRecordInit={this.handleRecordInit}
                   handleSaveSourcecastData={this.props.handleSaveSourcecastData}
                   handleSetEditorReadonly={this.props.handleSetEditorReadonly}
                   handleTimerPause={this.props.handleTimerPause}
@@ -194,6 +210,13 @@ class Sourcereel extends React.Component<ISourcereelProps> {
 
   public getTimerDuration = () =>
     this.props.timeElapsedBeforePause + Date.now() - this.props.timeResumed;
+
+  private handleRecordInit = () =>
+    this.props.handleRecordInit({
+      chapter: this.props.sourceChapter,
+      externalLibrary: this.props.externalLibraryName as ExternalLibraryName,
+      editorValue: this.props.editorValue
+    });
 }
 
 const INTRODUCTION = 'Welcome to Sourcereel!';

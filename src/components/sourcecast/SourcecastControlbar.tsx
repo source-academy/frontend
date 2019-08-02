@@ -2,6 +2,7 @@ import { Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { ExternalLibraryName } from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
 import {
   ICodeDelta,
@@ -95,6 +96,8 @@ class SourcecastControlbar extends React.PureComponent<
     const currentRevision = this.state.currentDeltaRevision;
     let currentTime = this.audio.current!.currentTime * 1000;
     this.props.handleEditorValueChange(playbackData.init.editorValue);
+    this.props.handleExternalSelect(playbackData.init.externalLibrary);
+    this.props.handleChapterSelect(playbackData.init.chapter);
     const codeDeltasToApply = playbackData.inputs
       .filter(
         deltaWithTime => deltaWithTime.time <= currentTime && deltaWithTime.type === 'codeDelta'
@@ -189,6 +192,8 @@ export interface ISourcecastControlbarProps {
   duration: number;
   playbackData: IPlaybackData;
   playbackStatus: PlaybackStatus;
+  handleChapterSelect: (chapter: number) => void;
+  handleExternalSelect: (name: ExternalLibraryName) => void;
 }
 
 export interface ISourcecastControlbarState {

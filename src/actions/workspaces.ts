@@ -38,11 +38,12 @@ export const browseReplHistoryUp: ActionCreator<actionTypes.IAction> = (
   payload: { workspaceLocation }
 });
 
-export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
-  newExternal: string
+export const changeExternalLibrary: ActionCreator<actionTypes.IAction> = (
+  newExternal: string,
+  workspaceLocation: WorkspaceLocation
 ) => ({
-  type: actionTypes.CHANGE_PLAYGROUND_EXTERNAL,
-  payload: { newExternal }
+  type: actionTypes.CHANGE_EXTERNAL_LIBRARY,
+  payload: { newExternal, workspaceLocation }
 });
 
 export const changeEditorHeight: ActionCreator<actionTypes.IAction> = (
@@ -88,7 +89,7 @@ export const chapterSelect: ActionCreator<actionTypes.IAction> = (
   }
 });
 
-export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
+export const externalLibrarySelect: ActionCreator<actionTypes.IAction> = (
   externalLibraryName: ExternalLibraryName,
   workspaceLocation: WorkspaceLocation
 ) => ({

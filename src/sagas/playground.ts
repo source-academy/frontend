@@ -24,7 +24,7 @@ function* updateQueryString() {
     (state: IState) => state.workspaces.playground.context.chapter
   );
   const external: ExternalLibraryName = yield select(
-    (state: IState) => state.workspaces.playground.playgroundExternal
+    (state: IState) => state.workspaces.playground.externalLibrary
   );
   const newQueryString: string = qs.stringify({
     prgrm: compressToEncodedURIComponent(codeString),
