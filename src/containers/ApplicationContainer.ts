@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { beginClearContext, logOut, setEditorBreakpoint, updateEditorValue } from '../actions';
 import {
   ensureLibrariesLoaded,
-  playgroundExternalSelect,
+  externalLibrarySelect,
   WorkspaceLocations
 } from '../actions/workspaces';
 import Application, { IDispatchProps, IStateProps } from '../components/Application';
@@ -25,7 +25,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   role: state.session.role,
   name: state.session.name,
   currentPlaygroundChapter: state.workspaces.playground.context.chapter,
-  currentPlaygroundExternalLibrary: state.workspaces.playground.playgroundExternal
+  currentExternalLibrary: state.workspaces.playground.externalLibrary
 });
 
 const workspaceLocation = WorkspaceLocations.playground;
@@ -50,8 +50,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setEditorBreakpoint(breakpoints, workspaceLocation),
       handleEnsureLibrariesLoaded: ensureLibrariesLoaded,
       handleLogOut: logOut,
-      handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        playgroundExternalSelect(externalLibraryName, workspaceLocation)
+      handleExternalLibrarySelect: (externalLibraryName: ExternalLibraryName) =>
+        externalLibrarySelect(externalLibraryName, workspaceLocation)
     },
     dispatch
   );

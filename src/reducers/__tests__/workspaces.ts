@@ -1,10 +1,9 @@
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_ACTIVE_TAB,
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
-  CHANGE_PLAYGROUND_EXTERNAL,
+  CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -252,25 +251,6 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
   });
 });
 
-describe('CHANGE_ACTIVE_TAB', () => {
-  test('sets sideContentActiveTab correctly', () => {
-    const activeTab = 2;
-    const actions: IAction[] = generateActions(CHANGE_ACTIVE_TAB, { activeTab });
-
-    actions.forEach(action => {
-      const result = reducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sideContentActiveTab: activeTab
-        }
-      });
-    });
-  });
-});
-
 describe('CHANGE_EDITOR_HEIGHT', () => {
   test('sets editorHeight correctly', () => {
     const height = 200;
@@ -309,11 +289,11 @@ describe('CHANGE_EDITOR_WIDTH', () => {
   });
 });
 
-describe('CHANGE_PLAYGROUND_EXTERNAL', () => {
-  test('sets playgroundExternal correctly', () => {
+describe('CHANGE_EXTERNAL_LIBRARY', () => {
+  test('sets externalLibrary correctly', () => {
     const newExternal = 'new_external_test';
     const playgroundAction: IAction = {
-      type: CHANGE_PLAYGROUND_EXTERNAL,
+      type: CHANGE_EXTERNAL_LIBRARY,
       payload: {
         newExternal,
         workspaceLocation: playgroundWorkspace
@@ -325,7 +305,7 @@ describe('CHANGE_PLAYGROUND_EXTERNAL', () => {
       ...defaultWorkspaceManager,
       playground: {
         ...defaultWorkspaceManager.playground,
-        playgroundExternal: newExternal
+        externalLibrary: newExternal
       }
     });
   });
@@ -1037,7 +1017,7 @@ describe('LOG_OUT', () => {
       editorHeight: 200,
       editorValue: 'test program here',
       highlightedLines: [[1, 2], [3, 4]],
-      playgroundExternal: 'NONE',
+      externalLibrary: 'NONE',
       replValue: 'test repl value here',
       websocketStatus: 0
     };

@@ -35,7 +35,7 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...createDefaultWorkspace(WorkspaceLocations.playground),
-          playgroundExternal: ExternalLibraryNames.NONE,
+          externalLibrary: ExternalLibraryNames.NONE,
           editorValue: dummyEditorValue
         }
       }
@@ -57,7 +57,7 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...createDefaultWorkspace(WorkspaceLocations.playground),
-          playgroundExternal: ExternalLibraryNames.NONE,
+          externalLibrary: ExternalLibraryNames.NONE,
           editorValue: dummyEditorValue
         }
       }
@@ -75,7 +75,7 @@ describe('Playground saga tests', () => {
 
 function createQueryString(code: string, state: IState): string {
   const chapter: number = state.workspaces.playground.context.chapter;
-  const external: ExternalLibraryName = state.workspaces.playground.playgroundExternal;
+  const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
   const newQueryString: string = qs.stringify({
     prgrm: compressToEncodedURIComponent(code),
     chap: chapter,

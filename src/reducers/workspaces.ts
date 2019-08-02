@@ -4,11 +4,10 @@ import { ITestcase } from '../components/assessment/assessmentShape';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_ACTIVE_TAB,
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_EXEC_TIME,
-  CHANGE_PLAYGROUND_EXTERNAL,
+  CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -178,14 +177,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         };
       }
-    case CHANGE_ACTIVE_TAB:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContentActiveTab: action.payload.activeTab
-        }
-      };
+
     case CHANGE_EDITOR_HEIGHT:
       return {
         ...state,
@@ -276,16 +268,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           }
         }
       };
-    /**
-     * This action is only meant for Playground usage, where
-     * the external library is displayed.
-     */
-    case CHANGE_PLAYGROUND_EXTERNAL:
+    case CHANGE_EXTERNAL_LIBRARY:
       return {
         ...state,
-        playground: {
-          ...state.playground,
-          playgroundExternal: action.payload.newExternal
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          externalLibrary: action.payload.newExternal
         }
       };
     case HANDLE_CONSOLE_LOG:

@@ -6,10 +6,9 @@ import {
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeActiveTab,
   changeEditorHeight,
   changeEditorWidth,
-  changePlaygroundExternal,
+  changeExternalLibrary,
   changeSideContentHeight,
   chapterSelect,
   clearReplInput,
@@ -19,8 +18,8 @@ import {
   evalEditor,
   evalRepl,
   evalTestcase,
+  externalLibrarySelect,
   highlightEditorLine,
-  playgroundExternalSelect,
   resetWorkspace,
   sendReplInputToOutput,
   setEditorBreakpoint,
@@ -52,25 +51,14 @@ test('browseReplHistoryUp generates correct action object', () => {
   });
 });
 
-test('changeActiveTab generates correct action object', () => {
-  const activeTab = 3;
-  const action = changeActiveTab(activeTab, playgroundWorkspace);
-  expect(action).toEqual({
-    type: actionTypes.CHANGE_ACTIVE_TAB,
-    payload: {
-      activeTab,
-      workspaceLocation: playgroundWorkspace
-    }
-  });
-});
-
-test('changePlaygroundExternal generates correct action object', () => {
+test('changeExternalLibrary generates correct action object', () => {
   const newExternal = 'new-external-test';
-  const action = changePlaygroundExternal(newExternal);
+  const action = changeExternalLibrary(newExternal, playgroundWorkspace);
   expect(action).toEqual({
-    type: actionTypes.CHANGE_PLAYGROUND_EXTERNAL,
+    type: actionTypes.CHANGE_EXTERNAL_LIBRARY,
     payload: {
-      newExternal
+      newExternal,
+      workspaceLocation: playgroundWorkspace
     }
   });
 });
@@ -123,9 +111,9 @@ test('chapterSelect generates correct action object', () => {
   });
 });
 
-test('playgroundExternalSelect generates correct action object', () => {
+test('externalLibrarySelect generates correct action object', () => {
   const externalLibraryName = 'SOUNDS';
-  const action = playgroundExternalSelect(externalLibraryName, assessmentWorkspace);
+  const action = externalLibrarySelect(externalLibraryName, assessmentWorkspace);
   expect(action).toEqual({
     type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
     payload: {

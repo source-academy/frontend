@@ -11,12 +11,12 @@ test('Application renders correctly', () => {
     title: 'Cadet',
     currentPlaygroundChapter: 2,
     handleLogOut: () => {},
-    currentPlaygroundExternalLibrary: ExternalLibraryNames.NONE,
+    currentExternalLibrary: ExternalLibraryNames.NONE,
     handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => {},
     handleEditorValueChange: (val: string) => {},
     handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
     handleEnsureLibrariesLoaded: () => {},
-    handlePlaygroundExternalSelect: (externalLibraryName: ExternalLibraryName) => {}
+    handleExternalLibrarySelect: (externalLibraryName: ExternalLibraryName) => {}
   };
   const app = <Application {...props} />;
   const tree = shallow(app);
