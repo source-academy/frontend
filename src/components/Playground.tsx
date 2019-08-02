@@ -192,7 +192,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 
   public usingSubst() : boolean { 
-    return this.props.activeTab === 2;
+    return true; // this.props.activeTab === 2;
   }
 
   private toggleIsGreen() {
@@ -230,7 +230,7 @@ const envVisualizerTab: SideContentTab = {
 
 const substVisualizerTab: SideContentTab = {
   label: 'Substitution Model Visualizer',
-  icon: IconNames.STOP,
+  iconName: IconNames.STOP,
   body: <SubstVisualizer />
 };
 
