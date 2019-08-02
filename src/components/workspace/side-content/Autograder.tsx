@@ -21,12 +21,9 @@ class Autograder extends React.Component<AutograderProps, State> {
   public constructor(props: AutograderProps) {
     super(props);
 
-    const hasTestcases: boolean = this.props.testcases.length > 0;
-    const hasResults: boolean = this.props.autogradingResults.length > 0;
-
     this.state = {
-      showTestcases: hasTestcases,
-      showResults: hasResults
+      showTestcases: true,
+      showResults: true
     };
   }
 

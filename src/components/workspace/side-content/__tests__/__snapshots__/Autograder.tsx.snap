@@ -6,13 +6,13 @@ exports[`Autograder renders autograder results with different statuses correctly
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
-          <Blueprint3.Icon icon=\\"caret-right\\" color={[undefined]}>
-            <span icon=\\"caret-right\\" className=\\"bp3-icon bp3-icon-caret-right\\" title={[undefined]}>
-              <svg fill={[undefined]} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+          <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
+            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                 <desc>
-                  caret-right
+                  caret-down
                 </desc>
-                <path d=\\"M11 8c0-.15-.07-.28-.17-.37l-4-3.5A.495.495 0 0 0 6 4.5v7a.495.495 0 0 0 .83.37l4-3.5c.1-.09.17-.22.17-.37z\\" fillRule=\\"evenodd\\" />
+                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
               </svg>
             </span>
           </Blueprint3.Icon>
@@ -23,9 +23,13 @@ exports[`Autograder renders autograder results with different statuses correctly
         <Blueprint3.Icon icon={[undefined]} />
       </button>
     </Blueprint3.Button>
-    <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+    <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
       <div className=\\"bp3-collapse\\" style={{...}}>
-        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
+          <div className=\\"noResults\\">
+            There are no testcases provided for this mission.
+          </div>
+        </div>
       </div>
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
@@ -192,7 +196,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
   <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
     Testcases
   </Blueprint3.Button>
-  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+  <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
     <div className=\\"noResults\\">
       There are no testcases provided for this mission.
     </div>
@@ -200,7 +204,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
   <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
     Autograder Results
   </Blueprint3.Button>
-  <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+  <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
     <div className=\\"noResults\\">
       There are no results to show.
     </div>
@@ -396,13 +400,13 @@ exports[`Autograder renders testcases with different statuses correctly 1`] = `
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
-          <Blueprint3.Icon icon=\\"caret-right\\" color={[undefined]}>
-            <span icon=\\"caret-right\\" className=\\"bp3-icon bp3-icon-caret-right\\" title={[undefined]}>
-              <svg fill={[undefined]} data-icon=\\"caret-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+          <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
+            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                 <desc>
-                  caret-right
+                  caret-down
                 </desc>
-                <path d=\\"M11 8c0-.15-.07-.28-.17-.37l-4-3.5A.495.495 0 0 0 6 4.5v7a.495.495 0 0 0 .83.37l4-3.5c.1-.09.17-.22.17-.37z\\" fillRule=\\"evenodd\\" />
+                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
               </svg>
             </span>
           </Blueprint3.Icon>
@@ -413,9 +417,13 @@ exports[`Autograder renders testcases with different statuses correctly 1`] = `
         <Blueprint3.Icon icon={[undefined]} />
       </button>
     </Blueprint3.Button>
-    <Blueprint3.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+    <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
       <div className=\\"bp3-collapse\\" style={{...}}>
-        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false} />
+        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
+          <div className=\\"noResults\\">
+            There are no results to show.
+          </div>
+        </div>
       </div>
     </Blueprint3.Collapse>
   </div>
