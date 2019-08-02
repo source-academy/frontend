@@ -139,7 +139,9 @@ export const storeAssessmentPassword: ActionCreator<actionTypes.IAction> = (
   password: string | null
 ) => ({
   type: actionTypes.STORE_ASSESSMENT_PASSWORD,
-  payload: password
+  payload: {
+    password
+  }
 });
 
 /**

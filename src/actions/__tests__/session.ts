@@ -169,7 +169,9 @@ test('storeAssessmentPassword generates correct action object', () => {
   const action = storeAssessmentPassword(password);
   expect(action).toEqual({
     type: actionTypes.STORE_ASSESSMENT_PASSWORD,
-    payload: password
+    payload: {
+      password
+    }
   });
 });
 

@@ -76,7 +76,7 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
     case STORE_ASSESSMENT_PASSWORD:
       return {
         ...state,
-        assessmentPassword: action.payload
+        assessmentPassword: action.payload.password
       };
     default:
       return state;

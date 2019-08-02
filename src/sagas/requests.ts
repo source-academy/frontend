@@ -135,9 +135,12 @@ export async function getAssessment(
   tokens: Tokens,
   password: string | null
 ): Promise<{ assessment: IAssessment | null; password: string | null }> {
-  const response = await request(`assessments/${id}`, 'GET', {
+  const response = await request(`assessments/${id}`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
+    body: {
+      password
+    },
     shouldRefresh: true
   });
   let assessment: IAssessment | null = null;

@@ -86,7 +86,9 @@ test('STORE_ASSESSMENT_PASSWORD works correctly in updating assessment password'
 
   const action = {
     type: STORE_ASSESSMENT_PASSWORD,
-    payload: 'password'
+    payload: {
+      password: 'password'
+    }
   };
   const result: ISessionState = reducer(newDefaultSession, action);
 

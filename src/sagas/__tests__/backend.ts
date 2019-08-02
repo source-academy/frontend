@@ -46,6 +46,7 @@ const mockTokens = { accessToken: 'access', refreshToken: 'refresherOrb' };
 const mockStates = {
   session: {
     accessToken: 'access',
+    assessmentPassword: null,
     assessmentOverviews: mockAssessmentOverviews,
     assessments: mockMapAssessments,
     notifications: mockNotifications,
@@ -128,10 +129,15 @@ describe('Test FETCH_ASSESSMENT Action', () => {
   test('when assesment is obtained', () => {
     const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
-      .withState({ session: mockTokens })
-      .provide([[call(getAssessment, mockId, mockTokens, null), mockAssessment]])
+      .withState(mockStates)
+      .provide([
+        [
+          call(getAssessment, mockId, mockTokens, null),
+          { assessment: mockAssessment, password: null }
+        ]
+      ])
       .put(actions.updateAssessment(mockAssessment))
-      .hasFinalState({ session: mockTokens })
+      .hasFinalState(mockStates)
       .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: mockId })
       .silentRun();
   });
@@ -139,11 +145,13 @@ describe('Test FETCH_ASSESSMENT Action', () => {
   test('when assesment is null', () => {
     const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
-      .withState({ session: mockTokens })
-      .provide([[call(getAssessment, mockId, mockTokens, null), null]])
-      .call(getAssessment, mockId, mockTokens)
+      .withState(mockStates)
+      .provide([
+        [call(getAssessment, mockId, mockTokens, null), { assessment: null, password: null }]
+      ])
+      .call(getAssessment, mockId, mockTokens, null)
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT)
-      .hasFinalState({ session: mockTokens })
+      .hasFinalState(mockStates)
       .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: mockId })
       .silentRun();
   });
