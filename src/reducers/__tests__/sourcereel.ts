@@ -1,6 +1,6 @@
 import {
   IAction,
-  RECORD_EDITOR_INIT_VALUE,
+  RECORD_INIT,
   RECORD_INPUT,
   TIMER_PAUSE,
   TIMER_RESET,
@@ -8,7 +8,13 @@ import {
   TIMER_START,
   TIMER_STOP
 } from '../../actions/actionTypes';
-import { ICodeDelta, Input, RecordingStatus } from '../../components/sourcecast/sourcecastShape';
+import { ExternalLibraryNames } from '../../components/assessment/assessmentShape';
+import {
+  ICodeDelta,
+  Input,
+  IPlaybackData,
+  RecordingStatus
+} from '../../components/sourcecast/sourcecastShape';
 import { reducer } from '../sourcereel';
 import { defaultWorkspaceManager } from '../states';
 
@@ -19,19 +25,20 @@ function generateAction(type: string, payload: any = {}): IAction {
   };
 }
 
-describe('RECORD_EDITOR_INIT_VALUE', () => {
+describe('RECORD_INIT', () => {
   test('records editorInitValue correctly', () => {
-    const editorValue = 'test init value';
-    const action: IAction = generateAction(RECORD_EDITOR_INIT_VALUE, { editorValue });
+    const initData: IPlaybackData['init'] = {
+      editorValue: 'test init value',
+      chapter: 1,
+      externalLibrary: ExternalLibraryNames.NONE
+    };
+    const action: IAction = generateAction(RECORD_INIT, { initData });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
       playbackData: {
         ...defaultWorkspaceManager.sourcereel.playbackData,
-        init: {
-          ...defaultWorkspaceManager.sourcereel.playbackData.init,
-          editorValue
-        }
+        init: initData
       }
     });
   });
