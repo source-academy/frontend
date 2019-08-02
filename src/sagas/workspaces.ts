@@ -361,6 +361,16 @@ export function* evalCode(
   if (!context.runtime.debuggerOn) {
     inspectorUpdate(undefined); // effectively resets the interface
   }
+  const substTab = document.getElementById("bp3-tab-title_side-content-tabs_Substitution Model Visualizer");
+  let usingSubst;
+
+  if (substTab && substTab.getAttribute("aria-selected") == "true")
+    usingSubst = true;
+  else
+    usingSubst = false;
+
+  if (usingSubst)
+    context.executionMethod = "interpreter" 
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
@@ -368,7 +378,7 @@ export function* evalCode(
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
-            useSubst: true
+            useSubst: usingSubst
           }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
