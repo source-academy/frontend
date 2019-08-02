@@ -8,6 +8,7 @@ import {
   SET_SOURCECAST_PLAYBACK_STATUS,
   UPDATE_SOURCECAST_INDEX
 } from '../../actions/actionTypes';
+import { ExternalLibraryNames } from '../../components/assessment/assessmentShape';
 import {
   ICodeDelta,
   Input,
@@ -46,6 +47,8 @@ describe('SAVE_SOURCECAST_DATA', () => {
     };
     const playbackData: IPlaybackData = {
       init: {
+        chapter: 1,
+        externalLibrary: ExternalLibraryNames.NONE,
         editorValue: ''
       },
       inputs: [input]
@@ -155,6 +158,8 @@ describe('SET_SOURCECAST_DATA', () => {
     };
     const playbackData: IPlaybackData = {
       init: {
+        chapter: 1,
+        externalLibrary: ExternalLibraryNames.NONE,
         editorValue: ''
       },
       inputs: [input]

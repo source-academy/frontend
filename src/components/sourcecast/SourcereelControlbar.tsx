@@ -124,8 +124,8 @@ class SourcereelControlbar extends React.PureComponent<
   };
 
   private handleRecorderStarting = () => {
-    const { handleRecordEditorInitValue, handleSetEditorReadonly, handleTimerStart } = this.props;
-    handleRecordEditorInitValue(this.props.editorValue);
+    const { handleRecordInit, handleSetEditorReadonly, handleTimerStart } = this.props;
+    handleRecordInit();
     handleSetEditorReadonly(false);
     handleTimerStart();
     const updater = setInterval(this.updateTimerDuration, 100);
@@ -214,7 +214,7 @@ class SourcereelControlbar extends React.PureComponent<
 }
 
 export interface ISourcereelControlbarProps {
-  handleRecordEditorInitValue: (editorValue: string) => void;
+  handleRecordInit: () => void;
   handleSaveSourcecastData: (
     title: string,
     description: string,
