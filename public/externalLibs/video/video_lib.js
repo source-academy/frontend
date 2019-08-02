@@ -68,8 +68,8 @@ function pixel_similar(p1, p2, threshold) {
 	math_abs(p1[2] - p2[2]) < threshold;
 }
 
-var _WIDTH = 100;
-var _HEIGHT = 75;
+var _WIDTH = 400;
+var _HEIGHT = 300;
 
 // returns the height of the video
 // ie the number of pixels in the vertical direction
@@ -207,6 +207,19 @@ VD._make_pixelData = function(pixelData) {
 }
 
 /**
+ * draw one frame only
+ */
+VD._draw_once = function() {	
+    VD._context.drawImage(VD._video, 0, 0, _WIDTH, _HEIGHT);
+    VD._pixelData = VD._context.getImageData(0, 0, _WIDTH, _HEIGHT);
+    
+    VD._make_image_abstraction(VD._pixelData.data);//from 1D to 2D
+    VD._student_filter(VD._SRCIMG, VD._DESTIMG);//process the image
+    VD._make_pixelData(VD._pixelData); //from 2D to 1D
+    VD._context.putImageData(VD._pixelData, 0, 0);
+}
+
+/**
  * The main loop
  */
 VD._draw = function() {	
@@ -237,6 +250,7 @@ VD._noLoop = function() {
 	VD._video_playing = false;
 	window.cancelAnimationFrame(VD._requestID);
     }
+
 }
 
 //starts the main loop
@@ -282,12 +296,23 @@ VD.handleCloseVideo = function() {
 }
 
 VD.handleStartVideo = function() {
+    VD.handleStart( () => VD._loop() );
+}
+
+VD.handleSnapPicture = function() {
+    VD.handleStart( () => {
+	VD._draw_once();
+	VD._noLoop();
+    });
+}
+
+VD.handleStart = function(cont) {
     if (!VD._video.srcObject) {
 	if (navigator.mediaDevices.getUserMedia) {
 	    navigator.mediaDevices.getUserMedia({ video: true })
-		.then(function (stream) {
+		.then( stream => {
 		    VD._video.srcObject = stream;
-		    VD._loop();
+		    cont();
 		})
 		.catch(function (err) {
 		    console.log(err); /* handle the error */
@@ -313,11 +338,12 @@ VD.handleStartVideo = function() {
 	    console.log('The browser you are using does not support getUserMedia');
 	}
     } else {
-	VD._loop();
+	cont();
     }
 }
 
 VD.handlePauseVideo = function() {
+    VD._draw_once();
     VD._noLoop();
 }
 

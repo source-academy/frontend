@@ -32,8 +32,8 @@ class VideoDisplay extends React.Component<{}, IState> {
   public handleStartVideo() {
     (window as any).VD.handleStartVideo();
   }
-  public handlePauseVideo() {
-    (window as any).VD.handlePauseVideo();
+  public handleSnapPicture() {
+    (window as any).VD.handleSnapPicture();
   }
   public handleCloseVideo() {
     (window as any).VD.handleCloseVideo();
@@ -65,22 +65,22 @@ class VideoDisplay extends React.Component<{}, IState> {
       display: 'none'
     };
     return (
-      <div>
+      <div> 
         <div>
-          {controlButton('', IconNames.PLAY, this.handleStartVideo)}
-          {controlButton('', IconNames.PAUSE, this.handlePauseVideo)}
-          {controlButton('Stop and close webcam', IconNames.STOP, this.handleCloseVideo)}
+          {controlButton('', IconNames.VIDEO, this.handleStartVideo)}
+          {controlButton('', IconNames.CAMERA, this.handleSnapPicture)}
+	  {controlButton('Remove filter', IconNames.FILTER_REMOVE, this.handleResetFilter)}
+          {controlButton('Close webcam', IconNames.STOP, this.handleCloseVideo)}
         </div>
-        {controlButton('Reset filter', IconNames.REFRESH, this.handleResetFilter)}
         <div>
           Width:
-          <Textarea value={this.state.width} onChange={this.handleWidthChange} />
-        </div>
-        <div>
+          <Textarea cols={5} value={this.state.width} onChange={this.handleWidthChange} />
+	  &nbsp;
           Height:
-          <Textarea value={this.state.height} onChange={this.handleHeightChange} />
+          <Textarea cols={5} value={this.state.height} onChange={this.handleHeightChange} />
+	   &nbsp; 
+	   {controlButton('Update', IconNames.REFRESH, this.handleUpdateDimensions)}
         </div>
-        {controlButton('Update video dimensions', IconNames.REFRESH, this.handleUpdateDimensions)}
         <div style={{ width: '100%', textAlign: 'center' }}>
           <video
             ref={r => (this.$video = r)}
