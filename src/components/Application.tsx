@@ -22,7 +22,7 @@ export interface IStateProps {
   role?: Role;
   title: string;
   name?: string;
-  currentPlaygroundExternalLibrary: ExternalLibraryName;
+  currentExternalLibrary: ExternalLibraryName;
 }
 
 export interface IDispatchProps {
@@ -31,7 +31,7 @@ export interface IDispatchProps {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleEnsureLibrariesLoaded: () => void;
   handleLogOut: () => void;
-  handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void;
+  handleExternalLibrarySelect: (external: ExternalLibraryName) => void;
 }
 
 const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
@@ -86,12 +86,12 @@ const toLogin = (props: IApplicationProps) => () => (
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props);
   const chapter = parseChapter(props) || props.currentPlaygroundChapter;
-  const externalLibraryName = parseExternalLibrary(props) || props.currentPlaygroundExternalLibrary;
+  const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibrary;
   if (prgrm) {
     props.handleEditorValueChange(prgrm);
     props.handleEnsureLibrariesLoaded();
     props.handleClearContext(chapter, externalLibraryName);
-    props.handlePlaygroundExternalSelect(externalLibraryName);
+    props.handleExternalLibrarySelect(externalLibraryName);
   }
 };
 

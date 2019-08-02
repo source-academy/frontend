@@ -17,11 +17,11 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
+  externalLibrarySelect,
   finishInvite,
   generateLzString,
   initInvite,
   invalidEditorSessionId,
-  playgroundExternalSelect,
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
@@ -54,7 +54,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
   websocketStatus: state.workspaces.playground.websocketStatus,
-  externalLibraryName: state.workspaces.playground.playgroundExternal
+  externalLibraryName: state.workspaces.playground.externalLibrary
 });
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
@@ -78,7 +78,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        playgroundExternalSelect(externalLibraryName, workspaceLocation),
+        externalLibrarySelect(externalLibraryName, workspaceLocation),
       handleInitInvite: (editorValue: string) => initInvite(editorValue, workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
