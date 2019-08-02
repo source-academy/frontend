@@ -367,7 +367,8 @@ export function* evalCode(
         ? call(resume, lastDebuggerResult)
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
-            originalMaxExecTime: execTime
+            originalMaxExecTime: execTime,
+            useSubst: true
           }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
