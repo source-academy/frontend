@@ -2,7 +2,7 @@ import { Keys } from '@blueprintjs/core';
 import * as React from 'react';
 
 export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISubstTimelineState> {
-  private trees?: String[];
+  private trees?: string[];
   private mounted = false;
   private slider: HTMLInputElement | null;
 
@@ -87,7 +87,7 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
     );
   }
 
-  public updateTrees(newTrees: String[]) {
+  public updateTrees(newTrees: string[]) {
     this.trees = newTrees;
 
     if (this.mounted) {
@@ -134,7 +134,7 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
     }
   }
 
-  private generateFromTree(tree: String): String {
+  private generateFromTree(tree: string): string {
     return tree;
   }
 
@@ -189,11 +189,11 @@ export class SubstTimeline extends React.PureComponent<ISubstTimelineProps, ISub
 
 export interface ISubstTimelineState {
   value: number;
-  trees: String[];
+  trees: string[];
 }
 
 export interface ISubstTimelineProps {
-  trees?: String[];
+  trees?: string[];
 }
 
 export default SubstTimeline;

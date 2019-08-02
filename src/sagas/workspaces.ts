@@ -366,7 +366,7 @@ export function* evalCode(
   );
   let usingSubst;
 
-  if (substTab && substTab.getAttribute('aria-selected') == 'true') {
+  if (substTab && substTab.getAttribute('aria-selected') === 'true') {
     usingSubst = true;
   } else {
     usingSubst = false;

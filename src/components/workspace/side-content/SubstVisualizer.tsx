@@ -14,7 +14,7 @@ class SubstVisualizer extends React.Component<ISubstTimelineProps, ISubstTimelin
     }
   }
 
-  public updateTrees(newTrees: String[]) {
+  public updateTrees(newTrees: string[]) {
     if (this.timeline) {
       this.timeline.updateTrees(newTrees);
     }
