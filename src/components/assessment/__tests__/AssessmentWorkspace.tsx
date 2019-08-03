@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
+import { SideContentType } from 'src/reducers/states';
 import { mockAssessments } from '../../../mocks/assessmentAPI';
 import { Library } from '../assessmentShape';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
@@ -18,6 +19,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   breakpoints: [],
   highlightedLines: [],
   hasUnsavedChanges: false,
+  handleActiveTabChange: (activeTab: SideContentType) => {},
   handleAssessmentFetch: (assessmentId: number) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},

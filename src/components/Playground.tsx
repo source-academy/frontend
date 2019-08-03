@@ -5,7 +5,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
 
-import { InterpreterOutput } from '../reducers/states';
+import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
 import { ExternalLibraryName } from './assessment/assessmentShape';
 import Markdown from './commons/Markdown';
@@ -61,6 +61,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
@@ -183,8 +184,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        defaultSelectedTabId: 'introduction',
-        tabs
+        defaultSelectedTabId: SideContentType.introduction,
+        handleActiveTabChange: this.props.handleActiveTabChange,
+        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
       }
     };
 
@@ -212,14 +214,14 @@ const playgroundIntroductionTab: SideContentTab = {
   label: 'Introduction',
   iconName: IconNames.COMPASS,
   body: <Markdown content={INTRODUCTION} />,
-  id: 'introduction'
+  id: SideContentType.introduction
 };
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <ListVisualizer />,
-  id: 'data'
+  id: SideContentType.dataVisualiser
 };
 
 const videoDisplayTab: SideContentTab = {
@@ -232,14 +234,14 @@ const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <Inspector />,
-  id: 'inspector'
+  id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
-  id: 'env'
+  id: SideContentType.envVisualiser
 };
 
 export default Playground;

@@ -1,5 +1,6 @@
 import { Card, Icon, IconName, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
+import { SideContentType } from 'src/reducers/states';
 
 /**
  * @property animate Set this to false to disable the movement
@@ -7,6 +8,10 @@ import * as React from 'react';
  *
  * @property defaultSelectedTabId The id of a SideContentTab to be
  *  selected initially when the SideContent component is mounted.
+ *
+ * @property handleActiveTabChange A dispatch bound to the
+ * UPDATE_ACTIVE_TAB action creator; updates the Redux store with
+ * the id of the active side content tab in the current workspace.
  *
  * @property onChange A function that is called whenever the
  * active tab is changed by the user.
@@ -24,8 +29,13 @@ import * as React from 'react';
  */
 export type SideContentProps = {
   animate?: boolean;
-  defaultSelectedTabId?: TabId;
-  onChange?: (newTabId: TabId, prevTabId: TabId, event: React.MouseEvent<HTMLElement>) => void;
+  defaultSelectedTabId?: SideContentType;
+  handleActiveTabChange: (activeTab: SideContentType) => void;
+  onChange?: (
+    newTabId: SideContentType,
+    prevTabId: SideContentType,
+    event: React.MouseEvent<HTMLElement>
+  ) => void;
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
 };
@@ -50,19 +60,27 @@ export type SideContentTab = {
   label: string;
   iconName: IconName;
   body: JSX.Element;
-  id?: TabId;
+  id?: SideContentType;
   disabled?: boolean;
 };
 
 class SideContent extends React.PureComponent<SideContentProps, {}> {
+  public componentDidMount() {
+    // Set initial sideContentActiveTab for this workspace
+    this.props.handleActiveTabChange(
+      this.props.defaultSelectedTabId ? this.props.defaultSelectedTabId : this.props.tabs[0].id!
+    );
+  }
+
   public render() {
     const tabs = this.props.tabs.map(this.renderTab);
 
     const changeTabsCallback = (
-      newTabId: TabId,
-      prevTabId: TabId,
+      newTabId: SideContentType,
+      prevTabId: SideContentType,
       event: React.MouseEvent<HTMLElement>
     ): void => {
+      this.props.handleActiveTabChange(newTabId);
       if (this.props.onChange === undefined) {
         this.resetAlert(prevTabId);
       } else {
