@@ -213,7 +213,9 @@ VD._make_pixelData = function(pixelData) {
 /**
  * draw one frame only
  */
-VD._draw_once = function() {	
+VD._draw_once = function() {
+    VD._timeInCurrentFrame = Date.now();
+
     VD._context.drawImage(VD._video, 0, 0, _WIDTH, _HEIGHT);
     VD._pixelData = VD._context.getImageData(0, 0, _WIDTH, _HEIGHT);
     
@@ -229,15 +231,7 @@ VD._draw_once = function() {
 VD._draw = function() {	
     VD._requestID = window.requestAnimationFrame(VD._draw);
 
-    VD._timeInCurrentFrame = Date.now();
-
-    VD._context.drawImage(VD._video, 0, 0, _WIDTH, _HEIGHT);
-    VD._pixelData = VD._context.getImageData(0, 0, _WIDTH, _HEIGHT);
-    
-    VD._make_image_abstraction(VD._pixelData.data);//from 1D to 2D
-    VD._student_filter(VD._SRCIMG, VD._DESTIMG);//process the image
-    VD._make_pixelData(VD._pixelData); //from 2D to 1D
-    VD._context.putImageData(VD._pixelData, 0, 0);
+    VD._draw_once();
     
     // for debugging purposes
     // _frameNo++;	
@@ -316,7 +310,11 @@ VD.handleStart = function(cont) {
 	    navigator.mediaDevices.getUserMedia({ video: true })
 		.then( stream => {
 		    VD._video.srcObject = stream;
-		    cont();
+            const afterVideoLoad = function(){
+                VD._video.removeEventListener('loadeddata', afterVideoLoad);
+                cont();
+            }
+            VD._video.addEventListener('loadeddata', afterVideoLoad);
 		})
 		.catch(function (err) {
 		    console.log(err); /* handle the error */
