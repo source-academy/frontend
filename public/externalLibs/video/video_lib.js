@@ -87,6 +87,10 @@ function get_video_width() {
 // default filter is copy_image
 function apply_filter(filter) { 
     VD._student_filter = filter;
+    if (!VD._video_playing) {
+        VD._draw_once();
+        VD._noLoop();
+    }	
 }
 
 /*
@@ -351,7 +355,6 @@ VD.handleUpdateDimensions = function(w, h) {
     if (w === _WIDTH && h === _HEIGHT) { return; }
     const wasLooping = VD._video_playing;
     VD._noLoop();
-    VD.handleResetFilter();
     _WIDTH = w;
     _HEIGHT = h;
     VD._video.width = w;
@@ -362,6 +365,9 @@ VD.handleUpdateDimensions = function(w, h) {
     VD._setup();
     if (wasLooping) {
 	VD._loop();
+    } else {
+        VD._draw_once();
+        VD._noLoop();
     }
 }
 

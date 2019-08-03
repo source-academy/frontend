@@ -1,11 +1,11 @@
+import { NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import Textarea from 'react-textarea-autosize';
 import { controlButton } from '../../commons';
 
 interface IState {
-  width: string;
-  height: string;
+  width: number;
+  height: number;
 }
 
 class VideoDisplay extends React.Component<{}, IState> {
@@ -14,10 +14,9 @@ class VideoDisplay extends React.Component<{}, IState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      height: (window as any)._HEIGHT.toString(),
-      width: (window as any)._WIDTH.toString()
+      width: (window as any)._WIDTH,
+      height: (window as any)._HEIGHT
     };
-    this.handleUpdateDimensions = this.handleUpdateDimensions.bind(this);
     this.handleWidthChange = this.handleWidthChange.bind(this);
     this.handleHeightChange = this.handleHeightChange.bind(this);
   }
@@ -38,23 +37,26 @@ class VideoDisplay extends React.Component<{}, IState> {
   public handleCloseVideo() {
     (window as any).VD.handleCloseVideo();
   }
-  public handleWidthChange(event: any) {
-    this.setState({
-      width: event.target.value,
-      height: this.state.height
-    });
+  public handleWidthChange(n: number) {
+    if (n > 0) {
+      this.setState({
+        width: n,
+        height: this.state.height
+      });
+      this.handleUpdateDimensions(n, this.state.height);
+    }
   }
-  public handleHeightChange(event: any) {
-    this.setState({
-      height: event.target.value,
-      width: this.state.width
-    });
+  public handleHeightChange(m: number) {
+    if (m > 0) {
+      this.setState({
+        width: this.state.width,
+        height: m
+      });
+      this.handleUpdateDimensions(this.state.width, m);
+    }
   }
-  public handleUpdateDimensions() {
-    (window as any).VD.handleUpdateDimensions(
-      parseInt(this.state.width, 10),
-      parseInt(this.state.height, 10)
-    );
+  public handleUpdateDimensions(n: number, m: number) {
+    (window as any).VD.handleUpdateDimensions(n, m);
   }
   public handleResetFilter() {
     (window as any).VD.handleResetFilter();
@@ -66,19 +68,42 @@ class VideoDisplay extends React.Component<{}, IState> {
     };
     return (
       <div>
-        <div>
-          {controlButton('', IconNames.VIDEO, this.handleStartVideo)}
-          {controlButton('', IconNames.CAMERA, this.handleSnapPicture)}
-          {controlButton('Remove filter', IconNames.FILTER_REMOVE, this.handleResetFilter)}
-          {controlButton('Close webcam', IconNames.STOP, this.handleCloseVideo)}
-        </div>
-        <div>
-          Width:
-          <Textarea cols={5} value={this.state.width} onChange={this.handleWidthChange} />
-          &nbsp; Height:
-          <Textarea cols={5} value={this.state.height} onChange={this.handleHeightChange} />
+        <div style={{ margin: '0 auto' }}>
           &nbsp;
-          {controlButton('Update', IconNames.REFRESH, this.handleUpdateDimensions)}
+          <Tooltip content="Stream video">
+            {controlButton('', IconNames.VIDEO, this.handleStartVideo)}
+          </Tooltip>
+          &nbsp;
+          <Tooltip content="Snap picture">
+            {controlButton('', IconNames.CAMERA, this.handleSnapPicture)}
+          </Tooltip>
+          &nbsp;
+          <Tooltip content="Remove filter">
+            {controlButton('', IconNames.FILTER_REMOVE, this.handleResetFilter)}
+          </Tooltip>
+          &nbsp;
+          <Tooltip content="Change width">
+            <NumericInput
+              leftIcon={IconNames.HORIZONTAL_DISTRIBUTION}
+              style={{ width: 80 }}
+              value={this.state.width}
+              onValueChange={this.handleWidthChange}
+            />
+          </Tooltip>
+          &nbsp;
+          <Tooltip content="Change height">
+            <NumericInput
+              leftIcon={IconNames.VERTICAL_DISTRIBUTION}
+              style={{ width: 80 }}
+              value={this.state.height}
+              onValueChange={this.handleHeightChange}
+            />
+          </Tooltip>
+          &nbsp;
+          <Tooltip content="Close webcam">
+            {controlButton('', IconNames.STOP, this.handleCloseVideo)}
+          </Tooltip>
+          &nbsp;
         </div>
         <div style={{ width: '100%', textAlign: 'center' }}>
           <video
