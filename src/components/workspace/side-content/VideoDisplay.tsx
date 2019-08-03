@@ -93,10 +93,6 @@ class VideoDisplay extends React.Component<{}, IState> {
             />
           </Tooltip>
           &nbsp;
-          <Tooltip content="Close webcam">
-            {controlButton('', IconNames.STOP, this.handleCloseVideo)}
-          </Tooltip>
-          &nbsp;
         </div>
         <div style={{ width: '100%', textAlign: 'center' }}>
           <video
