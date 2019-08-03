@@ -1,6 +1,6 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
 import { Library } from '../../components/assessment/assessmentShape';
-import { createDefaultWorkspace } from '../../reducers/states';
+import { createDefaultWorkspace, SideContentType } from '../../reducers/states';
 import * as actionTypes from '../actionTypes';
 import {
   beginClearContext,
@@ -20,10 +20,12 @@ import {
   evalTestcase,
   externalLibrarySelect,
   highlightEditorLine,
+  resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
   setEditorBreakpoint,
   toggleEditorAutorun,
+  updateActiveTab,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
@@ -293,6 +295,18 @@ test('sendReplInputToOutput generates correct action object', () => {
   });
 });
 
+test('resetTestcase generates correct action object', () => {
+  const index = 420;
+  const action = resetTestcase(assessmentWorkspace, index);
+  expect(action).toEqual({
+    type: actionTypes.RESET_TESTCASE,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      index
+    }
+  });
+});
+
 test('resetWorkspace generates correct default action object', () => {
   const action = resetWorkspace(playgroundWorkspace);
   expect(action).toEqual({
@@ -311,6 +325,18 @@ test('resetWorkspace generates correct action object with provided workspace', (
     payload: {
       workspaceLocation: assessmentWorkspace,
       workspaceOptions
+    }
+  });
+});
+
+test('updateActiveTab generates correct action object', () => {
+  const activeTab = SideContentType.questionOverview;
+  const action = updateActiveTab(activeTab, playgroundWorkspace);
+  expect(action).toEqual({
+    type: actionTypes.UPDATE_ACTIVE_TAB,
+    payload: {
+      activeTab,
+      workspaceLocation: playgroundWorkspace
     }
   });
 });
