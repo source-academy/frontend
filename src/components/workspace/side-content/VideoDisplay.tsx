@@ -79,7 +79,7 @@ class VideoDisplay extends React.Component<{}, IState> {
           </Tooltip>
           &nbsp;
           <Tooltip content="Remove filter">
-            {controlButton('', IconNames.FILTER_REMOVE, this.handleResetFilter)}
+            {controlButton('', IconNames.GRAPH_REMOVE, this.handleResetFilter)}
           </Tooltip>
           &nbsp;
           <Tooltip content="Change width">
@@ -88,6 +88,9 @@ class VideoDisplay extends React.Component<{}, IState> {
               style={{ width: 80 }}
               value={this.state.width}
               onValueChange={this.handleWidthChange}
+              minorStepSize={1}
+              stepSize={10}
+              majorStepSize={100}
             />
           </Tooltip>
           &nbsp;
@@ -97,15 +100,13 @@ class VideoDisplay extends React.Component<{}, IState> {
               style={{ width: 80 }}
               value={this.state.height}
               onValueChange={this.handleHeightChange}
+              minorStepSize={1}
+              stepSize={10}
+              majorStepSize={100}
             />
           </Tooltip>
-          &nbsp;
-          <Tooltip content="Close webcam">
-            {controlButton('', IconNames.STOP, this.handleCloseVideo)}
-          </Tooltip>
-          &nbsp;
         </div>
-        <div style={{ width: '100%', textAlign: 'center' }}>
+        <div className='sa-video' style={{ width: '100%', textAlign: 'center' }}>
           <video
             ref={r => (this.$video = r)}
             style={hideVideo}
