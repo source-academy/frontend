@@ -20,6 +20,7 @@ import {
   fetchAssessment,
   setEditorBreakpoint,
   submitAnswer,
+  updateActiveTab,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue
@@ -35,7 +36,7 @@ import AssessmentWorkspace, {
   OwnProps,
   StateProps
 } from '../../components/assessment/AssessmentWorkspace';
-import { IState, IWorkspaceState } from '../../reducers/states';
+import { IState, IWorkspaceState, SideContentType } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
@@ -66,6 +67,8 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
+      handleActiveTabChange: (activeTab: SideContentType) =>
+        updateActiveTab(activeTab, workspaceLocation),
       handleAssessmentFetch: fetchAssessment,
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),

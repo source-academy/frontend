@@ -1,7 +1,7 @@
 import { ActionCreator } from 'redux';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
-import { IWorkspaceState } from '../reducers/states';
+import { IWorkspaceState, SideContentType } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
 /**
@@ -105,6 +105,14 @@ export const toggleEditorAutorun: ActionCreator<actionTypes.IAction> = (
 ) => ({
   type: actionTypes.TOGGLE_EDITOR_AUTORUN,
   payload: { workspaceLocation }
+});
+
+export const updateActiveTab: ActionCreator<actionTypes.IAction> = (
+  activeTab: SideContentType,
+  workspaceLocation: WorkspaceLocation
+) => ({
+  type: actionTypes.UPDATE_ACTIVE_TAB,
+  payload: { activeTab, workspaceLocation }
 });
 
 /**
@@ -219,6 +227,11 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
     workspaceLocation,
     value: newOutput
   }
+});
+
+export const resetTestcase = (workspaceLocation: WorkspaceLocation, index: number) => ({
+  type: actionTypes.RESET_TESTCASE,
+  payload: { workspaceLocation, index }
 });
 
 /**
