@@ -1,21 +1,24 @@
-import { NumericInput, Tooltip } from '@blueprintjs/core';
+import { Button, ButtonGroup, Divider, NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import { controlButton } from '../../commons';
 
-interface IState {
+export type VideoDisplayMode = 'video' | 'still';
+
+type VideoDisplayState = {
   width: number;
   height: number;
-}
+  mode: VideoDisplayMode;
+};
 
-class VideoDisplay extends React.Component<{}, IState> {
+class VideoDisplay extends React.Component<{}, VideoDisplayState> {
   private $video: HTMLElement | null;
   private $canvas: HTMLElement | null;
   constructor(props: any) {
     super(props);
     this.state = {
       width: (window as any)._WIDTH,
-      height: (window as any)._HEIGHT
+      height: (window as any)._HEIGHT,
+      mode: 'video' as VideoDisplayMode
     };
     this.handleWidthChange = this.handleWidthChange.bind(this);
     this.handleHeightChange = this.handleHeightChange.bind(this);
@@ -63,43 +66,57 @@ class VideoDisplay extends React.Component<{}, IState> {
     const hideVideo = {
       display: 'none'
     };
+
     return (
-      <div>
-        <div style={{ margin: '0 auto' }}>
-          &nbsp;
-          <Tooltip content="Stream video">
-            {controlButton('', IconNames.VIDEO, this.handleStartVideo)}
-          </Tooltip>
-          &nbsp;
-          <Tooltip content="Snap picture">
-            {controlButton('', IconNames.CAMERA, this.handleSnapPicture)}
-          </Tooltip>
-          &nbsp;
-          <Tooltip content="Change width">
-            <NumericInput
-              leftIcon={IconNames.HORIZONTAL_DISTRIBUTION}
-              style={{ width: 80 }}
-              value={this.state.width}
-              onValueChange={this.handleWidthChange}
-              minorStepSize={1}
-              stepSize={10}
-              majorStepSize={100}
-            />
-          </Tooltip>
-          &nbsp;
-          <Tooltip content="Change height">
-            <NumericInput
-              leftIcon={IconNames.VERTICAL_DISTRIBUTION}
-              style={{ width: 80 }}
-              value={this.state.height}
-              onValueChange={this.handleHeightChange}
-              minorStepSize={1}
-              stepSize={10}
-              majorStepSize={100}
-            />
-          </Tooltip>
+      <div className='sa-video'>
+        <div className='sa-video-header'>
+          <div className='sa-video-header-element'>
+            <ButtonGroup>
+              <Button
+                icon={IconNames.VIDEO}
+                active={this.state.mode === 'video'}
+                onClick={this.swapModes(this.state.mode)}
+                text={'Live Video'}
+              />
+              <Button
+                icon={IconNames.CAMERA}
+                active={this.state.mode === 'still'}
+                onClick={this.swapModes(this.state.mode)}
+                text={'Still Image'}
+              />
+            </ButtonGroup>
+          </div>
+          <Divider />
+          <div className='sa-video-header-element'>
+            <div className='sa-video-header-numeric-input'>
+              <Tooltip content="Change width">
+                <NumericInput
+                  leftIcon={IconNames.HORIZONTAL_DISTRIBUTION}
+                  style={{ width: 70 }}
+                  value={this.state.width}
+                  onValueChange={this.handleWidthChange}
+                  minorStepSize={1}
+                  stepSize={10}
+                  majorStepSize={100}
+                />
+              </Tooltip>
+            </div>
+            <div className='sa-video-header-numeric-input'>
+              <Tooltip content="Change height">
+                <NumericInput
+                  leftIcon={IconNames.VERTICAL_DISTRIBUTION}
+                  style={{ width: 70 }}
+                  value={this.state.height}
+                  onValueChange={this.handleHeightChange}
+                  minorStepSize={1}
+                  stepSize={10}
+                  majorStepSize={100}
+                />
+              </Tooltip>
+            </div>
+          </div>
         </div>
-        <div className="sa-video" style={{ width: '100%', textAlign: 'center' }}>
+        <div className="sa-video-element">
           <video
             ref={r => (this.$video = r)}
             style={hideVideo}
@@ -115,6 +132,28 @@ class VideoDisplay extends React.Component<{}, IState> {
         </div>
       </div>
     );
+  }
+
+  private swapModes = (mode: VideoDisplayMode) => () => {
+    switch (mode) {
+      case 'video':
+        this.setState(
+          (state: VideoDisplayState) => {
+            return { ...state, mode: 'still' as VideoDisplayMode };
+          },
+          this.handleSnapPicture
+        );
+        break;
+
+      case 'still':
+        this.setState(
+          (state: VideoDisplayState) => {
+            return { ...state, mode: 'video' as VideoDisplayMode };
+          },
+          this.handleStartVideo
+        );
+        break;
+    }
   }
 }
 
