@@ -389,14 +389,14 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
     };
   });
 
-  test('puts changePlaygroundExternal, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
+  test('puts changeExternalLibrary, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
     const oldExternalLibraryName = ExternalLibraryNames.SOUNDS;
     const newExternalLibraryName = ExternalLibraryNames.RUNES;
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
       context,
       globals,
-      playgroundExternal: oldExternalLibraryName
+      externalLibrary: oldExternalLibraryName
     });
 
     const symbols = externalLibraries.get(newExternalLibraryName)!;
@@ -411,7 +411,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .put(actions.changePlaygroundExternal(newExternalLibraryName))
+      .put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation))
       .put(actions.beginClearContext(library, workspaceLocation))
       .put(actions.clearReplOutput(workspaceLocation))
       .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
@@ -432,7 +432,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
     const newDefaultState = generateDefaultState(workspaceLocation, {
       context,
       globals,
-      playgroundExternal: oldExternalLibraryName
+      externalLibrary: oldExternalLibraryName
     });
 
     const symbols = externalLibraries.get(newExternalLibraryName)!;
@@ -447,7 +447,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .not.put(actions.changePlaygroundExternal(newExternalLibraryName))
+      .not.put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation))
       .not.put(actions.beginClearContext(library, workspaceLocation))
       .not.put(actions.clearReplOutput(workspaceLocation))
       .not.call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)

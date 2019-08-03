@@ -15,6 +15,7 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
+  externalLibrarySelect,
   fetchSourcecastIndex,
   setCodeDeltasToApply,
   setEditorBreakpoint,
@@ -23,12 +24,12 @@ import {
   setSourcecastData,
   setSourcecastDuration,
   setSourcecastStatus,
-  setWebsocketStatus,
   toggleEditorAutorun,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
+import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
 import Sourcecast, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcecast';
 import {
   ICodeDelta,
@@ -46,6 +47,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorReadonly: state.workspaces.sourcecast.editorReadonly,
   editorWidth: state.workspaces.sourcecast.editorWidth,
   editorValue: state.workspaces.sourcecast.editorValue!,
+  externalLibraryName: state.workspaces.sourcecast.externalLibrary,
   isEditorAutorun: state.workspaces.sourcecast.isEditorAutorun,
   inputToApply: state.workspaces.sourcecast.inputToApply,
   breakpoints: state.workspaces.sourcecast.breakpoints,
@@ -60,8 +62,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   replValue: state.workspaces.sourcecast.replValue,
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
-  sourceChapter: state.workspaces.sourcecast.context.chapter,
-  websocketStatus: state.workspaces.playground.websocketStatus
+  sourceChapter: state.workspaces.sourcecast.context.chapter
 });
 
 const location: WorkspaceLocation = 'sourcecast';
@@ -78,6 +79,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
+      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
+        externalLibrarySelect(externalLibraryName, location),
       handleFetchSourcecastIndex: () => fetchSourcecastIndex(location),
       handleInterruptEval: () => beginInterruptExecution(location),
       handleReplEval: () => evalRepl(location),
@@ -96,8 +99,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleSetSourcecastDuration: (duration: number) => setSourcecastDuration(duration, location),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         setSourcecastStatus(playbackStatus, location),
-      handleSetWebsocketStatus: (websocketStatus: number) =>
-        setWebsocketStatus(location, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
