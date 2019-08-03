@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
 import ChatApp from '../../../containers/ChatContainer';
-import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../../reducers/states';
 import { USE_CHATKIT } from '../../../utils/constants';
 import { history } from '../../../utils/history';
 import {
@@ -26,7 +26,6 @@ import { Grading, IAnsweredQuestion } from './gradingShape';
 export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
-  activeTab: number;
   autogradingResults: AutogradingResult[];
   grading?: Grading;
   editorPrepend: string;
@@ -54,9 +53,9 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
@@ -240,12 +239,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     props: GradingWorkspaceProps,
     questionId: number
   ) => ({
-    activeTab: props.activeTab,
-    handleChangeActiveTab: props.handleChangeActiveTab,
+    handleActiveTabChange: props.handleActiveTabChange,
     tabs: [
       {
         label: `Grading: Question ${questionId}`,
-        icon: IconNames.TICK,
+        iconName: IconNames.TICK,
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
@@ -260,35 +258,40 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             maxXp={props.grading![questionId].question.maxXp}
             studentName={props.grading![questionId].student.name}
           />
-        )
+        ),
+        id: SideContentType.grading
       },
       {
         label: `Task ${questionId + 1}`,
-        icon: IconNames.NINJA,
-        body: <Markdown content={props.grading![questionId].question.content} />
+        iconName: IconNames.NINJA,
+        body: <Markdown content={props.grading![questionId].question.content} />,
+        id: SideContentType.questionOverview
       },
       {
         label: `Chat`,
-        icon: IconNames.CHAT,
+        iconName: IconNames.CHAT,
         body: USE_CHATKIT ? (
           <ChatApp
             roomId={props.grading![questionId].grade.roomId}
             submissionId={this.props.submissionId}
           />
         ) : (
-          <span>ChatKit disabled.</span>
-        )
+          <span>Chatkit disabled.</span>
+        ),
+        id: SideContentType.chat,
+        disabled: !USE_CHATKIT
       },
       {
         label: `Autograder`,
-        icon: IconNames.AIRPLANE,
+        iconName: IconNames.AIRPLANE,
         body: (
           <Autograder
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
-        )
+        ),
+        id: SideContentType.autograder
       }
     ]
   });

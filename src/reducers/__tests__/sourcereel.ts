@@ -1,14 +1,14 @@
 import {
   IAction,
-  RECORD_EDITOR_INIT_VALUE,
+  RECORD_INIT,
   RECORD_INPUT,
-  SAVE_SOURCECAST_DATA,
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,
   TIMER_START,
   TIMER_STOP
 } from '../../actions/actionTypes';
+import { ExternalLibraryNames } from '../../components/assessment/assessmentShape';
 import {
   ICodeDelta,
   Input,
@@ -25,19 +25,20 @@ function generateAction(type: string, payload: any = {}): IAction {
   };
 }
 
-describe('RECORD_EDITOR_INIT_VALUE', () => {
+describe('RECORD_INIT', () => {
   test('records editorInitValue correctly', () => {
-    const editorValue = 'test init value';
-    const action: IAction = generateAction(RECORD_EDITOR_INIT_VALUE, { editorValue });
+    const initData: IPlaybackData['init'] = {
+      editorValue: 'test init value',
+      chapter: 1,
+      externalLibrary: ExternalLibraryNames.NONE
+    };
+    const action: IAction = generateAction(RECORD_INIT, { initData });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
       playbackData: {
         ...defaultWorkspaceManager.sourcereel.playbackData,
-        init: {
-          ...defaultWorkspaceManager.sourcereel.playbackData.init,
-          editorValue
-        }
+        init: initData
       }
     });
   });
@@ -72,48 +73,6 @@ describe('RECORD_INPUT', () => {
         ...defaultWorkspaceManager.sourcereel.playbackData,
         inputs: [...defaultWorkspaceManager.sourcereel.playbackData.inputs, input]
       }
-    });
-  });
-});
-
-describe('SAVE_SOURCECAST_DATA', () => {
-  test('saves sourcecastData correctly', () => {
-    const codeDelta: ICodeDelta = {
-      start: {
-        row: 0,
-        column: 1
-      },
-      end: {
-        row: 0,
-        column: 2
-      },
-      action: 'insert',
-      lines: ['a']
-    };
-    const input: Input = {
-      time: 1,
-      type: 'codeDelta',
-      data: codeDelta
-    };
-    const playbackData: IPlaybackData = {
-      init: {
-        editorValue: ''
-      },
-      inputs: [input]
-    };
-
-    const payload = {
-      title: 'Test Title',
-      description: 'Test Description',
-      audioUrl: 'someUrl.com',
-      playbackData
-    };
-
-    const action: IAction = generateAction(SAVE_SOURCECAST_DATA, payload);
-    const result = reducer(defaultWorkspaceManager.sourcereel, action);
-    expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcereel,
-      ...payload
     });
   });
 });

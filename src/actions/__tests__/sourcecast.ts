@@ -1,3 +1,4 @@
+import { ExternalLibraryNames } from '../../components/assessment/assessmentShape';
 import {
   ICodeDelta,
   Input,
@@ -102,6 +103,8 @@ test('setSourcecastData generates correct action object', () => {
   };
   const playbackData: IPlaybackData = {
     init: {
+      chapter: 1,
+      externalLibrary: ExternalLibraryNames.NONE,
       editorValue: ''
     },
     inputs: [input]

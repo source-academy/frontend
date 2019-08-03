@@ -3,26 +3,27 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput } from '../../reducers/states';
+import { InterpreterOutput, SideContentType } from '../../reducers/states';
+import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
-import { Input, IPlaybackData, RecordingStatus } from './sourcecastShape';
+import { Input, IPlaybackData, KeyboardCommand, RecordingStatus } from './sourcecastShape';
 import SourcereelControlbar from './SourcereelControlbar';
 
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
-  activeTab: number;
   breakpoints: string[];
   editorHeight?: string;
   editorReadonly: boolean;
   editorValue: string;
   editorWidth: string;
   enableDebugging: boolean;
+  externalLibraryName: string;
   highlightedLines: number[][];
   isDebugging: boolean;
   isEditorAutorun: boolean;
@@ -38,9 +39,9 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
@@ -50,12 +51,13 @@ export interface IDispatchProps {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleInterruptEval: () => void;
   handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleRecordEditorInitValue: (editorValue: string) => void;
+  handleRecordInit: (initData: IPlaybackData['init']) => void;
   handleSaveSourcecastData: (
     title: string,
     description: string,
@@ -95,6 +97,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
+        externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) => {
           this.props.handleChapterSelect(chapter);
           if (this.props.recordingStatus !== RecordingStatus.recording) {
@@ -106,7 +109,29 @@ class Sourcereel extends React.Component<ISourcereelProps> {
             data: chapter
           });
         },
-        handleEditorEval: this.props.handleEditorEval,
+        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) => {
+          this.props.handleExternalSelect(name);
+          if (this.props.recordingStatus !== RecordingStatus.recording) {
+            return;
+          }
+          this.props.handleRecordInput({
+            time: this.getTimerDuration(),
+            type: 'externalLibrarySelect',
+            data: name
+          });
+        },
+
+        handleEditorEval: () => {
+          this.props.handleEditorEval();
+          if (this.props.recordingStatus !== RecordingStatus.recording) {
+            return;
+          }
+          this.props.handleRecordInput({
+            time: this.getTimerDuration(),
+            type: 'keyboardCommand',
+            data: KeyboardCommand.run
+          });
+        },
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleInterruptEval: this.props.handleInterruptEval,
         handleReplEval: this.props.handleReplEval,
@@ -143,12 +168,11 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        activeTab: this.props.activeTab,
-        handleChangeActiveTab: this.props.handleChangeActiveTab,
+        handleActiveTabChange: this.props.handleActiveTabChange,
         tabs: [
           {
             label: 'Introduction',
-            icon: IconNames.COMPASS,
+            iconName: IconNames.COMPASS,
             body: (
               <div>
                 <span className="Multi-line">
@@ -158,7 +182,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
                   editorValue={this.props.editorValue}
                   getTimerDuration={this.getTimerDuration}
                   playbackData={this.props.playbackData}
-                  handleRecordEditorInitValue={this.props.handleRecordEditorInitValue}
+                  handleRecordInit={this.handleRecordInit}
                   handleSaveSourcecastData={this.props.handleSaveSourcecastData}
                   handleSetEditorReadonly={this.props.handleSetEditorReadonly}
                   handleTimerPause={this.props.handleTimerPause}
@@ -186,26 +210,36 @@ class Sourcereel extends React.Component<ISourcereelProps> {
 
   public getTimerDuration = () =>
     this.props.timeElapsedBeforePause + Date.now() - this.props.timeResumed;
+
+  private handleRecordInit = () =>
+    this.props.handleRecordInit({
+      chapter: this.props.sourceChapter,
+      externalLibrary: this.props.externalLibraryName as ExternalLibraryName,
+      editorValue: this.props.editorValue
+    });
 }
 
 const INTRODUCTION = 'Welcome to Sourcereel!';
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
-  icon: IconNames.EYE_OPEN,
-  body: <ListVisualizer />
+  iconName: IconNames.EYE_OPEN,
+  body: <ListVisualizer />,
+  id: SideContentType.dataVisualiser
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
-  icon: IconNames.SEARCH,
-  body: <Inspector />
+  iconName: IconNames.SEARCH,
+  body: <Inspector />,
+  id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.GLOBE,
-  body: <EnvVisualizer />
+  iconName: IconNames.GLOBE,
+  body: <EnvVisualizer />,
+  id: SideContentType.envVisualiser
 };
 
 export default Sourcereel;

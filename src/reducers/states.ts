@@ -57,9 +57,8 @@ interface IGradingWorkspace extends IWorkspaceState {
   readonly hasUnsavedChanges: boolean;
 }
 
-export interface IPlaygroundWorkspace extends IWorkspaceState {
-  readonly playgroundExternal: ExternalLibraryName;
-}
+// tslint:disable-next-line: no-empty-interface
+export interface IPlaygroundWorkspace extends IWorkspaceState {}
 
 export interface ISourcecastWorkspace extends IWorkspaceState {
   readonly audioUrl: string;
@@ -90,6 +89,7 @@ export interface IWorkspaceManagerState {
 
 export interface IWorkspaceState {
   readonly autogradingResults: AutogradingResult[];
+  readonly breakpoints: string[];
   readonly context: Context;
   readonly editorPrepend: string;
   readonly editorReadonly: boolean;
@@ -99,18 +99,19 @@ export interface IWorkspaceState {
   readonly editorTestcases: ITestcase[];
   readonly editorHeight: number;
   readonly editorWidth: string;
-  readonly breakpoints: string[];
+  readonly execTime: number;
   readonly highlightedLines: number[][];
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
   readonly isEditorAutorun: boolean;
   readonly output: InterpreterOutput[];
+  readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
   readonly sharedbAceInitValue: string;
   readonly sharedbAceIsInviting: boolean;
-  readonly sideContentActiveTab: number;
+  readonly sideContentActiveTab: SideContentType;
   readonly sideContentHeight?: number;
   readonly websocketStatus: number;
   readonly globals: Array<[string, any]>;
@@ -245,6 +246,7 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
+  breakpoints: [],
   context: createContext<WorkspaceLocation>(latestSourceChapter, [], workspaceLocation),
   editorPrepend: '',
   editorSessionId: '',
@@ -257,7 +259,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   editorTestcases: [],
   editorHeight: 150,
   editorWidth: '50%',
-  breakpoints: [],
+  externalLibrary: ExternalLibraryNames.NONE,
+  execTime: 1000,
   highlightedLines: [],
   output: [],
   replHistory: {
@@ -268,7 +271,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   replValue: '',
   sharedbAceInitValue: '',
   sharedbAceIsInviting: false,
-  sideContentActiveTab: 0,
+  sideContentActiveTab: SideContentType.questionOverview,
   websocketStatus: 0,
   globals: [],
   isEditorAutorun: false,
@@ -278,6 +281,29 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
 });
 
 export const defaultRoomId = null;
+
+export enum SideContentType {
+  autograder = 'autograder',
+  briefing = 'briefing',
+  chat = 'chat',
+  dataVisualiser = 'data_visualiser',
+  editorGrading = 'editor_grading',
+  editorAutograder = 'editor_autograder',
+  editorBriefing = 'editor_briefing',
+  editorGlobalDeployment = 'editor_global_deployment',
+  editorGlobalGraderDeployment = 'editor_global_grader_deployment',
+  editorLocalDeployment = 'editor_local_deployment',
+  editorLocalGraderDeployment = 'editor_local_grader_deployment',
+  editorManageQuestion = 'editor_manage_question',
+  editorQuestionOverview = 'editor_question_overview',
+  editorQuestionTemplate = 'editor_question_template',
+  envVisualiser = 'env_visualiser',
+  grading = 'grading',
+  introduction = 'introduction',
+  inspector = 'inspector',
+  questionOverview = 'question_overview',
+  toneMatrix = 'tone_matrix'
+}
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
   assessment: {
@@ -293,8 +319,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     hasUnsavedChanges: false
   },
   playground: {
-    ...createDefaultWorkspace(WorkspaceLocations.playground),
-    playgroundExternal: ExternalLibraryNames.NONE
+    ...createDefaultWorkspace(WorkspaceLocations.playground)
   },
   sourcecast: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
@@ -303,7 +328,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     description: null,
     inputToApply: null,
     playbackData: {
-      init: { editorValue: '' },
+      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryNames.NONE },
       inputs: []
     },
     playbackDuration: 0,
@@ -314,7 +339,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   sourcereel: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
     playbackData: {
-      init: { editorValue: '' },
+      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryNames.NONE },
       inputs: []
     },
     recordingStatus: RecordingStatus.notStarted,

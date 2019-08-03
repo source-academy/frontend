@@ -5,7 +5,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
 
-import { InterpreterOutput } from '../reducers/states';
+import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
 import { ExternalLibraryName } from './assessment/assessmentShape';
 import Markdown from './commons/Markdown';
@@ -37,11 +37,11 @@ the REPL.
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
-  activeTab: number;
   editorSessionId: string;
   editorValue: string;
   editorHeight?: number;
   editorWidth: string;
+  execTime: number;
   breakpoints: string[];
   highlightedLines: number[][];
   isEditorAutorun: boolean;
@@ -60,9 +60,10 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
+  handleChangeExecTime: (execTime: number) => void;
   handleChapterSelect: (chapter: number) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -107,7 +108,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       controlBarProps: {
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
+        execTime: this.props.execTime,
         externalLibraryName: this.props.externalLibraryName,
+        handleChangeExecTime: (execTime: number) => this.props.handleChangeExecTime(execTime),
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
           this.props.handleChapterSelect(chapter),
         handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
@@ -125,6 +128,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleDebuggerPause: this.props.handleDebuggerPause,
         handleDebuggerResume: this.props.handleDebuggerResume,
         handleDebuggerReset: this.props.handleDebuggerReset,
+        hasChangeExecTime: true,
         hasChapterSelect: true,
         hasCollabEditing: true,
         hasEditorAutorunButton: true,
@@ -168,8 +172,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        activeTab: this.props.activeTab,
-        handleChangeActiveTab: this.props.handleChangeActiveTab,
+        defaultSelectedTabId: SideContentType.introduction,
+        handleActiveTabChange: this.props.handleActiveTabChange,
         tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
       }
     };
@@ -195,26 +199,30 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 
 const playgroundIntroductionTab: SideContentTab = {
   label: 'Introduction',
-  icon: IconNames.COMPASS,
-  body: <Markdown content={INTRODUCTION} />
+  iconName: IconNames.COMPASS,
+  body: <Markdown content={INTRODUCTION} />,
+  id: SideContentType.introduction
 };
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
-  icon: IconNames.EYE_OPEN,
-  body: <ListVisualizer />
+  iconName: IconNames.EYE_OPEN,
+  body: <ListVisualizer />,
+  id: SideContentType.dataVisualiser
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
-  icon: IconNames.SEARCH,
-  body: <Inspector />
+  iconName: IconNames.SEARCH,
+  body: <Inspector />,
+  id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.GLOBE,
-  body: <EnvVisualizer />
+  iconName: IconNames.GLOBE,
+  body: <EnvVisualizer />,
+  id: SideContentType.envVisualiser
 };
 
 export default Playground;

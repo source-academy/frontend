@@ -1,7 +1,10 @@
+import { ExternalLibraryName } from '../assessment/assessmentShape';
+
 export interface IInputTypeShape {
   chapterSelect: number;
   cursorPositionChange: IPosition;
   codeDelta: ICodeDelta;
+  externalLibrarySelect: ExternalLibraryName;
   keyboardCommand: KeyboardCommand;
   selectionRangeData: ISelectionData;
 }
@@ -46,6 +49,8 @@ export type Input = keyof IInputTypeShape extends infer K
 
 export interface IPlaybackData {
   init: {
+    chapter: number;
+    externalLibrary: ExternalLibraryName;
     editorValue: string;
   };
   inputs: Input[];

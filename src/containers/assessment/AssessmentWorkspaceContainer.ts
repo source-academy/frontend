@@ -7,7 +7,6 @@ import {
   beginInterruptExecution,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeActiveTab,
   changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
@@ -21,6 +20,7 @@ import {
   fetchAssessment,
   setEditorBreakpoint,
   submitAnswer,
+  updateActiveTab,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue
@@ -36,11 +36,10 @@ import AssessmentWorkspace, {
   OwnProps,
   StateProps
 } from '../../components/assessment/AssessmentWorkspace';
-import { IState, IWorkspaceState } from '../../reducers/states';
+import { IState, IWorkspaceState, SideContentType } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
-    activeTab: state.workspaces.assessment.sideContentActiveTab,
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
     editorPrepend: state.workspaces.assessment.editorPrepend,
@@ -68,10 +67,11 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
+      handleActiveTabChange: (activeTab: SideContentType) =>
+        updateActiveTab(activeTab, workspaceLocation),
       handleAssessmentFetch: fetchAssessment,
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChangeActiveTab: (activeTab: number) => changeActiveTab(activeTab, workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, changeEvent, workspaceLocation),
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),

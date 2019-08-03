@@ -3,7 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput } from '../../reducers/states';
+import { InterpreterOutput, SideContentType } from '../../reducers/states';
+import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
@@ -17,7 +18,6 @@ import SourcecastTable from './SourcecastTable';
 export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
-  activeTab: number;
   audioUrl: string;
   codeDeltasToApply: ICodeDelta[] | null;
   title: string | null;
@@ -26,6 +26,7 @@ export interface IStateProps {
   editorValue: string;
   editorHeight?: number;
   editorWidth: string;
+  externalLibraryName: string;
   breakpoints: string[];
   highlightedLines: number[][];
   isEditorAutorun: boolean;
@@ -41,13 +42,12 @@ export interface IStateProps {
   sideContentHeight?: number;
   sourcecastIndex: any;
   sourceChapter: number;
-  websocketStatus: number;
 }
 
 export interface IDispatchProps {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
@@ -57,6 +57,7 @@ export interface IDispatchProps {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleFetchSourcecastIndex: () => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
@@ -73,7 +74,6 @@ export interface IDispatchProps {
   ) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
-  handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
 }
@@ -94,6 +94,9 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       case 'chapterSelect':
         this.props.handleChapterSelect(inputToApply.data);
         break;
+      case 'externalLibrarySelect':
+        this.props.handleExternalSelect(inputToApply.data);
+        break;
     }
   }
 
@@ -110,14 +113,16 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
       breakpoints: this.props.breakpoints,
       highlightedLines: this.props.highlightedLines,
-      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-      handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
+      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
     };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
+        externalLibraryName: this.props.externalLibraryName,
         handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
           this.props.handleChapterSelect(chapter),
+        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
+          this.props.handleExternalSelect(name),
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleInterruptEval: this.props.handleInterruptEval,
@@ -155,12 +160,11 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        activeTab: this.props.activeTab,
-        handleChangeActiveTab: this.props.handleChangeActiveTab,
+        handleActiveTabChange: this.props.handleActiveTabChange,
         tabs: [
           {
             label: 'Introduction',
-            icon: IconNames.COMPASS,
+            iconName: IconNames.COMPASS,
             body: (
               <div>
                 <span className="Multi-line">
@@ -176,7 +180,8 @@ class Sourcecast extends React.Component<ISourcecastProps> {
                   sourcecastIndex={this.props.sourcecastIndex}
                 />
               </div>
-            )
+            ),
+            id: SideContentType.introduction
           },
           listVisualizerTab,
           inspectorTab,
@@ -194,7 +199,9 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       audioUrl: this.props.audioUrl,
       duration: this.props.playbackDuration,
       playbackData: this.props.playbackData,
-      playbackStatus: this.props.playbackStatus
+      playbackStatus: this.props.playbackStatus,
+      handleChapterSelect: this.props.handleChapterSelect,
+      handleExternalSelect: this.props.handleExternalSelect
     };
     return (
       <div className={classNames('Sourcecast', Classes.DARK)}>
@@ -209,20 +216,23 @@ const INTRODUCTION = 'Welcome to Sourcecast!';
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
-  icon: IconNames.EYE_OPEN,
-  body: <ListVisualizer />
+  iconName: IconNames.EYE_OPEN,
+  body: <ListVisualizer />,
+  id: SideContentType.dataVisualiser
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
-  icon: IconNames.SEARCH,
-  body: <Inspector />
+  iconName: IconNames.SEARCH,
+  body: <Inspector />,
+  id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.GLOBE,
-  body: <EnvVisualizer />
+  iconName: IconNames.GLOBE,
+  body: <EnvVisualizer />,
+  id: SideContentType.envVisualiser
 };
 
 export default Sourcecast;

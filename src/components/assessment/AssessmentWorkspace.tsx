@@ -12,7 +12,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
-import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
 import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
@@ -21,7 +21,7 @@ import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
-import { SideContentProps } from '../workspace/side-content';
+import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
@@ -39,7 +39,6 @@ import GradingResult from './GradingResult';
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
-  activeTab: number;
   assessment?: IAssessment;
   autogradingResults: AutogradingResult[];
   editorPrepend: string;
@@ -69,10 +68,10 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
@@ -328,27 +327,30 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const tabs = [
+    const tabs: SideContentTab[] = [
       {
         label: `Task ${questionId + 1}`,
-        icon: IconNames.NINJA,
-        body: <Markdown content={props.assessment!.questions[questionId].content} />
+        iconName: IconNames.NINJA,
+        body: <Markdown content={props.assessment!.questions[questionId].content} />,
+        id: SideContentType.questionOverview
       },
       {
         label: `${props.assessment!.category} Briefing`,
-        icon: IconNames.BRIEFCASE,
-        body: <Markdown content={props.assessment!.longSummary} />
+        iconName: IconNames.BRIEFCASE,
+        body: <Markdown content={props.assessment!.longSummary} />,
+        id: SideContentType.briefing
       },
       {
         label: `${props.assessment!.category} Autograder`,
-        icon: IconNames.AIRPLANE,
+        iconName: IconNames.AIRPLANE,
         body: (
           <Autograder
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
-        )
+        ),
+        id: SideContentType.autograder
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;
@@ -356,7 +358,7 @@ class AssessmentWorkspace extends React.Component<
       tabs.push(
         {
           label: `Grading`,
-          icon: IconNames.TICK,
+          iconName: IconNames.TICK,
           body: (
             <GradingResult
               graderName={props.assessment!.questions[questionId].grader.name}
@@ -366,11 +368,12 @@ class AssessmentWorkspace extends React.Component<
               maxGrade={props.assessment!.questions[questionId].maxGrade}
               maxXp={props.assessment!.questions[questionId].maxXp}
             />
-          )
+          ),
+          id: SideContentType.grading
         },
         {
           label: `Chat`,
-          icon: IconNames.CHAT,
+          iconName: IconNames.CHAT,
           body: USE_CHATKIT ? (
             <ChatApp
               assessmentId={this.props.assessment!.id}
@@ -378,7 +381,9 @@ class AssessmentWorkspace extends React.Component<
             />
           ) : (
             <span>Chatkit disabled.</span>
-          )
+          ),
+          id: SideContentType.chat,
+          disabled: !USE_CHATKIT
         }
       );
     }
@@ -387,15 +392,12 @@ class AssessmentWorkspace extends React.Component<
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
-        icon: IconNames.GRID_VIEW,
-        body: <ToneMatrix />
+        iconName: IconNames.GRID_VIEW,
+        body: <ToneMatrix />,
+        id: SideContentType.toneMatrix
       });
     }
-    return {
-      activeTab: props.activeTab,
-      handleChangeActiveTab: props.handleChangeActiveTab,
-      tabs
-    };
+    return { handleActiveTabChange: props.handleActiveTabChange, tabs };
   };
 
   /** Pre-condition: IAssessment has been loaded */

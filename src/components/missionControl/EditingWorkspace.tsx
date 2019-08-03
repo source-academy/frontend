@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
 import { history } from '../../utils/history';
 import {
   IAssessment,
@@ -19,7 +19,7 @@ import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
-import { SideContentProps } from '../workspace/side-content';
+import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
   AutograderTab,
@@ -39,7 +39,6 @@ import {
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
-  activeTab: number;
   editorHeight?: number;
   editorValue: string | null;
   editorWidth: string;
@@ -93,7 +92,7 @@ export type DispatchProps = {
 
 interface IState {
   assessment: IAssessment | null;
-  activeTab: number;
+  activeTab: SideContentType;
   editingMode: string;
   hasUnsavedChanges: boolean;
   showResetTemplateOverlay: boolean;
@@ -106,7 +105,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     super(props);
     this.state = {
       assessment: retrieveLocalAssessment(),
-      activeTab: 0,
+      activeTab: SideContentType.editorQuestionOverview,
       editingMode: 'question',
       hasUnsavedChanges: false,
       showResetTemplateOverlay: false,
@@ -394,16 +393,14 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.resetWorkspaceValues();
   };
 
-  private handleChangeActiveTab = (tab: number) => {
+  private handleActiveTabChange = (tab: SideContentType) => {
     this.setState({
       activeTab: tab
     });
   };
-
   private toggleEditingMode = () => {
     const toggle = this.state.editingMode === 'question' ? 'global' : 'question';
     this.setState({
-      activeTab: 0,
       editingMode: toggle
     });
   };
@@ -414,7 +411,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     questionId: number
   ) => {
     const assessment = this.state.assessment!;
-    let tabs;
+    let tabs: SideContentTab[];
     if (this.state.editingMode === 'question') {
       const qnType = this.state.assessment!.questions[this.props.questionId].type;
       const questionTemplateTab =
@@ -438,23 +435,25 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       tabs = [
         {
           label: `Task ${questionId + 1}`,
-          icon: IconNames.NINJA,
+          iconName: IconNames.NINJA,
           body: (
             <TextareaContentTab
               assessment={assessment}
               path={['questions', questionId, 'content']}
               updateAssessment={this.updateEditAssessmentState}
             />
-          )
+          ),
+          id: SideContentType.editorQuestionOverview
         },
         {
           label: `Question Template`,
-          icon: IconNames.DOCUMENT,
-          body: questionTemplateTab
+          iconName: IconNames.DOCUMENT,
+          body: questionTemplateTab,
+          id: SideContentType.editorQuestionTemplate
         },
         {
           label: `Manage Local Deployment`,
-          icon: IconNames.HOME,
+          iconName: IconNames.HOME,
           body: (
             <DeploymentTab
               assessment={assessment}
@@ -464,11 +463,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
               isOptionalDeployment={true}
             />
-          )
+          ),
+          id: SideContentType.editorLocalDeployment
         },
         {
           label: `Manage Local Grader Deployment`,
-          icon: IconNames.CONFIRM,
+          iconName: IconNames.CONFIRM,
           body: (
             <DeploymentTab
               assessment={assessment}
@@ -479,24 +479,26 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
               isOptionalDeployment={true}
             />
-          )
+          ),
+          id: SideContentType.editorLocalGraderDeployment
         },
         {
           label: `Grading`,
-          icon: IconNames.TICK,
+          iconName: IconNames.TICK,
           body: (
             <GradingTab
               assessment={assessment}
               path={['questions', questionId]}
               updateAssessment={this.updateEditAssessmentState}
             />
-          )
+          ),
+          id: SideContentType.editorGrading
         }
       ];
       if (qnType === 'programming') {
         tabs.push({
           label: `Autograder`,
-          icon: IconNames.AIRPLANE,
+          iconName: IconNames.AIRPLANE,
           body: (
             <AutograderTab
               assessment={assessment}
@@ -504,33 +506,36 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               handleTestcaseEval={this.handleTestcaseEval}
               updateAssessment={this.updateEditAssessmentState}
             />
-          )
+          ),
+          id: SideContentType.editorAutograder
         });
       }
       const functionsAttached = assessment!.questions[questionId].library.external.symbols;
       if (functionsAttached.includes('get_matrix')) {
         tabs.push({
           label: `Tone Matrix`,
-          icon: IconNames.GRID_VIEW,
-          body: <ToneMatrix />
+          iconName: IconNames.GRID_VIEW,
+          body: <ToneMatrix />,
+          id: SideContentType.toneMatrix
         });
       }
     } else {
       tabs = [
         {
           label: `${assessment!.category} Briefing`,
-          icon: IconNames.BRIEFCASE,
+          iconName: IconNames.BRIEFCASE,
           body: (
             <TextareaContentTab
               assessment={assessment}
               path={['longSummary']}
               updateAssessment={this.updateEditAssessmentState}
             />
-          )
+          ),
+          id: SideContentType.editorBriefing
         },
         {
           label: `Manage Question`,
-          icon: IconNames.WRENCH,
+          iconName: IconNames.WRENCH,
           body: (
             <ManageQuestionTab
               assessment={assessment}
@@ -538,11 +543,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               questionId={questionId}
               updateAssessment={this.updateAndSaveAssessment}
             />
-          )
+          ),
+          id: SideContentType.editorManageQuestion
         },
         {
           label: `Manage Global Deployment`,
-          icon: IconNames.GLOBE,
+          iconName: IconNames.GLOBE,
           body: (
             <DeploymentTab
               assessment={assessment}
@@ -552,11 +558,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
               isOptionalDeployment={false}
             />
-          )
+          ),
+          id: SideContentType.editorGlobalDeployment
         },
         {
           label: `Manage Global Grader Deployment`,
-          icon: IconNames.CONFIRM,
+          iconName: IconNames.CONFIRM,
           body: (
             <DeploymentTab
               assessment={assessment}
@@ -566,16 +573,13 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
               isOptionalDeployment={true}
             />
-          )
+          ),
+          id: SideContentType.editorGlobalGraderDeployment
         }
       ];
     }
 
-    return {
-      activeTab: this.state.activeTab,
-      handleChangeActiveTab: this.handleChangeActiveTab,
-      tabs
-    };
+    return { handleActiveTabChange: this.handleActiveTabChange, tabs };
   };
 
   /** Pre-condition: IAssessment has been loaded */
