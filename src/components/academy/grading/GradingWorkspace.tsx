@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
 import ChatApp from '../../../containers/ChatContainer';
-import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../../reducers/states';
 import { USE_CHATKIT } from '../../../utils/constants';
 import { history } from '../../../utils/history';
 import {
@@ -53,6 +53,7 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
@@ -250,6 +251,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     props: GradingWorkspaceProps,
     questionId: number
   ) => ({
+    handleActiveTabChange: props.handleActiveTabChange,
     tabs: [
       {
         label: `Grading: Question ${questionId + 1}`,
@@ -270,13 +272,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             comments={props.grading![questionId].grade.comments!}
           />
         ),
-        id: 'grading'
+        id: SideContentType.grading
       },
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
-        id: 'question_overview'
+        id: SideContentType.questionOverview
       },
       {
         label: `Chat`,
@@ -289,7 +291,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         ) : (
           <span>Chatkit disabled.</span>
         ),
-        id: 'chat',
+        id: SideContentType.chat,
         disabled: !USE_CHATKIT
       },
       {
@@ -302,7 +304,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
-        id: 'autograder'
+        id: SideContentType.autograder
       }
     ]
   });

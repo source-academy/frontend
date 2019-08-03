@@ -18,6 +18,7 @@ import {
   evalTestcase,
   fetchGrading,
   setEditorBreakpoint,
+  updateActiveTab,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
@@ -35,7 +36,7 @@ import GradingWorkspace, {
   StateProps
 } from '../../../components/academy/grading/GradingWorkspace';
 import { Library } from '../../../components/assessment/assessmentShape';
-import { IState, IWorkspaceState } from '../../../reducers/states';
+import { IState, IWorkspaceState, SideContentType } from '../../../reducers/states';
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 
@@ -66,6 +67,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
+      handleActiveTabChange: (activeTab: SideContentType) =>
+        updateActiveTab(activeTab, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>

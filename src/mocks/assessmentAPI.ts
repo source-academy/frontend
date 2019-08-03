@@ -185,7 +185,7 @@ const mockGlobals: Array<[string, any]> = [
 ];
 
 const mockSoundLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.SOUNDS,
     symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
@@ -194,7 +194,7 @@ const mockSoundLibrary: Library = {
 };
 
 export const mockRuneLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.RUNES,
     symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
@@ -203,7 +203,7 @@ export const mockRuneLibrary: Library = {
 };
 
 const mockCurveLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.CURVES,
     symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
@@ -212,7 +212,7 @@ const mockCurveLibrary: Library = {
 };
 
 const mockToneMatrixLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.SOUNDS,
     symbols: ['get_matrix']
