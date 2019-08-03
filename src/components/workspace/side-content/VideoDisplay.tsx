@@ -58,9 +58,6 @@ class VideoDisplay extends React.Component<{}, IState> {
   public handleUpdateDimensions(n: number, m: number) {
     (window as any).VD.handleUpdateDimensions(n, m);
   }
-  public handleResetFilter() {
-    (window as any).VD.handleResetFilter();
-  }
   // UI can be improved
   public render() {
     const hideVideo = {
@@ -76,10 +73,6 @@ class VideoDisplay extends React.Component<{}, IState> {
           &nbsp;
           <Tooltip content="Snap picture">
             {controlButton('', IconNames.CAMERA, this.handleSnapPicture)}
-          </Tooltip>
-          &nbsp;
-          <Tooltip content="Remove filter">
-            {controlButton('', IconNames.FILTER_REMOVE, this.handleResetFilter)}
           </Tooltip>
           &nbsp;
           <Tooltip content="Change width">
