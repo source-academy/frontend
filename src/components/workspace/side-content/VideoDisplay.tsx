@@ -99,7 +99,7 @@ class VideoDisplay extends React.Component<{}, IState> {
             />
           </Tooltip>
         </div>
-        <div className='sa-video' style={{ width: '100%', textAlign: 'center' }}>
+        <div className="sa-video" style={{ width: '100%', textAlign: 'center' }}>
           <video
             ref={r => (this.$video = r)}
             style={hideVideo}
