@@ -101,6 +101,7 @@ export interface IQuestion {
   answer: string | number | null;
   editorValue?: string | null;
   roomId: string | null;
+  comments?: string;
   content: string;
   id: number;
   library: Library;
