@@ -366,7 +366,6 @@ VD.handleUpdateDimensions = function(w, h) {
     if (VD._video_playing) {
 	VD._loop();
     } else {
-        VD.handleSnapPicture();
 	setTimeout(() => VD.handleSnapPicture(), 50);	
     }
 }
