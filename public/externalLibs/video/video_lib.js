@@ -88,9 +88,11 @@ function get_video_width() {
 function apply_filter(filter) { 
     VD._student_filter = filter;
     if (!VD._video_playing) {
-        VD._draw_once();
-        VD._noLoop();
-    }	
+        VD.handleStart( () => {
+	    VD._draw_once();
+            VD._noLoop();
+	})
+    }
 }
 
 /*
@@ -156,6 +158,11 @@ function make_static_distortion_filter(reverse_mapping) {
     }
     return filter;
 }
+
+function reset_filter() {
+    apply_filter(copy_image);
+}
+
 VD = {};
 VD._SRCIMG = [];
 VD._DESTIMG = [];
@@ -264,6 +271,8 @@ VD.init = function($video, $canvas) {
     VD._canvas = $canvas;
     VD._context = VD._canvas.getContext('2d');
     VD._setup();
+    VD.handleSnapPicture();
+    setTimeout(() => VD.handleSnapPicture(), 2000);
 }
 
 VD.deinit = function() { 
@@ -344,11 +353,6 @@ VD.handleStart = function(cont) {
     }
 }
 
-VD.handlePauseVideo = function() {
-    VD._draw_once();
-    VD._noLoop();
-}
-
 VD.handleUpdateDimensions = function(w, h) {
     if (w === _WIDTH && h === _HEIGHT) { return; }
     const wasLooping = VD._video_playing;
@@ -367,10 +371,6 @@ VD.handleUpdateDimensions = function(w, h) {
         VD._draw_once();
         VD._noLoop();
     }
-}
-
-VD.handleResetFilter = function() {
-    VD._student_filter = copy_image;
 }
 
 /* run this in playground for testing
