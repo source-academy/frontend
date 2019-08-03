@@ -369,6 +369,10 @@ $code-color-error: #ff4444;
 
           .bp3-button-group {
             width: max-content;
+
+            .bp3-active {
+              pointer-events: none;
+            }
           }
 
           .sa-video-header-numeric-input {

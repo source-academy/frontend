@@ -67,6 +67,9 @@ class VideoDisplay extends React.Component<{}, VideoDisplayState> {
       display: 'none'
     };
 
+    const videoIsActive = this.state.mode === 'video';
+    const stillIsActive = this.state.mode === 'still';
+
     return (
       <div className="sa-video">
         <div className="sa-video-header">
@@ -74,13 +77,13 @@ class VideoDisplay extends React.Component<{}, VideoDisplayState> {
             <ButtonGroup>
               <Button
                 icon={IconNames.VIDEO}
-                active={this.state.mode === 'video'}
+                active={videoIsActive}
                 onClick={this.swapModes(this.state.mode)}
                 text={'Live Video'}
               />
               <Button
                 icon={IconNames.CAMERA}
-                active={this.state.mode === 'still'}
+                active={stillIsActive}
                 onClick={this.swapModes(this.state.mode)}
                 text={'Still Image'}
               />

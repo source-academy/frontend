@@ -271,8 +271,7 @@ VD.init = function($video, $canvas) {
     VD._canvas = $canvas;
     VD._context = VD._canvas.getContext('2d');
     VD._setup();
-    VD.handleSnapPicture();
-    setTimeout(() => VD.handleSnapPicture(), 2000);
+    VD.handleStartVideo();
 }
 
 VD.deinit = function() { 

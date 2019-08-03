@@ -9,6 +9,7 @@ import * as actions from '../../actions';
 import * as actionTypes from '../../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
 import {
+  ExternalLibraryName,
   ExternalLibraryNames,
   ITestcase,
   Library
@@ -323,7 +324,7 @@ describe('CHAPTER_SELECT', () => {
     const library: Library = {
       chapter: newChapter,
       external: {
-        name: 'NONE',
+        name: 'NONE' as ExternalLibraryName,
         symbols: context.externalSymbols
       },
       globals
@@ -348,7 +349,7 @@ describe('CHAPTER_SELECT', () => {
     const library: Library = {
       chapter: newChapter,
       external: {
-        name: 'NONE',
+        name: 'NONE' as ExternalLibraryName,
         symbols: context.externalSymbols
       },
       globals

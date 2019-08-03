@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
-import { ExternalLibraryName } from './assessment/assessmentShape';
+import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Markdown from './commons/Markdown';
 import Workspace, { WorkspaceProps } from './workspace';
 import { SideContentTab } from './workspace/side-content';
@@ -112,7 +112,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       envVisualizerTab
     ];
 
-    if (this.props.externalLibraryName === 'VIDEO') {
+    if (
+      this.props.externalLibraryName === ExternalLibraryNames.PIXNFLIX ||
+      this.props.externalLibraryName === ExternalLibraryNames.ALL
+    ) {
       tabs.push(videoDisplayTab);
     }
 

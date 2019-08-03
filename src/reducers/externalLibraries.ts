@@ -157,7 +157,7 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.CURVES, curvesLibrary],
   [ExternalLibraryNames.SOUNDS, soundsLibrary],
   [ExternalLibraryNames.BINARYTREES, binaryTreesLibrary],
-  [ExternalLibraryNames.VIDEO, videoLibrary],
+  [ExternalLibraryNames.PIXNFLIX, videoLibrary],
   [
     ExternalLibraryNames.ALL,
     runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary)
