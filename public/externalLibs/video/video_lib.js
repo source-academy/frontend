@@ -88,9 +88,11 @@ function get_video_width() {
 function apply_filter(filter) { 
     VD._student_filter = filter;
     if (!VD._video_playing) {
-        VD._draw_once();
-        VD._noLoop();
-    }	
+        VD.handleStart( () => {
+	    VD._draw_once();
+            VD._noLoop();
+	})
+    }
 }
 
 /*
@@ -156,6 +158,11 @@ function make_static_distortion_filter(reverse_mapping) {
     }
     return filter;
 }
+
+function reset_filter() {
+    apply_filter(copy_image);
+}
+
 VD = {};
 VD._SRCIMG = [];
 VD._DESTIMG = [];
@@ -213,7 +220,9 @@ VD._make_pixelData = function(pixelData) {
 /**
  * draw one frame only
  */
-VD._draw_once = function() {	
+VD._draw_once = function() {
+    VD._timeInCurrentFrame = Date.now();
+
     VD._context.drawImage(VD._video, 0, 0, _WIDTH, _HEIGHT);
     VD._pixelData = VD._context.getImageData(0, 0, _WIDTH, _HEIGHT);
     
@@ -229,15 +238,7 @@ VD._draw_once = function() {
 VD._draw = function() {	
     VD._requestID = window.requestAnimationFrame(VD._draw);
 
-    VD._timeInCurrentFrame = Date.now();
-
-    VD._context.drawImage(VD._video, 0, 0, _WIDTH, _HEIGHT);
-    VD._pixelData = VD._context.getImageData(0, 0, _WIDTH, _HEIGHT);
-    
-    VD._make_image_abstraction(VD._pixelData.data);//from 1D to 2D
-    VD._student_filter(VD._SRCIMG, VD._DESTIMG);//process the image
-    VD._make_pixelData(VD._pixelData); //from 2D to 1D
-    VD._context.putImageData(VD._pixelData, 0, 0);
+    VD._draw_once();
     
     // for debugging purposes
     // _frameNo++;	
@@ -270,6 +271,8 @@ VD.init = function($video, $canvas) {
     VD._canvas = $canvas;
     VD._context = VD._canvas.getContext('2d');
     VD._setup();
+    VD.handleSnapPicture();
+    setTimeout(() => VD.handleSnapPicture(), 2000);
 }
 
 VD.deinit = function() { 
@@ -316,7 +319,11 @@ VD.handleStart = function(cont) {
 	    navigator.mediaDevices.getUserMedia({ video: true })
 		.then( stream => {
 		    VD._video.srcObject = stream;
-		    cont();
+            const afterVideoLoad = function(){
+                VD._video.removeEventListener('loadeddata', afterVideoLoad);
+                cont();
+            }
+            VD._video.addEventListener('loadeddata', afterVideoLoad);
 		})
 		.catch(function (err) {
 		    console.log(err); /* handle the error */
@@ -346,11 +353,6 @@ VD.handleStart = function(cont) {
     }
 }
 
-VD.handlePauseVideo = function() {
-    VD._draw_once();
-    VD._noLoop();
-}
-
 VD.handleUpdateDimensions = function(w, h) {
     if (w === _WIDTH && h === _HEIGHT) { return; }
     const wasLooping = VD._video_playing;
@@ -369,10 +371,6 @@ VD.handleUpdateDimensions = function(w, h) {
         VD._draw_once();
         VD._noLoop();
     }
-}
-
-VD.handleResetFilter = function() {
-    VD._student_filter = copy_image;
 }
 
 /* run this in playground for testing

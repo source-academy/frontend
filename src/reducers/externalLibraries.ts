@@ -142,7 +142,8 @@ const videoLibrary = [
   'pixel_similar',
   'get_video_width',
   'get_video_height',
-  'apply_filter'
+  'apply_filter',
+  'reset_filter'
 ];
 
 /**
