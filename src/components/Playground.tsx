@@ -186,7 +186,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         defaultSelectedTabId: SideContentType.introduction,
         handleActiveTabChange: this.props.handleActiveTabChange,
-        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
+        tabs
       }
     };
 
