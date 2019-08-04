@@ -21,6 +21,16 @@ import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
+import {
+  ClearButton,
+  EvalButton,
+  NextButton,
+  PreviousButton,
+  QuestionView,
+  ResetButton,
+  RunButton,
+  SaveButton
+} from '../workspace/controlBarButtons';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
@@ -405,42 +415,78 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`;
-    const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`;
+    const listingPath = `/academy/${assessmentCategoryLink(props.assessment!.category)}`;
+    const assessmentWorkspacePath = listingPath + `/${props.assessment!.id.toString()}`;
+    const questionProgress: [number, number] = [questionId + 1, props.assessment!.questions.length];
+
+    const onClickPrevious = () =>
+      history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () =>
+      history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => history.push(listingPath);
+
+    const onClickSave = () =>
+      this.props.handleSave(
+        this.props.assessment!.questions[questionId].id,
+        this.props.editorValue!
+      );
+    const onClickResetTemplate = () => {
+      this.setState({ showResetTemplateOverlay: true });
+    };
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={props.handleReplEval}
+        isRunning={props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const nextButton = (
+      <NextButton
+        onClickNext={onClickNext}
+        onClickReturn={onClickReturn}
+        questionProgress={questionProgress}
+        key="next_question"
+      />
+    );
+
+    const previousButton = (
+      <PreviousButton
+        onClick={onClickPrevious}
+        questionProgress={questionProgress}
+        key="previous_question"
+      />
+    );
+
+    const questionView = <QuestionView questionProgress={questionProgress} key="question_view" />;
+
+    const resetButton =
+      !beforeNow(props.closeDate) &&
+      props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+        <ResetButton onClick={onClickResetTemplate} key="reset_template" />
+      ) : null;
+
+    const runButton = <RunButton handleEditorEval={props.handleEditorEval} key="run" />;
+
+    const saveButton =
+      !beforeNow(props.closeDate) &&
+      props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+        <SaveButton
+          hasUnsavedChanges={props.hasUnsavedChanges}
+          onClickSave={onClickSave}
+          key="save"
+        />
+      ) : null;
+
     return {
-      handleChapterSelect: this.props.handleChapterSelect,
-      handleEditorEval: this.props.handleEditorEval,
-      handleInterruptEval: this.props.handleInterruptEval,
-      handleReplEval: this.props.handleReplEval,
-      handleReplOutputClear: this.props.handleReplOutputClear,
-      handleReplValueChange: this.props.handleReplValueChange,
-      handleDebuggerPause: this.props.handleDebuggerPause,
-      handleDebuggerResume: this.props.handleDebuggerResume,
-      handleDebuggerReset: this.props.handleDebuggerReset,
-      hasChapterSelect: false,
-      hasCollabEditing: false,
-      hasEditorAutorunButton: false,
-      hasSaveButton:
-        !beforeNow(this.props.closeDate) &&
-        this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
-      hasShareButton: false,
-      isRunning: this.props.isRunning,
-      isDebugging: this.props.isDebugging,
-      enableDebugging: this.props.enableDebugging,
-      onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
-      onClickPrevious: () =>
-        history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
-      onClickReturn: () => history.push(listingPath),
-      onClickSave: () =>
-        this.props.handleSave(
-          this.props.assessment!.questions[questionId].id,
-          this.props.editorValue!
-        ),
-      onClickResetTemplate: () => {
-        this.setState({ showResetTemplateOverlay: true });
-      },
-      questionProgress: [questionId + 1, this.props.assessment!.questions.length],
-      sourceChapter: this.props.assessment!.questions[questionId].library.chapter
+      editorButtons: [runButton, saveButton, resetButton],
+      flowButtons: [previousButton, questionView, nextButton],
+      replButtons: [evalButton, clearButton]
     };
   };
 }

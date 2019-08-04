@@ -19,6 +19,14 @@ import {
 import Markdown from '../../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../../workspace';
 import { ControlBarProps } from '../../workspace/ControlBar';
+import {
+  ClearButton,
+  EvalButton,
+  NextButton,
+  PreviousButton,
+  QuestionView,
+  RunButton
+} from '../../workspace/controlBarButtons';
 import { SideContentProps } from '../../workspace/side-content';
 import Autograder from '../../workspace/side-content/Autograder';
 import { Grading, IAnsweredQuestion } from './gradingShape';
@@ -303,28 +311,51 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   ) => {
     const listingPath = `/academy/grading`;
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`;
+    const questionProgress: [number, number] = [questionId + 1, props.grading!.length];
+
+    const onClickPrevious = () =>
+      history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () =>
+      history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => history.push(listingPath);
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={props.handleReplEval}
+        isRunning={props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const nextButton = (
+      <NextButton
+        onClickNext={onClickNext}
+        onClickReturn={onClickReturn}
+        questionProgress={questionProgress}
+        key="next_question"
+      />
+    );
+
+    const previousButton = (
+      <PreviousButton
+        onClick={onClickPrevious}
+        questionProgress={questionProgress}
+        key="previous_question"
+      />
+    );
+
+    const questionView = <QuestionView questionProgress={questionProgress} key="question_view" />;
+
+    const runButton = <RunButton handleEditorEval={props.handleEditorEval} key="run" />;
+
     return {
-      handleChapterSelect: this.props.handleChapterSelect,
-      handleEditorEval: this.props.handleEditorEval,
-      handleInterruptEval: this.props.handleInterruptEval,
-      handleReplEval: this.props.handleReplEval,
-      handleReplOutputClear: this.props.handleReplOutputClear,
-      handleDebuggerPause: this.props.handleDebuggerPause,
-      handleDebuggerResume: this.props.handleDebuggerResume,
-      handleDebuggerReset: this.props.handleDebuggerReset,
-      hasChapterSelect: false,
-      hasCollabEditing: false,
-      hasEditorAutorunButton: false,
-      hasSaveButton: false,
-      hasShareButton: false,
-      isRunning: this.props.isRunning,
-      isDebugging: this.props.isDebugging,
-      enableDebugging: this.props.enableDebugging,
-      onClickNext: () => history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
-      onClickPrevious: () => history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),
-      onClickReturn: () => history.push(listingPath),
-      questionProgress: [questionId + 1, this.props.grading!.length],
-      sourceChapter: this.props.grading![questionId].question.library.chapter
+      editorButtons: [runButton],
+      flowButtons: [previousButton, questionView, nextButton],
+      replButtons: [evalButton, clearButton]
     };
   };
 }

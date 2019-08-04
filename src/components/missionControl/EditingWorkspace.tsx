@@ -19,6 +19,17 @@ import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/ControlBar';
+import {
+  ClearButton,
+  EvalButton,
+  NextButton,
+  PreviousButton,
+  QuestionView,
+  ResetButton,
+  RunButton,
+  SaveButton,
+  ToggleEditModeButton
+} from '../workspace/controlBarButtons';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
@@ -151,7 +162,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const questionId = this.formatedQuestionId();
     const question: IQuestion = this.state.assessment.questions[questionId];
     const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props, questionId),
+      controlBarProps: this.controlBarProps(this.props, this.state, questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
@@ -583,41 +594,85 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   };
 
   /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
-    props: AssessmentWorkspaceProps,
-    questionId: number
-  ) => {
+  private controlBarProps: (
+    p: AssessmentWorkspaceProps,
+    s: IState,
+    q: number
+  ) => ControlBarProps = (props: AssessmentWorkspaceProps, state: IState, questionId: number) => {
     const listingPath = '/mission-control';
-    const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
+    const assessmentWorkspacePath = listingPath + `/${state.assessment!.id.toString()}`;
+    const questionProgress: [number, number] = [questionId + 1, state.assessment!.questions.length];
+
+    const onClickPrevious = () =>
+      history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () =>
+      history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => history.push(listingPath);
+
+    const onClickResetTemplate = () => {
+      this.setState((currentState: IState) => {
+        return {
+          ...currentState,
+          showResetTemplateOverlay: currentState.hasUnsavedChanges
+        };
+      });
+    };
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={props.handleReplEval}
+        isRunning={props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const nextButton = (
+      <NextButton
+        onClickNext={onClickNext}
+        onClickReturn={onClickReturn}
+        questionProgress={questionProgress}
+        key="next_question"
+      />
+    );
+
+    const previousButton = (
+      <PreviousButton
+        onClick={onClickPrevious}
+        questionProgress={questionProgress}
+        key="previous_question"
+      />
+    );
+
+    const questionView = <QuestionView questionProgress={questionProgress} key="question_view" />;
+
+    const resetButton = <ResetButton onClick={onClickResetTemplate} key="reset_template" />;
+
+    const runButton = <RunButton handleEditorEval={props.handleEditorEval} key="run" />;
+
+    const saveButton = (
+      <SaveButton
+        hasUnsavedChanges={state.hasUnsavedChanges}
+        onClickSave={this.handleSave}
+        key="save"
+      />
+    );
+
+    const toggleEditModeButton = (
+      <ToggleEditModeButton
+        editingMode={state.editingMode}
+        toggleEditMode={this.toggleEditingMode}
+        key="toggle_edit_mode"
+      />
+    );
+
     return {
-      handleEditorEval: this.props.handleEditorEval,
-      handleInterruptEval: this.props.handleInterruptEval,
-      handleReplEval: this.props.handleReplEval,
-      handleReplOutputClear: this.props.handleReplOutputClear,
-      handleReplValueChange: this.props.handleReplValueChange,
-      handleDebuggerPause: this.props.handleDebuggerPause,
-      handleDebuggerResume: this.props.handleDebuggerResume,
-      handleDebuggerReset: this.props.handleDebuggerReset,
-      hasChapterSelect: false,
-      hasCollabEditing: false,
-      hasEditorAutorunButton: false,
-      hasSaveButton: true,
-      hasShareButton: false,
-      isRunning: this.props.isRunning,
-      isDebugging: this.props.isDebugging,
-      enableDebugging: this.props.enableDebugging,
-      onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
-      onClickPrevious: () =>
-        history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
-      onClickReturn: () => history.push(listingPath),
-      onClickSave: this.handleSave,
-      onClickResetTemplate: () => {
-        this.setState({ showResetTemplateOverlay: this.state.hasUnsavedChanges });
-      },
-      questionProgress: [questionId + 1, this.state.assessment!.questions.length],
-      sourceChapter: this.state.assessment!.questions[questionId].library.chapter,
-      editingMode: this.state.editingMode,
-      toggleEditMode: this.toggleEditingMode
+      editorButtons: [runButton, saveButton, resetButton],
+      flowButtons: [previousButton, questionView, nextButton],
+      replButtons: [evalButton, clearButton, toggleEditModeButton]
     };
   };
 }

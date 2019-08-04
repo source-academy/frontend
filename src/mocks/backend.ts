@@ -3,6 +3,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
+import { WorkspaceLocation } from '../actions/workspaces';
 import {
   Grading,
   GradingOverview,
@@ -89,6 +90,7 @@ export function* mockBackendSaga(): SagaIterator {
     };
     yield put(actions.updateAssessment(newAssessment));
     yield call(showSuccessMessage, 'Saved!', 1000);
+    return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   });
 
   yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(action) {

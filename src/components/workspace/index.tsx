@@ -74,10 +74,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   private controlBarProps() {
-    return {
-      ...this.props.controlBarProps,
-      hasUnsavedChanges: this.props.hasUnsavedChanges
-    };
+    return { ...this.props.controlBarProps };
   }
 
   private editorResizableProps() {
