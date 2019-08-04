@@ -966,19 +966,21 @@
       if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
           return 0;
       } else {
-        const leftHeight = existing.includes(xs[0])
-                           ? 0
-                           : helper(xs[0]);
-        if (!existing.includes(xs[0]) 
-          && (is_pair(xs[0]) || is_array(xs[0]))) {
+        let leftHeight;
+        let rightHeight;
+        if (existing.includes(xs[0])
+            || (!is_pair(xs[0]) && (!is_array(xs[0])))) {
+          leftHeight = 0;          
+        } else {
           existing.push(xs[0]);
+          leftHeight = helper(xs[0]);
         }
-        const rightHeight = existing.includes(xs[1])
-                           ? 0
-                           : helper(xs[1]);
-        if (!existing.includes(xs[1])
-          && (is_pair(xs[1]) || is_array(xs[1]))) {
+        if (existing.includes(xs[1])
+            || (!is_pair(xs[1]) && (!is_array(xs[1])))) {
+          rightHeight = 0;          
+        } else {
           existing.push(xs[1]);
+          rightHeight = helper(xs[1]);
         }
         return leftHeight > rightHeight
               ? 1 + leftHeight
@@ -999,21 +1001,23 @@
       if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
           return 0;
       } else {
-        const leftHeight = existing.includes(xs[0])
-                           ? 0
-                           : helper(xs[0]);
-        if (!existing.includes(xs[0]) 
-          && (is_pair(xs[0]) || is_array(xs[0]))) {
+        let leftWidth;
+        let rightWidth;
+        if (existing.includes(xs[0])
+            || (!is_pair(xs[0]) && (!is_array(xs[0])))) {
+          leftWidth = 0;          
+        } else {
           existing.push(xs[0]);
+          leftWidth = helper(xs[0]);
         }
-        const rightHeight = existing.includes(xs[1])
-                           ? 0
-                           : helper(xs[1]);
-        if (!existing.includes(xs[1])
-          && (is_pair(xs[1]) || is_array(xs[1]))) {
+        if (existing.includes(xs[1])
+            || (!is_pair(xs[1]) && (!is_array(xs[1])))) {
+          rightWidth = 0;          
+        } else {
           existing.push(xs[1]);
+          rightWidth = helper(xs[1]);
         }
-        return leftHeight + rightHeight + 1;
+        return leftWidth + rightWidth + 1;
       }
     }
 
