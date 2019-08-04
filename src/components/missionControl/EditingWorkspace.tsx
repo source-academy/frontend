@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
 import { history } from '../../utils/history';
 import {
   IAssessment,
@@ -92,6 +92,7 @@ export type DispatchProps = {
 
 interface IState {
   assessment: IAssessment | null;
+  activeTab: SideContentType;
   editingMode: string;
   hasUnsavedChanges: boolean;
   showResetTemplateOverlay: boolean;
@@ -104,6 +105,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     super(props);
     this.state = {
       assessment: retrieveLocalAssessment(),
+      activeTab: SideContentType.editorQuestionOverview,
       editingMode: 'question',
       hasUnsavedChanges: false,
       showResetTemplateOverlay: false,
@@ -391,6 +393,11 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.resetWorkspaceValues();
   };
 
+  private handleActiveTabChange = (tab: SideContentType) => {
+    this.setState({
+      activeTab: tab
+    });
+  };
   private toggleEditingMode = () => {
     const toggle = this.state.editingMode === 'question' ? 'global' : 'question';
     this.setState({
@@ -436,13 +443,13 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: 'question_overview'
+          id: SideContentType.editorQuestionOverview
         },
         {
           label: `Question Template`,
           iconName: IconNames.DOCUMENT,
           body: questionTemplateTab,
-          id: 'question_template'
+          id: SideContentType.editorQuestionTemplate
         },
         {
           label: `Manage Local Deployment`,
@@ -457,7 +464,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               isOptionalDeployment={true}
             />
           ),
-          id: 'local_deployment'
+          id: SideContentType.editorLocalDeployment
         },
         {
           label: `Manage Local Grader Deployment`,
@@ -473,7 +480,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               isOptionalDeployment={true}
             />
           ),
-          id: 'local_grader_deployment'
+          id: SideContentType.editorLocalGraderDeployment
         },
         {
           label: `Grading`,
@@ -485,7 +492,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: 'grading'
+          id: SideContentType.editorGrading
         }
       ];
       if (qnType === 'programming') {
@@ -500,7 +507,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: 'autograder'
+          id: SideContentType.editorAutograder
         });
       }
       const functionsAttached = assessment!.questions[questionId].library.external.symbols;
@@ -509,7 +516,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           label: `Tone Matrix`,
           iconName: IconNames.GRID_VIEW,
           body: <ToneMatrix />,
-          id: 'tone_matrix'
+          id: SideContentType.toneMatrix
         });
       }
     } else {
@@ -524,7 +531,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: 'briefing'
+          id: SideContentType.editorBriefing
         },
         {
           label: `Manage Question`,
@@ -537,7 +544,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateAndSaveAssessment}
             />
           ),
-          id: 'manage_question'
+          id: SideContentType.editorManageQuestion
         },
         {
           label: `Manage Global Deployment`,
@@ -552,7 +559,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               isOptionalDeployment={false}
             />
           ),
-          id: 'global_deployment'
+          id: SideContentType.editorGlobalDeployment
         },
         {
           label: `Manage Global Grader Deployment`,
@@ -567,12 +574,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               isOptionalDeployment={true}
             />
           ),
-          id: 'global_grader_deployment'
+          id: SideContentType.editorGlobalGraderDeployment
         }
       ];
     }
 
-    return { tabs };
+    return { handleActiveTabChange: this.handleActiveTabChange, tabs };
   };
 
   /** Pre-condition: IAssessment has been loaded */

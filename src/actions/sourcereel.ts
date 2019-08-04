@@ -2,13 +2,13 @@ import { Input, IPlaybackData } from '../components/sourcecast/sourcecastShape';
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
-export const recordEditorInitValue = (
-  editorValue: string,
+export const recordInit = (
+  initData: IPlaybackData['init'],
   workspaceLocation: WorkspaceLocation
 ) => ({
-  type: actionTypes.RECORD_EDITOR_INIT_VALUE,
+  type: actionTypes.RECORD_INIT,
   payload: {
-    editorValue,
+    initData,
     workspaceLocation
   }
 });

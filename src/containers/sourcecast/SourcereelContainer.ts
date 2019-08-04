@@ -15,7 +15,8 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
-  recordEditorInitValue,
+  externalLibrarySelect,
+  recordInit,
   recordInput,
   saveSourcecastData,
   setEditorBreakpoint,
@@ -26,13 +27,15 @@ import {
   timerStart,
   timerStop,
   toggleEditorAutorun,
+  updateActiveTab,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
 } from '../../actions';
+import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
 import { Input, IPlaybackData } from '../../components/sourcecast/sourcecastShape';
 import Sourcereel, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcereel';
-import { IState } from '../../reducers/states';
+import { IState, SideContentType } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   breakpoints: state.workspaces.sourcereel.breakpoints,
@@ -40,6 +43,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorValue: state.workspaces.sourcereel.editorValue!,
   editorWidth: state.workspaces.sourcereel.editorWidth,
   enableDebugging: state.workspaces.sourcereel.enableDebugging,
+  externalLibraryName: state.workspaces.sourcereel.externalLibrary,
   highlightedLines: state.workspaces.sourcereel.highlightedLines,
   isDebugging: state.workspaces.sourcereel.isDebugging,
   isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
@@ -59,6 +63,7 @@ const location: WorkspaceLocation = 'sourcereel';
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
+      handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
@@ -68,6 +73,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
+      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
+        externalLibrarySelect(externalLibraryName, location),
       handleInterruptEval: () => beginInterruptExecution(location),
       handleRecordInput: (input: Input) => recordInput(input, location),
       handleReplEval: () => evalRepl(location),
@@ -80,8 +87,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         playbackData: IPlaybackData
       ) => saveSourcecastData(title, description, audio, playbackData, 'sourcecast'),
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
-      handleRecordEditorInitValue: (editorValue: string) =>
-        recordEditorInitValue(editorValue, location),
+      handleRecordInit: (initData: IPlaybackData['init']) => recordInit(initData, location),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleTimerPause: () => timerPause(location),

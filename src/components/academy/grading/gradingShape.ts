@@ -61,6 +61,7 @@ export type GradingQuestion = {
     gradeAdjustment: number;
     xp: number;
     xpAdjustment: number;
+    comments?: string;
   };
 };
 

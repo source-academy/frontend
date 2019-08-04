@@ -5,15 +5,16 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
 
-import { InterpreterOutput } from '../reducers/states';
+import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
-import { ExternalLibraryName } from './assessment/assessmentShape';
+import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Markdown from './commons/Markdown';
 import Workspace, { WorkspaceProps } from './workspace';
 import { SideContentTab } from './workspace/side-content';
 import EnvVisualizer from './workspace/side-content/EnvVisualizer';
 import Inspector from './workspace/side-content/Inspector';
 import ListVisualizer from './workspace/side-content/ListVisualizer';
+import VideoDisplay from './workspace/side-content/VideoDisplay';
 
 const CHAP = '\xa7';
 
@@ -60,6 +61,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
@@ -103,6 +105,20 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 
   public render() {
+    const tabs: SideContentTab[] = [
+      playgroundIntroductionTab,
+      listVisualizerTab,
+      inspectorTab,
+      envVisualizerTab
+    ];
+
+    if (
+      this.props.externalLibraryName === ExternalLibraryNames.PIXNFLIX ||
+      this.props.externalLibraryName === ExternalLibraryNames.ALL
+    ) {
+      tabs.push(videoDisplayTab);
+    }
+
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorValue: this.props.editorValue,
@@ -171,10 +187,12 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        defaultSelectedTabId: 'introduction',
-        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
+        defaultSelectedTabId: SideContentType.introduction,
+        handleActiveTabChange: this.props.handleActiveTabChange,
+        tabs
       }
     };
+
     return (
       <HotKeys
         className={classNames(
@@ -199,28 +217,34 @@ const playgroundIntroductionTab: SideContentTab = {
   label: 'Introduction',
   iconName: IconNames.COMPASS,
   body: <Markdown content={INTRODUCTION} />,
-  id: 'introduction'
+  id: SideContentType.introduction
 };
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <ListVisualizer />,
-  id: 'data'
+  id: SideContentType.dataVisualiser
+};
+
+const videoDisplayTab: SideContentTab = {
+  label: 'Video Display',
+  iconName: IconNames.MOBILE_VIDEO,
+  body: <VideoDisplay />
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <Inspector />,
-  id: 'inspector'
+  id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
-  id: 'env'
+  id: SideContentType.envVisualiser
 };
 
 export default Playground;

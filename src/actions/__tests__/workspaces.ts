@@ -1,6 +1,6 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
-import { Library } from '../../components/assessment/assessmentShape';
-import { createDefaultWorkspace } from '../../reducers/states';
+import { ExternalLibraryNames, Library } from '../../components/assessment/assessmentShape';
+import { createDefaultWorkspace, SideContentType } from '../../reducers/states';
 import * as actionTypes from '../actionTypes';
 import {
   beginClearContext,
@@ -8,7 +8,7 @@ import {
   browseReplHistoryUp,
   changeEditorHeight,
   changeEditorWidth,
-  changePlaygroundExternal,
+  changeExternalLibrary,
   changeSideContentHeight,
   chapterSelect,
   clearReplInput,
@@ -18,12 +18,14 @@ import {
   evalEditor,
   evalRepl,
   evalTestcase,
+  externalLibrarySelect,
   highlightEditorLine,
-  playgroundExternalSelect,
+  resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
   setEditorBreakpoint,
   toggleEditorAutorun,
+  updateActiveTab,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
@@ -51,13 +53,14 @@ test('browseReplHistoryUp generates correct action object', () => {
   });
 });
 
-test('changePlaygroundExternal generates correct action object', () => {
+test('changeExternalLibrary generates correct action object', () => {
   const newExternal = 'new-external-test';
-  const action = changePlaygroundExternal(newExternal);
+  const action = changeExternalLibrary(newExternal, playgroundWorkspace);
   expect(action).toEqual({
-    type: actionTypes.CHANGE_PLAYGROUND_EXTERNAL,
+    type: actionTypes.CHANGE_EXTERNAL_LIBRARY,
     payload: {
-      newExternal
+      newExternal,
+      workspaceLocation: playgroundWorkspace
     }
   });
 });
@@ -110,9 +113,9 @@ test('chapterSelect generates correct action object', () => {
   });
 });
 
-test('playgroundExternalSelect generates correct action object', () => {
-  const externalLibraryName = 'SOUNDS';
-  const action = playgroundExternalSelect(externalLibraryName, assessmentWorkspace);
+test('externalLibrarySelect generates correct action object', () => {
+  const externalLibraryName = ExternalLibraryNames.SOUNDS;
+  const action = externalLibrarySelect(externalLibraryName, assessmentWorkspace);
   expect(action).toEqual({
     type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
     payload: {
@@ -136,7 +139,7 @@ test('beginClearContext generates correct action object', () => {
   const library: Library = {
     chapter: 4,
     external: {
-      name: 'SOUNDS',
+      name: ExternalLibraryNames.SOUNDS,
       symbols: []
     },
     globals: []
@@ -176,7 +179,7 @@ test('endClearContext generates correct action object', () => {
   const library: Library = {
     chapter: 4,
     external: {
-      name: 'SOUNDS',
+      name: ExternalLibraryNames.SOUNDS,
       symbols: []
     },
     globals: []
@@ -292,6 +295,18 @@ test('sendReplInputToOutput generates correct action object', () => {
   });
 });
 
+test('resetTestcase generates correct action object', () => {
+  const index = 420;
+  const action = resetTestcase(assessmentWorkspace, index);
+  expect(action).toEqual({
+    type: actionTypes.RESET_TESTCASE,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      index
+    }
+  });
+});
+
 test('resetWorkspace generates correct default action object', () => {
   const action = resetWorkspace(playgroundWorkspace);
   expect(action).toEqual({
@@ -310,6 +325,18 @@ test('resetWorkspace generates correct action object with provided workspace', (
     payload: {
       workspaceLocation: assessmentWorkspace,
       workspaceOptions
+    }
+  });
+});
+
+test('updateActiveTab generates correct action object', () => {
+  const activeTab = SideContentType.questionOverview;
+  const action = updateActiveTab(activeTab, playgroundWorkspace);
+  expect(action).toEqual({
+    type: actionTypes.UPDATE_ACTIVE_TAB,
+    payload: {
+      activeTab,
+      workspaceLocation: playgroundWorkspace
     }
   });
 });

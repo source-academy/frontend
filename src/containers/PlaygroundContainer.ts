@@ -17,15 +17,16 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
+  externalLibrarySelect,
   finishInvite,
   generateLzString,
   initInvite,
   invalidEditorSessionId,
-  playgroundExternalSelect,
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
   toggleEditorAutorun,
+  updateActiveTab,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation,
@@ -33,7 +34,7 @@ import {
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
-import { IState } from '../reducers/states';
+import { IState, SideContentType } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorSessionId: state.workspaces.playground.editorSessionId,
@@ -54,7 +55,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
   websocketStatus: state.workspaces.playground.websocketStatus,
-  externalLibraryName: state.workspaces.playground.playgroundExternal
+  externalLibraryName: state.workspaces.playground.externalLibrary
 });
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
@@ -62,6 +63,8 @@ const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
+      handleActiveTabChange: (activeTab: SideContentType) =>
+        updateActiveTab(activeTab, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) => changeExecTime(execTime, workspaceLocation),
@@ -78,7 +81,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        playgroundExternalSelect(externalLibraryName, workspaceLocation),
+        externalLibrarySelect(externalLibraryName, workspaceLocation),
       handleInitInvite: (editorValue: string) => initInvite(editorValue, workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
