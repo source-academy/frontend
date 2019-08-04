@@ -101,6 +101,7 @@ export interface IQuestion {
   answer: string | number | null;
   editorValue?: string | null;
   roomId: string | null;
+  comments?: string;
   content: string;
   id: number;
   library: Library;
@@ -136,10 +137,11 @@ export enum ExternalLibraryNames {
   CURVES = 'CURVES',
   SOUNDS = 'SOUNDS',
   BINARYTREES = 'BINARYTREES',
+  PIXNFLIX = 'PIX&FLIX',
   ALL = 'ALL'
 }
 
-export type ExternalLibraryName = keyof typeof ExternalLibraryNames;
+export type ExternalLibraryName = (typeof ExternalLibraryNames)[keyof typeof ExternalLibraryNames];
 
 type ExternalLibrary = {
   name: ExternalLibraryName;

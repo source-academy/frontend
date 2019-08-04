@@ -293,7 +293,8 @@ const gradingTest1: Grading = [
       grade: 10,
       gradeAdjustment: 0,
       xp: 100,
-      xpAdjustment: 0
+      xpAdjustment: 0,
+      comments: 'Well done. Please try the quest!'
     }
   }
 ];
@@ -310,7 +311,8 @@ const gradingTest2: Grading = [
       grade: 30,
       gradeAdjustment: 10,
       xp: 500,
-      xpAdjustment: 20
+      xpAdjustment: 20,
+      comments: 'Good job! All the best for the finals.'
     }
   }
 ];
