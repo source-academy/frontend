@@ -191,7 +191,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         key="share"
       />
     );
-    
+
     const tabs: SideContentTab[] = [
       playgroundIntroductionTab,
       listVisualizerTab,
