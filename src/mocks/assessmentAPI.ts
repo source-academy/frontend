@@ -185,7 +185,7 @@ const mockGlobals: Array<[string, any]> = [
 ];
 
 const mockSoundLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.SOUNDS,
     symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
@@ -194,7 +194,7 @@ const mockSoundLibrary: Library = {
 };
 
 export const mockRuneLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.RUNES,
     symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
@@ -203,7 +203,7 @@ export const mockRuneLibrary: Library = {
 };
 
 const mockCurveLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.CURVES,
     symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
@@ -212,7 +212,7 @@ const mockCurveLibrary: Library = {
 };
 
 const mockToneMatrixLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.SOUNDS,
     symbols: ['get_matrix']
@@ -268,7 +268,32 @@ const chickenrice = "chicken rice";`,
     xp: 0,
     grade: 0,
     maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
+    comments: `Good job. You are awarded the full marks!
+
+----
+## markdown test
+
+# header
+
+**bold**
+
+_italics_
+
+* list
+
+1. numbered list
+
+- [] checkboxes
+
+> quote
+
+    code
+
+[link to Source Academy](https://sourceacademy.nus.edu.sg)  
+
+![](image-url-goes-here)
+      `
   },
   {
     autogradingResults: [],
@@ -315,7 +340,42 @@ function volumeOfSphere(x) {
     xp: 0,
     grade: 0,
     maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
+    comments: `You open the Report Card, not knowing what to expect...
+
+## WOW!
+Amazing grasp of runes. We can now move on to the next assignment.
+
+<br/>
+
+Robot Dog: \`woof\`
+
+You look at the display of the robot dog.
+
+    FEED ME
+1. Bread
+2. Water
+
+<br/>
+
+* I am hungry.
+* I am thirsty.
+
+<br/>
+<br/>
+    
+New message from **Avenger**!
+
+> _Cadet, please meet me at Level X-05, outside the pod bay doors. There is an important mission awaiting us._
+
+> _May the [Source](https://sourceacademy.nus.edu.sg) be with you._
+
+> Best regards, Avocado A. Avenger
+
+#### Upcoming Tasks
+- [] Meet Avenger Avenger at Level X-05
+- [] Open the Pod Bay Doors
+    `
   },
   {
     answer: 3,

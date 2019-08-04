@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput } from '../../reducers/states';
+import { InterpreterOutput, SideContentType } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
@@ -45,6 +45,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: number) => void;
@@ -159,6 +160,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
+        handleActiveTabChange: this.props.handleActiveTabChange,
         tabs: [
           {
             label: 'Introduction',
@@ -178,7 +180,8 @@ class Sourcecast extends React.Component<ISourcecastProps> {
                   sourcecastIndex={this.props.sourcecastIndex}
                 />
               </div>
-            )
+            ),
+            id: SideContentType.introduction
           },
           listVisualizerTab,
           inspectorTab,
@@ -215,21 +218,21 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <ListVisualizer />,
-  id: 'data'
+  id: SideContentType.dataVisualiser
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <Inspector />,
-  id: 'inspector'
+  id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
-  id: 'env'
+  id: SideContentType.envVisualiser
 };
 
 export default Sourcecast;

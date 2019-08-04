@@ -18,6 +18,7 @@ import {
   submitAnswer,
   submitAssessment,
   submitGrading,
+  submitGradingAndContinue,
   unsubmitSubmission,
   updateAssessment,
   updateAssessmentOverviews,
@@ -195,7 +196,25 @@ test('submitGrading generates correct action object with default values', () => 
       submissionId,
       questionId,
       gradeAdjustment: 0,
-      xpAdjustment: 0
+      xpAdjustment: 0,
+      comments: undefined
+    }
+  });
+});
+
+test('submitGradingAndContinue generates correct action object with default values', () => {
+  const submissionId = 8;
+  const questionId = 2;
+
+  const action = submitGradingAndContinue(submissionId, questionId);
+  expect(action).toEqual({
+    type: actionTypes.SUBMIT_GRADING_AND_CONTINUE,
+    payload: {
+      submissionId,
+      questionId,
+      gradeAdjustment: 0,
+      xpAdjustment: 0,
+      comments: undefined
     }
   });
 });
@@ -205,14 +224,41 @@ test('submitGrading generates correct action object', () => {
   const questionId = 3;
   const gradeAdjustment = 10;
   const xpAdjustment = 100;
-  const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment);
+  const comments = 'my comment';
+  const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment, comments);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
       gradeAdjustment,
-      xpAdjustment
+      xpAdjustment,
+      comments
+    }
+  });
+});
+
+test('submitGradingAndContinue generates correct action object', () => {
+  const submissionId = 4;
+  const questionId = 7;
+  const gradeAdjustment = 90;
+  const xpAdjustment = 55;
+  const comments = 'another comment';
+  const action = submitGradingAndContinue(
+    submissionId,
+    questionId,
+    gradeAdjustment,
+    xpAdjustment,
+    comments
+  );
+  expect(action).toEqual({
+    type: actionTypes.SUBMIT_GRADING_AND_CONTINUE,
+    payload: {
+      submissionId,
+      questionId,
+      gradeAdjustment,
+      xpAdjustment,
+      comments
     }
   });
 });
@@ -329,7 +375,8 @@ test('updateGrading generates correct action object', () => {
         grade: 10,
         gradeAdjustment: 0,
         xp: 100,
-        xpAdjustment: 0
+        xpAdjustment: 0,
+        comments: 'Well done.'
       }
     }
   ];
