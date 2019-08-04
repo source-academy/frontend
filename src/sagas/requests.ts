@@ -289,7 +289,8 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
         xp: grade.xp,
         roomId: grade.roomId || '',
         gradeAdjustment: grade.adjustment,
-        xpAdjustment: grade.xpAdjustment
+        xpAdjustment: grade.xpAdjustment,
+        comments: grade.comments
       }
     } as GradingQuestion;
   });
@@ -304,14 +305,16 @@ export const postGrading = async (
   questionId: number,
   gradeAdjustment: number,
   xpAdjustment: number,
-  tokens: Tokens
+  tokens: Tokens,
+  comments?: string
 ) => {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
     accessToken: tokens.accessToken,
     body: {
       grading: {
         adjustment: gradeAdjustment,
-        xpAdjustment
+        xpAdjustment,
+        comments
       }
     },
     noHeaderAccept: true,

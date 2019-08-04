@@ -8,10 +8,10 @@ import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effe
 
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
-import { WorkspaceLocation } from '../actions/workspaces';
-import { ExternalLibraryNames } from '../components/assessment/assessmentShape';
+import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
+import { ExternalLibraryNames, ITestcase } from '../components/assessment/assessmentShape';
 import { externalLibraries } from '../reducers/externalLibraries';
-import { IState, IWorkspaceState } from '../reducers/states';
+import { IState, IWorkspaceState, SideContentType } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper';
 
@@ -171,11 +171,10 @@ export default function* workspaceSaga(): SagaIterator {
       },
       globals
     };
-    /** End any code that is running right now. */
-    yield put(actions.beginInterruptExecution(workspaceLocation));
+    /** Do not interrupt execution of other testcases (potential race condition). */
     /** Clear the context, with the same chapter and externalSymbols as before. */
     yield put(actions.beginClearContext(library, workspaceLocation));
-    yield put(actions.clearReplOutput(workspaceLocation));
+    /** Do NOT clear the REPL output! */
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
@@ -422,6 +421,46 @@ export function* evalCode(
   }
 
   yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+
+  /** If successful, then continue to run all testcases IFF evalCode was triggered from
+   *    EVAL_EDITOR (Run button) instead of EVAL_REPL (Eval button)
+   * Retrieve the index of the active side-content tab
+   */
+  if (actionType === actionTypes.EVAL_EDITOR) {
+    const activeTab: SideContentType = yield select(
+      (state: IState) =>
+        (state.workspaces[workspaceLocation] as IWorkspaceState).sideContentActiveTab
+    );
+    /** If a student is attempting an assessment and has the autograder tab open OR
+     *    a grader is grading a submission and has the autograder tab open,
+     *    RUN all testcases of the current question through the interpreter
+     *  Each testcase runs in its own "sandbox" since the Context is cleared for each,
+     *    so side-effects from one testcase don't affect others
+     */
+    if (
+      activeTab === SideContentType.autograder &&
+      (workspaceLocation === WorkspaceLocations.assessment ||
+        workspaceLocation === WorkspaceLocations.grading)
+    ) {
+      const testcases: ITestcase[] = yield select(
+        (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorTestcases
+      );
+      /** Avoid displaying message if there are no testcases */
+      if (testcases.length > 0) {
+        /** Display a message to the user */
+        yield call(showSuccessMessage, `Running all testcases!`, 750);
+        for (const idx of testcases.keys()) {
+          yield put(actions.evalTestcase(workspaceLocation, idx));
+          /** Run testcases synchronously
+           * This blocks the generator until result of current testcase is known and output to REPL
+           * Ensures that HANDLE_CONSOLE_LOG appends consoleLogs (from display(...) calls) to the
+           * correct testcase result
+           */
+          yield take([actionTypes.EVAL_TESTCASE_SUCCESS, actionTypes.EVAL_TESTCASE_FAILURE]);
+        }
+      }
+    }
+  }
 }
 
 export function* evalTestCode(
@@ -431,6 +470,8 @@ export function* evalTestCode(
   workspaceLocation: WorkspaceLocation,
   index: number
 ) {
+  yield put(actions.resetTestcase(workspaceLocation, index));
+
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, {
       scheduler: 'preemptive',
@@ -448,7 +489,7 @@ export function* evalTestCode(
     /* Redundancy, added ensure that interruption results in an error. */
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
     yield put(actions.endInterruptExecution(workspaceLocation));
-    yield call(showWarningMessage, 'Execution aborted by user', 750);
+    yield call(showWarningMessage, `Execution of testcase ${index} aborted`, 750);
     return;
   }
 
@@ -466,7 +507,7 @@ export function* evalTestCode(
     });
 
     yield put(actions.evalInterpreterError(errors, workspaceLocation));
-    yield put(actions.evalTestcaseFailure('An error occured', workspaceLocation, index));
+    yield put(actions.evalTestcaseFailure(errors, workspaceLocation, index));
     return;
   }
 
