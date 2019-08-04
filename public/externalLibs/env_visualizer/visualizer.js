@@ -983,7 +983,7 @@
     }
 
     // blink icon
-    const icon = document.getElementById('env-icon');
+    const icon = document.getElementById('env_visualiser-icon');
     icon.classList.add('side-content-tab-alert');
 
     // reset current drawing
