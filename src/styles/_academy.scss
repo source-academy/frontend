@@ -161,43 +161,6 @@
   height: 100%;
 }
 
-.GradingEditor {
-  .grading-editor-student-name {
-    text-align: center;
-  }
-  .grading-editor-solution {
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      word-break: break-word;
-    }
-  }
-  .grading-editor-input-parent {
-    /** Center the text for numeric input and showing grades. */
-    table {
-      border-spacing: 5px;
-      width: 100%;
-      tbody {
-        text-align: center;
-        button {
-          width: 100%;
-        }
-        td {
-          /** Aligns the numeric input */
-          text-align: -webkit-center;
-        }
-      }
-    }
-    .grading-adjustment-input {
-      width: 150px;
-    }
-  }
-  .grading-editor-save-button {
-    margin-top: 0.4rem;
-    width: 100% !important;
-  }
-}
-
 /* Increase default margin of bp3's Divider for greater vertical spacing */
 .#{$ns}-divider {
   margin: 12px 0 12px 0;

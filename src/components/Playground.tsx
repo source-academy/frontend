@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
-import { ExternalLibraryName } from './assessment/assessmentShape';
+import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Markdown from './commons/Markdown';
 import Workspace, { WorkspaceProps } from './workspace';
 import {
@@ -24,6 +24,7 @@ import { SideContentTab } from './workspace/side-content';
 import EnvVisualizer from './workspace/side-content/EnvVisualizer';
 import Inspector from './workspace/side-content/Inspector';
 import ListVisualizer from './workspace/side-content/ListVisualizer';
+import VideoDisplay from './workspace/side-content/VideoDisplay';
 
 const CHAP = '\xa7';
 
@@ -190,6 +191,20 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         key="share"
       />
     );
+    
+    const tabs: SideContentTab[] = [
+      playgroundIntroductionTab,
+      listVisualizerTab,
+      inspectorTab,
+      envVisualizerTab
+    ];
+
+    if (
+      this.props.externalLibraryName === ExternalLibraryNames.PIXNFLIX ||
+      this.props.externalLibraryName === ExternalLibraryNames.ALL
+    ) {
+      tabs.push(videoDisplayTab);
+    }
 
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
@@ -234,9 +249,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       sideContentProps: {
         defaultSelectedTabId: SideContentType.introduction,
         handleActiveTabChange: this.props.handleActiveTabChange,
-        tabs: [playgroundIntroductionTab, listVisualizerTab, inspectorTab, envVisualizerTab]
+        tabs
       }
     };
+
     return (
       <HotKeys
         className={classNames(
@@ -269,6 +285,12 @@ const listVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <ListVisualizer />,
   id: SideContentType.dataVisualiser
+};
+
+const videoDisplayTab: SideContentTab = {
+  label: 'Video Display',
+  iconName: IconNames.MOBILE_VIDEO,
+  body: <VideoDisplay />
 };
 
 const inspectorTab: SideContentTab = {

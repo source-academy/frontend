@@ -367,7 +367,7 @@ class AssessmentWorkspace extends React.Component<
     if (isGraded) {
       tabs.push(
         {
-          label: `Grading`,
+          label: `Report Card`,
           iconName: IconNames.TICK,
           body: (
             <GradingResult
@@ -377,6 +377,7 @@ class AssessmentWorkspace extends React.Component<
               grade={props.assessment!.questions[questionId].grade}
               maxGrade={props.assessment!.questions[questionId].maxGrade}
               maxXp={props.assessment!.questions[questionId].maxXp}
+              comments={props.assessment!.questions[questionId].comments}
             />
           ),
           id: SideContentType.grading
