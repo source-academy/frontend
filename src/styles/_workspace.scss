@@ -353,6 +353,47 @@ $code-color-error: #ff4444;
         animation: none;
       }
     }
+
+    .sa-video {
+      min-width: min-content;
+
+      .sa-video-header {
+        justify-content: space-around;
+        display: flex;
+        background: rgba(26, 37, 48, 0.5);
+        border-radius: 3px 3px 0 0;
+
+        .sa-video-header-element {
+          display: inherit;
+          padding: 5px 0px;
+
+          .bp3-button-group {
+            width: max-content;
+
+            .bp3-active {
+              pointer-events: none;
+            }
+          }
+
+          .sa-video-header-numeric-input {
+            margin-left: 5px;
+            margin-right: 5px;
+          }
+        }
+
+        .bp3-divider {
+          margin: 0;
+        }
+      }
+
+      .sa-video-element {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        background: $cadet-color-1;
+        border-radius: 0 0 3px 3px;
+      }
+    }
   }
 
   .side-content-tooltip {

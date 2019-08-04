@@ -128,6 +128,24 @@ const binaryTreesLibrary = [
   'right_branch'
 ];
 
+const videoLibrary = [
+  'red_of',
+  'green_of',
+  'blue_of',
+  'set_rgb',
+  'copy_pixel',
+  'copy_image',
+  'constrain_color',
+  'compose_filter',
+  'make_distortion_filter',
+  'make_static_distortion_filter',
+  'pixel_similar',
+  'get_video_width',
+  'get_video_height',
+  'apply_filter',
+  'reset_filter'
+];
+
 /**
  * Defines which external libraries are available for usage, and what
  * external symbols (exposed functions) are under them.
@@ -139,7 +157,11 @@ const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.CURVES, curvesLibrary],
   [ExternalLibraryNames.SOUNDS, soundsLibrary],
   [ExternalLibraryNames.BINARYTREES, binaryTreesLibrary],
-  [ExternalLibraryNames.ALL, runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary)]
+  [ExternalLibraryNames.PIXNFLIX, videoLibrary],
+  [
+    ExternalLibraryNames.ALL,
+    runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary)
+  ]
 ];
 
 export const externalLibraries: Map<string, string[]> = new Map(libEntries);

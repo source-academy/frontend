@@ -39,6 +39,8 @@ function loadAllLibs() {
     '/externalLibs/streams/stream.js',
     '/externalLibs/pe_library.js',
     '/externalLibs/assert_compiled.js',
+    // video
+    '/externalLibs/video/video_lib.js',
     // inspector
     '/externalLibs/inspector/inspector.js',
     // env visualizer

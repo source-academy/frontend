@@ -38,7 +38,11 @@ import {
   UPDATE_REPL_VALUE
 } from '../../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
-import { ITestcase, Library } from '../../components/assessment/assessmentShape';
+import {
+  ExternalLibraryName,
+  ITestcase,
+  Library
+} from '../../components/assessment/assessmentShape';
 import { createContext } from '../../utils/slangHelper';
 import {
   CodeOutput,
@@ -441,7 +445,7 @@ describe('END_CLEAR_CONTEXT', () => {
     const library: Library = {
       chapter: 4,
       external: {
-        name: 'SOUNDS',
+        name: 'SOUNDS' as ExternalLibraryName,
         symbols: []
       },
       globals: mockGlobals
@@ -1027,7 +1031,7 @@ describe('LOG_OUT', () => {
       editorHeight: 200,
       editorValue: 'test program here',
       highlightedLines: [[1, 2], [3, 4]],
-      externalLibrary: 'NONE',
+      externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
       websocketStatus: 0
     };

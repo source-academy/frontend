@@ -1,6 +1,7 @@
 import {
   AssessmentCategories,
   AssessmentStatuses,
+  ExternalLibraryName,
   IAssessment,
   IAssessmentOverview,
   IMCQQuestion,
@@ -13,7 +14,7 @@ export const emptyLibrary = (): Library => {
   return {
     chapter: -1,
     external: {
-      name: 'NONE',
+      name: 'NONE' as ExternalLibraryName,
       symbols: []
     },
     globals: []
@@ -24,7 +25,7 @@ export const normalLibrary = (): Library => {
   return {
     chapter: 1,
     external: {
-      name: 'NONE',
+      name: 'NONE' as ExternalLibraryName,
       symbols: []
     },
     globals: []

@@ -2,6 +2,7 @@ import { Builder } from 'xml2js';
 import {
   AssessmentCategories,
   AssessmentStatuses,
+  ExternalLibraryName,
   GradingStatuses,
   IAssessment,
   IAssessmentOverview,
@@ -117,7 +118,7 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
     return {
       chapter: -1,
       external: {
-        name: 'NONE',
+        name: 'NONE' as ExternalLibraryName,
         symbols: []
       },
       globals: []
@@ -135,7 +136,7 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
     return {
       chapter: parseInt(deployment.$.interpreter, 10),
       external: {
-        name: nameVal,
+        name: nameVal as ExternalLibraryName,
         symbols: symbolsVal
       },
       globals: globalsVal

@@ -1,5 +1,5 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
-import { Library } from '../../components/assessment/assessmentShape';
+import { ExternalLibraryNames, Library } from '../../components/assessment/assessmentShape';
 import { createDefaultWorkspace, SideContentType } from '../../reducers/states';
 import * as actionTypes from '../actionTypes';
 import {
@@ -114,7 +114,7 @@ test('chapterSelect generates correct action object', () => {
 });
 
 test('externalLibrarySelect generates correct action object', () => {
-  const externalLibraryName = 'SOUNDS';
+  const externalLibraryName = ExternalLibraryNames.SOUNDS;
   const action = externalLibrarySelect(externalLibraryName, assessmentWorkspace);
   expect(action).toEqual({
     type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
@@ -139,7 +139,7 @@ test('beginClearContext generates correct action object', () => {
   const library: Library = {
     chapter: 4,
     external: {
-      name: 'SOUNDS',
+      name: ExternalLibraryNames.SOUNDS,
       symbols: []
     },
     globals: []
@@ -179,7 +179,7 @@ test('endClearContext generates correct action object', () => {
   const library: Library = {
     chapter: 4,
     external: {
-      name: 'SOUNDS',
+      name: ExternalLibraryNames.SOUNDS,
       symbols: []
     },
     globals: []
