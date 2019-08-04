@@ -137,10 +137,11 @@ export enum ExternalLibraryNames {
   CURVES = 'CURVES',
   SOUNDS = 'SOUNDS',
   BINARYTREES = 'BINARYTREES',
+  PIXNFLIX = 'PIX&FLIX',
   ALL = 'ALL'
 }
 
-export type ExternalLibraryName = keyof typeof ExternalLibraryNames;
+export type ExternalLibraryName = (typeof ExternalLibraryNames)[keyof typeof ExternalLibraryNames];
 
 type ExternalLibrary = {
   name: ExternalLibraryName;
