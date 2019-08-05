@@ -84,7 +84,8 @@ describe('EVAL_EDITOR', () => {
         // also calls evalCode here
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+          originalMaxExecTime: execTime,
+          useSubst: false
         })
         .dispatch({
           type: actionTypes.EVAL_EDITOR,
@@ -151,7 +152,8 @@ describe('EVAL_REPL', () => {
         // also calls evalCode here
         .call(runInContext, replValue, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: 1000
+          originalMaxExecTime: 1000,
+          useSubst: false
         })
         .dispatch({
           type: actionTypes.EVAL_REPL,
@@ -591,7 +593,7 @@ describe('evalCode', () => {
     actionType = actionTypes.EVAL_EDITOR;
     context = mockRuntimeContext();
     value = 'test value';
-    options = { scheduler: 'preemptive', originalMaxExecTime: 1000 };
+    options = { scheduler: 'preemptive', originalMaxExecTime: 1000, useSubst: false };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation);
   });
@@ -603,7 +605,8 @@ describe('evalCode', () => {
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+          originalMaxExecTime: execTime,
+          useSubst: false
         })
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .silentRun();
@@ -621,7 +624,8 @@ describe('evalCode', () => {
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+          originalMaxExecTime: execTime,
+          useSubst: false
         })
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .not.call(showSuccessMessage, 'Running all testcases!', 750)
@@ -642,7 +646,8 @@ describe('evalCode', () => {
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+          originalMaxExecTime: execTime,
+          useSubst: false
         })
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .call(showSuccessMessage, 'Running all testcases!', 750)
@@ -668,7 +673,8 @@ describe('evalCode', () => {
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+          originalMaxExecTime: execTime,
+          useSubst: false
         })
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .call(showSuccessMessage, 'Running all testcases!', 750)
@@ -697,7 +703,8 @@ describe('evalCode', () => {
         .provide([[call(runInContext, code, context, options), { status: 'suspended' }]])
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+          originalMaxExecTime: execTime,
+          useSubst: false
         })
         .put(actions.endDebuggerPause(workspaceLocation))
         .put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
@@ -709,7 +716,8 @@ describe('evalCode', () => {
         .withState(state)
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+          originalMaxExecTime: execTime,
+          useSubst: false
         })
         .put.like({ action: { type: actionTypes.EVAL_INTERPRETER_ERROR } })
         .silentRun();
@@ -719,9 +727,11 @@ describe('evalCode', () => {
       code = '// Prepend\n error';
       state = generateDefaultState(workspaceLocation, { editorPrepend: '// Prepend' });
 
-      runInContext(code, context, { scheduler: 'preemptive', originalMaxExecTime: 1000 }).then(
-        result => (context = (result as Finished).context)
-      );
+      runInContext(code, context, {
+        scheduler: 'preemptive',
+        originalMaxExecTime: 1000,
+        useSubst: false
+      }).then(result => (context = (result as Finished).context));
 
       const errors = context.errors.map((error: SourceError) => {
         const newError = cloneDeep(error);
@@ -734,7 +744,8 @@ describe('evalCode', () => {
         .withState(state)
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+          originalMaxExecTime: execTime,
+          useSubst: false
         })
         .put(actions.evalInterpreterError(errors, workspaceLocation))
         .silentRun();
@@ -847,7 +858,10 @@ describe('evalTestCode', () => {
     execTime = 1000;
     context = mockRuntimeContext();
     value = 'another test value';
-    options = { scheduler: 'preemptive', originalMaxExecTime: 1000 };
+    options = {
+      scheduler: 'preemptive',
+      originalMaxExecTime: 1000
+    };
     index = 1;
     state = generateDefaultState(workspaceLocation);
   });
