@@ -334,6 +334,10 @@ function* backendSaga(): SagaIterator {
   });
 
   yield takeEvery(actionTypes.DELETE_SOURCECAST_ENTRY, function*(action) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can delete sourcecast.');
+    }
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
