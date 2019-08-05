@@ -162,7 +162,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const questionId = this.formatedQuestionId();
     const question: IQuestion = this.state.assessment.questions[questionId];
     const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props, this.state, questionId),
+      controlBarProps: this.controlBarProps(this.props, questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
@@ -594,14 +594,16 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   };
 
   /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (
-    p: AssessmentWorkspaceProps,
-    s: IState,
-    q: number
-  ) => ControlBarProps = (props: AssessmentWorkspaceProps, state: IState, questionId: number) => {
+  private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
+    props: AssessmentWorkspaceProps,
+    questionId: number
+  ) => {
     const listingPath = '/mission-control';
-    const assessmentWorkspacePath = listingPath + `/${state.assessment!.id.toString()}`;
-    const questionProgress: [number, number] = [questionId + 1, state.assessment!.questions.length];
+    const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
+    const questionProgress: [number, number] = [
+      questionId + 1,
+      this.state.assessment!.questions.length
+    ];
 
     const onClickPrevious = () =>
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -655,7 +657,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 
     const saveButton = (
       <SaveButton
-        hasUnsavedChanges={state.hasUnsavedChanges}
+        hasUnsavedChanges={this.state.hasUnsavedChanges}
         onClickSave={this.handleSave}
         key="save"
       />
@@ -663,7 +665,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 
     const toggleEditModeButton = (
       <ToggleEditModeButton
-        editingMode={state.editingMode}
+        editingMode={this.state.editingMode}
         toggleEditMode={this.toggleEditingMode}
         key="toggle_edit_mode"
       />
