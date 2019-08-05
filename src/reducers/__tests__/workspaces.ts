@@ -24,11 +24,13 @@ import {
   IAction,
   INIT_INVITE,
   LOG_OUT,
+  RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
+  UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -36,7 +38,11 @@ import {
   UPDATE_REPL_VALUE
 } from '../../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
-import { ITestcase, Library } from '../../components/assessment/assessmentShape';
+import {
+  ExternalLibraryName,
+  ITestcase,
+  Library
+} from '../../components/assessment/assessmentShape';
 import { createContext } from '../../utils/slangHelper';
 import {
   CodeOutput,
@@ -46,7 +52,8 @@ import {
   IPlaygroundWorkspace,
   IWorkspaceManagerState,
   maxBrowseIndex,
-  RunningOutput
+  RunningOutput,
+  SideContentType
 } from '../states';
 import { reducer } from '../workspaces';
 
@@ -438,7 +445,7 @@ describe('END_CLEAR_CONTEXT', () => {
     const library: Library = {
       chapter: 4,
       external: {
-        name: 'SOUNDS',
+        name: 'SOUNDS' as ExternalLibraryName,
         symbols: []
       },
       globals: mockGlobals
@@ -795,7 +802,8 @@ describe('EVAL_TESTCASE_FAILURE', () => {
             },
             {
               ...editorTestcases[1],
-              result: value
+              result: undefined,
+              errors: value
             }
           ]
         }
@@ -807,6 +815,7 @@ describe('EVAL_TESTCASE_FAILURE', () => {
 describe('EVAL_TESTCASE_SUCCESS', () => {
   test('works correctly on RunningOutput and CodeOutput', () => {
     const isRunning = true;
+    const value = (outputWithCodeAndRunningOutput[0] as CodeOutput).value;
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeAndRunningOutput,
       isRunning,
@@ -814,6 +823,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
     });
 
     const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
+      value,
       index: 1
     });
 
@@ -832,7 +842,8 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
             },
             {
               ...editorTestcases[1],
-              result: (outputWithCodeAndRunningOutput[0] as CodeOutput).value
+              result: value,
+              errors: undefined
             }
           ]
         }
@@ -842,6 +853,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
 
   test('works correctly on other output', () => {
     const isRunning = true;
+    const value = (outputWithCodeAndRunningOutput[0] as CodeOutput).value;
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeOutput,
       isRunning,
@@ -849,6 +861,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
     });
 
     const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
+      value,
       index: 0
     });
 
@@ -864,7 +877,8 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
           editorTestcases: [
             {
               ...editorTestcases[0],
-              result: outputWithCodeOutput[0].value
+              result: value,
+              errors: undefined
             },
             {
               ...editorTestcases[1]
@@ -1017,7 +1031,7 @@ describe('LOG_OUT', () => {
       editorHeight: 200,
       editorValue: 'test program here',
       highlightedLines: [[1, 2], [3, 4]],
-      externalLibrary: 'NONE',
+      externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
       websocketStatus: 0
     };
@@ -1036,6 +1050,39 @@ describe('LOG_OUT', () => {
     expect(result).toEqual({
       ...defaultWorkspaceManager,
       playground: newPlayground
+    });
+  });
+});
+
+describe('RESET_TESTCASE', () => {
+  test('correctly resets the targeted testcase to its default state', () => {
+    const resetTestcaseDefaultState = generateDefaultWorkspace({
+      editorTestcases
+    });
+
+    const actions: IAction[] = generateActions(RESET_TESTCASE, {
+      index: 1
+    });
+
+    actions.forEach(action => {
+      const result = reducer(resetTestcaseDefaultState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...resetTestcaseDefaultState,
+        [location]: {
+          ...resetTestcaseDefaultState[location],
+          editorTestcases: [
+            {
+              ...editorTestcases[0]
+            },
+            {
+              ...editorTestcases[1],
+              result: undefined,
+              errors: undefined
+            }
+          ]
+        }
+      });
     });
   });
 });
@@ -1216,6 +1263,25 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           isEditorAutorun: false
+        }
+      });
+    });
+  });
+});
+
+describe('UPDATE_ACTIVE_TAB', () => {
+  test('writes correct value of sideContentActiveTab', () => {
+    const activeTab = SideContentType.questionOverview;
+    const actions: IAction[] = generateActions(UPDATE_ACTIVE_TAB, { activeTab });
+
+    actions.forEach(action => {
+      const result = reducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          sideContentActiveTab: activeTab
         }
       });
     });

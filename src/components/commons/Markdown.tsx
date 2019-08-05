@@ -6,15 +6,27 @@ import { Converter } from 'showdown';
 type MarkdownProps = {
   className?: string;
   content: string;
+  openLinksInNewWindow?: boolean;
+  simplifiedAutoLink?: boolean;
+  strikethrough?: boolean;
+  tasklists?: boolean;
 };
 
-const Markdown: React.SFC<MarkdownProps> = props => (
-  <div
-    className={classNames(props.className ? props.className : 'md', Classes.RUNNING_TEXT)}
-    dangerouslySetInnerHTML={{ __html: converter.makeHtml(props.content) }}
-  />
-);
+const Markdown: React.SFC<MarkdownProps> = props => {
+  const converter = new Converter({
+    tables: true,
+    simplifiedAutoLink: props.simplifiedAutoLink,
+    strikethrough: props.strikethrough,
+    tasklists: props.tasklists,
+    openLinksInNewWindow: props.openLinksInNewWindow
+  });
 
-const converter = new Converter({ tables: true });
+  return (
+    <div
+      className={classNames(props.className ? props.className : 'md', Classes.RUNNING_TEXT)}
+      dangerouslySetInnerHTML={{ __html: converter.makeHtml(props.content) }}
+    />
+  );
+};
 
 export default Markdown;

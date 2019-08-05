@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput } from '../../reducers/states';
+import { InterpreterOutput, SideContentType } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { SideContentTab } from '../workspace/side-content';
@@ -11,7 +11,14 @@ import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
-import { Input, IPlaybackData, KeyboardCommand, RecordingStatus } from './sourcecastShape';
+import {
+  Input,
+  IPlaybackData,
+  ISourcecastData,
+  KeyboardCommand,
+  RecordingStatus
+} from './sourcecastShape';
+import SourcecastTable from './SourcecastTable';
 import SourcereelControlbar from './SourcereelControlbar';
 
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
@@ -34,23 +41,27 @@ export interface IStateProps {
   replValue: string;
   timeElapsedBeforePause: number;
   sideContentHeight?: number;
+  sourcecastIndex: ISourcecastData[] | null;
   sourceChapter: number;
   timeResumed: number;
 }
 
 export interface IDispatchProps {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handleDeleteSourcecastEntry: (id: number) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleFetchSourcecastIndex: () => void;
   handleInterruptEval: () => void;
   handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
@@ -167,6 +178,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
+        handleActiveTabChange: this.props.handleActiveTabChange,
         tabs: [
           {
             label: 'Introduction',
@@ -192,6 +204,20 @@ class Sourcereel extends React.Component<ISourcereelProps> {
                 />
               </div>
             )
+          },
+          {
+            label: 'Management',
+            iconName: IconNames.EDIT,
+            body: (
+              <div>
+                <SourcecastTable
+                  handleDeleteSourcecastEntry={this.props.handleDeleteSourcecastEntry}
+                  handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
+                  sourcecastIndex={this.props.sourcecastIndex}
+                />
+              </div>
+            ),
+            id: SideContentType.introduction
           },
           listVisualizerTab,
           inspectorTab,
@@ -223,21 +249,21 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <ListVisualizer />,
-  id: 'data'
+  id: SideContentType.dataVisualiser
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <Inspector />,
-  id: 'inspector'
+  id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
-  id: 'env'
+  id: SideContentType.envVisualiser
 };
 
 export default Sourcereel;

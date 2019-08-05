@@ -203,7 +203,7 @@ function* backendSaga(): SagaIterator {
     yield put(actions.updateGradingOverviews(newOverviews));
   });
 
-  yield takeEvery(actionTypes.SUBMIT_GRADING, function*(action) {
+  const sendGrade = function*(action: actionTypes.IAction) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
@@ -212,7 +212,8 @@ function* backendSaga(): SagaIterator {
       submissionId,
       questionId,
       gradeAdjustment,
-      xpAdjustment
+      xpAdjustment,
+      comments
     } = (action as actionTypes.IAction).payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
@@ -223,10 +224,12 @@ function* backendSaga(): SagaIterator {
       questionId,
       gradeAdjustment,
       xpAdjustment,
-      tokens
+      tokens,
+      comments
     );
     if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Saved!', 1000);
+      yield call(showSuccessMessage, 'Submitted!', 1000);
+
       // Now, update the grade for the question in the Grading in the store
       const grading: Grading = yield select((state: IState) =>
         state.session.gradings.get(submissionId)
@@ -238,7 +241,8 @@ function* backendSaga(): SagaIterator {
             xpAdjustment,
             roomId: gradingQuestion.grade.roomId,
             grade: gradingQuestion.grade.grade,
-            xp: gradingQuestion.grade.xp
+            xp: gradingQuestion.grade.xp,
+            comments
           };
         }
         return gradingQuestion;
@@ -247,7 +251,25 @@ function* backendSaga(): SagaIterator {
     } else {
       request.handleResponseError(resp);
     }
-  });
+  };
+
+  const sendGradeAndContinue = function*(action: actionTypes.IAction) {
+    const { submissionId, questionId } = action.payload;
+    yield* sendGrade(action);
+    /**
+     * Move to next question for grading: this only works because the
+     * SUBMIT_GRADING_AND_CONTINUE Redux action is currently only
+     * used in the Grading Workspace
+     *
+     * If the questionId is out of bounds, the componentDidUpdate callback of
+     * GradingWorkspace will cause a redirect back to '/academy/grading'
+     */
+    yield history.push(`/academy/grading` + `/${submissionId}` + `/${questionId + 1}`);
+  };
+
+  yield takeEvery(actionTypes.SUBMIT_GRADING, sendGrade);
+
+  yield takeEvery(actionTypes.SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
 
   yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
     const tokens = yield select((state: IState) => ({
@@ -309,6 +331,33 @@ function* backendSaga(): SagaIterator {
     const assessmentId = (action as actionTypes.IAction).payload.assessmentId;
     const submissionId = (action as actionTypes.IAction).payload.submissionId;
     yield call(request.postNotify, tokens, assessmentId, submissionId);
+  });
+
+  yield takeEvery(actionTypes.DELETE_SOURCECAST_ENTRY, function*(action) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can delete sourcecast.');
+    }
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { id } = (action as actionTypes.IAction).payload;
+    const resp: Response = yield request.deleteSourcecastEntry(id, tokens);
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
+      return;
+    }
+    const sourcecastIndex = yield call(request.getSourcecastIndex, tokens);
+    if (sourcecastIndex) {
+      yield put(
+        actions.updateSourcecastIndex(
+          sourcecastIndex,
+          (action as actionTypes.IAction).payload.workspaceLocation
+        )
+      );
+    }
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
   yield takeEvery(actionTypes.FETCH_SOURCECAST_INDEX, function*(action) {

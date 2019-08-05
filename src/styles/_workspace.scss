@@ -164,6 +164,36 @@ $code-color-error: #ff4444;
     flex-direction: column;
   }
 
+  .side-content-header {
+    align-items: center;
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 0.2rem;
+    .side-content-header-button:focus {
+      outline: 0;
+    }
+
+    .side-content-header-button-alert {
+      -webkit-animation: alert 1s infinite;
+      -moz-animation: alert 1s infinite;
+      -o-animation: alert 1s infinite;
+      animation: alert 1s infinite;
+    }
+
+    @keyframes alert {
+      0%,
+      50% {
+        background-color: rgba(200, 100, 50, 0.5);
+      }
+      51%,
+      100% {
+        background-image: rgba(138, 155, 168, 0.3);
+      }
+    }
+  }
+
   .side-content-divider {
     height: 0.6rem;
     flex: initial;
@@ -202,6 +232,81 @@ $code-color-error: #ff4444;
     div {
       p:last-child {
         margin-bottom: 0;
+      }
+    }
+
+    .GradingEditor {
+      .grading-editor-student-name {
+        text-align: center;
+      }
+      .grading-editor-solution {
+        pre {
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          word-break: break-word;
+        }
+      }
+      .grading-editor-input-parent {
+        /** Center the text for numeric input and showing grades. */
+        table.bp3-html-table {
+          border-spacing: 5px;
+          width: 100%;
+          tbody {
+            text-align: center;
+
+            button {
+              width: 100%;
+            }
+
+            tr:first-child td,
+            th {
+              /** Aligns the numeric input */
+              text-align: -webkit-center;
+              // Hide grey line
+              -webkit-box-shadow: inset 0 0 0 0;
+              box-shadow: inset 0 0 0 0;
+              background: $cadet-color-2;
+            }
+          }
+        }
+        .grading-adjustment-input {
+          width: 150px;
+        }
+      }
+
+      .grading-editor-draft-buttons {
+        margin-top: 10px;
+
+        table.bp3-html-table {
+          table-layout: fixed;
+          margin: auto;
+          width: 100%;
+
+          tbody tr:first-child td {
+            // Hide grey line
+            -webkit-box-shadow: inset 0 0 0 0;
+            box-shadow: inset 0 0 0 0;
+            background: $cadet-color-2;
+            // Create space between buttons
+            padding: 0 5px 0 5px;
+
+            &:first-child {
+              padding-left: 0;
+            }
+
+            &:last-child {
+              padding-right: 0;
+            }
+          }
+        }
+      }
+
+      .grading-editor-button {
+        width: 100%;
+
+        &.grading-editor-save-and-continue {
+          margin-top: 0.4rem;
+        }
       }
     }
   }
@@ -246,6 +351,47 @@ $code-color-error: #ff4444;
         -moz-animation: none;
         -o-animation: none;
         animation: none;
+      }
+    }
+
+    .sa-video {
+      min-width: min-content;
+
+      .sa-video-header {
+        justify-content: space-around;
+        display: flex;
+        background: rgba(26, 37, 48, 0.5);
+        border-radius: 3px 3px 0 0;
+
+        .sa-video-header-element {
+          display: inherit;
+          padding: 5px 0px;
+
+          .bp3-button-group {
+            width: max-content;
+
+            .bp3-active {
+              pointer-events: none;
+            }
+          }
+
+          .sa-video-header-numeric-input {
+            margin-left: 5px;
+            margin-right: 5px;
+          }
+        }
+
+        .bp3-divider {
+          margin: 0;
+        }
+      }
+
+      .sa-video-element {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        background: $cadet-color-1;
+        border-radius: 0 0 3px 3px;
       }
     }
   }
@@ -302,26 +448,63 @@ $code-color-error: #ff4444;
     }
   }
 
+  .grading-result-table {
+    // Hide grey line appearing in grading result tables
+    table.bp3-html-table tbody tr:first-child {
+      td,
+      th {
+        -webkit-box-shadow: inset 0 0 1px 0 $cadet-color-2;
+        box-shadow: inset 0 0 1px 0 $cadet-color-2;
+      }
+    }
+  }
+
   .react-mde {
-    /* Color the borders */
-    border-color: $cadet-color-5;
+    /* Colour the borders */
+    border-color: #1b2530;
     border-radius: 3px;
     /* Override side-content's default text justify*/
     text-align: initial;
 
     .mde-header {
-      /* Color the toolbar */
-      background-color: $cadet-color-5;
+      /* Colour the toolbar */
+      background-color: rgba(16, 22, 26, 0.3);
+
+      /* Colour the editor button text */
+      .mde-tabs button {
+        color: $cadet-color-5;
+      }
+
+      /* Colour the selected button */
+      .mde-tabs button.selected {
+        background: rgba(138, 155, 168, 0.3);
+      }
+
+      /* Colour the editor icons */
+      .#{$ns}-icon {
+        color: #a7b6c2;
+      }
     }
 
-    /**
-     * Color code blocks. style is forced due to deep nesting,
-     * and no access to the generated html to place classes.
-     */
-    .mde-preview .mde-preview-content pre {
-      background-color: $cadet-color-5 !important;
-      code {
-        color: black !important;
+    /* Add padding to editor preview */
+    .mde-preview {
+      padding: 11px;
+    }
+
+    /* Set colour of editor text box */
+    textarea.mde-text {
+      background-color: rgba(16, 22, 26, 0.3);
+      color: $cadet-color-5;
+    }
+
+    /* Set colour of editor resize drag bar */
+    .grip {
+      background: rgba(138, 155, 168, 0.3);
+      color: #a7b6c2;
+
+      /* Fix ellipsis icon not aligned with drag bar */
+      .icon {
+        vertical-align: top;
       }
     }
   }
@@ -430,9 +613,61 @@ $code-color-error: #ff4444;
   }
 
   .Autograder {
+    min-width: 640px;
+
     > .collapse-button {
       width: 100%;
       background: rgba(0, 0, 0, 0.2);
+    }
+
+    .testcases-header,
+    .results-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+      padding: 0.4rem 0.6rem;
+
+      .#{$ns}-icon {
+        margin-right: 4px;
+      }
+    }
+
+    .testcases-header {
+      .header-fn,
+      .header-actual {
+        width: 37.5%;
+      }
+
+      .header-expected {
+        width: 24%;
+      }
+    }
+
+    .results-header {
+      .header-data {
+        width: 37.5%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
+
+        .header-sn {
+          width: 20%;
+        }
+
+        .header-status {
+          width: 78.5%;
+        }
+      }
+
+      .header-expected {
+        width: 24%;
+      }
+
+      .header-actual {
+        width: 37.5%;
+      }
     }
 
     pre {
@@ -445,7 +680,33 @@ $code-color-error: #ff4444;
     }
   }
 
-  .AutograderCard {
+  .AutograderCard,
+  .ResultCard {
+    /* Wrapper container (bp3's Card) for each testcase and autograder result */
+    .#{$ns}-card {
+      border-color: rgb(26, 37, 48);
+      border-style: solid;
+      border-width: 1px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: stretch;
+
+      /* HTML Pre component for rendering code blocks */
+      pre {
+        padding: 8px;
+        margin: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+        word-break: normal;
+        white-space: pre-line;
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+    }
+
+    /* CSS animation styling for testcases when run */
     @keyframes correct {
       from {
         background: rgba(125, 255, 125, 0.5);
@@ -468,15 +729,14 @@ $code-color-error: #ff4444;
 
     &.wrong {
       > .#{$ns}-card {
-        background: rgba(255, 55, 55, 0.2);
+        background-color: rgba(255, 55, 55, 0.2);
         animation-name: wrong;
         animation-duration: 4s;
       }
 
-      .autograder-actual {
-        pre {
-          color: $code-color-error;
-        }
+      pre.testcase-actual,
+      pre.result-actual {
+        color: $code-color-error;
       }
     }
 
@@ -493,103 +753,70 @@ $code-color-error: #ff4444;
       border-top-width: 2px;
       border-color: #1a2530;
     }
+  }
 
-    .#{$ns}-button {
-      border-color: rgb(26, 37, 48);
-      border-style: solid;
-      border-width: 1px;
-    }
-
+  .AutograderCard {
+    /* Nested bp3 Card component (with onClick attached) */
     .#{$ns}-card {
-      margin: 0 0 0 0;
-    }
-
-    .row {
-      padding-top: 0.2rem;
-      padding-bottom: 0.2rem;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-
-      > pre {
-        flex: 1 1 auto;
+      .testcase-program,
+      .testcase-actual {
+        width: 37.5%;
       }
-    }
 
-    .col {
-      width: 50%;
-    }
+      .testcase-expected {
+        width: 24%;
+      }
 
-    .autograder-expected {
-      padding-right: 0.2rem;
-    }
-    .autograder-actual {
-      padding-left: 0.2rem;
+      /* Following two are styles for rendered WebGL elements (runes, curves) */
+      .canvas-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      canvas {
+        height: 10rem;
+        width: 10rem;
+      }
     }
   }
 
   .ResultCard {
-    &:not(:first-child) {
-      border-top-style: solid;
-      border-top-width: 2px;
-      border-color: #1a2530;
-    }
-
-    &.wrong {
-      > .#{$ns}-card {
-        background: rgba(255, 55, 55, 0.2);
-      }
-    }
-
-    &.correct {
-      > .#{$ns}-card {
-        background: rgba(125, 255, 125, 0.2);
-      }
-    }
-
     .#{$ns}-card {
-      margin: 0 0 0 0;
-    }
+      .result-data {
+        width: 37.5%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
 
-    .row {
-      padding-top: 0.2rem;
-      padding-bottom: 0.2rem;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
+        div {
+          /* Maintain style consistency with other Pre elements */
+          background: rgba(16, 22, 26, 0.3);
+          border-radius: 3px;
+          box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.4);
+          box-sizing: border-box;
+          padding: 8px;
+          font-weight: bold;
+          text-align: center;
+          vertical-align: baseline;
+        }
 
-      > pre {
-        flex: 1 1 auto;
-        margin-left: 0.4rem;
+        .result-idx {
+          width: 20%;
+        }
+
+        .result-status {
+          width: 78.5%;
+        }
       }
-    }
 
-    .col {
-      width: 50%;
-    }
-
-    .autograder-expected {
-      padding-right: 0.2rem;
-    }
-    .autograder-actual {
-      padding-left: 0.2rem;
-    }
-
-    .autograder-error {
-      width: 100%;
-
-      &:not(:first-child) {
-        border-top-style: solid;
-        border-top-width: 2px;
-        border-color: #1a2530;
+      .result-expected {
+        width: 24%;
       }
-    }
 
-    .error-explanation {
-      pre {
-        color: $code-color-error;
+      .result-actual {
+        width: 37.5%;
       }
     }
   }
