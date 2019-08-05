@@ -30,7 +30,7 @@ import {
   ResetButton,
   RunButton,
   SaveButton
-} from '../workspace/controlBarButtons';
+} from '../workspace/controlBar';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';

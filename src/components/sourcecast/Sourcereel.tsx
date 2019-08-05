@@ -12,7 +12,7 @@ import {
   ClearButton,
   EvalButton,
   ExternalLibrarySelect
-} from '../workspace/controlBarButtons';
+} from '../workspace/controlBar';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';

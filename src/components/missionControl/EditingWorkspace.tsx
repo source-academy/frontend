@@ -29,7 +29,7 @@ import {
   RunButton,
   SaveButton,
   ToggleEditModeButton
-} from '../workspace/controlBarButtons';
+} from '../workspace/controlBar';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
