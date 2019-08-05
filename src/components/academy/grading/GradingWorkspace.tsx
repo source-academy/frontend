@@ -162,7 +162,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     /* Get the question to be graded */
     const question = this.props.grading[questionId].question as IQuestion;
     const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props, questionId),
+      controlBarProps: this.controlBarProps(questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
@@ -318,13 +318,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   });
 
   /** Pre-condition: Grading has been loaded */
-  private controlBarProps: (p: GradingWorkspaceProps, q: number) => ControlBarProps = (
-    props: GradingWorkspaceProps,
-    questionId: number
-  ) => {
+  private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
     const listingPath = `/academy/grading`;
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`;
-    const questionProgress: [number, number] = [questionId + 1, props.grading!.length];
+    const questionProgress: [number, number] = [questionId + 1, this.props.grading!.length];
 
     const onClickPrevious = () =>
       history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -333,13 +330,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const onClickReturn = () => history.push(listingPath);
 
     const clearButton = (
-      <ClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
       <EvalButton
-        handleReplEval={props.handleReplEval}
-        isRunning={props.isRunning}
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
         key="eval_repl"
       />
     );
@@ -363,7 +360,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
     const questionView = <QuestionView questionProgress={questionProgress} key="question_view" />;
 
-    const runButton = <RunButton handleEditorEval={props.handleEditorEval} key="run" />;
+    const runButton = <RunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
 
     return {
       editorButtons: [runButton],

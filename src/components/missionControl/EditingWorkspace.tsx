@@ -162,7 +162,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const questionId = this.formatedQuestionId();
     const question: IQuestion = this.state.assessment.questions[questionId];
     const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props, questionId),
+      controlBarProps: this.controlBarProps(questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
@@ -594,10 +594,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   };
 
   /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
-    props: AssessmentWorkspaceProps,
-    questionId: number
-  ) => {
+  private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
     const listingPath = '/mission-control';
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
     const questionProgress: [number, number] = [
@@ -621,13 +618,13 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     };
 
     const clearButton = (
-      <ClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
       <EvalButton
-        handleReplEval={props.handleReplEval}
-        isRunning={props.isRunning}
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
         key="eval_repl"
       />
     );
@@ -653,7 +650,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 
     const resetButton = <ResetButton onClick={onClickResetTemplate} key="reset_template" />;
 
-    const runButton = <RunButton handleEditorEval={props.handleEditorEval} key="run" />;
+    const runButton = <RunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
 
     const saveButton = (
       <SaveButton
