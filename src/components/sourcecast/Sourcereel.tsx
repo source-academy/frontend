@@ -11,7 +11,14 @@ import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
-import { Input, IPlaybackData, KeyboardCommand, RecordingStatus } from './sourcecastShape';
+import {
+  Input,
+  IPlaybackData,
+  ISourcecastData,
+  KeyboardCommand,
+  RecordingStatus
+} from './sourcecastShape';
+import SourcecastTable from './SourcecastTable';
 import SourcereelControlbar from './SourcereelControlbar';
 
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
@@ -34,6 +41,7 @@ export interface IStateProps {
   replValue: string;
   timeElapsedBeforePause: number;
   sideContentHeight?: number;
+  sourcecastIndex: ISourcecastData[] | null;
   sourceChapter: number;
   timeResumed: number;
 }
@@ -46,12 +54,14 @@ export interface IDispatchProps {
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handleDeleteSourcecastEntry: (id: number) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleFetchSourcecastIndex: () => void;
   handleInterruptEval: () => void;
   handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
@@ -194,6 +204,20 @@ class Sourcereel extends React.Component<ISourcereelProps> {
                 />
               </div>
             )
+          },
+          {
+            label: 'Management',
+            iconName: IconNames.EDIT,
+            body: (
+              <div>
+                <SourcecastTable
+                  handleDeleteSourcecastEntry={this.props.handleDeleteSourcecastEntry}
+                  handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
+                  sourcecastIndex={this.props.sourcecastIndex}
+                />
+              </div>
+            ),
+            id: SideContentType.introduction
           },
           listVisualizerTab,
           inspectorTab,
