@@ -19,7 +19,13 @@ import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastControlbar, { ISourcecastControlbarProps } from './SourcecastControlbar';
 import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
-import { ICodeDelta, Input, IPlaybackData, PlaybackStatus } from './sourcecastShape';
+import {
+  ICodeDelta,
+  Input,
+  IPlaybackData,
+  ISourcecastData,
+  PlaybackStatus
+} from './sourcecastShape';
 import SourcecastTable from './SourcecastTable';
 
 export interface ISourcecastProps extends IDispatchProps, IStateProps {}
@@ -47,7 +53,7 @@ export interface IStateProps {
   playbackStatus: PlaybackStatus;
   replValue: string;
   sideContentHeight?: number;
-  sourcecastIndex: any;
+  sourcecastIndex: ISourcecastData[] | null;
   sourceChapter: number;
 }
 
