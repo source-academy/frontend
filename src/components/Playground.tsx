@@ -130,7 +130,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       body: <SubstVisualizer content={this.state.substVisualizerContent} />,
       id: SideContentType.substVisualizer
     };
-    
+
     const autorunButtons = (
       <AutorunButtons
         handleDebuggerPause={this.props.handleDebuggerPause}
