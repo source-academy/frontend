@@ -1,18 +1,16 @@
-import {
-  Callout,
-  Drawer,
-  Intent,
-  NonIdealState,
-  ProgressBar,
-  Spinner
-} from '@blueprintjs/core';
+import { Callout, Drawer, Intent, NonIdealState, ProgressBar, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { NavLink } from 'react-router-dom';
 import { Role } from '../../reducers/states';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
-import { AssessmentCategories, AssessmentCategory, AssessmentStatuses, IAssessmentOverview } from '../assessment/assessmentShape';
+import {
+  AssessmentCategories,
+  AssessmentCategory,
+  AssessmentStatuses,
+  IAssessmentOverview
+} from '../assessment/assessmentShape';
 
 type ProfileProps = DispatchProps & OwnProps & StateProps;
 
@@ -57,9 +55,7 @@ class Profile extends React.Component<ProfileProps> {
 
       // Performs boundary checks if denominator is 0 or if it exceeds 1 (100%)
       const getFrac = (num: number, den: number): number => {
-        return den <= 0 || num / den > 1
-          ? 1
-          : num / den;
+        return den <= 0 || num / den > 1 ? 1 : num / den;
       };
 
       // Given a fraction between 0 and 1 inclusive, returns the corresponding Intent (colour)
@@ -67,12 +63,12 @@ class Profile extends React.Component<ProfileProps> {
         return frac < 0
           ? Intent.NONE
           : frac >= 0.9
-            ? Intent.PRIMARY
-            : frac >= 0.8
-              ? Intent.SUCCESS
-              : frac >= 0.6
-                ? Intent.WARNING
-                : Intent.DANGER;
+          ? Intent.PRIMARY
+          : frac >= 0.8
+          ? Intent.SUCCESS
+          : frac >= 0.6
+          ? Intent.WARNING
+          : Intent.DANGER;
       };
 
       // Given an assessment category, return its icon
@@ -90,52 +86,62 @@ class Profile extends React.Component<ProfileProps> {
             // For rendering hidden assessments not visible to the student
             // e.g. studio participation marks
             return IconNames.PULSE;
-          }
+        }
       };
 
       // Build condensed assessment cards from an array of assessments
-      const summaryCallouts = this.props.assessmentOverviews!
-        .filter( (item) => item.status === AssessmentStatuses.submitted )
-        .map( (item) => {
+      const summaryCallouts = this.props
+        .assessmentOverviews!.filter(item => item.status === AssessmentStatuses.submitted)
+        .map(item => {
           return (
             // Make each card navigate the user to the respective assessment
             <NavLink
-              className='profile-summary-navlink'
+              className="profile-summary-navlink"
               key={`${item.title}-${item.id}`}
               target="_blank"
               to={`/academy/${assessmentCategoryLink(item.category)}/${item.id}/0`}
-              activeClassName='profile-summary-navlink'
+              activeClassName="profile-summary-navlink"
             >
               <Callout
-                className='profile-summary-callout'
+                className="profile-summary-callout"
                 key={`${item.title}-${item.id}`}
                 icon={renderIcon(item.category)}
                 title={item.title}
               >
-              {item.maxGrade <= 0 && item.grade === 0 ? '' :
-                <div className='grade-details'>
-                  <div className='title'>Grade</div>
-                  <div className='value'>{item.grade} / {item.maxGrade}</div>
-                  <ProgressBar
-                    animate={false}
-                    className='value-bar'
-                    intent={parseFrac(getFrac(item.grade, item.maxGrade))}
-                    stripes={false}
-                    value={getFrac(item.grade, item.maxGrade)} />
-                </div>
-              }
-              {item.maxXp <= 0 && item.xp === 0 ? '' :
-                <div className='xp-details'>
-                  <div className='title'>XP</div>
-                  <div className='value'>{item.xp} / {item.maxXp}</div>
-                  <ProgressBar
-                    animate={false}
-                    className='value-bar'
-                    intent={parseFrac(getFrac(item.xp, item.maxXp))}
-                    stripes={false}
-                    value={getFrac(item.xp, item.maxXp)} />
-                </div>
-              }
+                {item.maxGrade <= 0 && item.grade === 0 ? (
+                  ''
+                ) : (
+                  <div className="grade-details">
+                    <div className="title">Grade</div>
+                    <div className="value">
+                      {item.grade} / {item.maxGrade}
+                    </div>
+                    <ProgressBar
+                      animate={false}
+                      className="value-bar"
+                      intent={parseFrac(getFrac(item.grade, item.maxGrade))}
+                      stripes={false}
+                      value={getFrac(item.grade, item.maxGrade)}
+                    />
+                  </div>
+                )}
+                {item.maxXp <= 0 && item.xp === 0 ? (
+                  ''
+                ) : (
+                  <div className="xp-details">
+                    <div className="title">XP</div>
+                    <div className="value">
+                      {item.xp} / {item.maxXp}
+                    </div>
+                    <ProgressBar
+                      animate={false}
+                      className="value-bar"
+                      intent={parseFrac(getFrac(item.xp, item.maxXp))}
+                      stripes={false}
+                      value={getFrac(item.xp, item.maxXp)}
+                    />
+                  </div>
+                )}
               </Callout>
             </NavLink>
           );
@@ -143,7 +149,7 @@ class Profile extends React.Component<ProfileProps> {
 
       // Compute the user's maximum total grade and XP from submitted assessments
       content = (
-        <div className='profile-content'>
+        <div className="profile-content">
           <div className="profile-header">
             <div className="profile-username">
               <div className="name">{this.props.name}</div>
@@ -162,7 +168,9 @@ class Profile extends React.Component<ProfileProps> {
               <div className="total-value">
                 {currentGrade} / {maxGrade}
               </div>
-              <div className="percentage">{(getFrac(currentGrade, maxGrade) * 100).toFixed(2)}%</div>
+              <div className="percentage">
+                {(getFrac(currentGrade, maxGrade) * 100).toFixed(2)}%
+              </div>
             </div>
             <div className="profile-xp">
               <Spinner
@@ -178,16 +186,14 @@ class Profile extends React.Component<ProfileProps> {
               <div className="percentage">{(getFrac(currentXp, maxXp) * 100).toFixed(2)}%</div>
             </div>
           </div>
-          <div className="profile-callouts">
-              {summaryCallouts}
-          </div>
+          <div className="profile-callouts">{summaryCallouts}</div>
         </div>
       );
     }
 
     return (
       <Drawer
-        className='profile'
+        className="profile"
         canEscapeKeyClose={true}
         canOutsideClickClose={true}
         icon={IconNames.USER}
