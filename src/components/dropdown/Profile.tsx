@@ -9,7 +9,9 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { NavLink } from 'react-router-dom';
 import { Role } from '../../reducers/states';
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories, AssessmentCategory, AssessmentStatuses, IAssessmentOverview } from '../assessment/assessmentShape';
 
 type ProfileProps = DispatchProps & OwnProps & StateProps;
@@ -87,7 +89,15 @@ class Profile extends React.Component<ProfileProps> {
         .filter( (item) => item.status === AssessmentStatuses.submitted )
         .map( (item) => {
           return (
-            <Callout
+            // Make each card navigate the user to the respective assessment
+            <NavLink
+              className='profile-summary-navlink'
+              key={`${item.title}-${item.id}`}
+              target="_blank"
+              to={`/academy/${assessmentCategoryLink(item.category)}/${item.id}/0`}
+              activeClassName='profile-summary-navlink'
+            >
+              <Callout
                 className='profile-summary-callout'
                 key={`${item.title}-${item.id}`}
                 icon={renderIcon(item.category)}
@@ -117,7 +127,8 @@ class Profile extends React.Component<ProfileProps> {
                     value={item.xp / item.maxXp} />
                 </div>
               }
-            </Callout>
+              </Callout>
+            </NavLink>
           );
         });
 
