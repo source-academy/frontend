@@ -55,6 +55,14 @@ class Profile extends React.Component<ProfileProps> {
         [0, 0, 0, 0]
       );
 
+      // Performs boundary checks if denominator is 0 or if it exceeds 1 (100%)
+      const getFrac = (num: number, den: number): number => {
+        return den <= 0 || num / den > 1
+          ? 1
+          : num / den;
+      };
+
+      // Given a fraction between 0 and 1 inclusive, returns the corresponding Intent (colour)
       const parseFrac = (frac: number): Intent => {
         return frac < 0
           ? Intent.NONE
@@ -67,6 +75,7 @@ class Profile extends React.Component<ProfileProps> {
                 : Intent.DANGER;
       };
 
+      // Given an assessment category, return its icon
       const renderIcon = (category: AssessmentCategory) => {
         switch (category) {
           case AssessmentCategories.Mission:
@@ -103,28 +112,28 @@ class Profile extends React.Component<ProfileProps> {
                 icon={renderIcon(item.category)}
                 title={item.title}
               >
-              {item.maxGrade <= 0 ? '' :
+              {item.maxGrade <= 0 && item.grade === 0 ? '' :
                 <div className='grade-details'>
                   <div className='title'>Grade</div>
                   <div className='value'>{item.grade} / {item.maxGrade}</div>
                   <ProgressBar
                     animate={false}
                     className='value-bar'
-                    intent={parseFrac(item.grade / item.maxGrade)}
+                    intent={parseFrac(getFrac(item.grade, item.maxGrade))}
                     stripes={false}
-                    value={item.grade / item.maxGrade} />
+                    value={getFrac(item.grade, item.maxGrade)} />
                 </div>
               }
-              {item.maxXp <= 0 ? '' :
+              {item.maxXp <= 0 && item.xp === 0 ? '' :
                 <div className='xp-details'>
                   <div className='title'>XP</div>
                   <div className='value'>{item.xp} / {item.maxXp}</div>
                   <ProgressBar
                     animate={false}
                     className='value-bar'
-                    intent={parseFrac(item.xp / item.maxXp)}
+                    intent={parseFrac(getFrac(item.xp, item.maxXp))}
                     stripes={false}
-                    value={item.xp / item.maxXp} />
+                    value={getFrac(item.xp, item.maxXp)} />
                 </div>
               }
               </Callout>
@@ -145,28 +154,28 @@ class Profile extends React.Component<ProfileProps> {
             <div className="profile-grade">
               <Spinner
                 className="grade-spinner"
-                intent={parseFrac(currentGrade / maxGrade)}
+                intent={parseFrac(getFrac(currentGrade, maxGrade))}
                 size={144}
-                value={currentGrade / maxGrade}
+                value={getFrac(currentGrade, maxGrade)}
               />
               <div className="type">Grade</div>
               <div className="total-value">
                 {currentGrade} / {maxGrade}
               </div>
-              <div className="percentage">{((currentGrade / maxGrade) * 100).toFixed(2)}%</div>
+              <div className="percentage">{(getFrac(currentGrade, maxGrade) * 100).toFixed(2)}%</div>
             </div>
             <div className="profile-xp">
               <Spinner
                 className="xp-spinner"
-                intent={parseFrac(currentXp / maxXp)}
+                intent={parseFrac(getFrac(currentXp, maxXp))}
                 size={144}
-                value={currentXp / maxXp}
+                value={getFrac(currentXp, maxXp)}
               />
               <div className="type">XP</div>
               <div className="total-value">
                 {currentXp} / {maxXp}
               </div>
-              <div className="percentage">{((currentXp / maxXp) * 100).toFixed(2)}%</div>
+              <div className="percentage">{(getFrac(currentXp, maxXp) * 100).toFixed(2)}%</div>
             </div>
           </div>
           <div className="profile-callouts">
