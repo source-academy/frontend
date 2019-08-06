@@ -14,9 +14,9 @@ import ProfileCard from './ProfileCard';
 type ProfileProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
-  assessmentOverviews?: IAssessmentOverview[];
   name?: string;
   role?: Role;
+  assessmentOverviews?: IAssessmentOverview[];
 };
 
 export type OwnProps = {
@@ -134,7 +134,7 @@ class Profile extends React.Component<ProfileProps, {}> {
             <div className="profile-progress">
               <div className="profile-grade">
                 <Spinner
-                  className="grade-spinner"
+                  className="profile-spinner"
                   intent={parseFrac(getFrac(currentGrade, maxGrade))}
                   size={144}
                   value={getFrac(currentGrade, maxGrade)}
@@ -149,7 +149,7 @@ class Profile extends React.Component<ProfileProps, {}> {
               </div>
               <div className="profile-xp">
                 <Spinner
-                  className="xp-spinner"
+                  className="profile-spinner"
                   intent={parseFrac(getFrac(currentXp, maxXp))}
                   size={144}
                   value={getFrac(currentXp, maxXp)}

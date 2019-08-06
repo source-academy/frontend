@@ -1,71 +1,102 @@
+import { mount } from 'enzyme';
 import * as React from 'react';
 
-import { shallow } from 'enzyme';
-
-import Profile from '../Profile';
-
+import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI';
 import { Role } from '../../../reducers/states';
 
-test('Profile renders "no XP, no Grade and Staff role" correctly', () => {
+import { MemoryRouter } from 'react-router-dom';
+import { AssessmentStatuses } from '../../../components/assessment/assessmentShape';
+import Profile from '../Profile';
+
+const mockNoClosedAssessmentOverviews = mockAssessmentOverviews.filter(
+  item => item.status !== AssessmentStatuses.submitted
+);
+
+/*  ===== Tester comments =====
+  Issue:
+    https://github.com/airbnb/enzyme/issues/1112
+  Description:
+    react-router's <NavLink> component is used in ProfileCard to render a navigation link to an
+    assessment when its condensed assessment card is clicked - this NavLink relies on React context
+    to work; mounting the component normally will result in the following exception being thrown:
+      | Invariant Violation: You should not use <Route> or withRouter() outside a <Router>
+  Fix:
+    For testing purposes, wrap any components containing <NavLink> components with a dummy react-router
+    <MemoryRouter> component, prior to mounting with Enzyme
+    -- recommendation from https://reacttraining.com/react-router/web/guides/testing
+*/
+
+test('Profile renders correctly when there are no closed assessments', () => {
   const props = {
-    grade: 0,
-    maxGrade: 99,
-    maxXp: 99,
     name: 'yeet',
-    role: Role.Staff,
-    xp: 0,
+    role: Role.Student,
+    assessmentOverviews: mockNoClosedAssessmentOverviews,
     isOpen: true,
     handleAssessmentOverviewFetch: () => {},
     onClose: () => {}
   };
-  const tree = shallow(<Profile {...props} />);
+  const tree = mount(
+    <MemoryRouter initialEntries={['/']}>
+      <Profile {...props} />
+    </MemoryRouter>
+  );
   expect(tree.debug()).toMatchSnapshot();
+  // Expect the placeholder <div> to be rendered
+  const placeholders = tree.find('.profile-placeholder').hostNodes();
+  expect(placeholders).toHaveLength(1);
+  expect(placeholders.getDOMNode().textContent).toEqual(
+    'There are no closed assessments to render grade and XP of.'
+  );
+  // Expect none of the other wrapper HTML <div> elements to be rendered
+  expect(
+    tree
+      .find('.profile-progress')
+      .hostNodes()
+      .exists()
+  ).toEqual(false);
+  expect(
+    tree
+      .find('.profile-callouts')
+      .hostNodes()
+      .exists()
+  ).toEqual(false);
 });
 
-test('Profile renders "no XP, no Grade and Student role" correctly', () => {
+test('Profile renders correctly when there are closed assessments', () => {
   const props = {
-    grade: 0,
-    maxGrade: 99,
-    maxXp: 99,
     name: 'yeeet',
-    role: Role.Student,
-    xp: 0,
-    isOpen: true,
-    handleAssessmentOverviewFetch: () => {},
-    onClose: () => {}
-  };
-  const tree = shallow(<Profile {...props} />);
-  expect(tree.debug()).toMatchSnapshot();
-});
-
-test('Profile renders with XP, Grade and Student role" correctly', () => {
-  const props = {
-    grade: 33,
-    maxGrade: 99,
-    maxXp: 99,
-    name: 'yeeeet',
-    role: Role.Student,
-    xp: 66,
-    isOpen: true,
-    handleAssessmentOverviewFetch: () => {},
-    onClose: () => {}
-  };
-  const tree = shallow(<Profile {...props} />);
-  expect(tree.debug()).toMatchSnapshot();
-});
-
-test('Profile renders with XP, Grade and Staff role" correctly', () => {
-  const props = {
-    grade: 33,
-    maxGrade: 99,
-    maxXp: 99,
-    name: 'yeeeeet',
     role: Role.Staff,
-    xp: 66,
+    assessmentOverviews: mockAssessmentOverviews,
     isOpen: true,
     handleAssessmentOverviewFetch: () => {},
     onClose: () => {}
   };
-  const tree = shallow(<Profile {...props} />);
+  const tree = mount(
+    <MemoryRouter initialEntries={['/']}>
+      <Profile {...props} />
+    </MemoryRouter>
+  );
   expect(tree.debug()).toMatchSnapshot();
+  // Expect the placeholder <div> to NOT be rendered
+  expect(
+    tree
+      .find('.profile-placeholder')
+      .hostNodes()
+      .exists()
+  ).toEqual(false);
+
+  // Expect the correct number of each of the other HTML elements to be rendered
+  ['.profile-spinner', '.type', '.total-value', '.percentage'].forEach(className => {
+    expect(tree.find(className).hostNodes()).toHaveLength(2);
+  });
+
+  const numClosedAssessments =
+    mockAssessmentOverviews.length - mockNoClosedAssessmentOverviews.length;
+  expect(tree.find('.profile-summary-navlink').hostNodes()).toHaveLength(numClosedAssessments);
+  expect(tree.find('.profile-summary-callout').hostNodes()).toHaveLength(numClosedAssessments);
+  expect(tree.find('.grade-details').hostNodes()).toHaveLength(3);
+  expect(tree.find('.xp-details').hostNodes()).toHaveLength(4);
+  ['.title', '.value', '.value-bar'].forEach(className => {
+    expect(tree.find(className).hostNodes()).toHaveLength(7);
+  });
 });
