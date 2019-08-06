@@ -108,5 +108,64 @@ div.#{$ns}-dialog.help {
         }
       }
     }
+
+    div.profile-callouts {
+      flex-grow: 1;
+      flex-shrink: 1;
+      overflow-y: auto;
+      
+      .profile-summary-callout {
+        line-height: 1em;
+        padding: 4px 12px 6px 30px;
+
+        &:hover {
+          background-color: rgba(138, 155, 168, 0.25)
+        }
+
+        h4 {
+          font-size: 1.1em;
+          font-weight: bold;
+        }
+
+        .#{$ns}-icon {
+          position: absolute;
+          top: 6px;
+          left: 6px;
+          
+          svg {
+            height: 18px;
+            width: 18px;
+          }
+        }
+
+        .grade-details, .xp-details {
+          & > * {
+            display: inline-block;
+          }
+
+          .title {
+            width: 12%;
+            text-align: left;
+          }
+
+          .value {
+            width: 35%;
+            text-align: center;
+          }
+
+          .value-bar {
+            width: 53%;
+          }
+        }
+
+        .xp-details {
+          margin-top: 0.2em;
+        }
+      }
+
+      .profile-summary-callout:not(:last-child) {
+        margin-bottom: 0.25em;
+      }
+    }
   }
 }

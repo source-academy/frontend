@@ -1,14 +1,16 @@
 import {
+  Callout,
   Drawer,
   Intent,
   NonIdealState,
+  ProgressBar,
   Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { Role } from '../../reducers/states';
-import { AssessmentStatuses, IAssessmentOverview } from '../assessment/assessmentShape';
+import { AssessmentCategories, AssessmentCategory, AssessmentStatuses, IAssessmentOverview } from '../assessment/assessmentShape';
 
 type ProfileProps = OwnProps & StateProps;
 
@@ -52,6 +54,62 @@ class Profile extends React.Component<ProfileProps> {
                 : Intent.DANGER;
       };
 
+      const renderIcon = (category: AssessmentCategory) => {
+        switch (category) {
+          case AssessmentCategories.Mission:
+            return IconNames.FLAME;
+          case AssessmentCategories.Sidequest:
+            return IconNames.LIGHTBULB;
+          case AssessmentCategories.Path:
+            return IconNames.PREDICTIVE_ANALYSIS;
+          case AssessmentCategories.Contest:
+            return IconNames.COMPARISON;
+          default:
+            // For rendering hidden assessments not visible to the student
+            // e.g. studio participation marks
+            return IconNames.PULSE;
+          }
+      };
+
+      // Build condensed assessment cards from an array of assessments
+      const summaryCallouts = this.props.assessmentOverviews!
+        .filter( (item) => item.status === AssessmentStatuses.submitted )
+        .map( (item) => {
+          return (
+            <Callout
+                className='profile-summary-callout'
+                key={`${item.title}-${item.id}`}
+                icon={renderIcon(item.category)}
+                title={item.title}
+              >
+              {item.maxGrade <= 0 ? '' :
+                <div className='grade-details'>
+                  <div className='title'>Grade</div>
+                  <div className='value'>{item.grade} / {item.maxGrade}</div>
+                  <ProgressBar
+                    animate={false}
+                    className='value-bar'
+                    intent={parseFrac(item.grade / item.maxGrade)}
+                    stripes={false}
+                    value={item.grade / item.maxGrade} />
+                </div>
+              }
+              {item.maxXp <= 0 ? '' :
+                <div className='xp-details'>
+                  <div className='title'>XP</div>
+                  <div className='value'>{item.xp} / {item.maxXp}</div>
+                  <ProgressBar
+                    animate={false}
+                    className='value-bar'
+                    intent={parseFrac(item.xp / item.maxXp)}
+                    stripes={false}
+                    value={item.xp / item.maxXp} />
+                </div>
+              }
+            </Callout>
+          );
+        });
+
       // Compute the user's maximum total grade and XP from submitted assessments
       content = (
         <div className='profile-content'>
@@ -88,6 +146,9 @@ class Profile extends React.Component<ProfileProps> {
               </div>
               <div className="percentage">{((currentXp / maxXp) * 100).toFixed(2)}%</div>
             </div>
+          </div>
+          <div className="profile-callouts">
+              {summaryCallouts}
           </div>
         </div>
       );
