@@ -20,7 +20,7 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
-import { ControlBarProps } from '../workspace/ControlBar';
+import { ControlBarProps } from '../workspace/controlBar/ControlBar';
 import {
   ClearButton,
   EvalButton,
@@ -30,7 +30,7 @@ import {
   ResetButton,
   RunButton,
   SaveButton
-} from '../workspace/controlBar';
+} from '../workspace/controlBar/index';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';

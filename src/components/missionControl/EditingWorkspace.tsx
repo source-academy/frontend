@@ -18,7 +18,7 @@ import {
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
-import { ControlBarProps } from '../workspace/ControlBar';
+import { ControlBarProps } from '../workspace/controlBar/ControlBar';
 import {
   ClearButton,
   EvalButton,
@@ -29,7 +29,7 @@ import {
   RunButton,
   SaveButton,
   ToggleEditModeButton
-} from '../workspace/controlBar';
+} from '../workspace/controlBar/index';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {

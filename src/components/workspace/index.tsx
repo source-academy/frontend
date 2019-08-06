@@ -2,7 +2,7 @@ import Resizable, { ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 import { Prompt } from 'react-router';
 
-import ControlBar, { ControlBarProps } from './ControlBar';
+import ControlBar, { ControlBarProps } from './controlBar/ControlBar';
 import Editor, { IEditorProps } from './Editor';
 import MCQChooser, { IMCQChooserProps } from './MCQChooser';
 import Repl, { IReplProps } from './Repl';
