@@ -357,7 +357,7 @@ export function* evalCode(
   context.runtime.debuggerOn =
     (actionType === actionTypes.EVAL_EDITOR || actionType === actionTypes.DEBUG_RESUME) &&
     context.chapter > 2;
-  if (!context.runtime.debuggerOn) {
+  if (!context.runtime.debuggerOn && context.chapter > 2) {
     inspectorUpdate(undefined); // effectively resets the interface
   }
   const { result, interrupted, paused } = yield race({
