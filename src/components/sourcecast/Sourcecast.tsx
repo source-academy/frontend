@@ -6,6 +6,13 @@ import * as React from 'react';
 import { InterpreterOutput, SideContentType } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
+import {
+  AutorunButtons,
+  ChapterSelect,
+  ClearButton,
+  EvalButton,
+  ExternalLibrarySelect
+} from '../workspace/controlBar/index';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
@@ -107,6 +114,55 @@ class Sourcecast extends React.Component<ISourcecastProps> {
   }
 
   public render() {
+    const autorunButtons = (
+      <AutorunButtons
+        handleDebuggerPause={this.props.handleDebuggerPause}
+        handleDebuggerReset={this.props.handleDebuggerReset}
+        handleDebuggerResume={this.props.handleDebuggerResume}
+        handleEditorEval={this.props.handleEditorEval}
+        handleInterruptEval={this.props.handleInterruptEval}
+        handleToggleEditorAutorun={this.props.handleToggleEditorAutorun}
+        isDebugging={this.props.isDebugging}
+        isEditorAutorun={this.props.isEditorAutorun}
+        isRunning={this.props.isRunning}
+        key="autorun"
+      />
+    );
+
+    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) =>
+      this.props.handleChapterSelect(chapter);
+
+    const chapterSelect = (
+      <ChapterSelect
+        handleChapterSelect={chapterSelectHandler}
+        sourceChapter={this.props.sourceChapter}
+        key="chapter"
+      />
+    );
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const externalSelectHandler = ({ name }: { name: ExternalLibraryName }, e: any) =>
+      this.props.handleExternalSelect(name);
+
+    const externalLibrarySelect = (
+      <ExternalLibrarySelect
+        externalLibraryName={this.props.externalLibraryName}
+        handleExternalSelect={externalSelectHandler}
+        key="external_library"
+      />
+    );
+
     const editorProps: ISourcecastEditorProps = {
       codeDeltasToApply: this.props.codeDeltasToApply,
       editorReadonly: this.props.editorReadonly,
@@ -123,32 +179,8 @@ class Sourcecast extends React.Component<ISourcecastProps> {
     };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
-        editorValue: this.props.editorValue,
-        externalLibraryName: this.props.externalLibraryName,
-        handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
-          this.props.handleChapterSelect(chapter),
-        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
-          this.props.handleExternalSelect(name),
-        handleEditorEval: this.props.handleEditorEval,
-        handleEditorValueChange: this.props.handleEditorValueChange,
-        handleInterruptEval: this.props.handleInterruptEval,
-        handleReplEval: this.props.handleReplEval,
-        handleReplOutputClear: this.props.handleReplOutputClear,
-        handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
-        handleDebuggerPause: this.props.handleDebuggerPause,
-        handleDebuggerResume: this.props.handleDebuggerResume,
-        handleDebuggerReset: this.props.handleDebuggerReset,
-        hasChapterSelect: true,
-        hasCollabEditing: false,
-        hasEditorAutorunButton: true,
-        hasSaveButton: false,
-        hasShareButton: false,
-        isEditorAutorun: this.props.isEditorAutorun,
-        isRunning: this.props.isRunning,
-        isDebugging: this.props.isDebugging,
-        enableDebugging: this.props.enableDebugging,
-        questionProgress: null,
-        sourceChapter: this.props.sourceChapter
+        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
+        replButtons: [evalButton, clearButton]
       },
       customEditor: <SourcecastEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
