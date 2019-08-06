@@ -321,6 +321,73 @@ $code-color-error: #ff4444;
     .#{$ns}-tab-list {
       justify-content: center;
     }
+
+    // Specific CSS for the Substituter tab, since REPL is hidden
+    ##{$ns}-tab-panel_side-content-tabs_subst_visualiser {
+      height: 100%;
+      margin-top: -45px;
+      overflow: hidden;
+
+      .side-content-text {
+        height: 100%;
+        margin-top: 70px;
+
+        .sa-substituter {
+          margin: 11px;
+          height: unset;
+
+          .#{$ns}-slider-label {
+            width: max-content;
+            display: none;
+
+            &:first-child,
+            &:last-child {
+              display: inline;
+            }
+          }
+
+          .#{$ns}-card {
+            background-color: $cadet-color-1;
+            padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+            margin: 2rem 0 0.5rem 0;
+
+            pre {
+              background-color: transparent;
+              box-shadow: none;
+              color: $code-color-result;
+              padding: 0px;
+              margin: 0px;
+              /**
+              * white-space, word-wrap and word-break
+              * are specified to allow all output to wrap.
+              */
+              white-space: pre-wrap;
+              word-wrap: break-word;
+              word-break: break-word;
+              /**
+              * Use same fonts as ace-editor for
+              * output. Taken from react-ace
+              * sourcecode, font size modified.
+              */
+              font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+                monospace;
+
+              .canvas-container {
+                display: flex;
+                padding: 0.5rem 0 0.5rem 0;
+                align-items: center;
+                justify-content: center;
+              }
+
+              canvas {
+                height: 20rem;
+                width: 20rem;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   .side-content-tab {
@@ -392,58 +459,6 @@ $code-color-error: #ff4444;
         padding: 10px;
         background: $cadet-color-1;
         border-radius: 0 0 3px 3px;
-      }
-    }
-
-    .sa-substituter {
-      margin: 11px;
-
-      .#{$ns}-slider {
-        margin-bottom: 15px;
-
-        .#{$ns}-slider-label {
-          width: min-content;
-        }
-      }
-
-      .#{$ns}-card {
-        background-color: $cadet-color-1;
-        padding: 0.4rem 0.6rem 0.4rem 0.6rem;
-        margin: 0 0 0.5rem 0;
-
-        pre {
-          background-color: transparent;
-          box-shadow: none;
-          color: $code-color-result;
-          padding: 0px;
-          margin: 0px;
-          /**
-           * white-space, word-wrap and word-break
-           * are specified to allow all output to wrap.
-           */
-          white-space: pre-wrap;
-          word-wrap: break-word;
-          word-break: break-word;
-          /**
-           * Use same fonts as ace-editor for
-           * output. Taken from react-ace
-           * sourcecode, font size modified.
-           */
-          font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
-            monospace;
-
-          .canvas-container {
-            display: flex;
-            padding: 0.5rem 0 0.5rem 0;
-            align-items: center;
-            justify-content: center;
-          }
-
-          canvas {
-            height: 20rem;
-            width: 20rem;
-          }
-        }
       }
     }
   }

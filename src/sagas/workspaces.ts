@@ -365,8 +365,15 @@ export function* evalCode(
   const substIsActive: boolean = yield select(
     (state: IState) => (state.playground as IPlaygroundState).usingSubst
   );
-  if (substIsActive) {
+  const substActiveAndCorrectChapter =
+    context.chapter <= 2 && workspaceLocation === WorkspaceLocations.playground && substIsActive;
+  if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
+    // icon to blink
+    const icon = document.getElementById(SideContentType.substVisualizer + '-icon');
+    if (icon) {
+      icon.classList.add('side-content-tab-alert');
+    }
   }
 
   const { result, interrupted, paused } = yield race({
@@ -376,7 +383,7 @@ export function* evalCode(
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
-            useSubst: substIsActive
+            useSubst: substActiveAndCorrectChapter
           }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,

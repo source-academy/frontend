@@ -16,13 +16,11 @@ export interface IReplProps {
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
-  substVisualizerRender?: (newOutput: string[]) => void;
   hidden?: boolean;
 }
 
 export interface IOutputProps {
   output: InterpreterOutput;
-  substVisualizerRender?: (newOutput: string[]) => void;
 }
 
 class Repl extends React.PureComponent<IReplProps, {}> {
@@ -31,9 +29,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
   }
 
   public render() {
-    const cards = this.props.output.map((slice, index) => (
-      <Output output={slice} key={index} substVisualizerRender={this.props.substVisualizerRender} />
-    ));
+    const cards = this.props.output.map((slice, index) => <Output output={slice} key={index} />);
     const inputProps: IReplInputProps = this.props as IReplInputProps;
     return (
       <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
@@ -67,9 +63,6 @@ export const Output: React.SFC<IOutputProps> = (props: IOutputProps) => {
       );
     case 'result':
       if (props.output.value instanceof Array) {
-        if (props.substVisualizerRender !== undefined) {
-          props.substVisualizerRender(props.output.value);
-        }
         // Gets the final output of the array of statements
         const lastOutput = props.output.value.length - 1;
         return (

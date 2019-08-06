@@ -16,7 +16,7 @@ export interface ISubstVisualizerState {
 const SubstDefaultText = () => {
   return (
     <div>
-      <p id="substituter-default-text" className={Classes.RUNNING_TEXT}>
+      <div id="substituter-default-text" className={Classes.RUNNING_TEXT}>
         Welcome to the Substituter!
         <br />
         <br />
@@ -46,7 +46,7 @@ const SubstDefaultText = () => {
         <br />
         Note that these shortcuts are only active when the browser focus is on this panel (click on
         the slider or the text!).
-      </p>
+      </div>
     </div>
   );
 };

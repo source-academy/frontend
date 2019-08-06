@@ -23,6 +23,7 @@ export type WorkspaceProps = {
   replProps: IReplProps;
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
+  sideContentIsResizeable?: boolean;
 };
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
@@ -48,6 +49,14 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * REPL from being flush with the top of the editor
    */
   public render() {
+    const sideContent = <SideContent {...this.props.sideContentProps} />;
+    const resizableSideContent = (
+      <Resizable {...this.sideContentResizableProps()}>
+        {sideContent}
+        <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
+      </Resizable>
+    );
+
     return (
       <div className="workspace">
         {this.props.hasUnsavedChanges ? (
@@ -62,10 +71,9 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
             {this.createWorkspaceInput(this.props)}
           </Resizable>
           <div className="right-parent">
-            <Resizable {...this.sideContentResizableProps()}>
-              <SideContent {...this.props.sideContentProps} />
-              <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
-            </Resizable>
+            {this.props.sideContentIsResizeable === undefined || this.props.sideContentIsResizeable
+              ? resizableSideContent
+              : sideContent}
             <Repl {...this.props.replProps} />
           </div>
         </div>

@@ -104,8 +104,8 @@ export interface IDispatchProps {
 
 type PlaygroundState = {
   isGreen: boolean;
-  substVisualizerContent: string[];
-  onSubstTab: boolean;
+  selectedTab: SideContentType;
+  hasBreakpoints: boolean;
 };
 
 class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
@@ -116,8 +116,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     super(props);
     this.state = {
       isGreen: false,
-      substVisualizerContent: [],
-      onSubstTab: false
+      selectedTab: SideContentType.introduction,
+      hasBreakpoints: false
     };
     this.handlers.goGreen = this.toggleIsGreen.bind(this);
     (window as any).thePlayground = this;
@@ -127,7 +127,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     const substVisualizerTab: SideContentTab = {
       label: 'Substituter',
       iconName: IconNames.STOP,
-      body: <SubstVisualizer content={this.state.substVisualizerContent} />,
+      body: <SubstVisualizer content={this.processArrayOutput(this.props.output)} />,
       id: SideContentType.substVisualizer
     };
 
@@ -146,8 +146,18 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       />
     );
 
-    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) =>
+    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) => {
+      if (
+        (chapter <= 2 && this.state.hasBreakpoints) ||
+        this.state.selectedTab === SideContentType.substVisualizer
+      ) {
+        this.props.handleUsingSubst(true);
+      }
+      if (chapter > 2) {
+        this.props.handleUsingSubst(false);
+      }
       this.props.handleChapterSelect(chapter);
+    };
     const chapterSelect = (
       <ChapterSelect
         handleChapterSelect={chapterSelectHandler}
@@ -156,17 +166,19 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       />
     );
 
-    const clearButton = this.state.onSubstTab ? null : (
-      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
-    );
+    const clearButton =
+      this.state.selectedTab === SideContentType.substVisualizer ? null : (
+        <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      );
 
-    const evalButton = this.state.onSubstTab ? null : (
-      <EvalButton
-        handleReplEval={this.props.handleReplEval}
-        isRunning={this.props.isRunning}
-        key="eval_repl"
-      />
-    );
+    const evalButton =
+      this.state.selectedTab === SideContentType.substVisualizer ? null : (
+        <EvalButton
+          handleReplEval={this.props.handleReplEval}
+          isRunning={this.props.isRunning}
+          key="eval_repl"
+        />
+      );
 
     const changeExecutionTimeHandler = (execTime: number) =>
       this.props.handleChangeExecTime(execTime);
@@ -212,8 +224,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       playgroundIntroductionTab,
       listVisualizerTab,
       inspectorTab,
-      envVisualizerTab,
-      substVisualizerTab
+      envVisualizerTab
     ];
 
     if (
@@ -221,6 +232,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       this.props.externalLibraryName === ExternalLibraryNames.ALL
     ) {
       tabs.push(videoDisplayTab);
+    }
+
+    if (this.props.sourceChapter <= 2) {
+      tabs.push(substVisualizerTab);
     }
 
     const workspaceProps: WorkspaceProps = {
@@ -246,7 +261,35 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         isEditorAutorun: this.props.isEditorAutorun,
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
-        handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+        handleEditorUpdateBreakpoints: (breakpoints: string[]) => {
+          // get rid of holes in array
+          const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
+          if (numberOfBreakpoints > 0) {
+            this.setState({
+              ...this.state,
+              hasBreakpoints: true
+            });
+            if (this.props.sourceChapter <= 2) {
+              /**
+               * There are breakpoints set on Source Chapter 2, so we set the
+               * Redux state for the editor to evaluate to the substituter
+               */
+
+              this.props.handleUsingSubst(true);
+            }
+          }
+          if (numberOfBreakpoints === 0) {
+            this.setState({
+              ...this.state,
+              hasBreakpoints: false
+            });
+
+            if (this.state.selectedTab !== SideContentType.substVisualizer) {
+              this.props.handleUsingSubst(false);
+            }
+          }
+          this.props.handleEditorUpdateBreakpoints(breakpoints);
+        },
         handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
       },
       editorHeight: this.props.editorHeight,
@@ -261,16 +304,16 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
-        substVisualizerRender: this.props.usingSubst ? this.updateSubstVisualizer : undefined,
-        hidden: this.state.onSubstTab
+        hidden: this.state.selectedTab === SideContentType.substVisualizer
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        defaultSelectedTabId: SideContentType.introduction,
+        defaultSelectedTabId: this.state.selectedTab,
         handleActiveTabChange: this.props.handleActiveTabChange,
         onChange: this.onChangeTabs,
         tabs
-      }
+      },
+      sideContentIsResizeable: this.state.selectedTab !== SideContentType.substVisualizer
     };
 
     return (
@@ -297,30 +340,27 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       return;
     }
 
-    if (newTabId === SideContentType.substVisualizer) {
+    if (this.props.sourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
       this.props.handleUsingSubst(true);
-      this.setState({
-        ...this.state,
-        onSubstTab: true
-      });
-      return;
     }
 
-    if (prevTabId === SideContentType.substVisualizer) {
+    if (prevTabId === SideContentType.substVisualizer && !this.state.hasBreakpoints) {
       this.props.handleUsingSubst(false);
-      this.setState({
-        ...this.state,
-        onSubstTab: false
-      });
-      return;
     }
+
+    this.setState({
+      ...this.state,
+      selectedTab: newTabId
+    });
   };
 
-  private updateSubstVisualizer = (newOutput: string[]) => {
-    return this.setState({
-      ...this.state,
-      substVisualizerContent: newOutput
-    });
+  private processArrayOutput = (output: InterpreterOutput[]) => {
+    const editorOutput = output[0];
+    if (editorOutput && editorOutput.type === 'result' && editorOutput.value instanceof Array) {
+      return editorOutput.value;
+    } else {
+      return [];
+    }
   };
 
   private toggleIsGreen() {
