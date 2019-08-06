@@ -10,6 +10,16 @@ import { LINKS } from '../utils/constants';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Markdown from './commons/Markdown';
 import Workspace, { WorkspaceProps } from './workspace';
+import {
+  AutorunButtons,
+  ChapterSelect,
+  ClearButton,
+  EvalButton,
+  ExecutionTime,
+  ExternalLibrarySelect,
+  SessionButtons,
+  ShareButton
+} from './workspace/controlBar';
 import { SideContentTab } from './workspace/side-content';
 import EnvVisualizer from './workspace/side-content/EnvVisualizer';
 import Inspector from './workspace/side-content/Inspector';
@@ -120,6 +130,83 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       body: <SubstVisualizer content={this.state.substVisualizerContent} />,
       id: SideContentType.substVisualizer
     };
+    
+    const autorunButtons = (
+      <AutorunButtons
+        handleDebuggerPause={this.props.handleDebuggerPause}
+        handleDebuggerReset={this.props.handleDebuggerReset}
+        handleDebuggerResume={this.props.handleDebuggerResume}
+        handleEditorEval={this.props.handleEditorEval}
+        handleInterruptEval={this.props.handleInterruptEval}
+        handleToggleEditorAutorun={this.props.handleToggleEditorAutorun}
+        isDebugging={this.props.isDebugging}
+        isEditorAutorun={this.props.isEditorAutorun}
+        isRunning={this.props.isRunning}
+        key="autorun"
+      />
+    );
+
+    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) =>
+      this.props.handleChapterSelect(chapter);
+    const chapterSelect = (
+      <ChapterSelect
+        handleChapterSelect={chapterSelectHandler}
+        sourceChapter={this.props.sourceChapter}
+        key="chapter"
+      />
+    );
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const changeExecutionTimeHandler = (execTime: number) =>
+      this.props.handleChangeExecTime(execTime);
+    const executionTime = (
+      <ExecutionTime
+        execTime={this.props.execTime}
+        handleChangeExecTime={changeExecutionTimeHandler}
+        key="execution_time"
+      />
+    );
+
+    const externalLibrarySelectHandler = ({ name }: { name: ExternalLibraryName }, e: any) =>
+      this.props.handleExternalSelect(name);
+    const externalLibrarySelect = (
+      <ExternalLibrarySelect
+        externalLibraryName={this.props.externalLibraryName}
+        handleExternalSelect={externalLibrarySelectHandler}
+        key="external_library"
+      />
+    );
+
+    const sessionButtons = (
+      <SessionButtons
+        editorSessionId={this.props.editorSessionId}
+        editorValue={this.props.editorValue}
+        handleInitInvite={this.props.handleInitInvite}
+        handleInvalidEditorSessionId={this.props.handleInvalidEditorSessionId}
+        handleSetEditorSessionId={this.props.handleSetEditorSessionId}
+        websocketStatus={this.props.websocketStatus}
+        key="session"
+      />
+    );
+
+    const shareButton = (
+      <ShareButton
+        handleGenerateLz={this.props.handleGenerateLz}
+        queryString={this.props.queryString}
+        key="share"
+      />
+    );
 
     const tabs: SideContentTab[] = [
       playgroundIntroductionTab,
@@ -138,42 +225,15 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
-        editorValue: this.props.editorValue,
-        editorSessionId: this.props.editorSessionId,
-        execTime: this.props.execTime,
-        externalLibraryName: this.props.externalLibraryName,
-        handleChangeExecTime: (execTime: number) => this.props.handleChangeExecTime(execTime),
-        handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
-          this.props.handleChapterSelect(chapter),
-        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) =>
-          this.props.handleExternalSelect(name),
-        handleEditorEval: this.props.handleEditorEval,
-        handleEditorValueChange: this.props.handleEditorValueChange,
-        handleGenerateLz: this.props.handleGenerateLz,
-        handleInitInvite: this.props.handleInitInvite,
-        handleInterruptEval: this.props.handleInterruptEval,
-        handleInvalidEditorSessionId: this.props.handleInvalidEditorSessionId,
-        handleReplEval: this.props.handleReplEval,
-        handleReplOutputClear: this.props.handleReplOutputClear,
-        handleSetEditorSessionId: this.props.handleSetEditorSessionId,
-        handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
-        handleDebuggerPause: this.props.handleDebuggerPause,
-        handleDebuggerResume: this.props.handleDebuggerResume,
-        handleDebuggerReset: this.props.handleDebuggerReset,
-        hasChangeExecTime: true,
-        hasChapterSelect: true,
-        hasCollabEditing: true,
-        hasEditorAutorunButton: true,
-        hasSaveButton: false,
-        hasShareButton: true,
-        isEditorAutorun: this.props.isEditorAutorun,
-        isRunning: this.props.isRunning,
-        isDebugging: this.props.isDebugging,
-        enableDebugging: this.props.enableDebugging,
-        queryString: this.props.queryString,
-        questionProgress: null,
-        sourceChapter: this.props.sourceChapter,
-        websocketStatus: this.props.websocketStatus
+        editorButtons: [
+          autorunButtons,
+          shareButton,
+          chapterSelect,
+          externalLibrarySelect,
+          sessionButtons,
+          executionTime
+        ],
+        replButtons: [evalButton, clearButton]
       },
       editorProps: {
         editorValue: this.props.editorValue,
