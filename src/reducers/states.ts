@@ -43,6 +43,7 @@ export interface IApplicationState {
 
 export interface IPlaygroundState {
   readonly queryString?: string;
+  readonly usingSubst: boolean;
 }
 
 interface IAssessmentWorkspace extends IWorkspaceState {
@@ -57,8 +58,9 @@ interface IGradingWorkspace extends IWorkspaceState {
   readonly hasUnsavedChanges: boolean;
 }
 
-// tslint:disable-next-line: no-empty-interface
-export interface IPlaygroundWorkspace extends IWorkspaceState {}
+export interface IPlaygroundWorkspace extends IWorkspaceState {
+  readonly usingSubst: boolean;
+}
 
 export interface ISourcecastWorkspace extends IWorkspaceState {
   readonly audioUrl: string;
@@ -234,7 +236,9 @@ export const defaultApplication: IApplicationState = {
   environment: currentEnvironment()
 };
 
-export const defaultPlayground: IPlaygroundState = {};
+export const defaultPlayground: IPlaygroundState = {
+  usingSubst: false
+};
 
 export const defaultEditorValue = '// Type your program in here!';
 
@@ -302,6 +306,7 @@ export enum SideContentType {
   introduction = 'introduction',
   inspector = 'inspector',
   questionOverview = 'question_overview',
+  substVisualizer = 'subst_visualiser',
   toneMatrix = 'tone_matrix'
 }
 
@@ -319,7 +324,8 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     hasUnsavedChanges: false
   },
   playground: {
-    ...createDefaultWorkspace(WorkspaceLocations.playground)
+    ...createDefaultWorkspace(WorkspaceLocations.playground),
+    usingSubst: false
   },
   sourcecast: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),

@@ -248,7 +248,7 @@ $code-color-error: #ff4444;
       }
       .grading-editor-input-parent {
         /** Center the text for numeric input and showing grades. */
-        table.bp3-html-table {
+        table.#{$ns}-html-table {
           border-spacing: 5px;
           width: 100%;
           tbody {
@@ -277,7 +277,7 @@ $code-color-error: #ff4444;
       .grading-editor-draft-buttons {
         margin-top: 10px;
 
-        table.bp3-html-table {
+        table.#{$ns}-html-table {
           table-layout: fixed;
           margin: auto;
           width: 100%;
@@ -367,10 +367,10 @@ $code-color-error: #ff4444;
           display: inherit;
           padding: 5px 0px;
 
-          .bp3-button-group {
+          .#{$ns}-button-group {
             width: max-content;
 
-            .bp3-active {
+            .#{$ns}-active {
               pointer-events: none;
             }
           }
@@ -381,7 +381,7 @@ $code-color-error: #ff4444;
           }
         }
 
-        .bp3-divider {
+        .#{$ns}-divider {
           margin: 0;
         }
       }
@@ -392,6 +392,14 @@ $code-color-error: #ff4444;
         padding: 10px;
         background: $cadet-color-1;
         border-radius: 0 0 3px 3px;
+      }
+    }
+
+    .sa-substituter {
+      margin: 11px;
+
+      .#{$ns}-slider-label {
+        width: min-content;
       }
     }
   }
@@ -450,7 +458,7 @@ $code-color-error: #ff4444;
 
   .grading-result-table {
     // Hide grey line appearing in grading result tables
-    table.bp3-html-table tbody tr:first-child {
+    table.#{$ns}-html-table tbody tr:first-child {
       td,
       th {
         -webkit-box-shadow: inset 0 0 1px 0 $cadet-color-2;
@@ -525,7 +533,7 @@ $code-color-error: #ff4444;
     }
   }
 
-  .bp3-divider {
+  .#{$ns}-divider {
     margin: 0 0 0.5rem 0;
   }
 
@@ -682,7 +690,7 @@ $code-color-error: #ff4444;
 
   .AutograderCard,
   .ResultCard {
-    /* Wrapper container (bp3's Card) for each testcase and autograder result */
+    /* Wrapper container (Blueprint Card) for each testcase and autograder result */
     .#{$ns}-card {
       border-color: rgb(26, 37, 48);
       border-style: solid;
@@ -756,7 +764,7 @@ $code-color-error: #ff4444;
   }
 
   .AutograderCard {
-    /* Nested bp3 Card component (with onClick attached) */
+    /* Nested Blueprint Card component (with onClick attached) */
     .#{$ns}-card {
       .testcase-program,
       .testcase-actual {

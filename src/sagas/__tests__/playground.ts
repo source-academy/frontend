@@ -36,7 +36,8 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace(WorkspaceLocations.playground),
           externalLibrary: ExternalLibraryNames.NONE,
-          editorValue: dummyEditorValue
+          editorValue: dummyEditorValue,
+          usingSubst: false
         }
       }
     };
@@ -58,7 +59,8 @@ describe('Playground saga tests', () => {
         playground: {
           ...createDefaultWorkspace(WorkspaceLocations.playground),
           externalLibrary: ExternalLibraryNames.NONE,
-          editorValue: dummyEditorValue
+          editorValue: dummyEditorValue,
+          usingSubst: false
         }
       }
     };

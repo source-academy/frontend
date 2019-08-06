@@ -16,12 +16,12 @@ export interface IReplProps {
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
-  substVisualizer?: any;
+  substVisualizerRender?: (newOutput: string[]) => void;
 }
 
 export interface IOutputProps {
   output: InterpreterOutput;
-  substVisualizer?: any;
+  substVisualizerRender?: (newOutput: string[]) => void;
 }
 
 class Repl extends React.PureComponent<IReplProps, {}> {
@@ -30,7 +30,9 @@ class Repl extends React.PureComponent<IReplProps, {}> {
   }
 
   public render() {
-    const cards = this.props.output.map((slice, index) => <Output output={slice} key={index} />);
+    const cards = this.props.output.map((slice, index) => (
+      <Output output={slice} key={index} substVisualizerRender={this.props.substVisualizerRender} />
+    ));
     const inputProps: IReplInputProps = this.props as IReplInputProps;
     return (
       <div className="Repl">
@@ -48,7 +50,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
   }
 }
 
-export const Output: React.SFC<IOutputProps> = props => {
+export const Output: React.SFC<IOutputProps> = (props: IOutputProps) => {
   switch (props.output.type) {
     case 'code':
       return (
@@ -64,13 +66,16 @@ export const Output: React.SFC<IOutputProps> = props => {
       );
     case 'result':
       if (props.output.value instanceof Array) {
-        const theSubstTimeline = (window as any).SubstTimeline;
-
-        if (theSubstTimeline) {
-          theSubstTimeline.updateTrees(props.output.value);
+        if (props.substVisualizerRender !== undefined) {
+          props.substVisualizerRender(props.output.value);
         }
-
-        return <Card>{theSubstTimeline ? theSubstTimeline.getFinalValue() : ''}</Card>;
+        // Gets the final output of the array of statements
+        const lastOutput = props.output.value.length - 1;
+        return (
+          <Card>
+            <Pre className="resultOutput">{removeSemicolon(props.output.value[lastOutput])}</Pre>
+          </Card>
+        );
       } else if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
@@ -114,6 +119,10 @@ const renderResult = (value: any) => {
   } else {
     return stringify(value);
   }
+};
+
+const removeSemicolon = (result: string) => {
+  return result.replace(';', '');
 };
 
 /* Override handler, so does not trigger when focus is in editor */

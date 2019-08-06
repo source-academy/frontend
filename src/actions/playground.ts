@@ -10,3 +10,8 @@ export const changeQueryString: ActionCreator<actionTypes.IAction> = (queryStrin
   type: actionTypes.CHANGE_QUERY_STRING,
   payload: queryString
 });
+
+export const toggleUsingSubst: ActionCreator<actionTypes.IAction> = (usingSubst: boolean) => ({
+  type: actionTypes.TOGGLE_USING_SUBST,
+  payload: usingSubst
+});

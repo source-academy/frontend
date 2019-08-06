@@ -13,6 +13,7 @@ export const LOG_OUT = 'LOG_OUT';
 /** Playground */
 export const CHANGE_QUERY_STRING = 'CHANGE_QUERY_STRING';
 export const GENERATE_LZ_STRING = 'GENERATE_LZ_STRING';
+export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 
 /** Interpreter */
 export const BEGIN_INTERRUPT_EXECUTION = 'BEGIN_INTERRUPT_EXECUTION';

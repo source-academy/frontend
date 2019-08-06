@@ -1033,7 +1033,8 @@ describe('LOG_OUT', () => {
       highlightedLines: [[1, 2], [3, 4]],
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
-      websocketStatus: 0
+      websocketStatus: 0,
+      usingSubst: false
     };
 
     const logoutDefaultState: IWorkspaceManagerState = {

@@ -26,6 +26,7 @@ import {
   setEditorSessionId,
   setWebsocketStatus,
   toggleEditorAutorun,
+  toggleUsingSubst,
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
@@ -55,7 +56,8 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
   websocketStatus: state.workspaces.playground.websocketStatus,
-  externalLibraryName: state.workspaces.playground.externalLibrary
+  externalLibraryName: state.workspaces.playground.externalLibrary,
+  usingSubst: state.playground.usingSubst
 });
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
@@ -93,6 +95,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),
+      handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst),
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation)

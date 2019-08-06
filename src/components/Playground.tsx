@@ -59,6 +59,7 @@ export interface IStateProps {
   sourceChapter: number;
   websocketStatus: number;
   externalLibraryName: string;
+  usingSubst: boolean;
 }
 
 export interface IDispatchProps {
@@ -84,6 +85,7 @@ export interface IDispatchProps {
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
+  handleUsingSubst: (usingSubst: boolean) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
@@ -92,6 +94,8 @@ export interface IDispatchProps {
 
 type PlaygroundState = {
   isGreen: boolean;
+  substVisualizerContent: string[];
+  usingSubst: boolean;
 };
 
 class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
@@ -100,12 +104,23 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 
   constructor(props: IPlaygroundProps) {
     super(props);
-    this.state = { isGreen: false };
+    this.state = {
+      isGreen: false,
+      substVisualizerContent: [],
+      usingSubst: false
+    };
     this.handlers.goGreen = this.toggleIsGreen.bind(this);
     (window as any).thePlayground = this;
   }
 
   public render() {
+    const substVisualizerTab: SideContentTab = {
+      label: 'Substituter',
+      iconName: IconNames.STOP,
+      body: <SubstVisualizer content={this.state.substVisualizerContent} />,
+      id: SideContentType.substVisualizer
+    };
+
     const tabs: SideContentTab[] = [
       playgroundIntroductionTab,
       listVisualizerTab,
@@ -185,12 +200,14 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        handleReplValueChange: this.props.handleReplValueChange,
+        substVisualizerRender: this.state.usingSubst ? this.updateSubstVisualizer : undefined
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
         defaultSelectedTabId: SideContentType.introduction,
         handleActiveTabChange: this.props.handleActiveTabChange,
+        onChange: this.onChangeTabs,
         tabs
       }
     };
@@ -210,12 +227,46 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     );
   }
 
-  public usingSubst(): boolean {
-    return true; // this.props.activeTab === 2;
-  }
+  private onChangeTabs = (
+    newTabId: SideContentType,
+    prevTabId: SideContentType,
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    if (newTabId === prevTabId) {
+      return;
+    }
+
+    if (newTabId === SideContentType.substVisualizer) {
+      this.props.handleUsingSubst(true);
+      this.setState({
+        ...this.state,
+        usingSubst: true
+      });
+      return;
+    }
+
+    if (prevTabId === SideContentType.substVisualizer) {
+      this.props.handleUsingSubst(false);
+      this.setState({
+        ...this.state,
+        usingSubst: false
+      });
+      return;
+    }
+  };
+
+  private updateSubstVisualizer = (newOutput: string[]) => {
+    return this.setState({
+      ...this.state,
+      substVisualizerContent: newOutput
+    });
+  };
 
   private toggleIsGreen() {
-    this.setState({ isGreen: !this.state.isGreen });
+    this.setState({
+      ...this.state,
+      isGreen: !this.state.isGreen
+    });
   }
 }
 
@@ -251,12 +302,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
   id: SideContentType.envVisualiser
-};
-
-const substVisualizerTab: SideContentTab = {
-  label: 'Substitution Model Visualizer',
-  iconName: IconNames.STOP,
-  body: <SubstVisualizer />
 };
 
 export default Playground;
