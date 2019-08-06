@@ -59,6 +59,11 @@ div.#{$ns}-dialog.help {
       }
     }
 
+    div.profile-placeholder {
+      flex: 0 0 auto;
+      text-align: center;
+    }
+
     div.profile-progress {
       flex: 0 0 auto;
       display: flex;
