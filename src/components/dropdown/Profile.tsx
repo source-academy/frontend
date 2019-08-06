@@ -1,16 +1,15 @@
-import { Callout, Drawer, Intent, NonIdealState, ProgressBar, Spinner } from '@blueprintjs/core';
+import { Drawer, Intent, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { NavLink } from 'react-router-dom';
 import { Role } from '../../reducers/states';
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import {
   AssessmentCategories,
   AssessmentCategory,
   AssessmentStatuses,
   IAssessmentOverview
 } from '../assessment/assessmentShape';
+import ProfileCard from './ProfileCard';
 
 type ProfileProps = DispatchProps & OwnProps & StateProps;
 
@@ -29,7 +28,7 @@ export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
 };
 
-class Profile extends React.Component<ProfileProps> {
+class Profile extends React.Component<ProfileProps, {}> {
   public componentDidMount() {
     if (!this.props.assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
@@ -116,58 +115,15 @@ class Profile extends React.Component<ProfileProps> {
         // Build condensed assessment cards from an array of assessments
         const summaryCallouts = this.props
           .assessmentOverviews!.filter(item => item.status === AssessmentStatuses.submitted)
-          .map(item => {
+          .map((assessment, index) => {
             return (
-              // Make each card navigate the user to the respective assessment
-              <NavLink
-                className="profile-summary-navlink"
-                key={`${item.title}-${item.id}`}
-                target="_blank"
-                to={`/academy/${assessmentCategoryLink(item.category)}/${item.id}/0`}
-                activeClassName="profile-summary-navlink"
-              >
-                <Callout
-                  className="profile-summary-callout"
-                  key={`${item.title}-${item.id}`}
-                  icon={renderIcon(item.category)}
-                  title={item.title}
-                >
-                  {item.maxGrade <= 0 && item.grade === 0 ? (
-                    ''
-                  ) : (
-                    <div className="grade-details">
-                      <div className="title">Grade</div>
-                      <div className="value">
-                        {item.grade} / {item.maxGrade}
-                      </div>
-                      <ProgressBar
-                        animate={false}
-                        className="value-bar"
-                        intent={parseFrac(getFrac(item.grade, item.maxGrade))}
-                        stripes={false}
-                        value={getFrac(item.grade, item.maxGrade)}
-                      />
-                    </div>
-                  )}
-                  {item.maxXp <= 0 && item.xp === 0 ? (
-                    ''
-                  ) : (
-                    <div className="xp-details">
-                      <div className="title">XP</div>
-                      <div className="value">
-                        {item.xp} / {item.maxXp}
-                      </div>
-                      <ProgressBar
-                        animate={false}
-                        className="value-bar"
-                        intent={parseFrac(getFrac(item.xp, item.maxXp))}
-                        stripes={false}
-                        value={getFrac(item.xp, item.maxXp)}
-                      />
-                    </div>
-                  )}
-                </Callout>
-              </NavLink>
+              <ProfileCard
+                key={index}
+                item={assessment}
+                getFrac={getFrac}
+                parseFrac={parseFrac}
+                renderIcon={renderIcon}
+              />
             );
           });
 
