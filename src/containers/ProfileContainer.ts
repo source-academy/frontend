@@ -4,12 +4,11 @@ import Profile, { StateProps } from '../components/dropdown/Profile';
 import { IState } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
-  grade: state.session.grade,
-  maxGrade: state.session.maxGrade,
-  maxXp: state.session.maxXp,
+  assessmentOverviews: state.session.assessmentOverviews,
   name: state.session.name,
-  role: state.session.role,
-  xp: state.session.xp
+  role: state.session.role
 });
 
-export default connect(mapStateToProps)(Profile);
+export default connect(
+  mapStateToProps
+)(Profile);
