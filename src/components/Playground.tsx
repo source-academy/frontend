@@ -19,7 +19,7 @@ import {
   ExternalLibrarySelect,
   SessionButtons,
   ShareButton
-} from './workspace/controlBar';
+} from './workspace/controlBar/index';
 import { SideContentTab } from './workspace/side-content';
 import EnvVisualizer from './workspace/side-content/EnvVisualizer';
 import Inspector from './workspace/side-content/Inspector';
@@ -105,7 +105,7 @@ export interface IDispatchProps {
 type PlaygroundState = {
   isGreen: boolean;
   substVisualizerContent: string[];
-  usingSubst: boolean;
+  onSubstTab: boolean;
 };
 
 class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
@@ -117,7 +117,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     this.state = {
       isGreen: false,
       substVisualizerContent: [],
-      usingSubst: false
+      onSubstTab: false
     };
     this.handlers.goGreen = this.toggleIsGreen.bind(this);
     (window as any).thePlayground = this;
@@ -156,11 +156,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       />
     );
 
-    const clearButton = (
+    const clearButton = this.state.onSubstTab ? null : (
       <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
     );
 
-    const evalButton = (
+    const evalButton = this.state.onSubstTab ? null : (
       <EvalButton
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
@@ -261,7 +261,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
-        substVisualizerRender: this.state.usingSubst ? this.updateSubstVisualizer : undefined
+        substVisualizerRender: this.props.usingSubst ? this.updateSubstVisualizer : undefined,
+        hidden: this.state.onSubstTab
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
@@ -300,7 +301,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       this.props.handleUsingSubst(true);
       this.setState({
         ...this.state,
-        usingSubst: true
+        onSubstTab: true
       });
       return;
     }
@@ -309,7 +310,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       this.props.handleUsingSubst(false);
       this.setState({
         ...this.state,
-        usingSubst: false
+        onSubstTab: false
       });
       return;
     }

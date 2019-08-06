@@ -1,7 +1,9 @@
-import { Classes, Divider, Icon, Slider } from '@blueprintjs/core';
+import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
+
+import { controlButton } from '../../commons';
 
 export interface ISubstVisualizerProps {
   content: string[];
@@ -25,26 +27,35 @@ const SubstDefaultText = () => {
         Alternatively, you may click on the gutter of the editor (where all the line numbers are, on
         the left) to set a breakpoint, and then run the program to show it here!
         <br />
+        <br />
         <Divider />
         Some useful keyboard shortcuts:
         <br />
-        <Icon icon={IconNames.KEY_SHIFT} htmlTitle={'Shift'} />
-        + <Icon icon={IconNames.ARROW_LEFT} htmlTitle={'Left'} />: Move to the previous step
+        {controlButton('Shift', IconNames.KEY_SHIFT)}+ {controlButton('Left', IconNames.ARROW_LEFT)}
+        : Move to the previous step
         <br />
-        <Icon icon={IconNames.KEY_SHIFT} htmlTitle={'Shift'} />
-        + <Icon icon={IconNames.ARROW_RIGHT} htmlTitle={'Right'} />: Move to the next step
+        {controlButton('Shift', IconNames.KEY_SHIFT)}+{' '}
+        {controlButton('Right', IconNames.ARROW_RIGHT)}: Move to the next step
         <br />
-        <Icon icon={IconNames.KEY_SHIFT} htmlTitle={'Shift'} />
-        + <Icon icon={IconNames.ARROW_UP} htmlTitle={'Up'} />: Move to the first step
+        {controlButton('Shift', IconNames.KEY_SHIFT)}+ {controlButton('Up', IconNames.ARROW_UP)}:
+        Move to the first step
         <br />
-        <Icon icon={IconNames.KEY_SHIFT} htmlTitle={'Shift'} />
-        + <Icon icon={IconNames.ARROW_DOWN} htmlTitle={'Down'} />: Move to the last step
+        {controlButton('Shift', IconNames.KEY_SHIFT)}+ {controlButton('Down', IconNames.ARROW_DOWN)}
+        : Move to the last step
         <br />
         <br />
         Note that these shortcuts are only active when the browser focus is on this panel (click on
         the slider or the text!).
       </p>
     </div>
+  );
+};
+
+const SubstCodeDisplay = (props: { content: string }) => {
+  return (
+    <Card>
+      <Pre className="resultOutput">{props.content}</Pre>
+    </Card>
   );
 };
 
@@ -92,7 +103,11 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
               onChange={this.sliderShift}
               value={this.state.value <= lastStepValue ? this.state.value : 1}
             />
-            {hasRunCode ? this.props.content[this.state.value - 1] : <SubstDefaultText />}
+            {hasRunCode ? (
+              <SubstCodeDisplay content={this.props.content[this.state.value - 1]} />
+            ) : (
+              <SubstDefaultText />
+            )}
           </div>
         </div>
       </HotKeys>

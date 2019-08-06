@@ -17,6 +17,7 @@ export interface IReplProps {
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
   substVisualizerRender?: (newOutput: string[]) => void;
+  hidden?: boolean;
 }
 
 export interface IOutputProps {
@@ -35,7 +36,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
     ));
     const inputProps: IReplInputProps = this.props as IReplInputProps;
     return (
-      <div className="Repl">
+      <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
         <div className="repl-output-parent">
           {cards}
           <HotKeys
