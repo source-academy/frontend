@@ -20,7 +20,7 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
-import { ControlBarProps } from '../workspace/ControlBar';
+import { ControlBarProps } from '../workspace/controlBar/ControlBar';
 import {
   ClearButton,
   EvalButton,
