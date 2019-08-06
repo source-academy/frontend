@@ -26,7 +26,7 @@ import {
   PreviousButton,
   QuestionView,
   RunButton
-} from '../../workspace/controlBar';
+} from '../../workspace/controlBar/index';
 import { SideContentProps } from '../../workspace/side-content';
 import Autograder from '../../workspace/side-content/Autograder';
 import { Grading, IAnsweredQuestion } from './gradingShape';
