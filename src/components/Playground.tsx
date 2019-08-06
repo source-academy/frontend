@@ -19,7 +19,7 @@ import {
   ExternalLibrarySelect,
   SessionButtons,
   ShareButton
-} from './workspace/controlBar';
+} from './workspace/controlBar/index';
 import { SideContentTab } from './workspace/side-content';
 import EnvVisualizer from './workspace/side-content/EnvVisualizer';
 import Inspector from './workspace/side-content/Inspector';
