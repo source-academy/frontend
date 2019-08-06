@@ -15,6 +15,7 @@ test('Profile renders "no XP, no Grade and Staff role" correctly', () => {
     role: Role.Staff,
     xp: 0,
     isOpen: true,
+    handleAssessmentOverviewFetch: () => {},
     onClose: () => {}
   };
   const tree = shallow(<Profile {...props} />);
@@ -30,6 +31,7 @@ test('Profile renders "no XP, no Grade and Student role" correctly', () => {
     role: Role.Student,
     xp: 0,
     isOpen: true,
+    handleAssessmentOverviewFetch: () => {},
     onClose: () => {}
   };
   const tree = shallow(<Profile {...props} />);
@@ -45,6 +47,7 @@ test('Profile renders with XP, Grade and Student role" correctly', () => {
     role: Role.Student,
     xp: 66,
     isOpen: true,
+    handleAssessmentOverviewFetch: () => {},
     onClose: () => {}
   };
   const tree = shallow(<Profile {...props} />);
@@ -60,6 +63,7 @@ test('Profile renders with XP, Grade and Staff role" correctly', () => {
     role: Role.Staff,
     xp: 66,
     isOpen: true,
+    handleAssessmentOverviewFetch: () => {},
     onClose: () => {}
   };
   const tree = shallow(<Profile {...props} />);

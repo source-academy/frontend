@@ -12,7 +12,7 @@ import * as React from 'react';
 import { Role } from '../../reducers/states';
 import { AssessmentCategories, AssessmentCategory, AssessmentStatuses, IAssessmentOverview } from '../assessment/assessmentShape';
 
-type ProfileProps = OwnProps & StateProps;
+type ProfileProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
   assessmentOverviews?: IAssessmentOverview[];
@@ -25,7 +25,18 @@ export type OwnProps = {
   onClose: () => void;
 };
 
+export type DispatchProps = {
+  handleAssessmentOverviewFetch: () => void;
+};
+
 class Profile extends React.Component<ProfileProps> {
+  public componentDidMount() {
+    if (!this.props.assessmentOverviews) {
+      // If assessment overviews are not loaded, fetch them
+      this.props.handleAssessmentOverviewFetch();
+    }
+  }
+
   public render() {
     const isLoaded = this.props.name && this.props.role && this.props.assessmentOverviews;
     let content: JSX.Element;

@@ -1,6 +1,8 @@
-import { connect, MapStateToProps } from 'react-redux';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 
-import Profile, { StateProps } from '../components/dropdown/Profile';
+import { bindActionCreators, Dispatch } from 'redux';
+import { fetchAssessmentOverviews } from '../actions';
+import Profile, { DispatchProps, StateProps } from '../components/dropdown/Profile';
 import { IState } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
@@ -9,6 +11,15 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   role: state.session.role
 });
 
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
+  bindActionCreators(
+    {
+      handleAssessmentOverviewFetch: fetchAssessmentOverviews
+    },
+    dispatch
+  );
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Profile);
