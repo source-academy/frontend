@@ -23,6 +23,8 @@ export enum LINKS {
   PIAZZA = 'https://piazza.com/nus.edu.sg/fall2019/cs1101s',
   SHAREDB_SERVER = 'api2.sourceacademy.nus.edu.sg/',
   SOURCE_DOCS = 'https://sicp.comp.nus.edu.sg/source/',
+  SOURCE_DOCS_CHAPTER_2_2 = 'https://sicp.comp.nus.edu.sg/chapters/29',
+  SOURCE_DOCS_CHAPTER_3_2 = 'https://sicp.comp.nus.edu.sg/chapters/52',
   TECH_SVC = 'mailto:techsvc@comp.nus.edu.sg',
   TEXTBOOK = 'https://sicp.comp.nus.edu.sg/'
 }
