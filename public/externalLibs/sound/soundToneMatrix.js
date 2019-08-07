@@ -493,20 +493,23 @@ function exponential_decay(decay_period) {
  * Returns an envelope: a function from sound to sound.
  * When the envelope is applied to a sound, it returns
  * a new sound that results from applying ADSR to
- * the given sound. The Attack duration, Sustain duration and
- * Release duration are given in the first, second and fourth
- * arguments in seconds, and the Sustain level is given in 
+ * the given sound. The Attack, Sustain and
+ * Release ratios are given in the first, second and fourth
+ * arguments, and the Sustain level is given in 
  * the third argument as a fraction between 0 and 1.
- * @param {number} attack_time - duration of attack phase in seconds
- * @param {number} decay_time - duration of decay phase in seconds
+ * @param {number} attack_ratio - proportion of sound in attack phase
+ * @param {number} decay_ratio - proportion of sound decay phase
  * @param {number} sustain_level - sustain level between 0 and 1
- * @param {number} release_time - duration of release phase in seconds
+ * @param {number} release_ratio - proportion of sound release phase
  * @returns {function} envelope: function from sound to sound
  */
-function adsr(attack_time, decay_time, sustain_level, release_time) {
+function adsr(attack_ratio, decay_ratio, sustain_level, release_ratio) {
   return sound => {
     var wave = get_wave(sound);
     var duration = get_duration(sound);
+    var attack_time = duration * attack_ratio
+    var decay_time = duration * decay_ratio
+    var release_time = duration * release_ratio
     return make_sound( x => {
       if (x < attack_time) {
         return wave(x) * (x / attack_time);
