@@ -126,7 +126,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   public render() {
     const substVisualizerTab: SideContentTab = {
       label: 'Substituter',
-      iconName: IconNames.STOP,
+      iconName: IconNames.FLOW_REVIEW,
       body: <SubstVisualizer content={this.processArrayOutput(this.props.output)} />,
       id: SideContentType.substVisualizer
     };
