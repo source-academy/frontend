@@ -358,7 +358,7 @@ $code-color-error: #ff4444;
             pre {
               background-color: transparent;
               -webkit-box-shadow: none;
-                      box-shadow: none;
+              box-shadow: none;
               color: $code-color-result;
               padding: 0px;
               margin: 0px;
@@ -384,11 +384,11 @@ $code-color-error: #ff4444;
                 display: flex;
                 padding: 0.5rem 0 0.5rem 0;
                 -webkit-box-align: center;
-                    -ms-flex-align: center;
-                        align-items: center;
+                -ms-flex-align: center;
+                align-items: center;
                 -webkit-box-pack: center;
-                    -ms-flex-pack: center;
-                        justify-content: center;
+                -ms-flex-pack: center;
+                justify-content: center;
               }
 
               canvas {
