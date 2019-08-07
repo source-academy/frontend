@@ -324,7 +324,9 @@ $code-color-error: #ff4444;
 
     // Specific CSS for the Substituter tab, since REPL is hidden
     ##{$ns}-tab-panel_side-content-tabs_subst_visualiser {
-      height: 100%;
+      height: -webkit-fit-content;
+      height: -moz-fit-content;
+      height: fit-content;
       margin-top: -45px;
       overflow: hidden;
 
@@ -337,6 +339,8 @@ $code-color-error: #ff4444;
           height: unset;
 
           .#{$ns}-slider-label {
+            width: -webkit-max-content;
+            width: -moz-max-content;
             width: max-content;
             display: none;
 
@@ -353,10 +357,12 @@ $code-color-error: #ff4444;
 
             pre {
               background-color: transparent;
-              box-shadow: none;
+              -webkit-box-shadow: none;
+                      box-shadow: none;
               color: $code-color-result;
               padding: 0px;
               margin: 0px;
+              text-align: left;
               /**
               * white-space, word-wrap and word-break
               * are specified to allow all output to wrap.
@@ -373,10 +379,16 @@ $code-color-error: #ff4444;
                 monospace;
 
               .canvas-container {
+                display: -webkit-box;
+                display: -ms-flexbox;
                 display: flex;
                 padding: 0.5rem 0 0.5rem 0;
-                align-items: center;
-                justify-content: center;
+                -webkit-box-align: center;
+                    -ms-flex-align: center;
+                        align-items: center;
+                -webkit-box-pack: center;
+                    -ms-flex-pack: center;
+                        justify-content: center;
               }
 
               canvas {

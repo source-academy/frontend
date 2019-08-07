@@ -20,8 +20,8 @@ const SubstDefaultText = () => {
         Welcome to the Substituter!
         <br />
         <br />
-        On this tab, the REPL will be hidden from view. You may use this tool by writing some code
-        on the left, then dragging the slider above to see its evaluation.
+        On this tab, the REPL will be hidden from view. You may use this tool by writing your
+        program on the left, then dragging the slider above to see its evaluation.
         <br />
         <br />
         Alternatively, you may click on the gutter of the editor (where all the line numbers are, on

@@ -13,7 +13,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
   <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
       <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      <Markdown content=\\"*Note this will not affect the saved copy of your code, unless you save over it.*\\" />
+      <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
@@ -41,7 +41,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
   <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
       <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      <Markdown content=\\"*Note this will not affect the saved copy of your code, unless you save over it.*\\" />
+      <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
@@ -69,7 +69,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
   <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
       <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      <Markdown content=\\"*Note this will not affect the saved copy of your code, unless you save over it.*\\" />
+      <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
