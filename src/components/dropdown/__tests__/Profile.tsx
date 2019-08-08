@@ -94,9 +94,9 @@ test('Profile renders correctly when there are closed assessments', () => {
     mockAssessmentOverviews.length - mockNoClosedAssessmentOverviews.length;
   expect(tree.find('.profile-summary-navlink').hostNodes()).toHaveLength(numClosedAssessments);
   expect(tree.find('.profile-summary-callout').hostNodes()).toHaveLength(numClosedAssessments);
-  expect(tree.find('.grade-details').hostNodes()).toHaveLength(3);
+  expect(tree.find('.grade-details').hostNodes()).toHaveLength(1);
   expect(tree.find('.xp-details').hostNodes()).toHaveLength(4);
   ['.title', '.value', '.value-bar'].forEach(className => {
-    expect(tree.find(className).hostNodes()).toHaveLength(7);
+    expect(tree.find(className).hostNodes()).toHaveLength(5);
   });
 });
