@@ -1,6 +1,13 @@
 import { MaterialData } from '../components/academy/materialsUpload/materialShape';
 import * as actionTypes from './actionTypes';
 
+export const createMaterialFolder = (name: string) => ({
+  type: actionTypes.CREATE_MATERIAL_FOLDER,
+  payload: {
+    name
+  }
+});
+
 export const deleteMaterial = (id: number) => ({
   type: actionTypes.DELETE_MATERIAL,
   payload: {

@@ -400,7 +400,7 @@ function* backendSaga(): SagaIterator {
     }));
     const resp = yield request.postSourcecast(title, description, audio, playbackData, tokens);
     if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Saved!', 1000);
+      yield call(showSuccessMessage, 'Saved successfully!', 1000);
       yield history.push('/sourcecast');
     } else if (resp !== null) {
       let errorMessage: string;
@@ -467,7 +467,40 @@ function* backendSaga(): SagaIterator {
       if (materialIndex) {
         yield put(actions.updateMaterialIndex(materialIndex));
       }
-      yield call(showSuccessMessage, 'Saved!', 1000);
+      yield call(showSuccessMessage, 'Saved successfully!', 1000);
+    } else if (resp !== null) {
+      let errorMessage: string;
+      switch (resp.status) {
+        case 401:
+          errorMessage = 'Session expired. Please login again.';
+          break;
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`;
+          break;
+      }
+      yield call(showWarningMessage, errorMessage);
+    } else {
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    }
+  });
+
+  yield takeEvery(actionTypes.CREATE_MATERIAL_FOLDER, function*(action) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can create materials folder.');
+    }
+    const { name } = (action as actionTypes.IAction).payload;
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const resp = yield request.postMaterialFolder(name, tokens);
+    if (resp && resp.ok) {
+      const materialIndex = yield call(request.getMaterialIndex, tokens);
+      if (materialIndex) {
+        yield put(actions.updateMaterialIndex(materialIndex));
+      }
+      yield call(showSuccessMessage, 'Created successfully!', 1000);
     } else if (resp !== null) {
       let errorMessage: string;
       switch (resp.status) {

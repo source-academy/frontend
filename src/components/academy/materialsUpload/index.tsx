@@ -8,6 +8,7 @@ import MaterialTable from './MaterialTable';
 interface IMaterialProps extends IDispatchProps, IStateProps {}
 
 export interface IDispatchProps {
+  handleCreateMaterialFolder: (name: string) => void;
   handleDeleteMaterial: (id: number) => void;
   handleFetchMaterialIndex: () => void;
   handleUploadMaterial: (file: File, title: string, description: string) => void;
@@ -25,6 +26,7 @@ class Material extends React.Component<IMaterialProps, {}> {
           <Dropzone handleUploadMaterial={this.props.handleUploadMaterial} />
           <Divider />
           <MaterialTable
+            handleCreateMaterialFolder={this.props.handleCreateMaterialFolder}
             handleDeleteMaterial={this.props.handleDeleteMaterial}
             handleFetchMaterialIndex={this.props.handleFetchMaterialIndex}
             materialIndex={this.props.materialIndex}

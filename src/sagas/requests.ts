@@ -518,6 +518,21 @@ export const postMaterial = async (
 };
 
 /**
+ * POST /category
+ */
+export const postMaterialFolder = async (name: string, tokens: Tokens) => {
+  const resp = await request(`category`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { name },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+};
+
+/**
  * @returns {(Response|null)} Response if successful, otherwise null.
  *
  * @see @type{RequestOptions} for options to this function.
