@@ -167,7 +167,7 @@ div.#{$ns}-dialog.help {
             }
           }
 
-          .xp-details {
+          & > div:not(:first-of-type) {
             margin-top: 0.2em;
           }
         }

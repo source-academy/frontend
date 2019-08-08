@@ -4,7 +4,11 @@ import * as React from 'react';
 
 import { NavLink } from 'react-router-dom';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
-import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmentShape';
+import {
+  AssessmentCategories,
+  AssessmentCategory,
+  IAssessmentOverview
+} from '../assessment/assessmentShape';
 
 type ProfileCardProps = {
   item: IAssessmentOverview;
@@ -30,7 +34,8 @@ class ProfileCard extends React.Component<ProfileCardProps, {}> {
           icon={this.props.renderIcon(this.props.item.category)}
           title={this.props.item.title}
         >
-          {this.props.item.maxGrade <= 0 && this.props.item.grade === 0 ? (
+          {this.props.item.category !== AssessmentCategories.Mission ||
+          (this.props.item.maxGrade <= 0 && this.props.item.grade === 0) ? (
             ''
           ) : (
             <div className="grade-details">

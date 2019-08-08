@@ -71,7 +71,14 @@ class Profile extends React.Component<ProfileProps, {}> {
         const [currentGrade, currentXp, maxGrade, maxXp] = this.props.assessmentOverviews!.reduce(
           (acc, item) =>
             item.status === AssessmentStatuses.submitted
-              ? [acc[0] + item.grade, acc[1] + item.xp, acc[2] + item.maxGrade, acc[3] + item.maxXp]
+              ? item.category === AssessmentCategories.Mission
+                ? [
+                    acc[0] + item.grade,
+                    acc[1] + item.xp,
+                    acc[2] + item.maxGrade,
+                    acc[3] + item.maxXp
+                  ]
+                : [acc[0], acc[1] + item.xp, acc[2], acc[3] + item.maxXp]
               : acc,
           [0, 0, 0, 0]
         );
