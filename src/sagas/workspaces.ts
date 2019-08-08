@@ -399,18 +399,22 @@ export function* evalCode(
   }
   yield updateInspector(workspaceLocation);
 
-  if (result.status !== 'suspended' && result.status !== 'finished') {
-    const prepend = yield select(
-      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend
-    );
-    const prependLines = prepend.length > 0 ? prepend.split('\n').length : 0;
+  if (result.status === 'error') {
+    let errors = context.errors;
 
-    const errors = context.errors.map((error: SourceError) => {
-      const newError = cloneDeep(error);
-      newError.location.start.line = newError.location.start.line - prependLines;
-      newError.location.end.line = newError.location.end.line - prependLines;
-      return newError;
-    });
+    if (actionType === actionTypes.EVAL_EDITOR) {
+      const prepend = yield select(
+        (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend
+      );
+      const prependLines = prepend.length > 0 ? prepend.split('\n').length : 0;
+
+      errors = context.errors.map((error: SourceError) => {
+        const newError = cloneDeep(error);
+        newError.location.start.line = newError.location.start.line - prependLines;
+        newError.location.end.line = newError.location.end.line - prependLines;
+        return newError;
+      });
+    }
 
     yield put(actions.evalInterpreterError(errors, workspaceLocation));
     return;
