@@ -3,7 +3,7 @@ import { SourceError } from 'js-slang/dist/types';
 
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
-import { MaterialData } from '../components/academy/materials/materialShape';
+import { MaterialData } from '../components/academy/materialsUpload/materialShape';
 import { Announcement } from '../components/Announcements';
 import {
   AutogradingResult,

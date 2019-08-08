@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { deleteMaterial, uploadMaterial } from '../../../actions';
 import { fetchMaterialIndex } from '../../../actions/materials';
-import Material, { IDispatchProps, IStateProps } from '../../../components/academy/materials';
+import Material, { IDispatchProps, IStateProps } from '../../../components/academy/materialsUpload';
 import { IState } from '../../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({

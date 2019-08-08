@@ -1,4 +1,4 @@
-import { MaterialData } from '../components/academy/materials/materialShape';
+import { MaterialData } from '../components/academy/materialsUpload/materialShape';
 import * as actionTypes from './actionTypes';
 
 export const deleteMaterial = (id: number) => ({
