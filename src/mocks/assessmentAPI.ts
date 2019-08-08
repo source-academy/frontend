@@ -101,7 +101,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-    grade: 2850,
+    grade: 2700,
     id: 4,
     maxGrade: 3000,
     maxXp: 1000,
@@ -111,14 +111,14 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
-    xp: 850,
+    xp: 800,
     gradingStatus: 'none'
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 2500,
+    grade: 1950,
     id: 5,
     maxGrade: 3000,
     maxXp: 1000,
@@ -128,14 +128,14 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 750,
+    xp: 500,
     gradingStatus: 'grading'
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 450,
+    grade: 300,
     id: 5,
     maxGrade: 700,
     maxXp: 500,
@@ -145,7 +145,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 275,
+    xp: 150,
     gradingStatus: 'graded'
   },
   {

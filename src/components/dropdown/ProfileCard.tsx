@@ -1,4 +1,4 @@
-import { Callout, Intent, ProgressBar } from '@blueprintjs/core';
+import { Callout, ProgressBar } from '@blueprintjs/core';
 import { IconName } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -9,7 +9,7 @@ import { AssessmentCategory, IAssessmentOverview } from '../assessment/assessmen
 type ProfileCardProps = {
   item: IAssessmentOverview;
   getFrac: (num: number, den: number) => number;
-  parseFrac: (frac: number) => Intent;
+  parseColour: (frac: number) => string;
   renderIcon: (category: AssessmentCategory) => IconName;
 };
 
@@ -40,10 +40,12 @@ class ProfileCard extends React.Component<ProfileCardProps, {}> {
               </div>
               <ProgressBar
                 animate={false}
-                className="value-bar"
-                intent={this.props.parseFrac(
-                  this.props.getFrac(this.props.item.grade, this.props.item.maxGrade)
-                )}
+                className={
+                  'value-bar' +
+                  this.props.parseColour(
+                    this.props.getFrac(this.props.item.grade, this.props.item.maxGrade)
+                  )
+                }
                 stripes={false}
                 value={this.props.getFrac(this.props.item.grade, this.props.item.maxGrade)}
               />
@@ -59,10 +61,12 @@ class ProfileCard extends React.Component<ProfileCardProps, {}> {
               </div>
               <ProgressBar
                 animate={false}
-                className="value-bar"
-                intent={this.props.parseFrac(
-                  this.props.getFrac(this.props.item.xp, this.props.item.maxXp)
-                )}
+                className={
+                  'value-bar' +
+                  this.props.parseColour(
+                    this.props.getFrac(this.props.item.xp, this.props.item.maxXp)
+                  )
+                }
                 stripes={false}
                 value={this.props.getFrac(this.props.item.xp, this.props.item.maxXp)}
               />

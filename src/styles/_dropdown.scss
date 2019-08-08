@@ -178,4 +178,34 @@ div.#{$ns}-dialog.help {
       }
     }
   }
+
+  .progress-steelblue {
+    &.profile-spinner svg path:last-of-type {
+      stroke: #137cbd;
+    }
+
+    &.value-bar > div {
+      background-color: #137cbd;
+    }
+  }
+
+  .progress-deepskyblue {
+    &.profile-spinner svg path:last-of-type {
+      stroke: #579ecb;
+    }
+
+    &.value-bar > div {
+      background-color: #579ecb;
+    }
+  }
+
+  .progress-skyblue {
+    &.profile-spinner svg path:last-of-type {
+      stroke: #9ac0d8;
+    }
+
+    &.value-bar > div {
+      background-color: #9ac0d8;
+    }
+  }
 }

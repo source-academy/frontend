@@ -1,4 +1,4 @@
-import { Drawer, Intent, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Drawer, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -81,17 +81,15 @@ class Profile extends React.Component<ProfileProps, {}> {
           return den <= 0 || num / den > 1 ? 1 : num / den;
         };
 
-        // Given a fraction between 0 and 1 inclusive, returns the corresponding Intent (colour)
-        const parseFrac = (frac: number): Intent => {
+        // Given a fraction between 0 and 1 inclusive, returns a className to apply colour with CSS
+        const parseColour = (frac: number): string => {
           return frac < 0
-            ? Intent.NONE
-            : frac >= 0.9
-            ? Intent.PRIMARY
+            ? ''
             : frac >= 0.8
-            ? Intent.SUCCESS
-            : frac >= 0.6
-            ? Intent.WARNING
-            : Intent.DANGER;
+            ? ' progress-steelblue'
+            : frac >= 0.45
+            ? ' progress-deepskyblue'
+            : ' progress-skyblue';
         };
 
         // Given an assessment category, return its icon
@@ -121,7 +119,7 @@ class Profile extends React.Component<ProfileProps, {}> {
                 key={index}
                 item={assessment}
                 getFrac={getFrac}
-                parseFrac={parseFrac}
+                parseColour={parseColour}
                 renderIcon={renderIcon}
               />
             );
@@ -134,8 +132,7 @@ class Profile extends React.Component<ProfileProps, {}> {
             <div className="profile-progress">
               <div className="profile-grade">
                 <Spinner
-                  className="profile-spinner"
-                  intent={parseFrac(getFrac(currentGrade, maxGrade))}
+                  className={'profile-spinner' + parseColour(getFrac(currentGrade, maxGrade))}
                   size={144}
                   value={getFrac(currentGrade, maxGrade)}
                 />
@@ -149,8 +146,7 @@ class Profile extends React.Component<ProfileProps, {}> {
               </div>
               <div className="profile-xp">
                 <Spinner
-                  className="profile-spinner"
-                  intent={parseFrac(getFrac(currentXp, maxXp))}
+                  className={'profile-spinner' + parseColour(getFrac(currentXp, maxXp))}
                   size={144}
                   value={getFrac(currentXp, maxXp)}
                 />
