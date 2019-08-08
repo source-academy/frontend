@@ -127,7 +127,7 @@ export interface ISessionState {
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
   readonly historyHelper: HistoryHelper;
-  readonly materialIndex?: MaterialData[];
+  readonly materialIndex: MaterialData[] | null;
   readonly maxGrade: number;
   readonly maxXp: number;
   readonly refreshToken?: string;
@@ -370,7 +370,7 @@ export const defaultSession: ISessionState = {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
   },
-  materialIndex: undefined,
+  materialIndex: null,
   maxGrade: 0,
   maxXp: 0,
   refreshToken: process.env.REACT_APP_REFRESH_TOKEN,

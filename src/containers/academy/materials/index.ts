@@ -7,7 +7,7 @@ import Material, { IDispatchProps, IStateProps } from '../../../components/acade
 import { IState } from '../../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  data: state.session.materialIndex
+  materialIndex: state.session.materialIndex
 });
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
