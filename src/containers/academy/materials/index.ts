@@ -1,8 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { deleteMaterial, uploadMaterial } from '../../../actions';
-import { fetchMaterialIndex } from '../../../actions/materials';
+import { deleteMaterial, fetchMaterialIndex, uploadMaterial } from '../../../actions';
 import Material, { IDispatchProps, IStateProps } from '../../../components/academy/materialsUpload';
 import { IState } from '../../../reducers/states';
 

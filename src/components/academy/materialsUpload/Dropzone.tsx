@@ -49,7 +49,10 @@ const MaterialDropzone: React.FC<IDropzoneType> = props => {
   const [description, setDescription] = React.useState<string>('');
   const handleSetTitle = (value: string) => setTitle(value);
   const handleSetDescription = (value: string) => setDescription(value);
-  const handleConfirmUpload = () => props.handleUploadMaterial(file!, title!, description);
+  const handleConfirmUpload = () => {
+    props.handleUploadMaterial(file!, title!, description);
+    setFile(undefined);
+  };
   const handleCancelUpload = () => setFile(undefined);
 
   const {

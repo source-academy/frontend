@@ -31,7 +31,7 @@ type State = {
 type IMaterialTableProps = IOwnProps;
 
 interface IOwnProps {
-  handleDeleteMaterial: (id: number) => void;
+  handleDeleteMaterial?: (id: number) => void;
   handleFetchMaterialIndex: () => void;
   materialIndex: MaterialData[] | null;
 }
@@ -86,7 +86,8 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
           suppressResize: true,
           cellStyle: {
             padding: 0
-          }
+          },
+          hide: !this.props.handleDeleteMaterial
         },
         { headerName: 'description', field: 'description', hide: true },
         { headerName: 'inserted_at', field: 'inserted_at', hide: true },
