@@ -418,6 +418,28 @@ function* backendSaga(): SagaIterator {
     }
   });
 
+  yield takeEvery(actionTypes.DELETE_MATERIAL, function*(action) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can delete material.');
+    }
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { id } = (action as actionTypes.IAction).payload;
+    const resp: Response = yield request.deleteMaterial(id, tokens);
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
+      return;
+    }
+    const materialIndex = yield call(request.getMaterialIndex, tokens);
+    if (materialIndex) {
+      yield put(actions.updateMaterialIndex(materialIndex));
+    }
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  });
+
   yield takeEvery(actionTypes.FETCH_MATERIAL_INDEX, function*() {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
@@ -441,6 +463,10 @@ function* backendSaga(): SagaIterator {
     }));
     const resp = yield request.postMaterial(file, title, description, tokens);
     if (resp && resp.ok) {
+      const materialIndex = yield call(request.getMaterialIndex, tokens);
+      if (materialIndex) {
+        yield put(actions.updateMaterialIndex(materialIndex));
+      }
       yield call(showSuccessMessage, 'Saved!', 1000);
     } else if (resp !== null) {
       let errorMessage: string;

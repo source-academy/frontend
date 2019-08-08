@@ -14,9 +14,10 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
+import DeleteCell from './DeleteCell';
+import DownloadCell from './DownloadCell';
 import Dropzone from './Dropzone';
 import { MaterialData } from './materialShape';
-import SelectCell from './SelectCell';
 
 /**
  * Column Definitions are defined within the state, so that data
@@ -31,6 +32,7 @@ type State = {
 interface IMaterialProps extends IDispatchProps, IStateProps {}
 
 export interface IDispatchProps {
+  handleDeleteMaterial: (id: number) => void;
   handleFetchMaterialIndex: () => void;
   handleUploadMaterial: (file: File, title: string, description: string) => void;
 }
@@ -64,7 +66,7 @@ class Material extends React.Component<IMaterialProps, State> {
         {
           headerName: 'Download',
           field: '',
-          cellRendererFramework: SelectCell,
+          cellRendererFramework: DownloadCell,
           cellRendererParams: {},
           maxWidth: 400,
           suppressSorting: true,
@@ -78,8 +80,10 @@ class Material extends React.Component<IMaterialProps, State> {
         {
           headerName: 'Delete',
           field: '',
-          cellRendererFramework: SelectCell,
-          cellRendererParams: {},
+          cellRendererFramework: DeleteCell,
+          cellRendererParams: {
+            handleDeleteMaterial: this.props.handleDeleteMaterial
+          },
           maxWidth: 400,
           suppressSorting: true,
           suppressMovable: true,

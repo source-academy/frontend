@@ -1,6 +1,13 @@
 import { MaterialData } from '../components/academy/materials/materialShape';
 import * as actionTypes from './actionTypes';
 
+export const deleteMaterial = (id: number) => ({
+  type: actionTypes.DELETE_MATERIAL,
+  payload: {
+    id
+  }
+});
+
 export const fetchMaterialIndex = () => ({
   type: actionTypes.FETCH_MATERIAL_INDEX
 });

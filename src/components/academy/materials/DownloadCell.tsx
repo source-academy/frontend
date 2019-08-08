@@ -3,12 +3,13 @@ import * as React from 'react';
 
 import { BACKEND_URL } from '../../../utils/constants';
 import { controlButton } from '../../commons';
+import { MaterialData } from './materialShape';
 
 interface ISelectCellProps {
-  data: any;
+  data: MaterialData;
 }
 
-class SelectCell extends React.Component<ISelectCellProps, {}> {
+class DownloadCell extends React.Component<ISelectCellProps, {}> {
   public constructor(props: ISelectCellProps) {
     super(props);
   }
@@ -30,4 +31,4 @@ class SelectCell extends React.Component<ISelectCellProps, {}> {
   };
 }
 
-export default SelectCell;
+export default DownloadCell;

@@ -8,6 +8,7 @@ import {
   GradingOverview,
   GradingQuestion
 } from '../components/academy/grading/gradingShape';
+import { MaterialData } from '../components/academy/materials/materialShape';
 import {
   AssessmentCategory,
   ExternalLibraryName,
@@ -460,12 +461,27 @@ export const postSourcecast = async (
 };
 
 /**
+ * DELETE /sourcecast
+ */
+export async function deleteMaterial(id: number, tokens: Tokens) {
+  const response = await request(`material/${id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return response;
+}
+
+/**
  * GET /material
  */
-export async function getMaterialIndex(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+export async function getMaterialIndex(tokens: Tokens): Promise<MaterialData[] | null> {
   const response = await request('material', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
     shouldRefresh: true
   });
   if (response && response.ok) {
@@ -479,7 +495,12 @@ export async function getMaterialIndex(tokens: Tokens): Promise<IAssessmentOverv
 /**
  * POST /material
  */
-export const postMaterial = async (file: File, title: string, description: string, tokens: Tokens) => {
+export const postMaterial = async (
+  file: File,
+  title: string,
+  description: string,
+  tokens: Tokens
+) => {
   const formData = new FormData();
   formData.append('material[file]', file, title);
   formData.append('material[title]', title);
