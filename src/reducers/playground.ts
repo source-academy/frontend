@@ -1,9 +1,14 @@
 import { Reducer } from 'redux';
+import { ActionType } from 'typesafe-actions';
 
-import { CHANGE_QUERY_STRING, IAction } from '../actions/actionTypes';
+import * as actions from '../actions';
+import { CHANGE_QUERY_STRING } from '../actions/actionTypes';
 import { defaultPlayground, IPlaygroundState } from './states';
 
-export const reducer: Reducer<IPlaygroundState> = (state = defaultPlayground, action: IAction) => {
+export const reducer: Reducer<IPlaygroundState> = (
+  state = defaultPlayground,
+  action: ActionType<typeof actions>
+) => {
   switch (action.type) {
     case CHANGE_QUERY_STRING:
       return {

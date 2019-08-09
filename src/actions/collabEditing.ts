@@ -1,38 +1,24 @@
-import { ActionCreator } from 'redux';
+import { action } from 'typesafe-actions';
 
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
-export const finishInvite = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.FINISH_INVITE,
-  payload: { workspaceLocation }
-});
+export const finishInvite = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.FINISH_INVITE, { workspaceLocation });
 
-export const initInvite: ActionCreator<actionTypes.IAction> = (
-  editorValue: string,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.INIT_INVITE,
-  payload: {
+export const initInvite = (editorValue: string, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.INIT_INVITE, {
     editorValue,
     workspaceLocation
-  }
-});
+  });
 
-export const invalidEditorSessionId = () => ({
-  type: actionTypes.INVALID_EDITOR_SESSION_ID
-});
+export const invalidEditorSessionId = () => action(actionTypes.INVALID_EDITOR_SESSION_ID);
 
-export const setEditorSessionId: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation,
-  editorSessionId: string
-) => ({
-  type: actionTypes.SET_EDITOR_SESSION_ID,
-  payload: {
+export const setEditorSessionId = (workspaceLocation: WorkspaceLocation, editorSessionId: string) =>
+  action(actionTypes.SET_EDITOR_SESSION_ID, {
     workspaceLocation,
     editorSessionId
-  }
-});
+  });
 
 /**
  * Sets sharedb websocket status.
@@ -40,13 +26,8 @@ export const setEditorSessionId: ActionCreator<actionTypes.IAction> = (
  * @param workspaceLocation the workspace to be reset
  * @param websocketStatus 0: CLOSED 1: OPEN
  */
-export const setWebsocketStatus: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation,
-  websocketStatus: number
-) => ({
-  type: actionTypes.SET_WEBSOCKET_STATUS,
-  payload: {
+export const setWebsocketStatus = (workspaceLocation: WorkspaceLocation, websocketStatus: number) =>
+  action(actionTypes.SET_WEBSOCKET_STATUS, {
     workspaceLocation,
     websocketStatus
-  }
-});
+  });

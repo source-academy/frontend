@@ -1,4 +1,4 @@
-import { IAction, LOG_OUT, SAVE_CANVAS } from '../../actions/actionTypes';
+import { LOG_OUT, SAVE_CANVAS } from '../../actions/actionTypes';
 import { reducer } from '../academy';
 import { defaultAcademy, IAcademyState } from '../states';
 
@@ -10,7 +10,7 @@ function createContext(width: number, height: number): HTMLCanvasElement {
 }
 
 test('LOG_OUT works correctly on default academy', () => {
-  const action: IAction = {
+  const action = {
     type: LOG_OUT,
     payload: {}
   };
@@ -22,7 +22,7 @@ test('LOG_OUT works correctly on default academy', () => {
 test('SAVE_CANVAS works correctly on default academy', () => {
   const payloadCanvas: HTMLCanvasElement = createContext(42, 42);
 
-  const action: IAction = {
+  const action = {
     type: SAVE_CANVAS,
     payload: payloadCanvas
   };
