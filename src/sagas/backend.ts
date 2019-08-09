@@ -418,7 +418,9 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.DELETE_MATERIAL, function*(action) {
+  yield takeEvery(actionTypes.DELETE_MATERIAL, function*(
+    action: ReturnType<typeof actions.deleteMaterial>
+  ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can delete material.');
@@ -427,7 +429,7 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const { id } = (action as actionTypes.IAction).payload;
+    const { id } = action.payload;
     const resp: Response = yield request.deleteMaterial(id, tokens);
     if (!resp || !resp.ok) {
       yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
@@ -451,12 +453,14 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.UPLOAD_MATERIAL, function*(action) {
+  yield takeEvery(actionTypes.UPLOAD_MATERIAL, function*(
+    action: ReturnType<typeof actions.uploadMaterial>
+  ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can upload materials.');
     }
-    const { file, title, description } = (action as actionTypes.IAction).payload;
+    const { file, title, description } = action.payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -484,12 +488,14 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.CREATE_MATERIAL_FOLDER, function*(action) {
+  yield takeEvery(actionTypes.CREATE_MATERIAL_FOLDER, function*(
+    action: ReturnType<typeof actions.createMaterialFolder>
+  ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can create materials folder.');
     }
-    const { name } = (action as actionTypes.IAction).payload;
+    const { name } = action.payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken

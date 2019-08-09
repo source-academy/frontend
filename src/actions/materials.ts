@@ -1,32 +1,19 @@
+import { action } from 'typesafe-actions';
+
 import { MaterialData } from '../components/academy/materialsUpload/materialShape';
 import * as actionTypes from './actionTypes';
 
-export const createMaterialFolder = (name: string) => ({
-  type: actionTypes.CREATE_MATERIAL_FOLDER,
-  payload: {
-    name
-  }
-});
+export const createMaterialFolder = (name: string) =>
+  action(actionTypes.CREATE_MATERIAL_FOLDER, { name });
 
-export const deleteMaterial = (id: number) => ({
-  type: actionTypes.DELETE_MATERIAL,
-  payload: {
-    id
-  }
-});
+export const deleteMaterial = (id: number) => 
+  action(actionTypes.DELETE_MATERIAL, { id });
 
-export const fetchMaterialIndex = () => ({
-  type: actionTypes.FETCH_MATERIAL_INDEX
-});
+export const fetchMaterialIndex = () =>
+  action(actionTypes.FETCH_MATERIAL_INDEX);
 
-export const updateMaterialIndex = (index: MaterialData[]) => ({
-  type: actionTypes.UPDATE_MATERIAL_INDEX,
-  payload: {
-    index
-  }
-});
+export const updateMaterialIndex = (index: MaterialData[]) =>
+  action(actionTypes.UPDATE_MATERIAL_INDEX, { index });
 
-export const uploadMaterial = (file: File, title: string, description: string) => ({
-  type: actionTypes.UPLOAD_MATERIAL,
-  payload: { file, title, description }
-});
+export const uploadMaterial = (file: File, title: string, description: string) =>
+  action(actionTypes.UPLOAD_MATERIAL, { file, title, description });
