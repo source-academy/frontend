@@ -8,7 +8,7 @@ import MaterialTable from './MaterialTable';
 interface IMaterialProps extends IDispatchProps, IStateProps {}
 
 export interface IDispatchProps {
-  handleCreateMaterialFolder: (name: string) => void;
+  handleCreateMaterialFolder: (title: string) => void;
   handleDeleteMaterial: (id: number) => void;
   handleFetchMaterialIndex: () => void;
   handleUploadMaterial: (file: File, title: string, description: string) => void;
@@ -18,7 +18,7 @@ export interface IStateProps {
   materialIndex: MaterialData[] | null;
 }
 
-class Material extends React.Component<IMaterialProps, {}> {
+class MaterialUpload extends React.Component<IMaterialProps, {}> {
   public render() {
     return (
       <div className="ContentDisplay row center-xs">
@@ -37,4 +37,4 @@ class Material extends React.Component<IMaterialProps, {}> {
   }
 }
 
-export default Material;
+export default MaterialUpload;

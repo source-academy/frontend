@@ -3,8 +3,8 @@ import { action } from 'typesafe-actions';
 import { MaterialData } from '../components/academy/materialsUpload/materialShape';
 import * as actionTypes from './actionTypes';
 
-export const createMaterialFolder = (name: string) =>
-  action(actionTypes.CREATE_MATERIAL_FOLDER, { name });
+export const createMaterialFolder = (title: string) =>
+  action(actionTypes.CREATE_MATERIAL_FOLDER, { title });
 
 export const deleteMaterial = (id: number) => 
   action(actionTypes.DELETE_MATERIAL, { id });

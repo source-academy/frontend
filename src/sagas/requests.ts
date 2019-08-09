@@ -520,10 +520,10 @@ export const postMaterial = async (
 /**
  * POST /category
  */
-export const postMaterialFolder = async (name: string, tokens: Tokens) => {
+export const postMaterialFolder = async (title: string, tokens: Tokens) => {
   const resp = await request(`category`, 'POST', {
     accessToken: tokens.accessToken,
-    body: { name },
+    body: { title },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

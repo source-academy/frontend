@@ -7,7 +7,7 @@ import {
   fetchMaterialIndex,
   uploadMaterial
 } from '../../../actions';
-import Material, { IDispatchProps, IStateProps } from '../../../components/academy/materialsUpload';
+import MaterialUpload, { IDispatchProps, IStateProps } from '../../../components/academy/materialsUpload';
 import { IState } from '../../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
@@ -17,7 +17,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleCreateMaterialFolder: (name: string) => createMaterialFolder(name),
+      handleCreateMaterialFolder: (title: string) => createMaterialFolder(title),
       handleDeleteMaterial: (id: number) => deleteMaterial(id),
       handleFetchMaterialIndex: () => fetchMaterialIndex(),
       handleUploadMaterial: (file: File, title: string, description: string) =>
@@ -29,4 +29,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Material);
+)(MaterialUpload);

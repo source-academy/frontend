@@ -38,7 +38,7 @@ type State = {
 type IMaterialTableProps = IOwnProps;
 
 interface IOwnProps {
-  handleCreateMaterialFolder?: (name: string) => void;
+  handleCreateMaterialFolder?: (title: string) => void;
   handleDeleteMaterial?: (id: number) => void;
   handleFetchMaterialIndex: () => void;
   materialIndex: MaterialData[] | null;

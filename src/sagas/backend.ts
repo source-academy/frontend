@@ -495,12 +495,12 @@ function* backendSaga(): SagaIterator {
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can create materials folder.');
     }
-    const { name } = action.payload;
+    const { title } = action.payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield request.postMaterialFolder(name, tokens);
+    const resp = yield request.postMaterialFolder(title, tokens);
     if (resp && resp.ok) {
       const materialIndex = yield call(request.getMaterialIndex, tokens);
       if (materialIndex) {
