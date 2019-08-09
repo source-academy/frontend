@@ -40,6 +40,7 @@ type IMaterialTableProps = IOwnProps;
 interface IOwnProps {
   handleCreateMaterialFolder?: (title: string) => void;
   handleDeleteMaterial?: (id: number) => void;
+  handleDeleteMaterialFolder?: (id: number) => void;
   handleFetchMaterialIndex: () => void;
   materialIndex: MaterialData[] | null;
 }
@@ -85,7 +86,8 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
           field: '',
           cellRendererFramework: DeleteCell,
           cellRendererParams: {
-            handleDeleteMaterial: this.props.handleDeleteMaterial
+            handleDeleteMaterial: this.props.handleDeleteMaterial,
+            handleDeleteMaterialFolder: this.props.handleDeleteMaterialFolder
           },
           maxWidth: 400,
           suppressSorting: true,
@@ -209,7 +211,7 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
   private handleCreateMaterialFolder = () => {
     this.props.handleCreateMaterialFolder!(this.state.newFolderName);
     this.handleCloseDialog();
-  }
+  };
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const changeVal = event.target.value;

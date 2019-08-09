@@ -10,6 +10,7 @@ interface IMaterialProps extends IDispatchProps, IStateProps {}
 export interface IDispatchProps {
   handleCreateMaterialFolder: (title: string) => void;
   handleDeleteMaterial: (id: number) => void;
+  handleDeleteMaterialFolder: (id: number) => void;
   handleFetchMaterialIndex: () => void;
   handleUploadMaterial: (file: File, title: string, description: string) => void;
 }
@@ -28,6 +29,7 @@ class MaterialUpload extends React.Component<IMaterialProps, {}> {
           <MaterialTable
             handleCreateMaterialFolder={this.props.handleCreateMaterialFolder}
             handleDeleteMaterial={this.props.handleDeleteMaterial}
+            handleDeleteMaterialFolder={this.props.handleDeleteMaterialFolder}
             handleFetchMaterialIndex={this.props.handleFetchMaterialIndex}
             materialIndex={this.props.materialIndex}
           />

@@ -522,6 +522,30 @@ function* backendSaga(): SagaIterator {
       yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
     }
   });
+
+  yield takeEvery(actionTypes.DELETE_MATERIAL_FOLDER, function*(
+    action: ReturnType<typeof actions.deleteMaterial>
+  ) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can delete material folder.');
+    }
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { id } = action.payload;
+    const resp: Response = yield request.deleteMaterialFolder(id, tokens);
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
+      return;
+    }
+    const materialIndex = yield call(request.getMaterialIndex, tokens);
+    if (materialIndex) {
+      yield put(actions.updateMaterialIndex(materialIndex));
+    }
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  });
 }
 
 export default backendSaga;

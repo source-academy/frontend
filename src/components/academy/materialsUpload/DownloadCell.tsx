@@ -15,7 +15,9 @@ class DownloadCell extends React.Component<ISelectCellProps, {}> {
   }
 
   public render() {
-    return <div>{controlButton('', IconNames.DOWNLOAD, this.handleSelect)}</div>;
+    return (
+      <div>{this.props.data.url && controlButton('', IconNames.DOWNLOAD, this.handleSelect)}</div>
+    );
   }
 
   private handleSelect = () => {

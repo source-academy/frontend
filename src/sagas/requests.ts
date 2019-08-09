@@ -461,7 +461,7 @@ export const postSourcecast = async (
 };
 
 /**
- * DELETE /sourcecast
+ * DELETE /material
  */
 export async function deleteMaterial(id: number, tokens: Tokens) {
   const response = await request(`material/${id}`, 'DELETE', {
@@ -516,6 +516,20 @@ export const postMaterial = async (
   });
   return resp;
 };
+
+/**
+ * DELETE /category
+ */
+export async function deleteMaterialFolder(id: number, tokens: Tokens) {
+  const response = await request(`category/${id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return response;
+}
 
 /**
  * POST /category
