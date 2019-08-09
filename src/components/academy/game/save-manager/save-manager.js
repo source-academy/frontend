@@ -23,7 +23,7 @@ export function init(saveFunc, saveData, callback) {
       }
     }
 
-    StoryManager.loadStoryXML(storyXMLs, false, function() {
+    StoryManager.loadStoryXML(storyXMLs, loadFromLocal, false, function() {
       LocationManager.changeStartLocation(saveData.startLocation);
       if (hasPending()) {
         var secondLast = actionSequence[actionSequence.length - 2];
