@@ -6,12 +6,26 @@ import * as React from 'react';
 import { InterpreterOutput, SideContentType } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
+import {
+  AutorunButtons,
+  ChapterSelect,
+  ClearButton,
+  EvalButton,
+  ExternalLibrarySelect
+} from '../workspace/controlBar/index';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
-import { Input, IPlaybackData, KeyboardCommand, RecordingStatus } from './sourcecastShape';
+import {
+  Input,
+  IPlaybackData,
+  ISourcecastData,
+  KeyboardCommand,
+  RecordingStatus
+} from './sourcecastShape';
+import SourcecastTable from './SourcecastTable';
 import SourcereelControlbar from './SourcereelControlbar';
 
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
@@ -34,6 +48,7 @@ export interface IStateProps {
   replValue: string;
   timeElapsedBeforePause: number;
   sideContentHeight?: number;
+  sourcecastIndex: ISourcecastData[] | null;
   sourceChapter: number;
   timeResumed: number;
 }
@@ -46,12 +61,14 @@ export interface IDispatchProps {
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handleDeleteSourcecastEntry: (id: number) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleFetchSourcecastIndex: () => void;
   handleInterruptEval: () => void;
   handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
@@ -80,6 +97,84 @@ class Sourcereel extends React.Component<ISourcereelProps> {
   }
 
   public render() {
+    const editorEvalHandler = () => {
+      this.props.handleEditorEval();
+      if (this.props.recordingStatus !== RecordingStatus.recording) {
+        return;
+      }
+      this.props.handleRecordInput({
+        time: this.getTimerDuration(),
+        type: 'keyboardCommand',
+        data: KeyboardCommand.run
+      });
+    };
+    const autorunButtons = (
+      <AutorunButtons
+        handleDebuggerPause={this.props.handleDebuggerPause}
+        handleDebuggerReset={this.props.handleDebuggerReset}
+        handleDebuggerResume={this.props.handleDebuggerResume}
+        handleEditorEval={editorEvalHandler}
+        handleInterruptEval={this.props.handleInterruptEval}
+        handleToggleEditorAutorun={this.props.handleToggleEditorAutorun}
+        isDebugging={this.props.isDebugging}
+        isEditorAutorun={this.props.isEditorAutorun}
+        isRunning={this.props.isRunning}
+        key="autorun"
+      />
+    );
+
+    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) => {
+      this.props.handleChapterSelect(chapter);
+      if (this.props.recordingStatus !== RecordingStatus.recording) {
+        return;
+      }
+      this.props.handleRecordInput({
+        time: this.getTimerDuration(),
+        type: 'chapterSelect',
+        data: chapter
+      });
+    };
+
+    const chapterSelect = (
+      <ChapterSelect
+        handleChapterSelect={chapterSelectHandler}
+        sourceChapter={this.props.sourceChapter}
+        key="chapter"
+      />
+    );
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const externalSelectHandler = ({ name }: { name: ExternalLibraryName }, e: any) => {
+      this.props.handleExternalSelect(name);
+      if (this.props.recordingStatus !== RecordingStatus.recording) {
+        return;
+      }
+      this.props.handleRecordInput({
+        time: this.getTimerDuration(),
+        type: 'externalLibrarySelect',
+        data: name
+      });
+    };
+
+    const externalLibrarySelect = (
+      <ExternalLibrarySelect
+        externalLibraryName={this.props.externalLibraryName}
+        handleExternalSelect={externalSelectHandler}
+        key="external_library"
+      />
+    );
+
     const editorProps: ISourcecastEditorProps = {
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,
@@ -96,61 +191,8 @@ class Sourcereel extends React.Component<ISourcereelProps> {
     };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
-        editorValue: this.props.editorValue,
-        externalLibraryName: this.props.externalLibraryName,
-        handleChapterSelect: ({ chapter }: { chapter: number }, e: any) => {
-          this.props.handleChapterSelect(chapter);
-          if (this.props.recordingStatus !== RecordingStatus.recording) {
-            return;
-          }
-          this.props.handleRecordInput({
-            time: this.getTimerDuration(),
-            type: 'chapterSelect',
-            data: chapter
-          });
-        },
-        handleExternalSelect: ({ name }: { name: ExternalLibraryName }, e: any) => {
-          this.props.handleExternalSelect(name);
-          if (this.props.recordingStatus !== RecordingStatus.recording) {
-            return;
-          }
-          this.props.handleRecordInput({
-            time: this.getTimerDuration(),
-            type: 'externalLibrarySelect',
-            data: name
-          });
-        },
-
-        handleEditorEval: () => {
-          this.props.handleEditorEval();
-          if (this.props.recordingStatus !== RecordingStatus.recording) {
-            return;
-          }
-          this.props.handleRecordInput({
-            time: this.getTimerDuration(),
-            type: 'keyboardCommand',
-            data: KeyboardCommand.run
-          });
-        },
-        handleEditorValueChange: this.props.handleEditorValueChange,
-        handleInterruptEval: this.props.handleInterruptEval,
-        handleReplEval: this.props.handleReplEval,
-        handleReplOutputClear: this.props.handleReplOutputClear,
-        handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
-        handleDebuggerPause: this.props.handleDebuggerPause,
-        handleDebuggerResume: this.props.handleDebuggerResume,
-        handleDebuggerReset: this.props.handleDebuggerReset,
-        hasChapterSelect: true,
-        hasCollabEditing: false,
-        hasEditorAutorunButton: true,
-        hasSaveButton: false,
-        hasShareButton: false,
-        isEditorAutorun: this.props.isEditorAutorun,
-        isRunning: this.props.isRunning,
-        isDebugging: this.props.isDebugging,
-        enableDebugging: this.props.enableDebugging,
-        questionProgress: null,
-        sourceChapter: this.props.sourceChapter
+        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
+        replButtons: [evalButton, clearButton]
       },
       customEditor: <SourcecastEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
@@ -194,6 +236,20 @@ class Sourcereel extends React.Component<ISourcereelProps> {
                 />
               </div>
             )
+          },
+          {
+            label: 'Management',
+            iconName: IconNames.EDIT,
+            body: (
+              <div>
+                <SourcecastTable
+                  handleDeleteSourcecastEntry={this.props.handleDeleteSourcecastEntry}
+                  handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
+                  sourcecastIndex={this.props.sourcecastIndex}
+                />
+              </div>
+            ),
+            id: SideContentType.introduction
           },
           listVisualizerTab,
           inspectorTab,
