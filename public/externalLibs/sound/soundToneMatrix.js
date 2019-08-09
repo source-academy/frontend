@@ -477,14 +477,12 @@ function sawtooth_sound(freq, duration) {
 		      duration);
 }
 
-function exponential_decay(decay_period) {
+function linear_decay(decay_period) {
   return function (t) {
     if ((t > decay_period) || (t < 0)) {
-      return undefined;
+      return 0;
     } else {
-      var halflife = decay_period / 8;
-      var lambda = Math.log(2) / halflife;
-      return Math.pow(Math.E, -lambda * t);
+      return 1 - (t / decay_period);
     }
   }
 }
@@ -514,11 +512,11 @@ function adsr(attack_ratio, decay_ratio, sustain_level, release_ratio) {
       if (x < attack_time) {
         return wave(x) * (x / attack_time);
       } else if (x < attack_time + decay_time) {
-        return ((1 - sustain_level) * (exponential_decay(decay_time))(x - attack_time) + sustain_level) * wave(x);
+        return ((1 - sustain_level) * (linear_decay(decay_time))(x - attack_time) + sustain_level) * wave(x);
       } else if (x < duration - release_time) {
         return wave(x) * sustain_level;
       } else if (x <= duration) {
-        return wave(x) * sustain_level * (exponential_decay(release_time))(x - (duration - release_time));
+        return wave(x) * sustain_level * (linear_decay(release_time))(x - (duration - release_time));
       } else {
         return 0;
       }
