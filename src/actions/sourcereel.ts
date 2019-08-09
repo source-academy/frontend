@@ -2,6 +2,14 @@ import { Input, IPlaybackData } from '../components/sourcecast/sourcecastShape';
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
+export const deleteSourcecastEntry = (id: number, workspaceLocation: WorkspaceLocation) => ({
+  type: actionTypes.DELETE_SOURCECAST_ENTRY,
+  payload: {
+    id,
+    workspaceLocation
+  }
+});
+
 export const recordInit = (
   initData: IPlaybackData['init'],
   workspaceLocation: WorkspaceLocation
