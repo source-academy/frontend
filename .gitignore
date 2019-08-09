@@ -23,6 +23,9 @@ terraform*
 
 npm-debug.log*
 
+.idea/
+cadet-frontend.iml
+
 # emacs backup files
 
 *~
