@@ -91,7 +91,7 @@ export function visualiseEnv(context: Context) {
   }
 }
 
-export function highlightLine(line: number) {
+export function highlightLine(line: number[]) {
   if ((window as any).Inspector) {
     (window as any).Inspector.highlightClean();
     (window as any).Inspector.highlightLine(line[0]);

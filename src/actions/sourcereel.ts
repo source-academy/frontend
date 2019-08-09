@@ -1,33 +1,26 @@
+import { action } from 'typesafe-actions';
+
 import { Input, IPlaybackData } from '../components/sourcecast/sourcecastShape';
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
-export const deleteSourcecastEntry = (id: number, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.DELETE_SOURCECAST_ENTRY,
-  payload: {
+export const deleteSourcecastEntry = (id: number, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.DELETE_SOURCECAST_ENTRY, {
     id,
     workspaceLocation
-  }
-});
+  });
 
-export const recordInit = (
-  initData: IPlaybackData['init'],
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.RECORD_INIT,
-  payload: {
+export const recordInit = (initData: IPlaybackData['init'], workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.RECORD_INIT, {
     initData,
     workspaceLocation
-  }
-});
+  });
 
-export const recordInput = (input: Input, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.RECORD_INPUT,
-  payload: {
+export const recordInput = (input: Input, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.RECORD_INPUT, {
     input,
     workspaceLocation
-  }
-});
+  });
 
 export const saveSourcecastData = (
   title: string,
@@ -35,53 +28,41 @@ export const saveSourcecastData = (
   audio: Blob,
   playbackData: IPlaybackData,
   workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.SAVE_SOURCECAST_DATA,
-  payload: {
+) =>
+  action(actionTypes.SAVE_SOURCECAST_DATA, {
     title,
     description,
     audio,
     audioUrl: window.URL.createObjectURL(audio),
     playbackData,
     workspaceLocation
-  }
-});
+  });
 
-export const timerPause = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.TIMER_PAUSE,
-  payload: {
+export const timerPause = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.TIMER_PAUSE, {
     timeNow: Date.now(),
     workspaceLocation
-  }
-});
+  });
 
-export const timerReset = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.TIMER_RESET,
-  payload: {
+export const timerReset = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.TIMER_RESET, {
     workspaceLocation
-  }
-});
+  });
 
-export const timerResume = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.TIMER_RESUME,
-  payload: {
+export const timerResume = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.TIMER_RESUME, {
     timeNow: Date.now(),
     workspaceLocation
-  }
-});
+  });
 
-export const timerStart = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.TIMER_START,
-  payload: {
+export const timerStart = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.TIMER_START, {
     timeNow: Date.now(),
     workspaceLocation
-  }
-});
+  });
 
-export const timerStop = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.TIMER_STOP,
-  payload: {
+export const timerStop = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.TIMER_STOP, {
     timeNow: Date.now(),
     workspaceLocation
-  }
-});
+  });
