@@ -101,7 +101,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-    grade: 5,
+    grade: 2700,
     id: 4,
     maxGrade: 3000,
     maxXp: 1000,
@@ -111,14 +111,14 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
-    xp: 4,
+    xp: 800,
     gradingStatus: 'none'
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 1500,
+    grade: 1950,
     id: 5,
     maxGrade: 3000,
     maxXp: 1000,
@@ -135,7 +135,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 250,
+    grade: 300,
     id: 5,
     maxGrade: 700,
     maxXp: 500,
@@ -145,7 +145,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 500,
+    xp: 150,
     gradingStatus: 'graded'
   },
   {
@@ -162,7 +162,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 0,
+    xp: 100,
     gradingStatus: 'excluded'
   }
 ];
@@ -602,5 +602,14 @@ sapien
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
     title: 'A Closed Mission'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    id: 5,
+    longSummary:
+      'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
+    missionPDF: 'www.google.com',
+    questions: mockClosedAssessmentQuestions,
+    title: 'A Closed Sidequest'
   }
 ];
