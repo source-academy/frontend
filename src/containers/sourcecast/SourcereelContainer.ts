@@ -13,9 +13,11 @@ import {
   clearReplOutput,
   debuggerReset,
   debuggerResume,
+  deleteSourcecastEntry,
   evalEditor,
   evalRepl,
   externalLibrarySelect,
+  fetchSourcecastIndex,
   recordInit,
   recordInput,
   saveSourcecastData,
@@ -53,6 +55,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   recordingStatus: state.workspaces.sourcereel.recordingStatus,
   replValue: state.workspaces.sourcereel.replValue,
   sideContentHeight: state.workspaces.sourcereel.sideContentHeight,
+  sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcereel.context.chapter,
   timeElapsedBeforePause: state.workspaces.sourcereel.timeElapsedBeforePause,
   timeResumed: state.workspaces.sourcereel.timeResumed
@@ -67,14 +70,17 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
+      handleDeleteSourcecastEntry: (id: number) => deleteSourcecastEntry(id, 'sourcecast'),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, location),
-      handleEditorWidthChange: (widthChange: number) => changeEditorWidth(widthChange, location),
+      handleEditorWidthChange: (widthChange: number) =>
+        changeEditorWidth(widthChange.toString(), location),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, location),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         externalLibrarySelect(externalLibraryName, location),
+      handleFetchSourcecastIndex: () => fetchSourcecastIndex('sourcecast'),
       handleInterruptEval: () => beginInterruptExecution(location),
       handleRecordInput: (input: Input) => recordInput(input, location),
       handleReplEval: () => evalRepl(location),

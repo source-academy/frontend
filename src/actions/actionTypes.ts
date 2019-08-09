@@ -1,9 +1,3 @@
-import { Action as ReduxAction } from 'redux';
-
-export interface IAction extends ReduxAction {
-  payload: any;
-}
-
 /** Academy */
 export const SAVE_CANVAS = 'SAVE_CANVAS';
 
@@ -77,6 +71,7 @@ export const SET_SOURCECAST_PLAYBACK_STATUS = 'SET_SOURCECAST_PLAYBACK_STATUS';
 export const UPDATE_SOURCECAST_INDEX = 'UPDATE_SOURCECAST_INDEX';
 
 /** Sourcereel */
+export const DELETE_SOURCECAST_ENTRY = 'DELETE_SOURCECAST_ENTRY';
 export const RECORD_INPUT = 'RECORD_INPUT';
 export const RECORD_INIT = 'RECORD_INIT';
 export const SAVE_SOURCECAST_DATA = 'SAVE_SOURCECAST_DATA';
