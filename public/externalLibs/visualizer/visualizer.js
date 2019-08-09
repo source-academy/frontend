@@ -871,6 +871,10 @@
    *  Then shift it to the left end.
    */
   function draw(xs) {
+    // Blink icon
+    const icon = document.getElementById('data_visualiser-icon');
+    icon.classList.add('side-content-tab-alert');
+
     minLeft = 500
     nodelist = []
 		fnNodeList = []
