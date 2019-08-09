@@ -499,7 +499,7 @@ async function request(
     // response.status of > 299 does not raise error; so deal with in in the try clause
     if (opts.shouldRefresh && response && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
-      store.dispatch(actions.setTokens(newTokens));
+      store.dispatch(actions.setTokens(newTokens!));
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,

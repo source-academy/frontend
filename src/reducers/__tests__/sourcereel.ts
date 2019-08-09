@@ -1,5 +1,4 @@
 import {
-  IAction,
   RECORD_INIT,
   RECORD_INPUT,
   TIMER_PAUSE,
@@ -18,7 +17,7 @@ import {
 import { reducer } from '../sourcereel';
 import { defaultWorkspaceManager } from '../states';
 
-function generateAction(type: string, payload: any = {}): IAction {
+function generateAction(type: string, payload: any = {}) {
   return {
     type,
     payload
@@ -32,7 +31,7 @@ describe('RECORD_INIT', () => {
       chapter: 1,
       externalLibrary: ExternalLibraryNames.NONE
     };
-    const action: IAction = generateAction(RECORD_INIT, { initData });
+    const action = generateAction(RECORD_INIT, { initData });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -65,7 +64,7 @@ describe('RECORD_INPUT', () => {
       data: delta
     };
 
-    const action: IAction = generateAction(RECORD_INPUT, { input });
+    const action = generateAction(RECORD_INPUT, { input });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -80,7 +79,7 @@ describe('RECORD_INPUT', () => {
 describe('TIMER_PAUSE', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
-    const action: IAction = generateAction(TIMER_PAUSE, { timeNow });
+    const action = generateAction(TIMER_PAUSE, { timeNow });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -95,7 +94,7 @@ describe('TIMER_PAUSE', () => {
 
 describe('TIMER_RESET', () => {
   test('pauses timer correctly', () => {
-    const action: IAction = generateAction(TIMER_RESET, {});
+    const action = generateAction(TIMER_RESET, {});
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -109,7 +108,7 @@ describe('TIMER_RESET', () => {
 describe('TIMER_RESUME', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
-    const action: IAction = generateAction(TIMER_RESUME, { timeNow });
+    const action = generateAction(TIMER_RESUME, { timeNow });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -122,7 +121,7 @@ describe('TIMER_RESUME', () => {
 describe('TIMER_START', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
-    const action: IAction = generateAction(TIMER_START, { timeNow });
+    const action = generateAction(TIMER_START, { timeNow });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -136,7 +135,7 @@ describe('TIMER_START', () => {
 describe('TIMER_STOP', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
-    const action: IAction = generateAction(TIMER_STOP, { timeNow });
+    const action = generateAction(TIMER_STOP, { timeNow });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
