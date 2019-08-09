@@ -206,8 +206,10 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
   private handleCloseDialog = () => this.setState({ dialogOpen: false, newFolderName: '' });
   private handleOpenDialog = () => this.setState({ dialogOpen: true });
   private handleSetFolderName = (value: string) => this.setState({ newFolderName: value });
-  private handleCreateMaterialFolder = () =>
+  private handleCreateMaterialFolder = () => {
     this.props.handleCreateMaterialFolder!(this.state.newFolderName);
+    this.handleCloseDialog();
+  }
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const changeVal = event.target.value;
