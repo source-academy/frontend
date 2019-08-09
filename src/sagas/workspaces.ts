@@ -18,8 +18,10 @@ import { highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelp
 export default function* workspaceSaga(): SagaIterator {
   let context: Context;
 
-  yield takeEvery(actionTypes.EVAL_EDITOR, function*(action) {
-    const workspaceLocation = (action as actionTypes.IAction).payload.workspaceLocation;
+  yield takeEvery(actionTypes.EVAL_EDITOR, function*(
+    action: ReturnType<typeof actions.evalEditor>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select((state: IState) => {
       const prepend = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
       const value = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
@@ -59,20 +61,24 @@ export default function* workspaceSaga(): SagaIterator {
     yield* evalCode(code, context, execTime, workspaceLocation, actionTypes.EVAL_EDITOR);
   });
 
-  yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(action) {
-    const workspaceLocation = (action as actionTypes.IAction).payload.workspaceLocation;
+  yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(
+    action: ReturnType<typeof actions.toggleEditorAutorun>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
     const isEditorAutorun = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).isEditorAutorun
     );
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
   });
 
-  yield takeEvery(actionTypes.INVALID_EDITOR_SESSION_ID, function*(action) {
+  yield takeEvery(actionTypes.INVALID_EDITOR_SESSION_ID, function*(
+    action: ReturnType<typeof actions.invalidEditorSessionId>
+  ) {
     yield call(showWarningMessage, 'Invalid ID Input', 1000);
   });
 
-  yield takeEvery(actionTypes.EVAL_REPL, function*(action) {
-    const workspaceLocation = (action as actionTypes.IAction).payload.workspaceLocation;
+  yield takeEvery(actionTypes.EVAL_REPL, function*(action: ReturnType<typeof actions.evalRepl>) {
+    const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).replValue
     );
@@ -88,8 +94,10 @@ export default function* workspaceSaga(): SagaIterator {
     yield* evalCode(code, context, execTime, workspaceLocation, actionTypes.EVAL_REPL);
   });
 
-  yield takeEvery(actionTypes.DEBUG_RESUME, function*(action) {
-    const workspaceLocation = (action as actionTypes.IAction).payload.workspaceLocation;
+  yield takeEvery(actionTypes.DEBUG_RESUME, function*(
+    action: ReturnType<typeof actions.debuggerResume>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue
     );
@@ -106,32 +114,40 @@ export default function* workspaceSaga(): SagaIterator {
     yield* evalCode(code, context, execTime, workspaceLocation, actionTypes.DEBUG_RESUME);
   });
 
-  yield takeEvery(actionTypes.DEBUG_RESET, function*(action) {
-    const workspaceLocation = (action as actionTypes.IAction).payload.workspaceLocation;
+  yield takeEvery(actionTypes.DEBUG_RESET, function*(
+    action: ReturnType<typeof actions.debuggerReset>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
     inspectorUpdate(undefined);
-    highlightLine(0);
+    highlightLine([0]);
     yield put(actions.clearReplOutput(workspaceLocation));
     context.runtime.break = false;
     lastDebuggerResult = undefined;
   });
 
-  yield takeEvery(actionTypes.HIGHLIGHT_LINE, function*(action) {
-    const workspaceLocation = (action as actionTypes.IAction).payload.highlightedLines;
+  yield takeEvery(actionTypes.HIGHLIGHT_LINE, function*(
+    action: ReturnType<typeof actions.highlightEditorLine>
+  ) {
+    const workspaceLocation = action.payload.highlightedLines;
     highlightLine(workspaceLocation);
     yield;
   });
 
-  yield takeEvery(actionTypes.UPDATE_EDITOR_BREAKPOINTS, function*(action) {
-    setBreakpointAtLine((action as actionTypes.IAction).payload.breakpoints);
+  yield takeEvery(actionTypes.UPDATE_EDITOR_BREAKPOINTS, function*(
+    action: ReturnType<typeof actions.setEditorBreakpoint>
+  ) {
+    setBreakpointAtLine(action.payload.breakpoints);
     yield;
   });
 
-  yield takeEvery(actionTypes.EVAL_TESTCASE, function*(action) {
-    const workspaceLocation = (action as actionTypes.IAction).payload.workspaceLocation;
-    const index = (action as actionTypes.IAction).payload.testcaseId;
+  yield takeEvery(actionTypes.EVAL_TESTCASE, function*(
+    action: ReturnType<typeof actions.evalTestcase>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
+    const index = action.payload.testcaseId;
     const code: string = yield select((state: IState) => {
       const prepend = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
       const value = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
@@ -181,9 +197,11 @@ export default function* workspaceSaga(): SagaIterator {
     yield* evalTestCode(code, context, execTime, workspaceLocation, index);
   });
 
-  yield takeEvery(actionTypes.CHAPTER_SELECT, function*(action) {
-    const workspaceLocation = (action as actionTypes.IAction).payload.workspaceLocation;
-    const newChapter = (action as actionTypes.IAction).payload.chapter;
+  yield takeEvery(actionTypes.CHAPTER_SELECT, function*(
+    action: ReturnType<typeof actions.chapterSelect>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
+    const newChapter = action.payload.chapter;
     const oldChapter = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
@@ -220,15 +238,17 @@ export default function* workspaceSaga(): SagaIterator {
    *
    * @see IWorkspaceManagerState @see IWorkspaceState
    */
-  yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function*(action) {
-    const workspaceLocation = (action as actionTypes.IAction).payload.workspaceLocation;
+  yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function*(
+    action: ReturnType<typeof actions.externalLibrarySelect>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
     const chapter = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
-    const newExternalLibraryName = (action as actionTypes.IAction).payload.externalLibraryName;
+    const newExternalLibraryName = action.payload.externalLibraryName;
     const oldExternalLibraryName = yield select(
       (state: IState) => state.workspaces[workspaceLocation].externalLibrary
     );
@@ -294,7 +314,9 @@ export default function* workspaceSaga(): SagaIterator {
    * Makes a call to checkWebGLAvailable to ensure that the Graphics libraries are loaded.
    * To abstract this to other libraries, add a call to the all() effect.
    */
-  yield takeEvery(actionTypes.ENSURE_LIBRARIES_LOADED, function*(action) {
+  yield takeEvery(actionTypes.ENSURE_LIBRARIES_LOADED, function*(
+    action: ReturnType<typeof actions.ensureLibrariesLoaded>
+  ) {
     yield* checkWebGLAvailable();
   });
 
@@ -304,9 +326,11 @@ export default function* workspaceSaga(): SagaIterator {
    * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
    * the function.
    */
-  yield takeEvery(actionTypes.BEGIN_CLEAR_CONTEXT, function*(action) {
+  yield takeEvery(actionTypes.BEGIN_CLEAR_CONTEXT, function*(
+    action: ReturnType<typeof actions.beginClearContext>
+  ) {
     yield* checkWebGLAvailable();
-    const externalLibraryName = (action as actionTypes.IAction).payload.library.external.name;
+    const externalLibraryName = action.payload.library.external.name;
     switch (externalLibraryName) {
       case ExternalLibraryNames.RUNES:
         (window as any).loadLib('RUNES');
@@ -317,16 +341,11 @@ export default function* workspaceSaga(): SagaIterator {
         (window as any).getReadyWebGLForCanvas('curve');
         break;
     }
-    const globals: Array<[string, any]> = (action as actionTypes.IAction).payload.library.globals;
+    const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
     for (const [key, value] of globals) {
       window[key] = value;
     }
-    yield put(
-      actions.endClearContext(
-        (action as actionTypes.IAction).payload.library,
-        (action as actionTypes.IAction).payload.workspaceLocation
-      )
-    );
+    yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
     yield undefined;
   });
 }

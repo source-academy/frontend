@@ -16,7 +16,7 @@ import {
   mockAssessments
 } from '../../mocks/assessmentAPI';
 import { mockNotifications } from '../../mocks/userAPI';
-import { Role } from '../../reducers/states';
+import { Role, Story } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import backendSaga from '../backend';
 import {
@@ -64,7 +64,12 @@ const errorResp = { ok: false };
 describe('Test FETCH_AUTH Action', () => {
   test('when tokens and user obtained', () => {
     const luminusCode = 'luminusCode';
-    const user = 'user';
+    const user = {
+      name: 'user',
+      role: 'student' as Role,
+      story: {} as Story,
+      grade: 1
+    };
     return expectSaga(backendSaga)
       .call(postAuth, luminusCode)
       .call(getUser, mockTokens)
@@ -76,7 +81,12 @@ describe('Test FETCH_AUTH Action', () => {
   });
   test('when tokens is null', () => {
     const luminusCode = 'luminusCode';
-    const user = 'user';
+    const user = {
+      name: 'user',
+      role: 'student' as Role,
+      story: {} as Story,
+      grade: 1
+    };
     return expectSaga(backendSaga)
       .provide([[call(postAuth, luminusCode), null], [call(getUser, mockTokens), user]])
       .call(postAuth, luminusCode)
