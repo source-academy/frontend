@@ -398,7 +398,11 @@ class AssessmentWorkspace extends React.Component<
         id: SideContentType.toneMatrix
       });
     }
-    return { handleActiveTabChange: props.handleActiveTabChange, tabs };
+    return {
+      handleActiveTabChange: props.handleActiveTabChange,
+      defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.briefing,
+      tabs
+    };
   };
 
   /** Pre-condition: IAssessment has been loaded */
