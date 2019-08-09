@@ -105,18 +105,24 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 
   public render() {
-    const tabs: SideContentTab[] = [
-      playgroundIntroductionTab,
-      listVisualizerTab,
-      inspectorTab,
-      envVisualizerTab
-    ];
+    const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
+    // Conditional logic for tab rendering
     if (
       this.props.externalLibraryName === ExternalLibraryNames.PIXNFLIX ||
       this.props.externalLibraryName === ExternalLibraryNames.ALL
     ) {
+      // Enable video tab only when 'PIX&FLIX' is selected
       tabs.push(videoDisplayTab);
+    }
+    if (this.props.sourceChapter >= 2) {
+      // Enable Data Visualizer for Source Chapter 2 and above
+      tabs.push(listVisualizerTab);
+    }
+    if (this.props.sourceChapter >= 3) {
+      // Enable Inspector, Env Visualizer for Source Chapter 3 and above
+      tabs.push(inspectorTab);
+      tabs.push(envVisualizerTab);
     }
 
     const workspaceProps: WorkspaceProps = {
