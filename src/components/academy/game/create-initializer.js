@@ -82,7 +82,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     storyId = prompt("Please enter storyID here or leave blank for system default story:");
     if (storyId === null || !storyId.replace(/\s/g, '').length) {
       //storyId is null or only contains whitespace
-      storyId = 'default'; //TODO: implement a hook to read storyId from backend
+      storyId = story;
       loadFromLocal = false;
     } else {
       loadFromLocal = confirm("Do you want to load " + storyId + ".story.xml from your local device?");
