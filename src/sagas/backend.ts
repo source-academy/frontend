@@ -27,8 +27,8 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import * as request from './requests';
 
 function* backendSaga(): SagaIterator {
-  yield takeEvery(actionTypes.FETCH_AUTH, function*(action) {
-    const luminusCode = (action as actionTypes.IAction).payload;
+  yield takeEvery(actionTypes.FETCH_AUTH, function*(action: ReturnType<typeof actions.fetchAuth>) {
+    const luminusCode = action.payload;
     const tokens = yield call(request.postAuth, luminusCode);
     if (!tokens) {
       return yield history.push('/');
@@ -58,19 +58,23 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(action) {
+  yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.fetchAssessment>
+  ) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const id = (action as actionTypes.IAction).payload;
+    const id = action.payload;
     const assessment: IAssessment = yield call(request.getAssessment, id, tokens);
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
     }
   });
 
-  yield takeEvery(actionTypes.SUBMIT_ANSWER, function*(action) {
+  yield takeEvery(actionTypes.SUBMIT_ANSWER, function*(
+    action: ReturnType<typeof actions.submitAnswer>
+  ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role !== Role.Student) {
       return yield call(showWarningMessage, 'Only students can submit answers.');
@@ -80,8 +84,8 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const questionId = (action as actionTypes.IAction).payload.id;
-    const answer = (action as actionTypes.IAction).payload.answer;
+    const questionId = action.payload.id;
+    const answer = action.payload.answer;
     const resp = yield call(request.postAnswer, questionId, answer, tokens);
     if (!resp) {
       return yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
@@ -121,7 +125,9 @@ function* backendSaga(): SagaIterator {
     return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   });
 
-  yield takeEvery(actionTypes.SUBMIT_ASSESSMENT, function*(action) {
+  yield takeEvery(actionTypes.SUBMIT_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.submitAssessment>
+  ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role !== Role.Student) {
       return yield call(showWarningMessage, 'Only students can submit assessments.');
@@ -131,7 +137,7 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const assessmentId = (action as actionTypes.IAction).payload;
+    const assessmentId = action.payload;
     const resp = yield call(request.postAssessment, assessmentId, tokens);
     if (!resp || !resp.ok) {
       return yield call(showWarningMessage, 'Something went wrong. Please try again.');
@@ -150,13 +156,15 @@ function* backendSaga(): SagaIterator {
     return yield put(actions.updateAssessmentOverviews(newOverviews));
   });
 
-  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*(action) {
+  yield takeEvery(actionTypes.FETCH_GRADING_OVERVIEWS, function*(
+    action: ReturnType<typeof actions.fetchGradingOverviews>
+  ) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
 
-    const filterToGroup = (action as actionTypes.IAction).payload;
+    const filterToGroup = action.payload;
 
     const gradingOverviews = yield call(request.getGradingOverviews, tokens, filterToGroup);
     if (gradingOverviews) {
@@ -164,12 +172,14 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.FETCH_GRADING, function*(action) {
+  yield takeEvery(actionTypes.FETCH_GRADING, function*(
+    action: ReturnType<typeof actions.fetchGrading>
+  ) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const id = (action as actionTypes.IAction).payload;
+    const id = action.payload;
     const grading = yield call(request.getGrading, id, tokens);
     if (grading) {
       yield put(actions.updateGrading(id, grading));
@@ -179,12 +189,14 @@ function* backendSaga(): SagaIterator {
   /**
    * Unsubmits the submission and updates the grading overviews of the new status.
    */
-  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(action) {
+  yield takeEvery(actionTypes.UNSUBMIT_SUBMISSION, function*(
+    action: ReturnType<typeof actions.unsubmitSubmission>
+  ) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const { submissionId } = (action as actionTypes.IAction).payload;
+    const { submissionId } = action.payload;
 
     const resp: Response = yield request.postUnsubmit(submissionId, tokens);
     if (!resp || !resp.ok) {
@@ -203,18 +215,16 @@ function* backendSaga(): SagaIterator {
     yield put(actions.updateGradingOverviews(newOverviews));
   });
 
-  const sendGrade = function*(action: actionTypes.IAction) {
+  const sendGrade = function*(
+    action:
+      | ReturnType<typeof actions.submitGrading>
+      | ReturnType<typeof actions.submitGradingAndContinue>
+  ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
     }
-    const {
-      submissionId,
-      questionId,
-      gradeAdjustment,
-      xpAdjustment,
-      comments
-    } = (action as actionTypes.IAction).payload;
+    const { submissionId, questionId, gradeAdjustment, xpAdjustment, comments } = action.payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -253,7 +263,9 @@ function* backendSaga(): SagaIterator {
     }
   };
 
-  const sendGradeAndContinue = function*(action: actionTypes.IAction) {
+  const sendGradeAndContinue = function*(
+    action: ReturnType<typeof actions.submitGradingAndContinue>
+  ) {
     const { submissionId, questionId } = action.payload;
     yield* sendGrade(action);
     /**
@@ -271,7 +283,9 @@ function* backendSaga(): SagaIterator {
 
   yield takeEvery(actionTypes.SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
 
-  yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(action) {
+  yield takeEvery(actionTypes.FETCH_NOTIFICATIONS, function*(
+    action: ReturnType<typeof actions.fetchNotifications>
+  ) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -282,15 +296,15 @@ function* backendSaga(): SagaIterator {
     yield put(actions.updateNotifications(notifications));
   });
 
-  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATIONS, function*(action) {
+  yield takeEvery(actionTypes.ACKNOWLEDGE_NOTIFICATIONS, function*(
+    action: ReturnType<typeof actions.acknowledgeNotifications>
+  ) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
 
-    const notificationFilter:
-      | NotificationFilterFunction
-      | undefined = (action as actionTypes.IAction).payload.withFilter;
+    const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
 
     const notifications: Notification[] = yield select(
       (state: IState) => state.session.notifications
@@ -322,18 +336,22 @@ function* backendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(actionTypes.NOTIFY_CHATKIT_USERS, function*(action) {
+  yield takeEvery(actionTypes.NOTIFY_CHATKIT_USERS, function*(
+    action: ReturnType<typeof actions.notifyChatUsers>
+  ) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
 
-    const assessmentId = (action as actionTypes.IAction).payload.assessmentId;
-    const submissionId = (action as actionTypes.IAction).payload.submissionId;
+    const assessmentId = action.payload.assessmentId;
+    const submissionId = action.payload.submissionId;
     yield call(request.postNotify, tokens, assessmentId, submissionId);
   });
 
-  yield takeEvery(actionTypes.DELETE_SOURCECAST_ENTRY, function*(action) {
+  yield takeEvery(actionTypes.DELETE_SOURCECAST_ENTRY, function*(
+    action: ReturnType<typeof actions.deleteSourcecastEntry>
+  ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can delete sourcecast.');
@@ -342,7 +360,7 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const { id } = (action as actionTypes.IAction).payload;
+    const { id } = action.payload;
     const resp: Response = yield request.deleteSourcecastEntry(id, tokens);
     if (!resp || !resp.ok) {
       yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
@@ -350,38 +368,32 @@ function* backendSaga(): SagaIterator {
     }
     const sourcecastIndex = yield call(request.getSourcecastIndex, tokens);
     if (sourcecastIndex) {
-      yield put(
-        actions.updateSourcecastIndex(
-          sourcecastIndex,
-          (action as actionTypes.IAction).payload.workspaceLocation
-        )
-      );
+      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
     }
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
-  yield takeEvery(actionTypes.FETCH_SOURCECAST_INDEX, function*(action) {
+  yield takeEvery(actionTypes.FETCH_SOURCECAST_INDEX, function*(
+    action: ReturnType<typeof actions.fetchSourcecastIndex>
+  ) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
     const sourcecastIndex = yield call(request.getSourcecastIndex, tokens);
     if (sourcecastIndex) {
-      yield put(
-        actions.updateSourcecastIndex(
-          sourcecastIndex,
-          (action as actionTypes.IAction).payload.workspaceLocation
-        )
-      );
+      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
     }
   });
 
-  yield takeEvery(actionTypes.SAVE_SOURCECAST_DATA, function*(action) {
+  yield takeEvery(actionTypes.SAVE_SOURCECAST_DATA, function*(
+    action: ReturnType<typeof actions.saveSourcecastData>
+  ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can save sourcecast.');
     }
-    const { title, description, audio, playbackData } = (action as actionTypes.IAction).payload;
+    const { title, description, audio, playbackData } = action.payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken

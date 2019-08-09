@@ -1,3 +1,5 @@
+import { action } from 'typesafe-actions';
+
 import {
   ICodeDelta,
   Input,
@@ -8,31 +10,22 @@ import {
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
-export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.FETCH_SOURCECAST_INDEX,
-  payload: {
+export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.FETCH_SOURCECAST_INDEX, {
     workspaceLocation
-  }
-});
+  });
 
-export const setCodeDeltasToApply = (
-  deltas: ICodeDelta[],
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.SET_CODE_DELTAS_TO_APPLY,
-  payload: {
+export const setCodeDeltasToApply = (deltas: ICodeDelta[], workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.SET_CODE_DELTAS_TO_APPLY, {
     deltas,
     workspaceLocation
-  }
-});
+  });
 
-export const setInputToApply = (inputToApply: Input, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.SET_INPUT_TO_APPLY,
-  payload: {
+export const setInputToApply = (inputToApply: Input, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.SET_INPUT_TO_APPLY, {
     inputToApply,
     workspaceLocation
-  }
-});
+  });
 
 export const setSourcecastData = (
   title: string,
@@ -40,43 +33,35 @@ export const setSourcecastData = (
   audioUrl: string,
   playbackData: IPlaybackData,
   workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.SET_SOURCECAST_DATA,
-  payload: {
+) =>
+  action(actionTypes.SET_SOURCECAST_DATA, {
     title,
     description,
     audioUrl,
     playbackData,
     workspaceLocation
-  }
-});
+  });
 
-export const setSourcecastDuration = (duration: number, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
-  payload: {
+export const setSourcecastDuration = (duration: number, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.SET_SOURCECAST_PLAYBACK_DURATION, {
     duration,
     workspaceLocation
-  }
-});
+  });
 
 export const setSourcecastStatus = (
   playbackStatus: PlaybackStatus,
   workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,
-  payload: {
+) =>
+  action(actionTypes.SET_SOURCECAST_PLAYBACK_STATUS, {
     playbackStatus,
     workspaceLocation
-  }
-});
+  });
 
 export const updateSourcecastIndex = (
   index: ISourcecastData[],
   workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.UPDATE_SOURCECAST_INDEX,
-  payload: {
+) =>
+  action(actionTypes.UPDATE_SOURCECAST_INDEX, {
     index,
     workspaceLocation
-  }
-});
+  });

@@ -16,7 +16,7 @@ function* updateQueryString() {
     (state: IState) => state.workspaces.playground.editorValue
   );
   if (!code || code === defaultEditorValue) {
-    yield put(actions.changeQueryString(undefined));
+    yield put(actions.changeQueryString(''));
     return;
   }
   const codeString: string = code as string;

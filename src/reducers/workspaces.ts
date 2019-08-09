@@ -1,4 +1,5 @@
 import { Reducer } from 'redux';
+import { ActionType } from 'typesafe-actions';
 import { ITestcase } from '../components/assessment/assessmentShape';
 
 import {
@@ -25,7 +26,6 @@ import {
   FINISH_INVITE,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
-  IAction,
   INIT_INVITE,
   LOG_OUT,
   RESET_TESTCASE,
@@ -43,6 +43,12 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
 } from '../actions/actionTypes';
+import * as collabActions from '../actions/collabEditing';
+import { logOut } from '../actions/commons';
+import * as interpreterActions from '../actions/interpreter';
+import * as sourcecastActions from '../actions/sourcecast';
+import * as sourcereelActions from '../actions/sourcereel';
+import * as workspaceActions from '../actions/workspaces';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { createContext } from '../utils/slangHelper';
 import { reducer as sourcecastReducer } from './sourcecast';
@@ -51,10 +57,21 @@ import {
   CodeOutput,
   createDefaultWorkspace,
   defaultWorkspaceManager,
+  ErrorOutput,
   InterpreterOutput,
   IWorkspaceManagerState,
-  maxBrowseIndex
+  maxBrowseIndex,
+  ResultOutput
 } from './states';
+
+const actions = {
+  logOut,
+  ...workspaceActions,
+  ...sourcecastActions,
+  ...sourcereelActions,
+  ...interpreterActions,
+  ...collabActions
+};
 
 /**
  * Takes in a IWorkspaceManagerState and maps it to a new state. The
@@ -66,10 +83,11 @@ import {
  */
 export const reducer: Reducer<IWorkspaceManagerState> = (
   state = defaultWorkspaceManager,
-  action: IAction
+  action: ActionType<typeof actions>
 ) => {
-  const workspaceLocation: WorkspaceLocation =
-    action.payload !== undefined ? action.payload.workspaceLocation : undefined;
+  const workspaceLocation: WorkspaceLocation = (action as any).payload
+    ? (action as any).payload.workspaceLocation
+    : 'assessment';
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
 
@@ -331,16 +349,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
         newOutput = state[workspaceLocation].output.slice(0, -1).concat({
-          ...action.payload,
-          workspaceLocation: undefined,
+          type: action.payload.type,
+          value: action.payload.value,
           consoleLogs: lastOutput.consoleLogs
-        });
+        } as ResultOutput);
       } else {
         newOutput = state[workspaceLocation].output.concat({
-          ...action.payload,
-          workspaceLocation: undefined,
+          type: action.payload.type,
+          value: action.payload.value,
           consoleLogs: []
-        });
+        } as ResultOutput);
       }
       return {
         ...state,
@@ -396,16 +414,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
         newOutput = state[workspaceLocation].output.slice(0, -1).concat({
-          ...action.payload,
-          workspaceLocation: undefined,
+          type: action.payload.type,
+          errors: action.payload.errors,
           consoleLogs: lastOutput.consoleLogs
-        });
+        } as ErrorOutput);
       } else {
         newOutput = state[workspaceLocation].output.concat({
-          ...action.payload,
-          workspaceLocation: undefined,
+          type: action.payload.type,
+          errors: action.payload.errors,
           consoleLogs: []
-        });
+        } as ErrorOutput);
       }
       return {
         ...state,
