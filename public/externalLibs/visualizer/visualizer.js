@@ -873,7 +873,9 @@
   function draw(xs) {
     // Blink icon
     const icon = document.getElementById('data_visualiser-icon');
-    icon.classList.add('side-content-tab-alert');
+if (icon) {
+  icon.classList.add('side-content-tab-alert');
+}
 
     minLeft = 500
     nodelist = []
