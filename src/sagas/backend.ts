@@ -333,6 +333,33 @@ function* backendSaga(): SagaIterator {
     yield call(request.postNotify, tokens, assessmentId, submissionId);
   });
 
+  yield takeEvery(actionTypes.DELETE_SOURCECAST_ENTRY, function*(action) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can delete sourcecast.');
+    }
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { id } = (action as actionTypes.IAction).payload;
+    const resp: Response = yield request.deleteSourcecastEntry(id, tokens);
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
+      return;
+    }
+    const sourcecastIndex = yield call(request.getSourcecastIndex, tokens);
+    if (sourcecastIndex) {
+      yield put(
+        actions.updateSourcecastIndex(
+          sourcecastIndex,
+          (action as actionTypes.IAction).payload.workspaceLocation
+        )
+      );
+    }
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  });
+
   yield takeEvery(actionTypes.FETCH_SOURCECAST_INDEX, function*(action) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
