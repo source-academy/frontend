@@ -1,9 +1,3 @@
-import { Action as ReduxAction } from 'redux';
-
-export interface IAction extends ReduxAction {
-  payload: any;
-}
-
 /** Academy */
 export const SAVE_CANVAS = 'SAVE_CANVAS';
 

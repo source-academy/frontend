@@ -20,7 +20,7 @@ describe('Playground saga tests', () => {
   test('puts changeQueryString action with undefined argument when passed the default value', () => {
     return expectSaga(playgroundSaga)
       .withState(defaultState)
-      .put(actions.changeQueryString(undefined))
+      .put(actions.changeQueryString(''))
       .dispatch({
         type: actionTypes.GENERATE_LZ_STRING
       })
@@ -43,7 +43,7 @@ describe('Playground saga tests', () => {
     };
     return expectSaga(playgroundSaga)
       .withState(dummyState)
-      .put(actions.changeQueryString(undefined))
+      .put(actions.changeQueryString(''))
       .dispatch({
         type: actionTypes.GENERATE_LZ_STRING
       })
