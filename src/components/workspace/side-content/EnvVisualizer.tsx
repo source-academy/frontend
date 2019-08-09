@@ -21,6 +21,15 @@ class EnvVisualizer extends React.Component<{}, IEnvVisualizerState> {
   public render() {
     return (
       <div ref={r => (this.$parent = r)} className={classNames('sa-env-visualizer', Classes.DARK)}>
+        <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
+          The environmental model visualizer generates the environmental model diagram based on
+          breakpoints set in the editor.
+          <br />
+          <br />
+          It is activated by clicking on the gutter of the editor (where all the line numbers are,
+          on the left) to set a breakpoint, and then running the program. Alternatively, you may add
+          the line <code>debugger;</code> to your program!
+        </p>
         {this.state.loading && (
           <NonIdealState description="Loading Env Visualizer..." icon={<Spinner />} />
         )}

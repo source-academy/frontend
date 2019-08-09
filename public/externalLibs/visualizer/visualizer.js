@@ -871,6 +871,9 @@
    *  Then shift it to the left end.
    */
   function draw(xs) {
+    // Hides the default text
+    (document.getElementById('data-visualizer-default-text')).hidden = true;
+    
     minLeft = 500
     nodelist = []
 		fnNodeList = []

@@ -19,8 +19,16 @@ class ListVisualizer extends React.Component<{}, IListVisualizerState> {
   }
 
   public render() {
+    // Default text will be hidden by visualizer.js when 'draw_data' is called
     return (
       <div ref={r => (this.$parent = r)} className={classNames('sa-list-visualizer', Classes.DARK)}>
+        <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
+          The data visualizer visualises data structures.
+          <br />
+          <br />
+          It is activated by calling the function <code>draw_data(the_data)</code>, where{' '}
+          <code>the_data</code> would be the data structure that you want to visualise.
+        </p>
         {this.state.loading && (
           <NonIdealState description="Loading Data Visualizer..." icon={<Spinner />} />
         )}
