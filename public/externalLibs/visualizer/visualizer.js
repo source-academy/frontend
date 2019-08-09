@@ -7,11 +7,6 @@
   container.id = 'list-visualizer-container'
   container.hidden = true
   document.body.appendChild(container)
-  stage = new Kinetic.Stage({
-    width: 1000,
-    height: 1000,
-    container: 'list-visualizer-container'
-  })
 
   /**
    *  Converts a list, or a pair, to a tree object. Wrapper function.
@@ -874,9 +869,22 @@
     // Hides the default text
     (document.getElementById('data-visualizer-default-text')).hidden = true;
     
+    /**
+     * Create kinetic stage according to calculated width and height of drawing.
+     * Theoretically, as each box is 90px wide and successive boxes overlap by half,
+     * the width of the drawing should be roughly (width * 45), with a similar calculation
+     * for height.
+     * In practice, likely due to browser auto-scaling, for large drawings this results in
+     * some of the drawing being cut off. Hence the width and height formulas used are approxmations.
+     */
+    stage = new Kinetic.Stage({
+      width: findListWidth(xs) * 60 + 60,
+      height: findListHeight(xs) * 60 + 100,
+      container: 'list-visualizer-container'
+    });
     minLeft = 500
     nodelist = []
-		fnNodeList = []
+    fnNodeList = []
     nodeLabel = 0
     // hides all other layers
     for (var i = 0; i < layerList.length; i++) {
@@ -954,10 +962,79 @@
     updateListVisualizerButtons()
   }
 	
-	function is_function(data) {
-		return typeof(data) == "function"
-	}
+  function is_function(data) {
+    return typeof(data) == "function"
+  }
 
+  /**
+   * Find the height of a drawing (in number of "rows" of pairs)
+   */ 
+  function findListHeight(xs) {
+    // Store pairs/arrays that were traversed previously so as to not double-count their height.
+    const existing = []; 
+
+     function helper(xs) {   
+      if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
+          return 0;
+      } else {
+        let leftHeight;
+        let rightHeight;
+        if (existing.includes(xs[0])
+            || (!is_pair(xs[0]) && (!is_array(xs[0])))) {
+          leftHeight = 0;          
+        } else {
+          existing.push(xs[0]);
+          leftHeight = helper(xs[0]);
+        }
+        if (existing.includes(xs[1])
+            || (!is_pair(xs[1]) && (!is_array(xs[1])))) {
+          rightHeight = 0;          
+        } else {
+          existing.push(xs[1]);
+          rightHeight = helper(xs[1]);
+        }
+        return leftHeight > rightHeight
+              ? 1 + leftHeight
+              : 1 + rightHeight;
+      }
+    }
+
+    return helper(xs, []);
+  }
+
+ /**
+  * Find the width of a drawing (in number of "columns" of pairs)
+  */ 
+  function findListWidth(xs) {
+    const existing = [];
+
+    function helper(xs) {   
+      if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
+          return 0;
+      } else {
+        let leftWidth;
+        let rightWidth;
+        if (existing.includes(xs[0])
+            || (!is_pair(xs[0]) && (!is_array(xs[0])))) {
+          leftWidth = 0;          
+        } else {
+          existing.push(xs[0]);
+          leftWidth = helper(xs[0]);
+        }
+        if (existing.includes(xs[1])
+            || (!is_pair(xs[1]) && (!is_array(xs[1])))) {
+          rightWidth = 0;          
+        } else {
+          existing.push(xs[1]);
+          rightWidth = helper(xs[1]);
+        }
+        return leftWidth + rightWidth + 1;
+      }
+    }
+
+    return helper(xs);
+  }
+	
   exports.ListVisualizer = {
     draw: draw,
     clear: clearListVisualizer,
