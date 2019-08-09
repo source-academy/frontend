@@ -75,7 +75,25 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
   function initialize(div, canvas) {
     startGame(div, canvas);
-    StoryXMLPlayer.loadStory('default', function () { });
+
+    let storyId;
+    let loadFromLocal;
+
+    storyId = prompt("Please enter storyID here or leave blank for system default story:");
+    if (storyId === null || !storyId.replace(/\s/g, '').length) {
+      //storyId is null or only contains whitespace
+      storyId = 'default'; //TODO: implement a hook to read storyId from backend
+      loadFromLocal = false;
+    } else {
+      loadFromLocal = confirm("Do you want to load " + storyId + ".story.xml from your local device?");
+    }
+
+    if (loadFromLocal) {
+      alert("Please ensure that storyxml_server is serving on localhost port 8088.");
+    } else {
+      alert("Downloading " + storyId + ".story.xml from AWS repository...");
+    }
+    StoryXMLPlayer.loadStory(storyId, loadFromLocal, function () { });
   }
 
   return initialize;

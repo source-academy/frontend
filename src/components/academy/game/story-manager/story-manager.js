@@ -67,11 +67,11 @@ export function unlockFirstQuest(storyId, callback) {
   }
 }
 
-export function loadStory(storyXML, callback, startLocation) {
+export function loadStory(storyXML, loadFromLocal, callback, startLocation) {
   if (loadedStories[storyXML]) {
     return;
   }
-  loadStoryXML([storyXML], true, function() {
+  loadStoryXML([storyXML], loadFromLocal, true, function() {
     if (startLocation) {
       LocationManager.changeStartLocation(startLocation);
     }
@@ -79,11 +79,11 @@ export function loadStory(storyXML, callback, startLocation) {
   });
 }
 
-export function loadStoryWithoutFirstQuest(storyXML, callback, startLocation) {
+export function loadStoryWithoutFirstQuest(storyXML, loadFromLocal, callback, startLocation) {
   if (loadedStories[storyXML]) {
     return;
   }
-  loadStoryXML([storyXML], true, function() {
+  loadStoryXML([storyXML], loadFromLocal, true, function() {
     if (startLocation) {
       LocationManager.changeStartLocation(startLocation);
     }
@@ -100,13 +100,14 @@ function processStory(story) {
   QuestManager.loadQuests(story);
 }
 
-export function loadStoryXML(storyXMLs, willSave, callback) {
+export function loadStoryXML(storyXMLs, loadFromLocal, willSave, callback) {
   callback = callback || Constants.nullFunction;
   loadingOverlay.visible = true;
   var downloaded = {};
   var downloadRequestSent = {};
   var willBeDownloaded = storyXMLs.slice();
   var storyDependencies = {};
+  var storyXMLPath = loadFromLocal ? Constants.localStoryXMLPath : Constants.globalStoryXMLPath;
   // download all needed XML files
   function download(i, storyXMLs, callback) {
     if (i >= storyXMLs.length) {
@@ -123,7 +124,7 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
       downloadRequestSent[curId] = true;
       $.ajax({
         type: 'GET',
-        url: Constants.storyXMLPath + curId + '.story.xml',
+        url: storyXMLPath + curId + '.story.xml',
         dataType: 'xml',
         success: function(xml) {
           var story = xml.children[0];
