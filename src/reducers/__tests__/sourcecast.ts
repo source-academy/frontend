@@ -1,5 +1,4 @@
 import {
-  IAction,
   SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
   SET_INPUT_TO_APPLY,
@@ -19,7 +18,7 @@ import {
 import { reducer } from '../sourcecast';
 import { defaultWorkspaceManager } from '../states';
 
-function generateAction(type: string, payload: any = {}): IAction {
+function generateAction(type: string, payload: any = {}) {
   return {
     type,
     payload
@@ -61,7 +60,7 @@ describe('SAVE_SOURCECAST_DATA', () => {
       playbackData
     };
 
-    const action: IAction = generateAction(SAVE_SOURCECAST_DATA, payload);
+    const action = generateAction(SAVE_SOURCECAST_DATA, payload);
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
@@ -98,7 +97,7 @@ describe('SET_CODE_DELTAS_TO_APPLY', () => {
         lines: ['b']
       }
     ];
-    const action: IAction = generateAction(SET_CODE_DELTAS_TO_APPLY, { deltas });
+    const action = generateAction(SET_CODE_DELTAS_TO_APPLY, { deltas });
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
@@ -128,7 +127,7 @@ describe('SET_INPUT_TO_APPLY', () => {
       data: delta
     };
 
-    const action: IAction = generateAction(SET_INPUT_TO_APPLY, { inputToApply });
+    const action = generateAction(SET_INPUT_TO_APPLY, { inputToApply });
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
@@ -172,7 +171,7 @@ describe('SET_SOURCECAST_DATA', () => {
       playbackData
     };
 
-    const action: IAction = generateAction(SET_SOURCECAST_DATA, payload);
+    const action = generateAction(SET_SOURCECAST_DATA, payload);
 
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
@@ -185,7 +184,7 @@ describe('SET_SOURCECAST_DATA', () => {
 describe('SET_SOURCECAST_PLAYBACK_DURATION', () => {
   test('sets sourcecastPlaybackDuration correctly', () => {
     const duration = 5;
-    const action: IAction = generateAction(SET_SOURCECAST_PLAYBACK_DURATION, { duration });
+    const action = generateAction(SET_SOURCECAST_PLAYBACK_DURATION, { duration });
 
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
@@ -198,7 +197,7 @@ describe('SET_SOURCECAST_PLAYBACK_DURATION', () => {
 describe('SET_SOURCECAST_PLAYBACK_STATUS', () => {
   test('sets sourcecastPlaybackStatus correctly', () => {
     const playbackStatus = PlaybackStatus.paused;
-    const action: IAction = generateAction(SET_SOURCECAST_PLAYBACK_STATUS, { playbackStatus });
+    const action = generateAction(SET_SOURCECAST_PLAYBACK_STATUS, { playbackStatus });
 
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
@@ -226,7 +225,7 @@ describe('UPDATE_SOURCECAST_INDEX', () => {
       }
     ];
 
-    const action: IAction = generateAction(UPDATE_SOURCECAST_INDEX, {
+    const action = generateAction(UPDATE_SOURCECAST_INDEX, {
       index: sourcecastData
     });
 
