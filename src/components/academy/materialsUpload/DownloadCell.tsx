@@ -19,8 +19,8 @@ class DownloadCell extends React.Component<ISelectCellProps, {}> {
     return (
       <div>
         {this.props.data.url
-          ? controlButton('', IconNames.DOWNLOAD, this.handleDownload)
-          : controlButton('', IconNames.KEY_ENTER, this.handleSelect)}
+          ? controlButton(`${this.props.data.title}`, null, this.handleDownload)
+          : controlButton(`${this.props.data.title}`, IconNames.FOLDER_CLOSE, this.handleSelect)}
       </div>
     );
   }
@@ -31,7 +31,6 @@ class DownloadCell extends React.Component<ISelectCellProps, {}> {
     click.initEvent('click', true, true);
     const link = document.createElement('A') as HTMLAnchorElement;
     link.href = url;
-    link.download = 'output.wav';
     link.dispatchEvent(click);
     link.click();
     return link;

@@ -59,9 +59,16 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
         {
           headerName: 'Title',
           field: 'title',
+          cellRendererFramework: DownloadCell,
+          cellRendererParams: {
+            handleFetchMaterialIndex: this.props.handleFetchMaterialIndex
+          },
           maxWidth: 800,
           suppressMovable: true,
-          suppressMenu: true
+          suppressMenu: true,
+          cellStyle: {
+            padding: 0
+          }
         },
         {
           headerName: 'Uploader',
@@ -69,22 +76,6 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
           maxWidth: 400,
           suppressMovable: true,
           suppressMenu: true
-        },
-        {
-          headerName: 'Download',
-          field: '',
-          cellRendererFramework: DownloadCell,
-          cellRendererParams: {
-            handleFetchMaterialIndex: this.props.handleFetchMaterialIndex
-          },
-          maxWidth: 400,
-          suppressSorting: true,
-          suppressMovable: true,
-          suppressMenu: true,
-          suppressResize: true,
-          cellStyle: {
-            padding: 0
-          }
         },
         {
           headerName: 'Delete',
@@ -98,7 +89,6 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
           suppressSorting: true,
           suppressMovable: true,
           suppressMenu: true,
-          suppressResize: true,
           cellStyle: {
             padding: 0
           },
@@ -129,7 +119,7 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
-    const data = sortBy(this.props.materialIndex, [(a: any) => -a.id]);
+    const data = sortBy(this.props.materialIndex, [(a: any) => -a.url]);
     const grid = (
       <div className="MaterialContainer">
         <div>
