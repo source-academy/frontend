@@ -15,7 +15,7 @@ module.exports = {
   glowDistance: 30,
   textSpeed: 0.02,
   localStoryXMLPath: LOCAL_HOST + 'stories/',
-  globalStoryXMLPath: ASSETS_HOST + 'stories/',
+  globalStoryXMLPath: STORIES_HOST + 'stories/',
   locationPath: ASSETS_HOST + 'locations/',
   objectPath: ASSETS_HOST + 'objects/',
   imgPath: ASSETS_HOST + 'images/',
