@@ -1,7 +1,7 @@
-import { ActionCreator } from 'redux';
+import { action } from 'typesafe-actions';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
-import { IWorkspaceState } from '../reducers/states';
+import { IWorkspaceState, SideContentType } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
 /**
@@ -17,92 +17,54 @@ import * as actionTypes from './actionTypes';
 export enum WorkspaceLocations {
   assessment = 'assessment',
   playground = 'playground',
-  grading = 'grading'
+  grading = 'grading',
+  sourcecast = 'sourcecast',
+  sourcereel = 'sourcereel'
 }
 
 export type WorkspaceLocation = keyof typeof WorkspaceLocations;
 
-export const browseReplHistoryDown: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.BROWSE_REPL_HISTORY_DOWN,
-  payload: { workspaceLocation }
-});
+export const browseReplHistoryDown = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.BROWSE_REPL_HISTORY_DOWN, { workspaceLocation });
 
-export const browseReplHistoryUp: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.BROWSE_REPL_HISTORY_UP,
-  payload: { workspaceLocation }
-});
+export const browseReplHistoryUp = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.BROWSE_REPL_HISTORY_UP, { workspaceLocation });
 
-export const changeActiveTab: ActionCreator<actionTypes.IAction> = (
-  activeTab: number,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHANGE_ACTIVE_TAB,
-  payload: { activeTab, workspaceLocation }
-});
+export const changeExternalLibrary = (newExternal: string, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.CHANGE_EXTERNAL_LIBRARY, { newExternal, workspaceLocation });
 
-export const changePlaygroundExternal: ActionCreator<actionTypes.IAction> = (
-  newExternal: string
-) => ({
-  type: actionTypes.CHANGE_PLAYGROUND_EXTERNAL,
-  payload: { newExternal }
-});
+export const changeEditorHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.CHANGE_EDITOR_HEIGHT, { height, workspaceLocation });
 
-export const changeEditorHeight: ActionCreator<actionTypes.IAction> = (
-  height: number,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHANGE_EDITOR_HEIGHT,
-  payload: { height, workspaceLocation }
-});
+export const changeEditorWidth = (widthChange: string, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.CHANGE_EDITOR_WIDTH, { widthChange, workspaceLocation });
 
-export const changeEditorWidth: ActionCreator<actionTypes.IAction> = (
-  widthChange: string,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHANGE_EDITOR_WIDTH,
-  payload: { widthChange, workspaceLocation }
-});
+export const changeExecTime = (execTime: string, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.CHANGE_EXEC_TIME, { execTime, workspaceLocation });
 
-export const changeSideContentHeight: ActionCreator<actionTypes.IAction> = (
-  height: number,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHANGE_SIDE_CONTENT_HEIGHT,
-  payload: { height, workspaceLocation }
-});
+export const changeSideContentHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.CHANGE_SIDE_CONTENT_HEIGHT, { height, workspaceLocation });
 
-export const chapterSelect: ActionCreator<actionTypes.IAction> = (
-  chapter: number,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.CHAPTER_SELECT,
-  payload: {
+export const chapterSelect = (chapter: number, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.CHAPTER_SELECT, {
     chapter,
     workspaceLocation
-  }
-});
+  });
 
-export const playgroundExternalSelect: ActionCreator<actionTypes.IAction> = (
+export const externalLibrarySelect = (
   externalLibraryName: ExternalLibraryName,
   workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
-  payload: {
+) =>
+  action(actionTypes.PLAYGROUND_EXTERNAL_SELECT, {
     externalLibraryName,
     workspaceLocation
-  }
-});
+  });
 
-export const toggleEditorAutorun: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.TOGGLE_EDITOR_AUTORUN,
-  payload: { workspaceLocation }
-});
+export const toggleEditorAutorun = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.TOGGLE_EDITOR_AUTORUN, { workspaceLocation });
+
+export const updateActiveTab = (activeTab: SideContentType, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.UPDATE_ACTIVE_TAB, { activeTab, workspaceLocation });
 
 /**
  * Starts the process to clear the js-slang Context
@@ -117,23 +79,17 @@ export const toggleEditorAutorun: ActionCreator<actionTypes.IAction> = (
  *
  * @see Library in assessmentShape.ts
  */
-export const beginClearContext = (library: Library, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.BEGIN_CLEAR_CONTEXT,
-  payload: {
+export const beginClearContext = (library: Library, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.BEGIN_CLEAR_CONTEXT, {
     library,
     workspaceLocation
-  }
-});
+  });
 
-export const clearReplInput = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.CLEAR_REPL_INPUT,
-  payload: { workspaceLocation }
-});
+export const clearReplInput = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.CLEAR_REPL_INPUT, { workspaceLocation });
 
-export const clearReplOutput = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.CLEAR_REPL_OUTPUT,
-  payload: { workspaceLocation }
-});
+export const clearReplOutput = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.CLEAR_REPL_OUTPUT, { workspaceLocation });
 
 /**
  * Finishes the process to clear the js-slang Context
@@ -147,80 +103,46 @@ export const clearReplOutput = (workspaceLocation: WorkspaceLocation) => ({
  *
  * @see Library in assessmentShape.ts
  */
-export const endClearContext = (library: Library, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.END_CLEAR_CONTEXT,
-  payload: {
+export const endClearContext = (library: Library, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.END_CLEAR_CONTEXT, {
     library,
     workspaceLocation
-  }
-});
+  });
 
-export const ensureLibrariesLoaded = () => ({
-  type: actionTypes.ENSURE_LIBRARIES_LOADED
-});
+export const ensureLibrariesLoaded = () => action(actionTypes.ENSURE_LIBRARIES_LOADED);
 
-export const evalEditor = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.EVAL_EDITOR,
-  payload: { workspaceLocation }
-});
+export const evalEditor = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.EVAL_EDITOR, { workspaceLocation });
 
-export const evalRepl = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.EVAL_REPL,
-  payload: { workspaceLocation }
-});
+export const evalRepl = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.EVAL_REPL, { workspaceLocation });
 
-export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: number) => ({
-  type: actionTypes.EVAL_TESTCASE,
-  payload: { workspaceLocation, testcaseId }
-});
+export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: number) =>
+  action(actionTypes.EVAL_TESTCASE, { workspaceLocation, testcaseId });
 
-export const invalidEditorSessionId = () => ({
-  type: actionTypes.INVALID_EDITOR_SESSION_ID
-});
+export const updateEditorValue = (newEditorValue: string, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });
 
-export const updateEditorValue: ActionCreator<actionTypes.IAction> = (
-  newEditorValue: string,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.UPDATE_EDITOR_VALUE,
-  payload: { newEditorValue, workspaceLocation }
-});
+export const setEditorBreakpoint = (breakpoints: string[], workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.UPDATE_EDITOR_BREAKPOINTS, { breakpoints, workspaceLocation });
 
-export const setEditorBreakpoint: ActionCreator<actionTypes.IAction> = (
-  breakpoints: string[],
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.UPDATE_EDITOR_BREAKPOINTS,
-  payload: { breakpoints, workspaceLocation }
-});
-
-export const highlightEditorLine: ActionCreator<actionTypes.IAction> = (
+export const highlightEditorLine = (
   highlightedLines: number[],
   workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.HIGHLIGHT_LINE,
-  payload: { highlightedLines, workspaceLocation }
-});
+) => action(actionTypes.HIGHLIGHT_LINE, { highlightedLines, workspaceLocation });
 
-export const updateReplValue: ActionCreator<actionTypes.IAction> = (
-  newReplValue: string,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.UPDATE_REPL_VALUE,
-  payload: { newReplValue, workspaceLocation }
-});
+export const updateReplValue = (newReplValue: string, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.UPDATE_REPL_VALUE, { newReplValue, workspaceLocation });
 
-export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
-  newOutput: string,
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.SEND_REPL_INPUT_TO_OUTPUT,
-  payload: {
+export const sendReplInputToOutput = (newOutput: string, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.SEND_REPL_INPUT_TO_OUTPUT, {
     type: 'code',
     workspaceLocation,
     value: newOutput
-  }
-});
+  });
+
+export const resetTestcase = (workspaceLocation: WorkspaceLocation, index: number) =>
+  action(actionTypes.RESET_TESTCASE, { workspaceLocation, index });
 
 /**
  * Resets a workspace to its default properties.
@@ -234,76 +156,44 @@ export const sendReplInputToOutput: ActionCreator<actionTypes.IAction> = (
 export const resetWorkspace = (
   workspaceLocation: WorkspaceLocation,
   workspaceOptions?: Partial<IWorkspaceState>
-) => ({
-  type: actionTypes.RESET_WORKSPACE,
-  payload: {
+) =>
+  action(actionTypes.RESET_WORKSPACE, {
     workspaceLocation,
     workspaceOptions
-  }
-});
+  });
 
 export const updateWorkspace = (
   workspaceLocation: WorkspaceLocation,
   workspaceOptions?: Partial<IWorkspaceState>
-) => ({
-  type: actionTypes.UPDATE_WORKSPACE,
-  payload: {
+) =>
+  action(actionTypes.UPDATE_WORKSPACE, {
     workspaceLocation,
     workspaceOptions
-  }
-});
+  });
 
-export const setEditorSessionId: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocation,
-  editorSessionId: string
-) => ({
-  type: actionTypes.SET_EDITOR_SESSION_ID,
-  payload: {
+export const setEditorReadonly = (workspaceLocation: WorkspaceLocation, editorReadonly: boolean) =>
+  action(actionTypes.SET_EDITOR_READONLY, {
     workspaceLocation,
-    editorSessionId
-  }
-});
+    editorReadonly
+  });
 
-/**
- * Sets sharedb websocket status.
- *
- * @param workspaceLocation the workspace to be reset
- * @param websocketStatus 0: CLOSED 1: OPEN
- */
-export const setWebsocketStatus: ActionCreator<actionTypes.IAction> = (
-  workspaceLocation: WorkspaceLocations,
-  websocketStatus: number
-) => ({
-  type: actionTypes.SET_WEBSOCKET_STATUS,
-  payload: {
-    workspaceLocation,
-    websocketStatus
-  }
-});
-
-export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) => ({
-  type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
-  payload: {
+export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>
+  action(actionTypes.UPDATE_CURRENT_ASSESSMENT_ID, {
     assessmentId,
     questionId
-  }
-});
+  });
 
-export const updateCurrentSubmissionId = (submissionId: number, questionId: number) => ({
-  type: actionTypes.UPDATE_CURRENT_SUBMISSION_ID,
-  payload: {
+export const updateCurrentSubmissionId = (submissionId: number, questionId: number) =>
+  action(actionTypes.UPDATE_CURRENT_SUBMISSION_ID, {
     submissionId,
     questionId
-  }
-});
+  });
 
-export const updateHasUnsavedChanges: ActionCreator<actionTypes.IAction> = (
+export const updateHasUnsavedChanges = (
   workspaceLocation: WorkspaceLocation,
   hasUnsavedChanges: boolean
-) => ({
-  type: actionTypes.UPDATE_HAS_UNSAVED_CHANGES,
-  payload: {
+) =>
+  action(actionTypes.UPDATE_HAS_UNSAVED_CHANGES, {
     workspaceLocation,
     hasUnsavedChanges
-  }
-});
+  });

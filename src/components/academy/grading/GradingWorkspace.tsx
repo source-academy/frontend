@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
 import ChatApp from '../../../containers/ChatContainer';
-import { InterpreterOutput, IWorkspaceState } from '../../../reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../../reducers/states';
 import { USE_CHATKIT } from '../../../utils/constants';
 import { history } from '../../../utils/history';
 import {
@@ -18,7 +18,15 @@ import {
 } from '../../assessment/assessmentShape';
 import Markdown from '../../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../../workspace';
-import { ControlBarProps } from '../../workspace/ControlBar';
+import { ControlBarProps } from '../../workspace/controlBar/ControlBar';
+import {
+  ClearButton,
+  EvalButton,
+  NextButton,
+  PreviousButton,
+  QuestionView,
+  RunButton
+} from '../../workspace/controlBar/index';
 import { SideContentProps } from '../../workspace/side-content';
 import Autograder from '../../workspace/side-content/Autograder';
 import { Grading, IAnsweredQuestion } from './gradingShape';
@@ -26,7 +34,6 @@ import { Grading, IAnsweredQuestion } from './gradingShape';
 export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
-  activeTab: number;
   autogradingResults: AutogradingResult[];
   grading?: Grading;
   editorPrepend: string;
@@ -54,9 +61,9 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
@@ -115,7 +122,25 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
    * if a workspace reset is needed.
    */
   public componentDidUpdate() {
-    this.checkWorkspaceReset(this.props);
+    /* Don't reset workspace if grading not fetched yet. */
+    if (this.props.grading === undefined) {
+      return;
+    }
+    const questionId = this.props.questionId;
+
+    /**
+     * Check if questionId is out of bounds, if it is, redirect to the
+     * grading overview page
+     *
+     * This occurs if the grading is submitted on the last question,
+     * as the function to move to the next question does not check
+     * if that question exists
+     */
+    if (this.props.grading[questionId] === undefined) {
+      history.push('/academy/grading');
+    } else {
+      this.checkWorkspaceReset(this.props);
+    }
   }
 
   public render() {
@@ -137,15 +162,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     /* Get the question to be graded */
     const question = this.props.grading[questionId].question as IQuestion;
     const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props, questionId),
+      controlBarProps: this.controlBarProps(questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorPrepend: this.props.editorPrepend,
-              editorPrependLines:
-                this.props.editorPrepend.length === 0
-                  ? 0
-                  : this.props.editorPrepend.split('\n').length,
               editorSessionId: '',
               editorValue: this.props.editorValue!,
               handleEditorEval: this.props.handleEditorEval,
@@ -186,24 +206,18 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   /**
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
+   *
+   * Assumes that 'props.grading' is defined
    */
   private checkWorkspaceReset(props: GradingWorkspaceProps) {
-    /* Don't reset workspace if grading not fetched yet. */
-    if (this.props.grading === undefined) {
-      return;
-    }
-
     /* Reset grading if it has changed.*/
-    const submissionId = this.props.submissionId;
-    const questionId = this.props.questionId;
+    const submissionId = props.submissionId;
+    const questionId = props.questionId;
 
-    if (
-      this.props.storedSubmissionId === submissionId &&
-      this.props.storedQuestionId === questionId
-    ) {
+    if (props.storedSubmissionId === submissionId && props.storedQuestionId === questionId) {
       return;
     }
-    const question = this.props.grading[questionId].question as IQuestion;
+    const question = props.grading![questionId].question as IQuestion;
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
@@ -224,19 +238,19 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       }
     }
 
-    this.props.handleEditorUpdateBreakpoints([]);
-    this.props.handleUpdateCurrentSubmissionId(submissionId, questionId);
-    this.props.handleResetWorkspace({
+    props.handleEditorUpdateBreakpoints([]);
+    props.handleUpdateCurrentSubmissionId(submissionId, questionId);
+    props.handleResetWorkspace({
       autogradingResults,
       editorPrepend,
       editorValue,
       editorPostpend,
       editorTestcases
     });
-    this.props.handleClearContext(question.library);
-    this.props.handleUpdateHasUnsavedChanges(false);
+    props.handleClearContext(question.library);
+    props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
-      this.props.handleEditorValueChange(editorValue);
+      props.handleEditorValueChange(editorValue);
     }
   }
 
@@ -245,12 +259,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     props: GradingWorkspaceProps,
     questionId: number
   ) => ({
-    activeTab: props.activeTab,
-    handleChangeActiveTab: props.handleChangeActiveTab,
+    handleActiveTabChange: props.handleActiveTabChange,
     tabs: [
       {
-        label: `Grading: Question ${questionId}`,
-        icon: IconNames.TICK,
+        label: `Grading: Question ${questionId + 1}`,
+        iconName: IconNames.TICK,
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
@@ -264,66 +277,95 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             xpAdjustment={props.grading![questionId].grade.xpAdjustment}
             maxXp={props.grading![questionId].question.maxXp}
             studentName={props.grading![questionId].student.name}
+            comments={props.grading![questionId].grade.comments!}
           />
-        )
+        ),
+        id: SideContentType.grading
       },
       {
         label: `Task ${questionId + 1}`,
-        icon: IconNames.NINJA,
-        body: <Markdown content={props.grading![questionId].question.content} />
+        iconName: IconNames.NINJA,
+        body: <Markdown content={props.grading![questionId].question.content} />,
+        id: SideContentType.questionOverview
       },
       {
         label: `Chat`,
-        icon: IconNames.CHAT,
+        iconName: IconNames.CHAT,
         body: USE_CHATKIT ? (
-          <ChatApp roomId={props.grading![questionId].grade.comment} />
+          <ChatApp
+            roomId={props.grading![questionId].grade.roomId}
+            submissionId={this.props.submissionId}
+          />
         ) : (
-          <span>ChatKit disabled.</span>
-        )
+          <span>Chatkit disabled.</span>
+        ),
+        id: SideContentType.chat,
+        disabled: !USE_CHATKIT
       },
       {
         label: `Autograder`,
-        icon: IconNames.AIRPLANE,
+        iconName: IconNames.AIRPLANE,
         body: (
           <Autograder
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
-        )
+        ),
+        id: SideContentType.autograder
       }
     ]
   });
 
   /** Pre-condition: Grading has been loaded */
-  private controlBarProps: (p: GradingWorkspaceProps, q: number) => ControlBarProps = (
-    props: GradingWorkspaceProps,
-    questionId: number
-  ) => {
+  private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
     const listingPath = `/academy/grading`;
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`;
+    const questionProgress: [number, number] = [questionId + 1, this.props.grading!.length];
+
+    const onClickPrevious = () =>
+      history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () =>
+      history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => history.push(listingPath);
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const nextButton = (
+      <NextButton
+        onClickNext={onClickNext}
+        onClickReturn={onClickReturn}
+        questionProgress={questionProgress}
+        key="next_question"
+      />
+    );
+
+    const previousButton = (
+      <PreviousButton
+        onClick={onClickPrevious}
+        questionProgress={questionProgress}
+        key="previous_question"
+      />
+    );
+
+    const questionView = <QuestionView questionProgress={questionProgress} key="question_view" />;
+
+    const runButton = <RunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
+
     return {
-      handleChapterSelect: this.props.handleChapterSelect,
-      handleEditorEval: this.props.handleEditorEval,
-      handleInterruptEval: this.props.handleInterruptEval,
-      handleReplEval: this.props.handleReplEval,
-      handleReplOutputClear: this.props.handleReplOutputClear,
-      handleDebuggerPause: this.props.handleDebuggerPause,
-      handleDebuggerResume: this.props.handleDebuggerResume,
-      handleDebuggerReset: this.props.handleDebuggerReset,
-      hasChapterSelect: false,
-      hasCollabEditing: false,
-      hasEditorAutorunButton: false,
-      hasSaveButton: false,
-      hasShareButton: false,
-      isRunning: this.props.isRunning,
-      isDebugging: this.props.isDebugging,
-      enableDebugging: this.props.enableDebugging,
-      onClickNext: () => history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`),
-      onClickPrevious: () => history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`),
-      onClickReturn: () => history.push(listingPath),
-      questionProgress: [questionId + 1, this.props.grading!.length],
-      sourceChapter: this.props.grading![questionId].question.library.chapter
+      editorButtons: [runButton],
+      flowButtons: [previousButton, questionView, nextButton],
+      replButtons: [evalButton, clearButton]
     };
   };
 }

@@ -10,16 +10,19 @@ jest.spyOn(Editor.prototype, 'componentDidMount').mockImplementation(componentDi
 
 test('Editor renders correctly', () => {
   const props: IEditorProps = {
-    editorSessionId: '',
-    editorPrepend: '',
-    editorPrependLines: 0,
-    editorValue: '',
     breakpoints: [],
+    editorSessionId: '',
+    editorValue: '',
     highlightedLines: [],
+    isEditorAutorun: false,
+    sharedbAceInitValue: '',
+    sharedbAceIsInviting: false,
     handleEditorEval: () => {},
     handleEditorValueChange: newCode => {},
     handleEditorUpdateBreakpoints: breakpoints => {},
-    isEditorAutorun: false
+    handleFinishInvite: () => {},
+    handleSetWebsocketStatus: websocketStatus => {},
+    handleUpdateHasUnsavedChanges: hasUnsavedChanges => {}
   };
   const app = <Editor {...props} />;
   const tree = shallow(app);

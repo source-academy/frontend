@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
 import { history } from '../../utils/history';
 import {
   IAssessment,
@@ -18,8 +18,19 @@ import {
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
-import { ControlBarProps } from '../workspace/ControlBar';
-import { SideContentProps } from '../workspace/side-content';
+import { ControlBarProps } from '../workspace/controlBar/ControlBar';
+import {
+  ClearButton,
+  EvalButton,
+  NextButton,
+  PreviousButton,
+  QuestionView,
+  ResetButton,
+  RunButton,
+  SaveButton,
+  ToggleEditModeButton
+} from '../workspace/controlBar/index';
+import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
   AutograderTab,
@@ -39,7 +50,6 @@ import {
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
-  activeTab: number;
   editorHeight?: number;
   editorValue: string | null;
   editorWidth: string;
@@ -93,7 +103,7 @@ export type DispatchProps = {
 
 interface IState {
   assessment: IAssessment | null;
-  activeTab: number;
+  activeTab: SideContentType;
   editingMode: string;
   hasUnsavedChanges: boolean;
   showResetTemplateOverlay: boolean;
@@ -106,7 +116,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     super(props);
     this.state = {
       assessment: retrieveLocalAssessment(),
-      activeTab: 0,
+      activeTab: SideContentType.editorQuestionOverview,
       editingMode: 'question',
       hasUnsavedChanges: false,
       showResetTemplateOverlay: false,
@@ -152,12 +162,10 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const questionId = this.formatedQuestionId();
     const question: IQuestion = this.state.assessment.questions[questionId];
     const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props, questionId),
+      controlBarProps: this.controlBarProps(questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorPrepend: '',
-              editorPrependLines: 0,
               editorSessionId: '',
               editorValue:
                 this.props.editorValue ||
@@ -396,16 +404,14 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.resetWorkspaceValues();
   };
 
-  private handleChangeActiveTab = (tab: number) => {
+  private handleActiveTabChange = (tab: SideContentType) => {
     this.setState({
       activeTab: tab
     });
   };
-
   private toggleEditingMode = () => {
     const toggle = this.state.editingMode === 'question' ? 'global' : 'question';
     this.setState({
-      activeTab: 0,
       editingMode: toggle
     });
   };
@@ -416,7 +422,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     questionId: number
   ) => {
     const assessment = this.state.assessment!;
-    let tabs;
+    let tabs: SideContentTab[];
     if (this.state.editingMode === 'question') {
       const qnType = this.state.assessment!.questions[this.props.questionId].type;
       const questionTemplateTab =
@@ -440,23 +446,25 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       tabs = [
         {
           label: `Task ${questionId + 1}`,
-          icon: IconNames.NINJA,
+          iconName: IconNames.NINJA,
           body: (
             <TextareaContentTab
               assessment={assessment}
               path={['questions', questionId, 'content']}
               updateAssessment={this.updateEditAssessmentState}
             />
-          )
+          ),
+          id: SideContentType.editorQuestionOverview
         },
         {
           label: `Question Template`,
-          icon: IconNames.DOCUMENT,
-          body: questionTemplateTab
+          iconName: IconNames.DOCUMENT,
+          body: questionTemplateTab,
+          id: SideContentType.editorQuestionTemplate
         },
         {
           label: `Manage Local Deployment`,
-          icon: IconNames.HOME,
+          iconName: IconNames.HOME,
           body: (
             <DeploymentTab
               assessment={assessment}
@@ -466,11 +474,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
               isOptionalDeployment={true}
             />
-          )
+          ),
+          id: SideContentType.editorLocalDeployment
         },
         {
           label: `Manage Local Grader Deployment`,
-          icon: IconNames.CONFIRM,
+          iconName: IconNames.CONFIRM,
           body: (
             <DeploymentTab
               assessment={assessment}
@@ -481,24 +490,26 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
               isOptionalDeployment={true}
             />
-          )
+          ),
+          id: SideContentType.editorLocalGraderDeployment
         },
         {
           label: `Grading`,
-          icon: IconNames.TICK,
+          iconName: IconNames.TICK,
           body: (
             <GradingTab
               assessment={assessment}
               path={['questions', questionId]}
               updateAssessment={this.updateEditAssessmentState}
             />
-          )
+          ),
+          id: SideContentType.editorGrading
         }
       ];
       if (qnType === 'programming') {
         tabs.push({
           label: `Autograder`,
-          icon: IconNames.AIRPLANE,
+          iconName: IconNames.AIRPLANE,
           body: (
             <AutograderTab
               assessment={assessment}
@@ -506,33 +517,36 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               handleTestcaseEval={this.handleTestcaseEval}
               updateAssessment={this.updateEditAssessmentState}
             />
-          )
+          ),
+          id: SideContentType.editorAutograder
         });
       }
       const functionsAttached = assessment!.questions[questionId].library.external.symbols;
       if (functionsAttached.includes('get_matrix')) {
         tabs.push({
           label: `Tone Matrix`,
-          icon: IconNames.GRID_VIEW,
-          body: <ToneMatrix />
+          iconName: IconNames.GRID_VIEW,
+          body: <ToneMatrix />,
+          id: SideContentType.toneMatrix
         });
       }
     } else {
       tabs = [
         {
           label: `${assessment!.category} Briefing`,
-          icon: IconNames.BRIEFCASE,
+          iconName: IconNames.BRIEFCASE,
           body: (
             <TextareaContentTab
               assessment={assessment}
               path={['longSummary']}
               updateAssessment={this.updateEditAssessmentState}
             />
-          )
+          ),
+          id: SideContentType.editorBriefing
         },
         {
           label: `Manage Question`,
-          icon: IconNames.WRENCH,
+          iconName: IconNames.WRENCH,
           body: (
             <ManageQuestionTab
               assessment={assessment}
@@ -540,11 +554,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               questionId={questionId}
               updateAssessment={this.updateAndSaveAssessment}
             />
-          )
+          ),
+          id: SideContentType.editorManageQuestion
         },
         {
           label: `Manage Global Deployment`,
-          icon: IconNames.GLOBE,
+          iconName: IconNames.GLOBE,
           body: (
             <DeploymentTab
               assessment={assessment}
@@ -554,11 +569,12 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
               isOptionalDeployment={false}
             />
-          )
+          ),
+          id: SideContentType.editorGlobalDeployment
         },
         {
           label: `Manage Global Grader Deployment`,
-          icon: IconNames.CONFIRM,
+          iconName: IconNames.CONFIRM,
           body: (
             <DeploymentTab
               assessment={assessment}
@@ -568,54 +584,94 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
               isOptionalDeployment={true}
             />
-          )
+          ),
+          id: SideContentType.editorGlobalGraderDeployment
         }
       ];
     }
 
-    return {
-      activeTab: this.state.activeTab,
-      handleChangeActiveTab: this.handleChangeActiveTab,
-      tabs
-    };
+    return { handleActiveTabChange: this.handleActiveTabChange, tabs };
   };
 
   /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
-    props: AssessmentWorkspaceProps,
-    questionId: number
-  ) => {
+  private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
     const listingPath = '/mission-control';
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
+    const questionProgress: [number, number] = [
+      questionId + 1,
+      this.state.assessment!.questions.length
+    ];
+
+    const onClickPrevious = () =>
+      history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () =>
+      history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => history.push(listingPath);
+
+    const onClickResetTemplate = () => {
+      this.setState((currentState: IState) => {
+        return {
+          ...currentState,
+          showResetTemplateOverlay: currentState.hasUnsavedChanges
+        };
+      });
+    };
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const nextButton = (
+      <NextButton
+        onClickNext={onClickNext}
+        onClickReturn={onClickReturn}
+        questionProgress={questionProgress}
+        key="next_question"
+      />
+    );
+
+    const previousButton = (
+      <PreviousButton
+        onClick={onClickPrevious}
+        questionProgress={questionProgress}
+        key="previous_question"
+      />
+    );
+
+    const questionView = <QuestionView questionProgress={questionProgress} key="question_view" />;
+
+    const resetButton = <ResetButton onClick={onClickResetTemplate} key="reset_template" />;
+
+    const runButton = <RunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
+
+    const saveButton = (
+      <SaveButton
+        hasUnsavedChanges={this.state.hasUnsavedChanges}
+        onClickSave={this.handleSave}
+        key="save"
+      />
+    );
+
+    const toggleEditModeButton = (
+      <ToggleEditModeButton
+        editingMode={this.state.editingMode}
+        toggleEditMode={this.toggleEditingMode}
+        key="toggle_edit_mode"
+      />
+    );
+
     return {
-      handleEditorEval: this.props.handleEditorEval,
-      handleInterruptEval: this.props.handleInterruptEval,
-      handleReplEval: this.props.handleReplEval,
-      handleReplOutputClear: this.props.handleReplOutputClear,
-      handleReplValueChange: this.props.handleReplValueChange,
-      handleDebuggerPause: this.props.handleDebuggerPause,
-      handleDebuggerResume: this.props.handleDebuggerResume,
-      handleDebuggerReset: this.props.handleDebuggerReset,
-      hasChapterSelect: false,
-      hasCollabEditing: false,
-      hasEditorAutorunButton: false,
-      hasSaveButton: true,
-      hasShareButton: false,
-      isRunning: this.props.isRunning,
-      isDebugging: this.props.isDebugging,
-      enableDebugging: this.props.enableDebugging,
-      onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
-      onClickPrevious: () =>
-        history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
-      onClickReturn: () => history.push(listingPath),
-      onClickSave: this.handleSave,
-      onClickResetTemplate: () => {
-        this.setState({ showResetTemplateOverlay: this.state.hasUnsavedChanges });
-      },
-      questionProgress: [questionId + 1, this.state.assessment!.questions.length],
-      sourceChapter: this.state.assessment!.questions[questionId].library.chapter,
-      editingMode: this.state.editingMode,
-      toggleEditMode: this.toggleEditingMode
+      editorButtons: [runButton, saveButton, resetButton],
+      flowButtons: [previousButton, questionView, nextButton],
+      replButtons: [evalButton, clearButton, toggleEditModeButton]
     };
   };
 }

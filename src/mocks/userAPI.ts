@@ -1,3 +1,5 @@
+import { Notification } from '../components/notification/notificationShape';
+
 /**
  * Deprecated, check backend for roles
  */
@@ -56,3 +58,55 @@ export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null 
     return mockStudentInfo;
   }
 };
+
+export const mockNotifications: Notification[] = [
+  {
+    id: 1,
+    type: 'new',
+    assessment_id: 2,
+    assessment_type: 'Mission',
+    assessment_title: 'The Secret to Streams'
+  },
+  {
+    id: 2,
+    type: 'new',
+    assessment_id: 3,
+    assessment_type: 'Sidequest',
+    assessment_title: 'A sample Sidequest'
+  },
+  {
+    id: 3,
+    type: 'autograded',
+    assessment_id: 4,
+    assessment_type: 'Mission',
+    assessment_title: 'A Closed Mission'
+  },
+  {
+    id: 4,
+    type: 'graded',
+    assessment_id: 4,
+    assessment_type: 'Mission',
+    assessment_title: 'A Closed Mission'
+  },
+  {
+    id: 5,
+    type: 'submitted',
+    submission_id: 1,
+    assessment_type: 'Mission',
+    assessment_title: 'Mission 0'
+  },
+  {
+    id: 6,
+    type: 'submitted',
+    submission_id: 2,
+    assessment_type: 'Mission',
+    assessment_title: 'Mission 1'
+  },
+  {
+    id: 7,
+    type: 'submitted',
+    submission_id: 3,
+    assessment_type: 'Mission',
+    assessment_title: 'Mission 0'
+  }
+];
