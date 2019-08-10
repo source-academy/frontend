@@ -410,7 +410,7 @@ class AssessmentWorkspace extends React.Component<
     }
     return {
       handleActiveTabChange: props.handleActiveTabChange,
-      defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.briefing,
+      defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
       tabs
     };
   };
