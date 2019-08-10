@@ -2,11 +2,9 @@ import {LINKS} from '../../../utils/constants'
 import {history} from '../../../utils/history'
 
 export default function (StoryXMLPlayer, story, username, attemptedAll) {
-    function saveToServer() {
-    }
+    function saveToServer() {}
 
-    function loadFromServer() {
-    }
+    function loadFromServer() {}
 
     var hookHandlers = {
         startMission: function (number) {
@@ -77,15 +75,30 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
         });
     }
 
-    function initialize(div, canvas) {
-        startGame(div, canvas);
+    function getStoryId() {
         const now = new Date();
         const mission_1_deployDate = new Date("August 16, 2019 12:00:00");
-        if (mission_1_deployDate <= now) {
-            StoryXMLPlayer.loadStory('mission-1', function () {});
+        return (mission_1_deployDate <= now) ? 'mission-1' : 'act-1';
+    }
+
+    function initialize(div, canvas) {
+        startGame(div, canvas);
+
+        let devMode = confirm("Do you want to enter dev mode?");
+        let storyId, loadFromLocal;
+        if (devMode) {
+            storyId = prompt("Please enter storyID here");
+            loadFromLocal = confirm("Do you want to load " + storyId + ".story.xml from your local device?");
+            if (loadFromLocal) {
+                alert("Loading " + storyId + "...\nPlease ensure that storyxml_server is serving on localhost port 8088.");
+            } else {
+                alert("Loading " + storyId + " from AWS repository...");
+            }
         } else {
-            StoryXMLPlayer.loadStory('act-1', function () {});
+            storyId = getStoryId();
+            loadFromLocal = false;
         }
+        StoryXMLPlayer.loadStory(storyId, loadFromLocal, function () {});
     }
 
     return initialize;
