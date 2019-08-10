@@ -435,8 +435,11 @@ function* backendSaga(): SagaIterator {
       yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
       return;
     }
-    const materialIndex = yield call(request.getMaterialIndex, -1, tokens);
-    if (materialIndex) {
+    const response = yield call(request.getMaterialIndex, -1, tokens);
+    if (response) {
+      const directory_tree = response.directory_tree;
+      const materialIndex = response.index;
+      yield put(actions.updateMaterialDirectoryTree(directory_tree));
       yield put(actions.updateMaterialIndex(materialIndex));
     }
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
@@ -471,10 +474,18 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield request.postMaterial(file, title, description, tokens);
+    const materialDirectoryTree = yield select(
+      (state: IState) => state.session.materialDirectoryTree!
+    );
+    const directoryLength = materialDirectoryTree.length;
+    const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
+    const resp = yield request.postMaterial(file, title, description, parentId, tokens);
     if (resp && resp.ok) {
-      const materialIndex = yield call(request.getMaterialIndex, -1, tokens);
-      if (materialIndex) {
+      const response = yield call(request.getMaterialIndex, -1, tokens);
+      if (response) {
+        const directory_tree = response.directory_tree;
+        const materialIndex = response.index;
+        yield put(actions.updateMaterialDirectoryTree(directory_tree));
         yield put(actions.updateMaterialIndex(materialIndex));
       }
       yield call(showSuccessMessage, 'Saved successfully!', 1000);
@@ -508,8 +519,11 @@ function* backendSaga(): SagaIterator {
     }));
     const resp = yield request.postMaterialFolder(title, tokens);
     if (resp && resp.ok) {
-      const materialIndex = yield call(request.getMaterialIndex, -1, tokens);
-      if (materialIndex) {
+      const response = yield call(request.getMaterialIndex, -1, tokens);
+      if (response) {
+        const directory_tree = response.directory_tree;
+        const materialIndex = response.index;
+        yield put(actions.updateMaterialDirectoryTree(directory_tree));
         yield put(actions.updateMaterialIndex(materialIndex));
       }
       yield call(showSuccessMessage, 'Created successfully!', 1000);

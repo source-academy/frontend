@@ -499,12 +499,16 @@ export const postMaterial = async (
   file: File,
   title: string,
   description: string,
+  parentId: number,
   tokens: Tokens
 ) => {
   const formData = new FormData();
   formData.append('material[file]', file, title);
   formData.append('material[title]', title);
   formData.append('material[description]', description);
+  if (parentId !== -1) {
+    formData.append('material[parentId]', parentId.toString());
+  }
   const resp = await request(`material`, 'POST', {
     accessToken: tokens.accessToken,
     body: formData,
