@@ -1,8 +1,8 @@
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { BACKEND_URL } from '../../../utils/constants';
-import { controlButton } from '../../commons';
+import { BACKEND_URL } from '../../utils/constants';
+import { controlButton } from '../commons';
 import { MaterialData } from './materialShape';
 
 interface ISelectCellProps {

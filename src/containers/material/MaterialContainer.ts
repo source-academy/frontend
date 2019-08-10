@@ -1,9 +1,9 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchMaterialIndex } from '../actions';
-import Material, { IDispatchProps, IStateProps } from '../components/materials';
-import { IState } from '../reducers/states';
+import { fetchMaterialIndex } from '../../actions';
+import Material, { IDispatchProps, IStateProps } from '../../components/material/Material';
+import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   materialDirectoryTree: state.session.materialDirectoryTree,

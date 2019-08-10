@@ -4,7 +4,7 @@ import { FlexDirectionProperty } from 'csstype';
 import * as React from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import { controlButton } from '../../commons';
+import { controlButton } from '../commons';
 
 interface IDropzoneType {
   handleUploadMaterial: (file: File, title: string, description: string) => void;

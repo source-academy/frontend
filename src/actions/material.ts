@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import { DirectoryData, MaterialData } from '../components/academy/materialsUpload/materialShape';
+import { DirectoryData, MaterialData } from '../components/material/materialShape';
 import * as actionTypes from './actionTypes';
 
 export const createMaterialFolder = (title: string) =>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { DirectoryData, MaterialData } from '../academy/materialsUpload/materialShape';
-import MaterialTable from '../academy/materialsUpload/MaterialTable';
+import { DirectoryData, MaterialData } from './materialShape';
+import MaterialTable from './MaterialTable';
 
 interface IMaterialProps extends IDispatchProps, IStateProps {}
 

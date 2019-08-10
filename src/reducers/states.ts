@@ -3,7 +3,6 @@ import { SourceError } from 'js-slang/dist/types';
 
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
-import { DirectoryData, MaterialData } from '../components/academy/materialsUpload/materialShape';
 import { Announcement } from '../components/Announcements';
 import {
   AutogradingResult,
@@ -13,6 +12,7 @@ import {
   IAssessmentOverview,
   ITestcase
 } from '../components/assessment/assessmentShape';
+import { DirectoryData, MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
 import {
   ICodeDelta,

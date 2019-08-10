@@ -2,7 +2,7 @@ import { Classes, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { controlButton } from '../../commons';
+import { controlButton } from '../commons';
 import { MaterialData } from './materialShape';
 
 interface IDeleteCellProps {

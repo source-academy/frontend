@@ -8,7 +8,6 @@ import {
   GradingOverview,
   GradingQuestion
 } from '../components/academy/grading/gradingShape';
-import { MaterialData } from '../components/academy/materialsUpload/materialShape';
 import {
   AssessmentCategory,
   ExternalLibraryName,
@@ -18,6 +17,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import { MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
 import { IPlaybackData, ISourcecastData } from '../components/sourcecast/sourcecastShape';
 import { store } from '../createStore';

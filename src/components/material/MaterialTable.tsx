@@ -20,8 +20,8 @@ import * as classNames from 'classnames';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import { getStandardDate } from '../../../utils/dateHelpers';
-import { controlButton } from '../../commons';
+import { getStandardDate } from '../../utils/dateHelpers';
+import { controlButton } from '../commons';
 import DeleteCell from './DeleteCell';
 import DownloadCell from './DownloadCell';
 import { DirectoryData, MaterialData } from './materialShape';

@@ -7,12 +7,12 @@ import {
   deleteMaterialFolder,
   fetchMaterialIndex,
   uploadMaterial
-} from '../../../actions';
+} from '../../actions';
 import MaterialUpload, {
   IDispatchProps,
   IStateProps
-} from '../../../components/academy/materialsUpload';
-import { IState } from '../../../reducers/states';
+} from '../../components/material/MaterialUpload';
+import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   materialDirectoryTree: state.session.materialDirectoryTree,
