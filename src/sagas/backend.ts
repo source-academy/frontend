@@ -435,13 +435,12 @@ function* backendSaga(): SagaIterator {
       yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
       return;
     }
-    const response = yield call(request.getMaterialIndex, -1, tokens);
-    if (response) {
-      const directory_tree = response.directory_tree;
-      const materialIndex = response.index;
-      yield put(actions.updateMaterialDirectoryTree(directory_tree));
-      yield put(actions.updateMaterialIndex(materialIndex));
-    }
+    const materialDirectoryTree = yield select(
+      (state: IState) => state.session.materialDirectoryTree!
+    );
+    const directoryLength = materialDirectoryTree.length;
+    const folderId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
+    yield put(actions.fetchMaterialIndex(folderId));
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
@@ -481,13 +480,7 @@ function* backendSaga(): SagaIterator {
     const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
     const resp = yield request.postMaterial(file, title, description, parentId, tokens);
     if (resp && resp.ok) {
-      const response = yield call(request.getMaterialIndex, -1, tokens);
-      if (response) {
-        const directory_tree = response.directory_tree;
-        const materialIndex = response.index;
-        yield put(actions.updateMaterialDirectoryTree(directory_tree));
-        yield put(actions.updateMaterialIndex(materialIndex));
-      }
+      yield put(actions.fetchMaterialIndex(parentId));
       yield call(showSuccessMessage, 'Saved successfully!', 1000);
     } else if (resp !== null) {
       let errorMessage: string;
@@ -524,13 +517,7 @@ function* backendSaga(): SagaIterator {
     const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
     const resp = yield request.postMaterialFolder(title, parentId, tokens);
     if (resp && resp.ok) {
-      const response = yield call(request.getMaterialIndex, -1, tokens);
-      if (response) {
-        const directory_tree = response.directory_tree;
-        const materialIndex = response.index;
-        yield put(actions.updateMaterialDirectoryTree(directory_tree));
-        yield put(actions.updateMaterialIndex(materialIndex));
-      }
+      yield put(actions.fetchMaterialIndex(parentId));
       yield call(showSuccessMessage, 'Created successfully!', 1000);
     } else if (resp !== null) {
       let errorMessage: string;
@@ -565,10 +552,12 @@ function* backendSaga(): SagaIterator {
       yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
       return;
     }
-    const materialIndex = yield call(request.getMaterialIndex, -1, tokens);
-    if (materialIndex) {
-      yield put(actions.updateMaterialIndex(materialIndex));
-    }
+    const materialDirectoryTree = yield select(
+      (state: IState) => state.session.materialDirectoryTree!
+    );
+    const directoryLength = materialDirectoryTree.length;
+    const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
+    yield put(actions.fetchMaterialIndex(parentId));
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 }
