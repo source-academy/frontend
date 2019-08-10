@@ -198,8 +198,7 @@ function* backendSaga(): SagaIterator {
     }));
     const { submissionId } = action.payload;
 
-
-    const resp: Response = yield request.postUnsubmit(submissionId, tokens);
+    const resp: Response = yield call(request.postUnsubmit, submissionId, tokens);
     if (!resp || !resp.ok) {
       yield request.handleResponseError(resp);
       return;
@@ -234,7 +233,8 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    const resp = yield request.postGrading(
+    const resp = yield call(
+      request.postGrading,
       submissionId,
       questionId,
       gradeAdjustment,
@@ -264,7 +264,8 @@ function* backendSaga(): SagaIterator {
       });
       yield put(actions.updateGrading(submissionId, newGrading));
     } else {
-      request.handleResponseError(resp);
+      yield request.handleResponseError(resp);
+      return;
     }
   };
 
@@ -353,7 +354,6 @@ function* backendSaga(): SagaIterator {
     const submissionId = action.payload.submissionId;
     yield call(request.postNotify, tokens, assessmentId, submissionId);
   });
-
 
   yield takeEvery(actionTypes.DELETE_SOURCECAST_ENTRY, function*(
     action: ReturnType<typeof actions.deleteSourcecastEntry>

@@ -93,7 +93,6 @@ export const mockFetchGradingOverview = (
   }
 };
 
-
 export const mockTestcases: ITestcase[] = [
   { program: `remainder(12, 7);`, score: 1, answer: `5` },
   { program: `remainder(6, 1);`, score: 2, answer: `0` },
@@ -101,8 +100,7 @@ export const mockTestcases: ITestcase[] = [
   { program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
 ];
 
-const mockGrading: Grading = [
-
+export const mockGrading: Grading = [
   {
     question: {
       answer: `function remainder(n, d) {

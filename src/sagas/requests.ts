@@ -300,21 +300,21 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
 /**
  * POST /grading/{submissionId}/{questionId}
  */
-export const postGrading = async (
+export async function postGrading(
   submissionId: number,
   questionId: number,
   gradeAdjustment: number,
   xpAdjustment: number,
   tokens: Tokens,
-  comments?: string
-) => {
+  comment?: string
+) {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
     accessToken: tokens.accessToken,
     body: {
       grading: {
+        comment: `${comment}`,
         adjustment: gradeAdjustment,
-        xpAdjustment,
-        comments
+        xpAdjustment
       }
     },
     noHeaderAccept: true,
@@ -323,7 +323,7 @@ export const postGrading = async (
     shouldRefresh: true
   });
   return resp;
-};
+}
 
 /**
  * POST /grading/{submissionId}/unsubmit
