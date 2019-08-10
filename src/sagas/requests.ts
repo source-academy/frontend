@@ -477,8 +477,9 @@ export async function deleteMaterial(id: number, tokens: Tokens) {
 /**
  * GET /material
  */
-export async function getMaterialIndex(tokens: Tokens): Promise<MaterialData[] | null> {
-  const response = await request('material', 'GET', {
+export async function getMaterialIndex(id: number, tokens: Tokens): Promise<MaterialData[] | null> {
+  const url = id === -1 ? `material` : `material?id=${id}`;
+  const response = await request(url, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

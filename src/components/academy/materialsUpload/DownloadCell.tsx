@@ -7,6 +7,7 @@ import { MaterialData } from './materialShape';
 
 interface ISelectCellProps {
   data: MaterialData;
+  handleFetchMaterialIndex: (id?: number) => void;
 }
 
 class DownloadCell extends React.Component<ISelectCellProps, {}> {
@@ -16,11 +17,15 @@ class DownloadCell extends React.Component<ISelectCellProps, {}> {
 
   public render() {
     return (
-      <div>{this.props.data.url && controlButton('', IconNames.DOWNLOAD, this.handleSelect)}</div>
+      <div>
+        {this.props.data.url
+          ? controlButton('', IconNames.DOWNLOAD, this.handleDownload)
+          : controlButton('', IconNames.KEY_ENTER, this.handleSelect)}
+      </div>
     );
   }
 
-  private handleSelect = () => {
+  private handleDownload = () => {
     const url = BACKEND_URL + this.props.data.url;
     const click = document.createEvent('Event');
     click.initEvent('click', true, true);
@@ -30,6 +35,10 @@ class DownloadCell extends React.Component<ISelectCellProps, {}> {
     link.dispatchEvent(click);
     link.click();
     return link;
+  };
+
+  private handleSelect = () => {
+    this.props.handleFetchMaterialIndex(this.props.data.id);
   };
 }
 

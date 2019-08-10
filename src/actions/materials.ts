@@ -11,7 +11,7 @@ export const deleteMaterial = (id: number) => action(actionTypes.DELETE_MATERIAL
 export const deleteMaterialFolder = (id: number) =>
   action(actionTypes.DELETE_MATERIAL_FOLDER, { id });
 
-export const fetchMaterialIndex = () => action(actionTypes.FETCH_MATERIAL_INDEX);
+export const fetchMaterialIndex = (id = -1) => action(actionTypes.FETCH_MATERIAL_INDEX, { id });
 
 export const updateMaterialIndex = (index: MaterialData[]) =>
   action(actionTypes.UPDATE_MATERIAL_INDEX, { index });

@@ -12,7 +12,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleFetchMaterialIndex: () => fetchMaterialIndex()
+      handleFetchMaterialIndex: (id?: number) => fetchMaterialIndex(id)
     },
     dispatch
   );

@@ -6,7 +6,7 @@ import MaterialTable from '../academy/materialsUpload/MaterialTable';
 interface IMaterialProps extends IDispatchProps, IStateProps {}
 
 export interface IDispatchProps {
-  handleFetchMaterialIndex: () => void;
+  handleFetchMaterialIndex: (id?: number) => void;
 }
 
 export interface IStateProps {

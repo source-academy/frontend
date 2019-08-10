@@ -435,19 +435,22 @@ function* backendSaga(): SagaIterator {
       yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
       return;
     }
-    const materialIndex = yield call(request.getMaterialIndex, tokens);
+    const materialIndex = yield call(request.getMaterialIndex, -1, tokens);
     if (materialIndex) {
       yield put(actions.updateMaterialIndex(materialIndex));
     }
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
-  yield takeEvery(actionTypes.FETCH_MATERIAL_INDEX, function*() {
+  yield takeEvery(actionTypes.FETCH_MATERIAL_INDEX, function*(
+    action: ReturnType<typeof actions.fetchMaterialIndex>
+  ) {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const materialIndex = yield call(request.getMaterialIndex, tokens);
+    const { id } = action.payload;
+    const materialIndex = yield call(request.getMaterialIndex, id, tokens);
     if (materialIndex) {
       yield put(actions.updateMaterialIndex(materialIndex));
     }
@@ -467,7 +470,7 @@ function* backendSaga(): SagaIterator {
     }));
     const resp = yield request.postMaterial(file, title, description, tokens);
     if (resp && resp.ok) {
-      const materialIndex = yield call(request.getMaterialIndex, tokens);
+      const materialIndex = yield call(request.getMaterialIndex, -1, tokens);
       if (materialIndex) {
         yield put(actions.updateMaterialIndex(materialIndex));
       }
@@ -502,7 +505,7 @@ function* backendSaga(): SagaIterator {
     }));
     const resp = yield request.postMaterialFolder(title, tokens);
     if (resp && resp.ok) {
-      const materialIndex = yield call(request.getMaterialIndex, tokens);
+      const materialIndex = yield call(request.getMaterialIndex, -1, tokens);
       if (materialIndex) {
         yield put(actions.updateMaterialIndex(materialIndex));
       }
@@ -540,7 +543,7 @@ function* backendSaga(): SagaIterator {
       yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
       return;
     }
-    const materialIndex = yield call(request.getMaterialIndex, tokens);
+    const materialIndex = yield call(request.getMaterialIndex, -1, tokens);
     if (materialIndex) {
       yield put(actions.updateMaterialIndex(materialIndex));
     }

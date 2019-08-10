@@ -24,7 +24,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleCreateMaterialFolder: (title: string) => createMaterialFolder(title),
       handleDeleteMaterial: (id: number) => deleteMaterial(id),
       handleDeleteMaterialFolder: (id: number) => deleteMaterialFolder(id),
-      handleFetchMaterialIndex: () => fetchMaterialIndex(),
+      handleFetchMaterialIndex: (id?: number) => fetchMaterialIndex(id),
       handleUploadMaterial: (file: File, title: string, description: string) =>
         uploadMaterial(file, title, description)
     },

@@ -41,7 +41,7 @@ interface IOwnProps {
   handleCreateMaterialFolder?: (title: string) => void;
   handleDeleteMaterial?: (id: number) => void;
   handleDeleteMaterialFolder?: (id: number) => void;
-  handleFetchMaterialIndex: () => void;
+  handleFetchMaterialIndex: (id?: number) => void;
   materialIndex: MaterialData[] | null;
 }
 
@@ -71,7 +71,9 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
           headerName: 'Download',
           field: '',
           cellRendererFramework: DownloadCell,
-          cellRendererParams: {},
+          cellRendererParams: {
+            handleFetchMaterialIndex: this.props.handleFetchMaterialIndex
+          },
           maxWidth: 400,
           suppressSorting: true,
           suppressMovable: true,

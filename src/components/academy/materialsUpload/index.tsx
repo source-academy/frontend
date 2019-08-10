@@ -11,7 +11,7 @@ export interface IDispatchProps {
   handleCreateMaterialFolder: (title: string) => void;
   handleDeleteMaterial: (id: number) => void;
   handleDeleteMaterialFolder: (id: number) => void;
-  handleFetchMaterialIndex: () => void;
+  handleFetchMaterialIndex: (id?: number) => void;
   handleUploadMaterial: (file: File, title: string, description: string) => void;
 }
 
