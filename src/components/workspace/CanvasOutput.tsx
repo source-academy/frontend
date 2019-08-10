@@ -16,9 +16,7 @@ class CanvasOutput extends React.Component<IProps, {}> {
   }
 
   public render() {
-    return (
-      <div ref={r => (this.$parent = r)} className="canvas-container"/>
-    );
+    return <div ref={r => (this.$parent = r)} className="canvas-container" />;
   }
 }
 
