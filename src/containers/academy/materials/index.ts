@@ -15,6 +15,7 @@ import MaterialUpload, {
 import { IState } from '../../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+  materialDirectoryTree: state.session.materialDirectoryTree,
   materialIndex: state.session.materialIndex
 });
 

@@ -450,8 +450,11 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
     const { id } = action.payload;
-    const materialIndex = yield call(request.getMaterialIndex, id, tokens);
-    if (materialIndex) {
+    const response = yield call(request.getMaterialIndex, id, tokens);
+    if (response) {
+      const directory_tree = response.directory_tree;
+      const materialIndex = response.index;
+      yield put(actions.updateMaterialDirectoryTree(directory_tree));
       yield put(actions.updateMaterialIndex(materialIndex));
     }
   });

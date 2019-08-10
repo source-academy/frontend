@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { MaterialData } from '../academy/materialsUpload/materialShape';
+import { DirectoryData, MaterialData } from '../academy/materialsUpload/materialShape';
 import MaterialTable from '../academy/materialsUpload/MaterialTable';
 
 interface IMaterialProps extends IDispatchProps, IStateProps {}
@@ -10,6 +10,7 @@ export interface IDispatchProps {
 }
 
 export interface IStateProps {
+  materialDirectoryTree: DirectoryData[] | null;
   materialIndex: MaterialData[] | null;
 }
 
@@ -20,6 +21,7 @@ class Material extends React.Component<IMaterialProps, {}> {
         <div className={`${'col-xs-10'} contentdisplay-content-parent`}>
           <MaterialTable
             handleFetchMaterialIndex={this.props.handleFetchMaterialIndex}
+            materialDirectoryTree={this.props.materialDirectoryTree}
             materialIndex={this.props.materialIndex}
           />
         </div>

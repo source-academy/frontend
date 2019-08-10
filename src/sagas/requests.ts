@@ -486,8 +486,7 @@ export async function getMaterialIndex(id: number, tokens: Tokens): Promise<Mate
     shouldRefresh: true
   });
   if (response && response.ok) {
-    const index = await response.json();
-    return index;
+    return await response.json();
   } else {
     return null;
   }

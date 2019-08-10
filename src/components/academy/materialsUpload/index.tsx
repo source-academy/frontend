@@ -2,7 +2,7 @@ import { Divider } from '@blueprintjs/core';
 import * as React from 'react';
 
 import Dropzone from './Dropzone';
-import { MaterialData } from './materialShape';
+import { DirectoryData, MaterialData } from './materialShape';
 import MaterialTable from './MaterialTable';
 
 interface IMaterialProps extends IDispatchProps, IStateProps {}
@@ -16,6 +16,7 @@ export interface IDispatchProps {
 }
 
 export interface IStateProps {
+  materialDirectoryTree: DirectoryData[] | null;
   materialIndex: MaterialData[] | null;
 }
 
@@ -31,6 +32,7 @@ class MaterialUpload extends React.Component<IMaterialProps, {}> {
             handleDeleteMaterial={this.props.handleDeleteMaterial}
             handleDeleteMaterialFolder={this.props.handleDeleteMaterialFolder}
             handleFetchMaterialIndex={this.props.handleFetchMaterialIndex}
+            materialDirectoryTree={this.props.materialDirectoryTree}
             materialIndex={this.props.materialIndex}
           />
         </div>

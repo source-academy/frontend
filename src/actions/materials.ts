@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import { MaterialData } from '../components/academy/materialsUpload/materialShape';
+import { DirectoryData, MaterialData } from '../components/academy/materialsUpload/materialShape';
 import * as actionTypes from './actionTypes';
 
 export const createMaterialFolder = (title: string) =>
@@ -12,6 +12,9 @@ export const deleteMaterialFolder = (id: number) =>
   action(actionTypes.DELETE_MATERIAL_FOLDER, { id });
 
 export const fetchMaterialIndex = (id = -1) => action(actionTypes.FETCH_MATERIAL_INDEX, { id });
+
+export const updateMaterialDirectoryTree = (directoryTree: DirectoryData[]) =>
+  action(actionTypes.UPDATE_MATERIAL_DIRECTORY_TREE, { directoryTree });
 
 export const updateMaterialIndex = (index: MaterialData[]) =>
   action(actionTypes.UPDATE_MATERIAL_INDEX, { index });

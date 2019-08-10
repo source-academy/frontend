@@ -8,6 +8,7 @@ import {
   FormGroup,
   InputGroup,
   NonIdealState,
+  OverflowList,
   Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
@@ -15,13 +16,14 @@ import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
+import * as classNames from 'classnames';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
 import { controlButton } from '../../commons';
 import DeleteCell from './DeleteCell';
 import DownloadCell from './DownloadCell';
-import { MaterialData } from './materialShape';
+import { DirectoryData, MaterialData } from './materialShape';
 
 /**
  * Column Definitions are defined within the state, so that data
@@ -42,6 +44,7 @@ interface IOwnProps {
   handleDeleteMaterial?: (id: number) => void;
   handleDeleteMaterialFolder?: (id: number) => void;
   handleFetchMaterialIndex: (id?: number) => void;
+  materialDirectoryTree: DirectoryData[] | null;
   materialIndex: MaterialData[] | null;
 }
 
@@ -139,6 +142,17 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
               value={this.state.filterValue}
               onChange={this.handleFilterChange}
             />
+            <div style={{ float: 'left', marginTop: 10 }}>
+              <OverflowList
+                className={Classes.BREADCRUMBS}
+                items={
+                  this.props.materialDirectoryTree
+                    ? [{ id: -1, title: 'Home' }].concat(this.props.materialDirectoryTree)
+                    : []
+                }
+                visibleItemRenderer={this.renderBreadcrumb}
+              />
+            </div>
             {this.props.handleCreateMaterialFolder && (
               <div style={{ float: 'right', marginTop: 10 }}>
                 {controlButton('Add New Folder', IconNames.PLUS, this.handleOpenDialog)}
@@ -206,6 +220,16 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
       </Card>
     );
   }
+
+  private renderBreadcrumb = (data: DirectoryData, index: number) => {
+    return (
+      <span className={classNames(Classes.BREADCRUMB, Classes.BREADCRUMB_CURRENT)} key={index}>
+        {controlButton(`${data.title}`, IconNames.CHEVRON_RIGHT, () =>
+          this.props.handleFetchMaterialIndex(data.id)
+        )}
+      </span>
+    );
+  };
 
   private handleCloseDialog = () => this.setState({ dialogOpen: false, newFolderName: '' });
   private handleOpenDialog = () => this.setState({ dialogOpen: true });

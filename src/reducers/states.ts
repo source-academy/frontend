@@ -3,7 +3,7 @@ import { SourceError } from 'js-slang/dist/types';
 
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
-import { MaterialData } from '../components/academy/materialsUpload/materialShape';
+import { DirectoryData, MaterialData } from '../components/academy/materialsUpload/materialShape';
 import { Announcement } from '../components/Announcements';
 import {
   AutogradingResult,
@@ -127,6 +127,7 @@ export interface ISessionState {
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
   readonly historyHelper: HistoryHelper;
+  readonly materialDirectoryTree: DirectoryData[] | null;
   readonly materialIndex: MaterialData[] | null;
   readonly maxGrade: number;
   readonly maxXp: number;
@@ -370,6 +371,7 @@ export const defaultSession: ISessionState = {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
   },
+  materialDirectoryTree: null,
   materialIndex: null,
   maxGrade: 0,
   maxXp: 0,

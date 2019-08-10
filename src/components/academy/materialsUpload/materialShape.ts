@@ -10,3 +10,8 @@ export type MaterialData = {
   };
   url: string;
 };
+
+export type DirectoryData = {
+  id: number;
+  title: string;
+};

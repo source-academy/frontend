@@ -11,6 +11,7 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
+  UPDATE_MATERIAL_DIRECTORY_TREE,
   UPDATE_MATERIAL_INDEX,
   UPDATE_NOTIFICATIONS
 } from '../actions/actionTypes';
@@ -71,6 +72,11 @@ export const reducer: Reducer<ISessionState> = (
       return {
         ...state,
         gradingOverviews: action.payload
+      };
+    case UPDATE_MATERIAL_DIRECTORY_TREE:
+      return {
+        ...state,
+        materialDirectoryTree: action.payload.directoryTree
       };
     case UPDATE_MATERIAL_INDEX:
       return {
