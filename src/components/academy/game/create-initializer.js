@@ -91,7 +91,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     if (loadFromLocal) {
       alert("Please ensure that storyxml_server is serving on localhost port 8088.");
     } else {
-      alert("Downloading " + storyId + ".story.xml from AWS repository...");
+      alert("Downloading " + storyId + ".story.xml from Bitbucket repository...");
     }
     StoryXMLPlayer.loadStory(storyId, loadFromLocal, function () { });
   }
