@@ -538,10 +538,10 @@ export async function deleteMaterialFolder(id: number, tokens: Tokens) {
 /**
  * POST /category
  */
-export const postMaterialFolder = async (title: string, tokens: Tokens) => {
+export const postMaterialFolder = async (title: string, parentId: number, tokens: Tokens) => {
   const resp = await request(`category`, 'POST', {
     accessToken: tokens.accessToken,
-    body: { title },
+    body: { title, parentId: parentId === -1 ? null : parentId },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

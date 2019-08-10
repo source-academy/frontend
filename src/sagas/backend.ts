@@ -517,7 +517,12 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield request.postMaterialFolder(title, tokens);
+    const materialDirectoryTree = yield select(
+      (state: IState) => state.session.materialDirectoryTree!
+    );
+    const directoryLength = materialDirectoryTree.length;
+    const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
+    const resp = yield request.postMaterialFolder(title, parentId, tokens);
     if (resp && resp.ok) {
       const response = yield call(request.getMaterialIndex, -1, tokens);
       if (response) {
