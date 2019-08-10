@@ -162,20 +162,30 @@ export function processTempObject(gameLocation, node) {
   if (node.tagName != 'TEMP_OBJECT') {
     return;
   }
-  var object = parseStaticObject(node);
-  var storyId = Utils.getStoryAncestor(node).id;
-  if (!removeTempObjFuncs[storyId]) {
-    removeTempObjFuncs[storyId] = {};
+  var collectible = node.getAttribute('name');
+  var isInDorm = gameLocation.name == 'yourRoom';
+  if ((isInDorm && !localStorage.hasOwnProperty(collectible))||
+      (!isInDorm && localStorage.hasOwnProperty(collectible))) {
+    return; //don't load the collectible in dorm if it's not collected || don't load if in hidden location and collected
   }
-  removeTempObjFuncs[storyId][node.id] = function() {
-    gameLocation.objects.removeChild(object);
-  };
-  gameLocation.objects.addChild(
-    parseInteractivity(node, object, function() {
-      removeTempObjFuncs[storyId][node.id]();
-      SaveManager.saveClickTempObject(node, storyId);
-    })
-  );
+  if (isInDorm) {
+    gameLocation.objects.addChild(parseInteractivity(node, parseStaticObject(node)));
+  } else {
+    var object = parseStaticObject(node);
+    var storyId = Utils.getStoryAncestor(node).id;
+    if (!removeTempObjFuncs[storyId]) {
+      removeTempObjFuncs[storyId] = {};
+    }
+    removeTempObjFuncs[storyId][node.id] = function() {
+      gameLocation.objects.removeChild(object);
+    };
+    gameLocation.objects.addChild(
+        parseInteractivity(node, object, function() {
+          removeTempObjFuncs[storyId][node.id]();
+          SaveManager.saveClickTempObject(node, storyId);
+        })
+    );
+  }
 }
 
 export function removeTempObject(storyId, objectId) {

@@ -28,48 +28,184 @@ div.#{$ns}-dialog.help {
   }
 }
 
-div.#{$ns}-dialog.profile {
-  padding: 0;
+.profile {
+  // 30% of 1366 pixels
+  min-width: 410px;
 
-  div.header {
-    text-align: center;
+  .profile-content {
+    height: calc(100vh - 40px);
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 20px;
+    line-height: 18px;
+    display: flex;
+    flex-direction: column;
 
-    span.name {
-      font-size: 1.5rem;
-      font-weight: 800;
-      padding-right: 0.7rem;
+    div.profile-header {
+      flex-grow: 0;
+      flex-shrink: 0;
+      text-align: center;
+      padding-bottom: 1.75em;
+
+      div.name {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 0.3em;
+      }
+
+      div.role {
+        font-size: 1rem;
+        font-style: italic;
+      }
     }
 
-    span.role {
-      font-style: italic;
+    div.profile-placeholder {
+      flex: 0 0 auto;
+      text-align: center;
+    }
+
+    div.profile-progress {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: row;
+      padding-bottom: 1.75em;
+      justify-content: space-around;
+      align-items: stretch;
+
+      .profile-grade,
+      .profile-xp {
+        position: relative;
+        width: 42%;
+        flex-grow: 0;
+        flex-shrink: 0;
+        margin-bottom: 0.3em;
+
+        .profile-spinner svg {
+          width: 100%;
+          height: 100%;
+          stroke-width: 6;
+          overflow: visible;
+        }
+
+        div.type,
+        div.total-value,
+        div.percentage {
+          position: absolute;
+          text-align: center;
+          width: 100%;
+        }
+
+        div.type {
+          font-weight: bold;
+          font-size: 1.35em;
+          top: 35%;
+        }
+
+        div.total-value {
+          font-size: 1.15em;
+          top: 52%;
+        }
+
+        div.percentage {
+          font-size: 0.95em;
+          top: 78%;
+        }
+      }
+    }
+
+    div.profile-callouts {
+      flex-grow: 1;
+      flex-shrink: 1;
+      overflow-y: auto;
+
+      .profile-summary-navlink {
+        color: black;
+        text-decoration: none;
+
+        .profile-summary-callout {
+          line-height: 1em;
+          padding: 4px 12px 6px 30px;
+
+          &:hover {
+            background-color: rgba(138, 155, 168, 0.25);
+          }
+
+          h4 {
+            font-size: 1.1em;
+            font-weight: bold;
+          }
+
+          .#{$ns}-icon {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+
+            svg {
+              height: 18px;
+              width: 18px;
+            }
+          }
+
+          .grade-details,
+          .xp-details {
+            & > * {
+              display: inline-block;
+            }
+
+            .title {
+              width: 12%;
+              text-align: left;
+            }
+
+            .value {
+              width: 35%;
+              text-align: center;
+            }
+
+            .value-bar {
+              width: 53%;
+            }
+          }
+
+          & > div:not(:first-of-type) {
+            margin-top: 0.2em;
+          }
+        }
+      }
+
+      .profile-summary-navlink:not(:last-child) > .profile-summary-callout {
+        margin-bottom: 0.25em;
+      }
     }
   }
 
-  div.progress {
-    div {
-      display: flex;
-      flex-direction: row;
-      margin-bottom: 0.3em;
-      padding-top: 1rem;
-
-      &:first-child {
-        padding-top: 0;
-      }
+  .progress-steelblue {
+    &.profile-spinner svg path:last-of-type {
+      stroke: #137cbd;
     }
 
-    span {
-      display: block;
+    &.value-bar > div {
+      background-color: #137cbd;
+    }
+  }
 
-      &.label {
-        /* Flush &.value to right */
-        flex-grow: 1;
-      }
+  .progress-deepskyblue {
+    &.profile-spinner svg path:last-of-type {
+      stroke: #579ecb;
+    }
 
-      &.value {
-        align-self: end;
-        font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
-          monospace;
-      }
+    &.value-bar > div {
+      background-color: #579ecb;
+    }
+  }
+
+  .progress-skyblue {
+    &.profile-spinner svg path:last-of-type {
+      stroke: #9ac0d8;
+    }
+
+    &.value-bar > div {
+      background-color: #9ac0d8;
     }
   }
 }

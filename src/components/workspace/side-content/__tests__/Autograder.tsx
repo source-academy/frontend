@@ -2,7 +2,7 @@ import { mount, shallow } from 'enzyme';
 import * as React from 'react';
 
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
-import { AutogradingResult, ITestcase } from 'src/components/assessment/assessmentShape';
+import { AutogradingResult, ITestcase } from '../../../../components/assessment/assessmentShape';
 import Autograder, { AutograderProps } from '../Autograder';
 
 const mockErrors: SourceError[] = [
