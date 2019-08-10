@@ -1,73 +1,45 @@
 # Cadet Frontend 
 
 [![Build Status](https://travis-ci.org/source-academy/cadet-frontend.svg?branch=master)](https://travis-ci.org/source-academy/cadet-frontend)
-[![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=travis)](https://coveralls.io/github/source-academy/cadet-frontend?branch=travis)
+[![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/cadet-frontend?branch=master)
 
-## Development Setup
+The Source Academy is a gamified platform designed to teach students coding while having fun! This repository in particular houses the source code for the frontend written in ReactJS with Redux.
 
+## Features
+- Playground to write and test programs
+- Built-in Debugger and Visualiser to interact with your programs
+- Missions/Quests/Contests to solve challenging problems while learning about programming fundamentals
+- Sessions for collaborative programming
+- Grading System to test your programs and marking
+
+## Getting Started
+
+### Installation 
 1. Install a stable version of NodeJS (tested: Node 10.15.0).
 2. Run `npm install` to install dependencies.
-3. Copy the `.env.example` file as `.env` and set the variable `REACT_APP_CLIENT_ID`
-   to contain your LumiNUS api key.
-4. Run `npm start` to start the server at `localhost:8075`. Admin permissions may
-   be required for your OS to serve at port 8075.
-5. If running cadet without nginx, `npm run cors-proxy` to solve CORS problems.
-   
-## For Windows Users
+3. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
+4. Run `npm start` to start the server at `localhost:8075`. 
 
-### Running cadet-frontend
-Run `npm run win-start`
+### Setting up your environment
 
-### Dealing with hooks
-In package.json, change line 28:\
-"pre-push": "bash scripts/test.sh",\
-to an empty line.
+The project requires some environment variables to be set to work properly. In the `.env` file a few things need to be set-up:
 
-Please note that doing this will disable the test suite, so you will need to run the tests manually instead. Using Git Bash (or any other UNIX-based command line), run the following:\
-cd scripts\
-bash test.sh
+1. **REACT_APP_LUMINUS_CLIENT_ID** : This is needed for the login to work at the moment. Contact the team to obtain one!
+2. **REACT_APP_USE_BACKEND**: Set to false if not running together with the [backend](https://github.com/source-academy/cadet). Take note that CORs has to be handled if running with the backend
+3. **REACT_APP_CHATKIT_INSTANCE_LOCATOR**: Set this up if running with chatkit. Its documentation can be found [here](https://pusher.com/docs/chatkit).
 
-## js-slang
+### Running the tests 
 
-Currently using a version of js-slang with native and verbose errors.
+Before pushing to Github, ensure that your code is formatted and your tests are passing. These two commands should help with that:
 
-Edit https://github.com/source-academy/cadet-frontend/blob/57ba44f6b55c214d0f20339cd45bece57f24f48c/src/sagas/index.ts#L260
+- `npm run format` : formats your code
+- `npm run test`: runs the tests and prints the output
 
-to toggle native (default is native enabled). 
+### Contribution Guidelines
 
-### To run local copy of js-slang
+Refer to our issue tracker and contribute to any open issues you are able to spot there. If you have any new issues, please do post there as well. We welcome any form of contribution and are open to any new ideas you may have for the project!
 
-1. Follow the instructions on the js-slang repository to transpile your own copy
-2. Edit line 41 of package.json in this project to link to the directory of your js-slang and then run `npm install`:
-
-`"js-slang": "file:path/to/js-slang",`
-
-Note that this copies your files over, any future changes will not be reflected. 
-
-You may try [this](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af) for a smoother experience.
-
-## Inspector
-This requires the use of the `debugger` branch of js-slang to work. Clone both the frontend and the `debugger` slang to the same directory. You would want to `yarn build` the slang you just obtained and then `yarn && sudo yarn start` in the frontend and it should just work. The merge over there is still ongoing. Meanwhile, please try to break this.
-
-The mental model we are using is: A breakpoint means that the interpreter will stop right before it. Whatever is highlighted is going to be evaluated next. If you meet any inconsistencies with this, also please raise it up for discussion.
-
-### What you can do
-- Set breakpoints by clicking on the gutter
-- `debugger;` just like ECMAScript
-- Inspect!
-- Run stuff in the context of the paused program!
-
-### Usage
-Here's what happens: After you click run, if there the interpreter meets a breakpoint, the first thing you're going to notice is that the REPL feedbacks to you it hit a breakpoint, the line is highlighted, and one of the icons on the right pane is going to start blinking. If you click on the icon, it reveals the inspector. All the variables in every frame is exposed here. The REPL is also now in the context of where ever you are. So you can evaluate anything you would normally be able to in the REPL. It is all quite simple really.
-
-### Note
-Because we use a local version of `js-slang`, the CI just breaks all the time.
-
-## For Editing And Creating New Local XML Missions
-
-1. Use the branch 'mission-editing' in cadet-frontend
-2. Run in browser with npm start
-2. Go to Incubator tab.
+To start contributing, create a fork from our repo and send a PR. Refer to [this article](https://help.github.com/en/articles/fork-a-repo) for more information.
 
 ## Application Structure
 

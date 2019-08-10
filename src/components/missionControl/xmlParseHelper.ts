@@ -2,6 +2,7 @@ import { Builder } from 'xml2js';
 import {
   AssessmentCategories,
   AssessmentStatuses,
+  ExternalLibraryName,
   GradingStatuses,
   IAssessment,
   IAssessmentOverview,
@@ -76,6 +77,7 @@ const makeAssessmentOverview = (
     id: editingId,
     maxGrade: maxGradeVal,
     maxXp: maxXpVal,
+    number: rawOverview.number || '',
     openAt: rawOverview.startdate,
     title: rawOverview.title,
     reading: task.READING ? task.READING[0] : '',
@@ -116,7 +118,7 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
     return {
       chapter: -1,
       external: {
-        name: 'NONE',
+        name: 'NONE' as ExternalLibraryName,
         symbols: []
       },
       globals: []
@@ -134,7 +136,7 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
     return {
       chapter: parseInt(deployment.$.interpreter, 10),
       external: {
-        name: nameVal,
+        name: nameVal as ExternalLibraryName,
         symbols: symbolsVal
       },
       globals: globalsVal
@@ -150,7 +152,7 @@ const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] =>
     const localMaxXp = problem.$.maxxp ? parseInt(problem.$.maxxp, 10) : 0;
     const question: IQuestion = {
       answer: null,
-      comment: null,
+      roomId: null,
       content: problem.TEXT[0],
       id: curId,
       library: makeLibrary(problem.DEPLOYMENT),
@@ -304,12 +306,13 @@ export const assessmentToXml = (
 ): IXmlParseStrTask => {
   const task: any = {};
   const rawOverview: IXmlParseStrOverview = {
-    kind: overview.category.toLowerCase(),
-    duedate: overview.closeAt,
     coverimage: overview.coverImage,
+    duedate: overview.closeAt,
+    kind: overview.category.toLowerCase(),
+    number: overview.number || '',
     startdate: overview.openAt,
-    title: overview.title,
-    story: overview.story
+    story: overview.story,
+    title: overview.title
   };
   task.$ = rawOverview;
 

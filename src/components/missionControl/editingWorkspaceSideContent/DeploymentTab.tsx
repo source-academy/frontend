@@ -1,4 +1,4 @@
-import { Button, MenuItem, Switch } from '@blueprintjs/core';
+import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
@@ -7,7 +7,6 @@ import { sourceChapters } from '../../../reducers/states';
 
 import { ExternalLibraryName, IAssessment, Library } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
-import SideContent from '../../workspace/side-content';
 import { emptyLibrary } from '../assessmentTemplates';
 import { assignToPath, getValueFromPath } from './';
 import TextareaContent from './TextareaContent';
@@ -33,14 +32,7 @@ interface IExternal {
   symbols: string[];
 }
 
-export class DeploymentTab extends React.Component<IProps, { activeTab: number }> {
-  public constructor(props: IProps) {
-    super(props);
-    this.state = {
-      activeTab: 0
-    };
-  }
-
+export class DeploymentTab extends React.Component<IProps, {}> {
   public render() {
     if (!this.props.isOptionalDeployment) {
       return (
@@ -98,8 +90,7 @@ export class DeploymentTab extends React.Component<IProps, { activeTab: number }
         External Library:
         <br />
         {externalSelect(deployment.external.name, this.handleExternalSelect!)}
-        <br />
-        <br />
+        <Divider />
         <div>Symbols:</div>
         <br />
         <table style={{ width: '100%' }}>
@@ -120,41 +111,22 @@ export class DeploymentTab extends React.Component<IProps, { activeTab: number }
       </React.Fragment>
     );
 
-    const tabs = [
-      {
-        label: `Library`,
-        icon: IconNames.BOOK,
-        body: symbolsFragment
-      },
-      {
-        label: `Globals`,
-        icon: IconNames.GLOBE,
-        body: globalsFragment
-      }
-    ];
-
     return (
       <div>
         {/* {deploymentDisp}
         <br /> */}
+        <Divider />
         {resetLibrary}
-        <br />
+        <Divider />
         Interpreter:
         <br />
         {chapterSelect(deployment.chapter, this.handleChapterSelect)}
-        <SideContent
-          activeTab={this.state.activeTab}
-          handleChangeActiveTab={this.handleChangeActiveTab}
-          tabs={tabs}
-        />
+        <Divider />
+        {symbolsFragment}
+        <Divider />
+        {globalsFragment}
       </div>
     );
-  };
-
-  private handleChangeActiveTab = (tab: number) => {
-    this.setState({
-      activeTab: tab
-    });
   };
 
   private textareaContent = (path: Array<string | number>) => {
@@ -279,16 +251,16 @@ const chapterSelect = (
   handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <ChapterSelectComponent
-    className="pt-minimal"
+    className={Classes.MINIMAL}
     items={chapters}
     onItemSelect={handleSelect}
     itemRenderer={chapterRenderer}
     filterable={false}
   >
     <Button
-      className="pt-minimal"
+      className={Classes.MINIMAL}
       text={styliseChapter(currentChap)}
-      rightIcon="double-caret-vertical"
+      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
     />
   </ChapterSelectComponent>
 );
@@ -310,13 +282,17 @@ const externalSelect = (
   handleSelect: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
 ) => (
   <ExternalSelectComponent
-    className="pt-minimal"
+    className={Classes.MINIMAL}
     items={iExternals}
     onItemSelect={handleSelect}
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button className="pt-minimal" text={currentExternal} rightIcon="double-caret-vertical" />
+    <Button
+      className={Classes.MINIMAL}
+      text={currentExternal}
+      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+    />
   </ExternalSelectComponent>
 );
 

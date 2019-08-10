@@ -1,5 +1,4 @@
 import {
-  IAction,
   LOG_OUT,
   SET_TOKENS,
   SET_USER,
@@ -7,7 +6,8 @@ import {
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_HISTORY_HELPERS
+  UPDATE_HISTORY_HELPERS,
+  UPDATE_NOTIFICATIONS
 } from '../../actions/actionTypes';
 import { Grading, GradingOverview } from '../../components/academy/grading/gradingShape';
 import {
@@ -17,12 +17,13 @@ import {
   IAssessment,
   IAssessmentOverview
 } from '../../components/assessment/assessmentShape';
+import { Notification } from '../../components/notification/notificationShape';
 import { HistoryHelper } from '../../utils/history';
 import { reducer } from '../session';
 import { defaultSession, ISessionState, Role, Story } from '../states';
 
 test('LOG_OUT works correctly on default session', () => {
-  const action: IAction = {
+  const action = {
     type: LOG_OUT,
     payload: {}
   };
@@ -35,7 +36,7 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
   const accessToken = 'access_token_test';
   const refreshToken = 'refresh_token_test';
 
-  const action: IAction = {
+  const action = {
     type: SET_TOKENS,
     payload: {
       accessToken,
@@ -62,7 +63,7 @@ test('SET_USER works correctly', () => {
     story
   };
 
-  const action: IAction = {
+  const action = {
     type: SET_USER,
     payload
   };
@@ -85,7 +86,7 @@ test('UPDATE_HISTORY_HELPERS works on non-academy location', () => {
     ...defaultSession,
     historyHelper
   };
-  const action: IAction = {
+  const action = {
     type: UPDATE_HISTORY_HELPERS,
     payload
   };
@@ -109,7 +110,7 @@ test('UPDATE_HISTORY_HELPERS works on academy location', () => {
     ...defaultSession,
     historyHelper
   };
-  const action: IAction = {
+  const action = {
     type: UPDATE_HISTORY_HELPERS,
     payload
   };
@@ -160,7 +161,7 @@ const assessmentTest3: IAssessment = {
 };
 
 test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest1
   };
@@ -178,7 +179,7 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old 
     assessments
   };
 
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest2
   };
@@ -196,7 +197,7 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
     ...defaultSession,
     assessments
   };
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest2
   };
@@ -246,7 +247,7 @@ const assessmentOverviewsTest2: IAssessmentOverview[] = [
 ];
 
 test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in inserting assessment overviews', () => {
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT_OVERVIEWS,
     payload: assessmentOverviewsTest1
   };
@@ -265,7 +266,7 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overvie
     assessmentOverviews: assessmentOverviewsTest1
   };
   const assessmentOverviewsPayload = [...assessmentOverviewsTest2, ...assessmentOverviewsTest1];
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT_OVERVIEWS,
     payload: assessmentOverviewsPayload
   };
@@ -287,11 +288,12 @@ const gradingTest1: Grading = [
       id: 234
     },
     grade: {
-      comment: 'test comment',
+      roomId: '19422030',
       grade: 10,
       gradeAdjustment: 0,
       xp: 100,
-      xpAdjustment: 0
+      xpAdjustment: 0,
+      comments: 'Well done. Please try the quest!'
     }
   }
 ];
@@ -304,18 +306,19 @@ const gradingTest2: Grading = [
       id: 345
     },
     grade: {
-      comment: 'updated comment',
+      roomId: '19422030',
       grade: 30,
       gradeAdjustment: 10,
       xp: 500,
-      xpAdjustment: 20
+      xpAdjustment: 20,
+      comments: 'Good job! All the best for the finals.'
     }
   }
 ];
 
 test('UPDATE_GRADING works correctly in inserting gradings', () => {
   const submissionId = 23;
-  const action: IAction = {
+  const action = {
     type: UPDATE_GRADING,
     payload: {
       submissionId,
@@ -338,7 +341,7 @@ test('UPDATE_GRADING works correctly in inserting gradings and retains old data'
     gradings
   };
 
-  const action: IAction = {
+  const action = {
     type: UPDATE_GRADING,
     payload: {
       submissionId: submissionId2,
@@ -360,7 +363,7 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
     gradings
   };
 
-  const action: IAction = {
+  const action = {
     type: UPDATE_GRADING,
     payload: {
       submissionId,
@@ -391,7 +394,10 @@ const gradingOverviewTest1: GradingOverview[] = [
     studentName: 'test student',
     submissionId: 1,
     submissionStatus: 'attempting',
-    groupName: 'group'
+    groupName: 'group',
+    gradingStatus: 'excluded',
+    questionCount: 0,
+    gradedCount: 6
   }
 ];
 
@@ -413,7 +419,10 @@ const gradingOverviewTest2: GradingOverview[] = [
     studentName: 'another student',
     submissionId: 2,
     submissionStatus: 'attempted',
-    groupName: 'another group'
+    groupName: 'another group',
+    gradingStatus: 'excluded',
+    questionCount: 6,
+    gradedCount: 0
   }
 ];
 
@@ -440,4 +449,32 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', (
   const result: ISessionState = reducer(newDefaultSession, action);
 
   expect(result.gradingOverviews).toEqual(gradingOverviewsPayload);
+});
+
+test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {
+  const notifications: Notification[] = [
+    {
+      id: 1,
+      type: 'new',
+      assessment_id: 1,
+      assessment_type: 'Mission',
+      assessment_title: 'The Secret to Streams'
+    },
+    {
+      id: 2,
+      type: 'new',
+      assessment_id: 2,
+      assessment_type: 'Sidequest',
+      assessment_title: 'A sample Sidequest'
+    }
+  ];
+
+  const action = {
+    type: UPDATE_NOTIFICATIONS,
+    payload: notifications
+  };
+
+  const result: ISessionState = reducer(defaultSession, action);
+
+  expect(result.notifications).toEqual(notifications);
 });

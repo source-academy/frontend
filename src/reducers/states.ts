@@ -12,6 +12,15 @@ import {
   IAssessmentOverview,
   ITestcase
 } from '../components/assessment/assessmentShape';
+import { Notification } from '../components/notification/notificationShape';
+import {
+  ICodeDelta,
+  Input,
+  IPlaybackData,
+  ISourcecastData,
+  PlaybackStatus,
+  RecordingStatus
+} from '../components/sourcecast/sourcecastShape';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -48,36 +57,61 @@ interface IGradingWorkspace extends IWorkspaceState {
   readonly hasUnsavedChanges: boolean;
 }
 
-export interface IPlaygroundWorkspace extends IWorkspaceState {
-  readonly playgroundExternal: ExternalLibraryName;
+// tslint:disable-next-line: no-empty-interface
+export interface IPlaygroundWorkspace extends IWorkspaceState {}
+
+export interface ISourcecastWorkspace extends IWorkspaceState {
+  readonly audioUrl: string;
+  readonly codeDeltasToApply: ICodeDelta[] | null;
+  readonly description: string | null;
+  readonly inputToApply: Input | null;
+  readonly playbackData: IPlaybackData;
+  readonly playbackDuration: number;
+  readonly playbackStatus: PlaybackStatus;
+  readonly sourcecastIndex: ISourcecastData[] | null;
+  readonly title: string | null;
+}
+
+export interface ISourcereelWorkspace extends IWorkspaceState {
+  readonly playbackData: IPlaybackData;
+  readonly recordingStatus: RecordingStatus;
+  readonly timeElapsedBeforePause: number;
+  readonly timeResumed: number;
 }
 
 export interface IWorkspaceManagerState {
   readonly assessment: IAssessmentWorkspace;
   readonly grading: IGradingWorkspace;
   readonly playground: IPlaygroundWorkspace;
+  readonly sourcecast: ISourcecastWorkspace;
+  readonly sourcereel: ISourcereelWorkspace;
 }
 
 export interface IWorkspaceState {
   readonly autogradingResults: AutogradingResult[];
+  readonly breakpoints: string[];
   readonly context: Context;
   readonly editorPrepend: string;
+  readonly editorReadonly: boolean;
   readonly editorSessionId: string;
   readonly editorValue: string | null;
   readonly editorPostpend: string;
   readonly editorTestcases: ITestcase[];
   readonly editorHeight: number;
   readonly editorWidth: string;
-  readonly breakpoints: string[];
+  readonly execTime: number;
   readonly highlightedLines: number[][];
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
   readonly isEditorAutorun: boolean;
   readonly output: InterpreterOutput[];
+  readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
-  readonly sideContentActiveTab: number;
+  readonly sharedbAceInitValue: string;
+  readonly sharedbAceIsInviting: boolean;
+  readonly sideContentActiveTab: SideContentType;
   readonly sideContentHeight?: number;
   readonly websocketStatus: number;
   readonly globals: Array<[string, any]>;
@@ -99,6 +133,7 @@ export interface ISessionState {
   readonly story?: Story;
   readonly name?: string;
   readonly xp: number;
+  readonly notifications: Notification[];
 }
 
 type ReplHistory = {
@@ -207,19 +242,25 @@ export const defaultEditorValue = '// Type your program in here!';
  * Create a default IWorkspaceState for 'resetting' a workspace.
  * Takes in parameters to set the js-slang library and chapter.
  *
- * @param location the location of the workspace, used for context
+ * @param workspaceLocation the location of the workspace, used for context
  */
-export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceState => ({
+export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
-  context: createContext<WorkspaceLocation>(latestSourceChapter, [], location),
+  breakpoints: [],
+  context: createContext<WorkspaceLocation>(latestSourceChapter, [], workspaceLocation),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue: location === WorkspaceLocations.playground ? defaultEditorValue : '',
+  editorValue:
+    workspaceLocation === WorkspaceLocations.playground || WorkspaceLocations.sourcecast
+      ? defaultEditorValue
+      : '',
   editorPostpend: '',
+  editorReadonly: false,
   editorTestcases: [],
   editorHeight: 150,
   editorWidth: '50%',
-  breakpoints: [],
+  externalLibrary: ExternalLibraryNames.NONE,
+  execTime: 1000,
   highlightedLines: [],
   output: [],
   replHistory: {
@@ -228,7 +269,9 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
     originalValue: ''
   },
   replValue: '',
-  sideContentActiveTab: 0,
+  sharedbAceInitValue: '',
+  sharedbAceIsInviting: false,
+  sideContentActiveTab: SideContentType.questionOverview,
   websocketStatus: 0,
   globals: [],
   isEditorAutorun: false,
@@ -237,7 +280,30 @@ export const createDefaultWorkspace = (location: WorkspaceLocation): IWorkspaceS
   enableDebugging: true
 });
 
-export const defaultComments = 'Comments **here**. Use `markdown` if you ~~are cool~~ want!';
+export const defaultRoomId = null;
+
+export enum SideContentType {
+  autograder = 'autograder',
+  briefing = 'briefing',
+  chat = 'chat',
+  dataVisualiser = 'data_visualiser',
+  editorGrading = 'editor_grading',
+  editorAutograder = 'editor_autograder',
+  editorBriefing = 'editor_briefing',
+  editorGlobalDeployment = 'editor_global_deployment',
+  editorGlobalGraderDeployment = 'editor_global_grader_deployment',
+  editorLocalDeployment = 'editor_local_deployment',
+  editorLocalGraderDeployment = 'editor_local_grader_deployment',
+  editorManageQuestion = 'editor_manage_question',
+  editorQuestionOverview = 'editor_question_overview',
+  editorQuestionTemplate = 'editor_question_template',
+  envVisualiser = 'env_visualiser',
+  grading = 'grading',
+  introduction = 'introduction',
+  inspector = 'inspector',
+  questionOverview = 'question_overview',
+  toneMatrix = 'tone_matrix'
+}
 
 export const defaultWorkspaceManager: IWorkspaceManagerState = {
   assessment: {
@@ -253,8 +319,32 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     hasUnsavedChanges: false
   },
   playground: {
-    ...createDefaultWorkspace(WorkspaceLocations.playground),
-    playgroundExternal: ExternalLibraryNames.NONE
+    ...createDefaultWorkspace(WorkspaceLocations.playground)
+  },
+  sourcecast: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
+    audioUrl: '',
+    codeDeltasToApply: null,
+    description: null,
+    inputToApply: null,
+    playbackData: {
+      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryNames.NONE },
+      inputs: []
+    },
+    playbackDuration: 0,
+    playbackStatus: PlaybackStatus.paused,
+    sourcecastIndex: null,
+    title: null
+  },
+  sourcereel: {
+    ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
+    playbackData: {
+      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryNames.NONE },
+      inputs: []
+    },
+    recordingStatus: RecordingStatus.notStarted,
+    timeElapsedBeforePause: 0,
+    timeResumed: 0
   }
 };
 
@@ -282,7 +372,8 @@ export const defaultSession: ISessionState = {
   maxXp: 0,
   refreshToken: undefined,
   name: undefined,
-  xp: 0
+  xp: 0,
+  notifications: []
 };
 
 export const defaultState: IState = {

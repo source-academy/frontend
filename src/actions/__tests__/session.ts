@@ -1,26 +1,44 @@
 import { Grading, GradingOverview } from '../../components/academy/grading/gradingShape';
 import { IAssessment, IAssessmentOverview } from '../../components/assessment/assessmentShape';
+import { Notification } from '../../components/notification/notificationShape';
+import { Role, Story } from '../../reducers/states';
 import * as actionTypes from '../actionTypes';
 import {
+  acknowledgeNotifications,
   fetchAnnouncements,
   fetchAssessment,
   fetchAssessmentOverviews,
   fetchAuth,
   fetchGrading,
   fetchGradingOverviews,
+  fetchNotifications,
   login,
+  notifyChatUsers,
   setTokens,
   setUser,
   submitAnswer,
   submitAssessment,
   submitGrading,
+  submitGradingAndContinue,
   unsubmitSubmission,
   updateAssessment,
   updateAssessmentOverviews,
   updateGrading,
   updateGradingOverviews,
-  updateHistoryHelpers
+  updateHistoryHelpers,
+  updateNotifications
 } from '../session';
+
+test('acknowledgeNotifications generates correct action object', () => {
+  const action = acknowledgeNotifications();
+
+  expect(action).toEqual({
+    type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
+    payload: {
+      withFilter: undefined
+    }
+  });
+});
 
 test('fetchAuth generates correct action object', () => {
   const luminusCode = 'luminus-code-test';
@@ -80,10 +98,42 @@ test('fetchGradingOverviews generates correct action object', () => {
   });
 });
 
+test('fetchNotifications generates correct action object', () => {
+  const action = fetchNotifications();
+
+  expect(action).toEqual({
+    type: actionTypes.FETCH_NOTIFICATIONS
+  });
+});
+
 test('login action generates correct action object', () => {
   const action = login();
   expect(action).toEqual({
     type: actionTypes.LOGIN
+  });
+});
+
+test('notifyChatUsers generates correct action object with undefined submission id', () => {
+  const action = notifyChatUsers(1, undefined);
+
+  expect(action).toEqual({
+    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    payload: {
+      assessmentId: 1,
+      submissionId: undefined
+    }
+  });
+});
+
+test('notifyChatUsers generates correct action object with undefined assessment id', () => {
+  const action = notifyChatUsers(undefined, 1);
+
+  expect(action).toEqual({
+    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    payload: {
+      assessmentId: undefined,
+      submissionId: 1
+    }
   });
 });
 
@@ -103,9 +153,9 @@ test('setTokens generates correct action object', () => {
 test('setUser generates correct action object', () => {
   const user = {
     name: 'test student',
-    role: 'student',
+    role: 'student' as Role,
     grade: 150,
-    story: {}
+    story: {} as Story
   };
   const action = setUser(user);
   expect(action).toEqual({
@@ -139,17 +189,33 @@ test('submitAssessment generates correct action object', () => {
 test('submitGrading generates correct action object with default values', () => {
   const submissionId = 8;
   const questionId = 2;
-  const comment = 'test comment here';
 
-  const action = submitGrading(submissionId, questionId, comment);
+  const action = submitGrading(submissionId, questionId);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      comment,
       gradeAdjustment: 0,
-      xpAdjustment: 0
+      xpAdjustment: 0,
+      comments: undefined
+    }
+  });
+});
+
+test('submitGradingAndContinue generates correct action object with default values', () => {
+  const submissionId = 8;
+  const questionId = 2;
+
+  const action = submitGradingAndContinue(submissionId, questionId);
+  expect(action).toEqual({
+    type: actionTypes.SUBMIT_GRADING_AND_CONTINUE,
+    payload: {
+      submissionId,
+      questionId,
+      gradeAdjustment: 0,
+      xpAdjustment: 0,
+      comments: undefined
     }
   });
 });
@@ -157,18 +223,43 @@ test('submitGrading generates correct action object with default values', () => 
 test('submitGrading generates correct action object', () => {
   const submissionId = 10;
   const questionId = 3;
-  const comment = 'another test comment here';
   const gradeAdjustment = 10;
   const xpAdjustment = 100;
-  const action = submitGrading(submissionId, questionId, comment, gradeAdjustment, xpAdjustment);
+  const comments = 'my comment';
+  const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment, comments);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
-      comment,
       gradeAdjustment,
-      xpAdjustment
+      xpAdjustment,
+      comments
+    }
+  });
+});
+
+test('submitGradingAndContinue generates correct action object', () => {
+  const submissionId = 4;
+  const questionId = 7;
+  const gradeAdjustment = 90;
+  const xpAdjustment = 55;
+  const comments = 'another comment';
+  const action = submitGradingAndContinue(
+    submissionId,
+    questionId,
+    gradeAdjustment,
+    xpAdjustment,
+    comments
+  );
+  expect(action).toEqual({
+    type: actionTypes.SUBMIT_GRADING_AND_CONTINUE,
+    payload: {
+      submissionId,
+      questionId,
+      gradeAdjustment,
+      xpAdjustment,
+      comments
     }
   });
 });
@@ -257,7 +348,10 @@ test('updateGradingOverviews generates correct action object', () => {
       studentName: 'test student',
       submissionId: 1,
       submissionStatus: 'attempting',
-      groupName: 'group'
+      groupName: 'group',
+      gradingStatus: 'excluded',
+      questionCount: 6,
+      gradedCount: 0
     }
   ];
 
@@ -278,11 +372,12 @@ test('updateGrading generates correct action object', () => {
         id: 234
       },
       grade: {
-        comment: 'test comment',
+        roomId: 'test roomId',
         grade: 10,
         gradeAdjustment: 0,
         xp: 100,
-        xpAdjustment: 0
+        xpAdjustment: 0,
+        comments: 'Well done.'
       }
     }
   ];
@@ -294,5 +389,31 @@ test('updateGrading generates correct action object', () => {
       submissionId,
       grading
     }
+  });
+});
+
+test('updateNotifications generates correct action object', () => {
+  const notifications: Notification[] = [
+    {
+      id: 1,
+      type: 'new',
+      assessment_id: 1,
+      assessment_type: 'Mission',
+      assessment_title: 'The Secret to Streams'
+    },
+    {
+      id: 2,
+      type: 'new',
+      assessment_id: 2,
+      assessment_type: 'Sidequest',
+      assessment_title: 'A sample Sidequest'
+    }
+  ];
+
+  const action = updateNotifications(notifications);
+
+  expect(action).toEqual({
+    type: actionTypes.UPDATE_NOTIFICATIONS,
+    payload: notifications
   });
 });

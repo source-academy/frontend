@@ -267,7 +267,7 @@ function resetCanvas() {
   }
 }
 
-/**
+/*
  * Gets the WebGL object (gl) ready for usage. Use this
  * to reset the mode of rendering i.e to change from 2d to 3d runes.
  *
@@ -302,12 +302,9 @@ function getReadyWebGLForCanvas(mode) {
 
     // rune-specific operations
     if (mode === '2d' || mode === '3d') {
-      initRuneCommon()
-      initRuneBuffer(vertices, indices)
-      // rune-3d-specific operations
-      if (mode === '3d') {
-        initRune3d()
-      }
+	initRuneCommon()
+	initRuneBuffer(vertices, indices)
+	initRune3d()
     }
 
     if (mode === 'curve') {
@@ -343,11 +340,8 @@ function getReadyWebGL(mode, name, horiz, vert, aa_off) {
 
     // rune-specific operations
     if (mode === '2d' || mode === '3d') {
-      initRuneCommon()
-      // rune-3d-specific operations
-      if (mode === '3d') {
+        initRuneCommon()
         initRune3d()
-      }
     }
 
     if (mode === 'curve') {
@@ -743,7 +737,7 @@ function combine(texA, texB) {
   gl.bindTexture(gl.TEXTURE_2D, texB)
   gl.uniform1i(redUniform, 1)
 
-  gl.drawElements(gl.TRIANGLES, black_bb.count, gl.UNSIGNED_SHORT, indexSize * black_bb.first)
+  gl.drawElements(gl.TRIANGLES, square.count, gl.UNSIGNED_SHORT, indexSize * square.first)
 }
 
 function clearAnaglyphFramebuffer() {
@@ -766,7 +760,7 @@ function copy_viewport_webGL(src) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
   gl.uniform1i(u_sampler_image, 2)
 
-  gl.drawElements(gl.TRIANGLES, black_bb.count, gl.UNSIGNED_SHORT, indexSize * black_bb.first)
+  gl.drawElements(gl.TRIANGLES, square.count, gl.UNSIGNED_SHORT, indexSize * square.first)
 }
 //---------------------Cheating canvas functions-----------------
 function copy_viewport(src, dest) {

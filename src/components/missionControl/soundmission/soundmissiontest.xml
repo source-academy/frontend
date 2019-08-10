@@ -249,7 +249,7 @@ Use a sine wave of 750 Hz for the tone and don't place any pauses before or afte
       </PROBLEM>
     </PROBLEMS>
     <DEPLOYMENT interpreter="2">
-      <EXTERNAL name="SOUND">
+      <EXTERNAL name="SOUNDS">
         <SYMBOL>get_duration</SYMBOL>
         <SYMBOL>get_wave</SYMBOL>
         <SYMBOL>is_sound</SYMBOL>

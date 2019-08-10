@@ -7,11 +7,6 @@
   container.id = 'list-visualizer-container'
   container.hidden = true
   document.body.appendChild(container)
-  stage = new Kinetic.Stage({
-    width: 1000,
-    height: 1000,
-    container: 'list-visualizer-container'
-  })
 
   /**
    *  Converts a list, or a pair, to a tree object. Wrapper function.
@@ -34,8 +29,14 @@
         } else {
           thisNode.left = construct_tree(head(lst))
         }
-        // otherwise, it's a data item
-      } else {
+      } else if (is_function(head(lst))) { // draw the function object
+	if (perms.indexOf(head(lst)) > -1) { // check if function has been drawn
+	  thisNode.leftid = perms.indexOf(head(lst))
+	} else { 
+	  thisNode.left = construct_function(head(lst))
+	}
+      }	else {
+	// otherwise, it's a data item
         thisNode.data = head(lst)
       }
       // similarly for right subtree.
@@ -45,12 +46,35 @@
         } else if (!is_null(tail(lst))) {
           thisNode.right = construct_tree(tail(lst))
         }
+      } else if (is_function(tail(lst))) {
+	if (perms.indexOf(tail(lst)) > -1) {
+		thisNode.rightid = perms.indexOf(tail(lst))
+	} else { 
+		thisNode.right = construct_function(tail(lst))
+	}
       } else {
         thisNode.data2 = tail(lst)
       }
 
       return thisNode
     }
+
+    /** 
+     * Returns a new TreeNode that represents a function object instead of a sublist
+     */
+    function construct_function(fn) {
+      var thisNode = new TreeNode()
+      thisNode.data2 = " " // workaround to prevent nullbox from being drawn
+
+      // memoise current function
+      perms[counter] = fn
+      thisNode.id = counter
+      thisNode.isFunction = true
+      counter++
+
+      return thisNode
+    }
+
     // keeps track of all sublists in order to detect cycles
     var perms = []
     var tree = new Tree()
@@ -70,6 +94,8 @@
     vertBarPos: 0.5,
     boxSpacingX: 50,
     boxSpacingY: 60,
+		
+    circleRadius: 12,
 
     arrowSpace: 5,
     arrowSpaceH: 13, // horizontal
@@ -143,7 +169,11 @@
   TreeDrawer.prototype.drawNode = function(node, x, y, layer) {
     if (node !== null) {
       // draws the content
-      realDrawNode(node.data, node.data2, node.id, x, y, x, y, layer)
+      if (node.isFunction) {
+        realDrawFunctionNode(node.id, x, y, x, y, layer)
+      } else {
+        realDrawNode(node.data, node.data2, node.id, x, y, x, y, layer)
+      }
 
       // if it has a left new child, draw it
       if (node.left !== null) {
@@ -188,8 +218,11 @@
     x = parentX - tcon.distanceX - count * tcon.distanceX
     y = parentY + tcon.distanceY
 
-    realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
-
+    if (node.isFunction) {
+      realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+    } else {
+      realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+    }
     if (node.left !== null) {
       this.drawLeft(node.left, x, y, layer)
     } else if (node.leftid != null) {
@@ -223,7 +256,11 @@
     x = parentX + tcon.distanceX + count * tcon.distanceX
     y = parentY + tcon.distanceY
 
-    realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+    if (node.isFunction) {
+      realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+    } else {
+      realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+    }
 
     if (node.left !== null) {
       this.drawLeft(node.left, x, y, layer)
@@ -272,6 +309,26 @@
     // no pointer is drawn to root
     if (x2 !== x1) {
       box.connectTo(x2 - x1, y2 - y1)
+    }
+
+    node.setX(x1)
+    node.setY(y1)
+    layer.add(node)
+
+    // add node to the known list
+    nodelist[id] = node
+    // update left extreme of the tree
+    minLeft = Math.min(minLeft, x1)
+  }
+	
+  function realDrawFunctionNode(id, x1, y1, x2, y2, layer) {
+    var circle = new NodeCircles()
+    var node = new Kinetic.Group()
+
+    circle.put(node)
+
+    if (x2 !== x1) {
+      circle.connectTo(x2 - x1, y2 - y1)
     }
 
     node.setX(x1)
@@ -359,7 +416,7 @@
         fill: 'white'
       })
       this.image.add(txt)
-    } else if (is_list(value) && is_null(value)) {
+    } else if (!is_list(value) && is_null(value)) {
       var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0)
       var emptyBox = empty.getRaw()
       this.image.add(emptyBox)
@@ -401,9 +458,105 @@
   }
 
   /**
+  *  Creates a Kinetic.Group used to represent a function object. Similar to NodeBox().
+  */
+  function NodeCircles() {
+    this.image = new Kinetic.Group()
+
+    var leftCircle = new Kinetic.Circle({
+      radius: 15,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      x: tcon.boxWidth / 2 - 20,
+      y: tcon.boxHeight / 2
+    })
+
+    var rightCircle = new Kinetic.Circle({
+      radius: 15,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      x: tcon.boxWidth / 2 + 10,
+      y: tcon.boxHeight / 2
+    })
+
+    var leftDot = new Kinetic.Circle({
+      radius: 4,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      fill: 'white',
+      x: tcon.boxWidth / 2 - 20,
+      y: tcon.boxHeight / 2
+    })
+
+    var rightDot = new Kinetic.Circle({
+      radius: 4,
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white',
+      fill: 'white',
+      x: tcon.boxWidth / 2 + 10,
+      y: tcon.boxHeight / 2
+    })
+
+    this.image.add(leftCircle)
+    this.image.add(rightCircle)
+    this.image.add(leftDot)
+    this.image.add(rightDot)
+  }
+
+  /**
    *  Connects a NodeBox to it's parent at x,y by using line segments with arrow head
    */
   NodeBox.prototype.connectTo = function(x, y) {
+    // starting point
+    var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
+
+    // end point
+    if (x > 0) {
+      var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 }
+    } else {
+      var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 }
+    }
+
+    var pointer = new Kinetic.Line({
+      points: [start, end],
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white'
+    })
+    // the angle of the incoming arrow
+    var angle = Math.atan((end.y - start.y) / (end.x - start.x))
+
+    // left and right part of an arrow head, rotated to the calculated angle
+    if (x > 0) {
+      var left = {
+        x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+        y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+      }
+      var right = {
+        x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+        y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+      }
+    } else {
+      var left = {
+        x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+        y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+      }
+      var right = {
+        x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+        y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+      }
+    }
+
+    var arrow = new Kinetic.Line({
+      points: [left, start, right],
+      strokeWidth: tcon.strokeWidth,
+      stroke: 'white'
+    })
+
+    this.image.getParent().add(pointer)
+    this.image.getParent().add(arrow)
+  }
+	
+	NodeCircles.prototype.connectTo = function(x, y) {
     // starting point
     var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
 
@@ -459,6 +612,10 @@
   NodeBox.prototype.put = function(container) {
     container.add(this.image)
   }
+	
+	NodeCircles.prototype.put = function(container) {
+		container.add(this.image)
+	}
 
   /**
    *  Connects a box to a previously known box, the arrow path is more complicated.
@@ -468,7 +625,7 @@
    */
   function backwardLeftEdge(x1, y1, x2, y2, layer) {
     // coordinates of all the turning points, execpt the first segment in the path
-    if (x1 > x2 && y1 > y2) {
+    if (x1 > x2 && y1 >= (y2 - tcon.boxHeight - 1)) {
       // lower right to upper left
       var path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
@@ -483,7 +640,7 @@
         x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
       ]
-    } else if (x1 <= x2 && y1 > y2) {
+    } else if (x1 <= x2 && y1 >= (y2 - tcon.boxHeight - 1)) {
       // lower left to upper right
       var path = [
         //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
@@ -571,7 +728,7 @@
    *  Same as backwardLeftEdge
    */
   function backwardRightEdge(x1, y1, x2, y2, layer) {
-    if (x1 > x2 && y1 > y2) {
+    if (x1 > x2 && y1 > (y2 - tcon.boxHeight - 1)) {
       var path = [
         //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
         x1 + tcon.boxWidth * 3 / 4,
@@ -585,7 +742,7 @@
         x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
       ]
-    } else if (x1 <= x2 && y1 > y2) {
+    } else if (x1 <= x2 && y1 > (y2 - tcon.boxHeight - 1)) {
       var path = [
         //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
         x1 + tcon.boxWidth * 3 / 4,
@@ -709,8 +866,29 @@
    *  Then shift it to the left end.
    */
   function draw(xs) {
+    // Blink icon
+    const icon = document.getElementById('data_visualiser-icon');
+    
+    if (icon) {
+      icon.classList.add('side-content-tab-alert');
+    }
+
+    /**
+     * Create kinetic stage according to calculated width and height of drawing.
+     * Theoretically, as each box is 90px wide and successive boxes overlap by half,
+     * the width of the drawing should be roughly (width * 45), with a similar calculation
+     * for height.
+     * In practice, likely due to browser auto-scaling, for large drawings this results in
+     * some of the drawing being cut off. Hence the width and height formulas used are approxmations.
+     */
+    stage = new Kinetic.Stage({
+      width: findListWidth(xs) * 60 + 60,
+      height: findListHeight(xs) * 60 + 100,
+      container: 'list-visualizer-container'
+    });
     minLeft = 500
     nodelist = []
+    fnNodeList = []
     nodeLabel = 0
     // hides all other layers
     for (var i = 0; i < layerList.length; i++) {
@@ -787,7 +965,80 @@
     layerList = []
     updateListVisualizerButtons()
   }
+	
+  function is_function(data) {
+    return typeof(data) == "function"
+  }
 
+  /**
+   * Find the height of a drawing (in number of "rows" of pairs)
+   */ 
+  function findListHeight(xs) {
+    // Store pairs/arrays that were traversed previously so as to not double-count their height.
+    const existing = []; 
+
+     function helper(xs) {   
+      if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
+          return 0;
+      } else {
+        let leftHeight;
+        let rightHeight;
+        if (existing.includes(xs[0])
+            || (!is_pair(xs[0]) && (!is_array(xs[0])))) {
+          leftHeight = 0;          
+        } else {
+          existing.push(xs[0]);
+          leftHeight = helper(xs[0]);
+        }
+        if (existing.includes(xs[1])
+            || (!is_pair(xs[1]) && (!is_array(xs[1])))) {
+          rightHeight = 0;          
+        } else {
+          existing.push(xs[1]);
+          rightHeight = helper(xs[1]);
+        }
+        return leftHeight > rightHeight
+              ? 1 + leftHeight
+              : 1 + rightHeight;
+      }
+    }
+
+    return helper(xs, []);
+  }
+
+ /**
+  * Find the width of a drawing (in number of "columns" of pairs)
+  */ 
+  function findListWidth(xs) {
+    const existing = [];
+
+    function helper(xs) {   
+      if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
+          return 0;
+      } else {
+        let leftWidth;
+        let rightWidth;
+        if (existing.includes(xs[0])
+            || (!is_pair(xs[0]) && (!is_array(xs[0])))) {
+          leftWidth = 0;          
+        } else {
+          existing.push(xs[0]);
+          leftWidth = helper(xs[0]);
+        }
+        if (existing.includes(xs[1])
+            || (!is_pair(xs[1]) && (!is_array(xs[1])))) {
+          rightWidth = 0;          
+        } else {
+          existing.push(xs[1]);
+          rightWidth = helper(xs[1]);
+        }
+        return leftWidth + rightWidth + 1;
+      }
+    }
+
+    return helper(xs);
+  }
+	
   exports.ListVisualizer = {
     draw: draw,
     clear: clearListVisualizer,

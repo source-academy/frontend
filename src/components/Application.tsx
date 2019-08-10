@@ -7,8 +7,10 @@ import Academy from '../containers/academy';
 import Login from '../containers/LoginContainer';
 import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
+import Sourcecast from '../containers/sourcecast/SourcecastContainer';
 import { Role, sourceChapters } from '../reducers/states';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
+import Contributors from './contributors';
 import NavigationBar from './NavigationBar';
 import NotFound from './NotFound';
 
@@ -20,7 +22,7 @@ export interface IStateProps {
   role?: Role;
   title: string;
   name?: string;
-  currentPlaygroundExternalLibrary: ExternalLibraryName;
+  currentExternalLibrary: ExternalLibraryName;
 }
 
 export interface IDispatchProps {
@@ -29,7 +31,7 @@ export interface IDispatchProps {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleEnsureLibrariesLoaded: () => void;
   handleLogOut: () => void;
-  handlePlaygroundExternalSelect: (external: ExternalLibraryName) => void;
+  handleExternalLibrarySelect: (external: ExternalLibraryName) => void;
 }
 
 const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
@@ -54,6 +56,8 @@ class Application extends React.Component<IApplicationProps, {}> {
             <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
+            <Route path="/contributors" component={Contributors} />
+            <Route path="/sourcecast" component={Sourcecast} />
             <Route exact={true} path="/" render={this.redirectToAcademy} />
             <Route component={NotFound} />
           </Switch>
@@ -82,12 +86,12 @@ const toLogin = (props: IApplicationProps) => () => (
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props);
   const chapter = parseChapter(props) || props.currentPlaygroundChapter;
-  const externalLibraryName = parseExternalLibrary(props) || props.currentPlaygroundExternalLibrary;
+  const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibrary;
   if (prgrm) {
     props.handleEditorValueChange(prgrm);
     props.handleEnsureLibrariesLoaded();
     props.handleClearContext(chapter, externalLibraryName);
-    props.handlePlaygroundExternalSelect(externalLibraryName);
+    props.handleExternalLibrarySelect(externalLibraryName);
   }
 };
 

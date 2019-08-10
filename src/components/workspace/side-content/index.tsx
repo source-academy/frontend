@@ -1,68 +1,159 @@
-import { Button, Card, IconName, Tooltip } from '@blueprintjs/core';
+import { Card, Icon, IconName, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
+import { SideContentType } from 'src/reducers/states';
 
 /**
- * @property tabs an Array of SideContentTabs,
- *   which must be non-empty i.e contain at least one SideContentTab
+ * @property animate Set this to false to disable the movement
+ * of the selected tab indicator. Default value: true.
+ *
+ * @property defaultSelectedTabId The id of a SideContentTab to be
+ *  selected initially when the SideContent component is mounted.
+ *
+ * @property handleActiveTabChange A dispatch bound to the
+ * UPDATE_ACTIVE_TAB action creator; updates the Redux store with
+ * the id of the active side content tab in the current workspace.
+ *
+ * @property onChange A function that is called whenever the
+ * active tab is changed by the user.
+ *
+ * @property tabs An array of SideContentTabs.
+ *  The tabs will be rendered in order of the array.
+ *  If this array is empty, no tabs will be rendered.
+ *
+ * @property renderActiveTabPanelOnly Set this property to
+ * true to enable unmounting of tab panels whenever tabs are
+ * switched. If it is left undefined, the value will default
+ * to false, and the tab panels will all be loaded with the
+ * mounting of the SideContent component. Switching tabs
+ * will merely hide them from view.
  */
 export type SideContentProps = {
-  activeTab: number;
+  animate?: boolean;
+  defaultSelectedTabId?: SideContentType;
+  handleActiveTabChange: (activeTab: SideContentType) => void;
+  onChange?: (
+    newTabId: SideContentType,
+    prevTabId: SideContentType,
+    event: React.MouseEvent<HTMLElement>
+  ) => void;
+  renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
-  handleChangeActiveTab: (aT: number) => void;
 };
 
+/**
+ * @property label A string that will appear as the tooltip.
+ *
+ * @property iconName BlueprintJS IconName element, used to render the
+ *   icon which will be displayed over the SideContent panel.
+ *
+ * @property body The element to be rendered in the SideContent panel
+ *  when the tab is selected.
+ *
+ * @property id A string/number that will be used as the tab ID and key.
+ *  If id is undefined, id will be set to label by the renderTab function.
+ *
+ * @property disabled Set this property to true to disable a tab. The
+ * corresponding tab label will still be rendered on hover, but the
+ * tab will be greyed out and cannot be selected. Default value: false.
+ */
 export type SideContentTab = {
   label: string;
-  icon: string;
+  iconName: IconName;
   body: JSX.Element;
+  id?: SideContentType;
+  disabled?: boolean;
 };
 
 class SideContent extends React.PureComponent<SideContentProps, {}> {
+  public componentDidMount() {
+    // Set initial sideContentActiveTab for this workspace
+    this.props.handleActiveTabChange(
+      this.props.defaultSelectedTabId ? this.props.defaultSelectedTabId : this.props.tabs[0].id!
+    );
+  }
+
   public render() {
-    /**
-     * The check here prevents a runtime error when the activeTab is momentarily out of
-     * bounds of this.props.tabs length. It is set to 0 becuase of the asssumption that tabs
-     * is at least length 1 (@see SideContentProps)
-     */
-    const activeTab =
-      this.props.activeTab < 0 || this.props.activeTab >= this.props.tabs.length
-        ? 0
-        : this.props.activeTab;
+    const tabs = this.props.tabs.map(this.renderTab);
+
+    const changeTabsCallback = (
+      newTabId: SideContentType,
+      prevTabId: SideContentType,
+      event: React.MouseEvent<HTMLElement>
+    ): void => {
+      this.props.handleActiveTabChange(newTabId);
+      if (this.props.onChange === undefined) {
+        this.resetAlert(prevTabId);
+      } else {
+        this.props.onChange(newTabId, prevTabId, event);
+        this.resetAlert(prevTabId);
+      }
+    };
+
     return (
       <div className="side-content">
         <Card>
-          {this.renderHeader()}
-          <div className="side-content-text">{this.props.tabs[activeTab].body}</div>
+          <div className="side-content-tabs">
+            <Tabs
+              id="side-content-tabs"
+              onChange={changeTabsCallback}
+              defaultSelectedTabId={this.props.defaultSelectedTabId}
+              renderActiveTabPanelOnly={this.props.renderActiveTabPanelOnly}
+            >
+              {tabs}
+            </Tabs>
+          </div>
         </Card>
       </div>
     );
   }
 
-  private renderHeader() {
-    if (this.props.tabs.length < 2) {
-      return <></>;
-    } else {
-      const click = (i: number) => () => this.props.handleChangeActiveTab(i);
-      const buttons = this.props.tabs.map((tab, i) => (
-        <Tooltip key={i} content={tab.label}>
-          <Button
-            className="side-content-header-button"
-            id={tab.label + '-icon'}
-            icon={tab.icon as IconName}
-            minimal={true}
-            onClick={click(i)}
-            active={i === this.props.activeTab}
-          />
-        </Tooltip>
-      ));
-      return (
-        <>
-          <div className="side-content-header">{buttons}</div>
-          <hr />
-        </>
-      );
-    }
+  private renderTab = (tab: SideContentTab) => {
+    // This variable will be the height and width of the BlueprintJS
+    // icon (in pixels) when rendered by a web browser.
+    const size = 20;
+
+    const tabId = tab.id === undefined ? tab.label : tab.id;
+    const tabTitle: JSX.Element = (
+      <Tooltip content={tab.label}>
+        <div className="side-content-tooltip" id={this.generateIconId(tabId)}>
+          <Icon icon={tab.iconName} iconSize={size} />
+        </div>
+      </Tooltip>
+    );
+    const tabPanel: JSX.Element = <div className="side-content-text">{tab.body}</div>;
+
+    return (
+      <Tab
+        key={tabId}
+        id={tabId}
+        title={tabTitle}
+        panel={tabPanel}
+        disabled={tab.disabled}
+        className="side-content-tab"
+      />
+    );
+  };
+
+  // Function to generate an icon id given a TabId, used to set and remove the
+  // "side-content-tab-alert" style to the tabs.
+  private generateIconId(tabId: TabId) {
+    return `${tabId}-icon`;
   }
+
+  // Function to remove the "side-content-tab-alert" class that makes the
+  // tabs flash. This function is to be run when the tabs are changed.
+  //
+  // Currently this style is only used for the "Inspector" and "Env Visualizer" tabs.
+  private resetAlert = (prevTabId: TabId) => {
+    const iconId = this.generateIconId(prevTabId);
+    const icon = document.getElementById(iconId);
+
+    // Remove alert from previous tab (the new selected tab will still have
+    // the "side-content-tab-alert" class, but the CSS makes it invisible)
+    if (icon) {
+      icon.classList.remove('side-content-tab-alert');
+    }
+  };
 }
 
 export default SideContent;

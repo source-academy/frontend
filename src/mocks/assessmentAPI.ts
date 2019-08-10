@@ -16,7 +16,7 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     grade: 1,
-    id: 0,
+    id: 1,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2038-06-18T05:24:26.026Z',
@@ -36,7 +36,7 @@ const mockOpenedAssessmentsOverviews: IAssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     grade: 2,
-    id: 0,
+    id: 1,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-06-18T05:24:26.026Z',
@@ -65,7 +65,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     grade: 3,
-    id: 1,
+    id: 2,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
@@ -82,7 +82,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     grade: 4,
-    id: 2,
+    id: 3,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2018-07-18T05:24:26.026Z',
@@ -101,35 +101,69 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-    grade: 5,
-    id: 3,
+    grade: 2700,
+    id: 4,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
     shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
-    xp: 4,
+    xp: 800,
     gradingStatus: 'none'
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 6,
-    id: 4,
+    grade: 1950,
+    id: 5,
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
-    title: 'A closed sidequest',
+    title: 'Closed (partially graded) Sidequest',
     shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+      'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 5,
-    gradingStatus: 'none'
+    xp: 500,
+    gradingStatus: 'grading'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    closeAt: '2008-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
+    grade: 300,
+    id: 5,
+    maxGrade: 700,
+    maxXp: 500,
+    openAt: '2007-07-18T05:24:26.026Z',
+    title: 'Closed (fully graded) Sidequest',
+    shortSummary:
+      'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
+    status: AssessmentStatuses.submitted,
+    story: null,
+    xp: 150,
+    gradingStatus: 'graded'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    closeAt: '2008-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
+    grade: 0,
+    id: 5,
+    maxGrade: 0,
+    maxXp: 0,
+    openAt: '2007-07-18T05:24:26.026Z',
+    title: 'Ungraded assessment',
+    shortSummary:
+      'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
+    status: AssessmentStatuses.submitted,
+    story: null,
+    xp: 100,
+    gradingStatus: 'excluded'
   }
 ];
 
@@ -151,34 +185,25 @@ const mockGlobals: Array<[string, any]> = [
 ];
 
 const mockSoundLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
-    name: ExternalLibraryNames.SOUND,
-    symbols: externalLibraries.get(ExternalLibraryNames.SOUND)!
+    name: ExternalLibraryNames.SOUNDS,
+    symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
   },
   globals: mockGlobals
 };
 
-export const mock2DRuneLibrary: Library = {
-  chapter: 1,
+export const mockRuneLibrary: Library = {
+  chapter: 4,
   external: {
-    name: ExternalLibraryNames.TWO_DIM_RUNES,
-    symbols: externalLibraries.get(ExternalLibraryNames.TWO_DIM_RUNES)!
-  },
-  globals: mockGlobals
-};
-
-const mock3DRuneLibrary: Library = {
-  chapter: 1,
-  external: {
-    name: ExternalLibraryNames.THREE_DIM_RUNES,
-    symbols: externalLibraries.get(ExternalLibraryNames.THREE_DIM_RUNES)!
+    name: ExternalLibraryNames.RUNES,
+    symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
   },
   globals: mockGlobals
 };
 
 const mockCurveLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.CURVES,
     symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
@@ -187,9 +212,9 @@ const mockCurveLibrary: Library = {
 };
 
 const mockToneMatrixLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
-    name: ExternalLibraryNames.SOUND,
+    name: ExternalLibraryNames.SOUNDS,
     symbols: ['get_matrix']
   },
   globals: mockGlobals
@@ -206,7 +231,7 @@ This question has an id of \`0\`.
 What's your favourite dinner food?
 \`\`\`
 `,
-    comment: null,
+    roomId: null,
     id: 0,
     library: mockSoundLibrary,
     prepend: `const pizza = "pizza";
@@ -243,7 +268,32 @@ const chickenrice = "chicken rice";`,
     xp: 0,
     grade: 0,
     maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
+    comments: `Good job. You are awarded the full marks!
+
+----
+## markdown test
+
+# header
+
+**bold**
+
+_italics_
+
+* list
+
+1. numbered list
+
+- [] checkboxes
+
+> quote
+
+    code
+
+[link to Source Academy](https://sourceacademy.nus.edu.sg)  
+
+![](image-url-goes-here)
+      `
   },
   {
     autogradingResults: [],
@@ -254,10 +304,10 @@ const chickenrice = "chicken rice";`,
 function volumeOfSphere(x) {
   return 4 / 3 * cube(x) * pi;
 }`,
-    comment: '`Great Job` **young padawan**',
+    roomId: '19422043',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
-    library: mock3DRuneLibrary,
+    library: mockRuneLibrary,
     prepend: `const square = x => x * x;
 const cube = x => x * x * x;
 const pi = 3.1415928;`,
@@ -290,11 +340,46 @@ function volumeOfSphere(x) {
     xp: 0,
     grade: 0,
     maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
+    comments: `You open the Report Card, not knowing what to expect...
+
+## WOW!
+Amazing grasp of runes. We can now move on to the next assignment.
+
+<br/>
+
+Robot Dog: \`woof\`
+
+You look at the display of the robot dog.
+
+    FEED ME
+1. Bread
+2. Water
+
+<br/>
+
+* I am hungry.
+* I am thirsty.
+
+<br/>
+<br/>
+    
+New message from **Avenger**!
+
+> _Cadet, please meet me at Level X-05, outside the pod bay doors. There is an important mission awaiting us._
+
+> _May the [Source](https://sourceacademy.nus.edu.sg) be with you._
+
+> Best regards, Avocado A. Avenger
+
+#### Upcoming Tasks
+- [] Meet Avenger Avenger at Level X-05
+- [] Open the Pod Bay Doors
+    `
   },
   {
     answer: 3,
-    comment: '## Money trees is the *perfect place for shade* and ``` thats just how i feel ``` ',
+    roomId: '19422046',
     content:
       'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
     choices: [
@@ -331,7 +416,7 @@ function volumeOfSphere(x) {
   },
   {
     answer: 3,
-    comment: null,
+    roomId: null,
     content:
       'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
     choices: [
@@ -369,7 +454,7 @@ function volumeOfSphere(x) {
   {
     autogradingResults: [],
     answer: null,
-    comment: 'Wow you have come far! `Steady`',
+    roomId: '19422032',
     content: 'You have reached the last question! Have some fun with the tone matrix...',
     id: 4,
     library: mockToneMatrixLibrary,
@@ -399,7 +484,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     return fibonacci(n-1) + fibonacci(n-2);
   }
 }`,
-    comment: 'Wow you have come far! `Steady`',
+    roomId: '19422032',
     content: 'You can see autograding results!!!',
     id: 0,
     library: mockToneMatrixLibrary,
@@ -467,7 +552,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
 export const mockAssessments: IAssessment[] = [
   {
     category: 'Mission',
-    id: 0,
+    id: 1,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
@@ -476,7 +561,7 @@ export const mockAssessments: IAssessment[] = [
   },
   {
     category: 'Mission',
-    id: 1,
+    id: 2,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
@@ -485,7 +570,7 @@ export const mockAssessments: IAssessment[] = [
   },
   {
     category: AssessmentCategories.Sidequest,
-    id: 2,
+    id: 3,
     longSummary: `###This is the sidequest briefing.
 
 *Lorem ipsum* dolor sit amet, consectetur adipiscing elit.
@@ -511,11 +596,20 @@ sapien
   },
   {
     category: AssessmentCategories.Mission,
-    id: 3,
+    id: 4,
     longSummary:
       'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
     title: 'A Closed Mission'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    id: 5,
+    longSummary:
+      'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
+    missionPDF: 'www.google.com',
+    questions: mockClosedAssessmentQuestions,
+    title: 'A Closed Sidequest'
   }
 ];

@@ -1,4 +1,4 @@
-import { Classes, Dialog, Tab, Tabs } from '@blueprintjs/core';
+import { Classes, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -19,69 +19,27 @@ const About: React.SFC<DialogProps> = props => (
     title="About"
   >
     <div className={Classes.DIALOG_BODY}>
-      <Tabs id="about">
-        <Tab id="abt" panel={panelAbout}>
-          About
-        </Tab>
-        <Tab id="devs" panel={panelDevs()}>
-          Developers
-        </Tab>
-      </Tabs>
+      <div className="abt">
+        <p>
+          The <i>Source Academy</i> is a computer-mediated learning environment for studying the
+          structure and interpretation of computer programs. Students write and run their programs
+          in their web browser, using sublanguages of JavaScript called{' '}
+          <a href={LINKS.SOURCE_DOCS}>Source §1, Source §2, Source §3 and Source §4</a>, designed
+          for the first four chapters of the textbook{' '}
+          <a href={LINKS.TEXTBOOK}>
+            Structure and Interpretation of Computer Programs, JavaScript Adaptation
+          </a>
+          .
+        </p>
+        <p>
+          The Source Academy is available under the Apache License 2.0 at our GitHub organisation,{' '}
+          <a href={LINKS.GITHUB_ORG}>Source Academy</a>. The National University of Singapore uses
+          the Source Academy for teaching Programming Methodology to freshmen Computer Science
+          students in the course <a href={LINKS.MODULE_DETAILS}>CS1101S</a>.
+        </p>
+      </div>
     </div>
   </Dialog>
-);
-
-const panelAbout = (
-  <>
-    <p>
-      The <i>Source Academy</i> is an experimental environment for learning programming in the
-      CS1101S module at the National University of Singapore.
-    </p>
-    <p>
-      This iteration of Source Academy, code-named <i>Cadet</i>, is available under the MIT License.
-      You may find the source code for Cadet at our GitHub organisation,{' '}
-      <a href={LINKS.GITHUB_ORG}>Source Academy</a>.
-    </p>
-  </>
-);
-
-const dot = <span className="dot">&bull;</span>;
-
-const panelDevs = () => (
-  <div className="devs">
-    <p>
-      <strong>Project Managers</strong>
-    </p>
-    <p>Martin Henz {dot} Evan Sebastian</p>
-    <p>
-      <strong>Frontend Team</strong>
-    </p>
-    {Math.round(Math.random()) === 0 ? (
-      <p>
-        Lee Ning Yuan {dot} Vignesh Shankar {dot} Rahul Rajesh
-      </p>
-    ) : (
-      <p>
-        Vignesh Shankar {dot} Lee Ning Yuan {dot} Rahul Rajesh
-      </p>
-    )}
-    <p>
-      <strong>Backend Team</strong>
-    </p>
-    <p>
-      Julius Putra Tanu Setiaji {dot} Chen Shaowei {dot} Liow Jia Chen
-    </p>
-    <p>
-      <strong>Source Team</strong>
-    </p>
-    <p>Tan Chee Kun, Thomas</p>
-    <p>
-      <strong>Artistic Team</strong>
-    </p>
-    <p>
-      Ng Tse Pei {dot} Joey Yeo {dot} Tan Yu Wei
-    </p>
-  </div>
 );
 
 export default About;

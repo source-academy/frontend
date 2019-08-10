@@ -1,9 +1,10 @@
-import { Card, Elevation } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { Card, Elevation, Pre } from '@blueprintjs/core';
+import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/interop';
+import { SourceError } from 'js-slang/dist/types';
 import * as React from 'react';
 import { ITestcase } from '../../assessment/assessmentShape';
-import { controlButton } from '../../commons';
+import CanvasOutput from '../CanvasOutput';
 
 type AutograderCardProps = {
   testcase: ITestcase;
@@ -15,7 +16,21 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
   public render() {
     let gradingStatus: string = '';
 
-    if (this.props.testcase.result) {
+    const buildErrorString = (errors: SourceError[]) => {
+      return parseError(errors);
+    };
+
+    const renderResult = (value: any) => {
+      /** A class which is the output of the show() function */
+      const ShapeDrawn = (window as any).ShapeDrawn;
+      if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
+        return <CanvasOutput />;
+      } else {
+        return stringify(value);
+      }
+    };
+
+    if (this.props.testcase.result !== undefined || this.props.testcase.errors) {
       gradingStatus = ' wrong';
 
       if (stringify(this.props.testcase.result) === this.props.testcase.answer) {
@@ -25,34 +40,25 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
 
     return (
       <div className={'AutograderCard' + gradingStatus}>
-        <Card elevation={Elevation.ONE}>
-          <div className="row autograder-controls">
-            {'Testcase ' + (this.props.index + 1)}
-            {controlButton('Test', IconNames.PLAY, () =>
-              this.props.handleTestcaseEval(this.props.index)
-            )}
-          </div>
-          <div className="row autograder-program">
-            <pre className="code">{this.props.testcase.program}</pre>
-          </div>
-          <div className="row">
-            <div className="col autograder-expected">
-              Expected Answer:
-              <pre className="code">{this.props.testcase.answer}</pre>
-            </div>
-            <div className="col autograder-actual">
-              Actual Answer:
-              {this.props.testcase.result ? (
-                <pre className="code">{stringify(this.props.testcase.result)}</pre>
-              ) : (
-                <pre>No Answer</pre>
-              )}
-            </div>
-          </div>
+        <Card className="bp3-interactive" elevation={Elevation.ONE} onClick={this.evalSelf}>
+          <Pre className="testcase-program">{this.props.testcase.program}</Pre>
+          <Pre className="testcase-expected">{this.props.testcase.answer}</Pre>
+          <Pre className="testcase-actual">
+            {this.props.testcase.errors
+              ? buildErrorString(this.props.testcase.errors)
+              : this.props.testcase.result !== undefined
+              ? renderResult(this.props.testcase.result)
+              : 'No Answer'}
+          </Pre>
         </Card>
       </div>
     );
   }
+
+  // Enable clicks on the card to run the testcase
+  private evalSelf = () => {
+    this.props.handleTestcaseEval(this.props.index);
+  };
 }
 
 export default AutograderCard;

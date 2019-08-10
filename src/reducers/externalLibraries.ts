@@ -3,10 +3,7 @@ import {
   ExternalLibraryNames
 } from '../components/assessment/assessmentShape';
 
-/**
- * Defines all the external symbols for playground, i.e full access to runes functionality.
- */
-const TwoDRunesExternals = [
+const runesLibrary = [
   'show',
   'color',
   'random_color',
@@ -37,139 +34,133 @@ const TwoDRunesExternals = [
   'flip_horiz',
   'make_cross',
   'repeat_pattern',
-  'black_bb',
-  'blank_bb',
-  'rcross_bb',
-  'sail_bb',
-  'corner_bb',
-  'nova_bb',
-  'circle_bb',
-  'heart_bb',
-  'pentagram_bb',
-  'ribbon_bb'
+  'square',
+  'blank',
+  'rcross',
+  'sail',
+  'corner',
+  'nova',
+  'circle',
+  'heart',
+  'pentagram',
+  'ribbon',
+  'anaglyph',
+  'overlay_frac',
+  'overlay',
+  'hollusion' // currently not documented; animation not working
+];
+
+const curvesLibrary = [
+  'make_point',
+  'draw_points_on',
+  'draw_connected',
+  'draw_points_squeezed_to_window',
+  'draw_connected_squeezed_to_window',
+  'draw_connected_full_view',
+  'draw_connected_full_view_proportional',
+  'x_of',
+  'y_of',
+  'unit_line',
+  'unit_line_at',
+  'unit_circle',
+  'connect_rigidly',
+  'connect_ends',
+  'put_in_standard_position',
+  'translate',
+  'scale',
+  /** Contest functions */
+  'rotate_pi_over_2',
+  'scale_x_y',
+  'gosperize',
+  'gosper_curve',
+  'show_connected_gosper',
+  'repeated',
+  'param_gosper',
+  'param_gosperize',
+  'rotate_around_origin',
+  'arc', // used in GOSPERIZE
+  'invert', // used in DRAGONIZE
+  'alternative_unit_circle', // undocumented
+  'full_view_proportional', // undocumented
+  'squeeze_full_view', // undocumented
+  'squeeze_rectangular_portion' // undocumented
+];
+
+const soundsLibrary = [
+  'make_sound',
+  'get_wave',
+  'get_duration',
+  'play',
+  'stop',
+  'consecutively',
+  'simultaneously',
+  'noise_sound',
+  'sine_sound',
+  'silence_sound',
+  'letter_name_to_midi_note',
+  'letter_name_to_frequency',
+  'midi_note_to_frequency',
+  'square_sound',
+  'triangle_sound',
+  'sawtooth_sound',
+  'play_unsafe',
+  /** Microphone Sounds */
+  'init_record',
+  'record',
+  'record_for',
+  /** Contest functions */
+  'adsr',
+  'stacking_adsr',
+  'trombone',
+  'piano',
+  'bell',
+  'violin',
+  'cello'
+];
+
+const binaryTreesLibrary = [
+  'make_empty_tree',
+  'is_tree',
+  'make_tree',
+  'is_empty_tree',
+  'entry',
+  'left_branch',
+  'right_branch'
+];
+
+const videoLibrary = [
+  'red_of',
+  'green_of',
+  'blue_of',
+  'set_rgb',
+  'copy_pixel',
+  'copy_image',
+  'constrain_color',
+  'compose_filter',
+  'make_distortion_filter',
+  'make_static_distortion_filter',
+  'pixel_similar',
+  'get_video_width',
+  'get_video_height',
+  'apply_filter',
+  'reset_filter'
 ];
 
 /**
  * Defines which external libraries are available for usage, and what
  * external symbols (exposed functions) are under them.
  */
+
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.NONE, []],
-  [ExternalLibraryNames.TWO_DIM_RUNES, TwoDRunesExternals],
+  [ExternalLibraryNames.RUNES, runesLibrary],
+  [ExternalLibraryNames.CURVES, curvesLibrary],
+  [ExternalLibraryNames.SOUNDS, soundsLibrary],
+  [ExternalLibraryNames.BINARYTREES, binaryTreesLibrary],
+  [ExternalLibraryNames.PIXNFLIX, videoLibrary],
   [
-    ExternalLibraryNames.THREE_DIM_RUNES,
-    [
-      ...TwoDRunesExternals,
-      'anaglyph',
-      'hollusion',
-      'animate',
-      'stereogram',
-      'overlay_frac',
-      'overlay'
-    ]
-  ],
-  [
-    ExternalLibraryNames.CURVES,
-    [
-      'make_point',
-      'draw_points_on',
-      'draw_connected',
-      'draw_points_squeezed_to_window',
-      'draw_connected_squeezed_to_window',
-      'draw_connected_full_view',
-      'draw_connected_full_view_proportional',
-      'x_of',
-      'y_of',
-      'unit_line',
-      'unit_line_at',
-      'unit_circle',
-      'connect_rigidly',
-      'connect_ends',
-      'put_in_standard_position',
-      'full_view_proportional',
-      'squeeze_full_view',
-      'squeeze_rectangular_portion',
-      'translate',
-      'scale',
-      /** Contest functions */
-      'alternative_unit_circle',
-      'rotate_pi_over_2',
-      'scale_x_y',
-      'gosperize',
-      'gosper_curve',
-      'show_connected_gosper',
-      'repeated',
-      'param_gosper',
-      'param_gosperize',
-      'rotate_around_origin'
-    ]
-  ],
-  [
-    ExternalLibraryNames.SOUND,
-    [
-      'make_sound',
-      'get_wave',
-      'get_duration',
-      'play',
-      'stop',
-      'cut_sound',
-      'autocut_sound',
-      'consecutively',
-      'simultaneously',
-      'noise_sound',
-      'sine_sound',
-      'constant_sound',
-      'silence_sound',
-      'high_sound',
-      'invert_sound',
-      'clamp_sound',
-      'letter_name_to_midi_note',
-      'letter_name_to_frequency',
-      'midi_note_to_frequency',
-      'square_sound',
-      'triangle_sound',
-      'sawtooth_sound',
-      'play_concurrently',
-      'play_safe',
-      /** Microphone Sounds */
-      'init_record',
-      'record_for',
-      'start_record',
-      'stop_record',
-      /** Contest functions */
-      'adsr',
-      'stacking_adsr',
-      'trombone',
-      'piano',
-      'bell',
-      'violin',
-      'cello'
-    ]
-  ],
-  [
-    ExternalLibraryNames.STREAMS,
-    [
-      'stream_tail',
-      'is_stream',
-      'list_to_stream',
-      'stream_to_list',
-      'stream',
-      'stream_length',
-      'stream_map',
-      'build_stream',
-      'stream_for_each',
-      'stream_reverse',
-      'stream_to_vector',
-      'stream_append',
-      'stream_member',
-      'stream_remove',
-      'stream_remove_all',
-      'stream_filter',
-      'enum_stream',
-      'integers_from',
-      'eval_stream',
-      'stream_ref'
-    ]
+    ExternalLibraryNames.ALL,
+    runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary)
   ]
 ];
 

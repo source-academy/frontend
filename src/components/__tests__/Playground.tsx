@@ -1,30 +1,34 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
+import { SideContentType } from 'src/reducers/states';
 import { mockRouterProps } from '../../mocks/components';
 import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape';
 import Playground, { IPlaygroundProps } from '../Playground';
 
 const baseProps = {
   editorValue: '',
+  execTime: 1000,
   breakpoints: [],
   highlightedLines: [],
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  activeTab: 0,
   editorSessionId: '',
   editorWidth: '50%',
   isEditorAutorun: false,
+  sharedbAceInitValue: '',
+  sharedbAceIsInviting: false,
   sideContentHeight: 40,
   sourceChapter: 2,
   externalLibraryName: ExternalLibraryNames.NONE,
   output: [],
   replValue: '',
   websocketStatus: 0,
+  handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
-  handleChangeActiveTab: (n: number) => {},
+  handleChangeExecTime: (execTime: number) => {},
   handleChapterSelect: (chapter: number) => {},
   handleEditorEval: () => {},
   handleEditorHeightChange: (height: number) => {},
@@ -32,6 +36,7 @@ const baseProps = {
   handleEditorWidthChange: (widthChange: number) => {},
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
+  handleFinishInvite: () => {},
   handleGenerateLz: () => {},
   handleInterruptEval: () => {},
   handleInvalidEditorSessionId: () => {},
@@ -39,6 +44,7 @@ const baseProps = {
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
   handleSetEditorSessionId: (editorSessionId: string) => {},
+  handleInitInvite: (value: string) => {},
   handleSetWebsocketStatus: (websocketStatus: number) => {},
   handleSideContentHeightChange: (h: number) => {},
   handleToggleEditorAutorun: () => {},

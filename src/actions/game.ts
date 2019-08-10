@@ -1,7 +1,5 @@
-import { ActionCreator } from 'redux';
+import { action } from 'typesafe-actions';
+
 import * as actionTypes from './actionTypes';
 
-export const saveCanvas: ActionCreator<actionTypes.IAction> = (canvas: HTMLCanvasElement) => ({
-  type: actionTypes.SAVE_CANVAS,
-  payload: canvas
-});
+export const saveCanvas = (canvas: HTMLCanvasElement) => action(actionTypes.SAVE_CANVAS, canvas);

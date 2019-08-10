@@ -39,6 +39,8 @@ function loadAllLibs() {
     '/externalLibs/streams/stream.js',
     '/externalLibs/pe_library.js',
     '/externalLibs/assert_compiled.js',
+    // video
+    '/externalLibs/video/video_lib.js',
     // inspector
     '/externalLibs/inspector/inspector.js',
     // env visualizer
@@ -59,15 +61,7 @@ function loadAllLibs() {
 function loadLib(externalLibraryName) {
   let files
   switch (externalLibraryName) {
-    case 'TWO_DIM_RUNES':
-      files = [
-        // graphics
-        '/externalLibs/graphics/gl-matrix.js',
-        '/externalLibs/graphics/webGLgraphics.js',
-        '/externalLibs/graphics/webGLrune.js'
-      ]
-      break
-    case 'THREE_DIM_RUNES':
+    case 'RUNES':
       files = [
         // graphics
         '/externalLibs/graphics/gl-matrix.js',

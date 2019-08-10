@@ -1,4 +1,4 @@
-import { Text } from '@blueprintjs/core';
+import { Divider, HTMLTable, Text } from '@blueprintjs/core';
 import * as React from 'react';
 import { getPrettyDate } from '../../utils/dateHelpers';
 import Markdown from '../commons/Markdown';
@@ -6,13 +6,13 @@ import Markdown from '../commons/Markdown';
 type GradingResultProps = OwnProps;
 
 export type OwnProps = {
-  comment: string | null;
   graderName: string;
   gradedAt: string;
   xp: number;
   grade: number;
   maxGrade: number;
   maxXp: number;
+  comments?: string;
 };
 
 class GradingResult extends React.Component<GradingResultProps, {}> {
@@ -24,7 +24,7 @@ class GradingResult extends React.Component<GradingResultProps, {}> {
     return (
       <div className="GradingResult">
         <div className="grading-result-table">
-          <table>
+          <HTMLTable>
             <tbody>
               <tr>
                 <th>Grade:</th>
@@ -43,20 +43,33 @@ class GradingResult extends React.Component<GradingResultProps, {}> {
                   </Text>
                 </td>
               </tr>
-            </tbody>
-          </table>
 
-          {this.props.comment !== null ? (
-            <div>
-              <br />
-              <th>Comment:</th>
-              <p>
-                <pre>
-                  <Markdown content={this.props.comment} />
-                </pre>
-              </p>
-            </div>
-          ) : null}
+              <tr>
+                <th>Comments:</th>
+                <td>{!this.props.comments && <Text>None</Text>}</td>
+              </tr>
+            </tbody>
+          </HTMLTable>
+
+          {this.props.comments && (
+            <HTMLTable>
+              <tbody>
+                <tr>
+                  <td>
+                    <Divider />
+                    <Markdown
+                      content={this.props.comments}
+                      simplifiedAutoLink={true}
+                      strikethrough={true}
+                      tasklists={true}
+                      openLinksInNewWindow={true}
+                    />
+                    <Divider />
+                  </td>
+                </tr>
+              </tbody>
+            </HTMLTable>
+          )}
 
           <br />
 
