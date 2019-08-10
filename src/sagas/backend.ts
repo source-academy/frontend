@@ -198,14 +198,17 @@ function* backendSaga(): SagaIterator {
     }));
     const { submissionId } = action.payload;
 
+
     const resp: Response = yield request.postUnsubmit(submissionId, tokens);
     if (!resp || !resp.ok) {
       yield request.handleResponseError(resp);
       return;
     }
 
-    const overviews = yield select((state: IState) => state.session.gradingOverviews || []);
-    const newOverviews = (overviews as GradingOverview[]).map(overview => {
+    const overviews: GradingOverview[] = yield select(
+      (state: IState) => state.session.gradingOverviews || []
+    );
+    const newOverviews: GradingOverview[] = overviews.map(overview => {
       if (overview.submissionId === submissionId) {
         return { ...overview, submissionStatus: 'attempted' };
       }
@@ -222,13 +225,15 @@ function* backendSaga(): SagaIterator {
   ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can submit answers.');
+      yield call(showWarningMessage, 'Only staff can submit answers.');
+      return;
     }
     const { submissionId, questionId, gradeAdjustment, xpAdjustment, comments } = action.payload;
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
+
     const resp = yield request.postGrading(
       submissionId,
       questionId,
@@ -348,6 +353,7 @@ function* backendSaga(): SagaIterator {
     const submissionId = action.payload.submissionId;
     yield call(request.postNotify, tokens, assessmentId, submissionId);
   });
+
 
   yield takeEvery(actionTypes.DELETE_SOURCECAST_ENTRY, function*(
     action: ReturnType<typeof actions.deleteSourcecastEntry>
