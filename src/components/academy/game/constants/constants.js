@@ -14,7 +14,7 @@ module.exports = {
   playerAvatarOffset: 40,
   glowDistance: 30,
   textSpeed: 0.02,
-  localStoryXMLPath: LOCAL_HOST,
+  localStoryXMLPath: LOCAL_HOST + 'stories/',
   globalStoryXMLPath: ASSETS_HOST + 'stories/',
   locationPath: ASSETS_HOST + 'locations/',
   objectPath: ASSETS_HOST + 'objects/',
