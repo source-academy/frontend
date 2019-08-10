@@ -1,3 +1,5 @@
+import { SourceError } from 'js-slang/dist/types';
+
 /*
  * Used to display information regarding an assessment in the UI.
  *
@@ -15,6 +17,7 @@ export interface IAssessmentOverview {
   id: number;
   maxGrade: number;
   maxXp: number;
+  number?: string; // For mission control
   openAt: string;
   title: string;
   reading?: string; // For mission control
@@ -37,7 +40,8 @@ export type AssessmentStatus = keyof typeof AssessmentStatuses;
 export enum GradingStatuses {
   none = 'none',
   grading = 'grading',
-  graded = 'graded'
+  graded = 'graded',
+  excluded = 'excluded'
 }
 
 export type GradingStatus = keyof typeof GradingStatuses;
@@ -82,7 +86,8 @@ export interface ITestcase {
   answer: string; // the correct answer to the testcase
   score: number;
   program: string; // the program to be appended to the student's code
-  result?: string; // the result from the execution of the testcase
+  result?: any; // the result from the execution of the testcase
+  errors?: SourceError[]; // errors raised by interpreter during execution
 }
 
 export interface IMCQQuestion extends IQuestion {
@@ -95,7 +100,8 @@ export interface IMCQQuestion extends IQuestion {
 export interface IQuestion {
   answer: string | number | null;
   editorValue?: string | null;
-  comment: string | null;
+  roomId: string | null;
+  comments?: string;
   content: string;
   id: number;
   library: Library;
@@ -130,10 +136,12 @@ export enum ExternalLibraryNames {
   RUNES = 'RUNES',
   CURVES = 'CURVES',
   SOUNDS = 'SOUNDS',
-  BINARYTREES = 'BINARYTREES'
+  BINARYTREES = 'BINARYTREES',
+  PIXNFLIX = 'PIX&FLIX',
+  ALL = 'ALL'
 }
 
-export type ExternalLibraryName = keyof typeof ExternalLibraryNames;
+export type ExternalLibraryName = (typeof ExternalLibraryNames)[keyof typeof ExternalLibraryNames];
 
 type ExternalLibrary = {
   name: ExternalLibraryName;

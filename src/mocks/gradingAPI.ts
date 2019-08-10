@@ -1,3 +1,4 @@
+import { ITestcase } from 'src/components/assessment/assessmentShape';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
 import { mockRuneLibrary as mockLibrary } from './assessmentAPI';
 import { mockFetchRole, Role, Roles } from './userAPI';
@@ -18,9 +19,12 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 100,
     studentId: 0,
     studentName: 'Al Gorithm',
-    submissionId: 0,
-    submissionStatus: 'attempted',
-    groupName: '1D'
+    submissionId: 1,
+    submissionStatus: 'submitted',
+    groupName: '1D',
+    gradingStatus: 'graded',
+    questionCount: 6,
+    gradedCount: 6
   },
   {
     gradeAdjustment: -2,
@@ -37,9 +41,12 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 400,
     studentId: 0,
     studentName: 'Dee Sign',
-    submissionId: 1,
+    submissionId: 2,
     submissionStatus: 'submitted',
-    groupName: '1F'
+    groupName: '1F',
+    gradingStatus: 'grading',
+    questionCount: 6,
+    gradedCount: 2
   },
   {
     gradeAdjustment: 4,
@@ -56,9 +63,12 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 1000,
     studentId: 1,
     studentName: 'May Trix',
-    submissionId: 2,
+    submissionId: 3,
     submissionStatus: 'submitted',
-    groupName: '1F'
+    groupName: '1F',
+    gradingStatus: 'none',
+    questionCount: 6,
+    gradedCount: 0
   }
 ];
 
@@ -83,10 +93,21 @@ export const mockFetchGradingOverview = (
   }
 };
 
-export const mockGrading: Grading = [
+
+export const mockTestcases: ITestcase[] = [
+  { program: `remainder(12, 7);`, score: 1, answer: `5` },
+  { program: `remainder(6, 1);`, score: 2, answer: `0` },
+  { program: `remainder(-15, 6);`, score: 2, answer: `-3` },
+  { program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
+];
+
+const mockGrading: Grading = [
+
   {
     question: {
-      answer: "This student's answer to the 0th question......",
+      answer: `function remainder(n, d) {
+  return (n - d) < 0 ? n : remainder(n - d, d);
+}`,
       content: `
 Hello and welcome to this assessment! This is the *0th question*.
 
@@ -96,12 +117,16 @@ Hello and welcome to this assessment! This is the *0th question*.
 `,
       prepend: '// THIS IS A PREPEND',
       postpend: '// THIS IS A POSTPEND',
-      testcases: [],
-      comment: null,
+      testcases: mockTestcases,
+      roomId: null,
       id: 0,
       library: mockLibrary,
       solutionTemplate: '0th question mock solution template',
-      solution: 'This is how the 0th question is `solved`',
+      solution: `This is how the 0th question is solved. [7 points]
+
+function remainder(n, d) {
+  return n % d;
+}`,
       type: 'programming',
       maxGrade: 1000,
       maxXp: 1000,
@@ -143,7 +168,32 @@ Hello and welcome to this assessment! This is the *0th question*.
       xpAdjustment: 0,
       grade: 0,
       xp: 0,
-      comment: 'Good job!!'
+      roomId: '19422040',
+      comments: `Good job. You are awarded the full marks!
+
+----
+## markdown test
+
+# header
+
+**bold**
+
+_italics_
+
+* list
+
+1. numbered list
+
+- [] checkboxes
+
+> quote
+
+    code
+
+[link to Source Academy](https://sourceacademy.nus.edu.sg)  
+
+![](image-url-goes-here)
+      `
     },
     student: {
       name: 'Al Gorithm',
@@ -156,7 +206,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       postpend: '',
       testcases: [],
       answer: "This student's answer to the 1st question",
-      comment: null,
+      roomId: null,
       content: 'Hello and welcome to this assessment! This is the 1st question.',
       id: 1,
       library: mockLibrary,
@@ -203,7 +253,42 @@ Hello and welcome to this assessment! This is the *0th question*.
       xpAdjustment: 0,
       grade: 100,
       xp: 100,
-      comment: 'Good job!!'
+      roomId: '19422040',
+      comments: `You open the Report Card, not knowing what to expect...
+
+## WOW!
+Amazing grasp of runes. We can now move on to the next assignment.
+
+<br/>
+
+Robot Dog: \`woof\`
+
+You look at the display of the robot dog.
+
+    FEED ME
+1. Bread
+2. Water
+
+<br/>
+
+* I am hungry.
+* I am thirsty.
+
+<br/>
+<br/>
+    
+New message from **Avenger**!
+
+> _Cadet, please meet me at Level X-05, outside the pod bay doors. There is an important mission awaiting us._
+
+> _May the [Source](https://sourceacademy.nus.edu.sg) be with you._
+
+> Best regards, Avocado A. Avenger
+
+#### Upcoming Tasks
+- [] Meet Avenger Avenger at Level X-05
+- [] Open the Pod Bay Doors
+      `
     },
     student: {
       name: 'Al Gorithm',
@@ -217,7 +302,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       postpend: '',
       testcases: [],
       answer: 3,
-      comment: null,
+      roomId: null,
       solution: 2,
       content:
         'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
@@ -282,8 +367,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       xpAdjustment: 0,
       grade: 50,
       xp: 50,
-      comment:
-        'A Very long string. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a leo et lectus gravida sagittis a non neque. Phasellus consectetur arcu vitae metus vulputate commodo. Phasellus varius sollicitudin quam a porta. Pellentesque mollis molestie felis vitae imperdiet. Nam porta purus ac tellus luctus ultrices. Integer pellentesque nisl vel nunc ullamcorper, in vehicula est dapibus. Nunc dapibus neque dolor, ut mattis massa mattis in. Fusce nec risus nec ex pharetra lacinia. Mauris sit amet ullamcorper sapien. Suspendisse scelerisque neque sed nunc tincidunt, ac semper enim efficitur. Ut sit amet eleifend arcu. Donec viverra at justo vitae eleifend. Morbi ut erat ultricies, hendrerit mi ut, ornare mauris.'
+      roomId: '19422030'
     },
     student: {
       name: 'Al Gorithm',

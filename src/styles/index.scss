@@ -2,7 +2,15 @@
 @import '~@blueprintjs/core/lib/css/blueprint.css';
 @import '~flexboxgrid/dist/flexboxgrid.css';
 @import '~flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css';
-@import '~react-mde/lib/styles/css/react-mde-all.css';
+
+// CSS styles for react-mde Markdown editor
+// (currently this editor is only used for grading comments)
+// react-mde-preview.css is excluded to avoid conflict with blueprintjs
+// styles in the preview tab of the editor, providing a more accurate
+// depiction of what the actual comment will look like
+@import '~react-mde/lib/styles/css/react-mde-toolbar.css';
+@import '~react-mde/lib/styles/css/react-mde-editor.css';
+@import '~react-mde/lib/styles/css/react-mde.css';
 
 @import '../../node_modules/@blueprintjs/core/lib/scss/variables';
 @import 'global';
@@ -19,5 +27,7 @@
 @import 'navigationBar';
 @import 'notfound';
 @import 'playground';
+@import 'sourcereel';
+@import 'sourcecast';
 @import 'workspaceGreen';
 @import 'workspace';

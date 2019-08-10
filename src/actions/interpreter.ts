@@ -1,70 +1,44 @@
 import { SourceError, Value } from 'js-slang/dist/types';
+import { action } from 'typesafe-actions';
 
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
-export const handleConsoleLog = (logString: string, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.HANDLE_CONSOLE_LOG,
-  payload: { logString, workspaceLocation }
-});
+export const handleConsoleLog = (logString: string, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.HANDLE_CONSOLE_LOG, { logString, workspaceLocation });
 
-export const evalInterpreterSuccess = (value: Value, workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.EVAL_INTERPRETER_SUCCESS,
-  payload: { type: 'result', value, workspaceLocation }
-});
+export const evalInterpreterSuccess = (value: Value, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.EVAL_INTERPRETER_SUCCESS, { type: 'result', value, workspaceLocation });
 
 export const evalTestcaseSuccess = (
   value: Value,
   workspaceLocation: WorkspaceLocation,
   index: number
-) => ({
-  type: actionTypes.EVAL_TESTCASE_SUCCESS,
-  payload: { type: 'result', value, workspaceLocation, index }
-});
+) => action(actionTypes.EVAL_TESTCASE_SUCCESS, { type: 'result', value, workspaceLocation, index });
 
 export const evalTestcaseFailure = (
   value: Value,
   workspaceLocation: WorkspaceLocation,
   index: number
-) => ({
-  type: actionTypes.EVAL_TESTCASE_FAILURE,
-  payload: { type: 'result', value, workspaceLocation, index }
-});
+) => action(actionTypes.EVAL_TESTCASE_FAILURE, { type: 'errors', value, workspaceLocation, index });
 
-export const evalInterpreterError = (
-  errors: SourceError[],
-  workspaceLocation: WorkspaceLocation
-) => ({
-  type: actionTypes.EVAL_INTERPRETER_ERROR,
-  payload: { type: 'errors', errors, workspaceLocation }
-});
+export const evalInterpreterError = (errors: SourceError[], workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.EVAL_INTERPRETER_ERROR, { type: 'errors', errors, workspaceLocation });
 
-export const beginInterruptExecution = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.BEGIN_INTERRUPT_EXECUTION,
-  payload: { workspaceLocation }
-});
+export const beginInterruptExecution = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.BEGIN_INTERRUPT_EXECUTION, { workspaceLocation });
 
-export const endInterruptExecution = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.END_INTERRUPT_EXECUTION,
-  payload: { workspaceLocation }
-});
+export const endInterruptExecution = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.END_INTERRUPT_EXECUTION, { workspaceLocation });
 
-export const beginDebuggerPause = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.BEGIN_DEBUG_PAUSE,
-  payload: { workspaceLocation }
-});
+export const beginDebuggerPause = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.BEGIN_DEBUG_PAUSE, { workspaceLocation });
 
-export const endDebuggerPause = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.END_DEBUG_PAUSE,
-  payload: { workspaceLocation }
-});
+export const endDebuggerPause = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.END_DEBUG_PAUSE, { workspaceLocation });
 
-export const debuggerResume = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.DEBUG_RESUME,
-  payload: { workspaceLocation }
-});
+export const debuggerResume = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.DEBUG_RESUME, { workspaceLocation });
 
-export const debuggerReset = (workspaceLocation: WorkspaceLocation) => ({
-  type: actionTypes.DEBUG_RESET,
-  payload: { workspaceLocation }
-});
+export const debuggerReset = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.DEBUG_RESET, { workspaceLocation });

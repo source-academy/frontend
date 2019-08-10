@@ -20,7 +20,7 @@ describe('Playground saga tests', () => {
   test('puts changeQueryString action with undefined argument when passed the default value', () => {
     return expectSaga(playgroundSaga)
       .withState(defaultState)
-      .put(actions.changeQueryString(undefined))
+      .put(actions.changeQueryString(''))
       .dispatch({
         type: actionTypes.GENERATE_LZ_STRING
       })
@@ -35,14 +35,14 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...createDefaultWorkspace(WorkspaceLocations.playground),
-          playgroundExternal: ExternalLibraryNames.NONE,
+          externalLibrary: ExternalLibraryNames.NONE,
           editorValue: dummyEditorValue
         }
       }
     };
     return expectSaga(playgroundSaga)
       .withState(dummyState)
-      .put(actions.changeQueryString(undefined))
+      .put(actions.changeQueryString(''))
       .dispatch({
         type: actionTypes.GENERATE_LZ_STRING
       })
@@ -57,7 +57,7 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...createDefaultWorkspace(WorkspaceLocations.playground),
-          playgroundExternal: ExternalLibraryNames.NONE,
+          externalLibrary: ExternalLibraryNames.NONE,
           editorValue: dummyEditorValue
         }
       }
@@ -75,7 +75,7 @@ describe('Playground saga tests', () => {
 
 function createQueryString(code: string, state: IState): string {
   const chapter: number = state.workspaces.playground.context.chapter;
-  const external: ExternalLibraryName = state.workspaces.playground.playgroundExternal;
+  const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
   const newQueryString: string = qs.stringify({
     prgrm: compressToEncodedURIComponent(code),
     chap: chapter,

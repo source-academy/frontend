@@ -107,12 +107,6 @@
     "Symbol(Used to implement hoisting)": " "
   }
 
-  setInterval(()=>{
-    if(document.getElementById("inspector-container") != null){
-      document.getElementById("Inspector-icon").classList.remove("side-content-header-button-alert");
-    }
-  },1000)
-
   function updateContext(context, stringify) {
     function dumpTable(env) {
       var res = '';
@@ -126,32 +120,36 @@
       return res.length > 0 ? res : undefined;
     }
 
-    // blinks icon
-    const icon = document.getElementById("Inspector-icon");
-    if (!context) {
-      icon.classList.remove("side-content-header-button-alert");
-      return;
+    // icon to blink
+    const icon = document.getElementById("inspector-icon");
+
+    if (!context && icon) {
+      icon.classList.remove("side-content-tab-alert");
+      container.innerHTML = "";
+      return
     }
 
     try {
       var frames = context.context.runtime.environments;
       container.innerHTML = "";
       for (var i = 0; i < frames.length; ++i){
-        var envtoString = dumpTable(frames[i].head)
+        var envtoString = dumpTable(frames[i].head);
         if (envtoString == undefined){
           // skipping either empty frame or perhaps the global
           continue
         }
         var newtable = document.createElement("table");
         var tbody = document.createElement("tbody");
-        tbody.id = "inspect-scope"
-        tbody.innerHTML = "</br><caption><strong> " + frames[i].name + "</strong></caption>" + envtoString
-        newtable.appendChild(tbody)
-        container.appendChild(newtable)
-        icon.classList.add("side-content-header-button-alert");
+        tbody.id = "inspect-scope";
+        tbody.innerHTML = "</br><caption><strong> " + frames[i].name + "</strong></caption>" + envtoString;
+        newtable.appendChild(tbody);
+        container.appendChild(newtable);
+        if (icon) {
+          icon.classList.add("side-content-tab-alert");
+        }
       }
     } catch (e) {
-        container.innerHTML = e
+        container.innerHTML = e;
     }
   }
 
@@ -169,7 +167,7 @@
     var gutterCells = document.getElementsByClassName("ace_gutter-cell");
     var aceLines = document.getElementsByClassName("ace_line");
 
-    // We are simply assuming they are sorted.
+    // We are simply assuming they are sorted (they are).
     // guttercells has inneHTML we could use. But as long as this still works,
     // we can keep doing this. Highly doubt this property will ever change.
     if (gutterCells != undefined && aceLines != undefined){

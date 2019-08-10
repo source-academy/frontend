@@ -6,19 +6,34 @@
   }
 }
 
+// Overall fullpage
+
+.fullpage {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+
+  .fullpage-content {
+    padding: 10px 20px 10px 20px;
+    display: inline-block;
+    margin: 0 0 10px 0;
+    width: 80%;
+    @include mQ(750px) {
+      width: 90%;
+    }
+  }
+}
+
 // Styling components of the ContributorsDetails
 
 .outsideDetails {
-  background-color: $cadet-color-1;
   text-align: center;
 
   .contributorsDetails {
     background-color: $cadet-color-4;
-    border-radius: 10px;
-    width: 96%;
-    height: 95%;
     display: inline-block;
     margin-top: 2%;
+    margin-bottom: 2%;
     padding: 1% 1% 1% 1%;
 
     h3 {
@@ -68,28 +83,25 @@
 // Styling components of the ContributorsList
 
 .containerPermalink {
-  background-color: $cadet-color-1;
-  padding-bottom: 1%;
+  background-color: $cadet-color-4;
+  margin-bottom: 2%;
 }
 
 div.inPermalink {
-  margin-inline-start: 2%;
-  margin-inline-end: 2%;
+  background-color: $cadet-color-4;
   text-align: justify;
-  background-color: $cadet-color-3;
-  border-radius: 10px;
 
   div {
     text-align: center;
     vertical-align: top;
     display: inline-block;
-    width: (100% / 6);
-    height: (100% / 6);
+    width: (100% / 5);
+    height: (100% / 5);
     margin-top: 1%;
     margin-bottom: 0.5%;
-    @include mQ(800px) {
-      width: 25%;
-      height: 25%;
+    @include mQ(1000px) {
+      width: (100% / 3);
+      height: (100% / 3);
     }
   }
 
@@ -100,15 +112,15 @@ div.inPermalink {
 
   p {
     margin-bottom: 0.2rem;
-    color: $cadet-color-5;
+    color: $cadet-color-2;
   }
 
   a {
     text-decoration: none;
     font-weight: bold;
-    color: $cadet-color-4;
+    color: $cadet-color-1;
     &:hover {
-      color: $cadet-color-5;
+      color: $cadet-color-3;
     }
   }
 }
@@ -117,11 +129,8 @@ div.repoDetailsPermalink {
   text-align: center;
 
   h3 {
-    line-height: 175%;
-    margin-right: 2%;
-    margin-left: 2%;
-    margin-bottom: 0%;
-    color: $cadet-color-4;
+    margin: 0% 2% 0.5% 2%;
+    color: $cadet-color-2;
   }
 
   h3::first-letter {
@@ -129,10 +138,8 @@ div.repoDetailsPermalink {
   }
 
   h5 {
-    margin-right: 2%;
-    margin-left: 2%;
-    margin-bottom: 1%;
+    margin: 0% 2% 1% 2%;
     font-style: italic;
-    color: $cadet-color-5;
+    color: $cadet-color-1;
   }
 }

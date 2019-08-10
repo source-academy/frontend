@@ -91,7 +91,7 @@ export function visualiseEnv(context: Context) {
   }
 }
 
-export function highlightLine(line: number) {
+export function highlightLine(line: number[]) {
   if ((window as any).Inspector) {
     (window as any).Inspector.highlightClean();
     (window as any).Inspector.highlightLine(line[0]);
@@ -107,6 +107,7 @@ export function inspectorUpdate(context: Context | undefined) {
     throw new Error('Inspector not loaded');
   }
 }
+
 /**
  * A wrapper around js-slang's createContext. This
  * provides the original function with the required

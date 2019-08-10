@@ -1,6 +1,7 @@
 import {
   AssessmentCategories,
   AssessmentStatuses,
+  ExternalLibraryName,
   IAssessment,
   IAssessmentOverview,
   IMCQQuestion,
@@ -13,7 +14,7 @@ export const emptyLibrary = (): Library => {
   return {
     chapter: -1,
     external: {
-      name: 'NONE',
+      name: 'NONE' as ExternalLibraryName,
       symbols: []
     },
     globals: []
@@ -24,7 +25,7 @@ export const normalLibrary = (): Library => {
   return {
     chapter: 1,
     external: {
-      name: 'NONE',
+      name: 'NONE' as ExternalLibraryName,
       symbols: []
     },
     globals: []
@@ -55,7 +56,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
   return {
     autogradingResults: [],
     answer: '// [Marking Scheme]\n// 1 mark for correct answer',
-    comment: '`Great Job` **young padawan**',
+    roomId: '19422043',
     content: 'Enter content here',
     id: 0,
     library: emptyLibrary(),
@@ -89,7 +90,7 @@ export const testcaseTemplate = (): ITestcase => {
 export const mcqTemplate = (): IMCQQuestion => {
   return {
     answer: 3,
-    comment: null,
+    roomId: null,
     content: 'This is a mock MCQ question',
     choices: [
       {
