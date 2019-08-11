@@ -3,7 +3,7 @@ import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/interop';
 import { SourceError } from 'js-slang/dist/types';
 import * as React from 'react';
-import { ITestcase } from '../../assessment/assessmentShape';
+import { ITestcase, TestcaseTypes } from '../../assessment/assessmentShape';
 import CanvasOutput from '../CanvasOutput';
 
 type AutograderCardProps = {
@@ -36,6 +36,17 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
       if (stringify(this.props.testcase.result) === this.props.testcase.answer) {
         gradingStatus = ' correct';
       }
+    }
+
+    // Render a placeholder cell in place of the actual testcase data for hidden testcases
+    if (this.props.testcase.type === TestcaseTypes.hidden) {
+      return (
+        <div className={'AutograderCard' + gradingStatus}>
+          <Card className="bp3-interactive" elevation={Elevation.ONE} onClick={this.evalSelf}>
+            <Pre className="testcase-placeholder">Hidden testcase</Pre>
+          </Card>
+        </div>
+      );
     }
 
     return (
