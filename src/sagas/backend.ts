@@ -400,7 +400,7 @@ function* backendSaga(): SagaIterator {
     }));
     const resp = yield request.postSourcecast(title, description, audio, playbackData, tokens);
     if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Saved!', 1000);
+      yield call(showSuccessMessage, 'Saved successfully!', 1000);
       yield history.push('/sourcecast');
     } else if (resp !== null) {
       let errorMessage: string;
@@ -416,6 +416,149 @@ function* backendSaga(): SagaIterator {
     } else {
       yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
     }
+  });
+
+  yield takeEvery(actionTypes.DELETE_MATERIAL, function*(
+    action: ReturnType<typeof actions.deleteMaterial>
+  ) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can delete material.');
+    }
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { id } = action.payload;
+    const resp: Response = yield request.deleteMaterial(id, tokens);
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
+      return;
+    }
+    const materialDirectoryTree = yield select(
+      (state: IState) => state.session.materialDirectoryTree!
+    );
+    const directoryLength = materialDirectoryTree.length;
+    const folderId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
+    yield put(actions.fetchMaterialIndex(folderId));
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  });
+
+  yield takeEvery(actionTypes.FETCH_MATERIAL_INDEX, function*(
+    action: ReturnType<typeof actions.fetchMaterialIndex>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { id } = action.payload;
+    const response = yield call(request.getMaterialIndex, id, tokens);
+    if (response) {
+      const directory_tree = response.directory_tree;
+      const materialIndex = response.index;
+      yield put(actions.updateMaterialDirectoryTree(directory_tree));
+      yield put(actions.updateMaterialIndex(materialIndex));
+    }
+  });
+
+  yield takeEvery(actionTypes.UPLOAD_MATERIAL, function*(
+    action: ReturnType<typeof actions.uploadMaterial>
+  ) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can upload materials.');
+    }
+    const { file, title, description } = action.payload;
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const materialDirectoryTree = yield select(
+      (state: IState) => state.session.materialDirectoryTree!
+    );
+    const directoryLength = materialDirectoryTree.length;
+    const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
+    const resp = yield request.postMaterial(file, title, description, parentId, tokens);
+    if (resp && resp.ok) {
+      yield put(actions.fetchMaterialIndex(parentId));
+      yield call(showSuccessMessage, 'Saved successfully!', 1000);
+    } else if (resp !== null) {
+      let errorMessage: string;
+      switch (resp.status) {
+        case 401:
+          errorMessage = 'Session expired. Please login again.';
+          break;
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`;
+          break;
+      }
+      yield call(showWarningMessage, errorMessage);
+    } else {
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    }
+  });
+
+  yield takeEvery(actionTypes.CREATE_MATERIAL_FOLDER, function*(
+    action: ReturnType<typeof actions.createMaterialFolder>
+  ) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can create materials folder.');
+    }
+    const { title } = action.payload;
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const materialDirectoryTree = yield select(
+      (state: IState) => state.session.materialDirectoryTree!
+    );
+    const directoryLength = materialDirectoryTree.length;
+    const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
+    const resp = yield request.postMaterialFolder(title, parentId, tokens);
+    if (resp && resp.ok) {
+      yield put(actions.fetchMaterialIndex(parentId));
+      yield call(showSuccessMessage, 'Created successfully!', 1000);
+    } else if (resp !== null) {
+      let errorMessage: string;
+      switch (resp.status) {
+        case 401:
+          errorMessage = 'Session expired. Please login again.';
+          break;
+        default:
+          errorMessage = `Something went wrong (got ${resp.status} response)`;
+          break;
+      }
+      yield call(showWarningMessage, errorMessage);
+    } else {
+      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+    }
+  });
+
+  yield takeEvery(actionTypes.DELETE_MATERIAL_FOLDER, function*(
+    action: ReturnType<typeof actions.deleteMaterial>
+  ) {
+    const role = yield select((state: IState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can delete material folder.');
+    }
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const { id } = action.payload;
+    const resp: Response = yield request.deleteMaterialFolder(id, tokens);
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
+      return;
+    }
+    const materialDirectoryTree = yield select(
+      (state: IState) => state.session.materialDirectoryTree!
+    );
+    const directoryLength = materialDirectoryTree.length;
+    const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
+    yield put(actions.fetchMaterialIndex(parentId));
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 }
 
