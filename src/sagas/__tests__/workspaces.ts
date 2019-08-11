@@ -1,6 +1,6 @@
 import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
-import { Finished, SourceError } from 'js-slang/dist/types';
+import { ErrorSeverity, ErrorType, Finished, SourceError } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
@@ -654,6 +654,45 @@ describe('evalCode', () => {
           payload: { type, value, workspaceLocation, index: 0 }
         })
         .put(actions.evalTestcase(workspaceLocation, 1))
+        .silentRun();
+    });
+
+    test('prematurely terminates if execution of one testcase results in an error', () => {
+      const type = 'error';
+      const mockErrors: SourceError[] = [
+        {
+          type: ErrorType.RUNTIME,
+          severity: ErrorSeverity.ERROR,
+          location: { start: { line: 1, column: 5 }, end: { line: 1, column: 5 } },
+          explain() {
+            return `Name func not declared.`;
+          },
+          elaborate() {
+            return `Name func not declared.`;
+          }
+        }
+      ];
+
+      state = generateDefaultState(workspaceLocation, {
+        editorTestcases: mockTestcases.slice(0, 2),
+        sideContentActiveTab: SideContentType.autograder
+      });
+
+      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+        .withState(state)
+        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
+        .call(runInContext, code, context, {
+          scheduler: 'preemptive',
+          originalMaxExecTime: execTime
+        })
+        .put(actions.evalInterpreterSuccess(value, workspaceLocation))
+        .call(showSuccessMessage, 'Running all testcases!', 750)
+        .put(actions.evalTestcase(workspaceLocation, 0))
+        .dispatch({
+          type: actionTypes.EVAL_TESTCASE_FAILURE,
+          payload: { type, mockErrors, workspaceLocation, index: 0 }
+        })
+        .not.put(actions.evalTestcase(workspaceLocation, 1))
         .silentRun();
     });
 
