@@ -38,7 +38,11 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
           return window.open(LINKS.LUMINUS);
       }
     },
-    pickUpCollectible: function () { },
+    pickUpCollectible: function (collectible) {
+      if (typeof Storage !== 'undefined') {
+        localStorage.setItem(collectible, 'collected');
+      }
+    },
     playSound: function (name) {
       var sound = new Audio(ASSETS_HOST + 'sounds/' + name + '.mp3');
       if (sound) {
