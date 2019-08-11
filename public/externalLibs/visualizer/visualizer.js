@@ -866,6 +866,11 @@
    *  Then shift it to the left end.
    */
   function draw(xs) {
+
+    // Hides the default text
+    (document.getElementById('data-visualizer-default-text')).hidden = true;
+    
+
     // Blink icon
     const icon = document.getElementById('data_visualiser-icon');
     

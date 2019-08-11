@@ -276,7 +276,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 const playgroundIntroductionTab: SideContentTab = {
   label: 'Introduction',
   iconName: IconNames.COMPASS,
-  body: <Markdown content={INTRODUCTION} />,
+  body: <Markdown content={INTRODUCTION} openLinksInNewWindow={true} />,
   id: SideContentType.introduction
 };
 
