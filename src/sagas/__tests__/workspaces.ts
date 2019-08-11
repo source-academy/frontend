@@ -13,6 +13,7 @@ import {
   ExternalLibraryNames,
   ITestcase,
   Library,
+  TestcaseType,
   TestcaseTypes
 } from '../../components/assessment/assessmentShape';
 import { mockRuntimeContext } from '../../mocks/context';
@@ -880,6 +881,7 @@ describe('evalTestCode', () => {
   let value: string;
   let options: Partial<IOptions>;
   let index: number;
+  let type: TestcaseType;
   let state: IState;
 
   beforeEach(() => {
@@ -890,25 +892,52 @@ describe('evalTestCode', () => {
     value = 'another test value';
     options = { scheduler: 'preemptive', originalMaxExecTime: 1000 };
     index = 1;
+    type = TestcaseTypes.public;
     state = generateDefaultState(workspaceLocation);
   });
 
   describe('without interrupt', () => {
     test('puts evalInterpreterSuccess and evalTestcaseSuccess on finished status', () => {
-      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index)
+      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .put(actions.evalTestcaseSuccess(value, workspaceLocation, index))
+        .not.put(actions.clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
 
-    test('puts evalInterpreterError and evalTestcaseFailure on other statuses', () => {
-      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index)
+    test('puts additional clearReplOutputLast for hidden testcases after finished status', () => {
+      type = TestcaseTypes.hidden;
+
+      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
+        .withState(state)
+        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
+        .put(actions.evalInterpreterSuccess(value, workspaceLocation))
+        .put(actions.evalTestcaseSuccess(value, workspaceLocation, index))
+        .put(actions.clearReplOutputLast(workspaceLocation))
+        .silentRun();
+    });
+
+    test('puts evalInterpreterError and evalTestcaseFailure on error status', () => {
+      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'error' }]])
         .put(actions.evalInterpreterError(context.errors, workspaceLocation))
         .put(actions.evalTestcaseFailure(context.errors, workspaceLocation, index))
+        .not.put(actions.clearReplOutputLast(workspaceLocation))
+        .silentRun();
+    });
+
+    test('puts additional clearReplOutputLast for hidden testcases after error status', () => {
+      type = TestcaseTypes.hidden;
+
+      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
+        .withState(state)
+        .provide([[call(runInContext, code, context, options), { status: 'error' }]])
+        .put(actions.evalInterpreterError(context.errors, workspaceLocation))
+        .put(actions.evalTestcaseFailure(context.errors, workspaceLocation, index))
+        .put(actions.clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
   });
