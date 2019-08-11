@@ -6,8 +6,20 @@
   flex: 1 1 100%;
 }
 
+// Fixes excessive margins in hint notifications that contain <Markdown> elements
+.markdown-notification {
+  *:first-child {
+    margin-top: 0;
+  }
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+}
+
 // Fix excessive margins applied by bp3-running-text style
-.md {
+.md,
+.markdown-notification {
   // Union selector on all header elements
   h1,
   h2,
