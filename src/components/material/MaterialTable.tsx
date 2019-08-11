@@ -20,7 +20,7 @@ import * as classNames from 'classnames';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import { getStandardDate } from '../../utils/dateHelpers';
+import { getStandardDateTime } from '../../utils/dateHelpers';
 import { controlButton } from '../commons';
 import DeleteCell from './DeleteCell';
 import DownloadCell from './DownloadCell';
@@ -81,7 +81,7 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
         },
         {
           headerName: 'Date',
-          valueGetter: params => getStandardDate(params.data.inserted_at),
+          valueGetter: params => getStandardDateTime(params.data.inserted_at),
           maxWidth: 400,
           suppressMovable: true,
           suppressMenu: true
