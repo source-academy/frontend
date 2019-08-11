@@ -30,9 +30,8 @@ export default function* workspaceSaga(): SagaIterator {
     const code: string = yield select((state: IState) => {
       const prepend = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
       const value = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
-      const postpend = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPostpend;
 
-      return prepend + (prepend.length > 0 ? '\n' : '') + value + '\n' + postpend;
+      return prepend + (prepend.length > 0 ? '\n' : '') + value;
     });
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
@@ -203,7 +202,14 @@ export default function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
-    yield* evalTestCode(code, context, execTime, workspaceLocation, index, type);
+    /**
+     *  Clone the context and elevate it to use Source chapter 4 for testcases - enables grader
+     *  programs in postpend to run as expected without raising interpreter errors
+     *  But, do not persist this context to the workspace state - this prevent students from using
+     *  the elevated context to run dis-allowed code beyond the current chapter from the REPL
+     */
+    const shardContext = { ...context, chapter: 4 };
+    yield* evalTestCode(code, shardContext, execTime, workspaceLocation, index, type);
   });
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(
