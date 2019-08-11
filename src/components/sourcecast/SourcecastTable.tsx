@@ -2,11 +2,9 @@ import { Divider, FormGroup, InputGroup, NonIdealState, Spinner } from '@bluepri
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid/dist/styles/ag-grid.css';
-import 'ag-grid/dist/styles/ag-theme-balham.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import ContentDisplay from '../commons/ContentDisplay';
 import DeleteCell from './DeleteCell';
 import SelectCell from './SelectCell';
 import { IPlaybackData, ISourcecastData } from './sourcecastShape';
@@ -46,34 +44,35 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
         {
           headerName: 'Title',
           field: 'title',
-          width: 200,
-          maxWidth: 200,
-          suppressMovable: true,
-          suppressMenu: true
-        },
-        {
-          headerName: 'Uploader',
-          field: 'uploader.name',
-          width: 200,
-          maxWidth: 200,
-          suppressMovable: true,
-          suppressMenu: true
-        },
-        {
-          headerName: 'Select',
-          field: '',
           cellRendererFramework: SelectCell,
           cellRendererParams: {
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },
-          suppressSorting: true,
+          maxWidth: 400,
           suppressMovable: true,
           suppressMenu: true,
-          suppressResize: true,
           cellStyle: {
-            padding: 0
+            'text-align': 'left'
           },
           hide: !this.props.handleSetSourcecastData
+        },
+        {
+          headerName: 'Title',
+          field: 'title',
+          maxWidth: 400,
+          suppressMovable: true,
+          suppressMenu: true,
+          hide: !!this.props.handleSetSourcecastData
+        },
+        {
+          headerName: 'Uploader',
+          field: 'uploader.name',
+          maxWidth: 200,
+          suppressMovable: true,
+          suppressMenu: true,
+          cellStyle: {
+            'text-align': 'center'
+          }
         },
         {
           headerName: 'Delete',
@@ -82,12 +81,13 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
           cellRendererParams: {
             handleDeleteSourcecastEntry: this.props.handleDeleteSourcecastEntry
           },
+          width: 100,
+          maxWidth: 100,
           suppressSorting: true,
           suppressMovable: true,
           suppressMenu: true,
-          suppressResize: true,
           cellStyle: {
-            padding: 0
+            'text-align': 'center'
           },
           hide: !this.props.handleDeleteSourcecastEntry
         },
@@ -101,6 +101,10 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
       filterValue: '',
       groupFilterEnabled: false
     };
+  }
+
+  public componentDidMount() {
+    this.props.handleFetchSourcecastIndex();
   }
 
   public render() {
@@ -118,7 +122,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
       <div className="SourcecastContainer">
         <br />
         <div>
-          <FormGroup label="" labelFor="text-input" inline={true}>
+          <FormGroup label="" labelFor="text-input">
             <InputGroup
               id="searchBar"
               large={false}
@@ -131,7 +135,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
         </div>
         <Divider />
         <div className="SourcecastTable">
-          <div className="ag-grid-parent ag-theme-fresh">
+          <div className="ag-grid-parent">
             <AgGridReact
               gridAutoHeight={true}
               enableColResize={true}
@@ -148,15 +152,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
         <br />
       </div>
     );
-    return (
-      <div>
-        <ContentDisplay
-          loadContentDispatch={this.props.handleFetchSourcecastIndex}
-          display={this.props.sourcecastIndex === undefined ? loadingDisplay : grid}
-          fullWidth={false}
-        />
-      </div>
-    );
+    return <div>{this.props.sourcecastIndex === undefined ? loadingDisplay : grid}</div>;
   }
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
