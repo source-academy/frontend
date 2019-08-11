@@ -57,3 +57,7 @@ To start contributing, create a fork from our repo and send a PR. Refer to [this
 ## TypeScript Coding Conventions
 
 We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
+
+### Projects
+
+For more info on specific frontend projects, please consult [our wiki](https://github.com/source-academy/cadet-frontend/wiki).
