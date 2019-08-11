@@ -5,6 +5,7 @@ import 'ag-grid/dist/styles/ag-grid.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
+import { getStandardDate } from '../../utils/dateHelpers';
 import DeleteCell from './DeleteCell';
 import SelectCell from './SelectCell';
 import { IPlaybackData, ISourcecastData } from './sourcecastShape';
@@ -59,7 +60,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
         {
           headerName: 'Title',
           field: 'title',
-          width: 400,
+          width: 200,
           suppressMovable: true,
           suppressMenu: true,
           hide: !!this.props.handleSetSourcecastData
@@ -73,6 +74,13 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
           cellStyle: {
             'text-align': 'center'
           }
+        },
+        {
+          headerName: 'Date',
+          valueGetter: params => getStandardDate(params.data.inserted_at),
+          maxWidth: 200,
+          suppressMovable: true,
+          suppressMenu: true
         },
         {
           headerName: 'Delete',

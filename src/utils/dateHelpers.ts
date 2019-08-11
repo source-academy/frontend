@@ -30,8 +30,14 @@ export const getPrettyDate = (dateString: string): string => {
   return prettyDate;
 };
 
-export const getStandardDate = (dateString: string): string => {
+export const getStandardDateTime = (dateString: string): string => {
   const date = moment(dateString);
   const prettyDate = date.format('MMMM Do YYYY, HH:mm');
+  return prettyDate;
+};
+
+export const getStandardDate = (dateString: string): string => {
+  const date = moment(dateString);
+  const prettyDate = date.format('MMMM Do YYYY');
   return prettyDate;
 };
