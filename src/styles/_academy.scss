@@ -6,6 +6,20 @@
   flex: 1 1 100%;
 }
 
+// Fix excessive margins applied by bp3-running-text style
+.md {
+  // Union selector on all header elements
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+}
+
 .#{$ns}-popover-content {
   padding: 0.4rem;
 }
@@ -24,6 +38,12 @@
 
 .assessment-briefing {
   padding-bottom: 0;
+
+  // If the assessment briefing begins with a header, remove its top margin
+  *:first-child {
+    margin-top: 0;
+  }
+
   .assessment-briefing-button {
     margin-top: 1rem;
   }
