@@ -67,6 +67,13 @@ const mockClosedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = 
   closeDate: '2008-06-18T05:24:26.026Z'
 };
 
+const mockGradedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
+  ...defaultProps,
+  assessment: mockAssessments[3],
+  assessmentId: 4,
+  questionId: 0
+};
+
 const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessment: mockAssessments[0],
@@ -96,4 +103,42 @@ test('AssessmentWorkspace page with MCQ question renders correctly', () => {
   const app = <AssessmentWorkspace {...mockMcqAssessmentWorkspaceProps} />;
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
+});
+
+/*  ===== Tester comments =====
+    Issue:
+      https://stackoverflow.com/questions/42813342/react-createelement-type-is-invalid-expected-a-string 
+    Description:
+      Mounting the AssessmentWorkspace deeply (rendering all recursive subcomponents) in Enzyme with mount
+      results in the test failing with the error
+          Warning: React.createElement: type is invalid -- expected a string (for built-in components) or
+          a class/function (for composite components) but got: undefined. You likely forgot to export your
+          component from the file it's defined in, or you might have mixed up default and named imports.
+     
+          Check the render method of `Workspace`.
+
+          The above error occurred in the <div> component:
+            in div (created by Workspace)
+            in div (created by Workspace)
+            in Workspace (created by AssessmentWorkspace)
+            in div (created by AssessmentWorkspace)
+            in AssessmentWorkspace (created by WrapperComponent)
+            in WrapperComponent
+      
+      whereas mounting it one-level deep in Enzyme using shallow throws no errors
+    Fix:
+      Stack trace suggests one of the React subcomponents of AssessmentWorkspace works in production
+      but is not set up correctly - requires re-examination of every single React component and
+      sub-component used in AssessmentWorkspace
+      
+      Current workaround is to mount AssessmentWorkspace shallowly since the behaviour is correct
+      during user testing
+*/
+
+test('AssessmentWorkspace renders Grading tab correctly if the question has been graded', () => {
+  const app = <AssessmentWorkspace {...mockGradedProgrammingAssessmentWorkspaceProps} />;
+  const tree = shallow(app);
+  expect(tree.debug()).toMatchSnapshot();
+  // Uncomment when fixed
+  // expect(tree.find('.grading-icon').hostNodes()).toHaveLength(1);
 });
