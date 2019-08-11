@@ -40,7 +40,8 @@ import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces'
 import {
   ExternalLibraryName,
   ITestcase,
-  Library
+  Library,
+  TestcaseTypes
 } from '../../components/assessment/assessmentShape';
 import { createContext } from '../../utils/slangHelper';
 import {
@@ -762,11 +763,13 @@ const outputWithCodeOutput: CodeOutput[] = [
 
 const editorTestcases: ITestcase[] = [
   {
+    type: TestcaseTypes.public,
     answer: 'abc',
     score: 10,
     program: 'test program'
   },
   {
+    type: TestcaseTypes.public,
     answer: 'def',
     score: 20,
     program: 'another program'

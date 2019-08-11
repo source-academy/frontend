@@ -2,7 +2,11 @@ import { mount, shallow } from 'enzyme';
 import * as React from 'react';
 
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
-import { AutogradingResult, ITestcase } from '../../../../components/assessment/assessmentShape';
+import {
+  AutogradingResult,
+  ITestcase,
+  TestcaseTypes
+} from '../../../../components/assessment/assessmentShape';
 import Autograder, { AutograderProps } from '../Autograder';
 
 const mockErrors: SourceError[] = [
@@ -20,13 +24,15 @@ const mockErrors: SourceError[] = [
 ];
 
 // The five testcases have statuses: correct, (none), correct, incorrect and error
-const mockTestcases: ITestcase[] = [
+const mockPublicTestcases: ITestcase[] = [
   { program: `"string";`, score: 0, answer: `"string"`, result: `string` },
   { program: `fibonacci(2)'`, score: 1, answer: `2` },
   { program: `fibonacci(3);`, score: 1, answer: `2`, result: 2 },
   { program: `fibonacci(4);`, score: 2, answer: `3`, result: 4 },
   { program: `fibonacci(5);`, score: 3, answer: `5`, errors: mockErrors }
-];
+].map(proto => {
+  return { ...proto, type: TestcaseTypes.public };
+});
 
 const testcaseCardClasses = [
   'AutograderCard correct',
@@ -97,10 +103,10 @@ test('Autograder renders placeholders correctly when testcases and results are e
   expect(tree.find('.ResultCard')).toHaveLength(0);
 });
 
-test('Autograder renders testcases with different statuses correctly', () => {
+test('Autograder renders public testcases with different statuses correctly', () => {
   const props: AutograderProps = {
     autogradingResults: [],
-    testcases: mockTestcases,
+    testcases: mockPublicTestcases,
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <Autograder {...props} />;

@@ -12,7 +12,8 @@ import {
   ExternalLibraryName,
   ExternalLibraryNames,
   ITestcase,
-  Library
+  Library,
+  TestcaseTypes
 } from '../../components/assessment/assessmentShape';
 import { mockRuntimeContext } from '../../mocks/context';
 import { mockTestcases } from '../../mocks/gradingAPI';
@@ -250,6 +251,7 @@ describe('EVAL_TESTCASE', () => {
 
     const editorTestcases: ITestcase[] = [
       {
+        type: TestcaseTypes.public,
         answer: '123',
         program,
         score: 1

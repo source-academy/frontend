@@ -6,7 +6,8 @@ import {
   IAssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
-  Library
+  Library,
+  TestcaseTypes
 } from '../components/assessment/assessmentShape';
 import { externalLibraries } from '../reducers/externalLibraries';
 
@@ -257,16 +258,19 @@ const chickenrice = "chicken rice";`,
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
       {
+        type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
         answer: `"pizza"`
       },
       {
+        type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
         answer: `"sushi"`
       },
       {
+        type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
         answer: `"chicken rice"`
@@ -303,11 +307,13 @@ const pi = 3.1415928;`,
     postpend: '',
     testcases: [
       {
+        type: TestcaseTypes.public,
         program: `areaOfCircle(5);`,
         score: 1,
         answer: `78.53982`
       },
       {
+        type: TestcaseTypes.public,
         program: `volumeOfSphere(5);`,
         score: 1,
         answer: `523.5988`
@@ -434,16 +440,19 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
       {
+        type: TestcaseTypes.public,
         program: `fibonacci(3);`,
         score: 1,
         answer: `2`
       },
       {
+        type: TestcaseTypes.public,
         program: `fibonacci(4);`,
         score: 1,
         answer: `3`
       },
       {
+        type: TestcaseTypes.public,
         program: `fibonacci(5);`,
         score: 1,
         answer: `5`
@@ -638,26 +647,31 @@ const AND = (xs) => {`,
 };`,
     testcases: [
       {
+        type: TestcaseTypes.public,
         program: `AND(list(true, false));`,
         score: 0,
         answer: `false`
       },
       {
+        type: TestcaseTypes.public,
         program: `AND(list(true, true));`,
         score: 0,
         answer: `true`
       },
       {
+        type: TestcaseTypes.public,
         program: `AND(list(OR(true, false), OR(true, true)));`,
         score: 0,
         answer: `true`
       },
       {
+        type: TestcaseTypes.hidden,
         program: `AND(list(true, OR(false, true), AND(list(true, false)), false));`,
         score: 0,
         answer: `false`
       },
       {
+        type: TestcaseTypes.hidden,
         program: `AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
         score: 0,
         answer: `true`
@@ -696,16 +710,19 @@ This question makes use of the wrapping container method to throw custom errors 
 };`,
     testcases: [
       {
+        type: TestcaseTypes.public,
         program: `XOR(true, false);`,
         score: 0,
         answer: `true`
       },
       {
+        type: TestcaseTypes.public,
         program: `XOR(false, true);`,
         score: 0,
         answer: `true`
       },
       {
+        type: TestcaseTypes.hidden,
         program: `XOR(false, XOR(true, false));`,
         score: 0,
         answer: `true`
@@ -757,16 +774,19 @@ const NOR_AND = (x, y) => {`,
 };`,
     testcases: [
       {
+        type: TestcaseTypes.public,
         program: `NOR_AND(true, false);`,
         score: 0,
         answer: `false`
       },
       {
+        type: TestcaseTypes.public,
         program: `NOR_AND(true, true);`,
         score: 0,
         answer: `true`
       },
       {
+        type: TestcaseTypes.hidden,
         program: `NOR_AND(true, NOR_AND(false, true));`,
         score: 0,
         answer: `false`
