@@ -110,8 +110,8 @@ export interface IQuestion {
   grader: {
     name: string;
     id: number;
-  };
-  gradedAt: string;
+  } | null;
+  gradedAt: string | null;
   xp: number;
   grade: number;
   maxGrade: number;

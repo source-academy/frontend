@@ -256,9 +256,185 @@ const chickenrice = "chicken rice";`,
       }
     ],
     solutionTemplate: `function answer() {
-  // Write something here!
+    // Write something here!
 }
 `,
+    type: 'programming',
+    grader: null,
+    gradedAt: null,
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  },
+  {
+    autogradingResults: [],
+    answer: `function areaOfCircle(x) {
+    return square(x) * pi;
+}
+
+function volumeOfSphere(x) {
+    return 4 / 3 * cube(x) * pi;
+}`,
+    roomId: '19422043',
+    content: 'Hello and welcome to this assessment! This is the 1st question.',
+    id: 1,
+    library: mockRuneLibrary,
+    prepend: `const square = x => x * x;
+const cube = x => x * x * x;
+const pi = 3.1415928;`,
+    postpend: '',
+    testcases: [
+      {
+        program: `areaOfCircle(5);`,
+        score: 1,
+        answer: `78.53982`
+      },
+      {
+        program: `volumeOfSphere(5);`,
+        score: 1,
+        answer: `523.5988`
+      }
+    ],
+    solutionTemplate: `function areaOfCircle(x) {
+    // return area of circle
+}
+
+function volumeOfSphere(x) {
+    // return volume of sphere
+}`,
+    type: 'programming',
+    grader: null,
+    gradedAt: null,
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  },
+  {
+    answer: 3,
+    roomId: '19422046',
+    content:
+      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
+    choices: [
+      {
+        content: '**Option** `A`',
+        hint: '_hint_ A is `here`'
+      },
+      {
+        content: '### B',
+        hint: 'hint B'
+      },
+      {
+        content: 'C',
+        hint: null
+      },
+      {
+        content: 'D',
+        hint: 'hint D'
+      }
+    ],
+    id: 2,
+    library: mockCurveLibrary,
+    type: 'mcq',
+    solution: 0,
+    grader: null,
+    gradedAt: null,
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  },
+  {
+    answer: 3,
+    roomId: null,
+    content:
+      'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
+    choices: [
+      {
+        content: 'A',
+        hint: null
+      },
+      {
+        content: 'B',
+        hint: null
+      },
+      {
+        content: 'C',
+        hint: null
+      },
+      {
+        content: 'D',
+        hint: null
+      }
+    ],
+    id: 3,
+    library: mockCurveLibrary,
+    type: 'mcq',
+    solution: null,
+    grader: null,
+    gradedAt: null,
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  },
+  {
+    autogradingResults: [],
+    answer: null,
+    roomId: '19422032',
+    content: 'You have reached the last question! Have some fun with the tone matrix...',
+    id: 4,
+    library: mockToneMatrixLibrary,
+    prepend: '',
+    postpend: '',
+    testcases: [],
+    solutionTemplate: '5th question mock solution template',
+    type: 'programming',
+    grader: null,
+    gradedAt: null,
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  }
+];
+
+export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+  {
+    answer: `function fibonacci(n) {
+    if (n <= 2) {
+        return 1;
+    } else {
+        return fibonacci(n-1) + fibonacci(n-2);
+    }
+}`,
+    roomId: '19422032',
+    content: 'You can see autograding results!!!',
+    id: 0,
+    library: mockCurveLibrary,
+    prepend: '',
+    postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
+    testcases: [
+      {
+        program: `fibonacci(3);`,
+        score: 1,
+        answer: `2`
+      },
+      {
+        program: `fibonacci(4);`,
+        score: 1,
+        answer: `3`
+      },
+      {
+        program: `fibonacci(5);`,
+        score: 1,
+        answer: `5`
+      }
+    ],
+    solutionTemplate: `function fibonacci(n) {
+    // Your answer here
+}`,
     type: 'programming',
     grader: {
       name: 'avenger',
@@ -292,232 +468,7 @@ _italics_
 
 [link to Source Academy](https://sourceacademy.nus.edu.sg)  
 
-![](image-url-goes-here)
-      `
-  },
-  {
-    autogradingResults: [],
-    answer: `function areaOfCircle(x) {
-  return square(x) * pi;
-}
-
-function volumeOfSphere(x) {
-  return 4 / 3 * cube(x) * pi;
-}`,
-    roomId: '19422043',
-    content: 'Hello and welcome to this assessment! This is the 1st question.',
-    id: 1,
-    library: mockRuneLibrary,
-    prepend: `const square = x => x * x;
-const cube = x => x * x * x;
-const pi = 3.1415928;`,
-    postpend: '',
-    testcases: [
-      {
-        program: `areaOfCircle(5);`,
-        score: 1,
-        answer: `78.53982`
-      },
-      {
-        program: `volumeOfSphere(5);`,
-        score: 1,
-        answer: `523.5988`
-      }
-    ],
-    solutionTemplate: `function areaOfCircle(x) {
-  // return area of circle
-}
-
-function volumeOfSphere(x) {
-  // return volume of sphere
-}`,
-    type: 'programming',
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
-    xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2,
-    comments: `You open the Report Card, not knowing what to expect...
-
-## WOW!
-Amazing grasp of runes. We can now move on to the next assignment.
-
-<br/>
-
-Robot Dog: \`woof\`
-
-You look at the display of the robot dog.
-
-    FEED ME
-1. Bread
-2. Water
-
-<br/>
-
-* I am hungry.
-* I am thirsty.
-
-<br/>
-<br/>
-    
-New message from **Avenger**!
-
-> _Cadet, please meet me at Level X-05, outside the pod bay doors. There is an important mission awaiting us._
-
-> _May the [Source](https://sourceacademy.nus.edu.sg) be with you._
-
-> Best regards, Avocado A. Avenger
-
-#### Upcoming Tasks
-- [] Meet Avenger Avenger at Level X-05
-- [] Open the Pod Bay Doors
-    `
-  },
-  {
-    answer: 3,
-    roomId: '19422046',
-    content:
-      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
-    choices: [
-      {
-        content: '**Option** `A`',
-        hint: '_hint_ A is `here`'
-      },
-      {
-        content: '### B',
-        hint: 'hint B'
-      },
-      {
-        content: 'C',
-        hint: null
-      },
-      {
-        content: 'D',
-        hint: 'hint D'
-      }
-    ],
-    id: 2,
-    library: mockCurveLibrary,
-    type: 'mcq',
-    solution: 0,
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
-    xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2
-  },
-  {
-    answer: 3,
-    roomId: null,
-    content:
-      'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
-    choices: [
-      {
-        content: 'A',
-        hint: null
-      },
-      {
-        content: 'B',
-        hint: null
-      },
-      {
-        content: 'C',
-        hint: null
-      },
-      {
-        content: 'D',
-        hint: null
-      }
-    ],
-    id: 3,
-    library: mockCurveLibrary,
-    type: 'mcq',
-    solution: null,
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
-    xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2
-  },
-  {
-    autogradingResults: [],
-    answer: null,
-    roomId: '19422032',
-    content: 'You have reached the last question! Have some fun with the tone matrix...',
-    id: 4,
-    library: mockToneMatrixLibrary,
-    prepend: '',
-    postpend: '',
-    testcases: [],
-    solutionTemplate: '5th question mock solution template',
-    type: 'programming',
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
-    xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2
-  }
-];
-
-export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
-  {
-    answer: `function fibonacci(n) {
-  if (n <= 2) {
-    return 1;
-  } else {
-    return fibonacci(n-1) + fibonacci(n-2);
-  }
-}`,
-    roomId: '19422032',
-    content: 'You can see autograding results!!!',
-    id: 0,
-    library: mockToneMatrixLibrary,
-    prepend: '',
-    postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
-    testcases: [
-      {
-        program: `fibonacci(3);`,
-        score: 1,
-        answer: `2`
-      },
-      {
-        program: `fibonacci(4);`,
-        score: 1,
-        answer: `3`
-      },
-      {
-        program: `fibonacci(5);`,
-        score: 1,
-        answer: `5`
-      }
-    ],
-    solutionTemplate: 'Make Fibonacci!!!',
-    type: 'programming',
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
-    xp: 0,
-    grade: 0,
-    maxGrade: 2,
-    maxXp: 2,
+![](image-url-goes-here)`,
     autogradingResults: [
       {
         resultType: 'pass'
@@ -543,6 +494,66 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
         ]
       }
     ]
+  },
+  {
+    answer: `function recurse(rune, n) {
+    return n <= 1 ? rune : make_cross(recurse(rune, n - 1));
+}`,
+    roomId: '19422033',
+    content: 'This is a runes question - there are no testcases nor autograding results.',
+    id: 1,
+    library: mockRuneLibrary,
+    prepend: '',
+    postpend: '',
+    testcases: [],
+    solutionTemplate: `function recurse(rune, n) {
+    // Your answer here
+}`,
+    type: 'programming',
+    grader: {
+      name: 'some avenger',
+      id: 1
+    },
+    gradedAt: '2038-06-18T05:24:26.026Z',
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2,
+    comments: `You open the Report Card, not knowing what to expect...
+
+    ## WOW!
+    Amazing grasp of runes. We can now move on to the next assignment.
+    
+    <br/>
+    
+    Robot Dog: \`woof\`
+    
+    You look at the display of the robot dog.
+    
+        FEED ME
+    1. Bread
+    2. Water
+    
+    <br/>
+    
+    * I am hungry.
+    * I am thirsty.
+    
+    <br/>
+    <br/>
+        
+    New message from **Avenger**!
+    
+    > _Cadet, please meet me at Level X-05, outside the pod bay doors. There is an important mission awaiting us._
+    
+    > _May the [Source](https://sourceacademy.nus.edu.sg) be with you._
+    
+    > Best regards, Avocado A. Avenger
+    
+    #### Upcoming Tasks
+    - [] Meet Avenger Avenger at Level X-05
+    - [] Open the Pod Bay Doors`,
+    autogradingResults: []
   }
 ];
 
