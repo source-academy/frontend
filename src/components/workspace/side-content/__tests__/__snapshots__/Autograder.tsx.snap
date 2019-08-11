@@ -212,7 +212,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
 </div>"
 `;
 
-exports[`Autograder renders testcases with different statuses correctly 1`] = `
+exports[`Autograder renders public testcases with different statuses correctly 1`] = `
 "<Autograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
   <div className=\\"Autograder\\">
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
