@@ -3,6 +3,10 @@
 
 // Author: Martin Henz
 
+// Note: this library is used in the externalLibs of cadet-frontend.
+// It is distinct from the LISTS library of Source §2, which contains
+// primitive and predeclared functions from Chapter 2 of SICP JS.
+
 'use strict'
 // array test works differently for Rhino and
 // the Firefox environment (especially Web Console)
