@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const LUMINUS_CLIENT_ID = process.env.REACT_APP_LUMINUS_CLIENT_ID;
-export const VERSION = process.env.REACT_APP_VERSION;
+export const SOURCE_ACADEMY_VERSION = 'Cadet';
 export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const USE_BACKEND =
   process.env.REACT_APP_USE_BACKEND !== undefined &&
