@@ -371,8 +371,8 @@ class AssessmentWorkspace extends React.Component<
           iconName: IconNames.TICK,
           body: (
             <GradingResult
-              graderName={props.assessment!.questions[questionId].grader.name}
-              gradedAt={props.assessment!.questions[questionId].gradedAt}
+              graderName={props.assessment!.questions[questionId].grader!.name}
+              gradedAt={props.assessment!.questions[questionId].gradedAt!}
               xp={props.assessment!.questions[questionId].xp}
               grade={props.assessment!.questions[questionId].grade}
               maxGrade={props.assessment!.questions[questionId].maxGrade}
