@@ -29,3 +29,9 @@ export const getPrettyDate = (dateString: string): string => {
   const prettyDate = date.format('Do MMMM, HH:mm');
   return prettyDate;
 };
+
+export const getStandardDate = (dateString: string): string => {
+  const date = moment(dateString);
+  const prettyDate = date.format('MMMM Do YYYY, HH:mm');
+  return prettyDate;
+};
