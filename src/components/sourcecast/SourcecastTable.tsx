@@ -48,7 +48,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
           cellRendererParams: {
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },
-          maxWidth: 400,
+          width: 400,
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
@@ -59,7 +59,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
         {
           headerName: 'Title',
           field: 'title',
-          maxWidth: 400,
+          width: 400,
           suppressMovable: true,
           suppressMenu: true,
           hide: !!this.props.handleSetSourcecastData
@@ -67,7 +67,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
         {
           headerName: 'Uploader',
           field: 'uploader.name',
-          maxWidth: 200,
+          width: 200,
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
@@ -144,6 +144,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
               columnDefs={this.state.columnDefs}
               onGridReady={this.onGridReady}
               rowData={data}
+              rowHeight={30}
               pagination={false}
               paginationPageSize={50}
             />
@@ -167,6 +168,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
+    window.onresize = () => this.gridApi!.sizeColumnsToFit();
   };
 }
 
