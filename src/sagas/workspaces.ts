@@ -470,12 +470,18 @@ export function* evalCode(
         yield call(showSuccessMessage, `Running all testcases!`, 750);
         for (const idx of testcases.keys()) {
           yield put(actions.evalTestcase(workspaceLocation, idx));
-          /** Run testcases synchronously
-           * This blocks the generator until result of current testcase is known and output to REPL
-           * Ensures that HANDLE_CONSOLE_LOG appends consoleLogs (from display(...) calls) to the
-           * correct testcase result
+          /** Run testcases synchronously - this blocks the generator until result of current
+           * testcase is known and output to REPL; ensures that HANDLE_CONSOLE_LOG appends
+           * consoleLogs(from display(...) calls) to the correct testcase result
            */
-          yield take([actionTypes.EVAL_TESTCASE_SUCCESS, actionTypes.EVAL_TESTCASE_FAILURE]);
+          const { success, error } = yield race({
+            success: take(actionTypes.EVAL_TESTCASE_SUCCESS),
+            error: take(actionTypes.EVAL_TESTCASE_FAILURE)
+          });
+          // Prematurely terminate if execution of current testcase returns an error
+          if (error || !success) {
+            return;
+          }
         }
       }
     }
