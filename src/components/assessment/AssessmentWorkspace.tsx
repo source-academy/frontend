@@ -12,7 +12,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
-import { InterpreterOutput, IWorkspaceState } from '../../reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
 import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
@@ -20,8 +20,18 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
-import { ControlBarProps } from '../workspace/ControlBar';
-import { SideContentProps } from '../workspace/side-content';
+import { ControlBarProps } from '../workspace/controlBar/ControlBar';
+import {
+  ClearButton,
+  EvalButton,
+  NextButton,
+  PreviousButton,
+  QuestionView,
+  ResetButton,
+  RunButton,
+  SaveButton
+} from '../workspace/controlBar/index';
+import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
@@ -39,7 +49,6 @@ import GradingResult from './GradingResult';
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
-  activeTab: number;
   assessment?: IAssessment;
   autogradingResults: AutogradingResult[];
   editorPrepend: string;
@@ -69,10 +78,10 @@ export type OwnProps = {
 };
 
 export type DispatchProps = {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
   handleEditorEval: () => void;
@@ -219,7 +228,7 @@ class AssessmentWorkspace extends React.Component<
         : this.props.questionId;
     const question: IQuestion = this.props.assessment.questions[questionId];
     const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(this.props, questionId),
+      controlBarProps: this.controlBarProps(questionId),
       editorProps:
         question.type === QuestionTypes.programming
           ? {
@@ -328,49 +337,54 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const tabs = [
+    const tabs: SideContentTab[] = [
       {
         label: `Task ${questionId + 1}`,
-        icon: IconNames.NINJA,
-        body: <Markdown content={props.assessment!.questions[questionId].content} />
+        iconName: IconNames.NINJA,
+        body: <Markdown content={props.assessment!.questions[questionId].content} />,
+        id: SideContentType.questionOverview
       },
       {
         label: `${props.assessment!.category} Briefing`,
-        icon: IconNames.BRIEFCASE,
-        body: <Markdown content={props.assessment!.longSummary} />
+        iconName: IconNames.BRIEFCASE,
+        body: <Markdown content={props.assessment!.longSummary} />,
+        id: SideContentType.briefing
       },
       {
         label: `${props.assessment!.category} Autograder`,
-        icon: IconNames.AIRPLANE,
+        iconName: IconNames.AIRPLANE,
         body: (
           <Autograder
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
-        )
+        ),
+        id: SideContentType.autograder
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== null;
     if (isGraded) {
       tabs.push(
         {
-          label: `Grading`,
-          icon: IconNames.TICK,
+          label: `Report Card`,
+          iconName: IconNames.TICK,
           body: (
             <GradingResult
-              graderName={props.assessment!.questions[questionId].grader.name}
-              gradedAt={props.assessment!.questions[questionId].gradedAt}
+              graderName={props.assessment!.questions[questionId].grader!.name}
+              gradedAt={props.assessment!.questions[questionId].gradedAt!}
               xp={props.assessment!.questions[questionId].xp}
               grade={props.assessment!.questions[questionId].grade}
               maxGrade={props.assessment!.questions[questionId].maxGrade}
               maxXp={props.assessment!.questions[questionId].maxXp}
+              comments={props.assessment!.questions[questionId].comments}
             />
-          )
+          ),
+          id: SideContentType.grading
         },
         {
           label: `Chat`,
-          icon: IconNames.CHAT,
+          iconName: IconNames.CHAT,
           body: USE_CHATKIT ? (
             <ChatApp
               assessmentId={this.props.assessment!.id}
@@ -378,7 +392,9 @@ class AssessmentWorkspace extends React.Component<
             />
           ) : (
             <span>Chatkit disabled.</span>
-          )
+          ),
+          id: SideContentType.chat,
+          disabled: !USE_CHATKIT
         }
       );
     }
@@ -387,58 +403,95 @@ class AssessmentWorkspace extends React.Component<
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
-        icon: IconNames.GRID_VIEW,
-        body: <ToneMatrix />
+        iconName: IconNames.GRID_VIEW,
+        body: <ToneMatrix />,
+        id: SideContentType.toneMatrix
       });
     }
     return {
-      activeTab: props.activeTab,
-      handleChangeActiveTab: props.handleChangeActiveTab,
+      handleActiveTabChange: props.handleActiveTabChange,
+      defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
       tabs
     };
   };
 
   /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (p: AssessmentWorkspaceProps, q: number) => ControlBarProps = (
-    props: AssessmentWorkspaceProps,
-    questionId: number
-  ) => {
+  private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
     const listingPath = `/academy/${assessmentCategoryLink(this.props.assessment!.category)}`;
     const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`;
+    const questionProgress: [number, number] = [
+      questionId + 1,
+      this.props.assessment!.questions.length
+    ];
+
+    const onClickPrevious = () =>
+      history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () =>
+      history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => history.push(listingPath);
+
+    const onClickSave = () =>
+      this.props.handleSave(
+        this.props.assessment!.questions[questionId].id,
+        this.props.editorValue!
+      );
+    const onClickResetTemplate = () => {
+      this.setState({ showResetTemplateOverlay: true });
+    };
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const nextButton = (
+      <NextButton
+        onClickNext={onClickNext}
+        onClickReturn={onClickReturn}
+        questionProgress={questionProgress}
+        key="next_question"
+      />
+    );
+
+    const previousButton = (
+      <PreviousButton
+        onClick={onClickPrevious}
+        questionProgress={questionProgress}
+        key="previous_question"
+      />
+    );
+
+    const questionView = <QuestionView questionProgress={questionProgress} key="question_view" />;
+
+    const resetButton =
+      !beforeNow(this.props.closeDate) &&
+      this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+        <ResetButton onClick={onClickResetTemplate} key="reset_template" />
+      ) : null;
+
+    const runButton = <RunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
+
+    const saveButton =
+      !beforeNow(this.props.closeDate) &&
+      this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+        <SaveButton
+          hasUnsavedChanges={this.props.hasUnsavedChanges}
+          onClickSave={onClickSave}
+          key="save"
+        />
+      ) : null;
+
     return {
-      handleChapterSelect: this.props.handleChapterSelect,
-      handleEditorEval: this.props.handleEditorEval,
-      handleInterruptEval: this.props.handleInterruptEval,
-      handleReplEval: this.props.handleReplEval,
-      handleReplOutputClear: this.props.handleReplOutputClear,
-      handleReplValueChange: this.props.handleReplValueChange,
-      handleDebuggerPause: this.props.handleDebuggerPause,
-      handleDebuggerResume: this.props.handleDebuggerResume,
-      handleDebuggerReset: this.props.handleDebuggerReset,
-      hasChapterSelect: false,
-      hasCollabEditing: false,
-      hasEditorAutorunButton: false,
-      hasSaveButton:
-        !beforeNow(this.props.closeDate) &&
-        this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq,
-      hasShareButton: false,
-      isRunning: this.props.isRunning,
-      isDebugging: this.props.isDebugging,
-      enableDebugging: this.props.enableDebugging,
-      onClickNext: () => history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`),
-      onClickPrevious: () =>
-        history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`),
-      onClickReturn: () => history.push(listingPath),
-      onClickSave: () =>
-        this.props.handleSave(
-          this.props.assessment!.questions[questionId].id,
-          this.props.editorValue!
-        ),
-      onClickResetTemplate: () => {
-        this.setState({ showResetTemplateOverlay: true });
-      },
-      questionProgress: [questionId + 1, this.props.assessment!.questions.length],
-      sourceChapter: this.props.assessment!.questions[questionId].library.chapter
+      editorButtons: [runButton, saveButton, resetButton],
+      flowButtons: [previousButton, questionView, nextButton],
+      replButtons: [evalButton, clearButton]
     };
   };
 }

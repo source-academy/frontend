@@ -3,21 +3,34 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput } from '../../reducers/states';
+import { InterpreterOutput, SideContentType } from '../../reducers/states';
+import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
+import {
+  AutorunButtons,
+  ChapterSelect,
+  ClearButton,
+  EvalButton,
+  ExternalLibrarySelect
+} from '../workspace/controlBar/index';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastControlbar, { ISourcecastControlbarProps } from './SourcecastControlbar';
 import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
-import { ICodeDelta, Input, IPlaybackData, PlaybackStatus } from './sourcecastShape';
+import {
+  ICodeDelta,
+  Input,
+  IPlaybackData,
+  ISourcecastData,
+  PlaybackStatus
+} from './sourcecastShape';
 import SourcecastTable from './SourcecastTable';
 
 export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
-  activeTab: number;
   audioUrl: string;
   codeDeltasToApply: ICodeDelta[] | null;
   title: string | null;
@@ -26,6 +39,7 @@ export interface IStateProps {
   editorValue: string;
   editorHeight?: number;
   editorWidth: string;
+  externalLibraryName: string;
   breakpoints: string[];
   highlightedLines: number[][];
   isEditorAutorun: boolean;
@@ -39,15 +53,14 @@ export interface IStateProps {
   playbackStatus: PlaybackStatus;
   replValue: string;
   sideContentHeight?: number;
-  sourcecastIndex: any;
+  sourcecastIndex: ISourcecastData[] | null;
   sourceChapter: number;
-  websocketStatus: number;
 }
 
 export interface IDispatchProps {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChangeActiveTab: (activeTab: number) => void;
   handleChapterSelect: (chapter: number) => void;
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
@@ -57,6 +70,7 @@ export interface IDispatchProps {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleFetchSourcecastIndex: () => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
@@ -73,7 +87,6 @@ export interface IDispatchProps {
   ) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
-  handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
 }
@@ -94,10 +107,62 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       case 'chapterSelect':
         this.props.handleChapterSelect(inputToApply.data);
         break;
+      case 'externalLibrarySelect':
+        this.props.handleExternalSelect(inputToApply.data);
+        break;
     }
   }
 
   public render() {
+    const autorunButtons = (
+      <AutorunButtons
+        handleDebuggerPause={this.props.handleDebuggerPause}
+        handleDebuggerReset={this.props.handleDebuggerReset}
+        handleDebuggerResume={this.props.handleDebuggerResume}
+        handleEditorEval={this.props.handleEditorEval}
+        handleInterruptEval={this.props.handleInterruptEval}
+        handleToggleEditorAutorun={this.props.handleToggleEditorAutorun}
+        isDebugging={this.props.isDebugging}
+        isEditorAutorun={this.props.isEditorAutorun}
+        isRunning={this.props.isRunning}
+        key="autorun"
+      />
+    );
+
+    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) =>
+      this.props.handleChapterSelect(chapter);
+
+    const chapterSelect = (
+      <ChapterSelect
+        handleChapterSelect={chapterSelectHandler}
+        sourceChapter={this.props.sourceChapter}
+        key="chapter"
+      />
+    );
+
+    const clearButton = (
+      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+    );
+
+    const evalButton = (
+      <EvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    const externalSelectHandler = ({ name }: { name: ExternalLibraryName }, e: any) =>
+      this.props.handleExternalSelect(name);
+
+    const externalLibrarySelect = (
+      <ExternalLibrarySelect
+        externalLibraryName={this.props.externalLibraryName}
+        handleExternalSelect={externalSelectHandler}
+        key="external_library"
+      />
+    );
+
     const editorProps: ISourcecastEditorProps = {
       codeDeltasToApply: this.props.codeDeltasToApply,
       editorReadonly: this.props.editorReadonly,
@@ -110,34 +175,12 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
       breakpoints: this.props.breakpoints,
       highlightedLines: this.props.highlightedLines,
-      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-      handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
+      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
     };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
-        editorValue: this.props.editorValue,
-        handleChapterSelect: ({ chapter }: { chapter: number }, e: any) =>
-          this.props.handleChapterSelect(chapter),
-        handleEditorEval: this.props.handleEditorEval,
-        handleEditorValueChange: this.props.handleEditorValueChange,
-        handleInterruptEval: this.props.handleInterruptEval,
-        handleReplEval: this.props.handleReplEval,
-        handleReplOutputClear: this.props.handleReplOutputClear,
-        handleToggleEditorAutorun: this.props.handleToggleEditorAutorun,
-        handleDebuggerPause: this.props.handleDebuggerPause,
-        handleDebuggerResume: this.props.handleDebuggerResume,
-        handleDebuggerReset: this.props.handleDebuggerReset,
-        hasChapterSelect: true,
-        hasCollabEditing: false,
-        hasEditorAutorunButton: true,
-        hasSaveButton: false,
-        hasShareButton: false,
-        isEditorAutorun: this.props.isEditorAutorun,
-        isRunning: this.props.isRunning,
-        isDebugging: this.props.isDebugging,
-        enableDebugging: this.props.enableDebugging,
-        questionProgress: null,
-        sourceChapter: this.props.sourceChapter
+        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
+        replButtons: [evalButton, clearButton]
       },
       customEditor: <SourcecastEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
@@ -155,12 +198,11 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        activeTab: this.props.activeTab,
-        handleChangeActiveTab: this.props.handleChangeActiveTab,
+        handleActiveTabChange: this.props.handleActiveTabChange,
         tabs: [
           {
             label: 'Introduction',
-            icon: IconNames.COMPASS,
+            iconName: IconNames.COMPASS,
             body: (
               <div>
                 <span className="Multi-line">
@@ -176,7 +218,8 @@ class Sourcecast extends React.Component<ISourcecastProps> {
                   sourcecastIndex={this.props.sourcecastIndex}
                 />
               </div>
-            )
+            ),
+            id: SideContentType.introduction
           },
           listVisualizerTab,
           inspectorTab,
@@ -194,7 +237,9 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       audioUrl: this.props.audioUrl,
       duration: this.props.playbackDuration,
       playbackData: this.props.playbackData,
-      playbackStatus: this.props.playbackStatus
+      playbackStatus: this.props.playbackStatus,
+      handleChapterSelect: this.props.handleChapterSelect,
+      handleExternalSelect: this.props.handleExternalSelect
     };
     return (
       <div className={classNames('Sourcecast', Classes.DARK)}>
@@ -209,20 +254,23 @@ const INTRODUCTION = 'Welcome to Sourcecast!';
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
-  icon: IconNames.EYE_OPEN,
-  body: <ListVisualizer />
+  iconName: IconNames.EYE_OPEN,
+  body: <ListVisualizer />,
+  id: SideContentType.dataVisualiser
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
-  icon: IconNames.SEARCH,
-  body: <Inspector />
+  iconName: IconNames.SEARCH,
+  body: <Inspector />,
+  id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
-  icon: IconNames.GLOBE,
-  body: <EnvVisualizer />
+  iconName: IconNames.GLOBE,
+  body: <EnvVisualizer />,
+  id: SideContentType.envVisualiser
 };
 
 export default Sourcecast;

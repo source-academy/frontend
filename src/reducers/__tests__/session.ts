@@ -1,5 +1,4 @@
 import {
-  IAction,
   LOG_OUT,
   SET_TOKENS,
   SET_USER,
@@ -24,7 +23,7 @@ import { reducer } from '../session';
 import { defaultSession, ISessionState, Role, Story } from '../states';
 
 test('LOG_OUT works correctly on default session', () => {
-  const action: IAction = {
+  const action = {
     type: LOG_OUT,
     payload: {}
   };
@@ -37,7 +36,7 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
   const accessToken = 'access_token_test';
   const refreshToken = 'refresh_token_test';
 
-  const action: IAction = {
+  const action = {
     type: SET_TOKENS,
     payload: {
       accessToken,
@@ -64,7 +63,7 @@ test('SET_USER works correctly', () => {
     story
   };
 
-  const action: IAction = {
+  const action = {
     type: SET_USER,
     payload
   };
@@ -87,7 +86,7 @@ test('UPDATE_HISTORY_HELPERS works on non-academy location', () => {
     ...defaultSession,
     historyHelper
   };
-  const action: IAction = {
+  const action = {
     type: UPDATE_HISTORY_HELPERS,
     payload
   };
@@ -111,7 +110,7 @@ test('UPDATE_HISTORY_HELPERS works on academy location', () => {
     ...defaultSession,
     historyHelper
   };
-  const action: IAction = {
+  const action = {
     type: UPDATE_HISTORY_HELPERS,
     payload
   };
@@ -162,7 +161,7 @@ const assessmentTest3: IAssessment = {
 };
 
 test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest1
   };
@@ -180,7 +179,7 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old 
     assessments
   };
 
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest2
   };
@@ -198,7 +197,7 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
     ...defaultSession,
     assessments
   };
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest2
   };
@@ -248,7 +247,7 @@ const assessmentOverviewsTest2: IAssessmentOverview[] = [
 ];
 
 test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in inserting assessment overviews', () => {
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT_OVERVIEWS,
     payload: assessmentOverviewsTest1
   };
@@ -267,7 +266,7 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overvie
     assessmentOverviews: assessmentOverviewsTest1
   };
   const assessmentOverviewsPayload = [...assessmentOverviewsTest2, ...assessmentOverviewsTest1];
-  const action: IAction = {
+  const action = {
     type: UPDATE_ASSESSMENT_OVERVIEWS,
     payload: assessmentOverviewsPayload
   };
@@ -293,7 +292,8 @@ const gradingTest1: Grading = [
       grade: 10,
       gradeAdjustment: 0,
       xp: 100,
-      xpAdjustment: 0
+      xpAdjustment: 0,
+      comments: 'Well done. Please try the quest!'
     }
   }
 ];
@@ -310,14 +310,15 @@ const gradingTest2: Grading = [
       grade: 30,
       gradeAdjustment: 10,
       xp: 500,
-      xpAdjustment: 20
+      xpAdjustment: 20,
+      comments: 'Good job! All the best for the finals.'
     }
   }
 ];
 
 test('UPDATE_GRADING works correctly in inserting gradings', () => {
   const submissionId = 23;
-  const action: IAction = {
+  const action = {
     type: UPDATE_GRADING,
     payload: {
       submissionId,
@@ -340,7 +341,7 @@ test('UPDATE_GRADING works correctly in inserting gradings and retains old data'
     gradings
   };
 
-  const action: IAction = {
+  const action = {
     type: UPDATE_GRADING,
     payload: {
       submissionId: submissionId2,
@@ -362,7 +363,7 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
     gradings
   };
 
-  const action: IAction = {
+  const action = {
     type: UPDATE_GRADING,
     payload: {
       submissionId,

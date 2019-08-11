@@ -1,6 +1,7 @@
 import {
   AssessmentCategories,
   AssessmentStatuses,
+  ExternalLibraryName,
   IAssessment,
   IAssessmentOverview,
   IMCQQuestion,
@@ -13,7 +14,7 @@ export const emptyLibrary = (): Library => {
   return {
     chapter: -1,
     external: {
-      name: 'NONE',
+      name: 'NONE' as ExternalLibraryName,
       symbols: []
     },
     globals: []
@@ -24,7 +25,7 @@ export const normalLibrary = (): Library => {
   return {
     chapter: 1,
     external: {
-      name: 'NONE',
+      name: 'NONE' as ExternalLibraryName,
       symbols: []
     },
     globals: []
@@ -66,11 +67,8 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     testcases: [],
     testcasesPrivate: [],
     type: 'programming',
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
+    grader: null,
+    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 0,
@@ -114,11 +112,8 @@ export const mcqTemplate = (): IMCQQuestion => {
     graderLibrary: emptyLibrary(),
     type: 'mcq',
     solution: 0,
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
+    grader: null,
+    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 0,

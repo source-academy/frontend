@@ -1,10 +1,9 @@
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_ACTIVE_TAB,
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
-  CHANGE_PLAYGROUND_EXTERNAL,
+  CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -22,14 +21,15 @@ import {
   FINISH_INVITE,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
-  IAction,
   INIT_INVITE,
   LOG_OUT,
+  RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
+  UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -37,7 +37,11 @@ import {
   UPDATE_REPL_VALUE
 } from '../../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
-import { ITestcase, Library } from '../../components/assessment/assessmentShape';
+import {
+  ExternalLibraryName,
+  ITestcase,
+  Library
+} from '../../components/assessment/assessmentShape';
 import { createContext } from '../../utils/slangHelper';
 import {
   CodeOutput,
@@ -47,7 +51,8 @@ import {
   IPlaygroundWorkspace,
   IWorkspaceManagerState,
   maxBrowseIndex,
-  RunningOutput
+  RunningOutput,
+  SideContentType
 } from '../states';
 import { reducer } from '../workspaces';
 
@@ -57,7 +62,7 @@ const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
 const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
 const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
 
-function generateActions(type: string, payload: any = {}): IAction[] {
+function generateActions(type: string, payload: any = {}): any[] {
   return [
     {
       type,
@@ -134,7 +139,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
     };
 
     const replDownDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replHistory });
-    const actions: IAction[] = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
+    const actions = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
 
     actions.forEach(action => {
       let result = reducer(replDownDefaultState, action);
@@ -178,7 +183,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
     };
 
     const replDownDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replHistory });
-    const actions: IAction[] = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
+    const actions = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
 
     actions.forEach(action => {
       const result = reducer(replDownDefaultState, action);
@@ -201,7 +206,7 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
       replHistory,
       replValue
     });
-    const actions: IAction[] = generateActions(BROWSE_REPL_HISTORY_UP, { replHistory });
+    const actions = generateActions(BROWSE_REPL_HISTORY_UP, { replHistory });
 
     actions.forEach(action => {
       let result = reducer(replUpDefaultState, action);
@@ -252,29 +257,10 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
   });
 });
 
-describe('CHANGE_ACTIVE_TAB', () => {
-  test('sets sideContentActiveTab correctly', () => {
-    const activeTab = 2;
-    const actions: IAction[] = generateActions(CHANGE_ACTIVE_TAB, { activeTab });
-
-    actions.forEach(action => {
-      const result = reducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sideContentActiveTab: activeTab
-        }
-      });
-    });
-  });
-});
-
 describe('CHANGE_EDITOR_HEIGHT', () => {
   test('sets editorHeight correctly', () => {
     const height = 200;
-    const actions: IAction[] = generateActions(CHANGE_EDITOR_HEIGHT, { height });
+    const actions = generateActions(CHANGE_EDITOR_HEIGHT, { height });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -293,7 +279,7 @@ describe('CHANGE_EDITOR_HEIGHT', () => {
 describe('CHANGE_EDITOR_WIDTH', () => {
   test('sets editorWidth correctly', () => {
     const widthChange = 20.5;
-    const actions: IAction[] = generateActions(CHANGE_EDITOR_WIDTH, { widthChange });
+    const actions = generateActions(CHANGE_EDITOR_WIDTH, { widthChange });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -309,11 +295,11 @@ describe('CHANGE_EDITOR_WIDTH', () => {
   });
 });
 
-describe('CHANGE_PLAYGROUND_EXTERNAL', () => {
-  test('sets playgroundExternal correctly', () => {
+describe('CHANGE_EXTERNAL_LIBRARY', () => {
+  test('sets externalLibrary correctly', () => {
     const newExternal = 'new_external_test';
-    const playgroundAction: IAction = {
-      type: CHANGE_PLAYGROUND_EXTERNAL,
+    const playgroundAction = {
+      type: CHANGE_EXTERNAL_LIBRARY,
       payload: {
         newExternal,
         workspaceLocation: playgroundWorkspace
@@ -325,7 +311,7 @@ describe('CHANGE_PLAYGROUND_EXTERNAL', () => {
       ...defaultWorkspaceManager,
       playground: {
         ...defaultWorkspaceManager.playground,
-        playgroundExternal: newExternal
+        externalLibrary: newExternal
       }
     });
   });
@@ -334,7 +320,7 @@ describe('CHANGE_PLAYGROUND_EXTERNAL', () => {
 describe('CHANGE_SIDE_CONTENT_HEIGHT', () => {
   test('sets sideContentHeight correctly', () => {
     const height = 100;
-    const actions: IAction[] = generateActions(CHANGE_SIDE_CONTENT_HEIGHT, { height });
+    const actions = generateActions(CHANGE_SIDE_CONTENT_HEIGHT, { height });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -354,7 +340,7 @@ describe('CLEAR_REPL_INPUT', () => {
   test('clears replValue', () => {
     const replValue = 'test repl value';
     const clearReplDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replValue });
-    const actions: IAction[] = generateActions(CLEAR_REPL_INPUT);
+    const actions = generateActions(CLEAR_REPL_INPUT);
 
     actions.forEach(action => {
       const result = reducer(clearReplDefaultState, action);
@@ -379,7 +365,7 @@ describe('CLEAR_REPL_OUTPUT', () => {
       }
     ];
     const clearReplDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ output });
-    const actions: IAction[] = generateActions(CLEAR_REPL_OUTPUT);
+    const actions = generateActions(CLEAR_REPL_OUTPUT);
 
     actions.forEach(action => {
       const result = reducer(clearReplDefaultState, action);
@@ -403,7 +389,7 @@ describe('DEBUG_RESET', () => {
       isRunning,
       isDebugging
     });
-    const actions: IAction[] = generateActions(DEBUG_RESET);
+    const actions = generateActions(DEBUG_RESET);
 
     actions.forEach(action => {
       const result = reducer(debugResetDefaultState, action);
@@ -426,7 +412,7 @@ describe('DEBUG_RESUME', () => {
     const debugResumeDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
       isDebugging
     });
-    const actions: IAction[] = generateActions(DEBUG_RESUME);
+    const actions = generateActions(DEBUG_RESUME);
 
     actions.forEach(action => {
       const result = reducer(debugResumeDefaultState, action);
@@ -458,13 +444,13 @@ describe('END_CLEAR_CONTEXT', () => {
     const library: Library = {
       chapter: 4,
       external: {
-        name: 'SOUNDS',
+        name: 'SOUNDS' as ExternalLibraryName,
         symbols: []
       },
       globals: mockGlobals
     };
 
-    const actions: IAction[] = generateActions(END_CLEAR_CONTEXT, { library });
+    const actions = generateActions(END_CLEAR_CONTEXT, { library });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -495,7 +481,7 @@ describe('END_DEBUG_PAUSE', () => {
   test('sets isRunning to false and isDebugging to true', () => {
     const isRunning = true;
     const debugPauseDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ isRunning });
-    const actions: IAction[] = generateActions(END_DEBUG_PAUSE);
+    const actions = generateActions(END_DEBUG_PAUSE);
 
     actions.forEach(action => {
       const result = reducer(debugPauseDefaultState, action);
@@ -520,7 +506,7 @@ describe('END_INTERRUPT_EXECUTION', () => {
       isRunning,
       isDebugging
     });
-    const actions: IAction[] = generateActions(END_INTERRUPT_EXECUTION);
+    const actions = generateActions(END_INTERRUPT_EXECUTION);
 
     actions.forEach(action => {
       const result = reducer(interruptExecutionDefaultState, action);
@@ -543,7 +529,7 @@ describe('EVAL_EDITOR', () => {
     const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
       isDebugging
     });
-    const actions: IAction[] = generateActions(EVAL_EDITOR);
+    const actions = generateActions(EVAL_EDITOR);
 
     actions.forEach(action => {
       const result = reducer(evalEditorDefaultState, action);
@@ -593,7 +579,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
       isRunning,
       isDebugging
     });
-    const actions: IAction[] = generateActions(EVAL_INTERPRETER_ERROR);
+    const actions = generateActions(EVAL_INTERPRETER_ERROR);
 
     actions.forEach(action => {
       const result = reducer(evalEditorDefaultState, action);
@@ -609,7 +595,6 @@ describe('EVAL_INTERPRETER_ERROR', () => {
               ...outputWithRunningOutput[0]
             },
             {
-              workspaceLocation: undefined,
               consoleLogs: ['console-log-test-2']
             }
           ]
@@ -627,7 +612,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
       isDebugging
     });
 
-    const actions: IAction[] = generateActions(EVAL_INTERPRETER_ERROR);
+    const actions = generateActions(EVAL_INTERPRETER_ERROR);
 
     actions.forEach(action => {
       const result = reducer(evalEditorDefaultState, action);
@@ -646,7 +631,6 @@ describe('EVAL_INTERPRETER_ERROR', () => {
               ...outputWithRunningAndCodeOutput[1]
             },
             {
-              workspaceLocation: undefined,
               consoleLogs: []
             }
           ]
@@ -669,7 +653,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
       highlightedLines
     });
 
-    const actions: IAction[] = generateActions(EVAL_INTERPRETER_SUCCESS);
+    const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
 
     actions.forEach(action => {
       const result = reducer(evalEditorDefaultState, action);
@@ -686,7 +670,6 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
               ...outputWithRunningOutput[0]
             },
             {
-              workspaceLocation: undefined,
               consoleLogs: ['console-log-test-2']
             }
           ]
@@ -707,7 +690,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
       highlightedLines
     });
 
-    const actions: IAction[] = generateActions(EVAL_INTERPRETER_SUCCESS);
+    const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
 
     actions.forEach(action => {
       const result = reducer(evalEditorDefaultState, action);
@@ -727,7 +710,6 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
               ...outputWithRunningAndCodeOutput[1]
             },
             {
-              workspaceLocation: undefined,
               consoleLogs: []
             }
           ]
@@ -739,7 +721,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
 
 describe('EVAL_REPL', () => {
   test('sets isRunning to true', () => {
-    const actions: IAction[] = generateActions(EVAL_REPL);
+    const actions = generateActions(EVAL_REPL);
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -797,7 +779,7 @@ describe('EVAL_TESTCASE_FAILURE', () => {
     const evalFailureDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
       editorTestcases
     });
-    const actions: IAction[] = generateActions(EVAL_TESTCASE_FAILURE, {
+    const actions = generateActions(EVAL_TESTCASE_FAILURE, {
       value,
       index: 1
     });
@@ -815,7 +797,8 @@ describe('EVAL_TESTCASE_FAILURE', () => {
             },
             {
               ...editorTestcases[1],
-              result: value
+              result: undefined,
+              errors: value
             }
           ]
         }
@@ -827,13 +810,15 @@ describe('EVAL_TESTCASE_FAILURE', () => {
 describe('EVAL_TESTCASE_SUCCESS', () => {
   test('works correctly on RunningOutput and CodeOutput', () => {
     const isRunning = true;
+    const value = (outputWithCodeAndRunningOutput[0] as CodeOutput).value;
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeAndRunningOutput,
       isRunning,
       editorTestcases
     });
 
-    const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
+    const actions = generateActions(EVAL_TESTCASE_SUCCESS, {
+      value,
       index: 1
     });
 
@@ -852,7 +837,8 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
             },
             {
               ...editorTestcases[1],
-              result: (outputWithCodeAndRunningOutput[0] as CodeOutput).value
+              result: value,
+              errors: undefined
             }
           ]
         }
@@ -862,13 +848,15 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
 
   test('works correctly on other output', () => {
     const isRunning = true;
+    const value = (outputWithCodeAndRunningOutput[0] as CodeOutput).value;
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeOutput,
       isRunning,
       editorTestcases
     });
 
-    const actions: IAction[] = generateActions(EVAL_TESTCASE_SUCCESS, {
+    const actions = generateActions(EVAL_TESTCASE_SUCCESS, {
+      value,
       index: 0
     });
 
@@ -884,7 +872,8 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
           editorTestcases: [
             {
               ...editorTestcases[0],
-              result: outputWithCodeOutput[0].value
+              result: value,
+              errors: undefined
             },
             {
               ...editorTestcases[1]
@@ -899,7 +888,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
 describe('INIT_INVITE', () => {
   test('sets sharedbAceInitValue and sharedbAceIsInviting correctly', () => {
     const sharedbAceInitValue = 'test sharedbAce init value';
-    const actions: IAction[] = generateActions(INIT_INVITE, {
+    const actions = generateActions(INIT_INVITE, {
       editorValue: sharedbAceInitValue
     });
 
@@ -922,7 +911,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with RunningOutput', () => {
     const logString = 'test-log-string';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningOutput });
-    const actions: IAction[] = generateActions(HANDLE_CONSOLE_LOG, { logString });
+    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
     actions.forEach(action => {
       const result = reducer(consoleLogDefaultState, action);
@@ -950,7 +939,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const consoleLogDefaultState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput
     });
-    const actions: IAction[] = generateActions(HANDLE_CONSOLE_LOG, { logString });
+    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
     actions.forEach(action => {
       const result = reducer(consoleLogDefaultState, action);
@@ -972,7 +961,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const logString = 'test-log-string-3';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: [] });
 
-    const actions: IAction[] = generateActions(HANDLE_CONSOLE_LOG, { logString });
+    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
     actions.forEach(action => {
       const result = reducer(consoleLogDefaultState, action);
@@ -996,7 +985,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
 describe('HIGHLIGHT_LINE', () => {
   test('sets highlightedLines correctly', () => {
     const highlightedLines = [12, 34, 56];
-    const actions: IAction[] = generateActions(HIGHLIGHT_LINE, { highlightedLines });
+    const actions = generateActions(HIGHLIGHT_LINE, { highlightedLines });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -1014,7 +1003,7 @@ describe('HIGHLIGHT_LINE', () => {
 
 describe('FINISH_INVITE', () => {
   test('sets sharedbAceIsInviting to false', () => {
-    const actions: IAction[] = generateActions(FINISH_INVITE);
+    const actions = generateActions(FINISH_INVITE);
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -1037,7 +1026,7 @@ describe('LOG_OUT', () => {
       editorHeight: 200,
       editorValue: 'test program here',
       highlightedLines: [[1, 2], [3, 4]],
-      playgroundExternal: 'NONE',
+      externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
       websocketStatus: 0
     };
@@ -1047,7 +1036,7 @@ describe('LOG_OUT', () => {
       playground: newPlayground
     };
 
-    const playgroundAction: IAction = {
+    const playgroundAction = {
       type: LOG_OUT,
       payload: {}
     };
@@ -1056,6 +1045,39 @@ describe('LOG_OUT', () => {
     expect(result).toEqual({
       ...defaultWorkspaceManager,
       playground: newPlayground
+    });
+  });
+});
+
+describe('RESET_TESTCASE', () => {
+  test('correctly resets the targeted testcase to its default state', () => {
+    const resetTestcaseDefaultState = generateDefaultWorkspace({
+      editorTestcases
+    });
+
+    const actions = generateActions(RESET_TESTCASE, {
+      index: 1
+    });
+
+    actions.forEach(action => {
+      const result = reducer(resetTestcaseDefaultState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...resetTestcaseDefaultState,
+        [location]: {
+          ...resetTestcaseDefaultState[location],
+          editorTestcases: [
+            {
+              ...editorTestcases[0]
+            },
+            {
+              ...editorTestcases[1],
+              result: undefined,
+              errors: undefined
+            }
+          ]
+        }
+      });
     });
   });
 });
@@ -1075,7 +1097,7 @@ describe('RESET_WORKSPACE', () => {
       replValue: 'test repl value'
     };
 
-    const actions: IAction[] = generateActions(RESET_WORKSPACE, { workspaceOptions });
+    const actions = generateActions(RESET_WORKSPACE, { workspaceOptions });
 
     actions.forEach(action => {
       const result = reducer(resetWorkspaceDefaultState, action);
@@ -1110,7 +1132,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
     });
     const newOutput = 'new-output-test';
 
-    const actions: IAction[] = generateActions(SEND_REPL_INPUT_TO_OUTPUT, {
+    const actions = generateActions(SEND_REPL_INPUT_TO_OUTPUT, {
       type: 'code',
       value: newOutput
     });
@@ -1151,7 +1173,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
     });
     const newOutput = '';
 
-    const actions: IAction[] = generateActions(SEND_REPL_INPUT_TO_OUTPUT, {
+    const actions = generateActions(SEND_REPL_INPUT_TO_OUTPUT, {
       type: 'code',
       value: newOutput
     });
@@ -1180,7 +1202,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
 describe('SET_EDITOR_SESSION_ID', () => {
   test('sets editorSessionId correctly', () => {
     const editorSessionId = 'test_editor_session_id';
-    const actions: IAction[] = generateActions(SET_EDITOR_SESSION_ID, { editorSessionId });
+    const actions = generateActions(SET_EDITOR_SESSION_ID, { editorSessionId });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -1199,7 +1221,7 @@ describe('SET_EDITOR_SESSION_ID', () => {
 describe('SET_WEBSOCKET_STATUS', () => {
   test('sets websocketStatus correctly', () => {
     const websocketStatus = 1;
-    const actions: IAction[] = generateActions(SET_WEBSOCKET_STATUS, { websocketStatus });
+    const actions = generateActions(SET_WEBSOCKET_STATUS, { websocketStatus });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -1217,7 +1239,7 @@ describe('SET_WEBSOCKET_STATUS', () => {
 
 describe('TOGGLE_EDITOR_AUTORUN', () => {
   test('toggles isEditorAutorun correctly', () => {
-    const actions: IAction[] = generateActions(TOGGLE_EDITOR_AUTORUN);
+    const actions = generateActions(TOGGLE_EDITOR_AUTORUN);
 
     actions.forEach(action => {
       let result = reducer(defaultWorkspaceManager, action);
@@ -1242,11 +1264,30 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
   });
 });
 
+describe('UPDATE_ACTIVE_TAB', () => {
+  test('writes correct value of sideContentActiveTab', () => {
+    const activeTab = SideContentType.questionOverview;
+    const actions = generateActions(UPDATE_ACTIVE_TAB, { activeTab });
+
+    actions.forEach(action => {
+      const result = reducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          sideContentActiveTab: activeTab
+        }
+      });
+    });
+  });
+});
+
 describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
   test('sets currentAssessment and currentQuestion correctly', () => {
     const assessmentId = 3;
     const questionId = 7;
-    const assessmentAction: IAction = {
+    const assessmentAction = {
       type: UPDATE_CURRENT_ASSESSMENT_ID,
       payload: {
         assessmentId,
@@ -1270,7 +1311,7 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
   test('sets currentSubmission and currentQuestion correctly', () => {
     const submissionId = 5;
     const questionId = 8;
-    const assessmentAction: IAction = {
+    const assessmentAction = {
       type: UPDATE_CURRENT_SUBMISSION_ID,
       payload: {
         submissionId,
@@ -1293,7 +1334,7 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
 describe('UPDATE_EDITOR_VALUE', () => {
   test('sets editorValue correctly', () => {
     const newEditorValue = 'test new editor value';
-    const actions: IAction[] = generateActions(UPDATE_EDITOR_VALUE, { newEditorValue });
+    const actions = generateActions(UPDATE_EDITOR_VALUE, { newEditorValue });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -1312,7 +1353,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
 describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
   test('sets hasUnsavedChanges correctly', () => {
     const hasUnsavedChanges = true;
-    const actions: IAction[] = generateActions(UPDATE_HAS_UNSAVED_CHANGES, { hasUnsavedChanges });
+    const actions = generateActions(UPDATE_HAS_UNSAVED_CHANGES, { hasUnsavedChanges });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);
@@ -1331,7 +1372,7 @@ describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
 describe('UPDATE_REPL_VALUE', () => {
   test('sets replValue correctly', () => {
     const newReplValue = 'test new repl value';
-    const actions: IAction[] = generateActions(UPDATE_REPL_VALUE, { newReplValue });
+    const actions = generateActions(UPDATE_REPL_VALUE, { newReplValue });
 
     actions.forEach(action => {
       const result = reducer(defaultWorkspaceManager, action);

@@ -1,3 +1,5 @@
+import { SourceError } from 'js-slang/dist/types';
+
 /*
  * Used to display information regarding an assessment in the UI.
  *
@@ -84,7 +86,8 @@ export interface ITestcase {
   answer: string; // the correct answer to the testcase
   score: number;
   program: string; // the program to be appended to the student's code
-  result?: string; // the result from the execution of the testcase
+  result?: any; // the result from the execution of the testcase
+  errors?: SourceError[]; // errors raised by interpreter during execution
 }
 
 export interface IMCQQuestion extends IQuestion {
@@ -98,6 +101,7 @@ export interface IQuestion {
   answer: string | number | null;
   editorValue?: string | null;
   roomId: string | null;
+  comments?: string;
   content: string;
   id: number;
   library: Library;
@@ -106,8 +110,8 @@ export interface IQuestion {
   grader: {
     name: string;
     id: number;
-  };
-  gradedAt: string;
+  } | null;
+  gradedAt: string | null;
   xp: number;
   grade: number;
   maxGrade: number;
@@ -133,10 +137,11 @@ export enum ExternalLibraryNames {
   CURVES = 'CURVES',
   SOUNDS = 'SOUNDS',
   BINARYTREES = 'BINARYTREES',
+  PIXNFLIX = 'PIX&FLIX',
   ALL = 'ALL'
 }
 
-export type ExternalLibraryName = keyof typeof ExternalLibraryNames;
+export type ExternalLibraryName = (typeof ExternalLibraryNames)[keyof typeof ExternalLibraryNames];
 
 type ExternalLibrary = {
   name: ExternalLibraryName;

@@ -101,7 +101,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-    grade: 5,
+    grade: 2700,
     id: 4,
     maxGrade: 3000,
     maxXp: 1000,
@@ -111,14 +111,14 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
-    xp: 4,
+    xp: 800,
     gradingStatus: 'none'
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 1500,
+    grade: 1950,
     id: 5,
     maxGrade: 3000,
     maxXp: 1000,
@@ -135,7 +135,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 250,
+    grade: 300,
     id: 5,
     maxGrade: 700,
     maxXp: 500,
@@ -145,7 +145,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 500,
+    xp: 150,
     gradingStatus: 'graded'
   },
   {
@@ -162,7 +162,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 0,
+    xp: 100,
     gradingStatus: 'excluded'
   }
 ];
@@ -185,7 +185,7 @@ const mockGlobals: Array<[string, any]> = [
 ];
 
 const mockSoundLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.SOUNDS,
     symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
@@ -194,7 +194,7 @@ const mockSoundLibrary: Library = {
 };
 
 export const mockRuneLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.RUNES,
     symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
@@ -203,7 +203,7 @@ export const mockRuneLibrary: Library = {
 };
 
 const mockCurveLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.CURVES,
     symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
@@ -212,7 +212,7 @@ const mockCurveLibrary: Library = {
 };
 
 const mockToneMatrixLibrary: Library = {
-  chapter: 1,
+  chapter: 4,
   external: {
     name: ExternalLibraryNames.SOUNDS,
     symbols: ['get_matrix']
@@ -256,15 +256,12 @@ const chickenrice = "chicken rice";`,
       }
     ],
     solutionTemplate: `function answer() {
-  // Write something here!
+    // Write something here!
 }
 `,
     type: 'programming',
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
+    grader: null,
+    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -273,11 +270,11 @@ const chickenrice = "chicken rice";`,
   {
     autogradingResults: [],
     answer: `function areaOfCircle(x) {
-  return square(x) * pi;
+    return square(x) * pi;
 }
 
 function volumeOfSphere(x) {
-  return 4 / 3 * cube(x) * pi;
+    return 4 / 3 * cube(x) * pi;
 }`,
     roomId: '19422043',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
@@ -300,18 +297,15 @@ const pi = 3.1415928;`,
       }
     ],
     solutionTemplate: `function areaOfCircle(x) {
-  // return area of circle
+    // return area of circle
 }
 
 function volumeOfSphere(x) {
-  // return volume of sphere
+    // return volume of sphere
 }`,
     type: 'programming',
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
+    grader: null,
+    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -344,11 +338,8 @@ function volumeOfSphere(x) {
     library: mockCurveLibrary,
     type: 'mcq',
     solution: 0,
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
+    grader: null,
+    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -381,11 +372,8 @@ function volumeOfSphere(x) {
     library: mockCurveLibrary,
     type: 'mcq',
     solution: null,
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
+    grader: null,
+    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -403,11 +391,8 @@ function volumeOfSphere(x) {
     testcases: [],
     solutionTemplate: '5th question mock solution template',
     type: 'programming',
-    grader: {
-      name: 'avenger',
-      id: 1
-    },
-    gradedAt: '2038-06-18T05:24:26.026Z',
+    grader: null,
+    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -418,16 +403,16 @@ function volumeOfSphere(x) {
 export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     answer: `function fibonacci(n) {
-  if (n <= 2) {
-    return 1;
-  } else {
-    return fibonacci(n-1) + fibonacci(n-2);
-  }
+    if (n <= 2) {
+        return 1;
+    } else {
+        return fibonacci(n-1) + fibonacci(n-2);
+    }
 }`,
     roomId: '19422032',
     content: 'You can see autograding results!!!',
     id: 0,
-    library: mockToneMatrixLibrary,
+    library: mockCurveLibrary,
     prepend: '',
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
@@ -447,7 +432,9 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
         answer: `5`
       }
     ],
-    solutionTemplate: 'Make Fibonacci!!!',
+    solutionTemplate: `function fibonacci(n) {
+    // Your answer here
+}`,
     type: 'programming',
     grader: {
       name: 'avenger',
@@ -458,6 +445,30 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     grade: 0,
     maxGrade: 2,
     maxXp: 2,
+    comments: `Good job. You are awarded the full marks!
+
+----
+## markdown test
+
+# header
+
+**bold**
+
+_italics_
+
+* list
+
+1. numbered list
+
+- [] checkboxes
+
+> quote
+
+    code
+
+[link to Source Academy](https://sourceacademy.nus.edu.sg)  
+
+![](image-url-goes-here)`,
     autogradingResults: [
       {
         resultType: 'pass'
@@ -483,6 +494,66 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
         ]
       }
     ]
+  },
+  {
+    answer: `function recurse(rune, n) {
+    return n <= 1 ? rune : make_cross(recurse(rune, n - 1));
+}`,
+    roomId: '19422033',
+    content: 'This is a runes question - there are no testcases nor autograding results.',
+    id: 1,
+    library: mockRuneLibrary,
+    prepend: '',
+    postpend: '',
+    testcases: [],
+    solutionTemplate: `function recurse(rune, n) {
+    // Your answer here
+}`,
+    type: 'programming',
+    grader: {
+      name: 'some avenger',
+      id: 1
+    },
+    gradedAt: '2038-06-18T05:24:26.026Z',
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2,
+    comments: `You open the Report Card, not knowing what to expect...
+
+    ## WOW!
+    Amazing grasp of runes. We can now move on to the next assignment.
+    
+    <br/>
+    
+    Robot Dog: \`woof\`
+    
+    You look at the display of the robot dog.
+    
+        FEED ME
+    1. Bread
+    2. Water
+    
+    <br/>
+    
+    * I am hungry.
+    * I am thirsty.
+    
+    <br/>
+    <br/>
+        
+    New message from **Avenger**!
+    
+    > _Cadet, please meet me at Level X-05, outside the pod bay doors. There is an important mission awaiting us._
+    
+    > _May the [Source](https://sourceacademy.nus.edu.sg) be with you._
+    
+    > Best regards, Avocado A. Avenger
+    
+    #### Upcoming Tasks
+    - [] Meet Avenger Avenger at Level X-05
+    - [] Open the Pod Bay Doors`,
+    autogradingResults: []
   }
 ];
 
@@ -542,5 +613,14 @@ sapien
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
     title: 'A Closed Mission'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    id: 5,
+    longSummary:
+      'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
+    missionPDF: 'www.google.com',
+    questions: mockClosedAssessmentQuestions,
+    title: 'A Closed Sidequest'
   }
 ];

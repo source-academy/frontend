@@ -7,6 +7,7 @@ import { sortBy } from 'lodash';
 import * as React from 'react';
 
 import ContentDisplay from '../commons/ContentDisplay';
+import DeleteCell from './DeleteCell';
 import SelectCell from './SelectCell';
 import { IPlaybackData, ISourcecastData } from './sourcecastShape';
 
@@ -23,8 +24,9 @@ type State = {
 type ISourcecastTableProps = IOwnProps;
 
 interface IOwnProps {
+  handleDeleteSourcecastEntry?: (id: number) => void;
   handleFetchSourcecastIndex: () => void;
-  handleSetSourcecastData: (
+  handleSetSourcecastData?: (
     title: string,
     description: string,
     audioUrl: string,
@@ -64,15 +66,30 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
           cellRendererParams: {
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },
-          width: 200,
-          maxWidth: 200,
           suppressSorting: true,
           suppressMovable: true,
           suppressMenu: true,
           suppressResize: true,
           cellStyle: {
             padding: 0
-          }
+          },
+          hide: !this.props.handleSetSourcecastData
+        },
+        {
+          headerName: 'Delete',
+          field: '',
+          cellRendererFramework: DeleteCell,
+          cellRendererParams: {
+            handleDeleteSourcecastEntry: this.props.handleDeleteSourcecastEntry
+          },
+          suppressSorting: true,
+          suppressMovable: true,
+          suppressMenu: true,
+          suppressResize: true,
+          cellStyle: {
+            padding: 0
+          },
+          hide: !this.props.handleDeleteSourcecastEntry
         },
         { headerName: 'description', field: 'description', hide: true },
         { headerName: 'inserted_at', field: 'inserted_at', hide: true },

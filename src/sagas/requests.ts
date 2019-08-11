@@ -18,7 +18,7 @@ import {
   QuestionTypes
 } from '../components/assessment/assessmentShape';
 import { Notification } from '../components/notification/notificationShape';
-import { IPlaybackData } from '../components/sourcecast/sourcecastShape';
+import { IPlaybackData, ISourcecastData } from '../components/sourcecast/sourcecastShape';
 import { store } from '../createStore';
 import { castLibrary } from '../utils/castBackend';
 import { BACKEND_URL } from '../utils/constants';
@@ -289,7 +289,8 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
         xp: grade.xp,
         roomId: grade.roomId || '',
         gradeAdjustment: grade.adjustment,
-        xpAdjustment: grade.xpAdjustment
+        xpAdjustment: grade.xpAdjustment,
+        comments: grade.comments
       }
     } as GradingQuestion;
   });
@@ -304,14 +305,16 @@ export const postGrading = async (
   questionId: number,
   gradeAdjustment: number,
   xpAdjustment: number,
-  tokens: Tokens
+  tokens: Tokens,
+  comments?: string
 ) => {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
     accessToken: tokens.accessToken,
     body: {
       grading: {
         adjustment: gradeAdjustment,
-        xpAdjustment
+        xpAdjustment,
+        comments
       }
     },
     noHeaderAccept: true,
@@ -398,12 +401,27 @@ export async function postNotify(tokens: Tokens, assessmentId?: number, submissi
 }
 
 /**
+ * DELETE /sourcecast
+ */
+export async function deleteSourcecastEntry(id: number, tokens: Tokens) {
+  const response = await request(`sourcecast/${id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return response;
+}
+
+/**
  * GET /sourcecast
  */
-export async function getSourcecastIndex(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+export async function getSourcecastIndex(tokens: Tokens): Promise<ISourcecastData[] | null> {
   const response = await request('sourcecast', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
     shouldRefresh: true
   });
   if (!response || !response.ok) {
@@ -481,7 +499,7 @@ async function request(
     // response.status of > 299 does not raise error; so deal with in in the try clause
     if (opts.shouldRefresh && response && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
-      store.dispatch(actions.setTokens(newTokens));
+      store.dispatch(actions.setTokens(newTokens!));
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,

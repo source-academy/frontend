@@ -1,18 +1,19 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
+import { SideContentType } from 'src/reducers/states';
 import { mockRouterProps } from '../../mocks/components';
 import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape';
 import Playground, { IPlaygroundProps } from '../Playground';
 
 const baseProps = {
   editorValue: '',
+  execTime: 1000,
   breakpoints: [],
   highlightedLines: [],
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  activeTab: 0,
   editorSessionId: '',
   editorWidth: '50%',
   isEditorAutorun: false,
@@ -24,9 +25,10 @@ const baseProps = {
   output: [],
   replValue: '',
   websocketStatus: 0,
+  handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
-  handleChangeActiveTab: (n: number) => {},
+  handleChangeExecTime: (execTime: number) => {},
   handleChapterSelect: (chapter: number) => {},
   handleEditorEval: () => {},
   handleEditorHeightChange: (height: number) => {},
