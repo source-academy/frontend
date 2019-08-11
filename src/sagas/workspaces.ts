@@ -9,7 +9,12 @@ import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effe
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
-import { ExternalLibraryNames, ITestcase } from '../components/assessment/assessmentShape';
+import {
+  ExternalLibraryNames,
+  ITestcase,
+  TestcaseType,
+  TestcaseTypes
+} from '../components/assessment/assessmentShape';
 import { externalLibraries } from '../reducers/externalLibraries';
 import { IState, IWorkspaceState, SideContentType } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
@@ -166,6 +171,10 @@ export default function* workspaceSaga(): SagaIterator {
         testcase
       );
     });
+    const type: TestcaseType = yield select(
+      (state: IState) =>
+        (state.workspaces[workspaceLocation] as IWorkspaceState).editorTestcases[index].type
+    );
     const execTime: number = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).execTime
     );
@@ -194,7 +203,7 @@ export default function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
-    yield* evalTestCode(code, context, execTime, workspaceLocation, index);
+    yield* evalTestCode(code, context, execTime, workspaceLocation, index, type);
   });
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(
@@ -443,7 +452,7 @@ export function* evalCode(
 
   /** If successful, then continue to run all testcases IFF evalCode was triggered from
    *    EVAL_EDITOR (Run button) instead of EVAL_REPL (Eval button)
-   * Retrieve the index of the active side-content tab
+   *  Retrieve the index of the active side-content tab
    */
   if (actionType === actionTypes.EVAL_EDITOR) {
     const activeTab: SideContentType = yield select(
@@ -471,8 +480,8 @@ export function* evalCode(
         for (const idx of testcases.keys()) {
           yield put(actions.evalTestcase(workspaceLocation, idx));
           /** Run testcases synchronously - this blocks the generator until result of current
-           * testcase is known and output to REPL; ensures that HANDLE_CONSOLE_LOG appends
-           * consoleLogs(from display(...) calls) to the correct testcase result
+           *  testcase is known and output to REPL; ensures that HANDLE_CONSOLE_LOG appends
+           *  consoleLogs(from display(...) calls) to the correct testcase result
            */
           const { success, error } = yield race({
             success: take(actionTypes.EVAL_TESTCASE_SUCCESS),
@@ -493,7 +502,8 @@ export function* evalTestCode(
   context: Context,
   execTime: number,
   workspaceLocation: WorkspaceLocation,
-  index: number
+  index: number,
+  type: TestcaseType
 ) {
   yield put(actions.resetTestcase(workspaceLocation, index));
 
@@ -518,7 +528,10 @@ export function* evalTestCode(
     return;
   }
 
-  if (result.status !== 'finished') {
+  /** result.status here is either 'error' or 'finished'; 'suspended' is not possible
+   *  since debugger is presently disabled in assessment and grading environments
+   */
+  if (result.status === 'error') {
     const prepend = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend
     );
@@ -533,9 +546,14 @@ export function* evalTestCode(
 
     yield put(actions.evalInterpreterError(errors, workspaceLocation));
     yield put(actions.evalTestcaseFailure(errors, workspaceLocation, index));
-    return;
+  } else if (result.status === 'finished') {
+    /* Execution of the testcase is successful, i.e. no errors were raised */
+    yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+    yield put(actions.evalTestcaseSuccess(result.value, workspaceLocation, index));
   }
 
-  yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
-  yield put(actions.evalTestcaseSuccess(result.value, workspaceLocation, index));
+  /* If a hidden testcase was executed, remove its output from the REPL */
+  if (type === TestcaseTypes.hidden) {
+    yield put(actions.clearReplOutputLast(workspaceLocation));
+  }
 }
