@@ -1,6 +1,12 @@
 import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
-import { ErrorSeverity, ErrorType, Finished, SourceError } from 'js-slang/dist/types';
+import {
+  ErrorSeverity,
+  ErrorType,
+  ExecutionMethod,
+  Finished,
+  SourceError
+} from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
@@ -58,7 +64,7 @@ describe('EVAL_EDITOR', () => {
       ['testArray', [1, 2, 'a', 'b']]
     ];
 
-    const code = editorPrepend + '\n' + editorValue + '\n' + editorPostpend;
+    const code = editorPrepend + '\n' + editorValue;
     const library = {
       chapter: context.chapter,
       external: {
@@ -243,9 +249,9 @@ describe('DEBUG_RESET', () => {
 describe('EVAL_TESTCASE', () => {
   test('puts beginClearContext and calls evalTestCode correctly', () => {
     const workspaceLocation = WorkspaceLocations.grading;
-    const editorPrepend = 'prepend';
-    const editorValue = 'value';
-    const editorPostpend = 'postpend';
+    const editorPrepend = '// prepend';
+    const editorValue = '5;';
+    const editorPostpend = '// postpend';
     const execTime = 1000;
     const testcaseId = 0;
     const program = '123;';
@@ -276,6 +282,8 @@ describe('EVAL_TESTCASE', () => {
       globals
     };
 
+    const shardContext = { ...context, chapter: 4, executionMethod: 'native' as ExecutionMethod };
+
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorPrepend,
       editorPostpend,
@@ -291,7 +299,7 @@ describe('EVAL_TESTCASE', () => {
         .withState(newDefaultState)
         .put(actions.beginClearContext(library, workspaceLocation))
         // also calls evalTestCode here
-        .call(runInContext, code, context, {
+        .call(runInContext, code, shardContext, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime
         })

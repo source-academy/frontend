@@ -212,7 +212,7 @@ const mockSoundLibrary: Library = {
 };
 
 export const mockRuneLibrary: Library = {
-  chapter: 4,
+  chapter: 2,
   external: {
     name: ExternalLibraryNames.RUNES,
     symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
@@ -627,20 +627,36 @@ In this question, let us model an AND gate as a function, and treat HIGH (active
 
 As an AND gate is not restricted to exactly two inputs, our function shall be the same. Implement the function \`AND(inputs)\` which takes in the list \`inputs\` (a list of boolean values), and returns the output of the AND gate as a boolean. You may assume the list \`inputs\` is of minimum length 2.
 
-This question makes use of the wrapping container method to throw custom errors for each testcase.`,
+This question makes use of the sentinel function method to throw custom errors for each testcase.`,
     id: 1,
     library: mockRuneLibrary,
-    prepend: `const OR = (x, y) => x || y;
-
-const AND = (xs) => {`,
-    postpend: ` if (AND(list(true, true)) === undefined) {
+    prepend: `const OR = (x, y) => x || y;`,
+    postpend: `const __AND = (xs) => {
+  if (AND(list(true, true)) === undefined) {
     error('Your function is empty!');
-  } else if (!AND(list(true, true))) {
-    error('Are you sure your base case is correct?');
-  } else if (AND(list(false, false))) {
-    error('Check the truth table for an AND gate again!');
-  } else if (AND(list(true, true, false))) {
-    error('Are you using all inputs in the list?');
+  } else if (!is_boolean(AND(list(true, true)))) {
+    error('Your function does not return a boolean!');
+  } else if (equal(xs, list(true, false))) {
+    const result = AND(xs);
+    if (result === false) {
+      return result;
+    } else {
+      error('Check the truth table for an AND gate again!');
+    }
+  } else if (equal(xs, list(true, true, false))) {
+    const result = AND(xs);
+    if (result === false) {
+      return result;
+    } else {
+      error('Are you using all inputs in the list?');
+    }
+  } else if (equal(xs, list(true, true, true))) {
+    const result = AND(xs);
+    if (result === true) {
+      return result;
+    } else {
+      error('Are you sure your base case is correct?');
+    }
   } else {
     return AND(xs);
   }
@@ -648,31 +664,31 @@ const AND = (xs) => {`,
     testcases: [
       {
         type: TestcaseTypes.public,
-        program: `AND(list(true, false));`,
+        program: `__AND(list(true, false));`,
         score: 0,
         answer: `false`
       },
       {
         type: TestcaseTypes.public,
-        program: `AND(list(true, true));`,
+        program: `__AND(list(true, true, false));`,
         score: 0,
-        answer: `true`
+        answer: `false`
       },
       {
         type: TestcaseTypes.public,
-        program: `AND(list(OR(true, false), OR(true, true)));`,
+        program: `__AND(list(true, OR(true, false), OR(true, true)));`,
         score: 0,
         answer: `true`
       },
       {
         type: TestcaseTypes.hidden,
-        program: `AND(list(true, OR(false, true), AND(list(true, false)), false));`,
+        program: `__AND(list(true, OR(false, true), AND(list(true, false)), false));`,
         score: 0,
         answer: `false`
       },
       {
         type: TestcaseTypes.hidden,
-        program: `AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
+        program: `__AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
         score: 0,
         answer: `true`
       }
@@ -699,11 +715,20 @@ In this question, let us model the XOR gate as a function. Implement the functio
 This question makes use of the wrapping container method to throw custom errors for each testcase.`,
     id: 2,
     library: mockRuneLibrary,
-    prepend: `const XOR = (x, y) => {`,
-    postpend: ` if (XOR(false, false) === undefined) {
+    prepend: ``,
+    postpend: `
+const __XOR = (x, y) => {
+  if (XOR(false, false) === undefined) {
     error('Your function is empty!');
-  } else if (XOR(false, false) || XOR(true, true)) {
-    error('Check your truth tables!');
+  } else if (!is_boolean(XOR(false, false))) {
+    error('Your function does not return a boolean!');
+  } else if ((x && !y) || (y && !x)) {
+    const result = XOR(x, y);
+    if (result) {
+      return result;
+    } else {
+      error('Check your truth tables!');
+    }
   } else {
     return XOR(x, y);
   }
@@ -711,21 +736,21 @@ This question makes use of the wrapping container method to throw custom errors 
     testcases: [
       {
         type: TestcaseTypes.public,
-        program: `XOR(true, false);`,
+        program: `__XOR(true, false);`,
         score: 0,
         answer: `true`
       },
       {
         type: TestcaseTypes.public,
-        program: `XOR(false, true);`,
+        program: `__XOR(false, true);`,
         score: 0,
         answer: `true`
       },
       {
         type: TestcaseTypes.hidden,
-        program: `XOR(false, XOR(true, false));`,
+        program: `__XOR(true, XOR(true, false));`,
         score: 0,
-        answer: `true`
+        answer: `false`
       }
     ],
     solutionTemplate: `function XOR(x, y) {
@@ -750,44 +775,56 @@ Implement the AND logic gate **ONLY using the NOR logic gate**, as the \`NOR_AND
 The \`NOR\` function modeled after a NOR gate is provided for you - it accepts two boolean values and returns \`true\` iff both inputs are \`false\`.`,
     id: 3,
     library: mockRuneLibrary,
-    prepend: `let sentinel = 0;
-const NOR = (x, y) => {
-  sentinel = sentinel + 1;
-  return !(x || y);
-};
-const AND = (x, y) => undefined;
+    prepend: `const NOR = (x, y) => !(x || y);
 
-const NOR_AND = (x, y) => {`,
-    postpend: ` if (NOR_AND(false, false) === undefined) {
+const AND = (x, y) => undefined;`,
+    postpend: `const __NOR_AND = (x, y) => {
+  if (NOR_AND(false, false) === undefined) {
     error('Your function is empty!');
-  } else if (NOR_AND(false, false)) {
-    error('Check your truth tables!');
-  } else {
-    sentinel = 0;
+  } else if (!is_boolean(NOR_AND(false, false))) {
+    error('Your function does not return a boolean!');
+  } else if (x && !y) {
     const result = NOR_AND(x, y);
-    if (sentinel !== 3) {
+    if (result === false) {
+      return result;
+    } else {
+      error('Check your truth tables!');
+    }
+  } else if (x && y) {
+    let counter = 0;
+    const observer = (p, q) => {
+      const NOR = (x, y) => {
+        counter = counter + 1;
+        return !(x || y);
+      };
+      return NOR_AND(p, q);
+    };
+    const result = observer(x, y);
+    if (counter !== 3) {
       error('Did you use NOR in your solution? >:(');
     } else {
       return result;
     }
+  } else {
+    return NOR_AND(x, y);
   }
 };`,
     testcases: [
       {
         type: TestcaseTypes.public,
-        program: `NOR_AND(true, false);`,
+        program: `__NOR_AND(true, false);`,
         score: 0,
         answer: `false`
       },
       {
         type: TestcaseTypes.public,
-        program: `NOR_AND(true, true);`,
+        program: `__NOR_AND(true, true);`,
         score: 0,
         answer: `true`
       },
       {
         type: TestcaseTypes.hidden,
-        program: `NOR_AND(true, NOR_AND(false, true));`,
+        program: `__NOR_AND(true, NOR_AND(false, true));`,
         score: 0,
         answer: `false`
       }
