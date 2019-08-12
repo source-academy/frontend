@@ -17,10 +17,12 @@ export interface IReplProps {
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
   hidden?: boolean;
+  usingSubst?: boolean;
 }
 
 export interface IOutputProps {
   output: InterpreterOutput;
+  usingSubst?: boolean;
 }
 
 class Repl extends React.PureComponent<IReplProps, {}> {
@@ -29,7 +31,9 @@ class Repl extends React.PureComponent<IReplProps, {}> {
   }
 
   public render() {
-    const cards = this.props.output.map((slice, index) => <Output output={slice} key={index} />);
+    const cards = this.props.output.map((slice, index) => (
+      <Output output={slice} key={index} usingSubst={this.props.usingSubst || false} />
+    ));
     const inputProps: IReplInputProps = this.props as IReplInputProps;
     return (
       <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
@@ -62,7 +66,8 @@ export const Output: React.SFC<IOutputProps> = (props: IOutputProps) => {
         </Card>
       );
     case 'result':
-      if (props.output.value instanceof Array) {
+      // We check if we are using Substituter, so we can process the REPL results properly
+      if (props.usingSubst && props.output.value instanceof Array) {
         // Gets the final output of the array of statements
         const lastOutput = props.output.value.length - 1;
         return (
@@ -116,7 +121,8 @@ const renderResult = (value: any) => {
 };
 
 const removeSemicolon = (result: string) => {
-  return result.replace(';', '');
+  // Redundant conversion to string to prevent type error when run
+  return result.toString().replace(';', '');
 };
 
 /* Override handler, so does not trigger when focus is in editor */

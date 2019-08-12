@@ -97,7 +97,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
   <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={false} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
       <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      <Markdown content=\\"*Note this will not affect the saved copy of your code, unless you save over it.*\\" />
+      <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>

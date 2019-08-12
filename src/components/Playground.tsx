@@ -310,7 +310,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
-        hidden: this.state.selectedTab === SideContentType.substVisualizer
+        hidden: this.state.selectedTab === SideContentType.substVisualizer,
+        usingSubst: this.props.usingSubst
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
