@@ -21,7 +21,9 @@ class SelectCell extends React.Component<ISelectCellProps, {}> {
   }
 
   public render() {
-    return <div>{controlButton('', IconNames.TICK, this.handleSelect)}</div>;
+    return (
+      <div>{controlButton(`${this.props.data.title}`, IconNames.PLAY, this.handleSelect)}</div>
+    );
   }
 
   private handleSelect = () => {
