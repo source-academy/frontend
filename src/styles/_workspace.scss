@@ -774,9 +774,10 @@ $code-color-error: #ff4444;
         justify-content: center;
       }
 
+      /* Override canvas inline height and width */
       canvas {
-        height: 10rem;
-        width: 10rem;
+        height: 12rem !important;
+        width: 12rem !important;
       }
     }
   }
