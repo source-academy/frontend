@@ -80,10 +80,10 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     const hasRunCode = lastStepValue !== 0;
     const substHandlers = hasRunCode
       ? {
-          PREV_STEP: this.stepPrev,
-          NEXT_STEP: this.stepNext(lastStepValue),
-          FIRST_STEP: this.stepFirst,
-          LAST_STEP: this.stepLast(lastStepValue)
+          PREV_STEP: this.offsetFocusSlider(this.stepPrev),
+          NEXT_STEP: this.offsetFocusSlider(this.stepNext(lastStepValue)),
+          FIRST_STEP: () => setTimeout(this.stepFirst, 0),
+          LAST_STEP: () => setTimeout(this.stepLast(lastStepValue))
         }
       : {
           PREV_STEP: () => {},
@@ -147,6 +147,12 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
       return { value: newSliderValue };
     });
   };
+
+  private offsetFocusSlider = (next: () => void) => () => {
+    if (!document.activeElement || (document.activeElement && !document.activeElement.className.includes("bp3-slider"))) {
+      next();
+    }
+  }
 }
 
 export default SubstVisualizer;
