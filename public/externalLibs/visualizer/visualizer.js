@@ -870,7 +870,6 @@
     // Hides the default text
     (document.getElementById('data-visualizer-default-text')).hidden = true;
     
-
     // Blink icon
     const icon = document.getElementById('data_visualiser-icon');
     
@@ -884,7 +883,7 @@
      * the width of the drawing should be roughly (width * 45), with a similar calculation
      * for height.
      * In practice, likely due to browser auto-scaling, for large drawings this results in
-     * some of the drawing being cut off. Hence the width and height formulas used are approxmations.
+     * some of the drawing being cut off. Hence the width and height formulas used are approximations.
      */
     stage = new Kinetic.Stage({
       width: findListWidth(xs) * 60 + 60,
@@ -982,7 +981,7 @@
     // Store pairs/arrays that were traversed previously so as to not double-count their height.
     const existing = []; 
 
-     function helper(xs) {   
+    function helper(xs) {   
       if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
           return 0;
       } else {
@@ -1007,13 +1006,13 @@
               : 1 + rightHeight;
       }
     }
-
-    return helper(xs, []);
+    
+    return helper(xs);
   }
 
- /**
-  * Find the width of a drawing (in number of "columns" of pairs)
-  */ 
+  /**
+   * Find the width of a drawing (in number of "columns" of pairs)
+   */ 
   function findListWidth(xs) {
     const existing = [];
 

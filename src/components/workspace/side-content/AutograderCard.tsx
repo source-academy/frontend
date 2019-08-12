@@ -24,7 +24,7 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
       /** A class which is the output of the show() function */
       const ShapeDrawn = (window as any).ShapeDrawn;
       if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-        return <CanvasOutput />;
+        return <CanvasOutput canvas={value.$canvas} />;
       } else {
         return stringify(value);
       }
