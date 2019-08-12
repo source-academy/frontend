@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const LUMINUS_CLIENT_ID = process.env.REACT_APP_LUMINUS_CLIENT_ID;
-export const VERSION = process.env.REACT_APP_VERSION;
+export const SOURCE_ACADEMY_VERSION = 'Cadet';
 export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const USE_BACKEND =
   process.env.REACT_APP_USE_BACKEND !== undefined &&
@@ -23,6 +23,8 @@ export enum LINKS {
   PIAZZA = 'https://piazza.com/nus.edu.sg/fall2019/cs1101s',
   SHAREDB_SERVER = 'api2.sourceacademy.nus.edu.sg/',
   SOURCE_DOCS = 'https://sicp.comp.nus.edu.sg/source/',
+  SOURCE_DOCS_CHAPTER_2_2 = 'https://sicp.comp.nus.edu.sg/chapters/29',
+  SOURCE_DOCS_CHAPTER_3_2 = 'https://sicp.comp.nus.edu.sg/chapters/52',
   TECH_SVC = 'mailto:techsvc@comp.nus.edu.sg',
   TEXTBOOK = 'https://sicp.comp.nus.edu.sg/'
 }

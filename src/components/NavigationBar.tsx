@@ -43,8 +43,8 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         rel="noopener noreferrer"
       >
         <Button minimal={true}>
-          <Icon icon={IconNames.BOOK} />
-          <div className="navbar-button-text hidden-xs">News &amp; Material</div>
+          <Icon icon={IconNames.ENVELOPE} />
+          <div className="navbar-button-text hidden-xs">News</div>
         </Button>
       </a>
 
@@ -59,6 +59,15 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
           <div className="navbar-button-text hidden-xs">Forum</div>
         </Button>
       </a>
+
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        to="/material"
+      >
+        <Icon icon={IconNames.BOOK} />
+        <div className="navbar-button-text hidden-xs">Material</div>
+      </NavLink>
 
       <NavLink
         activeClassName={Classes.ACTIVE}
