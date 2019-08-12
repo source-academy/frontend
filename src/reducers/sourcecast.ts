@@ -1,8 +1,9 @@
 import { Reducer } from 'redux';
+import { ActionType } from 'typesafe-actions';
 import { ISourcecastWorkspace } from './states';
 
+import * as actions from '../actions';
 import {
-  IAction,
   SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
   SET_INPUT_TO_APPLY,
@@ -14,7 +15,7 @@ import {
 
 export const reducer: Reducer<ISourcecastWorkspace> = (
   state: ISourcecastWorkspace,
-  action: IAction
+  action: ActionType<typeof actions>
 ) => {
   switch (action.type) {
     case SAVE_SOURCECAST_DATA:

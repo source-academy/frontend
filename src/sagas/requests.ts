@@ -17,8 +17,9 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import { MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
-import { IPlaybackData } from '../components/sourcecast/sourcecastShape';
+import { IPlaybackData, ISourcecastData } from '../components/sourcecast/sourcecastShape';
 import { store } from '../createStore';
 import { castLibrary } from '../utils/castBackend';
 import { BACKEND_URL } from '../utils/constants';
@@ -401,12 +402,27 @@ export async function postNotify(tokens: Tokens, assessmentId?: number, submissi
 }
 
 /**
+ * DELETE /sourcecast
+ */
+export async function deleteSourcecastEntry(id: number, tokens: Tokens) {
+  const response = await request(`sourcecast/${id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return response;
+}
+
+/**
  * GET /sourcecast
  */
-export async function getSourcecastIndex(tokens: Tokens): Promise<IAssessmentOverview[] | null> {
+export async function getSourcecastIndex(tokens: Tokens): Promise<ISourcecastData[] | null> {
   const response = await request('sourcecast', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
     shouldRefresh: true
   });
   if (!response || !response.ok) {
@@ -436,6 +452,96 @@ export const postSourcecast = async (
     accessToken: tokens.accessToken,
     body: formData,
     noContentType: true,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+};
+
+/**
+ * DELETE /material
+ */
+export async function deleteMaterial(id: number, tokens: Tokens) {
+  const response = await request(`material/${id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return response;
+}
+
+/**
+ * GET /material
+ */
+export async function getMaterialIndex(id: number, tokens: Tokens): Promise<MaterialData[] | null> {
+  const url = id === -1 ? `material` : `material?id=${id}`;
+  const response = await request(url, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  if (response && response.ok) {
+    return await response.json();
+  } else {
+    return null;
+  }
+}
+
+/**
+ * POST /material
+ */
+export const postMaterial = async (
+  file: File,
+  title: string,
+  description: string,
+  parentId: number,
+  tokens: Tokens
+) => {
+  const formData = new FormData();
+  formData.append('material[file]', file, title);
+  formData.append('material[title]', title);
+  formData.append('material[description]', description);
+  if (parentId !== -1) {
+    formData.append('material[parentId]', parentId.toString());
+  }
+  const resp = await request(`material`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: formData,
+    noContentType: true,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+};
+
+/**
+ * DELETE /category
+ */
+export async function deleteMaterialFolder(id: number, tokens: Tokens) {
+  const response = await request(`category/${id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return response;
+}
+
+/**
+ * POST /category
+ */
+export const postMaterialFolder = async (title: string, parentId: number, tokens: Tokens) => {
+  const resp = await request(`category`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { title, parentId: parentId === -1 ? null : parentId },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
@@ -484,7 +590,7 @@ async function request(
     // response.status of > 299 does not raise error; so deal with in in the try clause
     if (opts.shouldRefresh && response && response.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
-      store.dispatch(actions.setTokens(newTokens));
+      store.dispatch(actions.setTokens(newTokens!));
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,

@@ -866,8 +866,27 @@
    *  Then shift it to the left end.
    */
   function draw(xs) {
+
+    // Hides the default text
+    (document.getElementById('data-visualizer-default-text')).hidden = true;
+    
+    // Blink icon
+    const icon = document.getElementById('data_visualiser-icon');
+    
+    if (icon) {
+      icon.classList.add('side-content-tab-alert');
+    }
+
+    /**
+     * Create kinetic stage according to calculated width and height of drawing.
+     * Theoretically, as each box is 90px wide and successive boxes overlap by half,
+     * the width of the drawing should be roughly (width * 45), with a similar calculation
+     * for height.
+     * In practice, likely due to browser auto-scaling, for large drawings this results in
+     * some of the drawing being cut off. Hence the width and height formulas used are approximations.
+     */
     stage = new Kinetic.Stage({
-      width: findListWidth(xs) * 45 + 200,
+      width: findListWidth(xs) * 60 + 60,
       height: findListHeight(xs) * 60 + 100,
       container: 'list-visualizer-container'
     });
@@ -962,7 +981,7 @@
     // Store pairs/arrays that were traversed previously so as to not double-count their height.
     const existing = []; 
 
-     function helper(xs) {   
+    function helper(xs) {   
       if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
           return 0;
       } else {
@@ -987,13 +1006,13 @@
               : 1 + rightHeight;
       }
     }
-
-    return helper(xs, []);
+    
+    return helper(xs);
   }
 
- /**
-  * Find the width of a drawing (in number of "columns" of pairs)
-  */ 
+  /**
+   * Find the width of a drawing (in number of "columns" of pairs)
+   */ 
   function findListWidth(xs) {
     const existing = [];
 

@@ -1,7 +1,8 @@
 import { Reducer } from 'redux';
+import { ActionType } from 'typesafe-actions';
 
+import * as actions from '../actions';
 import {
-  IAction,
   LOG_OUT,
   SET_TOKENS,
   SET_USER,
@@ -10,11 +11,16 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
+  UPDATE_MATERIAL_DIRECTORY_TREE,
+  UPDATE_MATERIAL_INDEX,
   UPDATE_NOTIFICATIONS
 } from '../actions/actionTypes';
 import { defaultSession, ISessionState } from './states';
 
-export const reducer: Reducer<ISessionState> = (state = defaultSession, action: IAction) => {
+export const reducer: Reducer<ISessionState> = (
+  state = defaultSession,
+  action: ActionType<typeof actions>
+) => {
   switch (action.type) {
     case LOG_OUT:
       return defaultSession;
@@ -67,12 +73,21 @@ export const reducer: Reducer<ISessionState> = (state = defaultSession, action: 
         ...state,
         gradingOverviews: action.payload
       };
+    case UPDATE_MATERIAL_DIRECTORY_TREE:
+      return {
+        ...state,
+        materialDirectoryTree: action.payload.directoryTree
+      };
+    case UPDATE_MATERIAL_INDEX:
+      return {
+        ...state,
+        materialIndex: action.payload.index
+      };
     case UPDATE_NOTIFICATIONS:
       return {
         ...state,
         notifications: action.payload
       };
-
     default:
       return state;
   }
