@@ -458,7 +458,7 @@ var hollusionTimeout
  */
 function hollusion(rune, num) {
   clear_viewport()
-  var num = num > 3 ? num : 3
+  var num = num > 5 ? num : 5;
   var flattened_rune_list = generateFlattenedRuneList(rune)
   var frame_list = []
   for (var j = 0; j < num; j++) {
