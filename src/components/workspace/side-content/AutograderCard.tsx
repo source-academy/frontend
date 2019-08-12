@@ -1,4 +1,4 @@
-import { Card, Elevation, Pre } from '@blueprintjs/core';
+import { Card, Classes, Elevation, Pre } from '@blueprintjs/core';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/interop';
 import { SourceError } from 'js-slang/dist/types';
@@ -40,7 +40,7 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
 
     return (
       <div className={'AutograderCard' + gradingStatus}>
-        <Card className="bp3-interactive" elevation={Elevation.ONE} onClick={this.evalSelf}>
+        <Card className={Classes.INTERACTIVE} elevation={Elevation.ONE} onClick={this.evalSelf}>
           <Pre className="testcase-program">{this.props.testcase.program}</Pre>
           <Pre className="testcase-expected">{this.props.testcase.answer}</Pre>
           <Pre className="testcase-actual">

@@ -38,7 +38,7 @@ exports[`Error output (with consoleLogs) renders correctly 1`] = `
 `;
 
 exports[`Repl renders correctly 1`] = `
-"<div className=\\"Repl\\">
+"<div className=\\"Repl\\" style={{...}}>
   <div className=\\"repl-output-parent\\">
     <Component output={{...}} />
     <Component output={{...}} />

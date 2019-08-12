@@ -16,6 +16,7 @@ export interface IReplProps {
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
+  hidden?: boolean;
 }
 
 export interface IOutputProps {
@@ -23,11 +24,15 @@ export interface IOutputProps {
 }
 
 class Repl extends React.PureComponent<IReplProps, {}> {
+  public constructor(props: IReplProps) {
+    super(props);
+  }
+
   public render() {
     const cards = this.props.output.map((slice, index) => <Output output={slice} key={index} />);
     const inputProps: IReplInputProps = this.props as IReplInputProps;
     return (
-      <div className="Repl">
+      <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
         <div className="repl-output-parent">
           {cards}
           <HotKeys
@@ -42,7 +47,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
   }
 }
 
-export const Output: React.SFC<IOutputProps> = props => {
+export const Output: React.SFC<IOutputProps> = (props: IOutputProps) => {
   switch (props.output.type) {
     case 'code':
       return (
@@ -57,7 +62,15 @@ export const Output: React.SFC<IOutputProps> = props => {
         </Card>
       );
     case 'result':
-      if (props.output.consoleLogs.length === 0) {
+      if (props.output.value instanceof Array) {
+        // Gets the final output of the array of statements
+        const lastOutput = props.output.value.length - 1;
+        return (
+          <Card>
+            <Pre className="resultOutput">{removeSemicolon(props.output.value[lastOutput])}</Pre>
+          </Card>
+        );
+      } else if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
             <Pre className="resultOutput">{renderResult(props.output.value)}</Pre>
@@ -100,6 +113,10 @@ const renderResult = (value: any) => {
   } else {
     return stringify(value);
   }
+};
+
+const removeSemicolon = (result: string) => {
+  return result.replace(';', '');
 };
 
 /* Override handler, so does not trigger when focus is in editor */

@@ -11,7 +11,7 @@ import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { ExternalLibraryNames, ITestcase } from '../components/assessment/assessmentShape';
 import { externalLibraries } from '../reducers/externalLibraries';
-import { IState, IWorkspaceState, SideContentType } from '../reducers/states';
+import { IPlaygroundState, IState, IWorkspaceState, SideContentType } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper';
 
@@ -379,13 +379,30 @@ export function* evalCode(
   if (!context.runtime.debuggerOn && context.chapter > 2) {
     inspectorUpdate(undefined); // effectively resets the interface
   }
+
+  // Logic for execution of substitution model visualiser
+  const substIsActive: boolean = yield select(
+    (state: IState) => (state.playground as IPlaygroundState).usingSubst
+  );
+  const substActiveAndCorrectChapter =
+    context.chapter <= 2 && workspaceLocation === WorkspaceLocations.playground && substIsActive;
+  if (substActiveAndCorrectChapter) {
+    context.executionMethod = 'interpreter';
+    // icon to blink
+    const icon = document.getElementById(SideContentType.substVisualizer + '-icon');
+    if (icon) {
+      icon.classList.add('side-content-tab-alert');
+    }
+  }
+
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
-            originalMaxExecTime: execTime
+            originalMaxExecTime: execTime,
+            useSubst: substActiveAndCorrectChapter
           }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
