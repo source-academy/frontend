@@ -631,34 +631,28 @@ This question makes use of the sentinel function method to throw custom errors f
     id: 1,
     library: mockRuneLibrary,
     prepend: `const OR = (x, y) => x || y;`,
-    postpend: `const __AND = (xs) => {
+    postpend: `
+const __AND = (xs) => {
   if (AND(list(true, true)) === undefined) {
     error('Your function is empty!');
-  } else if (!is_boolean(AND(list(true, true)))) {
+  } else {}
+  
+  const result = AND(xs);
+
+  if (!is_boolean(result)) {
     error('Your function does not return a boolean!');
-  } else if (equal(xs, list(true, false))) {
-    const result = AND(xs);
-    if (result === false) {
-      return result;
-    } else {
-      error('Check the truth table for an AND gate again!');
-    }
-  } else if (equal(xs, list(true, true, false))) {
-    const result = AND(xs);
-    if (result === false) {
-      return result;
-    } else {
-      error('Are you using all inputs in the list?');
-    }
-  } else if (equal(xs, list(true, true, true))) {
-    const result = AND(xs);
-    if (result === true) {
-      return result;
-    } else {
-      error('Are you sure your base case is correct?');
-    }
+  } else {}
+  
+  if (equal(xs, list(true, false)) && result) {
+    error('Check the truth table for an AND gate again!');
+  } else if (equal(xs, list(true, true, false)) && result) {
+    error('Are you using all inputs in the list?');
+  } else if (equal(xs, list(true, true, true)) && !result) {
+    error('Are you sure your base case is correct?');
+  } else if (AND(list(true, true)) === AND(list(false, false))) {
+    error('Oi! Do not hardcode values!');
   } else {
-    return AND(xs);
+    return result;
   }
 };`,
     testcases: [
@@ -720,17 +714,20 @@ This question makes use of the wrapping container method to throw custom errors 
 const __XOR = (x, y) => {
   if (XOR(false, false) === undefined) {
     error('Your function is empty!');
-  } else if (!is_boolean(XOR(false, false))) {
+  } else {}
+  
+  const result = XOR(x, y);
+
+  if (!is_boolean(result)) {
     error('Your function does not return a boolean!');
-  } else if ((x && !y) || (y && !x)) {
-    const result = XOR(x, y);
-    if (result) {
-      return result;
-    } else {
-      error('Check your truth tables!');
-    }
+  } else {}
+  
+  if (((x && !y) || (y && !x)) && !result) {
+    error('Check your truth tables!');
+  } else if (XOR(false, false) === XOR(false, true)) {
+    error('Oi! Do not hardcode values!');
   } else {
-    return XOR(x, y);
+    return result;
   }
 };`,
     testcases: [
@@ -770,49 +767,56 @@ const __XOR = (x, y) => {
     roomId: null,
     content: `The NOR logic gate is special in that it is an _universal logic gate_, that is to say, they can be composed to form any other logic gate.
 
-Implement the AND logic gate **ONLY using the NOR logic gate**, as the \`NOR_AND(x, y)\` function that takes in two booleans as input.
+Implement the AND logic gate **using ONLY the NOR logic gate**, as the \`NOR_AND(x, y)\` function that takes in two booleans as input.
 
 The \`NOR\` function modeled after a NOR gate is provided for you - it accepts two boolean values and returns \`true\` iff both inputs are \`false\`.`,
     id: 3,
     library: mockRuneLibrary,
-    prepend: `const NOR = (x, y) => !(x || y);
+    prepend: `
+const NOR = (x, y) => {
+  // Abuse overriding of Source builtins to count function invocations
+  is_number(1);
+  return !(x || y);
+};
 
 const AND = (x, y) => undefined;`,
-    postpend: `const __NOR_AND = (x, y) => {
+    postpend: `
+let counter = 0;
+const is_number = (n) => {
+  counter = counter + 1;
+  return 1;
+};
+
+const __NOR_AND = (x, y) => {
   if (NOR_AND(false, false) === undefined) {
     error('Your function is empty!');
-  } else if (!is_boolean(NOR_AND(false, false))) {
+  } else {}
+  
+  counter = 0;
+  const result = NOR_AND(x, y);
+
+  if (!is_boolean(result)) {
     error('Your function does not return a boolean!');
-  } else if (x && !y) {
-    const result = NOR_AND(x, y);
-    if (result === false) {
-      return result;
-    } else {
-      error('Check your truth tables!');
-    }
-  } else if (x && y) {
-    let counter = 0;
-    const observer = (p, q) => {
-      const NOR = (x, y) => {
-        counter = counter + 1;
-        return !(x || y);
-      };
-      return NOR_AND(p, q);
-    };
-    const result = observer(x, y);
-    if (counter !== 3) {
-      error('Did you use NOR in your solution? >:(');
-    } else {
-      return result;
-    }
+  } else {}
+  
+  if (!x && y && result) {
+    error('Check your truth tables!');
+  } else if (x && y && !result && counter > 0) {
+    error('Nope! Try again :)');
+  } else if (x && y && !result) {
+    error('...You did not use NOR and still got it wrong!');
+  } else if (x && y && result && counter !== 3) {
+    error('Did you use NOR in your solution? >:(');
+  } else if (x && !y && counter !== 6) {
+    error('Incorrect number of calls.');
   } else {
-    return NOR_AND(x, y);
+    return result;
   }
 };`,
     testcases: [
       {
         type: TestcaseTypes.public,
-        program: `__NOR_AND(true, false);`,
+        program: `__NOR_AND(false, true);`,
         score: 0,
         answer: `false`
       },

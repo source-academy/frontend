@@ -18,7 +18,7 @@ import {
 import { externalLibraries } from '../reducers/externalLibraries';
 import { IState, IWorkspaceState, SideContentType } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
-import { highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper';
+import { createContext, highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper';
 
 export default function* workspaceSaga(): SagaIterator {
   let context: Context;
@@ -177,38 +177,20 @@ export default function* workspaceSaga(): SagaIterator {
     const execTime: number = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).execTime
     );
-    const chapter: number = yield select(
-      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
-    );
     const symbols: string[] = yield select(
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
     );
-    const globals: Array<[string, any]> = yield select(
-      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
-    );
-    const library = {
-      chapter,
-      external: {
-        name: ExternalLibraryNames.NONE,
-        symbols
-      },
-      globals
-    };
-    /** Do not interrupt execution of other testcases (potential race condition). */
-    /** Clear the context, with the same chapter and externalSymbols as before. */
-    yield put(actions.beginClearContext(library, workspaceLocation));
+    /** Do not interrupt execution of other testcases (potential race condition) */
+    /** No need to clear the context, since a shard context will be used for testcase execution */
     /** Do NOT clear the REPL output! */
-    context = yield select(
-      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
-    );
     /**
-     *  Clone the context and elevate it to use Source chapter 4 for testcases - enables grader
-     *  programs in postpend to run as expected without raising interpreter errors
+     *  Shard a new context elevated to use Source chapter 4 for testcases - enables grader programs
+     *  in postpend to run as expected without raising interpreter errors
      *  But, do not persist this context to the workspace state - this prevent students from using
-     *  the elevated context to run dis-allowed code beyond the current chapter from the REPL
+     *  this elevated context to run dis-allowed code beyond the current chapter from the REPL
      */
-    const shardContext = { ...context, chapter: 4 };
+    const shardContext: Context = yield call(createContext, 4, symbols, workspaceLocation);
     yield* evalTestCode(code, shardContext, execTime, workspaceLocation, index, type);
   });
 
