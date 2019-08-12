@@ -68,11 +68,9 @@ export const Output: React.SFC<IOutputProps> = (props: IOutputProps) => {
     case 'result':
       // We check if we are using Substituter, so we can process the REPL results properly
       if (props.usingSubst && props.output.value instanceof Array) {
-        // Gets the final output of the array of statements
-        const lastOutput = props.output.value.length - 1;
         return (
           <Card>
-            <Pre className="resultOutput">{removeSemicolon(props.output.value[lastOutput])}</Pre>
+            <Pre className="logOutput">Check out the substituter tab!</Pre>
           </Card>
         );
       } else if (props.output.consoleLogs.length === 0) {
@@ -118,11 +116,6 @@ const renderResult = (value: any) => {
   } else {
     return stringify(value);
   }
-};
-
-const removeSemicolon = (result: string) => {
-  // Redundant conversion to string to prevent type error when run
-  return result.toString().replace(';', '');
 };
 
 /* Override handler, so does not trigger when focus is in editor */

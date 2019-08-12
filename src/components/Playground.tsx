@@ -154,6 +154,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         this.props.handleUsingSubst(true);
       }
       if (chapter > 2) {
+        this.props.handleReplOutputClear();
         this.props.handleUsingSubst(false);
       }
       this.props.handleChapterSelect(chapter);
@@ -291,6 +292,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
             });
 
             if (this.state.selectedTab !== SideContentType.substVisualizer) {
+              this.props.handleReplOutputClear();
               this.props.handleUsingSubst(false);
             }
           }
@@ -352,6 +354,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     }
 
     if (prevTabId === SideContentType.substVisualizer && !this.state.hasBreakpoints) {
+      this.props.handleReplOutputClear();
       this.props.handleUsingSubst(false);
     }
 

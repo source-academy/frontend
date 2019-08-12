@@ -31,21 +31,17 @@ const SubstDefaultText = () => {
         <Divider />
         Some useful keyboard shortcuts:
         <br />
-        {controlButton('Shift', IconNames.KEY_SHIFT)}+ {controlButton('Left', IconNames.ARROW_LEFT)}
-        : Move to the previous step
         <br />
-        {controlButton('Shift', IconNames.KEY_SHIFT)}+{' '}
-        {controlButton('Right', IconNames.ARROW_RIGHT)}: Move to the next step
+        {controlButton('(Comma)', IconNames.LESS_THAN)}: Move to the first step
         <br />
-        {controlButton('Shift', IconNames.KEY_SHIFT)}+ {controlButton('Up', IconNames.ARROW_UP)}:
-        Move to the first step
-        <br />
-        {controlButton('Shift', IconNames.KEY_SHIFT)}+ {controlButton('Down', IconNames.ARROW_DOWN)}
-        : Move to the last step
+        {controlButton('(Period)', IconNames.GREATER_THAN)}: Move to the last step
         <br />
         <br />
-        Note that these shortcuts are only active when the browser focus is on this panel (click on
-        the slider or the text!).
+        Note that first and last step shortcuts are only active when the browser focus is on this
+        panel (click on the slider or the text!).
+        <br />
+        <br />
+        When focus is on the slider, the arrow keys may also be used to move a single step.
       </div>
     </div>
   );
@@ -60,10 +56,8 @@ const SubstCodeDisplay = (props: { content: string }) => {
 };
 
 const substKeyMap = {
-  PREV_STEP: 'shift+left',
-  NEXT_STEP: 'shift+right',
-  FIRST_STEP: 'shift+up',
-  LAST_STEP: 'shift+down'
+  FIRST_STEP: ',',
+  LAST_STEP: '.'
 };
 
 class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisualizerState> {
@@ -80,14 +74,10 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     const hasRunCode = lastStepValue !== 0;
     const substHandlers = hasRunCode
       ? {
-          PREV_STEP: this.offsetFocusSlider(this.stepPrev),
-          NEXT_STEP: this.offsetFocusSlider(this.stepNext(lastStepValue)),
-          FIRST_STEP: () => setTimeout(this.stepFirst, 0),
-          LAST_STEP: () => setTimeout(this.stepLast(lastStepValue))
+          FIRST_STEP: this.stepFirst,
+          LAST_STEP: this.stepLast(lastStepValue)
         }
       : {
-          PREV_STEP: () => {},
-          NEXT_STEP: () => {},
           FIRST_STEP: () => {},
           LAST_STEP: () => {}
         };
@@ -129,30 +119,6 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     // Move to the last step
     this.sliderShift(lastStepValue);
   };
-
-  private stepPrev = () => {
-    this.setState((state: ISubstVisualizerState) => {
-      const sliderValue = state.value;
-      // Check if we are already at the first item
-      const newSliderValue = sliderValue === 1 ? sliderValue : sliderValue - 1;
-      return { value: newSliderValue };
-    });
-  };
-
-  private stepNext = (lastStepValue: number) => () => {
-    this.setState((state: ISubstVisualizerState) => {
-      const sliderValue = state.value;
-      // Check if we are already at the last item
-      const newSliderValue = sliderValue === lastStepValue ? sliderValue : sliderValue + 1;
-      return { value: newSliderValue };
-    });
-  };
-
-  private offsetFocusSlider = (next: () => void) => () => {
-    if (!document.activeElement || (document.activeElement && !document.activeElement.className.includes("bp3-slider"))) {
-      next();
-    }
-  }
 }
 
 export default SubstVisualizer;
