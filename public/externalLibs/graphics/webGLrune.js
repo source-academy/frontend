@@ -418,10 +418,12 @@ function drawWithWebGL(flattened_rune_list, drawFunction) {
  * the REPL displays it graphically, instead of textually.
  */
 function show(rune) {
+  const frame = open_pixmap('frame', viewport_size, viewport_size, true);
   clear_viewport()
   var flattened_rune_list = generateFlattenedRuneList(rune)
-  drawWithWebGL(flattened_rune_list, drawRune)
-  return new ShapeDrawn()
+  drawWithWebGL(flattened_rune_list, drawRune);
+  copy_viewport(gl.canvas, frame);
+  return new ShapeDrawn(frame);
 }
 
 /**
@@ -434,11 +436,13 @@ function show(rune) {
  * to view the Anaglyph.
  */
 function anaglyph(rune) {
+  const frame = open_pixmap('frame', viewport_size, viewport_size, true);
   clear_viewport()
   clearAnaglyphFramebuffer()
   var flattened_rune_list = generateFlattenedRuneList(rune)
   drawWithWebGL(flattened_rune_list, drawAnaglyph)
-  return new ShapeDrawn()
+  copy_viewport(gl.canvas, frame);
+  return new ShapeDrawn(frame);
 }
 
 var hollusionTimeout
@@ -454,7 +458,7 @@ var hollusionTimeout
  */
 function hollusion(rune, num) {
   clear_viewport()
-  var num = num > 3 ? num : 3
+  var num = num > 5 ? num : 5;
   var flattened_rune_list = generateFlattenedRuneList(rune)
   var frame_list = []
   for (var j = 0; j < num; j++) {
@@ -479,15 +483,15 @@ function hollusion(rune, num) {
   for (var i = frame_list.length - 2; i > 0; i--) {
     frame_list.push(frame_list[i])
   }
-
+  const outframe = open_pixmap('frame', viewport_size, viewport_size, true);
   function animate() {
     var frame = frame_list.shift()
-    copy_viewport_webGL(frame)
+    copy_viewport(frame, outframe);
     frame_list.push(frame)
     hollusionTimeout = setTimeout(animate, 500 / num)
   }
-  animate()
-  return new ShapeDrawn()
+  animate();
+  return new ShapeDrawn(outframe);
 }
 
 function clearHollusion() {

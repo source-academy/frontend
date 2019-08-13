@@ -1,6 +1,7 @@
 var viewport_size = 600
 
 function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
+  const frame = open_pixmap('frame', viewport_size, viewport_size, true);
   var curvePosArray = []
   var transMat = mat4.create()
   // initialize the min/max to extreme values
@@ -66,7 +67,8 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
   clear_viewport()
   gl.uniformMatrix4fv(u_transformMatrix, false, transMat)
   drawCurve(drawMode, curvePosArray)
-  return new ShapeDrawn()
+  copy_viewport(gl.canvas, frame);
+  return new ShapeDrawn(frame);
 }
 
 /**
