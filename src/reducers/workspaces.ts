@@ -214,7 +214,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           editorWidth:
             (
               parseFloat(state[workspaceLocation].editorWidth.slice(0, -1)) +
-              action.payload.widthChange
+              parseFloat(action.payload.widthChange)
             ).toString() + '%'
         }
       };

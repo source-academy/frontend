@@ -982,7 +982,10 @@
       builtins.push(externalSymbols[i]);
     }
 
-    // blink icon
+    // Hides the default text
+    (document.getElementById('env-visualizer-default-text')).hidden = true;
+
+    // Blink icon
     const icon = document.getElementById('env_visualiser-icon');
     icon.classList.add('side-content-tab-alert');
 

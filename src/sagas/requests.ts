@@ -17,6 +17,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import { MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
 import { IPlaybackData, ISourcecastData } from '../components/sourcecast/sourcecastShape';
 import { store } from '../createStore';
@@ -451,6 +452,96 @@ export const postSourcecast = async (
     accessToken: tokens.accessToken,
     body: formData,
     noContentType: true,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+};
+
+/**
+ * DELETE /material
+ */
+export async function deleteMaterial(id: number, tokens: Tokens) {
+  const response = await request(`material/${id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return response;
+}
+
+/**
+ * GET /material
+ */
+export async function getMaterialIndex(id: number, tokens: Tokens): Promise<MaterialData[] | null> {
+  const url = id === -1 ? `material` : `material?id=${id}`;
+  const response = await request(url, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  if (response && response.ok) {
+    return await response.json();
+  } else {
+    return null;
+  }
+}
+
+/**
+ * POST /material
+ */
+export const postMaterial = async (
+  file: File,
+  title: string,
+  description: string,
+  parentId: number,
+  tokens: Tokens
+) => {
+  const formData = new FormData();
+  formData.append('material[file]', file, title);
+  formData.append('material[title]', title);
+  formData.append('material[description]', description);
+  if (parentId !== -1) {
+    formData.append('material[parentId]', parentId.toString());
+  }
+  const resp = await request(`material`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: formData,
+    noContentType: true,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+};
+
+/**
+ * DELETE /category
+ */
+export async function deleteMaterialFolder(id: number, tokens: Tokens) {
+  const response = await request(`category/${id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return response;
+}
+
+/**
+ * POST /category
+ */
+export const postMaterialFolder = async (title: string, parentId: number, tokens: Tokens) => {
+  const resp = await request(`category`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { title, parentId: parentId === -1 ? null : parentId },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

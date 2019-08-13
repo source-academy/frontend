@@ -188,7 +188,7 @@ var normalShaderProgram // the default shader program
 var vertexBuffer
 var vertexPositionAttribute // location of a_position
 var colorAttribute // location of a_color
-var canvas // the <canvas> object that is used to display webGL output
+const canvas = createCanvas(); // the <canvas> object that is used to display webGL output
 
 // rune 2d and 3d
 var instance_ext // ANGLE_instanced_arrays extension
@@ -247,24 +247,19 @@ function open_pixmap(name, horiz, vert, aa_off) {
 }
 
 /**
- * Creates a <canvas> object, or resets it if it exists.
+ * Creates a <canvas> object. Should only be called once.
  *
  * Post-condition: canvas is defined as the selected <canvas>
  *   object in the document.
  */
-function resetCanvas() {
-  canvas = document.querySelector('.rune-canvas')
-  if (!canvas) {
-    canvas = document.createElement('canvas')
-    canvas.setAttribute('width', 512)
-    canvas.setAttribute('height', 512)
-    canvas.className = 'rune-canvas'
-    canvas.hidden = true
-    document.body.appendChild(canvas)
-  } else {
-    canvas.parentNode.removeChild(canvas)
-    resetCanvas()
-  }
+function createCanvas() {
+  const canvas = document.createElement('canvas')
+  canvas.setAttribute('width', 512);
+  canvas.setAttribute('height', 512);
+  canvas.className = 'rune-canvas';
+  canvas.hidden = true;
+  document.body.appendChild(canvas);
+  return canvas;
 }
 
 /*
@@ -279,7 +274,6 @@ function resetCanvas() {
  *   the gl object.
  */
 function getReadyWebGLForCanvas(mode) {
-  resetCanvas()
   // Get the rendering context for WebGL
   gl = initWebGL(canvas)
   if (gl) {
@@ -302,9 +296,9 @@ function getReadyWebGLForCanvas(mode) {
 
     // rune-specific operations
     if (mode === '2d' || mode === '3d') {
-	initRuneCommon()
-	initRuneBuffer(vertices, indices)
-	initRune3d()
+      initRuneCommon()
+      initRuneBuffer(vertices, indices)
+      initRune3d()
     }
 
     if (mode === 'curve') {
@@ -798,4 +792,6 @@ function drawCurve(drawMode, curvePosArray) {
   }
 }
 
-function ShapeDrawn() {}
+function ShapeDrawn(canvas) {
+  this.$canvas = canvas;
+}
