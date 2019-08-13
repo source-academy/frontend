@@ -1,47 +1,15 @@
-.Sourcecast {
-  height: 100%;
+.Input {
+  width: 90%;
+  outline: none;
+  resize: none;
   display: flex;
-  background-color: $cadet-color-1;
-  flex-direction: column;
-  flex: 1 1 100%;
-}
-
-.Bar {
-  width: 95%;
-  margin: 0 auto;
-}
-
-.PlayerControl {
-  align-items: center;
-  float: left;
   justify-content: flex-start;
   margin: 0 auto;
-  width: 5%;
 }
 
-.Slider {
-  align-items: center;
-  float: right;
-  justify-self: flex-end;
-  margin: 0 auto;
-  width: 92%;
-}
-
-.SourcecastTable {
-  /* To show the table borders that get cut out by a Card  */
+.Material {
+  /* To show the table borders that get cut out by a Card */
   padding: 1px;
-
-  .ag-header-cell-label {
-    float: none !important;
-    width: auto !important;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .ag-header-cell-menu-button {
-    position: absolute;
-    float: none;
-  }
 
   /** 
    *  To prevent misalignment of column header and content 
@@ -69,9 +37,4 @@
     /* Disable rendering blue border when a sub-component in grid is in focus */
     outline: none;
   }
-}
-
-.Multi-line {
-  white-space: 'pre-line';
-  overflow-wrap: 'break-word';
 }

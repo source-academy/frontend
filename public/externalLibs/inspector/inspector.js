@@ -120,10 +120,14 @@
       return res.length > 0 ? res : undefined;
     }
 
+    // Hides the default text
+    (document.getElementById('inspector-default-text')).hidden = true;
+
     // icon to blink
     const icon = document.getElementById("inspector-icon");
 
     if (!context && icon) {
+      (document.getElementById('inspector-default-text')).hidden = false;
       icon.classList.remove("side-content-tab-alert");
       container.innerHTML = "";
       return

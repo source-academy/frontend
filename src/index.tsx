@@ -5,7 +5,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import ApplicationContainer from './containers/ApplicationContainer';
 import { store } from './createStore';
-import { LINKS, VERSION } from './utils/constants';
+import { LINKS, SOURCE_ACADEMY_VERSION } from './utils/constants';
 import { history } from './utils/history';
 import registerServiceWorker from './utils/registerServiceWorker';
 
@@ -15,7 +15,7 @@ const rootContainer = document.getElementById('root') as HTMLElement;
 (window as any).__REDUX_STORE__ = store; // need this for slang's display
 // tslint:disable-next-line
 console.log(
-  `%c Source Academy v${VERSION}; ` +
+  `%c Source Academy ${SOURCE_ACADEMY_VERSION}; ` +
     `Please visit ${LINKS.GITHUB_ISSUES} to report bugs or issues.`,
   'font-weight: bold;'
 );
