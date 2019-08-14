@@ -123,8 +123,7 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
       downloadRequestSent[curId] = true;
       $.ajax({
         type: 'GET',
-        //url: Constants.storyXMLPath + curId + '.story.xml',
-        url: 'http://localhost:8088/stories/' + curId + '.story.xml',
+        url: Constants.storyXMLPath + curId + '.story.xml',
         dataType: 'xml',
         success: function(xml) {
           var story = xml.children[0];
