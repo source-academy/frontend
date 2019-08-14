@@ -198,7 +198,7 @@ var _player;
 function play_unsafe(sound) {
     // type-check sound
     if ( !is_sound(sound) ) {
-	throw new Error("play is expecting sound, but encountered " + sound);
+        throw new Error("play is expecting sound, but encountered " + sound);
     }	
     
     // Declaring duration and wave variables
@@ -207,7 +207,7 @@ function play_unsafe(sound) {
 
     // If a sound is already playing, terminate execution
     if (_playing) {
-	throw new Error("play: audio system still playing previous sound");
+        throw new Error("play: audio system still playing previous sound");
     }
     
     _playing = true;
@@ -308,15 +308,18 @@ var _safeaudio = null;
  */
 function play(sound) {
     // If a sound is already playing, terminate execution.
-    if (_safeplaying || _playing) return sound;
-    // Discretize the input sound
-    var data = discretize(get_wave(sound), get_duration(sound));
-    _safeaudio = raw_to_audio(data);
+    if (_safeplaying || _playing) {
+        throw new Error("play: audio system still playing previous sound");
+    } else {
+        // Discretize the input sound
+        var data = discretize(get_wave(sound), get_duration(sound));
+        _safeaudio = raw_to_audio(data);
 
-    _safeaudio.addEventListener('ended', stop);
-    _safeaudio.play();
-    _safeplaying = true;
-    return sound;
+        _safeaudio.addEventListener('ended', stop);
+        _safeaudio.play();
+        _safeplaying = true;
+        return sound;
+    }
 }
 
 /* sound_to_string and string_to_sound would be really cool!!!
