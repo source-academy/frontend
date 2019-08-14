@@ -449,7 +449,7 @@ $code-color-error: #ff4444;
           .#{$ns}-button-group {
             width: max-content;
 
-            .#{$ns}-active {
+            .#{$ns}-button.sa-live-video-button.#{$ns}-active {
               pointer-events: none;
             }
           }
