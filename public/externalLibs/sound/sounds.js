@@ -318,6 +318,13 @@ function play(sound) {
     _safeplaying = true;
 }
 
+// Requires 'All' libraries!
+function display_waveform(num_points, sound) {
+    let wave = get_wave(sound);
+    let duration = get_duration(sound);
+    return draw_connected_full_view_proportional(num_points)(t => pair(t, wave(duration * t)));
+}
+
 /* sound_to_string and string_to_sound would be really cool!!!
 
 function sound_to_string(sound) {
