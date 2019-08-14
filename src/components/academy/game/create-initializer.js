@@ -8,34 +8,30 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
   var hookHandlers = {
     startMission: function (number) {
-      console.log('startMission: ' + number)
-      const assessmentType = story.split('-')[0] + 's'
-      return history.push('/academy/' + assessmentType)
-      // TODO: Reimplement redirection to actual assessment rather than the
-      //       listing, after story.xml files have been changed. Currently, the
-      //       story xml number points to the mission number, but the
-      //       assessment id we obtain and therefore organise our assessments
-      //       by refers to the database table ID
-      // return history.push('/academy/' + assessmentType + '/' + number)
+      const assessmentType = story.split('-')[0] + 's';
+      // return history.push('/academy/' + assessmentType)
+      return history.push('/academy/' + assessmentType + '/' + number);
     },
     openTemplate: function (name) {
       switch (name) {
-        case 'textbook':
-          return window.open(LINKS.TEXTBOOK, '_blank');
-        case 'announcements':
-          return window.open(LINKS.LUMINUS);
-        case 'lesson_plan':
-          return history.push('/academy/missions');
-        case 'students':
-          return history.push(LINKS.PIAZZA);
-        case 'materials':
-          return window.open(LINKS.LUMINUS);
-        case 'IDE':
-          return history.push('/playground');
-        case 'path':
-          return history.push('/academy/paths');
-        default:
-          return window.open(LINKS.LUMINUS);
+          case 'textbook':
+              return window.open(LINKS.TEXTBOOK, '_blank');
+          case 'announcements':
+              return window.open(LINKS.LUMINUS);
+          case 'lesson_plan':
+              return history.push('/academy/missions');
+          case 'students':
+              return history.push(LINKS.PIAZZA);
+          case 'materials':
+              return history.push('/material');
+          case 'IDE':
+              return history.push('/playground');
+          case 'path':
+              return history.push('/academy/paths');
+          case 'sourcecast':
+              return history.push('/sourcecast');
+          default:
+              return window.open(LINKS.LUMINUS);
       }
     },
     pickUpCollectible: function (collectible) {
