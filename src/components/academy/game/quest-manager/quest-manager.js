@@ -65,12 +65,55 @@ export function unlockQuest(storyId, questId, callback) {
   if (!activeQuests[storyId]) {
     activeQuests[storyId] = {};
   }
-  // apply effects first
-  applyEffects(quest.children[0]);
-  SaveManager.saveUnlockQuest(storyId, questId);
-  activeQuests[storyId][questId] = quest;
-  // play the opening sequence
-  playOpening(storyId, questId, callback);
+  if (questId === 'navigation') {
+    console.log("Activating " + questId);
+    applyEffects(quest.children[0]);
+    SaveManager.saveUnlockQuest(storyId, questId);
+    activeQuests[storyId][questId] = quest;
+    playOpening(storyId, questId, callback);
+  } else {
+    console.log("Skipping " + questId);
+    skipEffects(quest.children[0]);
+    SaveManager.saveUnlockQuest(storyId, questId);
+    activeQuests[storyId][questId] = quest;
+    skipOpening(storyId, questId, callback);
+  }
+}
+
+export function skipOpening(storyId, questId, callback) {
+  if (!activeQuests[storyId][questId]) {
+    return;
+  }
+  callback = callback || Constants.nullFunction;
+  var quest = activeQuests[storyId][questId];
+  DialogManager.skipSequence(quest.children[1], function() {
+    SaveManager.unmarkPending();
+    var child = quest.children[2];
+    function nextAction(child) {
+      if (!child) {
+        callback();
+        return;
+      }
+      if (child.tagName == 'COMPLETE_QUEST') {
+        playCompleteQuest(child, function() {
+          nextAction(child.nextElementSibling);
+        });
+      } else if (child.tagName == 'UNLOCK_QUEST') {
+        playUnlockQuest(child, function() {
+          nextAction(child.nextElementSibling);
+        });
+      } else if (child.tagName == 'EXTERNAL_ACTION') {
+        ExternalManager.playExternalAction(child);
+        nextAction(child.nextElementSibling);
+      } else if (child.tagName == 'CHANGE_START_LOCATION') {
+        LocationManager.changeStartLocation(child.textContent);
+        nextAction(child.nextElementSibling);
+      } else {
+        nextAction(child.nextElementSibling);
+      }
+    }
+    nextAction(child);
+  });
 }
 
 export function playOpening(storyId, questId, callback) {
@@ -154,6 +197,19 @@ export function applyEffects(node) {
       return;
     }
     MapManager.processEffectsLocation(child);
+    child = child.nextElementSibling;
+  }
+}
+
+export function skipEffects(node) {
+  if (node.tagName != 'EFFECTS') {
+    return;
+  }
+  var child = node.children[0];
+  while (child) {
+    if (child.tagName != 'LOCATION') {
+      return;
+    }
     child = child.nextElementSibling;
   }
 }
