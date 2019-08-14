@@ -20,9 +20,9 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
                     return window.open(LINKS.TEXTBOOK, '_blank');
                 case 'announcements':
                     return window.open(LINKS.LUMINUS);
-                case 'lesson_plan':
+                case 'assessments':
                     return history.push('/academy/missions');
-                case 'students':
+                case 'forum':
                     return history.push(LINKS.PIAZZA);
                 case 'materials':
                     return history.push('/material');
@@ -32,6 +32,8 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
                     return history.push('/academy/paths');
                 case 'sourcecast':
                     return history.push('/sourcecast');
+                case 'about':
+                    return history.push('/contributors');
                 default:
                     return window.open(LINKS.LUMINUS);
             }
