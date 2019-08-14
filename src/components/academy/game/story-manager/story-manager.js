@@ -158,7 +158,7 @@ export function loadStoryXML(storyXMLs, loadFromLocal, willSave, callback) {
         },
         error: function() {
           loadingOverlay.visible = false;
-          console.error('Cannot find story ' + curId);
+          console.error('Cannot find story ' + curId + ' at ' + storyXMLPath + curId + '.story.xml');
         }
       });
       download(i + 1, storyXMLs, callback);
