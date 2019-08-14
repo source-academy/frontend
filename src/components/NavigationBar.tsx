@@ -33,7 +33,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         to="/academy"
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
-        <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
+        <NavbarHeading className="hidden-xs hidden-sm">Source Academy</NavbarHeading>
       </NavLink>
 
       <a
@@ -44,7 +44,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       >
         <Button minimal={true}>
           <Icon icon={IconNames.ENVELOPE} />
-          <div className="navbar-button-text hidden-xs">News</div>
+          <div className="navbar-button-text hidden-xs hidden-sm">News</div>
         </Button>
       </a>
 
@@ -56,7 +56,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       >
         <Button minimal={true}>
           <Icon icon={IconNames.CHAT} />
-          <div className="navbar-button-text hidden-xs">Forum</div>
+          <div className="navbar-button-text hidden-xs hidden-sm">Forum</div>
         </Button>
       </a>
 
@@ -66,7 +66,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         to="/material"
       >
         <Icon icon={IconNames.BOOK} />
-        <div className="navbar-button-text hidden-xs">Material</div>
+        <div className="navbar-button-text hidden-xs hidden-sm">Material</div>
       </NavLink>
 
       <NavLink
@@ -75,7 +75,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         to="/sourcecast"
       >
         <Icon icon={IconNames.MUSIC} />
-        <div className="navbar-button-text hidden-xs">Sourcecast</div>
+        <div className="navbar-button-text hidden-xs hidden-sm">Sourcecast</div>
       </NavLink>
 
       <NavLink
@@ -84,7 +84,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
-        <div className="navbar-button-text hidden-xs">Playground</div>
+        <div className="navbar-button-text hidden-xs hidden-sm">Playground</div>
       </NavLink>
     </NavbarGroup>
 
@@ -96,7 +96,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         to="/mission-control"
       >
         <Icon icon={IconNames.CODE} />
-        <div className="navbar-button-text hidden-xs">Mission-Control</div>
+        <div className="navbar-button-text hidden-xs hidden-sm">Mission-Control</div>
       </NavLink> */}
 
       <NavLink
@@ -105,7 +105,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         to="/contributors"
       >
         <Icon icon={IconNames.HEART} />
-        <div className="navbar-button-text hidden-xs">Contributors</div>
+        <div className="navbar-button-text hidden-xs hidden-sm">Contributors</div>
       </NavLink>
 
       <div className="visible-xs">
