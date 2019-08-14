@@ -40,7 +40,9 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
         </Popover>
         <About isOpen={this.state.isAboutOpen} onClose={this.toggleAboutOpen} />
         <Help isOpen={this.state.isHelpOpen} onClose={this.toggleHelpOpen} />
-        <Profile isOpen={this.state.isProfileOpen} onClose={this.toggleProfileOpen} />
+        {this.props.name ? (
+          <Profile isOpen={this.state.isProfileOpen} onClose={this.toggleProfileOpen} />
+        ) : null}
       </>
     );
   }
