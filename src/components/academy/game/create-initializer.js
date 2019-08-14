@@ -75,7 +75,20 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
   function initialize(div, canvas) {
     startGame(div, canvas);
-    StoryXMLPlayer.loadStory('default', function () { });
+    const now = new Date();
+    const thurs15Aug = new Date("August 15, 2019 00:00:00");
+    const fri16Aug = new Date("August 16, 2019 00:00:00");
+    const sat17Aug = new Date("August 17, 2019 00:00:00");
+    
+    if (thurs15Aug < now && now < fri16Aug) {
+      // today is thursday 15 aug
+      StoryXMLPlayer.loadStory('act-1', function() { });
+    } else if (fri16Aug < now) {
+      // today is friday 16 aug and beyond
+      StoryXMLPlayer.loadStory('mission-M1', function() { });
+    } else {
+      StoryXMLPlayer.loadStory('default', function () { });
+    }
   }
 
   return initialize;
