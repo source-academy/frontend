@@ -46,6 +46,11 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
             if (sound) {
                 sound.play();
             }
+        },
+        saveCompletedQuest: function (questId) {
+            if (typeof Storage !== 'undefined') {
+                localStorage.setItem(questId, 'completed');
+            }
         }
     };
 
