@@ -443,3 +443,9 @@ export function playSequence(node, callback) {
     callback();
   });
 }
+
+export function skipSequence(node, callback) {
+  if (node.tagName == 'SEQUENCE') {
+    callback();
+  }
+}

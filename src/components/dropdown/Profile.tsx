@@ -30,7 +30,7 @@ export type DispatchProps = {
 
 class Profile extends React.Component<ProfileProps, {}> {
   public componentDidMount() {
-    if (!this.props.assessmentOverviews) {
+    if (this.props.name && this.props.role && !this.props.assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
       this.props.handleAssessmentOverviewFetch();
     }
