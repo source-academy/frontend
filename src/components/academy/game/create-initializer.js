@@ -11,8 +11,8 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     var hookHandlers = {
         startMission: function (number) {
             const assessmentType = story.split('-')[0] + 's';
-            // return history.push('/academy/' + assessmentType)
-            return history.push('/academy/' + assessmentType + '/' + number);
+            return history.push('/academy/' + assessmentType)
+            // return history.push('/academy/' + assessmentType + '/' + number);
         },
         openTemplate: function (name) {
             switch (name) {
@@ -23,7 +23,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
                 case 'assessments':
                     return history.push('/academy/missions');
                 case 'forum':
-                    return history.push(LINKS.PIAZZA);
+                    return window.open(LINKS.PIAZZA);
                 case 'materials':
                     return history.push('/material');
                 case 'IDE':
