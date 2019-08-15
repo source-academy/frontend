@@ -1,7 +1,6 @@
 import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { ErrorSeverity, ErrorType, Finished, SourceError } from 'js-slang/dist/types';
-import { cloneDeep } from 'lodash';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
 
@@ -269,8 +268,6 @@ describe('EVAL_TESTCASE', () => {
       ['testArray', [1, 2, 'a', 'b']]
     ];
 
-    // const code = editorPrepend + '\n' + editorValue + '\n' + editorPostpend + '\n' + program;
-    const symbols = context.externalSymbols;
     const library = {
       chapter: context.chapter,
       external: {
