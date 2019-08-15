@@ -21,6 +21,8 @@ export const END_DEBUG_PAUSE = 'END_DEBUG_PAUSE';
 export const DEBUG_RESUME = 'DEBUG_RESUME';
 export const DEBUG_RESET = 'DEBUG_RESET';
 export const HIGHLIGHT_LINE = 'HIGHLIGHT_LINE';
+// For interpreting code silently BEFORE the test case is run.
+export const EVAL_TESTCASE_SILENT = 'EVAL_TESTCASE_SILENT';
 
 /** Workspace */
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';

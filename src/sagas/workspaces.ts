@@ -1,8 +1,6 @@
 import { Context, interrupt, resume, runInContext, setBreakpointAtLine } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
-import { SourceError } from 'js-slang/dist/types';
-import { cloneDeep } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 
@@ -18,7 +16,13 @@ import {
 import { externalLibraries } from '../reducers/externalLibraries';
 import { IState, IWorkspaceState, SideContentType } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
-import { createContext, highlightLine, inspectorUpdate, visualiseEnv } from '../utils/slangHelper';
+import {
+  getBlockExtraMethodsString,
+  highlightLine,
+  inspectorUpdate,
+  makeElevatedContext,
+  visualiseEnv
+} from '../utils/slangHelper';
 
 export default function* workspaceSaga(): SagaIterator {
   let context: Context;
@@ -28,11 +32,12 @@ export default function* workspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select((state: IState) => {
-      const prepend = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
-      const value = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
+      const prependC = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
+      const valueC = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
 
-      return prepend + (prepend.length > 0 ? '\n' : '') + value;
+      return [prependC, valueC] as [string, string];
     });
+    const [prepend, value] = code;
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
@@ -62,7 +67,20 @@ export default function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
-    yield* evalCode(code, context, execTime, workspaceLocation, actionTypes.EVAL_EDITOR);
+
+    if (prepend.length) {
+      const elevatedContext = makeElevatedContext(context);
+      yield* evalCode(
+        prepend,
+        elevatedContext,
+        execTime,
+        workspaceLocation,
+        actionTypes.EVAL_TESTCASE_SILENT
+      );
+      yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
+    }
+
+    yield* evalCode(value, context, execTime, workspaceLocation, actionTypes.EVAL_EDITOR);
   });
 
   yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(
@@ -153,23 +171,17 @@ export default function* workspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     const index = action.payload.testcaseId;
     const code: string = yield select((state: IState) => {
+      // tslint:disable: no-shadowed-variable
       const prepend = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
       const value = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
       const postpend = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPostpend;
       const testcase = (state.workspaces[workspaceLocation] as IWorkspaceState).editorTestcases[
         index
       ].program;
-
-      return (
-        prepend +
-        (prepend.length > 0 ? '\n' : '') +
-        value +
-        '\n' +
-        postpend +
-        (postpend.length > 0 ? '\n' : '') +
-        testcase
-      );
+      return [prepend, value, postpend, testcase] as [string, string, string, string];
+      // tslint:enable: no-shadowed-variable
     });
+    const [prepend, value, postpend, testcase] = code;
     const type: TestcaseType = yield select(
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).editorTestcases[index].type
@@ -177,10 +189,7 @@ export default function* workspaceSaga(): SagaIterator {
     const execTime: number = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).execTime
     );
-    const symbols: string[] = yield select(
-      (state: IState) =>
-        (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
-    );
+
     /** Do not interrupt execution of other testcases (potential race condition) */
     /** No need to clear the context, since a shard context will be used for testcase execution */
     /** Do NOT clear the REPL output! */
@@ -190,8 +199,31 @@ export default function* workspaceSaga(): SagaIterator {
      *  But, do not persist this context to the workspace state - this prevent students from using
      *  this elevated context to run dis-allowed code beyond the current chapter from the REPL
      */
-    const shardContext: Context = yield call(createContext, 4, symbols, workspaceLocation);
-    yield* evalTestCode(code, shardContext, execTime, workspaceLocation, index, type);
+    context = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
+    );
+
+    const elevatedContext = makeElevatedContext(context);
+    yield* evalCode(
+      prepend,
+      elevatedContext,
+      execTime,
+      workspaceLocation,
+      actionTypes.EVAL_TESTCASE_SILENT
+    );
+    yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
+    yield* evalCode(value, context, execTime, workspaceLocation, actionTypes.EVAL_TESTCASE_SILENT);
+    if (context.errors.length) {
+      return;
+    } // halt on error.
+    yield* evalCode(
+      postpend,
+      elevatedContext,
+      execTime,
+      workspaceLocation,
+      actionTypes.EVAL_TESTCASE_SILENT
+    );
+    yield* evalTestCode(testcase, elevatedContext, execTime, workspaceLocation, index, type);
   });
 
   yield takeEvery(actionTypes.CHAPTER_SELECT, function*(
@@ -363,6 +395,21 @@ function* updateInspector(workspaceLocation: WorkspaceLocation) {
   }
 }
 
+function* blockExtraMethods(
+  elevatedContext: Context,
+  context: Context,
+  execTime: number,
+  workspaceLocation: WorkspaceLocation
+) {
+  const nullifier = getBlockExtraMethodsString(elevatedContext, context);
+  yield* evalCode(
+    nullifier,
+    elevatedContext,
+    execTime,
+    workspaceLocation,
+    actionTypes.EVAL_TESTCASE_SILENT
+  );
+}
 export function* evalCode(
   code: string,
   context: Context,
@@ -373,7 +420,12 @@ export function* evalCode(
   context.runtime.debuggerOn =
     (actionType === actionTypes.EVAL_EDITOR || actionType === actionTypes.DEBUG_RESUME) &&
     context.chapter > 2;
-  if (!context.runtime.debuggerOn && context.chapter > 2) {
+  if (
+    !context.runtime.debuggerOn &&
+    context.chapter > 2 &&
+    actionType !== actionTypes.EVAL_TESTCASE_SILENT
+  ) {
+    // Interface not guaranteed to exist. E.g. mission editor.
     inspectorUpdate(undefined); // effectively resets the interface
   }
   const { result, interrupted, paused } = yield race({
@@ -416,19 +468,7 @@ export function* evalCode(
   yield updateInspector(workspaceLocation);
 
   if (result.status !== 'suspended' && result.status !== 'finished') {
-    const prepend = yield select(
-      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend
-    );
-    const prependLines = prepend.length > 0 ? prepend.split('\n').length : 0;
-
-    const errors = context.errors.map((error: SourceError) => {
-      const newError = cloneDeep(error);
-      newError.location.start.line = newError.location.start.line - prependLines;
-      newError.location.end.line = newError.location.end.line - prependLines;
-      return newError;
-    });
-
-    yield put(actions.evalInterpreterError(errors, workspaceLocation));
+    yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
     return;
   } else if (result.status === 'suspended') {
     yield put(actions.endDebuggerPause(workspaceLocation));
@@ -436,7 +476,9 @@ export function* evalCode(
     return;
   }
 
-  yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+  if (actionType !== actionTypes.EVAL_TESTCASE_SILENT) {
+    yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+  }
 
   /** If successful, then continue to run all testcases IFF evalCode was triggered from
    *    EVAL_EDITOR (Run button) instead of EVAL_REPL (Eval button)
@@ -520,20 +562,8 @@ export function* evalTestCode(
    *  since debugger is presently disabled in assessment and grading environments
    */
   if (result.status === 'error') {
-    const prepend = yield select(
-      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend
-    );
-    const prependLines = prepend.length > 0 ? prepend.split('\n').length : 0;
-
-    const errors = context.errors.map((error: SourceError) => {
-      const newError = cloneDeep(error);
-      newError.location.start.line = newError.location.start.line - prependLines;
-      newError.location.end.line = newError.location.end.line - prependLines;
-      return newError;
-    });
-
-    yield put(actions.evalInterpreterError(errors, workspaceLocation));
-    yield put(actions.evalTestcaseFailure(errors, workspaceLocation, index));
+    yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+    yield put(actions.evalTestcaseFailure(context.errors, workspaceLocation, index));
   } else if (result.status === 'finished') {
     /* Execution of the testcase is successful, i.e. no errors were raised */
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));

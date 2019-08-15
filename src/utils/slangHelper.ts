@@ -1,7 +1,8 @@
 /* tslint:disable: ban-types*/
-import createSlangContext from 'js-slang/dist/createContext';
+import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
 import { stringify } from 'js-slang/dist/interop';
-import { Context, Value } from 'js-slang/dist/types';
+import { Context, CustomBuiltIns, Value } from 'js-slang/dist/types';
+import { difference, keys } from 'lodash';
 import { handleConsoleLog } from '../actions';
 
 /**
@@ -108,18 +109,92 @@ export function inspectorUpdate(context: Context | undefined) {
   }
 }
 
+export const externalBuiltIns = {
+  display,
+  rawDisplay,
+  prompt: cadetPrompt,
+  alert: cadetAlert,
+  visualiseList
+};
+
 /**
  * A wrapper around js-slang's createContext. This
  * provides the original function with the required
  * externalBuiltIns, such as display and prompt.
  */
 export function createContext<T>(chapter: number, externals: string[], externalContext: T) {
-  const externalBuiltIns = {
-    display,
-    rawDisplay,
-    prompt: cadetPrompt,
-    alert: cadetAlert,
-    visualiseList
-  };
   return createSlangContext<T>(chapter, externals, externalContext, externalBuiltIns);
+}
+
+// Assumes that the grader doesn't need additional libs
+// other than standard libraries.
+function loadStandardLibraries(proxyContext: Context, customBuiltIns: CustomBuiltIns) {
+  importBuiltins(proxyContext, customBuiltIns);
+  defineBuiltin(proxyContext, 'makeUndefinedErrorFunction', (fname: string) => () => {
+    throw new Error(`Name ${fname} not declared.`);
+  });
+}
+
+export function makeElevatedContext(context: Context) {
+  function ProxyFrame() {}
+  ProxyFrame.prototype = context.runtime.environments[0].head;
+  // @ts-ignore
+  const fakeFrame: { [key: string]: any } = new ProxyFrame();
+  // Explanation: Proxy doesn't work for defineProperty in use-strict.
+  // The js-slang will defineProperty on loadStandardLibraries
+  // creating a raw JS object and setting prototype
+  // will allow defineProperty on the child
+  // while reflection should work on parent.
+
+  const proxyGlobalEnv = new Proxy(context.runtime.environments[0], {
+    get(target, prop: string | number, receiver) {
+      if (prop === 'head') {
+        return fakeFrame;
+      }
+      return target[prop];
+    }
+  });
+  const proxyEnvs = new Proxy(context.runtime.environments, {
+    get(target, prop, receiver) {
+      if (prop === '0') {
+        return proxyGlobalEnv;
+      }
+      return target[prop];
+    }
+  });
+  const proxyRuntime = new Proxy(context.runtime, {
+    get(target, prop, receiver) {
+      if (prop === 'environments') {
+        return proxyEnvs;
+      }
+      return target[prop];
+    }
+  });
+  const elevatedContext = new Proxy(context, {
+    get(target, prop, receiver) {
+      switch (prop) {
+        case 'chapter':
+          return 4;
+        case 'runtime':
+          return proxyRuntime;
+        default:
+          return target[prop];
+      }
+    }
+  });
+
+  loadStandardLibraries(elevatedContext, externalBuiltIns);
+  return elevatedContext;
+}
+
+export function getBlockExtraMethodsString(elevatedContext: Context, context: Context) {
+  const eframe = elevatedContext.runtime.environments[0].head;
+  const frame = context.runtime.environments[0].head;
+  const toRemove = difference(keys(eframe), keys(frame));
+  const nullifier = toRemove
+    .map(x =>
+      x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = makeUndefinedErrorFunction('${x}');`
+    )
+    .join('\n');
+  return nullifier;
 }
