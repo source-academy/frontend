@@ -21,8 +21,6 @@ export const END_DEBUG_PAUSE = 'END_DEBUG_PAUSE';
 export const DEBUG_RESUME = 'DEBUG_RESUME';
 export const DEBUG_RESET = 'DEBUG_RESET';
 export const HIGHLIGHT_LINE = 'HIGHLIGHT_LINE';
-// For interpreting code silently BEFORE the test case is run.
-export const EVAL_TESTCASE_SILENT = 'EVAL_TESTCASE_SILENT';
 
 /** Workspace */
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
@@ -41,6 +39,8 @@ export const END_CLEAR_CONTEXT = 'END_CLEAR_CONTEXT';
 export const ENSURE_LIBRARIES_LOADED = 'ENSURE_LIBRARIES_LOADED';
 export const EVAL_EDITOR = 'EVAL_EDITOR';
 export const EVAL_REPL = 'EVAL_REPL';
+// For interpreting code blocks silently (e.g. prepend) BEFORE the test case is run
+export const EVAL_SILENT = 'EVAL_SILENT';
 export const EVAL_TESTCASE = 'EVAL_TESTCASE';
 export const PLAYGROUND_EXTERNAL_SELECT = 'PLAYGROUND_EXTERNAL_SELECT ';
 export const RESET_TESTCASE = 'RESET_TESTCASE';

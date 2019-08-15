@@ -35,10 +35,9 @@ export default function* workspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select((state: IState) => {
-      const prependC = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
-      const valueC = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
-
-      return [prependC, valueC] as [string, string];
+      const prependCode = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
+      const editorCode = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
+      return [prependCode, editorCode] as [string, string];
     });
     const [prepend, value] = code;
     const chapter: number = yield select(
@@ -62,15 +61,16 @@ export default function* workspaceSaga(): SagaIterator {
       },
       globals
     };
-    /** End any code that is running right now. */
+    // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
-    /** Clear the context, with the same chapter and externalSymbols as before. */
+    // Clear the context, with the same chapter and externalSymbols as before.
     yield put(actions.beginClearContext(library, workspaceLocation));
     yield put(actions.clearReplOutput(workspaceLocation));
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
 
+    // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
       const elevatedContext = makeElevatedContext(context);
       yield* evalCode(
@@ -78,8 +78,9 @@ export default function* workspaceSaga(): SagaIterator {
         elevatedContext,
         execTime,
         workspaceLocation,
-        actionTypes.EVAL_TESTCASE_SILENT
+        actionTypes.EVAL_SILENT
       );
+      // Block use of methods from privileged context
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
     }
 
@@ -193,12 +194,13 @@ export default function* workspaceSaga(): SagaIterator {
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).execTime
     );
 
-    /** Do not interrupt execution of other testcases (potential race condition) */
-    /** No need to clear the context, since a shard context will be used for testcase execution */
-    /** Do NOT clear the REPL output! */
+    // Do not interrupt execution of other testcases (potential race condition)
+    // No need to clear the context, since a shard context will be used for testcase execution
+    // Do NOT clear the REPL output!
+
     /**
-     *  Shard a new context elevated to use Source chapter 4 for testcases - enables grader programs
-     *  in postpend to run as expected without raising interpreter errors
+     *  Shard a new privileged context elevated to use Source chapter 4 for testcases - enables
+     *  grader programs in postpend to run as expected without raising interpreter errors
      *  But, do not persist this context to the workspace state - this prevent students from using
      *  this elevated context to run dis-allowed code beyond the current chapter from the REPL
      */
@@ -206,35 +208,36 @@ export default function* workspaceSaga(): SagaIterator {
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
 
+    // Execute prepend silently in privileged context
     const elevatedContext = makeElevatedContext(context);
-    yield* evalCode(
-      prepend,
-      elevatedContext,
-      execTime,
-      workspaceLocation,
-      actionTypes.EVAL_TESTCASE_SILENT
-    );
-    const blockKey = String(random(4829248, 6294504794392));
+    yield* evalCode(prepend, elevatedContext, execTime, workspaceLocation, actionTypes.EVAL_SILENT);
+
+    // Block use of methods from privileged context using a randomly generated blocking key
+    // Then execute student program silently in the original workspace context
+    const blockKey = String(random(1048576, 68719476736));
     yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
-    yield* evalCode(value, context, execTime, workspaceLocation, actionTypes.EVAL_TESTCASE_SILENT);
+    yield* evalCode(value, context, execTime, workspaceLocation, actionTypes.EVAL_SILENT);
+
+    // Halt execution if the student's code in the editor results in an error
     if (context.errors.length) {
       return;
-    } // halt on error.
+    }
+
+    // Execute postpend silently back in privileged context, if it exists
     if (postpend) {
-      // TODO: consider doing a swap.
-      // If the user modified any of the variables
-      // i.e. reusing any of the "reserved" names.
-      // It won't be accessible in the REPL.
+      // TODO: consider doing a swap. If the user has modified any of the variables,
+      // i.e. reusing any of the "reserved" names, prevent it from being accessed in the REPL.
       yield* restoreExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
       yield* evalCode(
         postpend,
         elevatedContext,
         execTime,
         workspaceLocation,
-        actionTypes.EVAL_TESTCASE_SILENT
+        actionTypes.EVAL_SILENT
       );
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
     }
+    // Finally execute the testcase function call in the privileged context
     yield* evalTestCode(testcase, elevatedContext, execTime, workspaceLocation, index, type);
   });
 
@@ -338,7 +341,7 @@ export default function* workspaceSaga(): SagaIterator {
       }
       return true;
     }
-    /** Create a race condition between the js files being loaded and a timeout. */
+    // Create a race condition between the js files being loaded and a timeout.
     const { loadedScripts, timeout } = yield race({
       loadedScripts: call(helper),
       timeout: delay(4000)
@@ -414,6 +417,7 @@ function* blockExtraMethods(
   workspaceLocation: WorkspaceLocation,
   unblockKey?: string
 ) {
+  // Extract additional methods available in the elevated context relative to the context
   const toBeBlocked = getDifferenceInMethods(elevatedContext, context);
   if (unblockKey) {
     const storeValues = getStoreExtraMethodsString(toBeBlocked, unblockKey);
@@ -422,18 +426,12 @@ function* blockExtraMethods(
       elevatedContext,
       execTime,
       workspaceLocation,
-      actionTypes.EVAL_TESTCASE_SILENT
+      actionTypes.EVAL_SILENT
     );
   }
 
   const nullifier = getBlockExtraMethodsString(toBeBlocked);
-  yield* evalCode(
-    nullifier,
-    elevatedContext,
-    execTime,
-    workspaceLocation,
-    actionTypes.EVAL_TESTCASE_SILENT
-  );
+  yield* evalCode(nullifier, elevatedContext, execTime, workspaceLocation, actionTypes.EVAL_SILENT);
 }
 
 function* restoreExtraMethods(
@@ -445,14 +443,9 @@ function* restoreExtraMethods(
 ) {
   const toUnblock = getDifferenceInMethods(elevatedContext, context);
   const restorer = getRestoreExtraMethodsString(toUnblock, unblockKey);
-  yield* evalCode(
-    restorer,
-    elevatedContext,
-    execTime,
-    workspaceLocation,
-    actionTypes.EVAL_TESTCASE_SILENT
-  );
+  yield* evalCode(restorer, elevatedContext, execTime, workspaceLocation, actionTypes.EVAL_SILENT);
 }
+
 export function* evalCode(
   code: string,
   context: Context,
@@ -466,9 +459,9 @@ export function* evalCode(
   if (
     !context.runtime.debuggerOn &&
     context.chapter > 2 &&
-    actionType !== actionTypes.EVAL_TESTCASE_SILENT
+    actionType !== actionTypes.EVAL_SILENT
   ) {
-    // Interface not guaranteed to exist. E.g. mission editor.
+    // Interface not guaranteed to exist, e.g. mission editor.
     inspectorUpdate(undefined); // effectively resets the interface
   }
   const { result, interrupted, paused } = yield race({
@@ -519,7 +512,8 @@ export function* evalCode(
     return;
   }
 
-  if (actionType !== actionTypes.EVAL_TESTCASE_SILENT) {
+  // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
+  if (actionType !== actionTypes.EVAL_SILENT) {
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
   }
 
@@ -546,9 +540,9 @@ export function* evalCode(
       const testcases: ITestcase[] = yield select(
         (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorTestcases
       );
-      /** Avoid displaying message if there are no testcases */
+      // Avoid displaying message if there are no testcases
       if (testcases.length > 0) {
-        /** Display a message to the user */
+        // Display a message to the user
         yield call(showSuccessMessage, `Running all testcases!`, 750);
         for (const idx of testcases.keys()) {
           yield put(actions.evalTestcase(workspaceLocation, idx));
@@ -594,7 +588,7 @@ export function* evalTestCode(
 
   if (interrupted) {
     interrupt(context);
-    /* Redundancy, added ensure that interruption results in an error. */
+    // Redundancy, added ensure that interruption results in an error.
     context.errors.push(new InterruptedError(context.runtime.nodes[0]));
     yield put(actions.endInterruptExecution(workspaceLocation));
     yield call(showWarningMessage, `Execution of testcase ${index} aborted`, 750);
@@ -608,12 +602,12 @@ export function* evalTestCode(
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
     yield put(actions.evalTestcaseFailure(context.errors, workspaceLocation, index));
   } else if (result.status === 'finished') {
-    /* Execution of the testcase is successful, i.e. no errors were raised */
+    // Execution of the testcase is successful, i.e. no errors were raised
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
     yield put(actions.evalTestcaseSuccess(result.value, workspaceLocation, index));
   }
 
-  /* If a hidden testcase was executed, remove its output from the REPL */
+  // If a hidden testcase was executed, remove its output from the REPL
   if (type === TestcaseTypes.hidden) {
     yield put(actions.clearReplOutputLast(workspaceLocation));
   }

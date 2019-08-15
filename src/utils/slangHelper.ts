@@ -126,8 +126,8 @@ export function createContext<T>(chapter: number, externals: string[], externalC
   return createSlangContext<T>(chapter, externals, externalContext, externalBuiltIns);
 }
 
-// Assumes that the grader doesn't need additional libs
-// other than standard libraries.
+// Assumes that the grader doesn't need additional external libraries apart from the standard
+// libraries (lists, streams).
 function loadStandardLibraries(proxyContext: Context, customBuiltIns: CustomBuiltIns) {
   importBuiltins(proxyContext, customBuiltIns);
   defineBuiltin(proxyContext, 'makeUndefinedErrorFunction', (fname: string) => () => {
@@ -135,6 +135,8 @@ function loadStandardLibraries(proxyContext: Context, customBuiltIns: CustomBuil
   });
 }
 
+// Given a Context, returns a privileged Context that when referenced,
+// intercepts reads from the underlying Context and returns desired values
 export function makeElevatedContext(context: Context) {
   function ProxyFrame() {}
   ProxyFrame.prototype = context.runtime.environments[0].head;
@@ -142,8 +144,7 @@ export function makeElevatedContext(context: Context) {
   const fakeFrame: { [key: string]: any } = new ProxyFrame();
   // Explanation: Proxy doesn't work for defineProperty in use-strict.
   // The js-slang will defineProperty on loadStandardLibraries
-  // creating a raw JS object and setting prototype
-  // will allow defineProperty on the child
+  // Creating a raw JS object and setting prototype will allow defineProperty on the child
   // while reflection should work on parent.
 
   const proxyGlobalEnv = new Proxy(context.runtime.environments[0], {
@@ -154,6 +155,7 @@ export function makeElevatedContext(context: Context) {
       return target[prop];
     }
   });
+
   const proxyEnvs = new Proxy(context.runtime.environments, {
     get(target, prop, receiver) {
       if (prop === '0') {
@@ -162,6 +164,7 @@ export function makeElevatedContext(context: Context) {
       return target[prop];
     }
   });
+
   const proxyRuntime = new Proxy(context.runtime, {
     get(target, prop, receiver) {
       if (prop === 'environments') {
@@ -170,6 +173,7 @@ export function makeElevatedContext(context: Context) {
       return target[prop];
     }
   });
+
   const elevatedContext = new Proxy(context, {
     get(target, prop, receiver) {
       switch (prop) {
@@ -188,9 +192,9 @@ export function makeElevatedContext(context: Context) {
 }
 
 export function getDifferenceInMethods(elevatedContext: Context, context: Context) {
-  const eframe = elevatedContext.runtime.environments[0].head;
+  const eFrame = elevatedContext.runtime.environments[0].head;
   const frame = context.runtime.environments[0].head;
-  return difference(keys(eframe), keys(frame));
+  return difference(keys(eFrame), keys(frame));
 }
 
 export function getStoreExtraMethodsString(toRemove: string[], unblockKey: string) {
