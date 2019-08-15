@@ -367,10 +367,10 @@ $code-color-error: #ff4444;
           display: inherit;
           padding: 5px 0px;
 
-          .bp3-button-group {
+          .#{$ns}-button-group {
             width: max-content;
 
-            .bp3-active {
+            .#{$ns}-button.sa-live-video-button.#{$ns}-active {
               pointer-events: none;
             }
           }
@@ -381,7 +381,7 @@ $code-color-error: #ff4444;
           }
         }
 
-        .bp3-divider {
+        .#{$ns}-divider {
           margin: 0;
         }
       }
