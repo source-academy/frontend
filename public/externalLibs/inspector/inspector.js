@@ -108,53 +108,58 @@
   }
 
   function updateContext(context, stringify) {
-    function dumpTable(env) {
-      var res = '';
-      for (var k in env) {
-        if (builtins.indexOf(''+k) < 0) {
-          var str = stringify(env[k]);
-          str = filter[str] ? filter[str] : str;
-          res += '<tr><td>' + k + '</td>' + '<td><code>' + str + '</code></td></tr>';
+    try{ 
+      function dumpTable(env) {
+        var res = '';
+        for (var k in env) {
+          if (builtins.indexOf(''+k) < 0) {
+            var str = stringify(env[k]);
+            str = filter[str] ? filter[str] : str;
+            res += '<tr><td>' + k + '</td>' + '<td><code>' + str + '</code></td></tr>';
+          }
         }
+        return res.length > 0 ? res : undefined;
       }
-      return res.length > 0 ? res : undefined;
-    }
-
-    // Hides the default text
-    (document.getElementById('inspector-default-text')).hidden = true;
-
-    // icon to blink
-    const icon = document.getElementById("inspector-icon");
-
-    if (!context && icon) {
-      (document.getElementById('inspector-default-text')).hidden = false;
-      icon.classList.remove("side-content-tab-alert");
-      container.innerHTML = "";
-      return
-    }
-
-    try {
-      var frames = context.context.runtime.environments;
-      container.innerHTML = "";
-      for (var i = 0; i < frames.length; ++i){
-        var envtoString = dumpTable(frames[i].head);
-        if (envtoString == undefined){
-          // skipping either empty frame or perhaps the global
-          continue
-        }
-        var newtable = document.createElement("table");
-        var tbody = document.createElement("tbody");
-        tbody.id = "inspect-scope";
-        tbody.innerHTML = "</br><caption><strong> " + frames[i].name + "</strong></caption>" + envtoString;
-        newtable.appendChild(tbody);
-        container.appendChild(newtable);
-        if (icon) {
-          icon.classList.add("side-content-tab-alert");
-        }
+  
+      // Hides the default text
+      (document.getElementById('inspector-default-text')).hidden = true;
+  
+      // icon to blink
+      const icon = document.getElementById("inspector-icon");
+  
+      if (!context && icon) {
+        (document.getElementById('inspector-default-text')).hidden = false;
+        icon.classList.remove("side-content-tab-alert");
+        container.innerHTML = "";
+        return
       }
-    } catch (e) {
-        container.innerHTML = e;
+  
+      try {
+        var frames = context.context.runtime.environments;
+        container.innerHTML = "";
+        for (var i = 0; i < frames.length; ++i){
+          var envtoString = dumpTable(frames[i].head);
+          if (envtoString == undefined){
+            // skipping either empty frame or perhaps the global
+            continue
+          }
+          var newtable = document.createElement("table");
+          var tbody = document.createElement("tbody");
+          tbody.id = "inspect-scope";
+          tbody.innerHTML = "</br><caption><strong> " + frames[i].name + "</strong></caption>" + envtoString;
+          newtable.appendChild(tbody);
+          container.appendChild(newtable);
+          if (icon) {
+            icon.classList.add("side-content-tab-alert");
+          }
+        }
+      } catch (e) {
+          container.innerHTML = e;
+      }
+    } catch (e){
+      console.log('inspector updateContext error', e);
     }
+    
   }
 
   function highlightClean(){
