@@ -222,9 +222,9 @@ export default function* workspaceSaga(): SagaIterator {
     } // halt on error.
     if (postpend) {
       // TODO: consider doing a swap.
-        // If the user modified any of the variables
-        // i.e. reusing any of the "reserved" names.
-        // It won't be accessible in the REPL.
+      // If the user modified any of the variables
+      // i.e. reusing any of the "reserved" names.
+      // It won't be accessible in the REPL.
       yield* restoreExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
       yield* evalCode(
         postpend,

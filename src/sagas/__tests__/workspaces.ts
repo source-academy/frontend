@@ -778,7 +778,7 @@ describe('evalCode', () => {
         .put.like({ action: { type: actionTypes.EVAL_INTERPRETER_ERROR } })
         .silentRun();
     });
- 
+
     // TODO: rewrite tests in a way that actually reflects known information.
     test('with error in the code, should return correct line number in error', () => {
       code = '// Prepend\n error';
