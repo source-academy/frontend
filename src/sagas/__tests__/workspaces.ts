@@ -5,6 +5,7 @@ import { cloneDeep } from 'lodash';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
 
+import createContext from 'js-slang/dist/createContext';
 import * as actions from '../../actions';
 import * as actionTypes from '../../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
@@ -21,7 +22,6 @@ import { mockTestcases } from '../../mocks/gradingAPI';
 import { externalLibraries } from '../../reducers/externalLibraries';
 import { defaultState, IState, SideContentType } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
-import { createContext } from '../../utils/slangHelper';
 import workspaceSaga, { evalCode, evalTestCode } from '../workspaces';
 
 function generateDefaultState(workspaceLocation: WorkspaceLocation, payload: any = {}): IState {
@@ -52,7 +52,7 @@ describe('EVAL_EDITOR', () => {
     const editorValue = 'value';
     const editorPostpend = 'postpend';
     const execTime = 1000;
-    const context = mockRuntimeContext();
+    const context = createContext();
     const globals: Array<[string, any]> = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
@@ -260,7 +260,7 @@ describe('EVAL_TESTCASE', () => {
       }
     ];
 
-    const context = mockRuntimeContext();
+    const context = createContext();
     const globals: Array<[string, any]> = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
@@ -600,7 +600,7 @@ describe('evalCode', () => {
     code = 'sample code';
     execTime = 1000;
     actionType = actionTypes.EVAL_EDITOR;
-    context = mockRuntimeContext();
+    context = createContext(); // mockRuntimeContext();
     value = 'test value';
     options = { scheduler: 'preemptive', originalMaxExecTime: 1000 };
     lastDebuggerResult = { status: 'error' };
