@@ -12,7 +12,6 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
         startMission: function (number) {
             const assessmentType = story.split('-')[0] + 's';
             return history.push('/academy/' + assessmentType)
-            // return history.push('/academy/' + assessmentType + '/' + number);
         },
         openTemplate: function (name) {
             switch (name) {
