@@ -1,10 +1,10 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
+import { MemoryRouter } from 'react-router';
 
 import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI';
 import { Role } from '../../../reducers/states';
 
-import { MemoryRouter } from 'react-router-dom';
 import { AssessmentStatuses } from '../../../components/assessment/assessmentShape';
 import Profile from '../Profile';
 
