@@ -70,7 +70,7 @@ export function unlockQuest(storyId, questId, callback) {
         skipEffects(quest.children[0]);
         SaveManager.saveUnlockQuest(storyId, questId);
         activeQuests[storyId][questId] = quest;
-        skipOpening(storyId, questId, callback);
+        skipQuest(storyId, questId, callback);
     } else {
         // activate sequence
         applyEffects(quest.children[0]);
@@ -80,7 +80,7 @@ export function unlockQuest(storyId, questId, callback) {
     }
 }
 
-export function skipOpening(storyId, questId, callback) {
+export function skipQuest(storyId, questId, callback) {
     if (!activeQuests[storyId][questId]) {
         return;
     }
@@ -94,20 +94,10 @@ export function skipOpening(storyId, questId, callback) {
                 callback();
                 return;
             }
-            if (child.tagName == 'COMPLETE_QUEST') {
-                playCompleteQuest(child, function () {
-                    nextAction(child.nextElementSibling);
-                });
-            } else if (child.tagName == 'UNLOCK_QUEST') {
+            if (child.tagName == 'UNLOCK_QUEST') {
                 playUnlockQuest(child, function () {
                     nextAction(child.nextElementSibling);
                 });
-            } else if (child.tagName == 'EXTERNAL_ACTION') {
-                ExternalManager.playExternalAction(child);
-                nextAction(child.nextElementSibling);
-            } else if (child.tagName == 'CHANGE_START_LOCATION') {
-                LocationManager.changeStartLocation(child.textContent);
-                nextAction(child.nextElementSibling);
             } else {
                 nextAction(child.nextElementSibling);
             }
