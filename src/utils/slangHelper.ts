@@ -187,14 +187,27 @@ export function makeElevatedContext(context: Context) {
   return elevatedContext;
 }
 
-export function getBlockExtraMethodsString(elevatedContext: Context, context: Context) {
+export function getDifferenceInMethods(elevatedContext: Context, context: Context) {
   const eframe = elevatedContext.runtime.environments[0].head;
   const frame = context.runtime.environments[0].head;
-  const toRemove = difference(keys(eframe), keys(frame));
-  const nullifier = toRemove
+  return difference(keys(eframe), keys(frame));
+}
+
+export function getStoreExtraMethodsString(toRemove: string[], unblockKey: string) {
+  return `const _____${unblockKey} = [${toRemove.join(', ')}];`;
+}
+
+export function getRestoreExtraMethodsString(removed: string[], unblockKey: string) {
+  const store = `_____${unblockKey}`;
+  return removed
+    .map((x, key) => (x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = ${store}[${key}];`))
+    .join('\n');
+}
+
+export function getBlockExtraMethodsString(toRemove: String[]) {
+  return toRemove
     .map(x =>
       x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = makeUndefinedErrorFunction('${x}');`
     )
     .join('\n');
-  return nullifier;
 }

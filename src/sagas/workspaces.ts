@@ -1,9 +1,9 @@
 import { Context, interrupt, resume, runInContext, setBreakpointAtLine } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
+import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
-
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
@@ -18,6 +18,9 @@ import { IState, IWorkspaceState, SideContentType } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import {
   getBlockExtraMethodsString,
+  getDifferenceInMethods,
+  getRestoreExtraMethodsString,
+  getStoreExtraMethodsString,
   highlightLine,
   inspectorUpdate,
   makeElevatedContext,
@@ -211,18 +214,27 @@ export default function* workspaceSaga(): SagaIterator {
       workspaceLocation,
       actionTypes.EVAL_TESTCASE_SILENT
     );
-    yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
+    const blockKey = String(random(4829248, 6294504794392));
+    yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
     yield* evalCode(value, context, execTime, workspaceLocation, actionTypes.EVAL_TESTCASE_SILENT);
     if (context.errors.length) {
       return;
     } // halt on error.
-    yield* evalCode(
-      postpend,
-      elevatedContext,
-      execTime,
-      workspaceLocation,
-      actionTypes.EVAL_TESTCASE_SILENT
-    );
+    if (postpend) {
+      // TODO: consider doing a swap.
+        // If the user modified any of the variables
+        // i.e. reusing any of the "reserved" names.
+        // It won't be accessible in the REPL.
+      yield* restoreExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
+      yield* evalCode(
+        postpend,
+        elevatedContext,
+        execTime,
+        workspaceLocation,
+        actionTypes.EVAL_TESTCASE_SILENT
+      );
+      yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
+    }
     yield* evalTestCode(testcase, elevatedContext, execTime, workspaceLocation, index, type);
   });
 
@@ -399,11 +411,42 @@ function* blockExtraMethods(
   elevatedContext: Context,
   context: Context,
   execTime: number,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
+  unblockKey?: string
 ) {
-  const nullifier = getBlockExtraMethodsString(elevatedContext, context);
+  const toBeBlocked = getDifferenceInMethods(elevatedContext, context);
+  if (unblockKey) {
+    const storeValues = getStoreExtraMethodsString(toBeBlocked, unblockKey);
+    yield* evalCode(
+      storeValues,
+      elevatedContext,
+      execTime,
+      workspaceLocation,
+      actionTypes.EVAL_TESTCASE_SILENT
+    );
+  }
+
+  const nullifier = getBlockExtraMethodsString(toBeBlocked);
   yield* evalCode(
     nullifier,
+    elevatedContext,
+    execTime,
+    workspaceLocation,
+    actionTypes.EVAL_TESTCASE_SILENT
+  );
+}
+
+function* restoreExtraMethods(
+  elevatedContext: Context,
+  context: Context,
+  execTime: number,
+  workspaceLocation: WorkspaceLocation,
+  unblockKey: string
+) {
+  const toUnblock = getDifferenceInMethods(elevatedContext, context);
+  const restorer = getRestoreExtraMethodsString(toUnblock, unblockKey);
+  yield* evalCode(
+    restorer,
     elevatedContext,
     execTime,
     workspaceLocation,
