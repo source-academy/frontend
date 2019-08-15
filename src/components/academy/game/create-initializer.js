@@ -81,22 +81,10 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     function initialize(div, canvas) {
         startGame(div, canvas);
         const now = new Date();
-
-        var mock_mission_1_deployDateString = prompt("Enter mock mission-1 deploy date. Default value: August 16, 2019 12:00:00");
-        if (mock_mission_1_deployDateString) {
-            localStorage.setItem('mock_mission_1_deployDateString', mock_mission_1_deployDateString);
-        }
-        mock_mission_1_deployDateString = localStorage.hasOwnProperty('mock_mission_1_deployDateString')
-                                        ? localStorage.getItem('mock_mission_1_deployDateString')
-                                        : "August 16, 2019 12:00:00";
-
-        const mission_1_deployDate = new Date(mock_mission_1_deployDateString);
-        console.log('mission-1 deploy date: ' + mission_1_deployDate);
+        const mission_1_deployDate = new Date("August 16, 2019 12:00:00");
         if (mission_1_deployDate <= now) {
-            console.log('Loading mission-1...');
             StoryXMLPlayer.loadStory('mission-1', function () {});
         } else {
-            console.log('Loading act-1...');
             StoryXMLPlayer.loadStory('act-1', function () {});
         }
     }
