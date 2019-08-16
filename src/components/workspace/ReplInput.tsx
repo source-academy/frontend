@@ -86,7 +86,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
           fontSize={14}
           highlightActiveLine={false}
           showGutter={false}
-          setOptions={{ fontFamily: "'Droid Sans Mono','CPMono_v07 Bold','Droid Sans'" }}
+          setOptions={{ fontFamily: "'Droid Sans Mono','CPMono_v07 Bold','Droid Sans', monospace" }}
         />
         <div className="replInputBottom" ref={e => (this.replInputBottom = e!)} />
       </>
