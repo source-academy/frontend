@@ -161,7 +161,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
           highlightActiveLine={false}
           mode="javascript"
           onChange={this.handleTemplateChange}
-          theme="cobalt"
+          theme="source"
           value={value}
           width="100%"
         />
