@@ -84,7 +84,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     function initialize(div, canvas) {
         startGame(div, canvas);
 
-        let devMode = confirm("Do you want to enter dev mode?");
+        let devMode = confirm("Do you want to enter developer mode?");
         let storyId, loadFromLocal;
         if (devMode) {
             storyId = prompt("Please enter storyID here");
@@ -92,7 +92,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
             if (loadFromLocal) {
                 alert("Loading " + storyId + "...\nPlease ensure that storyxml_server is serving on localhost port 8088.");
             } else {
-                alert("Loading " + storyId + " from AWS repository...");
+                alert("Loading " + storyId + " from AWS S3 repository...");
             }
         } else {
             storyId = getStoryId();
