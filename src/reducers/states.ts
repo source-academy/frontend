@@ -22,7 +22,7 @@ import {
   PlaybackStatus,
   RecordingStatus
 } from '../components/sourcecast/sourcecastShape';
-import { DEFAULT_SOURCE_CHAPTER } from '../utils/constants'
+import { DEFAULT_SOURCE_CHAPTER } from '../utils/constants';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
