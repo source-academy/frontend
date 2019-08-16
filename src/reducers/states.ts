@@ -22,6 +22,7 @@ import {
   PlaybackStatus,
   RecordingStatus
 } from '../components/sourcecast/sourcecastShape';
+import { DEFAULT_SOURCE_CHAPTER } from '../utils/constants';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -215,7 +216,6 @@ export enum Role {
  * For external libraries, see externalLibraries.ts
  */
 export const sourceChapters = [1, 2, 3, 4];
-const latestSourceChapter = sourceChapters.slice(-1)[0];
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
@@ -250,7 +250,7 @@ export const defaultEditorValue = '// Type your program in here!';
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
   breakpoints: [],
-  context: createContext<WorkspaceLocation>(latestSourceChapter, [], workspaceLocation),
+  context: createContext<WorkspaceLocation>(DEFAULT_SOURCE_CHAPTER, [], workspaceLocation),
   editorPrepend: '',
   editorSessionId: '',
   editorValue:
