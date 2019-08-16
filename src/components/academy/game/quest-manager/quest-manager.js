@@ -84,6 +84,7 @@ export function skipQuest(storyId, questId, callback) {
     if (!activeQuests[storyId][questId]) {
         return;
     }
+    console.log("Skipped quest " + questId);
     callback = callback || Constants.nullFunction;
     var quest = activeQuests[storyId][questId];
     DialogManager.skipSequence(quest.children[1], function () {
@@ -110,6 +111,7 @@ export function playOpening(storyId, questId, callback) {
     if (!activeQuests[storyId][questId]) {
         return;
     }
+    console.log("Playing quest " + questId);
     callback = callback || Constants.nullFunction;
     var quest = activeQuests[storyId][questId];
     DialogManager.playSequence(quest.children[1], function () {
