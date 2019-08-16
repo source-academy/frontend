@@ -410,7 +410,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation) {
   }
 }
 
-function* blockExtraMethods(
+export function* blockExtraMethods(
   elevatedContext: Context,
   context: Context,
   execTime: number,
@@ -434,7 +434,7 @@ function* blockExtraMethods(
   yield* evalCode(nullifier, elevatedContext, execTime, workspaceLocation, actionTypes.EVAL_SILENT);
 }
 
-function* restoreExtraMethods(
+export function* restoreExtraMethods(
   elevatedContext: Context,
   context: Context,
   execTime: number,

@@ -45,14 +45,11 @@ beforeEach(() => {
 });
 
 describe('EVAL_EDITOR', () => {
-  // Test skipped because it is overspecified.
-  // Specifically, it specifies what calls should be made
-  // Not the specific behavior (whether certain variables are accessible) or output.
-  test.skip('puts beginClearContext and calls evalCode correctly', () => {
+  test('puts beginClearContext and correctly executes prepend and value in sequence (calls evalCode)', () => {
     const workspaceLocation = WorkspaceLocations.playground;
-    const editorPrepend = 'prepend';
-    const editorValue = 'value';
-    const editorPostpend = 'postpend';
+    const editorPrepend = 'const foo = (x) => -1;\n"reeee";';
+    const editorValue = 'foo(2);';
+    const editorPostpend = '42;';
     const execTime = 1000;
     const context = createContext();
     const globals: Array<[string, any]> = [
@@ -61,7 +58,6 @@ describe('EVAL_EDITOR', () => {
       ['testArray', [1, 2, 'a', 'b']]
     ];
 
-    const code = editorPrepend + '\n' + editorValue;
     const library = {
       chapter: context.chapter,
       external: {
@@ -86,11 +82,24 @@ describe('EVAL_EDITOR', () => {
         .put(actions.beginInterruptExecution(workspaceLocation))
         .put(actions.beginClearContext(library, workspaceLocation))
         .put(actions.clearReplOutput(workspaceLocation))
-        // also calls evalCode here
-        .call(runInContext, code, context, {
-          scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+        // calls evalCode here with the prepend in elevated Context: silent run
+        .call.like({
+          fn: runInContext,
+          args: [editorPrepend, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
         })
+        // running the prepend block should return 'reeee', but silent run -> not written to REPL
+        .not.put(actions.evalInterpreterSuccess('reeee', workspaceLocation))
+        // Single call to evalCode made by blockExtraMethods
+        .call.like({ fn: runInContext })
+        // calls evalCode here with the student's program in normal Context
+        .call.like({
+          fn: runInContext,
+          args: [editorValue, context, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
+        })
+        // running the student's program should return -1, which is written to REPL
+        .put(actions.evalInterpreterSuccess(-1, workspaceLocation))
+        // should NOT attempt to execute the postpend block after above
+        .not.call(runInContext)
         .dispatch({
           type: actionTypes.EVAL_EDITOR,
           payload: { workspaceLocation }
@@ -244,19 +253,19 @@ describe('DEBUG_RESET', () => {
 });
 
 describe('EVAL_TESTCASE', () => {
-  test.skip('evaluates code portions in sequence and calls eval evalTestCode correctly', () => {
+  test('correctly executes prepend, value, postpend, testcase in sequence (calls evalTestCode)', () => {
     const workspaceLocation = WorkspaceLocations.grading;
-    const editorPrepend = '// prepend';
-    const editorValue = '5;';
-    const editorPostpend = '// postpend';
+    const editorPrepend = 'let z = 2;\nconst bar = (x, y) => 10 * x + y;\n"boink";';
+    const editorValue = 'bar(6, 9);';
+    const editorPostpend = '777;';
     const execTime = 1000;
     const testcaseId = 0;
 
     const editorTestcases: ITestcase[] = [
       {
         type: TestcaseTypes.public,
-        answer: '123',
-        program: '123', // test program.
+        answer: '42',
+        program: 'bar(4, z);', // test program.
         score: 1
       }
     ];
@@ -294,26 +303,42 @@ describe('EVAL_TESTCASE', () => {
         .not.put(actions.beginInterruptExecution(workspaceLocation))
         .not.put(actions.beginClearContext(library, workspaceLocation))
         .not.put(actions.clearReplOutput(workspaceLocation))
-        // Expect it to shard a new context here
-        // also calls evalTestCode here
-        // Note: This makes many different calls since
-        // it mimics how each section of code should be run in sequence.
-        .call(runInContext, editorPrepend, context, {
-          scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+        // Expect it to shard a new privileged context here and execute chunks in order
+        // calls evalCode here with the prepend in elevated Context: silent run
+        .call.like({
+          fn: runInContext,
+          args: [editorPrepend, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
         })
-        .call(runInContext, editorValue, context, {
-          scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+        // running the prepend block should return 'boink', but silent run -> not written to REPL
+        .not.put(actions.evalInterpreterSuccess('boink', workspaceLocation))
+        // Single call to evalCode made by blockExtraMethods
+        .call.like({ fn: runInContext })
+        // calls evalCode here with the student's program in normal Context
+        .call.like({
+          fn: runInContext,
+          args: [editorValue, context, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
         })
-        .call(runInContext, editorPostpend, context, {
-          scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+        // running the student's program should return 69, which is NOT written to REPL (silent)
+        .not.put(actions.evalInterpreterSuccess(69, workspaceLocation))
+        // Single call to evalCode made by restoreExtraMethods to enable postpend to run in S4
+        .call.like({ fn: runInContext })
+        // calls evalCode here again with the postpend now in elevated Context: silent run
+        .call.like({
+          fn: runInContext,
+          args: [editorPostpend, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
         })
-        .call(runInContext, editorTestcases[0].program, context, {
-          scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+        // running the postpend block should return true, but silent run -> not written to REPL
+        .not.put(actions.evalInterpreterSuccess(true, workspaceLocation))
+        // Single call to evalCode made by blockExtraMethods after postpend execution is complete
+        .call.like({ fn: runInContext })
+        // finally calls evalTestCode on the testcase
+        .call.like({
+          fn: runInContext,
+          args: [editorTestcases[0].program]
         })
+        // this testcase should execute fine in the elevated context and thus write result to REPL
+        .put(actions.evalInterpreterSuccess(42, workspaceLocation))
+        .put(actions.evalTestcaseSuccess(42, workspaceLocation, testcaseId))
         .dispatch({
           type: actionTypes.EVAL_TESTCASE,
           payload: { workspaceLocation, testcaseId }

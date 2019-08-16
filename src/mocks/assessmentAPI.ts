@@ -212,7 +212,7 @@ const mockSoundLibrary: Library = {
 };
 
 export const mockRuneLibrary: Library = {
-  chapter: 2,
+  chapter: 1,
   external: {
     name: ExternalLibraryNames.RUNES,
     symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
@@ -773,20 +773,12 @@ The \`NOR\` function modeled after a NOR gate is provided for you - it accepts t
     id: 3,
     library: mockRuneLibrary,
     prepend: `
-const NOR = (x, y) => {
-  // Abuse overriding of Source builtins to count function invocations
-  is_number(1);
-  return !(x || y);
-};
-
-const AND = (x, y) => undefined;`,
-    postpend: `
 let counter = 0;
-const is_number = (n) => {
+const NOR = (x, y) => {
   counter = counter + 1;
-  return 1;
-};
-
+  return !(x || y);
+};`,
+    postpend: `
 const __NOR_AND = (x, y) => {
   if (NOR_AND(false, false) === undefined) {
     error('Your function is empty!');
