@@ -137,7 +137,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             theme="source"
             value={this.props.editorValue}
             width="100%"
-            setOptions={{ fontFamily: "'Droid Sans Mono','CPMono_v07 Bold','Droid Sans'" }}
+            setOptions={{
+              fontFamily: "'Droid Sans Mono','CPMono_v07 Bold','Droid Sans', monospace"
+            }}
           />
         </div>
       </HotKeys>
