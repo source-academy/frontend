@@ -191,7 +191,12 @@ _italics_
 [link to Source Academy](https://sourceacademy.nus.edu.sg)  
 
 ![](image-url-goes-here)
-      `
+      `,
+      grader: {
+        name: 'HARTIN MENZ',
+        id: 100
+      },
+      gradedAt: '2019-08-16T13:26:32+00:00'
     },
     student: {
       name: 'Al Gorithm',
