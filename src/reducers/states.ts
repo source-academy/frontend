@@ -214,7 +214,7 @@ export enum Role {
  * Defines what chapters are available for usage.
  * For external libraries, see externalLibraries.ts
  */
-export const sourceChapters = [1, 2, 3, 4];
+export const sourceChapters = [1];
 const latestSourceChapter = sourceChapters.slice(-1)[0];
 
 const currentEnvironment = (): ApplicationEnvironment => {
