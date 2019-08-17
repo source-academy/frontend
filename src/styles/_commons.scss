@@ -32,3 +32,27 @@
     }
   }
 }
+
+/*
+  Force Blueprint Dialog to scroll on focus
+
+  Note: there should exist a better fix, as the Blueprint Dialog behaves
+  properly on the official demo/documentation website
+  https://blueprintjs.com/docs/#core/components/dialog
+*/
+.#{$ns}-dialog-container {
+  pointer-events: all;
+}
+
+/*
+  Temporary fix for this issue: https://github.com/palantir/blueprint/issues/1008
+
+  (when Blueprint Dialog is open, browser scroll bar is not clickable)
+*/
+.#{$ns}-overlay-backdrop {
+  display: none;
+}
+
+.#{$ns}-overlay-open {
+  background-color: rgba(16, 22, 26, 0.7);
+}

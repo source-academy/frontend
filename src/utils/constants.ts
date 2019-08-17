@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const LUMINUS_CLIENT_ID = process.env.REACT_APP_LUMINUS_CLIENT_ID;
-export const SOURCE_ACADEMY_VERSION = 'Cadet';
+export const SOURCE_ACADEMY_VERSION = process.env.REACT_APP_VERSION;
 export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const USE_BACKEND =
   process.env.REACT_APP_USE_BACKEND !== undefined &&
@@ -13,6 +13,7 @@ export const USE_CHATKIT =
   process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== undefined &&
   process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== '';
 export const INSTANCE_LOCATOR = process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR;
+export const DEFAULT_SOURCE_CHAPTER = 1;
 
 export enum LINKS {
   GITHUB_ISSUES = 'https://github.com/source-academy/cadet-frontend/issues',
@@ -20,7 +21,7 @@ export enum LINKS {
 
   MODULE_DETAILS = 'https://www.comp.nus.edu.sg/~cs1101s',
   LUMINUS = 'https://luminus.nus.edu.sg/modules/57290e55-335a-4c09-b904-a795572d6cda',
-  PIAZZA = 'https://piazza.com/nus.edu.sg/fall2019/cs1101s',
+  PIAZZA = 'https://piazza.com/class/juazn2axpf35wp',
   SHAREDB_SERVER = 'api2.sourceacademy.nus.edu.sg/',
   SOURCE_DOCS = 'https://sicp.comp.nus.edu.sg/source/',
   SOURCE_DOCS_CHAPTER_2_2 = 'https://sicp.comp.nus.edu.sg/chapters/29',
