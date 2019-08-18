@@ -24,7 +24,6 @@ import {
 import { IState, Role } from '../reducers/states';
 import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
-import { stringParamToInt } from '../utils/paramParseHelpers';
 import * as request from './requests';
 
 function* backendSaga(): SagaIterator {
@@ -270,21 +269,18 @@ function* backendSaga(): SagaIterator {
     const { submissionId } = action.payload;
     yield* sendGrade(action);
 
-    const currentUrl = window.location.pathname;
-    const gradingPath = '/academy/grading';
-    const match =
-      currentUrl.match(new RegExp(gradingPath + `/${submissionId}/(\\d+)`)) ||
-      currentUrl.match(new RegExp(gradingPath + `/${submissionId}`));
-    if (match) {
-      /**
-       * Move to next question for grading.
-       *
-       * If the questionId is out of bounds, the componentDidUpdate callback of
-       * GradingWorkspace will cause a redirect back to '/academy/grading'
-       */
-      const questionId = stringParamToInt(match[1]);
-      yield history.push(gradingPath + `/${submissionId}` + `/${(questionId || 0) + 1}`);
-    }
+    const currentQuestion = yield select(
+      (state: IState) => state.workspaces.grading.currentQuestion
+    );
+    /**
+     * Move to next question for grading: this only works because the
+     * SUBMIT_GRADING_AND_CONTINUE Redux action is currently only
+     * used in the Grading Workspace
+     *
+     * If the questionId is out of bounds, the componentDidUpdate callback of
+     * GradingWorkspace will cause a redirect back to '/academy/grading'
+     */
+    yield history.push('/academy/grading' + `/${submissionId}` + `/${(currentQuestion || 0) + 1}`);
   };
 
   yield takeEvery(actionTypes.SUBMIT_GRADING, sendGrade);
