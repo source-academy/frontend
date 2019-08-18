@@ -65,10 +65,15 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const id = action.payload;
-    const assessment: IAssessment = yield call(request.getAssessment, id, tokens);
+    const { id, password } = action.payload;
+    const assessment: IAssessment = yield call(request.getAssessment, id, password, tokens);
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
+    } else {
+      if (password !== null) {
+        history.goBack();
+        return yield call(showWarningMessage, 'Incorrect password. Please try again.');
+      }
     }
   });
 

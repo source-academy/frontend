@@ -131,11 +131,17 @@ export async function getAssessmentOverviews(
 /**
  * GET /assessments/${assessmentId}
  */
-export async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
-  const response = await request(`assessments/${id}`, 'GET', {
+export async function getAssessment(
+  id: number,
+  password: string | null,
+  tokens: Tokens
+): Promise<IAssessment | null> {
+  const response = await request(`assessments/${id}`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldRefresh: true
+    shouldRefresh: true,
+    shouldAutoLogout: password === null,
+    body: password == null ? {} : { password }
   });
   if (!response || !response.ok) {
     return null;
@@ -602,6 +608,10 @@ async function request(
       // this clause is mostly for SUBMIT_ANSWER; show an error message instead
       // and ask student to manually logout, so that they have a chance to save
       // their answers
+      return response;
+    }
+    if (response && response.status === 403 && opts.shouldAutoLogout === false) {
+      // this clause is mostly for FETCH_ASSESSMENT to catch incorrect password attempts
       return response;
     }
     if (!response || !response.ok) {

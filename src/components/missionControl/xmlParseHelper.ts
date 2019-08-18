@@ -85,7 +85,8 @@ const makeAssessmentOverview = (
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
     xp: 0,
-    gradingStatus: 'none' as GradingStatuses
+    gradingStatus: 'none' as GradingStatuses,
+    private: false
   };
 };
 

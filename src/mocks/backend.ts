@@ -49,7 +49,7 @@ export function* mockBackendSaga(): SagaIterator {
   yield takeEvery(actionTypes.FETCH_ASSESSMENT, function*(
     action: ReturnType<typeof actions.fetchAssessment>
   ) {
-    const id = action.payload;
+    const id = action.payload.id;
     const assessment = mockAssessments[id - 1];
     yield put(actions.updateAssessment({ ...assessment }));
   });

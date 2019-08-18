@@ -48,7 +48,8 @@ export const overviewTemplate = (): IAssessmentOverview => {
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
     xp: 0,
-    gradingStatus: 'none'
+    gradingStatus: 'none',
+    private: false
   };
 };
 

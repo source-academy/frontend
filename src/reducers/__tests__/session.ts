@@ -222,7 +222,8 @@ const assessmentOverviewsTest1: IAssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    private: false
   }
 ];
 
@@ -242,7 +243,8 @@ const assessmentOverviewsTest2: IAssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: GradingStatuses.grading
+    gradingStatus: GradingStatuses.grading,
+    private: false
   }
 ];
 

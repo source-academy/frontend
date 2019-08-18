@@ -10,6 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
+import * as qs from 'query-string';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
@@ -79,7 +80,7 @@ export type OwnProps = {
 
 export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
-  handleAssessmentFetch: (assessmentId: number) => void;
+  handleAssessmentFetch: (assessmentId: number, password: string | null) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
@@ -123,7 +124,12 @@ class AssessmentWorkspace extends React.Component<
    * and show the briefing.
    */
   public componentDidMount() {
-    this.props.handleAssessmentFetch(this.props.assessmentId);
+    let password = null;
+    if (qs.parse(location.search).isPasswordRequired === 'true') {
+      password = prompt('Please enter the password to this assessment here!');
+    }
+
+    this.props.handleAssessmentFetch(this.props.assessmentId, password);
     if (this.props.questionId === 0 && this.props.notAttempted) {
       this.setState({ showOverlay: true });
     }

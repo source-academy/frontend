@@ -15,7 +15,8 @@ export const fetchAuth = (luminusCode: string) => action(actionTypes.FETCH_AUTH,
 
 export const fetchAnnouncements = () => action(actionTypes.FETCH_ANNOUNCEMENTS);
 
-export const fetchAssessment = (id: number) => action(actionTypes.FETCH_ASSESSMENT, id);
+export const fetchAssessment = (id: number, password: string | null) =>
+  action(actionTypes.FETCH_ASSESSMENT, { id, password });
 
 export const fetchAssessmentOverviews = () => action(actionTypes.FETCH_ASSESSMENT_OVERVIEWS);
 

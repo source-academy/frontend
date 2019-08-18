@@ -298,7 +298,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     switch (overview.status) {
       case AssessmentStatuses.not_attempted:
         icon = IconNames.PLAY;
-        label = 'Attempt';
+        label = overview.private ? 'Unlock' : 'Attempt';
         break;
       case AssessmentStatuses.attempting:
         icon = IconNames.PLAY;
@@ -320,9 +320,15 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     }
     return (
       <NavLink
-        to={`/academy/${assessmentCategoryLink(
-          overview.category
-        )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+        to={{
+          pathname: `/academy/${assessmentCategoryLink(
+            overview.category
+          )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`,
+          search:
+            overview.private && overview.status === AssessmentStatuses.not_attempted
+              ? `isPasswordRequired=true`
+              : ''
+        }}
       >
         {controlButton(label, icon, () =>
           this.props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
@@ -402,7 +408,15 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     <div className="row listing-title">
       <Text ellipsize={true} className={'col-xs-10'}>
         <H4>
-          {overview.title} {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
+          {overview.private ? (
+            <Tooltip content="This assessment is password-protected.">
+              <Icon icon="lock" style={{ verticalAlign: 'text-top', padding: '0.1rem' }} />
+            </Tooltip>
+          ) : null}
+
+          {overview.title}
+
+          {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
         </H4>
       </Text>
       <div className="col-xs-2">{this.makeSubmissionButton(overview, index)}</div>

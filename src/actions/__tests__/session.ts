@@ -58,10 +58,10 @@ test('fetchAnnouncements generates correct action object', () => {
 
 test('fetchAssessment generates correct action object', () => {
   const id = 3;
-  const action = fetchAssessment(id);
+  const action = fetchAssessment(id, null);
   expect(action).toEqual({
     type: actionTypes.FETCH_ASSESSMENT,
-    payload: id
+    payload: { id, password: null }
   });
 });
 
@@ -300,7 +300,8 @@ test('updateAssessmentOverviews generates correct action object', () => {
       status: 'not_attempted',
       story: null,
       xp: 0,
-      gradingStatus: 'none'
+      gradingStatus: 'none',
+      private: false
     }
   ];
   const action = updateAssessmentOverviews(overviews);

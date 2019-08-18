@@ -139,10 +139,10 @@ describe('Test FETCH_ASSESSMENT Action', () => {
     const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
       .withState({ session: mockTokens })
-      .provide([[call(getAssessment, mockId, mockTokens), mockAssessment]])
+      .provide([[call(getAssessment, mockId, null, mockTokens), mockAssessment]])
       .put(actions.updateAssessment(mockAssessment))
       .hasFinalState({ session: mockTokens })
-      .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: mockId })
+      .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: { id: mockId, password: null } })
       .silentRun();
   });
 
@@ -150,11 +150,11 @@ describe('Test FETCH_ASSESSMENT Action', () => {
     const mockId = mockAssessment.id;
     return expectSaga(backendSaga)
       .withState({ session: mockTokens })
-      .provide([[call(getAssessment, mockId, mockTokens), null]])
-      .call(getAssessment, mockId, mockTokens)
+      .provide([[call(getAssessment, mockId, null, mockTokens), null]])
+      .call(getAssessment, mockId, null, mockTokens)
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT)
       .hasFinalState({ session: mockTokens })
-      .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: mockId })
+      .dispatch({ type: actionTypes.FETCH_ASSESSMENT, payload: { id: mockId, password: null } })
       .silentRun();
   });
 });

@@ -26,7 +26,8 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: 'none'
+    gradingStatus: 'none',
+    private: false
   }
 ];
 
@@ -58,7 +59,8 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    gradingStatus: 'none'
+    gradingStatus: 'none',
+    private: false
   },
   {
     category: AssessmentCategories.Mission,
@@ -75,7 +77,8 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    gradingStatus: 'none'
+    gradingStatus: 'none',
+    private: false
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -92,7 +95,8 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: 'none'
+    gradingStatus: 'none',
+    private: false
   }
 ];
 
@@ -112,7 +116,8 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    gradingStatus: 'none'
+    gradingStatus: 'none',
+    private: false
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -129,7 +134,8 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    gradingStatus: 'grading'
+    gradingStatus: 'grading',
+    private: false
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -146,7 +152,8 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    gradingStatus: 'graded'
+    gradingStatus: 'graded',
+    private: false
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -163,7 +170,8 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    gradingStatus: 'excluded'
+    gradingStatus: 'excluded',
+    private: false
   }
 ];
 
