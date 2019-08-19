@@ -363,22 +363,22 @@
   /**
    *  Try to fit any data into the box. If not possible, assign a number and log it in the console.
    */
-  function toText(data, full) {
+    function toText(data, full) {
     if (full) {
       return '' + data
     } else {
       var type = typeof data
       if (type === 'function' || type === 'object') {
         return false
-      } else if (type === "boolean") {
-        return '' + data
-      } else {
+      } else if (type === "string") {
         var str = '' + data
         if (str.length > 5) {
           return false
         } else {
           return '"' + str + '"'
         }
+      } else {
+        return '' + data
       }
     }
   }
