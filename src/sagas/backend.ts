@@ -259,7 +259,7 @@ function* backendSaga(): SagaIterator {
       });
       yield put(actions.updateGrading(submissionId, newGrading));
     } else {
-      request.handleResponseError(resp);
+      yield request.handleResponseError(resp);
     }
   };
 
