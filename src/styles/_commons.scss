@@ -55,4 +55,8 @@
 
 .#{$ns}-overlay-open {
   background-color: rgba(16, 22, 26, 0.7);
+
+  &.#{$ns}-toast-container {
+    background-color: unset;
+  }
 }
