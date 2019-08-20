@@ -85,11 +85,14 @@ describe('EVAL_EDITOR', () => {
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
           fn: runInContext,
-          args: [editorPrepend, {
-            scheduler: 'preemptive',
-            originalMaxExecTime: execTime,
-            useSubst: false
-          }]
+          args: [
+            editorPrepend,
+            {
+              scheduler: 'preemptive',
+              originalMaxExecTime: execTime,
+              useSubst: false
+            }
+          ]
         })
         // running the prepend block should return 'reeee', but silent run -> not written to REPL
         .not.put(actions.evalInterpreterSuccess('reeee', workspaceLocation))
