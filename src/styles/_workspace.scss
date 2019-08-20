@@ -766,6 +766,11 @@ $code-color-error: #ff4444;
   .AutograderCard {
     /* Nested bp3 Card component (with onClick attached) */
     .#{$ns}-card {
+      .testcase-placeholder {
+        width: 100%;
+        text-align: center;
+      }
+
       .testcase-program,
       .testcase-actual {
         width: 37.5%;
@@ -782,9 +787,10 @@ $code-color-error: #ff4444;
         justify-content: center;
       }
 
+      /* Override canvas inline height and width */
       canvas {
-        height: 10rem;
-        width: 10rem;
+        height: 12rem !important;
+        width: 12rem !important;
       }
     }
   }

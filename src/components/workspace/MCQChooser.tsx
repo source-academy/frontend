@@ -62,7 +62,9 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
     }
     const shouldDisplayMessage = this.props.mcq.solution !== null && this.props.mcq.choices[i].hint;
     if (shouldDisplayMessage) {
-      const hintElement = <Markdown content={this.props.mcq.choices[i].hint!} />;
+      const hintElement = (
+        <Markdown className="markdown-notification" content={this.props.mcq.choices[i].hint!} />
+      );
       if (i === this.props.mcq.solution) {
         showSuccessMessage(hintElement, 4000);
       } else {

@@ -11,6 +11,10 @@ export function mockContext(chapter = 1): Context {
 
 export function mockRuntimeContext(): Context {
   const context = createContext();
+  // Note: noticed no harm in removing the following context.runtime.
+  // If you get an error with head is undefined after trying to evaluate code.
+  // Likely due to the environments: [].
+  // In every real context, there is at least one env frame.
   context.runtime = {
     break: false,
     debuggerOn: true,
