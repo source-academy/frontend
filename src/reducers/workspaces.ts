@@ -12,6 +12,7 @@ import {
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
+  CLEAR_REPL_OUTPUT_LAST,
   DEBUG_RESET,
   DEBUG_RESUME,
   END_CLEAR_CONTEXT,
@@ -240,6 +241,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           replValue: ''
+        }
+      };
+    case CLEAR_REPL_OUTPUT_LAST:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          output: state[workspaceLocation].output.slice(0, -1)
         }
       };
     case CLEAR_REPL_OUTPUT:
