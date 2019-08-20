@@ -13,6 +13,7 @@ import {
   chapterSelect,
   clearReplInput,
   clearReplOutput,
+  clearReplOutputLast,
   endClearContext,
   ensureLibrariesLoaded,
   evalEditor,
@@ -159,6 +160,16 @@ test('clearReplInput generates correct action object', () => {
   const action = clearReplInput(assessmentWorkspace);
   expect(action).toEqual({
     type: actionTypes.CLEAR_REPL_INPUT,
+    payload: {
+      workspaceLocation: assessmentWorkspace
+    }
+  });
+});
+
+test('clearReplOutputLast generates correct action object', () => {
+  const action = clearReplOutputLast(assessmentWorkspace);
+  expect(action).toEqual({
+    type: actionTypes.CLEAR_REPL_OUTPUT_LAST,
     payload: {
       workspaceLocation: assessmentWorkspace
     }

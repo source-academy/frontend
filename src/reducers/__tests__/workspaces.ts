@@ -7,6 +7,7 @@ import {
   CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
+  CLEAR_REPL_OUTPUT_LAST,
   DEBUG_RESET,
   DEBUG_RESUME,
   END_CLEAR_CONTEXT,
@@ -40,7 +41,8 @@ import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces'
 import {
   ExternalLibraryName,
   ITestcase,
-  Library
+  Library,
+  TestcaseTypes
 } from '../../components/assessment/assessmentShape';
 import { createContext } from '../../utils/slangHelper';
 import {
@@ -375,6 +377,37 @@ describe('CLEAR_REPL_OUTPUT', () => {
         [location]: {
           ...clearReplDefaultState[location],
           output: []
+        }
+      });
+    });
+  });
+});
+
+describe('CLEAR_REPL_OUTPUT_LAST', () => {
+  test('removes the last entry from the REPL', () => {
+    const output: InterpreterOutput[] = [
+      {
+        type: 'result',
+        value: 'undefined',
+        consoleLogs: ['hello', 'world']
+      },
+      {
+        type: 'result',
+        value: 420,
+        consoleLogs: ['these', 'are', 'display', 'calls']
+      }
+    ];
+    const clearReplLastPriorState: IWorkspaceManagerState = generateDefaultWorkspace({ output });
+    const actions = generateActions(CLEAR_REPL_OUTPUT_LAST);
+
+    actions.forEach(action => {
+      const result = reducer(clearReplLastPriorState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...clearReplLastPriorState,
+        [location]: {
+          ...clearReplLastPriorState[location],
+          output: [output[0]]
         }
       });
     });
@@ -762,11 +795,13 @@ const outputWithCodeOutput: CodeOutput[] = [
 
 const editorTestcases: ITestcase[] = [
   {
+    type: TestcaseTypes.public,
     answer: 'abc',
     score: 10,
     program: 'test program'
   },
   {
+    type: TestcaseTypes.public,
     answer: 'def',
     score: 20,
     program: 'another program'
