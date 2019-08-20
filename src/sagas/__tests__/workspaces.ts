@@ -101,7 +101,11 @@ describe('EVAL_EDITOR', () => {
         // calls evalCode here with the student's program in normal Context
         .call.like({
           fn: runInContext,
-          args: [editorValue, context, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
+          args: [
+            editorValue,
+            context,
+            { scheduler: 'preemptive', originalMaxExecTime: execTime, useSubst: false }
+          ]
         })
         // running the student's program should return -1, which is written to REPL
         .put(actions.evalInterpreterSuccess(-1, workspaceLocation))
@@ -739,7 +743,8 @@ describe('evalCode', () => {
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
-          originalMaxExecTime: execTime
+          originalMaxExecTime: execTime,
+          useSubst: false
         })
         .put(actions.evalInterpreterSuccess(value, workspaceLocation))
         .call(showSuccessMessage, 'Running all testcases!', 750)
