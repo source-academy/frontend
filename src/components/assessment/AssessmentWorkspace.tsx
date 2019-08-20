@@ -10,12 +10,14 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
+import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
 import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
+import { showWarningMessage } from '../../utils/notification';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
@@ -35,6 +37,7 @@ import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
+  AssessmentCategories,
   AutogradingResult,
   IAssessment,
   IMCQQuestion,
@@ -430,6 +433,34 @@ class AssessmentWorkspace extends React.Component<
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
     const onClickReturn = () => history.push(listingPath);
 
+    // Replaces onClickNext if the current assessment is a Path
+    const onClickProgress = () => {
+      // Perform question blocking - determine the highest question number previously accessed
+      // by counting the number of questions that have a non-null answer
+      const blockedQuestionId =
+        this.props.assessment!.questions.filter(qn => qn.answer !== null).length - 1;
+
+      // If the current question does not block the next question, proceed as usual
+      if (questionId < blockedQuestionId) {
+        return history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+      }
+      // Else evaluate its correctness - proceed iff the answer to the current question is correct
+      const question: IQuestion = this.props.assessment!.questions[questionId];
+      if (question.type === QuestionTypes.mcq) {
+        if (question.answer !== (question as IMCQQuestion).solution) {
+          return showWarningMessage('Your MCQ solution is incorrect!', 750);
+        }
+      } else if (question.type === QuestionTypes.programming) {
+        const isCorrect = this.props.editorTestcases.reduce((acc, testcase) => {
+          return acc && stringify(testcase.result) === testcase.answer;
+        }, true);
+        if (!isCorrect) {
+          return showWarningMessage('Your solution has not passed all testcases!', 750);
+        }
+      }
+      history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+    };
+
     const onClickSave = () =>
       this.props.handleSave(
         this.props.assessment!.questions[questionId].id,
@@ -453,7 +484,11 @@ class AssessmentWorkspace extends React.Component<
 
     const nextButton = (
       <NextButton
-        onClickNext={onClickNext}
+        onClickNext={
+          this.props.assessment && this.props.assessment.category === AssessmentCategories.Path
+            ? onClickProgress
+            : onClickNext
+        }
         onClickReturn={onClickReturn}
         questionProgress={questionProgress}
         key="next_question"

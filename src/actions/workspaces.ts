@@ -91,6 +91,9 @@ export const clearReplInput = (workspaceLocation: WorkspaceLocation) =>
 export const clearReplOutput = (workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.CLEAR_REPL_OUTPUT, { workspaceLocation });
 
+export const clearReplOutputLast = (workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.CLEAR_REPL_OUTPUT_LAST, { workspaceLocation });
+
 /**
  * Finishes the process to clear the js-slang Context
  * at a specified workspace location.
