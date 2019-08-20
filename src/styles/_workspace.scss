@@ -318,8 +318,21 @@ $code-color-error: #ff4444;
     justify-content: center;
     display: flex;
 
-    .#{$ns}-tab-list {
-      justify-content: center;
+    /*
+      Fixes an innate issue with bp3's Tabs component where the active tab underline
+      fails to re-compute its position when the browser window changes size
+
+      Also fixes an innate issue where the position of the active tab underline
+      decouples when the central divider is resized
+    */
+    .#{$ns}-tabs {
+      display: flex;
+      flex-direction: column;
+      flex-basis: center;
+
+      .#{$ns}-tab-list {
+        align-self: center;
+      }
     }
   }
 
