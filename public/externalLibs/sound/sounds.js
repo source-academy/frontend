@@ -319,9 +319,10 @@ function play(sound) {
 }
 
 // Requires 'All' libraries!
-function display_waveform(num_points, sound) {
+function display_waveform(num_points_per_second, sound) {
     let wave = get_wave(sound);
     let duration = get_duration(sound);
+    let num_points = num_points_per_second * duration;
     return draw_connected_full_view_proportional(num_points)(t => pair(t, wave(duration * t)));
 }
 
