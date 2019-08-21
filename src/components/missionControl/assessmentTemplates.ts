@@ -7,7 +7,8 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   ITestcase,
-  Library
+  Library,
+  TestcaseTypes
 } from '../../components/assessment/assessmentShape';
 
 export const emptyLibrary = (): Library => {
@@ -78,6 +79,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
 
 export const testcaseTemplate = (): ITestcase => {
   return {
+    type: TestcaseTypes.public,
     answer: '',
     score: 0,
     program: ''

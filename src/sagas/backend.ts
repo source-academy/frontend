@@ -259,15 +259,19 @@ function* backendSaga(): SagaIterator {
       });
       yield put(actions.updateGrading(submissionId, newGrading));
     } else {
-      request.handleResponseError(resp);
+      yield request.handleResponseError(resp);
     }
   };
 
   const sendGradeAndContinue = function*(
     action: ReturnType<typeof actions.submitGradingAndContinue>
   ) {
-    const { submissionId, questionId } = action.payload;
+    const { submissionId } = action.payload;
     yield* sendGrade(action);
+
+    const currentQuestion = yield select(
+      (state: IState) => state.workspaces.grading.currentQuestion
+    );
     /**
      * Move to next question for grading: this only works because the
      * SUBMIT_GRADING_AND_CONTINUE Redux action is currently only
@@ -276,7 +280,7 @@ function* backendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/academy/grading'
      */
-    yield history.push(`/academy/grading` + `/${submissionId}` + `/${questionId + 1}`);
+    yield history.push('/academy/grading' + `/${submissionId}` + `/${(currentQuestion || 0) + 1}`);
   };
 
   yield takeEvery(actionTypes.SUBMIT_GRADING, sendGrade);

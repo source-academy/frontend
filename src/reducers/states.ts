@@ -22,6 +22,7 @@ import {
   PlaybackStatus,
   RecordingStatus
 } from '../components/sourcecast/sourcecastShape';
+import { DEFAULT_SOURCE_CHAPTER } from '../utils/constants';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -44,6 +45,7 @@ export interface IApplicationState {
 
 export interface IPlaygroundState {
   readonly queryString?: string;
+  readonly usingSubst: boolean;
 }
 
 interface IAssessmentWorkspace extends IWorkspaceState {
@@ -58,8 +60,9 @@ interface IGradingWorkspace extends IWorkspaceState {
   readonly hasUnsavedChanges: boolean;
 }
 
-// tslint:disable-next-line: no-empty-interface
-export interface IPlaygroundWorkspace extends IWorkspaceState {}
+export interface IPlaygroundWorkspace extends IWorkspaceState {
+  readonly usingSubst: boolean;
+}
 
 export interface ISourcecastWorkspace extends IWorkspaceState {
   readonly audioUrl: string;
@@ -215,7 +218,6 @@ export enum Role {
  * For external libraries, see externalLibraries.ts
  */
 export const sourceChapters = [1, 2, 3, 4];
-const latestSourceChapter = sourceChapters.slice(-1)[0];
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
@@ -237,7 +239,9 @@ export const defaultApplication: IApplicationState = {
   environment: currentEnvironment()
 };
 
-export const defaultPlayground: IPlaygroundState = {};
+export const defaultPlayground: IPlaygroundState = {
+  usingSubst: false
+};
 
 export const defaultEditorValue = '// Type your program in here!';
 
@@ -250,7 +254,7 @@ export const defaultEditorValue = '// Type your program in here!';
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
   breakpoints: [],
-  context: createContext<WorkspaceLocation>(latestSourceChapter, [], workspaceLocation),
+  context: createContext<WorkspaceLocation>(DEFAULT_SOURCE_CHAPTER, [], workspaceLocation),
   editorPrepend: '',
   editorSessionId: '',
   editorValue:
@@ -305,6 +309,7 @@ export enum SideContentType {
   introduction = 'introduction',
   inspector = 'inspector',
   questionOverview = 'question_overview',
+  substVisualizer = 'subst_visualiser',
   toneMatrix = 'tone_matrix'
 }
 
@@ -322,7 +327,8 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     hasUnsavedChanges: false
   },
   playground: {
-    ...createDefaultWorkspace(WorkspaceLocations.playground)
+    ...createDefaultWorkspace(WorkspaceLocations.playground),
+    usingSubst: false
   },
   sourcecast: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
