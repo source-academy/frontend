@@ -1,5 +1,5 @@
-import { ITestcase } from 'src/components/assessment/assessmentShape';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
+import { ITestcase, TestcaseTypes } from '../components/assessment/assessmentShape';
 import { mockRuneLibrary as mockLibrary } from './assessmentAPI';
 import { mockFetchRole, Role, Roles } from './userAPI';
 
@@ -94,10 +94,10 @@ export const mockFetchGradingOverview = (
 };
 
 export const mockTestcases: ITestcase[] = [
-  { program: `remainder(12, 7);`, score: 1, answer: `5` },
-  { program: `remainder(6, 1);`, score: 2, answer: `0` },
-  { program: `remainder(-15, 6);`, score: 2, answer: `-3` },
-  { program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
+  { type: TestcaseTypes.public, program: `remainder(12, 7);`, score: 1, answer: `5` },
+  { type: TestcaseTypes.public, program: `remainder(6, 1);`, score: 2, answer: `0` },
+  { type: TestcaseTypes.private, program: `remainder(-15, 6);`, score: 2, answer: `-3` },
+  { type: TestcaseTypes.private, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
 ];
 
 const mockGrading: Grading = [

@@ -10,12 +10,14 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
+import { stringify } from 'js-slang/dist/interop';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
 import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
+import { showWarningMessage } from '../../utils/notification';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
@@ -35,6 +37,7 @@ import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
 import {
+  AssessmentCategories,
   AutogradingResult,
   IAssessment,
   IMCQQuestion,
@@ -192,7 +195,7 @@ class AssessmentWorkspace extends React.Component<
       >
         <div className={Classes.DIALOG_BODY}>
           <Markdown content="Are you sure you want to reset the template?" />
-          <Markdown content="*Note this will not affect the saved copy of your code, unless you save over it.*" />
+          <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
@@ -430,6 +433,37 @@ class AssessmentWorkspace extends React.Component<
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
     const onClickReturn = () => history.push(listingPath);
 
+    // Returns a nullary function that defers the navigation of the browser window, until the
+    // student's answer passes some checks - presently only used for Paths
+    const onClickProgress = (deferredNavigate: () => void) => {
+      return () => {
+        // Perform question blocking - determine the highest question number previously accessed
+        // by counting the number of questions that have a non-null answer
+        const blockedQuestionId =
+          this.props.assessment!.questions.filter(qn => qn.answer !== null).length - 1;
+
+        // If the current question does not block the next question, proceed as usual
+        if (questionId < blockedQuestionId) {
+          return deferredNavigate();
+        }
+        // Else evaluate its correctness - proceed iff the answer to the current question is correct
+        const question: IQuestion = this.props.assessment!.questions[questionId];
+        if (question.type === QuestionTypes.mcq) {
+          if (question.answer !== (question as IMCQQuestion).solution) {
+            return showWarningMessage('Your MCQ solution is incorrect!', 750);
+          }
+        } else if (question.type === QuestionTypes.programming) {
+          const isCorrect = this.props.editorTestcases.reduce((acc, testcase) => {
+            return acc && stringify(testcase.result) === testcase.answer;
+          }, true);
+          if (!isCorrect) {
+            return showWarningMessage('Your solution has not passed all testcases!', 750);
+          }
+        }
+        return deferredNavigate();
+      };
+    };
+
     const onClickSave = () =>
       this.props.handleSave(
         this.props.assessment!.questions[questionId].id,
@@ -453,8 +487,16 @@ class AssessmentWorkspace extends React.Component<
 
     const nextButton = (
       <NextButton
-        onClickNext={onClickNext}
-        onClickReturn={onClickReturn}
+        onClickNext={
+          this.props.assessment!.category === AssessmentCategories.Path
+            ? onClickProgress(onClickNext)
+            : onClickNext
+        }
+        onClickReturn={
+          this.props.assessment!.category === AssessmentCategories.Path
+            ? onClickProgress(onClickReturn)
+            : onClickReturn
+        }
         questionProgress={questionProgress}
         key="next_question"
       />
