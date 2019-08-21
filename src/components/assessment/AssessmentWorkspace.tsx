@@ -195,7 +195,7 @@ class AssessmentWorkspace extends React.Component<
       >
         <div className={Classes.DIALOG_BODY}>
           <Markdown content="Are you sure you want to reset the template?" />
-          <Markdown content="*Note this will not affect the saved copy of your code, unless you save over it.*" />
+          <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
