@@ -503,18 +503,11 @@ function linear_decay(decay_period) {
  */
 function adsr(attack_ratio, decay_ratio, sustain_level, release_ratio) {
   return sound => {
+    var wave = get_wave(sound);
     var duration = get_duration(sound);
     var attack_time = duration * attack_ratio;
     var decay_time = duration * decay_ratio;
-    var release_time = duration * release_ratio;  
-    return absolute_adsr(attack_time, decay_time, sustain_level, release_time)(sound);
-  }
-}
-
-function absolute_adsr(attack_time, decay_time, sustain_level, release_time) {
-  return sound => {
-    var wave = get_wave(sound);
-    var duration = get_duration(sound);
+    var release_time = duration * release_ratio;
     return make_sound( x => {
       if (x < attack_time) {
         return wave(x) * (x / attack_time);
@@ -574,8 +567,8 @@ function stacking_adsr(waveform, base_frequency, duration, envelopes) {
  */
 function trombone(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
-    list(absolute_adsr(0.4, 0, 1, 0.2),
-      absolute_adsr(0.6472, 1.2, 0, 0.2)));
+    list(adsr(0.2, 0, 1, 0.1),
+      adsr(0.3236, 0.6, 0, 0.1)));
 }
 
 /**
@@ -587,9 +580,9 @@ function trombone(note, duration) {
  */
 function piano(note, duration) {
   return stacking_adsr(triangle_sound, midi_note_to_frequency(note), duration,
-    list(absolute_adsr(0, 1.03, 0, 0.1),
-      absolute_adsr(0, 0.64, 0, 0.1),
-      absolute_adsr(0, 0.4, 0, 0.1)));
+    list(adsr(0, 0.515, 0, 0.05),
+      adsr(0, 0.32, 0, 0.05),
+      adsr(0, 0.2, 0, 0.05)));
 }
 
 /**
@@ -601,10 +594,10 @@ function piano(note, duration) {
  */
 function bell(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
-    list(absolute_adsr(0, 1.2, 0, 0.1),
-      absolute_adsr(0, 1.3236, 0, 0.1),
-      absolute_adsr(0, 1.5236, 0, 0.1),
-      absolute_adsr(0, 1.8142, 0, 0.1)));
+    list(adsr(0, 0.6, 0, 0.05),
+      adsr(0, 0.6618, 0, 0.05),
+      adsr(0, 0.7618, 0, 0.05),
+      adsr(0, 0.9071, 0, 0.05)));
 }
 
 /**
@@ -616,10 +609,10 @@ function bell(note, duration) {
  */
 function violin(note, duration) {
   return stacking_adsr(sawtooth_sound, midi_note_to_frequency(note), duration,
-    list(absolute_adsr(0.7, 0, 1, 0.3),
-      absolute_adsr(0.7, 0, 1, 0.3),
-      absolute_adsr(0.9, 0, 1, 0.3),
-      absolute_adsr(0.9, 0, 1, 0.3)));
+    list(adsr(0.35, 0, 1, 0.15),
+      adsr(0.35, 0, 1, 0.15),
+      adsr(0.45, 0, 1, 0.15),
+      adsr(0.45, 0, 1, 0.15)));
 }
 
 /**
@@ -631,9 +624,9 @@ function violin(note, duration) {
  */
 function cello(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
-    list(absolute_adsr(0.1, 0, 1, 0.2),
-      absolute_adsr(0.1, 0, 1, 0.3),
-      absolute_adsr(0, 0, 0.2, 0.3)));
+    list(adsr(0.05, 0, 1, 0.1),
+      adsr(0.05, 0, 1, 0.15),
+      adsr(0, 0, 0.2, 0.15)));
 }
 
 function string_to_list_of_numbers(string) {
