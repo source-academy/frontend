@@ -16,18 +16,27 @@ export interface IReplProps {
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
+  hidden?: boolean;
+  usingSubst?: boolean;
 }
 
 export interface IOutputProps {
   output: InterpreterOutput;
+  usingSubst?: boolean;
 }
 
 class Repl extends React.PureComponent<IReplProps, {}> {
+  public constructor(props: IReplProps) {
+    super(props);
+  }
+
   public render() {
-    const cards = this.props.output.map((slice, index) => <Output output={slice} key={index} />);
+    const cards = this.props.output.map((slice, index) => (
+      <Output output={slice} key={index} usingSubst={this.props.usingSubst || false} />
+    ));
     const inputProps: IReplInputProps = this.props as IReplInputProps;
     return (
-      <div className="Repl">
+      <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
         <div className="repl-output-parent">
           {cards}
           <HotKeys
@@ -42,7 +51,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
   }
 }
 
-export const Output: React.SFC<IOutputProps> = props => {
+export const Output: React.SFC<IOutputProps> = (props: IOutputProps) => {
   switch (props.output.type) {
     case 'code':
       return (
@@ -57,7 +66,14 @@ export const Output: React.SFC<IOutputProps> = props => {
         </Card>
       );
     case 'result':
-      if (props.output.consoleLogs.length === 0) {
+      // We check if we are using Substituter, so we can process the REPL results properly
+      if (props.usingSubst && props.output.value instanceof Array) {
+        return (
+          <Card>
+            <Pre className="logOutput">Check out the substituter tab!</Pre>
+          </Card>
+        );
+      } else if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
             <Pre className="resultOutput">{renderResult(props.output.value)}</Pre>

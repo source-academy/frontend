@@ -25,6 +25,7 @@ const baseProps = {
   output: [],
   replValue: '',
   websocketStatus: 0,
+  usingSubst: false,
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -48,6 +49,7 @@ const baseProps = {
   handleSetWebsocketStatus: (websocketStatus: number) => {},
   handleSideContentHeightChange: (h: number) => {},
   handleToggleEditorAutorun: () => {},
+  handleUsingSubst: (usingSubst: boolean) => {},
   handleDebuggerPause: () => {},
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {}
