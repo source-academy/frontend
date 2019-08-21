@@ -9,9 +9,11 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     }
 
     var hookHandlers = {
-        startMission: function (number) {
-            const assessmentType = story.split('-')[0] + 's';
-            return history.push('/academy/' + assessmentType)
+        startMission: function () {
+            return history.push('/academy/missions');
+        },
+        startQuest: function () {
+            return history.push('/academy/quests');
         },
         openTemplate: function (name) {
             switch (name) {
