@@ -9,9 +9,11 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     }
 
     var hookHandlers = {
-        startMission: function (number) {
-            const assessmentType = story.split('-')[0] + 's';
-            return history.push('/academy/' + assessmentType)
+        startMission: function () {
+            return history.push('/academy/missions');
+        },
+        startQuest: function () {
+            return history.push('/academy/quests');
         },
         openTemplate: function (name) {
             switch (name) {
@@ -79,13 +81,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
 
     function initialize(div, canvas) {
         startGame(div, canvas);
-        const now = new Date();
-        const mission_1_deployDate = new Date("August 16, 2019 12:00:00");
-        if (mission_1_deployDate <= now) {
-            StoryXMLPlayer.loadStory('mission-1', function () {});
-        } else {
-            StoryXMLPlayer.loadStory('act-1', function () {});
-        }
+        StoryXMLPlayer.loadStory('master', function () {});
     }
 
     return initialize;
