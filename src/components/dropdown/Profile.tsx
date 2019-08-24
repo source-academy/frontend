@@ -7,6 +7,7 @@ import {
   AssessmentCategories,
   AssessmentCategory,
   AssessmentStatuses,
+  GradingStatuses,
   IAssessmentOverview
 } from '../assessment/assessmentShape';
 import ProfileCard from './ProfileCard';
@@ -71,7 +72,8 @@ class Profile extends React.Component<ProfileProps, {}> {
         const [currentGrade, currentXp, maxGrade, maxXp] = this.props.assessmentOverviews!.reduce(
           (acc, item) =>
             item.status === AssessmentStatuses.submitted
-              ? item.category === AssessmentCategories.Mission
+              ? item.category === AssessmentCategories.Mission &&
+                item.gradingStatus === GradingStatuses.graded
                 ? [
                     acc[0] + item.grade / item.maxGrade,
                     acc[1] + item.xp,
