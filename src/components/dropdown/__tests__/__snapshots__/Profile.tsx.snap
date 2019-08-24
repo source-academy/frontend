@@ -178,7 +178,7 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                                 <Route path=\\"\\\\\\\\/academy\\\\\\\\/quests\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                   <Link to=\\"/academy/quests/5/0\\" className=\\"profile-summary-navlink\\" style={[undefined]} aria-current={{...}} target=\\"_blank\\" replace={false}>
                                     <a className=\\"profile-summary-navlink\\" style={[undefined]} aria-current={{...}} target=\\"_blank\\" onClick={[Function]} href=\\"/academy/quests/5/0\\">
-                                      <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Closed (partially graded) Sidequest\\">
+                                      <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Closed (not graded) Sidequest\\">
                                         <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
                                           <Blueprint3.Icon icon=\\"lightbulb\\" iconSize={20}>
                                             <span icon=\\"lightbulb\\" className=\\"bp3-icon bp3-icon-lightbulb\\" title={[undefined]}>
@@ -192,7 +192,7 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                                           </Blueprint3.Icon>
                                           <Component>
                                             <h4 className=\\"bp3-heading\\">
-                                              Closed (partially graded) Sidequest
+                                              Closed (not graded) Sidequest
                                             </h4>
                                           </Component>
                                           <div className=\\"xp-details\\">
