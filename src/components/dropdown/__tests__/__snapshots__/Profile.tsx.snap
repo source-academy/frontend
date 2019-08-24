@@ -79,9 +79,9 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                                 Grade
                               </div>
                               <div className=\\"total-value\\">
-                                2700
+                                0.90
                                  / 
-                                3000
+                                1.00
                               </div>
                               <div className=\\"percentage\\">
                                 90.00

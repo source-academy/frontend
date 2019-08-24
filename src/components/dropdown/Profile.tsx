@@ -73,9 +73,9 @@ class Profile extends React.Component<ProfileProps, {}> {
             item.status === AssessmentStatuses.submitted
               ? item.category === AssessmentCategories.Mission
                 ? [
-                    acc[0] + item.grade,
+                    acc[0] + item.grade / item.maxGrade,
                     acc[1] + item.xp,
-                    acc[2] + item.maxGrade,
+                    acc[2] + 1,
                     acc[3] + item.maxXp
                   ]
                 : [acc[0], acc[1] + item.xp, acc[2], acc[3] + item.maxXp]
@@ -145,7 +145,7 @@ class Profile extends React.Component<ProfileProps, {}> {
                 />
                 <div className="type">Grade</div>
                 <div className="total-value">
-                  {currentGrade} / {maxGrade}
+                  {currentGrade.toFixed(2)} / {maxGrade.toFixed(2)}
                 </div>
                 <div className="percentage">
                   {(getFrac(currentGrade, maxGrade) * 100).toFixed(2)}%
