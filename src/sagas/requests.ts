@@ -155,6 +155,13 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
       q = question;
     }
 
+    // If the backend returns :nil (null) for grader, then the question is not graded
+    // Delete the grader and gradedAt attributes
+    if (q.grader === null) {
+      delete q.grader;
+      delete q.gradedAt;
+    }
+
     // Make library.external.name uppercase
     q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
     // Make globals into an Array of (string, value)

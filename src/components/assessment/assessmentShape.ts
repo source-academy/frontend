@@ -120,11 +120,11 @@ export interface IQuestion {
   library: Library;
   graderLibrary?: Library; // For mission control
   type: QuestionType;
-  grader: {
+  grader?: {
     name: string;
     id: number;
-  } | null;
-  gradedAt: string | null;
+  };
+  gradedAt?: string;
   xp: number;
   grade: number;
   maxGrade: number;
