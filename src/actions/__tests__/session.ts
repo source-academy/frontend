@@ -377,7 +377,12 @@ test('updateGrading generates correct action object', () => {
         gradeAdjustment: 0,
         xp: 100,
         xpAdjustment: 0,
-        comments: 'Well done.'
+        comments: 'Well done.',
+        grader: {
+          name: 'HARTIN MENZ',
+          id: 100
+        },
+        gradedAt: '2019-08-16T13:26:32+00:00'
       }
     }
   ];
