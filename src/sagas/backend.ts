@@ -77,7 +77,7 @@ function* backendSaga(): SagaIterator {
   ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role !== Role.Student) {
-      return yield call(showWarningMessage, 'Only students can submit answers.');
+      return yield call(showWarningMessage, 'Answer rejected - only students can submit answers.');
     }
 
     const tokens = yield select((state: IState) => ({
@@ -87,24 +87,16 @@ function* backendSaga(): SagaIterator {
     const questionId = action.payload.id;
     const answer = action.payload.answer;
     const resp = yield call(request.postAnswer, questionId, answer, tokens);
-    if (!resp) {
-      return yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+
+    const codes: Map<number, string> = new Map([
+      [400, "Answer rejected - can't save an empty answer."],
+      [403, 'Answer rejected - assessment not open or already finalised.']
+    ]);
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp, codes);
+      return;
     }
-    if (!resp.ok) {
-      let errorMessage: string;
-      switch (resp.status) {
-        case 401:
-          errorMessage = 'Session expired. Please login again.';
-          break;
-        case 400:
-          errorMessage = "Can't save an empty answer.";
-          break;
-        default:
-          errorMessage = `Something went wrong (got ${resp.status} response)`;
-          break;
-      }
-      return yield call(showWarningMessage, errorMessage);
-    }
+
     yield call(showSuccessMessage, 'Saved!', 1000);
     // Now, update the answer for the question in the assessment in the store
     const assessmentId = yield select(
@@ -130,7 +122,10 @@ function* backendSaga(): SagaIterator {
   ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role !== Role.Student) {
-      return yield call(showWarningMessage, 'Only students can submit assessments.');
+      return yield call(
+        showWarningMessage,
+        'Submission rejected - only students can submit assessments.'
+      );
     }
 
     const tokens = yield select((state: IState) => ({
@@ -139,9 +134,16 @@ function* backendSaga(): SagaIterator {
     }));
     const assessmentId = action.payload;
     const resp = yield call(request.postAssessment, assessmentId, tokens);
+
+    const codes: Map<number, string> = new Map([
+      [400, 'Not allowed to finalise - some questions are unattempted.'],
+      [403, 'Not allowed to finalise - assessment not open or already finalised.']
+    ]);
     if (!resp || !resp.ok) {
-      return yield call(showWarningMessage, 'Something went wrong. Please try again.');
+      yield request.handleResponseError(resp, codes);
+      return;
     }
+
     yield call(showSuccessMessage, 'Submitted!', 2000);
     // Now, update the status of the assessment overview in the store
     const overviews: IAssessmentOverview[] = yield select(
@@ -199,8 +201,13 @@ function* backendSaga(): SagaIterator {
     const { submissionId } = action.payload;
 
     const resp: Response = yield request.postUnsubmit(submissionId, tokens);
+
+    const codes: Map<number, string> = new Map([
+      [400, 'Not allowed to unsubmit - submission incomplete or not submitted.'],
+      [403, "Not allowed to unsubmit - not this student's Avenger or an Admin."]
+    ]);
     if (!resp || !resp.ok) {
-      yield request.handleResponseError(resp);
+      yield request.handleResponseError(resp, codes);
       return;
     }
 
@@ -237,30 +244,35 @@ function* backendSaga(): SagaIterator {
       tokens,
       comments
     );
-    if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Submitted!', 1000);
 
-      // Now, update the grade for the question in the Grading in the store
-      const grading: Grading = yield select((state: IState) =>
-        state.session.gradings.get(submissionId)
-      );
-      const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
-        if (gradingQuestion.question.id === questionId) {
-          gradingQuestion.grade = {
-            gradeAdjustment,
-            xpAdjustment,
-            roomId: gradingQuestion.grade.roomId,
-            grade: gradingQuestion.grade.grade,
-            xp: gradingQuestion.grade.xp,
-            comments
-          };
-        }
-        return gradingQuestion;
-      });
-      yield put(actions.updateGrading(submissionId, newGrading));
-    } else {
-      yield request.handleResponseError(resp);
+    const codes: Map<number, string> = new Map([
+      [400, 'Grading rejected - missing permissions or invalid grade parameters.'],
+      [405, 'Not allowed to grade - submission incomplete or not submitted.']
+    ]);
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp, codes);
+      return;
     }
+
+    yield call(showSuccessMessage, 'Submitted!', 1000);
+    // Now, update the grade for the question in the Grading in the store
+    const grading: Grading = yield select((state: IState) =>
+      state.session.gradings.get(submissionId)
+    );
+    const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
+      if (gradingQuestion.question.id === questionId) {
+        gradingQuestion.grade = {
+          gradeAdjustment,
+          xpAdjustment,
+          roomId: gradingQuestion.grade.roomId,
+          grade: gradingQuestion.grade.grade,
+          xp: gradingQuestion.grade.xp,
+          comments
+        };
+      }
+      return gradingQuestion;
+    });
+    yield put(actions.updateGrading(submissionId, newGrading));
   };
 
   const sendGradeAndContinue = function*(
@@ -335,7 +347,7 @@ function* backendSaga(): SagaIterator {
     const resp: Response | null = yield call(request.postAcknowledgeNotifications, tokens, ids);
 
     if (!resp || !resp.ok) {
-      yield call(showWarningMessage, "Something went wrong, couldn't acknowledge");
+      yield request.handleResponseError(resp);
       return;
     }
   });
@@ -358,18 +370,21 @@ function* backendSaga(): SagaIterator {
   ) {
     const role = yield select((state: IState) => state.session.role!);
     if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can delete sourcecast.');
+      return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
     }
+
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
     const { id } = action.payload;
     const resp: Response = yield request.deleteSourcecastEntry(id, tokens);
+
     if (!resp || !resp.ok) {
-      yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
+      yield request.handleResponseError(resp);
       return;
     }
+
     const sourcecastIndex = yield call(request.getSourcecastIndex, tokens);
     if (sourcecastIndex) {
       yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
@@ -403,23 +418,14 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
     const resp = yield request.postSourcecast(title, description, audio, playbackData, tokens);
-    if (resp && resp.ok) {
-      yield call(showSuccessMessage, 'Saved successfully!', 1000);
-      yield history.push('/sourcecast');
-    } else if (resp !== null) {
-      let errorMessage: string;
-      switch (resp.status) {
-        case 401:
-          errorMessage = 'Session expired. Please login again.';
-          break;
-        default:
-          errorMessage = `Something went wrong (got ${resp.status} response)`;
-          break;
-      }
-      yield call(showWarningMessage, errorMessage);
-    } else {
-      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp, new Map());
+      return;
     }
+
+    yield call(showSuccessMessage, 'Saved successfully!', 1000);
+    yield history.push('/sourcecast');
   });
 
   yield takeEvery(actionTypes.DELETE_MATERIAL, function*(
@@ -435,8 +441,9 @@ function* backendSaga(): SagaIterator {
     }));
     const { id } = action.payload;
     const resp: Response = yield request.deleteMaterial(id, tokens);
+
     if (!resp || !resp.ok) {
-      yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
+      yield request.handleResponseError(resp);
       return;
     }
     const materialDirectoryTree = yield select(
@@ -456,10 +463,10 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
     const { id } = action.payload;
-    const response = yield call(request.getMaterialIndex, id, tokens);
-    if (response) {
-      const directory_tree = response.directory_tree;
-      const materialIndex = response.index;
+    const resp = yield call(request.getMaterialIndex, id, tokens);
+    if (resp) {
+      const directory_tree = resp.directory_tree;
+      const materialIndex = resp.index;
       yield put(actions.updateMaterialDirectoryTree(directory_tree));
       yield put(actions.updateMaterialIndex(materialIndex));
     }
@@ -483,23 +490,14 @@ function* backendSaga(): SagaIterator {
     const directoryLength = materialDirectoryTree.length;
     const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
     const resp = yield request.postMaterial(file, title, description, parentId, tokens);
-    if (resp && resp.ok) {
-      yield put(actions.fetchMaterialIndex(parentId));
-      yield call(showSuccessMessage, 'Saved successfully!', 1000);
-    } else if (resp !== null) {
-      let errorMessage: string;
-      switch (resp.status) {
-        case 401:
-          errorMessage = 'Session expired. Please login again.';
-          break;
-        default:
-          errorMessage = `Something went wrong (got ${resp.status} response)`;
-          break;
-      }
-      yield call(showWarningMessage, errorMessage);
-    } else {
-      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
     }
+
+    yield put(actions.fetchMaterialIndex(parentId));
+    yield call(showSuccessMessage, 'Saved successfully!', 1000);
   });
 
   yield takeEvery(actionTypes.CREATE_MATERIAL_FOLDER, function*(
@@ -520,23 +518,14 @@ function* backendSaga(): SagaIterator {
     const directoryLength = materialDirectoryTree.length;
     const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
     const resp = yield request.postMaterialFolder(title, parentId, tokens);
-    if (resp && resp.ok) {
-      yield put(actions.fetchMaterialIndex(parentId));
-      yield call(showSuccessMessage, 'Created successfully!', 1000);
-    } else if (resp !== null) {
-      let errorMessage: string;
-      switch (resp.status) {
-        case 401:
-          errorMessage = 'Session expired. Please login again.';
-          break;
-        default:
-          errorMessage = `Something went wrong (got ${resp.status} response)`;
-          break;
-      }
-      yield call(showWarningMessage, errorMessage);
-    } else {
-      yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
     }
+
+    yield put(actions.fetchMaterialIndex(parentId));
+    yield call(showSuccessMessage, 'Created successfully!', 1000);
   });
 
   yield takeEvery(actionTypes.DELETE_MATERIAL_FOLDER, function*(
@@ -552,10 +541,12 @@ function* backendSaga(): SagaIterator {
     }));
     const { id } = action.payload;
     const resp: Response = yield request.deleteMaterialFolder(id, tokens);
+
     if (!resp || !resp.ok) {
-      yield call(showWarningMessage, `Something went wrong (got ${resp.status} response)`);
+      yield request.handleResponseError(resp);
       return;
     }
+
     const materialDirectoryTree = yield select(
       (state: IState) => state.session.materialDirectoryTree!
     );
