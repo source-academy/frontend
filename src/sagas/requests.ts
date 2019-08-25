@@ -273,7 +273,7 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
   const grading: Grading = gradingResult.map((gradingQuestion: any) => {
     const { student, question, grade } = gradingQuestion;
 
-    return {
+    const result = {
       question: {
         answer: question.answer,
         autogradingResults: question.autogradingResults || [],
@@ -301,6 +301,13 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
         comments: grade.comments
       }
     } as GradingQuestion;
+
+    if (gradingQuestion.grade.grader !== null) {
+      result.grade.grader = gradingQuestion.grade.grader;
+      result.grade.gradedAt = gradingQuestion.grade.gradedAt;
+    }
+
+    return result;
   });
   return grading;
 }

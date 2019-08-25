@@ -283,7 +283,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
                 ? props.grading![questionId].grade.grader!.name
                 : undefined
             }
-            gradedAt={props.grading![questionId].grade.gradedAt!}
+            gradedAt={
+              props.grading![questionId].grade.grader
+                ? props.grading![questionId].grade.gradedAt!
+                : undefined
+            }
           />
         ),
         id: SideContentType.grading

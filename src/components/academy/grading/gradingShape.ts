@@ -65,8 +65,8 @@ export type GradingQuestion = {
     grader?: {
       name: string;
       id: number;
-    } | null;
-    gradedAt?: string | null;
+    };
+    gradedAt?: string;
   };
 };
 
