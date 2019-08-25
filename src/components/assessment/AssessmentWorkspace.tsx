@@ -366,7 +366,7 @@ class AssessmentWorkspace extends React.Component<
         id: SideContentType.autograder
       }
     ];
-    const isGraded = props.assessment!.questions[questionId].grader !== null;
+    const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     if (isGraded) {
       tabs.push(
         {

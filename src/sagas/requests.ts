@@ -155,6 +155,13 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
       q = question;
     }
 
+    // If the backend returns :nil (null) for grader, then the question is not graded
+    // Delete the grader and gradedAt attributes
+    if (q.grader === null) {
+      delete q.grader;
+      delete q.gradedAt;
+    }
+
     // Make library.external.name uppercase
     q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
     // Make globals into an Array of (string, value)
@@ -266,7 +273,7 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
   const grading: Grading = gradingResult.map((gradingQuestion: any) => {
     const { student, question, grade } = gradingQuestion;
 
-    return {
+    const result = {
       question: {
         answer: question.answer,
         autogradingResults: question.autogradingResults || [],
@@ -294,6 +301,13 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
         comments: grade.comments
       }
     } as GradingQuestion;
+
+    if (gradingQuestion.grade.grader !== null) {
+      result.grade.grader = gradingQuestion.grade.grader;
+      result.grade.gradedAt = gradingQuestion.grade.gradedAt;
+    }
+
+    return result;
   });
   return grading;
 }
