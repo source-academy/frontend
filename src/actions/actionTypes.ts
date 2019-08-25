@@ -7,6 +7,7 @@ export const LOG_OUT = 'LOG_OUT';
 /** Playground */
 export const CHANGE_QUERY_STRING = 'CHANGE_QUERY_STRING';
 export const GENERATE_LZ_STRING = 'GENERATE_LZ_STRING';
+export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 
 /** Interpreter */
 export const BEGIN_INTERRUPT_EXECUTION = 'BEGIN_INTERRUPT_EXECUTION';
@@ -34,10 +35,13 @@ export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';
 export const CHAPTER_SELECT = 'CHAPTER_SELECT';
 export const CLEAR_REPL_INPUT = 'CLEAR_REPL_INPUT';
 export const CLEAR_REPL_OUTPUT = 'CLEAR_REPL_OUTPUT';
+export const CLEAR_REPL_OUTPUT_LAST = 'CLEAR_REPL_OUTPUT_LAST';
 export const END_CLEAR_CONTEXT = 'END_CLEAR_CONTEXT';
 export const ENSURE_LIBRARIES_LOADED = 'ENSURE_LIBRARIES_LOADED';
 export const EVAL_EDITOR = 'EVAL_EDITOR';
 export const EVAL_REPL = 'EVAL_REPL';
+// For interpreting code blocks silently (e.g. prepend) BEFORE the test case is run
+export const EVAL_SILENT = 'EVAL_SILENT';
 export const EVAL_TESTCASE = 'EVAL_TESTCASE';
 export const PLAYGROUND_EXTERNAL_SELECT = 'PLAYGROUND_EXTERNAL_SELECT ';
 export const RESET_TESTCASE = 'RESET_TESTCASE';

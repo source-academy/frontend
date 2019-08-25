@@ -2,7 +2,11 @@ import { mount, shallow } from 'enzyme';
 import * as React from 'react';
 
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
-import { AutogradingResult, ITestcase } from '../../../../components/assessment/assessmentShape';
+import {
+  AutogradingResult,
+  ITestcase,
+  TestcaseTypes
+} from '../../../../components/assessment/assessmentShape';
 import Autograder, { AutograderProps } from '../Autograder';
 
 const mockErrors: SourceError[] = [
@@ -20,21 +24,35 @@ const mockErrors: SourceError[] = [
 ];
 
 // The five testcases have statuses: correct, (none), correct, incorrect and error
-const mockTestcases: ITestcase[] = [
+const mockPublicTestcases: ITestcase[] = [
   { program: `"string";`, score: 0, answer: `"string"`, result: `string` },
-  { program: `fibonacci(2)'`, score: 1, answer: `2` },
+  { program: `fibonacci(2);`, score: 1, answer: `2` },
   { program: `fibonacci(3);`, score: 1, answer: `2`, result: 2 },
   { program: `fibonacci(4);`, score: 2, answer: `3`, result: 4 },
   { program: `fibonacci(5);`, score: 3, answer: `5`, errors: mockErrors }
-];
+].map(proto => {
+  return { ...proto, type: TestcaseTypes.public };
+});
 
-const testcaseCardClasses = [
+const publicTestcaseCardClasses = [
   'AutograderCard correct',
   'AutograderCard',
   'AutograderCard correct',
   'AutograderCard wrong',
   'AutograderCard wrong'
 ];
+
+// The four hidden testcases have statuses: (none), correct, incorrect and error
+const mockHiddenTestcases: ITestcase[] = [
+  { program: `add(3, 0);`, score: 1, answer: `3` },
+  { program: `add(5, 2);`, score: 1, answer: `7`, result: 7 },
+  { program: `add(-6, 6);`, score: 2, answer: `0`, result: 12 },
+  { program: `add(-4, -7);`, score: 3, answer: `-11`, errors: mockErrors }
+].map(proto => {
+  return { ...proto, type: TestcaseTypes.hidden };
+});
+
+const hiddenTestcaseCardClasses = publicTestcaseCardClasses.slice(1);
 
 const mockAutogradingResults: AutogradingResult[] = [
   { resultType: 'pass' },
@@ -97,10 +115,10 @@ test('Autograder renders placeholders correctly when testcases and results are e
   expect(tree.find('.ResultCard')).toHaveLength(0);
 });
 
-test('Autograder renders testcases with different statuses correctly', () => {
+test('Autograder renders public testcases with different statuses correctly', () => {
   const props: AutograderProps = {
     autogradingResults: [],
-    testcases: mockTestcases,
+    testcases: mockPublicTestcases,
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <Autograder {...props} />;
@@ -126,7 +144,7 @@ test('Autograder renders testcases with different statuses correctly', () => {
   //    Correct CSS styling applied to each Card (by className)
   const cards = tree.find('.AutograderCard');
   expect(cards).toHaveLength(5);
-  expect(cards.map(node => node.getDOMNode().className)).toEqual(testcaseCardClasses);
+  expect(cards.map(node => node.getDOMNode().className)).toEqual(publicTestcaseCardClasses);
   const resultCells = cards.map(card => {
     return card
       .find('.testcase-actual')
@@ -148,6 +166,32 @@ test('Autograder renders testcases with different statuses correctly', () => {
     '4',
     'Line 3: Name a not declared.'
   ]);
+});
+
+test('Autograder renders hidden testcases with different statuses correctly', () => {
+  const props: AutograderProps = {
+    autogradingResults: [],
+    testcases: mockHiddenTestcases,
+    handleTestcaseEval: (testcaseId: number) => {}
+  };
+  const app = <Autograder {...props} />;
+  const tree = mount(app);
+  expect(tree.debug()).toMatchSnapshot();
+  // No autograder result Card components should be rendered
+  expect(tree.find('.ResultCard')).toHaveLength(0);
+  // Expect each of the four testcases to have:
+  //    A placeholder cell rendered in place of the actual testcase data
+  //    Correct CSS styling applied to each Card (by className)
+  const cards = tree.find('.AutograderCard');
+  expect(cards).toHaveLength(4);
+  expect(cards.map(node => node.getDOMNode().className)).toEqual(hiddenTestcaseCardClasses);
+  cards.forEach(card => {
+    const placeholder = card
+      .find('.testcase-placeholder')
+      .hostNodes()
+      .getDOMNode();
+    expect(placeholder.textContent).toEqual('Hidden testcase');
+  });
 });
 
 test('Autograder renders autograder results with different statuses correctly', () => {
