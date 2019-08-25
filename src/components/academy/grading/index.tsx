@@ -247,6 +247,8 @@ class Grading extends React.Component<IGradingProps, State> {
               placeholder="Enter any text (e.g. mission)"
               value={this.state.filterValue}
               onChange={this.handleFilterChange}
+              onKeyPress={this.handleFilterKeypress}
+              onBlur={this.handleApplyFilter}
             />
           </FormGroup>
 
@@ -311,9 +313,17 @@ class Grading extends React.Component<IGradingProps, State> {
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const changeVal = event.target.value;
     this.setState({ filterValue: changeVal });
+  };
 
+  private handleFilterKeypress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      this.handleApplyFilter();
+    }
+  };
+
+  private handleApplyFilter = () => {
     if (this.gridApi) {
-      this.gridApi.setQuickFilter(changeVal);
+      this.gridApi.setQuickFilter(this.state.filterValue);
     }
   };
 
