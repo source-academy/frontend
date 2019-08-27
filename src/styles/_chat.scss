@@ -1,44 +1,49 @@
-.MessageList {
-  .dialogue-box {
-    font-family: inherit;
-    padding: 8px 15px 9px 15px;
-    white-space: pre-wrap; /* CSS3 */
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -pre-wrap; /* Opera <7 */
-    white-space: -o-pre-wrap; /* Opera 7 */
-    word-break: break-word;
-  }
+.Chat {
+  .chat-messages {
+    .dialogue-box {
+      font-family: inherit;
+      padding: 8px 15px 9px 15px;
+      white-space: pre-wrap; /* CSS3 */
+      white-space: -moz-pre-wrap; /* Firefox */
+      white-space: -pre-wrap; /* Opera <7 */
+      white-space: -o-pre-wrap; /* Opera 7 */
+      word-break: break-word;
+    }
 
-  .msg-item {
-    list-style-type: none;
-  }
+    .msg-list {
+      padding: 0px 0px 5px 0px;
+    }
 
-  .msg-list {
-    padding: 0px 0px 5px 0px;
-  }
+    .msg-item {
+      list-style-type: none;
+    }
 
-  .msg-sender {
-    font-weight: bold;
-    margin: 0px 0px 7px 0px;
-  }
-  .msg-date {
-    font-size: 11px;
-    font-family: monospace;
-  }
-}
+    .msg-sender {
+      font-weight: bold;
+      margin: 0px 0px 7px 0px;
+    }
 
-.Input {
-  .Input-zone {
-    padding: 0px 0px 5px 0px;
-    .Input-msg {
-      height: 90px;
-      outline: none;
-      resize: none;
-      width: 100%;
+    .msg-date {
+      font-size: 11px;
+      font-family: monospace;
     }
   }
-  .markdown-link {
-    color: inherit;
-    font-style: italic;
+
+  .input-field {
+    .input-zone {
+      padding: 0px 0px 5px 0px;
+
+      .input-msg {
+        height: 90px;
+        outline: none;
+        resize: none;
+        width: 100%;
+      }
+    }
+
+    .markdown-link {
+      color: inherit;
+      font-style: italic;
+    }
   }
 }

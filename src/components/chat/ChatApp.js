@@ -96,7 +96,7 @@ class ChatApp extends React.Component {
         return (
           <div className="Chat">
             <MessageList
-              className="message-list"
+              className="chat-messages"
               viewingUserId={this.state.currentUser.id}
               messages={this.state.messages}
             />
