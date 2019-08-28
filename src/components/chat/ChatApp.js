@@ -96,12 +96,10 @@ class ChatApp extends React.Component {
         return (
           <div className="Chat">
             <MessageList
-              className="message-list"
-              viewingUserId={this.state.currentUser.id}
               messages={this.state.messages}
             />
             <hr />
-            <Input className="input-field" onSubmit={this.addMessage} />
+            <Input onSubmit={this.addMessage} />
             <div ref={this.messagesEndRef} />
           </div>
         );

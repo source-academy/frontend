@@ -18,7 +18,7 @@ type StateProps = {
 class MessageList extends React.Component<StateProps> {
   public render() {
     return (
-      <div className="MessageList">
+      <div>
         <ul className="msg-list">
           {this.props.messages.length > 0 ? (
             this.props.messages.map((message: Message, index: number) => (
