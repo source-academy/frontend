@@ -13,88 +13,82 @@
     height: 1000,
     container: container
   });
-  const frameFontSetting = '14px Roboto Mono, Courier New';
+  const frameFontSetting = '14px RobotGo Mono, Courier New';
   const fnRadius = 12;
   // List of built-in functions to ignore (i.e. not draw)
   var builtins = [
-    'runtime',
-    'display',
-    'raw_display',
-    'stringify',
-    'error',
-    'prompt',
-    'is_number',
-    'is_string',
-    'is_function',
-    'is_boolean',
-    'is_undefined',
-    'parse_int',
-    'undefined',
-    'NaN',
     'Infinity',
-    'null',
-    'pair',
-    'is_pair',
-    'head',
-    'tail',
-    'is_null',
-    'is_list',
-    'list',
-    'length',
-    'map',
-    'build_list',
-    'for_each',
-    'list_to_string',
-    'reverse',
-    'append',
-    'member',
-    'remove',
-    'remove_all',
-    'filter',
-    'enum_list',
-    'list_ref',
+    'NaN',
     'accumulate',
-    'equal',
-    'draw_data',
-    'set_head',
-    'set_tail',
-    'array_length',
-    'is_array',
-    'parse',
+    'alert',
+    'alert',
+    'append',
     'apply_in_underlying_javascript',
-    'is_object',
-    'is_NaN',
-    'has_own_property',
-    'alert',
-    'timed',
+    'array_length',
     'assoc',
-    'rawDisplay',
-    'prompt',
-    'alert',
-    'visualiseList',
+    'build_list',
+    'build_stream',
+    'display',
+    'draw_data',
+    'enum_list',
+    'enum_stream',
+    'equal',
+    'error',
+    'eval_stream',
+    'filter',
+    'for_each',
+    'has_own_property',
+    'head',
+    'integers_from',
+    'is_NaN',
+    'is_array',
+    'is_boolean',
+    'is_function',
+    'is_list',
+    'is_null',
+    'is_number',
+    'is_object',
+    'is_pair',
+    'is_stream',
+    'is_string',
+    'is_undefined',
+    'length',
+    'list',
+    'list_ref',
+    'list_to_stream',
+    'list_to_string',
+    'map',
+    'math_E',
+    'math_LN10',
+    'math_LN2',
+    'math_LOG10E',
+    'math_LOG2E',
+    'math_PI',
+    'math_SQRT1_2',
+    'math_SQRT2',
     'math_abs',
     'math_acos',
     'math_acosh',
     'math_asin',
     'math_asinh',
     'math_atan',
-    'math_atanh',
     'math_atan2',
-    'math_ceil',
+    'math_atanh',
     'math_cbrt',
-    'math_expm1',
+    'math_ceil',
     'math_clz32',
     'math_cos',
     'math_cosh',
     'math_exp',
+    'math_expm1',
     'math_floor',
     'math_fround',
     'math_hypot',
     'math_imul',
     'math_log',
+    'math_log10',
     'math_log1p',
     'math_log2',
-    'math_log10',
     'math_max',
     'math_min',
     'math_pow',
@@ -106,18 +100,43 @@
     'math_sqrt',
     'math_tan',
     'math_tanh',
-    'math_trunc',
     'math_toSource',
-    'math_E',
-    'math_LN10',
-    'math_LN2',
-    'math_LOG10E',
-    'math_LOG2E',
-    'math_PI',
-    'math_SQRT1_2',
-    'math_SQRT2'
+    'math_trunc',
+    'member',
+    'null',
+    'pair',
+    'parse',
+    'parse_int',
+    'prompt',
+    'prompt',
+    'rawDisplay',
+    'raw_display',
+    'remove',
+    'remove_all',
+    'reverse',
+    'runtime',
+    'set_head',
+    'set_tail',
+    'stream',
+    'stream_append',
+    'stream_filter',
+    'stream_for_each',
+    'stream_length',
+    'stream_map',
+    'stream_member',
+    'stream_ref',
+    'stream_remove',
+    'stream_remove_all',
+    'stream_reverse',
+    'stream_tail',
+    'stream_to_list',
+    'stringify',
+    'tail',
+    'timed',
+    'undefined',
+    'visualiseList'
   ];
-  
+
   /**
    * List of built-in functions to draw and not ignore,
    * i.e. built-ins that are called during the program's execution.
@@ -624,8 +643,6 @@
   var frameLayer = new Concrete.Layer();
   var arrowLayer = new Concrete.Layer();
 
-  
-
   fnObjects = [];
   dataObjects = [];
   levels = {};
@@ -634,7 +651,6 @@
   var frames = [];
   // parse input from interpreter
   function parseInput(input) {
-    
     // add layers
     viewport
       .add(frameLayer)
@@ -882,7 +898,7 @@
     Object.keys(levels).forEach(function(level) {
       tempLevels[level] = levels[level].count;
     });
-    
+
     /**
      * Not working :( to fix
     let drawingWidth = 0,
@@ -895,7 +911,7 @@
     }
     viewport.setSize(drawingWidth, drawingHeight);
     */
-    
+
     for (f in frames) {
       /**
        * x-coordinate
@@ -975,7 +991,6 @@
 
   // main function to be exported
   function draw_env(context) {
-    
     // add library-specific built-in functions to list of builtins
     const externalSymbols = context.context.context.externalSymbols;
     for (let i in externalSymbols) {
@@ -983,7 +998,7 @@
     }
 
     // Hides the default text
-    (document.getElementById('env-visualizer-default-text')).hidden = true;
+    document.getElementById('env-visualizer-default-text').hidden = true;
 
     // Blink icon
     const icon = document.getElementById('env_visualiser-icon');
@@ -998,7 +1013,7 @@
     dataObjects = [];
     levels = {};
     builtinsToDraw = [];
-    
+
     frames = parseInput(context);
 
     drawSceneFrames();
@@ -1108,9 +1123,9 @@
   function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
   }
-  
+
   function isArrowFunction(fn) {
-    return fn.node.type == "ArrowFunctionExpression";
+    return fn.node.type == 'ArrowFunctionExpression';
   }
 
   exports.EnvVisualizer = {
@@ -1118,7 +1133,8 @@
     init: function(parent) {
       container.hidden = false;
       parent.appendChild(container);
-    }
+    },
+    builtins
   };
 
   setTimeout(() => {}, 1000);
