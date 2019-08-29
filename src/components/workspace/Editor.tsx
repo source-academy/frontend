@@ -72,6 +72,25 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     }
     const editor = (this.AceEditor.current as any).editor;
     const session = editor.getSession();
+    const jshintOptions = {
+      // undef: true,
+      // unused: true,
+      esnext: true,
+      moz: true,
+      devel: true,
+      browser: true,
+      node: true,
+      laxcomma: true,
+      laxbreak: true,
+      lastsemic: true,
+      onevar: false,
+      passfail: false,
+      maxerr: 1000,
+      expr: true,
+      multistr: true,
+      globalstrict: true
+    };
+    session.$worker.send('setOptions', [jshintOptions]);
 
     editor.on('gutterclick', this.handleGutterClick);
 
