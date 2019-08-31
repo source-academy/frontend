@@ -284,7 +284,7 @@ class Grading extends React.Component<IGradingProps, State> {
               rowData={data}
               rowHeight={30}
               pagination={true}
-              paginationPageSize={50}
+              paginationPageSize={25}
               suppressMovableColumns={true}
             />
           </div>
@@ -328,8 +328,10 @@ class Grading extends React.Component<IGradingProps, State> {
   };
 
   private handleGroupsFilter = () => {
-    this.setState({ groupFilterEnabled: !this.state.groupFilterEnabled });
-    this.props.handleFetchGradingOverviews(this.state.groupFilterEnabled);
+    if (this.gridApi) {
+      this.setState({ groupFilterEnabled: !this.state.groupFilterEnabled });
+      this.props.handleFetchGradingOverviews(this.state.groupFilterEnabled);
+    }
   };
 
   private onGridReady = (params: GridReadyEvent) => {
@@ -339,10 +341,9 @@ class Grading extends React.Component<IGradingProps, State> {
   };
 
   private exportCSV = () => {
-    if (this.gridApi === undefined) {
-      return;
+    if (this.gridApi) {
+      this.gridApi.exportDataAsCsv({ allColumns: true });
     }
-    this.gridApi.exportDataAsCsv({ allColumns: true });
   };
 
   /** Constructs data nodes for the datagrid by joining grading overviews with their
