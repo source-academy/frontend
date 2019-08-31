@@ -21,11 +21,9 @@ class GradeCell extends React.Component<GradeCellProps, {}> {
 
   /** Component to render in table - marks */
   public render() {
-    if (this.props.data.maxGrade !== 0) {
+    if (this.props.data.maxGrade) {
       const tooltip = `Initial Grade: ${this.props.data.initialGrade}
-        (${this.props.data.gradeAdjustment > 0 ? '+' : ''}${
-        this.props.data.gradeAdjustment
-      } adjustment)`;
+        (${this.props.data.gradeAdjustment >= 0 ? '+' : ''}${this.props.data.gradeAdjustment} adj.)`;
       return (
         <div>
           <Tooltip content={tooltip} position={Position.LEFT}>
