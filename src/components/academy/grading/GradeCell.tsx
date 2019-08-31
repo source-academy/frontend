@@ -23,10 +23,12 @@ class GradeCell extends React.Component<GradeCellProps, {}> {
   public render() {
     if (this.props.data.maxGrade) {
       const tooltip = `Initial Grade: ${this.props.data.initialGrade}
-        (${this.props.data.gradeAdjustment >= 0 ? '+' : ''}${this.props.data.gradeAdjustment} adj.)`;
+        (${this.props.data.gradeAdjustment >= 0 ? '+' : ''}${
+        this.props.data.gradeAdjustment
+      } adj.)`;
       return (
         <div>
-          <Tooltip content={tooltip} position={Position.LEFT}>
+          <Tooltip content={tooltip} position={Position.LEFT} hoverOpenDelay={0} lazy={true}>
             {`${this.props.data.currentGrade} / ${this.props.data.maxGrade}`}
           </Tooltip>
         </div>

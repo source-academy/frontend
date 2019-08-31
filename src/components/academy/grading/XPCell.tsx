@@ -27,7 +27,7 @@ class XPCell extends React.Component<XPCellProps, {}> {
         ${this.props.data.xpAdjustment >= 0 ? '+' : ''}${this.props.data.xpAdjustment} adj.)`;
       return (
         <div>
-          <Tooltip content={tooltip} position={Position.LEFT}>
+          <Tooltip content={tooltip} position={Position.LEFT} hoverOpenDelay={0} lazy={true}>
             {`${this.props.data.currentXp + this.props.data.xpBonus} / ${this.props.data.maxXp}`}
           </Tooltip>
         </div>
