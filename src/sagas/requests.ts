@@ -253,7 +253,11 @@ export async function getGradingOverviews(
       xpBonus: overview.xpBonus
     };
     return gradingOverview;
-  });
+  }).sort(
+    (subX: GradingOverview, subY: GradingOverview) => subX.assessmentId !== subY.assessmentId
+      ? subY.assessmentId - subX.assessmentId
+      : subY.submissionId - subX.submissionId
+  );
 }
 
 /**

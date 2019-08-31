@@ -365,9 +365,7 @@ class Grading extends React.Component<IGradingProps, State> {
     );
 
     return sortBy(newOverviews, [
-      (a: GradingOverviewWithNotifications) => (a.notifications.length > 0 ? -1 : 0),
-      (a: GradingOverview) => -a.assessmentId,
-      (a: GradingOverview) => -a.submissionId
+      (a: GradingOverviewWithNotifications) => (a.notifications.length > 0 ? -1 : 0)
     ]);
   };
 }
