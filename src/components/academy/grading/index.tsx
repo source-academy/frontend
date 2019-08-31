@@ -14,7 +14,6 @@ import { AgGridReact } from 'ag-grid-react';
 import { ValueFormatterParams } from 'ag-grid/dist/lib/entities/colDef';
 import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
-import { sortBy } from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -234,7 +233,7 @@ class Grading extends React.Component<IGradingProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
-    const data = this.sortSubmissions();
+    const data = this.buildSubmissionsWithNotifications();
 
     const grid = (
       <div className="GradingContainer">
@@ -303,11 +302,12 @@ class Grading extends React.Component<IGradingProps, State> {
     );
   }
 
-  public componentDidUpdate() {
-    if (!this.gridApi) {
-      return;
+  public componentDidUpdate(prevProps: IGradingProps, prevState: State) {
+    // Only update grid data when a notification is acknowledged
+    if (this.gridApi && this.props.notifications.length !== prevProps.notifications.length) {
+      // Pass the new reconstructed row data to the grid after fetching the updated notifs
+      this.gridApi.setRowData(this.buildSubmissionsWithNotifications());
     }
-    this.gridApi.setRowData(this.sortSubmissions());
   }
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -345,28 +345,24 @@ class Grading extends React.Component<IGradingProps, State> {
     this.gridApi.exportDataAsCsv({ allColumns: true });
   };
 
-  /* Submissions will be sorted in the following order:
-    - whether the submission has notifications
-    - the assessment id
-    - the submission id
-  */
-  private sortSubmissions = () => {
+  /** Constructs data nodes for the datagrid by joining grading overviews with their
+   *  associated notifications.
+   *  @return Returns an array of data nodes, prioritising grading overviews with
+   *  notifications first.
+   */
+  private buildSubmissionsWithNotifications: () => GradingOverviewWithNotifications[] = () => {
     if (!this.props.gradingOverviews) {
       return [];
     }
 
-    const newOverviews = (this.props.gradingOverviews as GradingOverviewWithNotifications[]).map(
-      overview => ({
+    return (this.props.gradingOverviews as GradingOverviewWithNotifications[])
+      .map(overview => ({
         ...overview,
         notifications: filterNotificationsBySubmission(overview.submissionId)(
           this.props.notifications
         )
-      })
-    );
-
-    return sortBy(newOverviews, [
-      (a: GradingOverviewWithNotifications) => (a.notifications.length > 0 ? -1 : 0)
-    ]);
+      }))
+      .sort((subX, subY) => subY.notifications.length - subX.notifications.length);
   };
 }
 
