@@ -233,7 +233,7 @@ class Grading extends React.Component<IGradingProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
-    const data = this.buildSubmissionsWithNotifications();
+    const data = this.sortSubmissionsByNotifications();
 
     const grid = (
       <div className="GradingContainer">
@@ -281,6 +281,7 @@ class Grading extends React.Component<IGradingProps, State> {
               enableFilter={true}
               columnDefs={this.columnDefs}
               onGridReady={this.onGridReady}
+              onGridSizeChanged={this.resizeGrid}
               rowData={data}
               rowHeight={30}
               pagination={true}
@@ -306,9 +307,17 @@ class Grading extends React.Component<IGradingProps, State> {
     // Only update grid data when a notification is acknowledged
     if (this.gridApi && this.props.notifications.length !== prevProps.notifications.length) {
       // Pass the new reconstructed row data to the grid after fetching the updated notifs
-      this.gridApi.setRowData(this.buildSubmissionsWithNotifications());
+      this.gridApi.setRowData(this.sortSubmissionsByNotifications());
     }
   }
+
+  // Forcibly resizes columns to fit the width of the datagrid - prevents datagrid
+  // from needing to render a horizontal scrollbar when columns overflow grid width
+  private resizeGrid = () => {
+    if (this.gridApi) {
+      this.gridApi.sizeColumnsToFit();
+    }
+  };
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const changeVal = event.target.value;
@@ -337,7 +346,6 @@ class Grading extends React.Component<IGradingProps, State> {
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
-    window.onresize = () => this.gridApi!.sizeColumnsToFit();
   };
 
   private exportCSV = () => {
@@ -351,7 +359,7 @@ class Grading extends React.Component<IGradingProps, State> {
    *  @return Returns an array of data nodes, prioritising grading overviews with
    *  notifications first.
    */
-  private buildSubmissionsWithNotifications: () => GradingOverviewWithNotifications[] = () => {
+  private sortSubmissionsByNotifications = () => {
     if (!this.props.gradingOverviews) {
       return [];
     }
