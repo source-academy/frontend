@@ -96,10 +96,11 @@ class Grading extends React.Component<IGradingProps, State> {
         headerName: '',
         field: 'notifications',
         cellRendererFramework: NotificationBadgeCell,
-        maxWidth: 30,
+        width: 30,
         suppressResize: true,
         suppressMovable: true,
-        suppressMenu: true
+        suppressMenu: true,
+        suppressSizeToFit: true
       },
       { headerName: 'Assessment Name', field: 'assessmentName' },
       { headerName: 'Category', field: 'assessmentCategory', maxWidth: 100 },
