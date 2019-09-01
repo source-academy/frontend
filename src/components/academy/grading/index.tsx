@@ -206,7 +206,7 @@ class Grading extends React.Component<IGradingProps, State> {
       { headerName: 'XP Adjustment', field: 'xpAdjustment', hide: true },
       { headerName: 'Current Grade', field: 'currentGrade', hide: true },
       { headerName: 'Max Grade', field: 'maxGrade', hide: true },
-      { headerName: 'Current XP', field: 'currentXp', hide: true },
+      { headerName: 'Current XP (excl. bonus)', field: 'currentXp', hide: true },
       { headerName: 'Max XP', field: 'maxXp', hide: true },
       { headerName: 'Bonus XP', field: 'xpBonus', hide: true }
     ];
@@ -426,7 +426,28 @@ class Grading extends React.Component<IGradingProps, State> {
 
   private exportCSV = () => {
     if (this.gridApi) {
-      this.gridApi.exportDataAsCsv({ allColumns: true });
+      this.gridApi.exportDataAsCsv({
+        fileName: `SA submissions (${new Date().toISOString()}).csv`,
+        // Explicitly declare exported columns to avoid exporting trash columns
+        columnKeys: [
+          'assessmentName',
+          'assessmentCategory',
+          'studentName',
+          'submissionStatus',
+          'gradingStatus',
+          'questionCount',
+          'gradedCount',
+          'initialGrade',
+          'gradeAdjustment',
+          'currentGrade',
+          'maxGrade',
+          'initialXp',
+          'xpAdjustment',
+          'currentXp',
+          'maxXp',
+          'xpBonus'
+        ]
+      });
     }
   };
 
