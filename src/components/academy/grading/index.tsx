@@ -34,6 +34,11 @@ import XPCell from './XPCell';
 type State = {
   filterValue: string;
   groupFilterEnabled: boolean;
+  currPage: number;
+  maxPages: number;
+  rowCountString: string;
+  isBackDisabled: boolean;
+  isForwardDisabled: boolean;
 };
 
 type GradingNavLinkProps = {
@@ -208,7 +213,12 @@ class Grading extends React.Component<IGradingProps, State> {
 
     this.state = {
       filterValue: '',
-      groupFilterEnabled: false
+      groupFilterEnabled: false,
+      currPage: 1,
+      maxPages: 1,
+      rowCountString: '(none)',
+      isBackDisabled: true,
+      isForwardDisabled: true
     };
   }
 
@@ -263,6 +273,36 @@ class Grading extends React.Component<IGradingProps, State> {
                 <div className="ag-grid-button-text hidden-xs">Show all groups</div>
               </Button>
             </div>
+            <div className="centre-controls">
+              <Button
+                icon={IconNames.CHEVRON_BACKWARD}
+                onClick={this.changePaginationView('first')}
+                minimal={true}
+                disabled={this.state.isBackDisabled}
+              />
+              <Button
+                icon={IconNames.CHEVRON_LEFT}
+                onClick={this.changePaginationView('prev')}
+                minimal={true}
+                disabled={this.state.isBackDisabled}
+              />
+              <Button className="pagination-details hidden-xs" disabled={true} minimal={true}>
+                <div>{`Page ${this.state.currPage} of ${this.state.maxPages}`}</div>
+                <div>{this.state.rowCountString}</div>
+              </Button>
+              <Button
+                icon={IconNames.CHEVRON_RIGHT}
+                onClick={this.changePaginationView('next')}
+                minimal={true}
+                disabled={this.state.isForwardDisabled}
+              />
+              <Button
+                icon={IconNames.CHEVRON_FORWARD}
+                onClick={this.changePaginationView('last')}
+                minimal={true}
+                disabled={this.state.isForwardDisabled}
+              />
+            </div>
             <div className="right-controls">
               <Button icon={IconNames.EXPORT} onClick={this.exportCSV}>
                 <div className="ag-grid-button-text hidden-xs">Export to CSV</div>
@@ -283,11 +323,13 @@ class Grading extends React.Component<IGradingProps, State> {
               columnDefs={this.columnDefs}
               onGridReady={this.onGridReady}
               onGridSizeChanged={this.resizeGrid}
+              onPaginationChanged={this.updatePaginationState}
               rowData={data}
               rowHeight={30}
               pagination={true}
               paginationPageSize={25}
               suppressMovableColumns={true}
+              suppressPaginationPanel={true}
             />
           </div>
         </div>
@@ -320,6 +362,38 @@ class Grading extends React.Component<IGradingProps, State> {
     }
   };
 
+  private updatePaginationState = () => {
+    if (this.gridApi) {
+      const newTotalPages = this.gridApi.paginationGetTotalPages();
+      const newCurrPage = newTotalPages === 0 ? 0 : this.gridApi.paginationGetCurrentPage() + 1;
+      this.setState({
+        currPage: newCurrPage,
+        maxPages: newTotalPages,
+        rowCountString: this.formatRowCountString(
+          25,
+          newCurrPage,
+          newTotalPages,
+          this.gridApi.paginationGetRowCount()
+        ),
+        isBackDisabled: newTotalPages === 0 || newCurrPage === 1,
+        isForwardDisabled: newTotalPages === 0 || newCurrPage === newTotalPages
+      });
+    }
+  };
+
+  private formatRowCountString = (
+    pageSize: number,
+    currPage: number,
+    maxPages: number,
+    totalRows: number
+  ) => {
+    return maxPages === 0
+      ? '(none)'
+      : currPage !== maxPages
+      ? `(#${pageSize * currPage - 24} - #${pageSize * currPage})`
+      : `(#${pageSize * currPage - 24} - #${totalRows})`;
+  };
+
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const changeVal = event.target.value;
     this.setState({ filterValue: changeVal });
@@ -347,12 +421,31 @@ class Grading extends React.Component<IGradingProps, State> {
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
+    this.updatePaginationState();
   };
 
   private exportCSV = () => {
     if (this.gridApi) {
       this.gridApi.exportDataAsCsv({ allColumns: true });
     }
+  };
+
+  private changePaginationView = (type: string) => {
+    return () => {
+      if (this.gridApi) {
+        switch (type) {
+          case 'first':
+            return this.gridApi.paginationGoToFirstPage();
+          case 'prev':
+            return this.gridApi.paginationGoToPreviousPage();
+          case 'next':
+            return this.gridApi.paginationGoToNextPage();
+          case 'last':
+            return this.gridApi.paginationGoToLastPage();
+          default:
+        }
+      }
+    };
   };
 
   /** Constructs data nodes for the datagrid by joining grading overviews with their
