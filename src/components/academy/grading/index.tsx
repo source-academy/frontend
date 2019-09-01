@@ -14,7 +14,6 @@ import { AgGridReact } from 'ag-grid-react';
 import { ValueFormatterParams } from 'ag-grid/dist/lib/entities/colDef';
 import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
-import { sortBy } from 'lodash';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -35,6 +34,11 @@ import XPCell from './XPCell';
 type State = {
   filterValue: string;
   groupFilterEnabled: boolean;
+  currPage: number;
+  maxPages: number;
+  rowCountString: string;
+  isBackDisabled: boolean;
+  isForwardDisabled: boolean;
 };
 
 type GradingNavLinkProps = {
@@ -97,10 +101,11 @@ class Grading extends React.Component<IGradingProps, State> {
         headerName: '',
         field: 'notifications',
         cellRendererFramework: NotificationBadgeCell,
-        maxWidth: 30,
+        width: 30,
         suppressResize: true,
         suppressMovable: true,
-        suppressMenu: true
+        suppressMenu: true,
+        suppressSizeToFit: true
       },
       { headerName: 'Assessment Name', field: 'assessmentName' },
       { headerName: 'Category', field: 'assessmentCategory', maxWidth: 100 },
@@ -208,7 +213,12 @@ class Grading extends React.Component<IGradingProps, State> {
 
     this.state = {
       filterValue: '',
-      groupFilterEnabled: false
+      groupFilterEnabled: false,
+      currPage: 1,
+      maxPages: 1,
+      rowCountString: '(none)',
+      isBackDisabled: true,
+      isForwardDisabled: true
     };
   }
 
@@ -234,7 +244,7 @@ class Grading extends React.Component<IGradingProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
-    const data = this.sortSubmissions();
+    const data = this.sortSubmissionsByNotifications();
 
     const grid = (
       <div className="GradingContainer">
@@ -263,6 +273,36 @@ class Grading extends React.Component<IGradingProps, State> {
                 <div className="ag-grid-button-text hidden-xs">Show all groups</div>
               </Button>
             </div>
+            <div className="centre-controls">
+              <Button
+                icon={IconNames.CHEVRON_BACKWARD}
+                onClick={this.changePaginationView('first')}
+                minimal={true}
+                disabled={this.state.isBackDisabled}
+              />
+              <Button
+                icon={IconNames.CHEVRON_LEFT}
+                onClick={this.changePaginationView('prev')}
+                minimal={true}
+                disabled={this.state.isBackDisabled}
+              />
+              <Button className="pagination-details hidden-xs" disabled={true} minimal={true}>
+                <div>{`Page ${this.state.currPage} of ${this.state.maxPages}`}</div>
+                <div>{this.state.rowCountString}</div>
+              </Button>
+              <Button
+                icon={IconNames.CHEVRON_RIGHT}
+                onClick={this.changePaginationView('next')}
+                minimal={true}
+                disabled={this.state.isForwardDisabled}
+              />
+              <Button
+                icon={IconNames.CHEVRON_FORWARD}
+                onClick={this.changePaginationView('last')}
+                minimal={true}
+                disabled={this.state.isForwardDisabled}
+              />
+            </div>
             <div className="right-controls">
               <Button icon={IconNames.EXPORT} onClick={this.exportCSV}>
                 <div className="ag-grid-button-text hidden-xs">Export to CSV</div>
@@ -282,11 +322,14 @@ class Grading extends React.Component<IGradingProps, State> {
               enableFilter={true}
               columnDefs={this.columnDefs}
               onGridReady={this.onGridReady}
+              onGridSizeChanged={this.resizeGrid}
+              onPaginationChanged={this.updatePaginationState}
               rowData={data}
               rowHeight={30}
               pagination={true}
-              paginationPageSize={50}
+              paginationPageSize={25}
               suppressMovableColumns={true}
+              suppressPaginationPanel={true}
             />
           </div>
         </div>
@@ -303,12 +346,53 @@ class Grading extends React.Component<IGradingProps, State> {
     );
   }
 
-  public componentDidUpdate() {
-    if (!this.gridApi) {
-      return;
+  public componentDidUpdate(prevProps: IGradingProps, prevState: State) {
+    // Only update grid data when a notification is acknowledged
+    if (this.gridApi && this.props.notifications.length !== prevProps.notifications.length) {
+      // Pass the new reconstructed row data to the grid after fetching the updated notifs
+      this.gridApi.setRowData(this.sortSubmissionsByNotifications());
     }
-    this.gridApi.setRowData(this.sortSubmissions());
   }
+
+  // Forcibly resizes columns to fit the width of the datagrid - prevents datagrid
+  // from needing to render a horizontal scrollbar when columns overflow grid width
+  private resizeGrid = () => {
+    if (this.gridApi) {
+      this.gridApi.sizeColumnsToFit();
+    }
+  };
+
+  private updatePaginationState = () => {
+    if (this.gridApi) {
+      const newTotalPages = this.gridApi.paginationGetTotalPages();
+      const newCurrPage = newTotalPages === 0 ? 0 : this.gridApi.paginationGetCurrentPage() + 1;
+      this.setState({
+        currPage: newCurrPage,
+        maxPages: newTotalPages,
+        rowCountString: this.formatRowCountString(
+          25,
+          newCurrPage,
+          newTotalPages,
+          this.gridApi.paginationGetRowCount()
+        ),
+        isBackDisabled: newTotalPages === 0 || newCurrPage === 1,
+        isForwardDisabled: newTotalPages === 0 || newCurrPage === newTotalPages
+      });
+    }
+  };
+
+  private formatRowCountString = (
+    pageSize: number,
+    currPage: number,
+    maxPages: number,
+    totalRows: number
+  ) => {
+    return maxPages === 0
+      ? '(none)'
+      : currPage !== maxPages
+      ? `(#${pageSize * currPage - 24} - #${pageSize * currPage})`
+      : `(#${pageSize * currPage - 24} - #${totalRows})`;
+  };
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const changeVal = event.target.value;
@@ -328,47 +412,60 @@ class Grading extends React.Component<IGradingProps, State> {
   };
 
   private handleGroupsFilter = () => {
-    this.setState({ groupFilterEnabled: !this.state.groupFilterEnabled });
-    this.props.handleFetchGradingOverviews(this.state.groupFilterEnabled);
+    if (this.gridApi) {
+      this.setState({ groupFilterEnabled: !this.state.groupFilterEnabled });
+      this.props.handleFetchGradingOverviews(this.state.groupFilterEnabled);
+    }
   };
 
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
-    window.onresize = () => this.gridApi!.sizeColumnsToFit();
+    this.updatePaginationState();
   };
 
   private exportCSV = () => {
-    if (this.gridApi === undefined) {
-      return;
+    if (this.gridApi) {
+      this.gridApi.exportDataAsCsv({ allColumns: true });
     }
-    this.gridApi.exportDataAsCsv({ allColumns: true });
   };
 
-  /* Submissions will be sorted in the following order:
-    - whether the submission has notifications
-    - the assessment id
-    - the submission id
-  */
-  private sortSubmissions = () => {
+  private changePaginationView = (type: string) => {
+    return () => {
+      if (this.gridApi) {
+        switch (type) {
+          case 'first':
+            return this.gridApi.paginationGoToFirstPage();
+          case 'prev':
+            return this.gridApi.paginationGoToPreviousPage();
+          case 'next':
+            return this.gridApi.paginationGoToNextPage();
+          case 'last':
+            return this.gridApi.paginationGoToLastPage();
+          default:
+        }
+      }
+    };
+  };
+
+  /** Constructs data nodes for the datagrid by joining grading overviews with their
+   *  associated notifications.
+   *  @return Returns an array of data nodes, prioritising grading overviews with
+   *  notifications first.
+   */
+  private sortSubmissionsByNotifications = () => {
     if (!this.props.gradingOverviews) {
       return [];
     }
 
-    const newOverviews = (this.props.gradingOverviews as GradingOverviewWithNotifications[]).map(
-      overview => ({
+    return (this.props.gradingOverviews as GradingOverviewWithNotifications[])
+      .map(overview => ({
         ...overview,
         notifications: filterNotificationsBySubmission(overview.submissionId)(
           this.props.notifications
         )
-      })
-    );
-
-    return sortBy(newOverviews, [
-      (a: GradingOverviewWithNotifications) => (a.notifications.length > 0 ? -1 : 0),
-      (a: GradingOverview) => -a.assessmentId,
-      (a: GradingOverview) => -a.submissionId
-    ]);
+      }))
+      .sort((subX, subY) => subY.notifications.length - subX.notifications.length);
   };
 }
 
