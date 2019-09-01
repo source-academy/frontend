@@ -89,7 +89,13 @@ export const mockFetchGradingOverview = (
   if (role === null || !permittedRoles.includes(role)) {
     return null;
   } else {
-    return group ? [mockGradingOverviews[0]] : mockGradingOverviews;
+    return group
+      ? [mockGradingOverviews[0]]
+      : mockGradingOverviews.sort((subX: GradingOverview, subY: GradingOverview) =>
+          subX.assessmentId !== subY.assessmentId
+            ? subY.assessmentId - subX.assessmentId
+            : subY.submissionId - subX.submissionId
+        );
   }
 };
 
