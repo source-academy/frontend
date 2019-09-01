@@ -1031,20 +1031,20 @@
     const existing = []; 
 
     function helper(xs) {   
-      if ((!is_pair(xs) && !is_array(xs) && !is_function(xs)) || is_null(xs)) {
+      if ((!is_pair(xs) && !is_function(xs)) || is_null(xs)) {
           return 0;
       } else {
         let leftHeight;
         let rightHeight;
         if (existing.includes(xs[0])
-            || (!is_pair(xs[0]) && !is_array(xs[0]) && !is_function(xs[0]))) {
+            || (!is_pair(xs[0]) && !is_function(xs[0]))) {
           leftHeight = 0;          
         } else {
           existing.push(xs[0]);
           leftHeight = helper(xs[0]);
         }
         if (existing.includes(xs[1])
-            || (!is_pair(xs[1]) && !is_array(xs[1]) && !is_function(xs[1]))) {
+            || (!is_pair(xs[1]) && !is_function(xs[1]))) {
           rightHeight = 0;          
         } else {
           existing.push(xs[1]);
@@ -1066,20 +1066,20 @@
     const existing = [];
 
     function helper(xs) {   
-      if ((!is_pair(xs) && !is_array(xs) && !is_function(xs)) || is_null(xs)) {
+      if ((!is_pair(xs) && !is_function(xs)) || is_null(xs)) {
           return 0;
       } else {
         let leftWidth;
         let rightWidth;
         if (existing.includes(xs[0])
-            || (!is_pair(xs[0]) && !is_array(xs[0]) && !is_function(xs[0]))) {
+            || (!is_pair(xs[0]) && !is_function(xs[0]))) {
           leftWidth = 0;          
         } else {
           existing.push(xs[0]);
           leftWidth = helper(xs[0]);
         }
         if (existing.includes(xs[1])
-            || (!is_pair(xs[1]) && !is_array(xs[1]) && !is_function(xs[1]))) {
+            || (!is_pair(xs[1]) && !is_function(xs[1]))) {
           rightWidth = 0;          
         } else {
           existing.push(xs[1]);
