@@ -97,7 +97,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
                                             An Odessey to Runes (Duplicate)
-                                             
                                           </h4>
                                         </Component>
                                       </div>
@@ -209,7 +208,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
                                             Basic logic gates
-                                             
                                           </h4>
                                         </Component>
                                       </div>
@@ -322,8 +320,147 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
+                                            A sample Practical
+                                            <Blueprint3.Tooltip content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
+                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+                                                <Manager>
+                                                  <span className=\\"bp3-popover-wrapper\\">
+                                                    <Reference innerRef={[Function: target]}>
+                                                      <InnerReference setReferenceNode={[Function]} innerRef={[Function: target]}>
+                                                        <Blueprint3.ResizeSensor onResize={[Function]}>
+                                                          <span onBlur={[Function]} onFocus={[Function]} onMouseEnter={[Function]} onMouseLeave={[Function]} className=\\"bp3-popover-target\\">
+                                                            <Blueprint3.Icon icon=\\"lock\\" style={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                                              <span icon=\\"lock\\" style={{...}} disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                                <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                                  <desc>
+                                                                    lock
+                                                                  </desc>
+                                                                  <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
+                                                                </svg>
+                                                              </span>
+                                                            </Blueprint3.Icon>
+                                                          </span>
+                                                        </Blueprint3.ResizeSensor>
+                                                      </InnerReference>
+                                                    </Reference>
+                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} className={[undefined]} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover\\" usePortal={true} portalContainer={[undefined]} lazy={true} />
+                                                  </span>
+                                                </Manager>
+                                              </Blueprint3.Popover>
+                                            </Blueprint3.Tooltip>
+                                          </h4>
+                                        </Component>
+                                      </div>
+                                    </Blueprint3.Text>
+                                    <div className=\\"col-xs-2\\">
+                                      <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                          <Blueprint3.Icon icon=\\"confirm\\">
+                                            <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
+                                              <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                <desc>
+                                                  confirm
+                                                </desc>
+                                                <path d=\\"M8.7 4.29a.965.965 0 0 0-.71-.3 1.003 1.003 0 0 0-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 0 0-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 0 0-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </span>
+                                          </Blueprint3.Icon>
+                                          <span className=\\"bp3-button-text\\">
+                                            Finalize Submission
+                                          </span>
+                                          <Blueprint3.Icon icon={[undefined]} />
+                                        </button>
+                                      </Blueprint3.Button>
+                                    </div>
+                                  </div>
+                                  <div className=\\"row listing-grade\\">
+                                    <Component>
+                                      <h6 className=\\"bp3-heading\\">
+                                         
+                                        Grade: 4 / 3000
+                                         
+                                      </h6>
+                                    </Component>
+                                  </div>
+                                  <div className=\\"row listing-xp\\">
+                                    <Component>
+                                      <h6 className=\\"bp3-heading\\">
+                                         
+                                        XP: 3 / 1000
+                                         
+                                      </h6>
+                                    </Component>
+                                  </div>
+                                  <div className=\\"row listing-description\\">
+                                    <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                      <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
+                                    </Markdown>
+                                  </div>
+                                  <div className=\\"listing-controls\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                      <div className=\\"listing-due-date\\" title={[undefined]}>
+                                        <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
+                                          <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"time\\" width={12} height={12} viewBox=\\"0 0 16 16\\">
+                                              <desc>
+                                                time
+                                              </desc>
+                                              <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint3.Icon>
+                                        Due: 18th June, 13:24
+                                      </div>
+                                    </Blueprint3.Text>
+                                    <NavLink to=\\"/academy/practicals/5/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/practicals\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                        <Link to=\\"/academy/practicals/5/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/practicals/5/0\\">
+                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <Blueprint3.Icon icon={{...}}>
+                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                                    <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
+                                                      <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                        <desc>
+                                                          play
+                                                        </desc>
+                                                        <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 0 0 5 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                                      </svg>
+                                                    </span>
+                                                  </Blueprint3.Icon>
+                                                </Blueprint3.Icon>
+                                                <span className=\\"bp3-button-text\\">
+                                                  Attempt
+                                                </span>
+                                                <Blueprint3.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint3.Button>
+                                          </a>
+                                        </Link>
+                                      </Route>
+                                    </NavLink>
+                                  </div>
+                                </div>
+                              </div>
+                            </Blueprint3.Card>
+                          </div>
+                          <div>
+                            <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
+                              <div className=\\"bp3-card bp3-elevation-1 row listing\\">
+                                <div className=\\"col-xs-3 listing-picture\\">
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  </Connect(NotificationBadge)>
+                                  <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
+                                </div>
+                                <div className=\\"col-xs-9 listing-text\\">
+                                  <div className=\\"row listing-title\\">
+                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
+                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
+                                        <Component>
+                                          <h4 className=\\"bp3-heading\\">
                                             A sample Sidequest
-                                             
                                           </h4>
                                         </Component>
                                       </div>
@@ -437,7 +574,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
                                             The Secret to Streams
-                                             
                                           </h4>
                                         </Component>
                                       </div>
@@ -551,7 +687,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
                                             An Odessey to Runes
-                                             
                                           </h4>
                                         </Component>
                                       </div>
@@ -789,7 +924,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
                                             An Odessey to Runes (Duplicate)
-                                             
                                           </h4>
                                         </Component>
                                       </div>
@@ -929,7 +1063,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
                                             Basic logic gates
-                                             
                                           </h4>
                                         </Component>
                                       </div>
@@ -1042,8 +1175,147 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
+                                            A sample Practical
+                                            <Blueprint3.Tooltip content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
+                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+                                                <Manager>
+                                                  <span className=\\"bp3-popover-wrapper\\">
+                                                    <Reference innerRef={[Function: target]}>
+                                                      <InnerReference setReferenceNode={[Function]} innerRef={[Function: target]}>
+                                                        <Blueprint3.ResizeSensor onResize={[Function]}>
+                                                          <span onBlur={[Function]} onFocus={[Function]} onMouseEnter={[Function]} onMouseLeave={[Function]} className=\\"bp3-popover-target\\">
+                                                            <Blueprint3.Icon icon=\\"lock\\" style={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                                              <span icon=\\"lock\\" style={{...}} disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                                <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                                  <desc>
+                                                                    lock
+                                                                  </desc>
+                                                                  <path d=\\"M13.96 7H12V3.95C12 1.77 10.21 0 8 0S4 1.77 4 3.95V7H1.96c-.55 0-.96.35-.96.9v6.91c0 .54.41 1.19.96 1.19h12c.55 0 1.04-.65 1.04-1.19V7.9c0-.55-.49-.9-1.04-.9zM6 7V3.95c0-1.09.9-1.97 2-1.97s2 .88 2 1.97V7H6z\\" fillRule=\\"evenodd\\" />
+                                                                </svg>
+                                                              </span>
+                                                            </Blueprint3.Icon>
+                                                          </span>
+                                                        </Blueprint3.ResizeSensor>
+                                                      </InnerReference>
+                                                    </Reference>
+                                                    <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} className={[undefined]} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp3-popover\\" usePortal={true} portalContainer={[undefined]} lazy={true} />
+                                                  </span>
+                                                </Manager>
+                                              </Blueprint3.Popover>
+                                            </Blueprint3.Tooltip>
+                                          </h4>
+                                        </Component>
+                                      </div>
+                                    </Blueprint3.Text>
+                                    <div className=\\"col-xs-2\\">
+                                      <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
+                                        <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
+                                          <Blueprint3.Icon icon=\\"confirm\\">
+                                            <span icon=\\"confirm\\" className=\\"bp3-icon bp3-icon-confirm\\" title={[undefined]}>
+                                              <svg fill={[undefined]} data-icon=\\"confirm\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                <desc>
+                                                  confirm
+                                                </desc>
+                                                <path d=\\"M8.7 4.29a.965.965 0 0 0-.71-.3 1.003 1.003 0 0 0-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 0 0-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 0 0-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z\\" fillRule=\\"evenodd\\" />
+                                              </svg>
+                                            </span>
+                                          </Blueprint3.Icon>
+                                          <span className=\\"bp3-button-text\\">
+                                            Finalize Submission
+                                          </span>
+                                          <Blueprint3.Icon icon={[undefined]} />
+                                        </button>
+                                      </Blueprint3.Button>
+                                    </div>
+                                  </div>
+                                  <div className=\\"row listing-grade\\">
+                                    <Component>
+                                      <h6 className=\\"bp3-heading\\">
+                                         
+                                        Grade: 4 / 3000
+                                         
+                                      </h6>
+                                    </Component>
+                                  </div>
+                                  <div className=\\"row listing-xp\\">
+                                    <Component>
+                                      <h6 className=\\"bp3-heading\\">
+                                         
+                                        XP: 3 / 1000
+                                         
+                                      </h6>
+                                    </Component>
+                                  </div>
+                                  <div className=\\"row listing-description\\">
+                                    <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                      <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
+                                    </Markdown>
+                                  </div>
+                                  <div className=\\"listing-controls\\">
+                                    <Blueprint3.Text className=\\"listing-due-date\\">
+                                      <div className=\\"listing-due-date\\" title={[undefined]}>
+                                        <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
+                                          <span icon=\\"time\\" className=\\"bp3-icon bp3-icon-time listing-due-icon\\" title={[undefined]}>
+                                            <svg fill={[undefined]} data-icon=\\"time\\" width={12} height={12} viewBox=\\"0 0 16 16\\">
+                                              <desc>
+                                                time
+                                              </desc>
+                                              <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42L9 7.59z\\" fillRule=\\"evenodd\\" />
+                                            </svg>
+                                          </span>
+                                        </Blueprint3.Icon>
+                                        Due: 18th June, 13:24
+                                      </div>
+                                    </Blueprint3.Text>
+                                    <NavLink to=\\"/academy/practicals/5/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/practicals\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                        <Link to=\\"/academy/practicals/5/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/practicals/5/0\\">
+                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                <Blueprint3.Icon icon={{...}}>
+                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                                    <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
+                                                      <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                                        <desc>
+                                                          play
+                                                        </desc>
+                                                        <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 0 0 5 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                                      </svg>
+                                                    </span>
+                                                  </Blueprint3.Icon>
+                                                </Blueprint3.Icon>
+                                                <span className=\\"bp3-button-text\\">
+                                                  Attempt
+                                                </span>
+                                                <Blueprint3.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint3.Button>
+                                          </a>
+                                        </Link>
+                                      </Route>
+                                    </NavLink>
+                                  </div>
+                                </div>
+                              </div>
+                            </Blueprint3.Card>
+                          </div>
+                          <div>
+                            <Blueprint3.Card className=\\"row listing\\" elevation={1} interactive={false}>
+                              <div className=\\"bp3-card bp3-elevation-1 row listing\\">
+                                <div className=\\"col-xs-3 listing-picture\\">
+                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function]} large={true}>
+                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function]} large={true} notifications={{...}} handleAcknowledgeNotifications={[Function]} />
+                                  </Connect(NotificationBadge)>
+                                  <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
+                                </div>
+                                <div className=\\"col-xs-9 listing-text\\">
+                                  <div className=\\"row listing-title\\">
+                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
+                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
+                                        <Component>
+                                          <h4 className=\\"bp3-heading\\">
                                             A sample Sidequest
-                                             
                                           </h4>
                                         </Component>
                                       </div>
@@ -1157,7 +1429,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
                                             The Secret to Streams
-                                             
                                           </h4>
                                         </Component>
                                       </div>
@@ -1271,7 +1542,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
                                             An Odessey to Runes
-                                             
                                           </h4>
                                         </Component>
                                       </div>
