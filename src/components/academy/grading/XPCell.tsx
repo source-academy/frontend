@@ -21,13 +21,14 @@ class XPCell extends React.Component<XPCellProps, {}> {
 
   /** Component to render in table - XP */
   public render() {
-    if (this.props.data.currentXp && this.props.data.maxXp) {
+    if (this.props.data.maxXp || this.props.data.xpBonus) {
       const tooltip = `Initial XP: ${this.props.data.initialXp}
-        (${this.props.data.xpAdjustment > 0 ? '+' : ''}${this.props.data.xpAdjustment} adjustment)`;
+        (${this.props.data.xpBonus > 0 ? `+${this.props.data.xpBonus} bonus ` : ''}
+        ${this.props.data.xpAdjustment >= 0 ? '+' : ''}${this.props.data.xpAdjustment} adj.)`;
       return (
         <div>
-          <Tooltip content={tooltip} position={Position.LEFT}>
-            {`${this.props.data.currentXp} / ${this.props.data.maxXp}`}
+          <Tooltip content={tooltip} position={Position.LEFT} hoverOpenDelay={10} lazy={true}>
+            {`${this.props.data.currentXp + this.props.data.xpBonus} / ${this.props.data.maxXp}`}
           </Tooltip>
         </div>
       );

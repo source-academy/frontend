@@ -232,6 +232,7 @@
 
 .ag-grid-controls {
   display: flex;
+  align-items: center;
   justify-content: space-between;
 
   .#{$ns}-icon {
@@ -241,6 +242,18 @@
 
   .ag-grid-button-text {
     margin-left: 7px;
+  }
+
+  .pagination-details.pagination-details.pagination-details {
+    /* Chain selectors for increased specificity: set default cursor */
+    cursor: default;
+    font-weight: bold;
+
+    .#{$ns}-button-text {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 }
 
