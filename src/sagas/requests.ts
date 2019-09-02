@@ -155,7 +155,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
       },
       shouldRefresh: true
     });
-  }  
+  }
 
   if (!resp || !resp.ok) {
     return null;
