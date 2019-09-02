@@ -26,6 +26,7 @@
     'has_own_property',
     'head',
     'integers_from',
+    'is',
     'is_NaN',
     'is_array',
     'is_boolean',
@@ -89,13 +90,10 @@
     'math_toSource',
     'math_trunc',
     'member',
-    'null',
     'pair',
     'parse',
     'parse_int',
     'prompt',
-    'prompt',
-    'rawDisplay',
     'raw_display',
     'remove',
     'remove_all',
@@ -118,16 +116,14 @@
     'stream_to_list',
     'stringify',
     'tail',
-    'timed',
-    'undefined',
-    'visualiseList'
+    'undefined'
   ];
 
   function filter(str) {
     swapTable = {
-      'programEnvironment': 'Global',
-      'forLoopEnvironment': 'For Loop',
-      'forBlockEnvironment': 'For Block'
+      programEnvironment: 'Global',
+      forLoopEnvironment: 'For Loop',
+      forBlockEnvironment: 'For Block'
     };
     return swapTable[str] ? swapTable[str] : str;
   }
@@ -157,7 +153,10 @@
         var tbody = document.createElement('tbody');
         tbody.id = 'inspect-scope';
         tbody.innerHTML =
-          '</br><caption><strong>Frame: ' + filter(frames[i].name) + '</strong></caption>' + envtoString;
+          '</br><caption><strong>Frame: ' +
+          filter(frames[i].name) +
+          '</strong></caption>' +
+          envtoString;
         newtable.appendChild(tbody);
         container.appendChild(newtable);
       }
@@ -177,7 +176,6 @@
     }
 
     try {
-      builtins = window.EnvVisualizer.builtins;
       drawOutput();
       if (icon) {
         icon.classList.add('side-content-tab-alert');

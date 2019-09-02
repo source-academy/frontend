@@ -2,8 +2,8 @@
   /**
    * Setup Stage
    */
-  builtins = window.Inspector.builtins;
-  filter = window.Inspector.filter;
+  var builtins = [];
+  var filter;
   var stage;
   var container = document.createElement('div');
   container.id = 'env-visualizer-container';
@@ -864,6 +864,8 @@
 
   // main function to be exported
   function draw_env(context) {
+    builtins = window.inspector.builtins;
+    filter = window.inspector.filter;
     // Hides the default text
     document.getElementById('env-visualizer-default-text').hidden = true;
 
