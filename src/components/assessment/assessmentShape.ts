@@ -82,7 +82,20 @@ export interface IProgrammingQuestion extends IQuestion {
   graderTemplate?: string;
 }
 
+/* The different types of testcases available */
+export enum TestcaseTypes {
+  // These are rendered in full by the Mission Autograder
+  public = 'public',
+  // These are rendered with a placeholder by the Autograder
+  hidden = 'hidden',
+  // These should only exist in the grading workspace for submissions
+  private = 'private'
+}
+
+export type TestcaseType = keyof typeof TestcaseTypes;
+
 export interface ITestcase {
+  type: TestcaseType;
   answer: string; // the correct answer to the testcase
   score: number;
   program: string; // the program to be appended to the student's code
@@ -107,11 +120,11 @@ export interface IQuestion {
   library: Library;
   graderLibrary?: Library; // For mission control
   type: QuestionType;
-  grader: {
+  grader?: {
     name: string;
     id: number;
-  } | null;
-  gradedAt: string | null;
+  };
+  gradedAt?: string;
   xp: number;
   grade: number;
   maxGrade: number;

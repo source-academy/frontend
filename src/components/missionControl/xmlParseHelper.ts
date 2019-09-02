@@ -11,7 +11,8 @@ import {
   IQuestion,
   ITestcase,
   Library,
-  MCQChoice
+  MCQChoice,
+  TestcaseTypes
 } from '../assessment/assessmentShape';
 import {
   IXmlParseStrCProblem,
@@ -158,8 +159,6 @@ const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] =>
       library: makeLibrary(problem.DEPLOYMENT),
       graderLibrary: makeLibrary(problem.GRADERDEPLOYMENT),
       type: problem.$.type,
-      grader: null,
-      gradedAt: null,
       xp: 0,
       grade: 0,
       maxGrade: parseInt(problem.$.maxgrade, 10),
@@ -227,6 +226,7 @@ const makeProgramming = (
 
 const makeTestcase = (testcase: IXmlParseStrTestcase): ITestcase => {
   return {
+    type: TestcaseTypes.public,
     answer: testcase.$.answer,
     score: parseInt(testcase.$.score, 10),
     program: testcase._

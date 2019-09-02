@@ -23,7 +23,7 @@
   }
 }
 
-.bp3-running-text.md {
+.#{$ns}-running-text.md {
   pre {
     > code {
       -webkit-box-shadow: none;
@@ -55,4 +55,8 @@
 
 .#{$ns}-overlay-open {
   background-color: rgba(16, 22, 26, 0.7);
+
+  &.#{$ns}-toast-container {
+    background-color: unset;
+  }
 }

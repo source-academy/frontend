@@ -278,6 +278,16 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             maxXp={props.grading![questionId].question.maxXp}
             studentName={props.grading![questionId].student.name}
             comments={props.grading![questionId].grade.comments!}
+            graderName={
+              props.grading![questionId].grade.grader
+                ? props.grading![questionId].grade.grader!.name
+                : undefined
+            }
+            gradedAt={
+              props.grading![questionId].grade.grader
+                ? props.grading![questionId].grade.gradedAt!
+                : undefined
+            }
           />
         ),
         id: SideContentType.grading

@@ -7,7 +7,8 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   ITestcase,
-  Library
+  Library,
+  TestcaseTypes
 } from '../../components/assessment/assessmentShape';
 
 export const emptyLibrary = (): Library => {
@@ -67,8 +68,6 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     testcases: [],
     testcasesPrivate: [],
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 0,
@@ -78,6 +77,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
 
 export const testcaseTemplate = (): ITestcase => {
   return {
+    type: TestcaseTypes.public,
     answer: '',
     score: 0,
     program: ''
@@ -112,8 +112,6 @@ export const mcqTemplate = (): IMCQQuestion => {
     graderLibrary: emptyLibrary(),
     type: 'mcq',
     solution: 0,
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 0,

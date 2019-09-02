@@ -64,6 +64,9 @@ const NotificationBadge: React.SFC<OwnProps & StateProps & DispatchProps> = prop
         content={notificationTags}
         interactionKind={PopoverInteractionKind.HOVER}
         position={Position.RIGHT}
+        hoverOpenDelay={50}
+        hoverCloseDelay={50}
+        lazy={true}
       >
         {notificationIcon}
       </Popover>

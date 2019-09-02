@@ -2,11 +2,13 @@ import {
   AssessmentCategories,
   AssessmentStatuses,
   ExternalLibraryNames,
+  GradingStatuses,
   IAssessment,
   IAssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
-  Library
+  Library,
+  TestcaseTypes
 } from '../components/assessment/assessmentShape';
 import { externalLibraries } from '../reducers/externalLibraries';
 
@@ -26,7 +28,7 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.none
   }
 ];
 
@@ -58,7 +60,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.none
   },
   {
     category: AssessmentCategories.Mission,
@@ -75,7 +77,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.none
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -92,7 +94,24 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.none
+  },
+  {
+    category: AssessmentCategories.Path,
+    closeAt: '2069-04-20T01:23:45.111Z',
+    coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
+    grade: 0,
+    id: 6,
+    maxGrade: 0,
+    maxXp: 200,
+    openAt: '2018-01-01T00:00:00.000Z',
+    title: 'Basic logic gates',
+    shortSummary:
+      'This mock path serves as a demonstration of the support provided for mock programming path functionality.',
+    status: AssessmentStatuses.not_attempted,
+    story: null,
+    xp: 0,
+    gradingStatus: GradingStatuses.excluded
   }
 ];
 
@@ -108,11 +127,11 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
+      'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.grading
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -123,13 +142,13 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
-    title: 'Closed (partially graded) Sidequest',
+    title: 'Closed (not graded) Sidequest',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
+      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    gradingStatus: 'grading'
+    gradingStatus: GradingStatuses.none
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -146,7 +165,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    gradingStatus: 'graded'
+    gradingStatus: GradingStatuses.graded
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -163,7 +182,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    gradingStatus: 'excluded'
+    gradingStatus: GradingStatuses.excluded
   }
 ];
 
@@ -194,7 +213,7 @@ const mockSoundLibrary: Library = {
 };
 
 export const mockRuneLibrary: Library = {
-  chapter: 4,
+  chapter: 1,
   external: {
     name: ExternalLibraryNames.RUNES,
     symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
@@ -240,16 +259,19 @@ const chickenrice = "chicken rice";`,
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
       {
+        type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
         answer: `"pizza"`
       },
       {
+        type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
         answer: `"sushi"`
       },
       {
+        type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
         answer: `"chicken rice"`
@@ -260,8 +282,6 @@ const chickenrice = "chicken rice";`,
 }
 `,
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -286,11 +306,13 @@ const pi = 3.1415928;`,
     postpend: '',
     testcases: [
       {
+        type: TestcaseTypes.public,
         program: `areaOfCircle(5);`,
         score: 1,
         answer: `78.53982`
       },
       {
+        type: TestcaseTypes.public,
         program: `volumeOfSphere(5);`,
         score: 1,
         answer: `523.5988`
@@ -304,8 +326,6 @@ function volumeOfSphere(x) {
     // return volume of sphere
 }`,
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -338,8 +358,6 @@ function volumeOfSphere(x) {
     library: mockCurveLibrary,
     type: 'mcq',
     solution: 0,
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -372,8 +390,6 @@ function volumeOfSphere(x) {
     library: mockCurveLibrary,
     type: 'mcq',
     solution: null,
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -391,8 +407,6 @@ function volumeOfSphere(x) {
     testcases: [],
     solutionTemplate: '5th question mock solution template',
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -417,16 +431,19 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
       {
+        type: TestcaseTypes.public,
         program: `fibonacci(3);`,
         score: 1,
         answer: `2`
       },
       {
+        type: TestcaseTypes.public,
         program: `fibonacci(4);`,
         score: 1,
         answer: `3`
       },
       {
+        type: TestcaseTypes.public,
         program: `fibonacci(5);`,
         score: 1,
         answer: `5`
@@ -557,6 +574,253 @@ _italics_
   }
 ];
 
+export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+  {
+    answer: null,
+    roomId: null,
+    content: 'As a recap: which of the following is not a valid logic gate?',
+    choices: [
+      {
+        content: 'XOR gate',
+        hint: 'This is the exclusive-OR gate!'
+      },
+      {
+        content: 'IF gate',
+        hint: 'Correct!'
+      },
+      {
+        content: 'AND gate',
+        hint: 'This logic gate exists!'
+      },
+      {
+        content: 'OR gate',
+        hint: 'This logic gate exists!'
+      }
+    ],
+    id: 0,
+    library: mockRuneLibrary,
+    type: 'mcq',
+    solution: 1,
+    xp: 0,
+    grade: 0,
+    maxGrade: 0,
+    maxXp: 0
+  },
+  {
+    autogradingResults: [],
+    answer: null,
+    roomId: null,
+    content: `An AND gate is a digital logic gate that implements logical conjunction on its inputs. It returns a single output that is HIGH (active) iff all the inputs to the AND gate are HIGH (active).
+
+In this question, let us model an AND gate as a function, and treat HIGH (active) inputs as the boolean value \`true\` and LOW (inactive) inputs as the boolean value \`false\`.
+
+As an AND gate is not restricted to exactly two inputs, our function shall be the same. Implement the function \`AND(inputs)\` which takes in the list \`inputs\` (a list of boolean values), and returns the output of the AND gate as a boolean. You may assume the list \`inputs\` is of minimum length 2.
+
+This question makes use of the sentinel function method to throw custom errors for each testcase.`,
+    id: 1,
+    library: mockRuneLibrary,
+    prepend: `const OR = (x, y) => x || y;`,
+    postpend: `
+const __AND = (xs) => {
+  if (AND(list(true, true)) === undefined) {
+    error('Your function is empty!');
+  } else {}
+  
+  const result = AND(xs);
+
+  if (!is_boolean(result)) {
+    error('Your function does not return a boolean!');
+  } else {}
+  
+  if (equal(xs, list(true, false)) && result) {
+    error('Check the truth table for an AND gate again!');
+  } else if (equal(xs, list(true, true, false)) && result) {
+    error('Are you using all inputs in the list?');
+  } else if (equal(xs, list(true, true, true)) && !result) {
+    error('Are you sure your base case is correct?');
+  } else if (AND(list(true, true)) === AND(list(false, false))) {
+    error('Oi! Do not hardcode values!');
+  } else {
+    return result;
+  }
+};`,
+    testcases: [
+      {
+        type: TestcaseTypes.public,
+        program: `__AND(list(true, false));`,
+        score: 0,
+        answer: `false`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `__AND(list(true, true, false));`,
+        score: 0,
+        answer: `false`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `__AND(list(true, OR(true, false), OR(true, true)));`,
+        score: 0,
+        answer: `true`
+      },
+      {
+        type: TestcaseTypes.hidden,
+        program: `__AND(list(true, OR(false, true), AND(list(true, false)), false));`,
+        score: 0,
+        answer: `false`
+      },
+      {
+        type: TestcaseTypes.hidden,
+        program: `__AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
+        score: 0,
+        answer: `true`
+      }
+    ],
+    solutionTemplate: `function AND(inputs) {
+    // Your answer here!
+}`,
+    type: 'programming',
+    xp: 0,
+    grade: 0,
+    maxGrade: 0,
+    maxXp: 0
+  },
+  {
+    autogradingResults: [],
+    answer: null,
+    roomId: null,
+    content: `The XOR (exclusive-OR) gate is a digital logic gate that accepts two inputs and returns a single output that is HIGH (active) iff one of the inputs are HIGH (active), but not both.
+
+In this question, let us model the XOR gate as a function. Implement the function \`XOR(x, y)\` which takes two boolean inputs \`x\` and \`y\` and which returns the output of the XOR gate as a boolean.
+
+This question makes use of the wrapping container method to throw custom errors for each testcase.`,
+    id: 2,
+    library: mockRuneLibrary,
+    prepend: ``,
+    postpend: `
+const __XOR = (x, y) => {
+  if (XOR(false, false) === undefined) {
+    error('Your function is empty!');
+  } else {}
+  
+  const result = XOR(x, y);
+
+  if (!is_boolean(result)) {
+    error('Your function does not return a boolean!');
+  } else {}
+  
+  if (((x && !y) || (y && !x)) && !result) {
+    error('Check your truth tables!');
+  } else if (XOR(false, false) === XOR(false, true)) {
+    error('Oi! Do not hardcode values!');
+  } else {
+    return result;
+  }
+};`,
+    testcases: [
+      {
+        type: TestcaseTypes.public,
+        program: `__XOR(true, false);`,
+        score: 0,
+        answer: `true`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `__XOR(false, true);`,
+        score: 0,
+        answer: `true`
+      },
+      {
+        type: TestcaseTypes.hidden,
+        program: `__XOR(true, XOR(true, false));`,
+        score: 0,
+        answer: `false`
+      }
+    ],
+    solutionTemplate: `function XOR(x, y) {
+    // Your answer here!
+}`,
+    type: 'programming',
+    xp: 0,
+    grade: 0,
+    maxGrade: 0,
+    maxXp: 0
+  },
+  {
+    autogradingResults: [],
+    answer: null,
+    roomId: null,
+    content: `The NOR logic gate is special in that it is an _universal logic gate_, that is to say, they can be composed to form any other logic gate.
+
+Implement the AND logic gate **using ONLY the NOR logic gate**, as the \`NOR_AND(x, y)\` function that takes in two booleans as input.
+
+The \`NOR\` function modeled after a NOR gate is provided for you - it accepts two boolean values and returns \`true\` iff both inputs are \`false\`.`,
+    id: 3,
+    library: mockRuneLibrary,
+    prepend: `
+let counter = 0;
+const NOR = (x, y) => {
+  counter = counter + 1;
+  return !(x || y);
+};`,
+    postpend: `
+const __NOR_AND = (x, y) => {
+  if (NOR_AND(false, false) === undefined) {
+    error('Your function is empty!');
+  } else {}
+  
+  counter = 0;
+  const result = NOR_AND(x, y);
+
+  if (!is_boolean(result)) {
+    error('Your function does not return a boolean!');
+  } else {}
+  
+  if (!x && y && result) {
+    error('Check your truth tables!');
+  } else if (x && y && !result && counter > 0) {
+    error('Nope! Try again :)');
+  } else if (x && y && !result) {
+    error('...You did not use NOR and still got it wrong!');
+  } else if (x && y && result && counter !== 3) {
+    error('Did you use NOR in your solution? >:(');
+  } else if (x && !y && counter !== 6) {
+    error('Incorrect number of calls.');
+  } else {
+    return result;
+  }
+};`,
+    testcases: [
+      {
+        type: TestcaseTypes.public,
+        program: `__NOR_AND(false, true);`,
+        score: 0,
+        answer: `false`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `__NOR_AND(true, true);`,
+        score: 0,
+        answer: `true`
+      },
+      {
+        type: TestcaseTypes.hidden,
+        program: `__NOR_AND(true, NOR_AND(false, true));`,
+        score: 0,
+        answer: `false`
+      }
+    ],
+    solutionTemplate: `function NOR_AND(x, y) {
+    // Your answer here!
+}`,
+    type: 'programming',
+    xp: 0,
+    grade: 0,
+    maxGrade: 0,
+    maxXp: 0
+  }
+];
+
 /*
  * A few Assessments to try out in workspaces.
  */
@@ -622,5 +886,17 @@ sapien
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
     title: 'A Closed Sidequest'
+  },
+  {
+    category: AssessmentCategories.Path,
+    id: 6,
+    longSummary: `### Basic logic gates
+
+This path is intended to demonstrate concepts from the lecture **Logic Circuits**. You are strongly encouraged to attempt this path to check your understanding, prior to the next Studio session. For this, you will be granted a small amount of XP!
+
+The path comprises 4 questions and is fully autograded and guided, and there are **no private test cases** - there will be no manual review by default. Please consult your Avenger if you require assistance!</TEXT>`,
+    missionPDF: 'www.google.com',
+    questions: mockPathQuestions,
+    title: 'A sample guided path'
   }
 ];
