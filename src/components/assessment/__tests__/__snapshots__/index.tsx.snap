@@ -207,7 +207,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
-                                            Basic logic gates
+                                            Basic Logic Gates
                                           </h4>
                                         </Component>
                                       </div>
@@ -1062,7 +1062,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
                                         <Component>
                                           <h4 className=\\"bp3-heading\\">
-                                            Basic logic gates
+                                            Basic Logic Gates
                                           </h4>
                                         </Component>
                                       </div>

@@ -229,8 +229,14 @@ $code-color-error: #ff4444;
     color: $code-color-result;
     text-align: justify;
 
-    div {
-      p:last-child {
+    & > div > * {
+      // If the assessment briefing begins with a header, remove its top margin
+      &:first-child {
+        margin-top: 0;
+      }
+
+      // Remove bottom margins of the last element in the assessment briefing
+      &:last-child {
         margin-bottom: 0;
       }
     }
