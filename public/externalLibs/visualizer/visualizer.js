@@ -83,23 +83,6 @@
     return tree
   }
   
-  /** 
-   * Returns a new TreeNode that represents a function object instead of a sublist
-   * Used only when the input to draw_data is a single function
-   */
-  function construct_single_function(fn) {
-    var thisNode = new TreeNode()
-    thisNode.data2 = " " // workaround to prevent nullbox from being drawn
-
-    // memoise current function
-    perms[counter] = fn
-    thisNode.id = counter
-    thisNode.isFunction = true
-    counter++
-
-    return thisNode
-  }
-  
   var tcon = {
     strokeWidth: 2,
     stroke: 'white',
