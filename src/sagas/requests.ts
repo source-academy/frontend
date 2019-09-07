@@ -132,14 +132,35 @@ export async function getAssessmentOverviews(
  * GET /assessments/${assessmentId}
  */
 export async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
-  const resp = await request(`assessments/${id}`, 'GET', {
+  let resp = await request(`assessments/${id}`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
+
+  // Attempt to load password-protected assessment
+  while (resp && resp.status === 403) {
+    const input = window.prompt('Please enter password.', '');
+    if (!input) {
+      resp = null;
+      history.back();
+      return null;
+    }
+
+    resp = await request(`assessments/${id}`, 'POST', {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      body: {
+        password: input
+      },
+      shouldRefresh: true
+    });
+  }
+
   if (!resp || !resp.ok) {
     return null;
   }
+
   const assessment = (await resp.json()) as IAssessment;
   // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
   //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
