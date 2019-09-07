@@ -132,14 +132,35 @@ export async function getAssessmentOverviews(
  * GET /assessments/${assessmentId}
  */
 export async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
-  const resp = await request(`assessments/${id}`, 'GET', {
+  let resp = await request(`assessments/${id}`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
+
+  // Attempt to load password-protected assessment
+  while (resp && resp.status === 403) {
+    const input = window.prompt('Please enter password.', '');
+    if (!input) {
+      resp = null;
+      history.back();
+      return null;
+    }
+
+    resp = await request(`assessments/${id}`, 'POST', {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      body: {
+        password: input
+      },
+      shouldRefresh: true
+    });
+  }
+
   if (!resp || !resp.ok) {
     return null;
   }
+
   const assessment = (await resp.json()) as IAssessment;
   // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
   //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
@@ -227,33 +248,39 @@ export async function getGradingOverviews(
     return null; // invalid accessToken _and_ refreshToken
   }
   const gradingOverviews = await resp.json();
-  return gradingOverviews.map((overview: any) => {
-    const gradingOverview: GradingOverview = {
-      assessmentId: overview.assessment.id,
-      assessmentName: overview.assessment.title,
-      assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
-      studentId: overview.student.id,
-      studentName: overview.student.name,
-      submissionId: overview.id,
-      submissionStatus: overview.status,
-      groupName: overview.groupName,
-      // Grade
-      initialGrade: overview.grade,
-      gradeAdjustment: overview.adjustment,
-      currentGrade: overview.grade + overview.adjustment,
-      maxGrade: overview.assessment.maxGrade,
-      gradingStatus: overview.gradingStatus,
-      questionCount: overview.questionCount,
-      gradedCount: overview.gradedCount,
-      // XP
-      initialXp: overview.xp,
-      xpAdjustment: overview.xpAdjustment,
-      currentXp: overview.xp + overview.xpAdjustment,
-      maxXp: overview.assessment.maxXp,
-      xpBonus: overview.xpBonus
-    };
-    return gradingOverview;
-  });
+  return gradingOverviews
+    .map((overview: any) => {
+      const gradingOverview: GradingOverview = {
+        assessmentId: overview.assessment.id,
+        assessmentName: overview.assessment.title,
+        assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
+        studentId: overview.student.id,
+        studentName: overview.student.name,
+        submissionId: overview.id,
+        submissionStatus: overview.status,
+        groupName: overview.groupName,
+        // Grade
+        initialGrade: overview.grade,
+        gradeAdjustment: overview.adjustment,
+        currentGrade: overview.grade + overview.adjustment,
+        maxGrade: overview.assessment.maxGrade,
+        gradingStatus: overview.gradingStatus,
+        questionCount: overview.questionCount,
+        gradedCount: overview.gradedCount,
+        // XP
+        initialXp: overview.xp,
+        xpAdjustment: overview.xpAdjustment,
+        currentXp: overview.xp + overview.xpAdjustment,
+        maxXp: overview.assessment.maxXp,
+        xpBonus: overview.xpBonus
+      };
+      return gradingOverview;
+    })
+    .sort((subX: GradingOverview, subY: GradingOverview) =>
+      subX.assessmentId !== subY.assessmentId
+        ? subY.assessmentId - subX.assessmentId
+        : subY.submissionId - subX.submissionId
+    );
 }
 
 /**

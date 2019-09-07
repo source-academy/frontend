@@ -402,7 +402,13 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     <div className="row listing-title">
       <Text ellipsize={true} className={'col-xs-10'}>
         <H4>
-          {overview.title} {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
+          {overview.title}
+          {overview.private ? (
+            <Tooltip content="This assessment is password-protected.">
+              <Icon icon="lock" style={{ verticalAlign: 'middle', padding: '0.2rem' }} />
+            </Tooltip>
+          ) : null}
+          {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
         </H4>
       </Text>
       <div className="col-xs-2">{this.makeSubmissionButton(overview, index)}</div>
