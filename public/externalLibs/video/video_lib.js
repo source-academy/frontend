@@ -374,9 +374,10 @@ VD.handleUpdateDimensions = function(w, h) {
 
 // upside-down
 
-const WIDTH = get_video_width();
-const HEIGHT = get_video_height();
+
 function upside_down(src, dest) {
+    const WIDTH = get_video_width();
+    const HEIGHT = get_video_height();
     for (let x=0; x<WIDTH; x = x + 1) {
         for (let y=0; y<HEIGHT; y = y + 1) {
             copy_pixel(
@@ -390,17 +391,16 @@ function upside_down(src, dest) {
 apply_filter(upside_down);
 
 // sine distortion
-
-const wave_length = 5 * (2 * math_PI);
-const distortion = 10;
-
-const WIDTH = get_video_width();
-const HEIGHT = get_video_height();
-
-const mid_x = WIDTH/2;
-const mid_y = HEIGHT/2;
             
 function sine_distortion(src, dest) {
+    const wave_length = 5 * (2 * math_PI);
+    const distortion = 10;
+
+    const WIDTH = get_video_width();
+    const HEIGHT = get_video_height();
+
+    const mid_x = WIDTH/2;
+    const mid_y = HEIGHT/2;
     for (let x=0; x<WIDTH; x = x + 1){
         for (let y=0; y<HEIGHT; y = y + 1){
             const d_x = math_abs(mid_x - x);
@@ -421,10 +421,10 @@ apply_filter(sine_distortion);
 
 // inversion filter
 
-const WIDTH = get_video_width();
-const HEIGHT = get_video_height();
-            
 function invert(src, dest) {
+    const WIDTH = get_video_width();
+    const HEIGHT = get_video_height();
+            
     for (let x=0; x<WIDTH; x = x + 1){
         for (let y=0; y<HEIGHT; y = y + 1){
             dest[x][y] = [255 - red_of(src[x][y]),
