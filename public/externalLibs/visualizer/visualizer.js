@@ -30,13 +30,13 @@
           thisNode.left = construct_tree(head(lst))
         }
       } else if (is_function(head(lst))) { // draw the function object
-	if (perms.indexOf(head(lst)) > -1) { // check if function has been drawn
-	  thisNode.leftid = perms.indexOf(head(lst))
-	} else { 
-	  thisNode.left = construct_function(head(lst))
-	}
+        if (perms.indexOf(head(lst)) > -1) { // check if function has been drawn
+          thisNode.leftid = perms.indexOf(head(lst))
+        } else { 
+          thisNode.left = construct_function(head(lst))
+        }
       }	else {
-	// otherwise, it's a data item
+        // otherwise, it's a data item
         thisNode.data = head(lst)
       }
       // similarly for right subtree.
@@ -47,11 +47,11 @@
           thisNode.right = construct_tree(tail(lst))
         }
       } else if (is_function(tail(lst))) {
-	if (perms.indexOf(tail(lst)) > -1) {
-		thisNode.rightid = perms.indexOf(tail(lst))
-	} else { 
-		thisNode.right = construct_function(tail(lst))
-	}
+        if (perms.indexOf(tail(lst)) > -1) {
+          thisNode.rightid = perms.indexOf(tail(lst))
+        } else { 
+          thisNode.right = construct_function(tail(lst))
+        }
       } else {
         thisNode.data2 = tail(lst)
       }
@@ -182,6 +182,9 @@
         // if it's left child is part of a cycle and it's been drawn, link back to that node instead
       } else if (node.leftid != null) {
         backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
+      } else if ((node.data === null) && !!node.isFunction) {
+        var nullbox = new NodeEmptyHead_list(x, y)
+        nullbox.put(layer)
       }
 
       // similarly for right child
@@ -227,6 +230,9 @@
       this.drawLeft(node.left, x, y, layer)
     } else if (node.leftid != null) {
       backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
+    } else if ((node.data === null) && !node.isFunction) {
+        var nullbox = new NodeEmptyHead_list(x, y)
+        nullbox.put(layer)
     }
     if (node.right !== null) {
       this.drawRight(node.right, x, y, layer)
@@ -266,6 +272,9 @@
       this.drawLeft(node.left, x, y, layer)
     } else if (node.leftid != null) {
       backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
+    } else if ((node.data === null) && !node.isFunction) {
+        var nullbox = new NodeEmptyHead_list(x, y)
+        nullbox.put(layer)
     }
     if (node.right !== null) {
       this.drawRight(node.right, x, y, layer)
@@ -354,20 +363,22 @@
   /**
    *  Try to fit any data into the box. If not possible, assign a number and log it in the console.
    */
-  function toText(data, full) {
+    function toText(data, full) {
     if (full) {
       return '' + data
     } else {
       var type = typeof data
       if (type === 'function' || type === 'object') {
         return false
-      } else {
+      } else if (type === "string") {
         var str = '' + data
         if (str.length > 5) {
           return false
         } else {
-          return str
+          return '"' + str + '"'
         }
+      } else {
+        return '' + data
       }
     }
   }
@@ -504,7 +515,7 @@
   }
 
   /**
-   *  Connects a NodeBox to it's parent at x,y by using line segments with arrow head
+   *  Connects a NodeBox to its parent at x,y by using line segments with arrow head
    */
   NodeBox.prototype.connectTo = function(x, y) {
     // starting point
@@ -762,9 +773,9 @@
         x1 + tcon.boxWidth * 3 / 4,
         y1 + tcon.boxSpacingY * 3 / 4,
         x1 + tcon.boxWidth * 3 / 4,
-        y2 - tcon.boxSpacingY * 3 / 8,
+        y2 - tcon.boxSpacingY * 3 / 8 + 7,
         x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
-        y2 - tcon.boxSpacingY * 3 / 8,
+        y2 - tcon.boxSpacingY * 3 / 8 + 7,
         x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
       ]
@@ -855,6 +866,44 @@
     return this.image
   }
 
+  /**
+   *  Complements a NodeBox when the head is an empty box.
+   */
+  function NodeEmptyHead_list(x, y) {
+    var null_box = new Kinetic.Line({
+      x: x - tcon.boxWidth / 2,
+      y: y,
+      points: [
+        tcon.boxWidth * tcon.vertBarPos,
+        tcon.boxHeight,
+        tcon.boxWidth * tcon.vertBarPos,
+        0,
+        tcon.boxWidth,
+        0,
+        tcon.boxWidth * tcon.vertBarPos,
+        tcon.boxHeight,
+        tcon.boxWidth,
+        tcon.boxHeight,
+        tcon.boxWidth,
+        0
+      ],
+      strokeWidth: tcon.strokeWidth - 1,
+      stroke: 'white'
+    })
+    this.image = null_box
+  }
+
+  /**
+   *  Adds it to a container
+   */
+  NodeEmptyHead_list.prototype.put = function(container) {
+    container.add(this.image)
+  }
+
+  NodeEmptyHead_list.prototype.getRaw = function() {
+    return this.image
+  }
+  
   // A list of layers drawn, used for history
   var layerList = []
   // ID of the current layer shown. Avoid changing this value externally as layer is not updated.
@@ -982,20 +1031,20 @@
     const existing = []; 
 
     function helper(xs) {   
-      if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
+      if ((!is_pair(xs) && !is_function(xs)) || is_null(xs)) {
           return 0;
       } else {
         let leftHeight;
         let rightHeight;
         if (existing.includes(xs[0])
-            || (!is_pair(xs[0]) && (!is_array(xs[0])))) {
+            || (!is_pair(xs[0]) && !is_function(xs[0]))) {
           leftHeight = 0;          
         } else {
           existing.push(xs[0]);
           leftHeight = helper(xs[0]);
         }
         if (existing.includes(xs[1])
-            || (!is_pair(xs[1]) && (!is_array(xs[1])))) {
+            || (!is_pair(xs[1]) && !is_function(xs[1]))) {
           rightHeight = 0;          
         } else {
           existing.push(xs[1]);
@@ -1017,20 +1066,20 @@
     const existing = [];
 
     function helper(xs) {   
-      if ((!is_pair(xs) && !is_array(xs)) || is_null(xs)) {
+      if ((!is_pair(xs) && !is_function(xs)) || is_null(xs)) {
           return 0;
       } else {
         let leftWidth;
         let rightWidth;
         if (existing.includes(xs[0])
-            || (!is_pair(xs[0]) && (!is_array(xs[0])))) {
+            || (!is_pair(xs[0]) && !is_function(xs[0]))) {
           leftWidth = 0;          
         } else {
           existing.push(xs[0]);
           leftWidth = helper(xs[0]);
         }
         if (existing.includes(xs[1])
-            || (!is_pair(xs[1]) && (!is_array(xs[1])))) {
+            || (!is_pair(xs[1]) && !is_function(xs[1]))) {
           rightWidth = 0;          
         } else {
           existing.push(xs[1]);
