@@ -1,4 +1,4 @@
-To describe a Sound, you need a wave function, and the duration of the sound in seconds.
+To describe a Sound, you need a wave function, and the duration of the Sound in seconds.
 The wave function takes a time *t* (in seconds) as argument and returns the amplitude of the wave
 (a number between -1 and 1) at time *t*. An example wave function `my_wave` has this type:
 
@@ -33,8 +33,8 @@ The `play` function has the type:
 
 `play` : Sound → `undefined`
 
-**Warning: In the following, we produce sounds that might be very loud! Turn down the volume of
-your speakers before you attempt to play sounds, especially in a public place or if you are wearing
+**Warning: In the following, we produce Sounds that might be very loud! Turn down the volume of
+your speakers before you attempt to play Sounds, especially in a public place or if you are wearing
 headphones.**
 
 You can test and play the following:
@@ -51,7 +51,7 @@ The `make_sound` constructor ensures that all Sounds have the following property
 ```
 (get_wave(sound))(get_duration(sound) + t) === 0
 ```
-for any number `t` > 0, regardless what the original wave of the sound returns for `t`.
+for any number `t` > 0, regardless what the original wave of the Sound returns for `t`.
 The wave will simply return 0 when the duration is up.
-This Sound discipline will make your tasks a lot easier.
-Sound processing library for Source Academy.
+This Sound discipline removes the need to change the wave function when
+the duration of a Sound changes.
