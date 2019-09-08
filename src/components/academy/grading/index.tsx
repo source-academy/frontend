@@ -51,6 +51,7 @@ interface IGradingProps
     RouteComponentProps<IGradingWorkspaceParams> {}
 
 export interface IGradingWorkspaceParams {
+  assessmentId?: string;
   submissionId?: string;
   questionId?: string;
 }
@@ -223,13 +224,15 @@ class Grading extends React.Component<IGradingProps, State> {
   }
 
   public render() {
+    const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId);
     const submissionId: number | null = stringParamToInt(this.props.match.params.submissionId);
     // default questionId is 0 (the first question)
     const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0;
 
     /* Create a workspace to grade a submission. */
-    if (submissionId !== null) {
+    if (assessmentId != null && submissionId !== null) {
       const props: GradingWorkspaceProps = {
+        assessmentId,
         submissionId,
         questionId
       };
