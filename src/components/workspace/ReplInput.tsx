@@ -83,7 +83,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
           ]}
           minLines={1}
           maxLines={20}
-          fontSize={14}
+          fontSize={17}
           highlightActiveLine={false}
           showGutter={false}
           setOptions={{
