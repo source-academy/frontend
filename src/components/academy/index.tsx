@@ -33,7 +33,7 @@ const assessmentRenderFactory = (cat: AssessmentCategory) => (
 ) => <AssessmentContainer assessmentCategory={cat} />;
 
 const assessmentRegExp = ':assessmentId(\\d+)?/:questionId(\\d+)?';
-const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?';
+const gradingRegExp = ':assessmentId(\\d+)?/:submissionId(\\d+)?/:questionId(\\d+)?';
 
 class Academy extends React.Component<IAcademyProps> {
   public componentDidMount() {

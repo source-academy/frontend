@@ -10,6 +10,7 @@ import { USE_CHATKIT } from '../../../utils/constants';
 import { history } from '../../../utils/history';
 import {
   AutogradingResult,
+  IAssessment,
   IMCQQuestion,
   IQuestion,
   ITestcase,
@@ -34,6 +35,7 @@ import { Grading, IAnsweredQuestion } from './gradingShape';
 export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
 export type StateProps = {
+  assessment?: IAssessment;
   autogradingResults: AutogradingResult[];
   grading?: Grading;
   editorPrepend: string;
@@ -51,17 +53,20 @@ export type StateProps = {
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
+  storedAssessmentId?: number;
   storedSubmissionId?: number;
   storedQuestionId?: number;
 };
 
 export type OwnProps = {
+  assessmentId: number;
   submissionId: number;
   questionId: number;
 };
 
 export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
+  handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
@@ -82,7 +87,11 @@ export type DispatchProps = {
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
-  handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void;
+  handleUpdateCurrentSubmissionId: (
+    assessmentId: number,
+    submissionId: number,
+    questionId: number
+  ) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
 };
 
@@ -92,6 +101,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
    * or a loading screen), try to fetch a newer grading.
    */
   public componentDidMount() {
+    this.props.handleAssessmentFetch(this.props.assessmentId);
     this.props.handleGradingFetch(this.props.submissionId);
 
     if (!this.props.grading) {
@@ -144,7 +154,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   }
 
   public render() {
-    if (this.props.grading === undefined) {
+    if (!this.props.grading || !this.props.assessment) {
       return (
         <NonIdealState
           className={classNames('WorkspaceParent', Classes.DARK)}
@@ -211,10 +221,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
    */
   private checkWorkspaceReset(props: GradingWorkspaceProps) {
     /* Reset grading if it has changed.*/
+    const assessmentId = props.assessmentId;
     const submissionId = props.submissionId;
     const questionId = props.questionId;
 
-    if (props.storedSubmissionId === submissionId && props.storedQuestionId === questionId) {
+    if (
+      props.storedAssessmentId === assessmentId &&
+      props.storedSubmissionId === submissionId &&
+      props.storedQuestionId === questionId
+    ) {
       return;
     }
     const question = props.grading![questionId].question as IQuestion;
@@ -239,7 +254,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     }
 
     props.handleEditorUpdateBreakpoints([]);
-    props.handleUpdateCurrentSubmissionId(submissionId, questionId);
+    props.handleUpdateCurrentSubmissionId(assessmentId, submissionId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
       editorPrepend,
@@ -299,6 +314,12 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         id: SideContentType.questionOverview
       },
       {
+        label: `${props.assessment!.category} Briefing`,
+        iconName: IconNames.BRIEFCASE,
+        body: <Markdown content={props.assessment!.longSummary} />,
+        id: SideContentType.briefing
+      },
+      {
         label: `Chat`,
         iconName: IconNames.CHAT,
         body: USE_CHATKIT ? (
@@ -330,7 +351,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   /** Pre-condition: Grading has been loaded */
   private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
     const listingPath = `/academy/grading`;
-    const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`;
+    const gradingWorkspacePath =
+      listingPath + `/${this.props.assessmentId}/${this.props.submissionId}`;
     const questionProgress: [number, number] = [questionId + 1, this.props.grading!.length];
 
     const onClickPrevious = () =>

@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 import { beginClearContext, logOut, setEditorBreakpoint, updateEditorValue } from '../actions';
 import {
+  changeExecTime,
   ensureLibrariesLoaded,
   externalLibrarySelect,
   WorkspaceLocations
@@ -51,7 +52,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleEnsureLibrariesLoaded: ensureLibrariesLoaded,
       handleLogOut: logOut,
       handleExternalLibrarySelect: (externalLibraryName: ExternalLibraryName) =>
-        externalLibrarySelect(externalLibraryName, workspaceLocation)
+        externalLibrarySelect(externalLibraryName, workspaceLocation),
+      handleSetExecTime: (execTime: string) => changeExecTime(execTime, workspaceLocation)
     },
     dispatch
   );
