@@ -1,6 +1,8 @@
 To describe a Sound, you need a wave function, and the duration of the Sound in seconds.
-The wave function takes a time *t* (in seconds) as argument and returns the amplitude of the wave
-(a number between -1 and 1) at time *t*. An example wave function `my_wave` has this type:
+The wave function takes a non-negative time *t* (in seconds) as argument and returns the amplitude
+of the wave
+(a number between -1 and 1) at time *t*. In this library, we assume that as duration of a sound
+a non-negative number is given. An example wave function `my_wave` has this type:
 
 `my_wave` : Number → Number
 
@@ -45,13 +47,14 @@ play(noise_sound(0.5));
 
 after which you should hear half a second of noise. (If you don't, your browser does not support sound; use a different one or ask your Avenger for advice).
 
-### Sound Discipline
+### Sound Property
 
 The `make_sound` constructor ensures that all Sounds have the following property:
 ```
 (get_wave(sound))(get_duration(sound) + t) === 0
 ```
-for any number `t` > 0, regardless what the original wave of the Sound returns for `t`.
+for any number `t` ≥ 0, regardless what the original wave of the Sound returns for `t`.
 The wave will simply return 0 when the duration is up.
-This Sound discipline removes the need to change the wave function when
+This Sound property removes the need to explicitly change the wave function when
 the duration of a Sound changes.
+
