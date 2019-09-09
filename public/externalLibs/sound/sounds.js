@@ -147,11 +147,11 @@ function raw_to_audio(_data) {
 
 /**
  * Makes a sound from a wave and a duration.
- * The wave is a function from time (in seconds)
+ * The wave is a function from a non-negative time (in seconds)
  * to an amplitude value that should lie between
  * -1 and 1. The duration is given in seconds.
  * @param {function} wave - given wave function
- * @param {number} duration - in seconds
+ * @param {Number} duration - in seconds
  * @returns {sound} 
  */
 function make_sound(wave, duration) {
@@ -160,7 +160,7 @@ function make_sound(wave, duration) {
 
 /**
  * Accesses the wave of a sound.
- * The wave is a function from time (in seconds)
+ * The wave is a function from a non-negative time (in seconds)
  * to an amplitude value that should lie between
  * -1 and 1.
  * @param {sound} sound - given sound
@@ -173,7 +173,7 @@ function get_wave(sound) {
 /**
  * Accesses the duration of a sound, in seconds.
  * @param {sound} sound - given sound
- * @returns {number} duration in seconds
+ * @returns {Number} duration in seconds
  */
 function get_duration(sound) {
     return tail(sound);
@@ -365,8 +365,14 @@ function stop() {
 /**
  * makes a new sound by combining the sounds in a given
  * list so that
- * they play consecutively, each next sound starting when the
- * previous sound ends
+ * they are arranged consecutively. Let us say the durations
+ * of the sounds are <CODE>d1</CODE>, ..., <CODE>dn</CODE> and the wave 
+ * functions are <CODE>w1</CODE>, ..., <CODE>wn</CODE>. Then the resulting
+ * sound has the duration of the sum of <CODE>d1</CODE>, ..., <CODE>dn</CODE>.
+ * The wave function <CODE>w</CODE> of the resulting sound uses <CODE>w1</CODE> for the first
+ * <CODE>d1</CODE> seconds, <CODE>w2</CODE> for the next 
+ * <CODE>d2</CODE> seconds etc. We specify that <CODE>w(d1) = w2(0)</CODE>,
+ * <CODE>w(d1+d2) = w3(0)</CODE>, etc
  * @param {list_of_sounds} sounds - given list of sounds
  * @returns {sound} resulting sound
  */
@@ -414,7 +420,7 @@ function simultaneously(list_of_sounds) {
 /**
  * makes a sound of a given duration by randomly
  * generating amplitude values
- * @param {number} duration - duration of result sound, in seconds
+ * @param {Number} duration - duration of result sound, in seconds
  * @returns {sound} resulting noise sound
  */
 function noise_sound(duration) {
@@ -423,8 +429,8 @@ function noise_sound(duration) {
 
 /**
  * makes a sine wave sound with given frequency and a given duration
- * @param {number} freq - frequency of result sound, in Hz
- * @param {number} duration - duration of result sound, in seconds
+ * @param {Number} freq - frequency of result sound, in Hz, <CODE>freq</CODE> ≥ 0
+ * @param {Number} duration - duration of result sound, in seconds
  * @returns {sound} resulting sine sound
  */
 function sine_sound(freq, duration) {
@@ -433,7 +439,7 @@ function sine_sound(freq, duration) {
 
 /**
  * makes a silence sound with a given duration
- * @param {number} duration - duration of result sound, in seconds
+ * @param {Number} duration - duration of result sound, in seconds
  * @returns {sound} resulting silence sound
  */
 function silence_sound(duration) {
@@ -448,7 +454,7 @@ function silence_sound(duration) {
  * See <a href="https://i.imgur.com/qGQgmYr.png">mapping from
  * letter name to midi notes</a>
  * @param {string} str - given letter name
- * @returns {number} midi value of the corresponding note
+ * @returns {Number} midi value of the corresponding note
  */
 function letter_name_to_midi_note(note) {
     // we don't consider double flat/ double sharp
@@ -511,7 +517,7 @@ function letter_name_to_midi_note(note) {
  * First converts <CODE>str</CODE> to a note using <CODE>letter_name_to_midi_note</CODE>
  * and then to a frequency using <CODE>midi_note_to_frequency</CODE>
  * @param {string} str - given letter name
- * @returns {number} frequency of corresponding note in Hz
+ * @returns {Number} frequency of corresponding note in Hz
  */
 function letter_name_to_frequency(note) {
     return midi_note_to_frequency(note_to_midi_note(note));
@@ -519,9 +525,9 @@ function letter_name_to_frequency(note) {
 
 /**
  * converts a midi note <CODE>n</CODE> to corresponding frequency.
- * The note is given as an integer number.
- * @param {number} n - given midi note
- * @returns {number} frequency of the note in Hz
+ * The note is given as an integer Number.
+ * @param {Number} n - given midi note
+ * @returns {Number} frequency of the note in Hz
  */
 function midi_note_to_frequency(note) {
     return 8.1757989156 * Math.pow(2, (note / 12));
@@ -529,8 +535,8 @@ function midi_note_to_frequency(note) {
 
 /**
  * makes a square wave sound with given frequency and a given duration
- * @param {number} freq - frequency of result sound, in Hz
- * @param {number} duration - duration of result sound, in seconds
+ * @param {Number} freq - frequency of result sound, in Hz, <CODE>freq</CODE> ≥ 0
+ * @param {Number} duration - duration of result sound, in seconds
  * @returns {sound} resulting square sound
  */
 function square_sound(freq, duration) {
@@ -551,8 +557,8 @@ function square_sound(freq, duration) {
 
 /**
  * makes a triangle wave sound with given frequency and a given duration
- * @param {number} freq - frequency of result sound, in Hz
- * @param {number} duration - duration of result sound, in seconds
+ * @param {Number} freq - frequency of result sound, in Hz, <CODE>freq</CODE> ≥ 0
+ * @param {Number} duration - duration of result sound, in seconds
  * @returns {sound} resulting triangle sound
  */
 function triangle_sound(freq, duration) {
@@ -574,8 +580,8 @@ function triangle_sound(freq, duration) {
 
 /**
  * makes a sawtooth wave sound with given frequency and a given duration
- * @param {number} freq - frequency of result sound, in Hz
- * @param {number} duration - duration of result sound, in seconds
+ * @param {Number} freq - frequency of result sound, in Hz; <CODE>freq</CODE> ≥ 0
+ * @param {Number} duration - duration of result sound, in seconds
  * @returns {sound} resulting sawtooth sound
  */
 function sawtooth_sound(freq, duration) {
