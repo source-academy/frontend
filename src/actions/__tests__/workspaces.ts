@@ -366,14 +366,12 @@ test('updateCurrentAssessmentId generates correct action object', () => {
 });
 
 test('updateCurrentSubmissionId generates correct action object', () => {
-  const assessmentId = 1;
   const submissionId = 3;
   const questionId = 6;
-  const action = updateCurrentSubmissionId(assessmentId, submissionId, questionId);
+  const action = updateCurrentSubmissionId(submissionId, questionId);
   expect(action).toEqual({
     type: actionTypes.UPDATE_CURRENT_SUBMISSION_ID,
     payload: {
-      assessmentId,
       submissionId,
       questionId
     }

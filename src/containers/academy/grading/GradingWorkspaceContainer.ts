@@ -16,7 +16,6 @@ import {
   evalEditor,
   evalRepl,
   evalTestcase,
-  fetchAssessment,
   fetchGrading,
   setEditorBreakpoint,
   updateActiveTab,
@@ -43,7 +42,6 @@ const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
-    assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.grading.autogradingResults,
     editorPrepend: state.workspaces.grading.editorPrepend,
     editorValue: state.workspaces.grading.editorValue,
@@ -61,7 +59,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     output: state.workspaces.grading.output,
     replValue: state.workspaces.grading.replValue,
     sideContentHeight: state.workspaces.grading.sideContentHeight,
-    storedAssessmentId: state.workspaces.grading.currentAssessment,
     storedSubmissionId: state.workspaces.grading.currentSubmission,
     storedQuestionId: state.workspaces.grading.currentQuestion
   };
@@ -70,7 +67,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(
     {
-      handleAssessmentFetch: fetchAssessment,
       handleActiveTabChange: (activeTab: SideContentType) =>
         updateActiveTab(activeTab, workspaceLocation),
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
