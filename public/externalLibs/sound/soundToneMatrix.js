@@ -495,10 +495,10 @@ function linear_decay(decay_period) {
  * Release ratios are given in the first, second and fourth
  * arguments, and the Sustain level is given in 
  * the third argument as a fraction between 0 and 1.
- * @param {number} attack_ratio - proportion of sound in attack phase
- * @param {number} decay_ratio - proportion of sound decay phase
- * @param {number} sustain_level - sustain level between 0 and 1
- * @param {number} release_ratio - proportion of sound release phase
+ * @param {Number} attack_ratio - proportion of sound in attack phase
+ * @param {Number} decay_ratio - proportion of sound decay phase
+ * @param {Number} sustain_level - sustain level between 0 and 1
+ * @param {Number} release_ratio - proportion of sound release phase
  * @returns {function} envelope: function from sound to sound
  */
 function adsr(attack_ratio, decay_ratio, sustain_level, release_ratio) {
@@ -534,8 +534,8 @@ function adsr(attack_ratio, decay_ratio, sustain_level, release_ratio) {
  * the second has twice the frequency, the third three times the
  * frequency etc.
  * @param {function} waveform - function from frequency and duration to sound
- * @param {number} base_frequency - frequency of the first harmonic
- * @param {number} duration - duration of the produced sound, in seconds
+ * @param {Number} base_frequency - frequency of the first harmonic
+ * @param {Number} duration - duration of the produced sound, in seconds
  * @param {list_of_envelope} envelopes - each a function from sound to sound
  * @returns {sound} resulting sound
  */
@@ -561,8 +561,8 @@ function stacking_adsr(waveform, base_frequency, duration, envelopes) {
 /**
  * returns a sound that is reminiscent of a trombone, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
  * @returns {function} <CODE>stop</CODE> to stop recording, 
  */
 function trombone(note, duration) {
@@ -574,8 +574,8 @@ function trombone(note, duration) {
 /**
  * returns a sound that is reminiscent of a piano, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
  * @returns {function} <CODE>stop</CODE> to stop recording, 
  */
 function piano(note, duration) {
@@ -588,8 +588,8 @@ function piano(note, duration) {
 /**
  * returns a sound that is reminiscent of a bell, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
  * @returns {function} <CODE>stop</CODE> to stop recording, 
  */
 function bell(note, duration) {
@@ -603,8 +603,8 @@ function bell(note, duration) {
 /**
  * returns a sound that is reminiscent of a violin, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
  * @returns {function} <CODE>stop</CODE> to stop recording, 
  */
 function violin(note, duration) {
@@ -618,8 +618,8 @@ function violin(note, duration) {
 /**
  * returns a sound that is reminiscent of a cello, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
  * @returns {function} <CODE>stop</CODE> to stop recording, 
  */
 function cello(note, duration) {
