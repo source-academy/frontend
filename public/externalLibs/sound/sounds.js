@@ -302,7 +302,7 @@ var _safeaudio = null;
 /**
  * plays a given sound using your computer's sound device
  * @param {sound} sound - given sound
- * @returns {undefined} undefined
+ * @returns {sound} given sound
  */
 function play(sound) {
     // If a sound is already playing, terminate execution.
