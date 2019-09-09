@@ -16,7 +16,8 @@ test('Application renders correctly', () => {
     handleEditorValueChange: (val: string) => {},
     handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
     handleEnsureLibrariesLoaded: () => {},
-    handleExternalLibrarySelect: (externalLibraryName: ExternalLibraryName) => {}
+    handleExternalLibrarySelect: (externalLibraryName: ExternalLibraryName) => {},
+    handleSetExecTime: (execTime: string) => {}
   };
   const app = <Application {...props} />;
   const tree = shallow(app);
