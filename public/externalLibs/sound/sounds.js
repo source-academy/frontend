@@ -198,100 +198,98 @@ var _player;
 function play_unsafe(sound) {
     // type-check sound
     if ( !is_sound(sound) ) {
-	throw new Error("play is expecting sound, but encountered " + sound);
-    }	
-    
-    // Declaring duration and wave variables
-    var wave = get_wave(sound);
-    var duration = get_duration(sound);
-
+        throw new Error("play is expecting sound, but encountered " + sound);
     // If a sound is already playing, terminate execution
-    if (_playing) {
-	throw new Error("play: audio system still playing previous sound");
-    }
-    
-    _playing = true;
+    } else if (_playing || _safeplaying) {
+        throw new Error("play: audio system still playing previous sound");
+    } else {
+        // Declaring duration and wave variables
+        var wave = get_wave(sound);
+        var duration = get_duration(sound);
+        
+        _playing = true;
 
-    // Create AudioContext (test this out might fix safari issue)
-    //const AudioContext = window.AudioContext || window.webkitAudioContext;
-    
-    // Main audio context
-    _player = new AudioContext();
+        // Create AudioContext (test this out might fix safari issue)
+        //const AudioContext = window.AudioContext || window.webkitAudioContext;
+        
+        // Main audio context
+        _player = new AudioContext();
 
-    // Controls Length of buffer in seconds.
-    var buffer_length = 0.1;
+        // Controls Length of buffer in seconds.
+        var buffer_length = 0.1;
 
-    // Define Buffer Size
-    var bufferSize = FS * buffer_length;
+        // Define Buffer Size
+        var bufferSize = FS * buffer_length;
 
-    // Create two buffers
-    var buffer1 = _player.createBuffer(1, bufferSize, FS);
-    var buffer2 = _player.createBuffer(1, bufferSize, FS);
+        // Create two buffers
+        var buffer1 = _player.createBuffer(1, bufferSize, FS);
+        var buffer2 = _player.createBuffer(1, bufferSize, FS);
 
-    // Keep track of elapsed_duration & first run of ping_pong
-    var elapsed_duration = 0;
-    var first_run = true;
+        // Keep track of elapsed_duration & first run of ping_pong
+        var elapsed_duration = 0;
+        var first_run = true;
 
-    // Schedules playback of sounds
-    function ping_pong(current_sound, next_sound, current_buffer, next_buffer) {
-        // If sound has exceeded duration, early return to stop calls.
-        if (elapsed_duration > duration || !_playing) { 
-            stop();
-            return;
-        }
+        // Schedules playback of sounds
+        function ping_pong(current_sound, next_sound, current_buffer, next_buffer) {
+            // If sound has exceeded duration, early return to stop calls.
+            if (elapsed_duration > duration || !_playing) { 
+                stop();
+                return;
+            }
 
-        // Fill current_buffer, then play current_sound.
-        if (first_run) {
-            // No longer first run of ping_pong.
-            first_run = false;
+            // Fill current_buffer, then play current_sound.
+            if (first_run) {
+                // No longer first run of ping_pong.
+                first_run = false;
 
-            // Discretize first chunk, load into current_buffer.
-            let current_data = current_buffer.getChannelData(0);
-            current_data = discretize_from(wave, duration, elapsed_duration,
-					   buffer_length, current_data);
+                // Discretize first chunk, load into current_buffer.
+                let current_data = current_buffer.getChannelData(0);
+                current_data = discretize_from(wave, duration, elapsed_duration,
+                        buffer_length, current_data);
 
-            // Create current_sound.
-            current_sound = new AudioBufferSourceNode(_player);
+                // Create current_sound.
+                current_sound = new AudioBufferSourceNode(_player);
 
-            // Set current_sound's buffer to current_buffer.
-            current_sound.buffer = current_buffer;
+                // Set current_sound's buffer to current_buffer.
+                current_sound.buffer = current_buffer;
 
-            // Play current_sound.
-            current_sound.connect(_player.destination);
-            current_sound.start();
+                // Play current_sound.
+                current_sound.connect(_player.destination);
+                current_sound.start();
+
+                // Increment elapsed duration.
+                elapsed_duration += buffer_length;
+            }
+
+            // Fill next_buffer while current_sound is playing,
+            // schedule next_sound to play after current_sound terminates.
+
+            // Discretize next chunk, load into next_buffer.
+            let next_data = next_buffer.getChannelData(0);
+            next_data = discretize_from(wave, duration, elapsed_duration,
+                        buffer_length, next_data);
+
+            // Create next_sound.
+            next_sound = new AudioBufferSourceNode(_player);
+
+            // Set next_sound's buffer to next_buffer.
+            next_sound.buffer = next_buffer;
+
+            // Schedule next_sound to play after current_sound.
+            next_sound.connect(_player.destination);
+            next_sound.start(start_time + elapsed_duration);
 
             // Increment elapsed duration.
             elapsed_duration += buffer_length;
+
+            current_sound.onended =
+            event => 
+                ping_pong(next_sound, current_sound, next_buffer, current_buffer);
         }
-
-        // Fill next_buffer while current_sound is playing,
-	// schedule next_sound to play after current_sound terminates.
-
-        // Discretize next chunk, load into next_buffer.
-        let next_data = next_buffer.getChannelData(0);
-        next_data = discretize_from(wave, duration, elapsed_duration,
-				    buffer_length, next_data);
-
-        // Create next_sound.
-        next_sound = new AudioBufferSourceNode(_player);
-
-        // Set next_sound's buffer to next_buffer.
-        next_sound.buffer = next_buffer;
-
-        // Schedule next_sound to play after current_sound.
-        next_sound.connect(_player.destination);
-        next_sound.start(start_time + elapsed_duration);
-
-        // Increment elapsed duration.
-        elapsed_duration += buffer_length;
-
-        current_sound.onended =
-	    event => 
-            ping_pong(next_sound, current_sound, next_buffer, current_buffer);
+        var start_time = _player.currentTime;
+        ping_pong(null, null, buffer1, buffer2);
+        return sound;
     }
-    var start_time = _player.currentTime;
-    ping_pong(null, null, buffer1, buffer2);
-    return sound;
 }
 
 // "Safe" playing for overly complex sounds.
@@ -304,18 +302,22 @@ var _safeaudio = null;
 /**
  * plays a given sound using your computer's sound device
  * @param {sound} sound - given sound
- * @returns {undefined} undefined
+ * @returns {sound} given sound
  */
 function play(sound) {
     // If a sound is already playing, terminate execution.
-    if (_safeplaying || _playing) return;
-    // Discretize the input sound
-    var data = discretize(get_wave(sound), get_duration(sound));
-    _safeaudio = raw_to_audio(data);
+    if (_safeplaying || _playing) {
+        throw new Error("play: audio system still playing previous sound");
+    } else {
+        // Discretize the input sound
+        var data = discretize(get_wave(sound), get_duration(sound));
+        _safeaudio = raw_to_audio(data);
 
-    _safeaudio.addEventListener('ended', stop);
-    _safeaudio.play();
-    _safeplaying = true;
+        _safeaudio.addEventListener('ended', stop);
+        _safeaudio.play();
+        _safeplaying = true;
+        return sound;
+    }
 }
 
 /* sound_to_string and string_to_sound would be really cool!!!

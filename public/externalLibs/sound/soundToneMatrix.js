@@ -477,14 +477,12 @@ function sawtooth_sound(freq, duration) {
 		      duration);
 }
 
-function exponential_decay(decay_period) {
+function linear_decay(decay_period) {
   return function (t) {
     if ((t > decay_period) || (t < 0)) {
-      return undefined;
+      return 0;
     } else {
-      var halflife = decay_period / 8;
-      var lambda = Math.log(2) / halflife;
-      return Math.pow(Math.E, -lambda * t);
+      return 1 - (t / decay_period);
     }
   }
 }
@@ -493,29 +491,32 @@ function exponential_decay(decay_period) {
  * Returns an envelope: a function from sound to sound.
  * When the envelope is applied to a sound, it returns
  * a new sound that results from applying ADSR to
- * the given sound. The Attack duration, Sustain duration and
- * Release duration are given in the first, second and fourth
- * arguments in seconds, and the Sustain level is given in 
+ * the given sound. The Attack, Sustain and
+ * Release ratios are given in the first, second and fourth
+ * arguments, and the Sustain level is given in 
  * the third argument as a fraction between 0 and 1.
- * @param {number} attack_time - duration of attack phase in seconds
- * @param {number} decay_time - duration of decay phase in seconds
+ * @param {number} attack_ratio - proportion of sound in attack phase
+ * @param {number} decay_ratio - proportion of sound decay phase
  * @param {number} sustain_level - sustain level between 0 and 1
- * @param {number} release_time - duration of release phase in seconds
+ * @param {number} release_ratio - proportion of sound release phase
  * @returns {function} envelope: function from sound to sound
  */
-function adsr(attack_time, decay_time, sustain_level, release_time) {
+function adsr(attack_ratio, decay_ratio, sustain_level, release_ratio) {
   return sound => {
     var wave = get_wave(sound);
     var duration = get_duration(sound);
+    var attack_time = duration * attack_ratio;
+    var decay_time = duration * decay_ratio;
+    var release_time = duration * release_ratio;
     return make_sound( x => {
       if (x < attack_time) {
         return wave(x) * (x / attack_time);
       } else if (x < attack_time + decay_time) {
-        return ((1 - sustain_level) * (exponential_decay(decay_time))(x - attack_time) + sustain_level) * wave(x);
+        return ((1 - sustain_level) * (linear_decay(decay_time))(x - attack_time) + sustain_level) * wave(x);
       } else if (x < duration - release_time) {
         return wave(x) * sustain_level;
       } else if (x <= duration) {
-        return wave(x) * sustain_level * (exponential_decay(release_time))(x - (duration - release_time));
+        return wave(x) * sustain_level * (linear_decay(release_time))(x - (duration - release_time));
       } else {
         return 0;
       }
@@ -528,7 +529,7 @@ function adsr(attack_time, decay_time, sustain_level, release_time) {
  * Returns a sound that results from applying a list of envelopes
  * to a given wave form. The wave form should be a sound generator that
  * takes a frequency and a duration as arguments and produces a
- * sound with the given frequency and duration. Each evelope is
+ * sound with the given frequency and duration. Each envelope is
  * applied to a harmonic: the first harmonic has the given frequency,
  * the second has twice the frequency, the third three times the
  * frequency etc.
@@ -566,8 +567,8 @@ function stacking_adsr(waveform, base_frequency, duration, envelopes) {
  */
 function trombone(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0.4, 0, 1, 0),
-      adsr(0.6472, 1.2, 0, 0)));
+    list(adsr(0.2, 0, 1, 0.1),
+      adsr(0.3236, 0.6, 0, 0.1)));
 }
 
 /**
@@ -579,9 +580,9 @@ function trombone(note, duration) {
  */
 function piano(note, duration) {
   return stacking_adsr(triangle_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0, 1.03, 0, 0),
-      adsr(0, 0.64, 0, 0),
-      adsr(0, 0.4, 0, 0)));
+    list(adsr(0, 0.515, 0, 0.05),
+      adsr(0, 0.32, 0, 0.05),
+      adsr(0, 0.2, 0, 0.05)));
 }
 
 /**
@@ -593,10 +594,10 @@ function piano(note, duration) {
  */
 function bell(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0, 1.2, 0, 0),
-      adsr(0, 1.3236, 0, 0),
-      adsr(0, 1.5236, 0, 0),
-      adsr(0, 1.8142, 0, 0)));
+    list(adsr(0, 0.6, 0, 0.05),
+      adsr(0, 0.6618, 0, 0.05),
+      adsr(0, 0.7618, 0, 0.05),
+      adsr(0, 0.9071, 0, 0.05)));
 }
 
 /**
@@ -608,10 +609,10 @@ function bell(note, duration) {
  */
 function violin(note, duration) {
   return stacking_adsr(sawtooth_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0.7, 0, 1, 0.3),
-      adsr(0.7, 0, 1, 0.3),
-      adsr(0.9, 0, 1, 0.3),
-      adsr(0.9, 0, 1, 0.3)));
+    list(adsr(0.35, 0, 1, 0.15),
+      adsr(0.35, 0, 1, 0.15),
+      adsr(0.45, 0, 1, 0.15),
+      adsr(0.45, 0, 1, 0.15)));
 }
 
 /**
@@ -623,9 +624,9 @@ function violin(note, duration) {
  */
 function cello(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0.1, 0, 1, 0.2),
-      adsr(0.1, 0, 1, 0.3),
-      adsr(0, 0, 0.2, 0.3)));
+    list(adsr(0.05, 0, 1, 0.1),
+      adsr(0.05, 0, 1, 0.15),
+      adsr(0, 0, 0.2, 0.15)));
 }
 
 function string_to_list_of_numbers(string) {
