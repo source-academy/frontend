@@ -65,12 +65,12 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                           </div>
                           <div className=\\"profile-progress\\">
                             <div className=\\"profile-grade\\">
-                              <Blueprint3.Spinner className=\\"profile-spinner progress-steelblue\\" size={144} value={0.9}>
+                              <Blueprint3.Spinner className=\\"profile-spinner progress-steelblue\\" size={144} value={1}>
                                 <div className=\\"bp3-spinner bp3-no-spin profile-spinner progress-steelblue\\">
                                   <div className=\\"bp3-spinner-animation\\">
                                     <svg width={144} height={144} strokeWidth=\\"2.78\\" viewBox=\\"3.61 3.61 92.78 92.78\\">
                                       <path className=\\"bp3-spinner-track\\" d=\\"M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90\\" />
-                                      <path className=\\"bp3-spinner-head\\" d=\\"M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90\\" pathLength={280} strokeDasharray=\\"280 280\\" strokeDashoffset={28} />
+                                      <path className=\\"bp3-spinner-head\\" d=\\"M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90\\" pathLength={280} strokeDasharray=\\"280 280\\" strokeDashoffset={0} />
                                     </svg>
                                   </div>
                                 </div>
@@ -79,12 +79,12 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                                 Grade
                               </div>
                               <div className=\\"total-value\\">
-                                2700
+                                0.00
                                  / 
-                                3000
+                                0.00
                               </div>
                               <div className=\\"percentage\\">
-                                90.00
+                                100.00
                                 %
                               </div>
                             </div>
@@ -178,7 +178,7 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                                 <Route path=\\"\\\\\\\\/academy\\\\\\\\/quests\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
                                   <Link to=\\"/academy/quests/5/0\\" className=\\"profile-summary-navlink\\" style={[undefined]} aria-current={{...}} target=\\"_blank\\" replace={false}>
                                     <a className=\\"profile-summary-navlink\\" style={[undefined]} aria-current={{...}} target=\\"_blank\\" onClick={[Function]} href=\\"/academy/quests/5/0\\">
-                                      <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Closed (partially graded) Sidequest\\">
+                                      <Blueprint3.Callout className=\\"profile-summary-callout\\" icon=\\"lightbulb\\" title=\\"Closed (not graded) Sidequest\\">
                                         <div className=\\"bp3-callout bp3-callout-icon profile-summary-callout\\">
                                           <Blueprint3.Icon icon=\\"lightbulb\\" iconSize={20}>
                                             <span icon=\\"lightbulb\\" className=\\"bp3-icon bp3-icon-lightbulb\\" title={[undefined]}>
@@ -192,7 +192,7 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                                           </Blueprint3.Icon>
                                           <Component>
                                             <h4 className=\\"bp3-heading\\">
-                                              Closed (partially graded) Sidequest
+                                              Closed (not graded) Sidequest
                                             </h4>
                                           </Component>
                                           <div className=\\"xp-details\\">

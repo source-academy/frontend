@@ -55,7 +55,7 @@ class GradingStatusCell extends React.Component<GradingStatusCellProps, {}> {
 
     return (
       <div>
-        <Tooltip content={tooltip} position={Position.LEFT}>
+        <Tooltip content={tooltip} position={Position.LEFT} hoverOpenDelay={10} lazy={true}>
           <Icon icon={iconName} intent={intent} />
         </Tooltip>
       </div>

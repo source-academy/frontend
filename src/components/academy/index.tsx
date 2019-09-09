@@ -33,7 +33,7 @@ const assessmentRenderFactory = (cat: AssessmentCategory) => (
 ) => <AssessmentContainer assessmentCategory={cat} />;
 
 const assessmentRegExp = ':assessmentId(\\d+)?/:questionId(\\d+)?';
-const gradingRegExp = ':submissionId(\\d+)?/:questionId(\\d+)?';
+const gradingRegExp = ':assessmentId(\\d+)?/:submissionId(\\d+)?/:questionId(\\d+)?';
 
 class Academy extends React.Component<IAcademyProps> {
   public componentDidMount() {
@@ -70,6 +70,13 @@ class Academy extends React.Component<IAcademyProps> {
             )}/${assessmentRegExp}`}
             render={assessmentRenderFactory(AssessmentCategories.Sidequest)}
           />
+          <Route
+            path={`/academy/${assessmentCategoryLink(
+              AssessmentCategories.Practical
+            )}/${assessmentRegExp}`}
+            render={assessmentRenderFactory(AssessmentCategories.Practical)}
+          />
+
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
           <Route path={'/academy/material'} component={MaterialUpload} />
           <Route path="/academy/sourcereel" component={Sourcereel} />

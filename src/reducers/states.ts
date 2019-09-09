@@ -55,6 +55,7 @@ interface IAssessmentWorkspace extends IWorkspaceState {
 }
 
 interface IGradingWorkspace extends IWorkspaceState {
+  readonly currentAssessment?: number;
   readonly currentSubmission?: number;
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;

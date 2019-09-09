@@ -79,6 +79,7 @@ describe('Test FETCH_AUTH Action', () => {
       .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminusCode })
       .silentRun();
   });
+
   test('when tokens is null', () => {
     const luminusCode = 'luminusCode';
     const user = {
@@ -96,6 +97,7 @@ describe('Test FETCH_AUTH Action', () => {
       .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminusCode })
       .silentRun();
   });
+
   test('when user is null', () => {
     const luminusCode = 'luminusCode';
     const nullUser = null;
@@ -160,7 +162,7 @@ describe('Test FETCH_ASSESSMENT Action', () => {
 });
 
 describe('Test SUBMIT_ANSWER Action', () => {
-  test('when respond is ok', () => {
+  test('when response is ok', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     const mockNewQuestions = mockAssessment.questions.slice().map((question: IQuestion) => {
       if (question.id === mockAnsweredAssessmentQuestion.id) {
@@ -201,7 +203,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     return expectSaga(backendSaga)
       .withState({ session: { role: Role.Staff } })
-      .call(showWarningMessage, 'Only students can submit answers.')
+      .call(showWarningMessage, 'Answer rejected - only students can submit answers.')
       .not.call.fn(postAnswer)
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT)
       .not.put.actionType(actionTypes.UPDATE_HAS_UNSAVED_CHANGES)
@@ -210,7 +212,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
       .silentRun();
   });
 
-  test('when respond is null', () => {
+  test('when response is null', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     return expectSaga(backendSaga)
       .withState({ session: { ...mockTokens, role: Role.Student } })
@@ -240,7 +242,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
       .silentRun();
   });
 
-  test('when respond is error', () => {
+  test('when response has HTTP status code 403 (Forbidden)', () => {
     const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
     return expectSaga(backendSaga)
       .withState({ session: { ...mockTokens, role: Role.Student } })
@@ -252,10 +254,10 @@ describe('Test SUBMIT_ANSWER Action', () => {
             mockAnsweredAssessmentQuestion.answer,
             mockTokens
           ),
-          errorResp
+          { ...errorResp, status: 403 }
         ]
       ])
-      .call.fn(showWarningMessage)
+      .call(showWarningMessage, 'Answer rejected - assessment not open or already finalised.')
       .not.call.fn(showSuccessMessage)
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT)
       .not.put.actionType(actionTypes.UPDATE_HAS_UNSAVED_CHANGES)
@@ -266,7 +268,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
 });
 
 describe('Test SUBMIT_ASSESSMENT Action', () => {
-  test('when respond is ok', () => {
+  test('when response is ok', () => {
     const mockAssessmentId = mockAssessment.id;
     const mockNewOverviews = mockAssessmentOverviews.map(overview => {
       if (overview.id === mockAssessmentId) {
@@ -288,24 +290,27 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
     );
   });
 
-  test('when respond is error', () => {
+  test('when response has HTTP status code 403 (Forbidden)', () => {
     return expectSaga(backendSaga)
       .withState({ session: { ...mockTokens, role: Role.Student } })
-      .provide([[call(postAssessment, 0, mockTokens), errorResp]])
+      .provide([[call(postAssessment, 0, mockTokens), { ...errorResp, status: 403 }]])
       .call(postAssessment, 0, mockTokens)
-      .call(showWarningMessage, 'Something went wrong. Please try again.')
+      .call(
+        showWarningMessage,
+        'Not allowed to finalise - assessment not open or already finalised.'
+      )
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT_OVERVIEWS)
       .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: 0 })
       .silentRun();
   });
 
-  test('when respond is null', () => {
+  test('when response is null', () => {
     return expectSaga(backendSaga)
       .withState({ session: { ...mockTokens, role: Role.Student } })
       .provide([[call(postAssessment, 0, mockTokens), null]])
       .call(postAssessment, 0, mockTokens)
-      .call(showWarningMessage, 'Something went wrong. Please try again.')
+      .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT_OVERVIEWS)
       .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: actionTypes.SUBMIT_ASSESSMENT, payload: 0 })
@@ -315,7 +320,7 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
   test('when role is not a student', () => {
     return expectSaga(backendSaga)
       .withState({ session: { role: Role.Staff } })
-      .call(showWarningMessage, 'Only students can submit assessments.')
+      .call(showWarningMessage, 'Submission rejected - only students can submit assessments.')
       .not.call.fn(postAssessment)
       .not.put.actionType(actionTypes.UPDATE_ASSESSMENT_OVERVIEWS)
       .hasFinalState({ session: { role: Role.Staff } })
@@ -336,7 +341,7 @@ describe('Test FETCH_NOTIFICATIONS Action', () => {
 });
 
 describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
-  test('when respond is ok', () => {
+  test('when response is ok', () => {
     const ids = [1, 2, 3];
     const mockNewNotifications = mockNotifications.filter(n => !ids.includes(n.id));
     return expectSaga(backendSaga)
@@ -354,12 +359,14 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
       .silentRun();
   });
 
-  test('when respond is error', () => {
+  test('when response has HTTP status code 404 (Not Found)', () => {
     const ids = mockNotifications.map(n => n.id);
     return expectSaga(backendSaga)
       .withState(mockStates)
-      .provide([[call(postAcknowledgeNotifications, mockTokens, ids), errorResp]])
-      .call(showWarningMessage, "Something went wrong, couldn't acknowledge")
+      .provide([
+        [call(postAcknowledgeNotifications, mockTokens, ids), { ...errorResp, status: 404 }]
+      ])
+      .call(showWarningMessage, 'Something went wrong (got 404 response)')
       .dispatch({ type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS, payload: {} })
       .silentRun();
   });

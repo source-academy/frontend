@@ -8,8 +8,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     gradeAdjustment: 0,
     xpAdjustment: 0,
     assessmentCategory: 'Mission',
-    assessmentId: 0,
-    assessmentName: 'Mission 0 ',
+    assessmentId: 1,
+    assessmentName: 'An Odyssey to Runes',
     currentGrade: 69,
     currentXp: 69,
     xpBonus: 10,
@@ -29,9 +29,9 @@ export const mockGradingOverviews: GradingOverview[] = [
   {
     gradeAdjustment: -2,
     xpAdjustment: -2,
-    assessmentCategory: 'Mission',
-    assessmentId: 1,
-    assessmentName: 'Mission 1',
+    assessmentCategory: 'Sidequest',
+    assessmentId: 6,
+    assessmentName: 'Basic logic gates',
     currentGrade: -2,
     currentXp: -2,
     xpBonus: 12,
@@ -52,8 +52,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     gradeAdjustment: 4,
     xpAdjustment: 4,
     assessmentCategory: 'Mission',
-    assessmentId: 0,
-    assessmentName: 'Mission 0',
+    assessmentId: 1,
+    assessmentName: 'An Odyssey to Runes',
     currentGrade: 1000,
     currentXp: 1000,
     xpBonus: 12,
@@ -89,7 +89,13 @@ export const mockFetchGradingOverview = (
   if (role === null || !permittedRoles.includes(role)) {
     return null;
   } else {
-    return group ? [mockGradingOverviews[0]] : mockGradingOverviews;
+    return group
+      ? [mockGradingOverviews[0]]
+      : mockGradingOverviews.sort((subX: GradingOverview, subY: GradingOverview) =>
+          subX.assessmentId !== subY.assessmentId
+            ? subY.assessmentId - subX.assessmentId
+            : subY.submissionId - subX.submissionId
+        );
   }
 };
 
@@ -191,7 +197,12 @@ _italics_
 [link to Source Academy](https://sourceacademy.nus.edu.sg)  
 
 ![](image-url-goes-here)
-      `
+      `,
+      grader: {
+        name: 'HARTIN MENZ',
+        id: 100
+      },
+      gradedAt: '2019-08-16T13:26:32+00:00'
     },
     student: {
       name: 'Al Gorithm',

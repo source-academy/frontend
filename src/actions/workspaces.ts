@@ -186,8 +186,13 @@ export const updateCurrentAssessmentId = (assessmentId: number, questionId: numb
     questionId
   });
 
-export const updateCurrentSubmissionId = (submissionId: number, questionId: number) =>
+export const updateCurrentSubmissionId = (
+  assessmentId: number,
+  submissionId: number,
+  questionId: number
+) =>
   action(actionTypes.UPDATE_CURRENT_SUBMISSION_ID, {
+    assessmentId,
     submissionId,
     questionId
   });

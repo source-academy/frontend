@@ -55,14 +55,14 @@ type Tokens = {
  * POST /auth
  */
 export async function postAuth(luminusCode: string): Promise<Tokens | null> {
-  const response = await request('auth', 'POST', {
+  const resp = await request('auth', 'POST', {
     body: { login: { luminus_code: luminusCode } },
     errorMessage: 'Could not login. Please contact the module administrator.'
   });
-  if (!response) {
+  if (!resp) {
     return null;
   }
-  const tokens = await response.json();
+  const tokens = await resp.json();
   return {
     accessToken: tokens.access_token,
     refreshToken: tokens.refresh_token
@@ -73,13 +73,13 @@ export async function postAuth(luminusCode: string): Promise<Tokens | null> {
  * POST /auth/refresh
  */
 async function postRefresh(refreshToken: string): Promise<Tokens | null> {
-  const response = await request('auth/refresh', 'POST', {
+  const resp = await request('auth/refresh', 'POST', {
     body: { refresh_token: refreshToken }
   });
-  if (!response) {
+  if (!resp) {
     return null;
   }
-  const tokens = await response.json();
+  const tokens = await resp.json();
   return {
     accessToken: tokens.access_token,
     refreshToken: tokens.refresh_token
@@ -90,15 +90,15 @@ async function postRefresh(refreshToken: string): Promise<Tokens | null> {
  * GET /user
  */
 export async function getUser(tokens: Tokens): Promise<object | null> {
-  const response = await request('user', 'GET', {
+  const resp = await request('user', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (!response || !response.ok) {
+  if (!resp || !resp.ok) {
     return null;
   }
-  return await response.json();
+  return await resp.json();
 }
 
 /**
@@ -107,15 +107,15 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
 export async function getAssessmentOverviews(
   tokens: Tokens
 ): Promise<IAssessmentOverview[] | null> {
-  const response = await request('assessments', 'GET', {
+  const resp = await request('assessments', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (!response || !response.ok) {
+  if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
-  const assessmentOverviews = await response.json();
+  const assessmentOverviews = await resp.json();
   return assessmentOverviews.map((overview: any) => {
     /**
      * backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
@@ -132,15 +132,36 @@ export async function getAssessmentOverviews(
  * GET /assessments/${assessmentId}
  */
 export async function getAssessment(id: number, tokens: Tokens): Promise<IAssessment | null> {
-  const response = await request(`assessments/${id}`, 'GET', {
+  let resp = await request(`assessments/${id}`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (!response || !response.ok) {
+
+  // Attempt to load password-protected assessment
+  while (resp && resp.status === 403) {
+    const input = window.prompt('Please enter password.', '');
+    if (!input) {
+      resp = null;
+      history.back();
+      return null;
+    }
+
+    resp = await request(`assessments/${id}`, 'POST', {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      body: {
+        password: input
+      },
+      shouldRefresh: true
+    });
+  }
+
+  if (!resp || !resp.ok) {
     return null;
   }
-  const assessment = (await response.json()) as IAssessment;
+
+  const assessment = (await resp.json()) as IAssessment;
   // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
   //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
   assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
@@ -153,6 +174,13 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
       question.postpend = question.postpend || '';
       question.testcases = question.testcases || [];
       q = question;
+    }
+
+    // If the backend returns :nil (null) for grader, then the question is not graded
+    // Delete the grader and gradedAt attributes
+    if (q.grader === null) {
+      delete q.grader;
+      delete q.gradedAt;
     }
 
     // Make library.external.name uppercase
@@ -211,42 +239,48 @@ export async function getGradingOverviews(
   tokens: Tokens,
   group: boolean
 ): Promise<GradingOverview[] | null> {
-  const response = await request(`grading?group=${group}`, 'GET', {
+  const resp = await request(`grading?group=${group}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (!response) {
+  if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
   }
-  const gradingOverviews = await response.json();
-  return gradingOverviews.map((overview: any) => {
-    const gradingOverview: GradingOverview = {
-      assessmentId: overview.assessment.id,
-      assessmentName: overview.assessment.title,
-      assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
-      studentId: overview.student.id,
-      studentName: overview.student.name,
-      submissionId: overview.id,
-      submissionStatus: overview.status,
-      groupName: overview.groupName,
-      // Grade
-      initialGrade: overview.grade,
-      gradeAdjustment: overview.adjustment,
-      currentGrade: overview.grade + overview.adjustment,
-      maxGrade: overview.assessment.maxGrade,
-      gradingStatus: overview.gradingStatus,
-      questionCount: overview.questionCount,
-      gradedCount: overview.gradedCount,
-      // XP
-      initialXp: overview.xp,
-      xpAdjustment: overview.xpAdjustment,
-      currentXp: overview.xp + overview.xpAdjustment,
-      maxXp: overview.assessment.maxXp,
-      xpBonus: overview.xpBonus
-    };
-    return gradingOverview;
-  });
+  const gradingOverviews = await resp.json();
+  return gradingOverviews
+    .map((overview: any) => {
+      const gradingOverview: GradingOverview = {
+        assessmentId: overview.assessment.id,
+        assessmentName: overview.assessment.title,
+        assessmentCategory: capitalise(overview.assessment.type) as AssessmentCategory,
+        studentId: overview.student.id,
+        studentName: overview.student.name,
+        submissionId: overview.id,
+        submissionStatus: overview.status,
+        groupName: overview.groupName,
+        // Grade
+        initialGrade: overview.grade,
+        gradeAdjustment: overview.adjustment,
+        currentGrade: overview.grade + overview.adjustment,
+        maxGrade: overview.assessment.maxGrade,
+        gradingStatus: overview.gradingStatus,
+        questionCount: overview.questionCount,
+        gradedCount: overview.gradedCount,
+        // XP
+        initialXp: overview.xp,
+        xpAdjustment: overview.xpAdjustment,
+        currentXp: overview.xp + overview.xpAdjustment,
+        maxXp: overview.assessment.maxXp,
+        xpBonus: overview.xpBonus
+      };
+      return gradingOverview;
+    })
+    .sort((subX: GradingOverview, subY: GradingOverview) =>
+      subX.assessmentId !== subY.assessmentId
+        ? subY.assessmentId - subX.assessmentId
+        : subY.submissionId - subX.submissionId
+    );
 }
 
 /**
@@ -254,19 +288,19 @@ export async function getGradingOverviews(
  * @returns {Grading}
  */
 export async function getGrading(submissionId: number, tokens: Tokens): Promise<Grading | null> {
-  const response = await request(`grading/${submissionId}`, 'GET', {
+  const resp = await request(`grading/${submissionId}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
-  if (!response) {
+  if (!resp) {
     return null;
   }
-  const gradingResult = await response.json();
+  const gradingResult = await resp.json();
   const grading: Grading = gradingResult.map((gradingQuestion: any) => {
     const { student, question, grade } = gradingQuestion;
 
-    return {
+    const result = {
       question: {
         answer: question.answer,
         autogradingResults: question.autogradingResults || [],
@@ -294,6 +328,13 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
         comments: grade.comments
       }
     } as GradingQuestion;
+
+    if (gradingQuestion.grade.grader !== null) {
+      result.grade.grader = gradingQuestion.grade.grader;
+      result.grade.gradedAt = gradingQuestion.grade.gradedAt;
+    }
+
+    return result;
   });
   return grading;
 }
@@ -405,30 +446,30 @@ export async function postNotify(tokens: Tokens, assessmentId?: number, submissi
  * DELETE /sourcecast
  */
 export async function deleteSourcecastEntry(id: number, tokens: Tokens) {
-  const response = await request(`sourcecast/${id}`, 'DELETE', {
+  const resp = await request(`sourcecast/${id}`, 'DELETE', {
     accessToken: tokens.accessToken,
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  return response;
+  return resp;
 }
 
 /**
  * GET /sourcecast
  */
 export async function getSourcecastIndex(tokens: Tokens): Promise<ISourcecastData[] | null> {
-  const response = await request('sourcecast', 'GET', {
+  const resp = await request('sourcecast', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  if (!response || !response.ok) {
+  if (!resp || !resp.ok) {
     return null;
   }
-  const index = await response.json();
+  const index = await resp.json();
   return index;
 }
 
@@ -464,14 +505,14 @@ export const postSourcecast = async (
  * DELETE /material
  */
 export async function deleteMaterial(id: number, tokens: Tokens) {
-  const response = await request(`material/${id}`, 'DELETE', {
+  const resp = await request(`material/${id}`, 'DELETE', {
     accessToken: tokens.accessToken,
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  return response;
+  return resp;
 }
 
 /**
@@ -479,14 +520,14 @@ export async function deleteMaterial(id: number, tokens: Tokens) {
  */
 export async function getMaterialIndex(id: number, tokens: Tokens): Promise<MaterialData[] | null> {
   const url = id === -1 ? `material` : `material?id=${id}`;
-  const response = await request(url, 'GET', {
+  const resp = await request(url, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  if (response && response.ok) {
-    return await response.json();
+  if (resp && resp.ok) {
+    return await resp.json();
   } else {
     return null;
   }
@@ -525,14 +566,14 @@ export const postMaterial = async (
  * DELETE /category
  */
 export async function deleteMaterialFolder(id: number, tokens: Tokens) {
-  const response = await request(`category/${id}`, 'DELETE', {
+  const resp = await request(`category/${id}`, 'DELETE', {
     accessToken: tokens.accessToken,
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  return response;
+  return resp;
 }
 
 /**
@@ -585,10 +626,10 @@ async function request(
     }
   }
   try {
-    const response = await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts);
+    const resp = await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts);
     // response.ok is (200 <= response.status <= 299)
     // response.status of > 299 does not raise error; so deal with in in the try clause
-    if (opts.shouldRefresh && response && response.status === 401) {
+    if (opts.shouldRefresh && resp && resp.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
       store.dispatch(actions.setTokens(newTokens!));
       const newOpts = {
@@ -598,16 +639,16 @@ async function request(
       };
       return request(path, method, newOpts);
     }
-    if (response && !response.ok && opts.shouldAutoLogout === false) {
+    if (resp && !resp.ok && opts.shouldAutoLogout === false) {
       // this clause is mostly for SUBMIT_ANSWER; show an error message instead
       // and ask student to manually logout, so that they have a chance to save
       // their answers
-      return response;
+      return resp;
     }
-    if (!response || !response.ok) {
+    if (!resp || !resp.ok) {
       throw new Error('API call failed or got non-OK response');
     }
-    return response;
+    return resp;
   } catch (e) {
     store.dispatch(actions.logOut());
     showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
@@ -615,21 +656,40 @@ async function request(
   }
 }
 
-export function* handleResponseError(resp: Response | null) {
+/**
+ * Handles display of warning notifications for failed HTTP requests, i.e. those with no response
+ * or a HTTP error status code (not 2xx).
+ *
+ * @param   {(Response|null)}     resp    Result of the failed HTTP request
+ * @param   {Map<number, string>} codes   Optional Map for status codes to custom warning messages
+ */
+export function* handleResponseError(resp: Response | null, codes?: Map<number, string>) {
+  // Default: check if the response is null
   if (!resp) {
     yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
     return;
   }
 
   let errorMessage: string;
-  switch (resp.status) {
-    case 401:
-      errorMessage = 'Session expired. Please login again.';
-      break;
-    default:
-      errorMessage = `Error ${resp.status}: ${resp.statusText}`;
-      break;
+
+  // Show a generic message if the failed response is missing a status code
+  if (!resp.status) {
+    errorMessage = 'Something went wrong (received response with no status code)';
+  } else if (codes && codes.has(resp.status)) {
+    // If the optional map was supplied, check the response against it with its status code
+    errorMessage = codes.get(resp.status)!;
+  } else {
+    // Otherwise match on the status code for common status codes
+    switch (resp.status) {
+      case 401:
+        errorMessage = 'Session expired. Please login again.';
+        break;
+      default:
+        errorMessage = `Something went wrong (got ${resp.status} response)`;
+        break;
+    }
   }
+
   yield call(showWarningMessage, errorMessage);
 }
 
