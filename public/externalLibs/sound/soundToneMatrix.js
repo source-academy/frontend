@@ -327,7 +327,7 @@ function get_matrix() {
     throw new Error("Please activate the tone matrix first by clicking on the tab!")
   }
   var matrix_list = matrix.slice(0);
-  var result = null;
+  var result = [];
   for (var i = 0; i <= 15; i++) {
     result[i] = vector_to_list(matrix_list[15 - i]);
   };
