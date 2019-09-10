@@ -610,7 +610,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         grading: {
           ...state.grading,
-          currentAssessment: action.payload.assessmentId,
           currentSubmission: action.payload.submissionId,
           currentQuestion: action.payload.questionId
         }

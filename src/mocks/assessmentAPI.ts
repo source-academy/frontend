@@ -105,7 +105,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     maxGrade: 0,
     maxXp: 200,
     openAt: '2018-01-01T00:00:00.000Z',
-    title: 'Basic Logic Gates',
+    title: 'Basic logic gates',
     shortSummary:
       'This mock path serves as a demonstration of the support provided for mock programming path functionality.',
     status: AssessmentStatuses.not_attempted,
@@ -908,7 +908,7 @@ sapien
   {
     category: AssessmentCategories.Path,
     id: 6,
-    longSummary: `### Basic Logic Gates
+    longSummary: `### Basic logic gates
 
 This path is intended to demonstrate concepts from the lecture **Logic Circuits**. You are strongly encouraged to attempt this path to check your understanding, prior to the next Studio session. For this, you will be granted a small amount of XP!
 
