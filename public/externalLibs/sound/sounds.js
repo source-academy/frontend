@@ -551,3 +551,18 @@ function sawtooth_sound(freq, duration) {
 		      (1 / 2) - (1 / Math.PI) * fourier_expansion_sawtooth(t),
 		      duration);
 }
+
+/**
+ * plays a given sound without regard if a sound is already playing
+ * @param {sound} sound - given sound
+ * @returns {undefined} undefined
+ */
+function play_concurrently(sound) {
+    // Discretize the input sound
+    var data = discretize(get_wave(sound), get_duration(sound));
+    _safeaudio = raw_to_audio(data);
+
+    _safeaudio.addEventListener('ended', stop);
+    _safeaudio.play();
+    _safeplaying = true;
+}
