@@ -431,52 +431,6 @@ function midi_note_to_frequency(note) {
   return 8.1757989156 * Math.pow(2, (note / 12));
 }
 
-function square_sound(freq, duration) {
-    function fourier_expansion_square(t) {
-        var answer = 0;
-        for (var i = 1; i <= fourier_expansion_level; i++) {
-            answer = answer +
-		Math.sin(2 * Math.PI * (2 * i - 1) * freq * t)
-		/
-		(2 * i - 1);
-        }
-        return answer;
-    }
-    return make_sound(t => 
-        (4 / Math.PI) * fourier_expansion_square(t),
-        duration);
-}
-
-function triangle_sound(freq, duration) {
-    function fourier_expansion_triangle(t) {
-        var answer = 0;
-        for (var i = 0; i < fourier_expansion_level; i++) {
-            answer = answer +
-		Math.pow(-1, i) *
-		Math.sin((2 * i + 1) * t * freq * Math.PI * 2)
-		/
-		Math.pow((2 * i + 1), 2);
-        }
-        return answer;
-    }
-    return make_sound(t => 
-        (8 / Math.PI / Math.PI) * fourier_expansion_triangle(t),
-        duration);
-}
-
-function sawtooth_sound(freq, duration) {
-    function fourier_expansion_sawtooth(t) {
-        var answer = 0;
-        for (var i = 1; i <= fourier_expansion_level; i++) {
-            answer = answer + Math.sin(2 * Math.PI * i * freq * t) / i;
-        }
-        return answer;
-    }
-    return make_sound(t =>
-		      (1 / 2) - (1 / Math.PI) * fourier_expansion_sawtooth(t),
-		      duration);
-}
-
 function linear_decay(decay_period) {
   return function (t) {
     if ((t > decay_period) || (t < 0)) {
