@@ -202,7 +202,7 @@ function play_unsafe(sound) {
     // If a sound is already playing, terminate execution
     } else if (_playing || _safeplaying) {
         throw new Error("play: audio system still playing previous sound");
-    } else if (get_duration(sound) == 0) {
+    } else if (get_duration(sound) <= 0) {
         return sound;
     } else {
         // Declaring duration and wave variables
@@ -310,7 +310,7 @@ function play(sound) {
     // If a sound is already playing, terminate execution.
     if (_safeplaying || _playing) {
         throw new Error("play: audio system still playing previous sound");
-    } else if (get_duration(sound) == 0) {
+    } else if (get_duration(sound) <= 0) {
         return sound;
     } else {
         // Discretize the input sound
