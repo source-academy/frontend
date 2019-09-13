@@ -385,8 +385,7 @@ $code-color-error: #ff4444;
               * output. Taken from react-ace
               * sourcecode, font size modified.
               */
-              font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
-                monospace;
+              font: 16px / normal 'Inconsolata', 'Consolas', monospace;
 
               .canvas-container {
                 display: -webkit-box;
@@ -648,8 +647,7 @@ $code-color-error: #ff4444;
  * output. Taken from react-ace
  * sourcecode, font size modified.
  */
-        font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
-          monospace;
+        font: 16px / normal 'Inconsolata', 'Consolas', monospace;
       }
 
       .codeOutput {
