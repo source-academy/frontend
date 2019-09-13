@@ -404,8 +404,11 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         <H4>
           {overview.title}
           {overview.private ? (
-            <Tooltip content="This assessment is password-protected.">
-              <Icon icon="lock" style={{ verticalAlign: 'middle', padding: '0.2rem' }} />
+            <Tooltip
+              className="listing-title-tooltip"
+              content="This assessment is password-protected."
+            >
+              <Icon icon="lock" />
             </Tooltip>
           ) : null}
           {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
@@ -427,19 +430,16 @@ const makeGradingStatus = (gradingStatus: string) => {
       intent = Intent.SUCCESS;
       tooltip = 'Fully graded';
       break;
-
     case GradingStatuses.grading:
       iconName = IconNames.TIME;
       intent = Intent.WARNING;
       tooltip = 'Grading in progress';
       break;
-
     case GradingStatuses.none:
       iconName = IconNames.CROSS;
       intent = Intent.DANGER;
       tooltip = 'Not graded yet';
       break;
-
     default:
       // Shows default icon if this assessment is ungraded
       iconName = IconNames.DISABLE;
@@ -449,7 +449,7 @@ const makeGradingStatus = (gradingStatus: string) => {
   }
 
   return (
-    <Tooltip content={tooltip} position={Position.RIGHT}>
+    <Tooltip className="listing-title-tooltip" content={tooltip} position={Position.RIGHT}>
       <Icon icon={iconName} intent={intent} />
     </Tooltip>
   );

@@ -124,8 +124,18 @@
     display: flex;
     margin-bottom: 2px;
 
-    .#{$ns}-icon {
-      vertical-align: baseline;
+    .listing-title-tooltip {
+      /* Space out icon tooltips */
+      margin-left: 2px;
+
+      /* Visually separate first icon tooltip from assessment title */
+      &:first-of-type {
+        margin-left: 6px;
+      }
+
+      .#{$ns}-icon {
+        vertical-align: baseline;
+      }
     }
 
     .#{$ns}-text-overflow-ellipsis {
