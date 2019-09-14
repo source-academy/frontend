@@ -785,11 +785,13 @@ $code-color-error: #ff4444;
         padding: 8px;
         margin: 0;
         overflow: visible;
-        overflow-wrap: normal;
+        overflow-wrap: break-word;
         word-break: normal;
         white-space: pre-line;
         flex-grow: 0;
         flex-shrink: 0;
+        /* Override justify applied to side-content (intended for text blocks) */
+        text-align: initial;
       }
     }
 
