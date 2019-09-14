@@ -228,6 +228,7 @@ $code-color-error: #ff4444;
     word-break: break-word;
     color: $code-color-result;
     text-align: justify;
+    overflow-x: auto;
 
     div {
       p:last-child {
