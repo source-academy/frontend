@@ -361,33 +361,33 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         </div>
         <div className="col-xs-9 listing-text">
           {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
-          <div className="row listing-grade">
+          <div className="listing-grade">
             <H6>
-              {' '}
               {beforeNow(overview.openAt)
                 ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                : `Max Grade: ${overview.maxGrade}`}{' '}
+                : `Max Grade: ${overview.maxGrade}`}
             </H6>
           </div>
-          <div className="row listing-xp">
+          <div className="listing-xp">
             <H6>
-              {' '}
               {beforeNow(overview.openAt)
                 ? `XP: ${overview.xp} / ${overview.maxXp}`
-                : `Max XP: ${overview.maxXp}`}{' '}
+                : `Max XP: ${overview.maxXp}`}
             </H6>
           </div>
-          <div className="row listing-description">
+          <div className="listing-description">
             <Markdown content={overview.shortSummary} />
           </div>
-          <div className="listing-controls">
+          <div className="listing-footer">
             <Text className="listing-due-date">
               <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
               {beforeNow(overview.openAt)
                 ? `Due: ${getPrettyDate(overview.closeAt)}`
                 : `Opens at: ${getPrettyDate(overview.openAt)}`}
             </Text>
-            {renderAttemptButton ? this.makeOverviewCardButton(overview) : null}
+            <div className="listing-interact-button">
+              {renderAttemptButton ? this.makeOverviewCardButton(overview) : null}
+            </div>
           </div>
         </div>
       </Card>
@@ -399,9 +399,9 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     index: number,
     renderGradingStatus: boolean
   ) => (
-    <div className="row listing-title">
-      <Text ellipsize={true} className={'col-xs-10'}>
-        <H4>
+    <div className="listing-header">
+      <Text ellipsize={true}>
+        <H4 className="listing-title">
           {overview.title}
           {overview.private ? (
             <Tooltip
@@ -414,7 +414,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
         </H4>
       </Text>
-      <div className="col-xs-2">{this.makeSubmissionButton(overview, index)}</div>
+      <div className="listing-finalise-button">{this.makeSubmissionButton(overview, index)}</div>
     </div>
   );
 }
