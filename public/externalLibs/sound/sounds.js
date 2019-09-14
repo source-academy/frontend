@@ -68,7 +68,7 @@ function discretize(wave, duration) {
     return vector;
 }
 
-// Discretizes a sound to a sound starting from elapsed_duration, for
+// Discretizes a Sound to a Sound starting from elapsed_duration, for
 // sample_length seconds
 function discretize_from(wave, duration, elapsed_duration, sample_length, data) {
     if (elapsed_duration + sample_length > duration) {
@@ -146,24 +146,24 @@ function raw_to_audio(_data) {
 // sound: (time -> amplitude) x duration
 
 /**
- * Makes a sound from a wave and a duration.
+ * Makes a Sound from a wave and a duration.
  * The wave is a function from a non-negative time (in seconds)
  * to an amplitude value that should lie between
  * -1 and 1. The duration is given in seconds.
  * @param {function} wave - given wave function
  * @param {Number} duration - in seconds
- * @returns {sound} 
+ * @returns {Sound} 
  */
 function make_sound(wave, duration) {
     return pair(t => t >= duration ? 0 : wave(t), duration);
 }
 
 /**
- * Accesses the wave of a sound.
+ * Accesses the wave of a Sound.
  * The wave is a function from a non-negative time (in seconds)
  * to an amplitude value that should lie between
  * -1 and 1.
- * @param {sound} sound - given sound
+ * @param {Sound} sound - given sound
  * @returns {function} wave function of the sound
  */
 function get_wave(sound) {
@@ -171,8 +171,8 @@ function get_wave(sound) {
 }
 
 /**
- * Accesses the duration of a sound, in seconds.
- * @param {sound} sound - given sound
+ * Accesses the duration of a Sound, in seconds.
+ * @param {Sound} sound - given Sound
  * @returns {Number} duration in seconds
  */
 function get_duration(sound) {
@@ -180,9 +180,9 @@ function get_duration(sound) {
 }
 
 /**
- * Checks if a given value is a sound
+ * Checks if a given value is a Sound
  * @param {value} x - given value
- * @returns {boolean} whether <CODE>x</CODE> is a sound
+ * @returns {boolean} whether <CODE>x</CODE> is a Sound
  */
 function is_sound(x) {
     return is_pair(x) &&
@@ -302,9 +302,9 @@ var _safeplaying = false;
 var _safeaudio = null;
 
 /**
- * plays a given sound using your computer's sound device
- * @param {sound} sound - given sound
- * @returns {sound} given sound
+ * plays a given Sound using your computer's sound device
+ * @param {Sound} sound - given Sound
+ * @returns {Sound} given Sound
  */
 function play(sound) {
     // If a sound is already playing, terminate execution.
@@ -378,7 +378,7 @@ function stop() {
  * <CODE>d2</CODE> seconds etc. We specify that <CODE>w(d1) = w2(0)</CODE>,
  * <CODE>w(d1+d2) = w3(0)</CODE>, etc
  * @param {list_of_sounds} sounds - given list of sounds
- * @returns {sound} resulting sound
+ * @returns {Sound} resulting sound
  */
 function consecutively(list_of_sounds) {
     function consec_two(ss1, ss2) {
@@ -399,7 +399,7 @@ function consecutively(list_of_sounds) {
  * they play simutaneously, all starting at the beginning of the 
  * resulting sound
  * @param {list_of_sounds} sounds - given list of sounds
- * @returns {sound} resulting sound
+ * @returns {Sound} resulting sound
  */
 function simultaneously(list_of_sounds) {
     function musher(ss1, ss2) {
@@ -422,29 +422,29 @@ function simultaneously(list_of_sounds) {
 }
 
 /**
- * makes a sound of a given duration by randomly
+ * makes a Sound of a given duration by randomly
  * generating amplitude values
  * @param {Number} duration - duration of result sound, in seconds
- * @returns {sound} resulting noise sound
+ * @returns {Sound} resulting noise sound
  */
 function noise_sound(duration) {
     return make_sound(t => Math.random() * 2 - 1, duration);
 }
 
 /**
- * makes a sine wave sound with given frequency and a given duration
- * @param {Number} freq - frequency of result sound, in Hz, <CODE>freq</CODE> ≥ 0
- * @param {Number} duration - duration of result sound, in seconds
- * @returns {sound} resulting sine sound
+ * makes a sine wave Sound with given frequency and a given duration
+ * @param {Number} freq - frequency of result Sound, in Hz, <CODE>freq</CODE> ≥ 0
+ * @param {Number} duration - duration of result Sound, in seconds
+ * @returns {Sound} resulting sine Sound
  */
 function sine_sound(freq, duration) {
     return make_sound(t => Math.sin(2 * Math.PI * t * freq), duration);
 }
 
 /**
- * makes a silence sound with a given duration
- * @param {Number} duration - duration of result sound, in seconds
- * @returns {sound} resulting silence sound
+ * makes a silence Sound with a given duration
+ * @param {Number} duration - duration of result Sound, in seconds
+ * @returns {Sound} resulting silence Sound
  */
 function silence_sound(duration) {
     return make_sound(t => 0, duration);
@@ -538,10 +538,10 @@ function midi_note_to_frequency(note) {
 }
 
 /**
- * makes a square wave sound with given frequency and a given duration
- * @param {Number} freq - frequency of result sound, in Hz, <CODE>freq</CODE> ≥ 0
- * @param {Number} duration - duration of result sound, in seconds
- * @returns {sound} resulting square sound
+ * makes a square wave Sound with given frequency and a given duration
+ * @param {Number} freq - frequency of result Sound, in Hz, <CODE>freq</CODE> ≥ 0
+ * @param {Number} duration - duration of result Sound, in seconds
+ * @returns {Sound} resulting square Sound
  */
 function square_sound(freq, duration) {
     function fourier_expansion_square(t) {
@@ -560,10 +560,10 @@ function square_sound(freq, duration) {
 }
 
 /**
- * makes a triangle wave sound with given frequency and a given duration
- * @param {Number} freq - frequency of result sound, in Hz, <CODE>freq</CODE> ≥ 0
- * @param {Number} duration - duration of result sound, in seconds
- * @returns {sound} resulting triangle sound
+ * makes a triangle wave Sound with given frequency and a given duration
+ * @param {Number} freq - frequency of result Sound, in Hz, <CODE>freq</CODE> ≥ 0
+ * @param {Number} duration - duration of result Sound, in seconds
+ * @returns {Sound} resulting triangle Sound
  */
 function triangle_sound(freq, duration) {
     function fourier_expansion_triangle(t) {
@@ -583,10 +583,10 @@ function triangle_sound(freq, duration) {
 }
 
 /**
- * makes a sawtooth wave sound with given frequency and a given duration
- * @param {Number} freq - frequency of result sound, in Hz; <CODE>freq</CODE> ≥ 0
- * @param {Number} duration - duration of result sound, in seconds
- * @returns {sound} resulting sawtooth sound
+ * makes a sawtooth wave Sound with given frequency and a given duration
+ * @param {Number} freq - frequency of result Sound, in Hz; <CODE>freq</CODE> ≥ 0
+ * @param {Number} duration - duration of result Sound, in seconds
+ * @returns {Sound} resulting sawtooth Sound
  */
 function sawtooth_sound(freq, duration) {
     function fourier_expansion_sawtooth(t) {
