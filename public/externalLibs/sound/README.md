@@ -33,7 +33,9 @@ where the given Number is the duration of the noisy Sound to be created, in seco
 
 The `play` function has the type:
 
-`play` : Sound → `undefined`
+`play` : Sound → Sound
+
+because it returns the given Sound, in addition to playing it using your computer's audio system.
 
 **Warning: In the following, we produce Sounds that might be very loud! Turn down the volume of
 your speakers before you attempt to play Sounds, especially in a public place or if you are wearing
