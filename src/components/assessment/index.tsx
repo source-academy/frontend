@@ -284,17 +284,20 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       icon={IconNames.CONFIRM}
       intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
       minimal={true}
-      // intentional: each menu renders own version of onClick
+      // intentional: each listing renders its own version of onClick
       // tslint:disable-next-line:jsx-no-lambda
       onClick={() => this.setBetchaAssessment(overview)}
     >
-      Finalize Submission
+      <span className="custom-hidden-xxxs">Finalize</span>
+      <span className="custom-hidden-xxs"> Submission</span>
     </Button>
   );
 
-  private makeOverviewCardButton = (overview: IAssessmentOverview) => {
+  private makeAssessmentInteractButton = (overview: IAssessmentOverview) => {
     let icon: IconName;
     let label: string;
+    let optionalLabel: string = '';
+
     switch (overview.status) {
       case AssessmentStatuses.not_attempted:
         icon = IconNames.PLAY;
@@ -302,15 +305,18 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         break;
       case AssessmentStatuses.attempting:
         icon = IconNames.PLAY;
-        label = 'Continue Attempt';
+        label = 'Continue';
+        optionalLabel = ' Attempt';
         break;
       case AssessmentStatuses.attempted:
         icon = IconNames.EDIT;
-        label = 'Review Attempt';
+        label = 'Review';
+        optionalLabel = ' Attempt';
         break;
       case AssessmentStatuses.submitted:
         icon = IconNames.EYE_OPEN;
-        label = 'Review Submission';
+        label = 'Review';
+        optionalLabel = ' Submission';
         break;
       default:
         // If we reach this case, backend data did not fit IAssessmentOverview
@@ -324,9 +330,18 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           overview.category
         )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
       >
-        {controlButton(label, icon, () =>
-          this.props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
-        )}
+        <Button
+          icon={icon}
+          minimal={true}
+          // intentional: each listing renders its own version of onClick
+          // tslint:disable-next-line:jsx-no-lambda
+          onClick={() =>
+            this.props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
+          }
+        >
+          <span className="custom-hidden-xxxs">{label}</span>
+          <span className="custom-hidden-xxs">{optionalLabel}</span>
+        </Button>
       </NavLink>
     );
   };
@@ -385,8 +400,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
                 ? `Due: ${getPrettyDate(overview.closeAt)}`
                 : `Opens at: ${getPrettyDate(overview.openAt)}`}
             </Text>
-            <div className="listing-interact-button">
-              {renderAttemptButton ? this.makeOverviewCardButton(overview) : null}
+            <div className="listing-button">
+              {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
             </div>
           </div>
         </div>
@@ -414,7 +429,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
         </H4>
       </Text>
-      <div className="listing-finalise-button">{this.makeSubmissionButton(overview, index)}</div>
+      <div className="listing-button">{this.makeSubmissionButton(overview, index)}</div>
     </div>
   );
 }

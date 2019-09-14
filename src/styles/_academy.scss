@@ -1,3 +1,19 @@
+@media only screen and (max-width: 512px) {
+  .custom-hidden-xxxs {
+    display: none;
+  }
+
+  .listing-button .#{$ns}-button .#{$ns}-icon {
+    margin-right: 0px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .custom-hidden-xxs {
+    display: none;
+  }
+}
+
 .Academy {
   height: 100%;
   width: 100%;
@@ -181,8 +197,7 @@
     }
   }
 
-  .listing-finalise-button,
-  .listing-interact-button {
+  .listing-button {
     /* Prevent <div> container collapsing and forcing button text to two lines */
     flex-grow: 0;
     flex-shrink: 0;
