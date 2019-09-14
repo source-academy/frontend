@@ -26,10 +26,12 @@ function* updateQueryString() {
   const external: ExternalLibraryName = yield select(
     (state: IState) => state.workspaces.playground.externalLibrary
   );
+  const execTime: number = yield select((state: IState) => state.workspaces.playground.execTime);
   const newQueryString: string = qs.stringify({
     prgrm: compressToEncodedURIComponent(codeString),
     chap: chapter,
-    ext: external
+    ext: external,
+    exec: execTime
   });
   yield put(actions.changeQueryString(newQueryString));
 }

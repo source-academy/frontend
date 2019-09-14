@@ -433,6 +433,7 @@ class Grading extends React.Component<IGradingProps, State> {
           'assessmentName',
           'assessmentCategory',
           'studentName',
+          'groupName',
           'submissionStatus',
           'gradingStatus',
           'questionCount',

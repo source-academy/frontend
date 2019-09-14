@@ -104,6 +104,7 @@ const soundsLibrary = [
   'triangle_sound',
   'sawtooth_sound',
   'play_unsafe',
+  'display_waveform',
   /** Microphone Sounds */
   'init_record',
   'record',
