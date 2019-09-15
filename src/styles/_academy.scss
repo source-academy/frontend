@@ -67,13 +67,18 @@
 .assessment-briefing {
   padding-bottom: 0;
 
-  // If the assessment briefing begins with a header, remove its top margin
-  *:first-child {
-    margin-top: 0;
-  }
+  & .md {
+    margin-bottom: 1rem;
 
-  .assessment-briefing-button {
-    margin-top: 1rem;
+    /* If the assessment briefing begins with a header, remove its top margin */
+    & > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Remove bottom margins of the last element in the assessment briefing */
+    & > *:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
