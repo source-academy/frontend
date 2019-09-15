@@ -234,10 +234,13 @@ $code-color-error: #ff4444;
     /* Respect padding of containing bp3 Card when scrollable */
     margin-bottom: 0.4rem;
 
-    div {
-      p:last-child {
-        margin-bottom: 0;
-      }
+    /* If the assessment briefing begins with a header, remove its top margin */
+    & > div > *:first-child {
+      margin-top: 0;
+    }
+
+    & > div > p:last-child {
+      margin-bottom: 0;
     }
 
     .GradingEditor {
