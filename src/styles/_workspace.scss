@@ -157,6 +157,8 @@ $code-color-error: #ff4444;
   .resize-side-content {
     display: flex;
     flex-direction: column;
+    /* Prevents side-content from overflowing right-parent container on initial load */
+    max-height: 100%;
   }
 
   .resize-editor-content {
