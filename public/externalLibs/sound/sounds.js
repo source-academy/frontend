@@ -7,35 +7,6 @@ const fourier_expansion_level = 5; // expansion level for
 // ---------------------------------------------
 // Fast reimplementations of the list library
 // ---------------------------------------------
-function vector_to_list(arr) {
-    var xs = [];
-
-    for (var i=arr.length-1; i>=0; i--) {
-        xs = pair(arr[i], xs);
-    }
-
-    return xs;
-}
-
-function list_to_vector(xs) {
-    var vector = [];
-
-    while(!is_null(xs)) {
-        vector.push(head(xs));
-        xs = tail(xs);
-    }
-
-    return vector;
-}
-
-function length(xs) {
-    var len = 0;
-    while(!is_null(xs)) {
-        len++;
-        xs = tail(xs);
-    }
-    return len;
-}
 
 function append(xs, ys) {
     var v1 = list_to_vector(xs);
@@ -599,4 +570,19 @@ function sawtooth_sound(freq, duration) {
     return make_sound(t =>
 		      (1 / 2) - (1 / Math.PI) * fourier_expansion_sawtooth(t),
 		      duration);
+}
+
+/**
+ * plays a given sound without regard if a sound is already playing
+ * @param {sound} sound - given sound
+ * @returns {undefined} undefined
+ */
+function play_concurrently(sound) {
+    // Discretize the input sound
+    var data = discretize(get_wave(sound), get_duration(sound));
+    _safeaudio = raw_to_audio(data);
+
+    _safeaudio.addEventListener('ended', stop);
+    _safeaudio.play();
+    _safeplaying = true;
 }
