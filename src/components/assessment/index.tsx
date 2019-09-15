@@ -284,17 +284,20 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       icon={IconNames.CONFIRM}
       intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
       minimal={true}
-      // intentional: each menu renders own version of onClick
+      // intentional: each listing renders its own version of onClick
       // tslint:disable-next-line:jsx-no-lambda
       onClick={() => this.setBetchaAssessment(overview)}
     >
-      Finalize Submission
+      <span className="custom-hidden-xxxs">Finalize</span>
+      <span className="custom-hidden-xxs"> Submission</span>
     </Button>
   );
 
-  private makeOverviewCardButton = (overview: IAssessmentOverview) => {
+  private makeAssessmentInteractButton = (overview: IAssessmentOverview) => {
     let icon: IconName;
     let label: string;
+    let optionalLabel: string = '';
+
     switch (overview.status) {
       case AssessmentStatuses.not_attempted:
         icon = IconNames.PLAY;
@@ -302,15 +305,18 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         break;
       case AssessmentStatuses.attempting:
         icon = IconNames.PLAY;
-        label = 'Continue Attempt';
+        label = 'Continue';
+        optionalLabel = ' Attempt';
         break;
       case AssessmentStatuses.attempted:
         icon = IconNames.EDIT;
-        label = 'Review Attempt';
+        label = 'Review';
+        optionalLabel = ' Attempt';
         break;
       case AssessmentStatuses.submitted:
         icon = IconNames.EYE_OPEN;
-        label = 'Review Submission';
+        label = 'Review';
+        optionalLabel = ' Submission';
         break;
       default:
         // If we reach this case, backend data did not fit IAssessmentOverview
@@ -324,9 +330,18 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           overview.category
         )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
       >
-        {controlButton(label, icon, () =>
-          this.props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
-        )}
+        <Button
+          icon={icon}
+          minimal={true}
+          // intentional: each listing renders its own version of onClick
+          // tslint:disable-next-line:jsx-no-lambda
+          onClick={() =>
+            this.props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
+          }
+        >
+          <span className="custom-hidden-xxxs">{label}</span>
+          <span className="custom-hidden-xxs">{optionalLabel}</span>
+        </Button>
       </NavLink>
     );
   };
@@ -361,33 +376,33 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         </div>
         <div className="col-xs-9 listing-text">
           {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
-          <div className="row listing-grade">
+          <div className="listing-grade">
             <H6>
-              {' '}
               {beforeNow(overview.openAt)
                 ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                : `Max Grade: ${overview.maxGrade}`}{' '}
+                : `Max Grade: ${overview.maxGrade}`}
             </H6>
           </div>
-          <div className="row listing-xp">
+          <div className="listing-xp">
             <H6>
-              {' '}
               {beforeNow(overview.openAt)
                 ? `XP: ${overview.xp} / ${overview.maxXp}`
-                : `Max XP: ${overview.maxXp}`}{' '}
+                : `Max XP: ${overview.maxXp}`}
             </H6>
           </div>
-          <div className="row listing-description">
+          <div className="listing-description">
             <Markdown content={overview.shortSummary} />
           </div>
-          <div className="listing-controls">
+          <div className="listing-footer">
             <Text className="listing-due-date">
               <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
               {beforeNow(overview.openAt)
                 ? `Due: ${getPrettyDate(overview.closeAt)}`
                 : `Opens at: ${getPrettyDate(overview.openAt)}`}
             </Text>
-            {renderAttemptButton ? this.makeOverviewCardButton(overview) : null}
+            <div className="listing-button">
+              {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
+            </div>
           </div>
         </div>
       </Card>
@@ -399,19 +414,22 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     index: number,
     renderGradingStatus: boolean
   ) => (
-    <div className="row listing-title">
-      <Text ellipsize={true} className={'col-xs-10'}>
-        <H4>
+    <div className="listing-header">
+      <Text ellipsize={true}>
+        <H4 className="listing-title">
           {overview.title}
           {overview.private ? (
-            <Tooltip content="This assessment is password-protected.">
-              <Icon icon="lock" style={{ verticalAlign: 'middle', padding: '0.2rem' }} />
+            <Tooltip
+              className="listing-title-tooltip"
+              content="This assessment is password-protected."
+            >
+              <Icon icon="lock" />
             </Tooltip>
           ) : null}
           {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
         </H4>
       </Text>
-      <div className="col-xs-2">{this.makeSubmissionButton(overview, index)}</div>
+      <div className="listing-button">{this.makeSubmissionButton(overview, index)}</div>
     </div>
   );
 }
@@ -427,19 +445,16 @@ const makeGradingStatus = (gradingStatus: string) => {
       intent = Intent.SUCCESS;
       tooltip = 'Fully graded';
       break;
-
     case GradingStatuses.grading:
       iconName = IconNames.TIME;
       intent = Intent.WARNING;
       tooltip = 'Grading in progress';
       break;
-
     case GradingStatuses.none:
       iconName = IconNames.CROSS;
       intent = Intent.DANGER;
       tooltip = 'Not graded yet';
       break;
-
     default:
       // Shows default icon if this assessment is ungraded
       iconName = IconNames.DISABLE;
@@ -449,7 +464,7 @@ const makeGradingStatus = (gradingStatus: string) => {
   }
 
   return (
-    <Tooltip content={tooltip} position={Position.RIGHT}>
+    <Tooltip className="listing-title-tooltip" content={tooltip} position={Position.RIGHT}>
       <Icon icon={iconName} intent={intent} />
     </Tooltip>
   );
