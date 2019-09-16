@@ -74,7 +74,7 @@
 
       return thisNode
     }
-
+    
     // keeps track of all sublists in order to detect cycles
     var perms = []
     var tree = new Tree()
@@ -82,7 +82,7 @@
     tree.rootNode = construct_tree(lst)
     return tree
   }
-
+  
   var tcon = {
     strokeWidth: 2,
     stroke: 'white',
@@ -349,7 +349,7 @@
     // update left extreme of the tree
     minLeft = Math.min(minLeft, x1)
   }
-
+  
   /**
    *   Draws a tree object on the canvas at x,y on a given layer
    */
@@ -513,7 +513,7 @@
     this.image.add(leftDot)
     this.image.add(rightDot)
   }
-
+  
   /**
    *  Connects a NodeBox to its parent at x,y by using line segments with arrow head
    */
@@ -915,7 +915,6 @@
    *  Then shift it to the left end.
    */
   function draw(xs) {
-
     // Hides the default text
     (document.getElementById('data-visualizer-default-text')).hidden = true;
     
@@ -952,9 +951,9 @@
     stage.add(layer)
     layerList.push(layer)
 
-    if (!is_pair(xs)) {
+    if (!is_pair(xs) && !is_function(xs)) {
       if (is_null(xs)) {
-        var display = '[  ]'
+        var display = "null"
       } else {
         var display = toText(xs, true)
       }
@@ -968,6 +967,9 @@
         fill: 'white'
       })
       layer.add(txt)
+    } else if (is_function(xs)) {
+      // Draw a single function object
+      realDrawFunctionNode(0, 50, 50, 50, 50, layer)
     } else {
       // attempts to draw the tree
       drawTree(list_to_tree(xs), 500, 50, layer)

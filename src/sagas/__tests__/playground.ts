@@ -78,10 +78,12 @@ describe('Playground saga tests', () => {
 function createQueryString(code: string, state: IState): string {
   const chapter: number = state.workspaces.playground.context.chapter;
   const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
+  const execTime: number = state.workspaces.playground.execTime;
   const newQueryString: string = qs.stringify({
     prgrm: compressToEncodedURIComponent(code),
     chap: chapter,
-    ext: external
+    ext: external,
+    exec: execTime
   });
   return newQueryString;
 }

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "cadet-frontend",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "scripts-info": {
     "format": "Format source code",
     "start": "Start the Webpack development server",
