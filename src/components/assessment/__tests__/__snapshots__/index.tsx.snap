@@ -91,17 +91,17 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             An Odessey to Runes (Duplicate)
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -115,37 +115,38 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Max Grade: 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Max XP: 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -161,6 +162,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         Opens at: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
+                                    <div className=\\"listing-button\\" />
                                   </div>
                                 </div>
                               </div>
@@ -202,17 +204,17 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             Basic logic gates
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -226,37 +228,38 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 0 / 0
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 0 / 200
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"This mock path serves as a demonstration of the support provided for mock programming path functionality.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -272,14 +275,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         Due: 20th April, 09:23
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/paths/6/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/paths\\\\\\\\/6\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/paths/6/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/paths/6/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/paths/6/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/paths\\\\\\\\/6\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/paths/6/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/paths/6/0\\">
+                                              <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -289,17 +292,20 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Attempt
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\" />
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -315,22 +321,22 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Practical
-                                            <Blueprint3.Tooltip content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+                                            <Blueprint3.Tooltip className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
+                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
                                                 <Manager>
-                                                  <span className=\\"bp3-popover-wrapper\\">
+                                                  <span className=\\"bp3-popover-wrapper listing-title-tooltip\\">
                                                     <Reference innerRef={[Function: target]}>
                                                       <InnerReference setReferenceNode={[Function]} innerRef={[Function: target]}>
                                                         <Blueprint3.ResizeSensor onResize={[Function]}>
                                                           <span onBlur={[Function]} onFocus={[Function]} onMouseEnter={[Function]} onMouseLeave={[Function]} className=\\"bp3-popover-target\\">
-                                                            <Blueprint3.Icon icon=\\"lock\\" style={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                              <span icon=\\"lock\\" style={{...}} disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                            <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                                              <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
                                                                 <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                                   <desc>
                                                                     lock
@@ -352,7 +358,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -366,37 +372,38 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 4 / 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 3 / 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -412,14 +419,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         Due: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/practicals/5/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/practicals\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/practicals/5/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/practicals/5/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/practicals/5/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/practicals\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/practicals/5/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/practicals/5/0\\">
+                                              <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -429,17 +436,20 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Attempt
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\" />
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -455,17 +465,17 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Sidequest
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -479,37 +489,38 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 4 / 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 3 / 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -525,14 +536,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         Due: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/quests/3/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/quests\\\\\\\\/3\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/quests/3/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/quests/3/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/quests/3/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/quests\\\\\\\\/3\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/quests/3/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/quests/3/0\\">
+                                              <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -542,17 +553,20 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Attempt
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\" />
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -568,17 +582,17 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <img className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             The Secret to Streams
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -592,37 +606,38 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 3 / 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 2 / 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -638,14 +653,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         Due: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/missions/2/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/2\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/missions/2/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/2/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/missions/2/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/2\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/missions/2/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/2/0\\">
+                                              <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -655,17 +670,22 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Continue Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Continue
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\">
+                                                       Attempt
+                                                    </span>
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -681,17 +701,17 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <img className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             An Odessey to Runes
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={false} icon=\\"confirm\\" intent=\\"danger\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={[undefined]} onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal bp3-intent-danger\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -705,37 +725,38 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 2 / 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 1 / 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"\\\\n*Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\nincididunt ut labore et dolore magna aliqua.\\\\n\\\\n\`\`\`\\\\nconst a = 5;\\\\n\`\`\`\\\\n\\\\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n_doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n[veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n\`explicabo\`.\\\\n\\\\n\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -751,14 +772,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                         Due: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/1\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/1/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"edit\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/1\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/1/0\\">
+                                              <Blueprint3.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"edit\\">
                                                     <span icon=\\"edit\\" className=\\"bp3-icon bp3-icon-edit\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -768,17 +789,22 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Review Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Review
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\">
+                                                       Attempt
+                                                    </span>
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -918,17 +944,17 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             An Odessey to Runes (Duplicate)
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -942,37 +968,38 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Max Grade: 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Max XP: 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -988,14 +1015,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         Opens at: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/1\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/1/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/1\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/1/0\\">
+                                              <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -1005,17 +1032,20 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Attempt
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\" />
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -1057,17 +1087,17 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             Basic logic gates
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -1081,37 +1111,38 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 0 / 0
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 0 / 200
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"This mock path serves as a demonstration of the support provided for mock programming path functionality.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -1127,14 +1158,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         Due: 20th April, 09:23
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/paths/6/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/paths\\\\\\\\/6\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/paths/6/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/paths/6/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/paths/6/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/paths\\\\\\\\/6\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/paths/6/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/paths/6/0\\">
+                                              <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -1144,17 +1175,20 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Attempt
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\" />
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -1170,22 +1204,22 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Practical
-                                            <Blueprint3.Tooltip content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+                                            <Blueprint3.Tooltip className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
+                                              <Blueprint3.Popover interactionKind=\\"hover-target\\" className=\\"listing-title-tooltip\\" content=\\"This assessment is password-protected.\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} position=\\"auto\\" targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
                                                 <Manager>
-                                                  <span className=\\"bp3-popover-wrapper\\">
+                                                  <span className=\\"bp3-popover-wrapper listing-title-tooltip\\">
                                                     <Reference innerRef={[Function: target]}>
                                                       <InnerReference setReferenceNode={[Function]} innerRef={[Function: target]}>
                                                         <Blueprint3.ResizeSensor onResize={[Function]}>
                                                           <span onBlur={[Function]} onFocus={[Function]} onMouseEnter={[Function]} onMouseLeave={[Function]} className=\\"bp3-popover-target\\">
-                                                            <Blueprint3.Icon icon=\\"lock\\" style={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                              <span icon=\\"lock\\" style={{...}} disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
+                                                            <Blueprint3.Icon icon=\\"lock\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                                              <span icon=\\"lock\\" disabled={[undefined]} tabIndex={0} className=\\"bp3-icon bp3-icon-lock\\" title={[undefined]}>
                                                                 <svg fill={[undefined]} data-icon=\\"lock\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                                   <desc>
                                                                     lock
@@ -1207,7 +1241,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -1221,37 +1255,38 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 4 / 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 3 / 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -1267,14 +1302,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         Due: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/practicals/5/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/practicals\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/practicals/5/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/practicals/5/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/practicals/5/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/practicals\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/practicals/5/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/practicals/5/0\\">
+                                              <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -1284,17 +1319,20 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Attempt
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\" />
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -1310,17 +1348,17 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <img className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/350x200/?text=Hello\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             A sample Sidequest
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -1334,37 +1372,38 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 4 / 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 3 / 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -1380,14 +1419,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         Due: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/quests/3/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/quests\\\\\\\\/3\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/quests/3/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/quests/3/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/quests/3/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/quests\\\\\\\\/3\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/quests/3/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/quests/3/0\\">
+                                              <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -1397,17 +1436,20 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Attempt
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\" />
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -1423,17 +1465,17 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <img className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             The Secret to Streams
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={true} icon=\\"confirm\\" intent=\\"none\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={true} onClick={[undefined]} className=\\"bp3-button bp3-disabled bp3-minimal\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={-1}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -1447,37 +1489,38 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 3 / 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 2 / 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -1493,14 +1536,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         Due: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/missions/2/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/2\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/missions/2/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/2/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"play\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/missions/2/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/2\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/missions/2/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/2/0\\">
+                                              <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"play\\">
                                                     <span icon=\\"play\\" className=\\"bp3-icon bp3-icon-play\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -1510,17 +1553,22 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Continue Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Continue
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\">
+                                                       Attempt
+                                                    </span>
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -1536,17 +1584,17 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <img className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
-                                  <div className=\\"row listing-title\\">
-                                    <Blueprint3.Text ellipsize={true} className=\\"col-xs-10\\">
-                                      <div className=\\"bp3-text-overflow-ellipsis col-xs-10\\" title={[undefined]}>
-                                        <Component>
-                                          <h4 className=\\"bp3-heading\\">
+                                  <div className=\\"listing-header\\">
+                                    <Blueprint3.Text ellipsize={true}>
+                                      <div className=\\"bp3-text-overflow-ellipsis\\" title={[undefined]}>
+                                        <Component className=\\"listing-title\\">
+                                          <h4 className=\\"bp3-heading listing-title\\">
                                             An Odessey to Runes
                                           </h4>
                                         </Component>
                                       </div>
                                     </Blueprint3.Text>
-                                    <div className=\\"col-xs-2\\">
+                                    <div className=\\"listing-button\\">
                                       <Blueprint3.Button disabled={false} icon=\\"confirm\\" intent=\\"danger\\" minimal={true} onClick={[Function: onClick]}>
                                         <button type=\\"button\\" disabled={[undefined]} onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal bp3-intent-danger\\" onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                           <Blueprint3.Icon icon=\\"confirm\\">
@@ -1560,37 +1608,38 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                             </span>
                                           </Blueprint3.Icon>
                                           <span className=\\"bp3-button-text\\">
-                                            Finalize Submission
+                                            <span className=\\"custom-hidden-xxxs\\">
+                                              Finalize
+                                            </span>
+                                            <span className=\\"custom-hidden-xxs\\">
+                                               Submission
+                                            </span>
                                           </span>
                                           <Blueprint3.Icon icon={[undefined]} />
                                         </button>
                                       </Blueprint3.Button>
                                     </div>
                                   </div>
-                                  <div className=\\"row listing-grade\\">
+                                  <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         Grade: 2 / 3000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-xp\\">
+                                  <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                         
                                         XP: 1 / 1000
-                                         
                                       </h6>
                                     </Component>
                                   </div>
-                                  <div className=\\"row listing-description\\">
+                                  <div className=\\"listing-description\\">
                                     <Markdown content=\\"\\\\n*Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\nincididunt ut labore et dolore magna aliqua.\\\\n\\\\n\`\`\`\\\\nconst a = 5;\\\\n\`\`\`\\\\n\\\\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n_doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n[veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n\`explicabo\`.\\\\n\\\\n\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
-                                  <div className=\\"listing-controls\\">
+                                  <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
                                       <div className=\\"listing-due-date\\" title={[undefined]}>
                                         <Blueprint3.Icon className=\\"listing-due-icon\\" iconSize={12} icon=\\"time\\">
@@ -1606,14 +1655,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                         Due: 18th June, 13:24
                                       </div>
                                     </Blueprint3.Text>
-                                    <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                      <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/1\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                        <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                          <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/1/0\\">
-                                            <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
-                                              <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
-                                                <Blueprint3.Icon icon={{...}}>
-                                                  <Blueprint3.Icon icon=\\"edit\\" color={[undefined]}>
+                                    <div className=\\"listing-button\\">
+                                      <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/1\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
+                                          <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
+                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/1/0\\">
+                                              <Blueprint3.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
+                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                                                  <Blueprint3.Icon icon=\\"edit\\">
                                                     <span icon=\\"edit\\" className=\\"bp3-icon bp3-icon-edit\\" title={[undefined]}>
                                                       <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                                         <desc>
@@ -1623,17 +1672,22 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                       </svg>
                                                     </span>
                                                   </Blueprint3.Icon>
-                                                </Blueprint3.Icon>
-                                                <span className=\\"bp3-button-text\\">
-                                                  Review Attempt
-                                                </span>
-                                                <Blueprint3.Icon icon={[undefined]} />
-                                              </button>
-                                            </Blueprint3.Button>
-                                          </a>
-                                        </Link>
-                                      </Route>
-                                    </NavLink>
+                                                  <span className=\\"bp3-button-text\\">
+                                                    <span className=\\"custom-hidden-xxxs\\">
+                                                      Review
+                                                    </span>
+                                                    <span className=\\"custom-hidden-xxs\\">
+                                                       Attempt
+                                                    </span>
+                                                  </span>
+                                                  <Blueprint3.Icon icon={[undefined]} />
+                                                </button>
+                                              </Blueprint3.Button>
+                                            </a>
+                                          </Link>
+                                        </Route>
+                                      </NavLink>
+                                    </div>
                                   </div>
                                 </div>
                               </div>

@@ -157,6 +157,8 @@ $code-color-error: #ff4444;
   .resize-side-content {
     display: flex;
     flex-direction: column;
+    /* Prevents side-content from overflowing right-parent container on initial load */
+    max-height: 100%;
   }
 
   .resize-editor-content {
@@ -228,11 +230,17 @@ $code-color-error: #ff4444;
     word-break: break-word;
     color: $code-color-result;
     text-align: justify;
+    overflow-x: auto;
+    /* Respect padding of containing bp3 Card when scrollable */
+    margin-bottom: 0.4rem;
 
-    div {
-      p:last-child {
-        margin-bottom: 0;
-      }
+    /* If the assessment briefing begins with a header, remove its top margin */
+    & > div > *:first-child {
+      margin-top: 0;
+    }
+
+    & > div > p:last-child {
+      margin-bottom: 0;
     }
 
     .GradingEditor {
@@ -314,7 +322,6 @@ $code-color-error: #ff4444;
   .side-content-tabs {
     flex: 1 1 auto;
     height: 100%;
-    overflow-y: auto;
     justify-content: center;
     display: flex;
 
@@ -785,11 +792,13 @@ $code-color-error: #ff4444;
         padding: 8px;
         margin: 0;
         overflow: visible;
-        overflow-wrap: normal;
+        overflow-wrap: break-word;
         word-break: normal;
         white-space: pre-line;
         flex-grow: 0;
         flex-shrink: 0;
+        /* Override justify applied to side-content (intended for text blocks) */
+        text-align: initial;
       }
     }
 
