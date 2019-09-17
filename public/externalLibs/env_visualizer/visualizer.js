@@ -115,7 +115,26 @@
     'math_LOG2E',
     'math_PI',
     'math_SQRT1_2',
-    'math_SQRT2'
+    'math_SQRT2',
+    'stream_tail',
+    'stream',
+    'list_to_stream',
+    'is_stream',
+    'stream_to_list',
+    'stream_length',
+    'stream_map',
+    'build_stream',
+    'stream_for_each',
+    'stream_reverse',
+    'stream_append',
+    'stream_remove',
+    'stream_member',
+    'stream_remove_all',
+    'stream_filter',
+    'enum_stream',
+    'integers_from',
+    'eval_stream',
+    'stream_ref',
   ];
   
   /**
@@ -689,7 +708,9 @@
     let dataObjectKey = Math.pow(2, 24) - 1;
     let builtinFnObjectKey = Math.pow(2, 23) - 1;
     frames.reverse(); // more natural ordering! Global frame now comes first
+
     while (i < frames.length) {
+      
       const frame = frames[i];
 
       // load basic ConcreteJS properties
@@ -750,7 +771,9 @@
       for (let k in env) {
         let varLength;
         // first sieve out built-in functions in non-global frames
-        if (frame.name !== 'global' && builtins.indexOf(getFnName(env[k])) >= 0) {
+        if ((frame.name !== 'global' 
+            && (frame.name == "programEnvironment" && frame.tail.name == "programEnvironment"))
+            && (builtins.indexOf(getFnName(env[k])) >= 0 || builtins.indexOf(k) >= 0)) {
           builtinsToDraw.push(getFnName(env[k]));
           heightFactor++;
           if (k.length > maxLength) {
@@ -774,7 +797,7 @@
         }
 
         if (typeof env[k] == 'function') {
-          const fnName = getFnName(env[k]);
+          const fnName = k;
           if (builtins.indexOf(fnName) < 0 || builtinsToDraw.indexOf(fnName) >= 0) {
             // check if function was already declared in another frame
             let existing = false;
@@ -797,7 +820,7 @@
                 }
               }
             }
-
+            
             env[k].hovered = false;
             env[k].selected = false;
             env[k].layer = fnObjectLayer;
@@ -817,11 +840,11 @@
               if (!existing) {
                 env[k].key = builtinFnObjectKey--;
                 env[k].functionName = fnName;
-                env[k].parent = frames[0];
-                frames[0].fnObjects.push(env[k].key);
-                frames[0].variables.push(env[k]);
+                env[k].parent = frame;
+                frame.fnObjects.push(env[k].key);
+                frame.variables.push(env[k]);
                 // update height of global frame
-                frames[0].height += 30;
+                frame.height += 30;
               }
               frame.variables.push(env[k]);
             }
@@ -895,7 +918,7 @@
     }
     viewport.setSize(drawingWidth, drawingHeight);
     */
-    
+
     for (f in frames) {
       /**
        * x-coordinate
@@ -975,7 +998,6 @@
 
   // main function to be exported
   function draw_env(context) {
-    
     // add library-specific built-in functions to list of builtins
     const externalSymbols = context.context.context.externalSymbols;
     for (let i in externalSymbols) {
