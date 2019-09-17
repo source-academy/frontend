@@ -2,11 +2,11 @@
   var container = document.createElement('div');
   container.id = 'inspector-container';
 
-  var builtins = [
+  const maxImplStrLength = 100;
+  const builtins = [
     'Infinity',
     'NaN',
     'accumulate',
-    'alert',
     'alert',
     'append',
     'apply_in_underlying_javascript',
@@ -134,7 +134,13 @@
       for (var k in env) {
         if (builtins.indexOf('' + k) < 0) {
           var str = filter(stringify(env[k]));
-          res += '<tr><td>' + k + '</td>' + '<td><code>' + str + '</code></td></tr>';
+          res +=
+            '<tr><td class="inspect-table-obj-name">' +
+            k +
+            '</td>' +
+            '<td class="inspect-table-obj-details"><code>' +
+            str +
+            '</code></td></tr>';
         }
       }
       return res.length > 0 ? res : undefined;
@@ -150,8 +156,9 @@
           continue;
         }
         var newtable = document.createElement('table');
+        newtable.classList.add('inspect-scope-table');
+        newtable.innerHTML = '<colgroup><col width="20%"><col width="80%"></colgroup>';
         var tbody = document.createElement('tbody');
-        tbody.id = 'inspect-scope';
         tbody.innerHTML =
           '</br><caption><strong>Frame: ' +
           filter(frames[i].name) +
