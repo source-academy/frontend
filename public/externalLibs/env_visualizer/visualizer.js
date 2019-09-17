@@ -15,7 +15,7 @@
     height: 1000,
     container: container
   });
-  const frameFontSetting = '14px RobotGo Mono, Courier New';
+  const frameFontSetting = '14px Roboto Mono, Courier New';
   const fnRadius = 12;
   // List of built-in functions to ignore (i.e. not draw)
 
