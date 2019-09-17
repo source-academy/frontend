@@ -11,7 +11,7 @@ and of the point returned by the Curve as the position
 of your pen on a 2-dimensional plane at the time indicated by the
 argument. We represent the *type* of such Curve functions like this:
 
-Curve: Number → Point
+Curve := Number → Point
 
 where Point is a pair of Numbers. If `C` is a Curve, then the starting
 point of the curve is always `C(0)`, and the ending point is always
@@ -53,12 +53,19 @@ function unit_circle(t) {
 draw_connected_full_view(100)(unit_circle);
 ```
 </a>
-Here, `draw_connected_full_view` is applied to 100, which means that 100+1 points
-are being sampled. The function returns a Curve drawer: A function that turns
-a Curve into a Drawing. When a program evaluates to a Drawing, the Source system
+Here, `draw_connected_full_view` is applied to 100, which means that 100+1 numbers
+between 0 and 1 are being sampled:
+0, 0.01, 0.02, ..., 0.99, 1. 
+The function `draw_connected_full_view` is a Curve drawer:
+A function that takes a number and returns a function that turns
+a Curve into a Drawing.
+
+Drawer := Number → (Curve → Drawing)
+
+When a program evaluates to a Drawing, the Source system
 displays it graphically, in a window, instead of textually.
 
-The functions returned by `draw_connected_full_view` stretches or shrinks
+The functions returned by `draw_connected_full_view` stretch or shrink
 the given Curve to show the full curve and maximize its width and height,
 with some padding.
 

@@ -431,91 +431,46 @@ function midi_note_to_frequency(note) {
   return 8.1757989156 * Math.pow(2, (note / 12));
 }
 
-function square_sound(freq, duration) {
-    function fourier_expansion_square(t) {
-        var answer = 0;
-        for (var i = 1; i <= fourier_expansion_level; i++) {
-            answer = answer +
-		Math.sin(2 * Math.PI * (2 * i - 1) * freq * t)
-		/
-		(2 * i - 1);
-        }
-        return answer;
-    }
-    return make_sound(t => 
-        (4 / Math.PI) * fourier_expansion_square(t),
-        duration);
-}
-
-function triangle_sound(freq, duration) {
-    function fourier_expansion_triangle(t) {
-        var answer = 0;
-        for (var i = 0; i < fourier_expansion_level; i++) {
-            answer = answer +
-		Math.pow(-1, i) *
-		Math.sin((2 * i + 1) * t * freq * Math.PI * 2)
-		/
-		Math.pow((2 * i + 1), 2);
-        }
-        return answer;
-    }
-    return make_sound(t => 
-        (8 / Math.PI / Math.PI) * fourier_expansion_triangle(t),
-        duration);
-}
-
-function sawtooth_sound(freq, duration) {
-    function fourier_expansion_sawtooth(t) {
-        var answer = 0;
-        for (var i = 1; i <= fourier_expansion_level; i++) {
-            answer = answer + Math.sin(2 * Math.PI * i * freq * t) / i;
-        }
-        return answer;
-    }
-    return make_sound(t =>
-		      (1 / 2) - (1 / Math.PI) * fourier_expansion_sawtooth(t),
-		      duration);
-}
-
-function exponential_decay(decay_period) {
+function linear_decay(decay_period) {
   return function (t) {
     if ((t > decay_period) || (t < 0)) {
-      return undefined;
+      return 0;
     } else {
-      var halflife = decay_period / 8;
-      var lambda = Math.log(2) / halflife;
-      return Math.pow(Math.E, -lambda * t);
+      return 1 - (t / decay_period);
     }
   }
 }
 
 /**
- * Returns an envelope: a function from sound to sound.
- * When the envelope is applied to a sound, it returns
- * a new sound that results from applying ADSR to
- * the given sound. The Attack duration, Sustain duration and
- * Release duration are given in the first, second and fourth
- * arguments in seconds, and the Sustain level is given in 
+ * Returns an envelope: a function from Sound to Sound.
+ * When the envelope is applied to a Sound, it returns
+ * a new Sound that results from applying ADSR to
+ * the given Sound. The Attack, Sustain and
+ * Release ratios are given in the first, second and fourth
+ * arguments, and the Sustain level is given in 
  * the third argument as a fraction between 0 and 1.
- * @param {number} attack_time - duration of attack phase in seconds
- * @param {number} decay_time - duration of decay phase in seconds
- * @param {number} sustain_level - sustain level between 0 and 1
- * @param {number} release_time - duration of release phase in seconds
- * @returns {function} envelope: function from sound to sound
+ * @param {Number} attack_ratio - proportion of Sound in attack phase
+ * @param {Number} decay_ratio - proportion of Sound decay phase
+ * @param {Number} sustain_level - sustain level between 0 and 1
+ * @param {Number} release_ratio - proportion of Sound release phase
+ * @returns {function} envelope: function from Sound to Sound
  */
-function adsr(attack_time, decay_time, sustain_level, release_time) {
+function adsr(attack_ratio, decay_ratio, sustain_level, release_ratio) {
   return sound => {
     var wave = get_wave(sound);
     var duration = get_duration(sound);
+    var attack_time = duration * attack_ratio;
+    var decay_time = duration * decay_ratio;
+    var release_time = duration * release_ratio;
     return make_sound( x => {
       if (x < attack_time) {
         return wave(x) * (x / attack_time);
       } else if (x < attack_time + decay_time) {
-        return ((1 - sustain_level) * (exponential_decay(decay_time))(x - attack_time) + sustain_level) * wave(x);
+        return ((1 - sustain_level) * (linear_decay(decay_time))(x - attack_time) + sustain_level) * wave(x);
       } else if (x < duration - release_time) {
         return wave(x) * sustain_level;
       } else if (x <= duration) {
-        return wave(x) * sustain_level * (exponential_decay(release_time))(x - (duration - release_time));
+        return wave(x) * sustain_level * (linear_decay(release_time))(x - (duration - release_time));
       } else {
         return 0;
       }
@@ -523,20 +478,20 @@ function adsr(attack_time, decay_time, sustain_level, release_time) {
   };
 }
 
-// waveform is a function that accepts freq, dur and returns sound
+// waveform is a function that accepts freq, dur and returns Sound
 /**
- * Returns a sound that results from applying a list of envelopes
- * to a given wave form. The wave form should be a sound generator that
+ * Returns a Sound that results from applying a list of envelopes
+ * to a given wave form. The wave form should be a Sound generator that
  * takes a frequency and a duration as arguments and produces a
- * sound with the given frequency and duration. Each evelope is
+ * Sound with the given frequency and duration. Each envelope is
  * applied to a harmonic: the first harmonic has the given frequency,
  * the second has twice the frequency, the third three times the
  * frequency etc.
- * @param {function} waveform - function from frequency and duration to sound
- * @param {number} base_frequency - frequency of the first harmonic
- * @param {number} duration - duration of the produced sound, in seconds
- * @param {list_of_envelope} envelopes - each a function from sound to sound
- * @returns {sound} resulting sound
+ * @param {function} waveform - function from frequency and duration to Sound
+ * @param {Number} base_frequency - frequency of the first harmonic
+ * @param {Number} duration - duration of the produced Sound, in seconds
+ * @param {list_of_envelope} envelopes - each a function from Sound to Sound
+ * @returns {Sound} resulting Sound
  */
 function stacking_adsr(waveform, base_frequency, duration, envelopes) {
   function zip(lst, n) {
@@ -558,74 +513,74 @@ function stacking_adsr(waveform, base_frequency, duration, envelopes) {
 // instruments for students
 
 /**
- * returns a sound that is reminiscent of a trombone, playing
+ * returns a Sound that is reminiscent of a trombone, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
- * @returns {function} <CODE>stop</CODE> to stop recording, 
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting trombone Sound with given given pitch and duration
  */
 function trombone(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0.4, 0, 1, 0),
-      adsr(0.6472, 1.2, 0, 0)));
+    list(adsr(0.2, 0, 1, 0.1),
+      adsr(0.3236, 0.6, 0, 0.1)));
 }
 
 /**
- * returns a sound that is reminiscent of a piano, playing
+ * returns a Sound that is reminiscent of a piano, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
- * @returns {function} <CODE>stop</CODE> to stop recording, 
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting piano Sound with given given pitch and duration
  */
 function piano(note, duration) {
   return stacking_adsr(triangle_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0, 1.03, 0, 0),
-      adsr(0, 0.64, 0, 0),
-      adsr(0, 0.4, 0, 0)));
+    list(adsr(0, 0.515, 0, 0.05),
+      adsr(0, 0.32, 0, 0.05),
+      adsr(0, 0.2, 0, 0.05)));
 }
 
 /**
- * returns a sound that is reminiscent of a bell, playing
+ * returns a Sound that is reminiscent of a bell, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
- * @returns {function} <CODE>stop</CODE> to stop recording, 
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting bell Sound with given given pitch and duration
  */
 function bell(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0, 1.2, 0, 0),
-      adsr(0, 1.3236, 0, 0),
-      adsr(0, 1.5236, 0, 0),
-      adsr(0, 1.8142, 0, 0)));
+    list(adsr(0, 0.6, 0, 0.05),
+      adsr(0, 0.6618, 0, 0.05),
+      adsr(0, 0.7618, 0, 0.05),
+      adsr(0, 0.9071, 0, 0.05)));
 }
 
 /**
- * returns a sound that is reminiscent of a violin, playing
+ * returns a Sound that is reminiscent of a violin, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
- * @returns {function} <CODE>stop</CODE> to stop recording, 
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting violin Sound with given given pitch and duration
  */
 function violin(note, duration) {
   return stacking_adsr(sawtooth_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0.7, 0, 1, 0.3),
-      adsr(0.7, 0, 1, 0.3),
-      adsr(0.9, 0, 1, 0.3),
-      adsr(0.9, 0, 1, 0.3)));
+    list(adsr(0.35, 0, 1, 0.15),
+      adsr(0.35, 0, 1, 0.15),
+      adsr(0.45, 0, 1, 0.15),
+      adsr(0.45, 0, 1, 0.15)));
 }
 
 /**
- * returns a sound that is reminiscent of a cello, playing
+ * returns a Sound that is reminiscent of a cello, playing
  * a given note for a given <CODE>duration</CODE> of seconds
- * @param {number} note - midi note
- * @param {number} duration - duration in seconds
- * @returns {function} <CODE>stop</CODE> to stop recording, 
+ * @param {Number} note - midi note
+ * @param {Number} duration - duration in seconds
+ * @returns {Sound} resulting cello Sound with given given pitch and duration
  */
 function cello(note, duration) {
   return stacking_adsr(square_sound, midi_note_to_frequency(note), duration,
-    list(adsr(0.1, 0, 1, 0.2),
-      adsr(0.1, 0, 1, 0.3),
-      adsr(0, 0, 0.2, 0.3)));
+    list(adsr(0.05, 0, 1, 0.1),
+      adsr(0.05, 0, 1, 0.15),
+      adsr(0, 0, 0.2, 0.15)));
 }
 
 function string_to_list_of_numbers(string) {

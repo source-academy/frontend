@@ -10,6 +10,7 @@ import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import Sourcecast from '../containers/sourcecast/SourcecastContainer';
 import { Role, sourceChapters } from '../reducers/states';
+import { stringParamToInt } from '../utils/paramParseHelpers';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Contributors from './contributors';
 import NavigationBar from './NavigationBar';
@@ -33,6 +34,7 @@ export interface IDispatchProps {
   handleEnsureLibrariesLoaded: () => void;
   handleLogOut: () => void;
   handleExternalLibrarySelect: (external: ExternalLibraryName) => void;
+  handleSetExecTime: (execTime: string) => void;
 }
 
 const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
@@ -89,11 +91,13 @@ const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props);
   const chapter = parseChapter(props) || props.currentPlaygroundChapter;
   const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibrary;
+  const execTime = parseExecTime(props);
   if (prgrm) {
     props.handleEditorValueChange(prgrm);
     props.handleEnsureLibrariesLoaded();
     props.handleClearContext(chapter, externalLibraryName);
     props.handleExternalLibrarySelect(externalLibraryName);
+    props.handleSetExecTime(execTime);
   }
 };
 
@@ -115,6 +119,13 @@ const parseChapter = (props: RouteComponentProps<{}>) => {
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
   const ext = qs.parse(props.location.hash).ext || '';
   return Object.values(ExternalLibraryNames).includes(ext) ? ext : ExternalLibraryNames.NONE;
+};
+
+const parseExecTime = (props: RouteComponentProps<{}>) => {
+  const time = qs.parse(props.location.hash).exec || '1000';
+  // Parse the time string to a number, defaulting execTime to 1000
+  const execTime = stringParamToInt(time) || 1000;
+  return `${execTime < 1000 ? 1000 : execTime}`;
 };
 
 export default Application;

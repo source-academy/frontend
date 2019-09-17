@@ -69,6 +69,15 @@ const NavigationBar: React.SFC<OwnProps> = props => (
           disableHover={true}
         />
       </NavLink>
+
+      <NavLink
+        to={`/academy/${assessmentCategoryLink(AssessmentCategories.Practical)}`}
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+      >
+        <Icon icon={IconNames.MANUAL} />
+        <div className="navbar-button-text hidden-xs">Practical</div>
+      </NavLink>
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>

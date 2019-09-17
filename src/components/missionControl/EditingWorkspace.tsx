@@ -521,7 +521,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           id: SideContentType.editorAutograder
         });
       }
-      const functionsAttached = assessment!.questions[questionId].library.external.symbols;
+      const functionsAttached = assessment!.globalDeployment!.external.symbols;
       if (functionsAttached.includes('get_matrix')) {
         tabs.push({
           label: `Tone Matrix`,

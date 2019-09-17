@@ -64,7 +64,7 @@ function unit_line(t) {
  * only points with the given y-coordinate.
  * 
  * @param {number} t - fraction between 0 and 1
- * @returns {curve} horizontal Curve 
+ * @returns {Curve} horizontal Curve 
  */
 function unit_line_at(y) {
   return function(t) {
@@ -188,15 +188,14 @@ function deriv_t(n) {
 }
 
 /**
- * this function returns a unary Curve operator: 
- * It takes scaling factors <CODE>a</CODE> and <CODE>b</CODE> as arguments 
+ * this function takes scaling factors <CODE>a</CODE> and <CODE>b</CODE> as arguments 
  * and returns a unary Curve operator that
  * scales a given Curve by <CODE>a</CODE> in x-direction and by <CODE>b</CODE> 
  * in y-direction.
  * 
  * @param {number} a - scaling factor in x-direction
  * @param {number} b - scaling factor in y-direction
- * @returns {function} unary Curve operator
+ * @returns {unary_Curve_operator} function that takes a Curve and returns a Curve
  */
 function scale_x_y(a, b) {
   return curve => 
@@ -207,13 +206,12 @@ function scale_x_y(a, b) {
 }
 
 /**
- * this function returns a unary Curve operator: 
- * It takes a scaling factor s argument and returns a
+ * this function takes a scaling factor s argument and returns a
  * unary Curve operator that
  * scales a given Curve by s in x and y direction.
  * 
  * @param {number} s - scaling factor
- * @returns {function} unary Curve operator
+ * @returns {unary_Curve_operator} function that takes a Curve and returns a Curve
  */
 function scale(s) {
   return scale_x_y(s, s)
@@ -422,7 +420,7 @@ function show_connected_gosper(level) {
  * applying an angle given by the given angle-producing function
  * @param {number} level - number of repeated applications of gosperize to the curve
  * @param {function} angle_at - function that determines the angle at each level
- * @returns {curve} 
+ * @returns {Curve} 
  */
 function param_gosper(level, angle_at) {
   if (level === 0) {
@@ -433,11 +431,10 @@ function param_gosper(level, angle_at) {
 }
 
 /**
- * this function returns a unary Curve operator: 
- * It takes an angle theta and returns a Curve operator:
+ * this function takes an angle theta and returns a unary Curve operator:
  * A function that takes a Curve as argument and returns
  * a new Curve, according to the Gosper operation, modified
- * with the given angle
+ * with the given angle theta
  * 
  * @param {Curve} curve - given Curve
  * @returns {Curve} result Curve
