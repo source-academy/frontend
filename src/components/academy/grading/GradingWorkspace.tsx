@@ -324,7 +324,21 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         ),
         id: SideContentType.autograder
       }
-    ]
+    ];
+    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;
+    if (functionsAttached.includes('get_matrix')) {
+      tabs.push({
+        label: `Tone Matrix`,
+        iconName: IconNames.GRID_VIEW,
+        body: <ToneMatrix />,
+        id: SideContentType.toneMatrix
+      });
+    }
+    return {
+      handleActiveTabChange: props.handleActiveTabChange,
+      defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
+      tabs
+    };
   });
 
   /** Pre-condition: Grading has been loaded */
