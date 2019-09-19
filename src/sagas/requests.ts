@@ -154,6 +154,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
       body: {
         password: input
       },
+      shouldAutoLogout: false,
       shouldRefresh: true
     });
   }
