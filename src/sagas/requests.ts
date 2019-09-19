@@ -135,6 +135,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
   let resp = await request(`assessments/${id}`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
     shouldRefresh: true
   });
 
@@ -153,6 +154,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
       body: {
         password: input
       },
+      shouldAutoLogout: false,
       shouldRefresh: true
     });
   }
