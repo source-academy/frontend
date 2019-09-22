@@ -295,6 +295,10 @@ $code-color-error: #ff4444;
             padding: 0 8px 0 8px;
             width: 150px;
           }
+
+          .adjustment-input .#{$ns}-intent-danger {
+            background-color: rgba(219, 55, 55, 0.25);
+          }
         }
       }
 

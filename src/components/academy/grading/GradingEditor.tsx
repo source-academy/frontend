@@ -168,6 +168,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                   buttonPosition={Position.RIGHT}
                   fill={true}
                   placeholder={gradePlaceholder}
+                  intent={
+                    totalGrade < 0 || totalGrade > this.props.maxGrade ? Intent.DANGER : Intent.NONE
+                  }
                   min={0 - this.props.initialGrade}
                   max={
                     this.props.maxGrade > this.props.initialGrade
@@ -197,6 +200,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                   buttonPosition={Position.RIGHT}
                   fill={true}
                   placeholder={xpPlaceholder}
+                  intent={totalXp < 0 || totalXp > this.props.maxXp ? Intent.DANGER : Intent.NONE}
                   min={0 - this.props.initialXp}
                   max={
                     this.props.maxXp > this.props.initialXp
