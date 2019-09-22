@@ -2,12 +2,15 @@ import { Alert, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { Role } from '../../../reducers/states';
 import { controlButton } from '../../commons';
 import { GradingOverview } from './gradingShape';
 
 interface IUnsubmitCellProps {
   data: GradingOverview;
   handleUnsubmitSubmission: (submissionId: number) => void;
+  group: string | null;
+  role?: Role;
 }
 
 type UnsubmitCellState = {
@@ -25,6 +28,8 @@ class UnsubmitCell extends React.Component<IUnsubmitCellProps, UnsubmitCellState
 
   public render() {
     if (this.props.data.submissionStatus !== 'submitted') {
+      return null;
+    } else if (this.props.group !== this.props.data.groupName && this.props.role! !== Role.Admin) {
       return null;
     }
 

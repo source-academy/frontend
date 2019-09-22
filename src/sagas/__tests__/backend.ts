@@ -67,6 +67,7 @@ describe('Test FETCH_AUTH Action', () => {
     const user = {
       name: 'user',
       role: 'student' as Role,
+      group: '42D',
       story: {} as Story,
       grade: 1
     };
@@ -85,6 +86,7 @@ describe('Test FETCH_AUTH Action', () => {
     const user = {
       name: 'user',
       role: 'student' as Role,
+      group: '42D',
       story: {} as Story,
       grade: 1
     };
