@@ -27,8 +27,9 @@ import {
   QuestionView,
   RunButton
 } from '../../workspace/controlBar/index';
-import { SideContentProps } from '../../workspace/side-content';
+import { SideContentProps, SideContentTab } from '../../workspace/side-content';
 import Autograder from '../../workspace/side-content/Autograder';
+import ToneMatrix from '../../workspace/side-content/ToneMatrix';
 import { Grading, IAnsweredQuestion } from './gradingShape';
 
 export type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
@@ -258,9 +259,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
   private sideContentProps: (p: GradingWorkspaceProps, q: number) => SideContentProps = (
     props: GradingWorkspaceProps,
     questionId: number
-  ) => ({
-    handleActiveTabChange: props.handleActiveTabChange,
-    tabs: [
+  ) => {
+    const tabs: SideContentTab[] = [
       {
         label: `Grading: Question ${questionId + 1}`,
         iconName: IconNames.TICK,
@@ -324,8 +324,25 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         ),
         id: SideContentType.autograder
       }
-    ]
-  });
+    ];
+
+    const functionsAttached = props.grading![questionId].question.library.external.symbols;
+    if (functionsAttached.includes('get_matrix')) {
+      tabs.push({
+        label: `Tone Matrix`,
+        iconName: IconNames.GRID_VIEW,
+        body: <ToneMatrix />,
+        id: SideContentType.toneMatrix
+      });
+    }
+
+    const sideContentProps: SideContentProps = {
+      handleActiveTabChange: props.handleActiveTabChange,
+      tabs
+    };
+
+    return sideContentProps;
+  };
 
   /** Pre-condition: Grading has been loaded */
   private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
