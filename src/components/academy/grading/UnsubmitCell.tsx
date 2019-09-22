@@ -24,6 +24,10 @@ class UnsubmitCell extends React.Component<IUnsubmitCellProps, UnsubmitCellState
   }
 
   public render() {
+    if (this.props.data.submissionStatus !== 'submitted') {
+      return null;
+    }
+
     return (
       <div>
         <Alert
