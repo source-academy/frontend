@@ -131,6 +131,11 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       (stringParamToInt(this.state.gradeAdjustmentInput || undefined) || 0);
     const totalXp =
       this.props.initialXp + (stringParamToInt(this.state.xpAdjustmentInput || undefined) || 0);
+    const gradePlaceholder = `${this.props.initialGrade > 0 ? '-' : ''}${
+      this.props.initialGrade
+    } to ${this.props.maxGrade - this.props.initialGrade}`;
+    const xpPlaceholder = `${this.props.initialXp > 0 ? '-' : ''}${this.props.initialXp} to ${this
+      .props.maxXp - this.props.initialXp}`;
 
     return (
       <div className="GradingEditor">
@@ -162,7 +167,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                   value={this.state.gradeAdjustmentInput || ''}
                   buttonPosition={Position.RIGHT}
                   fill={true}
-                  placeholder="Adjust grades relatively here"
+                  placeholder={gradePlaceholder}
                   min={0 - this.props.initialGrade}
                   max={
                     this.props.maxGrade > this.props.initialGrade
@@ -191,7 +196,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
                   value={this.state.xpAdjustmentInput || ''}
                   buttonPosition={Position.RIGHT}
                   fill={true}
-                  placeholder="Adjust XP relatively here"
+                  placeholder={xpPlaceholder}
                   min={0 - this.props.initialXp}
                   max={
                     this.props.maxXp > this.props.initialXp
