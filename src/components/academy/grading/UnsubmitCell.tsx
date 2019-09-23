@@ -6,7 +6,7 @@ import { Role } from '../../../reducers/states';
 import { controlButton } from '../../commons';
 import { GradingOverview } from './gradingShape';
 
-interface IUnsubmitCellProps {
+export interface IUnsubmitCellProps {
   data: GradingOverview;
   handleUnsubmitSubmission: (submissionId: number) => void;
   group: string | null;
