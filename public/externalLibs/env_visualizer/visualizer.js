@@ -14,7 +14,29 @@
     container: container
   });
   const frameFontSetting = '14px Roboto Mono, Courier New';
-  const fnRadius = 12;
+  const FNOBJECT_RADIUS = 12; // radius of function object circle
+  const DATA_OBJECT_SIDE = 24; // length of data object triangle
+  const FRAME_HEIGHT_LINE = 30; // height in px of each line of text in a frame;
+  const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
+  const FRAME_WIDTH_CHAR = 10; // width in px of each text character in a frame;
+  const FRAME_WIDTH_PADDING = 50; // width in px to pad each frame with;
+  const OBJECT_FRAME_RIGHT_SPACING = 60; // space to right frame border
+  const OBJECT_FRAME_TOP_SPACING = 25; // perpendicular distance to top border
+  
+  /**
+   * Keys (unique IDs) for data objects, user-defined function objects,
+   * and built-in function objects must all be differentiated.
+   * dataObject and builtinFnObject keys need to be manually assigned.
+   * Since ConcreteJS hit detection uses [0, 2^24) as its range of keys
+   * (and -1 for not found), take 2^24 - 1 as the key for
+   * the first dataObject and decrement from there.
+   * Take 2^23 - 1 as the key for the first builtinFnObject and
+   * decrement from there.
+   */
+  let dataObjectKey = Math.pow(2, 24) - 1;
+  let builtinFnObjectKey = Math.pow(2, 23) - 1;
+  let fnObjectKey = Math.pow(2, 22) - 1;
+  
   // List of built-in functions to ignore (i.e. not draw)
   var builtins = [
     'runtime',
@@ -176,22 +198,21 @@
   }
 
   function drawSceneFrames() {
-    for (let i = 0; i < frames.length; i++) {
-      drawSceneFrame(i);
-    }
+    frames.forEach(function(frame) {
+      drawSceneFrame(frame);
+    });
     viewport.render();
   }
 
   // For both function objects and data objects
   function drawSceneFrameObjectArrows() {
     frames.forEach(function(frame) {
-      let variables = frame.variables;
-      for (let i = 0; i < variables.length; i++) {
-        if (typeof variables[i] == 'function') {
-          var fn = getFnObjectFromKey(variables[i].key);
-          drawSceneFrameFnArrow(frame, fn, i);
-        } else if (typeof variables[i] == 'object') {
-          drawSceneFrameDataArrow(frame, i);
+      let elements = frame.elements;
+      for (e in elements) {
+        if (typeof elements[e] == 'function') {
+          drawSceneFrameFnArrow(frame, e, elements[e]);
+        } else if (typeof elements[e] == 'object') {
+          drawSceneFrameDataArrow(frame, e, elements[e]);
         }
       }
     });
@@ -221,17 +242,10 @@
     var config = fnObjects[pos];
     var scene = config.layer.scene,
       context = scene.context;
-
-    // find index position of function object within frame
-    var parent = config.parent;
-    var offset = config.offset;
-    var x = parent.x + parent.width + 60;
-    var y = parent.y + 25 + offset * 30;
-    config.x = x;
-    config.y = y;
-    //config.offset = offset;
+    const x = config.x;
+    const y = config.y;
     context.beginPath();
-    context.arc(x - fnRadius, y, fnRadius, 0, Math.PI * 2, false);
+    context.arc(x - FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
 
     if (!config.hovered && !config.selected) {
       context.strokeStyle = '#999999';
@@ -267,7 +281,7 @@
         context.fillText('...', x + 120, y + 120);
       }
     }
-    context.arc(x + fnRadius, y, fnRadius, 0, Math.PI * 2, false);
+    context.arc(x + FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
     if (!config.hovered && !config.selected) {
       context.strokeStyle = '#999999';
       context.lineWidth = 2;
@@ -283,23 +297,19 @@
     var config = fnObjects[pos];
     var hit = config.layer.hit,
       context = hit.context;
-    var parent = config.parent;
-    // var offset = parent.fnObjects.indexOf(config.key);
-    var offset = config.offset;
-    var x = parent.x + parent.width + 60;
-    var y = parent.y + 25 + offset * 30;
+    const x = config.x;
+    const y = config.y;
     config.x = x;
     config.y = y;
-    config.offset = offset;
     context.save();
     context.beginPath();
-    context.arc(x - fnRadius, y, fnRadius, 0, Math.PI * 2, false);
+    context.arc(x - FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
     context.fillStyle = hit.getColorFromIndex(config.key);
     context.fill();
     context.restore();
 
     context.beginPath();
-    context.arc(x + fnRadius, y, fnRadius, 0, Math.PI * 2, false);
+    context.arc(x + FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
     context.fillStyle = hit.getColorFromIndex(config.key);
     context.fill();
     context.restore();
@@ -311,18 +321,18 @@
    * that points to data.
    */
   function drawSceneDataObject(dataObject) {
+    const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
     var config = dataObject;
     var scene = dataObjectLayer.scene,
       context = scene.context;
-    var parent = config.parent;
-    var offset = parent.variables.indexOf(config);
-    const x0 = parent.x + parent.width + 48,
-      y0 = parent.y + 25 + offset * 30 - 12;
-    const x1 = x0 - 12,
-      y1 = y0 + 24;
-    const x2 = x1 + 24,
+    var parent = wrapper.parent;
+    // define points for drawing data object triangle
+    const x0 = wrapper.x,
+      y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
+    const x1 = x0 - DATA_OBJECT_SIDE / 2,
+      y1 = y0 + DATA_OBJECT_SIDE;
+    const x2 = x1 + DATA_OBJECT_SIDE,
       y2 = y1;
-    config.offset = offset;
     context.beginPath();
     context.moveTo(x0, y0);
     context.lineTo(x1, y1);
@@ -349,13 +359,13 @@
   }
 
   function drawHitDataObject(dataObject) {
+    const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
     var config = dataObject;
     var hit = dataObjectLayer.hit,
       context = hit.context;
-    var parent = config.parent;
-    var offset = config.offset;
-    const x0 = parent.x + parent.width + 48,
-      y0 = parent.y + 25 + offset * 30 - 12;
+    var parent = wrapper.parent;
+    const x0 = wrapper.x,
+      y0 = wrapper.y;
     const x1 = x0 - 12,
       y1 = y0 + 24;
     const x2 = x1 + 24,
@@ -371,11 +381,8 @@
     context.restore();
   }
 
-  function drawSceneFrame(pos) {
-    var config = frames[pos];
-    if (config.variables.length == 0) {
-      return;
-    }
+  function drawSceneFrame(frame) {
+    var config = frame;
     var scene = config.layer.scene,
       context = scene.context;
     context.save();
@@ -404,17 +411,17 @@
     }
 
     // render text in frame
-    let env = config.headClone;
+    let elements = config.elements;
     let i = 0;
-    for (let k in env) {
+    for (let k in elements) {
       if (builtins.indexOf('' + k) < 0 || builtinsToDraw.indexOf('' + k) >= 0) {
-        if (typeof env[k] == 'number' || typeof env[k] == 'string') {
+        if (typeof elements[k] == 'number' || typeof elements[k] == 'string') {
           if (k == '(Other predclr. names)') {
             context.fillText(`${'' + k}`, x + 10, y + 30 + i * 30);
           } else {
-            context.fillText(`${'' + k}: ${'' + env[k]}`, x + 10, y + 30 + i * 30);
+            context.fillText(`${'' + k}: ${'' + elements[k]}`, x + 10, y + 30 + i * 30);
           }
-        } else if (typeof env[k] == 'object') {
+        } else if (typeof elements[k] == 'object') {
           context.fillText(`${'' + k}:`, x + 10, y + 30 + i * 30);
         } else {
           context.fillText(`${'' + k}:`, x + 10, y + 30 + i * 30);
@@ -471,20 +478,79 @@
    * Trivial - the arrow just points straight to a fixed position relative to
    * the frame.
    */
-  function drawSceneFrameDataArrow(frame, frameOffset) {
+  function drawSceneFrameDataArrow(frame, name, dataObject) {
+    const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
     var scene = arrowLayer.scene,
       context = scene.context;
-    const x0 = frame.x + frame.variables[frameOffset].name.length * 10 + 20,
-      y0 = frame.y + frameOffset * 30 + 25,
-      xf = frame.x + frame.width + 35,
-      yf = y0;
+    const yf = wrapper.y;
     context.save();
     context.strokeStyle = '#999999';
     context.beginPath();
-    context.moveTo(x0, y0);
-    context.lineTo(xf, yf);
-    drawArrowHead(context, x0, y0, xf, yf);
-    context.stroke();
+
+    if (wrapper.parent == frame) {
+      // dataObject belongs to current frame
+      // simply draw straight arrow from frame to function
+      const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 20;
+      const y0 = wrapper.y,
+        xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; // left circle
+      context.moveTo(x0, y0);
+      context.lineTo(xf, yf);
+
+      // draw arrow head
+      drawArrowHead(context, x0, y0, xf, yf);
+      context.stroke();
+    } else {
+      /**
+       * dataObject belongs to different frame.
+       * Two "offset" factors are used: frameOffset, the index position of
+       * the source variable in the starting frame, and fnOffset, the position
+       * of the target dataObject in the destination frame. Offsetting the line
+       * by these factors prevents overlaps between arrows that are pointing to
+       * different objects.
+       */
+      const frameOffset = findElementPosition(dataObject, frame);
+      const fnOffset = findElementPosition(dataObject, wrapper.parent);
+      const x0 = frame.x + name.length * 8 + 22,
+        y0 = frame.y + frameOffset * 30 + 25;
+      const xf = wrapper.x + FNOBJECT_RADIUS * 2 + 3,
+        x1 = frame.x + frame.width + 10 + frameOffset * 20,
+        y1 = y0;
+      const x2 = x1,
+        y2 = frame.y - 20 + frameOffset * 5;
+      let x3 = xf + 10 + fnOffset * 7,
+        y3 = y2;
+      /**
+       * From this position, the arrow needs to move upward to reach the
+       * target dataObject. Make sure it does not intersect any other object
+       * when doing so, or adjust its position if it does.
+       * This currently only works for the frame level directly above the origin
+       * frame, which suffices in most cases.
+       * TO-DO: Improve implementation to handle any number of frame levels.
+       */
+
+      levels[frame.level - 1].frames.forEach(function(frame) {
+        const leftBound = frame.x;
+        let rightBound = frame.x + frame.width;
+        // if (frame.fnObjects.length != 0) {
+          // rightBound += 84;
+        // }
+        if (x3 > leftBound && x3 < rightBound) {
+          // overlap
+          x3 = rightBound + 10 + fnOffset * 7;
+        }
+      });
+      const x4 = x3,
+        y4 = yf;
+      context.moveTo(x0, y0);
+      context.lineTo(x1, y1);
+      context.lineTo(x2, y2);
+      context.lineTo(x3, y3);
+      context.lineTo(x4, y4);
+      context.lineTo(xf, yf);
+      // draw arrow headClone
+      drawArrowHead(context, x4, y4, xf, yf);
+      context.stroke();
+    }
   }
 
   /**
@@ -493,7 +559,7 @@
    * a different frame. If so, more care is needed to route the arrow back up
    * to its destination.
    */
-  function drawSceneFrameFnArrow(frame, fnObject, frameOffset) {
+  function drawSceneFrameFnArrow(frame, name, fnObject) {
     var scene = arrowLayer.scene,
       context = scene.context;
     const yf = fnObject.y;
@@ -504,15 +570,9 @@
     if (fnObject.parent == frame) {
       // fnObject belongs to current frame
       // simply draw straight arrow from frame to function
-      let x0;
-      if (isArrowFunction(fnObject)) {
-        const paramName = getKeyByValue(frame.headClone, frame.variables[frameOffset]);
-        x0 = frame.x + paramName.length * 10 + 20;
-      } else {
-        x0 = frame.x + getFnName(fnObject).length * 10 + 20;
-      }
-      const y0 = frame.y + fnObject.offset * 30 + 25,
-        xf = fnObject.x - fnRadius * 2 - 3; // left circle
+      const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 20;
+      const y0 = fnObject.y,
+        xf = fnObject.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
 
@@ -528,16 +588,15 @@
        * by these factors prevents overlaps between arrows that are pointing to
        * different objects.
        */
-      const paramName = getKeyByValue(frame.headClone, frame.variables[frameOffset]);
-      const x0 = frame.x + paramName.length * 8 + 22,
+      const frameOffset = findElementPosition(fnObject, frame);
+      const fnOffset = findElementPosition(fnObject, fnObject.parent);
+      const x0 = frame.x + name.length * 8 + 22,
         y0 = frame.y + frameOffset * 30 + 25;
-      const xf = fnObject.x + fnRadius * 2 + 3,
+      const xf = fnObject.x + FNOBJECT_RADIUS * 2 + 3,
         x1 = frame.x + frame.width + 10 + frameOffset * 20,
         y1 = y0;
       const x2 = x1,
         y2 = frame.y - 20 + frameOffset * 5;
-      // find offset of fnObject at parent frame
-      const fnOffset = fnObject.parent.variables.indexOf(fnObject);
       let x3 = xf + 10 + fnOffset * 7,
         y3 = y2;
       /**
@@ -552,9 +611,9 @@
       levels[frame.level - 1].frames.forEach(function(frame) {
         const leftBound = frame.x;
         let rightBound = frame.x + frame.width;
-        if (frame.fnObjects.length != 0) {
-          rightBound += 84;
-        }
+        // if (frame.fnObjects.length != 0) {
+          // rightBound += 84;
+        // }
         if (x3 > leftBound && x3 < rightBound) {
           // overlap
           x3 = rightBound + 10 + fnOffset * 7;
@@ -608,23 +667,21 @@
    * frame-function arrows.
    */
   function drawSceneFrameArrow(frame) {
-    if (frame.variables.length == 0) {
-      return;
-    }
     var config = frame;
     var scene = arrowLayer.scene,
       context = scene.context;
     context.save();
     context.strokeStyle = 'white';
-
-    if (config.tail == null) return null;
-    const offset = levels[frame.tail.level].frames.indexOf(frame.tail);
+    
+    if (config.parent == null) return null;
+    const parent = config.parent;
+    const offset = levels[parent.level].frames.indexOf(frame.parent);
     const x0 = config.x + config.width / 2,
       y0 = config.y,
       x1 = x0,
-      y1 = (frame.tail.y + frame.tail.height + y0) / 2 + offset * 4,
-      x2 = frame.tail.x + frame.tail.width / 2;
-    (y2 = y1), (x3 = x2), (y3 = frame.tail.y + frame.tail.height + 3); // offset by 3 for aesthetic reasons
+      y1 = (parent.y + parent.height + y0) / 2 + offset * 4,
+      x2 = parent.x + parent.width / 2;
+    (y2 = y1), (x3 = x2), (y3 = parent.y + parent.height + 3); // offset by 3 for aesthetic reasons
     context.beginPath();
     context.moveTo(x0, y0);
     context.lineTo(x1, y1);
@@ -646,7 +703,15 @@
   
 
   fnObjects = [];
+  /**
+   * Unlike function objects, data objects are represented internally not as
+   * objects, but as arrays. As such, we cannot assign properties like x- and
+   * y-coordinates directly to them. These properties are stored instead in
+   * another array of objects called dataObjectWrappers, which maps 1-to-1 to
+   * the objects they represent in dataObjects.
+   */
   dataObjects = [];
+  dataObjectWrappers = [];
   levels = {};
   builtinsToDraw = [];
 
@@ -660,84 +725,103 @@
       .add(fnObjectLayer)
       .add(dataObjectLayer)
       .add(arrowLayer);
-    let frames = input.context.context.runtime.environments;
+    let environments = input.context.context.runtime.environments;
+    
+    /**
+     * Refactor start
+     */
+    
+    /**
+     * From array of environments, create an array of frames. Each frame 
+     * directly represent a frame to be drawn on screen.
+     */
+    let frames = [];
+    
+    // Assign the same id to each environment and its corresponding frame
+    let envKeyCounter = environments.length - 1;
+    environments.forEach(function(e) {
+      e.envKeyCounter = envKeyCounter;
+      envKeyCounter--;
+    });
 
-    for (let i in frames) {
-      let frame = frames[i];
-      frame.hovered = false;
-      frame.layer = frameLayer;
-      frame.color = white;
-
-      // reset frame
-      frame.dataObjects = [];
-      frame.fnObjects = [];
-      frame.variables = [];
-      frame.children = [];
-
-      // clone frame.head to avoid disrupting rest of interpreter
-      frame.headClone = {};
-      for (k in frame.head) {
-        frame.headClone[k] = frame.head[k];
+    // Create a frame for each environment
+    // Process backwards such that global frame comes first
+    for (let i = environments.length - 1; i >= 0; i--) {
+      let environment = environments[i];      
+      let frame;
+            
+      /**
+       * There are two environments named programEnvironment. We only want one
+       * corresponding "Program Environment" frame.
+       */
+      if (environment.name == "programEnvironment") {
+        let isProgEnvPresent = false;
+        frames.forEach(function (f) {
+          if (f.name == "Program Environment") {
+            frame = f;
+            isProgEnvPresent = true;
+          }
+        });
+        if (!isProgEnvPresent) {
+          frame = createEmptyFrame("Program Environment");
+          frame.key = environment.envKeyCounter;
+          frames.push(frame);
+        }
+      } else {
+        frame = createEmptyFrame(environment.name);
+        frame.key = environment.envKeyCounter;
+        frames.push(frame);
       }
-
-      if (frame.name == 'global') {
-        frame.headClone['(Other predclr. names)'] = '';
-      }
+      
+      // extract elements from environment into frame
+      frame.elements = {};
+      if (frame.name == "global") {
+        frame.elements['(other predclr. names)'] = '';
+        // don't copy over built-in functions
+      } else if (environment.name == "programEnvironment"
+                  && environment.tail.name == "global") {
+        // do nothing (this environment contains library functions)
+      } else {
+        // copy everything (possibly including redeclared built-ins) over
+        const envElements = environment.head;
+        for (e in envElements) {
+          frame.elements[e] = envElements[e];
+          if (typeof envElements[e] == "function"
+              && builtins.indexOf('' + getFnName(envElements[e])) > 0) {
+            // this is a built-in function referenced to in a later frame,
+            // e.g. "const a = pair". In this case, add it to the global frame
+            // to be drawn and subsequently referenced.
+            frames[0].elements[getFnName(envElements[e])] = envElements[e];
+            builtinsToDraw.push(getFnName(envElements[e])); // TEMP WORKAROUND
+          }
+        }
+      } 
     }
 
     /**
-     * First iteration through frames:
-     * - assign unique keys to frames and data and function objects
-     * - find height level of each frame
-     * - store keys of child frames within each frame
-     * - calculate dimensions of frame
+     * - Assign parent frame of each frame (except global frame)
+     * - Assign level of each frame. Frames are organised into distinct 
+     *   vertical bands. Global frame is at the top (level 0). Every
+     *   other frame is 1 level below its parent.
      */
-    let i = 0;
-    let key_counter = 0;
-    /**
-     * Keys (unique IDs) for data objects, user-defined function objects,
-     * and built-in function objects must all be differentiated.
-     * dataObject and builtinFnObject keys need to be manually assigned.
-     * Since ConcreteJS hit detection uses [0, 2^24) as its range of keys
-     * (and -1 for not found), take 2^24 - 1 as the key for
-     * the first dataObject and decrement from there.
-     * Take 2^23 - 1 as the key for the first builtinFnObject and
-     * decrement from there.
-     */
-
-    let dataObjectKey = Math.pow(2, 24) - 1;
-    let builtinFnObjectKey = Math.pow(2, 23) - 1;
-    frames.reverse(); // more natural ordering! Global frame now comes first
-
-    while (i < frames.length) {
+    frames.forEach(function(frame) {
+      if (frame.name == "global") {
+        frame.parent = null;
+        frame.level = 0;
+      } else {
+        if (frame.name == "Program Environment") {
+          frame.parent = getFrameByName(frames, "global");
+        } else {
+          env = getEnvByKeyCounter(environments, frame.key);
+          if (env.tail.name == "programEnvironment") {
+            env = env.tail;
+          }
+          frame.parent = getFrameByKey(frames, env.tail.envKeyCounter);
+        }
+        frame.parent.children.push(frame.key);
+        frame.level = frame.parent.level + 1;
+      }
       
-      const frame = frames[i];
-
-      // load basic ConcreteJS properties
-      frame.hovered = false;
-      frame.selected = false;
-      frame.layer = frameLayer;
-      frame.color = 'white';
-
-      // arrays to store keys of objects in scope of frame
-      frame.fnObjects = [];
-      frame.dataObjects = [];
-
-      // assign id to frame
-      frame.key = key_counter;
-      key_counter++;
-
-      // update array of children keys of parent frame
-      frame.children = []; // stores keys of child frames
-      if (frame.tail !== null) frame.tail.children.push(frame.key);
-
-      /**
-       * Frames are separated into distinct vertical "levels", where each frame
-       * is always drawn one level below its parent and the global frame is at
-       * the top level (i.e. top of the screen/drawing).
-       */
-      frame.level = frame.name === 'global' ? 0 : frame.tail.level + 1;
-
       // update total number of frames in the current level
       if (levels[frame.level]) {
         levels[frame.level].count++;
@@ -746,147 +830,44 @@
         levels[frame.level] = { count: 1 };
         levels[frame.level].frames = [frame];
       }
+    });
 
-      /**
-       * Iterate through variables to find the length of the longest one,
-       * to determine the width of the frame. Calculate height of frame
-       * from the number of variables.
-       * Separately, if variable points to a function or data object,
-       * add the required properties for drawing of the object.
-       */
-      let env = frame.headClone;
-
-      /**
-       * Array to store variables to be displayed. A separate array from head
-       * is used to maintain the ordering of variables, which is needed for
-       * determine the coordinates of function and data objects that need to
-       * be drawn.
-       */
-      frame.variables = [];
-      if (frame.name == 'global') {
-        frame.variables.push('');
-      }
-      let maxLength = 0; // track length of longest variable in frame
-      let heightFactor = 0; // track number of variables in frame
-      for (let k in env) {
-        let varLength;
-        // first sieve out built-in functions in non-global frames
-        if ((frame.name !== 'global' 
-            && (frame.name == "programEnvironment" && frame.tail.name == "programEnvironment"))
-            && (builtins.indexOf(getFnName(env[k])) >= 0 || builtins.indexOf(k) >= 0)) {
-          builtinsToDraw.push(getFnName(env[k]));
-          heightFactor++;
-          if (k.length > maxLength) {
-            maxLength = k.length;
-          }
-
-          // update width of global frame
-          let newWidth = getFnName(env[k]).length * 10 + 50;
-          if (frames[0].width < newWidth) {
-            frames[0].width = newWidth;
-          }
-        } else if (builtins.indexOf('' + k) < 0) {
-          heightFactor++;
-          varLength =
-            typeof env[k] == 'number' || typeof env[k] == 'string'
-              ? k.length + ('' + env[k]).length
-              : k.length;
-          if (varLength > maxLength) {
-            maxLength = varLength;
-          }
-        }
-
-        if (typeof env[k] == 'function') {
-          const fnName = k;
-          if (builtins.indexOf(fnName) < 0 || builtinsToDraw.indexOf(fnName) >= 0) {
-            // check if function was already declared in another frame
-            let existing = false;
-            if (builtinsToDraw.indexOf(fnName) < 0) {
-              // not built-in
-              for (let fn in fnObjects) {
-                try {
-                  if (fnObjects[fn] == env[k]) {
-                    existing = true;
-                    break;
-                  }
-                } catch (e) {}
-              }
-            } else {
-              // is built-in
-              for (let fn in fnObjects) {
-                if (getFnName(fnObjects[fn]) == fnName) {
-                  existing = true;
-                  break;
-                }
-              }
-            }
-            
-            env[k].hovered = false;
-            env[k].selected = false;
-            env[k].layer = fnObjectLayer;
-            env[k].color = 'white';
-            if (builtinsToDraw.indexOf(fnName) < 0) {
-              if (!existing) {
-                if (env[k].node.id) {
-                  env[k].key = env[k].node.id.start;
-                } else {
-                  env[k].key = builtinFnObjectKey--;
-                }
-                env[k].parent = frame;
-              }
-              frame.fnObjects.push(env[k].key);
-              frame.variables.push(env[k]);
-            } else {
-              if (!existing) {
-                env[k].key = builtinFnObjectKey--;
-                env[k].functionName = fnName;
-                env[k].parent = frame;
-                frame.fnObjects.push(env[k].key);
-                frame.variables.push(env[k]);
-                // update height of global frame
-                frame.height += 30;
-              }
-              frame.variables.push(env[k]);
-            }
-            if (!existing) {
-              fnObjects.push(env[k]);
-            }
-          }
-        } else if (builtins.indexOf('' + k) < 0) {
-          if (env[k] != null && typeof env[k] == 'object') {
-            let dataParent = frame;
-            while (dataParent.name === 'blockFrame') {
-              dataParent = dataParent.tail;
-            }
-            dataObject = {
-              hovered: false,
-              selected: false,
-              layer: dataObjectLayer,
-              color: 'white',
-              key: dataObjectKey--,
-              parent: dataParent,
-              data: env[k],
-              name: k
-            };
-            dataObjects.push(dataObject);
-            frame.dataObjects.push(dataObject);
-            frame.variables.push(dataObject);
-          } else {
-            frame.variables.push(env[k]);
-          }
+    /** 
+     * - Find width and height of each frame
+     */
+    frames.forEach(function(frame) {
+      frame.height = getFrameHeight(frame);
+      frame.width = getFrameWidth(frame);
+    });
+    
+    /**
+     * Extract function and data objects from frames. Each distinct object is
+     * drawn next to the first frame where it is referenced; subsequent
+     * references point back to the object.
+     */
+    frames.forEach(function(frame) {
+      const elements = frame.elements;
+      for (e in elements) {
+        if (typeof elements[e] == "function"
+          && !fnObjects.includes(elements[e])) {
+          initialiseFnObject(elements[e], frame);
+          fnObjects.push(elements[e]);
+        } else if (typeof elements[e] == "object"
+          && !dataObjects.includes(elements[e])) {
+          dataObjects.push(elements[e]);
+          dataObjectWrappers.push(
+            initialiseDataObjectWrapper(e, elements[e], frame)
+          );
         }
       }
-      frame.width = maxLength * 10 + 50;
-      frame.height = heightFactor * 30 + 20;
-      i++;
-    }
+    });
 
     /**
      * Find and store the height of each level
-     * (i.e. the height of the tallest frame)
+     * (i.e. the height of the tallest environment)
      */
     for (let l in levels) {
-      let level = levels[l];
+      const level = levels[l];
       let maxHeight = 0;
       level.frames.forEach(function(frame) {
         if (frame.height > maxHeight) {
@@ -897,29 +878,22 @@
     }
 
     /**
-     * Second pass:
-     *  - Assign x- and y-coordinates for each frame
-     *  - Resize viewport according to total size of drawing
-     */
-    let tempLevels = {};
-    Object.keys(levels).forEach(function(level) {
-      tempLevels[level] = levels[level].count;
-    });
-    
-    /**
-     * Not working :( to fix
-    let drawingWidth = 0,
-      drawingHeight = 0;
-    for (l in levels) {
-      drawingHeight += (levels[l].height + 60);
-      for (f in levels[l].frames) {
-        drawingWidth += (levels[l].frames[f].width + 72);
-      }
-    }
-    viewport.setSize(drawingWidth, drawingHeight);
-    */
+     * Calculate x- and y-coordinates for each frame
+     */ 
+    frames.forEach(function(frame) {
+      let currLevel = frame.level;
 
-    for (f in frames) {
+      /**
+       * y-coordinate
+       * Simply the total height of all levels above the frame, plus a
+       * fixed spacing factor (60) per level.
+       */
+      let y = 30;
+      for (let i = 0; i < currLevel; i++) {
+        y += levels[i].height + 60;
+      }
+      frame.y = y;
+      
       /**
        * x-coordinate
        * For each level, split the viewport width into n partitions where
@@ -927,49 +901,44 @@
        * of each partition.
        *
        * Potential improvement: Assign space recursively to each frame and its
-       * "tree" of child frames.
+       * "tree" of child frame.
        */
-      let frame = frames[f];
-      let partitionWidth = viewport.width / levels[frame.level].count;
+      const partitionCount = levels[currLevel].count;
+      const partitionWidth = viewport.width / partitionCount;
       frame.x =
-        viewport.width -
-        tempLevels[frame.level] * partitionWidth +
-        partitionWidth / 2 -
-        frame.width / 2;
-      tempLevels[frame.level]--;
-
-      /**
-       * y-coordinate
-       * Simply the total height of all levels above the frame, plus a
-       * fixed factor (60) per level.
-       */
-      let level = frame.level;
-      let y = 30;
-      for (i = 0; i < level; i++) {
-        y += levels[i].height + 60;
-      }
-      frame.y = y;
-
-      let pos = 0;
-      let headClone = frame.headClone;
-      for (let k in headClone) {
-        if (
-          typeof headClone[k] == 'function' &&
-          (builtins.indexOf('' + k) < 0 || builtinsToDraw.indexOf('' + k)) >= 0
-        ) {
-          if (headClone[k].offset == undefined) {
-            headClone[k].offset = pos;
-          }
-          pos++;
-        } else if (typeof headClone[k] !== 'function' && builtins.indexOf('' + k) < 0) {
-          if (typeof headClone[k] == 'object') {
-            headClone[k].offset = pos;
-          }
-          pos++;
-        }
-      }
+        (levels[currLevel].frames.indexOf(frame) + 1) * partitionWidth
+        - partitionWidth / 2
+        - frame.width / 2;
+    });
+    
+    /**
+     * Calculate coordinates for each fnObject and dataObject.
+     */
+    fnObjects.forEach(function(fnObject) {
+      const parent = fnObject.parent;
+      fnObject.x = parent.x 
+                   + parent.width 
+                   + OBJECT_FRAME_RIGHT_SPACING;
+      fnObject.y = parent.y +
+                   findElementPosition(fnObject, parent) * FRAME_HEIGHT_LINE
+                   + OBJECT_FRAME_TOP_SPACING;
+    });
+    
+    for (d in dataObjects) {
+      const wrapper = dataObjectWrappers[d];
+      const parent = wrapper.parent;
+      wrapper.x = parent.x 
+                  + parent.width 
+                  + OBJECT_FRAME_RIGHT_SPACING;
+      wrapper.y = parent.y +
+                  findElementPosition(dataObjects[d], parent) * FRAME_HEIGHT_LINE
+                  + OBJECT_FRAME_TOP_SPACING;
     }
+
     return frames;
+    /**
+     * Refactor end
+     */
   }
 
   function drawArrowHead(context, xi, yi, xf, yf) {
@@ -1018,9 +987,10 @@
     arrowLayer.scene.clear();
     fnObjects = [];
     dataObjects = [];
+    dataObjectWrappers = [];
     levels = {};
     builtinsToDraw = [];
-    
+
     frames = parseInput(context);
 
     drawSceneFrames();
@@ -1031,6 +1001,7 @@
     drawSceneFrameArrows();
     drawSceneFrameObjectArrows();
     drawSceneFnFrameArrows();
+
     // add concrete container handlers
     container.addEventListener('mousemove', function(evt) {
       var boundingRect = container.getBoundingClientRect(),
@@ -1117,7 +1088,7 @@
   }
 
   function getFnName(fn) {
-    if (fn.functionName != undefined) {
+    if (fn.node.type == "FunctionDeclaration") {
       return fn.functionName;
     } else {
       return fn
@@ -1135,6 +1106,97 @@
     return fn.node.type == "ArrowFunctionExpression";
   }
 
+  function createEmptyFrame(frameName) {
+    const frame = {name: frameName};
+    frame.hovered = false;
+    frame.layer = frameLayer;
+    frame.color = white;
+    frame.children = [];
+    return frame;
+  }
+  
+  function getFrameByKey(frames, key) {
+    for (let i in frames) {
+      if (frames[i].key == key) {
+        return frames[i];
+      }
+    }
+    return null;
+  }
+  
+  function getEnvByKeyCounter(frames, key) {
+    for (let i in frames) {
+      if (frames[i].envKeyCounter == key) {
+        return frames[i];
+      }
+    }
+    return null;
+  }
+  
+  function getFrameByName(frames, name) {
+    for (let i in frames) {
+      if (frames[i].name == name) {
+        return frames[i];
+      }
+    }
+    return null;
+  }
+  
+  function getFrameHeight(frame) {
+    return Object.keys(frame.elements).length * FRAME_HEIGHT_LINE + FRAME_HEIGHT_PADDING;
+  }
+  
+  function getFrameWidth(frame) {
+    let maxLength = 0;
+    const elements = frame.elements;
+    for (e in elements) {
+      let currLength;
+      const literals = ["number", "string", "boolean"];
+      if (literals.includes(typeof elements[e])) {
+        currLength = e.length + elements[e].toString().length;
+      } else {
+        currLength = e.length;
+      }
+      maxLength = Math.max(maxLength, currLength);
+    }
+    return maxLength * FRAME_WIDTH_CHAR + FRAME_WIDTH_PADDING;    
+  }
+  
+  function initialiseFnObject(fnObject, parent) {
+    fnObject.hovered = false;
+    fnObject.selected = false;
+    fnObject.layer = fnObjectLayer;
+    fnObject.color = 'white';
+    fnObject.key = fnObjectKey--;
+    fnObject.parent = parent;
+  }
+  
+  function initialiseDataObjectWrapper(objectName, objectData, parent) {
+    const dataObjectWrapper = {
+      hovered: false,
+      selected: false,
+      layer: dataObjectLayer,
+      color: 'white',
+      key: dataObjectKey--,
+      parent: parent,
+      data: objectData,
+      name: objectName
+    };
+    return dataObjectWrapper;
+  }
+  
+  function findElementPosition(element, frame) {
+    const elements = frame.elements;
+    let i = 0;
+    for (e in elements) {
+      if (elements[e] == element) {
+        return i;
+      }
+      i++;
+    }
+    return -1;
+  }
+  
   exports.EnvVisualizer = {
     draw_env: draw_env,
     init: function(parent) {
