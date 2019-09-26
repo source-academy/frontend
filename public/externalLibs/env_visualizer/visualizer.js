@@ -633,9 +633,6 @@
     }
   }
 
-  /**
-   * Trivial case (arrow goes straight back to the adjacent frame).
-   */
   function drawSceneFnFrameArrow(fnObject) {
     var scene = arrowLayer.scene,
       context = scene.context;
@@ -647,18 +644,40 @@
     context.save();
     context.strokeStyle = '#999999';
     context.beginPath();
-    const x0 = startCoord[0],
-      y0 = startCoord[1],
-      x1 = x0,
-      y1 = y0 - 15,
-      x2 = x1 - 70,
-      y2 = y1;
-    context.moveTo(x0, y0);
-    context.lineTo(x1, y1);
-    context.lineTo(x2, y2);
-    // draw arrow headClone
-    drawArrowHead(context, x1, y1, x2, y2);
-    context.stroke();
+    
+    if (fnObject.source == null || fnObject.source == fnObject.parent) {
+      // Object is right next to the frame to be pointed to. Trivial case.
+      const x0 = startCoord[0],
+        y0 = startCoord[1],
+        x1 = x0,
+        y1 = y0 - 15,
+        x2 = x1 - 70,
+        y2 = y1;
+      context.moveTo(x0, y0);
+      context.lineTo(x1, y1);
+      context.lineTo(x2, y2);
+      // draw arrow headClone
+      drawArrowHead(context, x1, y1, x2, y2);
+      context.stroke();
+    } else {
+      const x0 = startCoord[0],
+        y0 = startCoord[1],
+        x1 = x0 + FNOBJECT_RADIUS + 3;
+        y1 = y0,
+        x2 = x1,
+        y2 = fnObject.source.y - 30,
+        x3 = fnObject.source.x + fnObject.source.width / 2 + 10,
+        y3 = y2
+        x4 = x3,
+        y4 = fnObject.source.y - 3;
+      context.moveTo(x0, y0);
+      context.lineTo(x1, y1);
+      context.lineTo(x2, y2);
+      context.lineTo(x3, y3);
+      context.lineTo(x4, y4);
+      drawArrowHead(context, x3, y3, x4, y4);
+      context.stroke();
+    }
   }
 
   /**
@@ -714,154 +733,14 @@
   dataObjectWrappers = [];
   levels = {};
   builtinsToDraw = [];
+  envKeyCounter = 0;
 
   var frames = [];
-  // parse input from interpreter
-  function parseInput(input) {
-    
-    // add layers
-    viewport
-      .add(frameLayer)
-      .add(fnObjectLayer)
-      .add(dataObjectLayer)
-      .add(arrowLayer);
-    let environments = input.context.context.runtime.environments;
-    
-    /**
-     * Refactor start
-     */
-    
-    /**
-     * From array of environments, create an array of frames. Each frame 
-     * directly represent a frame to be drawn on screen.
-     */
-    let frames = [];
-    
-    // Assign the same id to each environment and its corresponding frame
-    let envKeyCounter = environments.length - 1;
-    environments.forEach(function(e) {
-      e.envKeyCounter = envKeyCounter;
-      envKeyCounter--;
-    });
-
-    // Create a frame for each environment
-    // Process backwards such that global frame comes first
-    for (let i = environments.length - 1; i >= 0; i--) {
-      let environment = environments[i];      
-      let frame;
-            
-      /**
-       * There are two environments named programEnvironment. We only want one
-       * corresponding "Program Environment" frame.
-       */
-      if (environment.name == "programEnvironment") {
-        let isProgEnvPresent = false;
-        frames.forEach(function (f) {
-          if (f.name == "Program Environment") {
-            frame = f;
-            isProgEnvPresent = true;
-          }
-        });
-        if (!isProgEnvPresent) {
-          frame = createEmptyFrame("Program Environment");
-          frame.key = environment.envKeyCounter;
-          frames.push(frame);
-        }
-      } else {
-        frame = createEmptyFrame(environment.name);
-        frame.key = environment.envKeyCounter;
-        frames.push(frame);
-      }
-      
-      // extract elements from environment into frame
-      frame.elements = {};
-      if (frame.name == "global") {
-        frame.elements['(other predclr. names)'] = '';
-        // don't copy over built-in functions
-      } else if (environment.name == "programEnvironment"
-                  && environment.tail.name == "global") {
-        // do nothing (this environment contains library functions)
-      } else {
-        // copy everything (possibly including redeclared built-ins) over
-        const envElements = environment.head;
-        for (e in envElements) {
-          frame.elements[e] = envElements[e];
-          if (typeof envElements[e] == "function"
-              && builtins.indexOf('' + getFnName(envElements[e])) > 0) {
-            // this is a built-in function referenced to in a later frame,
-            // e.g. "const a = pair". In this case, add it to the global frame
-            // to be drawn and subsequently referenced.
-            frames[0].elements[getFnName(envElements[e])] = envElements[e];
-            builtinsToDraw.push(getFnName(envElements[e])); // TEMP WORKAROUND
-          }
-        }
-      } 
-    }
-
-    /**
-     * - Assign parent frame of each frame (except global frame)
-     * - Assign level of each frame. Frames are organised into distinct 
-     *   vertical bands. Global frame is at the top (level 0). Every
-     *   other frame is 1 level below its parent.
-     */
-    frames.forEach(function(frame) {
-      if (frame.name == "global") {
-        frame.parent = null;
-        frame.level = 0;
-      } else {
-        if (frame.name == "Program Environment") {
-          frame.parent = getFrameByName(frames, "global");
-        } else {
-          env = getEnvByKeyCounter(environments, frame.key);
-          if (env.tail.name == "programEnvironment") {
-            env = env.tail;
-          }
-          frame.parent = getFrameByKey(frames, env.tail.envKeyCounter);
-        }
-        frame.parent.children.push(frame.key);
-        frame.level = frame.parent.level + 1;
-      }
-      
-      // update total number of frames in the current level
-      if (levels[frame.level]) {
-        levels[frame.level].count++;
-        levels[frame.level].frames.push(frame);
-      } else {
-        levels[frame.level] = { count: 1 };
-        levels[frame.level].frames = [frame];
-      }
-    });
-
-    /** 
-     * - Find width and height of each frame
-     */
-    frames.forEach(function(frame) {
-      frame.height = getFrameHeight(frame);
-      frame.width = getFrameWidth(frame);
-    });
-    
-    /**
-     * Extract function and data objects from frames. Each distinct object is
-     * drawn next to the first frame where it is referenced; subsequent
-     * references point back to the object.
-     */
-    frames.forEach(function(frame) {
-      const elements = frame.elements;
-      for (e in elements) {
-        if (typeof elements[e] == "function"
-          && !fnObjects.includes(elements[e])) {
-          initialiseFnObject(elements[e], frame);
-          fnObjects.push(elements[e]);
-        } else if (typeof elements[e] == "object"
-          && !dataObjects.includes(elements[e])) {
-          dataObjects.push(elements[e]);
-          dataObjectWrappers.push(
-            initialiseDataObjectWrapper(e, elements[e], frame)
-          );
-        }
-      }
-    });
-
+  
+  /**
+   * Assigns an x- and a y-coordinate to every frame and object.
+   */
+  function positionItems(frames) {
     /**
      * Find and store the height of each level
      * (i.e. the height of the tallest environment)
@@ -934,11 +813,6 @@
                   findElementPosition(dataObjects[d], parent) * FRAME_HEIGHT_LINE
                   + OBJECT_FRAME_TOP_SPACING;
     }
-
-    return frames;
-    /**
-     * Refactor end
-     */
   }
 
   function drawArrowHead(context, xi, yi, xf, yf) {
@@ -990,8 +864,192 @@
     dataObjectWrappers = [];
     levels = {};
     builtinsToDraw = [];
+    
+    let allEnvs = context.context.context.runtime.environments;
+    // parse input from interpreter
+    function parseInput(allFrames, environments) {
+      let frames = [];
+      /**
+       * environments is the array of environments in the interpreter.
+       * frames is the current frames being created
+       * allFrames is all frames created so far (including from previous
+       * recursive calls of parseInput).
+       */
+      
+      // add layers
+      viewport
+        .add(frameLayer)
+        .add(fnObjectLayer)
+        .add(dataObjectLayer)
+        .add(arrowLayer);
 
-    frames = parseInput(context);
+      /**
+       * Refactor start
+       */
+      
+      // Assign the same id to each environment and its corresponding frame
+      environments.forEach(function(e) {
+        e.envKeyCounter = envKeyCounter;
+        envKeyCounter++;
+      });
+
+      /**
+       * Create a frame for each environment
+       * Each frame represents one frame to be drawn
+       */
+      // Process backwards such that global frame comes first
+      for (let i = environments.length - 1; i >= 0; i--) {
+        let environment = environments[i];      
+        let frame;
+              
+        /**
+         * There are two environments named programEnvironment. We only want one
+         * corresponding "Program Environment" frame.
+         */
+        if (environment.name == "programEnvironment") {
+          let isProgEnvPresent = false;
+          frames.forEach(function (f) {
+            if (f.name == "Program Environment") {
+              frame = f;
+              isProgEnvPresent = true;
+            }
+          });
+          if (!isProgEnvPresent) {
+            frame = createEmptyFrame("Program Environment");
+            frame.key = environment.envKeyCounter;
+            frames.push(frame);
+            allFrames.push(frame);
+          }
+        } else {
+          frame = createEmptyFrame(environment.name);
+          frame.key = environment.envKeyCounter;
+          frames.push(frame);
+          allFrames.push(frame);
+        }
+        
+        // extract elements from environment into frame
+        frame.elements = {};
+        if (frame.name == "global") {
+          frame.elements['(other predclr. names)'] = '';
+          // don't copy over built-in functions
+        } else if (environment.name == "programEnvironment"
+                    && environment.tail.name == "global") {
+          // do nothing (this environment contains library functions)
+        } else {
+          // copy everything (possibly including redeclared built-ins) over
+          const envElements = environment.head;
+          for (e in envElements) {
+            frame.elements[e] = envElements[e];
+            if (typeof envElements[e] == "function"
+                && builtins.indexOf('' + getFnName(envElements[e])) > 0) {
+              // this is a built-in function referenced to in a later frame,
+              // e.g. "const a = pair". In this case, add it to the global frame
+              // to be drawn and subsequently referenced.
+              frames[0].elements[getFnName(envElements[e])] = envElements[e];
+              builtinsToDraw.push(getFnName(envElements[e])); // TEMP WORKAROUND
+            }
+          }
+        } 
+      }
+
+      /**
+       * - Assign parent frame of each frame (except global frame)
+       * - Assign level of each frame. Frames are organised into distinct 
+       *   vertical bands. Global frame is at the top (level 0). Every
+       *   other frame is 1 level below its parent.
+       */
+      frames.forEach(function(frame) {
+        if (frame.name == "global") {
+          frame.parent = null;
+          frame.level = 0;
+        } else {
+          if (frame.name == "Program Environment") {
+            frame.parent = getFrameByName(allFrames, "global");
+          } else {
+            env = getEnvByKeyCounter(environments, frame.key);
+            if (env.tail.name == "programEnvironment") {
+              env = env.tail;
+            }
+            frame.parent = getFrameByKey(allFrames, env.tail.envKeyCounter);
+          }
+          frame.parent.children.push(frame.key);
+          frame.level = frame.parent.level + 1;
+        }
+        
+        // update total number of frames in the current level
+        if (levels[frame.level]) {
+          levels[frame.level].count++;
+          levels[frame.level].frames.push(frame);
+        } else {
+          levels[frame.level] = { count: 1 };
+          levels[frame.level].frames = [frame];
+        }
+      });
+
+      /** 
+       * - Find width and height of each frame
+       */
+      frames.forEach(function(frame) {
+        frame.height = getFrameHeight(frame);
+        frame.width = getFrameWidth(frame);
+      });
+      
+      /**
+       * Extract function and data objects from frames. Each distinct object is
+       * drawn next to the first frame where it is referenced; subsequent
+       * references point back to the object.
+       */      
+      frames.forEach(function(frame) {
+        const elements = frame.elements;
+        for (e in elements) {
+          if (typeof elements[e] == "function"
+            && !fnObjects.includes(elements[e])) {
+            initialiseFnObject(elements[e], frame);
+            fnObjects.push(elements[e]);
+          } else if (typeof elements[e] == "object"
+            && !dataObjects.includes(elements[e])) {
+            dataObjects.push(elements[e]);
+            dataObjectWrappers.push(
+              initialiseDataObjectWrapper(e, elements[e], frame)
+            );
+          }
+        }
+      });
+
+      /**
+       * Some functions may have been generated via anonymous functions, whose
+       * environments would not have been present in initial array from the
+       * interpreter.
+       * Find these environments, and recursively process them.
+       */
+      const missing = []; // think of a better name
+      fnObjects.forEach(function (fnObject) {
+        if (!allEnvs.includes(fnObject.environment)) {
+          missing.push(fnObject.environment);
+          allEnvs.push(fnObject.environment);
+        };
+      });
+      if (missing.length > 0) {
+        frames = (parseInput(allFrames, missing));
+      } 
+
+      return allFrames;
+      /**
+       * Refactor end
+       */
+    }
+
+    frames = parseInput([], context.context.context.runtime.environments);
+    positionItems(frames);
+
+    /**
+     * Find the source frame for each fnObject. The source frame is the frame
+     * which generated the function. This may be different from the parent
+     * frame, which is the first frame where the object is referenced.
+     */
+    fnObjects.forEach(function(fnObject) {
+      fnObject.source = getFrameByKey(frames, fnObject.environment.envKeyCounter);
+    });
 
     drawSceneFrames();
     drawSceneFnObjects();
