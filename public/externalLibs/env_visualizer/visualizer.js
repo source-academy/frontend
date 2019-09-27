@@ -34,138 +34,11 @@
    * decrement from there.
    */
   let dataObjectKey = Math.pow(2, 24) - 1;
-  let builtinFnObjectKey = Math.pow(2, 23) - 1;
   let fnObjectKey = Math.pow(2, 22) - 1;
   
-  // List of built-in functions to ignore (i.e. not draw)
-  var builtins = [
-    'runtime',
-    'display',
-    'raw_display',
-    'stringify',
-    'error',
-    'prompt',
-    'is_number',
-    'is_string',
-    'is_function',
-    'is_boolean',
-    'is_undefined',
-    'parse_int',
-    'undefined',
-    'NaN',
-    'Infinity',
-    'null',
-    'pair',
-    'is_pair',
-    'head',
-    'tail',
-    'is_null',
-    'is_list',
-    'list',
-    'length',
-    'map',
-    'build_list',
-    'for_each',
-    'list_to_string',
-    'reverse',
-    'append',
-    'member',
-    'remove',
-    'remove_all',
-    'filter',
-    'enum_list',
-    'list_ref',
-    'accumulate',
-    'equal',
-    'draw_data',
-    'set_head',
-    'set_tail',
-    'array_length',
-    'is_array',
-    'parse',
-    'apply_in_underlying_javascript',
-    'is_object',
-    'is_NaN',
-    'has_own_property',
-    'alert',
-    'timed',
-    'assoc',
-    'rawDisplay',
-    'prompt',
-    'alert',
-    'visualiseList',
-    'math_abs',
-    'math_acos',
-    'math_acosh',
-    'math_asin',
-    'math_asinh',
-    'math_atan',
-    'math_atanh',
-    'math_atan2',
-    'math_ceil',
-    'math_cbrt',
-    'math_expm1',
-    'math_clz32',
-    'math_cos',
-    'math_cosh',
-    'math_exp',
-    'math_floor',
-    'math_fround',
-    'math_hypot',
-    'math_imul',
-    'math_log',
-    'math_log1p',
-    'math_log2',
-    'math_log10',
-    'math_max',
-    'math_min',
-    'math_pow',
-    'math_random',
-    'math_round',
-    'math_sign',
-    'math_sin',
-    'math_sinh',
-    'math_sqrt',
-    'math_tan',
-    'math_tanh',
-    'math_trunc',
-    'math_toSource',
-    'math_E',
-    'math_LN10',
-    'math_LN2',
-    'math_LOG10E',
-    'math_LOG2E',
-    'math_PI',
-    'math_SQRT1_2',
-    'math_SQRT2',
-    'stream_tail',
-    'stream',
-    'list_to_stream',
-    'is_stream',
-    'stream_to_list',
-    'stream_length',
-    'stream_map',
-    'build_stream',
-    'stream_for_each',
-    'stream_reverse',
-    'stream_append',
-    'stream_remove',
-    'stream_member',
-    'stream_remove_all',
-    'stream_filter',
-    'enum_stream',
-    'integers_from',
-    'eval_stream',
-    'stream_ref',
-  ];
+  // Initialise list of built-in functions to ignore (i.e. not draw)
+  var builtins = [];
   
-  /**
-   * List of built-in functions to draw and not ignore,
-   * i.e. built-ins that are called during the program's execution.
-   * Add name of such a function to this list when one is found.
-   */
-  var builtinsToDraw = [];
-
   /**
    * Helper functions for drawing different types of elements on the canvas.
    */
@@ -393,17 +266,25 @@
     y = config.y;
     context.beginPath();
 
-    // render frame name
+    // render frame name; rename as needed for aesthetic reasons
     let frameName;
-    if (config.name == 'forLoopEnvironment') {
-      frameName = 'for loop';
-    } else if (config.name == 'forBlockEnvironment') {
-      frameName = 'for block';
-    } else if (config.name == 'blockEnvironment') {
-      frameName = 'block';
-    } else {
-      frameName = config.name;
+    switch (config.name) {
+      case 'forLoopEnvironment':
+        frameName = 'for loop';
+        break;
+      case 'forBlockEnvironment':
+        frameName = 'for block';
+        break;
+      case 'blockEnvironment':
+        frameName = 'block';
+        break;
+      case 'global':
+        frameName = "Global";
+        break;
+      default:
+        frameName = config.name;
     }
+    
     if (frameName.length * 9 < config.width / 2 || frameName == 'global') {
       context.fillText(frameName, x, y - 10);
     } else {
@@ -414,20 +295,22 @@
     let elements = config.elements;
     let i = 0;
     for (let k in elements) {
-      if (builtins.indexOf('' + k) < 0 || builtinsToDraw.indexOf('' + k) >= 0) {
-        if (typeof elements[k] == 'number' || typeof elements[k] == 'string') {
-          if (k == '(Other predclr. names)') {
+      switch (typeof elements[k]) {
+        case 'number':
+        case 'boolean':
+          context.fillText(`${'' + k}: ${'' + elements[k]}`, x + 10, y + 30 + i * 30);
+          break;
+        case 'string':
+          if (k == '(other predclr. names)') {
             context.fillText(`${'' + k}`, x + 10, y + 30 + i * 30);
           } else {
-            context.fillText(`${'' + k}: ${'' + elements[k]}`, x + 10, y + 30 + i * 30);
+            context.fillText(`${'' + k}: "${'' + elements[k]}"`, x + 10, y + 30 + i * 30);
           }
-        } else if (typeof elements[k] == 'object') {
+          break;
+        default:
           context.fillText(`${'' + k}:`, x + 10, y + 30 + i * 30);
-        } else {
-          context.fillText(`${'' + k}:`, x + 10, y + 30 + i * 30);
-        }
-        i++;
       }
+      i++;
     }
 
     context.rect(x, y, config.width, config.height);
@@ -719,8 +602,6 @@
   var frameLayer = new Concrete.Layer();
   var arrowLayer = new Concrete.Layer();
 
-  
-
   fnObjects = [];
   /**
    * Unlike function objects, data objects are represented internally not as
@@ -841,6 +722,11 @@
 
   // main function to be exported
   function draw_env(context) {
+    // add built-in functions to list of builtins
+    const allEnvs = context.context.context.runtime.environments;
+    builtins = builtins.concat(Object.keys(allEnvs[allEnvs.length - 1].head));
+    builtins = builtins.concat(Object.keys(allEnvs[allEnvs.length - 2].head));
+    
     // add library-specific built-in functions to list of builtins
     const externalSymbols = context.context.context.externalSymbols;
     for (let i in externalSymbols) {
@@ -865,7 +751,6 @@
     levels = {};
     builtinsToDraw = [];
     
-    let allEnvs = context.context.context.runtime.environments;
     // parse input from interpreter
     function parseInput(allFrames, environments) {
       let frames = [];
@@ -946,7 +831,6 @@
               // e.g. "const a = pair". In this case, add it to the global frame
               // to be drawn and subsequently referenced.
               frames[0].elements[getFnName(envElements[e])] = envElements[e];
-              builtinsToDraw.push(getFnName(envElements[e])); // TEMP WORKAROUND
             }
           }
         } 
@@ -1024,9 +908,18 @@
        */
       const missing = []; // think of a better name
       fnObjects.forEach(function (fnObject) {
-        if (!allEnvs.includes(fnObject.environment)) {
-          missing.push(fnObject.environment);
-          allEnvs.push(fnObject.environment);
+        let otherEnv = fnObject.environment;
+        /**
+         * There may be multiple levels of anonymous function frames, e.g.
+         * from the expression (w => x => y => z)(1)(2), where
+         * w => x => ... generates one frame, and
+         * x => y => ... generates another.
+         * The while loop ensure all of these frames are extracted.
+         */
+        while (!allEnvs.includes(otherEnv)) {
+          missing.push(otherEnv);
+          allEnvs.push(otherEnv);
+          otherEnv = otherEnv.tail;
         };
       });
       if (missing.length > 0) {
