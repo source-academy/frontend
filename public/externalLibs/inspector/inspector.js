@@ -162,8 +162,8 @@
     function drawOutput() {
       var frames = context.context.runtime.environments;
       container.innerHTML = '';
-      for (var i = 0; i < frames.length; ++i) {
-        var envtoString = dumpTable(frames[i].head);
+      for (var frame = frames[0]; frame != null; frame = frame.tail) {
+        var envtoString = dumpTable(frame.head);
         if (envtoString == undefined) {
           // skipping either empty frame or perhaps the global
           continue;
@@ -173,7 +173,7 @@
         newtable.innerHTML = '<colgroup><col width="20%"><col width="80%"></colgroup>';
         var tbody = document.createElement('tbody');
         tbody.innerHTML =
-          '</br><caption><strong>' + filter(frames[i].name) + '</strong></caption>' + envtoString;
+          '</br><caption><strong>' + filter(frame.name) + '</strong></caption>' + envtoString;
         newtable.appendChild(tbody);
         container.appendChild(newtable);
       }
