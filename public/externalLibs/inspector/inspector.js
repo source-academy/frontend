@@ -122,11 +122,12 @@
   function filter(str) {
     // regex to match: replacement for match
     swapTable = {
-      programEnvironment: 'Global',
+      programEnvironment: 'Program',
       forLoopEnvironment: 'For Loop',
       forBlockEnvironment: 'For Block',
       'Anonymous\\d*': 'Anonymous Function',
-      '{[\\s\\S]*}': '{...}'
+      '{[\\s\\S]*}': '{...}',
+      'Symbol.*': '-'
     };
     for (var r in swapTable) {
       str = str.replace(new RegExp(r), swapTable[r]);
