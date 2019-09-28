@@ -1,4 +1,4 @@
-import { Context, interrupt, resume, runInContext, setBreakpointAtLine } from 'js-slang';
+import { Context, interrupt, resume, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { random } from 'lodash';
@@ -27,6 +27,7 @@ import {
   visualiseEnv
 } from '../utils/slangHelper';
 
+let breakpoints: string[] = [];
 export default function* workspaceSaga(): SagaIterator {
   let context: Context;
 
@@ -39,7 +40,15 @@ export default function* workspaceSaga(): SagaIterator {
       const editorCode = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
       return [prependCode, editorCode] as [string, string];
     });
-    const [prepend, value] = code;
+    const [prepend, tempvalue] = code;
+    const exploded = tempvalue.split('\n');
+    for (const i in breakpoints) {
+      if (typeof i === 'string') {
+        const index: number = +i;
+        exploded[index] = 'debugger;' + exploded[index];
+      }
+    }
+    const value = exploded.join('\n');
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
@@ -166,7 +175,7 @@ export default function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.UPDATE_EDITOR_BREAKPOINTS, function*(
     action: ReturnType<typeof actions.setEditorBreakpoint>
   ) {
-    setBreakpointAtLine(action.payload.breakpoints);
+    breakpoints = action.payload.breakpoints;
     yield;
   });
 
@@ -529,14 +538,7 @@ export function* evalCode(
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
-  } else if (
-    context.runtime.debuggerOn &&
-    result.status === 'finished' &&
-    actionType !== actionTypes.EVAL_REPL
-  ) {
-    yield put(actions.debuggerReset(workspaceLocation));
   }
-
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== actionTypes.EVAL_SILENT) {
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
