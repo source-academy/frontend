@@ -20,6 +20,8 @@
   const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
   const FRAME_WIDTH_CHAR = 10; // width in px of each text character in a frame;
   const FRAME_WIDTH_PADDING = 50; // width in px to pad each frame with;
+  const FRAME_SPACING = 100; // spacing between horizontally adjacent frames
+  const LEVEL_SPACING = 60; // spacing between vertical frame levels
   const OBJECT_FRAME_RIGHT_SPACING = 60; // space to right frame border
   const OBJECT_FRAME_TOP_SPACING = 25; // perpendicular distance to top border
   
@@ -638,6 +640,7 @@
     /**
      * Calculate x- and y-coordinates for each frame
      */ 
+    const drawingWidth = getDrawingWidth(levels);
     frames.forEach(function(frame) {
       let currLevel = frame.level;
 
@@ -662,7 +665,7 @@
        * "tree" of child frame.
        */
       const partitionCount = levels[currLevel].count;
-      const partitionWidth = viewport.width / partitionCount;
+      const partitionWidth = drawingWidth / partitionCount;
       frame.x =
         (levels[currLevel].frames.indexOf(frame) + 1) * partitionWidth
         - partitionWidth / 2
@@ -951,11 +954,12 @@
        * Refactor end
        */
     }
-try{
+
     frames = parseInput([], context.context.context.runtime.environments);
-}catch(e){console.log(e);}
+
     positionItems(frames);
 
+    viewport.setSize(getDrawingWidth(levels), getDrawingHeight(levels));
     /**
      * Find the source frame for each fnObject. The source frame is the frame
      * which generated the function. This may be different from the parent
@@ -1132,6 +1136,27 @@ try{
       maxLength = Math.max(maxLength, currLength);
     }
     return maxLength * FRAME_WIDTH_CHAR + FRAME_WIDTH_PADDING;    
+  }
+  
+  function getDrawingWidth(levels) {
+    let maxX = 0;
+    for (l in levels) {
+      let currX = 0;
+      level = levels[l];
+      level.frames.forEach(function(f) {
+        currX += f.width + FRAME_SPACING;
+      });
+      maxX = Math.max(maxX, currX);
+    }
+    return maxX;
+  }
+  
+  function getDrawingHeight(levels) {
+    let y = 0;
+    levels.forEach(function(level) {
+      y += level.height + LEVEL_SPACING;
+    });
+    return y;
   }
   
   function getWrapperFromDataObject(dataObject) {
