@@ -120,15 +120,27 @@
   ];
 
   function filter(str) {
+    // regex to match: replacement for match
     swapTable = {
       programEnvironment: 'Global',
       forLoopEnvironment: 'For Loop',
-      forBlockEnvironment: 'For Block'
+      forBlockEnvironment: 'For Block',
+      'Anonymous\\d*': 'Anonymous Function',
+      '{[\\s\\S]*}': '{...}'
     };
-    return swapTable[str] ? swapTable[str] : str;
+    for (var r in swapTable) {
+      str = str.replace(new RegExp(r), swapTable[r]);
+    }
+    return str;
   }
 
   function updateContext(context, stringify) {
+    // Hides the default text
+    const defaultText = document.getElementById('inspector-default-text');
+    if (defaultText) {
+      defaultText.hidden = true;
+    }
+
     function dumpTable(env) {
       var res = '';
       for (var k in env) {
@@ -139,7 +151,7 @@
             k +
             '</td>' +
             '<td class="inspect-table-obj-details"><code>' +
-            str +
+            filter(str) +
             '</code></td></tr>';
         }
       }
@@ -160,17 +172,11 @@
         newtable.innerHTML = '<colgroup><col width="20%"><col width="80%"></colgroup>';
         var tbody = document.createElement('tbody');
         tbody.innerHTML =
-          '</br><caption><strong>Frame: ' +
-          filter(frames[i].name) +
-          '</strong></caption>' +
-          envtoString;
+          '</br><caption><strong>' + filter(frames[i].name) + '</strong></caption>' + envtoString;
         newtable.appendChild(tbody);
         container.appendChild(newtable);
       }
     }
-
-    // Hides the default text
-    document.getElementById('inspector-default-text').hidden = true;
 
     // icon to blink
     const icon = document.getElementById('inspector-icon');

@@ -147,6 +147,7 @@ export default function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
+    yield put(actions.clearReplOutput(workspaceLocation));
     inspectorUpdate(undefined);
     highlightLine([0]);
     yield put(actions.clearReplOutput(workspaceLocation));
@@ -267,6 +268,7 @@ export default function* workspaceSaga(): SagaIterator {
       };
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
+      yield put(actions.debuggerReset(workspaceLocation));
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000);
     }
   });
@@ -527,6 +529,12 @@ export function* evalCode(
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
+  } else if (
+    context.runtime.debuggerOn &&
+    result.status === 'finished' &&
+    actionType !== actionTypes.EVAL_REPL
+  ) {
+    yield put(actions.debuggerReset(workspaceLocation));
   }
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
