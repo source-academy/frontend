@@ -155,15 +155,7 @@
       }
     }
     context.arc(x + FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
-    if (!config.hovered && !config.selected) {
-      context.strokeStyle = '#999999';
-      context.lineWidth = 2;
-      context.stroke();
-    } else {
-      context.strokeStyle = 'green';
-      context.lineWidth = 2;
-      context.stroke();
-    }
+    context.stroke();
   }
 
   function drawHitFnObject(pos) {
@@ -215,14 +207,20 @@
     context.font = '14px Roboto Mono Light, Courier New';
     context.fillText('!', x0 - 4, y0 + 20);
 
-    if (!config.hovered && !config.selected) {
+    if (!wrapper.hovered && !wrapper.selected) {
       context.strokeStyle = '#999999';
       context.lineWidth = 2;
       context.stroke();
     } else {
       context.strokeStyle = 'green';
       context.lineWidth = 2;
-      if (config.hovered) {
+      context.stroke();
+    }
+    
+    if (wrapper.selected) {
+      context.strokeStyle = 'green';
+      context.lineWidth = 2;
+      if (wrapper.hovered) {
         context.font = '14px Roboto Mono Light, Courier New';
         context.fillStyle = 'white';
         context.fillText('Data Object', x0 + 20, y0 + 15);
@@ -249,7 +247,7 @@
     context.lineTo(x1, y1);
     context.lineTo(x2, y2);
     context.lineTo(x0, y0);
-    context.fillStyle = hit.getColorFromIndex(config.key);
+    context.fillStyle = hit.getColorFromIndex(wrapper.key);
     context.fill();
     context.restore();
   }
@@ -722,6 +720,7 @@
 
   // main function to be exported
   function draw_env(context) {
+
     // add built-in functions to list of builtins
     const allEnvs = context.context.context.runtime.environments;
     builtins = builtins.concat(Object.keys(allEnvs[allEnvs.length - 1].head));
@@ -919,6 +918,27 @@
         while (!allEnvs.includes(otherEnv)) {
           missing.push(otherEnv);
           allEnvs.push(otherEnv);
+          // find function definition expression to use as frame name
+          let pointer = otherEnv.callExpression.callee;
+          let i = 0;
+          while (pointer.callee) {
+            pointer = pointer.callee;
+            i++;
+          }
+          while (i > 0) {
+            pointer = pointer.body;
+            i--;
+          }
+          const params = pointer.params;
+          let paramArray = [];
+          params.forEach(function(p) {
+            paramArray.push(p.name);
+          });
+          const paramString = "(" + paramArray.join(", ") + ") => ...";
+          otherEnv.name = paramString;
+          console.log(otherEnv);
+          console.log(paramString);
+          console.log(pointer.toString);
           otherEnv = otherEnv.tail;
         };
       });
@@ -931,8 +951,9 @@
        * Refactor end
        */
     }
-
+try{
     frames = parseInput([], context.context.context.runtime.environments);
+}catch(e){console.log(e);}
     positionItems(frames);
 
     /**
@@ -966,9 +987,9 @@
         fnObject.hovered = false;
       });
 
-      dataObjects.forEach(function(dataObject) {
-        dataObject.hovered = false;
-      });
+      for (d in dataObjects) {
+        dataObjectWrappers[d].hovered = false;
+      }
 
       if (key >= 0 && key < Math.pow(2, 23)) {
         fnObject = getFnObjectFromKey(key);
@@ -978,7 +999,7 @@
       } else if (key >= Math.pow(2, 23)) {
         dataObject = getDataObjectFromKey(key);
         try {
-          dataObject.hovered = true;
+          getWrapperFromDataObject(dataObject).hovered = true;
         } catch (e) {}
       }
       drawSceneFnObjects();
@@ -997,9 +1018,9 @@
         fnObject.selected = false;
       });
 
-      dataObjects.forEach(function(dataObject) {
-        dataObject.selected = false;
-      });
+      for (d in dataObjects) {
+        dataObjectWrappers[d].hovered = false;
+      }
 
       if (key >= 0 && key < Math.pow(2, 23)) {
         fnObject = getFnObjectFromKey(key);
@@ -1009,7 +1030,7 @@
       } else if (key > Math.pow(2, 23)) {
         dataObject = getDataObjectFromKey(key);
         try {
-          dataObject.selected = true;
+          getWrapperFromDataObject(dataObject).selected = true;
           draw_data(dataObject.data);
         } catch (e) {}
       }
@@ -1111,6 +1132,10 @@
       maxLength = Math.max(maxLength, currLength);
     }
     return maxLength * FRAME_WIDTH_CHAR + FRAME_WIDTH_PADDING;    
+  }
+  
+  function getWrapperFromDataObject(dataObject) {
+    return dataObjectWrappers[dataObjects.indexOf(dataObject)];
   }
   
   function initialiseFnObject(fnObject, parent) {
