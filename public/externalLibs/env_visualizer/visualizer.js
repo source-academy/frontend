@@ -1153,9 +1153,9 @@
   
   function getDrawingHeight(levels) {
     let y = 0;
-    levels.forEach(function(level) {
-      y += level.height + LEVEL_SPACING;
-    });
+    for (l in levels) {
+      y += levels[l].height + LEVEL_SPACING;
+    }
     return y;
   }
   
