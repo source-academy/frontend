@@ -123,9 +123,10 @@
     // regex to match: replacement for match
     swapTable = {
       programEnvironment: 'Program',
-      forLoopEnvironment: 'For Loop',
-      forBlockEnvironment: 'For Block',
-      'Anonymous\\d*': 'Anonymous Function',
+      forLoopEnvironment: 'Body of <code>for</code>',
+      forBlockEnvironment: 'Control statement of <code>for</code>',
+      blockEnvironment: 'Block',
+      'Anonymous\\d* (.*)': 'Anonymous Function <code>$1 => {...}</code>',
       '{[\\s\\S]*}': '{...}',
       'Symbol.*': '-'
     };
