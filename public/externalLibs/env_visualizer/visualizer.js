@@ -16,6 +16,7 @@
   const frameFontSetting = '14px Roboto Mono, Courier New';
   const FNOBJECT_RADIUS = 12; // radius of function object circle
   const DATA_OBJECT_SIDE = 24; // length of data object triangle
+  const DRAWING_LEFT_PADDING = 100; // left padding for entire drawing
   const FRAME_HEIGHT_LINE = 30; // height in px of each line of text in a frame;
   const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
   const FRAME_WIDTH_CHAR = 10; // width in px of each text character in a frame;
@@ -669,7 +670,8 @@
       frame.x =
         (levels[currLevel].frames.indexOf(frame) + 1) * partitionWidth
         - partitionWidth / 2
-        - frame.width / 2;
+        - frame.width / 2
+        + DRAWING_LEFT_PADDING;
     });
     
     /**
@@ -763,18 +765,27 @@
        * allFrames is all frames created so far (including from previous
        * recursive calls of parseInput).
        */
-      
+
+      /**
+       * For some reason, some environments are not present in the top level 
+       * array of environments in the input context. Here, we extract those
+       * missing environments.
+       */
       let i = environments.length - 4; // skip global and program environments
       while (i >= 0) {
         const currEnv = allEnvs[i];
         if (!allEnvs.includes(currEnv.tail)) {
-           allEnvs.splice(i + 1, 0, currEnv.tail);
-           environments.splice(i + 1, 0, currEnv.tail);
-           i++;
+          if(environments === allEnvs) {
+            allEnvs.splice(i + 1, 0, currEnv.tail);
+          } else {
+            allEnvs.splice(i + 1, 0, currEnv.tail);
+            environments.splice(i + 1, 0, currEnv.tail);
+          }
+          i += 2;
         }
         i--;
       }
-      
+
       // add layers
       viewport
         .add(frameLayer)
@@ -857,6 +868,7 @@
        *   other frame is 1 level below its parent.
        */
       frames.forEach(function(frame) {
+        
         if (frame.name == "global") {
           frame.parent = null;
           frame.level = 0;
@@ -968,7 +980,9 @@
 
     positionItems(frames);
 
-    viewport.setSize(getDrawingWidth(levels), getDrawingHeight(levels));
+    viewport.setSize(getDrawingWidth(levels) * 1.5, getDrawingHeight(levels));
+    // "* 1.5" is a partial workaround for drawing being cut off on the right
+    
     /**
      * Find the source frame for each fnObject. The source frame is the frame
      * which generated the function. This may be different from the parent
