@@ -513,7 +513,6 @@ class AssessmentWorkspace extends React.Component<
     const questionView = <QuestionView questionProgress={questionProgress} key="question_view" />;
 
     const resetButton =
-      !beforeNow(this.props.closeDate) &&
       this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
         <ResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
