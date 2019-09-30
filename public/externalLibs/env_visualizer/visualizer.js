@@ -270,13 +270,13 @@
     let frameName;
     switch (config.name) {
       case 'forLoopEnvironment':
-        frameName = 'for loop';
+        frameName = 'Body of for-loop';
         break;
       case 'forBlockEnvironment':
-        frameName = 'for block';
+        frameName = 'Control variable of for-loop';
         break;
       case 'blockEnvironment':
-        frameName = 'block';
+        frameName = 'Block';
         break;
       case 'global':
         frameName = "Global";
@@ -725,7 +725,7 @@
   function draw_env(context) {
 
     // add built-in functions to list of builtins
-    const allEnvs = context.context.context.runtime.environments;
+    let allEnvs = context.context.context.runtime.environments;
     builtins = builtins.concat(Object.keys(allEnvs[allEnvs.length - 1].head));
     builtins = builtins.concat(Object.keys(allEnvs[allEnvs.length - 2].head));
     
@@ -754,7 +754,8 @@
     builtinsToDraw = [];
     
     // parse input from interpreter
-    function parseInput(allFrames, environments) {
+    function parseInput(allFrames, envs) {
+      let environments = envs;
       let frames = [];
       /**
        * environments is the array of environments in the interpreter.
@@ -762,6 +763,17 @@
        * allFrames is all frames created so far (including from previous
        * recursive calls of parseInput).
        */
+      
+      let i = environments.length - 4; // skip global and program environments
+      while (i >= 0) {
+        const currEnv = allEnvs[i];
+        if (!allEnvs.includes(currEnv.tail)) {
+           allEnvs.splice(i + 1, 0, currEnv.tail);
+           environments.splice(i + 1, 0, currEnv.tail);
+           i++;
+        }
+        i--;
+      }
       
       // add layers
       viewport
@@ -939,9 +951,6 @@
           });
           const paramString = "(" + paramArray.join(", ") + ") => ...";
           otherEnv.name = paramString;
-          console.log(otherEnv);
-          console.log(paramString);
-          console.log(pointer.toString);
           otherEnv = otherEnv.tail;
         };
       });
