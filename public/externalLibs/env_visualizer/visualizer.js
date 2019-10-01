@@ -986,7 +986,7 @@
        */
     }
 
-    frames = parseInput([], context.context.context.runtime.environments);
+    frames = parseInput([], allEnvs);
 
     positionItems(frames);
 
