@@ -126,7 +126,7 @@
       forLoopEnvironment: 'Body of <code>for</code>',
       forBlockEnvironment: 'Control statement of <code>for</code>',
       blockEnvironment: 'Block',
-      'Anonymous\\d* (.*)': 'Anonymous Function <code>$1 => {...}</code>',
+      '[.]* => [.]*': ' => ',
       '{[\\s\\S]*}': '{...}',
       'Symbol.*': '-'
     };
