@@ -731,7 +731,11 @@
   function draw_env(context) {
 
     // add built-in functions to list of builtins
-    let allEnvs = context.context.context.runtime.environments;
+    let originalEnvs = context.context.context.runtime.environments;
+    let allEnvs = [];
+    originalEnvs.forEach(function(e) {
+      allEnvs.push(e);
+    });
     builtins = builtins.concat(Object.keys(allEnvs[allEnvs.length - 1].head));
     builtins = builtins.concat(Object.keys(allEnvs[allEnvs.length - 2].head));
 
@@ -855,7 +859,8 @@
           for (e in envElements) {
             frame.elements[e] = envElements[e];
             if (typeof envElements[e] == "function"
-                && builtins.indexOf('' + getFnName(envElements[e])) > 0) {
+                && builtins.indexOf('' + getFnName(envElements[e])) > 0
+                && getFnName(envElements[e])) {
               // this is a built-in function referenced to in a later frame,
               // e.g. "const a = pair". In this case, add it to the global frame
               // to be drawn and subsequently referenced.
@@ -968,7 +973,7 @@
               paramArray.push(p.name);
             });
             const paramString = "(" + paramArray.join(", ") + ") => ...";
-            otherEnv.name = paramString;
+            otherEnv.vizName = paramString;
           } catch (e) {
             // for some reason or other the function definition expression is
             // not always available. In that case, just use the frame name
@@ -989,9 +994,8 @@
     frames = parseInput([], allEnvs);
 
     positionItems(frames);
-
-    viewport.setSize(getDrawingWidth(levels) * 1.5, getDrawingHeight(levels));
-    // "* 1.5" is a partial workaround for drawing being cut off on the right
+    viewport.setSize(getDrawingWidth(levels) * 1.6, getDrawingHeight(levels));
+    // "* 1.7" is a partial workaround for drawing being cut off on the right
     
     /**
      * Find the source frame for each fnObject. The source frame is the frame
@@ -1097,7 +1101,9 @@
   }
 
   function getFnName(fn) {
-    if (fn.node.type == "FunctionDeclaration") {
+    if (fn.node.type == "FunctionDeclaration" && !fn.functionName) {
+      return undefined;
+    } else if (fn.node.type == "FunctionDeclaration") {
       return fn.functionName;
     } else {
       return fn
