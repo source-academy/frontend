@@ -16,14 +16,14 @@
   const frameFontSetting = '14px Roboto Mono, Courier New';
   const FNOBJECT_RADIUS = 12; // radius of function object circle
   const DATA_OBJECT_SIDE = 24; // length of data object triangle
-  const DRAWING_LEFT_PADDING = 100; // left padding for entire drawing
+  const DRAWING_LEFT_PADDING = 20; // left padding for entire drawing
   const FRAME_HEIGHT_LINE = 30; // height in px of each line of text in a frame;
   const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
-  const FRAME_WIDTH_CHAR = 10; // width in px of each text character in a frame;
+  const FRAME_WIDTH_CHAR = 8; // width in px of each text character in a frame;
   const FRAME_WIDTH_PADDING = 50; // width in px to pad each frame with;
   const FRAME_SPACING = 100; // spacing between horizontally adjacent frames
   const LEVEL_SPACING = 60; // spacing between vertical frame levels
-  const OBJECT_FRAME_RIGHT_SPACING = 60; // space to right frame border
+  const OBJECT_FRAME_RIGHT_SPACING = 50; // space to right frame border
   const OBJECT_FRAME_TOP_SPACING = 25; // perpendicular distance to top border
   
   /**
@@ -374,7 +374,7 @@
     if (wrapper.parent == frame) {
       // dataObject belongs to current frame
       // simply draw straight arrow from frame to function
-      const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 20;
+      const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
       const y0 = wrapper.y,
         xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
@@ -454,7 +454,7 @@
     if (fnObject.parent == frame) {
       // fnObject belongs to current frame
       // simply draw straight arrow from frame to function
-      const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 20;
+      const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
       const y0 = fnObject.y,
         xf = fnObject.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
@@ -535,7 +535,7 @@
         y0 = startCoord[1],
         x1 = x0,
         y1 = y0 - 15,
-        x2 = x1 - 70,
+        x2 = fnObject.parent.x + fnObject.parent.width + 3,
         y2 = y1;
       context.moveTo(x0, y0);
       context.lineTo(x1, y1);
@@ -549,7 +549,7 @@
         x1 = x0 + FNOBJECT_RADIUS + 3;
         y1 = y0,
         x2 = x1,
-        y2 = fnObject.source.y - 30,
+        y2 = fnObject.source.y - 40,
         x3 = fnObject.source.x + fnObject.source.width / 2 + 10,
         y3 = y2
         x4 = x3,
@@ -730,7 +730,7 @@
     let allEnvs = context.context.context.runtime.environments;
     builtins = builtins.concat(Object.keys(allEnvs[allEnvs.length - 1].head));
     builtins = builtins.concat(Object.keys(allEnvs[allEnvs.length - 2].head));
-    
+
     // add library-specific built-in functions to list of builtins
     const externalSymbols = context.context.context.externalSymbols;
     for (let i in externalSymbols) {
@@ -814,18 +814,18 @@
               
         /**
          * There are two environments named programEnvironment. We only want one
-         * corresponding "Program Environment" frame.
+         * corresponding "Program" frame.
          */
         if (environment.name == "programEnvironment") {
           let isProgEnvPresent = false;
           frames.forEach(function (f) {
-            if (f.name == "Program Environment") {
+            if (f.name == "Program") {
               frame = f;
               isProgEnvPresent = true;
             }
           });
           if (!isProgEnvPresent) {
-            frame = createEmptyFrame("Program Environment");
+            frame = createEmptyFrame("Program");
             frame.key = environment.envKeyCounter;
             frames.push(frame);
             allFrames.push(frame);
@@ -873,7 +873,7 @@
           frame.parent = null;
           frame.level = 0;
         } else {
-          if (frame.name == "Program Environment") {
+          if (frame.name == "Program") {
             frame.parent = getFrameByName(allFrames, "global");
           } else {
             env = getEnvByKeyCounter(environments, frame.key);
@@ -958,11 +958,17 @@
           }
           const params = pointer.params;
           let paramArray = [];
-          params.forEach(function(p) {
-            paramArray.push(p.name);
-          });
-          const paramString = "(" + paramArray.join(", ") + ") => ...";
-          otherEnv.name = paramString;
+          let paramString;
+          try {
+            params.forEach(function(p) {
+              paramArray.push(p.name);
+            });
+            const paramString = "(" + paramArray.join(", ") + ") => ...";
+            otherEnv.name = paramString;
+          } catch (e) {
+            // for some reason or other the function definition expression is
+            // not always available. In that case, just use the frame name
+          }
           otherEnv = otherEnv.tail;
         };
       });
@@ -975,9 +981,9 @@
        * Refactor end
        */
     }
-
+try{
     frames = parseInput([], context.context.context.runtime.environments);
-
+}catch(e){console.log(e);}
     positionItems(frames);
 
     viewport.setSize(getDrawingWidth(levels) * 1.5, getDrawingHeight(levels));
