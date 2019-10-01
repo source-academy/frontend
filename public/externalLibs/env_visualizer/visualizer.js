@@ -75,7 +75,9 @@
 
   function drawSceneFrames() {
     frames.forEach(function(frame) {
-      drawSceneFrame(frame);
+      if (!isEmptyFrame(frame)) {
+        drawSceneFrame(frame);
+      }
     });
     viewport.render();
   }
@@ -104,7 +106,9 @@
 
   function drawSceneFrameArrows() {
     frames.forEach(function(frame) {
-      drawSceneFrameArrow(frame);
+      if (!isEmptyFrame(frame)) {
+        drawSceneFrameArrow(frame);
+      }
     });
     viewport.render();
   }
@@ -981,9 +985,9 @@
        * Refactor end
        */
     }
-try{
+
     frames = parseInput([], context.context.context.runtime.environments);
-}catch(e){console.log(e);}
+
     positionItems(frames);
 
     viewport.setSize(getDrawingWidth(levels) * 1.5, getDrawingHeight(levels));
@@ -1225,6 +1229,23 @@ try{
       i++;
     }
     return -1;
+  }
+  
+  function isEmptyFrame(frame) {
+    let hasObject = false;
+    fnObjects.forEach(function(f) {
+      if (f.parent == frame) {
+        hasObject = true;
+      }
+    });
+    dataObjectWrappers.forEach(function(d) {
+      if (d.parent == frame) {
+        hasObject = true;
+      }
+    });
+    return !hasObject 
+            && frame.children.length == 0 
+            && Object.keys(frame.elements).length == 0;
   }
   
   exports.EnvVisualizer = {
