@@ -1,7 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { BACKEND_URL } from '../../utils/constants';
 import { controlButton } from '../commons';
 import { MaterialData } from './materialShape';
 
@@ -26,7 +25,7 @@ class DownloadCell extends React.Component<ISelectCellProps, {}> {
   }
 
   private handleDownload = () => {
-    const url = BACKEND_URL + this.props.data.url;
+    const url = this.props.data.url;
     const click = document.createEvent('Event');
     click.initEvent('click', true, true);
     const link = document.createElement('A') as HTMLAnchorElement;
