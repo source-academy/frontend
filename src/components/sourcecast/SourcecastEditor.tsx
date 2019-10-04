@@ -204,7 +204,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
             }}
             ref={this.AceEditor}
             markers={this.getMarkers()}
-            fontSize={14}
+            fontSize={17}
             height="100%"
             highlightActiveLine={false}
             mode="javascript"
