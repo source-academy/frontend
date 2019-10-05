@@ -81,23 +81,23 @@ const NavigationBar: React.SFC<OwnProps> = props => (
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>
-        {/* <NavLink
+        <NavLink
           to={'/academy/sourcereel'}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.MOBILE_VIDEO} />
           <div className="navbar-button-text hidden-xs">Sourcereel</div>
-        </NavLink> */}
+        </NavLink>
 
-        {/* <NavLink
+        <NavLink
           to={'/academy/material'}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.CLOUD_UPLOAD} />
           <div className="navbar-button-text hidden-xs">Upload</div>
-        </NavLink> */}
+        </NavLink>
 
         <NavLink
           to={'/academy/grading'}
