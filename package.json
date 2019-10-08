@@ -106,7 +106,7 @@
     "@types/react-router": "^4.0.24",
     "@types/react-router-dom": "^4.3.3",
     "@types/react-router-redux": "^5.0.13",
-    "@types/react-test-renderer": "^16.0.1",
+    "@types/react-test-renderer": "^16.9.0",
     "@types/react-textarea-autosize": "^4.3.4",
     "@types/redux-mock-store": "^0.0.13",
     "@types/showdown": "^1.7.5",
