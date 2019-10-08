@@ -342,6 +342,32 @@ $code-color-error: #ff4444;
       }
     }
 
+    ##{$ns}-tab-panel_side-content-tabs_inspector {
+      overflow: hidden;
+      .inspect-scope-table {
+        width: 100%;
+        white-space: nowrap;
+        table-layout: fixed;
+
+        tbody {
+          .inspect-table-obj-name {
+            width: 20%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .inspect-table-obj-details {
+            display: block;
+            code {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: block;
+            }
+          }
+        }
+      }
+    }
+
     // Specific CSS for the Substituter tab, since REPL is hidden
     ##{$ns}-tab-panel_side-content-tabs_subst_visualiser {
       height: calc(100% - 60px);

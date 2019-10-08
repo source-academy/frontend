@@ -1,4 +1,4 @@
-import { Context, interrupt, resume, runInContext, setBreakpointAtLine } from 'js-slang';
+import { Context, interrupt, resume, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { random } from 'lodash';
@@ -27,6 +27,7 @@ import {
   visualiseEnv
 } from '../utils/slangHelper';
 
+let breakpoints: string[] = [];
 export default function* workspaceSaga(): SagaIterator {
   let context: Context;
 
@@ -39,7 +40,15 @@ export default function* workspaceSaga(): SagaIterator {
       const editorCode = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
       return [prependCode, editorCode] as [string, string];
     });
-    const [prepend, value] = code;
+    const [prepend, tempvalue] = code;
+    const exploded = tempvalue.split('\n');
+    for (const i in breakpoints) {
+      if (typeof i === 'string') {
+        const index: number = +i;
+        exploded[index] = 'debugger;' + exploded[index];
+      }
+    }
+    const value = exploded.join('\n');
     const chapter: number = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
@@ -147,6 +156,7 @@ export default function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
+    yield put(actions.clearReplOutput(workspaceLocation));
     inspectorUpdate(undefined);
     highlightLine([0]);
     yield put(actions.clearReplOutput(workspaceLocation));
@@ -165,7 +175,7 @@ export default function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.UPDATE_EDITOR_BREAKPOINTS, function*(
     action: ReturnType<typeof actions.setEditorBreakpoint>
   ) {
-    setBreakpointAtLine(action.payload.breakpoints);
+    breakpoints = action.payload.breakpoints;
     yield;
   });
 
@@ -267,6 +277,7 @@ export default function* workspaceSaga(): SagaIterator {
       };
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
+      yield put(actions.debuggerReset(workspaceLocation));
       yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000);
     }
   });
@@ -528,7 +539,6 @@ export function* evalCode(
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
   }
-
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== actionTypes.EVAL_SILENT) {
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));

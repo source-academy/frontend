@@ -27,7 +27,8 @@ class Inspector extends React.Component<{}, IInspectorState> {
           <br />
           <br />
           It is activated by clicking on the gutter of the editor (where all the line numbers are,
-          on the left) to set a breakpoint, and then running the program.
+          on the left) to set a breakpoint, and then running the program. Only the first line of a
+          statement can have a breakpoint. The program halts just before the statement is evaluated.
         </p>
         {this.state.loading && (
           <NonIdealState description="Loading Inspector..." icon={<Spinner />} />
