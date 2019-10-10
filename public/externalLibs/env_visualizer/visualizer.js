@@ -379,7 +379,7 @@
       // dataObject belongs to current frame
       // simply draw straight arrow from frame to function
       const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
-      const y0 = wrapper.y,
+      const y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 25,
         xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
@@ -399,7 +399,7 @@
       const frameOffset = findElementPosition(dataObject, frame);
       const fnOffset = findElementPosition(dataObject, wrapper.parent);
       const x0 = frame.x + name.length * 8 + 22,
-        y0 = frame.y + frameOffset * 30 + 25;
+        y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 25;
       const xf = wrapper.x + FNOBJECT_RADIUS * 2 + 3,
         x1 = frame.x + frame.width + 10 + frameOffset * 20,
         y1 = y0;
@@ -459,7 +459,7 @@
       // fnObject belongs to current frame
       // simply draw straight arrow from frame to function
       const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
-      const y0 = fnObject.y,
+      const y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 25,
         xf = fnObject.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
@@ -470,22 +470,24 @@
     } else {
       /**
        * fnObject belongs to different frame.
-       * Two "offset" factors are used: frameOffset, the index position of
-       * the source variable in the starting frame, and fnOffset, the position
-       * of the target fnObject in the destination frame. Offsetting the line
+       * Three "offset" factors are used: startOffset, the index position of
+       * the source variable in the starting frame; fnOffset, the position
+       * of the target fnObject in the destination frame; and frameOffset, the
+       * position of the frame within its level. Offsetting the line
        * by these factors prevents overlaps between arrows that are pointing to
        * different objects.
        */
-      const frameOffset = findElementPosition(fnObject, frame);
+      const startOffset = findElementPosition(fnObject, frame);
       const fnOffset = findElementPosition(fnObject, fnObject.parent);
+      const frameOffset = findFrameIndexInLevel(frame);
       const x0 = frame.x + name.length * 8 + 22,
-        y0 = frame.y + frameOffset * 30 + 25;
+        y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 25;
       const xf = fnObject.x + FNOBJECT_RADIUS * 2 + 3,
         x1 = frame.x + frame.width + 10 + frameOffset * 20,
         y1 = y0;
       const x2 = x1,
         y2 = frame.y - 20 + frameOffset * 5;
-      let x3 = xf + 10 + fnOffset * 7,
+      let x3 = xf + 12 + fnOffset * 7,
         y3 = y2;
       /**
        * From this position, the arrow needs to move upward to reach the
@@ -548,12 +550,20 @@
       drawArrowHead(context, x1, y1, x2, y2);
       context.stroke();
     } else {
+      /**
+       * startOffset: index of fnObject in its parent (starting) frame
+       * destOffset: index of fnObject in source (destination) frame
+       * frameOffset: index of source frame within its level
+       */
+      const startOffset = findElementPosition(fnObject, fnObject.parent);
+      const destOffset = findElementPosition(fnObject, fnObject.source);
+      const frameOffset = findFrameIndexInLevel(fnObject.source);
       const x0 = startCoord[0],
         y0 = startCoord[1],
-        x1 = x0 + FNOBJECT_RADIUS + 3;
+        x1 = x0 + FNOBJECT_RADIUS + (startOffset + 1) * 5;
         y1 = y0,
         x2 = x1,
-        y2 = fnObject.source.y - 40,
+        y2 = fnObject.source.y - 40 + frameOffset * 2,
         x3 = fnObject.source.x + fnObject.source.width / 2 + 10,
         y3 = y2
         x4 = x3,
@@ -986,26 +996,26 @@
       } 
 
       return allFrames;
-      /**
-       * Refactor end
-       */
     }
 
     frames = parseInput([], allEnvs);
-
-    positionItems(frames);
-    viewport.setSize(getDrawingWidth(levels) * 1.6, getDrawingHeight(levels));
-    // "* 1.7" is a partial workaround for drawing being cut off on the right
-    
     /**
      * Find the source frame for each fnObject. The source frame is the frame
      * which generated the function. This may be different from the parent
      * frame, which is the first frame where the object is referenced.
      */
     fnObjects.forEach(function(fnObject) {
-      fnObject.source = getFrameByKey(frames, fnObject.environment.envKeyCounter);
+      if (fnObject.environment.name == "programEnvironment") {
+        fnObject.source = getFrameByName(frames, "Program");
+      } else {
+        fnObject.source = getFrameByKey(frames, fnObject.environment.envKeyCounter);
+      }
     });
 
+    positionItems(frames);
+    viewport.setSize(getDrawingWidth(levels) * 1.6, getDrawingHeight(levels));
+    // "* 1.6" is a partial workaround for drawing being cut off on the right
+    
     drawSceneFrames();
     drawSceneFnObjects();
     drawHitFnObjects();
@@ -1235,6 +1245,15 @@
       i++;
     }
     return -1;
+  }
+
+  function findElementNamePosition(elementName, frame) {
+    return Object.keys(frame.elements).indexOf(elementName);
+  }
+  
+  function findFrameIndexInLevel(frame) {
+    const level = frame.level;
+    return levels[level].frames.indexOf(frame);
   }
   
   function isEmptyFrame(frame) {
