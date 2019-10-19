@@ -10,33 +10,69 @@
  * VD._TEMP[i][j] = [0,0,0];
  */
 
+/**
+ * Returns the red component of a given Pixel <CODE>px</CODE>
+ * @param {px} Pixel - given Pixel
+ * @returns {Number} the red component as a number between 0 and 255
+ */
 function red_of(px) { // returns the red value of px respectively
     return px[0];
 }
 
+/**
+ * Returns the green component of a given Pixel <CODE>px</CODE>
+ * @param {px} Pixel - given Pixel
+ * @returns {Number} the green component as a number between 0 and 255
+ */
 function green_of(px) { // returns the green value of px respectively
     return px[1];
 }
 
+/**
+ * Returns the blue component of a given Pixel <CODE>px</CODE>
+ * @param {px} Pixel - given Pixel
+ * @returns {Number} the blue component as a number between 0 and 255
+ */
 function blue_of(px) { // returns the blue value of px respectively
     return px[2];
 }
 
+/**
+ * Assigns the red, green and blue components of a pixel 
+ * <CODE>px</CODE> to given values
+ * @param {px} Pixel - given Pixel
+ * @param {r} Number - the red component as a number between 0 and 255
+ * @param {g} Number - the green component as a number between 0 and 255
+ * @param {b} Number - the blue component as a number between 0 and 255
+ * @param {px} Pixel - given Pixel
+ * @returns {undefined} 
+ */
 function set_rgb(px,r,g,b) { // assigns the r,g,b values to this px
     px[0] = r;
     px[1] = g;
     px[2] = b;
 }
 
-// sets the rgb values of dest to the same as src
+/**
+ * Copies the red, green and blue components of a Pixel 
+ * <CODE>src</CODE> to a Pixel <CODE>dst</CODE>
+ * @param {px} Pixel - source Pixel
+ * @param {px} Pixel - destination Pixel
+ * @returns {undefined} 
+ */
 function copy_pixel(src,dest) { 
     dest[0] = src[0];
     dest[1] = src[1];
     dest[2] = src[2];
 }
 
-// a filter which does not do anything
-// every pixel in dest will be set to the same rgb values as its corresponding pixel in src
+/**
+ * Filter that copies all Pixels faithfully from the
+ * source Image to the destination Image
+ * @param {src} Image - source Image
+ * @param {dst} Image - destination Image
+ * @returns {undefined} 
+ */
 function copy_image(src, dest) {
     for (let i=0; i<_WIDTH; i = i+1) {
 	for (let j=0; j<_HEIGHT; j = j+1) {
@@ -45,7 +81,11 @@ function copy_image(src, dest) {
     }
 }
 
-// constrains val such that 0 <= val <= 255
+/**
+ * Constrains a given color value to lie between 0 and 255
+ * @param {Number} val - source value
+ * @returns {Number} constrained value between 0 and 255
+ */
 function constrain_color(val) {
     return val > 255 ? 255 
 	: val < 0 ? 0 : val;
@@ -71,20 +111,36 @@ function pixel_similar(p1, p2, threshold) {
 var _WIDTH = 400;
 var _HEIGHT = 300;
 
-// returns the height of the video
-// ie the number of pixels in the vertical direction
+/**
+ * Returns the current height of the output video display in
+ * pixels, i.e. the number of pixels in vertical direction
+ * @returns {Number} height of output display (in pixels)
+ */
 function get_video_height() {
     return _HEIGHT;
 }
 
-// returns the width of the video
-// ie the number of pixels in the horizontal direction
+/**
+ * Returns the current width of the output video display in
+ * pixels, i.e. the number of pixels in horizontal direction
+ * @returns {Number} width of output display (in pixels)
+ */
 function get_video_width() {
     return _WIDTH;
 }
 
 // changes the current filter to my_filter
 // default filter is copy_image
+/**
+ * Installs a given filter to be used to transform
+ * the images that the camera captures into images
+ * displayed on the screen. A filter is a function
+ * that is applied to two two-dimensional arrays
+ * of Pixels: the source image and the destination
+ * image.
+ * @param {f} filter - the filter to be installed
+ * @returns {undefined} 
+ */
 function apply_filter(filter) { 
     VD._student_filter = filter;
     if (!VD._video_playing) {
