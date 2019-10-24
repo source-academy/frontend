@@ -162,6 +162,7 @@ class SourcereelControlbar extends React.PureComponent<
     handleTimerReset();
     clearInterval(this.state.updater!);
     this.setState({ duration: 0 });
+    this.recorder.stop();
     this.recorder.clear();
   };
 
