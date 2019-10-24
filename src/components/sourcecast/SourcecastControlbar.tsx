@@ -31,7 +31,13 @@ class SourcecastControlbar extends React.PureComponent<
   }
 
   public render() {
-    const PlayerPlayButton = controlButton('Play', IconNames.PLAY, this.handlePlayerPlaying);
+    const PlayerPlayButton = controlButton(
+      'Play',
+      IconNames.PLAY,
+      this.handlePlayerPlaying,
+      {},
+      !this.props.duration
+    );
     const PlayerPauseButton = controlButton('Pause', IconNames.PAUSE, this.handlePlayerPausing);
     return (
       <div className="Bar">
