@@ -232,9 +232,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       // Enable video tab only when 'PIX&FLIX' is selected
       tabs.push(videoDisplayTab);
     }
-    if (
-      this.props.externalLibraryName === ExternalLibraryNames.MACHINELEARNING
-    ) {
+    if (this.props.externalLibraryName === ExternalLibraryNames.MACHINELEARNING) {
       // Enable Face API Display only when 'MACHINELEARNING' is selected
       tabs.push(FaceapiDisplayTab);
     }
