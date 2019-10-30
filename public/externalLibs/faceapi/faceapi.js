@@ -40,7 +40,7 @@ let video_launched = undefined;
  */
 function init_webcam(){
   video_launched = true;
-  navigator.getUserMedia(
+  navigator.mediaDevices.getUserMedia(
     { video: {} },
     stream => video.srcObject = stream,
     err => console.error(err)
@@ -177,7 +177,7 @@ function train_recognition() {
 
 async function train() {
   if (video_launched === true){
-    navigator.getUserMedia(
+    navigator.mediaDevices.getUserMedia(
       { video: {} },
       stream => video.srcObject = stream,
       err => console.error(err)
@@ -188,7 +188,7 @@ async function train() {
   const labeledFaceDescriptors = await trainLabeledImages();
   faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
   if (video_launched === true){
-    navigator.getUserMedia(
+    navigator.mediaDevices.getUserMedia(
       { video: {} },
       stream => video.srcObject = stream,
       err => console.error(err)
