@@ -35,11 +35,39 @@ const capitalizeFirstLetter = (str: string) => {
 export const retrieveLocalAssessment = (): Assessment | null => {
   const assessment = localStorage.getItem('MissionEditingAssessmentSA');
   if (assessment) {
-    return JSON.parse(assessment);
+    const parsed = JSON.parse(assessment) as Assessment;
+    if(parsed.globalDeployment && parsed.globalDeployment.globals) {
+      parsed.globalDeployment.globals = processExternalFunction(parsed.globalDeployment.globals, "global")!;
+    }
+    parsed.questions.forEach( (qn, idx) => {
+      if(qn.library && qn.library.globals) {
+        qn.library.globals = processExternalFunction(qn.library.globals, `q${idx+1}`)!;
+      }
+    });
+    return parsed;
   } else {
     return null;
   }
 };
+
+// These are externals which may not have the function part of it loaded.
+interface IPartialExternal {
+  0: string;
+  1: any;
+  2?: string;
+}
+
+function processExternalFunction(ext: IPartialExternal[], context: string): IPartialExternal[] {
+  return ext.map( x => {
+    try {
+      return x[2] ? [x[0], altEval(x[2]), x[2]] as IPartialExternal : x;
+    } catch(e) {
+      // tslint:disable-next-line: no-console
+      console.error(`Failed to evaluate external ${context} ${x[0]}`, x[2]);
+      return x;
+    }
+  });
+}
 
 export const retrieveLocalAssessmentOverview = (): AssessmentOverview | null => {
   const assessment = localStorage.getItem('MissionEditingOverviewSA');
