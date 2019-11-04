@@ -36,12 +36,15 @@ export const retrieveLocalAssessment = (): Assessment | null => {
   const assessment = localStorage.getItem('MissionEditingAssessmentSA');
   if (assessment) {
     const parsed = JSON.parse(assessment) as Assessment;
-    if(parsed.globalDeployment && parsed.globalDeployment.globals) {
-      parsed.globalDeployment.globals = processExternalFunction(parsed.globalDeployment.globals, "global")!;
+    if (parsed.globalDeployment && parsed.globalDeployment.globals) {
+      parsed.globalDeployment.globals = processExternalFunction(
+        parsed.globalDeployment.globals,
+        'global'
+      )!;
     }
-    parsed.questions.forEach( (qn, idx) => {
-      if(qn.library && qn.library.globals) {
-        qn.library.globals = processExternalFunction(qn.library.globals, `q${idx+1}`)!;
+    parsed.questions.forEach((qn, idx) => {
+      if (qn.library && qn.library.globals) {
+        qn.library.globals = processExternalFunction(qn.library.globals, `q${idx + 1}`)!;
       }
     });
     return parsed;
@@ -58,10 +61,10 @@ interface IPartialExternal {
 }
 
 function processExternalFunction(ext: IPartialExternal[], context: string): IPartialExternal[] {
-  return ext.map( x => {
+  return ext.map(x => {
     try {
-      return x[2] ? [x[0], altEval(x[2]), x[2]] as IPartialExternal : x;
-    } catch(e) {
+      return x[2] ? ([x[0], altEval(x[2]), x[2]] as IPartialExternal) : x;
+    } catch (e) {
       // tslint:disable-next-line: no-console
       console.error(`Failed to evaluate external ${context} ${x[0]}`, x[2]);
       return x;
