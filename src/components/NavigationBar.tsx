@@ -60,23 +60,23 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         </Button>
       </a>
 
-      {/* <NavLink
+      <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/material"
       >
         <Icon icon={IconNames.BOOK} />
         <div className="navbar-button-text hidden-xs hidden-sm">Material</div>
-      </NavLink> */}
+      </NavLink>
 
-      {/* <NavLink
+      <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/sourcecast"
       >
         <Icon icon={IconNames.MUSIC} />
         <div className="navbar-button-text hidden-xs hidden-sm">Sourcecast</div>
-      </NavLink> */}
+      </NavLink>
 
       <NavLink
         activeClassName={Classes.ACTIVE}

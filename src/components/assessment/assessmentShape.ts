@@ -26,6 +26,7 @@ export interface IAssessmentOverview {
   story: string | null;
   xp: number;
   gradingStatus: GradingStatus;
+  private?: boolean;
 }
 
 export enum AssessmentStatuses {
@@ -65,7 +66,8 @@ export enum AssessmentCategories {
   Contest = 'Contest',
   Mission = 'Mission',
   Path = 'Path',
-  Sidequest = 'Sidequest'
+  Sidequest = 'Sidequest',
+  Practical = 'Practical'
 }
 
 export type AssessmentCategory = keyof typeof AssessmentCategories;
@@ -120,11 +122,11 @@ export interface IQuestion {
   library: Library;
   graderLibrary?: Library; // For mission control
   type: QuestionType;
-  grader: {
+  grader?: {
     name: string;
     id: number;
-  } | null;
-  gradedAt: string | null;
+  };
+  gradedAt?: string;
   xp: number;
   grade: number;
   maxGrade: number;

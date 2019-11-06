@@ -204,7 +204,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
             }}
             ref={this.AceEditor}
             markers={this.getMarkers()}
-            fontSize={14}
+            fontSize={17}
             height="100%"
             highlightActiveLine={false}
             mode="javascript"
@@ -217,7 +217,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
             value={this.props.editorValue}
             width="100%"
             setOptions={{
-              fontFamily: "'Droid Sans Mono','CPMono_v07 Bold','Droid Sans', monospace"
+              fontFamily: "'Inconsolata', 'Consolas', monospace"
             }}
           />
         </div>

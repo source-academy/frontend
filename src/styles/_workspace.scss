@@ -157,6 +157,8 @@ $code-color-error: #ff4444;
   .resize-side-content {
     display: flex;
     flex-direction: column;
+    /* Prevents side-content from overflowing right-parent container on initial load */
+    max-height: 100%;
   }
 
   .resize-editor-content {
@@ -228,11 +230,17 @@ $code-color-error: #ff4444;
     word-break: break-word;
     color: $code-color-result;
     text-align: justify;
+    overflow-x: auto;
+    /* Respect padding of containing bp3 Card when scrollable */
+    margin-bottom: 0.4rem;
 
-    div {
-      p:last-child {
-        margin-bottom: 0;
-      }
+    /* If the assessment briefing begins with a header, remove its top margin */
+    & > div > *:first-child {
+      margin-top: 0;
+    }
+
+    & > div > p:last-child {
+      margin-bottom: 0;
     }
 
     .GradingEditor {
@@ -248,7 +256,7 @@ $code-color-error: #ff4444;
       }
       .grading-editor-input-parent {
         /** Center the text for numeric input and showing grades. */
-        table.bp3-html-table {
+        table.#{$ns}-html-table {
           border-spacing: 5px;
           width: 100%;
           tbody {
@@ -277,7 +285,7 @@ $code-color-error: #ff4444;
       .grading-editor-draft-buttons {
         margin-top: 10px;
 
-        table.bp3-html-table {
+        table.#{$ns}-html-table {
           table-layout: fixed;
           margin: auto;
           width: 100%;
@@ -314,7 +322,6 @@ $code-color-error: #ff4444;
   .side-content-tabs {
     flex: 1 1 auto;
     height: 100%;
-    overflow-y: auto;
     justify-content: center;
     display: flex;
 
@@ -332,6 +339,81 @@ $code-color-error: #ff4444;
 
       .#{$ns}-tab-list {
         align-self: center;
+      }
+    }
+
+    // Specific CSS for the Substituter tab, since REPL is hidden
+    ##{$ns}-tab-panel_side-content-tabs_subst_visualiser {
+      height: calc(100% - 60px);
+      margin-top: -45px;
+
+      .side-content-text {
+        height: 100%;
+        margin-top: 70px;
+
+        .sa-substituter {
+          margin: 11px;
+          height: unset;
+
+          .#{$ns}-slider-label {
+            width: -webkit-max-content;
+            width: -moz-max-content;
+            width: max-content;
+            display: none;
+
+            &:first-child,
+            &:last-child {
+              display: inline;
+            }
+          }
+
+          .#{$ns}-card {
+            background-color: $cadet-color-1;
+            padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+            margin: 2rem 0 0.5rem 0;
+
+            pre {
+              background-color: transparent;
+              -webkit-box-shadow: none;
+              box-shadow: none;
+              color: $code-color-result;
+              padding: 0px;
+              margin: 0px;
+              text-align: left;
+              /**
+              * white-space, word-wrap and word-break
+              * are specified to allow all output to wrap.
+              */
+              white-space: pre-wrap;
+              word-wrap: break-word;
+              word-break: break-word;
+              /**
+              * Use same fonts as ace-editor for
+              * output. Taken from react-ace
+              * sourcecode, font size modified.
+              */
+              font: 16px / normal 'Inconsolata', 'Consolas', monospace;
+
+              .canvas-container {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                padding: 0.5rem 0 0.5rem 0;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
+                justify-content: center;
+              }
+
+              canvas {
+                height: 20rem;
+                width: 20rem;
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -428,7 +510,7 @@ $code-color-error: #ff4444;
       animation: alert 1s infinite;
     }
 
-    @-webkit-keyframes alert {
+    @keyframes alert {
       0%,
       50% {
         background-color: rgba(200, 100, 50, 0.5);
@@ -437,6 +519,11 @@ $code-color-error: #ff4444;
       100% {
         background-image: rgba(138, 155, 168, 0.3);
       }
+    }
+    .side-content-text .slider {
+      $a: 100%;
+      $b: 140px;
+      width: calc(#{$a} - #{$b});
     }
   }
 
@@ -458,7 +545,7 @@ $code-color-error: #ff4444;
 
   .grading-result-table {
     // Hide grey line appearing in grading result tables
-    table.bp3-html-table tbody tr:first-child {
+    table.#{$ns}-html-table tbody tr:first-child {
       td,
       th {
         -webkit-box-shadow: inset 0 0 1px 0 $cadet-color-2;
@@ -533,7 +620,7 @@ $code-color-error: #ff4444;
     }
   }
 
-  .bp3-divider {
+  .#{$ns}-divider {
     margin: 0 0 0.5rem 0;
   }
 
@@ -567,8 +654,7 @@ $code-color-error: #ff4444;
  * output. Taken from react-ace
  * sourcecode, font size modified.
  */
-        font: 14px / normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
-          monospace;
+        font: 16px / normal 'Inconsolata', 'Consolas', monospace;
       }
 
       .codeOutput {
@@ -690,7 +776,7 @@ $code-color-error: #ff4444;
 
   .AutograderCard,
   .ResultCard {
-    /* Wrapper container (bp3's Card) for each testcase and autograder result */
+    /* Wrapper container (Blueprint Card) for each testcase and autograder result */
     .#{$ns}-card {
       border-color: rgb(26, 37, 48);
       border-style: solid;
@@ -706,11 +792,13 @@ $code-color-error: #ff4444;
         padding: 8px;
         margin: 0;
         overflow: visible;
-        overflow-wrap: normal;
+        overflow-wrap: break-word;
         word-break: normal;
         white-space: pre-line;
         flex-grow: 0;
         flex-shrink: 0;
+        /* Override justify applied to side-content (intended for text blocks) */
+        text-align: initial;
       }
     }
 
@@ -764,7 +852,7 @@ $code-color-error: #ff4444;
   }
 
   .AutograderCard {
-    /* Nested bp3 Card component (with onClick attached) */
+    /* Nested Blueprint Card component (with onClick attached) */
     .#{$ns}-card {
       .testcase-placeholder {
         width: 100%;

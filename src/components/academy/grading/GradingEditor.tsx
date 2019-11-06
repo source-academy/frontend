@@ -1,4 +1,5 @@
 import {
+  Divider,
   H3,
   HTMLTable,
   Icon,
@@ -15,6 +16,7 @@ import * as React from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { Prompt } from 'react-router';
 
+import { getPrettyDate } from '../../../utils/dateHelpers';
 import { showSuccessMessage, showWarningMessage } from '../../../utils/notification';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import { controlButton } from '../../commons';
@@ -47,6 +49,8 @@ export type OwnProps = {
   maxXp: number;
   studentName: string;
   comments?: string;
+  graderName?: string;
+  gradedAt?: string;
 };
 
 /**
@@ -256,6 +260,17 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           IconNames.UPDATED,
           this.validateGradesBeforeSave(this.onClickSaveAndContinue),
           saveAndContinueButtonOpts
+        )}
+        {this.props.graderName && this.props.gradedAt && (
+          <>
+            <Divider />
+            <div>
+              <Text>
+                Last edited by <b>{this.props.graderName}</b> on{' '}
+                {getPrettyDate(this.props.gradedAt)}
+              </Text>
+            </div>
+          </>
         )}
       </div>
     );

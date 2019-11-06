@@ -195,7 +195,7 @@ class AssessmentWorkspace extends React.Component<
       >
         <div className={Classes.DIALOG_BODY}>
           <Markdown content="Are you sure you want to reset the template?" />
-          <Markdown content="*Note this will not affect the saved copy of your code, unless you save over it.*" />
+          <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
@@ -366,7 +366,7 @@ class AssessmentWorkspace extends React.Component<
         id: SideContentType.autograder
       }
     ];
-    const isGraded = props.assessment!.questions[questionId].grader !== null;
+    const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     if (isGraded) {
       tabs.push(
         {
@@ -433,32 +433,35 @@ class AssessmentWorkspace extends React.Component<
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
     const onClickReturn = () => history.push(listingPath);
 
-    // Replaces onClickNext if the current assessment is a Path
-    const onClickProgress = () => {
-      // Perform question blocking - determine the highest question number previously accessed
-      // by counting the number of questions that have a non-null answer
-      const blockedQuestionId =
-        this.props.assessment!.questions.filter(qn => qn.answer !== null).length - 1;
+    // Returns a nullary function that defers the navigation of the browser window, until the
+    // student's answer passes some checks - presently only used for Paths
+    const onClickProgress = (deferredNavigate: () => void) => {
+      return () => {
+        // Perform question blocking - determine the highest question number previously accessed
+        // by counting the number of questions that have a non-null answer
+        const blockedQuestionId =
+          this.props.assessment!.questions.filter(qn => qn.answer !== null).length - 1;
 
-      // If the current question does not block the next question, proceed as usual
-      if (questionId < blockedQuestionId) {
-        return history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
-      }
-      // Else evaluate its correctness - proceed iff the answer to the current question is correct
-      const question: IQuestion = this.props.assessment!.questions[questionId];
-      if (question.type === QuestionTypes.mcq) {
-        if (question.answer !== (question as IMCQQuestion).solution) {
-          return showWarningMessage('Your MCQ solution is incorrect!', 750);
+        // If the current question does not block the next question, proceed as usual
+        if (questionId < blockedQuestionId) {
+          return deferredNavigate();
         }
-      } else if (question.type === QuestionTypes.programming) {
-        const isCorrect = this.props.editorTestcases.reduce((acc, testcase) => {
-          return acc && stringify(testcase.result) === testcase.answer;
-        }, true);
-        if (!isCorrect) {
-          return showWarningMessage('Your solution has not passed all testcases!', 750);
+        // Else evaluate its correctness - proceed iff the answer to the current question is correct
+        const question: IQuestion = this.props.assessment!.questions[questionId];
+        if (question.type === QuestionTypes.mcq) {
+          if (question.answer !== (question as IMCQQuestion).solution) {
+            return showWarningMessage('Your MCQ solution is incorrect!', 750);
+          }
+        } else if (question.type === QuestionTypes.programming) {
+          const isCorrect = this.props.editorTestcases.reduce((acc, testcase) => {
+            return acc && stringify(testcase.result) === testcase.answer;
+          }, true);
+          if (!isCorrect) {
+            return showWarningMessage('Your solution has not passed all testcases!', 750);
+          }
         }
-      }
-      history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+        return deferredNavigate();
+      };
     };
 
     const onClickSave = () =>
@@ -485,11 +488,15 @@ class AssessmentWorkspace extends React.Component<
     const nextButton = (
       <NextButton
         onClickNext={
-          this.props.assessment && this.props.assessment.category === AssessmentCategories.Path
-            ? onClickProgress
+          this.props.assessment!.category === AssessmentCategories.Path
+            ? onClickProgress(onClickNext)
             : onClickNext
         }
-        onClickReturn={onClickReturn}
+        onClickReturn={
+          this.props.assessment!.category === AssessmentCategories.Path
+            ? onClickProgress(onClickReturn)
+            : onClickReturn
+        }
         questionProgress={questionProgress}
         key="next_question"
       />
@@ -506,7 +513,6 @@ class AssessmentWorkspace extends React.Component<
     const questionView = <QuestionView questionProgress={questionProgress} key="question_view" />;
 
     const resetButton =
-      !beforeNow(this.props.closeDate) &&
       this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
         <ResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;

@@ -2,6 +2,7 @@ import {
   AssessmentCategories,
   AssessmentStatuses,
   ExternalLibraryNames,
+  GradingStatuses,
   IAssessment,
   IAssessmentOverview,
   IMCQQuestion,
@@ -27,7 +28,7 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.none
   }
 ];
 
@@ -59,7 +60,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.none
   },
   {
     category: AssessmentCategories.Mission,
@@ -76,7 +77,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.none
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -93,7 +94,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.none
   },
   {
     category: AssessmentCategories.Path,
@@ -110,7 +111,25 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: 'excluded'
+    gradingStatus: GradingStatuses.excluded
+  },
+  {
+    category: AssessmentCategories.Practical,
+    closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
+    grade: 4,
+    id: 5,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2018-07-18T05:24:26.026Z',
+    title: 'A sample Practical',
+    shortSummary:
+      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    status: AssessmentStatuses.not_attempted,
+    story: 'sidequest-2.1',
+    xp: 3,
+    gradingStatus: GradingStatuses.none,
+    private: true
   }
 ];
 
@@ -126,11 +145,11 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
+      'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    gradingStatus: 'none'
+    gradingStatus: GradingStatuses.grading
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -141,13 +160,13 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     maxGrade: 3000,
     maxXp: 1000,
     openAt: '2007-07-18T05:24:26.026Z',
-    title: 'Closed (partially graded) Sidequest',
+    title: 'Closed (not graded) Sidequest',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
+      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    gradingStatus: 'grading'
+    gradingStatus: GradingStatuses.none
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -164,7 +183,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    gradingStatus: 'graded'
+    gradingStatus: GradingStatuses.graded
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -181,7 +200,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    gradingStatus: 'excluded'
+    gradingStatus: GradingStatuses.excluded
   }
 ];
 
@@ -281,8 +300,6 @@ const chickenrice = "chicken rice";`,
 }
 `,
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -327,8 +344,6 @@ function volumeOfSphere(x) {
     // return volume of sphere
 }`,
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -361,8 +376,6 @@ function volumeOfSphere(x) {
     library: mockCurveLibrary,
     type: 'mcq',
     solution: 0,
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -395,8 +408,6 @@ function volumeOfSphere(x) {
     library: mockCurveLibrary,
     type: 'mcq',
     solution: null,
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -414,8 +425,6 @@ function volumeOfSphere(x) {
     testcases: [],
     solutionTemplate: '5th question mock solution template',
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 2,
@@ -610,8 +619,6 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     library: mockRuneLibrary,
     type: 'mcq',
     solution: 1,
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 0,
@@ -691,8 +698,6 @@ const __AND = (xs) => {
     // Your answer here!
 }`,
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 0,
@@ -754,8 +759,6 @@ const __XOR = (x, y) => {
     // Your answer here!
 }`,
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 0,
@@ -829,8 +832,6 @@ const __NOR_AND = (x, y) => {
     // Your answer here!
 }`,
     type: 'programming',
-    grader: null,
-    gradedAt: null,
     xp: 0,
     grade: 0,
     maxGrade: 0,

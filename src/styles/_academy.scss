@@ -1,3 +1,19 @@
+@media only screen and (max-width: 512px) {
+  .custom-hidden-xxxs {
+    display: none;
+  }
+
+  .listing-button .#{$ns}-button .#{$ns}-icon {
+    margin-right: 0px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .custom-hidden-xxs {
+    display: none;
+  }
+}
+
 .Academy {
   height: 100%;
   width: 100%;
@@ -51,13 +67,18 @@
 .assessment-briefing {
   padding-bottom: 0;
 
-  // If the assessment briefing begins with a header, remove its top margin
-  *:first-child {
-    margin-top: 0;
-  }
+  & .md {
+    margin-bottom: 1rem;
 
-  .assessment-briefing-button {
-    margin-top: 1rem;
+    /* If the assessment briefing begins with a header, remove its top margin */
+    & > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Remove bottom margins of the last element in the assessment briefing */
+    & > *:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -84,9 +105,8 @@
     padding: 0;
     text-align: justify;
 
-    .listing-due-icon {
-      vertical-align: baseline;
-      margin-right: 0.4rem;
+    & > * {
+      overflow-wrap: break-word;
     }
   }
 
@@ -114,59 +134,78 @@
   }
 
   .listing-text {
-    padding: 0.5rem 1rem 0.5rem 1.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
     border: 1rem;
     display: flex;
     flex-direction: column;
   }
 
-  .listing-title {
+  .listing-header {
+    margin-bottom: 0.8rem;
     display: flex;
-    margin-bottom: 2px;
+    align-items: center;
+    justify-content: space-between;
 
-    .#{$ns}-icon {
-      vertical-align: baseline;
+    .listing-title {
+      margin-bottom: 0;
+
+      h4 {
+        margin-top: 4px;
+      }
     }
 
-    .#{$ns}-text-overflow-ellipsis {
-      /* Pushes button to the right of container */
-      flex-grow: 1;
-      display: flex;
-    }
+    .listing-title-tooltip {
+      /* Space out icon tooltips */
+      margin-left: 2px;
 
-    div {
-      /* overwrite default padding */
-      padding: 0;
-      margin-bottom: 0.4rem;
-    }
+      /* Visually separate first icon tooltip from assessment title */
+      &:first-of-type {
+        margin-left: 6px;
+      }
 
-    .col-xs-2 {
-      /* flush menu button, span.#{$ns}-popover-wrapper, to right */
-      text-align: right;
-    }
-
-    h4 {
-      margin: 4px 0 0 0;
+      .#{$ns}-icon {
+        vertical-align: baseline;
+      }
     }
   }
 
   .listing-description {
-    /* Pushes .listing-controls to the bottom of container */
     flex-grow: 1;
+    flex-shrink: 0;
     /* Creates space between the description text, buttons and title */
-    margin: 1rem 0rem 1rem 0rem;
+    margin: 0.5rem 0rem 0.5rem 0.5rem;
+
+    & > * {
+      /* Limit height of description on smaller screens */
+      max-height: 30vh;
+      /* Add padding to visually separate scrollbar from content */
+      padding-right: 0.5rem;
+      overflow-y: auto;
+    }
   }
 
-  .listing-controls {
+  .listing-footer {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     .listing-due-date {
-      /* Pushes button to the right of container */
       display: flex;
-      flex-grow: 1;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       align-items: center;
-      padding-top: 6px;
     }
+
+    .listing-due-icon {
+      margin-right: 0.4rem;
+    }
+  }
+
+  .listing-button {
+    /* Prevent <div> container collapsing and forcing button text to two lines */
+    flex-grow: 0;
+    flex-shrink: 0;
   }
 }
 
@@ -193,7 +232,7 @@
   height: 100%;
 }
 
-/* Increase default margin of bp3's Divider for greater vertical spacing */
+/* Increase default margin of Blueprint's Divider for greater vertical spacing */
 .#{$ns}-divider {
   margin: 12px 0 12px 0;
 }
@@ -232,6 +271,7 @@
 
 .ag-grid-controls {
   display: flex;
+  align-items: center;
   justify-content: space-between;
 
   .#{$ns}-icon {
@@ -241,6 +281,18 @@
 
   .ag-grid-button-text {
     margin-left: 7px;
+  }
+
+  .pagination-details.pagination-details.pagination-details {
+    /* Chain selectors for increased specificity: set default cursor */
+    cursor: default;
+    font-weight: bold;
+
+    .#{$ns}-button-text {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 }
 

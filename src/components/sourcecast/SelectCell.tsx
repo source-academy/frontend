@@ -1,7 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { BACKEND_URL } from '../../utils/constants';
 import { controlButton } from '../commons';
 import { IPlaybackData, ISourcecastData } from './sourcecastShape';
 
@@ -28,7 +27,7 @@ class SelectCell extends React.Component<ISelectCellProps, {}> {
 
   private handleSelect = () => {
     const { data } = this.props;
-    const url = BACKEND_URL + data.url;
+    const url = data.url;
     const playbackData = JSON.parse(data.playbackData);
     this.props.handleSetSourcecastData(data.title, data.description, url, playbackData);
   };

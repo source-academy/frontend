@@ -79,10 +79,10 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
  * displays it graphically, in a window, instead of textually.
  * The parts between (0,0) and (1,1) of the resulting Drawing 
  * are shown in the window.
- * @param {number} num - determines the number of points to be 
+ * @param {Number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
- * @return {function} function from Curves to Drawings.
+ * @return {function} function of type Curve → Drawing
  */
 function draw_connected(num) {
   return function(func) {
@@ -98,10 +98,10 @@ function draw_connected(num) {
  * displays it graphically, in a window, instead of textually.
  * The parts between (0,0) and (1,1) of the resulting Drawing 
  * are shown in the window.
- * @param {number} num - determines the number of points to be 
+ * @param {Number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
- * @return {function} function from Curves to Drawings.
+ * @return {function} function of type Curve → Drawing
  */
 function draw_points_on(num) {
   return curve => 
@@ -116,10 +116,10 @@ function draw_points_on(num) {
  * displays it graphically, in a window, instead of textually.
  * The Drawing is squeezed such that all its parts are shown in the
  * window.
- * @param {number} num - determines the number of points to be 
+ * @param {Number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
- * @return {function} function from Curves to Drawings.
+ * @return {function} function of type Curve → Drawing
  */
 function draw_points_squeezed_to_window(num) {
   return function(func) {
@@ -136,10 +136,10 @@ function draw_points_squeezed_to_window(num) {
  * The Drawing is resized proportionally such that it 
  * is shown as big as possible, and still fits entirely 
  * inside the window.
- * @param {number} num - determines the number of points to be 
+ * @param {Number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
- * @return {function} function from Curves to Drawings.
+ * @return {function} function of type Curve → Drawing
  */
 function draw_connected_squeezed_to_window(num) {
   return function(func) {
@@ -156,10 +156,10 @@ function draw_connected_squeezed_to_window(num) {
  * The Drawing is stretched or shrunk
  * to show the full curve
  * and maximize its width and height, with some padding.
- * @param {number} num - determines the number of points to be 
+ * @param {Number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
- * @return {function} function from Curves to Drawings.
+ * @return {function} function of type Curve → Drawing
  */
 function draw_connected_full_view(num) {
   return function(func) {
@@ -175,10 +175,10 @@ function draw_connected_full_view(num) {
  * displays it graphically, in a window, instead of textually.
  * The Drawing is scaled proportionally to show the full curve
  * and maximize its size, with some padding.
- * @param {number} num - determines the number of points to be 
+ * @param {Number} num - determines the number of points to be 
  * sampled. Including 0 and 1,
  * there are <CODE>num + 1</CODE> evenly spaced sample points.
- * @return {function} function from Curves to Drawings.
+ * @return {function} function of type Curve → Drawing
  */
 function draw_connected_full_view_proportional(num) {
   return function(func) {
@@ -188,8 +188,8 @@ function draw_connected_full_view_proportional(num) {
 
 /**
  * makes a Point with given x and y coordinates
- * @param {number} x - x-coordinate of new point
- * @param {number} y - y-coordinate of new point
+ * @param {Number} x - x-coordinate of new point
+ * @param {Number} y - y-coordinate of new point
  * @returns {Point} with x and y as coordinates
  */
 function make_point(x, y) {
@@ -199,7 +199,7 @@ function make_point(x, y) {
 /**
  * retrieves the x-coordinate a given Point
  * @param {Point} p - given point
- * @returns {number} x-coordinate of the Point
+ * @returns {Number} x-coordinate of the Point
  */
 function x_of(pt) {
   return pt[0]
@@ -208,7 +208,7 @@ function x_of(pt) {
 /**
  * retrieves the y-coordinate a given Point
  * @param {Point} p - given point
- * @returns {number} y-coordinate of the Point
+ * @returns {Number} y-coordinate of the Point
  */
 function y_of(pt) {
   return pt[1]
