@@ -62,14 +62,18 @@
   function drawSceneDataObjects() {
     dataObjectLayer.scene.clear();
     dataObjects.forEach(function(dataObject) {
-      drawSceneDataObject(dataObject);
+      if (dataObject != null) {
+        drawSceneDataObject(dataObject);
+      }
     });
     viewport.render();
   }
 
   function drawHitDataObjects() {
     dataObjects.forEach(function(dataObject) {
-      drawHitDataObject(dataObject);
+      if (dataObject != null) {
+        drawHitDataObject(dataObject);
+      }
     });
   }
 
@@ -89,7 +93,7 @@
       for (e in elements) {
         if (typeof elements[e] == 'function') {
           drawSceneFrameFnArrow(frame, e, elements[e]);
-        } else if (typeof elements[e] == 'object') {
+        } else if (typeof elements[e] == 'object' && elements[e] != null) {
           drawSceneFrameDataArrow(frame, e, elements[e]);
         }
       }
@@ -147,8 +151,15 @@
       } catch (e) {
         fnString = config.toString();
       }
-      const params = fnString.substring(fnString.indexOf('(') + 1, fnString.indexOf(')'));
-      let body = fnString.substring(fnString.indexOf(')') + 1);
+      let params;
+      let body;
+      if (config.node.type == "FunctionDeclaration") {
+        params = fnString.substring(fnString.indexOf('('), fnString.indexOf('{') - 1);
+        body = fnString.substring(fnString.indexOf('{'));
+      } else {
+        params = fnString.substring(0, fnString.indexOf('=') - 1);
+        body = fnString.substring(fnString.indexOf('=') + 3);
+      }
       body = body.split('\n');
       context.fillText(`params: ${params == '' ? '()' : params}`, x + 50, y);
       context.fillText(`body:`, x + 50, y + 20);
@@ -300,20 +311,26 @@
     let elements = config.elements;
     let i = 0;
     for (let k in elements) {
-      switch (typeof elements[k]) {
-        case 'number':
-        case 'boolean':
-          context.fillText(`${'' + k}: ${'' + elements[k]}`, x + 10, y + 30 + i * 30);
-          break;
-        case 'string':
-          if (k == '(other predclr. names)') {
-            context.fillText(`${'' + k}`, x + 10, y + 30 + i * 30);
-          } else {
-            context.fillText(`${'' + k}: "${'' + elements[k]}"`, x + 10, y + 30 + i * 30);
-          }
-          break;
-        default:
-          context.fillText(`${'' + k}:`, x + 10, y + 30 + i * 30);
+      if (elements[k] == null && typeof (elements[k]) == "object") {
+        // null primitive in Source
+        context.fillText(`${'' + k}: null`, x + 10, y + 30 + i * 30);
+      } else {
+        switch (typeof elements[k]) {
+          case 'number':
+          case 'boolean':
+          case 'undefined':
+            context.fillText(`${'' + k}: ${'' + elements[k]}`, x + 10, y + 30 + i * 30);
+            break;
+          case 'string':
+            if (k == '(other predclr. names)') {
+              context.fillText(`${'' + k}`, x + 10, y + 30 + i * 30);
+            } else {
+              context.fillText(`${'' + k}: "${'' + elements[k]}"`, x + 10, y + 30 + i * 30);
+            }
+            break;
+          default:
+            context.fillText(`${'' + k}:`, x + 10, y + 30 + i * 30);
+        }
       }
       i++;
     }
@@ -1179,6 +1196,8 @@
       const literals = ["number", "string", "boolean"];
       if (literals.includes(typeof elements[e])) {
         currLength = e.length + elements[e].toString().length;
+      } else if (typeof elements[e] == "undefined") {
+        currLength = e.length + 9;
       } else {
         currLength = e.length;
       }
