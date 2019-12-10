@@ -158,7 +158,7 @@ export default function* workspaceSaga(): SagaIterator {
     );
     yield put(actions.clearReplOutput(workspaceLocation));
     inspectorUpdate(undefined);
-    highlightLine([0]);
+    highlightLine(undefined);
     yield put(actions.clearReplOutput(workspaceLocation));
     context.runtime.break = false;
     lastDebuggerResult = undefined;
@@ -168,7 +168,7 @@ export default function* workspaceSaga(): SagaIterator {
     action: ReturnType<typeof actions.highlightEditorLine>
   ) {
     const workspaceLocation = action.payload.highlightedLines;
-    highlightLine(workspaceLocation);
+    highlightLine(workspaceLocation[0]);
     yield;
   });
 
@@ -394,6 +394,9 @@ export default function* workspaceSaga(): SagaIterator {
       case ExternalLibraryNames.CURVES:
         (window as any).loadLib('CURVES');
         (window as any).getReadyWebGLForCanvas('curve');
+        break;
+      case ExternalLibraryNames.MACHINELEARNING:
+        (window as any).loadLib('MACHINELEARNING');
         break;
     }
     const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;

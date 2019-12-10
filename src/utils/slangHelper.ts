@@ -92,10 +92,11 @@ export function visualiseEnv(context: Context) {
   }
 }
 
-export function highlightLine(line: number[]) {
+export function highlightLine(line: number | undefined) {
   if ((window as any).Inspector) {
     (window as any).Inspector.highlightClean();
-    (window as any).Inspector.highlightLine(line[0]);
+    // if number is undefined it just clears the highlighting.
+    (window as any).Inspector.highlightLine(line);
   } else {
     throw new Error('Inspector not loaded');
   }
