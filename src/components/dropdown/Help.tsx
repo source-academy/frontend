@@ -22,7 +22,7 @@ const Help: React.SFC<DialogProps> = props => (
       <p>Please use the following resources when you encounter issues with this system.</p>
       <p>
         As of August 2019, we recommend the browsers <b>Google Chrome</b>, Version 75 or higher, or{' '}
-        <b>Mozilla Firefox</b>, Version 68 or higher, to visit the Source Academy. If you encounter
+        <b>Mozilla Firefox</b>, Version 70 or higher, to visit the Source Academy. If you encounter
         issues with the Source Academy using these browsers, please use the following resources.
       </p>
       <ul>

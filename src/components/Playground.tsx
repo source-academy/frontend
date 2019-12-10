@@ -22,6 +22,7 @@ import {
 } from './workspace/controlBar/index';
 import { SideContentTab } from './workspace/side-content';
 import EnvVisualizer from './workspace/side-content/EnvVisualizer';
+import FaceapiDisplay from './workspace/side-content/FaceapiDisplay';
 import Inspector from './workspace/side-content/Inspector';
 import ListVisualizer from './workspace/side-content/ListVisualizer';
 import SubstVisualizer from './workspace/side-content/SubstVisualizer';
@@ -231,6 +232,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       // Enable video tab only when 'PIX&FLIX' is selected
       tabs.push(videoDisplayTab);
     }
+    if (this.props.externalLibraryName === ExternalLibraryNames.MACHINELEARNING) {
+      // Enable Face API Display only when 'MACHINELEARNING' is selected
+      tabs.push(FaceapiDisplayTab);
+    }
     if (this.props.sourceChapter >= 2) {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(listVisualizerTab);
@@ -399,6 +404,12 @@ const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   iconName: IconNames.MOBILE_VIDEO,
   body: <VideoDisplay />
+};
+
+const FaceapiDisplayTab: SideContentTab = {
+  label: 'Face API Display',
+  iconName: IconNames.MUGSHOT,
+  body: <FaceapiDisplay />
 };
 
 const inspectorTab: SideContentTab = {
