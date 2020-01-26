@@ -18,7 +18,7 @@ The Source Academy is a gamified platform designed to teach students coding whil
 ### Installation 
 1. Install a stable version of NodeJS (tested: Node 10.15.0).
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
-3. Run `npm install` to install dependencies.
+3. Run `npm install` to install dependencies. (Running `audit fix` may prevent server from starting)
 4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
 5. Run `npm start` to start the server at `localhost:8075`.
 
@@ -26,7 +26,7 @@ The Source Academy is a gamified platform designed to teach students coding whil
 
 The project requires some environment variables to be set to work properly. In the `.env` file a few things need to be set-up:
 
-1. **REACT_APP_LUMINUS_CLIENT_ID** : This is needed for the login to work at the moment. Contact the team to obtain one!
+1. **REACT_APP_LUMINUS_CLIENT_ID** : nus_apps
 2. **REACT_APP_USE_BACKEND**: Set to false if not running together with the [backend](https://github.com/source-academy/cadet). Take note that CORs has to be handled if running with the backend
 3. **REACT_APP_CHATKIT_INSTANCE_LOCATOR**: Set this up if running with chatkit. Its documentation can be found [here](https://pusher.com/docs/chatkit).
 
