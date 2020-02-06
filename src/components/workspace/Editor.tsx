@@ -6,8 +6,6 @@ import sharedbAce from 'sharedb-ace';
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
 import './editorTheme/source';
-import 'brace/ext/language_tools'
-import CustomSourceMode from "./source-mode"
 
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
@@ -74,12 +72,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     }
     const editor = (this.AceEditor.current as any).editor;
     const session = editor.getSession();
-
-
-    //add custom mode
-    const customMode = new CustomSourceMode();
-    session.setMode(customMode);
-
     const jshintOptions = {
       // undef: true,
       // unused: true,
@@ -165,10 +157,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             value={this.props.editorValue}
             width="100%"
             setOptions={{
-              fontFamily: "'Inconsolata', 'Consolas', monospace",
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              enableSnippets: true,
+              fontFamily: "'Inconsolata', 'Consolas', monospace"
             }}
           />
         </div>
