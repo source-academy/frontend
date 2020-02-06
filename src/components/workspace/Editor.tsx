@@ -3,6 +3,7 @@ import AceEditor, { Annotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
+import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
 import './editorTheme/source';
@@ -157,7 +158,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             value={this.props.editorValue}
             width="100%"
             setOptions={{
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
+              fontFamily: "'Inconsolata', 'Consolas', monospace",
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              enableSnippets: true
             }}
           />
         </div>
