@@ -4,7 +4,7 @@ import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/searchbox';
-import 'brace/mode/javascript';
+import './editorMode/source-mode.js';
 import './editorTheme/source';
 
 import { LINKS } from '../../utils/constants';
