@@ -5,7 +5,7 @@ import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
-import 'brace/mode/javascript';
+import './editorMode/source';
 import './editorTheme/source';
 
 import { LINKS } from '../../utils/constants';
