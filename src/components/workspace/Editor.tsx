@@ -4,8 +4,10 @@ import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/searchbox';
-import './editorMode/source-mode.js';
+import './editorMode/source-mode';
 import './editorTheme/source';
+
+import "brace/ext/language_tools"
 
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
@@ -157,7 +159,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             value={this.props.editorValue}
             width="100%"
             setOptions={{
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
+              fontFamily: "'Inconsolata', 'Consolas', monospace",
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              enableSnippets: true,
             }}
           />
         </div>
