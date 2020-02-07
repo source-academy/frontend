@@ -1,3 +1,14 @@
+/**
+ * Source Mode for Ace Editor
+ * (Modified from javascript mode in default brace package)
+ * 
+ * this is by now only a base line for future modifications
+ * 
+ * Changes includes:
+ * 1) change code styles so that it passes tslint test
+ * 
+ */
+
 ace.define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
     "use strict";
     
