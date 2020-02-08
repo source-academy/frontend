@@ -151,7 +151,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             fontSize={17}
             height="100%"
             highlightActiveLine={false}
-            mode="javascript"
+            mode="source"
             onChange={this.onChangeMethod}
             onValidate={this.onValidateMethod}
             theme="source"
