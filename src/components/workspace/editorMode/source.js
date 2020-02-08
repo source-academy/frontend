@@ -71,7 +71,7 @@ function _SourceHighlightRules(acequire, exports, module) {
     const oop = acequire("../lib/oop");
     const DocCommentHighlightRules = acequire("./doc_comment_highlight_rules").DocCommentHighlightRules;
     const TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
-    const identifierRegex = "[a-zA-Z\\$_\u00a1-\uffff][a-zA-Z\\d\\$_\u00a1-\uffff]*";
+    const identifierRegex = "[a-zA-Z\\$_\u00a1-\uffff]-[a-zA-Z\\d\\$_\u00a1-\uffff]*";
 
     class SourceHighlightRules {
         constructor(options) {
