@@ -11,12 +11,8 @@
 
 
 
-<<<<<<< HEAD
 
 //ace/mode/doc_comment_highlight_rules
-=======
- //ace/mode/doc_comment_highlight_rules
->>>>>>> b72e1962cf7125560114372a32152030af281513
 function _DocCommentHighlightRules(acequire, exports, module) {
     "use strict";
     
@@ -76,7 +72,6 @@ function _SourceHighlightRules(acequire, exports, module) {
     class SourceHighlightRules {
         constructor(options) {
             const keywordMapper = this.createKeywordMapper({
-<<<<<<< HEAD
                 constant: {
                     language: "null|Infinity|NaN|undefined",
                 },
@@ -89,19 +84,11 @@ function _SourceHighlightRules(acequire, exports, module) {
 
 
                 keyword: "const|yield|import|get|set|async|await|" +
-=======
-                "constant.language": "null|Infinity|NaN|undefined",
-
-                "constant.language.boolean": "true|false",
-
-                "keyword": "const|yield|import|get|set|async|await|" +
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     "break|case|catch|continue|default|delete|do|else|finally|for|function|" +
                     "if|in|of|instanceof|new|return|switch|throw|try|typeof|let|var|while|with|debugger|" +
                     "__parent__|__count__|escape|unescape|with|__proto__|" +
                     "class|enum|extends|super|export|implements|private|public|interface|package|protected|static",
 
-<<<<<<< HEAD
                 storage: {
                     type : "const|let|var|function"
                 },
@@ -112,13 +99,6 @@ function _SourceHighlightRules(acequire, exports, module) {
 
                 variable: {
                     language : "Array|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|" + // Constructors
-=======
-                "storage.type": "const|let|var|function",
-
-                "support.function": "alert",
-
-                "variable.language": "Array|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|" + // Constructors
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     "Namespace|QName|XML|XMLList|" + // E4X
                     "ArrayBuffer|Float32Array|Float64Array|Int16Array|Int32Array|Int8Array|" +
                     "Uint16Array|Uint32Array|Uint8Array|Uint8ClampedArray|" +
@@ -127,12 +107,8 @@ function _SourceHighlightRules(acequire, exports, module) {
                     "decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|" + // Non-constructor functions
                     "isNaN|parseFloat|parseInt|" +
                     "JSON|Math|" + // Other
-<<<<<<< HEAD
                     "this|arguments|prototype|window|document"
                 },
-=======
-                    "this|arguments|prototype|window|document",
->>>>>>> b72e1962cf7125560114372a32152030af281513
 
             }, "identifier");
 
@@ -147,11 +123,7 @@ function _SourceHighlightRules(acequire, exports, module) {
                 ".)";
 
             this.$rules = {
-<<<<<<< HEAD
                 function_arguments: [
-=======
-                "function_arguments": [
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     {
                         regex: identifierRegex,
                         token: "variable.parameter",
@@ -167,11 +139,7 @@ function _SourceHighlightRules(acequire, exports, module) {
                         token: "empty",
                     }
                 ],
-<<<<<<< HEAD
                 no_regex: [
-=======
-                "no_regex": [
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     DocCommentHighlightRules.getStartRule("doc-start"),
                     comments("no_regex"),
                     {
@@ -290,17 +258,10 @@ function _SourceHighlightRules(acequire, exports, module) {
                         "keyword.operator", "text",
                         "storage.type", "text", "entity.name.function", "text", "paren.lparen"
                     ],
-<<<<<<< HEAD
                 }, {
                     regex: /[.](?![.])/,
                     token: "punctuation.operator",
                 }, {
-=======
-                }, {
-                    regex: /[.](?![.])/,
-                    token: "punctuation.operator",
-                }, {
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     regex: /(s(?:h(?:ift|ow(?:Mod(?:elessDialog|alDialog)|Help))|croll(?:X|By(?:Pages|Lines)?|Y|To)?|t(?:op|rike)|i(?:n|zeToContent|debar|gnText)|ort|u(?:p|b(?:str(?:ing)?)?)|pli(?:ce|t)|e(?:nd|t(?:Re(?:sizable|questHeader)|M(?:i(?:nutes|lliseconds)|onth)|Seconds|Ho(?:tKeys|urs)|Year|Cursor|Time(?:out)?|Interval|ZOptions|Date|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Date|FullYear)|FullYear|Active)|arch)|qrt|lice|avePreferences|mall)|h(?:ome|andleEvent)|navigate|c(?:har(?:CodeAt|At)|o(?:s|n(?:cat|textual|firm)|mpile)|eil|lear(?:Timeout|Interval)?|a(?:ptureEvents|ll)|reate(?:StyleSheet|Popup|EventObject))|t(?:o(?:GMTString|S(?:tring|ource)|U(?:TCString|pperCase)|Lo(?:caleString|werCase))|est|a(?:n|int(?:Enabled)?))|i(?:s(?:NaN|Finite)|ndexOf|talics)|d(?:isableExternalCapture|ump|etachEvent)|u(?:n(?:shift|taint|escape|watch)|pdateCommands)|j(?:oin|avaEnabled)|p(?:o(?:p|w)|ush|lugins.refresh|a(?:ddings|rse(?:Int|Float)?)|r(?:int|ompt|eference))|e(?:scape|nableExternalCapture|val|lementFromPoint|x(?:p|ec(?:Script|Command)?))|valueOf|UTC|queryCommand(?:State|Indeterm|Enabled|Value)|f(?:i(?:nd|le(?:ModifiedDate|Size|CreatedDate|UpdatedDate)|xed)|o(?:nt(?:size|color)|rward)|loor|romCharCode)|watch|l(?:ink|o(?:ad|g)|astIndexOf)|a(?:sin|nchor|cos|t(?:tachEvent|ob|an(?:2)?)|pply|lert|b(?:s|ort))|r(?:ou(?:nd|teEvents)|e(?:size(?:By|To)|calc|turnValue|place|verse|l(?:oad|ease(?:Capture|Events)))|andom)|g(?:o|et(?:ResponseHeader|M(?:i(?:nutes|lliseconds)|onth)|Se(?:conds|lection)|Hours|Year|Time(?:zoneOffset)?|Da(?:y|te)|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Da(?:y|te)|FullYear)|FullYear|A(?:ttention|llResponseHeaders)))|m(?:in|ove(?:B(?:y|elow)|To(?:Absolute)?|Above)|ergeAttributes|a(?:tch|rgins|x))|b(?:toa|ig|o(?:ld|rderWidths)|link|ack))\b(?=\()/,
                     token: "support.function",
                 }, {
@@ -318,11 +279,7 @@ function _SourceHighlightRules(acequire, exports, module) {
                     token: "empty",
                 }
                 ],
-<<<<<<< HEAD
                 qqstring: [
-=======
-                "qqstring": [
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     {
                         regex: escapedRegex,
                         token: "constant.language.escape",
@@ -338,11 +295,7 @@ function _SourceHighlightRules(acequire, exports, module) {
                         defaultToken: "string"
                     }
                 ],
-<<<<<<< HEAD
                 qstring: [
-=======
-                "qstring": [
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     {
                         regex: escapedRegex,
                         token: "constant.language.escape",
@@ -358,11 +311,7 @@ function _SourceHighlightRules(acequire, exports, module) {
                         defaultToken: "string"
                     }
                 ],
-<<<<<<< HEAD
                 regex: [
-=======
-                "regex": [
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     {
                         regex: "\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)",
                         token: "regexp.keyword.operator",
@@ -391,11 +340,7 @@ function _SourceHighlightRules(acequire, exports, module) {
                         defaultToken: "string.regexp"
                     }
                 ],
-<<<<<<< HEAD
                 regex_character_class: [
-=======
-                "regex_character_class": [
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     {
                         regex: "\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)",
                         token: "regexp.charclass.keyword.operator",
@@ -414,11 +359,7 @@ function _SourceHighlightRules(acequire, exports, module) {
                         defaultToken: "string.regexp.charachterclass"
                     }
                 ],
-<<<<<<< HEAD
                 start: [
-=======
-                "start": [
->>>>>>> b72e1962cf7125560114372a32152030af281513
                     DocCommentHighlightRules.getStartRule("doc-start"),
                     comments("start"),
                     {
