@@ -1,16 +1,15 @@
 /**
  * Source Mode for Ace Editor
  * (Modified from javascript mode in default brace package)
+ * The link to the original JavaScript mode can be found here:
+ * https://github.com/ajaxorg/ace-builds/blob/master/src/mode-javascript.js
  * 
- * this is by now only a base line for future modifications
+ * This is by now only a base line for future modifications
  * 
  * Changes includes:
  * 1) change code styles so that it passes tslint test
  * 2) refactor some code to ES2015 class syntax
  */
-
-
-
 
 //ace/mode/doc_comment_highlight_rules
 function _DocCommentHighlightRules(acequire, exports, module) {
