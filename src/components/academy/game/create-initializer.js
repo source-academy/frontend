@@ -1,5 +1,6 @@
 import {LINKS} from '../../../utils/constants'
 import {history} from '../../../utils/history'
+import {soundPath} from './constants/constants'
 
 export default function (StoryXMLPlayer, story, username, attemptedAll) {
     function saveToServer() {
@@ -45,7 +46,7 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
             }
         },
         playSound: function (name) {
-            var sound = new Audio(ASSETS_HOST + 'sounds/' + name + '.mp3');
+            var sound = new Audio(soundPath + name + '.mp3');
             if (sound) {
                 sound.play();
             }
