@@ -63,148 +63,63 @@ function _DocCommentHighlightRules(acequire, exports, module) {
 function _SourceHighlightRules(acequire, exports, module) {
     "use strict";
     
-    //parent classes to be inherited
     const oop = acequire("../lib/oop");
     const DocCommentHighlightRules = acequire("./doc_comment_highlight_rules").DocCommentHighlightRules;
     const TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
-    
-    // TODO: Unicode escape sequences
-    let identifierRegex = "[a-zA-Z\\$_\u00a1-\uffff][a-zA-Z\\d\\$_\u00a1-\uffff]*";
-
-    //keywords for all source chapters
-    const chapter1 = {
-        constants : ""                                                                                    ,  
-
-        functions : "display|error|is_boolean|is_function|is_number|is_string|is_undefined|"              + 
-                    "math_abs|math_acos|math_acosh|math_asin|math_asinh|math_atan|"                       +
-                    "math_atan2|math_atanh|math_cbrt|math_ceil|math_clz32|"                               + 
-                    "math_cos|math_cosh|math_exp|math_expm1|math_floor|math_fround|math_hypot|math_imul|" +
-                    "math_log|math_log1p|math_log2|math_log10|math_max|math_min|math_pow|math_random|"    +
-                    "math_round|math_sign|math_sin|math_sinh|math_sqrt|math_tan|math_tanh|"               +
-                    "math_tanh|math_trunc|parse_int|prompt|runtime|stringify"                             ,
-    };
-
-    const chapter2  = {
-        constant :  ""                                                                                    ,
-
-        functions : "accumulate|append|build_list|display|"                                               + 
-                    "draw_data|enum_list|equal|error|filter|for_each|head|"                               +
-                    "is_boolean|is_function|is_list|is_null|is_number|"                                   + 
-                    "is_pair|is_string|is_undefined|length|list|list_ref|list_to_string|"                 +
-                    "map|math_abs|math_acos|math_acosh|math_asin|"                                        + 
-                    "math_asinh|math_atan|math_atan2|math_atanh|math_cbrt|math_ceil|math_clz32|"          +
-                    "math_cos|math_cosh|math_exp|math_expm1|math_floor|"                                  + 
-                    "math_fround|math_hypot|math_imul|math_log|math_log1p|"                               +
-                    "math_log2|math_LOG10E|math_max|math_min|math_pow|math_random|math_round|math_sign|"  +
-                    "math_sin|math_sinh|math_sqrt|math_tan|math_tanh|math_trunc|member|"                  + 
-                    "pair|parse_int|prompt|remove|remove_all|reverse|runtime|stringify|tail"              ,
-    }
-
-    const chapter3 = {
-        constant :  ""                                                                                    ,
-
-        functions : "accumulate|append|array_length|build_list|"                                          + 
-                    "build_stream|display|draw_data|enum_list|enum_stream|equal|"                         +
-                    "error|eval_stream|filter|for_each|head|integers_from|is_array|is_boolean|"           +
-                    "is_function|is_list|is_null|is_number|"                                              + 
-                    "is_pair|is_stream|is_string|is_undefined|length|"                                    +
-                    "list|list_ref|list_to_stream|list_to_string|"                                        + 
-                    "map|math_abs|math_acos|math_acosh|math_asin|math_asinh|math_atan|"                   +
-                    "math_atan2|math_atanh|math_cbrt|math_ceil|"                                          + 
-                    "math_clz32|math_cos|math_cosh|math_exp|math_expm1|"                                  +
-                    "math_floor|math_fround|math_hypot|math_imul|math_log|math_log1p|math_log2|"          +
-                    "math_log10|math_max|math_min|math_pow|math_random|"                                  + 
-                    "math_round|math_sign|math_sin|math_sinh|math_sqrt|"                                  +
-                    "math_tan|math_tanh|math_trunc|member|pair|parse_int|"                                +
-                    "prompt|remove|remove_all|reverse|"                                                   + 
-                    "runtime|set_head|set_tail|stream|stream_append|"                                     +
-                    "stream_filter|stream_for_each|stream_length|"                                        + 
-                    "stream_map|stream_member|stream_ref|stream_remove|"                                  +
-                    "stream_remove_all|stream_reverse|stream_tail|stream_to_list|stringify|tail"          ,
-    }
-
-    const chapter4 = {
-        constants : ""                                                                                    ,
-        
-        functions : "accumulate|append|apply_in_underlying_javascript|"                                   + 
-                    "array_length|build_list|build_stream|display|draw_data|enum_list|enum_stream|"       + 
-                    "equal|error|eval_stream|filter|for_each|head|integers_from|is_array|is_boolean|"     +
-                    "is_function|is_list|is_null|is_number|is_pair|"                                      + 
-                    "is_stream|is_string|is_undefined|length|"                                            + 
-                    "list|list_ref|list_to_stream|list_to_string|"                                        +
-                    "map|math_abs|math_acos|math_acosh|math_asin|"                                        + 
-                    "math_asinh|math_atan|math_atan2|math_atanh|"                                         +
-                    "math_cbrt|math_ceil|math_clz32|math_cos|"                                            + 
-                    "math_cosh|math_exp|math_expm1|math_floor|math_fround|"                               +
-                    "math_hypot|math_imul|math_log|math_log1p|math_log2|math_log10|"                      +
-                    "math_max|math_min|math_pow|math_random|math_round|"                                  + 
-                    "math_sign|math_sin|math_sinh|math_sqrt|math_tan|math_tanh|"                          +
-                    "math_trunc|member|pair|parse|parse_int|"                                             + 
-                    "prompt|remove|remove_all|reverse|runtime|set_head|set_tail|"                         +
-                    "stream|stream_append|stream_filter|stream_for_each|"                                 + 
-                    "stream_length|stream_map|stream_member|stream_ref|"                                  +
-                    "stream_remove|stream_remove_all|stream_reverse|"                                     + 
-                    "stream_tail|stream_to_list|stringify|tail"                                           ,
-    }
-
-    const external = {
-        functions : ""
-    }
+    const identifierRegex = "[a-zA-Z\\$_\u00a1-\uffff]-[a-zA-Z\\d\\$_\u00a1-\uffff]*";
 
     class SourceHighlightRules {
         constructor(options) {
-            // see: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects
-            let keywordMapper = this.createKeywordMapper({
-                "constant.language": 
-                    "null|Infinity|NaN|undefined|math_LN2|math_LN10|"                          +
-                    "math_LOG2E|math_LOG10E|math_PI|math_SQRT1_2|math_SQRT2"                   +
-                    chapter1.constants                                                         ,
+            const keywordMapper = this.createKeywordMapper({
+                constant: {
+                    language: "null|Infinity|NaN|undefined",
+                },
 
-                "constant.language.boolean" : "true|false",
+                constant: {
+                    language: {
+                        boolean: "true|false"
+                    }
+                },
 
-                keyword: "const|break|continue|else|for|function|"                             +
-                        "if|return|let|var|while|"                                             ,
 
-                "storage.type":
-                    "const|let|function",
+                keyword: "const|yield|import|get|set|async|await|" +
+                    "break|case|catch|continue|default|delete|do|else|finally|for|function|" +
+                    "if|in|of|instanceof|new|return|switch|throw|try|typeof|let|var|while|with|debugger|" +
+                    "__parent__|__count__|escape|unescape|with|__proto__|" +
+                    "class|enum|extends|super|export|implements|private|public|interface|package|protected|static",
 
-                "support.function":
-                    "alert|"                                                                   + //built-in
-                    chapter1.functions                                                         , //chapter 1
+                storage: {
+                    type : "const|let|var|function"
+                },
 
-                "variable.language":
-                    "Array|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|"  + // Constructors
-                    "Namespace|QName|XML|XMLList|"                                             + // E4X
-                    "ArrayBuffer|Float32Array|Float64Array|Int16Array|Int32Array|Int8Array|"   +
-                    "Uint16Array|Uint32Array|Uint8Array|Uint8ClampedArray|"                    +
-                    "Error|EvalError|InternalError|RangeError|ReferenceError|StopIteration|"   + // Errors
-                    "SyntaxError|TypeError|URIError|"                                          +
+                support: {
+                    function : "alert"
+                },
+
+                variable: {
+                    language : "Array|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|" + // Constructors
+                    "Namespace|QName|XML|XMLList|" + // E4X
+                    "ArrayBuffer|Float32Array|Float64Array|Int16Array|Int32Array|Int8Array|" +
+                    "Uint16Array|Uint32Array|Uint8Array|Uint8ClampedArray|" +
+                    "Error|EvalError|InternalError|RangeError|ReferenceError|StopIteration|" + // Errors
+                    "SyntaxError|TypeError|URIError|" +
                     "decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|" + // Non-constructor functions
-                    "isNaN|parseFloat|parseInt|"                                               +
-                    "JSON|Math|"                                                               + // Other
-                    "this|arguments|prototype|window|document|"                                + // Pseudo
-                    "var|yield|import|get|set|async|await|with|debugger|switch|throw|try|"     + //forbidden words
-                    "typeof|__parent__|__count__|escape|unescape|with|__proto__|"              +
-                    "class|enum|extends|super|export|implements|private|public|"               +
-                    "interface|package|protected|static|in|of|instanceof|new|"                 +
-                    "case|catch|default|delete|do|finally"
+                    "isNaN|parseFloat|parseInt|" +
+                    "JSON|Math|" + // Other
+                    "this|arguments|prototype|window|document"
+                },
 
             }, "identifier");
 
-            // keywords which can be followed by regular expressions
+            const keywordBeforeRegex = "case|do|else|finally|in|instanceof|return|throw|try|typeof|yield|void";
 
-            // original keywordBeforeRegex = "case|do|else|finally|in|instanceof|return|throw|try|typeof|yield|void";
-            let keywordBeforeRegex = "else|return";
-
-            let escapedRegex = "\\\\(?:x[0-9a-fA-F]{2}|" + // hex
+            const escapedRegex = "\\\\(?:x[0-9a-fA-F]{2}|" + // hex
                 "u[0-9a-fA-F]{4}|" + // unicode
                 "u{[0-9a-fA-F]{1,6}}|" + // es6 unicode
                 "[0-2][0-7]{0,2}|" + // oct
                 "3[0-7][0-7]?|" + // oct
                 "[4-7][0-7]?|" + //oct
                 ".)";
-            // regexp must not have capturing parentheses. Use (?:) instead.
-            // regexps are ordered -> the first match is used
 
             this.$rules = {
                 function_arguments: [
@@ -505,9 +420,9 @@ function _SourceHighlightRules(acequire, exports, module) {
             this.normalizeRules();
         }
     }
-
+    
     oop.inherits(SourceHighlightRules, TextHighlightRules);
-
+    
     function JSX() {
         const tagRegex = identifierRegex.replace("\\d", "\\d\\-");
         const jsxTag = {
@@ -594,7 +509,7 @@ function _SourceHighlightRules(acequire, exports, module) {
             regex : "'",
             stateName : "jsx_attr_q",
             token : "string.attribute-value.xml",
-
+            
         }, {            
             push : [
                 {token : "string.attribute-value.xml", regex: '"', next: "pop"},
@@ -612,7 +527,7 @@ function _SourceHighlightRules(acequire, exports, module) {
             token : "constant.language.escape.reference.xml",
         }];
     }
-
+    
     function comments(next) {
         return [
             {
@@ -623,7 +538,7 @@ function _SourceHighlightRules(acequire, exports, module) {
                 ],
                 regex : /\/\*/,
                 token : "comment", // multi line comment
-
+                
             }, {
                 next: [
                     DocCommentHighlightRules.getTagRule(),
@@ -636,7 +551,7 @@ function _SourceHighlightRules(acequire, exports, module) {
         ];
     }
     exports.SourceHighlightRules = SourceHighlightRules;
-    }
+}
 
 
 
@@ -645,7 +560,7 @@ function _Mode(acequire, exports, module) {
 
     var oop = acequire("../lib/oop");
     var TextMode = acequire("./text").Mode;
-    var SourceHighlightRules = acequire("./source_highlight_rules").SourceHighlightRules;
+    var JavaScriptHighlightRules = acequire("./javascript_highlight_rules").JavaScriptHighlightRules;
     var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
     var WorkerClient = acequire("../worker/worker_client").WorkerClient;
     var CstyleBehaviour = acequire("./behaviour/cstyle").CstyleBehaviour;
@@ -653,7 +568,7 @@ function _Mode(acequire, exports, module) {
 
     class Mode {
         constructor() {
-            this.HighlightRules = SourceHighlightRules;
+            this.HighlightRules = JavaScriptHighlightRules;
             this.$outdent = new MatchingBraceOutdent();
             this.$behaviour = new CstyleBehaviour();
             this.foldingRules = new CStyleFoldMode();
@@ -727,7 +642,8 @@ function _Mode(acequire, exports, module) {
     }).call(Mode.prototype);
 
     exports.Mode = Mode;
-}
+    }
+    
 
 ace.define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], _DocCommentHighlightRules);
 ace.define("ace/mode/source_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"], _SourceHighlightRules);
