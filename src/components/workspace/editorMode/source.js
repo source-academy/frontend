@@ -71,7 +71,10 @@ function _SourceHighlightRules(acequire, exports, module) {
     // TODO: Unicode escape sequences
     let identifierRegex = "[a-zA-Z\\$_\u00a1-\uffff][a-zA-Z\\d\\$_\u00a1-\uffff]*";
 
-    //keywords for all source chapters
+    /* keywords for all source chapters
+     * keywords for later chapters should stack on previous chapters
+     * for example functions for chapter2 = chapter1.functions + "|" + chpater2.functions
+     */ 
     const chapter1 = {
         constants : ""                                                                                    ,  
 
@@ -87,64 +90,27 @@ function _SourceHighlightRules(acequire, exports, module) {
     const chapter2  = {
         constant :  ""                                                                                    ,
 
-        functions : "accumulate|append|build_list|display|"                                               + 
+        functions : "accumulate|append|build_list|"                                                       + 
                     "draw_data|enum_list|equal|error|filter|for_each|head|"                               +
-                    "is_boolean|is_function|is_list|is_null|is_number|"                                   + 
-                    "is_pair|is_string|is_undefined|length|list|list_ref|list_to_string|"                 +
-                    "map|math_abs|math_acos|math_acosh|math_asin|"                                        + 
-                    "math_asinh|math_atan|math_atan2|math_atanh|math_cbrt|math_ceil|math_clz32|"          +
-                    "math_cos|math_cosh|math_exp|math_expm1|math_floor|"                                  + 
-                    "math_fround|math_hypot|math_imul|math_log|math_log1p|"                               +
-                    "math_log2|math_LOG10E|math_max|math_min|math_pow|math_random|math_round|math_sign|"  +
-                    "math_sin|math_sinh|math_sqrt|math_tan|math_tanh|math_trunc|member|"                  + 
-                    "pair|parse_int|prompt|remove|remove_all|reverse|runtime|stringify|tail"              ,
+                    "is_pair|length|list|list_ref|list_to_string|"                                        +
+                    "map|member|pair|parse_int|prompt|remove|remove_all|reverse|runtime|tail"             ,
     }
 
     const chapter3 = {
         constant :  ""                                                                                    ,
 
-        functions : "accumulate|append|array_length|build_list|"                                          + 
-                    "build_stream|display|draw_data|enum_list|enum_stream|equal|"                         +
-                    "error|eval_stream|filter|for_each|head|integers_from|is_array|is_boolean|"           +
-                    "is_function|is_list|is_null|is_number|"                                              + 
-                    "is_pair|is_stream|is_string|is_undefined|length|"                                    +
-                    "list|list_ref|list_to_stream|list_to_string|"                                        + 
-                    "map|math_abs|math_acos|math_acosh|math_asin|math_asinh|math_atan|"                   +
-                    "math_atan2|math_atanh|math_cbrt|math_ceil|"                                          + 
-                    "math_clz32|math_cos|math_cosh|math_exp|math_expm1|"                                  +
-                    "math_floor|math_fround|math_hypot|math_imul|math_log|math_log1p|math_log2|"          +
-                    "math_log10|math_max|math_min|math_pow|math_random|"                                  + 
-                    "math_round|math_sign|math_sin|math_sinh|math_sqrt|"                                  +
-                    "math_tan|math_tanh|math_trunc|member|pair|parse_int|"                                +
-                    "prompt|remove|remove_all|reverse|"                                                   + 
-                    "runtime|set_head|set_tail|stream|stream_append|"                                     +
+        functions : "array_length|build_stream|enum_stream|"                                              +
+                    "eval_stream|integers_from|is_array|is_stream|"                                       +
+                    "list_to_stream|set_head|set_tail|stream|stream_append|"                              +
                     "stream_filter|stream_for_each|stream_length|"                                        + 
                     "stream_map|stream_member|stream_ref|stream_remove|"                                  +
-                    "stream_remove_all|stream_reverse|stream_tail|stream_to_list|stringify|tail"          ,
+                    "stream_remove_all|stream_reverse|stream_tail|stream_to_list"                         ,
     }
 
     const chapter4 = {
         constants : ""                                                                                    ,
         
-        functions : "accumulate|append|apply_in_underlying_javascript|"                                   + 
-                    "array_length|build_list|build_stream|display|draw_data|enum_list|enum_stream|"       + 
-                    "equal|error|eval_stream|filter|for_each|head|integers_from|is_array|is_boolean|"     +
-                    "is_function|is_list|is_null|is_number|is_pair|"                                      + 
-                    "is_stream|is_string|is_undefined|length|"                                            + 
-                    "list|list_ref|list_to_stream|list_to_string|"                                        +
-                    "map|math_abs|math_acos|math_acosh|math_asin|"                                        + 
-                    "math_asinh|math_atan|math_atan2|math_atanh|"                                         +
-                    "math_cbrt|math_ceil|math_clz32|math_cos|"                                            + 
-                    "math_cosh|math_exp|math_expm1|math_floor|math_fround|"                               +
-                    "math_hypot|math_imul|math_log|math_log1p|math_log2|math_log10|"                      +
-                    "math_max|math_min|math_pow|math_random|math_round|"                                  + 
-                    "math_sign|math_sin|math_sinh|math_sqrt|math_tan|math_tanh|"                          +
-                    "math_trunc|member|pair|parse|parse_int|"                                             + 
-                    "prompt|remove|remove_all|reverse|runtime|set_head|set_tail|"                         +
-                    "stream|stream_append|stream_filter|stream_for_each|"                                 + 
-                    "stream_length|stream_map|stream_member|stream_ref|"                                  +
-                    "stream_remove|stream_remove_all|stream_reverse|"                                     + 
-                    "stream_tail|stream_to_list|stringify|tail"                                           ,
+        functions : "apply_in_underlying_javascript"                                                      , 
     }
 
     const external = {
