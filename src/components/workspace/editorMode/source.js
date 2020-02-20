@@ -113,10 +113,6 @@ function _SourceHighlightRules(acequire, exports, module) {
         functions : "apply_in_underlying_javascript"                                                      , 
     }
 
-    const external = {
-        functions : ""
-    }
-
     class SourceHighlightRules {
         constructor(options) {
             // see: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects
@@ -158,7 +154,10 @@ function _SourceHighlightRules(acequire, exports, module) {
             }, "identifier");
 
             // keywords which can be followed by regular expressions
-            let keywordBeforeRegex = "case|do|else|finally|in|instanceof|return|throw|try|typeof|yield|void";
+
+            // original let keywordBeforeRegex = "case|do|else|finally|in|instanceof|return|throw|try|typeof|yield|void"
+            let keywordBeforeRegex = "else|return";
+
             let escapedRegex = "\\\\(?:x[0-9a-fA-F]{2}|" + // hex
                 "u[0-9a-fA-F]{4}|" + // unicode
                 "u{[0-9a-fA-F]{1,6}}|" + // es6 unicode
