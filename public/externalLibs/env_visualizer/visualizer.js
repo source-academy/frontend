@@ -17,7 +17,7 @@
   const FNOBJECT_RADIUS = 12; // radius of function object circle
   const DATA_OBJECT_SIDE = 24; // length of data object triangle
   const DRAWING_LEFT_PADDING = 20; // left padding for entire drawing
-  const FRAME_HEIGHT_LINE = 30; // height in px of each line of text in a frame;
+  const FRAME_HEIGHT_LINE = 40; // height in px of each line of text in a frame;
   const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
   const FRAME_WIDTH_CHAR = 8; // width in px of each text character in a frame;
   const FRAME_WIDTH_PADDING = 50; // width in px to pad each frame with;
@@ -25,6 +25,12 @@
   const LEVEL_SPACING = 60; // spacing between vertical frame levels
   const OBJECT_FRAME_RIGHT_SPACING = 50; // space to right frame border
   const OBJECT_FRAME_TOP_SPACING = 25; // perpendicular distance to top border
+  
+  // DATA STRUCTURE DIMENSIONS
+  const DATA_UNIT_WIDTH = 80;
+  const DATA_UNIT_HEIGHT = 40;
+
+
   
   /**
    * Keys (unique IDs) for data objects, user-defined function objects,
@@ -398,23 +404,24 @@
     for (let k in elements) {
       if (elements[k] == null && typeof (elements[k]) == "object") {
         // null primitive in Source
-        context.fillText(`${'' + k}: null`, x + 10, y + 30 + i * 30);
+        context.fillText(`${'' + k}: null`, x + 10, y + 40 + i * 40);
       } else {
         switch (typeof elements[k]) {
           case 'number':
           case 'boolean':
           case 'undefined':
-            context.fillText(`${'' + k}: ${'' + elements[k]}`, x + 10, y + 30 + i * 30);
+            context.fillText(`${'' + k}: ${'' + elements[k]}`, x + 10, y + 40 + i * 40);
             break;
           case 'string':
             if (k == '(other predclr. names)') {
-              context.fillText(`${'' + k}`, x + 10, y + 30 + i * 30);
+              context.fillText(`${'' + k}`, x + 10, y + 40 + i * 40);
             } else {
-              context.fillText(`${'' + k}: "${'' + elements[k]}"`, x + 10, y + 30 + i * 30);
+              context.fillText(`${'' + k}: "${'' + elements[k]}"`, x + 10, y + 40 + i * 40);
             }
             break;
           default:
-            context.fillText(`${'' + k}:`, x + 10, y + 30 + i * 30);
+            context.fillText(`${'' + k}:`, x + 10, y + 40 + i * 40);
+            i += getUnitHeight(elements[k]);
         }
       }
       i++;
@@ -481,7 +488,7 @@
       // dataObject belongs to current frame
       // simply draw straight arrow from frame to function
       const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
-      const y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 25,
+      const y0 = frame.y + findElementNamePosition(dataObject, frame) * FRAME_HEIGHT_LINE + 35,
         xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
@@ -501,7 +508,7 @@
       const frameOffset = findElementPosition(dataObject, frame);
       const fnOffset = findElementPosition(dataObject, wrapper.parent);
       const x0 = frame.x + name.length * 8 + 22,
-        y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 25;
+        y0 = frame.y + findElementNamePosition(dataObject, frame) * FRAME_HEIGHT_LINE + 35;
       const xf = wrapper.x + FNOBJECT_RADIUS * 2 + 3,
         x1 = frame.x + frame.width + 10 + frameOffset * 20,
         y1 = y0;
@@ -561,7 +568,7 @@
       // fnObject belongs to current frame
       // simply draw straight arrow from frame to function
       const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
-      const y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 25,
+      const y0 = frame.y + findElementNamePosition(fnObject, frame) * FRAME_HEIGHT_LINE + 35,
         xf = fnObject.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
@@ -583,7 +590,7 @@
       const fnOffset = findElementPosition(fnObject, fnObject.parent);
       const frameOffset = findFrameIndexInLevel(frame);
       const x0 = frame.x + name.length * 8 + 22,
-        y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 25;
+        y0 = frame.y + findElementNamePosition(fnObject, frame) * FRAME_HEIGHT_LINE + 35;
       const xf = fnObject.x + FNOBJECT_RADIUS * 2 + 3,
         x1 = frame.x + frame.width + 10 + frameOffset * 20,
         y1 = y0;
@@ -1017,14 +1024,6 @@
           levels[frame.level].frames = [frame];
         }
       });
-
-      /** 
-       * - Find width and height of each frame
-       */
-      frames.forEach(function(frame) {
-        frame.height = getFrameHeight(frame);
-        frame.width = getFrameWidth(frame);
-      });
       
       /**
        * Extract function and data objects from frames. Each distinct object is
@@ -1047,6 +1046,19 @@
           }
         }
       });
+
+      /** 
+       * - Find width and height of each frame
+       */
+
+      for(let i = frames.length - 1; i >= 0; i--) {
+        let frame = frames[i];
+        frame.height = getFrameHeight(frame);
+        frame.width = getFrameWidth(frame);
+        frame.fullwidth = getFrameAndObjectWidth(frame);
+      }
+
+
 
       /**
        * Some functions may have been generated via anonymous functions, whose
@@ -1270,39 +1282,145 @@
     return null;
   }
   
+  // NEW ADDITION OF LIST WIDTH CALCULATION
+  function getListWidth(list) {
+    function getUnitWidth(list){
+      if (!Array.isArray(list)) {
+        return 0;
+      } else {
+        return Math.max(getUnitWidth(list[1]) + 1, getUnitWidth(list[0]))
+      }
+    }
+    let x = getUnitWidth(list) * DATA_UNIT_WIDTH;
+    return x;
+  }
+
+  // NEW ADDITION OF LIST HEIGHT CALCULATION
+
+  function isFunction(functionToCheck) {
+    return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+  }
+
+  function getUnitHeight(list){
+    if (!Array.isArray(list)) {
+      return 0;
+    } else if (Array.isArray(list[0])) {
+      return 1 + getUnitHeight(list[0]) + getUnitHeight(list[1]);
+    } else if (isFunction(list[0])) {
+      return 1 + getUnitHeight(list[1]);
+    } else {
+      return getUnitHeight(list[1]);
+    }
+  }
+
+  function getListHeight(list) {
+    let x = (getUnitHeight(list) + 1) * DATA_UNIT_HEIGHT
+    return x;
+  }
+
   function getFrameHeight(frame) {
-    return Object.keys(frame.elements).length * FRAME_HEIGHT_LINE + FRAME_HEIGHT_PADDING;
+    let elem_lines = 0;
+    let data_space = 0;
+
+    // assumes line spacing is separate from data obj
+
+    for(elem in frame.elements){
+      if(isFunction(frame.elements[elem])) {
+        elem_lines += 1;
+      } 
+      else if(Array.isArray(frame.elements[elem])) {
+        const parent = dataObjectWrappers[dataObjects.indexOf(frame.elements[elem])].parent;
+        if(parent == frame) {
+          data_space += getListHeight(frame.elements[elem]);
+        } else {
+          data_space += DATA_UNIT_HEIGHT;
+        }        
+      } 
+      else {
+        elem_lines += 1;
+      }
+    }
+    
+    return data_space + elem_lines * FRAME_HEIGHT_LINE + FRAME_HEIGHT_PADDING;
   }
   
   function getFrameWidth(frame) {
     let maxLength = 0;
     const elements = frame.elements;
     for (e in elements) {
-      let currLength;
-      const literals = ["number", "string", "boolean"];
-      if (literals.includes(typeof elements[e])) {
-        currLength = e.length + elements[e].toString().length;
-      } else if (typeof elements[e] == "undefined") {
-        currLength = e.length + 9;
-      } else {
-        currLength = e.length;
-      }
-      maxLength = Math.max(maxLength, currLength);
+      if(true) {
+        let currLength;
+        const literals = ["number", "string", "boolean"];
+        if (literals.includes(typeof elements[e])) {
+          currLength = e.length + elements[e].toString().length;
+        } else if (typeof elements[e] == "undefined") {
+          currLength = e.length + 9;
+        } else {
+          currLength = e.length;
+        }
+        maxLength = Math.max(maxLength, currLength);
+      } 
+ 
     }
+    
     return maxLength * FRAME_WIDTH_CHAR + FRAME_WIDTH_PADDING;    
   }
-  
-  function getDrawingWidth(levels) {
-    let maxX = 0;
-    for (l in levels) {
-      let currX = 0;
-      level = levels[l];
-      level.frames.forEach(function(f) {
-        currX += f.width + FRAME_SPACING;
-      });
-      maxX = Math.max(maxX, currX);
+
+  // New function for Width of Objects + Frame
+
+  function getFrameAndObjectWidth(frame){
+    if(frame.elements.length == 0){
+      return getFrameWidth(frame);
+    } else {
+      let maxWidth = 0;
+      for(e in frame.elements) {
+
+        // Can be either primitive, function or array
+        if(isFunction(frame.elements[e])) {
+          if(frame.elements[e].parent == frame) {
+            maxWidth = Math.max(maxWidth, DATA_UNIT_WIDTH);
+          }          
+        } else if(Array.isArray(frame.elements[e])) {
+          const parent = dataObjectWrappers[dataObjects.indexOf(frame.elements[e])].parent;
+          if(parent == frame) {
+            maxWidth = Math.max(maxWidth, getListWidth(frame.elements[e]))
+          }
+        } 
+      }
+      return getFrameWidth(frame) + OBJECT_FRAME_RIGHT_SPACING + maxWidth; 
     }
-    return maxX;
+  }
+  
+  function getTotalWidth(frame){
+    // compare fullwidth + width of children
+        
+    const children_level = frame.level + 1
+    // const children = levels[children_level].frames.filter((f) => f.parent == frame);
+    let children = levels[children_level]
+    let children_length = 0;
+
+    if (children != undefined) {
+      children = levels[children_level].frames.filter((f) => f.parent == frame);
+      if(children == undefined) {
+        return frame.fullwidth;
+      }
+      for (c in children) {
+        children_length += getTotalWidth(children[c]);
+      }
+
+      children_length += (children.length - 1) * FRAME_SPACING;
+    } else {
+      return frame.fullwidth;
+    }
+
+    return Math.max(frame.fullwidth, children_length);
+  }
+
+
+
+  
+  function getDrawingWidth(levels) {   
+    return getTotalWidth(levels[1].frames[0])
   }
   
   function getDrawingHeight(levels) {
@@ -1352,8 +1470,29 @@
     return -1;
   }
 
-  function findElementNamePosition(elementName, frame) {
-    return Object.keys(frame.elements).indexOf(elementName);
+  function findElementNamePosition(element, frame) {
+    let index = 0;
+
+    for(elem in frame.elements){
+      if(frame.elements[elem] == element) {
+        break;
+      }
+      if(isFunction(frame.elements[elem])) {
+        index += 1;
+      } 
+      else if(Array.isArray(frame.elements[elem])) {
+        const parent = dataObjectWrappers[dataObjects.indexOf(frame.elements[elem])].parent;
+        if(parent == frame) {
+          index += getUnitHeight(frame.elements[elem]) + 1
+        } else {
+          index += 1;
+        }        
+      } else {
+        index += 1
+      }
+    }
+    
+    return index;
   }
   
   function findFrameIndexInLevel(frame) {
