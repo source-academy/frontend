@@ -203,28 +203,99 @@
    * visualiser, so a separate icon (a triangle) is drawn for each variable
    * that points to data.
    */
-  function drawSceneDataObject(dataObject) {
-    const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
-    var config = dataObject;
-    var scene = dataObjectLayer.scene,
-      context = scene.context;
-    var parent = wrapper.parent;
-    // define points for drawing data object triangle
-    const x0 = wrapper.x,
-      y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
-    const x1 = x0 - DATA_OBJECT_SIDE / 2,
-      y1 = y0 + DATA_OBJECT_SIDE;
-    const x2 = x1 + DATA_OBJECT_SIDE,
-      y2 = y1;
+
+   // function to determine the distance to shift the next pair
+   // takes in a list data object and returns an integer
+  function getShiftDistance(dataObject) {
+    const width = 60;
+    if (Array.isArray(dataObject)) {
+      // 15 is the spacing between each pair so the list doesnt get too crowded
+      
+    } else {
+      return width + 15;
+    }
+
+  }
+
+  function drawLine(context, startX, startY, endX, endY) {
     context.beginPath();
-    context.moveTo(x0, y0);
-    context.lineTo(x1, y1);
-    context.lineTo(x2, y2);
-    context.lineTo(x0, y0);
+    context.moveTo(startX, startY);
+    context.lineTo(endX, endY);
+    context.stroke();
+    context.closePath();
+  }
+
+  function drawScenePairs(dataObject, scene, wrapper, wrapperData, startX, startY) {
+    // wrapperData is only relevant for tracing the origin of function objects in lists
+    // not useful for anything else 
+    var context = scene.context,
+      parent = wrapper.parent;
+    // define points for drawing data object triangle
+    const height = 30,
+      width = 60;
+    // draws the pair shape
+    context.strokeRect(startX, startY, width, height);
+    context.beginPath();
+    context.moveTo(startX + width/2, startY);
+    context.lineTo(startX + width/2, startY + height);
+    context.stroke();
+    context.closePath();
+    context.restore();
     context.fillStyle = '#999999';
     context.font = '14px Roboto Mono Light, Courier New';
-    context.fillText('!', x0 - 4, y0 + 20);
+    // draws data in the head and tail
+    if (Array.isArray(dataObject[0])) {
+      drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + height + 15);
+      drawLine(context, startX + width/4, startY + height/2, 
+        startX + width/4, startY + height + 15);
+      context.moveTo(startX + width/4, startY + height + 15);
+      drawArrowHead(context, startX + width/4, startY + height/2, 
+        startX + width/4, startY + height + 15);
+      context.stroke();
+    } else if (dataObject[0] == null) {
+      drawLine(context, startX + width/2, startY, startX, startY + height);
+    } else if (typeof wrapperData[0] === 'function') {
+      // draw line up to fn height
+      drawLine(context, startX + width/4, startY + height/2, 
+        startX + width/4, wrapperData[0].y);
+      // draw line left/right to fn area
+      drawLine(context, startX + width/4, wrapperData[0].y,
+        wrapperData[0].x, wrapperData[0].y);
+      // draw arrow head shape
+      context.moveTo(wrapperData[0].x, wrapperData[0].y);
+      drawArrowHead(context, startX + width/4, wrapperData[0].y, 
+        wrapperData[0].x, wrapperData[0].y);
+      context.stroke();
+    } else {
+      context.fillText(dataObject[0], startX + width/6, startY + 2 * height/3);
+    }
 
+    if (Array.isArray(dataObject[1])) {
+      drawScenePairs(dataObject[1], scene, wrapper, wrapperData[1], startX + width + 15, startY);
+      drawLine(context, startX + 3 * width/4, startY + height/2, 
+        startX + width + 15, startY + height/2);
+      context.moveTo(startX + width + 15, startY + height/2);
+      drawArrowHead(context, startX + 3 * width/4, startY + height/2, 
+        startX + width + 15, startY + height/2);
+      context.stroke();
+    } else if (dataObject[1] == null) {
+      drawLine(context, startX + width, startY, startX + width/2, startY + height);
+    } else if (typeof wrapperData[1] === 'function') {
+      // draw line up to fn height
+      drawLine(context, startX + 3 * width/4, startY + height/2, 
+        startX + 3 * width/4, wrapperData[1].y);
+      // draw line left/right to fn area
+      drawLine(context, startX + 3 * width/4, wrapperData[1].y, 
+        wrapperData[1].x, wrapperData[1].y)
+      // draw arrow head shape
+      context.moveTo(wrapperData[1].x, wrapperData[1].y);
+      drawArrowHead(context, startX + 3 * width/4, wrapperData[1].y, 
+        wrapperData[1].x, wrapperData[1].y);
+      context.stroke();
+    } else {
+      context.fillText(dataObject[1], startX + 2 * width/3, startY + 2 * height/3);
+    }
+    
     if (!wrapper.hovered && !wrapper.selected) {
       context.strokeStyle = '#999999';
       context.lineWidth = 2;
@@ -247,6 +318,20 @@
     }
   }
 
+  function drawSceneDataObject(dataObject) {
+    const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
+    var config = dataObject;
+    var scene = dataObjectLayer.scene,
+      context = scene.context;
+    var parent = wrapper.parent;
+    // define points for drawing data object triangle
+    const x0 = wrapper.x - 25,
+      y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
+    
+    drawScenePairs(dataObject, scene, wrapper, wrapper.data, x0, y0);
+    
+  }
+
   function drawHitDataObject(dataObject) {
     const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
     var config = dataObject;
@@ -255,7 +340,7 @@
     var parent = wrapper.parent;
     const x0 = wrapper.x,
       y0 = wrapper.y;
-    const x1 = x0 - 12,
+    const x1 = x0 - 20,
       y1 = y0 + 24;
     const x2 = x1 + 24,
       y2 = y1;
@@ -756,6 +841,7 @@
 
   // main function to be exported
   function draw_env(context) {
+    console.log(context);
 
     // add built-in functions to list of builtins
     let originalEnvs = context.context.context.runtime.environments;
