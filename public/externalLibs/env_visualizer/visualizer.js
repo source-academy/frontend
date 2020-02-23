@@ -798,16 +798,19 @@
                    findElementPosition(fnObject, parent) * FRAME_HEIGHT_LINE
                    + OBJECT_FRAME_TOP_SPACING;
     });
-    
+
+    // prevents data structures in the same row from overlapping
+    let prevObjectsHeights = 0;
     for (d in dataObjects) {
       const wrapper = dataObjectWrappers[d];
       const parent = wrapper.parent;
       wrapper.x = parent.x 
                   + parent.width 
                   + OBJECT_FRAME_RIGHT_SPACING;
-      wrapper.y = parent.y +
-                  findElementPosition(dataObjects[d], parent) * FRAME_HEIGHT_LINE
+      wrapper.y = parent.y
+                  + prevObjectsHeights
                   + OBJECT_FRAME_TOP_SPACING;
+      prevObjectsHeights += getListHeight(dataObjects[d]);
     }
   }
 
