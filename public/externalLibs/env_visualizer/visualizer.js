@@ -212,16 +212,6 @@
 
    // function to determine the distance to shift the next pair
    // takes in a list data object and returns an integer
-  function getShiftDistance(dataObject) {
-    const width = 60;
-    if (Array.isArray(dataObject)) {
-      // 15 is the spacing between each pair so the list doesnt get too crowded
-      
-    } else {
-      return width + 15;
-    }
-
-  }
 
   function drawLine(context, startX, startY, endX, endY) {
     context.beginPath();
@@ -236,14 +226,12 @@
     // not useful for anything else 
     var context = scene.context,
       parent = wrapper.parent;
-    // define points for drawing data object triangle
-    const height = 30,
-      width = 60;
+    
     // draws the pair shape
-    context.strokeRect(startX, startY, width, height);
+    context.strokeRect(startX, startY, DATA_UNIT_WIDTH, DATA_UNIT_HEIGHT);
     context.beginPath();
-    context.moveTo(startX + width/2, startY);
-    context.lineTo(startX + width/2, startY + height);
+    context.moveTo(startX + DATA_UNIT_WIDTH/2, startY);
+    context.lineTo(startX + DATA_UNIT_WIDTH/2, startY + DATA_UNIT_HEIGHT);
     context.stroke();
     context.closePath();
     context.restore();
@@ -251,55 +239,56 @@
     context.font = '14px Roboto Mono Light, Courier New';
     // draws data in the head and tail
     if (Array.isArray(dataObject[0])) {
-      drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + height + 15);
-      drawLine(context, startX + width/4, startY + height/2, 
-        startX + width/4, startY + height + 15);
-      context.moveTo(startX + width/4, startY + height + 15);
-      drawArrowHead(context, startX + width/4, startY + height/2, 
-        startX + width/4, startY + height + 15);
+      const shiftY = getListHeight(dataObject[1]);
+      drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + shiftY);
+      drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        startX + DATA_UNIT_WIDTH/4, startY + shiftY);
+      context.moveTo(startX + DATA_UNIT_WIDTH/4, startY + shiftY);
+      drawArrowHead(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        startX + DATA_UNIT_WIDTH/4, startY + shiftY);
       context.stroke();
     } else if (dataObject[0] == null) {
-      drawLine(context, startX + width/2, startY, startX, startY + height);
+      drawLine(context, startX + DATA_UNIT_WIDTH/2, startY, startX, startY + DATA_UNIT_HEIGHT);
     } else if (typeof wrapperData[0] === 'function') {
       // draw line up to fn height
-      drawLine(context, startX + width/4, startY + height/2, 
-        startX + width/4, wrapperData[0].y);
+      drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
       // draw line left/right to fn area
-      drawLine(context, startX + width/4, wrapperData[0].y,
+      drawLine(context, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y,
         wrapperData[0].x, wrapperData[0].y);
       // draw arrow head shape
       context.moveTo(wrapperData[0].x, wrapperData[0].y);
-      drawArrowHead(context, startX + width/4, wrapperData[0].y, 
+      drawArrowHead(context, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
         wrapperData[0].x, wrapperData[0].y);
       context.stroke();
     } else {
-      context.fillText(dataObject[0], startX + width/6, startY + 2 * height/3);
+      context.fillText(dataObject[0], startX + DATA_UNIT_WIDTH/6, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
 
     if (Array.isArray(dataObject[1])) {
-      drawScenePairs(dataObject[1], scene, wrapper, wrapperData[1], startX + width + 15, startY);
-      drawLine(context, startX + 3 * width/4, startY + height/2, 
-        startX + width + 15, startY + height/2);
-      context.moveTo(startX + width + 15, startY + height/2);
-      drawArrowHead(context, startX + 3 * width/4, startY + height/2, 
-        startX + width + 15, startY + height/2);
+      drawScenePairs(dataObject[1], scene, wrapper, wrapperData[1], startX + DATA_UNIT_WIDTH + 15, startY);
+      drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
+      context.moveTo(startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
+      drawArrowHead(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
       context.stroke();
     } else if (dataObject[1] == null) {
-      drawLine(context, startX + width, startY, startX + width/2, startY + height);
+      drawLine(context, startX + DATA_UNIT_WIDTH, startY, startX + DATA_UNIT_WIDTH/2, startY + DATA_UNIT_HEIGHT);
     } else if (typeof wrapperData[1] === 'function') {
       // draw line up to fn height
-      drawLine(context, startX + 3 * width/4, startY + height/2, 
-        startX + 3 * width/4, wrapperData[1].y);
+      drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y);
       // draw line left/right to fn area
-      drawLine(context, startX + 3 * width/4, wrapperData[1].y, 
+      drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y, 
         wrapperData[1].x, wrapperData[1].y)
       // draw arrow head shape
       context.moveTo(wrapperData[1].x, wrapperData[1].y);
-      drawArrowHead(context, startX + 3 * width/4, wrapperData[1].y, 
+      drawArrowHead(context, startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y, 
         wrapperData[1].x, wrapperData[1].y);
       context.stroke();
     } else {
-      context.fillText(dataObject[1], startX + 2 * width/3, startY + 2 * height/3);
+      context.fillText(dataObject[1], startX + 2 * DATA_UNIT_WIDTH/3, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
     
     if (!wrapper.hovered && !wrapper.selected) {
@@ -1291,8 +1280,8 @@
         return Math.max(getUnitWidth(list[1]) + 1, getUnitWidth(list[0]))
       }
     }
-    let x = getUnitWidth(list) * DATA_UNIT_WIDTH;
-    return x;
+    let pairCount = getUnitWidth(list);
+    return pairCount * (DATA_UNIT_WIDTH + 15);
   }
 
   // NEW ADDITION OF LIST HEIGHT CALCULATION
@@ -1314,7 +1303,7 @@
   }
 
   function getListHeight(list) {
-    let x = (getUnitHeight(list) + 1) * DATA_UNIT_HEIGHT
+    let x = (getUnitHeight(list) + 1) * (DATA_UNIT_HEIGHT + 15);
     return x;
   }
 
