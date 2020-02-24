@@ -18,7 +18,7 @@ The Source Academy is a gamified platform designed to teach students coding whil
 ### Installation 
 1. Install a stable version of NodeJS (tested: Node 10.15.0).
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
-3. Run `npm install` to install dependencies.
+3. Run `npm install` to install dependencies. (Running `audit fix` may prevent server from starting)
 4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
 5. Run `npm start` to start the server at `localhost:8075`.
 
