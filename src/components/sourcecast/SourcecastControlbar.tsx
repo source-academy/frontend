@@ -31,7 +31,13 @@ class SourcecastControlbar extends React.PureComponent<
   }
 
   public render() {
-    const PlayerPlayButton = controlButton('Play', IconNames.PLAY, this.handlePlayerPlaying);
+    const PlayerPlayButton = controlButton(
+      'Play',
+      IconNames.PLAY,
+      this.handlePlayerPlaying,
+      {},
+      !this.props.duration
+    );
     const PlayerPauseButton = controlButton('Pause', IconNames.PAUSE, this.handlePlayerPausing);
     return (
       <div className="Bar">
@@ -172,12 +178,16 @@ class SourcecastControlbar extends React.PureComponent<
   };
 
   private renderLabel = (value: number) => {
-    const totalTime = this.props.duration * value;
-    const min = Math.floor(totalTime / 60);
-    const sec = Math.floor(totalTime - min * 60);
-    const minString = min < 10 ? '0' + min : min;
-    const secString = sec < 10 ? '0' + sec : sec;
-    return minString + ':' + secString;
+    if (this.props.duration) {
+      const totalTime = this.props.duration * value;
+      const min = Math.floor(totalTime / 60);
+      const sec = Math.floor(totalTime - min * 60);
+      const minString = min < 10 ? '0' + min : min;
+      const secString = sec < 10 ? '0' + sec : sec;
+      return minString + ':' + secString;
+    } else {
+      return '00:00';
+    }
   };
 }
 
