@@ -2,7 +2,7 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import 'brace/mode/javascript';
-import './editorTheme/source';
+import 'js-slang/dist/editors/ace/theme/source';
 
 export interface IReplInputProps {
   replValue: string;

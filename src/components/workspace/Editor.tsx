@@ -5,11 +5,14 @@ import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
-import './editorMode/source';
-import './editorTheme/source';
-
+import 'js-slang/dist/editors/ace/modes/source1';
+import 'js-slang/dist/editors/ace/modes/source2';
+import 'js-slang/dist/editors/ace/modes/source3';
+import 'js-slang/dist/editors/ace/modes/source4';
+import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
+
 /**
  * @property editorValue - The string content of the react-ace editor
  * @property handleEditorChange  - A callback function
@@ -17,6 +20,7 @@ import { checkSessionIdExists } from './collabEditing/helper';
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
  */
+
 export interface IEditorProps {
   breakpoints: string[];
   editorSessionId: string;
@@ -25,6 +29,7 @@ export interface IEditorProps {
   isEditorAutorun: boolean;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
+  sourceChapter?: number;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
@@ -73,6 +78,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     }
     const editor = (this.AceEditor.current as any).editor;
     const session = editor.getSession();
+
+    /* disable error threshold incrementer
+
     const jshintOptions = {
       // undef: true,
       // unused: true,
@@ -92,6 +100,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       globalstrict: true
     };
     session.$worker.send('setOptions', [jshintOptions]);
+
+    */
 
     editor.on('gutterclick', this.handleGutterClick);
 
@@ -127,6 +137,20 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     return markerProps;
   };
 
+  // chapter selector used to choose the correct source mode
+  public chapterNo = () => {
+    const chapter = this.props.sourceChapter;
+    if (chapter === 4) {
+      return 'source4';
+    } else if (chapter === 3) {
+      return 'source3';
+    } else if (chapter === 2) {
+      return 'source2';
+    } else {
+      return 'source1';
+    }
+  };
+
   public render() {
     return (
       <HotKeys className="Editor" handlers={handlers}>
@@ -151,7 +175,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             fontSize={17}
             height="100%"
             highlightActiveLine={false}
-            mode="source"
+            mode={this.chapterNo()} // select according to props.sourceChapter
             onChange={this.onChangeMethod}
             onValidate={this.onValidateMethod}
             theme="source"
