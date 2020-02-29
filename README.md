@@ -65,3 +65,8 @@ We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-g
 ### Projects
 
 For more info on specific frontend projects, please consult [our wiki](https://github.com/source-academy/cadet-frontend/wiki).
+
+## Branch `sa_2021`
+
+The branch `sa_2021` serves as development branch for the Source Academy frontend,
+starting on 29/2/2020.
