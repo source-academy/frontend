@@ -263,6 +263,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         replButtons: [evalButton, clearButton]
       },
       editorProps: {
+        sourceChapter: this.props.sourceChapter,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
