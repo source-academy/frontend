@@ -5,11 +5,11 @@ import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
-import 'js-slang/dist/editors/modes/source1';
-import 'js-slang/dist/editors/modes/source2';
-import 'js-slang/dist/editors/modes/source3';
-import 'js-slang/dist/editors/modes/source4';
-import 'js-slang/dist/editors/theme/source';
+import 'js-slang/dist/editors/ace/modes/source1';
+import 'js-slang/dist/editors/ace/modes/source2';
+import 'js-slang/dist/editors/ace/modes/source3';
+import 'js-slang/dist/editors/ace/modes/source4';
+import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
 
