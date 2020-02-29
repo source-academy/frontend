@@ -70,3 +70,6 @@ For more info on specific frontend projects, please consult [our wiki](https://g
 
 The branch `sa_2021` serves as development branch for the Source Academy frontend,
 starting on 29/2/2020.
+
+For now on, all branches for development PRs should target `sa_2021` instead of
+master.
