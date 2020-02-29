@@ -141,15 +141,15 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   public chapterNo = () => {
     const chapter = this.props.sourceChapter;
     if (chapter === 4) {
-      return "source4";
+      return 'source4';
     } else if (chapter === 3) {
-      return "source3";
+      return 'source3';
     } else if (chapter === 2) {
-      return "source2";
+      return 'source2';
     } else {
-      return "source1";
+      return 'source1';
     }
-  }
+  };
 
   public render() {
     return (
