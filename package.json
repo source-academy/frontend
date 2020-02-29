@@ -1,4 +1,4 @@
-{ 
+{
   "private": true,
   "name": "cadet-frontend",
   "version": "1.4.3",
@@ -44,7 +44,7 @@
     "draft-js": "^0.10.5",
     "flexboxgrid": "^6.3.1",
     "flexboxgrid-helpers": "^1.1.3",
-    "js-slang": "^0.3.5",
+    "js-slang": "^0.4.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.13",
     "lz-string": "^1.4.4",
@@ -122,6 +122,6 @@
     "react-scripts-ts": "^2.16.0",
     "react-test-renderer": "^16.3.1",
     "redux-saga-test-plan": "^4.0.0-beta.3",
-    "typescript": "^3.5.2"
+    "typescript": "3.5.2"
   }
 }
