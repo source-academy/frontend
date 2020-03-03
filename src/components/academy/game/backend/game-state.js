@@ -2,7 +2,7 @@ import {storyXMLPath} from '../constants/constants'
 
 /**
  * Handles data regarding the game state. 
- * - The student's list of completed quests
+ * - The student's list of completed quests and collectibles
  * - The student's current story mission
  * - The global list of missions that are open
  */
@@ -16,7 +16,7 @@ export function fetchGameData(callback) {
   }
   fetched = true;
   const toFetch = [
-    fetchCompletedQuests,
+    fetchStudentData,
     fetchStudentMissionPointer,
     fetchGlobalMissionPointer
   ];
@@ -26,14 +26,33 @@ export function fetchGameData(callback) {
   toFetch.map(x => x(innerCallback));
 }
 
-function fetchCompletedQuests(callback) {
+function fetchStudentData(callback) {
   // placeholder
   callback();
 }
 
-export function getCompletedQuests() {
-  // placeholder
+export function getStudentData() {
+  // formerly create-initializer/loadFromServer
   return null;
+}
+
+export function saveStudentData(json) {
+  // formerly create-initializer/saveToServer
+  return json;
+}
+
+export function saveCollectible(collectible) {
+  // currently local but we should eventually migrate to backend
+  if (typeof Storage !== 'undefined') {
+    localStorage.setItem(collectible, 'collected');
+  }
+}
+
+export function saveQuest(questId) {
+  // currently local but we should eventually migrate to backend
+  if (typeof Storage !== 'undefined') {
+    localStorage.setItem(questId, 'completed');
+  }
 }
 
 function fetchStudentMissionPointer(callback) {

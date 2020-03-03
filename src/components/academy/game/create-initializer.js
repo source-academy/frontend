@@ -1,14 +1,9 @@
 import {LINKS} from '../../../utils/constants'
 import {history} from '../../../utils/history'
 import {soundPath} from './constants/constants'
-import {fetchGameData, getMissionPointer} from './backend/game-state'
+import {fetchGameData, getMissionPointer, getStudentData, saveCollectible, saveQuest, saveStudentData} from './backend/game-state'
 
 export default function (StoryXMLPlayer, story, username, attemptedAll) {
-    function saveToServer() {
-    }
-
-    function loadFromServer() {
-    }
 
     var hookHandlers = {
         startMission: function () {
@@ -41,22 +36,14 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
                     return window.open(LINKS.LUMINUS);
             }
         },
-        pickUpCollectible: function (collectible) {
-            if (typeof Storage !== 'undefined') {
-                localStorage.setItem(collectible, 'collected');
-            }
-        },
+        pickUpCollectible: saveCollectible,
         playSound: function (name) {
             var sound = new Audio(soundPath + name + '.mp3');
             if (sound) {
                 sound.play();
             }
         },
-        saveCompletedQuest: function (questId) {
-            if (typeof Storage !== 'undefined') {
-                localStorage.setItem(questId, 'completed');
-            }
-        }
+        saveCompletedQuest: saveQuest
     };
 
     function openWristDevice() {
@@ -64,11 +51,10 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     }
 
     function startGame(div, canvas, saveData) {
-        saveData = saveData || loadFromServer();
+        // saveData = saveData || loadFromServer();
         StoryXMLPlayer.init(div, canvas, {
             saveData: saveData,
             hookHandlers: hookHandlers,
-            saveFunc: saveToServer,
             wristDeviceFunc: openWristDevice,
             playerName: username,
             playerImageCanvas: $('<canvas />'),
@@ -86,5 +72,5 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
         StoryXMLPlayer.loadStory(getMissionPointer(), function () {});
     }
 
-    return initialize;
+    return (div, canvas) => fetchGameData(() => initialize(div, canvas));
 };
