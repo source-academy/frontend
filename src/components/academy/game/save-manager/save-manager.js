@@ -1,3 +1,5 @@
+import {saveStudentData} from '../backend/game-state';
+
 var LocationManager = require('../location-manager/location-manager.js');
 var QuestManager = require('../quest-manager/quest-manager.js');
 var StoryManager = require('../story-manager/story-manager.js');
@@ -7,11 +9,10 @@ var ObjectManager = require('../object-manager/object-manager.js');
 var Utils = require('../utils/utils.js');
 
 var actionSequence = [];
-var saveFunction;
 
-export function init(saveFunc, saveData, callback) {
-  saveFunction = saveFunc;
+export function init(saveData, callback) {
   if (saveData) {
+    alert(saveData);
     saveData = JSON.parse(saveData);
     actionSequence = saveData.actionSequence;
     var storyXMLs = [];
@@ -110,7 +111,7 @@ export function saveLoadStories(stories) {
 }
 
 function saveGame() {
-  saveFunction(
+  saveStudentData(
     JSON.stringify({
       actionSequence: actionSequence,
       startLocation: LocationManager.getStartLocation()
