@@ -37,6 +37,29 @@ export function createGlowTexture(displayObject) {
   return createTexture(container, [glowFilter], width, height);
 }
 
+export function createTelescopeEffect(parent) {
+  const background = parent;
+  const radius = 300;
+  const blurSize = 16;
+  const circle = new PIXI.Graphics()
+    .beginFill(0xff0000)
+    .drawCircle(radius + blurSize, radius + blurSize, radius)
+    .endFill();
+  circle.filters = [new PIXI.filters.BlurFilter(blurSize)];
+  const bounds = new PIXI.Rectangle(0, 0, (radius + blurSize) * 2, (radius + blurSize) * 2);
+  const renderer = getRenderer();
+  const texture = renderer.generateTexture(circle, PIXI.SCALE_MODES.NEAREST, 1, bounds);
+  const focus = new PIXI.Sprite(texture);
+  parent.addChild(focus);
+  background.mask = focus;
+  parent.interactive = true;
+  parent.on('mousemove', pointerMove);
+  function pointerMove(event) {
+    focus.position.x = event.data.global.x - focus.width / 2;
+    focus.position.y = event.data.global.y - focus.height / 2;
+  }
+}
+
 export function createDarkenedTexture(texture) {
   return createFilteredTexture(texture, [darkFilter]);
 }
