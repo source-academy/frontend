@@ -26,6 +26,17 @@ export function fetchGameData(callback) {
   toFetch.map(x => x(innerCallback));
 }
 
+// overrides
+let studentDataOverride = undefined,
+    missionPointerOverride = undefined,
+    currentDateOverride = undefined;
+// override student game data
+export function overrideStudentData(data) { studentDataOverride = data; }
+// override student's current mission
+export function overrideMissionPointer(data) { missionPointerOverride = data; }
+// override current date (to determine active missions)
+export function overrideCurrentDate(data) { currentDateOverride = data; }
+
 function fetchStudentData(callback) {
   // placeholder
   callback();
@@ -33,6 +44,7 @@ function fetchStudentData(callback) {
 
 export function getStudentData() {
   // formerly create-initializer/loadFromServer
+  if(studentDataOverride) return studentDataOverride;
   return null;
 }
 
@@ -62,6 +74,7 @@ function fetchStudentMissionPointer(callback) {
 
 function getStudentMissionPointer() {
   // placeholder
+  if(missionPointerOverride) return missionPointerOverride;
   return 10;
 }
 
@@ -81,7 +94,7 @@ function fetchGlobalMissionPointer(callback) {
       console.error('Cannot find master story list');
     }
   }).then(() => {
-    const now = new Date();
+    const now = currentDateOverride ? currentDateOverride : new Date();
     const openStory = story => new Date(story.getAttribute("startDate")) < now && now < new Date(story.getAttribute("endDate"));
     stories = stories.filter(openStory);
     callback();
