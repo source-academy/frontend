@@ -111,6 +111,17 @@ const NavigationBar: React.SFC<OwnProps> = props => (
             disableHover={true}
           />
         </NavLink>
+
+        <NavLink
+          to={'/academy/gamedev'}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon={IconNames.CROWN} />
+          <div className="navbar-button-text hidden-xs">Game Dev</div>
+        </NavLink>
+
+
       </NavbarGroup>
     ) : null}
   </Navbar>
