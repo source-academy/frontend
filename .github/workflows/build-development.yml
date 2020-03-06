@@ -2,7 +2,7 @@ name: Build source-academy.github.io
 on:
   push:	
     branches:	
-      - master
+      - sa_2021
 
 jobs:
   deploy:
