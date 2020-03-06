@@ -1,11 +1,10 @@
 import * as React from 'react';
 import AceEditor from 'react-ace';
-
-import 'brace/mode/javascript';
-import 'js-slang/dist/editors/ace/theme/source';
+// source mode and chapter imported in Editor.tsx
 
 export interface IReplInputProps {
   replValue: string;
+  sourceChapter: number;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplValueChange: (newCode: string) => void;
@@ -44,12 +43,17 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
     }
   }
 
+  public getChapterMode() {
+    const chapter = this.props.sourceChapter;
+    return chapter === undefined ? 'source1' : 'source' + chapter.toString();
+  }
+
   public render() {
     return (
       <>
         <AceEditor
           className="repl-react-ace react-ace"
-          mode="javascript"
+          mode={this.getChapterMode()}
           theme="source"
           height="1px"
           width="100%"

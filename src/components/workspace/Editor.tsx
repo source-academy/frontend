@@ -5,10 +5,7 @@ import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
-import 'js-slang/dist/editors/ace/modes/source1';
-import 'js-slang/dist/editors/ace/modes/source2';
-import 'js-slang/dist/editors/ace/modes/source3';
-import 'js-slang/dist/editors/ace/modes/source4';
+import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source'
 import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
@@ -139,16 +136,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
   // chapter selector used to choose the correct source mode
   public chapterNo = () => {
-    const chapter = this.props.sourceChapter;
-    if (chapter === 4) {
-      return 'source4';
-    } else if (chapter === 3) {
-      return 'source3';
-    } else if (chapter === 2) {
-      return 'source2';
-    } else {
-      return 'source1';
+    let chapter = this.props.sourceChapter;
+    if (chapter === undefined) {
+      chapter = 1;
     }
+    HighlightRulesSelector(chapter);
+    ModeSelector(chapter);
+    return 'source' + chapter.toString();
   };
 
   public render() {
