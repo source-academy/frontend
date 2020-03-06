@@ -1,10 +1,11 @@
 import * as React from 'react';
-import AceEditor, { Annotation } from 'react-ace';
+import AceEditor, { IAnnotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
-import 'brace/ext/language_tools';
-import 'brace/ext/searchbox';
+import 'ace-builds/src-noconflict/ext-language_tools';
+import 'ace-builds/src-noconflict/ext-searchbox';
+import 'ace-builds/webpack-resolver';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
@@ -39,7 +40,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string) => void;
-  private onValidateMethod: (annotations: Annotation[]) => void;
+  private onValidateMethod: (annotations: IAnnotation[]) => void;
 
   constructor(props: IEditorProps) {
     super(props);
@@ -51,7 +52,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
       this.props.handleEditorValueChange(newCode);
     };
-    this.onValidateMethod = (annotations: Annotation[]) => {
+    this.onValidateMethod = (annotations: IAnnotation[]) => {
       if (this.props.isEditorAutorun && annotations.length === 0) {
         this.props.handleEditorEval();
       }
@@ -176,7 +177,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             value={this.props.editorValue}
             width="100%"
             setOptions={{
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
+              fontFamily: "'Inconsolata', 'Consolas', monospace",
             }}
           />
         </div>
