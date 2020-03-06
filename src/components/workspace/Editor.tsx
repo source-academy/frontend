@@ -5,7 +5,7 @@ import sharedbAce from 'sharedb-ace';
 
 import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source'
+import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
