@@ -908,7 +908,7 @@ describe('evalCode', () => {
         .call(showWarningMessage, 'Execution aborted', 750)
         .silentRun()
         .then(result => {
-          expect(context.errors[0]).toHaveProperty(['type'], "Runtime");
+          expect(context.errors[0]).toHaveProperty(['type'], 'Runtime');
         });
     });
   });
@@ -1020,7 +1020,7 @@ describe('evalTestCode', () => {
         .call(showWarningMessage, `Execution of testcase ${index} aborted`, 750)
         .silentRun()
         .then(() => {
-          expect(context.errors[0]).toHaveProperty(['type'], "Runtime");
+          expect(context.errors[0]).toHaveProperty(['type'], 'Runtime');
         });
     });
   });
