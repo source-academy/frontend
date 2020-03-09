@@ -79,8 +79,8 @@ export interface IDispatchProps {
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
   handleChapterSelect: (chapter: number) => void;
+  handleDeclarationNavigate?: (line: number, row: number) => void;
   handleEditorEval: () => void;
-  handleEditorNavigate?: (line: number, row: number) => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
@@ -267,8 +267,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         sourceChapter: this.props.sourceChapter,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
+        handleDeclarationNavigate: this.props.handleDeclarationNavigate,
         handleEditorEval: this.props.handleEditorEval,
-        handleEditorNavigate: this.props.handleEditorNavigate,
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleFinishInvite: this.props.handleFinishInvite,
         sharedbAceInitValue: this.props.sharedbAceInitValue,

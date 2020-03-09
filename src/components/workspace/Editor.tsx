@@ -27,8 +27,8 @@ export interface IEditorProps {
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
+  handleDeclarationNavigate?: (line: number, row: number) => void;
   handleEditorEval: () => void;
-  handleEditorNavigate?: (line: number, row: number) => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
@@ -168,7 +168,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   win: 'Command-B',
                   mac: 'Command-B'
                 },
-                exec: this.handleEditorNavigate
+                exec: this.handleDeclarationNavigate
               }
             ]}
             editorProps={{
@@ -202,13 +202,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
      };
   };
 
-  private handleEditorNavigate = () => {
+  private handleDeclarationNavigate = () => {
     // tslint:disable-next-line:no-console
-    console.log("In handleEditorNavigate()", this.cursorPosition);
+    console.log("Navigation requested at:", this.cursorPosition);
 
     // Remove if when implemented in all
-    if (this.props.handleEditorNavigate) {
-      this.props.handleEditorNavigate(this.cursorPosition.line,
+    if (this.props.handleDeclarationNavigate) {
+      this.props.handleDeclarationNavigate(this.cursorPosition.line,
         this.cursorPosition.column);
     }
   };

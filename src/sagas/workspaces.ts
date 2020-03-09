@@ -406,6 +406,15 @@ export default function* workspaceSaga(): SagaIterator {
     yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
     yield undefined;
   });
+
+  yield takeEvery(actionTypes.NAV_DECLARATION, function*(
+    action: ReturnType<typeof actions.navigateToDeclaration>
+  ) {
+    // tslint:disable-next-line:no-console
+    console.log("Action NAV_DECLARATION:", action.payload);
+    yield put(actions.highlightEditorLine([action.payload.line - 1],
+      action.payload.workspaceLocation));
+  });
 }
 
 let lastDebuggerResult: any;

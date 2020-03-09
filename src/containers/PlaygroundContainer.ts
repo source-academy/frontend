@@ -22,6 +22,7 @@ import {
   generateLzString,
   initInvite,
   invalidEditorSessionId,
+  navigateToDeclaration,
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
@@ -72,8 +73,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleChangeExecTime: (execTime: number) =>
         changeExecTime(execTime.toString(), workspaceLocation),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, workspaceLocation),
+      handleDeclarationNavigate: (line: number, column: number) =>
+        navigateToDeclaration(workspaceLocation, line, column),
       handleEditorEval: () => evalEditor(workspaceLocation),
-      handleEditorNavigate: (line: number, row: number) => (console.log("in playground")),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
       handleEditorWidthChange: (widthChange: number) =>
