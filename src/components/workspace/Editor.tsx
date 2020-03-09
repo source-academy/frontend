@@ -28,6 +28,7 @@ export interface IEditorProps {
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
   handleEditorEval: () => void;
+  handleEditorNavigate?: (line: number, row: number) => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
@@ -40,6 +41,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
+  private cursorPosition: any;
 
   constructor(props: IEditorProps) {
     super(props);
@@ -159,6 +161,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   mac: 'Shift-Enter'
                 },
                 exec: this.props.handleEditorEval
+              },
+              {
+                name: 'evaluate',
+                bindKey: {
+                  win: 'Command-B',
+                  mac: 'Command-B'
+                },
+                exec: this.handleEditorNavigate
               }
             ]}
             editorProps={{
@@ -171,6 +181,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             highlightActiveLine={false}
             mode={this.chapterNo()} // select according to props.sourceChapter
             onChange={this.onChangeMethod}
+            onCursorChange={this.onCursorChange}
             onValidate={this.onValidateMethod}
             theme="source"
             value={this.props.editorValue}
@@ -183,6 +194,24 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       </HotKeys>
     );
   }
+
+  private onCursorChange = (selection: any) => {
+     this.cursorPosition = {
+       line: selection.getCursor().row + 1,
+       column: selection.getCursor().column,
+     };
+  };
+
+  private handleEditorNavigate = () => {
+    // tslint:disable-next-line:no-console
+    console.log("In handleEditorNavigate()", this.cursorPosition);
+
+    // Remove if when implemented in all
+    if (this.props.handleEditorNavigate) {
+      this.props.handleEditorNavigate(this.cursorPosition.line,
+        this.cursorPosition.column);
+    }
+  };
 
   private handleGutterClick = (e: any) => {
     const target = e.domEvent.target;
