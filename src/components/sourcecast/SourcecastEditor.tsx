@@ -5,7 +5,7 @@ import { HotKeys } from 'react-hotkeys';
 
 import 'brace/ext/searchbox';
 import 'brace/mode/javascript';
-import '../workspace/editorTheme/source';
+import 'js-slang/dist/editors/ace/theme/source';
 
 import { ICodeDelta, Input, IPosition, ISelectionRange, KeyboardCommand } from './sourcecastShape';
 /**
