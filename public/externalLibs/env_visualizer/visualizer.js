@@ -51,6 +51,67 @@
   /**
    * Helper functions for drawing different types of elements on the canvas.
    */
+  function checkSubStructure(d1, d2) {
+    // d1 and d2 are 2 dataObjects, check if d2 is identical to d1
+    // or a sub data structure of d1
+    if (!Array.isArray(d1)) {
+      return false;
+    } else if (d2 === d1) {
+      return true;
+    } else {
+      return checkSubStructure(d1[0], d2)
+        || checkSubStructure(d1[1], d2);
+    }
+  }
+
+  function getShiftInfo(d1, d2) {
+    // given that d2 is a sub structure of d1, return an array
+    // to indicate the x and y coordinate with respect to d1
+    const result = {
+      x: dataObjectWrappers[dataObjects.indexOf(d1)].x,
+      y: dataObjectWrappers[dataObjects.indexOf(d1)].y
+    }
+    while (d2 !== d1) {
+      if (checkSubStructure(d1[0], d2)) {
+        d1 = d1[0];
+        result.y += DATA_UNIT_HEIGHT + 15;
+      } else {
+        d1 = d1[1];
+        result.x += DATA_UNIT_WIDTH + 15;
+      }
+    }
+    return result;
+  }
+
+  function drawThis(dataObject) {
+    // returns a structure that contains a boolean to indicate whether 
+    // or not to draw dataObject. If boolean is false, also returns the main
+    // and substructure that is involved
+    const result = {
+      draw: true,
+      mainStructure: null,
+      subStructure: null
+    }
+    for (d in drawnDataObjects) {
+      if (checkSubStructure(drawnDataObjects[d], dataObject)) {
+        result.draw = false;
+        result.mainStructure = drawnDataObjects[d];
+        result.subStructure = dataObject;
+        return result;
+      }
+    }
+    return result;
+  }
+
+  function reassignCoordinates(d1, d2) {
+    // if we do not need to draw d2, reassign x and y coordinates to 
+    // be the corresponding coordinates of d1
+    const trueCoordinates = getShiftInfo(d1, d2);
+    const wrapper = dataObjectWrappers[dataObjects.indexOf(d2)];
+    wrapper.x = trueCoordinates.x;
+    wrapper.y = trueCoordinates.y;
+  }
+
   function drawSceneFnObjects() {
     fnObjectLayer.scene.clear();
     for (let i = 0; i < fnObjects.length; i++) {
@@ -64,13 +125,22 @@
       drawHitFnObject(i);
     }
   }
-
   function drawSceneDataObjects() {
+    // drawDataObjects array is declared as a global array below but must 
+    // be reset whenever this fn is called
+    drawnDataObjects = [];
     dataObjectLayer.scene.clear();
     dataObjects.forEach(function(dataObject) {
       if (dataObject != null) {
-        drawSceneDataObject(dataObject);
-      }
+        const result = drawThis(dataObject);
+        const draw = result.draw;
+        if (draw) {
+          drawSceneDataObject(dataObject);
+          drawnDataObjects.push(dataObject);
+        } else {
+          reassignCoordinates(result.mainStructure, result.subStructure);
+        }
+      } 
     });
     viewport.render();
   }
@@ -239,14 +309,29 @@
     context.font = '14px Roboto Mono Light, Courier New';
     // draws data in the head and tail
     if (Array.isArray(dataObject[0])) {
-      const shiftY = getListHeight(dataObject[1]);
-      drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + shiftY);
-      drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-        startX + DATA_UNIT_WIDTH/4, startY + shiftY);
-      context.moveTo(startX + DATA_UNIT_WIDTH/4, startY + shiftY);
-      drawArrowHead(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-        startX + DATA_UNIT_WIDTH/4, startY + shiftY);
-      context.stroke();
+      const result = drawThis(dataObject[0]);
+      const draw = result.draw;
+      if (draw) {
+        const shiftY = getListHeight(dataObject[1]);
+        drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + shiftY);
+        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, startY + shiftY);
+        context.moveTo(startX + DATA_UNIT_WIDTH/4, startY + shiftY);
+        drawArrowHead(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, startY + shiftY);
+        context.stroke();
+      } else {
+        const coordinates = getShiftInfo(result.mainStructure, result.subStructure);
+        const xCoord = coordinates.x - DATA_UNIT_WIDTH/4;
+        const yCoord = coordinates.y + DATA_UNIT_HEIGHT/2;
+        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          xCoord, yCoord);
+        context.moveTo(xCoord, yCoord);
+        drawArrowHead(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
+          xCoord, yCoord);
+        context.stroke()
+      }
+      
     } else if (dataObject[0] == null) {
       drawLine(context, startX + DATA_UNIT_WIDTH/2, startY, startX, startY + DATA_UNIT_HEIGHT);
     } else if (typeof wrapperData[0] === 'function') {
@@ -266,13 +351,27 @@
     }
 
     if (Array.isArray(dataObject[1])) {
-      drawScenePairs(dataObject[1], scene, wrapper, wrapperData[1], startX + DATA_UNIT_WIDTH + 15, startY);
-      drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-        startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
-      context.moveTo(startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
-      drawArrowHead(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-        startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
-      context.stroke();
+      const result = drawThis(dataObject[1]);
+      const draw = result.draw;
+      if (draw) {
+        drawScenePairs(dataObject[1], scene, wrapper, wrapperData[1], startX + DATA_UNIT_WIDTH + 15, startY);
+        drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
+        context.moveTo(startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
+        drawArrowHead(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
+        context.stroke();
+      } else {
+        const coordinates = getShiftInfo(result.mainStructure, result.subStructure);
+        const xCoord = coordinates.x - DATA_UNIT_WIDTH/4;
+        const yCoord = coordinates.y + DATA_UNIT_HEIGHT/2;
+        drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
+          xCoord, yCoord);
+        context.moveTo(xCoord, yCoord);
+        drawArrowHead(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
+          xCoord, yCoord);
+        context.stroke()
+      }
     } else if (dataObject[1] == null) {
       drawLine(context, startX + DATA_UNIT_WIDTH, startY, startX + DATA_UNIT_WIDTH/2, startY + DATA_UNIT_HEIGHT);
     } else if (typeof wrapperData[1] === 'function') {
@@ -728,7 +827,8 @@
   levels = {};
   builtinsToDraw = [];
   envKeyCounter = 0;
-
+  
+  let drawnDataObjects = [];
   var frames = [];
   
   /**
