@@ -31,6 +31,8 @@ The project requires some environment variables to be set to work properly. In t
 3. **REACT_APP_CHATKIT_INSTANCE_LOCATOR**: Set this up if running with chatkit. Its documentation can be found [here](https://pusher.com/docs/chatkit).
 
  \*If you require access to Luminus keys please email Prof Henz at henz@comp.nus.edu.sg to request for a with the email subject heading "Request for Luminus API Keys".
+ 
+## Development
   
 ### Running the tests 
 
@@ -38,6 +40,14 @@ Before pushing to Github, ensure that your code is formatted and your tests are 
 
 - `npm run format` : formats your code
 - `npm run test`: runs the tests and prints the output
+
+### Running your own js-slang
+
+See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the cadet-frontend.
+
+### Development of Source Acacademy 2021
+
+The development of Source Academy 2021 is on-going. Use the branch `sa_2021` in this repository for your pull requests. The tip of branch `sa_2021` in `cadet-frontend` is automatically deployed as [https://source-academy.github.io/](https://source-academy.github.io/).
 
 ### Contribution Guidelines
 
