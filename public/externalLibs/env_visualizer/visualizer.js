@@ -576,7 +576,7 @@
       // dataObject belongs to current frame
       // simply draw straight arrow from frame to function
       const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
-      const y0 = frame.y + findElementNamePosition(dataObject, frame) * FRAME_HEIGHT_LINE + 35,
+      const y0 = frame.y + findElementPosition(dataObject, frame) * FRAME_HEIGHT_LINE + 35,
         xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
@@ -596,7 +596,7 @@
       const frameOffset = findElementPosition(dataObject, frame);
       const fnOffset = findElementPosition(dataObject, wrapper.parent);
       const x0 = frame.x + name.length * 8 + 22,
-        y0 = frame.y + findElementNamePosition(dataObject, frame) * FRAME_HEIGHT_LINE + 35;
+        y0 = frame.y + findElementPosition(dataObject, frame) * FRAME_HEIGHT_LINE + 35;
       const xf = wrapper.x + FNOBJECT_RADIUS * 2 + 3,
         x1 = frame.x + frame.width + 10 + frameOffset * 20,
         y1 = y0;
@@ -656,7 +656,7 @@
       // fnObject belongs to current frame
       // simply draw straight arrow from frame to function
       const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
-      const y0 = frame.y + findElementNamePosition(fnObject, frame) * FRAME_HEIGHT_LINE + 35,
+      const y0 = frame.y + findElementPosition(fnObject, frame) * FRAME_HEIGHT_LINE + 35,
         xf = fnObject.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
@@ -678,7 +678,7 @@
       const fnOffset = findElementPosition(fnObject, fnObject.parent);
       const frameOffset = findFrameIndexInLevel(frame);
       const x0 = frame.x + name.length * 8 + 22,
-        y0 = frame.y + findElementNamePosition(fnObject, frame) * FRAME_HEIGHT_LINE + 35;
+        y0 = frame.y + findElementPosition(fnObject, frame) * FRAME_HEIGHT_LINE + 35;
       const xf = fnObject.x + FNOBJECT_RADIUS * 2 + 3,
         x1 = frame.x + frame.width + 10 + frameOffset * 20,
         y1 = y0;
@@ -889,15 +889,6 @@
     /**
      * Calculate coordinates for each fnObject and dataObject.
      */
-    fnObjects.forEach(function(fnObject) {
-      const parent = fnObject.parent;
-      fnObject.x = parent.x 
-                   + parent.width 
-                   + OBJECT_FRAME_RIGHT_SPACING;
-      fnObject.y = parent.y +
-                   findElementPosition(fnObject, parent) * FRAME_HEIGHT_LINE
-                   + OBJECT_FRAME_TOP_SPACING;
-    });
     
     // prevents data structures in the same row from overlapping
     let prevObjectsHeights = 0;
@@ -912,6 +903,24 @@
                   + OBJECT_FRAME_TOP_SPACING;
       prevObjectsHeights += getListHeight(dataObjects[d]);
     }
+
+    fnObjects.forEach(function (fnObject) {
+      // Checks the parent of the function, calculating coordinates accordingly
+      const parent = fnObject.parent;
+      if(Array.isArray(parent)){
+        fnObject.parent = getWrapperFromDataObject(parent)
+        fnObject.x = fnObject.parent.x 
+        fnObject.y = fnObject.parent.y + FRAME_HEIGHT_LINE
+      } else {
+        fnObject.x = parent.x 
+                   + parent.width 
+                   + OBJECT_FRAME_RIGHT_SPACING;
+        fnObject.y = parent.y +
+                    findElementPosition(fnObject, parent) * FRAME_HEIGHT_LINE
+                   + OBJECT_FRAME_TOP_SPACING;
+      }
+    });
+
   }
 
   function drawArrowHead(context, xi, yi, xf, yf) {
@@ -940,8 +949,6 @@
 
   // main function to be exported
   function draw_env(context) {
-    console.log(context);
-
     // add built-in functions to list of builtins
     let originalEnvs = context.context.context.runtime.environments;
     let allEnvs = [];
@@ -1127,7 +1134,7 @@
         for (e in elements) {
           if (typeof elements[e] == "function"
             && !fnObjects.includes(elements[e])) {
-            initialiseFnObject(elements[e], frame);
+            initialiseFrameFnObject(elements[e], frame);
             fnObjects.push(elements[e]);
           } else if (typeof elements[e] == "object"
             && !dataObjects.includes(elements[e])) {
@@ -1135,9 +1142,22 @@
             dataObjectWrappers.push(
               initialiseDataObjectWrapper(e, elements[e], frame)
             );
+            // Iterate through elements[e], check if function exists in fnObjects	
+            // If no, instantiate and add to fnObjects array	
+            findFnInDataObject(elements[e], frame)
           }
         }
       });
+
+      function findFnInDataObject(list, parent){	
+        if (Array.isArray(list)) {	
+          findFnInDataObject(list[0], list)	
+          findFnInDataObject(list[1], list)	
+        } else if(isFunction(list) && !fnObjects.includes(list)) {	
+          initialiseDataFnObject(list, parent)	
+          fnObjects.push(list);	
+        }	
+      }	
 
       /** 
        * - Find width and height of each frame
@@ -1373,8 +1393,11 @@
     }
     return null;
   }
+
+  function isFunction(functionToCheck) {
+    return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+  }
   
-  // NEW ADDITION OF LIST WIDTH CALCULATION
   function getListWidth(list) {
     function getUnitWidth(list){
       if (!Array.isArray(list)) {
@@ -1387,19 +1410,19 @@
     return pairCount * (DATA_UNIT_WIDTH + 15);
   }
 
-  // NEW ADDITION OF LIST HEIGHT CALCULATION
-
-  function isFunction(functionToCheck) {
-    return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
-  }
-
   function getUnitHeight(list){
     if (!Array.isArray(list)) {
       return 0;
     } else if (Array.isArray(list[0])) {
       return 1 + getUnitHeight(list[0]) + getUnitHeight(list[1]);
     } else if (isFunction(list[0])) {
-      return 1 + getUnitHeight(list[1]);
+      let parenttype = fnObjects[fnObjects.indexOf(list[0])].parenttype;
+      let tail_height = getUnitHeight(list[1])
+      if(parenttype == "frame" || tail_height > 0) {
+        return tail_height;
+      } else {
+        return 1;
+      }
     } else {
       return getUnitHeight(list[1]);
     }
@@ -1414,7 +1437,7 @@
     let elem_lines = 0;
     let data_space = 0;
 
-    // assumes line spacing is separate from data obj
+    // Assumes line spacing is separate from data object spacing
 
     for(elem in frame.elements){
       if(isFunction(frame.elements[elem])) {
@@ -1458,7 +1481,7 @@
     return maxLength * FRAME_WIDTH_CHAR + FRAME_WIDTH_PADDING;    
   }
 
-  // New function for Width of Objects + Frame
+  // Calculates width of objects + frame
 
   function getFrameAndObjectWidth(frame){
     if(frame.elements.length == 0){
@@ -1483,35 +1506,30 @@
     }
   }
   
-  function getTotalWidth(frame){
-    // compare fullwidth + width of children
-        
-    const children_level = frame.level + 1
-    // const children = levels[children_level].frames.filter((f) => f.parent == frame);
-    let children = levels[children_level]
-    let children_length = 0;
-
-    if (children != undefined) {
-      children = levels[children_level].frames.filter((f) => f.parent == frame);
-      if(children == undefined) {
+  function getDrawingWidth(levels) { 
+    function getTotalWidth(frame){
+      // Compare fullwidth + width of children
+          
+      const children_level = frame.level + 1
+      let children = levels[children_level]
+      let children_length = 0;
+  
+      if (children != undefined) {
+        children = levels[children_level].frames.filter((f) => f.parent == frame);
+        if(children == undefined) {
+          return frame.fullwidth;
+        }
+        for (c in children) {
+          children_length += getTotalWidth(children[c]);
+        }
+  
+        children_length += (children.length - 1) * FRAME_SPACING;
+      } else {
         return frame.fullwidth;
       }
-      for (c in children) {
-        children_length += getTotalWidth(children[c]);
-      }
-
-      children_length += (children.length - 1) * FRAME_SPACING;
-    } else {
-      return frame.fullwidth;
-    }
-
-    return Math.max(frame.fullwidth, children_length);
-  }
-
-
-
   
-  function getDrawingWidth(levels) {   
+      return Math.max(frame.fullwidth, children_length);
+    }  
     return getTotalWidth(levels[1].frames[0])
   }
   
@@ -1526,7 +1544,7 @@
   function getWrapperFromDataObject(dataObject) {
     return dataObjectWrappers[dataObjects.indexOf(dataObject)];
   }
-  
+
   function initialiseFnObject(fnObject, parent) {
     fnObject.hovered = false;
     fnObject.selected = false;
@@ -1534,6 +1552,16 @@
     fnObject.color = 'white';
     fnObject.key = fnObjectKey--;
     fnObject.parent = parent;
+  }
+
+  function initialiseDataFnObject(fnObject, parent) {
+    initialiseFnObject(fnObject, parent)
+    fnObject.parenttype = "data"
+  }
+
+  function initialiseFrameFnObject(fnObject, parent) {
+    initialiseFnObject(fnObject, parent)
+    fnObject.parenttype = "frame"
   }
   
   function initialiseDataObjectWrapper(objectName, objectData, parent) {
@@ -1551,20 +1579,7 @@
   }
   
   function findElementPosition(element, frame) {
-    const elements = frame.elements;
-    let i = 0;
-    for (e in elements) {
-      if (elements[e] == element) {
-        return i;
-      }
-      i++;
-    }
-    return -1;
-  }
-
-  function findElementNamePosition(element, frame) {
     let index = 0;
-
     for(elem in frame.elements){
       if(frame.elements[elem] == element) {
         break;
@@ -1583,7 +1598,6 @@
         index += 1
       }
     }
-    
     return index;
   }
   
