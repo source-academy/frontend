@@ -17,15 +17,19 @@
   const FNOBJECT_RADIUS = 12; // radius of function object circle
   const DATA_OBJECT_SIDE = 24; // length of data object triangle
   const DRAWING_LEFT_PADDING = 20; // left padding for entire drawing
-  const FRAME_HEIGHT_LINE = 40; // height in px of each line of text in a frame;
+  const FRAME_HEIGHT_LINE = 50; // height in px of each line of text in a frame;
   const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
   const FRAME_WIDTH_CHAR = 8; // width in px of each text character in a frame;
   const FRAME_WIDTH_PADDING = 50; // width in px to pad each frame with;
   const FRAME_SPACING = 100; // spacing between horizontally adjacent frames
   const LEVEL_SPACING = 60; // spacing between vertical frame levels
   const OBJECT_FRAME_RIGHT_SPACING = 50; // space to right frame border
-  const OBJECT_FRAME_TOP_SPACING = 25; // perpendicular distance to top border
-  
+  const OBJECT_FRAME_TOP_SPACING = 35; // perpendicular distance to top border
+
+  // TEXT SPACING 
+  const HORIZONTAL_TEXT_MARGIN = 10
+  const VERITCAL_TEXT_MARGIN = 39
+
   // DATA STRUCTURE DIMENSIONS
   const DATA_UNIT_WIDTH = 80;
   const DATA_UNIT_HEIGHT = 40;
@@ -489,26 +493,29 @@
     // render text in frame
     let elements = config.elements;
     let i = 0;
+    let textX = x + HORIZONTAL_TEXT_MARGIN
+    let textY = y + VERITCAL_TEXT_MARGIN
+
     for (let k in elements) {
       if (elements[k] == null && typeof (elements[k]) == "object") {
         // null primitive in Source
-        context.fillText(`${'' + k}: null`, x + 10, y + 40 + i * 40);
+        context.fillText(`${'' + k}: null`, textX, textY + i * FRAME_HEIGHT_LINE);
       } else {
         switch (typeof elements[k]) {
           case 'number':
           case 'boolean':
           case 'undefined':
-            context.fillText(`${'' + k}: ${'' + elements[k]}`, x + 10, y + 40 + i * 40);
+            context.fillText(`${'' + k}: ${'' + elements[k]}`, textX, textY + i * FRAME_HEIGHT_LINE);
             break;
           case 'string':
             if (k == '(other predclr. names)') {
-              context.fillText(`${'' + k}`, x + 10, y + 40 + i * 40);
+              context.fillText(`${'' + k}`, textX, y + VERITCAL_TEXT_MARGIN + i * FRAME_HEIGHT_LINE);
             } else {
-              context.fillText(`${'' + k}: "${'' + elements[k]}"`, x + 10, y + 40 + i * 40);
+              context.fillText(`${'' + k}: "${'' + elements[k]}"`, textX, textY + i * FRAME_HEIGHT_LINE);
             }
             break;
           default:
-            context.fillText(`${'' + k}:`, x + 10, y + 40 + i * 40);
+            context.fillText(`${'' + k}:`, textX, textY + i * FRAME_HEIGHT_LINE);
             i += getUnitHeight(elements[k]);
         }
       }
@@ -888,10 +895,7 @@
     
     /**
      * Calculate coordinates for each fnObject and dataObject.
-     */
-    
-    // prevents data structures in the same row from overlapping
-    let prevObjectsHeights = 0;
+     */    
     for (d in dataObjects) {
       const wrapper = dataObjectWrappers[d];
       const parent = wrapper.parent;
@@ -899,9 +903,8 @@
                   + parent.width 
                   + OBJECT_FRAME_RIGHT_SPACING;
       wrapper.y = parent.y
-                  + prevObjectsHeights
+                  + findElementPosition(dataObjects[d], parent) * FRAME_HEIGHT_LINE
                   + OBJECT_FRAME_TOP_SPACING;
-      prevObjectsHeights += getListHeight(dataObjects[d]);
     }
 
     fnObjects.forEach(function (fnObject) {
@@ -1448,7 +1451,7 @@
         if(parent == frame) {
           data_space += getListHeight(frame.elements[elem]);
         } else {
-          data_space += DATA_UNIT_HEIGHT;
+          data_space += FRAME_HEIGHT_LINE;
         }        
       } 
       else {
@@ -1456,7 +1459,10 @@
       }
     }
     
-    return data_space + elem_lines * FRAME_HEIGHT_LINE + FRAME_HEIGHT_PADDING;
+    return data_space + elem_lines * FRAME_HEIGHT_LINE;
+    // Previously FRAME_HEIGHT_PADDING was added, but there was a weird space below
+    // Not sure if that was the cause, removing it temporarily first to observe the results
+    // + FRAME_HEIGHT_PADDING;
   }
   
   function getFrameWidth(frame) {
@@ -1482,7 +1488,6 @@
   }
 
   // Calculates width of objects + frame
-
   function getFrameAndObjectWidth(frame){
     if(frame.elements.length == 0){
       return getFrameWidth(frame);
