@@ -147,9 +147,11 @@ export const sendReplInputToOutput = (newOutput: string, workspaceLocation: Work
 export const resetTestcase = (workspaceLocation: WorkspaceLocation, index: number) =>
   action(actionTypes.RESET_TESTCASE, { workspaceLocation, index });
 
-export const navigateToDeclaration = (workspaceLocation: WorkspaceLocation,
-                                      line: number, column: number) =>
-  action(actionTypes.NAV_DECLARATION, {workspaceLocation, line, column});
+export const navigateToDeclaration = (
+  workspaceLocation: WorkspaceLocation,
+  line: number,
+  column: number
+) => action(actionTypes.NAV_DECLARATION, { workspaceLocation, line, column });
 
 /**
  * Resets a workspace to its default properties.

@@ -163,7 +163,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                 exec: this.props.handleEditorEval
               },
               {
-                name: 'navigate',
+                name: 'evaluate',
                 bindKey: {
                   win: 'Command-B',
                   mac: 'Command-B'
@@ -196,20 +196,19 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   }
 
   private onCursorChange = (selection: any) => {
-     this.cursorPosition = {
-       line: selection.getCursor().row + 1,
-       column: selection.getCursor().column,
-     };
+    this.cursorPosition = {
+      line: selection.getCursor().row + 1,
+      column: selection.getCursor().column
+    };
   };
 
   private handleDeclarationNavigate = () => {
     // tslint:disable-next-line:no-console
-    console.log("Navigation requested at:", this.cursorPosition);
+    console.log('Navigation requested at:', this.cursorPosition);
 
     // Remove if when implemented in all
     if (this.props.handleDeclarationNavigate) {
-      this.props.handleDeclarationNavigate(this.cursorPosition.line,
-        this.cursorPosition.column);
+      this.props.handleDeclarationNavigate(this.cursorPosition.line, this.cursorPosition.column);
     }
   };
 

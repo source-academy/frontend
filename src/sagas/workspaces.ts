@@ -410,9 +410,8 @@ export default function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.NAV_DECLARATION, function*(
     action: ReturnType<typeof actions.navigateToDeclaration>
   ) {
-
     // tslint:disable-next-line:no-console
-    console.log("Action NAV_DECLARATION:", action.payload);
+    console.log('Action NAV_DECLARATION:', action.payload);
 
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
@@ -421,14 +420,18 @@ export default function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
-    const foundAt = findIdentifier(code, context, {line: action.payload.line, column: action.payload.column});
+    const foundAt = findIdentifier(code, context, {
+      line: action.payload.line,
+      column: action.payload.column
+    });
 
     // tslint:disable-next-line:no-console
-    console.log("Found node", foundAt);
+    console.log('Found node', foundAt);
 
     if (foundAt) {
-      yield put(actions.highlightEditorLine([foundAt.loc.start.line - 1],
-        action.payload.workspaceLocation));
+      yield put(
+        actions.highlightEditorLine([foundAt.loc.start.line - 1], action.payload.workspaceLocation)
+      );
     }
   });
 }
