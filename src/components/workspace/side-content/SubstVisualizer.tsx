@@ -1,9 +1,13 @@
-import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
+import { Classes, Divider, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as es from 'estree';
 import { codify } from 'js-slang/dist/substituter';
 import * as React from 'react';
+import AceEditor from "react-ace";
 import { HotKeys } from 'react-hotkeys';
+
+import 'js-slang/dist/editors/ace/modes/source2';
+import 'js-slang/dist/editors/ace/theme/source';
 
 import { controlButton } from '../../commons';
 
@@ -49,14 +53,6 @@ const SubstDefaultText = () => {
   );
 };
 
-const SubstCodeDisplay = (props: { content: string }) => {
-  return (
-    <Card>
-      <Pre className="resultOutput">{props.content}</Pre>
-    </Card>
-  );
-};
-
 const substKeyMap = {
   FIRST_STEP: ',',
   LAST_STEP: '.'
@@ -96,7 +92,23 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
               value={this.state.value <= lastStepValue ? this.state.value : 1}
             />
             {hasRunCode ? (
-              <SubstCodeDisplay content={this.props.content.map(codify)[this.state.value - 1]} />
+              <AceEditor
+              className="react-ace"
+              mode="source2"
+              theme="source"
+              fontSize={17}
+              highlightActiveLine={false}
+              wrapEnabled={true}
+              height="unset"
+              width="100%"
+              showGutter={false}
+              readOnly={true}
+              maxLines={Infinity}
+              value={codify(this.props.content[this.state.value <= lastStepValue ? this.state.value - 1 : 0])}
+              setOptions={{
+                fontFamily: "'Inconsolata', 'Consolas', monospace",
+              }}
+            />
             ) : (
               <SubstDefaultText />
             )}
