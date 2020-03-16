@@ -163,7 +163,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                 exec: this.props.handleEditorEval
               },
               {
-                name: 'evaluate',
+                name: 'navigate',
                 bindKey: {
                   win: 'Command-B',
                   mac: 'Command-B'
