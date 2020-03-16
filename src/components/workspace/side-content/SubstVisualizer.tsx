@@ -1,12 +1,14 @@
 import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as es from 'estree';
+import { codify } from 'js-slang/dist/substituter';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import { controlButton } from '../../commons';
 
 export interface ISubstVisualizerProps {
-  content: string[];
+  content: es.Program[];
 }
 
 export interface ISubstVisualizerState {
@@ -94,7 +96,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
               value={this.state.value <= lastStepValue ? this.state.value : 1}
             />
             {hasRunCode ? (
-              <SubstCodeDisplay content={this.props.content[this.state.value - 1]} />
+              <SubstCodeDisplay content={this.props.content.map(codify)[this.state.value - 1]} />
             ) : (
               <SubstDefaultText />
             )}
