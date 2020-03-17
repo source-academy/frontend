@@ -69,11 +69,11 @@
   }
 
   function getShiftInfo(d1, d2) {
-    // given that d2 is a sub structure of d1, return an array
+    // given that d2 is a sub structure of d1, return a coordinate object
     // to indicate the x and y coordinate with respect to d1
     const result = {
       x: dataObjectWrappers[dataObjects.indexOf(d1)].x,
-      y: dataObjectWrappers[dataObjects.indexOf(d1)].y
+      y: dataObjectWrappers[dataObjects.indexOf(d1)].y + 28
     }
     while (d2 !== d1) {
       if (checkSubStructure(d1[0], d2)) {
@@ -294,6 +294,27 @@
     context.stroke();
     context.closePath();
   }
+  
+  // since arrows across data structures will now be drawn in the arrow Layer
+  // need a function calculate the coordinates the small portion of the arrow from
+  // center of box to edge of box
+  function inBoxCoordinates(x0, y0, xf, yf, head) {
+    const distX = Math.abs(x0 - xf);
+    const distY = Math.abs(y0 - yf);
+    const half_width = ((xf > x0 && head) || (x0 >= xf && !head)) 
+      ? (3/4) * DATA_UNIT_WIDTH
+      : (1/4) * DATA_UNIT_WIDTH;
+    const half_height = DATA_UNIT_HEIGHT/2;
+    // asume arrows goes out from side of box instead of top
+    let xFinal = xf > x0 ? x0 + half_width : x0 - half_width;
+    let yFinal = y0 - (distY * (half_width/distX));
+    if (yFinal < y0 - half_height) {
+      // doesn't go out from side but rather from top
+      yFinal = y0 - half_height;
+      xFinal = xf > x0 ? x0 + (distX * (half_height/distY)) : x0 - (distX * (half_height/distY));
+    } 
+    return {x: xFinal, y: yFinal};
+  }
 
   function drawScenePairs(dataObject, scene, wrapper, wrapperData, startX, startY) {
     // wrapperData is only relevant for tracing the origin of function objects in lists
@@ -301,7 +322,11 @@
     var context = scene.context,
       parent = wrapper.parent;
     
+    // makes an opaque rectangle of the same colour as the background
+    context.fillStyle = '#2c3e50';
+    context.fillRect(startX, startY, DATA_UNIT_WIDTH, DATA_UNIT_HEIGHT);
     // draws the pair shape
+    context.fillStyle = '#999999';
     context.strokeRect(startX, startY, DATA_UNIT_WIDTH, DATA_UNIT_HEIGHT);
     context.beginPath();
     context.moveTo(startX + DATA_UNIT_WIDTH/2, startY);
@@ -309,7 +334,6 @@
     context.stroke();
     context.closePath();
     context.restore();
-    context.fillStyle = '#999999';
     context.font = '14px Roboto Mono Light, Courier New';
     // draws data in the head and tail
     if (Array.isArray(dataObject[0])) {
@@ -325,31 +349,41 @@
           startX + DATA_UNIT_WIDTH/4, startY + shiftY);
         context.stroke();
       } else {
+        // declare new context so arrow drawn in the arrowLayer instead of dataObjectLayer
+        const arrowContext = arrowLayer.scene.context;
         const coordinates = getShiftInfo(result.mainStructure, result.subStructure);
-        const xCoord = coordinates.x - DATA_UNIT_WIDTH/4;
-        const yCoord = coordinates.y + DATA_UNIT_HEIGHT/2;
-        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        const xCoord = coordinates.x;
+        const yCoord = coordinates.y;
+        // draw line from center of box to edge of box in dataObjectLayer
+        const boxEdgeCoord = inBoxCoordinates(startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, xCoord, yCoord, true);
+        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, boxEdgeCoord.x, boxEdgeCoord.y);
+        // draw remaining line in arrowLayer
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
           xCoord, yCoord);
-        context.moveTo(xCoord, yCoord);
-        drawArrowHead(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
+          arrowContext.moveTo(xCoord, yCoord);
+        drawArrowHead(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
           xCoord, yCoord);
-        context.stroke()
+        arrowContext.stroke();
       }
       
     } else if (dataObject[0] == null) {
       drawLine(context, startX + DATA_UNIT_WIDTH/2, startY, startX, startY + DATA_UNIT_HEIGHT);
     } else if (typeof wrapperData[0] === 'function') {
-      // draw line up to fn height
+      // draw line in box
       drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        startX + DATA_UNIT_WIDTH/4, startY);
+      // draw line up to fn height
+      const arrowContext = arrowLayer.scene.context;
+      drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
         startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
       // draw line left/right to fn area
-      drawLine(context, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y,
+      drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y,
         wrapperData[0].x, wrapperData[0].y);
       // draw arrow head shape
-      context.moveTo(wrapperData[0].x, wrapperData[0].y);
-      drawArrowHead(context, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
+      arrowContext.moveTo(wrapperData[0].x, wrapperData[0].y);
+      drawArrowHead(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
         wrapperData[0].x, wrapperData[0].y);
-      context.stroke();
+        arrowContext.stroke();
     } else {
       context.fillText(dataObject[0], startX + DATA_UNIT_WIDTH/6, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
@@ -366,30 +400,40 @@
           startX + DATA_UNIT_WIDTH + 15, startY + DATA_UNIT_HEIGHT/2);
         context.stroke();
       } else {
+        // declare new context so arrow drawn in the arrowLayer instead of dataObjectLayer
+        const arrowContext = arrowLayer.scene.context;
         const coordinates = getShiftInfo(result.mainStructure, result.subStructure);
         const xCoord = coordinates.x - DATA_UNIT_WIDTH/4;
         const yCoord = coordinates.y + DATA_UNIT_HEIGHT/2;
-        drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
+        // draw line from center of box to edge of box in dataObjectLayer
+        const boxEdgeCoord = inBoxCoordinates(startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, xCoord, yCoord, false);
+        drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, boxEdgeCoord.x, boxEdgeCoord.y);
+        // draw remaining line in arrowLayer
+        drawLine(arrowContext, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
           xCoord, yCoord);
-        context.moveTo(xCoord, yCoord);
-        drawArrowHead(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
+        arrowContext.moveTo(xCoord, yCoord);
+        drawArrowHead(arrowContext, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
           xCoord, yCoord);
-        context.stroke()
+        arrowContext.stroke()
       }
     } else if (dataObject[1] == null) {
       drawLine(context, startX + DATA_UNIT_WIDTH, startY, startX + DATA_UNIT_WIDTH/2, startY + DATA_UNIT_HEIGHT);
     } else if (typeof wrapperData[1] === 'function') {
+      const arrowContext = arrowLayer.scene.context;
+      //draw line in box
+      drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
+        startX + 3 * DATA_UNIT_WIDTH/4, startY);
       // draw line up to fn height
-      drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+      drawLine(arrowContext, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
         startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y);
       // draw line left/right to fn area
-      drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y, 
+      drawLine(arrowContext, startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y, 
         wrapperData[1].x, wrapperData[1].y)
       // draw arrow head shape
-      context.moveTo(wrapperData[1].x, wrapperData[1].y);
-      drawArrowHead(context, startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y, 
+      arrowContext.moveTo(wrapperData[1].x, wrapperData[1].y);
+      drawArrowHead(arrowContext, startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y, 
         wrapperData[1].x, wrapperData[1].y);
-      context.stroke();
+        arrowContext.stroke();
     } else {
       context.fillText(dataObject[1], startX + 2 * DATA_UNIT_WIDTH/3, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
@@ -423,11 +467,10 @@
       context = scene.context;
     var parent = wrapper.parent;
     // define points for drawing data object triangle
-    const x0 = wrapper.x - 25,
+    const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
     
     drawScenePairs(dataObject, scene, wrapper, wrapper.data, x0, y0);
-    
   }
 
   function drawHitDataObject(dataObject) {
@@ -436,21 +479,8 @@
     var hit = dataObjectLayer.hit,
       context = hit.context;
     var parent = wrapper.parent;
-    const x0 = wrapper.x,
-      y0 = wrapper.y;
-    const x1 = x0 - 20,
-      y1 = y0 + 24;
-    const x2 = x1 + 24,
-      y2 = y1;
-    context.save();
-    context.beginPath();
-    context.moveTo(x0, y0);
-    context.lineTo(x1, y1);
-    context.lineTo(x2, y2);
-    context.lineTo(x0, y0);
-    context.fillStyle = hit.getColorFromIndex(wrapper.key);
-    context.fill();
-    context.restore();
+    const x0 = wrapper.x - DATA_OBJECT_SIDE,
+      y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
   }
 
   function drawSceneFrame(frame) {
@@ -578,13 +608,12 @@
     context.save();
     context.strokeStyle = '#999999';
     context.beginPath();
-
     if (wrapper.parent == frame) {
       // dataObject belongs to current frame
       // simply draw straight arrow from frame to function
       const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
       const y0 = frame.y + findElementPosition(dataObject, frame) * FRAME_HEIGHT_LINE + 35,
-        xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; // left circle
+        xf = wrapper.x - DATA_OBJECT_SIDE; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
 
@@ -953,6 +982,7 @@
   // main function to be exported
   function draw_env(context) {
     // add built-in functions to list of builtins
+    console.log(context);
     let originalEnvs = context.context.context.runtime.environments;
     let allEnvs = [];
     originalEnvs.forEach(function(e) {
@@ -1022,7 +1052,6 @@
         .add(fnObjectLayer)
         .add(dataObjectLayer)
         .add(arrowLayer);
-
       /**
        * Refactor start
        */
@@ -1254,7 +1283,6 @@
     drawSceneFrameArrows();
     drawSceneFrameObjectArrows();
     drawSceneFnFrameArrows();
-
     // add concrete container handlers
     container.addEventListener('mousemove', function(evt) {
       var boundingRect = container.getBoundingClientRect(),
@@ -1319,8 +1347,12 @@
       drawSceneFnObjects();
       drawSceneDataObjects();
     });
-
     frames.reverse();
+    // reorder layers
+    arrowLayer.moveToBottom();
+    fnObjectLayer.moveToTop();
+    dataObjectLayer.moveToTop();
+    viewport.render();
   }
   exports.draw_env = draw_env;
 
