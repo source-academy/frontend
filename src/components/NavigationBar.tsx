@@ -1,12 +1,12 @@
 import {
   Alignment,
-// Button,
+  // Button,
   Classes,
   Icon,
   Navbar,
   NavbarDivider,
-  NavbarGroup,
-// NavbarHeading
+  NavbarGroup
+  // NavbarHeading
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
@@ -26,9 +26,8 @@ export interface INavigationBarProps {
 
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
   <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
-	<NavbarGroup align={Alignment.LEFT}>
-
-    {/* 
+    <NavbarGroup align={Alignment.LEFT}>
+      {/* 
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
@@ -39,7 +38,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </NavLink>
      */}
 
-    {/*
+      {/*
       <a
         className="NavigationBar__link"
         href={LINKS.LUMINUS}
@@ -65,7 +64,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
       </a>
      */}
 
-    {/*
+      {/*
       <NavLink
       activeClassName={Classes.ACTIVE}
       className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
