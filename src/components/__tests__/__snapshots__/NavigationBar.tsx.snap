@@ -3,32 +3,10 @@
 exports[`NavigationBar renders "Not logged in" correctly 1`] = `
 "<Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
   <Blueprint3.NavbarGroup align=\\"left\\">
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/academy\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"symbol-diamond\\" />
-      <Blueprint3.NavbarHeading className=\\"hidden-xs hidden-sm\\">
-        Source Academy
-      </Blueprint3.NavbarHeading>
-    </NavLink>
-    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/b1340bf4-fc99-4898-be2a-2c20e38c065f/announcements/active\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
-      <Blueprint3.Button minimal={true}>
-        <Blueprint3.Icon icon=\\"envelope\\" />
-        <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-          News
-        </div>
-      </Blueprint3.Button>
-    </a>
-    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/b1340bf4-fc99-4898-be2a-2c20e38c065f/forum\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
-      <Blueprint3.Button minimal={true}>
-        <Blueprint3.Icon icon=\\"chat\\" />
-        <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-          Forum
-        </div>
-      </Blueprint3.Button>
-    </a>
     <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Playground
+        Source Academy Playground
       </div>
     </NavLink>
   </Blueprint3.NavbarGroup>
@@ -53,32 +31,10 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
 exports[`NavigationBar renders correctly with username 1`] = `
 "<Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
   <Blueprint3.NavbarGroup align=\\"left\\">
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/academy\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"symbol-diamond\\" />
-      <Blueprint3.NavbarHeading className=\\"hidden-xs hidden-sm\\">
-        Source Academy
-      </Blueprint3.NavbarHeading>
-    </NavLink>
-    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/b1340bf4-fc99-4898-be2a-2c20e38c065f/announcements/active\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
-      <Blueprint3.Button minimal={true}>
-        <Blueprint3.Icon icon=\\"envelope\\" />
-        <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-          News
-        </div>
-      </Blueprint3.Button>
-    </a>
-    <a className=\\"NavigationBar__link\\" href=\\"https://luminus.nus.edu.sg/modules/b1340bf4-fc99-4898-be2a-2c20e38c065f/forum\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">
-      <Blueprint3.Button minimal={true}>
-        <Blueprint3.Icon icon=\\"chat\\" />
-        <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-          Forum
-        </div>
-      </Blueprint3.Button>
-    </a>
     <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Playground
+        Source Academy Playground
       </div>
     </NavLink>
   </Blueprint3.NavbarGroup>
