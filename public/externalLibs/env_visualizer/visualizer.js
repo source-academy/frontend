@@ -17,7 +17,7 @@
   const FNOBJECT_RADIUS = 12; // radius of function object circle
   const DATA_OBJECT_SIDE = 24; // length of data object triangle
   const DRAWING_LEFT_PADDING = 20; // left padding for entire drawing
-  const FRAME_HEIGHT_LINE = 50; // height in px of each line of text in a frame;
+  const FRAME_HEIGHT_LINE = 55; // height in px of each line of text in a frame;
   const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
   const FRAME_WIDTH_CHAR = 8; // width in px of each text character in a frame;
   const FRAME_WIDTH_PADDING = 50; // width in px to pad each frame with;
@@ -77,8 +77,10 @@
     }
     while (d2 !== d1) {
       if (checkSubStructure(d1[0], d2)) {
+        // Add the height of the tail of d1 to the y-coordinate
+        rightHeight = getUnitHeight2(d1[1]);
         d1 = d1[0];
-        result.y += DATA_UNIT_HEIGHT + 15;
+        result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + 15);
       } else {
         d1 = d1[1];
         result.x += DATA_UNIT_WIDTH + 15;
@@ -340,7 +342,7 @@
       const result = drawThis(dataObject[0]);
       const draw = result.draw;
       if (draw) {
-        const shiftY = getListHeight(dataObject[1]);
+        const shiftY = calculatePairShift(dataObject[1]);
         drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + shiftY);
         drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
           startX + DATA_UNIT_WIDTH/4, startY + shiftY);
@@ -470,6 +472,7 @@
     const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
     
+    initialisePairShift(dataObject);
     drawScenePairs(dataObject, scene, wrapper, wrapper.data, x0, y0);
   }
 
@@ -539,7 +542,7 @@
             break;
           case 'string':
             if (k == '(other predclr. names)') {
-              context.fillText(`${'' + k}`, textX, y + VERITCAL_TEXT_MARGIN + i * FRAME_HEIGHT_LINE);
+              context.fillText(`${'' + k}`, textX, textY + i * FRAME_HEIGHT_LINE);
             } else {
               context.fillText(`${'' + k}: "${'' + elements[k]}"`, textX, textY + i * FRAME_HEIGHT_LINE);
             }
@@ -612,8 +615,8 @@
       // dataObject belongs to current frame
       // simply draw straight arrow from frame to function
       const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
-      const y0 = frame.y + findElementPosition(dataObject, frame) * FRAME_HEIGHT_LINE + 35,
-        xf = wrapper.x - DATA_OBJECT_SIDE; // left circle
+      const y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 35,
+        xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
 
@@ -632,7 +635,7 @@
       const frameOffset = findElementPosition(dataObject, frame);
       const fnOffset = findElementPosition(dataObject, wrapper.parent);
       const x0 = frame.x + name.length * 8 + 22,
-        y0 = frame.y + findElementPosition(dataObject, frame) * FRAME_HEIGHT_LINE + 35;
+        y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 35;
       const xf = wrapper.x + FNOBJECT_RADIUS * 2 + 3,
         x1 = frame.x + frame.width + 10 + frameOffset * 20,
         y1 = y0;
@@ -692,7 +695,7 @@
       // fnObject belongs to current frame
       // simply draw straight arrow from frame to function
       const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
-      const y0 = frame.y + findElementPosition(fnObject, frame) * FRAME_HEIGHT_LINE + 35,
+      const y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 35,
         xf = fnObject.x - FNOBJECT_RADIUS * 2 - 3; // left circle
       context.moveTo(x0, y0);
       context.lineTo(xf, yf);
@@ -714,7 +717,7 @@
       const fnOffset = findElementPosition(fnObject, fnObject.parent);
       const frameOffset = findFrameIndexInLevel(frame);
       const x0 = frame.x + name.length * 8 + 22,
-        y0 = frame.y + findElementPosition(fnObject, frame) * FRAME_HEIGHT_LINE + 35;
+        y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 35;
       const xf = fnObject.x + FNOBJECT_RADIUS * 2 + 3,
         x1 = frame.x + frame.width + 10 + frameOffset * 20,
         y1 = y0;
@@ -768,13 +771,22 @@
     context.strokeStyle = '#999999';
     context.beginPath();
     
-    if (fnObject.source == null || fnObject.source == fnObject.parent) {
-      // Object is right next to the frame to be pointed to. Trivial case.
+    //  Previous condition:
+    // fnObject.source == null || fnObject.source == fnObject.parent
+    // By right, the arrow should always point left to the frame directly adjacent
+    // There is no other way for the arrow to point.
+    if (true) {
+      frame = fnObject.parent;
+      if(fnObject.parenttype == "data"){ 
+        parentobj = dataObjects.indexOf(fnObject.parent[0])
+        frame = dataObjectWrappers[parentobj].parent
+      } 
+
       const x0 = startCoord[0],
         y0 = startCoord[1],
         x1 = x0,
         y1 = y0 - 15,
-        x2 = fnObject.parent.x + fnObject.parent.width + 3,
+        x2 = frame.x + frame.width + 3,
         y2 = y1;
       context.moveTo(x0, y0);
       context.lineTo(x1, y1);
@@ -783,6 +795,7 @@
       drawArrowHead(context, x1, y1, x2, y2);
       context.stroke();
     } else {
+      // Kept here just in case
       /**
        * startOffset: index of fnObject in its parent (starting) frame
        * destOffset: index of fnObject in source (destination) frame
@@ -938,11 +951,19 @@
 
     fnObjects.forEach(function (fnObject) {
       // Checks the parent of the function, calculating coordinates accordingly
-      const parent = fnObject.parent;
+      let parent = fnObject.parent;
       if(Array.isArray(parent)){
-        fnObject.parent = getWrapperFromDataObject(parent)
-        fnObject.x = fnObject.parent.x 
-        fnObject.y = fnObject.parent.y + FRAME_HEIGHT_LINE
+        // Check if parent has x and y coordinates
+        // Otherwise use getShiftInfo to calculate
+        if(parent[0] === parent[1]){
+          parent = getWrapperFromDataObject(parent[1])
+          fnObject.x = parent.x 
+          fnObject.y = parent.y + FRAME_HEIGHT_LINE
+        } else {
+          parent_coordinates = getShiftInfo(parent[0], parent[1])
+          fnObject.x = parent_coordinates.x
+          fnObject.y = parent_coordinates.y + FRAME_HEIGHT_LINE
+        }
       } else {
         fnObject.x = parent.x 
                    + parent.width 
@@ -1176,19 +1197,19 @@
             );
             // Iterate through elements[e], check if function exists in fnObjects	
             // If no, instantiate and add to fnObjects array	
-            findFnInDataObject(elements[e], frame)
+            findFnInDataObject(elements[e], elements[e], elements[e])
           }
         }
       });
 
-      function findFnInDataObject(list, parent){	
-        if (Array.isArray(list)) {	
-          findFnInDataObject(list[0], list)	
-          findFnInDataObject(list[1], list)	
-        } else if(isFunction(list) && !fnObjects.includes(list)) {	
-          initialiseDataFnObject(list, parent)	
-          fnObjects.push(list);	
-        }	
+      function findFnInDataObject(list, parent, dataObject){		
+        if (Array.isArray(list)) {		
+          findFnInDataObject(list[0], list, dataObject)		
+          findFnInDataObject(list[1], list, dataObject)		
+        } else if(isFunction(list) && !fnObjects.includes(list)) {		
+          initialiseDataFnObject(list, [dataObject, parent])		
+          fnObjects.push(list);		
+        }		
       }	
 
       /** 
@@ -1445,22 +1466,103 @@
     return pairCount * (DATA_UNIT_WIDTH + 15);
   }
 
-  function getUnitHeight(list){
+  function getUnitHeight(parentlist) {
+    let otherObjects = [];
+    let objectStored = false;
+    dataObjects.forEach(x => {
+      if(x == parentlist){
+        objectStored = true;
+      }
+      if(objectStored){
+      } else if(x !== parentlist) {
+        otherObjects.push(x)
+      }
+    })
+    function recursiveHelper(list){
+      let substructureExists = false;
+      otherObjects.forEach(x => {
+        if(checkSubStructure(x, list)){
+          substructureExists = true;
+        }
+      })
+      if (!Array.isArray(list) || substructureExists) {
+        return 0;
+      } else if (Array.isArray(list[0])) {
+        return 1 + recursiveHelper(list[0]) + recursiveHelper(list[1]);
+      } else if (isFunction(list[0])) {
+        let parenttype = fnObjects[fnObjects.indexOf(list[0])].parenttype;
+        let tail_height = recursiveHelper(list[1])
+        if(parenttype == "frame" || tail_height > 0) {
+          return tail_height;
+        } else {
+          return 1;
+        }
+      } else {
+        return recursiveHelper(list[1]);
+      }
+    }
+    return recursiveHelper(parentlist)
+  }
+
+  function getUnitHeight2(list){
     if (!Array.isArray(list)) {
       return 0;
     } else if (Array.isArray(list[0])) {
-      return 1 + getUnitHeight(list[0]) + getUnitHeight(list[1]);
+      return 1 + getUnitHeight2(list[0]) + getUnitHeight2(list[1]);
     } else if (isFunction(list[0])) {
       let parenttype = fnObjects[fnObjects.indexOf(list[0])].parenttype;
-      let tail_height = getUnitHeight(list[1])
+      let tail_height = getUnitHeight2(list[1])
       if(parenttype == "frame" || tail_height > 0) {
         return tail_height;
       } else {
         return 1;
       }
     } else {
-      return getUnitHeight(list[1]);
+      return getUnitHeight2(list[1]);
     }
+  }
+
+  let currentObject = null;
+  function initialisePairShift(dataObject) {
+    currentObject = dataObject;
+  }
+
+  function calculatePairShift(sublist){
+    let otherObjects = [];
+    let objectStored = false;
+    dataObjects.forEach(x => {
+      if(x == currentObject){
+        objectStored = true;
+      }
+      if(objectStored){
+      } else if(x !== currentObject) {
+        otherObjects.push(x)
+      }
+    })
+    function recursiveHelper(list){
+      let substructureExists = false;
+      otherObjects.forEach(x => {
+        if(checkSubStructure(x, list)){
+          substructureExists = true;
+        }
+      })
+      if (!Array.isArray(list) || substructureExists) {
+        return 0;
+      } else if (Array.isArray(list[0])) {
+        return 1 + recursiveHelper(list[0]) + recursiveHelper(list[1]);
+      } else if (isFunction(list[0])) {
+        let parenttype = fnObjects[fnObjects.indexOf(list[0])].parenttype;
+        let tail_height = recursiveHelper(list[1])
+        if(parenttype == "frame" || tail_height > 0) {
+          return tail_height;
+        } else {
+          return 1;
+        }
+      } else {
+        return recursiveHelper(list[1]);
+      }
+    }
+    return (recursiveHelper(sublist) + 1) * (DATA_UNIT_HEIGHT + 15);
   }
 
   function getListHeight(list) {
@@ -1615,6 +1717,7 @@
     return dataObjectWrapper;
   }
   
+  // Calculates the unit position of an element (data/primitive/function)
   function findElementPosition(element, frame) {
     let index = 0;
     for(elem in frame.elements){
@@ -1628,6 +1731,28 @@
         const parent = dataObjectWrappers[dataObjects.indexOf(frame.elements[elem])].parent;
         if(parent == frame) {
           index += getUnitHeight(frame.elements[elem]) + 1
+        } else {
+          index += 1;
+        }        
+      } else {
+        index += 1
+      }
+    }
+    return index;
+  }
+
+  // Calculates the unit position of the name of the element (in the frame box)
+  function findElementNamePosition(elementName, frame) {
+    let lineNo = Object.keys(frame.elements).indexOf(elementName);
+    let index = 0;
+    for(let i = 0; i < lineNo; i++){
+      if(isFunction(Object.values(frame.elements)[i])) {
+        index += 1;
+      } 
+      else if(Array.isArray(Object.values(frame.elements)[i])) {
+        const parent = dataObjectWrappers[dataObjects.indexOf(Object.values(frame.elements)[i])].parent;
+        if(parent == frame) {
+          index += getUnitHeight(Object.values(frame.elements)[i]) + 1
         } else {
           index += 1;
         }        
