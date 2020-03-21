@@ -36,6 +36,7 @@ import {
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
+import { IPosition } from '../components/workspace/Editor';
 import { IState, SideContentType } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
@@ -52,6 +53,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
   replValue: state.workspaces.playground.replValue,
+  newCursorPosition: state.workspaces.playground.newCursorPosition,
   sharedbAceIsInviting: state.workspaces.playground.sharedbAceIsInviting,
   sharedbAceInitValue: state.workspaces.playground.sharedbAceInitValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
@@ -73,8 +75,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleChangeExecTime: (execTime: number) =>
         changeExecTime(execTime.toString(), workspaceLocation),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, workspaceLocation),
-      handleDeclarationNavigate: (line: number, column: number) =>
-        navigateToDeclaration(workspaceLocation, line, column),
+      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+        navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),

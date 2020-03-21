@@ -1,6 +1,7 @@
 import { action } from 'typesafe-actions';
 
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
+import { IPosition } from '../components/workspace/Editor';
 import { IWorkspaceState, SideContentType } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -149,9 +150,12 @@ export const resetTestcase = (workspaceLocation: WorkspaceLocation, index: numbe
 
 export const navigateToDeclaration = (
   workspaceLocation: WorkspaceLocation,
-  line: number,
-  column: number
-) => action(actionTypes.NAV_DECLARATION, { workspaceLocation, line, column });
+  cursorPosition: IPosition
+) => action(actionTypes.NAV_DECLARATION, { workspaceLocation, cursorPosition });
+
+export const moveCursor = (workspaceLocation: WorkspaceLocation,
+                           cursorPosition: IPosition) =>
+  action(actionTypes.MOVE_CURSOR, { workspaceLocation, cursorPosition });
 
 /**
  * Resets a workspace to its default properties.

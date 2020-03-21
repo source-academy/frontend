@@ -1,4 +1,4 @@
-import { Context, findIdentifier, interrupt, resume, runInContext } from 'js-slang';
+import { Context, findDeclaration, interrupt, resume, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/interpreter-errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { random } from 'lodash';
@@ -410,9 +410,6 @@ export default function* workspaceSaga(): SagaIterator {
   yield takeEvery(actionTypes.NAV_DECLARATION, function*(
     action: ReturnType<typeof actions.navigateToDeclaration>
   ) {
-    // tslint:disable-next-line:no-console
-    console.log('Action NAV_DECLARATION:', action.payload);
-
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue
@@ -420,17 +417,15 @@ export default function* workspaceSaga(): SagaIterator {
     context = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
     );
-    const foundAt = findIdentifier(code, context, {
-      line: action.payload.line,
-      column: action.payload.column
+
+    const result = findDeclaration(code, context, {
+      line: action.payload.cursorPosition.row + 1,
+      column: action.payload.cursorPosition.column
     });
-
-    // tslint:disable-next-line:no-console
-    console.log('Found node', foundAt);
-
-    if (foundAt) {
+    if (result) {
       yield put(
-        actions.highlightEditorLine([foundAt.loc.start.line - 1], action.payload.workspaceLocation)
+        actions.moveCursor(action.payload.workspaceLocation,
+          {row: result.start.line - 1, column: result.start.column})
       );
     }
   });

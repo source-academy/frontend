@@ -33,6 +33,7 @@ import {
   RunButton,
   SaveButton
 } from '../workspace/controlBar/index';
+import { IPosition } from '../workspace/Editor';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
@@ -62,6 +63,7 @@ export type StateProps = {
   editorWidth: string;
   breakpoints: string[];
   highlightedLines: number[][];
+  newCursorPosition?: IPosition;
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -87,6 +89,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorHeightChange: (height: number) => void;
@@ -237,11 +240,13 @@ class AssessmentWorkspace extends React.Component<
           ? {
               editorSessionId: '',
               editorValue: this.props.editorValue!,
+              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
               breakpoints: this.props.breakpoints,
               highlightedLines: this.props.highlightedLines,
+              newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               isEditorAutorun: false
             }

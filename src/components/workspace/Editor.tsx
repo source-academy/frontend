@@ -23,11 +23,12 @@ export interface IEditorProps {
   editorSessionId: string;
   editorValue: string;
   highlightedLines: number[][];
+  newCursorPosition?: IPosition;
   isEditorAutorun: boolean;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
-  handleDeclarationNavigate?: (line: number, row: number) => void;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
@@ -36,12 +37,16 @@ export interface IEditorProps {
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
 
+export interface IPosition {
+  row: number;
+  column: number;
+}
+
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: Annotation[]) => void;
-  private cursorPosition: any;
 
   constructor(props: IEditorProps) {
     super(props);
@@ -121,6 +126,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     this.ShareAce = null;
   }
 
+  public componentDidUpdate(prevprops: IEditorProps) {
+    const newCursorPosition = this.props.newCursorPosition;
+    if (newCursorPosition && newCursorPosition !== prevprops.newCursorPosition) {
+      this.moveCursor(newCursorPosition);
+    }
+  }
+
   public getMarkers = () => {
     const markerProps = [];
     for (const lineNum of this.props.highlightedLines) {
@@ -163,9 +175,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                 exec: this.props.handleEditorEval
               },
               {
-                name: 'evaluate',
+                name: 'navigate',
                 bindKey: {
-                  win: 'Command-B',
+                  win: 'Ctrl-B',
                   mac: 'Command-B'
                 },
                 exec: this.handleDeclarationNavigate
@@ -181,7 +193,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             highlightActiveLine={false}
             mode={this.chapterNo()} // select according to props.sourceChapter
             onChange={this.onChangeMethod}
-            onCursorChange={this.onCursorChange}
             onValidate={this.onValidateMethod}
             theme="source"
             value={this.props.editorValue}
@@ -195,21 +206,20 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     );
   }
 
-  private onCursorChange = (selection: any) => {
-    this.cursorPosition = {
-      line: selection.getCursor().row + 1,
-      column: selection.getCursor().column
-    };
+  // Used in navigating from occurence to navigation
+  private moveCursor = (position: IPosition) => {
+    (this.AceEditor.current as any).editor.selection.clearSelection();
+    (this.AceEditor.current as any).editor.moveCursorToPosition(position);
+    (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();
+    (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(
+      position,
+      0.5
+    );
   };
 
   private handleDeclarationNavigate = () => {
-    // tslint:disable-next-line:no-console
-    console.log('Navigation requested at:', this.cursorPosition);
-
-    // Remove if when implemented in all
-    if (this.props.handleDeclarationNavigate) {
-      this.props.handleDeclarationNavigate(this.cursorPosition.line, this.cursorPosition.column);
-    }
+    this.props.handleDeclarationNavigate(
+      (this.AceEditor.current as any).editor.getCursorPosition());
   };
 
   private handleGutterClick = (e: any) => {

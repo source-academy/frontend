@@ -29,6 +29,7 @@ import {
   HIGHLIGHT_LINE,
   INIT_INVITE,
   LOG_OUT,
+  MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -512,6 +513,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
 
+
     /**
      * Resets the workspace to default settings,
      * including the js-slang Context. Apply
@@ -628,6 +630,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           highlightedLines: action.payload.highlightedLines
+        }
+      };
+    case MOVE_CURSOR:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          newCursorPosition: action.payload.cursorPosition
         }
       };
     case UPDATE_REPL_VALUE:

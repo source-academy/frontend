@@ -16,7 +16,7 @@ import {
   debuggerResume,
   evalEditor,
   evalRepl,
-  evalTestcase,
+  evalTestcase, navigateToDeclaration,
   setEditorBreakpoint,
   submitAnswer,
   updateEditorValue,
@@ -35,6 +35,7 @@ import AssessmentWorkspace, {
   OwnProps,
   StateProps
 } from '../../components/missionControl/EditingWorkspace';
+import { IPosition } from '../../components/workspace/Editor';
 import { IState, IWorkspaceState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
@@ -44,6 +45,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     editorWidth: state.workspaces.assessment.editorWidth,
     breakpoints: state.workspaces.assessment.breakpoints,
     highlightedLines: state.workspaces.assessment.highlightedLines,
+    newCursorPosition: state.workspaces.assessment.newCursorPosition,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
     isRunning: state.workspaces.assessment.isRunning,
     isDebugging: state.workspaces.assessment.isDebugging,
@@ -66,6 +68,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, workspaceLocation),
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
+      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+        navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
