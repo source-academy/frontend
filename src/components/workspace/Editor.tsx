@@ -211,15 +211,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     (this.AceEditor.current as any).editor.selection.clearSelection();
     (this.AceEditor.current as any).editor.moveCursorToPosition(position);
     (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();
-    (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(
-      position,
-      0.5
-    );
+    (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(position, 0.5);
   };
 
   private handleDeclarationNavigate = () => {
     this.props.handleDeclarationNavigate(
-      (this.AceEditor.current as any).editor.getCursorPosition());
+      (this.AceEditor.current as any).editor.getCursorPosition()
+    );
   };
 
   private handleGutterClick = (e: any) => {

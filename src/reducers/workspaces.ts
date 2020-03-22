@@ -513,7 +513,6 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         }
       };
 
-
     /**
      * Resets the workspace to default settings,
      * including the js-slang Context. Apply

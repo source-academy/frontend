@@ -424,8 +424,10 @@ export default function* workspaceSaga(): SagaIterator {
     });
     if (result) {
       yield put(
-        actions.moveCursor(action.payload.workspaceLocation,
-          {row: result.start.line - 1, column: result.start.column})
+        actions.moveCursor(action.payload.workspaceLocation, {
+          row: result.start.line - 1,
+          column: result.start.column
+        })
       );
     }
   });

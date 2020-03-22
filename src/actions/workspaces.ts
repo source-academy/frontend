@@ -153,8 +153,7 @@ export const navigateToDeclaration = (
   cursorPosition: IPosition
 ) => action(actionTypes.NAV_DECLARATION, { workspaceLocation, cursorPosition });
 
-export const moveCursor = (workspaceLocation: WorkspaceLocation,
-                           cursorPosition: IPosition) =>
+export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition: IPosition) =>
   action(actionTypes.MOVE_CURSOR, { workspaceLocation, cursorPosition });
 
 /**
