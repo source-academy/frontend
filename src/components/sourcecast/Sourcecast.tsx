@@ -23,6 +23,7 @@ import {
   ICodeDelta,
   Input,
   IPlaybackData,
+  IPosition,
   ISourcecastData,
   PlaybackStatus
 } from './sourcecastShape';
@@ -47,6 +48,7 @@ export interface IStateProps {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
+  newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   playbackDuration: number;
   playbackData: IPlaybackData;
@@ -65,6 +67,7 @@ export interface IDispatchProps {
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
@@ -168,6 +171,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,
       editorSessionId: '',
+      handleDeclarationNavigate: this.props.handleDeclarationNavigate,
       handleEditorEval: this.props.handleEditorEval,
       handleEditorValueChange: this.props.handleEditorValueChange,
       isEditorAutorun: this.props.isEditorAutorun,
@@ -175,6 +179,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
       breakpoints: this.props.breakpoints,
       highlightedLines: this.props.highlightedLines,
+      newCursorPosition: this.props.newCursorPosition,
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
     };
     const workspaceProps: WorkspaceProps = {

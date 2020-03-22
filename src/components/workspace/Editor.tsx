@@ -23,8 +23,8 @@ export interface IEditorProps {
   editorSessionId: string;
   editorValue: string;
   highlightedLines: number[][];
-  newCursorPosition?: IPosition;
   isEditorAutorun: boolean;
+  newCursorPosition?: IPosition;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
@@ -126,9 +126,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     this.ShareAce = null;
   }
 
-  public componentDidUpdate(prevprops: IEditorProps) {
+  public componentDidUpdate(prevProps: IEditorProps) {
     const newCursorPosition = this.props.newCursorPosition;
-    if (newCursorPosition && newCursorPosition !== prevprops.newCursorPosition) {
+    if (newCursorPosition && newCursorPosition !== prevProps.newCursorPosition) {
       this.moveCursor(newCursorPosition);
     }
   }

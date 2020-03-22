@@ -58,11 +58,11 @@ export interface IStateProps {
   execTime: number;
   breakpoints: string[];
   highlightedLines: number[][];
-  newCursorPosition?: IPosition;
   isEditorAutorun: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
+  newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   queryString?: string;
   replValue: string;

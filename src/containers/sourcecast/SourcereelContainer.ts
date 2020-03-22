@@ -17,7 +17,7 @@ import {
   evalEditor,
   evalRepl,
   externalLibrarySelect,
-  fetchSourcecastIndex,
+  fetchSourcecastIndex, navigateToDeclaration,
   recordInit,
   recordInput,
   saveSourcecastData,
@@ -35,7 +35,7 @@ import {
   WorkspaceLocation
 } from '../../actions';
 import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
-import { Input, IPlaybackData } from '../../components/sourcecast/sourcecastShape';
+import { Input, IPlaybackData, IPosition } from '../../components/sourcecast/sourcecastShape';
 import Sourcereel, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcereel';
 import { IState, SideContentType } from '../../reducers/states';
 
@@ -50,6 +50,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   isDebugging: state.workspaces.sourcereel.isDebugging,
   isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
   isRunning: state.workspaces.sourcereel.isRunning,
+  newCursorPosition: state.workspaces.sourcecast.newCursorPosition,
   output: state.workspaces.sourcereel.output,
   playbackData: state.workspaces.sourcereel.playbackData,
   recordingStatus: state.workspaces.sourcereel.recordingStatus,
@@ -70,6 +71,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
+      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+        navigateToDeclaration(location, cursorPosition),
       handleDeleteSourcecastEntry: (id: number) => deleteSourcecastEntry(id, 'sourcecast'),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),

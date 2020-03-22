@@ -46,11 +46,11 @@ export type StateProps = {
   editorWidth: string;
   breakpoints: string[];
   highlightedLines: number[][];
-  newCursorPosition?: IPosition;
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
+  newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
