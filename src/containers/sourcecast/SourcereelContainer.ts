@@ -51,7 +51,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   isDebugging: state.workspaces.sourcereel.isDebugging,
   isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
   isRunning: state.workspaces.sourcereel.isRunning,
-  newCursorPosition: state.workspaces.sourcecast.newCursorPosition,
+  newCursorPosition: state.workspaces.sourcereel.newCursorPosition,
   output: state.workspaces.sourcereel.output,
   playbackData: state.workspaces.sourcereel.playbackData,
   recordingStatus: state.workspaces.sourcereel.recordingStatus,
