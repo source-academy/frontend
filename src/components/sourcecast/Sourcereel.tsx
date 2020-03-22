@@ -20,7 +20,8 @@ import ListVisualizer from '../workspace/side-content/ListVisualizer';
 import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
 import {
   Input,
-  IPlaybackData, IPosition,
+  IPlaybackData,
+  IPosition,
   ISourcecastData,
   KeyboardCommand,
   RecordingStatus
