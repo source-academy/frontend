@@ -1025,3 +1025,59 @@ describe('evalTestCode', () => {
     });
   });
 });
+
+describe('NAV_DECLARATION', () => {
+  let workspaceLocation: WorkspaceLocation;
+  let context: Context;
+  let editorValue: string;
+  let state: IState;
+
+  beforeEach(() => {
+    workspaceLocation = WorkspaceLocations.playground;
+    editorValue = 'const foo = (x) => -1; foo(2);';
+    context = {
+      ...mockRuntimeContext(),
+      chapter: 4
+    };
+    state = generateDefaultState(workspaceLocation, {editorValue: editorValue, context: context});
+  });
+
+  test('moves cursor to declaration correctly', () => {
+    const loc = {row: 0, column: 24};
+    const resultLoc = {row: 0, column: 6};
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .dispatch({
+        type: actionTypes.NAV_DECLARATION,
+        payload: { workspaceLocation, cursorPosition: loc }
+      })
+      .put(actions.moveCursor(workspaceLocation, resultLoc))
+      .silentRun()
+  });
+
+  test('does not move cursor if node is not an identifier', () => {
+    const loc = {row: 0, column: 27};
+    const resultLoc = {row: 0, column: 6};
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .dispatch({
+        type: actionTypes.NAV_DECLARATION,
+        payload: { workspaceLocation, cursorPosition: loc }
+      })
+      .not.put(actions.moveCursor(workspaceLocation, resultLoc))
+      .silentRun()
+  });
+
+  test('does not move cursor if node is same as declaration', () => {
+    const loc = {row: 0, column: 7};
+    const resultLoc = {row: 0, column: 6};
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .dispatch({
+        type: actionTypes.NAV_DECLARATION,
+        payload: { workspaceLocation, cursorPosition: loc }
+      })
+      .not.put(actions.moveCursor(workspaceLocation, resultLoc))
+      .silentRun()
+  });
+});
