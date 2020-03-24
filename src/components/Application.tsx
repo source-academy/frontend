@@ -62,7 +62,7 @@ class Application extends React.Component<IApplicationProps, {}> {
             <Route path="/contributors" component={Contributors} />
             <Route path="/material" component={Material} />
             <Route path="/sourcecast" component={Sourcecast} />
-            <Route exact={true} path="/" render={this.redirectToAcademy} />
+            <Route exact={true} path="/" render={this.redirectToPlayground} />
             <Route component={NotFound} />
           </Switch>
         </div>
@@ -70,7 +70,7 @@ class Application extends React.Component<IApplicationProps, {}> {
     );
   }
 
-  private redirectToAcademy = () => <Redirect to="/academy" />;
+  private redirectToPlayground = () => <Redirect to="/playground" />;
 }
 
 /**

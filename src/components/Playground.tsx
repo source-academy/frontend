@@ -263,6 +263,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         replButtons: [evalButton, clearButton]
       },
       editorProps: {
+        sourceChapter: this.props.sourceChapter,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleEditorEval: this.props.handleEditorEval,
@@ -311,6 +312,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {
+        sourceChapter: this.props.sourceChapter,
         output: this.props.output,
         replValue: this.props.replValue,
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
