@@ -1039,12 +1039,12 @@ describe('NAV_DECLARATION', () => {
       ...mockRuntimeContext(),
       chapter: 4
     };
-    state = generateDefaultState(workspaceLocation, {editorValue: editorValue, context: context});
+    state = generateDefaultState(workspaceLocation, { editorValue, context });
   });
 
   test('moves cursor to declaration correctly', () => {
-    const loc = {row: 0, column: 24};
-    const resultLoc = {row: 0, column: 6};
+    const loc = { row: 0, column: 24 };
+    const resultLoc = { row: 0, column: 6 };
     return expectSaga(workspaceSaga)
       .withState(state)
       .dispatch({
@@ -1052,12 +1052,12 @@ describe('NAV_DECLARATION', () => {
         payload: { workspaceLocation, cursorPosition: loc }
       })
       .put(actions.moveCursor(workspaceLocation, resultLoc))
-      .silentRun()
+      .silentRun();
   });
 
   test('does not move cursor if node is not an identifier', () => {
-    const pos = {row: 0, column: 27};
-    const resultPos = {row: 0, column: 6};
+    const pos = { row: 0, column: 27 };
+    const resultPos = { row: 0, column: 6 };
     return expectSaga(workspaceSaga)
       .withState(state)
       .dispatch({
@@ -1065,12 +1065,12 @@ describe('NAV_DECLARATION', () => {
         payload: { workspaceLocation, cursorPosition: pos }
       })
       .not.put(actions.moveCursor(workspaceLocation, resultPos))
-      .silentRun()
+      .silentRun();
   });
 
   test('does not move cursor if node is same as declaration', () => {
-    const pos = {row: 0, column: 7};
-    const resultPos = {row: 0, column: 6};
+    const pos = { row: 0, column: 7 };
+    const resultPos = { row: 0, column: 6 };
     return expectSaga(workspaceSaga)
       .withState(state)
       .dispatch({
@@ -1078,6 +1078,6 @@ describe('NAV_DECLARATION', () => {
         payload: { workspaceLocation, cursorPosition: pos }
       })
       .not.put(actions.moveCursor(workspaceLocation, resultPos))
-      .silentRun()
+      .silentRun();
   });
 });

@@ -23,7 +23,8 @@ import {
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
   INIT_INVITE,
-  LOG_OUT, MOVE_CURSOR,
+  LOG_OUT,
+  MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -1426,7 +1427,7 @@ describe('UPDATE_REPL_VALUE', () => {
 
 describe('MOVE_CURSOR', () => {
   test('moves cursor correctly', () => {
-    const newCursorPosition = {row: 0, column: 0};
+    const newCursorPosition = { row: 0, column: 0 };
     const actions = generateActions(MOVE_CURSOR, { newCursorPosition });
 
     actions.forEach(action => {
@@ -1443,4 +1444,3 @@ describe('MOVE_CURSOR', () => {
     });
   });
 });
-

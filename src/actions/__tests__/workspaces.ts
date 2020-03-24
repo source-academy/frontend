@@ -393,7 +393,7 @@ test('updateHasUnsavedChanges generates correct action object', () => {
 });
 
 test('navigateToDeclaration generates correct action object', () => {
-  const cursorPosition = {row: 0, column: 0};
+  const cursorPosition = { row: 0, column: 0 };
   const action = navigateToDeclaration(playgroundWorkspace, cursorPosition);
   expect(action).toEqual({
     type: actionTypes.NAV_DECLARATION,
@@ -404,9 +404,8 @@ test('navigateToDeclaration generates correct action object', () => {
   });
 });
 
-
 test('moveCursor generates correct action object', () => {
-  const cursorPosition = {row: 0, column: 0};
+  const cursorPosition = { row: 0, column: 0 };
   const action = moveCursor(playgroundWorkspace, cursorPosition);
   expect(action).toEqual({
     type: actionTypes.MOVE_CURSOR,
