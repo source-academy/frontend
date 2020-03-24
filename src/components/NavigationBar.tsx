@@ -1,12 +1,12 @@
 import {
   Alignment,
-  Button,
+  // Button,
   Classes,
   Icon,
   Navbar,
   NavbarDivider,
-  NavbarGroup,
-  NavbarHeading
+  NavbarGroup
+  // NavbarHeading
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
@@ -14,7 +14,7 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { Role } from '../reducers/states';
-import { LINKS } from '../utils/constants';
+// import { LINKS } from '../utils/constants';
 import Dropdown from './dropdown';
 
 export interface INavigationBarProps {
@@ -27,6 +27,7 @@ export interface INavigationBarProps {
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
   <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
     <NavbarGroup align={Alignment.LEFT}>
+      {/* 
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
@@ -35,7 +36,9 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
         <NavbarHeading className="hidden-xs hidden-sm">Source Academy</NavbarHeading>
       </NavLink>
+     */}
 
+      {/*
       <a
         className="NavigationBar__link"
         href={LINKS.LUMINUS}
@@ -59,24 +62,27 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
           <div className="navbar-button-text hidden-xs hidden-sm">Forum</div>
         </Button>
       </a>
+     */}
 
-      {/*<NavLink*/}
-      {/*activeClassName={Classes.ACTIVE}*/}
-      {/*className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}*/}
-      {/*to="/material"*/}
-      {/*>*/}
-      {/*<Icon icon={IconNames.BOOK} />*/}
-      {/*<div className="navbar-button-text hidden-xs hidden-sm">Material</div>*/}
-      {/*</NavLink>*/}
+      {/*
+      <NavLink
+      activeClassName={Classes.ACTIVE}
+      className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+      to="/material"
+      >
+      <Icon icon={IconNames.BOOK} />
+      <div className="navbar-button-text hidden-xs hidden-sm">Material</div>
+      </NavLink>
 
-      {/*<NavLink*/}
-      {/*activeClassName={Classes.ACTIVE}*/}
-      {/*className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}*/}
-      {/*to="/sourcecast"*/}
-      {/*>*/}
-      {/*<Icon icon={IconNames.MUSIC} />*/}
-      {/*<div className="navbar-button-text hidden-xs hidden-sm">Sourcecast</div>*/}
-      {/*</NavLink>*/}
+      <NavLink
+      activeClassName={Classes.ACTIVE}
+      className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+      to="/sourcecast"
+      >
+      <Icon icon={IconNames.MUSIC} />
+      <div className="navbar-button-text hidden-xs hidden-sm">Sourcecast</div>
+      </NavLink>
+     */}
 
       <NavLink
         activeClassName={Classes.ACTIVE}
@@ -84,7 +90,7 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
-        <div className="navbar-button-text hidden-xs hidden-sm">Playground</div>
+        <div className="navbar-button-text hidden-xs hidden-sm">Source Academy Playground</div>
       </NavLink>
     </NavbarGroup>
 

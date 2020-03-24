@@ -1,10 +1,10 @@
 import { isEqual } from 'lodash';
 import * as React from 'react';
-import AceEditor, { Annotation } from 'react-ace';
+import AceEditor, { IAnnotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
-import 'brace/ext/searchbox';
-import 'brace/mode/javascript';
+import 'ace-builds/src-noconflict/ext-searchbox';
+import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
 import { ICodeDelta, Input, IPosition, ISelectionRange, KeyboardCommand } from './sourcecastShape';
@@ -45,7 +45,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string, delta: ICodeDelta) => void;
-  private onValidateMethod: (annotations: Annotation[]) => void;
+  private onValidateMethod: (annotations: IAnnotation[]) => void;
   private onCursorChange: (selecction: any) => void;
   private onSelectionChange: (selection: any) => void;
 
@@ -66,7 +66,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
         });
       }
     };
-    this.onValidateMethod = (annotations: Annotation[]) => {
+    this.onValidateMethod = (annotations: IAnnotation[]) => {
       if (this.props.isEditorAutorun && annotations.length === 0) {
         this.props.handleEditorEval();
       }
