@@ -1,15 +1,15 @@
 import * as React from 'react';
-import AceEditor, { Annotation } from 'react-ace';
+import AceEditor, { IAnnotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
-import 'brace/ext/language_tools';
-import 'brace/ext/searchbox';
-import './editorMode/source';
-import './editorTheme/source';
-
+import 'ace-builds/src-noconflict/ext-language_tools';
+import 'ace-builds/src-noconflict/ext-searchbox';
+import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
+import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
+
 /**
  * @property editorValue - The string content of the react-ace editor
  * @property handleEditorChange  - A callback function
@@ -17,6 +17,7 @@ import { checkSessionIdExists } from './collabEditing/helper';
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
  */
+
 export interface IEditorProps {
   breakpoints: string[];
   editorSessionId: string;
@@ -25,6 +26,7 @@ export interface IEditorProps {
   isEditorAutorun: boolean;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
+  sourceChapter?: number;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
@@ -37,7 +39,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string) => void;
-  private onValidateMethod: (annotations: Annotation[]) => void;
+  private onValidateMethod: (annotations: IAnnotation[]) => void;
 
   constructor(props: IEditorProps) {
     super(props);
@@ -49,7 +51,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
       this.props.handleEditorValueChange(newCode);
     };
-    this.onValidateMethod = (annotations: Annotation[]) => {
+    this.onValidateMethod = (annotations: IAnnotation[]) => {
       if (this.props.isEditorAutorun && annotations.length === 0) {
         this.props.handleEditorEval();
       }
@@ -73,6 +75,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     }
     const editor = (this.AceEditor.current as any).editor;
     const session = editor.getSession();
+
+    /* disable error threshold incrementer
+
     const jshintOptions = {
       // undef: true,
       // unused: true,
@@ -92,6 +97,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       globalstrict: true
     };
     session.$worker.send('setOptions', [jshintOptions]);
+
+    */
 
     editor.on('gutterclick', this.handleGutterClick);
 
@@ -127,6 +134,17 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     return markerProps;
   };
 
+  // chapter selector used to choose the correct source mode
+  public chapterNo = () => {
+    let chapter = this.props.sourceChapter;
+    if (chapter === undefined) {
+      chapter = 1;
+    }
+    HighlightRulesSelector(chapter);
+    ModeSelector(chapter);
+    return 'source' + chapter.toString();
+  };
+
   public render() {
     return (
       <HotKeys className="Editor" handlers={handlers}>
@@ -151,17 +169,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             fontSize={17}
             height="100%"
             highlightActiveLine={false}
-            mode="source"
+            mode={this.chapterNo()} // select according to props.sourceChapter
             onChange={this.onChangeMethod}
             onValidate={this.onValidateMethod}
             theme="source"
             value={this.props.editorValue}
             width="100%"
             setOptions={{
-              fontFamily: "'Inconsolata', 'Consolas', monospace",
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              enableSnippets: true
+              fontFamily: "'Inconsolata', 'Consolas', monospace"
             }}
           />
         </div>

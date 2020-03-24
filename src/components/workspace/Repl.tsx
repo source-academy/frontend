@@ -18,6 +18,7 @@ export interface IReplProps {
   handleReplValueChange: (newCode: string) => void;
   hidden?: boolean;
   usingSubst?: boolean;
+  sourceChapter?: number;
 }
 
 export interface IOutputProps {
