@@ -1056,28 +1056,28 @@ describe('NAV_DECLARATION', () => {
   });
 
   test('does not move cursor if node is not an identifier', () => {
-    const loc = {row: 0, column: 27};
-    const resultLoc = {row: 0, column: 6};
+    const pos = {row: 0, column: 27};
+    const resultPos = {row: 0, column: 6};
     return expectSaga(workspaceSaga)
       .withState(state)
       .dispatch({
         type: actionTypes.NAV_DECLARATION,
-        payload: { workspaceLocation, cursorPosition: loc }
+        payload: { workspaceLocation, cursorPosition: pos }
       })
-      .not.put(actions.moveCursor(workspaceLocation, resultLoc))
+      .not.put(actions.moveCursor(workspaceLocation, resultPos))
       .silentRun()
   });
 
   test('does not move cursor if node is same as declaration', () => {
-    const loc = {row: 0, column: 7};
-    const resultLoc = {row: 0, column: 6};
+    const pos = {row: 0, column: 7};
+    const resultPos = {row: 0, column: 6};
     return expectSaga(workspaceSaga)
       .withState(state)
       .dispatch({
         type: actionTypes.NAV_DECLARATION,
-        payload: { workspaceLocation, cursorPosition: loc }
+        payload: { workspaceLocation, cursorPosition: pos }
       })
-      .not.put(actions.moveCursor(workspaceLocation, resultLoc))
+      .not.put(actions.moveCursor(workspaceLocation, resultPos))
       .silentRun()
   });
 });

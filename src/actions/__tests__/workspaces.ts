@@ -21,6 +21,8 @@ import {
   evalTestcase,
   externalLibrarySelect,
   highlightEditorLine,
+  moveCursor,
+  navigateToDeclaration,
   resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
@@ -386,6 +388,31 @@ test('updateHasUnsavedChanges generates correct action object', () => {
     payload: {
       workspaceLocation: assessmentWorkspace,
       hasUnsavedChanges
+    }
+  });
+});
+
+test('navigateToDeclaration generates correct action object', () => {
+  const cursorPosition = {row: 0, column: 0};
+  const action = navigateToDeclaration(playgroundWorkspace, cursorPosition);
+  expect(action).toEqual({
+    type: actionTypes.NAV_DECLARATION,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      cursorPosition
+    }
+  });
+});
+
+
+test('moveCursor generates correct action object', () => {
+  const cursorPosition = {row: 0, column: 0};
+  const action = moveCursor(playgroundWorkspace, cursorPosition);
+  expect(action).toEqual({
+    type: actionTypes.MOVE_CURSOR,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      cursorPosition
     }
   });
 });
