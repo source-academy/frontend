@@ -1149,7 +1149,6 @@
        *   other frame is 1 level below its parent.
        */
       frames.forEach(function(frame) {
-        
         if (frame.name == "global") {
           frame.parent = null;
           frame.level = 0;
@@ -1163,8 +1162,11 @@
             }
             frame.parent = getFrameByKey(allFrames, env.tail.envKeyCounter);
           }
-          frame.parent.children.push(frame.key);
-          frame.level = frame.parent.level + 1;
+          // For loops do not have frame.parent, only while loops and functions do
+          if(frame.parent) {
+            frame.parent.children.push(frame.key);
+            frame.level = frame.parent.level + 1;            
+          }
         }
         
         // update total number of frames in the current level
@@ -1245,6 +1247,12 @@
           missing.push(otherEnv);
           allEnvs.push(otherEnv);
           // find function definition expression to use as frame name
+          
+          if(!otherEnv.callExpression) {
+            // When the environment is a loop, it doesn't have a call expression
+            break;
+          }
+
           let pointer = otherEnv.callExpression.callee;
           let i = 0;
           while (pointer.callee) {
