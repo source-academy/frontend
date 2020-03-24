@@ -23,7 +23,7 @@ import {
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
   INIT_INVITE,
-  LOG_OUT,
+  LOG_OUT, MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -1423,3 +1423,24 @@ describe('UPDATE_REPL_VALUE', () => {
     });
   });
 });
+
+describe('MOVE_CURSOR', () => {
+  test('moves cursor correctly', () => {
+    const newCursorPosition = {row: 0, column: 0};
+    const actions = generateActions(MOVE_CURSOR, { newCursorPosition });
+
+    actions.forEach(action => {
+      const result = reducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+      const cursorPosition = action.payload.cursorPosition;
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          newCursorPosition: cursorPosition
+        }
+      });
+    });
+  });
+});
+
