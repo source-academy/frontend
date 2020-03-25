@@ -100,6 +100,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     */
 
+    // navigation on key press
+    editor.commands.addCommand({
+      name: 'myCommand',
+      bindKey: { win: 'Ctrl-B', mac: 'Command-B' },
+      exec: this.handleNavigation
+    });
+
     editor.on('gutterclick', this.handleGutterClick);
 
     // Change all info annotations to error annotations
@@ -183,6 +190,16 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       </HotKeys>
     );
   }
+
+  private handleNavigation = (editor: any) => {
+    const chapter = this.props.sourceChapter;
+    const pos = editor.selection.getCursor();
+    const token = editor.session.getTokenAt(pos.row, pos.column);
+    const url = LINKS.TEXTBOOK;
+    if (token !== null && /\bsupport.function\b/.test(token.type)) {
+      window.open(`${url}/source/source_${chapter}/global.html#${token.value}`); // opens the link
+    }
+  };
 
   private handleGutterClick = (e: any) => {
     const target = e.domEvent.target;
