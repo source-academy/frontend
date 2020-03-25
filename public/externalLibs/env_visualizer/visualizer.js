@@ -79,7 +79,7 @@
     while (d2 !== d1) {
       if (checkSubStructure(d1[0], d2)) {
         // Add the height of the tail of d1 to the y-coordinate
-        rightHeight = getUnitHeight2(d1[1]);
+        rightHeight = getBasicUnitHeight(d1[1]);
         d1 = d1[0];
         result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
       } else {
@@ -389,8 +389,17 @@
       drawLine(context, startX + DATA_UNIT_WIDTH/2, startY, startX, startY + DATA_UNIT_HEIGHT);
     } else if (typeof wrapperData[0] === 'function') {
       // draw line in box
-      drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-        startX + DATA_UNIT_WIDTH/4, startY);
+      if((startY + DATA_UNIT_HEIGHT/2) > wrapperData[0].y) {
+        // draw line upwards
+        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, startY);
+      } else {
+        // draw line downwards
+        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT, 
+          startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2);
+      }
+
+
       // draw line up to fn height
       const arrowContext = arrowLayer.scene.context;
       drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
@@ -937,12 +946,15 @@
     for (let l in levels) {
       const level = levels[l];
       let maxHeight = 0;
+      let fullwidthArray = [];
       level.frames.forEach(function(frame) {
         if (frame.height > maxHeight) {
           maxHeight = frame.height;
         }
+        fullwidthArray.push(frame.fullwidth)
       });
       level.height = maxHeight;
+      level.widthArray = fullwidthArray
     }
 
     /**
@@ -980,7 +992,7 @@
         - frame.width / 2
         + DRAWING_LEFT_PADDING;
     });
-    
+        
     /**
      * Calculate coordinates for each fnObject and dataObject.
      */    
@@ -1008,7 +1020,7 @@
         } else {
           parent_coordinates = getShiftInfo(parent[0], parent[1])
           fnObject.x = parent_coordinates.x
-          fnObject.y = parent_coordinates.y + FRAME_HEIGHT_LINE
+          fnObject.y = parent_coordinates.y + FRAME_HEIGHT_LINE - 18
         }
       } else {
         fnObject.x = parent.x 
@@ -1520,15 +1532,35 @@
   }
   
   function getListWidth(list) {
+    let otherObjects = [];
+    let objectStored = false;
+    dataObjects.forEach(x => {
+      if(x == list){
+        objectStored = true;
+      }
+      if(objectStored){
+      } else if(x !== list) {
+        otherObjects.push(x)
+      }
+    })
+
     function getUnitWidth(list){
-      if (!Array.isArray(list)) {
+      let substructureExists = false;
+      otherObjects.forEach(x => {
+        if(checkSubStructure(x, list)){
+          substructureExists = true;
+        }
+      })
+
+      if (!Array.isArray(list) || substructureExists) {
         return 0;
       } else {
         return Math.max(getUnitWidth(list[1]) + 1, getUnitWidth(list[0]))
       }
     }
+
     let pairCount = getUnitWidth(list);
-    return pairCount * (DATA_UNIT_WIDTH + PAIR_SPACING);
+    return pairCount * (DATA_UNIT_WIDTH + 15);
   }
 
   function getUnitHeight(parentlist) {
@@ -1553,7 +1585,17 @@
       if (!Array.isArray(list) || substructureExists) {
         return 0;
       } else if (Array.isArray(list[0])) {
-        return 1 + recursiveHelper(list[0]) + recursiveHelper(list[1]);
+        let substructureExistsHead = false;
+        otherObjects.forEach(x => {
+          if(checkSubStructure(x, list[0])){
+            substructureExistsHead = true;
+          }
+        })
+        if(substructureExistsHead){
+          return recursiveHelper(list[1]);
+        } else {
+          return 1 + recursiveHelper(list[0]) + recursiveHelper(list[1]);
+        }     
       } else if (isFunction(list[0])) {
         let parenttype = fnObjects[fnObjects.indexOf(list[0])].parenttype;
         let tail_height = recursiveHelper(list[1])
@@ -1569,21 +1611,21 @@
     return recursiveHelper(parentlist)
   }
 
-  function getUnitHeight2(list){
+  function getBasicUnitHeight(list){
     if (!Array.isArray(list)) {
       return 0;
     } else if (Array.isArray(list[0])) {
-      return 1 + getUnitHeight2(list[0]) + getUnitHeight2(list[1]);
+      return 1 + getBasicUnitHeight(list[0]) + getBasicUnitHeight(list[1]);
     } else if (isFunction(list[0])) {
       let parenttype = fnObjects[fnObjects.indexOf(list[0])].parenttype;
-      let tail_height = getUnitHeight2(list[1])
+      let tail_height = getBasicUnitHeight(list[1])
       if(parenttype == "frame" || tail_height > 0) {
         return tail_height;
       } else {
         return 1;
       }
     } else {
-      return getUnitHeight2(list[1]);
+      return getBasicUnitHeight(list[1]);
     }
   }
 
