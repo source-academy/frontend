@@ -481,8 +481,9 @@
     }
 
     if (Array.isArray(dataObject[1])) {
-      drawHitPairs(dataObject[1], hit, wrapper, x0 + DATA_UNIT_HEIGHT + PAIR_SPACING, y0);
+      drawHitPairs(dataObject[1], hit, wrapper, x0 + DATA_UNIT_WIDTH + PAIR_SPACING, y0);
     }
+    context.stroke();
   }
 
   function drawSceneDataObject(dataObject) {
