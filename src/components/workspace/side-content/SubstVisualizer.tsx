@@ -1,9 +1,9 @@
 import { Classes, Divider, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as es from 'estree';
-import { codify } from 'js-slang/dist/substituter';
+import { codify } from 'js-slang/dist/stepper/stepper';
 import * as React from 'react';
-import AceEditor from "react-ace";
+import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
 import 'js-slang/dist/editors/ace/modes/source2';
@@ -93,22 +93,24 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
             />
             {hasRunCode ? (
               <AceEditor
-              className="react-ace"
-              mode="source2"
-              theme="source"
-              fontSize={17}
-              highlightActiveLine={false}
-              wrapEnabled={true}
-              height="unset"
-              width="100%"
-              showGutter={false}
-              readOnly={true}
-              maxLines={Infinity}
-              value={codify(this.props.content[this.state.value <= lastStepValue ? this.state.value - 1 : 0])}
-              setOptions={{
-                fontFamily: "'Inconsolata', 'Consolas', monospace",
-              }}
-            />
+                className="react-ace"
+                mode="source2"
+                theme="source"
+                fontSize={17}
+                highlightActiveLine={false}
+                wrapEnabled={true}
+                height="unset"
+                width="100%"
+                showGutter={false}
+                readOnly={true}
+                maxLines={Infinity}
+                value={codify(
+                  this.props.content[this.state.value <= lastStepValue ? this.state.value - 1 : 0]
+                )}
+                setOptions={{
+                  fontFamily: "'Inconsolata', 'Consolas', monospace"
+                }}
+              />
             ) : (
               <SubstDefaultText />
             )}
