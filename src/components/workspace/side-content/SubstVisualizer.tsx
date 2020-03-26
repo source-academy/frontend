@@ -1,12 +1,18 @@
-import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
+import { Classes, Divider, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as es from 'estree';
+import { codify } from 'js-slang/dist/stepper/stepper';
 import * as React from 'react';
+import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
+
+import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
+import 'js-slang/dist/editors/ace/theme/source';
 
 import { controlButton } from '../../commons';
 
 export interface ISubstVisualizerProps {
-  content: string[];
+  content: es.Program[];
 }
 
 export interface ISubstVisualizerState {
@@ -17,7 +23,7 @@ const SubstDefaultText = () => {
   return (
     <div>
       <div id="substituter-default-text" className={Classes.RUNNING_TEXT}>
-        Welcome to the Substituter!
+        Welcome to the Stepper!
         <br />
         <br />
         On this tab, the REPL will be hidden from view. You may use this tool by writing your
@@ -47,14 +53,6 @@ const SubstDefaultText = () => {
   );
 };
 
-const SubstCodeDisplay = (props: { content: string }) => {
-  return (
-    <Card>
-      <Pre className="resultOutput">{props.content}</Pre>
-    </Card>
-  );
-};
-
 const substKeyMap = {
   FIRST_STEP: ',',
   LAST_STEP: '.'
@@ -66,6 +64,10 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     this.state = {
       value: 1
     };
+
+    // set source mode as 2
+    HighlightRulesSelector(2);
+    ModeSelector(2);
   }
 
   public render() {
@@ -94,7 +96,25 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
               value={this.state.value <= lastStepValue ? this.state.value : 1}
             />
             {hasRunCode ? (
-              <SubstCodeDisplay content={this.props.content[this.state.value - 1]} />
+              <AceEditor
+                className="react-ace"
+                mode="source2"
+                theme="source"
+                fontSize={17}
+                highlightActiveLine={false}
+                wrapEnabled={true}
+                height="unset"
+                width="100%"
+                showGutter={false}
+                readOnly={true}
+                maxLines={Infinity}
+                value={codify(
+                  this.props.content[this.state.value <= lastStepValue ? this.state.value - 1 : 0]
+                )}
+                setOptions={{
+                  fontFamily: "'Inconsolata', 'Consolas', monospace"
+                }}
+              />
             ) : (
               <SubstDefaultText />
             )}
