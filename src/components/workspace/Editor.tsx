@@ -198,6 +198,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const url = LINKS.TEXTBOOK;
     if (token !== null && /\bsupport.function\b/.test(token.type)) {
       window.open(`${url}/source/source_${chapter}/global.html#${token.value}`); // opens the link
+    } else if (token !== null && /\bstorage.type\b/.test(token.type)) {
+      window.open(`${url}/source/source_${chapter}.pdf`);
     }
   };
 
