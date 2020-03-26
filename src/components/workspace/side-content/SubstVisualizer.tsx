@@ -6,7 +6,7 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
-import 'js-slang/dist/editors/ace/modes/source2';
+import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 
 import { controlButton } from '../../commons';
@@ -23,7 +23,7 @@ const SubstDefaultText = () => {
   return (
     <div>
       <div id="substituter-default-text" className={Classes.RUNNING_TEXT}>
-        Welcome to the Substituter!
+        Welcome to the Stepper!
         <br />
         <br />
         On this tab, the REPL will be hidden from view. You may use this tool by writing your
@@ -64,6 +64,10 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     this.state = {
       value: 1
     };
+
+    // set source mode as 2
+    HighlightRulesSelector(2);
+    ModeSelector(2);
   }
 
   public render() {
