@@ -180,7 +180,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   win: 'Ctrl-B',
                   mac: 'Command-B'
                 },
-                exec: this.handleDeclarationNavigate
+                exec: this.handleNavigate
               }
             ]}
             editorProps={{
@@ -214,10 +214,20 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(position, 0.5);
   };
 
-  private handleDeclarationNavigate = () => {
-    this.props.handleDeclarationNavigate(
-      (this.AceEditor.current as any).editor.getCursorPosition()
-    );
+  private handleNavigate = () => {
+    const chapter = this.props.sourceChapter;
+    const pos = (this.AceEditor.current as any).editor.selection.getCursor();
+    const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
+    const url = LINKS.TEXTBOOK;
+    if (token !== null && /\bsupport.function\b/.test(token.type)) {
+      window.open(`${url}/source/source_${chapter}/global.html#${token.value}`); // opens the link
+    } else if (token !== null && /\bstorage.type\b/.test(token.type)) {
+      window.open(`${url}/source/source_${chapter}.pdf`);
+    } else {
+      this.props.handleDeclarationNavigate(
+        (this.AceEditor.current as any).editor.getCursorPosition()
+      );
+    }
   };
 
   private handleGutterClick = (e: any) => {
