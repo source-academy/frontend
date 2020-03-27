@@ -1,7 +1,7 @@
 /* tslint:disable: ban-types*/
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
-import { stringify } from 'js-slang/dist/interop';
 import { Context, CustomBuiltIns, Value } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
 import { handleConsoleLog } from '../actions';
 
