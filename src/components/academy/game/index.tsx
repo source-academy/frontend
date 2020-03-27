@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { store } from '../../../createStore';
 import { Story } from '../../../reducers/states';
+import { setUserRole } from './backend/user';
 
 type GameProps = DispatchProps & StateProps;
 
@@ -39,7 +40,7 @@ export class Game extends React.Component<GameProps, {}> {
     const story: any = (await import('./game.js')).default;
     if (this.props.canvas === undefined) {
       const storyOpts = await this.getStoryOpts();
-      story(this.div, this.canvas, this.props.name, ...storyOpts);
+      story(this.div, this.canvas, this.props.name, storyOpts);
       this.props.handleSaveCanvas(this.canvas);
     } else {
       // This browser window has loaded the Game component & canvas before
@@ -57,26 +58,10 @@ export class Game extends React.Component<GameProps, {}> {
   }
 
   private async getStoryOpts() {
-    if (this.props.story) {
-      // no missions, no story from backend, just play intro
-      return this.props.story.story
-        ? [this.props.story.story, !this.props.story.playStory]
-        : ['mission-1', true];
-    } else {
-      // this.props.story is null if creating 'fresh' store from localStorage
-      const state = store.getState();
-      if (state.session.story) {
-        // no missions, no story from backend, just play intro
-        return state.session.story.story
-          ? [state.session.story.story, !state.session.story.playStory]
-          : ['mission-1', true];
-      } else {
-        // if user is null, actions.logOut is called anyways; nonetheless we
-        // return a storyOpts, otherwise typescript complains about using storyOpts
-        // before assignment in story/4 below
-        return ['mission-1', true];
-      }
-    }
+    const defaultStory = { story: 10, playStory: true };
+    const userStory = this.props.story ? this.props.story : store.getState().session.story;
+    setUserRole(store.getState().session.role);
+    return userStory ? userStory : defaultStory;
   }
 }
 

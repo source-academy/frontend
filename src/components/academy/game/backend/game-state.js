@@ -6,24 +6,20 @@ import {storyXMLPath} from '../constants/constants'
  * - The student's current story mission
  * - The global list of missions that are open
  */
-
 let fetched = false;
-export function fetchGameData(callback) {
+let studentMissionPointer = undefined,
+    studentData = undefined;
+export function fetchGameData(userStory, callback) {
   // fetch only needs to be called once; if there are additional calls somehow then ignore them
   if(fetched) {
     callback();
     return;
   }
   fetched = true;
-  const toFetch = [
-    fetchStudentData,
-    fetchStudentMissionPointer,
-    fetchGlobalMissionPointer
-  ];
-  let remaining = toFetch.length;
-  // does nothing until the last fetch is completed
-  const innerCallback = () => (--remaining === 0) ? callback() : undefined;
-  toFetch.map(x => x(innerCallback));
+  studentMissionPointer = userStory.story;
+  // not implemented yet
+  studentData = undefined; // userStory.data;
+  fetchGlobalMissionPointer(callback);
 }
 
 // overrides
@@ -37,15 +33,10 @@ export function overrideMissionPointer(data) { missionPointerOverride = data; }
 // override current date (to determine active missions)
 export function overrideCurrentDate(data) { currentDateOverride = data; }
 
-function fetchStudentData(callback) {
-  // placeholder
-  callback();
-}
-
 export function getStudentData() {
   // formerly create-initializer/loadFromServer
   if(studentDataOverride) return studentDataOverride;
-  return null;
+  return studentData;
 }
 
 export function saveStudentData(json) {
@@ -67,15 +58,10 @@ export function saveQuest(questId) {
   }
 }
 
-function fetchStudentMissionPointer(callback) {
-  // placeholder
-  callback();
-}
-
 function getStudentMissionPointer() {
   // placeholder
   if(missionPointerOverride) return missionPointerOverride;
-  return 10;
+  return studentMissionPointer;
 }
 
 let stories = [];
@@ -90,7 +76,6 @@ function fetchGlobalMissionPointer(callback) {
       stories = stories.sort((a, b) => parseInt(a.getAttribute("key")) - parseInt(b.getAttribute("key")));
     },
     error: () => {
-      loadingOverlay.visible = false;
       console.error('Cannot find master story list');
     }
   }).then(() => {
