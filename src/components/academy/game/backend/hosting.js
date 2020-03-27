@@ -1,3 +1,5 @@
+import { isStudent } from './user';
+
 const LIVE_ASSETS_HOST = 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/';
 
 // placeholder URL
@@ -6,4 +8,4 @@ const TEST_ASSETS_HOST = 'https://sa2021assets.blob.core.windows.net/sa2021-asse
 
 // placeholder predicate
 export const ASSETS_HOST = LIVE_ASSETS_HOST;
-export const STORY_HOST = false ? LIVE_ASSETS_HOST : TEST_ASSETS_HOST;
+export const STORY_HOST = isStudent() ? LIVE_ASSETS_HOST : TEST_ASSETS_HOST;

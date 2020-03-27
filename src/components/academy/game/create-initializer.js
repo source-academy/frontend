@@ -3,7 +3,7 @@ import {history} from '../../../utils/history'
 import {soundPath} from './constants/constants'
 import {fetchGameData, getMissionPointer, getStudentData, saveCollectible, saveQuest, saveStudentData} from './backend/game-state'
 
-export default function (StoryXMLPlayer, story, username, attemptedAll) {
+export default function (StoryXMLPlayer, username, userStory) {
 
     var hookHandlers = {
         startMission: function () {
@@ -51,7 +51,6 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
     }
 
     function startGame(div, canvas, saveData) {
-        // saveData = saveData || loadFromServer();
         StoryXMLPlayer.init(div, canvas, {
             saveData: saveData,
             hookHandlers: hookHandlers,
@@ -72,5 +71,5 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
         StoryXMLPlayer.loadStory(getMissionPointer(), function () {});
     }
 
-    return (div, canvas) => fetchGameData(() => initialize(div, canvas));
+    return (div, canvas) => fetchGameData(userStory, () => initialize(div, canvas));
 };
