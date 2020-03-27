@@ -1,5 +1,5 @@
 import { Context, findDeclaration, interrupt, resume, runInContext } from 'js-slang';
-import { InterruptedError } from 'js-slang/dist/interpreter-errors';
+import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';

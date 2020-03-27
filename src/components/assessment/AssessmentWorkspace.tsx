@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
-import { stringify } from 'js-slang/dist/interop';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
