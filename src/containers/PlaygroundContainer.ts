@@ -22,6 +22,7 @@ import {
   generateLzString,
   initInvite,
   invalidEditorSessionId,
+  navigateToDeclaration,
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
@@ -35,6 +36,7 @@ import {
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
+import { IPosition } from '../components/workspace/Editor';
 import { IState, SideContentType } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
@@ -48,6 +50,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   isRunning: state.workspaces.playground.isRunning,
   isDebugging: state.workspaces.playground.isDebugging,
   enableDebugging: state.workspaces.playground.enableDebugging,
+  newCursorPosition: state.workspaces.playground.newCursorPosition,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
   replValue: state.workspaces.playground.replValue,
@@ -72,6 +75,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleChangeExecTime: (execTime: number) =>
         changeExecTime(execTime.toString(), workspaceLocation),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, workspaceLocation),
+      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+        navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),

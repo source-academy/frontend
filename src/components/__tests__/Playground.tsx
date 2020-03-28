@@ -5,6 +5,7 @@ import { SideContentType } from 'src/reducers/states';
 import { mockRouterProps } from '../../mocks/components';
 import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape';
 import Playground, { IPlaygroundProps } from '../Playground';
+import { IPosition } from '../workspace/Editor';
 
 const baseProps = {
   editorValue: '',
@@ -31,6 +32,7 @@ const baseProps = {
   handleBrowseHistoryUp: () => {},
   handleChangeExecTime: (execTime: number) => {},
   handleChapterSelect: (chapter: number) => {},
+  handleDeclarationNavigate: (cursorPosition: IPosition) => {},
   handleEditorEval: () => {},
   handleEditorHeightChange: (height: number) => {},
   handleEditorValueChange: () => {},

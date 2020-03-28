@@ -20,6 +20,7 @@ import {
   SessionButtons,
   ShareButton
 } from './workspace/controlBar/index';
+import { IPosition } from './workspace/Editor';
 import { SideContentTab } from './workspace/side-content';
 import EnvVisualizer from './workspace/side-content/EnvVisualizer';
 import FaceapiDisplay from './workspace/side-content/FaceapiDisplay';
@@ -61,6 +62,7 @@ export interface IStateProps {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
+  newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   queryString?: string;
   replValue: string;
@@ -79,6 +81,7 @@ export interface IDispatchProps {
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
   handleChapterSelect: (chapter: number) => void;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
@@ -266,6 +269,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         sourceChapter: this.props.sourceChapter,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
+        handleDeclarationNavigate: this.props.handleDeclarationNavigate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleFinishInvite: this.props.handleFinishInvite,
@@ -274,6 +278,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         isEditorAutorun: this.props.isEditorAutorun,
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
+        newCursorPosition: this.props.newCursorPosition,
         handleEditorUpdateBreakpoints: (breakpoints: string[]) => {
           // get rid of holes in array
           const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;

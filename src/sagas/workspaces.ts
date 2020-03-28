@@ -1,4 +1,4 @@
-import { Context, interrupt, resume, runInContext } from 'js-slang';
+import { Context, findDeclaration, interrupt, resume, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { random } from 'lodash';
@@ -405,6 +405,31 @@ export default function* workspaceSaga(): SagaIterator {
     }
     yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
     yield undefined;
+  });
+
+  yield takeEvery(actionTypes.NAV_DECLARATION, function*(
+    action: ReturnType<typeof actions.navigateToDeclaration>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
+    const code: string = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue
+    );
+    context = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
+    );
+
+    const result = findDeclaration(code, context, {
+      line: action.payload.cursorPosition.row + 1,
+      column: action.payload.cursorPosition.column
+    });
+    if (result) {
+      yield put(
+        actions.moveCursor(action.payload.workspaceLocation, {
+          row: result.start.line - 1,
+          column: result.start.column
+        })
+      );
+    }
   });
 }
 
