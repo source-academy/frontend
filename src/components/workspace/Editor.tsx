@@ -6,9 +6,15 @@ import sharedbAce from 'sharedb-ace';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
+import { createContext, getAllOccurrencesInScope } from 'js-slang';
+import AceRange from './AceRange';
 import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
 import { checkSessionIdExists } from './collabEditing/helper';
+
+/**
+ * Note: Import order should not be changed due to some dependency issues with AceEditor.
+ */
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -181,6 +187,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   mac: 'Command-B'
                 },
                 exec: this.handleNavigate
+              },
+              {
+                name: 'refactor',
+                bindKey: {
+                  win: 'Ctrl-M',
+                  mac: 'Command-M'
+                },
+                exec: this.handleRefactor
               }
             ]}
             editorProps={{
@@ -228,6 +242,27 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         (this.AceEditor.current as any).editor.getCursorPosition()
       );
     }
+  };
+
+  private handleRefactor = () => {
+    const editor = (this.AceEditor.current as any).editor;
+    if (!editor) {
+      return;
+    }
+    const code = this.props.editorValue;
+    const chapter = this.props.sourceChapter;
+    const position = editor.getCursorPosition();
+
+    const sourceLocations = getAllOccurrencesInScope(code, createContext(chapter), {
+      line: position.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
+      column: position.column
+    });
+
+    const selection = editor.getSelection();
+    const ranges = sourceLocations.map(
+      loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
+    );
+    ranges.forEach(range => selection.addRange(range));
   };
 
   private handleGutterClick = (e: any) => {
