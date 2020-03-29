@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
-import { sourceChapters, sourceDisplayNames } from '../../../reducers/states';
+import { sourceChapters, styliseChapter } from '../../../reducers/states';
 
 export type ChapterSelectProps = {
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -17,10 +17,6 @@ export interface IChapter {
 }
 
 export function ChapterSelect(props: ChapterSelectProps) {
-  const styliseChapter = (chap: number) => {
-    return `Source \xa7${sourceDisplayNames.has(chap) ? sourceDisplayNames.get(chap) : chap}`;
-  };
-
   const chapters = sourceChapters.map(chap => ({
     displayName: styliseChapter(chap),
     chapter: chap

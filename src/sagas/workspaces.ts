@@ -14,7 +14,13 @@ import {
   TestcaseTypes
 } from '../components/assessment/assessmentShape';
 import { externalLibraries } from '../reducers/externalLibraries';
-import { IPlaygroundState, IState, IWorkspaceState, SideContentType } from '../reducers/states';
+import {
+  IPlaygroundState,
+  IState,
+  IWorkspaceState,
+  SideContentType,
+  styliseChapter
+} from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import {
   getBlockExtraMethodsString,
@@ -278,7 +284,7 @@ export default function* workspaceSaga(): SagaIterator {
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
-      yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000);
+      yield call(showSuccessMessage, `Switched to ${styliseChapter(newChapter)}`, 1000);
     }
   });
 

@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import { externalLibraries } from '../../../reducers/externalLibraries';
-import { sourceChapters, sourceDisplayNames } from '../../../reducers/states';
+import { sourceChapters, styliseChapter } from '../../../reducers/states';
 
 import { ExternalLibraryName, IAssessment, Library } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
@@ -239,10 +239,6 @@ const removeSpaces = (str: string) => {
 const altEval = (str: string): any => {
   return Function('"use strict";return (' + str + ')')();
 };
-
-function styliseChapter(chap: number) {
-  return `Source \xa7${sourceDisplayNames.has(chap) ? sourceDisplayNames.get(chap) : chap}`;
-}
 
 const chapters = sourceChapters.map(chap => ({ displayName: styliseChapter(chap), chapter: chap }));
 

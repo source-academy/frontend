@@ -223,6 +223,10 @@ export const sourceChapters = [1, 2, 3, 4, 4.3];
 export const sourceDisplayNames: Map<number, string> = new Map([[4.3, '3 Non-Det']]);
 export const sourceURLNames: Map<string, number> = new Map([['3_Non_Det', 4.3]]);
 
+export const styliseChapter = (chap: number) => {
+  return `Source \xa7${sourceDisplayNames.has(chap) ? sourceDisplayNames.get(chap) : chap}`;
+};
+
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
     case 'development':
