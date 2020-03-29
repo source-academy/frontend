@@ -5,16 +5,12 @@ import sharedbAce from 'sharedb-ace';
 
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { createContext, getAllOccurrencesInScope } from 'js-slang';
-import AceRange from './AceRange';
+import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
+import AceRange from './AceRange';
 import { checkSessionIdExists } from './collabEditing/helper';
-
-/**
- * Note: Import order should not be changed due to some dependency issues with AceEditor.
- */
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -51,6 +47,7 @@ export interface IPosition {
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
+  private markerIds: number[];
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: IAnnotation[]) => void;
 
@@ -58,11 +55,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
+    this.markerIds = [];
     this.onChangeMethod = (newCode: string) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
         this.props.handleUpdateHasUnsavedChanges(true);
       }
       this.props.handleEditorValueChange(newCode);
+      this.handleVariableHighlighting();
     };
     this.onValidateMethod = (annotations: IAnnotation[]) => {
       if (this.props.isEditorAutorun && annotations.length === 0) {
@@ -122,6 +121,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     if (this.props.editorSessionId !== '') {
       this.handleStartCollabEditing(editor);
     }
+
+    this.handleVariableHighlighting();
   }
 
   public componentWillUnmount() {
@@ -207,6 +208,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             highlightActiveLine={false}
             mode={this.chapterNo()} // select according to props.sourceChapter
             onChange={this.onChangeMethod}
+            onCursorChange={this.handleVariableHighlighting}
             onValidate={this.onValidateMethod}
             theme="source"
             value={this.props.editorValue}
@@ -263,6 +265,38 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
     );
     ranges.forEach(range => selection.addRange(range));
+  };
+
+  private handleVariableHighlighting = () => {
+    // using Ace Editor's way of highlighting as seen here: https://github.com/ajaxorg/ace/blob/master/lib/ace/editor.js#L497
+    // We use async blocks so we don't block the browser during editing
+
+    setTimeout(() => {
+      const editor = (this.AceEditor.current as any).editor;
+      const session = editor.session;
+      const code = this.props.editorValue;
+      const chapterNumber = this.props.sourceChapter;
+      const position = editor.getCursorPosition();
+      if (!session || !session.bgTokenizer) {
+        return;
+      }
+      this.markerIds.forEach(id => {
+        session.removeMarker(id);
+      });
+      const ranges = getAllOccurrencesInScope(code, createContext(chapterNumber), {
+        line: position.row + 1,
+        column: position.column
+      }).map(
+        loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
+      );
+
+      const markerType = 'ace_variable_highlighting';
+      const markerIds = ranges.map(range => {
+        // returns the marker ID for removal later
+        return session.addMarker(range, markerType, 'text');
+      });
+      this.markerIds = markerIds;
+    }, 10);
   };
 
   private handleGutterClick = (e: any) => {
