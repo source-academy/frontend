@@ -1,4 +1,5 @@
 import { Context, findDeclaration, interrupt, resume, runInContext } from 'js-slang';
+import { getNames } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { random } from 'lodash';
@@ -27,15 +28,6 @@ import {
   makeElevatedContext,
   visualiseEnv
 } from '../utils/slangHelper';
-
-function getNamesStub(row: number, col: number, prog: string): any {
-  // console.log(row, col, JSON.stringify(prog));ll
-  return [
-    { name: 'foo', meta: 'function' },
-    { name: 'bar', meta: 'const' },
-    { name: 'baz', meta: 'let' }
-  ];
-}
 
 let breakpoints: string[] = [];
 export default function* workspaceSaga(): SagaIterator {
@@ -118,17 +110,13 @@ export default function* workspaceSaga(): SagaIterator {
     const code: string = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!
     );
-    const editorNames: any = yield call(
-      getNamesStub,
-      action.payload.row,
-      action.payload.column,
-      code
-    );
+    const editorNames: any = yield call(getNames, code, action.payload.row, action.payload.column);
 
     const editorSuggestions = editorNames.map((name: any) => ({
       caption: name.name,
       value: name.name,
-      meta: name.meta
+      meta: name.meta,
+      score: 1000
     }));
 
     const builtinSuggestions = Documentation.builtins[context.chapter] || [];

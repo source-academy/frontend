@@ -82,7 +82,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     this.completer = {
       getCompletions: (editor: any, session: any, pos: any, prefix: any, callback: any) => {
         // console.log(pos); // Cursor col is insertion location i.e. last char col + 1
-        this.props.handlePromptAutocomplete(pos.row, pos.column, callback);
+        this.props.handlePromptAutocomplete(pos.row + 1, pos.column, callback);
       }
     };
   }
