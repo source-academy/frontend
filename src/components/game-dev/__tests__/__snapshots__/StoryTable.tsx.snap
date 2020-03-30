@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Story table renders correctly 1`] = `
+"<Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
+  <div className=\\"MaterialContainer\\">
+    <div>
+      <h4>
+        Story XML files
+      </h4>
+      <Blueprint3.FormGroup label=\\"\\" labelFor=\\"text-input\\">
+        <Blueprint3.InputGroup id=\\"searchBar\\" large={false} leftIcon=\\"search\\" placeholder=\\"Search\\" value=\\"\\" onChange={[Function]} />
+        <div style={{...}}>
+          <Blueprint3.OverflowList className=\\"bp3-breadcrumbs\\" items={{...}} visibleItemRenderer={[Function]} collapseFrom=\\"start\\" minVisibleItems={0} />
+        </div>
+      </Blueprint3.FormGroup>
+    </div>
+    <Blueprint3.Divider />
+    <div className=\\"Material\\">
+      <div className=\\"ag-grid-parent ag-theme-material\\">
+        <AgGridReact gridAutoHeight={true} enableColResize={true} enableSorting={true} enableFilter={true} columnDefs={{...}} onGridReady={[Function]} rowData={{...}} pagination={true} paginationPageSize={50} suppressMovableColumns={true} />
+      </div>
+    </div>
+    <Blueprint3.Button icon=\\"mountain\\" onClick={[Function]}>
+      <div className=\\"ag-grid-button-text hidden-xs\\">
+        Open Game in new Window
+      </div>
+    </Blueprint3.Button>
+      
+    <Blueprint3.Button icon=\\"download\\" onClick={[Function]}>
+      <div className=\\"ag-grid-button-text hidden-xs\\">
+        Load XML files from AWS
+      </div>
+    </Blueprint3.Button>
+  </div>
+</Blueprint3.Card>"
+`;

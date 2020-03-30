@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Material table renders correctly 1`] = `
+"<Blueprint3.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
+  <div className=\\"MaterialContainer\\">
+    <div>
+      <Blueprint3.FormGroup label=\\"\\" labelFor=\\"text-input\\">
+        <Blueprint3.InputGroup id=\\"searchBar\\" large={false} leftIcon=\\"search\\" placeholder=\\"Search\\" value=\\"\\" onChange={[Function]} />
+        <div style={{...}}>
+          <Blueprint3.OverflowList className=\\"bp3-breadcrumbs\\" items={{...}} visibleItemRenderer={[Function]} collapseFrom=\\"start\\" minVisibleItems={0} />
+        </div>
+        <div style={{...}}>
+          <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+            Add New Folder
+          </Blueprint3.Button>
+        </div>
+        <Blueprint3.Dialog icon=\\"info-sign\\" isOpen={false} onClose={[Function]} title=\\"Add New Folder\\" canOutsideClickClose={true}>
+          <div className=\\"bp3-dialog-body\\">
+            <Blueprint3.EditableText className=\\"Input\\" intent=\\"none\\" maxLines={1} minLines={1} multiline={true} placeholder=\\"Enter folder name...\\" selectAllOnFocus={true} value=\\"\\" onChange={[Function]} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} minWidth={80} type=\\"text\\" />
+          </div>
+          <div className=\\"bp3-dialog-footer\\">
+            <div className=\\"bp3-dialog-footer-actions\\">
+              <Blueprint3.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+                Confirm
+              </Blueprint3.Button>
+              <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+                Cancel
+              </Blueprint3.Button>
+            </div>
+          </div>
+        </Blueprint3.Dialog>
+      </Blueprint3.FormGroup>
+    </div>
+    <Blueprint3.Divider />
+    <div className=\\"Material\\">
+      <div className=\\"ag-grid-parent ag-theme-material\\">
+        <AgGridReact gridAutoHeight={true} enableColResize={true} enableSorting={true} enableFilter={true} columnDefs={{...}} onGridReady={[Function]} rowData={{...}} pagination={true} paginationPageSize={50} suppressMovableColumns={true} />
+      </div>
+    </div>
+  </div>
+</Blueprint3.Card>"
+`;
