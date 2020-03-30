@@ -40,6 +40,7 @@ export const END_CLEAR_CONTEXT = 'END_CLEAR_CONTEXT';
 export const ENSURE_LIBRARIES_LOADED = 'ENSURE_LIBRARIES_LOADED';
 export const EVAL_EDITOR = 'EVAL_EDITOR';
 export const EVAL_REPL = 'EVAL_REPL';
+export const PROMPT_AUTOCOMPLETE = 'PROMPT_AUTOCOMPLETE';
 // For interpreting code blocks silently (e.g. prepend) BEFORE the test case is run
 export const EVAL_SILENT = 'EVAL_SILENT';
 export const EVAL_TESTCASE = 'EVAL_TESTCASE';

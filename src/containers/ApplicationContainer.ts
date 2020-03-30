@@ -6,6 +6,7 @@ import {
   changeExecTime,
   ensureLibrariesLoaded,
   externalLibrarySelect,
+  promptAutocomplete,
   WorkspaceLocations
 } from '../actions/workspaces';
 import Application, { IDispatchProps, IStateProps } from '../components/Application';
@@ -47,6 +48,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
           workspaceLocation
         ),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        promptAutocomplete(workspaceLocation, row, col, callback),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
       handleEnsureLibrariesLoaded: ensureLibrariesLoaded,

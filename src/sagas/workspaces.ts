@@ -13,6 +13,7 @@ import {
   TestcaseType,
   TestcaseTypes
 } from '../components/assessment/assessmentShape';
+import { Documentation } from '../reducers/documentation';
 import { externalLibraries } from '../reducers/externalLibraries';
 import { IPlaygroundState, IState, IWorkspaceState, SideContentType } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
@@ -26,6 +27,15 @@ import {
   makeElevatedContext,
   visualiseEnv
 } from '../utils/slangHelper';
+
+function getNamesStub(row: number, col: number, prog: string): any {
+  // console.log(row, col, JSON.stringify(prog));ll
+  return [
+    { name: 'foo', meta: 'function' },
+    { name: 'bar', meta: 'const' },
+    { name: 'baz', meta: 'let' }
+  ];
+}
 
 let breakpoints: string[] = [];
 export default function* workspaceSaga(): SagaIterator {
@@ -94,6 +104,46 @@ export default function* workspaceSaga(): SagaIterator {
     }
 
     yield* evalCode(value, context, execTime, workspaceLocation, actionTypes.EVAL_EDITOR);
+  });
+
+  yield takeEvery(actionTypes.PROMPT_AUTOCOMPLETE, function*(
+    action: ReturnType<typeof actions.promptAutocomplete>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
+
+    context = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
+    );
+
+    const code: string = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!
+    );
+    const editorNames: any = yield call(
+      getNamesStub,
+      action.payload.row,
+      action.payload.column,
+      code
+    );
+
+    const editorSuggestions = editorNames.map((name: any) => ({
+      caption: name.name,
+      value: name.name,
+      meta: name.meta
+    }));
+
+    const builtinSuggestions = Documentation.builtins[context.chapter] || [];
+
+    const extLib = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).externalLibrary
+    );
+
+    const extLibSuggestions = Documentation.externalLibraries[extLib] || [];
+
+    yield call(
+      action.payload.callback,
+      null,
+      editorSuggestions.concat(builtinSuggestions, extLibSuggestions)
+    );
   });
 
   yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(

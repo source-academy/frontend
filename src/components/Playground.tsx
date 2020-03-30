@@ -104,6 +104,7 @@ export interface IDispatchProps {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 }
 
 type PlaygroundState = {
@@ -272,6 +273,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleDeclarationNavigate: this.props.handleDeclarationNavigate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
+        handlePromptAutocomplete: this.props.handlePromptAutocomplete,
         handleFinishInvite: this.props.handleFinishInvite,
         sharedbAceInitValue: this.props.sharedbAceInitValue,
         sharedbAceIsInviting: this.props.sharedbAceIsInviting,

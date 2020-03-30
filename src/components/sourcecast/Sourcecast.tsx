@@ -71,6 +71,7 @@ export interface IDispatchProps {
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
@@ -234,6 +235,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
     };
     const sourcecastControlbarProps: ISourcecastControlbarProps = {
       handleEditorValueChange: this.props.handleEditorValueChange,
+      handlePromptAutocomplete: this.props.handlePromptAutocomplete,
       handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
       handleSetEditorReadonly: this.props.handleSetEditorReadonly,
       handleSetInputToApply: this.props.handleSetInputToApply,
