@@ -5,7 +5,7 @@ import Dropzone from './Dropzone';
 import { DirectoryData, MaterialData } from './storyShape';
 import StoryTable from './StoryTable';
 
-interface IStoryProps extends IDispatchProps, IStateProps {}
+export interface IStoryProps extends IDispatchProps, IStateProps {}
 
 export interface IDispatchProps {
   handleCreateMaterialFolder: (title: string) => void;

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Story Upload area renders correctly 1`] = `
+"<div className=\\"ContentDisplay row center-xs\\">
+  <div className=\\"col-xs-10 contentdisplay-content-parent\\">
+    <MaterialDropzone handleUploadMaterial={[Function: handleUploadMaterial]} />
+    <Blueprint3.Divider />
+    <StoryTable handleCreateMaterialFolder={[Function: handleCreateMaterialFolder]} handleDeleteMaterial={[Function: handleDeleteMaterial]} handleDeleteMaterialFolder={[Function: handleDeleteMaterialFolder]} handleFetchMaterialIndex={[Function: handleFetchMaterialIndex]} materialDirectoryTree={{...}} materialIndex={{...}} />
+  </div>
+</div>"
+`;
