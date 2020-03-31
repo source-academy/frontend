@@ -15,7 +15,7 @@
   });
   const frameFontSetting = '14px Roboto Mono, Courier New';
   const FNOBJECT_RADIUS = 12; // radius of function object circle
-  const DATA_OBJECT_SIDE = 30; // length of data object triangle
+  const DATA_OBJECT_SIDE = 24; // length of data object triangle
   const DRAWING_LEFT_PADDING = 50; // left padding for entire drawing
   const FRAME_HEIGHT_LINE = 55; // height in px of each line of text in a frame;
   const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
@@ -364,7 +364,7 @@
       if (draw) {
         const shiftY = calculatePairShift(dataObject[1]);
         if (is_Array(dataObject[0])) {
-          drawNestedArrayObject(startX + 31, startY + shiftY + 18);
+          drawNestedArrayObject(startX, startY + shiftY);
         } else {
           drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + shiftY);
         }
@@ -517,53 +517,55 @@
     }
 
     if (Array.isArray(dataObject[1])) {
-      drawHitPairs(dataObject[1], hit, wrapper, x0 + DATA_UNIT_HEIGHT + PAIR_SPACING, y0);
+      drawHitPairs(dataObject[1], hit, wrapper, x0 + DATA_UNIT_WIDTH + PAIR_SPACING, y0);
     }
     context.stroke();
   }
 
   function drawArrayObject(dataObject) {
     const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
-    var scene = dataObjectLayer.scene,
-      context = scene.context;
-    // define points for drawing data object triangle
-    const x0 = wrapper.x - 12,
-      y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
-    const x1 = x0 - DATA_OBJECT_SIDE / 2,
-      y1 = y0 + DATA_OBJECT_SIDE;
-    const x2 = x1 + DATA_OBJECT_SIDE,
-      y2 = y1;
-    context.beginPath();
-    context.moveTo(x0, y0);
-    context.lineTo(x1, y1);
-    context.lineTo(x2, y2);
-    context.lineTo(x0, y0);
-    context.fillStyle = '#999999';
-    context.font = '14px Roboto Mono Light, Courier New';
-    context.fillText('!', x0 - 4, y0 + 20);
-    context.strokeStyle = '#999999';
-    context.lineWidth = 2;
-    context.stroke();
+
+    drawNestedArrayObject(wrapper.x - DATA_OBJECT_SIDE, wrapper.y - DATA_UNIT_HEIGHT/2);
   }
 
   function drawNestedArrayObject(xcoord, ycoord) {
     var scene = dataObjectLayer.scene,
       context = scene.context;
-    // define points for drawing data object triangle
-    const x0 = xcoord - 12,
-      y0 = ycoord - DATA_OBJECT_SIDE / 2;
-    const x1 = x0 - DATA_OBJECT_SIDE / 2,
-      y1 = y0 + DATA_OBJECT_SIDE;
-    const x2 = x1 + DATA_OBJECT_SIDE,
-      y2 = y1;
+    // define points for drawing data object 
+    const x0 = xcoord,
+      y0 = ycoord;
+    const x1 = x0 + DATA_UNIT_WIDTH,
+      y1 = y0;
+    const x2 = x1,
+      y2 = y1 + DATA_UNIT_HEIGHT;
+    const x3 = x0,
+      y3 = y2;
+
+    // Internal Lines
+    const ly0 = y0;
+    const ly1 = y2;
+    const l1x = x0 + 15,
+     l2x = l1x + 15,
+     l3x = l2x + 15;
+
+
     context.beginPath();
     context.moveTo(x0, y0);
     context.lineTo(x1, y1);
     context.lineTo(x2, y2);
+    context.lineTo(x3, y3);
     context.lineTo(x0, y0);
+    context.moveTo(l1x, ly0);
+    context.lineTo(l1x, ly1);
+    context.moveTo(l2x, ly0);
+    context.lineTo(l2x, ly1);
+    context.moveTo(l3x, ly0);
+    context.lineTo(l3x, ly1);
+
+
     context.fillStyle = '#999999';
     context.font = '14px Roboto Mono Light, Courier New';
-    context.fillText('!', x0 - 4, y0 + 20);
+    context.fillText('...', x0 + 50, y0 + DATA_UNIT_HEIGHT/2);
     context.strokeStyle = '#999999';
     context.lineWidth = 2;
     context.stroke();
@@ -797,7 +799,6 @@
       
       drawLine(context, x0, y0, xf, y0);
       drawArrow(context, xf, y0, xf, yf);
-
       // duplicate the exact same arrow but in the hovered layer so it only
       // comes into view once you hover over it
       */
