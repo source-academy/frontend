@@ -227,7 +227,7 @@
     const x = config.x;
     const y = config.y;
     context.fillStyle = '#2c3e50';
-    context.fillRect(x - 2 * FNOBJECT_RADIUS, y - FNOBJECT_RADIUS - 2, 4 * FNOBJECT_RADIUS, 2 * FNOBJECT_RADIUS + 4);
+    context.fillRect(x - 2 * FNOBJECT_RADIUS, y - FNOBJECT_RADIUS, 4 * FNOBJECT_RADIUS, 2 * FNOBJECT_RADIUS);
     context.strokeStyle = '#999999';
     context.beginPath();
     context.arc(x - FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
@@ -274,6 +274,8 @@
       }
     }
     context.arc(x + FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
+    context.moveTo(x + FNOBJECT_RADIUS, y);
+    context.lineTo(x + FNOBJECT_RADIUS, y - FNOBJECT_RADIUS);
     context.stroke();
   }
 
@@ -426,22 +428,43 @@
         drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT, 
           startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2);
       }
-
       // draw line up to fn height
       const arrowContext = arrowLayer.scene.context;
-      drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-        startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
+      if (startX + DATA_UNIT_WIDTH/4 <= wrapperData[0].x + 4 * FNOBJECT_RADIUS) {
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
+        drawLine(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y);
+        drawArrow(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y, 
+          wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
+        // duplicate arrow in hoveredLayer
+        var hoverContext = hoveredLayer.scene.context;
+        hoverContext.strokeStyle = 'white';
+        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
+        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
+        drawLine(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y);
+        drawArrow(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y, 
+          wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
+      } else {
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
       // draw arrow left/right to fn area
-      drawArrow(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
-        wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
-      // duplicate arrow in hoveredLayer
-      var hoverContext = hoveredLayer.scene.context;
-      hoverContext.strokeStyle = 'white';
-      drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-        startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
-      // draw arrow left/right to fn area
-      drawArrow(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
-        wrapperData[0].x + 2 *FNOBJECT_RADIUS, wrapperData[0].y);
+        drawArrow(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
+          wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
+        // duplicate arrow in hoveredLayer
+        var hoverContext = hoveredLayer.scene.context;
+        hoverContext.strokeStyle = 'white';
+        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
+        // draw arrow left/right to fn area
+        drawArrow(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
+          wrapperData[0].x + 2 *FNOBJECT_RADIUS, wrapperData[0].y);
+      }
     } else {
       context.fillText(dataObject[0], startX + DATA_UNIT_WIDTH/6, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
@@ -478,28 +501,59 @@
     } else if (dataObject[1] == null) {
       drawLine(context, startX + DATA_UNIT_WIDTH, startY, startX + DATA_UNIT_WIDTH/2, startY + DATA_UNIT_HEIGHT);
     } else if (typeof wrapperData[1] === 'function') {
+      // draw line in box
+      if((startY + DATA_UNIT_HEIGHT/2) > wrapperData[1].y) {
+        // draw line upwards
+        drawLine(context, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+          startX + 3/4 * DATA_UNIT_WIDTH, startY);
+      } else {
+        // draw line downwards
+        drawLine(context, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT, 
+          startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2);
+      }
+      // draw arrow layer
       const arrowContext = arrowLayer.scene.context;
-      //draw line in box
-      drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
-        startX + 3 * DATA_UNIT_WIDTH/4, startY);
-      // draw line up to fn height
-      drawLine(arrowContext, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-        startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y);
-      // draw line left/right to fn area
-      drawLine(arrowContext, startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y, 
-        wrapperData[1].x, wrapperData[1].y)
-      // draw arrow head shape
-      arrowContext.moveTo(wrapperData[1].x, wrapperData[1].y);
-      drawArrowHead(arrowContext, startX + 3 * DATA_UNIT_WIDTH/4, wrapperData[1].y, 
-        wrapperData[1].x, wrapperData[1].y);
-        arrowContext.stroke();
+      if (startX + 3/4 * DATA_UNIT_WIDTH <= wrapperData[1].x + 4 * FNOBJECT_RADIUS) {
+        drawLine(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+          startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS);
+        drawLine(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS);
+        drawLine(arrowContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y);
+        drawArrow(arrowContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y, 
+          wrapperData[1].x + 2 * FNOBJECT_RADIUS, wrapperData[1].y);
+        // duplicate arrow in hoveredLayer
+        var hoverContext = hoveredLayer.scene.context;
+        hoverContext.strokeStyle = 'white';
+        drawLine(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+          startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS);
+        drawLine(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS);
+        drawLine(hoverContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y);
+        drawArrow(hoverContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y, 
+          wrapperData[1].x + 2 * FNOBJECT_RADIUS, wrapperData[1].y);
+      } else {
+        drawLine(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+          startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y);
+      // draw arrow left/right to fn area
+        drawArrow(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y, 
+          wrapperData[1].x + 2 * FNOBJECT_RADIUS, wrapperData[1].y);
+        // duplicate arrow in hoveredLayer
+        var hoverContext = hoveredLayer.scene.context;
+        hoverContext.strokeStyle = 'white';
+        drawLine(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+          startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y);
+        // draw arrow left/right to fn area
+        drawArrow(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y, 
+          wrapperData[1].x + 2 * FNOBJECT_RADIUS, wrapperData[1].y);
+      }
     } else {
       context.fillText(dataObject[1], startX + 2 * DATA_UNIT_WIDTH/3, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
-    
-    context.strokeStyle = '#999999';
-    context.lineWidth = 2;
-    context.stroke();
+      context.strokeStyle = '#999999';
+      context.lineWidth = 2;
+      context.stroke();
   }
 
   function drawHitPairs(dataObject, hit, wrapper, x0, y0) {
@@ -579,16 +633,8 @@
     initialisePairShift(dataObject);
     drawScenePairs(dataObject, scene, wrapper, wrapper.data, x0, y0);
     
-    if (wrapper.selected) {
-      context.strokeStyle = 'green';
-      context.lineWidth = 2;
-      if (wrapper.hovered) {
-        context.font = '14px Roboto Mono Light, Courier New';
-        context.fillStyle = 'white';
-        context.fillText('Data Object', x0 + 20, y0 + PAIR_SPACING);
-      }
-      context.stroke();
-    }
+
+    
   }
 
   function drawHitDataObject(dataObject) {
@@ -909,7 +955,7 @@
         frame = dataObjectWrappers[parentobj].parent
       } 
 
-      const x0 = startCoord[0],
+      const x0 = fnObject.x + FNOBJECT_RADIUS,
         y0 = startCoord[1],
         x1 = x0,
         y1 = y0 - 15,
