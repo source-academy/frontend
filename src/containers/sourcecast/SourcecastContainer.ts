@@ -17,6 +17,7 @@ import {
   evalRepl,
   externalLibrarySelect,
   fetchSourcecastIndex,
+  navigateToDeclaration,
   setCodeDeltasToApply,
   setEditorBreakpoint,
   setEditorReadonly,
@@ -36,6 +37,7 @@ import {
   ICodeDelta,
   Input,
   IPlaybackData,
+  IPosition,
   PlaybackStatus
 } from '../../components/sourcecast/sourcecastShape';
 import { IState, SideContentType } from '../../reducers/states';
@@ -56,6 +58,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   isRunning: state.workspaces.sourcecast.isRunning,
   isDebugging: state.workspaces.sourcecast.isDebugging,
   enableDebugging: state.workspaces.sourcecast.enableDebugging,
+  newCursorPosition: state.workspaces.sourcecast.newCursorPosition,
   output: state.workspaces.sourcecast.output,
   playbackDuration: state.workspaces.sourcecast.playbackDuration,
   playbackData: state.workspaces.sourcecast.playbackData,
@@ -75,6 +78,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
+      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+        navigateToDeclaration(location, cursorPosition),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, location),

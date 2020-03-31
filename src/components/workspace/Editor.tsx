@@ -5,9 +5,11 @@ import sharedbAce from 'sharedb-ace';
 
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
+import { createContext, getAllOccurrencesInScope } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
+import AceRange from './AceRange';
 import { checkSessionIdExists } from './collabEditing/helper';
 
 /**
@@ -24,9 +26,11 @@ export interface IEditorProps {
   editorValue: string;
   highlightedLines: number[][];
   isEditorAutorun: boolean;
+  newCursorPosition?: IPosition;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
@@ -35,9 +39,15 @@ export interface IEditorProps {
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
 
+export interface IPosition {
+  row: number;
+  column: number;
+}
+
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
+  private markerIds: number[];
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: IAnnotation[]) => void;
 
@@ -45,11 +55,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
+    this.markerIds = [];
     this.onChangeMethod = (newCode: string) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
         this.props.handleUpdateHasUnsavedChanges(true);
       }
       this.props.handleEditorValueChange(newCode);
+      this.handleVariableHighlighting();
     };
     this.onValidateMethod = (annotations: IAnnotation[]) => {
       if (this.props.isEditorAutorun && annotations.length === 0) {
@@ -100,13 +112,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     */
 
-    // navigation on key press
-    editor.commands.addCommand({
-      name: 'myCommand',
-      bindKey: { win: 'Ctrl-B', mac: 'Command-B' },
-      exec: this.handleNavigation
-    });
-
     editor.on('gutterclick', this.handleGutterClick);
 
     // Change all info annotations to error annotations
@@ -116,6 +121,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     if (this.props.editorSessionId !== '') {
       this.handleStartCollabEditing(editor);
     }
+
+    this.handleVariableHighlighting();
   }
 
   public componentWillUnmount() {
@@ -124,6 +131,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       this.ShareAce.WS.close();
     }
     this.ShareAce = null;
+  }
+
+  public componentDidUpdate(prevProps: IEditorProps) {
+    const newCursorPosition = this.props.newCursorPosition;
+    if (newCursorPosition && newCursorPosition !== prevProps.newCursorPosition) {
+      this.moveCursor(newCursorPosition);
+    }
   }
 
   public getMarkers = () => {
@@ -166,6 +180,22 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   mac: 'Shift-Enter'
                 },
                 exec: this.props.handleEditorEval
+              },
+              {
+                name: 'navigate',
+                bindKey: {
+                  win: 'Ctrl-B',
+                  mac: 'Command-B'
+                },
+                exec: this.handleNavigate
+              },
+              {
+                name: 'refactor',
+                bindKey: {
+                  win: 'Ctrl-M',
+                  mac: 'Command-M'
+                },
+                exec: this.handleRefactor
               }
             ]}
             editorProps={{
@@ -178,6 +208,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             highlightActiveLine={false}
             mode={this.chapterNo()} // select according to props.sourceChapter
             onChange={this.onChangeMethod}
+            onCursorChange={this.handleVariableHighlighting}
             onValidate={this.onValidateMethod}
             theme="source"
             value={this.props.editorValue}
@@ -191,16 +222,81 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     );
   }
 
-  private handleNavigation = (editor: any) => {
+  // Used in navigating from occurence to navigation
+  private moveCursor = (position: IPosition) => {
+    (this.AceEditor.current as any).editor.selection.clearSelection();
+    (this.AceEditor.current as any).editor.moveCursorToPosition(position);
+    (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();
+    (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(position, 0.5);
+  };
+
+  private handleNavigate = () => {
     const chapter = this.props.sourceChapter;
-    const pos = editor.selection.getCursor();
-    const token = editor.session.getTokenAt(pos.row, pos.column);
+    const pos = (this.AceEditor.current as any).editor.selection.getCursor();
+    const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
     const url = LINKS.TEXTBOOK;
     if (token !== null && /\bsupport.function\b/.test(token.type)) {
       window.open(`${url}/source/source_${chapter}/global.html#${token.value}`); // opens the link
     } else if (token !== null && /\bstorage.type\b/.test(token.type)) {
       window.open(`${url}/source/source_${chapter}.pdf`);
+    } else {
+      this.props.handleDeclarationNavigate(
+        (this.AceEditor.current as any).editor.getCursorPosition()
+      );
     }
+  };
+
+  private handleRefactor = () => {
+    const editor = (this.AceEditor.current as any).editor;
+    if (!editor) {
+      return;
+    }
+    const code = this.props.editorValue;
+    const chapter = this.props.sourceChapter;
+    const position = editor.getCursorPosition();
+
+    const sourceLocations = getAllOccurrencesInScope(code, createContext(chapter), {
+      line: position.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
+      column: position.column
+    });
+
+    const selection = editor.getSelection();
+    const ranges = sourceLocations.map(
+      loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
+    );
+    ranges.forEach(range => selection.addRange(range));
+  };
+
+  private handleVariableHighlighting = () => {
+    // using Ace Editor's way of highlighting as seen here: https://github.com/ajaxorg/ace/blob/master/lib/ace/editor.js#L497
+    // We use async blocks so we don't block the browser during editing
+
+    setTimeout(() => {
+      const editor = (this.AceEditor.current as any).editor;
+      const session = editor.session;
+      const code = this.props.editorValue;
+      const chapterNumber = this.props.sourceChapter;
+      const position = editor.getCursorPosition();
+      if (!session || !session.bgTokenizer) {
+        return;
+      }
+      this.markerIds.forEach(id => {
+        session.removeMarker(id);
+      });
+      const ranges = getAllOccurrencesInScope(code, createContext(chapterNumber), {
+        line: position.row + 1,
+        column: position.column
+      }).map(
+        loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
+      );
+
+      const markerType = 'ace_variable_highlighting';
+      const markerIds = ranges.map(range => {
+        // returns the marker ID for removal later
+        return session.addMarker(range, markerType, 'text');
+      });
+      this.markerIds = markerIds;
+    }, 10);
   };
 
   private handleGutterClick = (e: any) => {

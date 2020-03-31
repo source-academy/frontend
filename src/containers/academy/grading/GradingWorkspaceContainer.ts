@@ -17,6 +17,7 @@ import {
   evalRepl,
   evalTestcase,
   fetchGrading,
+  navigateToDeclaration,
   setEditorBreakpoint,
   updateActiveTab,
   updateEditorValue,
@@ -36,6 +37,7 @@ import GradingWorkspace, {
   StateProps
 } from '../../../components/academy/grading/GradingWorkspace';
 import { Library } from '../../../components/assessment/assessmentShape';
+import { IPosition } from '../../../components/workspace/Editor';
 import { IState, IWorkspaceState, SideContentType } from '../../../reducers/states';
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
@@ -56,6 +58,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     isRunning: state.workspaces.grading.isRunning,
     isDebugging: state.workspaces.grading.isDebugging,
     enableDebugging: state.workspaces.grading.enableDebugging,
+    newCursorPosition: state.workspaces.grading.newCursorPosition,
     output: state.workspaces.grading.output,
     replValue: state.workspaces.grading.replValue,
     sideContentHeight: state.workspaces.grading.sideContentHeight,
@@ -74,6 +77,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, workspaceLocation),
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
+      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+        navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),

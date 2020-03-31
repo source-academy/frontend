@@ -43,6 +43,8 @@ export const EVAL_REPL = 'EVAL_REPL';
 // For interpreting code blocks silently (e.g. prepend) BEFORE the test case is run
 export const EVAL_SILENT = 'EVAL_SILENT';
 export const EVAL_TESTCASE = 'EVAL_TESTCASE';
+export const MOVE_CURSOR = 'MOVE_CURSOR';
+export const NAV_DECLARATION = 'NAV_DECLARATION';
 export const PLAYGROUND_EXTERNAL_SELECT = 'PLAYGROUND_EXTERNAL_SELECT ';
 export const RESET_TESTCASE = 'RESET_TESTCASE';
 export const RESET_WORKSPACE = 'RESET_WORKSPACE';

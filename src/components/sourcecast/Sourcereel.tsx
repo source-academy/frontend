@@ -21,6 +21,7 @@ import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
 import {
   Input,
   IPlaybackData,
+  IPosition,
   ISourcecastData,
   KeyboardCommand,
   RecordingStatus
@@ -42,6 +43,7 @@ export interface IStateProps {
   isDebugging: boolean;
   isEditorAutorun: boolean;
   isRunning: boolean;
+  newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   playbackData: IPlaybackData;
   recordingStatus: RecordingStatus;
@@ -61,6 +63,7 @@ export interface IDispatchProps {
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleDeleteSourcecastEntry: (id: number) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -180,12 +183,14 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       editorValue: this.props.editorValue,
       editorSessionId: '',
       getTimerDuration: this.getTimerDuration,
+      handleDeclarationNavigate: this.props.handleDeclarationNavigate,
       handleEditorEval: this.props.handleEditorEval,
       handleEditorValueChange: this.props.handleEditorValueChange,
       isEditorAutorun: this.props.isEditorAutorun,
       isRecording: this.props.recordingStatus === RecordingStatus.recording,
       breakpoints: this.props.breakpoints,
       highlightedLines: this.props.highlightedLines,
+      newCursorPosition: this.props.newCursorPosition,
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
       handleRecordInput: this.props.handleRecordInput
     };

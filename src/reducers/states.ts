@@ -22,6 +22,7 @@ import {
   PlaybackStatus,
   RecordingStatus
 } from '../components/sourcecast/sourcecastShape';
+import { IPosition } from '../components/workspace/Editor';
 import { DEFAULT_SOURCE_CHAPTER } from '../utils/constants';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
@@ -105,6 +106,7 @@ export interface IWorkspaceState {
   readonly editorWidth: string;
   readonly execTime: number;
   readonly highlightedLines: number[][];
+  readonly newCursorPosition?: IPosition;
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
