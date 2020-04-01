@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`GameDev page renders correctly 1`] = `
-"<div className=\\"ContentDisplay row center-xs\\">
-  <div className=\\"col-xs-10 contentdisplay-content-parent\\">
-    <StoryTable handleFetchMaterialIndex={[Function: handleFetchMaterialIndex]} materialDirectoryTree={{...}} materialIndex={{...}} />
-  </div>
-</div>"
-`;
