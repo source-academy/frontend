@@ -6,6 +6,7 @@ import {
   deleteMaterial,
   deleteMaterialFolder,
   fetchMaterialIndex,
+  fetchTestStories,
   uploadMaterial
 } from '../../actions';
 import StoryUpload, {
@@ -25,6 +26,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleCreateMaterialFolder: (title: string) => null,
       handleDeleteMaterial: (id: number) => deleteMaterial(id),
       handleDeleteMaterialFolder: (id: number) => deleteMaterialFolder(id),
+      handleFetchTestStories: () => fetchTestStories(),
       handleFetchMaterialIndex: (id?: number) => fetchMaterialIndex(id),
       handleUploadMaterial: (file: File, title: string, description: string) =>
         uploadMaterial(file, title, description)

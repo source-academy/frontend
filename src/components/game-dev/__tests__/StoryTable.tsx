@@ -12,7 +12,8 @@ test('Story table renders correctly', () => {
     handleCreateMaterialFolder (p1: string) {
     }, handleDeleteMaterial (p1: number) {
     }, handleDeleteMaterialFolder (p1: number) {
-    }, handleFetchMaterialIndex (p1: number) {
+    }, handleFetchMaterialIndex (p1?: number) {
+    }, handleFetchTestStories () {
     }, materialDirectoryTree: null, materialIndex: null
   };
   const app = <StoryTable {...props} />;

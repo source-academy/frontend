@@ -11,7 +11,8 @@ export interface IDispatchProps {
   handleCreateMaterialFolder: (title: string) => void;
   handleDeleteMaterial: (id: number) => void;
   handleDeleteMaterialFolder: (id: number) => void;
-  handleFetchMaterialIndex: (id?: number) => void;
+  handleFetchMaterialIndex: (id: number) => void;
+  handleFetchTestStories: () => void;
   handleUploadMaterial: (file: File, title: string, description: string) => void;
 }
 
@@ -31,6 +32,7 @@ class StoryUpload extends React.Component<IStoryProps, {}> {
             handleCreateMaterialFolder={this.props.handleCreateMaterialFolder}
             handleDeleteMaterial={this.props.handleDeleteMaterial}
             handleDeleteMaterialFolder={this.props.handleDeleteMaterialFolder}
+            handleFetchTestStories={this.props.handleFetchTestStories}
             handleFetchMaterialIndex={this.props.handleFetchMaterialIndex}
             materialDirectoryTree={this.props.materialDirectoryTree}
             materialIndex={this.props.materialIndex}

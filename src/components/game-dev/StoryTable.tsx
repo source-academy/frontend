@@ -44,6 +44,7 @@ export interface IOwnProps {
   handleDeleteMaterial?: (id: number) => void;
   handleDeleteMaterialFolder?: (id: number) => void;
   handleFetchMaterialIndex: (id?: number) => void;
+  handleFetchTestStories: () => void;
   materialDirectoryTree: DirectoryData[] | null;
   materialIndex: MaterialData[] | null;
 }
@@ -115,7 +116,7 @@ class StoryTable extends React.Component<IMaterialTableProps, State> {
   }
 
   public componentDidMount() {
-    this.props.handleFetchMaterialIndex();
+    this.props.handleFetchTestStories();
   }
 
   public render() {

@@ -9,6 +9,7 @@ test("Story Upload area renders correctly", () => {
     }, handleDeleteMaterial (p1: number) {
     }, handleDeleteMaterialFolder (p1: number) {
     }, handleFetchMaterialIndex (p1: number) {
+    }, handleFetchTestStories () {
     }, handleUploadMaterial (p1: File, p2: string, p3: string) {
     }, materialDirectoryTree: null, materialIndex: null
 

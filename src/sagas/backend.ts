@@ -17,6 +17,7 @@ import {
   IAssessmentOverview,
   IQuestion
 } from '../components/assessment/assessmentShape';
+import { MaterialData } from '../components/material/materialShape';
 import {
   Notification,
   NotificationFilterFunction
@@ -554,6 +555,70 @@ function* backendSaga(): SagaIterator {
     const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
     yield put(actions.fetchMaterialIndex(parentId));
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  });
+  
+  yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(
+    action: ReturnType<typeof actions.fetchTestStories>
+  ) {
+    
+    const fileName :string=  "Test Stories";
+    /*
+    yield put(actions.fetchMaterialIndex());
+    let materialIndex = null;
+    while (materialIndex === null) {
+      materialIndex = yield select(
+        (state: IState) => state.session.materialIndex!
+      );
+    }
+    let storyFolder = yield materialIndex.find((x :MaterialData) => x.title === fileName);
+    
+    if (storyFolder === undefined) {
+      yield put(actions.createMaterialFolder(fileName));
+      while (yield materialIndex.find((x :MaterialData) => x.title === fileName) === undefined) {
+        materialIndex = yield select(
+          (state: IState) => state.session.materialIndex!
+        );
+      }
+      storyFolder = yield materialIndex.find((x :MaterialData) => x.title === fileName);
+    }
+    // tslint:disable-next-line:no-console
+    console.log(storyFolder.id == null ? 1 : 0);
+    yield put(actions.fetchMaterialIndex(storyFolder.id));
+    */
+
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    let resp = yield call(request.getMaterialIndex, -1, tokens);
+    if (resp) {
+      let materialIndex = resp.index;
+      let storyFolder = yield materialIndex.find((x :MaterialData) => x.title === fileName);
+      if (storyFolder === undefined) {
+        const role = yield select((state: IState) => state.session.role!);
+        if (role === Role.Student) {
+          return yield call(showWarningMessage, 'Only staff can create materials folder.');
+        }
+        resp = yield request.postMaterialFolder(fileName, -1, tokens);
+        if (!resp || !resp.ok) {
+          yield request.handleResponseError(resp);
+          return;
+        }
+      }
+
+      resp = yield call(request.getMaterialIndex, -1, tokens);
+      if (resp) {
+        materialIndex = resp.index;
+        storyFolder = yield materialIndex.find((x :MaterialData) => x.title === fileName);
+        resp = yield call(request.getMaterialIndex, storyFolder.id, tokens);
+        if(resp) {
+          const directory_tree = resp.directory_tree;
+          materialIndex = resp.index;
+          yield put(actions.updateMaterialDirectoryTree(directory_tree));
+          yield put(actions.updateMaterialIndex(materialIndex));
+        }
+      }
+    }
   });
 }
 
