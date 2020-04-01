@@ -5,7 +5,7 @@ exports[`Story Upload area renders correctly 1`] = `
   <div className=\\"col-xs-10 contentdisplay-content-parent\\">
     <MaterialDropzone handleUploadMaterial={[Function: handleUploadMaterial]} />
     <Blueprint3.Divider />
-    <StoryTable handleCreateMaterialFolder={[Function: handleCreateMaterialFolder]} handleDeleteMaterial={[Function: handleDeleteMaterial]} handleDeleteMaterialFolder={[Function: handleDeleteMaterialFolder]} handleFetchMaterialIndex={[Function: handleFetchMaterialIndex]} materialDirectoryTree={{...}} materialIndex={{...}} />
+    <StoryTable handleCreateMaterialFolder={[Function: handleCreateMaterialFolder]} handleDeleteMaterial={[Function: handleDeleteMaterial]} handleDeleteMaterialFolder={[Function: handleDeleteMaterialFolder]} handleFetchTestStories={[Function: handleFetchTestStories]} handleFetchMaterialIndex={[Function: handleFetchMaterialIndex]} materialDirectoryTree={{...}} materialIndex={{...}} />
   </div>
 </div>"
 `;

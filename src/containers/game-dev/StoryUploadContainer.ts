@@ -9,10 +9,7 @@ import {
   fetchTestStories,
   uploadMaterial
 } from '../../actions';
-import StoryUpload, {
-  IDispatchProps,
-  IStateProps
-} from '../../components/game-dev/StoryUpload';
+import StoryUpload, { IDispatchProps, IStateProps } from '../../components/game-dev/StoryUpload';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({

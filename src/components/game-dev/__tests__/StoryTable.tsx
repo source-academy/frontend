@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import StoryTable, { IOwnProps } from "../StoryTable";
+import StoryTable, { IOwnProps } from '../StoryTable';
 
 const componentDidMountSpy = jest.fn();
 
@@ -9,12 +9,13 @@ jest.spyOn(StoryTable.prototype, 'componentDidMount').mockImplementation(compone
 
 test('Story table renders correctly', () => {
   const props: IOwnProps = {
-    handleCreateMaterialFolder (p1: string) {
-    }, handleDeleteMaterial (p1: number) {
-    }, handleDeleteMaterialFolder (p1: number) {
-    }, handleFetchMaterialIndex (p1?: number) {
-    }, handleFetchTestStories () {
-    }, materialDirectoryTree: null, materialIndex: null
+    handleCreateMaterialFolder(p1: string) {},
+    handleDeleteMaterial(p1: number) {},
+    handleDeleteMaterialFolder(p1: number) {},
+    handleFetchMaterialIndex(p1?: number) {},
+    handleFetchTestStories() {},
+    materialDirectoryTree: null,
+    materialIndex: null
   };
   const app = <StoryTable {...props} />;
   const tree = shallow(app);

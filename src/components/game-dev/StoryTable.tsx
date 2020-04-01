@@ -175,7 +175,7 @@ class StoryTable extends React.Component<IMaterialTableProps, State> {
         <Button icon={IconNames.MOUNTAIN} onClick={this.handleTest}>
           <div className="ag-grid-button-text hidden-xs">Open Game in new Window</div>
         </Button>
-        {"  "}
+        {'  '}
         <Button icon={IconNames.DOWNLOAD} onClick={this.handleReset}>
           <div className="ag-grid-button-text hidden-xs">Load XML files from AWS</div>
         </Button>
@@ -208,11 +208,11 @@ class StoryTable extends React.Component<IMaterialTableProps, State> {
   };
 
   private handleTest = () => {
-    window.open("/academy/game");
+    window.open('/academy/game');
   };
 
   private handleReset = () => {
-    window.alert("Are you sure you want to discard all changes made?");
+    window.alert('Are you sure you want to discard all changes made?');
   };
 
   private onGridReady = (params: GridReadyEvent) => {

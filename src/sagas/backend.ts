@@ -556,12 +556,11 @@ function* backendSaga(): SagaIterator {
     yield put(actions.fetchMaterialIndex(parentId));
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
-  
+
   yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(
     action: ReturnType<typeof actions.fetchTestStories>
   ) {
-    
-    const fileName :string=  "Test Stories";
+    const fileName: string = 'Test Stories';
     /*
     yield put(actions.fetchMaterialIndex());
     let materialIndex = null;
@@ -593,7 +592,7 @@ function* backendSaga(): SagaIterator {
     let resp = yield call(request.getMaterialIndex, -1, tokens);
     if (resp) {
       let materialIndex = resp.index;
-      let storyFolder = yield materialIndex.find((x :MaterialData) => x.title === fileName);
+      let storyFolder = yield materialIndex.find((x: MaterialData) => x.title === fileName);
       if (storyFolder === undefined) {
         const role = yield select((state: IState) => state.session.role!);
         if (role === Role.Student) {
@@ -609,9 +608,9 @@ function* backendSaga(): SagaIterator {
       resp = yield call(request.getMaterialIndex, -1, tokens);
       if (resp) {
         materialIndex = resp.index;
-        storyFolder = yield materialIndex.find((x :MaterialData) => x.title === fileName);
+        storyFolder = yield materialIndex.find((x: MaterialData) => x.title === fileName);
         resp = yield call(request.getMaterialIndex, storyFolder.id, tokens);
-        if(resp) {
+        if (resp) {
           const directory_tree = resp.directory_tree;
           materialIndex = resp.index;
           yield put(actions.updateMaterialDirectoryTree(directory_tree));

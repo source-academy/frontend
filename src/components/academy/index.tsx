@@ -3,7 +3,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import Grading from '../../containers/academy/grading';
 import AssessmentContainer from '../../containers/assessment';
-import StoryUpload from "../../containers/game-dev/StoryUploadContainer";
+import StoryUpload from '../../containers/game-dev/StoryUploadContainer';
 import Game from '../../containers/GameContainer';
 import MaterialUpload from '../../containers/material/MaterialUploadContainer';
 import Sourcereel from '../../containers/sourcecast/SourcereelContainer';
