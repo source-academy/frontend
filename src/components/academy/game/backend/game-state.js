@@ -1,4 +1,5 @@
-import {storyXMLPath} from '../constants/constants'
+import { storyXMLPathTest, storyXMLPathLive } from '../constants/constants'
+import { isStudent } from './user';
 
 /**
  * Handles data regarding the game state. 
@@ -67,23 +68,29 @@ function getStudentMissionPointer() {
 let stories = [];
 
 function fetchGlobalMissionPointer(callback) {
-  $.ajax({
+  const makeAjax = isTest => $.ajax({
     type: 'GET',
-    url: storyXMLPath + 'master.xml',
+    url: (isTest ? storyXMLPathTest : storyXMLPathLive) + 'master.xml',
     dataType: 'xml',
     success: xml => {
       stories = Array.from(xml.children[0].children);
       stories = stories.sort((a, b) => parseInt(a.getAttribute("key")) - parseInt(b.getAttribute("key")));
+      const now = currentDateOverride ? currentDateOverride : new Date();
+      const openStory = story => new Date(story.getAttribute("startDate")) < now && now < new Date(story.getAttribute("endDate"));
+      stories = stories.filter(openStory);
+      callback();
     },
-    error: () => {
-      console.error('Cannot find master story list');
-    }
-  }).then(() => {
-    const now = currentDateOverride ? currentDateOverride : new Date();
-    const openStory = story => new Date(story.getAttribute("startDate")) < now && now < new Date(story.getAttribute("endDate"));
-    stories = stories.filter(openStory);
-    callback();
+    error: isTest
+      ? () => {
+          console.log('Cannot find master story list on test');
+          console.log('Trying on live...');
+          makeAjax(false);
+        }
+      : () => {
+          console.error('Cannot find master story list');
+        }
   });
+  makeAjax(!isStudent());
 }
 
 /**

@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js'
+import { isStudent } from '../backend/user.js';
 
 var Constants = require('../constants/constants.js');
 var QuestManager = require('../quest-manager/quest-manager.js');
@@ -121,9 +122,10 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
     } else {
       // download the story
       downloadRequestSent[curId] = true;
-      $.ajax({
+      const makeAjax = isTest => $.ajax({
         type: 'GET',
-        url: Constants.storyXMLPath + curId + '.story.xml',
+        url: (isTest ? Constants.storyXMLPathTest : Constants.storyXMLPathLive)
+          + curId + '.story.xml',
         dataType: 'xml',
         success: function(xml) {
           var story = xml.children[0];
@@ -155,11 +157,18 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
             }
           }
         },
-        error: function() {
-          loadingOverlay.visible = false;
-          console.error('Cannot find story ' + curId);
-        }
+        error: isTest
+          ? () => {
+              console.log('Cannot find story ' + curId + ' on test');
+              console.log('Trying on live...');
+              makeAjax(false);
+            }
+          : () => {
+            loadingOverlay.visible = false;
+            console.error('Cannot find story ' + curId);
+          }
       });
+      makeAjax(!isStudent());
       download(i + 1, storyXMLs, callback);
     }
   }

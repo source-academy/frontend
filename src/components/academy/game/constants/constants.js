@@ -1,4 +1,4 @@
-import {ASSETS_HOST, STORY_HOST} from '../backend/hosting'
+import { ASSETS_HOST, LIVE_STORIES_HOST, TEST_STORIES_HOST } from '../backend/hosting'
 
 export const 
   screenWidth = 1920,
@@ -16,7 +16,8 @@ export const
   playerAvatarOffset = 40,
   glowDistance = 30,
   textSpeed = 0.02,
-  storyXMLPath = STORY_HOST + 'stories/',
+  storyXMLPathLive = LIVE_STORIES_HOST + 'stories/',
+  storyXMLPathTest = TEST_STORIES_HOST + 'stories/',
   locationPath = ASSETS_HOST + 'locations/',
   objectPath = ASSETS_HOST + 'objects/',
   imgPath = ASSETS_HOST + 'images/',
