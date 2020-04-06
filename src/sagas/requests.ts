@@ -593,6 +593,18 @@ export const postMaterialFolder = async (title: string, parentId: number, tokens
   return resp;
 };
 
+export async function getGroupsInfo(tokens: Tokens): Promise<object | null> {
+  const resp = await request('groups', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+  return await resp.json();
+}
+
 /**
  * @returns {(Response|null)} Response if successful, otherwise null.
  *

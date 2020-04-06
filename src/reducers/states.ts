@@ -32,6 +32,7 @@ export interface IState {
   readonly playground: IPlaygroundState;
   readonly session: ISessionState;
   readonly workspaces: IWorkspaceManagerState;
+  readonly dashboard: IDashBoardState;
 }
 
 export interface IAcademyState {
@@ -41,6 +42,10 @@ export interface IAcademyState {
 export interface IApplicationState {
   readonly title: string;
   readonly environment: ApplicationEnvironment;
+}
+
+export interface IDashBoardState {
+  readonly groupsInfo: object;
 }
 
 export interface IPlaygroundState {
@@ -239,6 +244,10 @@ export const defaultApplication: IApplicationState = {
   environment: currentEnvironment()
 };
 
+export const defaultDashBoard: IDashBoardState = {
+  groupsInfo: {}
+};
+
 export const defaultPlayground: IPlaygroundState = {
   usingSubst: false
 };
@@ -391,6 +400,7 @@ export const defaultSession: ISessionState = {
 export const defaultState: IState = {
   academy: defaultAcademy,
   application: defaultApplication,
+  dashboard: defaultDashBoard,
   playground: defaultPlayground,
   session: defaultSession,
   workspaces: defaultWorkspaceManager
