@@ -6,7 +6,7 @@ import sharedbAce from 'sharedb-ace';
 import { require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
-import { createContext, getAllOccurrencesInScope } from 'js-slang';
+import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { LINKS } from '../../utils/constants';
@@ -216,6 +216,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   mac: 'Command-M'
                 },
                 exec: this.handleRefactor
+              },
+              {
+                name: 'highlightScope',
+                bindKey: {
+                  win: 'Ctrl-Shift-H',
+                  mac: 'Command-Shift-H'
+                },
+                exec: this.handleHighlightScope
               }
             ]}
             editorProps={{
@@ -287,6 +295,39 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
     );
     ranges.forEach(range => selection.addRange(range));
+  };
+
+  private handleHighlightScope = () => {
+    const editor = (this.AceEditor.current as any).editor;
+    if (!editor) {
+      return;
+    }
+    const code = this.props.editorValue;
+    const chapter = this.props.sourceChapter;
+    const position = editor.getCursorPosition();
+
+    const ranges = getScope(code, createContext(chapter), {
+      line: position.row + 1,
+      column: position.column
+    });
+
+    if (ranges.length !== 0) {
+      ranges.map(range => {
+        // Highlight the scope ranges
+        this.markerIds.push(
+          editor.session.addMarker(
+            new AceRange(
+              range.start.line - 1,
+              range.start.column,
+              range.end.line - 1,
+              range.end.column
+            ),
+            'ace_selection',
+            'text'
+          )
+        );
+      });
+    }
   };
 
   private handleVariableHighlighting = () => {
