@@ -1,5 +1,5 @@
 import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
-import { ErrorSeverity, ErrorType, Finished, SourceError } from 'js-slang/dist/types';
+import { ErrorSeverity, ErrorType, Finished, SourceError, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
 
@@ -51,6 +51,7 @@ describe('EVAL_EDITOR', () => {
     const editorPostpend = '42;';
     const execTime = 1000;
     const context = createContext();
+    const variant: Variant = 'default';
     const globals: Array<[string, any]> = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
@@ -59,6 +60,7 @@ describe('EVAL_EDITOR', () => {
 
     const library = {
       chapter: context.chapter,
+      variant,
       external: {
         name: ExternalLibraryNames.NONE,
         symbols: context.externalSymbols
@@ -381,6 +383,7 @@ describe('CHAPTER_SELECT', () => {
     const newChapter = 3;
     const library: Library = {
       chapter: newChapter,
+      variant: 'default',
       external: {
         name: 'NONE' as ExternalLibraryName,
         symbols: context.externalSymbols
@@ -397,7 +400,7 @@ describe('CHAPTER_SELECT', () => {
       .call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
       .dispatch({
         type: actionTypes.CHAPTER_SELECT,
-        payload: { chapter: newChapter, workspaceLocation }
+        payload: { chapter: newChapter, variant: 'default', workspaceLocation }
       })
       .silentRun();
   });

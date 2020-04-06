@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
+import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput, SideContentType } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
@@ -57,6 +58,7 @@ export interface IStateProps {
   sideContentHeight?: number;
   sourcecastIndex: ISourcecastData[] | null;
   sourceChapter: number;
+  sourceVariant: Variant;
 }
 
 export interface IDispatchProps {
@@ -139,6 +141,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       <ChapterSelect
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
+        sourceVariant={this.props.sourceVariant}
         key="chapter"
       />
     );

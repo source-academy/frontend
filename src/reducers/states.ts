@@ -219,12 +219,12 @@ export enum Role {
  * Defines what chapters are available for usage.
  * For external libraries, see externalLibraries.ts
  */
-export const sourceChapters = [1, 2, 3, 4, 4.3];
-export const sourceDisplayNames: Map<number, string> = new Map([[4.3, '3 Non-Det']]);
+export const sourceChapters = [1, 2, 3, 4];
+export const sourceVariants = ['non-det'];
 export const sourceURLNames: Map<string, number> = new Map([['3_Non_Det', 4.3]]);
 
 export const styliseChapter = (chap: number) => {
-  return `Source \xa7${sourceDisplayNames.has(chap) ? sourceDisplayNames.get(chap) : chap}`;
+  return `Source \xa7${chap}`;
 };
 
 const currentEnvironment = (): ApplicationEnvironment => {

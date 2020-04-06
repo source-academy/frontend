@@ -2,6 +2,7 @@ import { Context, findDeclaration, interrupt, Result, resume, runInContext } fro
 import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
+import { Variant } from 'js-slang/dist/types';
 import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
@@ -69,8 +70,12 @@ export default function* workspaceSaga(): SagaIterator {
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
+    const variant: Variant = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.variant
+    );
     const library = {
       chapter,
+      variant,
       external: {
         name: ExternalLibraryNames.NONE,
         symbols
@@ -263,6 +268,7 @@ export default function* workspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const newChapter = action.payload.chapter;
+    const newVariant = action.payload.variant;
     const oldChapter = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
@@ -276,6 +282,7 @@ export default function* workspaceSaga(): SagaIterator {
     if (newChapter !== oldChapter) {
       const library = {
         chapter: newChapter,
+        variant: newVariant,
         external: {
           name: ExternalLibraryNames.NONE,
           symbols

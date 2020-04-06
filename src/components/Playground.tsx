@@ -5,6 +5,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
 
+import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
@@ -70,6 +71,7 @@ export interface IStateProps {
   sharedbAceInitValue: string;
   sharedbAceIsInviting: boolean;
   sourceChapter: number;
+  sourceVariant: Variant;
   websocketStatus: number;
   externalLibraryName: string;
   usingSubst: boolean;
@@ -80,7 +82,7 @@ export interface IDispatchProps {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
-  handleChapterSelect: (chapter: number) => void;
+  handleChapterSelect: (chapter: number, variant: Variant) => void;
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -150,7 +152,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       />
     );
 
-    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) => {
+    const chapterSelectHandler = (
+      { chapter, variant }: { chapter: number; variant: Variant },
+      e: any
+    ) => {
       if (
         (chapter <= 2 && this.state.hasBreakpoints) ||
         this.state.selectedTab === SideContentType.substVisualizer
@@ -161,12 +166,13 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         this.props.handleReplOutputClear();
         this.props.handleUsingSubst(false);
       }
-      this.props.handleChapterSelect(chapter);
+      this.props.handleChapterSelect(chapter, variant);
     };
     const chapterSelect = (
       <ChapterSelect
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
+        sourceVariant={this.props.sourceVariant}
         key="chapter"
       />
     );

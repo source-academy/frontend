@@ -125,12 +125,12 @@ export const externalBuiltIns = {
  */
 export function createContext<T>(
   chapter: number,
-  variant: Variant,
+  variant: Variant | undefined,
   externals: string[],
   externalContext: T
 ) {
-  if (chapter > 4) {
-    return createSlangContext<T>(chapter, 'non-det', externals, externalContext, externalBuiltIns);
+  if (variant === undefined) {
+    return createSlangContext<T>(chapter, 'default', externals, externalContext, externalBuiltIns);
   } else {
     return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
   }

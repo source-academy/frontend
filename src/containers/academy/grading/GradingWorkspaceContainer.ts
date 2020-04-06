@@ -75,7 +75,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, workspaceLocation),
+        chapterSelect(chapter, 'default', workspaceLocation),
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: IPosition) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
