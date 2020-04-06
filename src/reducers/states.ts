@@ -23,7 +23,7 @@ import {
   RecordingStatus
 } from '../components/sourcecast/sourcecastShape';
 import { IPosition } from '../components/workspace/Editor';
-import { DEFAULT_SOURCE_CHAPTER } from '../utils/constants';
+import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../utils/constants';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -256,7 +256,7 @@ export const defaultEditorValue = '// Type your program in here!';
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
   breakpoints: [],
-  context: createContext<WorkspaceLocation>(DEFAULT_SOURCE_CHAPTER, [], workspaceLocation),
+  context: createContext<WorkspaceLocation>(DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT, [], workspaceLocation),
   editorPrepend: '',
   editorSessionId: '',
   editorValue:
