@@ -555,6 +555,108 @@ function* backendSaga(): SagaIterator {
     yield put(actions.fetchMaterialIndex(parentId));
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
+
+  yield takeEvery(actionTypes.CHANGE_DATE_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.changeDateAssessment>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = action.payload.id;
+    const closeAt = action.payload.closeAt;
+    const openAt = action.payload.openAt;
+    const errorMessageWrapper: string[] = ['Something went wrong'];
+    const resp: Response = yield request.changeDateAssessment(
+      id,
+      closeAt,
+      openAt,
+      tokens,
+      errorMessageWrapper
+    );
+
+    if (!resp || !resp.ok) {
+      yield call(showWarningMessage, errorMessageWrapper[0], 5000);
+      return;
+    }
+
+    yield put(actions.fetchAssessmentOverviews());
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  });
+
+  yield takeEvery(actionTypes.DELETE_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.deleteAssessment>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = action.payload;
+    const resp: Response = yield request.deleteAssessment(id, tokens);
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
+    }
+
+    yield put(actions.fetchAssessmentOverviews());
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  });
+
+  yield takeEvery(actionTypes.PUBLISH_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.publishAssessment>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = action.payload.id;
+    const bool = action.payload.bool;
+    const resp: Response = yield request.publishAssessment(id, bool, tokens);
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
+    }
+
+    yield put(actions.fetchAssessmentOverviews());
+
+    if (bool) {
+      yield call(showSuccessMessage, 'Published successfully!', 1000);
+    } else {
+      yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
+    }
+  });
+
+  yield takeEvery(actionTypes.UPLOAD_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.uploadAssessment>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const file = action.payload.file;
+    const forceUpdate = action.payload.forceUpdate;
+    const responseMessageWrapper = ['Something went wrong'];
+    const resp: Response = yield request.uploadAssessment(
+      file,
+      tokens,
+      responseMessageWrapper,
+      forceUpdate
+    );
+    if (resp) {
+      if (responseMessageWrapper[0] === 'OK') {
+        yield call(showSuccessMessage, 'Uploaded successfully!', 2000);
+      } else if (responseMessageWrapper[0] === 'Force Update OK') {
+        yield call(showSuccessMessage, 'Assessment force updated successfully!', 2000);
+      } else {
+        yield call(showWarningMessage, responseMessageWrapper[0], 10000);
+        return;
+      }
+    }
+
+    yield put(actions.fetchAssessmentOverviews());
+  });
 }
 
 export default backendSaga;

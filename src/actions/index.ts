@@ -1,6 +1,7 @@
 export * from './collabEditing';
 export * from './commons';
 export * from './game';
+export * from './groundcontrol';
 export * from './interpreter';
 export * from './material';
 export * from './playground';
