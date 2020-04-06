@@ -1,4 +1,5 @@
-import { Context, findDeclaration, interrupt, resume, runInContext } from 'js-slang';
+import { Context, findDeclaration, interrupt, Result, resume, runInContext } from 'js-slang';
+import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { random } from 'lodash';
@@ -526,7 +527,7 @@ export function* evalCode(
     }
   }
 
-  const isNonDet: boolean = context.chapter === 4.3;
+  const isNonDet: boolean = context.variant === 'non-det';
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
@@ -537,7 +538,6 @@ export function* evalCode(
           : code.includes(TRY_AGAIN) // defensive check: try-again should only be used on its own
           ? { status: 'error' }
           : call(runInContext, code, context, {
-              scheduler: 'non-det',
               executionMethod: 'interpreter',
               originalMaxExecTime: execTime,
               useSubst: substActiveAndCorrectChapter

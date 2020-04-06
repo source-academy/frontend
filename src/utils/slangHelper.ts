@@ -129,7 +129,11 @@ export function createContext<T>(
   externals: string[],
   externalContext: T
 ) {
-  return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
+  if (chapter > 4) {
+    return createSlangContext<T>(chapter, 'non-det', externals, externalContext, externalBuiltIns);
+  } else {
+    return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
+  }
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard
