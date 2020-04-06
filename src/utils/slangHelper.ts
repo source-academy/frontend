@@ -124,7 +124,7 @@ export const externalBuiltIns = {
  * externalBuiltIns, such as display and prompt.
  */
 export function createContext<T>(chapter: number, externals: string[], externalContext: T) {
-  return createSlangContext<T>(chapter, externals, externalContext, externalBuiltIns);
+  return createSlangContext<T>(chapter, 'default', externals, externalContext, externalBuiltIns);
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard
