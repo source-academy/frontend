@@ -491,6 +491,7 @@ describe('END_CLEAR_CONTEXT', () => {
       const location = action.payload.workspaceLocation;
       const context = createContext<WorkspaceLocation>(
         library.chapter,
+        'default',
         library.external.symbols,
         location
       );

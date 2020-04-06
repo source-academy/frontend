@@ -267,6 +267,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[workspaceLocation],
           context: createContext<WorkspaceLocation>(
             action.payload.library.chapter,
+            'default',
             action.payload.library.external.symbols,
             workspaceLocation
           ),
