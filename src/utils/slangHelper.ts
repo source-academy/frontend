@@ -123,7 +123,12 @@ export const externalBuiltIns = {
  * provides the original function with the required
  * externalBuiltIns, such as display and prompt.
  */
-export function createContext<T>(chapter: number, variant: Variant, externals: string[], externalContext: T) {
+export function createContext<T>(
+  chapter: number,
+  variant: Variant,
+  externals: string[],
+  externalContext: T
+) {
   return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
 }
 

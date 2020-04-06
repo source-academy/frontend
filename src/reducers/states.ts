@@ -256,7 +256,12 @@ export const defaultEditorValue = '// Type your program in here!';
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
   breakpoints: [],
-  context: createContext<WorkspaceLocation>(DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT, [], workspaceLocation),
+  context: createContext<WorkspaceLocation>(
+    DEFAULT_SOURCE_CHAPTER,
+    DEFAULT_SOURCE_VARIANT,
+    [],
+    workspaceLocation
+  ),
   editorPrepend: '',
   editorSessionId: '',
   editorValue:
