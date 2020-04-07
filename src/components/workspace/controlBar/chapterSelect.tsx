@@ -52,7 +52,7 @@ export function ChapterSelect(props: ChapterSelectProps) {
     >
       <Button
         className={Classes.MINIMAL}
-        text={styliseChapter(currentChap)}
+        text={styliseChapter(currentChap, currentVariant)}
         rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
       />
     </ChapterSelectComponent>
