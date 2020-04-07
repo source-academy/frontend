@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import { externalLibraries } from '../../../reducers/externalLibraries';
-import { sourceLanguages, styliseChapter  } from '../../../reducers/states';
+import { sourceLanguages, styliseChapter } from '../../../reducers/states';
 
 import { ExternalLibraryName, IAssessment, Library } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
@@ -242,7 +242,11 @@ const altEval = (str: string): any => {
   return Function('"use strict";return (' + str + ')')();
 };
 
-const chapters = sourceLanguages.map(lang => ({ chapter: lang.chapter, variant: lang.variant, displayName: styliseChapter(lang.chapter, lang.variant) }));
+const chapters = sourceLanguages.map(lang => ({
+  chapter: lang.chapter,
+  variant: lang.variant,
+  displayName: styliseChapter(lang.chapter, lang.variant)
+}));
 
 const chapterSelect = (
   currentChap: number,
