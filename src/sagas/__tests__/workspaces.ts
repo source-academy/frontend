@@ -407,7 +407,7 @@ describe('CHAPTER_SELECT', () => {
 
   test('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter and oldVariant === newVariant', () => {
     const newChapter = 4;
-    const newVariant: Variant = 'default'
+    const newVariant: Variant = 'default';
     const library: Library = {
       chapter: newChapter,
       variant: newVariant,

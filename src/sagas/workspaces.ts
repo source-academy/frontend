@@ -546,7 +546,7 @@ export function* evalCode(
           executionMethod: 'interpreter',
           originalMaxExecTime: execTime,
           useSubst: substActiveAndCorrectChapter
-        })
+        });
   }
 
   const isNonDet: boolean = context.variant === 'non-det';
