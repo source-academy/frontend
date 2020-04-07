@@ -537,7 +537,7 @@ export function* evalCode(
     }
   }
 
-  function call_non_det(code: string) {
+  function call_non_det() {
     return code.trim() === TRY_AGAIN
       ? call(resume, lastNonDetResult)
       : code.includes(TRY_AGAIN) // defensive check: try-again should only be used on its own
@@ -555,7 +555,7 @@ export function* evalCode(
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
         : isNonDet
-        ? call_non_det(code)
+        ? call_non_det()
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
