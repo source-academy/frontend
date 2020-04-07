@@ -28,12 +28,12 @@ export function ChapterSelect(props: ChapterSelectProps) {
     };
   });
 
-  const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick }) => (
+  const chapterRenderer: ItemRenderer<IChapter> = (lang, { handleClick }) => (
     <MenuItem
       active={false}
-      key={chap.chapter + chap.variant}
+      key={lang.chapter + lang.variant}
       onClick={handleClick}
-      text={chap.displayName}
+      text={lang.displayName}
     />
   );
   const ChapterSelectComponent = Select.ofType<IChapter>();
