@@ -76,6 +76,12 @@
       x: dataObjectWrappers[dataObjects.indexOf(d1)].x,
       y: dataObjectWrappers[dataObjects.indexOf(d1)].y + 3/4 * DATA_UNIT_HEIGHT
     }
+
+    // If parent object, point to placeholder object rather than within object
+    if(d1.length != 2) {
+      return result;
+    }
+
     while (d2 !== d1) {
       if (checkSubStructure(d1[0], d2)) {
         // Add the height of the tail of d1 to the y-coordinate
@@ -602,7 +608,6 @@
      l2x = l1x + 15,
      l3x = l2x + 15;
 
-
     context.beginPath();
     context.moveTo(x0, y0);
     context.lineTo(x1, y1);
@@ -616,7 +621,6 @@
     context.moveTo(l3x, ly0);
     context.lineTo(l3x, ly1);
 
-
     context.fillStyle = '#999999';
     context.font = '14px Roboto Mono Light, Courier New';
     context.fillText('...', x0 + 50, y0 + DATA_UNIT_HEIGHT/2);
@@ -628,15 +632,12 @@
   function drawSceneDataObject(dataObject) {
     const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
     var scene = dataObjectLayer.scene;
-    // define points for drawing data object triangle
+    // define points for drawing data object
     const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
     
     initialisePairShift(dataObject);
     drawScenePairs(dataObject, scene, wrapper, wrapper.data, x0, y0);
-    
-
-    
   }
 
   function drawHitDataObject(dataObject) {
@@ -1013,11 +1014,11 @@
     if (config.parent == null) return null;
     const parent = config.parent;
     const offset = levels[parent.level].frames.indexOf(frame.parent);
-    const x0 = config.x + config.width / 2,
+    const x0 = config.x + 40,
       y0 = config.y,
       x1 = x0,
       y1 = (parent.y + parent.height + y0) / 2 + offset * 4,
-      x2 = parent.x + parent.width / 2;
+      x2 = parent.x + 40;
     (y2 = y1), (x3 = x2), (y3 = parent.y + parent.height + 3); // offset by 3 for aesthetic reasons
     context.beginPath();
     context.moveTo(x0, y0);
@@ -1120,7 +1121,6 @@
         }
       });
     }
-
 
     /**
      * Calculate coordinates for each fnObject and dataObject.
@@ -1666,7 +1666,10 @@
     // return !is_pair(dataObject) && Array.isArray(dataObject);
     return dataObject.length != 2
   }
+
+  // Space Calculation Functions
   
+  // Calculates width of a list/array
   function getListWidth(list) {
     let otherObjects = [];
     let objectStored = false;
@@ -1695,10 +1698,27 @@
       }
     }
 
-    let pairCount = getUnitWidth(list);
-    return pairCount * (DATA_UNIT_WIDTH + 15);
+    if(list.length != 2) {
+      // If list is array, check that it is not a substructure of any other data structure
+      let substructureExists = false;
+      otherObjects.forEach(x => {
+        if(checkSubStructure(x, list)){
+          substructureExists = true;
+        }
+      })
+
+      if(substructureExists){
+        return 0;
+      } else {
+        return DATA_UNIT_WIDTH;
+      }
+    } else {
+      let pairCount = getUnitWidth(list);
+      return pairCount * (DATA_UNIT_WIDTH + 15);
+    }
   }
 
+// Calculates unit height of list/array, considering references to other data structures
   function getUnitHeight(parentlist) {
     let otherObjects = [];
     let objectStored = false;
@@ -1711,6 +1731,7 @@
         otherObjects.push(x)
       }
     })
+
     function recursiveHelper(list){
       let substructureExists = false;
       otherObjects.forEach(x => {
@@ -1744,9 +1765,15 @@
         return recursiveHelper(list[1]);
       }
     }
-    return recursiveHelper(parentlist)
+
+    if(parentlist.length != 2) {
+      return 0;
+    } else {
+      return recursiveHelper(parentlist)
+    }
   }
 
+  // Calculates unit height of a list, ignoring references to other data structures
   function getBasicUnitHeight(list){
     if (!Array.isArray(list)) {
       return 0;
@@ -1765,11 +1792,13 @@
     }
   }
 
+// Needs to be initialised with parent data structure before using calculatePairShift
   let currentObject = null;
   function initialisePairShift(dataObject) {
     currentObject = dataObject;
   }
 
+// Determines the height positioning of pairs in the same data structure 
   function calculatePairShift(sublist){
     let otherObjects = [];
     let objectStored = false;
@@ -1818,16 +1847,17 @@
     return (recursiveHelper(sublist) + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
   }
 
+  // Calculates list/array height 
+  // Used in frame height calculations
   function getListHeight(list) {
     let x = (getUnitHeight(list) + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
     return x;
   }
 
   function getFrameHeight(frame) {
+    // Assumes line spacing is separate from data object spacing
     let elem_lines = 0;
     let data_space = 0;
-
-    // Assumes line spacing is separate from data object spacing
 
     for(elem in frame.elements){
       if(isFunction(frame.elements[elem])) {
@@ -1846,12 +1876,10 @@
       }
     }
     
-    return data_space + elem_lines * FRAME_HEIGHT_LINE;
-    // Previously FRAME_HEIGHT_PADDING was added, but there was a weird space below
-    // Not sure if that was the cause, removing it temporarily first to observe the results
-    // + FRAME_HEIGHT_PADDING;
+    return data_space + elem_lines * FRAME_HEIGHT_LINE + FRAME_HEIGHT_PADDING;
   }
   
+  // Calculates width of frame only
   function getFrameWidth(frame) {
     let maxLength = 0;
     const elements = frame.elements;
@@ -1868,9 +1896,7 @@
         }
         maxLength = Math.max(maxLength, currLength);
       } 
- 
     }
-    
     return maxLength * FRAME_WIDTH_CHAR + FRAME_WIDTH_PADDING;    
   }
 
