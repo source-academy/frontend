@@ -18,6 +18,7 @@ import {
   evalTestcase,
   fetchGrading,
   navigateToDeclaration,
+  promptAutocomplete,
   setEditorBreakpoint,
   updateActiveTab,
   updateEditorValue,
@@ -101,7 +102,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         updateHasUnsavedChanges(workspaceLocation, unsavedChanges),
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation)
+      handleDebuggerReset: () => debuggerReset(workspaceLocation),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        promptAutocomplete(workspaceLocation, row, col, callback)
     },
     dispatch
   );

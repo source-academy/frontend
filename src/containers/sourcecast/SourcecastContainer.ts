@@ -18,6 +18,7 @@ import {
   externalLibrarySelect,
   fetchSourcecastIndex,
   navigateToDeclaration,
+  promptAutocomplete,
   setCodeDeltasToApply,
   setEditorBreakpoint,
   setEditorReadonly,
@@ -112,7 +113,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
       handleDebuggerPause: () => beginDebuggerPause(location),
       handleDebuggerResume: () => debuggerResume(location),
-      handleDebuggerReset: () => debuggerReset(location)
+      handleDebuggerReset: () => debuggerReset(location),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        promptAutocomplete(location, row, col, callback)
     },
     dispatch
   );

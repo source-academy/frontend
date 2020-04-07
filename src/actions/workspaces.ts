@@ -209,3 +209,16 @@ export const updateHasUnsavedChanges = (
     workspaceLocation,
     hasUnsavedChanges
   });
+
+export const promptAutocomplete = (
+  workspaceLocation: WorkspaceLocation,
+  row: number,
+  column: number,
+  callback: any // TODO: define a type for this
+) =>
+  action(actionTypes.PROMPT_AUTOCOMPLETE, {
+    workspaceLocation,
+    row,
+    column,
+    callback
+  });
