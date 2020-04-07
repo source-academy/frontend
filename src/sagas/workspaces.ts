@@ -268,6 +268,9 @@ export default function* workspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const newChapter = action.payload.chapter;
+    const oldVariant = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.variant
+    );
     const newVariant = action.payload.variant;
     const oldChapter = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
@@ -279,7 +282,7 @@ export default function* workspaceSaga(): SagaIterator {
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
-    if (newChapter !== oldChapter) {
+    if (newChapter !== oldChapter || newVariant !== oldVariant) {
       const library = {
         chapter: newChapter,
         variant: newVariant,

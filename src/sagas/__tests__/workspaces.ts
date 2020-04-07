@@ -405,10 +405,12 @@ describe('CHAPTER_SELECT', () => {
       .silentRun();
   });
 
-  test('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter', () => {
+  test('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter and oldVariant === newVariant', () => {
     const newChapter = 4;
+    const newVariant: Variant = 'default'
     const library: Library = {
       chapter: newChapter,
+      variant: newVariant,
       external: {
         name: 'NONE' as ExternalLibraryName,
         symbols: context.externalSymbols
@@ -425,7 +427,7 @@ describe('CHAPTER_SELECT', () => {
       .not.call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
       .dispatch({
         type: actionTypes.CHAPTER_SELECT,
-        payload: { chapter: newChapter, workspaceLocation }
+        payload: { chapter: newChapter, variant: newVariant, workspaceLocation }
       })
       .silentRun();
   });
