@@ -264,9 +264,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   breakpoints: [],
   context: createContext<WorkspaceLocation>(
     DEFAULT_SOURCE_CHAPTER,
-    DEFAULT_SOURCE_VARIANT,
     [],
-    workspaceLocation
+    workspaceLocation,
+    DEFAULT_SOURCE_VARIANT,
   ),
   editorPrepend: '',
   editorSessionId: '',
