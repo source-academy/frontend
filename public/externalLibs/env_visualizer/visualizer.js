@@ -2005,7 +2005,7 @@
       else if(Array.isArray(Object.values(frame.elements)[i])) {
         const parent = dataObjectWrappers[dataObjects.indexOf(Object.values(frame.elements)[i])].parent;
         if(parent == frame) {
-          index += getUnitHeight(Object.values(frame.elements)[i]) + 1
+          index += getUnitHeight(Object.values(frame.elements)[i]) + 1;
         } else {
           index += 1;
         }        
