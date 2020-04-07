@@ -232,16 +232,17 @@ export const sourceLanguages: ISourceLanguage[] = [
   { chapter: 4, variant: 'default' }
 ];
 
-const variantDisplay: Map<Variant, string> = new Map([
-  ['default', ''],
-  ['non-det', 'Non-Det']
+const variantDisplay: Map<Variant, string> = new Map([['default', ''], ['non-det', 'Non-Det']]);
+export const sourceURLNames: Map<string, ISourceLanguage> = new Map([
+  ['3_Non_Det', { chapter: 3, variant: 'non-det' }]
 ]);
-export const sourceURLNames: Map<string, number> = new Map([['3_Non_Det', 4.3]]);
 
 export const styliseChapter = (chap: number, variant?: Variant) => {
-  
-  return `Source \xa7${chap}` + 
-    (!variant || variantDisplay[variant] === '' ? '' : ' ' + variantDisplay[variant]);
+  let res = `Source \xa7${chap}`;
+  if (variant && variantDisplay.has(variant)) {
+    res += variantDisplay.get(variant);
+  }
+  return res;
 };
 
 const currentEnvironment = (): ApplicationEnvironment => {
@@ -283,7 +284,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
     DEFAULT_SOURCE_CHAPTER,
     [],
     workspaceLocation,
-    DEFAULT_SOURCE_VARIANT,
+    DEFAULT_SOURCE_VARIANT
   ),
   editorPrepend: '',
   editorSessionId: '',

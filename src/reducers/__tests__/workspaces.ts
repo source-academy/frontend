@@ -493,7 +493,7 @@ describe('END_CLEAR_CONTEXT', () => {
         library.chapter,
         library.external.symbols,
         location,
-        'default',
+        'default'
       );
 
       expect(result).toEqual({

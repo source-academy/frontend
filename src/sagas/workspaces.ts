@@ -275,6 +275,7 @@ export default function* workspaceSaga(): SagaIterator {
     const oldChapter = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
+    
     const symbols: string[] = yield select(
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
