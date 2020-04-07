@@ -9,7 +9,7 @@ import Material from '../containers/material/MaterialContainer';
 import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import Sourcecast from '../containers/sourcecast/SourcecastContainer';
-import { Role, sourceURLNames } from '../reducers/states';
+import { languageURLNames, Role } from '../reducers/states';
 import { stringParamToInt } from '../utils/paramParseHelpers';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Contributors from './contributors';
@@ -121,8 +121,8 @@ const parsePrgrm = (props: RouteComponentProps<{}>) => {
 const parseChapter = (props: RouteComponentProps<{}>) => {
   const chapQuery = qs.parse(props.location.hash).chap;
 
-  const chap: number = sourceURLNames.has(chapQuery)
-    ? sourceURLNames.get(chapQuery)!.chapter
+  const chap: number = languageURLNames.has(chapQuery)
+    ? languageURLNames.get(chapQuery)!.chapter
     : chapQuery === undefined
     ? NaN
     : parseInt(chapQuery, 10);
@@ -133,8 +133,8 @@ const parseChapter = (props: RouteComponentProps<{}>) => {
 const parseVariant = (props: RouteComponentProps<{}>) => {
   const chapQuery = qs.parse(props.location.hash).chap;
 
-  const variant: Variant = sourceURLNames.has(chapQuery)
-    ? sourceURLNames.get(chapQuery)!.variant
+  const variant: Variant = languageURLNames.has(chapQuery)
+    ? languageURLNames.get(chapQuery)!.variant
     : 'default';
 
   return variant;

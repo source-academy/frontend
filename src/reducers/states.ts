@@ -233,7 +233,7 @@ export const sourceLanguages: ISourceLanguage[] = [
 ];
 
 const variantDisplay: Map<Variant, string> = new Map([['non-det', 'Non-Det']]);
-export const sourceURLNames: Map<string, ISourceLanguage> = new Map([
+export const languageURLNames: Map<string, ISourceLanguage> = new Map([
   ['3_Non_Det', { chapter: 3, variant: 'non-det' }]
 ]);
 
