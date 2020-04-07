@@ -295,7 +295,7 @@ export default function* workspaceSaga(): SagaIterator {
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
-      yield call(showSuccessMessage, `Switched to ${styliseChapter(newChapter)}`, 1000);
+      yield call(showSuccessMessage, `Switched to ${styliseChapter(newChapter, newVariant)}`, 1000);
     }
   });
 

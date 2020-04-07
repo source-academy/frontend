@@ -9,7 +9,7 @@ import Material from '../containers/material/MaterialContainer';
 import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import Sourcecast from '../containers/sourcecast/SourcecastContainer';
-import { Role, sourceChapters, sourceURLNames } from '../reducers/states';
+import { Role, sourceURLNames } from '../reducers/states';
 import { stringParamToInt } from '../utils/paramParseHelpers';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Contributors from './contributors';
@@ -118,7 +118,7 @@ const parseChapter = (props: RouteComponentProps<{}>) => {
     ? NaN
     : parseInt(chapQuery, 10);
 
-  return sourceChapters.includes(chap) ? chap : undefined;
+  return chap;
 };
 
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {

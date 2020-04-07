@@ -1,5 +1,5 @@
 import { Context } from 'js-slang';
-import { SourceError } from 'js-slang/dist/types';
+import { SourceError, Variant } from 'js-slang/dist/types';
 
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
@@ -219,12 +219,29 @@ export enum Role {
  * Defines what chapters are available for usage.
  * For external libraries, see externalLibraries.ts
  */
-export const sourceChapters = [1, 2, 3, 4];
-export const sourceVariants = ['non-det'];
+export interface ISourceLanguage {
+  chapter: number;
+  variant: Variant;
+}
+
+export const sourceLanguages: ISourceLanguage[] = [
+  { chapter: 1, variant: 'default' },
+  { chapter: 2, variant: 'default' },
+  { chapter: 3, variant: 'default' },
+  { chapter: 3, variant: 'non-det' },
+  { chapter: 4, variant: 'default' }
+];
+
+const variantDisplay: Map<Variant, string> = new Map([
+  ['default', ''],
+  ['non-det', 'Non-Det']
+]);
 export const sourceURLNames: Map<string, number> = new Map([['3_Non_Det', 4.3]]);
 
-export const styliseChapter = (chap: number) => {
-  return `Source \xa7${chap}`;
+export const styliseChapter = (chap: number, variant?: Variant) => {
+  
+  return `Source \xa7${chap}` + 
+    (!variant || variantDisplay[variant] === '' ? '' : ' ' + variantDisplay[variant]);
 };
 
 const currentEnvironment = (): ApplicationEnvironment => {

@@ -4,7 +4,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
-import { sourceChapters, sourceVariants, styliseChapter } from '../../../reducers/states';
+import { ISourceLanguage, sourceLanguages, styliseChapter } from '../../../reducers/states';
 
 export type ChapterSelectProps = {
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -20,22 +20,13 @@ export interface IChapter {
 }
 
 export function ChapterSelect(props: ChapterSelectProps) {
-  let chapters = sourceChapters.map(chap => {
-    const variant = 'default' as Variant;
+  const chapters = sourceLanguages.map((lang: ISourceLanguage) => {
     return {
-      displayName: styliseChapter(chap),
-      variant,
-      chapter: chap
+      chapter: lang.chapter,
+      variant: lang.variant,
+      displayName: styliseChapter(lang.chapter, lang.variant)
     };
   });
-
-  const chaptersWithVariants = sourceVariants.map((variant: Variant) => ({
-    displayName: styliseChapter(3) + ' ' + variant,
-    variant,
-    chapter: 3
-  }));
-
-  chapters = chapters.concat(chaptersWithVariants);
 
   const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick }) => (
     <MenuItem

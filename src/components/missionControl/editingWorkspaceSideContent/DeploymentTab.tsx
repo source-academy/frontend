@@ -3,13 +3,15 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import { externalLibraries } from '../../../reducers/externalLibraries';
-import { sourceChapters, styliseChapter } from '../../../reducers/states';
+import { sourceLanguages, styliseChapter  } from '../../../reducers/states';
 
 import { ExternalLibraryName, IAssessment, Library } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
 import { emptyLibrary } from '../assessmentTemplates';
 import { assignToPath, getValueFromPath } from './';
 import TextareaContent from './TextareaContent';
+
+import { Variant } from 'js-slang/dist/types';
 
 interface IProps {
   assessment: IAssessment;
@@ -120,7 +122,7 @@ export class DeploymentTab extends React.Component<IProps, {}> {
         <Divider />
         Interpreter:
         <br />
-        {chapterSelect(deployment.chapter, this.handleChapterSelect)}
+        {chapterSelect(deployment.chapter, deployment.variant, this.handleChapterSelect)}
         <Divider />
         {symbolsFragment}
         <Divider />
@@ -240,10 +242,11 @@ const altEval = (str: string): any => {
   return Function('"use strict";return (' + str + ')')();
 };
 
-const chapters = sourceChapters.map(chap => ({ displayName: styliseChapter(chap), chapter: chap }));
+const chapters = sourceLanguages.map(lang => ({ chapter: lang.chapter, variant: lang.variant, displayName: styliseChapter(lang.chapter, lang.variant) }));
 
 const chapterSelect = (
   currentChap: number,
+  variant?: Variant,
   handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <ChapterSelectComponent
@@ -255,7 +258,7 @@ const chapterSelect = (
   >
     <Button
       className={Classes.MINIMAL}
-      text={styliseChapter(currentChap)}
+      text={styliseChapter(currentChap, variant)}
       rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
     />
   </ChapterSelectComponent>
