@@ -45,6 +45,9 @@ export interface IPosition {
   row: number;
   column: number;
 }
+
+// This interface is actually unused but ace poorly documents this feature so
+// we leave this here for reference.
 export interface IAutocompletionResult {
   caption: string;
   value: string;
