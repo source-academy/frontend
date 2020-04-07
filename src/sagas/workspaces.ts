@@ -537,21 +537,25 @@ export function* evalCode(
     }
   }
 
+  function call_non_det(code: string) {
+    return code.trim() === TRY_AGAIN
+      ? call(resume, lastNonDetResult)
+      : code.includes(TRY_AGAIN) // defensive check: try-again should only be used on its own
+      ? { status: 'error' }
+      : call(runInContext, code, context, {
+          executionMethod: 'interpreter',
+          originalMaxExecTime: execTime,
+          useSubst: substActiveAndCorrectChapter
+        })
+  }
+
   const isNonDet: boolean = context.variant === 'non-det';
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
         : isNonDet
-        ? code.trim() === TRY_AGAIN
-          ? call(resume, lastNonDetResult)
-          : code.includes(TRY_AGAIN) // defensive check: try-again should only be used on its own
-          ? { status: 'error' }
-          : call(runInContext, code, context, {
-              executionMethod: 'interpreter',
-              originalMaxExecTime: execTime,
-              useSubst: substActiveAndCorrectChapter
-            })
+        ? call_non_det(code)
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
