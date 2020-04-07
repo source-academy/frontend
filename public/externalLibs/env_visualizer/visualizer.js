@@ -232,7 +232,7 @@
       context = scene.context;
     const x = config.x;
     const y = config.y;
-    context.fillStyle = '#2c3e50';
+    context.fillStyle = '#2c3e50'; // colour of Source Academy background
     context.fillRect(x - 2 * FNOBJECT_RADIUS, y - FNOBJECT_RADIUS, 4 * FNOBJECT_RADIUS, 2 * FNOBJECT_RADIUS);
     context.strokeStyle = '#999999';
     context.beginPath();
@@ -369,6 +369,7 @@
     if (Array.isArray(dataObject[0])) {
       const result = drawThis(dataObject[0]);
       const draw = result.draw;
+      // check if need to draw the data object or it has already been drawn
       if (draw) {
         const shiftY = calculatePairShift(dataObject[1]);
         if (is_Array(dataObject[0])) {
@@ -475,6 +476,7 @@
       context.fillText(dataObject[0], startX + DATA_UNIT_WIDTH/6, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
 
+    // repeat the same provess for the tail of the pair
     if (Array.isArray(dataObject[1])) {
       const result = drawThis(dataObject[1]);
       const draw = result.draw;
@@ -563,7 +565,7 @@
   }
 
   function drawHitPairs(dataObject, hit, wrapper, x0, y0) {
-    
+    // simplified version of drawScenePairs so that we can detect when hover over pair
     var context = hit.context;
     context.beginPath();
     context.rect(x0, y0, DATA_UNIT_WIDTH, DATA_UNIT_HEIGHT);
