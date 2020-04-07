@@ -164,8 +164,6 @@ type ExternalLibrary = {
   symbols: string[];
 };
 
-export type Variant = 'lazy' | 'non-det' | 'default';
-
 export type Library = {
   chapter: number;
   variant?: Variant;
