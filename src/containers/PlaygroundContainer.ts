@@ -18,6 +18,7 @@ import {
   evalEditor,
   evalRepl,
   externalLibrarySelect,
+  fetchChapter,
   finishInvite,
   generateLzString,
   initInvite,
@@ -104,7 +105,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst),
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation)
+      handleDebuggerReset: () => debuggerReset(workspaceLocation),
+      handleFetchChapter: () => fetchChapter()
     },
     dispatch
   );

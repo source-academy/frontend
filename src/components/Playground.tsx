@@ -104,6 +104,7 @@ export interface IDispatchProps {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
+  handleFetchChapter: () => void;
 }
 
 type PlaygroundState = {
@@ -125,6 +126,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     };
     this.handlers.goGreen = this.toggleIsGreen.bind(this);
     (window as any).thePlayground = this;
+    this.props.handleFetchChapter();
   }
 
   public render() {

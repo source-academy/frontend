@@ -38,12 +38,13 @@ import {
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
+  UPDATE_CHAPTER,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  UPDATE_WORKSPACE
+  UPDATE_WORKSPACE,
 } from '../actions/actionTypes';
 import * as collabActions from '../actions/collabEditing';
 import { logOut } from '../actions/commons';
@@ -655,6 +656,18 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           hasUnsavedChanges: action.payload.hasUnsavedChanges
         }
       };
+    case UPDATE_CHAPTER:
+      return {
+        ...state,
+        playground: {
+          ...state.playground,
+          context: {
+            ...state.playground.context,
+            chapter: action.payload
+          }
+        }
+      };
+  
     default:
       return state;
   }
