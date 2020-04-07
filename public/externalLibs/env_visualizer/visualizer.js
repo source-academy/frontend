@@ -1148,10 +1148,16 @@
           parent = getWrapperFromDataObject(parent[1])
           fnObject.x = parent.x 
           fnObject.y = parent.y + FRAME_HEIGHT_LINE
+          if(parent.length > 1 && isFunction(parent[1][1])){
+            fnObject.x += DATA_UNIT_WIDTH / 2
+          }
         } else {
           parent_coordinates = getShiftInfo(parent[0], parent[1])
           fnObject.x = parent_coordinates.x
           fnObject.y = parent_coordinates.y + FRAME_HEIGHT_LINE - 18
+          if(parent.length > 1 && parent[1][1] == fnObject){
+            fnObject.x += DATA_UNIT_WIDTH / 2
+          }
         }
       } else {
         fnObject.x = parent.x 
@@ -1722,19 +1728,23 @@
 
 // Calculates unit height of list/array, considering references to other data structures
   function getUnitHeight(parentlist) {
+    /**
+     * otherObjects contains all data objects initialised before parentlist
+     * This is to check if any part of parentlist is a substructure of any
+     * previously defined data structure, and omit that part from the height calculations
+     */
     let otherObjects = [];
     let objectStored = false;
     dataObjects.forEach(x => {
       if(x == parentlist){
         objectStored = true;
-      }
-      if(objectStored){
-      } else if(x !== parentlist) {
+      } else if(!objectStored) {
         otherObjects.push(x)
-      }
+      }    
     })
 
     function recursiveHelper(list){
+      // Check if list is simply a substructure of any previously defined data structure
       let substructureExists = false;
       otherObjects.forEach(x => {
         if(checkSubStructure(x, list)){
@@ -1742,6 +1752,13 @@
         }
       })
       if (!Array.isArray(list) || substructureExists) {
+        if (isFunction(list)) {
+          let fnObject = fnObjects[fnObjects.indexOf(list)];
+          let parenttype = fnObject.parenttype;
+          if (parenttype == "data" && fnObject.parent[0] == parentlist) {
+            return 1;
+          }
+        }
         return 0;
       } else if (Array.isArray(list[0])) {
         let substructureExistsHead = false;
@@ -1756,12 +1773,15 @@
           return 1 + recursiveHelper(list[0]) + recursiveHelper(list[1]);
         }     
       } else if (isFunction(list[0])) {
-        let parenttype = fnObjects[fnObjects.indexOf(list[0])].parenttype;
+        let fnObject = fnObjects[fnObjects.indexOf(list[0])]
+        let parenttype = fnObject.parenttype;
         let tail_height = recursiveHelper(list[1])
         if(parenttype == "frame" || tail_height > 0) {
           return tail_height;
-        } else {
+        } else if(fnObject.parent[0] == parentlist) {
           return 1;
+        } else {
+          return 0;
         }
       } else {
         return recursiveHelper(list[1]);
@@ -1794,7 +1814,7 @@
     }
   }
 
-// Needs to be initialised with parent data structure before using calculatePairShift
+// Initialise parent data structure before using calculatePairShift
   let currentObject = null;
   function initialisePairShift(dataObject) {
     currentObject = dataObject;
@@ -1821,6 +1841,13 @@
         }
       })
       if (!Array.isArray(list) || substructureExists) {
+        if (isFunction(list)) {
+          let fnObject = fnObjects[fnObjects.indexOf(list)];
+          let parenttype = fnObject.parenttype;
+          if (parenttype == "data" && fnObject.parent[0] == currentObject) {
+            return 1;
+          }
+        }
         return 0;
       } else if (Array.isArray(list[0])) {
         let substructureExistsHead = false;
@@ -1835,12 +1862,15 @@
           return 1 + recursiveHelper(list[0]) + recursiveHelper(list[1]);
         }  
       } else if (isFunction(list[0])) {
-        let parenttype = fnObjects[fnObjects.indexOf(list[0])].parenttype;
+        let fnObject = fnObjects[fnObjects.indexOf(list[0])]
+        let parenttype = fnObject.parenttype;
         let tail_height = recursiveHelper(list[1])
         if(parenttype == "frame" || tail_height > 0) {
           return tail_height;
-        } else {
+        } else if(fnObject.parent[0] == currentObject) {
           return 1;
+        } else {
+          return 0;
         }
       } else {
         return recursiveHelper(list[1]);
