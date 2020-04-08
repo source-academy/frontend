@@ -574,9 +574,9 @@
     } else {
       context.fillText(dataObject[1], startX + 2 * DATA_UNIT_WIDTH/3, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
-      context.strokeStyle = '#999999';
-      context.lineWidth = 2;
-      context.stroke();
+    context.strokeStyle = '#999999';
+    context.lineWidth = 2;
+    context.stroke();
   }
 
   function drawHitPairs(dataObject, hit, wrapper, x0, y0) {
