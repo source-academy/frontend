@@ -124,12 +124,17 @@ export default function* workspaceSaga(): SagaIterator {
       autocompleteCode = prepend + '\n' + editorValue;
     }
 
-    const editorNames: any = yield call(
+    const [editorNames, displaySuggestions] = yield call(
       getNames,
       autocompleteCode,
       action.payload.row + prependLength,
       action.payload.column
     );
+
+    if (!displaySuggestions) {
+      yield call(action.payload.callback);
+      return;
+    }
 
     const editorSuggestions = editorNames.map((name: any) => ({
       caption: name.name,
