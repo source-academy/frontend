@@ -60,12 +60,22 @@
     // d1 and d2 are 2 dataObjects, check if d2 is identical to d1
     // or a sub data structure of d1
     if (!Array.isArray(d1)) {
-      return false;
+      if(isFunction(d1) && isFunction(d2) && d1 == d2) {
+        return true;
+      } else {
+        return false;
+      }
     } else if (d2 === d1) {
       return true;
-    } else {
+    } else if(d1.length == 2) {
       return checkSubStructure(d1[0], d2)
         || checkSubStructure(d1[1], d2);
+    } else {
+      let containsSubStructure = false;
+      for(let i = 0; !containsSubStructure && i < d1.length; i++) {
+        containsSubStructure = checkSubStructure(d1[i], d2)
+      }
+      return containsSubStructure;
     }
   }
 
@@ -138,7 +148,12 @@
   function drawSceneFnObjects() {
     fnObjectLayer.scene.clear();
     for (let i = 0; i < fnObjects.length; i++) {
-      drawSceneFnObject(i);
+      const fnObjParent = fnObjects[i].parent
+      if(Array.isArray(fnObjParent) && fnObjParent[0].length != 2) {
+        // Do not draw function if it belongs to an array. (Remove after implementing arrays)
+      } else {
+        drawSceneFnObject(i);
+      }
     }
     viewport.render();
   }
@@ -952,7 +967,8 @@
     // fnObject.source == null || fnObject.source == fnObject.parent
     // By right, the arrow should always point left to the frame directly adjacent
     // There is no other way for the arrow to point.
-    if (true) {
+    // Currently, if fnObject is defined in an array, do not draw the arrow (remove after arrays are implemented)
+    if (!(Array.isArray(fnObject.parent) && fnObject.parent[0].length != 2)) {
       frame = fnObject.parent;
       if(fnObject.parenttype == "data"){ 
         parentobj = dataObjects.indexOf(fnObject.parent[0])
@@ -978,26 +994,26 @@
        * destOffset: index of fnObject in source (destination) frame
        * frameOffset: index of source frame within its level
        */
-      const startOffset = findElementPosition(fnObject, fnObject.parent);
-      const destOffset = findElementPosition(fnObject, fnObject.source);
-      const frameOffset = findFrameIndexInLevel(fnObject.source);
-      const x0 = startCoord[0],
-        y0 = startCoord[1],
-        x1 = x0 + FNOBJECT_RADIUS + (startOffset + 1) * 5;
-        y1 = y0,
-        x2 = x1,
-        y2 = fnObject.source.y - 40 + frameOffset * 2,
-        x3 = fnObject.source.x + fnObject.source.width / 2 + 10,
-        y3 = y2
-        x4 = x3,
-        y4 = fnObject.source.y - 3;
-      context.moveTo(x0, y0);
-      context.lineTo(x1, y1);
-      context.lineTo(x2, y2);
-      context.lineTo(x3, y3);
-      context.lineTo(x4, y4);
-      drawArrowHead(context, x3, y3, x4, y4);
-      context.stroke();
+      // const startOffset = findElementPosition(fnObject, fnObject.parent);
+      // const destOffset = findElementPosition(fnObject, fnObject.source);
+      // const frameOffset = findFrameIndexInLevel(fnObject.source);
+      // const x0 = startCoord[0],
+      //   y0 = startCoord[1],
+      //   x1 = x0 + FNOBJECT_RADIUS + (startOffset + 1) * 5;
+      //   y1 = y0,
+      //   x2 = x1,
+      //   y2 = fnObject.source.y - 40 + frameOffset * 2,
+      //   x3 = fnObject.source.x + fnObject.source.width / 2 + 10,
+      //   y3 = y2
+      //   x4 = x3,
+      //   y4 = fnObject.source.y - 3;
+      // context.moveTo(x0, y0);
+      // context.lineTo(x1, y1);
+      // context.lineTo(x2, y2);
+      // context.lineTo(x3, y3);
+      // context.lineTo(x4, y4);
+      // drawArrowHead(context, x3, y3, x4, y4);
+      // context.stroke();
     }
   }
 
@@ -1145,10 +1161,10 @@
         // Check if parent has x and y coordinates
         // Otherwise use getShiftInfo to calculate
         if(parent[0] === parent[1]){
-          parent = getWrapperFromDataObject(parent[1])
-          fnObject.x = parent.x 
-          fnObject.y = parent.y + FRAME_HEIGHT_LINE
-          if(parent.length > 1 && isFunction(parent[1][1])){
+          parentWrapper = getWrapperFromDataObject(parent[1])
+          fnObject.x = parentWrapper.x 
+          fnObject.y = parentWrapper.y + FRAME_HEIGHT_LINE
+          if(parent.length > 1 && parent[1][1] == fnObject){
             fnObject.x += DATA_UNIT_WIDTH / 2
           }
         } else {
