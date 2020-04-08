@@ -3,6 +3,7 @@ import AceEditor, { IAnnotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
+import { require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
@@ -35,6 +36,7 @@ export interface IEditorProps {
   handleEditorValueChange: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -44,12 +46,23 @@ export interface IPosition {
   column: number;
 }
 
+// This interface is actually unused but ace poorly documents this feature so
+// we leave this here for reference.
+export interface IAutocompletionResult {
+  caption: string;
+  value: string;
+  meta?: string;
+  docHTML?: string;
+  score?: number;
+}
+
 class Editor extends React.PureComponent<IEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
   private markerIds: number[];
   private onChangeMethod: (newCode: string) => void;
   private onValidateMethod: (annotations: IAnnotation[]) => void;
+  private completer: {};
 
   constructor(props: IEditorProps) {
     super(props);
@@ -66,6 +79,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     this.onValidateMethod = (annotations: IAnnotation[]) => {
       if (this.props.isEditorAutorun && annotations.length === 0) {
         this.props.handleEditorEval();
+      }
+    };
+
+    this.completer = {
+      getCompletions: (editor: any, session: any, pos: any, prefix: any, callback: any) => {
+        // console.log(pos); // Cursor col is insertion location i.e. last char col + 1
+        this.props.handlePromptAutocomplete(pos.row + 1, pos.column, callback);
       }
     };
   }
@@ -116,6 +136,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     // Change all info annotations to error annotations
     session.on('changeAnnotation', this.handleAnnotationChange(session));
+
+    // Start autocompletion
+    acequire('ace/ext/language_tools').setCompleters([this.completer]);
 
     // Has session ID
     if (this.props.editorSessionId !== '') {
@@ -222,6 +245,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             value={this.props.editorValue}
             width="100%"
             setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
               fontFamily: "'Inconsolata', 'Consolas', monospace"
             }}
           />

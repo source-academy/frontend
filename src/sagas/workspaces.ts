@@ -1,4 +1,12 @@
-import { Context, findDeclaration, interrupt, Result, resume, runInContext } from 'js-slang';
+import {
+  Context,
+  findDeclaration,
+  getNames,
+  interrupt,
+  Result,
+  resume,
+  runInContext
+} from 'js-slang';
 import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
@@ -15,6 +23,7 @@ import {
   TestcaseType,
   TestcaseTypes
 } from '../components/assessment/assessmentShape';
+import { Documentation } from '../reducers/documentation';
 import { externalLibraries } from '../reducers/externalLibraries';
 import {
   IPlaygroundState,
@@ -106,6 +115,61 @@ export default function* workspaceSaga(): SagaIterator {
     }
 
     yield* evalCode(value, context, execTime, workspaceLocation, actionTypes.EVAL_EDITOR);
+  });
+
+  yield takeEvery(actionTypes.PROMPT_AUTOCOMPLETE, function*(
+    action: ReturnType<typeof actions.promptAutocomplete>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
+
+    context = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
+    );
+
+    const code: string = yield select((state: IState) => {
+      const prependCode = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
+      const editorCode = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
+      return [prependCode, editorCode] as [string, string];
+    });
+    const [prepend, editorValue] = code;
+
+    // Deal with prepended code
+    let autocompleteCode;
+    let prependLength = 0;
+    if (!prepend) {
+      autocompleteCode = editorValue;
+    } else {
+      prependLength = prepend.split('\n').length;
+      autocompleteCode = prepend + '\n' + editorValue;
+    }
+
+    const editorNames: any = yield call(
+      getNames,
+      autocompleteCode,
+      action.payload.row + prependLength,
+      action.payload.column
+    );
+
+    const editorSuggestions = editorNames.map((name: any) => ({
+      caption: name.name,
+      value: name.name,
+      meta: name.meta,
+      score: 1000 // Prioritize suggestions from code
+    }));
+
+    const builtinSuggestions = Documentation.builtins[context.chapter] || [];
+
+    const extLib = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).externalLibrary
+    );
+
+    const extLibSuggestions = Documentation.externalLibraries[extLib] || [];
+
+    yield call(
+      action.payload.callback,
+      null,
+      editorSuggestions.concat(builtinSuggestions, extLibSuggestions)
+    );
   });
 
   yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(

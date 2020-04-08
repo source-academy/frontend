@@ -88,6 +88,7 @@ export type DispatchProps = {
   handleDebuggerReset: () => void;
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 };
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
@@ -179,6 +180,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
               highlightedLines: this.props.highlightedLines,
               newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
               isEditorAutorun: false
             }
           : undefined,

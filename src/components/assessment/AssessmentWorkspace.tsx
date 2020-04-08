@@ -108,6 +108,7 @@ export type DispatchProps = {
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 };
 
 class AssessmentWorkspace extends React.Component<
@@ -248,6 +249,7 @@ class AssessmentWorkspace extends React.Component<
               highlightedLines: this.props.highlightedLines,
               newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
               isEditorAutorun: false
             }
           : undefined,

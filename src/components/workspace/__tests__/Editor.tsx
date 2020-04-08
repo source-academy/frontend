@@ -23,7 +23,8 @@ test('Editor renders correctly', () => {
     handleEditorUpdateBreakpoints: breakpoints => {},
     handleFinishInvite: () => {},
     handleSetWebsocketStatus: websocketStatus => {},
-    handleUpdateHasUnsavedChanges: hasUnsavedChanges => {}
+    handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
+    handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
   };
   const app = <Editor {...props} />;
   const tree = shallow(app);
