@@ -237,9 +237,9 @@ export const languageURLNames: Map<string, ISourceLanguage> = new Map([
   ['3_Non_Det', { chapter: 3, variant: 'non-det' }]
 ]);
 
-export const styliseChapter = (chap: number, variant?: Variant) => {
+export const styliseChapter = (chap: number, variant: Variant = 'default') => {
   let res = `Source \xa7${chap}`;
-  if (variant && variantDisplay.has(variant)) {
+  if (variantDisplay.has(variant)) {
     res += ' ' + variantDisplay.get(variant);
   }
   return res;

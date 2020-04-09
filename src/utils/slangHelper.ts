@@ -127,13 +127,9 @@ export function createContext<T>(
   chapter: number,
   externals: string[],
   externalContext: T,
-  variant?: Variant
+  variant: Variant = 'default'
 ) {
-  if (variant === undefined) {
-    return createSlangContext<T>(chapter, 'default', externals, externalContext, externalBuiltIns);
-  } else {
-    return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
-  }
+  return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard

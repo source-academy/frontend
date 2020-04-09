@@ -250,7 +250,7 @@ const chapters = sourceLanguages.map(lang => ({
 
 const chapterSelect = (
   currentChap: number,
-  variant?: Variant,
+  variant: Variant = 'default',
   handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <ChapterSelectComponent
