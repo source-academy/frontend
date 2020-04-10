@@ -58,7 +58,7 @@
     "query-string": "^6.1.0",
     "re-resizable": "^4.4.8",
     "react": "^16.8.6",
-    "react-ace": "^8.0.0",
+    "react-ace": "^8.1.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.6",
     "react-dom-factories": "^1.0.2",
