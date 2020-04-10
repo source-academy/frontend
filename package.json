@@ -67,7 +67,7 @@
     "react-mde": "^7.6.2",
     "react-redux": "^5.1.0",
     "react-router": "^4.2.0",
-    "react-router-dom": "^4.2.2",
+    "react-router-dom": "^5.1.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "react-textarea-autosize": "^7.1.0",
     "react-transition-group": "^2.3.1",
