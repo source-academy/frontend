@@ -607,8 +607,9 @@ export function* evalCode(
     }
   }
 
-  function call_non_det() {
-    return code.trim() === TRY_AGAIN
+  function call_variant(variant: Variant) {
+    if (variant === 'non-det') {
+      return code.trim() === TRY_AGAIN
       ? call(resume, lastNonDetResult)
       : code.includes(TRY_AGAIN) // defensive check: try-again should only be used on its own
       ? { status: 'error' }
@@ -617,20 +618,31 @@ export function* evalCode(
           originalMaxExecTime: execTime,
           useSubst: substActiveAndCorrectChapter
         });
+    } else if (variant === 'lazy') {
+      return call(runInContext, code, context, {
+        scheduler: 'preemptive',
+        originalMaxExecTime: execTime,
+        useSubst: substActiveAndCorrectChapter
+      });
+    } else {
+      throw new Error("Unknown variant: " + variant);
+    }
   }
 
   const isNonDet: boolean = context.variant === 'non-det';
+  const isLazy: boolean = context.variant === 'lazy';
+  
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
-        : isNonDet
-        ? call_non_det()
-        : call(runInContext, code, context, {
-            scheduler: 'preemptive',
-            originalMaxExecTime: execTime,
-            useSubst: substActiveAndCorrectChapter
-          }),
+        : isNonDet || isLazy
+          ? call_variant(context.variant)
+          : call(runInContext, code, context, {
+              scheduler: 'preemptive',
+              originalMaxExecTime: execTime,
+              useSubst: substActiveAndCorrectChapter
+            }),
 
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
