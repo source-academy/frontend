@@ -234,14 +234,11 @@ export const sourceLanguages: ISourceLanguage[] = [
   { chapter: 4, variant: 'default' }
 ];
 
-const variantDisplay: Map<Variant, string> = new Map([
-  ['non-det', 'Non-Det'],
-  ['lazy', 'Lazy']
-]);
+const variantDisplay: Map<Variant, string> = new Map([['non-det', 'Non-Det'], ['lazy', 'Lazy']]);
 export const languageURLNames: Map<string, ISourceLanguage> = new Map([
   ['1_Lazy', { chapter: 1, variant: 'lazy' }],
   ['2_Lazy', { chapter: 2, variant: 'lazy' }],
-  ['3_Non_Det', { chapter: 3, variant: 'non-det' }],
+  ['3_Non_Det', { chapter: 3, variant: 'non-det' }]
 ]);
 
 export const urlName = (chapter: number, variant: Variant = 'default'): string => {
