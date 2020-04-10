@@ -28,11 +28,15 @@ let studentDataOverride = undefined,
     missionPointerOverride = undefined,
     currentDateOverride = undefined;
 // override student game data
-export function overrideStudentData(data) { studentDataOverride = data; }
-// override student's current mission
-export function overrideMissionPointer(data) { missionPointerOverride = data; }
-// override current date (to determine active missions)
-export function overrideCurrentDate(data) { currentDateOverride = data; }
+export function overrideGameState(data) {
+  if (data) {
+    studentDataOverride = data;
+    missionPointerOverride = data.missionPointer;
+    currentDateOverride = data.currentDate;
+  } else {
+    studentDataOverride = missionPointerOverride = currentDateOverride = undefined;
+  }
+}
 
 export function getStudentData() {
   // formerly create-initializer/loadFromServer
