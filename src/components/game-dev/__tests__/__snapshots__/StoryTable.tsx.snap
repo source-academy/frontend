@@ -20,6 +20,8 @@ exports[`Story table renders correctly 1`] = `
         <AgGridReact gridAutoHeight={true} enableColResize={true} enableSorting={true} enableFilter={true} columnDefs={{...}} onGridReady={[Function]} rowData={{...}} pagination={true} paginationPageSize={50} suppressMovableColumns={true} />
       </div>
     </div>
+    <JsonUpload />
+    <br />
     <Blueprint3.Button icon=\\"mountain\\" onClick={[Function]}>
       <div className=\\"ag-grid-button-text hidden-xs\\">
         Open Game in new Window
