@@ -5,6 +5,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
 
+import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
@@ -20,6 +21,7 @@ import {
   SessionButtons,
   ShareButton
 } from './workspace/controlBar/index';
+import { IPosition } from './workspace/Editor';
 import { SideContentTab } from './workspace/side-content';
 import EnvVisualizer from './workspace/side-content/EnvVisualizer';
 import FaceapiDisplay from './workspace/side-content/FaceapiDisplay';
@@ -61,6 +63,7 @@ export interface IStateProps {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
+  newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   queryString?: string;
   replValue: string;
@@ -68,6 +71,7 @@ export interface IStateProps {
   sharedbAceInitValue: string;
   sharedbAceIsInviting: boolean;
   sourceChapter: number;
+  sourceVariant: Variant;
   websocketStatus: number;
   externalLibraryName: string;
   usingSubst: boolean;
@@ -78,7 +82,8 @@ export interface IDispatchProps {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
-  handleChapterSelect: (chapter: number) => void;
+  handleChapterSelect: (chapter: number, variant: Variant) => void;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
@@ -101,6 +106,7 @@ export interface IDispatchProps {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 }
 
 type PlaygroundState = {
@@ -147,7 +153,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       />
     );
 
-    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) => {
+    const chapterSelectHandler = (
+      { chapter, variant }: { chapter: number; variant: Variant },
+      e: any
+    ) => {
       if (
         (chapter <= 2 && this.state.hasBreakpoints) ||
         this.state.selectedTab === SideContentType.substVisualizer
@@ -158,12 +167,13 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         this.props.handleReplOutputClear();
         this.props.handleUsingSubst(false);
       }
-      this.props.handleChapterSelect(chapter);
+      this.props.handleChapterSelect(chapter, variant);
     };
     const chapterSelect = (
       <ChapterSelect
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
+        sourceVariant={this.props.sourceVariant}
         key="chapter"
       />
     );
@@ -263,16 +273,20 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         replButtons: [evalButton, clearButton]
       },
       editorProps: {
+        sourceChapter: this.props.sourceChapter,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
+        handleDeclarationNavigate: this.props.handleDeclarationNavigate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
+        handlePromptAutocomplete: this.props.handlePromptAutocomplete,
         handleFinishInvite: this.props.handleFinishInvite,
         sharedbAceInitValue: this.props.sharedbAceInitValue,
         sharedbAceIsInviting: this.props.sharedbAceIsInviting,
         isEditorAutorun: this.props.isEditorAutorun,
         breakpoints: this.props.breakpoints,
         highlightedLines: this.props.highlightedLines,
+        newCursorPosition: this.props.newCursorPosition,
         handleEditorUpdateBreakpoints: (breakpoints: string[]) => {
           // get rid of holes in array
           const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
@@ -311,6 +325,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {
+        sourceChapter: this.props.sourceChapter,
         output: this.props.output,
         replValue: this.props.replValue,
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,

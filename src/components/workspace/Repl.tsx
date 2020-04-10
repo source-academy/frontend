@@ -1,7 +1,7 @@
 import { Card, Classes, Pre } from '@blueprintjs/core';
 import * as classNames from 'classnames';
 import { parseError } from 'js-slang';
-import { stringify } from 'js-slang/dist/interop';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
@@ -18,6 +18,7 @@ export interface IReplProps {
   handleReplValueChange: (newCode: string) => void;
   hidden?: boolean;
   usingSubst?: boolean;
+  sourceChapter?: number;
 }
 
 export interface IOutputProps {

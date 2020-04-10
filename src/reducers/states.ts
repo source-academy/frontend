@@ -1,5 +1,5 @@
 import { Context } from 'js-slang';
-import { SourceError } from 'js-slang/dist/types';
+import { SourceError, Variant } from 'js-slang/dist/types';
 
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
@@ -22,7 +22,8 @@ import {
   PlaybackStatus,
   RecordingStatus
 } from '../components/sourcecast/sourcecastShape';
-import { DEFAULT_SOURCE_CHAPTER } from '../utils/constants';
+import { IPosition } from '../components/workspace/Editor';
+import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../utils/constants';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -105,6 +106,7 @@ export interface IWorkspaceState {
   readonly editorWidth: string;
   readonly execTime: number;
   readonly highlightedLines: number[][];
+  readonly newCursorPosition?: IPosition;
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
@@ -217,7 +219,42 @@ export enum Role {
  * Defines what chapters are available for usage.
  * For external libraries, see externalLibraries.ts
  */
-export const sourceChapters = [1, 2, 3, 4];
+export interface ISourceLanguage {
+  chapter: number;
+  variant: Variant;
+}
+
+export const sourceLanguages: ISourceLanguage[] = [
+  { chapter: 1, variant: 'default' },
+  { chapter: 2, variant: 'default' },
+  { chapter: 3, variant: 'default' },
+  { chapter: 3, variant: 'non-det' },
+  { chapter: 4, variant: 'default' }
+];
+
+const variantDisplay: Map<Variant, string> = new Map([['non-det', 'Non-Det']]);
+export const languageURLNames: Map<string, ISourceLanguage> = new Map([
+  ['3_Non_Det', { chapter: 3, variant: 'non-det' }]
+]);
+
+export const urlName = (chapter: number, variant: Variant = 'default'): string => {
+  for (const name of languageURLNames.keys()) {
+    const language: ISourceLanguage = languageURLNames.get(name)!;
+    if (language.chapter === chapter && language.variant === variant) {
+      return name;
+    }
+  }
+
+  return chapter.toString();
+};
+
+export const styliseChapter = (chap: number, variant: Variant = 'default') => {
+  let res = `Source \xa7${chap}`;
+  if (variantDisplay.has(variant)) {
+    res += ' ' + variantDisplay.get(variant);
+  }
+  return res;
+};
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
@@ -254,7 +291,12 @@ export const defaultEditorValue = '// Type your program in here!';
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
   breakpoints: [],
-  context: createContext<WorkspaceLocation>(DEFAULT_SOURCE_CHAPTER, [], workspaceLocation),
+  context: createContext<WorkspaceLocation>(
+    DEFAULT_SOURCE_CHAPTER,
+    [],
+    workspaceLocation,
+    DEFAULT_SOURCE_VARIANT
+  ),
   editorPrepend: '',
   editorSessionId: '',
   editorValue:

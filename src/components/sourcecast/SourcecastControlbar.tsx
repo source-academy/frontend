@@ -204,6 +204,7 @@ export interface ISourcecastControlbarProps {
   playbackStatus: PlaybackStatus;
   handleChapterSelect: (chapter: number) => void;
   handleExternalSelect: (name: ExternalLibraryName) => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 }
 
 export interface ISourcecastControlbarState {

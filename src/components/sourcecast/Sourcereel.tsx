@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
+import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput, SideContentType } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
@@ -21,6 +22,7 @@ import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
 import {
   Input,
   IPlaybackData,
+  IPosition,
   ISourcecastData,
   KeyboardCommand,
   RecordingStatus
@@ -42,6 +44,7 @@ export interface IStateProps {
   isDebugging: boolean;
   isEditorAutorun: boolean;
   isRunning: boolean;
+  newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   playbackData: IPlaybackData;
   recordingStatus: RecordingStatus;
@@ -50,6 +53,7 @@ export interface IStateProps {
   sideContentHeight?: number;
   sourcecastIndex: ISourcecastData[] | null;
   sourceChapter: number;
+  sourceVariant: Variant;
   timeResumed: number;
 }
 
@@ -61,6 +65,7 @@ export interface IDispatchProps {
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleDeleteSourcecastEntry: (id: number) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -139,6 +144,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       <ChapterSelect
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
+        sourceVariant={this.props.sourceVariant}
         key="chapter"
       />
     );
@@ -180,12 +186,14 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       editorValue: this.props.editorValue,
       editorSessionId: '',
       getTimerDuration: this.getTimerDuration,
+      handleDeclarationNavigate: this.props.handleDeclarationNavigate,
       handleEditorEval: this.props.handleEditorEval,
       handleEditorValueChange: this.props.handleEditorValueChange,
       isEditorAutorun: this.props.isEditorAutorun,
       isRecording: this.props.recordingStatus === RecordingStatus.recording,
       breakpoints: this.props.breakpoints,
       highlightedLines: this.props.highlightedLines,
+      newCursorPosition: this.props.newCursorPosition,
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
       handleRecordInput: this.props.handleRecordInput
     };

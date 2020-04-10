@@ -21,6 +21,8 @@ import {
   evalTestcase,
   externalLibrarySelect,
   highlightEditorLine,
+  moveCursor,
+  navigateToDeclaration,
   resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
@@ -104,11 +106,13 @@ test('changeSideContentHeight generates correct action object', () => {
 
 test('chapterSelect generates correct action object', () => {
   const chapter = 3;
-  const action = chapterSelect(chapter, playgroundWorkspace);
+  const variant = 'default';
+  const action = chapterSelect(chapter, variant, playgroundWorkspace);
   expect(action).toEqual({
     type: actionTypes.CHAPTER_SELECT,
     payload: {
       chapter,
+      variant,
       workspaceLocation: playgroundWorkspace
     }
   });
@@ -386,6 +390,30 @@ test('updateHasUnsavedChanges generates correct action object', () => {
     payload: {
       workspaceLocation: assessmentWorkspace,
       hasUnsavedChanges
+    }
+  });
+});
+
+test('navigateToDeclaration generates correct action object', () => {
+  const cursorPosition = { row: 0, column: 0 };
+  const action = navigateToDeclaration(playgroundWorkspace, cursorPosition);
+  expect(action).toEqual({
+    type: actionTypes.NAV_DECLARATION,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      cursorPosition
+    }
+  });
+});
+
+test('moveCursor generates correct action object', () => {
+  const cursorPosition = { row: 0, column: 0 };
+  const action = moveCursor(playgroundWorkspace, cursorPosition);
+  expect(action).toEqual({
+    type: actionTypes.MOVE_CURSOR,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      cursorPosition
     }
   });
 });
