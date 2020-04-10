@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { overrideStudentData } from '../academy/game/backend/game-state.js';
 
 class JsonUpload extends React.Component {
   private static onFormSubmit(e: { preventDefault: () => void; }){
@@ -7,9 +8,7 @@ class JsonUpload extends React.Component {
 
   constructor(props: Readonly<{}>) {
     super(props);
-    this.state ={
-      file:null
-    };
+    overrideStudentData(undefined);
     JsonUpload.onFormSubmit = JsonUpload.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
@@ -17,14 +16,17 @@ class JsonUpload extends React.Component {
   public render() {
     return (
       <form onSubmit={JsonUpload.onFormSubmit}>
-        <h3>Json File Upload</h3>
+        <h3>Game State Override</h3>
         <input type="file" onChange={this.onChange} style={{width: "250px"}}/>
-        <button type="submit">Upload</button>
       </form>
     );
   }
   private onChange(e: { target: { files: any; }; }) {
-    this.setState({file:e.target.files[0]});
+    const reader = new FileReader();
+    reader.onload = (event: Event) => {
+      overrideStudentData(JSON.parse(""+reader.result));
+    };
+    reader.readAsText(e.target.files[0]);
   }
 }
 
