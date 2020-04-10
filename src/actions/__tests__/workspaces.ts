@@ -106,11 +106,13 @@ test('changeSideContentHeight generates correct action object', () => {
 
 test('chapterSelect generates correct action object', () => {
   const chapter = 3;
-  const action = chapterSelect(chapter, playgroundWorkspace);
+  const variant = 'default';
+  const action = chapterSelect(chapter, variant, playgroundWorkspace);
   expect(action).toEqual({
     type: actionTypes.CHAPTER_SELECT,
     payload: {
       chapter,
+      variant,
       workspaceLocation: playgroundWorkspace
     }
   });

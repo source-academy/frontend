@@ -1,7 +1,16 @@
-import { Context, findDeclaration, interrupt, resume, runInContext } from 'js-slang';
-import { getNames } from 'js-slang';
+import {
+  Context,
+  findDeclaration,
+  getNames,
+  interrupt,
+  Result,
+  resume,
+  runInContext
+} from 'js-slang';
+import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
+import { Variant } from 'js-slang/dist/types';
 import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
@@ -16,7 +25,13 @@ import {
 } from '../components/assessment/assessmentShape';
 import { Documentation } from '../reducers/documentation';
 import { externalLibraries } from '../reducers/externalLibraries';
-import { IPlaygroundState, IState, IWorkspaceState, SideContentType } from '../reducers/states';
+import {
+  IPlaygroundState,
+  IState,
+  IWorkspaceState,
+  SideContentType,
+  styliseChapter
+} from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import {
   getBlockExtraMethodsString,
@@ -64,8 +79,12 @@ export default function* workspaceSaga(): SagaIterator {
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
+    const variant: Variant = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.variant
+    );
     const library = {
       chapter,
+      variant,
       external: {
         name: ExternalLibraryNames.NONE,
         symbols
@@ -318,9 +337,14 @@ export default function* workspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const newChapter = action.payload.chapter;
+    const oldVariant = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.variant
+    );
+    const newVariant = action.payload.variant;
     const oldChapter = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
+
     const symbols: string[] = yield select(
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
@@ -328,9 +352,10 @@ export default function* workspaceSaga(): SagaIterator {
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
-    if (newChapter !== oldChapter) {
+    if (newChapter !== oldChapter || newVariant !== oldVariant) {
       const library = {
         chapter: newChapter,
+        variant: newVariant,
         external: {
           name: ExternalLibraryNames.NONE,
           symbols
@@ -340,7 +365,7 @@ export default function* workspaceSaga(): SagaIterator {
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
-      yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000);
+      yield call(showSuccessMessage, `Switched to ${styliseChapter(newChapter, newVariant)}`, 1000);
     }
   });
 
@@ -496,6 +521,7 @@ export default function* workspaceSaga(): SagaIterator {
 }
 
 let lastDebuggerResult: any;
+let lastNonDetResult: Result;
 function* updateInspector(workspaceLocation: WorkspaceLocation) {
   try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
@@ -581,15 +607,31 @@ export function* evalCode(
     }
   }
 
+  function call_non_det() {
+    return code.trim() === TRY_AGAIN
+      ? call(resume, lastNonDetResult)
+      : code.includes(TRY_AGAIN) // defensive check: try-again should only be used on its own
+      ? { status: 'error' }
+      : call(runInContext, code, context, {
+          executionMethod: 'interpreter',
+          originalMaxExecTime: execTime,
+          useSubst: substActiveAndCorrectChapter
+        });
+  }
+
+  const isNonDet: boolean = context.variant === 'non-det';
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
+        : isNonDet
+        ? call_non_det()
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
             useSubst: substActiveAndCorrectChapter
           }),
+
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
@@ -621,14 +663,24 @@ export function* evalCode(
   }
   yield updateInspector(workspaceLocation);
 
-  if (result.status !== 'suspended' && result.status !== 'finished') {
+  if (
+    result.status !== 'suspended' &&
+    result.status !== 'finished' &&
+    result.status !== 'suspended-non-det'
+  ) {
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
     return;
   } else if (result.status === 'suspended') {
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
+  } else if (isNonDet) {
+    if (result.value === 'cut') {
+      result.value = undefined;
+    }
+    lastNonDetResult = result;
   }
+
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== actionTypes.EVAL_SILENT) {
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));

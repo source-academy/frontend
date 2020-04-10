@@ -492,7 +492,8 @@ describe('END_CLEAR_CONTEXT', () => {
       const context = createContext<WorkspaceLocation>(
         library.chapter,
         library.external.symbols,
-        location
+        location,
+        'default'
       );
 
       expect(result).toEqual({
