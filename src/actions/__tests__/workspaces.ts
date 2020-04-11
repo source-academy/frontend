@@ -33,7 +33,7 @@ import {
   updateCurrentSubmissionId,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
+  updateReplValue,
 } from '../workspaces';
 
 const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
@@ -44,7 +44,7 @@ test('browseReplHistoryDown generates correct action object', () => {
   const action = browseReplHistoryDown(assessmentWorkspace);
   expect(action).toEqual({
     type: actionTypes.BROWSE_REPL_HISTORY_DOWN,
-    payload: { workspaceLocation: assessmentWorkspace }
+    payload: { workspaceLocation: assessmentWorkspace },
   });
 });
 
@@ -52,7 +52,7 @@ test('browseReplHistoryUp generates correct action object', () => {
   const action = browseReplHistoryUp(gradingWorkspace);
   expect(action).toEqual({
     type: actionTypes.BROWSE_REPL_HISTORY_UP,
-    payload: { workspaceLocation: gradingWorkspace }
+    payload: { workspaceLocation: gradingWorkspace },
   });
 });
 
@@ -63,8 +63,8 @@ test('changeExternalLibrary generates correct action object', () => {
     type: actionTypes.CHANGE_EXTERNAL_LIBRARY,
     payload: {
       newExternal,
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -75,8 +75,8 @@ test('changeEditorHeight generates correct action object', () => {
     type: actionTypes.CHANGE_EDITOR_HEIGHT,
     payload: {
       height,
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -87,8 +87,8 @@ test('changeEditorWidth generates correct action object', () => {
     type: actionTypes.CHANGE_EDITOR_WIDTH,
     payload: {
       widthChange,
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -99,8 +99,8 @@ test('changeSideContentHeight generates correct action object', () => {
     type: actionTypes.CHANGE_SIDE_CONTENT_HEIGHT,
     payload: {
       height,
-      workspaceLocation: gradingWorkspace
-    }
+      workspaceLocation: gradingWorkspace,
+    },
   });
 });
 
@@ -113,8 +113,8 @@ test('chapterSelect generates correct action object', () => {
     payload: {
       chapter,
       variant,
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -129,8 +129,8 @@ test('chapterSelect generates correct action object for wasm_v1', () => {
       chapter,
       variant,
       wasmEnabled,
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -141,8 +141,8 @@ test('externalLibrarySelect generates correct action object', () => {
     type: actionTypes.PLAYGROUND_EXTERNAL_SELECT,
     payload: {
       externalLibraryName,
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -151,8 +151,8 @@ test('toggleEditorAutorun generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.TOGGLE_EDITOR_AUTORUN,
     payload: {
-      workspaceLocation: gradingWorkspace
-    }
+      workspaceLocation: gradingWorkspace,
+    },
   });
 });
 
@@ -161,9 +161,9 @@ test('beginClearContext generates correct action object', () => {
     chapter: 4,
     external: {
       name: ExternalLibraryNames.SOUNDS,
-      symbols: []
+      symbols: [],
     },
-    globals: []
+    globals: [],
   };
 
   const action = beginClearContext(library, playgroundWorkspace);
@@ -171,8 +171,8 @@ test('beginClearContext generates correct action object', () => {
     type: actionTypes.BEGIN_CLEAR_CONTEXT,
     payload: {
       library,
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -181,8 +181,8 @@ test('clearReplInput generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.CLEAR_REPL_INPUT,
     payload: {
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -191,8 +191,8 @@ test('clearReplOutputLast generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.CLEAR_REPL_OUTPUT_LAST,
     payload: {
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -201,8 +201,8 @@ test('clearReplOutput generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.CLEAR_REPL_OUTPUT,
     payload: {
-      workspaceLocation: gradingWorkspace
-    }
+      workspaceLocation: gradingWorkspace,
+    },
   });
 });
 
@@ -211,9 +211,9 @@ test('endClearContext generates correct action object', () => {
     chapter: 4,
     external: {
       name: ExternalLibraryNames.SOUNDS,
-      symbols: []
+      symbols: [],
     },
-    globals: []
+    globals: [],
   };
 
   const action = endClearContext(library, playgroundWorkspace);
@@ -221,15 +221,15 @@ test('endClearContext generates correct action object', () => {
     type: actionTypes.END_CLEAR_CONTEXT,
     payload: {
       library,
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
 test('ensureLibrariesLoaded generates correct action object', () => {
   const action = ensureLibrariesLoaded();
   expect(action).toEqual({
-    type: actionTypes.ENSURE_LIBRARIES_LOADED
+    type: actionTypes.ENSURE_LIBRARIES_LOADED,
   });
 });
 
@@ -238,8 +238,8 @@ test('evalEditor generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.EVAL_EDITOR,
     payload: {
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -248,8 +248,8 @@ test('evalRepl generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.EVAL_REPL,
     payload: {
-      workspaceLocation: gradingWorkspace
-    }
+      workspaceLocation: gradingWorkspace,
+    },
   });
 });
 
@@ -260,8 +260,8 @@ test('evalTestcase generates correct action object', () => {
     type: actionTypes.EVAL_TESTCASE,
     payload: {
       testcaseId,
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -272,8 +272,8 @@ test('updateEditorValue generates correct action object', () => {
     type: actionTypes.UPDATE_EDITOR_VALUE,
     payload: {
       newEditorValue,
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -284,8 +284,8 @@ test('setEditorBreakpoint generates correct action object', () => {
     type: actionTypes.UPDATE_EDITOR_BREAKPOINTS,
     payload: {
       breakpoints,
-      workspaceLocation: gradingWorkspace
-    }
+      workspaceLocation: gradingWorkspace,
+    },
   });
 });
 
@@ -296,8 +296,8 @@ test('highlightEditorLine generates correct action object', () => {
     type: actionTypes.HIGHLIGHT_LINE,
     payload: {
       highlightedLines,
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -308,8 +308,8 @@ test('updateReplValue generates correct action object', () => {
     type: actionTypes.UPDATE_REPL_VALUE,
     payload: {
       newReplValue,
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -321,8 +321,8 @@ test('sendReplInputToOutput generates correct action object', () => {
     payload: {
       type: 'code',
       value: newOutput,
-      workspaceLocation: gradingWorkspace
-    }
+      workspaceLocation: gradingWorkspace,
+    },
   });
 });
 
@@ -333,8 +333,8 @@ test('resetTestcase generates correct action object', () => {
     type: actionTypes.RESET_TESTCASE,
     payload: {
       workspaceLocation: assessmentWorkspace,
-      index
-    }
+      index,
+    },
   });
 });
 
@@ -343,8 +343,8 @@ test('resetWorkspace generates correct default action object', () => {
   expect(action).toEqual({
     type: actionTypes.RESET_WORKSPACE,
     payload: {
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -355,8 +355,8 @@ test('resetWorkspace generates correct action object with provided workspace', (
     type: actionTypes.RESET_WORKSPACE,
     payload: {
       workspaceLocation: assessmentWorkspace,
-      workspaceOptions
-    }
+      workspaceOptions,
+    },
   });
 });
 
@@ -367,8 +367,8 @@ test('updateActiveTab generates correct action object', () => {
     type: actionTypes.UPDATE_ACTIVE_TAB,
     payload: {
       activeTab,
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -380,8 +380,8 @@ test('updateCurrentAssessmentId generates correct action object', () => {
     type: actionTypes.UPDATE_CURRENT_ASSESSMENT_ID,
     payload: {
       assessmentId,
-      questionId
-    }
+      questionId,
+    },
   });
 });
 
@@ -393,8 +393,8 @@ test('updateCurrentSubmissionId generates correct action object', () => {
     type: actionTypes.UPDATE_CURRENT_SUBMISSION_ID,
     payload: {
       submissionId,
-      questionId
-    }
+      questionId,
+    },
   });
 });
 
@@ -405,8 +405,8 @@ test('updateHasUnsavedChanges generates correct action object', () => {
     type: actionTypes.UPDATE_HAS_UNSAVED_CHANGES,
     payload: {
       workspaceLocation: assessmentWorkspace,
-      hasUnsavedChanges
-    }
+      hasUnsavedChanges,
+    },
   });
 });
 
@@ -417,8 +417,8 @@ test('navigateToDeclaration generates correct action object', () => {
     type: actionTypes.NAV_DECLARATION,
     payload: {
       workspaceLocation: playgroundWorkspace,
-      cursorPosition
-    }
+      cursorPosition,
+    },
   });
 });
 
@@ -429,7 +429,7 @@ test('moveCursor generates correct action object', () => {
     type: actionTypes.MOVE_CURSOR,
     payload: {
       workspaceLocation: playgroundWorkspace,
-      cursorPosition
-    }
+      cursorPosition,
+    },
   });
 });

@@ -232,17 +232,17 @@ export const sourceLanguages: ISourceLanguage[] = [
   { chapter: 3, variant: 'default', wasmEnabled: false },
   { chapter: 3, variant: 'concurrent', wasmEnabled: false },
   { chapter: 3, variant: 'non-det', wasmEnabled: false },
-  { chapter: 4, variant: 'default', wasmEnabled: false }
+  { chapter: 4, variant: 'default', wasmEnabled: false },
 ];
 
 const variantDisplay: Map<Variant, string> = new Map([
   ['non-det', 'Non-Det'],
-  ['concurrent', 'Concurrent']
+  ['concurrent', 'Concurrent'],
 ]);
 export const languageURLNames: Map<string, ISourceLanguage> = new Map([
   ['1_WasmEnabled', { chapter: 1, variant: 'non-det', wasmEnabled: true }],
   ['3_Non_Det', { chapter: 3, variant: 'non-det', wasmEnabled: false }],
-  ['3_Concurrent', { chapter: 3, variant: 'concurrent', wasmEnabled: false }]
+  ['3_Concurrent', { chapter: 3, variant: 'concurrent', wasmEnabled: false }],
 ]);
 
 export const urlName = (chapter: number, variant: Variant = 'default'): string => {

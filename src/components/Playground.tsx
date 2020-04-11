@@ -252,7 +252,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
           openLinksInNewWindow={true}
         />
       ),
-      id: SideContentType.introduction
+      id: SideContentType.introduction,
     };
 
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
@@ -293,7 +293,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
           sessionButtons,
           executionTime,
         ],
-        replButtons: [this.props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton]
+        replButtons: [this.props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton],
       },
       editorProps: {
         sourceChapter: this.props.sourceChapter,
@@ -425,13 +425,6 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     });
   }
 }
-
-const playgroundIntroductionTab: SideContentTab = {
-  label: 'Introduction',
-  iconName: IconNames.COMPASS,
-  body: <Markdown content={INTRODUCTION} openLinksInNewWindow={true} />,
-  id: SideContentType.introduction,
-};
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
