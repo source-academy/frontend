@@ -24,6 +24,7 @@ export interface IStateProps {
   accessToken?: string;
   currentPlaygroundChapter: number;
   currentPlaygroundVariant: Variant;
+  currentPlaygroundWasmEnabled: boolean;
   role?: Role;
   title: string;
   name?: string;
@@ -34,6 +35,7 @@ export interface IDispatchProps {
   handleClearContext: (
     chapter: number,
     variant: Variant,
+    wasmEnabled: boolean,
     externalLibraryName: ExternalLibraryName
   ) => void;
   handleEditorValueChange: (val: string) => void;
@@ -98,12 +100,13 @@ const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props);
   const chapter = parseChapter(props) || props.currentPlaygroundChapter;
   const variant = parseVariant(props) || props.currentPlaygroundVariant;
+  const wasmEnabled = parseWasmEnabled(props) || props.currentPlaygroundWasmEnabled;
   const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibrary;
   const execTime = parseExecTime(props);
   if (prgrm) {
     props.handleEditorValueChange(prgrm);
     props.handleEnsureLibrariesLoaded();
-    props.handleClearContext(chapter, variant, externalLibraryName);
+    props.handleClearContext(chapter, variant, wasmEnabled, externalLibraryName);
     props.handleExternalLibrarySelect(externalLibraryName);
     props.handleSetExecTime(execTime);
   }
@@ -138,6 +141,16 @@ const parseVariant = (props: RouteComponentProps<{}>) => {
     : 'default';
 
   return variant;
+};
+
+const parseWasmEnabled = (props: RouteComponentProps<{}>) => {
+  const chapQuery = qs.parse(props.location.hash).chap;
+
+  const wasmEnabled: boolean = languageURLNames.has(chapQuery)
+    ? languageURLNames.get(chapQuery)!.wasmEnabled
+    : 'false';
+
+  return wasmEnabled;
 };
 
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
