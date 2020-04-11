@@ -49,6 +49,14 @@ clicking and dragging on the right border of the editor, or the top border of
 the REPL.
 `;
 
+const CONCURRENT_SOURCE_INTRODUCTION = `
+
+In Source ${CHAP}3 Concurrent, all programs are concurrent programs. Hence, they do not return any
+result, and can only reflect trace through calls to the \`display\` function. This includes
+programs that only use one thread and do not make any calls to \`concurrent_execute\`. To
+run programs concurrently, use the \`concurrent_execute\` function. You may refer to Source
+${CHAP}3 Concurrent specifications for more details.`;
+
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
@@ -232,6 +240,21 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       />
     );
 
+    const playgroundIntroductionTab: SideContentTab = {
+      label: 'Introduction',
+      iconName: IconNames.COMPASS,
+      body: (
+        <Markdown
+          content={
+            INTRODUCTION +
+            (this.props.sourceVariant === 'concurrent' ? CONCURRENT_SOURCE_INTRODUCTION : '')
+          }
+          openLinksInNewWindow={true}
+        />
+      ),
+      id: SideContentType.introduction
+    };
+
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
     // Conditional logic for tab rendering
@@ -250,7 +273,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(listVisualizerTab);
     }
-    if (this.props.sourceChapter >= 3) {
+    if (this.props.sourceChapter >= 3 && this.props.sourceVariant !== 'concurrent') {
       // Enable Inspector, Env Visualizer for Source Chapter 3 and above
       tabs.push(inspectorTab);
       tabs.push(envVisualizerTab);
@@ -266,14 +289,15 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
           autorunButtons,
           shareButton,
           chapterSelect,
-          externalLibrarySelect,
+          this.props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           sessionButtons,
           executionTime,
         ],
-        replButtons: [evalButton, clearButton],
+        replButtons: [this.props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton]
       },
       editorProps: {
         sourceChapter: this.props.sourceChapter,
+        sourceVariant: this.props.sourceVariant,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleDeclarationNavigate: this.props.handleDeclarationNavigate,
@@ -326,6 +350,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {
         sourceChapter: this.props.sourceChapter,
+        sourceVariant: this.props.sourceVariant,
         output: this.props.output,
         replValue: this.props.replValue,
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
