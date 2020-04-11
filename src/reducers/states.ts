@@ -222,19 +222,22 @@ export enum Role {
 export interface ISourceLanguage {
   chapter: number;
   variant: Variant;
+  wasmEnabled: boolean;
 }
 
 export const sourceLanguages: ISourceLanguage[] = [
-  { chapter: 1, variant: 'default' },
-  { chapter: 2, variant: 'default' },
-  { chapter: 3, variant: 'default' },
-  { chapter: 3, variant: 'non-det' },
-  { chapter: 4, variant: 'default' }
+  { chapter: 1, variant: 'default', wasmEnabled: true },
+  { chapter: 1, variant: 'default', wasmEnabled: false },
+  { chapter: 2, variant: 'default', wasmEnabled: false },
+  { chapter: 3, variant: 'default', wasmEnabled: false },
+  { chapter: 3, variant: 'non-det', wasmEnabled: false },
+  { chapter: 4, variant: 'default', wasmEnabled: false }
 ];
 
 const variantDisplay: Map<Variant, string> = new Map([['non-det', 'Non-Det']]);
 export const languageURLNames: Map<string, ISourceLanguage> = new Map([
-  ['3_Non_Det', { chapter: 3, variant: 'non-det' }]
+  ['1_Wasm_Enabled', {chapter: 1, variant: 'default', wasmEnabled: 'true' }],
+  ['3_Non_Det', { chapter: 3, variant: 'non-det', wasmEnabled: 'false' }]
 ]);
 
 export const urlName = (chapter: number, variant: Variant = 'default'): string => {

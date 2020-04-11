@@ -50,11 +50,13 @@ export const changeSideContentHeight = (height: number, workspaceLocation: Works
 export const chapterSelect = (
   chapter: number,
   variant: Variant,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
+  wasmEnabled: boolean
 ) =>
   action(actionTypes.CHAPTER_SELECT, {
     chapter,
     variant,
+    wasmEnabled,
     workspaceLocation
   });
 
