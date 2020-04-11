@@ -13,11 +13,13 @@ test('Application renders correctly', () => {
     title: 'Cadet',
     currentPlaygroundChapter: 2,
     currentPlaygroundVariant: 'default',
+    currentPlaygroundWasmEnabled: false,
     handleLogOut: () => {},
     currentExternalLibrary: ExternalLibraryNames.NONE,
     handleClearContext: (
       chapter: number,
       variant: Variant,
+      wasmEnabled: boolean,
       externalLibraryName: ExternalLibraryName
     ) => {},
     handleEditorValueChange: (val: string) => {},

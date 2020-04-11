@@ -118,6 +118,22 @@ test('chapterSelect generates correct action object', () => {
   });
 });
 
+test('chapterSelect generates correct action object for wasm_v1', () => {
+  const chapter = 1;
+  const variant = 'default';
+  const wasmEnabled = true;
+  const action = chapterSelect(chapter, variant, playgroundWorkspace, wasmEnabled);
+  expect(action).toEqual({
+    type: actionTypes.CHAPTER_SELECT,
+    payload: {
+      chapter,
+      variant,
+      wasmEnabled,
+      workspaceLocation: playgroundWorkspace
+    }
+  });
+});
+
 test('externalLibrarySelect generates correct action object', () => {
   const externalLibraryName = ExternalLibraryNames.SOUNDS;
   const action = externalLibrarySelect(externalLibraryName, assessmentWorkspace);
