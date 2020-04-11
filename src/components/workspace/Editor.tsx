@@ -9,6 +9,7 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
+import { Variant } from 'js-slang/dist/types';
 import { LINKS } from '../../utils/constants';
 import AceRange from './AceRange';
 import { checkSessionIdExists } from './collabEditing/helper';
@@ -31,6 +32,7 @@ export interface IEditorProps {
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
+  sourceVariant?: Variant;
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
@@ -181,10 +183,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   // chapter selector used to choose the correct source mode
   public chapterNo = () => {
     let chapter = this.props.sourceChapter;
+    let variant = this.props.sourceVariant;
     if (chapter === undefined) {
       chapter = 1;
     }
-    HighlightRulesSelector(chapter);
+    if (variant === undefined) {
+      variant = 'default';
+    }
+    HighlightRulesSelector(chapter, variant);
     ModeSelector(chapter);
     return 'source' + chapter.toString();
   };
