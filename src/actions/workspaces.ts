@@ -21,7 +21,7 @@ export enum WorkspaceLocations {
   playground = 'playground',
   grading = 'grading',
   sourcecast = 'sourcecast',
-  sourcereel = 'sourcereel'
+  sourcereel = 'sourcereel',
 }
 
 export type WorkspaceLocation = keyof typeof WorkspaceLocations;
@@ -57,7 +57,7 @@ export const chapterSelect = (
     chapter,
     variant,
     wasmEnabled,
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const externalLibrarySelect = (
@@ -66,7 +66,7 @@ export const externalLibrarySelect = (
 ) =>
   action(actionTypes.PLAYGROUND_EXTERNAL_SELECT, {
     externalLibraryName,
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const toggleEditorAutorun = (workspaceLocation: WorkspaceLocation) =>
@@ -91,7 +91,7 @@ export const updateActiveTab = (activeTab: SideContentType, workspaceLocation: W
 export const beginClearContext = (library: Library, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.BEGIN_CLEAR_CONTEXT, {
     library,
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const clearReplInput = (workspaceLocation: WorkspaceLocation) =>
@@ -118,7 +118,7 @@ export const clearReplOutputLast = (workspaceLocation: WorkspaceLocation) =>
 export const endClearContext = (library: Library, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.END_CLEAR_CONTEXT, {
     library,
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const ensureLibrariesLoaded = () => action(actionTypes.ENSURE_LIBRARIES_LOADED);
@@ -150,7 +150,7 @@ export const sendReplInputToOutput = (newOutput: string, workspaceLocation: Work
   action(actionTypes.SEND_REPL_INPUT_TO_OUTPUT, {
     type: 'code',
     workspaceLocation,
-    value: newOutput
+    value: newOutput,
   });
 
 export const resetTestcase = (workspaceLocation: WorkspaceLocation, index: number) =>
@@ -179,7 +179,7 @@ export const resetWorkspace = (
 ) =>
   action(actionTypes.RESET_WORKSPACE, {
     workspaceLocation,
-    workspaceOptions
+    workspaceOptions,
   });
 
 export const updateWorkspace = (
@@ -188,25 +188,25 @@ export const updateWorkspace = (
 ) =>
   action(actionTypes.UPDATE_WORKSPACE, {
     workspaceLocation,
-    workspaceOptions
+    workspaceOptions,
   });
 
 export const setEditorReadonly = (workspaceLocation: WorkspaceLocation, editorReadonly: boolean) =>
   action(actionTypes.SET_EDITOR_READONLY, {
     workspaceLocation,
-    editorReadonly
+    editorReadonly,
   });
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>
   action(actionTypes.UPDATE_CURRENT_ASSESSMENT_ID, {
     assessmentId,
-    questionId
+    questionId,
   });
 
 export const updateCurrentSubmissionId = (submissionId: number, questionId: number) =>
   action(actionTypes.UPDATE_CURRENT_SUBMISSION_ID, {
     submissionId,
-    questionId
+    questionId,
   });
 
 export const updateHasUnsavedChanges = (
@@ -215,7 +215,7 @@ export const updateHasUnsavedChanges = (
 ) =>
   action(actionTypes.UPDATE_HAS_UNSAVED_CHANGES, {
     workspaceLocation,
-    hasUnsavedChanges
+    hasUnsavedChanges,
   });
 
 export const promptAutocomplete = (
@@ -228,5 +228,5 @@ export const promptAutocomplete = (
     workspaceLocation,
     row,
     column,
-    callback
+    callback,
   });

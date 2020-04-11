@@ -19,7 +19,7 @@ import {
   ExecutionTime,
   ExternalLibrarySelect,
   SessionButtons,
-  ShareButton
+  ShareButton,
 } from './workspace/controlBar/index';
 import { IPosition } from './workspace/Editor';
 import { SideContentTab } from './workspace/side-content';
@@ -124,7 +124,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     this.state = {
       isGreen: false,
       selectedTab: SideContentType.introduction,
-      hasBreakpoints: false
+      hasBreakpoints: false,
     };
     this.handlers.goGreen = this.toggleIsGreen.bind(this);
     (window as any).thePlayground = this;
@@ -135,7 +135,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       label: 'Substituter',
       iconName: IconNames.FLOW_REVIEW,
       body: <SubstVisualizer content={this.processArrayOutput(this.props.output)} />,
-      id: SideContentType.substVisualizer
+      id: SideContentType.substVisualizer,
     };
 
     const autorunButtons = (
@@ -268,9 +268,9 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
           chapterSelect,
           externalLibrarySelect,
           sessionButtons,
-          executionTime
+          executionTime,
         ],
-        replButtons: [evalButton, clearButton]
+        replButtons: [evalButton, clearButton],
       },
       editorProps: {
         sourceChapter: this.props.sourceChapter,
@@ -289,11 +289,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         newCursorPosition: this.props.newCursorPosition,
         handleEditorUpdateBreakpoints: (breakpoints: string[]) => {
           // get rid of holes in array
-          const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
+          const numberOfBreakpoints = breakpoints.filter((arrayItem) => !!arrayItem).length;
           if (numberOfBreakpoints > 0) {
             this.setState({
               ...this.state,
-              hasBreakpoints: true
+              hasBreakpoints: true,
             });
             if (this.props.sourceChapter <= 2) {
               /**
@@ -307,7 +307,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
           if (numberOfBreakpoints === 0) {
             this.setState({
               ...this.state,
-              hasBreakpoints: false
+              hasBreakpoints: false,
             });
 
             if (this.state.selectedTab !== SideContentType.substVisualizer) {
@@ -317,7 +317,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
           }
           this.props.handleEditorUpdateBreakpoints(breakpoints);
         },
-        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus
+        handleSetWebsocketStatus: this.props.handleSetWebsocketStatus,
       },
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
@@ -333,16 +333,16 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
         hidden: this.state.selectedTab === SideContentType.substVisualizer,
-        usingSubst: this.props.usingSubst
+        usingSubst: this.props.usingSubst,
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
         defaultSelectedTabId: this.state.selectedTab,
         handleActiveTabChange: this.props.handleActiveTabChange,
         onChange: this.onChangeTabs,
-        tabs
+        tabs,
       },
-      sideContentIsResizeable: this.state.selectedTab !== SideContentType.substVisualizer
+      sideContentIsResizeable: this.state.selectedTab !== SideContentType.substVisualizer,
     };
 
     return (
@@ -380,7 +380,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 
     this.setState({
       ...this.state,
-      selectedTab: newTabId
+      selectedTab: newTabId,
     });
   };
 
@@ -396,7 +396,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   private toggleIsGreen() {
     this.setState({
       ...this.state,
-      isGreen: !this.state.isGreen
+      isGreen: !this.state.isGreen,
     });
   }
 }
@@ -405,40 +405,40 @@ const playgroundIntroductionTab: SideContentTab = {
   label: 'Introduction',
   iconName: IconNames.COMPASS,
   body: <Markdown content={INTRODUCTION} openLinksInNewWindow={true} />,
-  id: SideContentType.introduction
+  id: SideContentType.introduction,
 };
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <ListVisualizer />,
-  id: SideContentType.dataVisualiser
+  id: SideContentType.dataVisualiser,
 };
 
 const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   iconName: IconNames.MOBILE_VIDEO,
-  body: <VideoDisplay />
+  body: <VideoDisplay />,
 };
 
 const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
-  body: <FaceapiDisplay />
+  body: <FaceapiDisplay />,
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <Inspector />,
-  id: SideContentType.inspector
+  id: SideContentType.inspector,
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
-  id: SideContentType.envVisualiser
+  id: SideContentType.envVisualiser,
 };
 
 export default Playground;
