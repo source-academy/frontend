@@ -226,7 +226,7 @@ export interface ISourceLanguage {
 
 export const sourceLanguages: ISourceLanguage[] = [
   { chapter: 1, variant: 'default' },
-  { chapter: 1, variant: 'wasm'},
+  { chapter: 1, variant: 'wasm' },
   { chapter: 2, variant: 'default' },
   { chapter: 3, variant: 'default' },
   { chapter: 3, variant: 'concurrent' },
