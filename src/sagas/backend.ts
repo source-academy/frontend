@@ -566,17 +566,17 @@ function* backendSaga(): SagaIterator {
     const id = action.payload.id;
     const closeAt = action.payload.closeAt;
     const openAt = action.payload.openAt;
-    const errorMessageWrapper: string[] = ['Something went wrong'];
-    const resp: Response = yield request.changeDateAssessment(
+    const respMsg: string | null = yield request.changeDateAssessment(
       id,
       closeAt,
       openAt,
       tokens,
-      errorMessageWrapper
     );
-
-    if (!resp || !resp.ok) {
-      yield call(showWarningMessage, errorMessageWrapper[0], 5000);
+    if (respMsg == null) {
+      yield request.handleResponseError(respMsg);
+      return;
+    } else if (respMsg !== 'OK') {
+      yield call(showWarningMessage, respMsg, 5000);
       return;
     }
 
@@ -637,24 +637,21 @@ function* backendSaga(): SagaIterator {
     }));
     const file = action.payload.file;
     const forceUpdate = action.payload.forceUpdate;
-    const responseMessageWrapper = ['Something went wrong'];
-    const resp: Response = yield request.uploadAssessment(
+    const respMsg = yield request.uploadAssessment(
       file,
       tokens,
-      responseMessageWrapper,
       forceUpdate
     );
-    if (resp) {
-      if (responseMessageWrapper[0] === 'OK') {
-        yield call(showSuccessMessage, 'Uploaded successfully!', 2000);
-      } else if (responseMessageWrapper[0] === 'Force Update OK') {
-        yield call(showSuccessMessage, 'Assessment force updated successfully!', 2000);
-      } else {
-        yield call(showWarningMessage, responseMessageWrapper[0], 10000);
-        return;
-      }
+    if (!respMsg) {
+      yield request.handleResponseError(respMsg);
+    } else if (respMsg === 'OK') {
+      yield call(showSuccessMessage, 'Uploaded successfully!', 2000);
+    } else if (respMsg === 'Force Update OK') {
+      yield call(showSuccessMessage, 'Assessment force updated successfully!', 2000);
+    } else {
+      yield call(showWarningMessage, respMsg, 10000);
+      return;
     }
-
     yield put(actions.fetchAssessmentOverviews());
   });
 }

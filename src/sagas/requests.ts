@@ -598,7 +598,6 @@ export async function changeDateAssessment(
   closeAt: string,
   openAt: string,
   tokens: Tokens,
-  errorMessageWrapper: string[]
 ) {
   const resp = await request(`assessments/update/${id}`, 'POST', {
     accessToken: tokens.accessToken,
@@ -608,10 +607,7 @@ export async function changeDateAssessment(
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  if (resp && !resp.ok) {
-    await resp.text().then(errmsg => (errorMessageWrapper[0] = errmsg));
-  }
-  return resp;
+  return resp ? await resp.text() : null;
 }
 
 export async function deleteAssessment(id: number, tokens: Tokens) {
@@ -640,7 +636,6 @@ export async function publishAssessment(id: number, bool: boolean, tokens: Token
 export const uploadAssessment = async (
   file: File,
   tokens: Tokens,
-  responseMessageWrapper: string[],
   forceUpdate: boolean
 ) => {
   const formData = new FormData();
@@ -655,10 +650,7 @@ export const uploadAssessment = async (
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  if (resp) {
-    await resp.text().then(errmsg => (responseMessageWrapper[0] = errmsg));
-  }
-  return resp;
+  return resp ? await resp.text() : null;
 };
 
 /**
