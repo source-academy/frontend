@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import { ActionType } from 'typesafe-actions';
 
 import * as actions from '../actions';
-import { UPDATE_GROUPS_INFO } from '../actions/actionTypes';
+import { UPDATE_GROUP_OVERVIEWS } from '../actions/actionTypes';
 import { defaultDashBoard, IDashBoardState } from './states';
 
 export const reducer: Reducer<IDashBoardState> = (
@@ -10,10 +10,10 @@ export const reducer: Reducer<IDashBoardState> = (
   action: ActionType<typeof actions>
 ) => {
   switch (action.type) {
-    case UPDATE_GROUPS_INFO:
+    case UPDATE_GROUP_OVERVIEWS:
       return {
         ...state,
-        groupsInfo: action.payload
+        groupOverviews: action.payload
       };
     default:
       return state;

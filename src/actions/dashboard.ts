@@ -2,7 +2,9 @@ import { action } from 'typesafe-actions';
 
 import * as actionTypes from './actionTypes';
 
-export const fetchGroupsInfo = () => action(actionTypes.FETCH_GROUPS_INFO);
+import { IGroupOverview } from '../components/dashboard/groupShape';
 
-export const updateGroupsInfo = (groupsInfo: object) =>
-  action(actionTypes.UPDATE_GROUPS_INFO, groupsInfo);
+export const fetchGroupOverviews = () => action(actionTypes.FETCH_GROUP_OVERVIEWS);
+
+export const updateGroupOverviews = (groupOverviews: IGroupOverview[]) =>
+  action(actionTypes.UPDATE_GROUP_OVERVIEWS, groupOverviews);

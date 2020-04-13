@@ -12,6 +12,7 @@ import {
   IAssessmentOverview,
   ITestcase
 } from '../components/assessment/assessmentShape';
+import { IGroupOverview } from '../components/dashboard/groupShape';
 import { DirectoryData, MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
 import {
@@ -45,7 +46,7 @@ export interface IApplicationState {
 }
 
 export interface IDashBoardState {
-  readonly groupsInfo: object;
+  readonly groupOverviews: IGroupOverview[];
 }
 
 export interface IPlaygroundState {
@@ -245,7 +246,7 @@ export const defaultApplication: IApplicationState = {
 };
 
 export const defaultDashBoard: IDashBoardState = {
-  groupsInfo: {}
+  groupOverviews: []
 };
 
 export const defaultPlayground: IPlaygroundState = {

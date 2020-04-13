@@ -6,6 +6,7 @@ import * as React from 'react';
 
 import { GradingOverview } from '../academy/grading/gradingShape';
 import ContentDisplay from '../commons/ContentDisplay';
+import { IGroupOverview } from './groupShape';
 
 type State = {
   filterValue: string;
@@ -21,12 +22,12 @@ interface IDashboardProps extends IDispatchProps, IStateProps {}
 
 export interface IDispatchProps {
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
-  handleFetchGroupsInfo: () => void;
+  handleFetchGroupOverviews: () => void;
 }
 
 export interface IStateProps {
   gradingOverviews: GradingOverview[];
-  groupsInfo: object;
+  groupOverviews: IGroupOverview[];
 }
 
 export type LeaderBoardInfo = {
@@ -68,7 +69,7 @@ class Dashboard extends React.Component<IDashboardProps, State> {
   }
 
   public componentDidMount() {
-    this.props.handleFetchGroupsInfo();
+    this.props.handleFetchGroupOverviews();
   }
 
   public componentDidUpdate(prevProps: IDashboardProps, prevState: State) {
@@ -113,7 +114,7 @@ class Dashboard extends React.Component<IDashboardProps, State> {
   }
 
   private updateLeaderBoard = () => {
-    if (Object.keys(this.props.groupsInfo).length === 0) {
+    if (this.props.groupOverviews.length === 0) {
       return [];
     }
     const gradingOverview: GradingOverview[] = this.filterSubmissionsByCategory();
@@ -123,35 +124,39 @@ class Dashboard extends React.Component<IDashboardProps, State> {
         continue;
       }
       const groupName = current.groupName;
-      // Keys for the groupsInfo object
-      const id = 'id';
-      const avengerName = 'avengerName';
-      const index = this.props.groupsInfo[groupName][id];
-      if (filteredData[index] === undefined) {
-        filteredData[index] = {
-          avengerName: this.props.groupsInfo[groupName][avengerName],
-          numOfUngradedMissions: 0,
-          totalNumOfMissions: 0,
-          numOfUngradedQuests: 0,
-          totalNumOfQuests: 0
-        };
-      }
+      const group = this.props.groupOverviews.find(x => x.groupName === groupName);
 
-      const currentEntry = filteredData[index];
-      const gradingStatus = current.gradingStatus;
+      if (group) {
+        const index = group.id;
+        if (filteredData[index] === undefined) {
+          filteredData[index] = {
+            avengerName: group.avengerName,
+            numOfUngradedMissions: 0,
+            totalNumOfMissions: 0,
+            numOfUngradedQuests: 0,
+            totalNumOfQuests: 0
+          };
+        }
 
-      if (current.assessmentCategory === 'Mission') {
-        if (gradingStatus === 'none' || gradingStatus === 'grading') {
-          currentEntry.numOfUngradedMissions++;
+        const currentEntry = filteredData[index];
+        const gradingStatus = current.gradingStatus;
+    
+        if (current.assessmentCategory === 'Mission') {
+          if (gradingStatus === 'none' || gradingStatus === 'grading') {
+            currentEntry.numOfUngradedMissions++;
+          }
+          currentEntry.totalNumOfMissions++;
+        } else {
+          if (gradingStatus === 'none' || gradingStatus === 'grading') {
+            currentEntry.numOfUngradedQuests++;
+          }
+          currentEntry.totalNumOfQuests++;
         }
-        currentEntry.totalNumOfMissions++;
-      } else {
-        if (gradingStatus === 'none' || gradingStatus === 'grading') {
-          currentEntry.numOfUngradedQuests++;
-        }
-        currentEntry.totalNumOfQuests++;
       }
     }
+      
+
+      
     return filteredData;
   };
 
