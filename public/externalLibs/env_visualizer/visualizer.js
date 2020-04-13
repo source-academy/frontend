@@ -16,7 +16,7 @@
   const frameFontSetting = '14px Roboto Mono, Courier New';
   const FNOBJECT_RADIUS = 12; // radius of function object circle
   const DATA_OBJECT_SIDE = 24; // length of data object triangle
-  const DRAWING_LEFT_PADDING = 50; // left padding for entire drawing
+  const DRAWING_LEFT_PADDING = 70; // left padding for entire drawing
   const FRAME_HEIGHT_LINE = 55; // height in px of each line of text in a frame;
   const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
   const FRAME_WIDTH_CHAR = 8; // width in px of each text character in a frame;
@@ -60,22 +60,14 @@
     // d1 and d2 are 2 dataObjects, check if d2 is identical to d1
     // or a sub data structure of d1
     if (!Array.isArray(d1)) {
-      if(isFunction(d1) && isFunction(d2) && d1 == d2) {
-        return true;
-      } else {
-        return false;
-      }
+      return false;
     } else if (d2 === d1) {
       return true;
-    } else if(d1.length == 2) {
+    } else if(is_Array(d1)) {
+      return false;
+    } else {
       return checkSubStructure(d1[0], d2)
         || checkSubStructure(d1[1], d2);
-    } else {
-      let containsSubStructure = false;
-      for(let i = 0; !containsSubStructure && i < d1.length; i++) {
-        containsSubStructure = checkSubStructure(d1[i], d2)
-      }
-      return containsSubStructure;
     }
   }
 
@@ -381,6 +373,9 @@
     context.restore();
     context.font = '14px Roboto Mono Light, Courier New';
     // draws data in the head and tail
+
+    let is_Arr = false;
+
     if (Array.isArray(dataObject[0])) {
       const result = drawThis(dataObject[0]);
       const draw = result.draw;
@@ -388,6 +383,7 @@
       if (draw) {
         const shiftY = calculatePairShift(dataObject[1]);
         if (is_Array(dataObject[0])) {
+          is_Arr = true;
           drawNestedArrayObject(startX, startY + shiftY);
         } else {
           drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + shiftY);
@@ -492,7 +488,9 @@
     }
 
     // repeat the same provess for the tail of the pair
-    if (Array.isArray(dataObject[1])) {
+    if(is_Arr){
+      // Do nothing
+    } else if (Array.isArray(dataObject[1])) {
       const result = drawThis(dataObject[1]);
       const draw = result.draw;
       if (draw) {
@@ -574,9 +572,9 @@
     } else {
       context.fillText(dataObject[1], startX + 2 * DATA_UNIT_WIDTH/3, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
-      context.strokeStyle = '#999999';
-      context.lineWidth = 2;
-      context.stroke();
+    context.strokeStyle = '#999999';
+    context.lineWidth = 2;
+    context.stroke();
   }
 
   function drawHitPairs(dataObject, hit, wrapper, x0, y0) {
@@ -1161,10 +1159,10 @@
         // Check if parent has x and y coordinates
         // Otherwise use getShiftInfo to calculate
         if(parent[0] === parent[1]){
-          parentWrapper = getWrapperFromDataObject(parent[1])
-          fnObject.x = parentWrapper.x 
-          fnObject.y = parentWrapper.y + FRAME_HEIGHT_LINE
-          if(parent.length > 1 && parent[1][1] == fnObject){
+          parent = getWrapperFromDataObject(parent[1])
+          fnObject.x = parent.x 
+          fnObject.y = parent.y + FRAME_HEIGHT_LINE
+          if(parent.length > 1 && isFunction(parent[1][1])){
             fnObject.x += DATA_UNIT_WIDTH / 2
           }
         } else {
@@ -1411,7 +1409,11 @@
             );
             // Iterate through elements[e], check if function exists in fnObjects	
             // If no, instantiate and add to fnObjects array	
-            findFnInDataObject(elements[e], elements[e], elements[e])
+            // Currently, do not add function objects belonging to arrays (as arrays are not supported yet)
+            if(!is_Array(elements[e])) {
+              findFnInDataObject(elements[e], elements[e], elements[e])
+            }
+            
           }
         }
       });
