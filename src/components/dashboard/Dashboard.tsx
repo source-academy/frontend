@@ -140,7 +140,7 @@ class Dashboard extends React.Component<IDashboardProps, State> {
 
         const currentEntry = filteredData[index];
         const gradingStatus = current.gradingStatus;
-    
+
         if (current.assessmentCategory === 'Mission') {
           if (gradingStatus === 'none' || gradingStatus === 'grading') {
             currentEntry.numOfUngradedMissions++;
@@ -154,9 +154,6 @@ class Dashboard extends React.Component<IDashboardProps, State> {
         }
       }
     }
-      
-
-      
     return filteredData;
   };
 

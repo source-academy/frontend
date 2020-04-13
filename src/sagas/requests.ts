@@ -605,7 +605,7 @@ export async function getGroupOverviews(tokens: Tokens): Promise<IGroupOverview[
   }
 
   const groupOverviews = await resp.json();
-  
+
   return groupOverviews.map((overview: any) => {
     return overview as IGroupOverview;
   });
