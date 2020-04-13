@@ -9,7 +9,7 @@ import Material from '../containers/material/MaterialContainer';
 import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import Sourcecast from '../containers/sourcecast/SourcecastContainer';
-import { languageURLNames, Role } from '../reducers/states';
+import { Role, sourceLanguages } from '../reducers/states';
 import { stringParamToInt } from '../utils/paramParseHelpers';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Contributors from './contributors';
@@ -97,7 +97,7 @@ const toLogin = (props: IApplicationProps) => () => (
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props);
   const chapter = parseChapter(props) || props.currentPlaygroundChapter;
-  const variant = parseVariant(props) || props.currentPlaygroundVariant;
+  const variant = parseVariant(props, chapter) || props.currentPlaygroundVariant;
   const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibrary;
   const execTime = parseExecTime(props);
   if (prgrm) {
@@ -120,9 +120,11 @@ const parsePrgrm = (props: RouteComponentProps<{}>) => {
 
 const parseChapter = (props: RouteComponentProps<{}>) => {
   const chapQuery = qs.parse(props.location.hash).chap;
+  // find a language with this chapter (if any)
+  const langWithMatchingChapter = sourceLanguages.find(language => language.chapter === chapQuery);
 
-  const chap: number = languageURLNames.has(chapQuery)
-    ? languageURLNames.get(chapQuery)!.chapter
+  const chap: number = langWithMatchingChapter
+    ? langWithMatchingChapter.chapter
     : chapQuery === undefined
     ? NaN
     : parseInt(chapQuery, 10);
@@ -130,12 +132,14 @@ const parseChapter = (props: RouteComponentProps<{}>) => {
   return chap ? chap : undefined;
 };
 
-const parseVariant = (props: RouteComponentProps<{}>) => {
-  const chapQuery = qs.parse(props.location.hash).chap;
+const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
+  const chapQuery = qs.parse(props.location.hash).variant;
+  // find a language with this variant and chapter (if any)
+  const matchingLang = sourceLanguages.find(
+    language => language.chapter === chap && language.variant === chapQuery
+  );
 
-  const variant: Variant = languageURLNames.has(chapQuery)
-    ? languageURLNames.get(chapQuery)!.variant
-    : 'default';
+  const variant: Variant = matchingLang ? matchingLang.variant : 'default';
 
   return variant;
 };
