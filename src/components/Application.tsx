@@ -133,10 +133,10 @@ const parseChapter = (props: RouteComponentProps<{}>) => {
 };
 
 const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
-  const chapQuery = qs.parse(props.location.hash).variant;
+  const variantQuery = qs.parse(props.location.hash).variant;
   // find a language with this variant and chapter (if any)
   const matchingLang = sourceLanguages.find(
-    language => language.chapter === chap && language.variant === chapQuery
+    language => language.chapter === chap && language.variant === variantQuery
   );
 
   const variant: Variant = matchingLang ? matchingLang.variant : 'default';
