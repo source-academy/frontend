@@ -9,18 +9,21 @@ import Material from '../containers/material/MaterialContainer';
 import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import Sourcecast from '../containers/sourcecast/SourcecastContainer';
-import { Role, sourceChapters } from '../reducers/states';
+import { Role, sourceLanguages } from '../reducers/states';
 import { stringParamToInt } from '../utils/paramParseHelpers';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Contributors from './contributors';
 import NavigationBar from './NavigationBar';
 import NotFound from './NotFound';
 
+import { Variant } from 'js-slang/dist/types';
+
 export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
   accessToken?: string;
   currentPlaygroundChapter: number;
+  currentPlaygroundVariant: Variant;
   role?: Role;
   title: string;
   name?: string;
@@ -28,7 +31,11 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-  handleClearContext: (chapter: number, externalLibraryName: ExternalLibraryName) => void;
+  handleClearContext: (
+    chapter: number,
+    variant: Variant,
+    externalLibraryName: ExternalLibraryName
+  ) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleEnsureLibrariesLoaded: () => void;
@@ -90,12 +97,13 @@ const toLogin = (props: IApplicationProps) => () => (
 const parsePlayground = (props: IApplicationProps) => {
   const prgrm = parsePrgrm(props);
   const chapter = parseChapter(props) || props.currentPlaygroundChapter;
+  const variant = parseVariant(props, chapter) || props.currentPlaygroundVariant;
   const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibrary;
   const execTime = parseExecTime(props);
   if (prgrm) {
     props.handleEditorValueChange(prgrm);
     props.handleEnsureLibrariesLoaded();
-    props.handleClearContext(chapter, externalLibraryName);
+    props.handleClearContext(chapter, variant, externalLibraryName);
     props.handleExternalLibrarySelect(externalLibraryName);
     props.handleSetExecTime(execTime);
   }
@@ -112,8 +120,28 @@ const parsePrgrm = (props: RouteComponentProps<{}>) => {
 
 const parseChapter = (props: RouteComponentProps<{}>) => {
   const chapQuery = qs.parse(props.location.hash).chap;
-  const chap = chapQuery === undefined ? NaN : parseInt(chapQuery, 10);
-  return sourceChapters.includes(chap) ? chap : undefined;
+  // find a language with this chapter (if any)
+  const langWithMatchingChapter = sourceLanguages.find(language => language.chapter === chapQuery);
+
+  const chap: number = langWithMatchingChapter
+    ? langWithMatchingChapter.chapter
+    : chapQuery === undefined
+    ? NaN
+    : parseInt(chapQuery, 10);
+
+  return chap ? chap : undefined;
+};
+
+const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
+  const variantQuery = qs.parse(props.location.hash).variant;
+  // find a language with this variant and chapter (if any)
+  const matchingLang = sourceLanguages.find(
+    language => language.chapter === chap && language.variant === variantQuery
+  );
+
+  const variant: Variant = matchingLang ? matchingLang.variant : 'default';
+
+  return variant;
 };
 
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {

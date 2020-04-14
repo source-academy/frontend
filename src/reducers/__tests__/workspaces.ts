@@ -24,6 +24,7 @@ import {
   HIGHLIGHT_LINE,
   INIT_INVITE,
   LOG_OUT,
+  MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -491,7 +492,8 @@ describe('END_CLEAR_CONTEXT', () => {
       const context = createContext<WorkspaceLocation>(
         library.chapter,
         library.external.symbols,
-        location
+        location,
+        'default'
       );
 
       expect(result).toEqual({
@@ -1418,6 +1420,26 @@ describe('UPDATE_REPL_VALUE', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           replValue: newReplValue
+        }
+      });
+    });
+  });
+});
+
+describe('MOVE_CURSOR', () => {
+  test('moves cursor correctly', () => {
+    const newCursorPosition = { row: 0, column: 0 };
+    const actions = generateActions(MOVE_CURSOR, { newCursorPosition });
+
+    actions.forEach(action => {
+      const result = reducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+      const cursorPosition = action.payload.cursorPosition;
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          newCursorPosition: cursorPosition
         }
       });
     });
