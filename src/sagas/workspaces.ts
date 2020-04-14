@@ -162,7 +162,12 @@ export default function* workspaceSaga(): SagaIterator {
       score: 1000 // Prioritize suggestions from code
     }));
 
-    const builtinSuggestions = Documentation.builtins[context.chapter] || [];
+    let chapterName = context.chapter.toString();
+    if (context.variant !== 'default') {
+      chapterName += '_' + context.variant;
+    }
+
+    const builtinSuggestions = Documentation.builtins[chapterName] || [];
 
     const extLib = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).externalLibrary
