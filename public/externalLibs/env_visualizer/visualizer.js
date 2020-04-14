@@ -86,10 +86,12 @@
       y: dataObjectWrappers[dataObjects.indexOf(d1)].y + 3/4 * DATA_UNIT_HEIGHT
     }
 
-    // If parent object, point to placeholder object rather than within object
+    // If parent object is array, point to placeholder object rather than within object
     if(d1.length != 2) {
       return result;
     }
+
+    initialiseBasicUnitHeight(d1);
 
     while (d2 !== d1) {
       if (checkSubStructure(d1[0], d2)) {
@@ -1924,7 +1926,7 @@
               substructureExistsHead = true;
             }
           });
-          if (substructureExistsHead) {
+          if (substructureExistsHead || dataPairs.includes(list[0])) {
             if(tailIsFn) {
               return 1;
             } else {
@@ -1932,14 +1934,12 @@
             }
           } else {
             if(tailIsFn){
-              return 1 + recursiveHelper(list[0]);
+              return 1 + (1 + recursiveHelper(list[0]));
             } else {
               return (1 + recursiveHelper(list[0])) + recursiveHelper(list[1]);
             }           
           } 
-        }
-        
-        if(isFunction(list[0])){
+        } else if(isFunction(list[0])){
           let fnObject = fnObjects[fnObjects.indexOf(list[0])]
           let parenttype = fnObject.parenttype;
           let tail_height = 0;
@@ -1972,49 +1972,22 @@
     return recursiveHelper(parentlist)    
   }
 
-  // Calculates list/array height 
-  // Used in frame height calculations
-  function getListHeight(list) {
-    let x = (getUnitHeight(list) + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
-    return x;
+  // Calculates unit height of a list
+  let currentObj = null;
+  function initialiseBasicUnitHeight(dataObject) {
+    currentObj = dataObject;
   }
 
-  // Calculates unit height of a list, ignoring references to other data structures
-  function getBasicUnitHeight(list){
-    if (!Array.isArray(list)) {
-      return 0;
-    } else if (Array.isArray(list[0])) {
-      return 1 + getBasicUnitHeight(list[0]) + getBasicUnitHeight(list[1]);
-    } else if (isFunction(list[0])) {
-      let parenttype = fnObjects[fnObjects.indexOf(list[0])].parenttype;
-      let tail_height = getBasicUnitHeight(list[1])
-      if(parenttype == "frame" || tail_height > 0) {
-        return tail_height;
-      } else {
-        return 1;
-      }
-    } else {
-      return getBasicUnitHeight(list[1]);
-    }
-  }
-
-// Initialise parent data structure before using calculatePairShift
-  let currentObject = null;
-  function initialisePairShift(dataObject) {
-    currentObject = dataObject;
-  }
-
-// Determines the height positioning of pairs in the same data structure 
-  function calculatePairShift(sublist){
+  function getBasicUnitHeight(sublist){
     let otherObjects = [];
     let dataPairs = [];
     let objectStored = false;
     dataObjects.forEach(x => {
-      if(x == currentObject){
+      if(x == currentObj){
         objectStored = true;
       }
       if(objectStored){
-      } else if(x !== currentObject) {
+      } else if(x !== currentObj) {
         otherObjects.push(x)
       }
     })
@@ -2050,7 +2023,7 @@
               substructureExistsHead = true;
             }
           });
-          if (substructureExistsHead) {
+          if (substructureExistsHead || dataPairs.includes(list[0])) {
             if(tailIsFn) {
               return 1;
             } else {
@@ -2058,7 +2031,7 @@
             }
           } else {
             if(tailIsFn){
-              return 1 + recursiveHelper(list[0]);
+              return 1 + (1 + recursiveHelper(list[0]));
             } else {
               return (1 + recursiveHelper(list[0])) + recursiveHelper(list[1]);
             }           
@@ -2094,6 +2067,128 @@
       }
     
     }
+
+    if(isFunction(sublist)) {
+      return 1;
+    }
+    return (recursiveHelper(sublist));
+  }
+
+// Initialise parent data structure before using calculatePairShift
+  let currentObject = null;
+  function initialisePairShift(dataObject) {
+    currentObject = dataObject;
+  }
+
+// Determines the height positioning of pairs in the same data structure 
+  function calculatePairShift(sublist){
+    let otherObjects = [];
+    let dataPairs = [];
+    let objectStored = false;
+    dataObjects.forEach(x => {
+      if(x == currentObject){
+        objectStored = true;
+      }
+      if(objectStored){
+      } else if(x !== currentObject) {
+        otherObjects.push(x)
+      }
+    })
+
+    // Need to add every pair before sublist into the data structure
+    function fillDataPairs(currPair) {
+      if(currPair == sublist || !Array.isArray(currPair) || currPair.length != 2){
+        // Do nothing, stop recursing
+      } else if(!dataPairs.includes(currPair)){
+        dataPairs.push(currPair);
+        fillDataPairs(dataPairs[0]);
+        fillDataPairs(dataPairs[1]);
+      }
+    }
+
+    fillDataPairs(currentObject)
+
+    dataPairs.push(currentObject)
+    function recursiveHelper(list){
+      let substructureExists = false;
+      otherObjects.forEach(x => {
+        if(checkSubStructure(x, list)){
+          substructureExists = true;
+        }
+      })
+      if(substructureExists || dataPairs.includes(list)){
+        return 0;
+      } 
+
+      dataPairs.push(list);
+      
+      if(Array.isArray(list) && list.length != 2){
+        return 0;
+      } else if(Array.isArray(list)) {
+        let tailIsFn = false;
+
+        if(isFunction(list[1])){
+          let fnObject = fnObjects[fnObjects.indexOf(list[1])]
+          if(fnObject.parent[1] == list) {
+            tailIsFn = true;
+          }
+        }
+
+        if(Array.isArray(list[0])){
+          let substructureExistsHead = false;
+          otherObjects.forEach(x => {
+            if (checkSubStructure(x, list[0])) {
+              substructureExistsHead = true;
+            }
+          });
+          if (substructureExistsHead || dataPairs.includes(list[0])) {
+            if(tailIsFn) {
+              return 1;
+            } else {              
+              return recursiveHelper(list[1]);
+            }
+          } else {
+            if(tailIsFn){
+              return 1 + (1 + recursiveHelper(list[0]));
+            } else {
+              return (1 + recursiveHelper(list[0])) + recursiveHelper(list[1]);
+            }           
+          } 
+        }
+        
+        if(isFunction(list[0])){
+          let fnObject = fnObjects[fnObjects.indexOf(list[0])]
+          let parenttype = fnObject.parenttype;
+          let tail_height = 0;
+          if(tailIsFn){
+            tail_height = 1;
+          } else {
+            tail_height = recursiveHelper(list[1])
+          }
+
+          if (parenttype == "frame" || tail_height > 0) {
+            return tail_height;
+          } else if (fnObject.parent[1] == list) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }
+
+        if(tailIsFn) {
+          return 1;
+        } else {
+          return recursiveHelper(list[1]);
+        }
+      } else {
+        return 0;
+      }
+    
+    }
+
+    if(isFunction(sublist)) {
+      return (2) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
+    }
     return (recursiveHelper(sublist) + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
   }
 
@@ -2120,8 +2215,7 @@
         } else {
           data_space += FRAME_HEIGHT_LINE;
         }        
-      } 
-      else {
+      } else {
         elem_lines += 1;
       }
     }
