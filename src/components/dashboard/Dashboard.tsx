@@ -47,7 +47,8 @@ class Dashboard extends React.Component<IDashboardProps, State> {
     this.columnDefs = [
       {
         headerName: 'Avenger',
-        field: 'avengerName'
+        field: 'avengerName',
+        width: 100
       },
       {
         headerName: 'Number of Ungraded Missions',
