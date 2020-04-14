@@ -1969,7 +1969,7 @@
 
           if (parenttype == "frame" || tail_height > 0) {
             return tail_height;
-          } else if (fnObject.parent[0] == parentlist && fnObject.parent[1] == list) {
+          } else if (fnObject.parent[0] == sublist && fnObject.parent[1] == list) {
             return 1;
           } else {
             return 0;
