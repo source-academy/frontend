@@ -133,7 +133,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     session.$worker.send('setOptions', [jshintOptions]);
 
     */
-   
+
     editor.on('gutterclick', this.handleGutterClick);
 
     // Change all info annotations to error annotations
