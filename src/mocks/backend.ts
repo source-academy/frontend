@@ -20,6 +20,7 @@ import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { mockAssessmentOverviews, mockAssessments } from './assessmentAPI';
 import { mockFetchGrading, mockFetchGradingOverview } from './gradingAPI';
+import { mockGroupOverviews } from './groupAPI';
 import { mockNotifications } from './userAPI';
 
 export function* mockBackendSaga(): SagaIterator {
@@ -207,5 +208,9 @@ export function* mockBackendSaga(): SagaIterator {
     action: ReturnType<typeof actions.fetchNotifications>
   ) {
     yield put(actions.updateNotifications(mockNotifications));
+  });
+
+  yield takeEvery(actionTypes.FETCH_GROUP_OVERVIEWS, function*() {
+    yield put(actions.updateGroupOverviews([...mockGroupOverviews]));
   });
 }
