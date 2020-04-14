@@ -32,6 +32,7 @@ import {
   SideContentType,
   styliseChapter
 } from '../reducers/states';
+import * as Sourceror from 'sourceror-driver';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import {
   getBlockExtraMethodsString,
@@ -629,9 +630,16 @@ export function* evalCode(
         originalMaxExecTime: execTime,
         useSubst: substActiveAndCorrectChapter
       });
+    } else if (variant === 'wasm') {
+      return call(wasm_compile_and_run, code, context)
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
+  }
+  async function wasm_compile_and_run(code: string, context: Context): Promise<Result> {
+    return Sourceror.compile(code, context).then((wasmModule: WebAssembly.Module) =>
+	Sourceror.run(wasmModule, context)
+	).then((returnedValue: any) => ({ status: "finished", context, value: returnedValue }), (_) => ({ status: "error" }));
   }
 
   const isNonDet: boolean = context.variant === 'non-det';
