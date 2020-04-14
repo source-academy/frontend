@@ -271,11 +271,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
   private handleNavigate = () => {
     const chapter = this.props.sourceChapter;
+    const variantString =
+      this.props.sourceVariant === 'default' ? '' : `_${this.props.sourceVariant}`;
     const pos = (this.AceEditor.current as any).editor.selection.getCursor();
     const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
     const url = LINKS.TEXTBOOK;
     if (token !== null && /\bsupport.function\b/.test(token.type)) {
-      window.open(`${url}/source/source_${chapter}/global.html#${token.value}`); // opens the link
+      window.open(`${url}/source/source_${chapter}${variantString}/global.html#${token.value}`); // opens the link
     } else if (token !== null && /\bstorage.type\b/.test(token.type)) {
       window.open(`${url}/source/source_${chapter}.pdf`);
     } else {
