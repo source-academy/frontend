@@ -226,7 +226,9 @@ export interface ISourceLanguage {
 
 export const sourceLanguages: ISourceLanguage[] = [
   { chapter: 1, variant: 'default' },
+  { chapter: 1, variant: 'lazy' },
   { chapter: 2, variant: 'default' },
+  { chapter: 2, variant: 'lazy' },
   { chapter: 3, variant: 'default' },
   { chapter: 3, variant: 'concurrent' },
   { chapter: 3, variant: 'non-det' },
@@ -235,7 +237,8 @@ export const sourceLanguages: ISourceLanguage[] = [
 
 const variantDisplay: Map<Variant, string> = new Map([
   ['non-det', 'Non-Det'],
-  ['concurrent', 'Concurrent']
+  ['concurrent', 'Concurrent'],
+  ['lazy', 'Lazy']
 ]);
 
 export const styliseChapter = (chap: number, variant: Variant = 'default') => {
