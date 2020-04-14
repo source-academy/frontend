@@ -133,7 +133,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     session.$worker.send('setOptions', [jshintOptions]);
 
     */
-
+   
     editor.on('gutterclick', this.handleGutterClick);
 
     // Change all info annotations to error annotations
@@ -277,9 +277,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
     const url = LINKS.TEXTBOOK;
     if (token !== null && /\bsupport.function\b/.test(token.type)) {
-      window.open(`${url}/source/source_${chapter}${variantString}/global.html#${token.value}`); // opens the link
+      window.open(`${url}source/source_${chapter}${variantString}/global.html#${token.value}`); // opens the link
     } else if (token !== null && /\bstorage.type\b/.test(token.type)) {
-      window.open(`${url}/source/source_${chapter}.pdf`);
+      window.open(`${url}source/source_${chapter}.pdf`);
     } else {
       this.props.handleDeclarationNavigate(
         (this.AceEditor.current as any).editor.getCursorPosition()
