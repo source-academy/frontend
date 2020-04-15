@@ -4,7 +4,6 @@ import { ExternalLibraryName, Library } from '../components/assessment/assessmen
 import { IPosition } from '../components/workspace/Editor';
 import { IWorkspaceState, SideContentType } from '../reducers/states';
 import * as actionTypes from './actionTypes';
-// import { IChapter } from 'src/components/academy/DefaultChapter';
 
 /**
  * Used to differenciate between the sources of actions, as

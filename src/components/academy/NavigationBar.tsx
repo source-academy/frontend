@@ -83,6 +83,8 @@ const NavigationBar: React.SFC<OwnProps> = props => (
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>
+        <DefaultChapter />
+
         <NavLink
           to={'/academy/sourcereel'}
           activeClassName={Classes.ACTIVE}
@@ -113,8 +115,6 @@ const NavigationBar: React.SFC<OwnProps> = props => (
             disableHover={true}
           />
         </NavLink>
-
-        <DefaultChapter />
       </NavbarGroup>
     ) : null}
   </Navbar>
