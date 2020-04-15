@@ -99,6 +99,7 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
       </div>
       <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
     </NavLink>
+    <withRouter(Connect(DefaultChapter)) />
   </Blueprint3.NavbarGroup>
 </Blueprint3.Navbar>"
 `;
@@ -161,6 +162,7 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
       </div>
       <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
     </NavLink>
+    <withRouter(Connect(DefaultChapter)) />
   </Blueprint3.NavbarGroup>
 </Blueprint3.Navbar>"
 `;

@@ -4,6 +4,7 @@ import { ExternalLibraryName, Library } from '../components/assessment/assessmen
 import { IPosition } from '../components/workspace/Editor';
 import { IWorkspaceState, SideContentType } from '../reducers/states';
 import * as actionTypes from './actionTypes';
+// import { IChapter } from 'src/components/academy/DefaultChapter';
 
 /**
  * Used to differenciate between the sources of actions, as
@@ -210,13 +211,10 @@ export const updateHasUnsavedChanges = (
     hasUnsavedChanges
   });
 
-export const fetchChapter = () => 
-  action(actionTypes.FETCH_CHAPTER);
+export const fetchChapter = () => action(actionTypes.FETCH_CHAPTER);
 
-// update database
-export const changeChapter = (chapterno: number) =>
-  action(actionTypes.CHANGE_CHAPTER, { chapterno });
+export const changeChapter = (chapter: number) =>
+  action(actionTypes.CHANGE_CHAPTER, { chapter });
 
-// update state
-export const updateChapter = (chapterno: number) =>
-  action(actionTypes.UPDATE_CHAPTER, chapterno);
+export const updateChapter = (chapter: number) => 
+  action(actionTypes.UPDATE_CHAPTER, { chapter });

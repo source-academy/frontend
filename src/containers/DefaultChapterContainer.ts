@@ -8,7 +8,6 @@ import { DefaultChapter, IDispatchProps, IStateProps } from '../components/acade
 import { IChapter } from '../components/workspace/controlBar';
 import { IState } from '../reducers/states';
 
-
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sourceChapter: state.workspaces.playground.context.chapter
 });
@@ -17,8 +16,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
   bindActionCreators(
     {
       handleFetchChapter: () => fetchChapter(),
-      handleUpdateChapter: (chapter: IChapter) => changeChapter(chapter.chapter),
-     
+      handleUpdateChapter: (chapterNo: IChapter) => changeChapter(chapterNo.chapter)
     },
     dispatch
   );

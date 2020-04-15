@@ -6,6 +6,7 @@ import {
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
+  changeChapter,
   changeEditorHeight,
   changeEditorWidth,
   changeExternalLibrary,
@@ -20,6 +21,7 @@ import {
   evalRepl,
   evalTestcase,
   externalLibrarySelect,
+  fetchChapter,
   highlightEditorLine,
   moveCursor,
   navigateToDeclaration,
@@ -29,6 +31,7 @@ import {
   setEditorBreakpoint,
   toggleEditorAutorun,
   updateActiveTab,
+  updateChapter,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
@@ -413,5 +416,35 @@ test('moveCursor generates correct action object', () => {
       workspaceLocation: playgroundWorkspace,
       cursorPosition
     }
+  });
+});
+
+
+test('fetchChapter generates correct action object', () => {
+  const action = fetchChapter();
+  expect(action).toEqual({
+    type: actionTypes.FETCH_CHAPTER,
+  });
+});
+
+test('changeChapter generates correct action object', () => {
+  const chapter = 1;
+  const action = changeChapter(chapter);
+  expect(action).toEqual({
+    type: actionTypes.CHANGE_CHAPTER,
+    payload: {
+      chapter
+    },
+  });
+});
+
+test('updateChapter generates correct action object', () => {
+  const chapter = 1;
+  const action = updateChapter(chapter);
+  expect(action).toEqual({
+    type: actionTypes.UPDATE_CHAPTER,
+    payload: {
+      chapter
+    },
   });
 });

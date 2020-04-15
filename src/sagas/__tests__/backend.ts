@@ -381,3 +381,22 @@ describe('Test NOTIFY_CHATKIT_USERS Action', () => {
       .silentRun();
   });
 });
+
+describe('Test FETCH_CHAPTER Action', () => {
+  test('when chapter is obtained', () => {
+    return expectSaga(backendSaga)
+    .withState({ session: { role: Role.Staff } })
+      .dispatch({ type: actionTypes.FETCH_CHAPTER })
+      .silentRun();
+  });
+});
+
+describe('Test CHANGE_CHAPTER Action', () => {
+  test('when chapter is changed', () => {
+    return expectSaga(backendSaga)
+    .withState({ session: { role: Role.Staff } })
+      .dispatch({ type: actionTypes.CHANGE_CHAPTER, payload: { chapterNo: 1 } })
+      .silentRun();
+  });
+});
+

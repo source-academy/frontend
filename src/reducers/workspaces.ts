@@ -44,7 +44,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  UPDATE_WORKSPACE,
+  UPDATE_WORKSPACE
 } from '../actions/actionTypes';
 import * as collabActions from '../actions/collabEditing';
 import { logOut } from '../actions/commons';
@@ -663,11 +663,11 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state.playground,
           context: {
             ...state.playground.context,
-            chapter: action.payload
+            chapter: action.payload.chapter
           }
         }
       };
-  
+
     default:
       return state;
   }

@@ -556,7 +556,6 @@ function* backendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
-
   yield takeEvery(actionTypes.FETCH_CHAPTER, function*() {
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
@@ -568,10 +567,9 @@ function* backendSaga(): SagaIterator {
     }
 
     const chapter = yield call(request.fetchChapter, tokens);
-    const chap = chapter.chapter.chapterno;
 
-    if (chap) {
-      yield put(actions.updateChapter(chap));
+    if (chapter) {
+      yield put(actions.updateChapter(chapter.chapter.chapterno));
     }
   });
 
@@ -583,22 +581,17 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    const chap = action.payload.chapterno;
-    const resp: Response = yield request.changeChapter(chap, tokens);
+    const chapter = action.payload.chapter;
+    const resp: Response = yield request.changeChapter(chapter, tokens);
 
     if (!resp || !resp.ok) {
       yield request.handleResponseError(resp);
       return;
     }
 
-    yield put(actions.updateChapter(chap));
+    yield put(actions.updateChapter(chapter));
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   });
-
 }
-
-
-
-
 
 export default backendSaga;
