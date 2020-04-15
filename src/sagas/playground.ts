@@ -5,7 +5,7 @@ import { put, select, takeEvery } from 'redux-saga/effects';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
-import { defaultEditorValue, IState, urlName } from '../reducers/states';
+import { defaultEditorValue, IState } from '../reducers/states';
 
 import { Variant } from 'js-slang/dist/types';
 
@@ -28,16 +28,14 @@ function* updateQueryString() {
   const variant: Variant = yield select(
     (state: IState) => state.workspaces.playground.context.variant
   );
-
-  const languageUrlName: string = urlName(chapter, variant);
-
   const external: ExternalLibraryName = yield select(
     (state: IState) => state.workspaces.playground.externalLibrary
   );
   const execTime: number = yield select((state: IState) => state.workspaces.playground.execTime);
   const newQueryString: string = qs.stringify({
     prgrm: compressToEncodedURIComponent(codeString),
-    chap: languageUrlName,
+    chap: chapter,
+    variant,
     ext: external,
     exec: execTime
   });
