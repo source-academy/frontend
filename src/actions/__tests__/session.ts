@@ -1,7 +1,7 @@
 import { Grading, GradingOverview } from '../../components/academy/grading/gradingShape';
 import { IAssessment, IAssessmentOverview } from '../../components/assessment/assessmentShape';
 import { Notification } from '../../components/notification/notificationShape';
-import { Role, Story } from '../../reducers/states';
+import { GameState, Role, Story } from '../../reducers/states';
 import * as actionTypes from '../actionTypes';
 import {
   acknowledgeNotifications,
@@ -155,7 +155,8 @@ test('setUser generates correct action object', () => {
     name: 'test student',
     role: 'student' as Role,
     grade: 150,
-    story: {} as Story
+    story: {} as Story,
+    gameState: {} as GameState
   };
   const action = setUser(user);
   expect(action).toEqual({

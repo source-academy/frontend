@@ -21,5 +21,3 @@ export const updateMaterialIndex = (index: MaterialData[]) =>
 
 export const uploadMaterial = (file: File, title: string, description: string) =>
   action(actionTypes.UPLOAD_MATERIAL, { file, title, description });
-
-export const fetchTestStories = () => action(actionTypes.FETCH_TEST_STORIES);

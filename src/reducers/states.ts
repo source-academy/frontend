@@ -138,7 +138,8 @@ export interface ISessionState {
   readonly maxXp: number;
   readonly refreshToken?: string;
   readonly role?: Role;
-  readonly story?: Story;
+  readonly story: Story;
+  readonly gameState: GameState;
   readonly name?: string;
   readonly xp: number;
   readonly notifications: Notification[];
@@ -155,6 +156,11 @@ export const maxBrowseIndex = 50;
 export type Story = {
   story: string;
   playStory: boolean;
+};
+
+export type GameState = {
+  collectibles: { [id: string]: string };
+  completed_quests: string[];
 };
 
 /**
@@ -423,6 +429,14 @@ export const defaultSession: ISessionState = {
   refreshToken: undefined,
   role: undefined,
   name: undefined,
+  story: {
+    story: '',
+    playStory: false
+  },
+  gameState: {
+    completed_quests: [],
+    collectibles: {}
+  },
   xp: 0,
   notifications: []
 };

@@ -2,6 +2,7 @@
 /*eslint-env browser*/
 import { call } from 'redux-saga/effects';
 
+import { GameState } from 'src/reducers/states';
 import * as actions from '../actions';
 import {
   Grading,
@@ -99,6 +100,24 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
     return null;
   }
   return await resp.json();
+}
+
+/**
+ * PUT /user/game_states/
+ */
+export async function putUserGameState(
+  // eslint-disable-next-line
+  gameStates: GameState,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request('user/game_states/save', 'PUT', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: {
+      gameStates: JSON.stringify(gameStates)
+    }
+  });
+  return resp;
 }
 
 /**

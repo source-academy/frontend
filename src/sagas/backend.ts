@@ -22,7 +22,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../components/notification/notificationShape';
-import { IState, Role } from '../reducers/states';
+import { GameState, IState, Role } from '../reducers/states';
 import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import * as request from './requests';
@@ -561,30 +561,6 @@ function* backendSaga(): SagaIterator {
     action: ReturnType<typeof actions.fetchTestStories>
   ) {
     const fileName: string = 'Test Stories';
-    /*
-    yield put(actions.fetchMaterialIndex());
-    let materialIndex = null;
-    while (materialIndex === null) {
-      materialIndex = yield select(
-        (state: IState) => state.session.materialIndex!
-      );
-    }
-    let storyFolder = yield materialIndex.find((x :MaterialData) => x.title === fileName);
-    
-    if (storyFolder === undefined) {
-      yield put(actions.createMaterialFolder(fileName));
-      while (yield materialIndex.find((x :MaterialData) => x.title === fileName) === undefined) {
-        materialIndex = yield select(
-          (state: IState) => state.session.materialIndex!
-        );
-      }
-      storyFolder = yield materialIndex.find((x :MaterialData) => x.title === fileName);
-    }
-    // tslint:disable-next-line:no-console
-    console.log(storyFolder.id == null ? 1 : 0);
-    yield put(actions.fetchMaterialIndex(storyFolder.id));
-    */
-
     const tokens = yield select((state: IState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -618,6 +594,22 @@ function* backendSaga(): SagaIterator {
         }
       }
     }
+  });
+
+  yield takeEvery(actionTypes.SAVE_USER_STATE, function*(
+    action: ReturnType<typeof actions.saveUserData>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const gameState: GameState = action.payload;
+    const resp = yield request.putUserGameState(gameState, tokens);
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
+    }
+    yield put(actions.setGameState(gameState));
   });
 }
 

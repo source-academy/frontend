@@ -15,7 +15,7 @@ import {
   NotificationFilterFunction
 } from '../components/notification/notificationShape';
 import { store } from '../createStore';
-import { IState, Role } from '../reducers/states';
+import { GameState, IState, Role } from '../reducers/states';
 import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { mockAssessmentOverviews, mockAssessments } from './assessmentAPI';
@@ -35,7 +35,8 @@ export function* mockBackendSaga(): SagaIterator {
         story: 'mission-1',
         playStory: true
       },
-      grade: 0
+      grade: 0,
+      gameState: {} as GameState
     };
     store.dispatch(actions.setTokens(tokens));
     store.dispatch(actions.setUser(user));
