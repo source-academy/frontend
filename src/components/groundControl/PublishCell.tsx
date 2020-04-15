@@ -26,7 +26,7 @@ class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> 
 
   public render() {
     const text = this.props.data.isPublished ? 'Unpublish' : 'Publish';
-    const lowerText = text.charAt(0).toLowerCase() + text.substring(1);
+    const lowerCaseText = text.toLowerCase();
     return (
       <div>
         <this.toggleButton />
@@ -38,7 +38,7 @@ class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> 
           canOutsideClickClose={true}
         >
           <div className={Classes.DIALOG_BODY}>
-            {<p>Are you sure to {lowerText} this Assessment?</p>}
+            {<p>Are you sure that you want to {lowerCaseText} this Assessment?</p>}
           </div>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>

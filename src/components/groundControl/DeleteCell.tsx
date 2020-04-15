@@ -34,7 +34,7 @@ class DeleteCell extends React.Component<IDeleteCellProps, IDeleteCellState> {
           canOutsideClickClose={true}
         >
           <div className={Classes.DIALOG_BODY}>
-            {<p>Are you sure to delete this Assessment?</p>}
+            {<p>Are you sure that you want to delete this Assessment?</p>}
           </div>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
