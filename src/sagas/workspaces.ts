@@ -615,8 +615,6 @@ export function* evalCode(
   function call_non_det() {
     return code.trim() === TRY_AGAIN
       ? call(resume, lastNonDetResult)
-      : code.includes(TRY_AGAIN) // defensive check: try-again should only be used on its own
-      ? { status: 'error' }
       : call(runInContext, code, context, {
           executionMethod: 'interpreter',
           originalMaxExecTime: execTime,
