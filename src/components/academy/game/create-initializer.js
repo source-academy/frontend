@@ -1,9 +1,9 @@
 import {LINKS} from '../../../utils/constants'
 import {history} from '../../../utils/history'
 import {soundPath} from './constants/constants'
-import {fetchGameData, getMissionPointer, getStudentData, saveCollectible, saveQuest, saveStudentData} from './backend/game-state'
+import {fetchGameData, getMissionPointer, getStudentData, saveCollectible, saveQuest} from './backend/game-state'
 
-export default function (StoryXMLPlayer, username, userStory) {
+export default function (StoryXMLPlayer, username, userStory, gameState) {
 
     var hookHandlers = {
         startMission: function () {
@@ -50,9 +50,8 @@ export default function (StoryXMLPlayer, username, userStory) {
         window.open(LINKS.LUMINUS);
     }
 
-    function startGame(div, canvas, saveData) {
+    function startGame(div, canvas) {
         StoryXMLPlayer.init(div, canvas, {
-            saveData: saveData,
             hookHandlers: hookHandlers,
             wristDeviceFunc: openWristDevice,
             playerName: username,
@@ -60,16 +59,17 @@ export default function (StoryXMLPlayer, username, userStory) {
             changeLocationHook: function (newLocation) {
                 if (typeof Storage !== 'undefined') {
                     // Code for localStorage/sessionStorage.
-                    localStorage.cs1101s_source_academy_location = newLocation;
+                    localStorage.locationKey = newLocation;
                 }
             }
         });
     }
 
     function initialize(div, canvas) {
-        startGame(div, canvas, getStudentData());
+
+        startGame(div, canvas);
         StoryXMLPlayer.loadStory(getMissionPointer(), function () {});
     }
 
-    return (div, canvas) => fetchGameData(userStory, () => initialize(div, canvas));
+    return (div, canvas) => fetchGameData(userStory, gameState, () => initialize(div, canvas));
 };

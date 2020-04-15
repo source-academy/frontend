@@ -1,19 +1,21 @@
 import * as React from 'react';
-
-import { store } from '../../../createStore';
-import { Story } from '../../../reducers/states';
+import { GameState, Role, Story } from '../../../reducers/states';
+import { setSaveHandler } from './backend/game-state';
 import { setUserRole } from './backend/user';
 
 type GameProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
   handleSaveCanvas: (c: HTMLCanvasElement) => void;
+  handleSaveData: (s: GameState) => void;
 };
 
 export type StateProps = {
   canvas?: HTMLCanvasElement;
   name: string;
-  story?: Story;
+  story: Story;
+  gameState: GameState;
+  role?: Role;
 };
 
 export class Game extends React.Component<GameProps, {}> {
@@ -39,8 +41,10 @@ export class Game extends React.Component<GameProps, {}> {
   public async componentDidMount() {
     const story: any = (await import('./game.js')).default;
     if (this.props.canvas === undefined) {
-      const storyOpts = await this.getStoryOpts();
-      story(this.div, this.canvas, this.props.name, storyOpts);
+      setUserRole(this.props.role);
+      setSaveHandler((gameState: GameState) => this.props.handleSaveData(gameState));
+
+      story(this.div, this.canvas, this.props.name, this.props.story, this.props.gameState);
       this.props.handleSaveCanvas(this.canvas);
     } else {
       // This browser window has loaded the Game component & canvas before
@@ -55,13 +59,6 @@ export class Game extends React.Component<GameProps, {}> {
         <canvas ref={e => (this.canvas = e!)} />
       </div>
     );
-  }
-
-  private async getStoryOpts() {
-    const defaultStory = { story: 10, playStory: true };
-    const userStory = this.props.story ? this.props.story : store.getState().session.story;
-    setUserRole(store.getState().session.role);
-    return userStory ? userStory : defaultStory;
   }
 }
 

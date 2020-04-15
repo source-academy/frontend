@@ -23,7 +23,7 @@ import { getStandardDateTime } from '../../utils/dateHelpers';
 import { controlButton } from '../commons';
 import DeleteCell from './DeleteCell';
 import DownloadCell from './DownloadCell';
-import JsonUpload from "./JsonUpload";
+import JsonUpload from './JsonUpload';
 import { DirectoryData, MaterialData } from './storyShape';
 
 /**
@@ -174,7 +174,7 @@ class StoryTable extends React.Component<IMaterialTableProps, State> {
           </div>
         </div>
         <JsonUpload />
-        <br/>
+        <br />
         <Button icon={IconNames.MOUNTAIN} onClick={this.handleTest}>
           <div className="ag-grid-button-text hidden-xs">Open Game in new Window</div>
         </Button>

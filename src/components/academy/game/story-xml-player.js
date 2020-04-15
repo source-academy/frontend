@@ -20,9 +20,10 @@ var stage;
 // options contains the following properties:
 // saveData, hookHandlers, wristDeviceFunc
 // changeLocationHook, playerImageCanvas, playerName
-export function init(div, canvas, options, callback) {
+export function init(div, canvas, options) {
   renderer = PIXI.autoDetectRenderer(
     Constants.screenWidth,
+
     Constants.screenHeight,
     { backgroundColor: 0x000000, view: canvas }
   );
@@ -51,8 +52,8 @@ export function init(div, canvas, options, callback) {
   }
   animate();
 
-  SaveManager.init(options.saveData, callback);
-
+  SaveManager.init();
+  
   // a pixi.container on top of everything that is exported
   stage.addChild(ExternalManager.init(options.hookHandlers));
 };

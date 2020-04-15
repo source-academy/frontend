@@ -106,7 +106,6 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
  * PUT /user/game_states/
  */
 export async function putUserGameState(
-  // eslint-disable-next-line
   gameStates: GameState,
   tokens: Tokens
 ): Promise<Response | null> {
