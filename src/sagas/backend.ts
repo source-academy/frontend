@@ -566,12 +566,7 @@ function* backendSaga(): SagaIterator {
     const id = action.payload.id;
     const closeAt = action.payload.closeAt;
     const openAt = action.payload.openAt;
-    const respMsg: string | null = yield request.changeDateAssessment(
-      id,
-      closeAt,
-      openAt,
-      tokens,
-    );
+    const respMsg: string | null = yield request.changeDateAssessment(id, closeAt, openAt, tokens);
     if (respMsg == null) {
       yield request.handleResponseError(respMsg);
       return;
@@ -637,11 +632,7 @@ function* backendSaga(): SagaIterator {
     }));
     const file = action.payload.file;
     const forceUpdate = action.payload.forceUpdate;
-    const respMsg = yield request.uploadAssessment(
-      file,
-      tokens,
-      forceUpdate
-    );
+    const respMsg = yield request.uploadAssessment(file, tokens, forceUpdate);
     if (!respMsg) {
       yield request.handleResponseError(respMsg);
     } else if (respMsg === 'OK') {

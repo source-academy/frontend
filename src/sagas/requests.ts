@@ -597,7 +597,7 @@ export async function changeDateAssessment(
   id: number,
   closeAt: string,
   openAt: string,
-  tokens: Tokens,
+  tokens: Tokens
 ) {
   const resp = await request(`assessments/update/${id}`, 'POST', {
     accessToken: tokens.accessToken,
@@ -633,11 +633,7 @@ export async function publishAssessment(id: number, togglePublishTo: boolean, to
   return resp;
 }
 
-export const uploadAssessment = async (
-  file: File,
-  tokens: Tokens,
-  forceUpdate: boolean
-) => {
+export const uploadAssessment = async (file: File, tokens: Tokens, forceUpdate: boolean) => {
   const formData = new FormData();
   formData.append('assessment[file]', file);
   formData.append('forceUpdate', String(forceUpdate));
