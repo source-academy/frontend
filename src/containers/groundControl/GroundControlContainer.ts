@@ -14,7 +14,7 @@ import GroundControl, {
 } from '../../components/groundControl/GroundControl';
 import { IState } from '../../reducers/states';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state, props) => ({
+const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   assessmentOverviews: state.session.assessmentOverviews ? state.session.assessmentOverviews : []
 });
 
