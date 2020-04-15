@@ -6,7 +6,7 @@ import {
   deleteAssessment,
   publishAssessment,
   uploadAssessment
-} from '../../actions/groundcontrol';
+} from '../../actions/groundControl';
 import { fetchAssessmentOverviews } from '../../actions/session';
 import GroundControl, {
   IDispatchProps,
