@@ -1,41 +1,50 @@
 import { storyXMLPathTest, storyXMLPathLive } from '../constants/constants'
 import { isStudent } from './user';
 
+var SaveManager = require('../save-manager/save-manager.js');
+
 /**
  * Handles data regarding the game state. 
  * - The student's list of completed quests and collectibles
  * - The student's current story mission
  * - The global list of missions that are open
+ * - The action to save user state to server.
  */
 let fetched = false;
-let studentMissionPointer = undefined,
-    studentData = undefined;
-export function fetchGameData(userStory, callback) {
+let studentData = undefined,
+    handleSaveData = undefined,
+    studentStory = undefined;
+
+export function fetchGameData(userStory, gameState, callback) {
   // fetch only needs to be called once; if there are additional calls somehow then ignore them
   if(fetched) {
     callback();
     return;
   }
   fetched = true;
-  studentMissionPointer = userStory.story;
-  // not implemented yet
-  studentData = undefined; // userStory.data;
+  studentStory = userStory.story;
+  studentData = gameState;
   fetchGlobalMissionPointer(callback);
 }
 
 // overrides
 let studentDataOverride = undefined,
-    missionPointerOverride = undefined,
-    currentDateOverride = undefined;
+    currentDateOverride = undefined,
+    studentStoryOverride = undefined;
+
 // override student game data
 export function overrideGameState(data) {
   if (data) {
-    studentDataOverride = data;
-    missionPointerOverride = data.missionPointer;
+    studentDataOverride = data.gameState;
+    studentStoryOverride = data.story;
     currentDateOverride = data.currentDate;
   } else {
-    studentDataOverride = missionPointerOverride = currentDateOverride = undefined;
+    studentStoryOverride = studentDataOverride = missionPointerOverride = currentDateOverride = undefined;
   }
+}
+
+export function setSaveHandler(saveData) {
+  handleSaveData = saveData;
 }
 
 export function getStudentData() {
@@ -44,29 +53,36 @@ export function getStudentData() {
   return studentData;
 }
 
-export function saveStudentData(json) {
-  // formerly create-initializer/saveToServer
-  return json;
+export function saveStudentData(data) {
+  console.log('saving student data');
+  if (handleSaveData !== undefined) {
+    handleSaveData(data)
+  }
 }
 
 export function saveCollectible(collectible) {
-  // currently local but we should eventually migrate to backend
-  if (typeof Storage !== 'undefined') {
-    localStorage.setItem(collectible, 'collected');
-  }
+  studentData.collectibles[collectible] = 'completed';
+  saveStudentData(studentData);
+}
+
+export function hasCollectible(collectible) {
+  return studentData && 
+    studentData.collectibles[collectible] && 
+    studentData.collectibles[collectible] === 'completed';
 }
 
 export function saveQuest(questId) {
-  // currently local but we should eventually migrate to backend
-  if (typeof Storage !== 'undefined') {
-    localStorage.setItem(questId, 'completed');
-  }
+  studentData.completed_quests.push(questId);
+  saveStudentData(studentData);
 }
 
-function getStudentMissionPointer() {
-  // placeholder
-  if(missionPointerOverride) return missionPointerOverride;
-  return studentMissionPointer;
+export function hasCompletedQuest(questId) {
+  return studentData && studentData.completed_quests.includes(questId);
+}
+
+function getStudentStory() {
+  if(studentStoryOverride) return studentStoryOverride;
+  return studentStory;
 }
 
 let stories = [];
@@ -103,12 +119,13 @@ function fetchGlobalMissionPointer(callback) {
  * global list of open missions, then the corresponding upper (or lower) bound will be used.
  */
 export function getMissionPointer() {
-  let student = getStudentMissionPointer();
+  //finds the mission id's mission pointer
+  let missionPointer = stories.find(story => story.getAttribute("id") === getStudentStory());
   const newest = parseInt(stories[stories.length-1].getAttribute("key")); // the newest mission to open
   const oldest = parseInt(stories[0].getAttribute("key")); // the oldest mission to open
-  student = Math.min(student, newest);
-  student = Math.max(student, oldest);
-  const storyToLoad = stories.filter(story => story.getAttribute("key") == student)[0];
+  missionPointer = Math.min(missionPointer, newest);
+  missionPointer = Math.max(missionPointer, oldest);
+  const storyToLoad = stories.filter(story => story.getAttribute("key") == missionPointer)[0];
   console.log("Now loading story " + storyToLoad.getAttribute("id")); // debug statement
   return storyToLoad.getAttribute("id");
 }

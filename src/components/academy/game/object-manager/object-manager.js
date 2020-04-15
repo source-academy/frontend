@@ -10,6 +10,7 @@ var ExternalManager = require('../external-manager/external-manager.js');
 var MapOverlay = require('../map-overlay/map-overlay.js');
 var Utils = require('../utils/utils.js');
 var FilterEffects = require('../filter-effects/filter-effects.js');
+var GameState = require('../backend/game-state')
 
 var mapObjects;
 var sequenceObjects;
@@ -164,8 +165,8 @@ export function processTempObject(gameLocation, node) {
   }
   var collectible = node.getAttribute('name');
   var isInDorm = gameLocation.name == 'yourRoom';
-  if ((isInDorm && !localStorage.hasOwnProperty(collectible))||
-      (!isInDorm && localStorage.hasOwnProperty(collectible))) {
+  if ((isInDorm && !GameState.hasColletible(collectible))||
+      (!isInDorm && GameState.hasColletible(collectible))) {
     return; //don't load the collectible in dorm if it's not collected || don't load if in hidden location and collected
   }
   if (isInDorm) {
