@@ -1,7 +1,7 @@
 import { Button, Classes, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer , Select} from '@blueprintjs/select';
-// 
+import { ItemRenderer, Select } from '@blueprintjs/select';
+//
 import * as React from 'react';
 
 import { RouteComponentProps } from 'react-router';
@@ -35,20 +35,12 @@ export function DefaultChapter(props: IChapterProps) {
   }));
 
   const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick }) => (
-    <MenuItem
-      active={false}
-      key={chap.chapter}
-      onClick={handleClick}
-      text={chap.displayName}
-    />
+    <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
   );
 
   const ChapterSelectComponent = Select.ofType<IChapter>();
 
-  const chapSelect = (
-    currentChap: number,
-    handleSelect = (i: IChapter) => {}
-  ) => (
+  const chapSelect = (currentChap: number, handleSelect = (i: IChapter) => {}) => (
     <ChapterSelectComponent
       className={Classes.MINIMAL}
       items={chapters}
@@ -61,10 +53,8 @@ export function DefaultChapter(props: IChapterProps) {
         text={styliseChapter(currentChap)}
         rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
       />
-     </ChapterSelectComponent>
+    </ChapterSelectComponent>
   );
-  
-    return <div> {chapSelect(props.sourceChapter, props.handleUpdateChapter)} </div>;
 
-  
+  return <div> {chapSelect(props.sourceChapter, props.handleUpdateChapter)} </div>;
 }

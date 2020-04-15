@@ -419,11 +419,10 @@ test('moveCursor generates correct action object', () => {
   });
 });
 
-
 test('fetchChapter generates correct action object', () => {
   const action = fetchChapter();
   expect(action).toEqual({
-    type: actionTypes.FETCH_CHAPTER,
+    type: actionTypes.FETCH_CHAPTER
   });
 });
 
@@ -434,7 +433,7 @@ test('changeChapter generates correct action object', () => {
     type: actionTypes.CHANGE_CHAPTER,
     payload: {
       chapter
-    },
+    }
   });
 });
 
@@ -445,6 +444,6 @@ test('updateChapter generates correct action object', () => {
     type: actionTypes.UPDATE_CHAPTER,
     payload: {
       chapter
-    },
+    }
   });
 });

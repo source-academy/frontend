@@ -213,8 +213,6 @@ export const updateHasUnsavedChanges = (
 
 export const fetchChapter = () => action(actionTypes.FETCH_CHAPTER);
 
-export const changeChapter = (chapter: number) =>
-  action(actionTypes.CHANGE_CHAPTER, { chapter });
+export const changeChapter = (chapter: number) => action(actionTypes.CHANGE_CHAPTER, { chapter });
 
-export const updateChapter = (chapter: number) => 
-  action(actionTypes.UPDATE_CHAPTER, { chapter });
+export const updateChapter = (chapter: number) => action(actionTypes.UPDATE_CHAPTER, { chapter });

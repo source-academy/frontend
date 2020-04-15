@@ -114,8 +114,7 @@ const NavigationBar: React.SFC<OwnProps> = props => (
           />
         </NavLink>
 
-        <DefaultChapter/>
-        
+        <DefaultChapter />
       </NavbarGroup>
     ) : null}
   </Navbar>
