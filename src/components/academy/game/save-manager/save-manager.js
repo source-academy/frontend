@@ -1,4 +1,5 @@
 import {saveStudentData} from '../backend/game-state';
+import {saveDataKey} from "../constants/constants";
 
 var LocationManager = require('../location-manager/location-manager.js');
 var QuestManager = require('../quest-manager/quest-manager.js');
@@ -10,14 +11,13 @@ var Utils = require('../utils/utils.js');
 
 var actionSequence = [];
 
-export function init(saveData, callback) {
+// finds existing save data, which consists of action sequence and starting location
+export function init() {
+  let saveData = localStorage.getItem(saveDataKey);
   if (saveData) {
-    alert(saveData);
     saveData = JSON.parse(saveData);
     actionSequence = saveData.actionSequence;
     var storyXMLs = [];
-    // TODO: this is assuming that all 'loadStory' appear at the start
-    // This may not be the case. Need to improve
     for (var i = 0; i < actionSequence.length; i++) {
       if (actionSequence[i].type == 'loadStory') {
         storyXMLs.push(actionSequence[i].storyId);
@@ -110,8 +110,9 @@ export function saveLoadStories(stories) {
   saveGame();
 }
 
+// saves actionsequence and start location into local storage
 function saveGame() {
-  saveStudentData(
+  localStorage.setItem(saveDataKey,
     JSON.stringify({
       actionSequence: actionSequence,
       startLocation: LocationManager.getStartLocation()
