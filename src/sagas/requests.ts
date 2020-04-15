@@ -621,10 +621,10 @@ export async function deleteAssessment(id: number, tokens: Tokens) {
   return resp;
 }
 
-export async function publishAssessment(id: number, bool: boolean, tokens: Tokens) {
+export async function publishAssessment(id: number, togglePublishTo: boolean, tokens: Tokens) {
   const resp = await request(`assessments/publish/${id}`, 'POST', {
     accessToken: tokens.accessToken,
-    body: { bool },
+    body: { togglePublishTo },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

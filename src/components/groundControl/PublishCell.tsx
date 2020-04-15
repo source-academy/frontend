@@ -7,12 +7,12 @@ import { controlButton } from '../commons';
 
 interface IPublishCellProps {
   data: IAssessmentOverview;
-  handlePublishAssessment: (bool: boolean, id: number) => void;
+  handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
 }
 
 interface IPublishCellState {
   dialogOpen: boolean;
-  is_published: boolean;
+  isPublished: boolean;
 }
 
 class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> {
@@ -20,7 +20,7 @@ class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> 
     super(props);
     this.state = {
       dialogOpen: false,
-      is_published: this.props.data.isPublished === undefined ? false : this.props.data.isPublished
+      isPublished: this.props.data.isPublished === undefined ? false : this.props.data.isPublished
     };
   }
 
@@ -52,7 +52,7 @@ class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> 
   }
 
   private toggleButton = () => {
-    return <Switch checked={this.state.is_published} onChange={this.handleOpenDialog} />;
+    return <Switch checked={this.state.isPublished} onChange={this.handleOpenDialog} />;
   };
   private handleCloseDialog = () => this.setState({ dialogOpen: false });
   private handleOpenDialog = () => this.setState({ dialogOpen: true });
