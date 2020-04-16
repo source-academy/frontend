@@ -9,6 +9,7 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
+import { Variant } from 'js-slang/dist/types';
 import { LINKS } from '../../utils/constants';
 import AceRange from './AceRange';
 import { checkSessionIdExists } from './collabEditing/helper';
@@ -31,6 +32,7 @@ export interface IEditorProps {
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
+  sourceVariant?: Variant;
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
@@ -181,10 +183,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   // chapter selector used to choose the correct source mode
   public chapterNo = () => {
     let chapter = this.props.sourceChapter;
+    let variant = this.props.sourceVariant;
     if (chapter === undefined) {
       chapter = 1;
     }
-    HighlightRulesSelector(chapter);
+    if (variant === undefined) {
+      variant = 'default';
+    }
+    HighlightRulesSelector(chapter, variant);
     ModeSelector(chapter);
     return 'source' + chapter.toString();
   };
@@ -265,13 +271,15 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
   private handleNavigate = () => {
     const chapter = this.props.sourceChapter;
+    const variantString =
+      this.props.sourceVariant === 'default' ? '' : `_${this.props.sourceVariant}`;
     const pos = (this.AceEditor.current as any).editor.selection.getCursor();
     const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
     const url = LINKS.TEXTBOOK;
     if (token !== null && /\bsupport.function\b/.test(token.type)) {
-      window.open(`${url}/source/source_${chapter}/global.html#${token.value}`); // opens the link
+      window.open(`${url}source/source_${chapter}${variantString}/global.html#${token.value}`); // opens the link
     } else if (token !== null && /\bstorage.type\b/.test(token.type)) {
-      window.open(`${url}/source/source_${chapter}.pdf`);
+      window.open(`${url}source/source_${chapter}.pdf`);
     } else {
       this.props.handleDeclarationNavigate(
         (this.AceEditor.current as any).editor.getCursorPosition()

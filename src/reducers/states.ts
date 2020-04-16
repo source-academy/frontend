@@ -226,27 +226,20 @@ export interface ISourceLanguage {
 
 export const sourceLanguages: ISourceLanguage[] = [
   { chapter: 1, variant: 'default' },
+  { chapter: 1, variant: 'lazy' },
   { chapter: 2, variant: 'default' },
+  { chapter: 2, variant: 'lazy' },
   { chapter: 3, variant: 'default' },
+  { chapter: 3, variant: 'concurrent' },
   { chapter: 3, variant: 'non-det' },
   { chapter: 4, variant: 'default' }
 ];
 
-const variantDisplay: Map<Variant, string> = new Map([['non-det', 'Non-Det']]);
-export const languageURLNames: Map<string, ISourceLanguage> = new Map([
-  ['3_Non_Det', { chapter: 3, variant: 'non-det' }]
+const variantDisplay: Map<Variant, string> = new Map([
+  ['non-det', 'Non-Det'],
+  ['concurrent', 'Concurrent'],
+  ['lazy', 'Lazy']
 ]);
-
-export const urlName = (chapter: number, variant: Variant = 'default'): string => {
-  for (const name of languageURLNames.keys()) {
-    const language: ISourceLanguage = languageURLNames.get(name)!;
-    if (language.chapter === chapter && language.variant === variant) {
-      return name;
-    }
-  }
-
-  return chapter.toString();
-};
 
 export const styliseChapter = (chap: number, variant: Variant = 'default') => {
   let res = `Source \xa7${chap}`;

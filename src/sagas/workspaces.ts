@@ -162,7 +162,12 @@ export default function* workspaceSaga(): SagaIterator {
       score: 1000 // Prioritize suggestions from code
     }));
 
-    const builtinSuggestions = Documentation.builtins[context.chapter] || [];
+    let chapterName = context.chapter.toString();
+    if (context.variant !== 'default') {
+      chapterName += '_' + context.variant;
+    }
+
+    const builtinSuggestions = Documentation.builtins[chapterName] || [];
 
     const extLib = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).externalLibrary
@@ -607,25 +612,35 @@ export function* evalCode(
     }
   }
 
-  function call_non_det() {
-    return code.trim() === TRY_AGAIN
-      ? call(resume, lastNonDetResult)
-      : code.includes(TRY_AGAIN) // defensive check: try-again should only be used on its own
-      ? { status: 'error' }
-      : call(runInContext, code, context, {
-          executionMethod: 'interpreter',
-          originalMaxExecTime: execTime,
-          useSubst: substActiveAndCorrectChapter
-        });
+  function call_variant(variant: Variant) {
+    if (variant === 'non-det') {
+      return code.trim() === TRY_AGAIN
+        ? call(resume, lastNonDetResult)
+        : call(runInContext, code, context, {
+            executionMethod: 'interpreter',
+            originalMaxExecTime: execTime,
+            useSubst: substActiveAndCorrectChapter
+          });
+    } else if (variant === 'lazy') {
+      return call(runInContext, code, context, {
+        scheduler: 'preemptive',
+        originalMaxExecTime: execTime,
+        useSubst: substActiveAndCorrectChapter
+      });
+    } else {
+      throw new Error('Unknown variant: ' + variant);
+    }
   }
 
   const isNonDet: boolean = context.variant === 'non-det';
+  const isLazy: boolean = context.variant === 'lazy';
+
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
-        : isNonDet
-        ? call_non_det()
+        : isNonDet || isLazy
+        ? call_variant(context.variant)
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
