@@ -86,6 +86,11 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     this.completer = {
       getCompletions: (editor: any, session: any, pos: any, prefix: any, callback: any) => {
+        // Don't prompt if prefix starts with number
+        if (prefix && /\d/.test(prefix.charAt(0))) {
+          callback();
+          return;
+        }
         // console.log(pos); // Cursor col is insertion location i.e. last char col + 1
         this.props.handlePromptAutocomplete(pos.row + 1, pos.column, callback);
       }

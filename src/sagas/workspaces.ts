@@ -147,7 +147,8 @@ export default function* workspaceSaga(): SagaIterator {
       getNames,
       autocompleteCode,
       action.payload.row + prependLength,
-      action.payload.column
+      action.payload.column,
+      context
     );
 
     if (!displaySuggestions) {
@@ -159,7 +160,7 @@ export default function* workspaceSaga(): SagaIterator {
       caption: name.name,
       value: name.name,
       meta: name.meta,
-      score: 1000 // Prioritize suggestions from code
+      score: name.score ? name.score + 1000 : 1000 // Prioritize suggestions from code
     }));
 
     let chapterName = context.chapter.toString();
