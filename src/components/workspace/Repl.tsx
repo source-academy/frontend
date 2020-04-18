@@ -1,7 +1,8 @@
 import { Card, Classes, Pre } from '@blueprintjs/core';
 import * as classNames from 'classnames';
 import { parseError } from 'js-slang';
-import { stringify } from 'js-slang/dist/interop';
+import { Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
@@ -19,6 +20,7 @@ export interface IReplProps {
   hidden?: boolean;
   usingSubst?: boolean;
   sourceChapter?: number;
+  sourceVariant?: Variant;
 }
 
 export interface IOutputProps {
@@ -44,7 +46,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
             className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
             handlers={handlers}
           >
-            <ReplInput {...inputProps} />
+            {this.props.sourceVariant !== 'concurrent' ? <ReplInput {...inputProps} /> : null}
           </HotKeys>
         </div>
       </div>

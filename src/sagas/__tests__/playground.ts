@@ -1,3 +1,4 @@
+import { Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
 import { expectSaga } from 'redux-saga-test-plan';
@@ -77,11 +78,13 @@ describe('Playground saga tests', () => {
 
 function createQueryString(code: string, state: IState): string {
   const chapter: number = state.workspaces.playground.context.chapter;
+  const variant: Variant = state.workspaces.playground.context.variant;
   const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
   const execTime: number = state.workspaces.playground.execTime;
   const newQueryString: string = qs.stringify({
     prgrm: compressToEncodedURIComponent(code),
     chap: chapter,
+    variant,
     ext: external,
     exec: execTime
   });

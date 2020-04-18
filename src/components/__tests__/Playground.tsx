@@ -1,10 +1,12 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
+import { Variant } from 'js-slang/dist/types';
 import { SideContentType } from 'src/reducers/states';
 import { mockRouterProps } from '../../mocks/components';
 import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape';
 import Playground, { IPlaygroundProps } from '../Playground';
+import { IPosition } from '../workspace/Editor';
 
 const baseProps = {
   editorValue: '',
@@ -21,6 +23,7 @@ const baseProps = {
   sharedbAceIsInviting: false,
   sideContentHeight: 40,
   sourceChapter: 2,
+  sourceVariant: 'default' as Variant,
   externalLibraryName: ExternalLibraryNames.NONE,
   output: [],
   replValue: '',
@@ -31,6 +34,7 @@ const baseProps = {
   handleBrowseHistoryUp: () => {},
   handleChangeExecTime: (execTime: number) => {},
   handleChapterSelect: (chapter: number) => {},
+  handleDeclarationNavigate: (cursorPosition: IPosition) => {},
   handleEditorEval: () => {},
   handleEditorHeightChange: (height: number) => {},
   handleEditorValueChange: () => {},
@@ -52,7 +56,8 @@ const baseProps = {
   handleUsingSubst: (usingSubst: boolean) => {},
   handleDebuggerPause: () => {},
   handleDebuggerResume: () => {},
-  handleDebuggerReset: () => {}
+  handleDebuggerReset: () => {},
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
 };
 
 const testValueProps: IPlaygroundProps = {

@@ -1,7 +1,7 @@
 /* tslint:disable: ban-types*/
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
-import { stringify } from 'js-slang/dist/interop';
-import { Context, CustomBuiltIns, Value } from 'js-slang/dist/types';
+import { Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
 import { handleConsoleLog } from '../actions';
 
@@ -123,8 +123,13 @@ export const externalBuiltIns = {
  * provides the original function with the required
  * externalBuiltIns, such as display and prompt.
  */
-export function createContext<T>(chapter: number, externals: string[], externalContext: T) {
-  return createSlangContext<T>(chapter, externals, externalContext, externalBuiltIns);
+export function createContext<T>(
+  chapter: number,
+  externals: string[],
+  externalContext: T,
+  variant: Variant = 'default'
+) {
+  return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard

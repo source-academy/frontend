@@ -29,6 +29,7 @@ import {
   HIGHLIGHT_LINE,
   INIT_INVITE,
   LOG_OUT,
+  MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -267,7 +268,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           context: createContext<WorkspaceLocation>(
             action.payload.library.chapter,
             action.payload.library.external.symbols,
-            workspaceLocation
+            workspaceLocation,
+            action.payload.library.variant
           ),
           globals: action.payload.library.globals
         }
@@ -628,6 +630,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           highlightedLines: action.payload.highlightedLines
+        }
+      };
+    case MOVE_CURSOR:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          newCursorPosition: action.payload.cursorPosition
         }
       };
     case UPDATE_REPL_VALUE:

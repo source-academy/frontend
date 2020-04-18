@@ -27,6 +27,7 @@ import {
   QuestionView,
   RunButton
 } from '../../workspace/controlBar/index';
+import { IPosition } from '../../workspace/Editor';
 import { SideContentProps, SideContentTab } from '../../workspace/side-content';
 import Autograder from '../../workspace/side-content/Autograder';
 import ToneMatrix from '../../workspace/side-content/ToneMatrix';
@@ -49,6 +50,7 @@ export type StateProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
+  newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -67,6 +69,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorHeightChange: (height: number) => void;
@@ -85,6 +88,7 @@ export type DispatchProps = {
   handleDebuggerReset: () => void;
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 };
 
 class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
@@ -169,11 +173,14 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           ? {
               editorSessionId: '',
               editorValue: this.props.editorValue!,
+              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               breakpoints: this.props.breakpoints,
               highlightedLines: this.props.highlightedLines,
+              newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
               isEditorAutorun: false
             }
           : undefined,

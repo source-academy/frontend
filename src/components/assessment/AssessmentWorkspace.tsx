@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
-import { stringify } from 'js-slang/dist/interop';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
@@ -33,6 +33,7 @@ import {
   RunButton,
   SaveButton
 } from '../workspace/controlBar/index';
+import { IPosition } from '../workspace/Editor';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
 import Autograder from '../workspace/side-content/Autograder';
 import ToneMatrix from '../workspace/side-content/ToneMatrix';
@@ -66,6 +67,7 @@ export type StateProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
+  newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
@@ -87,6 +89,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
+  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorHeightChange: (height: number) => void;
@@ -105,6 +108,7 @@ export type DispatchProps = {
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 };
 
 class AssessmentWorkspace extends React.Component<
@@ -237,12 +241,15 @@ class AssessmentWorkspace extends React.Component<
           ? {
               editorSessionId: '',
               editorValue: this.props.editorValue!,
+              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.props.handleEditorEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
               breakpoints: this.props.breakpoints,
               highlightedLines: this.props.highlightedLines,
+              newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
               isEditorAutorun: false
             }
           : undefined,

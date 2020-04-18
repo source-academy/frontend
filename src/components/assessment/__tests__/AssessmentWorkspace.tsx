@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import { SideContentType } from 'src/reducers/states';
 import { mockAssessments } from '../../../mocks/assessmentAPI';
+import { IPosition } from '../../workspace/Editor';
 import { Library } from '../assessmentShape';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
 
@@ -25,6 +26,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleBrowseHistoryUp: () => {},
   handleChapterSelect: (chapter: any, changeEvent: any) => {},
   handleClearContext: (library: Library) => {},
+  handleDeclarationNavigate: (cursorPosition: IPosition) => {},
   handleEditorEval: () => {},
   handleEditorValueChange: (val: string) => {},
   handleEditorHeightChange: (height: number) => {},
@@ -43,6 +45,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleDebuggerPause: () => {},
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
   isRunning: false,
   isDebugging: false,
   enableDebugging: false,

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import SourcecastEditor, { ISourcecastEditorProps } from '../SourcecastEditor';
+import { IPosition } from '../sourcecastShape';
 
 const componentDidMountSpy = jest.fn();
 
@@ -25,6 +26,7 @@ test('SourcecastEditor renders correctly', () => {
     sharedbAceInitValue: '',
     sharedbAceIsInviting: false,
     getTimerDuration: () => 1,
+    handleDeclarationNavigate: (cursorPosition: IPosition) => {},
     handleEditorEval: () => {},
     handleEditorValueChange: newCode => {},
     handleEditorUpdateBreakpoints: breakpoints => {},
