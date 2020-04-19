@@ -387,8 +387,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     }, 10);
   };
 
-  private handleTypeInferenceDisplay = () : void => {
-
+  private handleTypeInferenceDisplay = (): void => {
     // declare constants
     const chapter = this.props.sourceChapter;
     const code = this.props.editorValue;
@@ -396,28 +395,35 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const pos = editor.getCursorPosition();
     const token = editor.session.getTokenAt(pos.row, pos.column);
 
-
     // comment out everyline of the inference string returned by getTypeInformation
-    const commentEveryLine = (str : string) => {
+    const commentEveryLine = (str: string) => {
       const arr = str.split('\n');
-      return arr.filter(st => st !== '').map(st => '// ' + st).join('\n');
+      return arr
+        .filter(st => st !== '')
+        .map(st => '// ' + st)
+        .join('\n');
     };
 
     // display the information
     if (this.props.handleReplValueChange) {
       if (pos && token) {
-        const str = getTypeInformation(code, createContext(chapter), {line: pos.row + 1, column: pos.column}, token.value);
+        const str = getTypeInformation(
+          code,
+          createContext(chapter),
+          { line: pos.row + 1, column: pos.column },
+          token.value
+        );
         const output = commentEveryLine(str);
         if (str.length > 0) {
           this.props.handleReplValueChange(output);
         } else {
-          this.props.handleReplValueChange("// type information not found");
+          this.props.handleReplValueChange('// type information not found');
         }
       } else {
-        this.props.handleReplValueChange("// invalid token. Please put cursor on an identifier.");
+        this.props.handleReplValueChange('// invalid token. Please put cursor on an identifier.');
       }
     }
-  }
+  };
 
   private handleGutterClick = (e: any) => {
     const target = e.domEvent.target;
