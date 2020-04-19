@@ -6,7 +6,7 @@ import sharedbAce from 'sharedb-ace';
 import { require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
-import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
+import { createContext, getAllOccurrencesInScope, getScope, getTypeInformation } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { Variant } from 'js-slang/dist/types';
@@ -36,6 +36,7 @@ export interface IEditorProps {
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
+  handleReplValueChange?: (newCode: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
@@ -238,6 +239,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   mac: 'Command-Shift-H'
                 },
                 exec: this.handleHighlightScope
+              },
+              {
+                name: 'TypeInferenceDisplay',
+                bindKey: {
+                  win: 'Ctrl-Shift-M',
+                  mac: 'Command-Shift-M'
+                },
+                exec: this.handleTypeInferenceDisplay
               }
             ]}
             editorProps={{
@@ -376,6 +385,44 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       });
       this.markerIds = markerIds;
     }, 10);
+  };
+
+  private handleTypeInferenceDisplay = (): void => {
+    // declare constants
+    const chapter = this.props.sourceChapter;
+    const code = this.props.editorValue;
+    const editor = (this.AceEditor.current as any).editor;
+    const pos = editor.getCursorPosition();
+    const token = editor.session.getTokenAt(pos.row, pos.column);
+
+    // comment out everyline of the inference string returned by getTypeInformation
+    const commentEveryLine = (str: string) => {
+      const arr = str.split('\n');
+      return arr
+        .filter(st => st !== '')
+        .map(st => '// ' + st)
+        .join('\n');
+    };
+
+    // display the information
+    if (this.props.handleReplValueChange) {
+      if (pos && token) {
+        const str = getTypeInformation(
+          code,
+          createContext(chapter),
+          { line: pos.row + 1, column: pos.column },
+          token.value
+        );
+        const output = commentEveryLine(str);
+        if (str.length > 0) {
+          this.props.handleReplValueChange(output);
+        } else {
+          this.props.handleReplValueChange('// type information not found');
+        }
+      } else {
+        this.props.handleReplValueChange('// invalid token. Please put cursor on an identifier.');
+      }
+    }
   };
 
   private handleGutterClick = (e: any) => {
