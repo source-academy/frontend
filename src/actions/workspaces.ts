@@ -1,6 +1,8 @@
 import { action } from 'typesafe-actions';
 
+import { Variant } from 'js-slang/dist/types';
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
+import { IPosition } from '../components/workspace/Editor';
 import { IWorkspaceState, SideContentType } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
@@ -45,9 +47,14 @@ export const changeExecTime = (execTime: string, workspaceLocation: WorkspaceLoc
 export const changeSideContentHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.CHANGE_SIDE_CONTENT_HEIGHT, { height, workspaceLocation });
 
-export const chapterSelect = (chapter: number, workspaceLocation: WorkspaceLocation) =>
+export const chapterSelect = (
+  chapter: number,
+  variant: Variant,
+  workspaceLocation: WorkspaceLocation
+) =>
   action(actionTypes.CHAPTER_SELECT, {
     chapter,
+    variant,
     workspaceLocation
   });
 
@@ -147,6 +154,14 @@ export const sendReplInputToOutput = (newOutput: string, workspaceLocation: Work
 export const resetTestcase = (workspaceLocation: WorkspaceLocation, index: number) =>
   action(actionTypes.RESET_TESTCASE, { workspaceLocation, index });
 
+export const navigateToDeclaration = (
+  workspaceLocation: WorkspaceLocation,
+  cursorPosition: IPosition
+) => action(actionTypes.NAV_DECLARATION, { workspaceLocation, cursorPosition });
+
+export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition: IPosition) =>
+  action(actionTypes.MOVE_CURSOR, { workspaceLocation, cursorPosition });
+
 /**
  * Resets a workspace to its default properties.
  *
@@ -199,4 +214,17 @@ export const updateHasUnsavedChanges = (
   action(actionTypes.UPDATE_HAS_UNSAVED_CHANGES, {
     workspaceLocation,
     hasUnsavedChanges
+  });
+
+export const promptAutocomplete = (
+  workspaceLocation: WorkspaceLocation,
+  row: number,
+  column: number,
+  callback: any // TODO: define a type for this
+) =>
+  action(actionTypes.PROMPT_AUTOCOMPLETE, {
+    workspaceLocation,
+    row,
+    column,
+    callback
   });

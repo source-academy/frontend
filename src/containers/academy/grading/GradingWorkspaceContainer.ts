@@ -17,6 +17,8 @@ import {
   evalRepl,
   evalTestcase,
   fetchGrading,
+  navigateToDeclaration,
+  promptAutocomplete,
   setEditorBreakpoint,
   updateActiveTab,
   updateEditorValue,
@@ -36,6 +38,7 @@ import GradingWorkspace, {
   StateProps
 } from '../../../components/academy/grading/GradingWorkspace';
 import { Library } from '../../../components/assessment/assessmentShape';
+import { IPosition } from '../../../components/workspace/Editor';
 import { IState, IWorkspaceState, SideContentType } from '../../../reducers/states';
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
@@ -56,6 +59,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     isRunning: state.workspaces.grading.isRunning,
     isDebugging: state.workspaces.grading.isDebugging,
     enableDebugging: state.workspaces.grading.enableDebugging,
+    newCursorPosition: state.workspaces.grading.newCursorPosition,
     output: state.workspaces.grading.output,
     replValue: state.workspaces.grading.replValue,
     sideContentHeight: state.workspaces.grading.sideContentHeight,
@@ -72,8 +76,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, workspaceLocation),
+        chapterSelect(chapter, 'default', workspaceLocation),
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
+      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+        navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
@@ -96,7 +102,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         updateHasUnsavedChanges(workspaceLocation, unsavedChanges),
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation)
+      handleDebuggerReset: () => debuggerReset(workspaceLocation),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        promptAutocomplete(workspaceLocation, row, col, callback)
     },
     dispatch
   );

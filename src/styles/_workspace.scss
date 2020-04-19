@@ -381,6 +381,18 @@ $code-color-error: #ff4444;
           margin: 11px;
           height: unset;
 
+          .beforeMarker {
+            background: rgba(179, 101, 57, 0.75);
+            position: absolute;
+            z-index: 20;
+          }
+
+          .afterMarker {
+            background: green;
+            position: absolute;
+            z-index: 20;
+          }
+
           .#{$ns}-slider-label {
             width: -webkit-max-content;
             width: -moz-max-content;

@@ -2,6 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Variant } from 'js-slang/dist/types';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -22,6 +23,8 @@ import {
   generateLzString,
   initInvite,
   invalidEditorSessionId,
+  navigateToDeclaration,
+  promptAutocomplete,
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
@@ -35,6 +38,7 @@ import {
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
+import { IPosition } from '../components/workspace/Editor';
 import { IState, SideContentType } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
@@ -48,6 +52,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   isRunning: state.workspaces.playground.isRunning,
   isDebugging: state.workspaces.playground.isDebugging,
   enableDebugging: state.workspaces.playground.enableDebugging,
+  newCursorPosition: state.workspaces.playground.newCursorPosition,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
   replValue: state.workspaces.playground.replValue,
@@ -55,6 +60,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sharedbAceInitValue: state.workspaces.playground.sharedbAceInitValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
+  sourceVariant: state.workspaces.playground.context.variant,
   websocketStatus: state.workspaces.playground.websocketStatus,
   externalLibraryName: state.workspaces.playground.externalLibrary,
   usingSubst: state.playground.usingSubst
@@ -71,7 +77,10 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) =>
         changeExecTime(execTime.toString(), workspaceLocation),
-      handleChapterSelect: (chapter: number) => chapterSelect(chapter, workspaceLocation),
+      handleChapterSelect: (chapter: number, variant: Variant) =>
+        chapterSelect(chapter, variant, workspaceLocation),
+      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+        navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorHeightChange: (height: number) => changeEditorHeight(height, workspaceLocation),
@@ -99,7 +108,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst),
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation)
+      handleDebuggerReset: () => debuggerReset(workspaceLocation),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        promptAutocomplete(workspaceLocation, row, col, callback)
     },
     dispatch
   );
