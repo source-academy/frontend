@@ -21,11 +21,12 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
+      handleAssessmentChangeDate: changeDateAssessment,
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
       handlePublishAssessment: publishAssessment,
-      handleAssessmentChangeDate: changeDateAssessment
+      
     },
     dispatch
   );
