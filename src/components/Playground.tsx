@@ -303,6 +303,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleDeclarationNavigate: this.props.handleDeclarationNavigate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
+        handleReplValueChange: this.props.handleReplValueChange,
         handlePromptAutocomplete: this.props.handlePromptAutocomplete,
         handleFinishInvite: this.props.handleFinishInvite,
         sharedbAceInitValue: this.props.sharedbAceInitValue,
