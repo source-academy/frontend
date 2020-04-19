@@ -125,13 +125,13 @@ class Dashboard extends React.Component<IDashboardProps, State> {
         continue;
       }
       const groupName = current.groupName;
-      const group = this.props.groupOverviews.find(x => x.groupName === groupName);
+      const groupOverviews = this.props.groupOverviews;
+      const index = groupOverviews.findIndex(x => x.groupName === groupName);
 
-      if (group) {
-        const index = group.id;
+      if (index !== -1) {
         if (filteredData[index] === undefined) {
           filteredData[index] = {
-            avengerName: group.avengerName,
+            avengerName: groupOverviews[index].avengerName,
             numOfUngradedMissions: 0,
             totalNumOfMissions: 0,
             numOfUngradedQuests: 0,
