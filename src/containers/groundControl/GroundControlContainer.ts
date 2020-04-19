@@ -25,8 +25,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
-      handlePublishAssessment: publishAssessment,
-      
+      handlePublishAssessment: publishAssessment
     },
     dispatch
   );

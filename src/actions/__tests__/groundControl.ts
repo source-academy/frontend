@@ -8,8 +8,8 @@ import {
 
 test('changeDateAssessment generates correct action object', () => {
   const id = 10;
-  const openAt = "2020-01-01T00:00:00.000Z";
-  const closeAt = "2021-01-01T00:00:00.000Z";
+  const openAt = '2020-01-01T00:00:00.000Z';
+  const closeAt = '2021-01-01T00:00:00.000Z';
   const action = changeDateAssessment(id, openAt, closeAt);
   expect(action).toEqual({
     type: actionTypes.CHANGE_DATE_ASSESSMENT,
@@ -44,8 +44,8 @@ test('publishAssessment generates correct action object', () => {
 });
 
 test(' generates correct action object', () => {
-  const file = new File([""], "testFile");
-  const forceUpdate =  true;
+  const file = new File([''], 'testFile');
+  const forceUpdate = true;
   const action = uploadAssessment(file, forceUpdate);
   expect(action).toEqual({
     type: actionTypes.UPLOAD_ASSESSMENT,
