@@ -25,7 +25,8 @@
   const LEVEL_SPACING = 60; // spacing between vertical frame levels
   const OBJECT_FRAME_RIGHT_SPACING = 50; // space to right frame border
   const OBJECT_FRAME_TOP_SPACING = 35; // perpendicular distance to top border
-  const PAIR_SPACING = 15;
+  const PAIR_SPACING = 15; // spacing between pairs
+  const INNER_RADIUS = 2; // radius of inner dot within a fn object
 
   // TEXT SPACING 
   const HORIZONTAL_TEXT_MARGIN = 10
@@ -251,16 +252,20 @@
     context.fillStyle = '#2c3e50'; // colour of Source Academy background
     context.fillRect(x - 2 * FNOBJECT_RADIUS, y - FNOBJECT_RADIUS, 4 * FNOBJECT_RADIUS, 2 * FNOBJECT_RADIUS);
     context.strokeStyle = '#999999';
+    context.fillStyle = '#999999';
     context.beginPath();
+    context.arc(x - FNOBJECT_RADIUS, y, INNER_RADIUS, 0, Math.PI * 2, false);
+    context.fill();
+    context.moveTo(x, y);
     context.arc(x - FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
 
     if (!config.hovered && !config.selected) {
       context.strokeStyle = '#999999';
-      context.lineWidth = 2;
+      //context.lineWidth = 2;
       context.stroke();
     } else {
       context.strokeStyle = 'green';
-      context.lineWidth = 2;
+      //context.lineWidth = 2;
       context.stroke();
     }
 
@@ -295,7 +300,12 @@
         context.fillText('...', x + 120, y + 120);
       }
     }
+    context.moveTo(x + FNOBJECT_RADIUS, y);
+    context.arc(x + FNOBJECT_RADIUS, y, INNER_RADIUS, 0, Math.PI * 2, false);
+    context.fill();
+    context.moveTo(x + 2 * FNOBJECT_RADIUS, y);
     context.arc(x + FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
+    
     context.moveTo(x + FNOBJECT_RADIUS, y);
     context.lineTo(x + FNOBJECT_RADIUS, y - FNOBJECT_RADIUS);
     context.stroke();
@@ -674,7 +684,7 @@
       context.fillText(dataObject[1], startX + 2 * DATA_UNIT_WIDTH/3, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
     context.strokeStyle = '#999999';
-    context.lineWidth = 2;
+    //context.lineWidth = 2;
     context.stroke();
     
   }
