@@ -297,6 +297,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       },
       editorProps: {
         sourceChapter: this.props.sourceChapter,
+        externalLibraryName: this.props.externalLibraryName,
         sourceVariant: this.props.sourceVariant,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
@@ -304,6 +305,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
         handleReplValueChange: this.props.handleReplValueChange,
+        handleReplEval: this.props.handleReplEval,
         handlePromptAutocomplete: this.props.handlePromptAutocomplete,
         handleFinishInvite: this.props.handleFinishInvite,
         sharedbAceInitValue: this.props.sharedbAceInitValue,

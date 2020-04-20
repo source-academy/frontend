@@ -32,11 +32,13 @@ export interface IEditorProps {
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
+  externalLibraryName?: string;
   sourceVariant?: Variant;
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleReplValueChange?: (newCode: string) => void;
+  handleReplEval?: () => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
@@ -190,15 +192,19 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   public chapterNo = () => {
     let chapter = this.props.sourceChapter;
     let variant = this.props.sourceVariant;
+    let external = this.props.externalLibraryName;
     if (chapter === undefined) {
       chapter = 1;
     }
     if (variant === undefined) {
       variant = 'default';
     }
-    HighlightRulesSelector(chapter, variant);
-    ModeSelector(chapter);
-    return 'source' + chapter.toString();
+    if (external === undefined) {
+      external = 'NONE';
+    }
+    HighlightRulesSelector(chapter, variant, external);
+    ModeSelector(chapter, variant, external);
+    return 'source' + chapter.toString() + variant + external;
   };
 
   public render() {
@@ -287,11 +293,15 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const chapter = this.props.sourceChapter;
     const variantString =
       this.props.sourceVariant === 'default' ? '' : `_${this.props.sourceVariant}`;
+    const external =
+      this.props.externalLibraryName === undefined ? 'NONE' : this.props.externalLibraryName;
+    const domain =
+      external === 'NONE' ? `source_${chapter}${variantString}` : `External%20libraries`;
     const pos = (this.AceEditor.current as any).editor.selection.getCursor();
     const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
     const url = LINKS.TEXTBOOK;
     if (token !== null && /\bsupport.function\b/.test(token.type)) {
-      window.open(`${url}source/source_${chapter}${variantString}/global.html#${token.value}`); // opens the link
+      window.open(`${url}source/${domain}/global.html#${token.value}`); // opens the link
     } else if (token !== null && /\bstorage.type\b/.test(token.type)) {
       window.open(`${url}source/source_${chapter}.pdf`);
     } else {
@@ -405,8 +415,12 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     };
 
     // display the information
-    if (this.props.handleReplValueChange) {
+    if (this.props.handleReplValueChange && this.props.handleReplEval) {
       if (pos && token) {
+        // if the token is a comment, ignore it
+        if (token.type === 'comment') {
+          return;
+        }
         const str = getTypeInformation(
           code,
           createContext(chapter),
@@ -422,6 +436,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       } else {
         this.props.handleReplValueChange('// invalid token. Please put cursor on an identifier.');
       }
+
+      this.props.handleReplEval();
     }
   };
 
