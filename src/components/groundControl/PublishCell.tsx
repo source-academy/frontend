@@ -27,9 +27,16 @@ class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> 
   public render() {
     const text = this.props.data.isPublished ? 'Unpublish' : 'Publish';
     const lowerCaseText = text.toLowerCase();
+    const toggleButton = () => {
+      return (
+        <div className="toggle-button-wrapper">
+          <Switch checked={this.state.isPublished} onChange={this.handleOpenDialog} />
+        </div>
+      );
+    };
     return (
       <div>
-        <this.toggleButton />
+        {toggleButton()}
         <Dialog
           icon="info-sign"
           isOpen={this.state.dialogOpen}
@@ -51,9 +58,6 @@ class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> 
     );
   }
 
-  private toggleButton = () => {
-    return <Switch checked={this.state.isPublished} onChange={this.handleOpenDialog} />;
-  };
   private handleCloseDialog = () => this.setState({ dialogOpen: false });
   private handleOpenDialog = () => this.setState({ dialogOpen: true });
   private handleDelete = () => {

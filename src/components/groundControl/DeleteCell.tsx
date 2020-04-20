@@ -35,6 +35,7 @@ class DeleteCell extends React.Component<IDeleteCellProps, IDeleteCellState> {
         >
           <div className={Classes.DIALOG_BODY}>
             {<p>Are you sure that you want to delete this Assessment?</p>}
+            {<p>Students' answers and submissions will be deleted as well.</p>}
           </div>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>

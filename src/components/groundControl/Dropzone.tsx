@@ -95,7 +95,11 @@ const MaterialDropzone: React.FC<IDropzoneProps> = props => {
   };
 
   const toggleButton = () => {
-    return <Switch checked={props.forceUpdate} onChange={handleToggleOnChange} />;
+    return (
+      <div className="toggle-button-wrapper">
+        <Switch checked={props.forceUpdate} onChange={handleToggleOnChange} />
+      </div>
+    );
   };
 
   const handleConfirmForceUpdate = () => {

@@ -157,7 +157,7 @@ class GroundControl extends React.Component<IGroundControlProps, IGroundControlS
     );
 
     const display = (
-      <div>
+      <div className="GroundControl">
         <Dropzone
           handleUploadAssessment={this.handleUploadAssessment}
           toggleForceUpdate={this.toggleForceUpdate}
