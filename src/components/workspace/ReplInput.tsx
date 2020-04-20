@@ -45,7 +45,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
 
   public getChapterMode() {
     const chapter = this.props.sourceChapter;
-    return chapter === undefined ? 'source1' : 'source' + chapter.toString();
+    return chapter === undefined ? 'source1' : 'source' + chapter.toString() + 'default' + 'NONE';
   }
 
   public render() {
