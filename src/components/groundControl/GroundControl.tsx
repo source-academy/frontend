@@ -2,6 +2,7 @@ import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
+import { sortBy } from 'lodash';
 import * as React from 'react';
 
 import { getPrettyDate } from '../../utils/dateHelpers';
@@ -21,12 +22,14 @@ export interface IDispatchProps {
 }
 
 export interface IGroundControlAssessmentOverview extends IAssessmentOverview {
-  prettyOpenAt?: string;
-  prettyCloseAt?: string;
+  prettyOpenAt: string;
+  prettyCloseAt: string;
+  formattedOpenAt: Date;
+  formattedCloseAt: Date;
 }
 
 export interface IStateProps {
-  assessmentOverviews: IGroundControlAssessmentOverview[];
+  assessmentOverviews: IAssessmentOverview[];
 }
 
 export interface IGroundControlProps extends IDispatchProps, IStateProps {}
@@ -184,25 +187,19 @@ class GroundControl extends React.Component<IGroundControlProps, IGroundControlS
       return [];
     }
 
-    const overview = this.props.assessmentOverviews.slice();
-    return overview
-      .sort((assessmentX, assessmentY) => {
-        if (assessmentX.category < assessmentY.category) {
-          return -1;
-        } else if (assessmentX.category === assessmentY.category) {
-          return 0;
-        } else {
-          return 1;
-        }
-      })
+    const overview: IGroundControlAssessmentOverview[] = this.props.assessmentOverviews
+      .slice()
       .map(assessmentOverview => {
         const clone: IGroundControlAssessmentOverview = JSON.parse(
           JSON.stringify(assessmentOverview)
         );
         clone.prettyCloseAt = getPrettyDate(clone.closeAt);
         clone.prettyOpenAt = getPrettyDate(clone.openAt);
+        clone.formattedOpenAt = new Date(Date.parse(clone.openAt));
+        clone.formattedCloseAt = new Date(Date.parse(clone.closeAt));
         return clone;
       });
+    return sortBy(overview, ['category', 'formattedOpenAt', 'formattedCloseAt']);
   };
 
   private onGridReady = (params: GridReadyEvent) => {
