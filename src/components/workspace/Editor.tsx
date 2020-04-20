@@ -22,7 +22,6 @@ import { checkSessionIdExists } from './collabEditing/helper';
  *           of the editor's content, using `slang`
  */
 
-
 export interface IEditorProps {
   breakpoints: string[];
   editorSessionId: string;
