@@ -1,7 +1,7 @@
-import { Classes, Divider, Slider } from '@blueprintjs/core';
+import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as es from 'estree';
-import { codify } from 'js-slang/dist/stepper/stepper';
+import { redexify } from 'js-slang/dist/stepper/stepper';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
@@ -12,7 +12,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { controlButton } from '../../commons';
 
 export interface ISubstVisualizerProps {
-  content: es.Program[];
+  content: Array<[es.Program, string[][], string]>;
 }
 
 export interface ISubstVisualizerState {
@@ -56,6 +56,14 @@ const SubstDefaultText = () => {
 const substKeyMap = {
   FIRST_STEP: ',',
   LAST_STEP: '.'
+};
+
+const SubstCodeDisplay = (props: { content: string }) => {
+  return (
+    <Card>
+      <Pre className="resultOutput">{props.content}</Pre>
+    </Card>
+  );
 };
 
 class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisualizerState> {
@@ -108,9 +116,8 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
                 showGutter={false}
                 readOnly={true}
                 maxLines={Infinity}
-                value={codify(
-                  this.props.content[this.state.value <= lastStepValue ? this.state.value - 1 : 0]
-                )}
+                value={this.getText(this.state.value)}
+                markers={this.getDiffMarkers(this.state.value)}
                 setOptions={{
                   fontFamily: "'Inconsolata', 'Consolas', monospace"
                 }}
@@ -118,10 +125,78 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
             ) : (
               <SubstDefaultText />
             )}
+            {hasRunCode ? (
+              <SubstCodeDisplay
+                content={
+                  this.state.value <= lastStepValue && this.props.content.length > 1
+                    ? this.props.content[this.state.value - 1][2]
+                    : ''
+                }
+              />
+            ) : null}
           </div>
         </div>
       </HotKeys>
     );
+  }
+
+  private getDiffMarkers = (value: number) => {
+    const lastStepValue = this.props.content.length;
+    const contIndex = value <= lastStepValue ? value - 1 : 0;
+    const pathified = redexify(this.props.content[contIndex][0], this.props.content[contIndex][1]);
+    const redexed = pathified[0];
+    const redex = pathified[1].split('\n');
+
+    const diffMarkers = [] as any[];
+    if (redex.length > 0) {
+      const mainprog = redexed.split('$');
+      let text = mainprog[0];
+      let front = text.split('\n');
+
+      let startR = front.length - 1;
+      let startC = front[startR].length;
+
+      for (let i = 0; i < mainprog.length - 1; i++) {
+        const endR = startR + redex.length - 1;
+        const endC =
+          redex.length === 1
+            ? startC + redex[redex.length - 1].length
+            : redex[redex.length - 1].length;
+
+        diffMarkers.push({
+          startRow: startR,
+          startCol: startC,
+          endRow: endR,
+          endCol: endC,
+          className: value % 2 === 0 ? 'beforeMarker' : 'afterMarker',
+          type: 'background'
+        });
+
+        text = text + redex + mainprog[i + 1];
+        front = text.split('\n');
+        startR = front.length - 1;
+        startC = front[startR].length;
+      }
+    }
+    return diffMarkers;
+  };
+
+  private getText(value: number) {
+    const lastStepValue = this.props.content.length;
+    const contIndex = value <= lastStepValue ? value - 1 : 0;
+    const pathified = redexify(this.props.content[contIndex][0], this.props.content[contIndex][1]);
+    const redexed = pathified[0];
+    const redex = pathified[1];
+    const split = redexed.split('$');
+    if (split.length > 1) {
+      let text = split[0];
+      for (let i = 1; i < split.length; i++) {
+        text = text + redex + split[i];
+      }
+      return text;
+    } else {
+      return redexed;
+    }
   }
 
   private sliderShift = (newValue: number) => {
