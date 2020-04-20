@@ -1,7 +1,5 @@
 import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as es from 'estree';
-import { redexify } from 'js-slang/dist/stepper/stepper';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
@@ -12,7 +10,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { controlButton } from '../../commons';
 
 export interface ISubstVisualizerProps {
-  content: Array<[es.Program, string[][], string]>;
+  content: Array<[string, string, string]>;
 }
 
 export interface ISubstVisualizerState {
@@ -26,12 +24,13 @@ const SubstDefaultText = () => {
         Welcome to the Stepper!
         <br />
         <br />
-        On this tab, the REPL will be hidden from view. You may use this tool by writing your
-        program on the left, then dragging the slider above to see its evaluation.
+        On this tab, the REPL will be hidden from view, so do check that your code has no errors
+        before running the stepper. You may use this tool by writing your program on the left, then
+        dragging the slider above to see its evaluation.
         <br />
         <br />
-        Alternatively, you may click on the gutter of the editor (where all the line numbers are, on
-        the left) to set a breakpoint, and then run the program to show it here!
+        On even-numbered steps, the part of the program that will be evaluated next is highlighted
+        in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green.
         <br />
         <br />
         <Divider />
@@ -43,11 +42,11 @@ const SubstDefaultText = () => {
         {controlButton('(Period)', IconNames.GREATER_THAN)}: Move to the last step
         <br />
         <br />
-        Note that first and last step shortcuts are only active when the browser focus is on this
-        panel (click on the slider or the text!).
+        Note that the first and last step shortcuts are only active when the browser focus is on
+        this panel (click on the slider or the text!).
         <br />
         <br />
-        When focus is on the slider, the arrow keys may also be used to move a single step.
+        When the focus is on the slider, the arrow keys may also be used to move a single step.
       </div>
     </div>
   );
@@ -143,7 +142,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
   private getDiffMarkers = (value: number) => {
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
-    const pathified = redexify(this.props.content[contIndex][0], this.props.content[contIndex][1]);
+    const pathified = this.props.content[contIndex];
     const redexed = pathified[0];
     const redex = pathified[1].split('\n');
 
@@ -184,7 +183,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
   private getText(value: number) {
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
-    const pathified = redexify(this.props.content[contIndex][0], this.props.content[contIndex][1]);
+    const pathified = this.props.content[contIndex];
     const redexed = pathified[0];
     const redex = pathified[1];
     const split = redexed.split('$');
