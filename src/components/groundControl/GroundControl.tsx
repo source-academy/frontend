@@ -131,12 +131,12 @@ class GroundControl extends React.Component<IGroundControlProps, IGroundControlS
       this.gridApi &&
       this.props.assessmentOverviews.length !== prevProps.assessmentOverviews.length
     ) {
-      this.gridApi.setRowData(this.sortByCategory());
+      this.gridApi.setRowData(this.sortByCategoryAndDate());
     }
   }
 
   public render() {
-    const data = this.sortByCategory();
+    const data = this.sortByCategoryAndDate();
     const Grid = () => (
       <div className="GradingContainer">
         <div className="Grading ag-grid-parent ag-theme-balham">
@@ -182,7 +182,7 @@ class GroundControl extends React.Component<IGroundControlProps, IGroundControlS
     );
   }
 
-  private sortByCategory = () => {
+  private sortByCategoryAndDate = () => {
     if (!this.props.assessmentOverviews) {
       return [];
     }
