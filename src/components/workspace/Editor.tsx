@@ -22,6 +22,7 @@ import { checkSessionIdExists } from './collabEditing/helper';
  *           of the editor's content, using `slang`
  */
 
+
 export interface IEditorProps {
   breakpoints: string[];
   editorSessionId: string;
@@ -293,11 +294,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const chapter = this.props.sourceChapter;
     const variantString =
       this.props.sourceVariant === 'default' ? '' : `_${this.props.sourceVariant}`;
-    const external = 
+    const external =
       this.props.externalLibraryName === undefined ? 'NONE' : this.props.externalLibraryName;
-    const domain = external === 'NONE' 
-      ? `source_${chapter}${variantString}`
-      : `External%20libraries`;
+    const domain =
+      external === 'NONE' ? `source_${chapter}${variantString}` : `External%20libraries`;
     const pos = (this.AceEditor.current as any).editor.selection.getCursor();
     const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
     const url = LINKS.TEXTBOOK;
@@ -418,7 +418,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     // display the information
     if (this.props.handleReplValueChange && this.props.handleReplEval) {
       if (pos && token) {
-
         // if the token is a comment, ignore it
         if (token.type === 'comment') {
           return;
