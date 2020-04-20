@@ -26,8 +26,8 @@
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "tslint": "tslint -p . -c ./tslint.prod.json",
     "cors-proxy": "lcp --proxyUrl http://localhost:4000 --port 4001 --proxyPartial \"\"",
-    "preinstall": "[ ! -f ./node_modules/sourceror-driver/node_modules/@btzy/sourceror ] || mv ./node_modules/sourceror-driver/node_modules/@btzy/sourceror ./public/externalLibs/sourceror",
-    "postinstall": "rm -rf ./public/externalLibs/sourceror"
+    "postinstall": "[ ! -f ./node_modules/sourceror-driver/node_modules/@btzy/sourceror ] || mv ./node_modules/sourceror-driver/node_modules/@btzy/sourceror ./public/externalLibs/sourceror",
+    "postuninstall": "rm -rf ./public/externalLibs/sourceror"
   },
   "husky": {
     "hooks": {
