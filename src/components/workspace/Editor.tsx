@@ -421,7 +421,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         if (token.type === 'comment') {
           return;
         }
-
         const str = getTypeInformation(
           code,
           createContext(chapter),
