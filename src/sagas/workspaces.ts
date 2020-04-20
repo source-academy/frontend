@@ -14,6 +14,7 @@ import { Variant } from 'js-slang/dist/types';
 import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
+import * as Sourceror from 'sourceror-driver';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
@@ -32,7 +33,6 @@ import {
   SideContentType,
   styliseChapter
 } from '../reducers/states';
-import * as Sourceror from 'sourceror-driver-test';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import {
   getBlockExtraMethodsString,
@@ -635,9 +635,9 @@ export function* evalCode(
       throw new Error('Unknown variant: ' + variant);
     }
   }
-  async function wasm_compile_and_run(code: string, context: Context): Promise<Result> {
-    return Sourceror.compile(code, context)
-      .then((wasmModule: WebAssembly.Module) => Sourceror.run(wasmModule, context))
+  async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
+    return Sourceror.compile(wasmCode, wasmContext)
+      .then((wasmModule: WebAssembly.Module) => Sourceror.run(wasmModule, wasmContext))
       .then(
         (returnedValue: any) => ({ status: 'finished', context, value: returnedValue }),
         _ => ({ status: 'error' })
