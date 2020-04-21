@@ -165,8 +165,8 @@ export function processTempObject(gameLocation, node) {
   }
   var collectible = node.getAttribute('name');
   var isInDorm = gameLocation.name == 'yourRoom';
-  if ((isInDorm && !GameState.hasColletible(collectible))||
-      (!isInDorm && GameState.hasColletible(collectible))) {
+  if ((isInDorm && !GameState.hasCollectible(collectible))||
+      (!isInDorm && GameState.hasCollectible(collectible))) {
     return; //don't load the collectible in dorm if it's not collected || don't load if in hidden location and collected
   }
   if (isInDorm) {
