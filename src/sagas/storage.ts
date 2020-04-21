@@ -112,15 +112,15 @@ ${contents}
   return new Promise((resolve, reject) => {
     gapi.client
       .request({
-        'path': 'https://www.googleapis.com/upload/drive/v3/files',
-        'method': 'POST',
-        'params': {
-          'uploadType': 'multipart'
+        path: 'https://www.googleapis.com/upload/drive/v3/files',
+        method: 'POST',
+        params: {
+          uploadType: 'multipart'
         },
-        'headers': {
+        headers: {
           'Content-Type': `multipart/related; boundary=${boundary}`
         },
-        'body': body
+        body: body
       })
       .then(response => {
         if (response.status !== 200) {
@@ -128,10 +128,11 @@ ${contents}
         } else {
           resolve();
         }
-      }).catch(reason => {
-      // tslint:disable-next-line:no-console
-      console.error(reason.message);
-    });
+      })
+      .catch(reason => {
+        // tslint:disable-next-line:no-console
+        console.error(reason.message);
+      });
   });
 }
 
@@ -208,12 +209,8 @@ export function* storageSaga(): SagaIterator {
   yield takeEvery(actionTypes.SAVE_TO_DRIVE, function*() {
     const code = yield select((state: IState) => state.workspaces.playground.editorValue);
     const chapter = yield select((state: IState) => state.workspaces.playground.context.chapter);
-    const variant = yield select(
-      (state: IState) => state.workspaces.playground.context.variant
-    );
-    const external = yield select(
-      (state: IState) => state.workspaces.playground.externalLibrary
-    );
+    const variant = yield select((state: IState) => state.workspaces.playground.context.variant);
+    const external = yield select((state: IState) => state.workspaces.playground.externalLibrary);
     const token = yield select((state: IState) => state.session.storageToken);
     const defaultFileName = 'Untitled.source';
     const filename =
