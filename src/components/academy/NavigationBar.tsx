@@ -82,6 +82,15 @@ const NavigationBar: React.SFC<OwnProps> = props => (
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>
         <NavLink
+          to={'/academy/groundcontrol'}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon="satellite" />
+          <div className="navbar-button-text hidden-xs">Ground Control</div>
+        </NavLink>
+
+        <NavLink
           to={'/academy/sourcereel'}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}

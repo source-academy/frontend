@@ -80,6 +80,12 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
+    <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"satellite\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Ground Control
+      </div>
+    </NavLink>
     <NavLink to=\\"/academy/sourcereel\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"mobile-video\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
@@ -148,6 +154,12 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
+    <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"satellite\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Ground Control
+      </div>
+    </NavLink>
     <NavLink to=\\"/academy/sourcereel\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"mobile-video\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
