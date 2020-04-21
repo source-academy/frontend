@@ -15,26 +15,25 @@ class JsonUpload extends React.Component {
 
   public render() {
     return (
-      <form onSubmit={JsonUpload.onFormSubmit}>
+      <form onSubmit={JsonUpload.onFormSubmit} id="json-upload">
         <h3>Game State Override</h3>
         <input type="file" onChange={this.onChange} style={{ width: '250px' }} />
       </form>
     );
   }
-  private onChange(e: { target: { files: any } }) {
+  private onChange(e: { target: any }) {
     const reader = new FileReader();
     reader.onloadend = (event: Event) => {
-      if(typeof reader.result === "string") {
+      if (typeof reader.result === 'string') {
         overrideSessionData(JSON.parse(reader.result));
       }
     };
-    if (e.target.files[0] instanceof Blob) {
+    if (e.target.files && e.target.files[0] instanceof Blob) {
       reader.readAsText(e.target.files[0]);
     } else {
       overrideSessionData(undefined);
+      e.target.value = null;
     }
-    
-    
   }
 }
 
