@@ -645,6 +645,7 @@ function* backendSaga(): SagaIterator {
     }
     yield put(actions.fetchAssessmentOverviews());
   });
+
   yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(
     action: ReturnType<typeof actions.fetchTestStories>
   ) {

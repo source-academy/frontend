@@ -24,7 +24,7 @@ export const
   avatarPath = ASSETS_HOST + 'avatars/',
   uiPath = ASSETS_HOST + 'UI/',
   soundPath = ASSETS_HOST + 'sounds/',
-  saveDataKey = "source_academy_save_data",
-  locationKey = "source_academy_location",
+  SAVE_DATA_KEY = "source_academy_save_data",
+  LOCATION_KEY = "source_academy_location",
   fadeTime = 0.3,
   nullFunction = function() {};
