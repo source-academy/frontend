@@ -24,6 +24,10 @@ export function init() {
       }
     }
 
+    //callback wasn't being used, but was required in location manager
+    // Made it an empty function
+    let callback = () => {};
+
     StoryManager.loadStoryXML(storyXMLs, false, function() {
       LocationManager.changeStartLocation(saveData.startLocation);
       if (hasPending()) {
