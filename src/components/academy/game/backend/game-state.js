@@ -1,4 +1,4 @@
-import { storyXMLPathTest, storyXMLPathLive } from '../constants/constants'
+import { storyXMLPathTest, storyXMLPathLive, SAVE_DATA_KEY, LOCATION_KEY } from '../constants/constants'
 import { isStudent } from './user';
 
 var SaveManager = require('../save-manager/save-manager.js');
@@ -13,34 +13,40 @@ var SaveManager = require('../save-manager/save-manager.js');
 let handleSaveData = undefined;
 
 //everything is going to be stored in session storage since we discovered game-state dosent persist over pages
-const OVERRIDE_KEY = "key for SA2021 overridden",
-SESSION_DATA_KEY = "key for SA2021 sessionData";
+const OVERRIDE_KEY = "source_academy_override",
+OVERRIDE_DATES_KEY = "source_academy_override_dates",
+OVERRIDE_PUBLISH_KEY = "source_academy_override_publish",
+SESSION_DATA_KEY = "source_academy_session_data";
 
-export function fetchGameData(story, gameStates, callback) {
-  console.log("fetch game data");
-  console.log(story);
-  console.log(gameStates);
-  console.log(callback);
+let sessionData = undefined;
+
+export function fetchGameData(story, gameStates, missions, callback) {
   // fetch only needs to be called once; if there are additional calls somehow then ignore them
-  // if(hasBeenFetched()) {
-  //   callback();
-  //   return;
-  // }
-  console.log("storing into session storage");
-  let data = {
-    "story":story, "gameStates":gameStates, "currentDate":Date()
+  // only for students
+  if(!hasBeenFetched() && isStudent()) {
+    let data = {
+      "story":story, "gameStates":gameStates, "currentDate":Date()
+    }
+    setSessionData(data);
+  } else if (isStudent()) {
+    callback(getSessionData().story.story);
+    return;
+  } 
+  if (!isStudent()) {
+    // resets current progress for testers
+    SaveManager.resetLocalSaveData();
   }
-  sessionStorage.setItem(SESSION_DATA_KEY, JSON.stringify(data));
-  console.log(sessionStorage.getItem(SESSION_DATA_KEY));
-  fetchGlobalMissionPointer(callback);
+  printSessionData();
+  missions = organiseMissions(missions);
+  getMissionPointer(missions, callback);
 }
 
 function printSessionData() {
   console.log("SessionData = " + (sessionStorage.getItem(SESSION_DATA_KEY)));
 }
 
-function setSessionData(data) {
-  sessionStorage.setItem(SESSION_DATA_KEY, JSON.stringify(data));
+function setSessionData(sessionData) {
+  sessionStorage.setItem(SESSION_DATA_KEY, JSON.stringify(sessionData));
 }
 
 function getSessionData() {
@@ -51,13 +57,28 @@ function hasBeenFetched() {
   return sessionStorage.hasOwnProperty(SESSION_DATA_KEY);
 }
 
+function removeSessionStorage() {
+  sessionStorage.removeItem(SESSION_DATA_KEY);
+  sessionStorage.removeItem(OVERRIDE_KEY);
+  sessionStorage.removeItem(OVERRIDE_PUBLISH_KEY);
+  sessionStorage.removeItem(OVERRIDE_DATES_KEY);
+}
+
+
+
 // override student session data
 export function overrideSessionData(data) {
-  setSessionData(data);
   if (data) {
+    setSessionData(data.sessionData);
     sessionStorage.setItem(OVERRIDE_KEY, "true");
+    if (data.overridePublish) {
+      sessionStorage.setItem(OVERRIDE_PUBLISH_KEY, "will override published");
+    }
+    if (data.overrideDates) {
+      sessionStorage.setItem(OVERRIDE_DATES_KEY, "will override dates");
+    }
   } else {
-    sessionStorage.removeItem(OVERRIDE_KEY);
+    removeSessionStorage();
   }
   printSessionData();
 }
@@ -67,7 +88,6 @@ export function setSaveHandler(saveData) {
 }
 
 export function saveUserData(data) {
-  console.log('saving student data');
   if (data && handleSaveData !== undefined) {
     handleSaveData(data)
     setSessionData(data);
@@ -75,9 +95,9 @@ export function saveUserData(data) {
 }
 
 export function saveCollectible(collectible) {
-  const data = getSessionData();
+  const sessionData = getSessionData();
   data.gameStates.collectibles[collectible] = 'completed';
-  saveUserData(data);
+  saveUserData(sessionData);
 }
 
 export function hasCollectible(collectible) {
@@ -86,9 +106,9 @@ export function hasCollectible(collectible) {
 }
 
 export function saveQuest(questId) {
-  const data = getSessionData();
-  data.gameStates.completed_quests.push(questId);
-  saveUserData(data);
+  const sessionData = getSessionData();
+  sessionData.gameStates.completed_quests.push(questId);
+  saveUserData(sessionData);
 }
 
 export function hasCompletedQuest(questId) {
@@ -96,39 +116,62 @@ export function hasCompletedQuest(questId) {
     getSessionData().gameStates.completed_quests.includes(questId);
 }
 
+
 function getStudentStory() {
-  return hasBeenFetched() && 
-    getSessionData().story.story;
+  //tries to retrieve local version of story
+  //if unable to find, use backend's version.
+  if (SaveManager.hasLocalSave()) {
+    let actionSequence = SaveManager.getLocalSaveData().actionSequence;
+    let story = actionSequence[actionSequence.length - 1].storyID;
+    return story;
+  } else {
+    return hasBeenFetched()
+      ? getSessionData().story.story
+      : undefined;
+  }
 }
 
-let stories = [];
-
-function fetchGlobalMissionPointer(callback) {
-  const makeAjax = isTest => $.ajax({
-    type: 'GET',
-    url: (isTest ? storyXMLPathTest : storyXMLPathLive) + 'master.xml',
-    dataType: 'xml',
-    success: xml => {
-      console.log(xml.children[0].children);
-      stories = Array.from(xml.children[0].children);
-      stories = stories.sort((a, b) => parseInt(a.getAttribute("key")) - parseInt(b.getAttribute("key")));
-      const now = new Date(getSessionData().currentDate);
-      const openStory = story => new Date(story.getAttribute("startDate")) < now && now < new Date(story.getAttribute("endDate"));
-      stories = stories.filter(openStory);
-      console.log(stories);
-      callback();
-    },
-    error: isTest
-      ? () => {
-          console.log('Cannot find master story list on test');
-          console.log('Trying on live...');
-          makeAjax(false);
-        }
-      : () => {
-          console.error('Cannot find master story list');
-        }
-  });
-  makeAjax(!isStudent());
+function organiseMissions(missions) {
+  function compareMissions(x, y) {
+    //compares with opening dates first and if equal, compare closing dates.
+    //sort by earliest date
+    const openX = new Date(x.openAt).getTime();
+    const openY = new Date(y.openAt).getTime();
+    const closeX = new Date(x.closeAt).getTime();
+    const closeY = new Date(y.closeAt).getTime();
+    return openX === openY
+      ? Math.sign(closeX - closeY)
+      : Math.sign(openX - openY);
+  }
+  function isWithinDates(mission, date) {
+    return new Date(mission.openAt) <= now && 
+        now <= new Date(mission.closeAt);
+  }
+  let predicate;
+  const now = new Date(getSessionData().currentDate);
+  
+  if (isStudent()) {
+    predicate = (mission) =>
+      mission.isPublished && isWithinDates(mission, now);
+  } else {
+    // resets current progress
+    SaveManager.resetLocalSaveData();
+    //testers will play unpublished missions too and can go out of bounds unless
+    //they state that they don't want to in the json file, using the override keys
+    predicate = (mission)  => {
+      let toPass = true;
+      if (!sessionStorage.getItem(OVERRIDE_DATES_KEY)) {
+        toPass = isWithinDates(mission, now);
+      } 
+      if (!sessionStorage.getItem(OVERRIDE_PUBLISH_KEY)) {
+        toPass = toPass && mission.isPublished;
+      }
+      return toPass;
+    }
+  }
+  missions = missions.filter(predicate);
+  missions = missions.sort(compareMissions);
+  return missions;
 }
 
 /**
@@ -136,16 +179,24 @@ function fetchGlobalMissionPointer(callback) {
  * However, in the event the student's current mission pointer falls outside the bounds of the
  * global list of open missions, then the corresponding upper (or lower) bound will be used.
  */
-export function getMissionPointer() {
+function getMissionPointer(missions, callback) {
   //finds the mission id's mission pointer
-  const studentStory = getStudentStory();
-  console.log("students story " + studentStory);
-  let missionPointer = stories.find(story => !studentStory || story.getAttribute("id") === studentStory).getKey();
-  const newest = parseInt(stories[stories.length-1].getAttribute("key")); // the newest mission to open
-  const oldest = parseInt(stories[0].getAttribute("key")); // the oldest mission to open
-  missionPointer = Math.min(missionPointer, newest);
-  missionPointer = Math.max(missionPointer, oldest);
-  const storyToLoad = stories.filter(story => story.getAttribute("id") == missionPointer)[0];
-  console.log("Now loading story " + storyToLoad.getAttribute("id")); // debug statement
-  return storyToLoad.getAttribute("id");
+  let studentStory = getStudentStory();
+  const isStoryEmpty = story => story === undefined || story.length === 0;
+  let missionPointer = isStoryEmpty(studentStory) 
+    ? missions[0]
+    : missions.find(mission => mission.story === studentStory);
+  //if mission pointer is in localStorage and can't find any proper story.
+  if (missionPointer === undefined && SaveManager.hasLocalSave()) {
+    localStorage.removeItem(SAVE_DATA_KEY);
+    studentStory = getStudentStory();
+    missionPointer = isStoryEmpty(studentStory) 
+      ? missions[0]
+      : missions.find(mission => mission.story === studentStory);
+  }
+  if (missionPointer === undefined) {
+    missionPointer = missions[0];
+  }
+  console.log("Now loading story " + missionPointer.story); // debug statement
+  callback(missionPointer.story);
 }

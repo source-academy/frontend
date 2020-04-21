@@ -159,7 +159,6 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
         },
         error: isTest
           ? () => {
-              console.log('Cannot find story ' + curId + ' on test');
               console.log('Trying on live...');
               makeAjax(false);
             }

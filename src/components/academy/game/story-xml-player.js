@@ -23,7 +23,6 @@ var stage;
 export function init(div, canvas, options) {
   renderer = PIXI.autoDetectRenderer(
     Constants.screenWidth,
-
     Constants.screenHeight,
     { backgroundColor: 0x000000, view: canvas }
   );
@@ -56,6 +55,28 @@ export function init(div, canvas, options) {
   
   // a pixi.container on top of everything that is exported
   stage.addChild(ExternalManager.init(options.hookHandlers));
+};
+
+export function loadingScreen(div, canvas) {
+  renderer = PIXI.autoDetectRenderer(
+    Constants.screenWidth,
+    Constants.screenHeight,
+    { backgroundColor: 0x000000, view: canvas }
+  );
+  div.append(renderer.view);
+  Utils.saveRenderer(renderer);
+  // create the root of the scene graph
+  stage = new PIXI.Container();
+  stage.addChild(BlackOverlay.init());
+  const loadingScreen = StoryManager.init();
+  loadingScreen.visible = true;
+  stage.addChild(StoryManager.init());
+
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(stage);
+  }
+  animate();
 };
 
 export { getExternalOverlay } from './external-manager/external-manager.js'

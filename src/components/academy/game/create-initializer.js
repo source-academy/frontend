@@ -1,9 +1,9 @@
 import {LINKS} from '../../../utils/constants'
 import {history} from '../../../utils/history'
-import {soundPath} from './constants/constants'
+import {soundPath, LOCATION_KEY} from './constants/constants'
 import {fetchGameData, getMissionPointer, getStudentData, saveCollectible, saveQuest} from './backend/game-state'
 
-export default function (StoryXMLPlayer, username, userStory, gameState) {
+export default function (StoryXMLPlayer, username, userStory, gameState, missions) {
 
     var hookHandlers = {
         startMission: function () {
@@ -59,17 +59,16 @@ export default function (StoryXMLPlayer, username, userStory, gameState) {
             changeLocationHook: function (newLocation) {
                 if (typeof Storage !== 'undefined') {
                     // Code for localStorage/sessionStorage.
-                    localStorage.locationKey = newLocation;
+                    localStorage.setItem(LOCATION_KEY, newLocation);
                 }
             }
         });
     }
 
-    function initialize(div, canvas) {
-
+    function initialize(story, div, canvas) {
         startGame(div, canvas);
-        StoryXMLPlayer.loadStory(getMissionPointer(), function () {});
+        StoryXMLPlayer.loadStory(story, function () {});
     }
 
-    return (div, canvas) => fetchGameData(userStory, gameState, () => initialize(div, canvas));
+    return (div, canvas) => fetchGameData(userStory, gameState, missions, (story) => initialize(story, div, canvas));
 };
