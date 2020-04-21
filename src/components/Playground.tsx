@@ -1,6 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
+import * as queryString from 'query-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
@@ -18,6 +19,8 @@ import {
   EvalButton,
   ExecutionTime,
   ExternalLibrarySelect,
+  GoogleDriveButtons,
+  LinkButton,
   SessionButtons,
   ShareButton
 } from './workspace/controlBar/index';
@@ -83,10 +86,12 @@ export interface IStateProps {
   websocketStatus: number;
   externalLibraryName: string;
   usingSubst: boolean;
+  storageToken?: string;
 }
 
 export interface IDispatchProps {
   handleActiveTabChange: (activeTab: SideContentType) => void;
+  handleAccessToken: (accessToken: string) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
@@ -115,6 +120,8 @@ export interface IDispatchProps {
   handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleOpenPicker: () => void;
+  handleSavePicker: () => void;
 }
 
 type PlaygroundState = {
@@ -200,6 +207,17 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         />
       );
 
+    const googleDriveButtons =
+      this.props.storageToken === undefined ? null : (
+        <GoogleDriveButtons
+          key="googledirve"
+          onClickSave={this.props.handleSavePicker}
+          onClickOpen={this.props.handleOpenPicker}
+        />
+      );
+
+    const linkButton = this.props.storageToken !== undefined ? null : <LinkButton key="linkto" />;
+
     const changeExecutionTimeHandler = (execTime: number) =>
       this.props.handleChangeExecTime(execTime);
     const executionTime = (
@@ -258,6 +276,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
     // Conditional logic for tab rendering
+    if (this.hasAccessToken()) {
+      const parsed = queryString.parse(this.props.location.hash);
+      this.props.handleAccessToken(parsed.access_token);
+    }
     if (
       this.props.externalLibraryName === ExternalLibraryNames.PIXNFLIX ||
       this.props.externalLibraryName === ExternalLibraryNames.ALL
@@ -291,6 +313,8 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
           chapterSelect,
           this.props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           sessionButtons,
+          linkButton,
+          googleDriveButtons,
           executionTime
         ],
         replButtons: [this.props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton]
@@ -420,6 +444,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       return [];
     }
   };
+
+  private hasAccessToken() {
+    return window.location.hash.toString().startsWith('#access_token=');
+  }
 
   private toggleIsGreen() {
     this.setState({

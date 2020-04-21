@@ -29,6 +29,7 @@ const baseProps = {
   replValue: '',
   websocketStatus: 0,
   usingSubst: false,
+  storageToken: '',
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -57,7 +58,10 @@ const baseProps = {
   handleDebuggerPause: () => {},
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
+  handleAccessToken: () => {},
+  handleOpenPicker: () => {},
+  handleSavePicker: () => {}
 };
 
 const testValueProps: IPlaygroundProps = {

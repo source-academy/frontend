@@ -228,3 +228,6 @@ export const promptAutocomplete = (
     column,
     callback
   });
+
+export const openFile = (fileId: string, filename: string) =>
+  action(actionTypes.OPEN_FILE, { fileId, filename });

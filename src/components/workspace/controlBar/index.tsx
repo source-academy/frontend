@@ -14,3 +14,5 @@ export * from './saveButton';
 export * from './sessionButton';
 export * from './shareButton';
 export * from './toggleEditModeButton';
+export * from './googleDriveButtons';
+export * from './linkButton';

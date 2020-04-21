@@ -9,3 +9,10 @@ export const toggleUsingSubst = (usingSubst: boolean) =>
 
 export const changeQueryString = (queryString: string) =>
   action(actionTypes.CHANGE_QUERY_STRING, queryString);
+
+export const handleAccessToken = (accessToken: string) =>
+  action(actionTypes.HANDLE_ACCESS_TOKEN, accessToken);
+
+export const openPicker = () => action(actionTypes.OPEN_PICKER);
+
+export const savePicker = () => action(actionTypes.SAVE_TO_DRIVE);

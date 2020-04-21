@@ -62,6 +62,7 @@ interface IGradingWorkspace extends IWorkspaceState {
 }
 
 export interface IPlaygroundWorkspace extends IWorkspaceState {
+  readonly filename: string;
   readonly usingSubst: boolean;
 }
 
@@ -121,6 +122,7 @@ export interface IWorkspaceState {
   readonly sideContentHeight?: number;
   readonly websocketStatus: number;
   readonly globals: Array<[string, any]>;
+  readonly filename: string;
 }
 
 export interface ISessionState {
@@ -142,6 +144,7 @@ export interface ISessionState {
   readonly name?: string;
   readonly xp: number;
   readonly notifications: Notification[];
+  readonly storageToken?: string;
 }
 
 type ReplHistory = {
@@ -319,7 +322,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
   isEditorAutorun: false,
   isRunning: false,
   isDebugging: false,
-  enableDebugging: true
+  enableDebugging: true,
+  filename: ''
 });
 
 export const defaultRoomId = null;
@@ -363,6 +367,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace(WorkspaceLocations.playground),
+    filename: 'untitled.s',
     usingSubst: false
   },
   sourcecast: {

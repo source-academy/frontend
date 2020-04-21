@@ -5,6 +5,7 @@ dotenv.config();
 export const LUMINUS_CLIENT_ID = process.env.REACT_APP_LUMINUS_CLIENT_ID;
 export const SOURCE_ACADEMY_VERSION = process.env.REACT_APP_VERSION;
 export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+export const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 export const USE_BACKEND =
   process.env.REACT_APP_USE_BACKEND !== undefined &&
   process.env.REACT_APP_USE_BACKEND !== '' &&

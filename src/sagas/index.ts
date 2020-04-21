@@ -3,6 +3,7 @@ import { USE_BACKEND } from '../utils/constants';
 import backendSaga from './backend';
 import loginSaga from './login';
 import playgroundSaga from './playground';
+import storageSaga from './storage';
 import workspaceSaga from './workspaces';
 
 export default function* mainSaga() {
@@ -10,4 +11,5 @@ export default function* mainSaga() {
   yield* workspaceSaga();
   yield* loginSaga();
   yield* playgroundSaga();
+  yield* storageSaga();
 }

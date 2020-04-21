@@ -3,6 +3,7 @@ import { ActionType } from 'typesafe-actions';
 
 import * as actions from '../actions';
 import {
+  HANDLE_ACCESS_TOKEN,
   LOG_OUT,
   SET_TOKENS,
   SET_USER,
@@ -24,6 +25,11 @@ export const reducer: Reducer<ISessionState> = (
   switch (action.type) {
     case LOG_OUT:
       return defaultSession;
+    case HANDLE_ACCESS_TOKEN:
+      return {
+        ...state,
+        storageToken: action.payload
+      };
     case SET_TOKENS:
       return {
         ...state,

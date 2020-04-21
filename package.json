@@ -81,6 +81,10 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
+    "@types/gapi": "^0.0.36",
+    "@types/gapi.client": "^1.0.1",
+    "@types/gapi.client.drive": "^3.0.3",
+    "@types/google.picker": "^0.0.33",
     "@blueprintjs/core": "^3.24.0",
     "@blueprintjs/icons": "^3.9.1",
     "@blueprintjs/select": "^3.9.0",
