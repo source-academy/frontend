@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { saveCanvas, saveUserData } from '../actions/game';
+import { fetchAssessmentOverviews, saveCanvas, saveUserData } from '../actions';
 import Game, { DispatchProps, StateProps } from '../components/academy/game';
 import { IState } from '../reducers/states';
 
@@ -9,7 +9,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleSaveCanvas: saveCanvas,
-      handleSaveData: saveUserData
+      handleSaveData: saveUserData,
+      handleAssessmentOverviewFetch: fetchAssessmentOverviews
     },
     dispatch
   );
@@ -19,7 +20,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   name: state.session.name!,
   story: state.session.story,
   gameState: state.session.gameState,
-  role: state.session.role
+  role: state.session.role,
+  assessmentOverviews: state.session.assessmentOverviews
 });
 
 export default connect(
