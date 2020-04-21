@@ -16,7 +16,7 @@ exports[`Material table renders correctly 1`] = `
         </div>
         <Blueprint3.Dialog icon=\\"info-sign\\" isOpen={false} onClose={[Function]} title=\\"Add New Folder\\" canOutsideClickClose={true}>
           <div className=\\"bp3-dialog-body\\">
-            <Blueprint3.EditableText className=\\"Input\\" intent=\\"none\\" maxLines={1} minLines={1} multiline={true} placeholder=\\"Enter folder name...\\" selectAllOnFocus={true} value=\\"\\" onChange={[Function]} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} minWidth={80} type=\\"text\\" />
+            <Blueprint3.EditableText className=\\"Input\\" intent=\\"none\\" maxLines={1} minLines={1} multiline={true} placeholder=\\"Enter folder name...\\" selectAllOnFocus={true} value=\\"\\" onChange={[Function]} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} minWidth={80} type=\\"text\\" />
           </div>
           <div className=\\"bp3-dialog-footer\\">
             <div className=\\"bp3-dialog-footer-actions\\">
