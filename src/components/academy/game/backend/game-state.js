@@ -39,7 +39,7 @@ export function overrideGameState(data) {
     studentStoryOverride = data.story;
     currentDateOverride = data.currentDate;
   } else {
-    studentStoryOverride = studentDataOverride = missionPointerOverride = currentDateOverride = undefined;
+    studentStoryOverride = studentDataOverride = currentDateOverride = undefined;
   }
 }
 
