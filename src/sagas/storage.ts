@@ -99,10 +99,14 @@ function createFile(
   const body = `
 --${boundary}
 Content-Type: application/json; charset=UTF-8
+
 ${JSON.stringify(meta)}
+
 --${boundary}
 Content-Type: ${mimeType}
+
 ${contents}
+
 --${boundary}--
 `;
 
@@ -112,15 +116,15 @@ ${contents}
   return new Promise((resolve, reject) => {
     gapi.client
       .request({
-        path: 'https://www.googleapis.com/upload/drive/v3/files',
-        method: 'POST',
-        params: {
-          uploadType: 'multipart'
+        'path': 'https://www.googleapis.com/upload/drive/v3/files',
+        'method': 'POST',
+        'params': {
+          'uploadType': 'multipart'
         },
-        headers: {
+        'headers': {
           'Content-Type': `multipart/related; boundary=${boundary}`
         },
-        body
+        'body': body
       })
       .then(response => {
         if (response.status !== 200) {
