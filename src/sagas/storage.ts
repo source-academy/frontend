@@ -131,7 +131,7 @@ ${contents}
       })
       .catch(reason => {
         // tslint:disable-next-line:no-console
-        console.error(reason.message);
+        console.error(reason);
       });
   });
 }
