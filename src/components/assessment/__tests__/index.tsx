@@ -73,7 +73,7 @@ test('Assessment page with multiple loaded missions renders correctly', () => {
     </Provider>
   );
   const tree = mount(app);
-  //expect(tree.debug()).toMatchSnapshot();
+  expect(tree.debug()).toMatchSnapshot();
 });
 
 test('Assessment page does not show attempt Button for upcoming assessments for student user', () => {
@@ -85,5 +85,5 @@ test('Assessment page does not show attempt Button for upcoming assessments for 
     </Provider>
   );
   const tree = mount(app);
-  //expect(tree.debug()).toMatchSnapshot();
+  expect(tree.debug()).toMatchSnapshot();
 });
