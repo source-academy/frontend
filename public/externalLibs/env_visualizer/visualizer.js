@@ -79,6 +79,17 @@
     return helper(d1, d2);
   }
 
+  let callGetShiftInfoData;
+  function initialiseCallGetShiftInfo(dataStructure){
+    callGetShiftInfoData = dataStructure;
+  }
+
+  function callGetShiftInfo(d2){
+    let x = getShiftInfo(callGetShiftInfoData, d2).y;
+    let y = dataObjectWrappers[dataObjects.indexOf(callGetShiftInfoData)].y + 3/4 * DATA_UNIT_HEIGHT;
+    return x - y;
+  }
+
   function getShiftInfo(d1, d2) {
     // given that d2 is a sub structure of d1, return a coordinate object
     // to indicate the x and y coordinate with respect to d1
@@ -92,19 +103,33 @@
       return result;
     }
 
-    initialiseBasicUnitHeight(d1);
+    // initialiseBasicUnitHeight(d1);
 
     while (d2 !== d1) {
-      if (checkSubStructure(d1[0], d2)) {
-        // Add the height of the tail of d1 to the y-coordinate
-        rightHeight = getBasicUnitHeight(d1[1]);
-        d1 = d1[0];
-        result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
-      } else {
+      if (checkSubStructure(d1[1], d2)) {        
         d1 = d1[1];
         result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
+      } else {
+        initialiseBasicUnitHeight(d1);
+        rightHeight = getBasicUnitHeight(d1[1]);
+        // console.log(rightHeight)
+        result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
+        d1 = d1[0];
       }
     }
+    
+
+    // while (d2 !== d1) {
+    //   if (checkSubStructure(d1[0], d2)) {
+    //     // Add the height of the tail of d1 to the y-coordinate
+    //     rightHeight = getBasicUnitHeight(d1[1]);
+    //     d1 = d1[0];
+    //     result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
+    //   } else {
+    //     d1 = d1[1];
+    //     result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
+    //   }
+    // }
     return result;
   }
 
@@ -396,160 +421,9 @@
     //context.restore();
     context.font = '14px Roboto Mono Light, Courier New';
     cycleDetector.push(dataObject);
-    // draws data in the head and tail
-    if (Array.isArray(dataObject[0])) {
-      let cycleDetected = false;
-      let mainStructure = null;
-      let subStructure = null;
-      cycleDetector.forEach(x => {
-        if (x === dataObject[0]) {
-          cycleDetected = true;
-          mainStructure = cycleDetector[0];
-          subStructure = x;
-        }
-      });
-      
-      if (cycleDetected) {
-        const arrowContext = arrowLayer.scene.context;
-        arrowContext.strokeStyle = '#999999';
-        var hoverContext = hoveredLayer.scene.context;
-        hoverContext.strokeStyle = 'white';
-        const coordinates = getShiftInfo(mainStructure, subStructure);
-        const xCoord = coordinates.x - 10;
-        const yCoord = coordinates.y;
-        newStartX = startX + DATA_UNIT_WIDTH/4;
-        newStartY = startY + DATA_UNIT_HEIGHT/2;
-        // 22 is DATA_UNIT_HEIGHT/2 + some buffer (not sure where buffer came from)
-        if (yCoord - 22 == newStartY) {
-          //cycle is on the same level
-          drawLine(context, newStartX, newStartY, newStartX, startY);
-          drawLine(arrowContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawLine(arrowContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT);
+    
 
-          drawLine(hoverContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawLine(hoverContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT);
-        } else if (yCoord - 22 > newStartY) {
-          // arrow points down
-          const boxEdgeCoord = inBoxCoordinates(newStartX, newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT, true);
-          drawLine(context, newStartX, newStartY, boxEdgeCoord.x, boxEdgeCoord.y);
-          drawArrow(arrowContext, newStartX , newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT);
-          drawArrow(hoverContext, newStartX , newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT);
-        } else {
-          // arrow points up
-          const boxEdgeCoord = inBoxCoordinates(newStartX, newStartY, xCoord, yCoord, true);
-          drawLine(context, newStartX, newStartY, boxEdgeCoord.x, boxEdgeCoord.y);
-          drawArrow(arrowContext, newStartX , newStartY, xCoord, yCoord);
-          drawArrow(hoverContext, newStartX , newStartY, xCoord, yCoord);
-        }
-      } else {
-        const result = drawThis(dataObject[0]);
-        const draw = result.draw;
-        // check if need to draw the data object or it has already been drawn
-        if (draw) {
-          const shiftY = calculatePairShift(dataObject[1]);
-          if (is_Array(dataObject[0])) {
-            drawNestedArrayObject(startX, startY + shiftY);
-          } else {
-            drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + shiftY);
-          }
-          drawArrow(context, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
-            startX + DATA_UNIT_WIDTH / 4, startY + shiftY);
-
-        } else {
-          if (is_Array(dataObject[0])) {
-            // declare new context so arrow drawn in the arrowLayer instead of dataObjectLayer
-            const arrowContext = arrowLayer.scene.context;
-            const coordinates = getShiftInfo(result.mainStructure, result.subStructure);
-            const xCoord = coordinates.x - 10;
-            const yCoord = coordinates.y - 10;
-            // draw line from center of box to edge of box in dataObjectLayer
-            const boxEdgeCoord = inBoxCoordinates(startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2, xCoord, yCoord, true);
-            drawLine(context, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2, boxEdgeCoord.x, boxEdgeCoord.y);
-            // draw remaining line in arrowLayer
-            drawArrow(arrowContext, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
-              xCoord, yCoord);
-            // duplicate the exact same line but in the hover layer
-            var hoverContext = hoveredLayer.scene.context;
-            hoverContext.strokeStyle = 'white';
-            drawArrow(hoverContext, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
-              xCoord, yCoord);
-          } else {
-            // declare new context so arrow drawn in the arrowLayer instead of dataObjectLayer
-            const arrowContext = arrowLayer.scene.context;
-            const coordinates = getShiftInfo(result.mainStructure, result.subStructure);
-            const xCoord = coordinates.x;
-            const yCoord = coordinates.y;
-            // draw line from center of box to edge of box in dataObjectLayer
-            const boxEdgeCoord = inBoxCoordinates(startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2, xCoord, yCoord, true);
-            drawLine(context, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2, boxEdgeCoord.x, boxEdgeCoord.y);
-            // draw remaining line in arrowLayer
-            drawArrow(arrowContext, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
-              xCoord, yCoord);
-            // duplicate the exact same line but in the hover layer
-            var hoverContext = hoveredLayer.scene.context;
-            hoverContext.strokeStyle = 'white';
-            drawArrow(hoverContext, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
-              xCoord, yCoord);
-          }
-        }
-      }
-    } else if (dataObject[0] == null) {
-      drawLine(context, startX + DATA_UNIT_WIDTH/2, startY, startX, startY + DATA_UNIT_HEIGHT);
-    } else if (typeof wrapperData[0] === 'function') {
-      // draw line in box
-      if((startY + DATA_UNIT_HEIGHT/2) > wrapperData[0].y) {
-        // draw line upwards
-        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-          startX + DATA_UNIT_WIDTH/4, startY);
-      } else {
-        // draw line downwards
-        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT, 
-          startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2);
-      }
-      // draw line up to fn height
-      const arrowContext = arrowLayer.scene.context;
-      if (startX + DATA_UNIT_WIDTH/4 <= wrapperData[0].x + 4 * FNOBJECT_RADIUS) {
-        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
-        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
-          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
-        drawLine(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
-          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y);
-        drawArrow(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y, 
-          wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
-        // duplicate arrow in hoveredLayer
-        var hoverContext = hoveredLayer.scene.context;
-        hoverContext.strokeStyle = 'white';
-        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
-        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
-          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
-        drawLine(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
-          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y);
-        drawArrow(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y, 
-          wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
-      } else {
-        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
-      // draw arrow left/right to fn area
-        drawArrow(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
-          wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
-        // duplicate arrow in hoveredLayer
-        var hoverContext = hoveredLayer.scene.context;
-        hoverContext.strokeStyle = 'white';
-        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
-          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
-        // draw arrow left/right to fn area
-        drawArrow(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
-          wrapperData[0].x + 2 *FNOBJECT_RADIUS, wrapperData[0].y);
-      }
-    } else {
-      context.fillText(dataObject[0], startX + DATA_UNIT_WIDTH/6, startY + 2 * DATA_UNIT_HEIGHT/3);
-    }
-
-    // repeat the same provess for the tail of the pair
+    // repeat the same process for the tail of the pair
     if (Array.isArray(dataObject[1])) {
       let cycleDetected = false;
       let mainStructure = null;
@@ -683,6 +557,165 @@
     } else {
       context.fillText(dataObject[1], startX + 2 * DATA_UNIT_WIDTH/3, startY + 2 * DATA_UNIT_HEIGHT/3);
     }
+
+
+    // draws data in the head and tail
+    if (Array.isArray(dataObject[0])) {
+      let cycleDetected = false;
+      let mainStructure = null;
+      let subStructure = null;
+      cycleDetector.forEach(x => {
+        if (x === dataObject[0]) {
+          cycleDetected = true;
+          mainStructure = cycleDetector[0];
+          subStructure = x;
+        }
+      });
+      
+      if (cycleDetected) {
+        const arrowContext = arrowLayer.scene.context;
+        arrowContext.strokeStyle = '#999999';
+        var hoverContext = hoveredLayer.scene.context;
+        hoverContext.strokeStyle = 'white';
+        const coordinates = getShiftInfo(mainStructure, subStructure);
+        const xCoord = coordinates.x - 10;
+        const yCoord = coordinates.y;
+        newStartX = startX + DATA_UNIT_WIDTH/4;
+        newStartY = startY + DATA_UNIT_HEIGHT/2;
+        // 22 is DATA_UNIT_HEIGHT/2 + some buffer (not sure where buffer came from)
+        if (yCoord - 22 == newStartY) {
+          //cycle is on the same level
+          drawLine(context, newStartX, newStartY, newStartX, startY);
+          drawLine(arrowContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
+          drawLine(arrowContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
+          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT);
+
+          drawLine(hoverContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
+          drawLine(hoverContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
+          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT);
+        } else if (yCoord - 22 > newStartY) {
+          // arrow points down
+          const boxEdgeCoord = inBoxCoordinates(newStartX, newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT, true);
+          drawLine(context, newStartX, newStartY, boxEdgeCoord.x, boxEdgeCoord.y);
+          drawArrow(arrowContext, newStartX , newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT);
+          drawArrow(hoverContext, newStartX , newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT);
+        } else {
+          // arrow points up
+          const boxEdgeCoord = inBoxCoordinates(newStartX, newStartY, xCoord, yCoord, true);
+          drawLine(context, newStartX, newStartY, boxEdgeCoord.x, boxEdgeCoord.y);
+          drawArrow(arrowContext, newStartX , newStartY, xCoord, yCoord);
+          drawArrow(hoverContext, newStartX , newStartY, xCoord, yCoord);
+        }
+      } else {
+        const result = drawThis(dataObject[0]);
+        const draw = result.draw;
+        // check if need to draw the data object or it has already been drawn
+        if (draw) {
+          const newShiftY = callGetShiftInfo(dataObject[0])
+          // console.log(newShiftY)
+          let shiftY = calculatePairShift(dataObject[1]);
+          // console.log(shiftY)
+          // console.log("Correct calc? " + (shiftY == newShiftY))
+          // shiftY = newShiftY;
+          if (is_Array(dataObject[0])) {
+            drawNestedArrayObject(startX, startY + shiftY);
+          } else {
+            drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + shiftY);
+          }
+          drawArrow(context, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
+            startX + DATA_UNIT_WIDTH / 4, startY + shiftY);
+
+        } else {
+          if (is_Array(dataObject[0])) {
+            // declare new context so arrow drawn in the arrowLayer instead of dataObjectLayer
+            const arrowContext = arrowLayer.scene.context;
+            const coordinates = getShiftInfo(result.mainStructure, result.subStructure);
+            const xCoord = coordinates.x - 10;
+            const yCoord = coordinates.y - 10;
+            // draw line from center of box to edge of box in dataObjectLayer
+            const boxEdgeCoord = inBoxCoordinates(startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2, xCoord, yCoord, true);
+            drawLine(context, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2, boxEdgeCoord.x, boxEdgeCoord.y);
+            // draw remaining line in arrowLayer
+            drawArrow(arrowContext, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
+              xCoord, yCoord);
+            // duplicate the exact same line but in the hover layer
+            var hoverContext = hoveredLayer.scene.context;
+            hoverContext.strokeStyle = 'white';
+            drawArrow(hoverContext, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
+              xCoord, yCoord);
+          } else {
+            // declare new context so arrow drawn in the arrowLayer instead of dataObjectLayer
+            const arrowContext = arrowLayer.scene.context;
+            const coordinates = getShiftInfo(result.mainStructure, result.subStructure);
+            const xCoord = coordinates.x;
+            const yCoord = coordinates.y;
+            // draw line from center of box to edge of box in dataObjectLayer
+            const boxEdgeCoord = inBoxCoordinates(startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2, xCoord, yCoord, true);
+            drawLine(context, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2, boxEdgeCoord.x, boxEdgeCoord.y);
+            // draw remaining line in arrowLayer
+            drawArrow(arrowContext, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
+              xCoord, yCoord);
+            // duplicate the exact same line but in the hover layer
+            var hoverContext = hoveredLayer.scene.context;
+            hoverContext.strokeStyle = 'white';
+            drawArrow(hoverContext, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
+              xCoord, yCoord);
+          }
+        }
+      }
+    } else if (dataObject[0] == null) {
+      drawLine(context, startX + DATA_UNIT_WIDTH/2, startY, startX, startY + DATA_UNIT_HEIGHT);
+    } else if (typeof wrapperData[0] === 'function') {
+      // draw line in box
+      if((startY + DATA_UNIT_HEIGHT/2) > wrapperData[0].y) {
+        // draw line upwards
+        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, startY);
+      } else {
+        // draw line downwards
+        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT, 
+          startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2);
+      }
+      // draw line up to fn height
+      const arrowContext = arrowLayer.scene.context;
+      if (startX + DATA_UNIT_WIDTH/4 <= wrapperData[0].x + 4 * FNOBJECT_RADIUS) {
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
+        drawLine(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y);
+        drawArrow(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y, 
+          wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
+        // duplicate arrow in hoveredLayer
+        var hoverContext = hoveredLayer.scene.context;
+        hoverContext.strokeStyle = 'white';
+        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
+        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
+        drawLine(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+          wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y);
+        drawArrow(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y, 
+          wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
+      } else {
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
+      // draw arrow left/right to fn area
+        drawArrow(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
+          wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
+        // duplicate arrow in hoveredLayer
+        var hoverContext = hoveredLayer.scene.context;
+        hoverContext.strokeStyle = 'white';
+        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
+        // draw arrow left/right to fn area
+        drawArrow(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
+          wrapperData[0].x + 2 *FNOBJECT_RADIUS, wrapperData[0].y);
+      }
+    } else {
+      context.fillText(dataObject[0], startX + DATA_UNIT_WIDTH/6, startY + 2 * DATA_UNIT_HEIGHT/3);
+    }
     context.strokeStyle = '#999999';
     //context.lineWidth = 2;
     context.stroke();
@@ -763,7 +796,9 @@
     const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
     cycleDetector = [];
+    // initialiseBasicUnitHeight
     initialisePairShift(dataObject);
+    initialiseCallGetShiftInfo(dataObject)
     drawScenePairs(dataObject, scene, wrapper, wrapper.data, x0, y0);
     //reorder layers
     arrowLayer.moveToBottom();
@@ -781,7 +816,9 @@
     
     const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
-    initialisePairShift(dataObject);
+      // initialiseBasicUnitHeight
+    // initialisePairShift(dataObject);
+    // initialiseCallGetShiftInfo(dataObject)
     drawHitPairs(dataObject, hit, wrapper, x0, y0);
   }
 
@@ -1553,8 +1590,8 @@
           return false;
         } else if (Array.isArray(list)) {	
           dataPairsSeachedForFnObj.push(list)
-          findFnInDataObject(list[0], list, dataObject)		
           findFnInDataObject(list[1], list, dataObject)		
+          findFnInDataObject(list[0], list, dataObject)		
         } else if(isFunction(list) && !fnObjects.includes(list)) {
           initialiseDataFnObject(list, [dataObject, parent])		
           fnObjects.push(list);		
@@ -1884,7 +1921,7 @@
     }
   }
 
-// Calculates unit height of list/array, considering references to other data structures
+  // Calculates unit height of list/array, considering references to other data structures
   function getUnitHeight(parentlist) {
     /**
      * otherObjects contains all data objects initialised before parentlist
@@ -1936,17 +1973,19 @@
               substructureExistsHead = true;
             }
           });
+          const tail_height = recursiveHelper(list[1]);
+
           if (substructureExistsHead || dataPairs.includes(list[0])) {
             if(tailIsFn) {
               return 1;
             } else {
-              return recursiveHelper(list[1]);
+              return tail_height;
             }
           } else {
             if(tailIsFn){
               return 1 + (1 + recursiveHelper(list[0]));
             } else {
-              return (1 + recursiveHelper(list[0])) + recursiveHelper(list[1]);
+              return (1 + recursiveHelper(list[0])) + tail_height;
             }           
           } 
         } else if(isFunction(list[0])){
@@ -2001,6 +2040,19 @@
         otherObjects.push(x)
       }
     })
+
+    function fillDataPairs(currPair) {
+      if(currPair == sublist || !Array.isArray(currPair) || currPair.length != 2){
+        // Do nothing, stop recursing
+      } else if(!dataPairs.includes(currPair)){
+        dataPairs.push(currPair);
+        fillDataPairs(dataPairs[1]);
+        fillDataPairs(dataPairs[0]);
+      }
+    }
+
+    fillDataPairs(currentObj)
+
     function recursiveHelper(list){
       let substructureExists = false;
       otherObjects.forEach(x => {
@@ -2033,17 +2085,24 @@
               substructureExistsHead = true;
             }
           });
+
+          const tail_height = recursiveHelper(list[1]);
           if (substructureExistsHead || dataPairs.includes(list[0])) {
             if(tailIsFn) {
               return 1;
             } else {
-              return recursiveHelper(list[1]);
+              return tail_height;
             }
           } else {
+            const head_height = recursiveHelper(list[0]);
             if(tailIsFn){
-              return 1 + (1 + recursiveHelper(list[0]));
+              return 1 + (1 + head_height);
             } else {
-              return (1 + recursiveHelper(list[0])) + recursiveHelper(list[1]);
+              // console.log(list)
+              // console.log(list + head_height)
+              // console.log(list + tail_height)
+              // console.log("here?")              
+              return  1 + (1 + head_height) + tail_height;
             }           
           } 
         }
