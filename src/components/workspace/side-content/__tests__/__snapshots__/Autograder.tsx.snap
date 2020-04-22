@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Autograder renders autograder results with different statuses correctly 1`] = `
-"<Autograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+"<Autograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]} program=\\"\\">
   <div className=\\"Autograder\\">
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
@@ -187,12 +187,69 @@ exports[`Autograder renders autograder results with different statuses correctly
         </div>
       </div>
     </Blueprint3.Collapse>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={{...}}>
+          <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
+            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                <desc>
+                  caret-down
+                </desc>
+                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+              </svg>
+            </span>
+          </Blueprint3.Icon>
+        </Blueprint3.Icon>
+        <span className=\\"bp3-button-text\\">
+          Code Metrics
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+      <div className=\\"bp3-collapse\\" style={{...}}>
+        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
+          <CodeMetircCard program=\\"\\">
+            <div className=\\"CodeMetircCard\\">
+              <Blueprint3.Card elevation={0} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-0\\">
+                  <Component className=\\"Length\\">
+                    <pre className=\\"bp3-code-block Length\\">
+                      Length: 0
+                    </pre>
+                  </Component>
+                </div>
+              </Blueprint3.Card>
+              <Blueprint3.Card elevation={0} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-0\\">
+                  <Component className=\\"TokenCount\\">
+                    <pre className=\\"bp3-code-block TokenCount\\">
+                      Number of tokens: 0
+                    </pre>
+                  </Component>
+                </div>
+              </Blueprint3.Card>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
+                  <Component className=\\"RunTime\\">
+                    <pre className=\\"bp3-code-block RunTime\\">
+                      Run time: 0 ms
+                    </pre>
+                  </Component>
+                </div>
+              </Blueprint3.Card>
+            </div>
+          </CodeMetircCard>
+        </div>
+      </div>
+    </Blueprint3.Collapse>
   </div>
 </Autograder>"
 `;
 
 exports[`Autograder renders hidden testcases with different statuses correctly 1`] = `
-"<Autograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+"<Autograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]} program=\\"\\">
   <div className=\\"Autograder\\">
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
@@ -342,6 +399,63 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
         </div>
       </div>
     </Blueprint3.Collapse>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={{...}}>
+          <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
+            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                <desc>
+                  caret-down
+                </desc>
+                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+              </svg>
+            </span>
+          </Blueprint3.Icon>
+        </Blueprint3.Icon>
+        <span className=\\"bp3-button-text\\">
+          Code Metrics
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+      <div className=\\"bp3-collapse\\" style={{...}}>
+        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
+          <CodeMetircCard program=\\"\\">
+            <div className=\\"CodeMetircCard\\">
+              <Blueprint3.Card elevation={0} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-0\\">
+                  <Component className=\\"Length\\">
+                    <pre className=\\"bp3-code-block Length\\">
+                      Length: 0
+                    </pre>
+                  </Component>
+                </div>
+              </Blueprint3.Card>
+              <Blueprint3.Card elevation={0} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-0\\">
+                  <Component className=\\"TokenCount\\">
+                    <pre className=\\"bp3-code-block TokenCount\\">
+                      Number of tokens: 0
+                    </pre>
+                  </Component>
+                </div>
+              </Blueprint3.Card>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
+                  <Component className=\\"RunTime\\">
+                    <pre className=\\"bp3-code-block RunTime\\">
+                      Run time: 0 ms
+                    </pre>
+                  </Component>
+                </div>
+              </Blueprint3.Card>
+            </div>
+          </CodeMetircCard>
+        </div>
+      </div>
+    </Blueprint3.Collapse>
   </div>
 </Autograder>"
 `;
@@ -364,11 +478,17 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
       There are no results to show.
     </div>
   </Blueprint3.Collapse>
+  <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+    Code Metrics
+  </Blueprint3.Button>
+  <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+    <CodeMetircCard program=\\"\\" />
+  </Blueprint3.Collapse>
 </div>"
 `;
 
 exports[`Autograder renders public testcases with different statuses correctly 1`] = `
-"<Autograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+"<Autograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]} program=\\"\\">
   <div className=\\"Autograder\\">
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
       <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
@@ -578,6 +698,63 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           <div className=\\"noResults\\">
             There are no results to show.
           </div>
+        </div>
+      </div>
+    </Blueprint3.Collapse>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={{...}}>
+          <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
+            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                <desc>
+                  caret-down
+                </desc>
+                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+              </svg>
+            </span>
+          </Blueprint3.Icon>
+        </Blueprint3.Icon>
+        <span className=\\"bp3-button-text\\">
+          Code Metrics
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+      <div className=\\"bp3-collapse\\" style={{...}}>
+        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
+          <CodeMetircCard program=\\"\\">
+            <div className=\\"CodeMetircCard\\">
+              <Blueprint3.Card elevation={0} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-0\\">
+                  <Component className=\\"Length\\">
+                    <pre className=\\"bp3-code-block Length\\">
+                      Length: 0
+                    </pre>
+                  </Component>
+                </div>
+              </Blueprint3.Card>
+              <Blueprint3.Card elevation={0} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-0\\">
+                  <Component className=\\"TokenCount\\">
+                    <pre className=\\"bp3-code-block TokenCount\\">
+                      Number of tokens: 0
+                    </pre>
+                  </Component>
+                </div>
+              </Blueprint3.Card>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
+                  <Component className=\\"RunTime\\">
+                    <pre className=\\"bp3-code-block RunTime\\">
+                      Run time: 0 ms
+                    </pre>
+                  </Component>
+                </div>
+              </Blueprint3.Card>
+            </div>
+          </CodeMetircCard>
         </div>
       </div>
     </Blueprint3.Collapse>

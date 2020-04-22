@@ -327,6 +327,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
+            program={props.editorValue!}
           />
         ),
         id: SideContentType.autograder

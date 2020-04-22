@@ -4,17 +4,20 @@ import * as React from 'react';
 import { AutogradingResult, ITestcase } from '../../assessment/assessmentShape';
 import { controlButton } from '../../commons';
 import AutograderCard from './AutograderCard';
+import CodeMetircCard from './CodeMetricCard';
 import ResultCard from './ResultCard';
 
 export type AutograderProps = {
   autogradingResults: AutogradingResult[];
   testcases: ITestcase[];
   handleTestcaseEval: (testcaseId: number) => void;
+  program: string;
 };
 
 type State = {
   showTestcases: boolean;
   showResults: boolean;
+  showMetrics: boolean;
 };
 
 class Autograder extends React.Component<AutograderProps, State> {
@@ -23,7 +26,8 @@ class Autograder extends React.Component<AutograderProps, State> {
 
     this.state = {
       showTestcases: true,
-      showResults: true
+      showResults: true,
+      showMetrics: true
     };
   }
 
@@ -95,6 +99,8 @@ class Autograder extends React.Component<AutograderProps, State> {
         <div className="noResults">There are no results to show.</div>
       );
 
+    const codeMetrics = <CodeMetircCard program={this.props.program}/>; 
+
     const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
       controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
         minimal: true,
@@ -107,6 +113,8 @@ class Autograder extends React.Component<AutograderProps, State> {
         <Collapse isOpen={this.state.showTestcases}>{testcases}</Collapse>
         {collapseButton('Autograder Results', this.state.showResults, this.toggleResults)}
         <Collapse isOpen={this.state.showResults}>{results}</Collapse>
+        {collapseButton('Code Metrics', this.state.showMetrics, this.toggleMetrics)}
+        <Collapse isOpen={this.state.showMetrics}>{codeMetrics}</Collapse>
       </div>
     );
   }
@@ -121,6 +129,12 @@ class Autograder extends React.Component<AutograderProps, State> {
     this.setState({
       ...this.state,
       showResults: !this.state.showResults
+    });
+
+    private toggleMetrics = () =>
+    this.setState({
+      ...this.state,
+      showMetrics: !this.state.showMetrics
     });
 }
 

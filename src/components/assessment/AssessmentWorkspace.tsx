@@ -368,6 +368,7 @@ class AssessmentWorkspace extends React.Component<
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
+            program = {this.props.editorValue!}
           />
         ),
         id: SideContentType.autograder

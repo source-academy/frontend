@@ -90,7 +90,8 @@ test('Autograder renders placeholders correctly when testcases and results are e
   const props: AutograderProps = {
     autogradingResults: [],
     testcases: [],
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
+    program:""
   };
   const app = <Autograder {...props} />;
   const tree = shallow(app);
@@ -119,7 +120,8 @@ test('Autograder renders public testcases with different statuses correctly', ()
   const props: AutograderProps = {
     autogradingResults: [],
     testcases: mockPublicTestcases,
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
+    program:""
   };
   const app = <Autograder {...props} />;
   const tree = mount(app);
@@ -172,7 +174,8 @@ test('Autograder renders hidden testcases with different statuses correctly', ()
   const props: AutograderProps = {
     autogradingResults: [],
     testcases: mockHiddenTestcases,
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
+    program:""
   };
   const app = <Autograder {...props} />;
   const tree = mount(app);
@@ -198,7 +201,8 @@ test('Autograder renders autograder results with different statuses correctly', 
   const props: AutograderProps = {
     autogradingResults: mockAutogradingResults,
     testcases: [],
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
+    program:""
   };
   const app = <Autograder {...props} />;
   const tree = mount(app);
