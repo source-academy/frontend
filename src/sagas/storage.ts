@@ -124,7 +124,7 @@ ${contents}
         headers: {
           'Content-Type': `multipart/related; boundary=${boundary}`
         },
-        body: body
+        body
       })
       .then(response => {
         if (response.status !== 200) {
