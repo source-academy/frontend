@@ -116,15 +116,15 @@ ${contents}
   return new Promise((resolve, reject) => {
     gapi.client
       .request({
-        'path': 'https://www.googleapis.com/upload/drive/v3/files',
-        'method': 'POST',
-        'params': {
-          'uploadType': 'multipart'
+        path: 'https://www.googleapis.com/upload/drive/v3/files',
+        method: 'POST',
+        params: {
+          uploadType: 'multipart'
         },
-        'headers': {
+        headers: {
           'Content-Type': `multipart/related; boundary=${boundary}`
         },
-        'body': body
+        body: body
       })
       .then(response => {
         if (response.status !== 200) {
