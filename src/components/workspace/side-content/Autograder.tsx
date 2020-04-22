@@ -99,7 +99,7 @@ class Autograder extends React.Component<AutograderProps, State> {
         <div className="noResults">There are no results to show.</div>
       );
 
-    const codeMetrics = <CodeMetircCard program={this.props.program}/>; 
+    const codeMetrics = <CodeMetircCard program={this.props.program} />;
 
     const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
       controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
@@ -131,7 +131,7 @@ class Autograder extends React.Component<AutograderProps, State> {
       showResults: !this.state.showResults
     });
 
-    private toggleMetrics = () =>
+  private toggleMetrics = () =>
     this.setState({
       ...this.state,
       showMetrics: !this.state.showMetrics
