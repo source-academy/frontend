@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
+import { Variant } from 'js-slang/dist/types';
 import { SideContentType } from 'src/reducers/states';
 import { mockRouterProps } from '../../mocks/components';
 import { ExternalLibraryName, ExternalLibraryNames } from '../assessment/assessmentShape';
@@ -22,6 +23,7 @@ const baseProps = {
   sharedbAceIsInviting: false,
   sideContentHeight: 40,
   sourceChapter: 2,
+  sourceVariant: 'default' as Variant,
   externalLibraryName: ExternalLibraryNames.NONE,
   output: [],
   replValue: '',
@@ -56,6 +58,7 @@ const baseProps = {
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
   handleFetchChapter: () => {}
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
 };
 
 const testValueProps: IPlaygroundProps = {

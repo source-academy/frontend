@@ -5,6 +5,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
 
+import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
@@ -48,6 +49,14 @@ clicking and dragging on the right border of the editor, or the top border of
 the REPL.
 `;
 
+const CONCURRENT_SOURCE_INTRODUCTION = `
+
+In Source ${CHAP}3 Concurrent, all programs are concurrent programs. Hence, they do not return any
+result, and can only reflect trace through calls to the \`display\` function. This includes
+programs that only use one thread and do not make any calls to \`concurrent_execute\`. To
+run programs concurrently, use the \`concurrent_execute\` function. You may refer to Source
+${CHAP}3 Concurrent specifications for more details.`;
+
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
@@ -70,6 +79,7 @@ export interface IStateProps {
   sharedbAceInitValue: string;
   sharedbAceIsInviting: boolean;
   sourceChapter: number;
+  sourceVariant: Variant;
   websocketStatus: number;
   externalLibraryName: string;
   usingSubst: boolean;
@@ -80,7 +90,7 @@ export interface IDispatchProps {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
-  handleChapterSelect: (chapter: number) => void;
+  handleChapterSelect: (chapter: number, variant: Variant) => void;
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -105,6 +115,7 @@ export interface IDispatchProps {
   handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
   handleFetchChapter: () => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 }
 
 type PlaygroundState = {
@@ -152,7 +163,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       />
     );
 
-    const chapterSelectHandler = ({ chapter }: { chapter: number }, e: any) => {
+    const chapterSelectHandler = (
+      { chapter, variant }: { chapter: number; variant: Variant },
+      e: any
+    ) => {
       if (
         (chapter <= 2 && this.state.hasBreakpoints) ||
         this.state.selectedTab === SideContentType.substVisualizer
@@ -163,12 +177,13 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         this.props.handleReplOutputClear();
         this.props.handleUsingSubst(false);
       }
-      this.props.handleChapterSelect(chapter);
+      this.props.handleChapterSelect(chapter, variant);
     };
     const chapterSelect = (
       <ChapterSelect
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
+        sourceVariant={this.props.sourceVariant}
         key="chapter"
       />
     );
@@ -227,6 +242,21 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       />
     );
 
+    const playgroundIntroductionTab: SideContentTab = {
+      label: 'Introduction',
+      iconName: IconNames.COMPASS,
+      body: (
+        <Markdown
+          content={
+            INTRODUCTION +
+            (this.props.sourceVariant === 'concurrent' ? CONCURRENT_SOURCE_INTRODUCTION : '')
+          }
+          openLinksInNewWindow={true}
+        />
+      ),
+      id: SideContentType.introduction
+    };
+
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
     // Conditional logic for tab rendering
@@ -245,7 +275,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(listVisualizerTab);
     }
-    if (this.props.sourceChapter >= 3) {
+    if (this.props.sourceChapter >= 3 && this.props.sourceVariant !== 'concurrent') {
       // Enable Inspector, Env Visualizer for Source Chapter 3 and above
       tabs.push(inspectorTab);
       tabs.push(envVisualizerTab);
@@ -261,19 +291,24 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
           autorunButtons,
           shareButton,
           chapterSelect,
-          externalLibrarySelect,
+          this.props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           sessionButtons,
           executionTime
         ],
-        replButtons: [evalButton, clearButton]
+        replButtons: [this.props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton]
       },
       editorProps: {
         sourceChapter: this.props.sourceChapter,
+        externalLibraryName: this.props.externalLibraryName,
+        sourceVariant: this.props.sourceVariant,
         editorValue: this.props.editorValue,
         editorSessionId: this.props.editorSessionId,
         handleDeclarationNavigate: this.props.handleDeclarationNavigate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
+        handleReplValueChange: this.props.handleReplValueChange,
+        handleReplEval: this.props.handleReplEval,
+        handlePromptAutocomplete: this.props.handlePromptAutocomplete,
         handleFinishInvite: this.props.handleFinishInvite,
         sharedbAceInitValue: this.props.sharedbAceInitValue,
         sharedbAceIsInviting: this.props.sharedbAceIsInviting,
@@ -320,6 +355,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {
         sourceChapter: this.props.sourceChapter,
+        sourceVariant: this.props.sourceVariant,
         output: this.props.output,
         replValue: this.props.replValue,
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
@@ -394,13 +430,6 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     });
   }
 }
-
-const playgroundIntroductionTab: SideContentTab = {
-  label: 'Introduction',
-  iconName: IconNames.COMPASS,
-  body: <Markdown content={INTRODUCTION} openLinksInNewWindow={true} />,
-  id: SideContentType.introduction
-};
 
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',

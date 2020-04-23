@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
+import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput, SideContentType } from '../../reducers/states';
 import { ExternalLibraryName } from '../assessment/assessmentShape';
 import Workspace, { WorkspaceProps } from '../workspace';
@@ -57,6 +58,7 @@ export interface IStateProps {
   sideContentHeight?: number;
   sourcecastIndex: ISourcecastData[] | null;
   sourceChapter: number;
+  sourceVariant: Variant;
 }
 
 export interface IDispatchProps {
@@ -71,6 +73,7 @@ export interface IDispatchProps {
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
@@ -139,6 +142,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       <ChapterSelect
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
+        sourceVariant={this.props.sourceVariant}
         key="chapter"
       />
     );
@@ -234,6 +238,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
     };
     const sourcecastControlbarProps: ISourcecastControlbarProps = {
       handleEditorValueChange: this.props.handleEditorValueChange,
+      handlePromptAutocomplete: this.props.handlePromptAutocomplete,
       handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
       handleSetEditorReadonly: this.props.handleSetEditorReadonly,
       handleSetInputToApply: this.props.handleSetInputToApply,

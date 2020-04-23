@@ -18,6 +18,7 @@ import {
   externalLibrarySelect,
   fetchSourcecastIndex,
   navigateToDeclaration,
+  promptAutocomplete,
   setCodeDeltasToApply,
   setEditorBreakpoint,
   setEditorReadonly,
@@ -66,7 +67,8 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   replValue: state.workspaces.sourcecast.replValue,
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
-  sourceChapter: state.workspaces.sourcecast.context.chapter
+  sourceChapter: state.workspaces.sourcecast.context.chapter,
+  sourceVariant: state.workspaces.sourcecast.context.variant
 });
 
 const location: WorkspaceLocation = 'sourcecast';
@@ -77,7 +79,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
-      handleChapterSelect: (chapter: number) => chapterSelect(chapter, location),
+      handleChapterSelect: (chapter: number) => chapterSelect(chapter, 'default', location),
       handleDeclarationNavigate: (cursorPosition: IPosition) =>
         navigateToDeclaration(location, cursorPosition),
       handleEditorEval: () => evalEditor(location),
@@ -112,7 +114,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),
       handleDebuggerPause: () => beginDebuggerPause(location),
       handleDebuggerResume: () => debuggerResume(location),
-      handleDebuggerReset: () => debuggerReset(location)
+      handleDebuggerReset: () => debuggerReset(location),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        promptAutocomplete(location, row, col, callback)
     },
     dispatch
   );

@@ -18,6 +18,7 @@ import {
   evalRepl,
   evalTestcase,
   navigateToDeclaration,
+  promptAutocomplete,
   setEditorBreakpoint,
   submitAnswer,
   updateEditorValue,
@@ -67,7 +68,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, workspaceLocation),
+        chapterSelect(chapter, 'default', workspaceLocation),
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: IPosition) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
@@ -95,7 +96,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId,
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation)
+      handleDebuggerReset: () => debuggerReset(workspaceLocation),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        promptAutocomplete(workspaceLocation, row, col, callback)
     },
     dispatch
   );

@@ -1,5 +1,6 @@
 import { action } from 'typesafe-actions';
 
+import { Variant } from 'js-slang/dist/types';
 import { ExternalLibraryName, Library } from '../components/assessment/assessmentShape';
 import { IPosition } from '../components/workspace/Editor';
 import { IWorkspaceState, SideContentType } from '../reducers/states';
@@ -46,9 +47,14 @@ export const changeExecTime = (execTime: string, workspaceLocation: WorkspaceLoc
 export const changeSideContentHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.CHANGE_SIDE_CONTENT_HEIGHT, { height, workspaceLocation });
 
-export const chapterSelect = (chapter: number, workspaceLocation: WorkspaceLocation) =>
+export const chapterSelect = (
+  chapter: number,
+  variant: Variant,
+  workspaceLocation: WorkspaceLocation
+) =>
   action(actionTypes.CHAPTER_SELECT, {
     chapter,
+    variant,
     workspaceLocation
   });
 
@@ -210,8 +216,23 @@ export const updateHasUnsavedChanges = (
     hasUnsavedChanges
   });
 
+
 export const fetchChapter = () => action(actionTypes.FETCH_CHAPTER);
 
 export const changeChapter = (chapter: number) => action(actionTypes.CHANGE_CHAPTER, { chapter });
 
 export const updateChapter = (chapter: number) => action(actionTypes.UPDATE_CHAPTER, { chapter });
+
+export const promptAutocomplete = (
+  workspaceLocation: WorkspaceLocation,
+  row: number,
+  column: number,
+  callback: any // TODO: define a type for this
+) =>
+  action(actionTypes.PROMPT_AUTOCOMPLETE, {
+    workspaceLocation,
+    row,
+    column,
+    callback
+  });
+

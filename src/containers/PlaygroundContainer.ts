@@ -2,6 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Variant } from 'js-slang/dist/types';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -24,6 +25,7 @@ import {
   initInvite,
   invalidEditorSessionId,
   navigateToDeclaration,
+  promptAutocomplete,
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
@@ -59,6 +61,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sharedbAceInitValue: state.workspaces.playground.sharedbAceInitValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
+  sourceVariant: state.workspaces.playground.context.variant,
   websocketStatus: state.workspaces.playground.websocketStatus,
   externalLibraryName: state.workspaces.playground.externalLibrary,
   usingSubst: state.playground.usingSubst
@@ -75,7 +78,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) =>
         changeExecTime(execTime.toString(), workspaceLocation),
-      handleChapterSelect: (chapter: number) => chapterSelect(chapter, workspaceLocation),
+      handleChapterSelect: (chapter: number, variant: Variant) =>
+        chapterSelect(chapter, variant, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: IPosition) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
@@ -107,6 +111,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handleFetchChapter: () => fetchChapter()
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        promptAutocomplete(workspaceLocation, row, col, callback)
     },
     dispatch
   );
