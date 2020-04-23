@@ -395,7 +395,7 @@ describe('Test CHANGE_CHAPTER Action', () => {
   test('when chapter is changed', () => {
     return expectSaga(backendSaga)
       .withState({ session: { role: Role.Staff } })
-      .dispatch({ type: actionTypes.CHANGE_CHAPTER, payload: { chapterNo: 1 } })
+      .dispatch({ type: actionTypes.CHANGE_CHAPTER, payload: { chapterNo: 1, variant: 'default' } })
       .silentRun();
   });
 });

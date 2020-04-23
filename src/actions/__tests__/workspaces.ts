@@ -430,22 +430,26 @@ test('fetchChapter generates correct action object', () => {
 
 test('changeChapter generates correct action object', () => {
   const chapter = 1;
-  const action = changeChapter(chapter);
+  const variant = 'default';
+  const action = changeChapter(chapter, variant);
   expect(action).toEqual({
     type: actionTypes.CHANGE_CHAPTER,
     payload: {
-      chapter
+      chapter,
+      variant
     }
   });
 });
 
 test('updateChapter generates correct action object', () => {
   const chapter = 1;
-  const action = updateChapter(chapter);
+  const variant = 'default';
+  const action = updateChapter(chapter, variant);
   expect(action).toEqual({
     type: actionTypes.UPDATE_CHAPTER,
     payload: {
-      chapter
+      chapter,
+      variant
     }
   });
 });

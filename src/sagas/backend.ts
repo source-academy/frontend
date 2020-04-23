@@ -569,7 +569,7 @@ function* backendSaga(): SagaIterator {
     const chapter = yield call(request.fetchChapter, tokens);
 
     if (chapter) {
-      yield put(actions.updateChapter(chapter.chapter.chapterno));
+      yield put(actions.updateChapter(chapter.chapter.chapterno, chapter.chapter.variant));
     }
   });
 
@@ -581,15 +581,15 @@ function* backendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    const chapter = action.payload.chapter;
-    const resp: Response = yield request.changeChapter(chapter, tokens);
+    const chapter = action.payload;
+    const resp: Response = yield request.changeChapter(chapter.chapter, chapter.variant, tokens);
 
     if (!resp || !resp.ok) {
       yield request.handleResponseError(resp);
       return;
     }
 
-    yield put(actions.updateChapter(chapter));
+    yield put(actions.updateChapter(chapter.chapter, chapter.variant));
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   });
 }

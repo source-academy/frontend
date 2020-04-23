@@ -596,7 +596,7 @@ export const postMaterialFolder = async (title: string, parentId: number, tokens
 /**
  * GET /chapter
  */
-export async function fetchChapter(tokens: Tokens): Promise<number | null> {
+export async function fetchChapter(tokens: Tokens): Promise<Response | null> {
   const resp = await request('chapter', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
@@ -615,10 +615,10 @@ export async function fetchChapter(tokens: Tokens): Promise<number | null> {
 /**
  * POST /chapter/update/1
  */
-export async function changeChapter(chapterno: number, tokens: Tokens) {
+export async function changeChapter(chapterno: number, variant: string, tokens: Tokens) {
   const resp = await request(`chapter/update/1`, 'POST', {
     accessToken: tokens.accessToken,
-    body: { chapterno },
+    body: { chapterno, variant },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

@@ -664,7 +664,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state.playground,
           context: {
             ...state.playground.context,
-            chapter: action.payload.chapter
+            chapter: action.payload.chapter,
+            variant: action.payload.variant
           }
         }
       };

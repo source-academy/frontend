@@ -9,14 +9,15 @@ import { IChapter } from '../components/workspace/controlBar';
 import { IState } from '../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  sourceChapter: state.workspaces.playground.context.chapter
+  sourceChapter: state.workspaces.playground.context.chapter,
+  sourceVariant: state.workspaces.playground.context.variant
 });
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
       handleFetchChapter: () => fetchChapter(),
-      handleUpdateChapter: (chapterNo: IChapter) => changeChapter(chapterNo.chapter)
+      handleUpdateChapter: (chapter: IChapter) => changeChapter(chapter.chapter, chapter.variant)
     },
     dispatch
   );
