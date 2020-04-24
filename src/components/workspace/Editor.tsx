@@ -305,7 +305,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const externalUrl =
       this.props.externalLibraryName === 'ALL' ? `External%20libraries` : external;
     const ext = Documentation.externalLibraries[external];
-    
+
     if (ext.some((node: { caption: string }) => node.caption === token.value)) {
       if (
         token !== null &&
