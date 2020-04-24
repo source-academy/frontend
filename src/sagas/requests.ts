@@ -596,10 +596,8 @@ export const postMaterialFolder = async (title: string, parentId: number, tokens
 /**
  * GET /chapter
  */
-export async function fetchChapter(tokens: Tokens): Promise<Response | null> {
+export async function fetchChapter(): Promise<Response | null> {
   const resp = await request('chapter', 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true

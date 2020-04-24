@@ -557,16 +557,7 @@ function* backendSaga(): SagaIterator {
   });
 
   yield takeEvery(actionTypes.FETCH_CHAPTER, function*() {
-    const tokens = yield select((state: IState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-
-    if (!tokens.accessToken) {
-      return;
-    }
-
-    const chapter = yield call(request.fetchChapter, tokens);
+    const chapter = yield call(request.fetchChapter);
 
     if (chapter) {
       yield put(actions.updateChapter(chapter.chapter.chapterno, chapter.chapter.variant));
