@@ -302,14 +302,16 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     const external =
       this.props.externalLibraryName === undefined ? 'NONE' : this.props.externalLibraryName;
+    const externalUrl =
+      this.props.externalLibraryName === 'ALL' ? `External%20libraries` : external;
     const ext = Documentation.externalLibraries[external];
-
+    
     if (ext.some((node: { caption: string }) => node.caption === token.value)) {
       if (
         token !== null &&
         (/\bsupport.function\b/.test(token.type) || /\bconstant.language\b/.test(token.type))
       ) {
-        window.open(`${url}source/External%20libraries/global.html#${token.value}`); // opens external library link
+        window.open(`${url}source/${externalUrl}/global.html#${token.value}`); // opens external library link
       }
     } else if (
       token !== null &&
