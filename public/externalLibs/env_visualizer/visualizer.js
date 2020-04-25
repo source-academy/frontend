@@ -103,16 +103,19 @@
       return result;
     }
 
-    // initialiseBasicUnitHeight(d1);
+    initialiseBasicUnitHeight(d1);
 
     while (d2 !== d1) {
       if (checkSubStructure(d1[1], d2)) {        
         d1 = d1[1];
         result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
       } else {
-        initialiseBasicUnitHeight(d1);
+        // initialiseBasicUnitHeight(d1);
+        // console.log("______________________")
+        // console.log(d1[1])
         rightHeight = getBasicUnitHeight(d1[1]);
         // console.log(rightHeight)
+        // console.log("______________________")
         result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
         d1 = d1[0];
       }
@@ -422,6 +425,8 @@
     context.font = '14px Roboto Mono Light, Courier New';
     cycleDetector.push(dataObject);
     
+    // console.log(dataObject)
+    // console.log("context initialised")
 
     // repeat the same process for the tail of the pair
     if (Array.isArray(dataObject[1])) {
@@ -611,9 +616,10 @@
         const draw = result.draw;
         // check if need to draw the data object or it has already been drawn
         if (draw) {
-          const newShiftY = callGetShiftInfo(dataObject[0])
+          // const newShiftY = callGetShiftInfo(dataObject[0])
           // console.log(newShiftY)
-          let shiftY = calculatePairShift(dataObject[1]);
+          // let shiftY = calculatePairShift(dataObject[1]);
+          let shiftY = callGetShiftInfo(dataObject[0])
           // console.log(shiftY)
           // console.log("Correct calc? " + (shiftY == newShiftY))
           // shiftY = newShiftY;
@@ -796,8 +802,6 @@
     const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
     cycleDetector = [];
-    // initialiseBasicUnitHeight
-    initialisePairShift(dataObject);
     initialiseCallGetShiftInfo(dataObject)
     drawScenePairs(dataObject, scene, wrapper, wrapper.data, x0, y0);
     //reorder layers
@@ -1692,6 +1696,7 @@
     drawSceneFrames();
     drawSceneFnObjects();
     drawHitFnObjects();
+    // Error appears here (draw scene data objects)
     drawSceneDataObjects();
     drawHitDataObjects();
     drawSceneFrameArrows();
@@ -2098,11 +2103,7 @@
             if(tailIsFn){
               return 1 + (1 + head_height);
             } else {
-              // console.log(list)
-              // console.log(list + head_height)
-              // console.log(list + tail_height)
-              // console.log("here?")              
-              return  1 + (1 + head_height) + tail_height;
+              return  (1 + head_height) + tail_height;
             }           
           } 
         }
@@ -2119,7 +2120,7 @@
 
           if (parenttype == "frame" || tail_height > 0) {
             return tail_height;
-          } else if (fnObject.parent[0] == sublist && fnObject.parent[1] == list) {
+          } else if (fnObject.parent[0] == currentObj && fnObject.parent[1] == list) {
             return 1;
           } else {
             return 0;
@@ -2144,10 +2145,10 @@
   }
 
 // Initialise parent data structure before using calculatePairShift
-  let currentObject = null;
-  function initialisePairShift(dataObject) {
-    currentObject = dataObject;
-  }
+  // let currentObject = null;
+  // function initialisePairShift(dataObject) {
+  //   currentObject = dataObject;
+  // }
 
 // Determines the height positioning of pairs in the same data structure 
   function calculatePairShift(sublist){
