@@ -232,6 +232,7 @@ export interface ISourceLanguage {
 
 export const sourceLanguages: ISourceLanguage[] = [
   { chapter: 1, variant: 'default' },
+  { chapter: 1, variant: 'wasm' },
   { chapter: 1, variant: 'lazy' },
   { chapter: 2, variant: 'default' },
   { chapter: 2, variant: 'lazy' },
@@ -242,6 +243,7 @@ export const sourceLanguages: ISourceLanguage[] = [
 ];
 
 const variantDisplay: Map<Variant, string> = new Map([
+  ['wasm', 'wasm'],
   ['non-det', 'Non-Det'],
   ['concurrent', 'Concurrent'],
   ['lazy', 'Lazy']
