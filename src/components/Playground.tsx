@@ -210,7 +210,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     const googleDriveButtons =
       this.props.storageToken === undefined ? null : (
         <GoogleDriveButtons
-          key="googledirve"
+          key="googledrive"
           onClickSave={this.props.handleSavePicker}
           onClickOpen={this.props.handleOpenPicker}
         />
