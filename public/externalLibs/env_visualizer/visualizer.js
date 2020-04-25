@@ -407,8 +407,7 @@
     // wrapperData is only relevant for tracing the origin of function objects in lists
     // not useful for anything else 
     var context = scene.context,
-      parent = wrapper.parent;
-    
+      parent = wrapper.parent;    
     // makes an opaque rectangle of the same colour as the background
     context.fillStyle = '#2c3e50';
     context.fillRect(startX, startY, DATA_UNIT_WIDTH, DATA_UNIT_HEIGHT);
@@ -623,13 +622,16 @@
           // console.log(shiftY)
           // console.log("Correct calc? " + (shiftY == newShiftY))
           // shiftY = newShiftY;
+
+
+
           if (is_Array(dataObject[0])) {
-            drawNestedArrayObject(startX, startY + shiftY);
+            drawNestedArrayObject(startX, wrapper.y + shiftY);
           } else {
-            drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, startY + shiftY);
+            drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, wrapper.y + shiftY);
           }
           drawArrow(context, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
-            startX + DATA_UNIT_WIDTH / 4, startY + shiftY);
+            startX + DATA_UNIT_WIDTH / 4, wrapper.y + shiftY);
 
         } else {
           if (is_Array(dataObject[0])) {
@@ -802,6 +804,7 @@
     const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
     cycleDetector = [];
+    initialisePairShift(dataObject);
     initialiseCallGetShiftInfo(dataObject)
     drawScenePairs(dataObject, scene, wrapper, wrapper.data, x0, y0);
     //reorder layers
@@ -2145,10 +2148,10 @@
   }
 
 // Initialise parent data structure before using calculatePairShift
-  // let currentObject = null;
-  // function initialisePairShift(dataObject) {
-  //   currentObject = dataObject;
-  // }
+  let currentObject = null;
+  function initialisePairShift(dataObject) {
+    currentObject = dataObject;
+  }
 
 // Determines the height positioning of pairs in the same data structure 
   function calculatePairShift(sublist){
