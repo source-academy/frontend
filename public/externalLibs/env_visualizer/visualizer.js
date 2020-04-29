@@ -97,31 +97,67 @@
       x: dataObjectWrappers[dataObjects.indexOf(d1)].x,
       y: dataObjectWrappers[dataObjects.indexOf(d1)].y + 3/4 * DATA_UNIT_HEIGHT
     }
+    // console.log(result);
 
     // If parent object is array, point to placeholder object rather than within object
     if(d1.length != 2) {
       return result;
     }
 
+    let orig = d1;
+    let searchedPairs = [];
+
     initialiseBasicUnitHeight(d1);
 
     while (d2 !== d1) {
-      if (checkSubStructure(d1[1], d2)) {        
-        d1 = d1[1];
-        result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
+      if(searchedPairs.includes(d1)){
+        let currCoords = getShiftInfo(orig, d1);
+        // console.log(currCoords)
+        result.x = currCoords.x;
+        result.y = currCoords.y;
+        // Means that the data structure is cyclic
+        if(checkSubStructure(d1[0], d2)){
+          // If the head contains d2
+          rightHeight = getBasicUnitHeight(d1[1]);
+          result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
+          d1 = d1[0];
+        } else {
+          result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
+          d1 = d1[1];
+        }
+
       } else {
-        // initialiseBasicUnitHeight(d1);
-        // console.log("______________________")
-        // console.log(d1[1])
-        rightHeight = getBasicUnitHeight(d1[1]);
-        // console.log(rightHeight)
-        // console.log("______________________")
-        result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
-        d1 = d1[0];
+        searchedPairs.push(d1)
+        if (checkSubStructure(d1[1], d2)) {
+          d1 = d1[1];
+          result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
+        } else {
+          // console.log("______________________")
+          // console.log(d1[1])
+          rightHeight = getBasicUnitHeight(d1[1]);
+          // console.log(rightHeight)
+          // console.log("______________________")
+          result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
+          d1 = d1[0];
+        }
       }
     }
-    
 
+    // Second iteration
+    // if (checkSubStructure(d1[1], d2)) {        
+    //   d1 = d1[1];
+    //   result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
+    // } else {
+    //   // console.log("______________________")
+    //   // console.log(d1[1])
+    //   rightHeight = getBasicUnitHeight(d1[1]);
+    //   // console.log(rightHeight)
+    //   // console.log("______________________")
+    //   result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
+    //   d1 = d1[0];
+    // }
+    
+    // First iteration
     // while (d2 !== d1) {
     //   if (checkSubStructure(d1[0], d2)) {
     //     // Add the height of the tail of d1 to the y-coordinate
@@ -2059,6 +2095,8 @@
       }
     }
 
+    // THE LINE BELOW IS NOT SUPERFLOUS AND IS VERY IMPT
+    dataPairs.push(currentObj)
     fillDataPairs(currentObj)
 
     function recursiveHelper(list){
@@ -2068,6 +2106,7 @@
           substructureExists = true;
         }
       })
+
       if(substructureExists || dataPairs.includes(list)){
         return 0;
       } 
