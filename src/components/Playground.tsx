@@ -273,7 +273,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(listVisualizerTab);
     }
-    if (this.props.sourceChapter >= 3 && this.props.sourceVariant !== 'concurrent') {
+    if (
+      this.props.sourceChapter >= 3 &&
+      this.props.sourceVariant !== 'concurrent' &&
+      this.props.sourceVariant !== 'non-det'
+    ) {
       // Enable Inspector, Env Visualizer for Source Chapter 3 and above
       tabs.push(inspectorTab);
       tabs.push(envVisualizerTab);
