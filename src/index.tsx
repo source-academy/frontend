@@ -1,3 +1,5 @@
+import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
+
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
@@ -8,8 +10,6 @@ import { store } from './createStore';
 import { LINKS, SOURCE_ACADEMY_VERSION, MODULES_BACKEND_URL } from './utils/constants';
 import { history } from './utils/history';
 import registerServiceWorker from './utils/registerServiceWorker';
-
-import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
 
 import './styles/index.css';
 
@@ -22,7 +22,7 @@ console.log(
   'font-weight: bold;'
 );
 
-setBackendStaticURL(MODULES_BACKEND_URL)
+setBackendStaticURL(MODULES_BACKEND_URL);
 
 render(
   <Provider store={store}>
