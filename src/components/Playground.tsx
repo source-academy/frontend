@@ -106,6 +106,7 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSendReplInputToOutput: (code: string) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -273,7 +274,11 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(listVisualizerTab);
     }
-    if (this.props.sourceChapter >= 3 && this.props.sourceVariant !== 'concurrent') {
+    if (
+      this.props.sourceChapter >= 3 &&
+      this.props.sourceVariant !== 'concurrent' &&
+      this.props.sourceVariant !== 'non-det'
+    ) {
       // Enable Inspector, Env Visualizer for Source Chapter 3 and above
       tabs.push(inspectorTab);
       tabs.push(envVisualizerTab);
@@ -304,8 +309,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleDeclarationNavigate: this.props.handleDeclarationNavigate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
-        handleReplValueChange: this.props.handleReplValueChange,
-        handleReplEval: this.props.handleReplEval,
+        handleSendReplInputToOutput: this.props.handleSendReplInputToOutput,
         handlePromptAutocomplete: this.props.handlePromptAutocomplete,
         handleFinishInvite: this.props.handleFinishInvite,
         sharedbAceInitValue: this.props.sharedbAceInitValue,

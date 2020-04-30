@@ -8,7 +8,13 @@ import { Documentation } from '../../reducers/documentation';
 import { require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
-import { createContext, getAllOccurrencesInScope, getScope, getTypeInformation } from 'js-slang';
+import {
+  createContext,
+  getAllOccurrencesInScope,
+  getScope,
+  getTypeInformation,
+  hasDeclaration
+} from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { Variant } from 'js-slang/dist/types';
@@ -39,11 +45,10 @@ export interface IEditorProps {
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
-  handleReplValueChange?: (newCode: string) => void;
-  handleReplEval?: () => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleSendReplInputToOutput?: (newOutput: string) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -306,25 +311,39 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       this.props.externalLibraryName === 'ALL' ? `External%20libraries` : external;
     const ext = Documentation.externalLibraries[external];
 
+    this.props.handleDeclarationNavigate(
+      (this.AceEditor.current as any).editor.getCursorPosition()
+    );
+
+    const newPos = (this.AceEditor.current as any).editor.selection.getCursor();
+    if (newPos.row !== pos.row || newPos.column !== pos.column) {
+      return;
+    }
+
+    if (
+      hasDeclaration(this.props.editorValue, createContext(chapter), {
+        line: newPos.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
+        column: newPos.column
+      })
+    ) {
+      return;
+    }
+
     if (ext.some((node: { caption: string }) => node.caption === token.value)) {
       if (
         token !== null &&
-        (/\bsupport.function\b/.test(token.type) || /\bconstant.language\b/.test(token.type))
+        (/\bsupport.function\b/.test(token.type) || /\bbuiltinConsts\b/.test(token.type))
       ) {
         window.open(`${url}source/${externalUrl}/global.html#${token.value}`); // opens external library link
       }
     } else if (
       token !== null &&
-      (/\bsupport.function\b/.test(token.type) || /\bconstant.language\b/.test(token.type))
+      (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
     ) {
       window.open(`${url}source/source_${chapter}${variantString}/global.html#${token.value}`); // opens builtn library link
     }
     if (token !== null && /\bstorage.type\b/.test(token.type)) {
       window.open(`${url}source/source_${chapter}.pdf`);
-    } else {
-      this.props.handleDeclarationNavigate(
-        (this.AceEditor.current as any).editor.getCursorPosition()
-      );
     }
   };
 
@@ -431,8 +450,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         .join('\n');
     };
 
+    let output;
+
     // display the information
-    if (this.props.handleReplValueChange && this.props.handleReplEval) {
+    if (this.props.handleSendReplInputToOutput) {
       if (pos && token) {
         // if the token is a comment, ignore it
         if (token.type === 'comment') {
@@ -444,17 +465,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
           { line: pos.row + 1, column: pos.column },
           token.value
         );
-        const output = commentEveryLine(str);
-        if (str.length > 0) {
-          this.props.handleReplValueChange(output);
-        } else {
-          this.props.handleReplValueChange('// type information not found');
+        output = commentEveryLine(str);
+        if (str.length === 0) {
+          output = '// type information not found';
         }
       } else {
-        this.props.handleReplValueChange('// invalid token. Please put cursor on an identifier.');
+        output = '// invalid token. Please put cursor on an identifier.';
       }
-
-      this.props.handleReplEval();
+      this.props.handleSendReplInputToOutput(output);
     }
   };
 
