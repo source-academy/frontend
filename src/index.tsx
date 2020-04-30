@@ -9,7 +9,7 @@ import { LINKS, SOURCE_ACADEMY_VERSION, MODULES_BACKEND_URL } from './utils/cons
 import { history } from './utils/history';
 import registerServiceWorker from './utils/registerServiceWorker';
 
-import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader'
+import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
 
 import './styles/index.css';
 
