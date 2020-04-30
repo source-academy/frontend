@@ -5,7 +5,7 @@ import {
   Icon,
   Navbar,
   NavbarDivider,
-  NavbarGroup,
+  NavbarGroup
   // NavbarHeading
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
@@ -24,7 +24,7 @@ export interface INavigationBarProps {
   name?: string;
 }
 
-const NavigationBar: React.SFC<INavigationBarProps> = (props) => (
+const NavigationBar: React.SFC<INavigationBarProps> = props => (
   <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
     <NavbarGroup align={Alignment.LEFT}>
       {/* 

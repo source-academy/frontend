@@ -57,19 +57,19 @@ const baseProps = {
   handleDebuggerPause: () => {},
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
 };
 
 const testValueProps: IPlaygroundProps = {
   ...baseProps,
   ...mockRouterProps('/academy', {}),
-  editorValue: 'Test value',
+  editorValue: 'Test value'
 };
 
 const playgroundLinkProps: IPlaygroundProps = {
   ...baseProps,
   ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {}),
-  editorValue: 'This should not show up',
+  editorValue: 'This should not show up'
 };
 
 test('Playground renders correctly', () => {

@@ -16,7 +16,7 @@ export const fetchRepos = async () => {
         key: repo.id,
         name: repo.name,
         description: repo.description,
-        link: repo.contributors_url,
+        link: repo.contributors_url
       };
     });
   return repos;
@@ -45,7 +45,7 @@ export const fetchContributors = async (endpoints: Repo[]) => {
             photo: contributor.avatar_url,
             githubPage: contributor.html_url,
             githubName: contributor.login,
-            commits: contributor.contributions,
+            commits: contributor.contributions
           };
         });
     })

@@ -6,7 +6,7 @@ import * as actions from '../actions';
 import {
   Grading,
   GradingOverview,
-  GradingQuestion,
+  GradingQuestion
 } from '../components/academy/grading/gradingShape';
 import {
   AssessmentCategory,
@@ -15,7 +15,7 @@ import {
   IAssessmentOverview,
   IProgrammingQuestion,
   QuestionType,
-  QuestionTypes,
+  QuestionTypes
 } from '../components/assessment/assessmentShape';
 import { MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
@@ -57,7 +57,7 @@ type Tokens = {
 export async function postAuth(luminusCode: string): Promise<Tokens | null> {
   const resp = await request('auth', 'POST', {
     body: { login: { luminus_code: luminusCode } },
-    errorMessage: 'Could not login. Please contact the module administrator.',
+    errorMessage: 'Could not login. Please contact the module administrator.'
   });
   if (!resp) {
     return null;
@@ -65,7 +65,7 @@ export async function postAuth(luminusCode: string): Promise<Tokens | null> {
   const tokens = await resp.json();
   return {
     accessToken: tokens.access_token,
-    refreshToken: tokens.refresh_token,
+    refreshToken: tokens.refresh_token
   };
 }
 
@@ -74,7 +74,7 @@ export async function postAuth(luminusCode: string): Promise<Tokens | null> {
  */
 async function postRefresh(refreshToken: string): Promise<Tokens | null> {
   const resp = await request('auth/refresh', 'POST', {
-    body: { refresh_token: refreshToken },
+    body: { refresh_token: refreshToken }
   });
   if (!resp) {
     return null;
@@ -82,7 +82,7 @@ async function postRefresh(refreshToken: string): Promise<Tokens | null> {
   const tokens = await resp.json();
   return {
     accessToken: tokens.access_token,
-    refreshToken: tokens.refresh_token,
+    refreshToken: tokens.refresh_token
   };
 }
 
@@ -93,7 +93,7 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
   const resp = await request('user', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   if (!resp || !resp.ok) {
     return null;
@@ -110,7 +110,7 @@ export async function getAssessmentOverviews(
   const resp = await request('assessments', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -136,7 +136,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
 
   // Attempt to load password-protected assessment
@@ -152,10 +152,10 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       body: {
-        password: input,
+        password: input
       },
       shouldAutoLogout: false,
-      shouldRefresh: true,
+      shouldRefresh: true
     });
   }
 
@@ -168,7 +168,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
   //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
   assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
   delete (assessment as any).type;
-  assessment.questions = assessment.questions.map((q) => {
+  assessment.questions = assessment.questions.map(q => {
     if (q.type === QuestionTypes.programming) {
       const question = q as IProgrammingQuestion;
       question.autogradingResults = question.autogradingResults || [];
@@ -188,7 +188,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<IAssess
     // Make library.external.name uppercase
     q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
     // Make globals into an Array of (string, value)
-    q.library.globals = Object.entries(q.library.globals as object).map((entry) => {
+    q.library.globals = Object.entries(q.library.globals as object).map(entry => {
       try {
         entry[1] = (window as any).eval(entry[1]);
       } catch (e) {}
@@ -213,7 +213,7 @@ export async function postAnswer(
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 }
@@ -227,7 +227,7 @@ export async function postAssessment(id: number, tokens: Tokens): Promise<Respon
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false, // 400 if some questions unattempted
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 }
@@ -244,7 +244,7 @@ export async function getGradingOverviews(
   const resp = await request(`grading?group=${group}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
@@ -274,7 +274,7 @@ export async function getGradingOverviews(
         xpAdjustment: overview.xpAdjustment,
         currentXp: overview.xp + overview.xpAdjustment,
         maxXp: overview.assessment.maxXp,
-        xpBonus: overview.xpBonus,
+        xpBonus: overview.xpBonus
       };
       return gradingOverview;
     })
@@ -293,7 +293,7 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
   const resp = await request(`grading/${submissionId}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   if (!resp) {
     return null;
@@ -318,7 +318,7 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
         testcases: question.testcases || [],
         type: question.type as QuestionType,
         maxGrade: question.maxGrade,
-        maxXp: question.maxXp,
+        maxXp: question.maxXp
       },
       student,
       grade: {
@@ -327,8 +327,8 @@ export async function getGrading(submissionId: number, tokens: Tokens): Promise<
         roomId: grade.roomId || '',
         gradeAdjustment: grade.adjustment,
         xpAdjustment: grade.xpAdjustment,
-        comments: grade.comments,
-      },
+        comments: grade.comments
+      }
     } as GradingQuestion;
 
     if (gradingQuestion.grade.grader !== null) {
@@ -358,13 +358,13 @@ export const postGrading = async (
       grading: {
         adjustment: gradeAdjustment,
         xpAdjustment,
-        comments,
-      },
+        comments
+      }
     },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 };
@@ -378,7 +378,7 @@ export async function postUnsubmit(submissionId: number, tokens: Tokens) {
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 }
@@ -390,7 +390,7 @@ export async function getNotifications(tokens: Tokens) {
   const resp: Response | null = await request('notification', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
+    shouldAutoLogout: false
   });
   let notifications: Notification[] = [];
 
@@ -408,7 +408,7 @@ export async function getNotifications(tokens: Tokens) {
         ? capitalise(notification.assessment.type)
         : undefined,
       assessment_title: notification.assessment ? notification.assessment.title : undefined,
-      submission_id: notification.submission_id || undefined,
+      submission_id: notification.submission_id || undefined
     } as Notification;
   });
 
@@ -423,7 +423,7 @@ export async function postAcknowledgeNotifications(tokens: Tokens, ids: number[]
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     body: { notificationIds: ids },
-    shouldAutoLogout: false,
+    shouldAutoLogout: false
   });
 
   return resp;
@@ -438,9 +438,9 @@ export async function postNotify(tokens: Tokens, assessmentId?: number, submissi
     refreshToken: tokens.refreshToken,
     body: {
       assessmentId,
-      submissionId,
+      submissionId
     },
-    shouldAutoLogout: false,
+    shouldAutoLogout: false
   });
 }
 
@@ -453,7 +453,7 @@ export async function deleteSourcecastEntry(id: number, tokens: Tokens) {
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 }
@@ -466,7 +466,7 @@ export async function getSourcecastIndex(tokens: Tokens): Promise<ISourcecastDat
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   if (!resp || !resp.ok) {
     return null;
@@ -498,7 +498,7 @@ export const postSourcecast = async (
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 };
@@ -512,7 +512,7 @@ export async function deleteMaterial(id: number, tokens: Tokens) {
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 }
@@ -526,7 +526,7 @@ export async function getMaterialIndex(id: number, tokens: Tokens): Promise<Mate
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   if (resp && resp.ok) {
     return await resp.json();
@@ -559,7 +559,7 @@ export const postMaterial = async (
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 };
@@ -573,7 +573,7 @@ export async function deleteMaterialFolder(id: number, tokens: Tokens) {
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 }
@@ -588,7 +588,7 @@ export const postMaterialFolder = async (title: string, parentId: number, tokens
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
-    shouldRefresh: true,
+    shouldRefresh: true
   });
   return resp;
 };
@@ -637,7 +637,7 @@ async function request(
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,
-        shouldRefresh: false,
+        shouldRefresh: false
       };
       return request(path, method, newOpts);
     }

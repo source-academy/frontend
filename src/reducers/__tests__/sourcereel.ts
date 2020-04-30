@@ -5,14 +5,14 @@ import {
   TIMER_RESET,
   TIMER_RESUME,
   TIMER_START,
-  TIMER_STOP,
+  TIMER_STOP
 } from '../../actions/actionTypes';
 import { ExternalLibraryNames } from '../../components/assessment/assessmentShape';
 import {
   ICodeDelta,
   Input,
   IPlaybackData,
-  RecordingStatus,
+  RecordingStatus
 } from '../../components/sourcecast/sourcecastShape';
 import { reducer } from '../sourcereel';
 import { defaultWorkspaceManager } from '../states';
@@ -20,7 +20,7 @@ import { defaultWorkspaceManager } from '../states';
 function generateAction(type: string, payload: any = {}) {
   return {
     type,
-    payload,
+    payload
   };
 }
 
@@ -29,7 +29,7 @@ describe('RECORD_INIT', () => {
     const initData: IPlaybackData['init'] = {
       editorValue: 'test init value',
       chapter: 1,
-      externalLibrary: ExternalLibraryNames.NONE,
+      externalLibrary: ExternalLibraryNames.NONE
     };
     const action = generateAction(RECORD_INIT, { initData });
     const result = reducer(defaultWorkspaceManager.sourcereel, action);
@@ -37,8 +37,8 @@ describe('RECORD_INIT', () => {
       ...defaultWorkspaceManager.sourcereel,
       playbackData: {
         ...defaultWorkspaceManager.sourcereel.playbackData,
-        init: initData,
-      },
+        init: initData
+      }
     });
   });
 });
@@ -48,20 +48,20 @@ describe('RECORD_INPUT', () => {
     const delta: ICodeDelta = {
       start: {
         row: 0,
-        column: 1,
+        column: 1
       },
       end: {
         row: 0,
-        column: 2,
+        column: 2
       },
       action: 'insert',
-      lines: ['a'],
+      lines: ['a']
     };
 
     const input: Input = {
       time: 0,
       type: 'codeDelta',
-      data: delta,
+      data: delta
     };
 
     const action = generateAction(RECORD_INPUT, { input });
@@ -70,8 +70,8 @@ describe('RECORD_INPUT', () => {
       ...defaultWorkspaceManager.sourcereel,
       playbackData: {
         ...defaultWorkspaceManager.sourcereel.playbackData,
-        inputs: [...defaultWorkspaceManager.sourcereel.playbackData.inputs, input],
-      },
+        inputs: [...defaultWorkspaceManager.sourcereel.playbackData.inputs, input]
+      }
     });
   });
 });
@@ -87,7 +87,7 @@ describe('TIMER_PAUSE', () => {
       timeElapsedBeforePause:
         defaultWorkspaceManager.sourcereel.timeElapsedBeforePause +
         timeNow -
-        defaultWorkspaceManager.sourcereel.timeResumed,
+        defaultWorkspaceManager.sourcereel.timeResumed
     });
   });
 });
@@ -100,7 +100,7 @@ describe('TIMER_RESET', () => {
       ...defaultWorkspaceManager.sourcereel,
       recordingStatus: RecordingStatus.notStarted,
       timeElapsedBeforePause: 0,
-      timeResumed: 0,
+      timeResumed: 0
     });
   });
 });
@@ -113,7 +113,7 @@ describe('TIMER_RESUME', () => {
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
       recordingStatus: RecordingStatus.recording,
-      timeResumed: timeNow,
+      timeResumed: timeNow
     });
   });
 });
@@ -127,7 +127,7 @@ describe('TIMER_START', () => {
       ...defaultWorkspaceManager.sourcereel,
       recordingStatus: RecordingStatus.recording,
       timeResumed: timeNow,
-      timeElapsedBeforePause: 0,
+      timeElapsedBeforePause: 0
     });
   });
 });
@@ -141,7 +141,7 @@ describe('TIMER_STOP', () => {
       ...defaultWorkspaceManager.sourcereel,
       recordingStatus: RecordingStatus.finished,
       timeResumed: 0,
-      timeElapsedBeforePause: 0,
+      timeElapsedBeforePause: 0
     });
   });
 });

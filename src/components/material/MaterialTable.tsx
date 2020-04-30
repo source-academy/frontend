@@ -9,7 +9,7 @@ import {
   InputGroup,
   NonIdealState,
   OverflowList,
-  Spinner,
+  Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
@@ -62,29 +62,29 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
           field: 'title',
           cellRendererFramework: DownloadCell,
           cellRendererParams: {
-            handleFetchMaterialIndex: this.props.handleFetchMaterialIndex,
+            handleFetchMaterialIndex: this.props.handleFetchMaterialIndex
           },
           width: 800,
           suppressMovable: true,
           suppressMenu: true,
           autoHeight: true,
           cellStyle: {
-            'text-align': 'left',
-          },
+            'text-align': 'left'
+          }
         },
         {
           headerName: 'Uploader',
           field: 'uploader.name',
           width: 400,
           suppressMovable: true,
-          suppressMenu: true,
+          suppressMenu: true
         },
         {
           headerName: 'Date',
-          valueGetter: (params) => getStandardDateTime(params.data.inserted_at),
+          valueGetter: params => getStandardDateTime(params.data.inserted_at),
           width: 400,
           suppressMovable: true,
-          suppressMenu: true,
+          suppressMenu: true
         },
         {
           headerName: 'Delete',
@@ -92,26 +92,26 @@ class MaterialTable extends React.Component<IMaterialTableProps, State> {
           cellRendererFramework: DeleteCell,
           cellRendererParams: {
             handleDeleteMaterial: this.props.handleDeleteMaterial,
-            handleDeleteMaterialFolder: this.props.handleDeleteMaterialFolder,
+            handleDeleteMaterialFolder: this.props.handleDeleteMaterialFolder
           },
           width: 150,
           suppressSorting: true,
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
-            padding: 0,
+            padding: 0
           },
-          hide: !this.props.handleDeleteMaterial,
+          hide: !this.props.handleDeleteMaterial
         },
         { headerName: 'description', field: 'description', hide: true },
         { headerName: 'inserted_at', field: 'inserted_at', hide: true },
         { headerName: 'updated_at', field: 'updated_at', hide: true },
-        { headerName: 'url', field: 'url', hide: true },
+        { headerName: 'url', field: 'url', hide: true }
       ],
       dialogOpen: false,
       filterValue: '',
       groupFilterEnabled: false,
-      newFolderName: '',
+      newFolderName: ''
     };
   }
 

@@ -9,10 +9,10 @@ const mockChangedStoredState: ISavedState = {
     accessToken: 'yep',
     refreshToken: 'refresherOrb',
     role: undefined,
-    name: 'Jeff',
+    name: 'Jeff'
   },
   playgroundEditorValue: 'Nihao everybody',
-  playgroundIsEditorAutorun: true,
+  playgroundIsEditorAutorun: true
 };
 
 const mockChangedState: IState = {
@@ -22,16 +22,16 @@ const mockChangedState: IState = {
     accessToken: 'yep',
     refreshToken: 'refresherOrb',
     role: undefined,
-    name: 'Jeff',
+    name: 'Jeff'
   },
   workspaces: {
     ...defaultState.workspaces,
     playground: {
       ...defaultState.workspaces.playground,
       editorValue: 'Nihao everybody',
-      isEditorAutorun: true,
-    },
-  },
+      isEditorAutorun: true
+    }
+  }
 };
 
 describe('createStore() function', () => {
@@ -39,14 +39,14 @@ describe('createStore() function', () => {
     localStorage.removeItem('storedState');
     expect(createStore(history).getState()).toEqual({
       ...defaultState,
-      router: { location: null },
+      router: { location: null }
     });
   });
   test('has correct getState() when called with storedState', () => {
     localStorage.setItem('storedState', compressToUTF16(JSON.stringify(mockChangedStoredState)));
     expect(createStore(history).getState()).toEqual({
       ...mockChangedState,
-      router: { location: null },
+      router: { location: null }
     });
     localStorage.removeItem('storedState');
   });

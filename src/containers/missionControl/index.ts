@@ -8,7 +8,7 @@ import { IState, Role } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state, props) => {
   const stateProps: IStateProps = {
-    isStudent: state.session.role ? state.session.role === Role.Student : true,
+    isStudent: state.session.role ? state.session.role === Role.Student : true
   };
   return stateProps;
 };
@@ -17,9 +17,14 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
   bindActionCreators(
     {
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
-      handleSubmitAssessment: submitAssessment,
+      handleSubmitAssessment: submitAssessment
     },
     dispatch
   );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Assessment));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Assessment)
+);

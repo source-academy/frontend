@@ -15,7 +15,7 @@ export const reducer: Reducer<IAcademyState> = (
     case SAVE_CANVAS:
       return {
         ...state,
-        gameCanvas: action.payload,
+        gameCanvas: action.payload
       };
     default:
       return state;

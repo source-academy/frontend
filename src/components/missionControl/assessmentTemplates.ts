@@ -8,7 +8,7 @@ import {
   IProgrammingQuestion,
   ITestcase,
   Library,
-  TestcaseTypes,
+  TestcaseTypes
 } from '../../components/assessment/assessmentShape';
 
 export const emptyLibrary = (): Library => {
@@ -16,9 +16,9 @@ export const emptyLibrary = (): Library => {
     chapter: -1,
     external: {
       name: 'NONE' as ExternalLibraryName,
-      symbols: [],
+      symbols: []
     },
-    globals: [],
+    globals: []
   };
 };
 
@@ -27,9 +27,9 @@ export const normalLibrary = (): Library => {
     chapter: 1,
     external: {
       name: 'NONE' as ExternalLibraryName,
-      symbols: [],
+      symbols: []
     },
-    globals: [],
+    globals: []
   };
 };
 
@@ -49,7 +49,7 @@ export const overviewTemplate = (): IAssessmentOverview => {
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
     xp: 0,
-    gradingStatus: 'none',
+    gradingStatus: 'none'
   };
 };
 
@@ -71,7 +71,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     xp: 0,
     grade: 0,
     maxGrade: 0,
-    maxXp: 0,
+    maxXp: 0
   };
 };
 
@@ -80,7 +80,7 @@ export const testcaseTemplate = (): ITestcase => {
     type: TestcaseTypes.public,
     answer: '',
     score: 0,
-    program: '',
+    program: ''
   };
 };
 
@@ -92,20 +92,20 @@ export const mcqTemplate = (): IMCQQuestion => {
     choices: [
       {
         content: 'A',
-        hint: null,
+        hint: null
       },
       {
         content: 'B',
-        hint: null,
+        hint: null
       },
       {
         content: 'C',
-        hint: null,
+        hint: null
       },
       {
         content: 'D',
-        hint: null,
-      },
+        hint: null
+      }
     ],
     id: 2,
     library: emptyLibrary(),
@@ -115,7 +115,7 @@ export const mcqTemplate = (): IMCQQuestion => {
     xp: 0,
     grade: 0,
     maxGrade: 0,
-    maxXp: 0,
+    maxXp: 0
   };
 };
 
@@ -128,6 +128,6 @@ export const assessmentTemplate = (): IAssessment => {
     longSummary: 'Insert mission briefing here',
     missionPDF: 'www.google.com',
     questions: [programmingTemplate()],
-    title: 'Insert title here',
+    title: 'Insert title here'
   };
 };

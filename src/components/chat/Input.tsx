@@ -16,7 +16,7 @@ class Input extends React.Component<IInputProps, StateProps> {
   public constructor(props: IInputProps) {
     super(props);
     this.state = {
-      message: '',
+      message: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,7 +25,7 @@ class Input extends React.Component<IInputProps, StateProps> {
   public render() {
     const sendButtonOpts = {
       className: 'chat-send-button',
-      fullWidth: true,
+      fullWidth: true
     };
 
     return (
@@ -48,14 +48,14 @@ class Input extends React.Component<IInputProps, StateProps> {
 
   private handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     this.setState({
-      message: e.target.value,
+      message: e.target.value
     });
   }
 
   private handleSubmit() {
     this.props.onSubmit(this.state.message);
     this.setState({
-      message: '',
+      message: ''
     });
   }
 }

@@ -5,7 +5,7 @@ import {
   SET_SOURCECAST_DATA,
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_STATUS,
-  UPDATE_SOURCECAST_INDEX,
+  UPDATE_SOURCECAST_INDEX
 } from '../../actions/actionTypes';
 import { ExternalLibraryNames } from '../../components/assessment/assessmentShape';
 import {
@@ -13,7 +13,7 @@ import {
   Input,
   IPlaybackData,
   ISourcecastData,
-  PlaybackStatus,
+  PlaybackStatus
 } from '../../components/sourcecast/sourcecastShape';
 import { reducer } from '../sourcecast';
 import { defaultWorkspaceManager } from '../states';
@@ -21,7 +21,7 @@ import { defaultWorkspaceManager } from '../states';
 function generateAction(type: string, payload: any = {}) {
   return {
     type,
-    payload,
+    payload
   };
 }
 
@@ -30,41 +30,41 @@ describe('SAVE_SOURCECAST_DATA', () => {
     const codeDelta: ICodeDelta = {
       start: {
         row: 0,
-        column: 1,
+        column: 1
       },
       end: {
         row: 0,
-        column: 2,
+        column: 2
       },
       action: 'insert',
-      lines: ['a'],
+      lines: ['a']
     };
     const input: Input = {
       time: 1,
       type: 'codeDelta',
-      data: codeDelta,
+      data: codeDelta
     };
     const playbackData: IPlaybackData = {
       init: {
         chapter: 1,
         externalLibrary: ExternalLibraryNames.NONE,
-        editorValue: '',
+        editorValue: ''
       },
-      inputs: [input],
+      inputs: [input]
     };
 
     const payload = {
       title: 'Test Title',
       description: 'Test Description',
       audioUrl: 'someUrl.com',
-      playbackData,
+      playbackData
     };
 
     const action = generateAction(SAVE_SOURCECAST_DATA, payload);
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
-      ...payload,
+      ...payload
     });
   });
 });
@@ -75,33 +75,33 @@ describe('SET_CODE_DELTAS_TO_APPLY', () => {
       {
         start: {
           row: 0,
-          column: 1,
+          column: 1
         },
         end: {
           row: 0,
-          column: 2,
+          column: 2
         },
         action: 'insert',
-        lines: ['a'],
+        lines: ['a']
       },
       {
         start: {
           row: 0,
-          column: 2,
+          column: 2
         },
         end: {
           row: 0,
-          column: 3,
+          column: 3
         },
         action: 'insert',
-        lines: ['b'],
-      },
+        lines: ['b']
+      }
     ];
     const action = generateAction(SET_CODE_DELTAS_TO_APPLY, { deltas });
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
-      codeDeltasToApply: deltas,
+      codeDeltasToApply: deltas
     });
   });
 });
@@ -111,27 +111,27 @@ describe('SET_INPUT_TO_APPLY', () => {
     const delta: ICodeDelta = {
       start: {
         row: 0,
-        column: 1,
+        column: 1
       },
       end: {
         row: 0,
-        column: 2,
+        column: 2
       },
       action: 'insert',
-      lines: ['a'],
+      lines: ['a']
     };
 
     const inputToApply: Input = {
       time: 0,
       type: 'codeDelta',
-      data: delta,
+      data: delta
     };
 
     const action = generateAction(SET_INPUT_TO_APPLY, { inputToApply });
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
-      inputToApply,
+      inputToApply
     });
   });
 });
@@ -141,34 +141,34 @@ describe('SET_SOURCECAST_DATA', () => {
     const codeDelta: ICodeDelta = {
       start: {
         row: 0,
-        column: 1,
+        column: 1
       },
       end: {
         row: 0,
-        column: 2,
+        column: 2
       },
       action: 'insert',
-      lines: ['a'],
+      lines: ['a']
     };
     const input: Input = {
       time: 1,
       type: 'codeDelta',
-      data: codeDelta,
+      data: codeDelta
     };
     const playbackData: IPlaybackData = {
       init: {
         chapter: 1,
         externalLibrary: ExternalLibraryNames.NONE,
-        editorValue: '',
+        editorValue: ''
       },
-      inputs: [input],
+      inputs: [input]
     };
 
     const payload = {
       title: 'Test Title',
       description: 'Test Description',
       audioUrl: 'fakeAudioUrl.com/audio.mp3',
-      playbackData,
+      playbackData
     };
 
     const action = generateAction(SET_SOURCECAST_DATA, payload);
@@ -176,7 +176,7 @@ describe('SET_SOURCECAST_DATA', () => {
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
-      ...payload,
+      ...payload
     });
   });
 });
@@ -189,7 +189,7 @@ describe('SET_SOURCECAST_PLAYBACK_DURATION', () => {
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
-      playbackDuration: duration,
+      playbackDuration: duration
     });
   });
 });
@@ -202,7 +202,7 @@ describe('SET_SOURCECAST_PLAYBACK_STATUS', () => {
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
-      playbackStatus,
+      playbackStatus
     });
   });
 });
@@ -219,20 +219,20 @@ describe('UPDATE_SOURCECAST_INDEX', () => {
         id: 1,
         uploader: {
           id: 2,
-          name: 'Tester',
+          name: 'Tester'
         },
-        url: 'testurl.com',
-      },
+        url: 'testurl.com'
+      }
     ];
 
     const action = generateAction(UPDATE_SOURCECAST_INDEX, {
-      index: sourcecastData,
+      index: sourcecastData
     });
 
     const result = reducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
-      sourcecastIndex: sourcecastData,
+      sourcecastIndex: sourcecastData
     });
   });
 });

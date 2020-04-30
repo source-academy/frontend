@@ -5,7 +5,7 @@ import {
   interrupt,
   Result,
   resume,
-  runInContext,
+  runInContext
 } from 'js-slang';
 import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
@@ -22,7 +22,7 @@ import {
   ExternalLibraryNames,
   ITestcase,
   TestcaseType,
-  TestcaseTypes,
+  TestcaseTypes
 } from '../components/assessment/assessmentShape';
 import { Documentation } from '../reducers/documentation';
 import { externalLibraries } from '../reducers/externalLibraries';
@@ -31,7 +31,7 @@ import {
   IState,
   IWorkspaceState,
   SideContentType,
-  styliseChapter,
+  styliseChapter
 } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import {
@@ -42,14 +42,14 @@ import {
   highlightLine,
   inspectorUpdate,
   makeElevatedContext,
-  visualiseEnv,
+  visualiseEnv
 } from '../utils/slangHelper';
 
 let breakpoints: string[] = [];
 export default function* workspaceSaga(): SagaIterator {
   let context: Context;
 
-  yield takeEvery(actionTypes.EVAL_EDITOR, function* (
+  yield takeEvery(actionTypes.EVAL_EDITOR, function*(
     action: ReturnType<typeof actions.evalEditor>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -77,7 +77,7 @@ export default function* workspaceSaga(): SagaIterator {
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
     );
-    const globals: [string, any][] = yield select(
+    const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
     const variant: Variant = yield select(
@@ -88,9 +88,9 @@ export default function* workspaceSaga(): SagaIterator {
       variant,
       external: {
         name: ExternalLibraryNames.NONE,
-        symbols,
+        symbols
       },
-      globals,
+      globals
     };
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
@@ -118,7 +118,7 @@ export default function* workspaceSaga(): SagaIterator {
     yield* evalCode(value, context, execTime, workspaceLocation, actionTypes.EVAL_EDITOR);
   });
 
-  yield takeEvery(actionTypes.PROMPT_AUTOCOMPLETE, function* (
+  yield takeEvery(actionTypes.PROMPT_AUTOCOMPLETE, function*(
     action: ReturnType<typeof actions.promptAutocomplete>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -161,7 +161,7 @@ export default function* workspaceSaga(): SagaIterator {
       caption: name.name,
       value: name.name,
       meta: name.meta,
-      score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
+      score: name.score ? name.score + 1000 : 1000 // Prioritize suggestions from code
     }));
 
     let chapterName = context.chapter.toString();
@@ -184,7 +184,7 @@ export default function* workspaceSaga(): SagaIterator {
     );
   });
 
-  yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function* (
+  yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(
     action: ReturnType<typeof actions.toggleEditorAutorun>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -194,13 +194,13 @@ export default function* workspaceSaga(): SagaIterator {
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
   });
 
-  yield takeEvery(actionTypes.INVALID_EDITOR_SESSION_ID, function* (
+  yield takeEvery(actionTypes.INVALID_EDITOR_SESSION_ID, function*(
     action: ReturnType<typeof actions.invalidEditorSessionId>
   ) {
     yield call(showWarningMessage, 'Invalid ID Input', 1000);
   });
 
-  yield takeEvery(actionTypes.EVAL_REPL, function* (action: ReturnType<typeof actions.evalRepl>) {
+  yield takeEvery(actionTypes.EVAL_REPL, function*(action: ReturnType<typeof actions.evalRepl>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).replValue
@@ -217,7 +217,7 @@ export default function* workspaceSaga(): SagaIterator {
     yield* evalCode(code, context, execTime, workspaceLocation, actionTypes.EVAL_REPL);
   });
 
-  yield takeEvery(actionTypes.DEBUG_RESUME, function* (
+  yield takeEvery(actionTypes.DEBUG_RESUME, function*(
     action: ReturnType<typeof actions.debuggerResume>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -237,7 +237,7 @@ export default function* workspaceSaga(): SagaIterator {
     yield* evalCode(code, context, execTime, workspaceLocation, actionTypes.DEBUG_RESUME);
   });
 
-  yield takeEvery(actionTypes.DEBUG_RESET, function* (
+  yield takeEvery(actionTypes.DEBUG_RESET, function*(
     action: ReturnType<typeof actions.debuggerReset>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -252,7 +252,7 @@ export default function* workspaceSaga(): SagaIterator {
     lastDebuggerResult = undefined;
   });
 
-  yield takeEvery(actionTypes.HIGHLIGHT_LINE, function* (
+  yield takeEvery(actionTypes.HIGHLIGHT_LINE, function*(
     action: ReturnType<typeof actions.highlightEditorLine>
   ) {
     const workspaceLocation = action.payload.highlightedLines;
@@ -260,14 +260,14 @@ export default function* workspaceSaga(): SagaIterator {
     yield;
   });
 
-  yield takeEvery(actionTypes.UPDATE_EDITOR_BREAKPOINTS, function* (
+  yield takeEvery(actionTypes.UPDATE_EDITOR_BREAKPOINTS, function*(
     action: ReturnType<typeof actions.setEditorBreakpoint>
   ) {
     breakpoints = action.payload.breakpoints;
     yield;
   });
 
-  yield takeEvery(actionTypes.EVAL_TESTCASE, function* (
+  yield takeEvery(actionTypes.EVAL_TESTCASE, function*(
     action: ReturnType<typeof actions.evalTestcase>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -339,7 +339,7 @@ export default function* workspaceSaga(): SagaIterator {
     yield* evalTestCode(testcase, elevatedContext, execTime, workspaceLocation, index, type);
   });
 
-  yield takeEvery(actionTypes.CHAPTER_SELECT, function* (
+  yield takeEvery(actionTypes.CHAPTER_SELECT, function*(
     action: ReturnType<typeof actions.chapterSelect>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -356,7 +356,7 @@ export default function* workspaceSaga(): SagaIterator {
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
     );
-    const globals: [string, any][] = yield select(
+    const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
     if (newChapter !== oldChapter || newVariant !== oldVariant) {
@@ -365,9 +365,9 @@ export default function* workspaceSaga(): SagaIterator {
         variant: newVariant,
         external: {
           name: ExternalLibraryNames.NONE,
-          symbols,
+          symbols
         },
-        globals,
+        globals
       };
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
@@ -387,14 +387,14 @@ export default function* workspaceSaga(): SagaIterator {
    *
    * @see IWorkspaceManagerState @see IWorkspaceState
    */
-  yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function* (
+  yield takeEvery(actionTypes.PLAYGROUND_EXTERNAL_SELECT, function*(
     action: ReturnType<typeof actions.externalLibrarySelect>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const chapter = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
-    const globals: [string, any][] = yield select(
+    const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
     const newExternalLibraryName = action.payload.externalLibraryName;
@@ -406,9 +406,9 @@ export default function* workspaceSaga(): SagaIterator {
       chapter,
       external: {
         name: newExternalLibraryName,
-        symbols,
+        symbols
       },
-      globals,
+      globals
     };
     if (newExternalLibraryName !== oldExternalLibraryName) {
       yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
@@ -449,7 +449,7 @@ export default function* workspaceSaga(): SagaIterator {
     // Create a race condition between the js files being loaded and a timeout.
     const { loadedScripts, timeout } = yield race({
       loadedScripts: call(helper),
-      timeout: delay(4000),
+      timeout: delay(4000)
     });
     if (timeout !== undefined && loadedScripts === undefined) {
       yield call(showWarningMessage, 'Error loading libraries', 750);
@@ -463,7 +463,7 @@ export default function* workspaceSaga(): SagaIterator {
    * Makes a call to checkWebGLAvailable to ensure that the Graphics libraries are loaded.
    * To abstract this to other libraries, add a call to the all() effect.
    */
-  yield takeEvery(actionTypes.ENSURE_LIBRARIES_LOADED, function* (
+  yield takeEvery(actionTypes.ENSURE_LIBRARIES_LOADED, function*(
     action: ReturnType<typeof actions.ensureLibrariesLoaded>
   ) {
     yield* checkWebGLAvailable();
@@ -475,7 +475,7 @@ export default function* workspaceSaga(): SagaIterator {
    * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
    * the function.
    */
-  yield takeEvery(actionTypes.BEGIN_CLEAR_CONTEXT, function* (
+  yield takeEvery(actionTypes.BEGIN_CLEAR_CONTEXT, function*(
     action: ReturnType<typeof actions.beginClearContext>
   ) {
     yield* checkWebGLAvailable();
@@ -493,7 +493,7 @@ export default function* workspaceSaga(): SagaIterator {
         (window as any).loadLib('MACHINELEARNING');
         break;
     }
-    const globals: [string, any][] = action.payload.library.globals as [string, any][];
+    const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
     for (const [key, value] of globals) {
       window[key] = value;
     }
@@ -501,7 +501,7 @@ export default function* workspaceSaga(): SagaIterator {
     yield undefined;
   });
 
-  yield takeEvery(actionTypes.NAV_DECLARATION, function* (
+  yield takeEvery(actionTypes.NAV_DECLARATION, function*(
     action: ReturnType<typeof actions.navigateToDeclaration>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -514,13 +514,13 @@ export default function* workspaceSaga(): SagaIterator {
 
     const result = findDeclaration(code, context, {
       line: action.payload.cursorPosition.row + 1,
-      column: action.payload.cursorPosition.column,
+      column: action.payload.cursorPosition.column
     });
     if (result) {
       yield put(
         actions.moveCursor(action.payload.workspaceLocation, {
           row: result.start.line - 1,
-          column: result.start.column,
+          column: result.start.column
         })
       );
     }
@@ -621,13 +621,13 @@ export function* evalCode(
         : call(runInContext, code, context, {
             executionMethod: 'interpreter',
             originalMaxExecTime: execTime,
-            useSubst: substActiveAndCorrectChapter,
+            useSubst: substActiveAndCorrectChapter
           });
     } else if (variant === 'lazy') {
       return call(runInContext, code, context, {
         scheduler: 'preemptive',
         originalMaxExecTime: execTime,
-        useSubst: substActiveAndCorrectChapter,
+        useSubst: substActiveAndCorrectChapter
       });
     } else if (variant === 'wasm') {
       return call(wasm_compile_and_run, code, context);
@@ -640,7 +640,7 @@ export function* evalCode(
       .then((wasmModule: WebAssembly.Module) => Sourceror.run(wasmModule, wasmContext))
       .then(
         (returnedValue: any) => ({ status: 'finished', context, value: returnedValue }),
-        (_) => ({ status: 'error' })
+        _ => ({ status: 'error' })
       );
   }
 
@@ -656,7 +656,7 @@ export function* evalCode(
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
-            useSubst: substActiveAndCorrectChapter,
+            useSubst: substActiveAndCorrectChapter
           }),
 
     /**
@@ -664,7 +664,7 @@ export function* evalCode(
      * i.e the trigger for the interpreter to interrupt execution.
      */
     interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION),
-    paused: take(actionTypes.BEGIN_DEBUG_PAUSE),
+    paused: take(actionTypes.BEGIN_DEBUG_PAUSE)
   });
 
   if (interrupted) {
@@ -748,7 +748,7 @@ export function* evalCode(
            */
           const { success, error } = yield race({
             success: take(actionTypes.EVAL_TESTCASE_SUCCESS),
-            error: take(actionTypes.EVAL_TESTCASE_FAILURE),
+            error: take(actionTypes.EVAL_TESTCASE_FAILURE)
           });
           // Prematurely terminate if execution of current testcase returns an error
           if (error || !success) {
@@ -773,13 +773,13 @@ export function* evalTestCode(
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, {
       scheduler: 'preemptive',
-      originalMaxExecTime: execTime,
+      originalMaxExecTime: execTime
     }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
      */
-    interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION),
+    interrupted: take(actionTypes.BEGIN_INTERRUPT_EXECUTION)
   });
 
   if (interrupted) {

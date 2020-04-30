@@ -19,7 +19,7 @@ class UnsubmitCell extends React.Component<IUnsubmitCellProps, UnsubmitCellState
     super(props);
 
     this.state = {
-      isAlertOpen: false,
+      isAlertOpen: false
     };
   }
 
@@ -39,7 +39,7 @@ class UnsubmitCell extends React.Component<IUnsubmitCellProps, UnsubmitCellState
           Are you sure you want to unsubmit?
         </Alert>
         {controlButton('', IconNames.ARROW_LEFT, () => this.setState({ isAlertOpen: true }), {
-          fullWidth: true,
+          fullWidth: true
         })}
       </div>
     );

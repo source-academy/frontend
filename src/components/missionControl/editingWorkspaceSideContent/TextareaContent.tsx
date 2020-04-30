@@ -8,7 +8,7 @@ import { assignToPath, getValueFromPath } from './';
 interface IProps {
   assessment: IAssessment;
   isNumber?: boolean;
-  path: (string | number)[];
+  path: Array<string | number>;
   useRawValue?: boolean;
   processResults?: (newVal: string | number) => string | number;
   updateAssessment: (assessment: IAssessment) => void;
@@ -29,7 +29,7 @@ export class TextareaContent extends React.Component<IProps, IState> {
       isEditing: false,
       isNumber: isNumberVal,
       fieldValue: '',
-      useRawValue: this.props.useRawValue || isNumberVal,
+      useRawValue: this.props.useRawValue || isNumberVal
     };
   }
 
@@ -74,13 +74,13 @@ export class TextareaContent extends React.Component<IProps, IState> {
     }
 
     this.setState({
-      isEditing: false,
+      isEditing: false
     });
   };
 
   private handleEditAssessment = (e: any) => {
     this.setState({
-      fieldValue: e.target.value,
+      fieldValue: e.target.value
     });
   };
 
@@ -99,7 +99,7 @@ export class TextareaContent extends React.Component<IProps, IState> {
       const fieldVal = getValueFromPath(this.props.path, this.props.assessment) || '';
       this.setState({
         isEditing: true,
-        fieldValue: typeof fieldVal === 'string' ? fieldVal : fieldVal.toString(),
+        fieldValue: typeof fieldVal === 'string' ? fieldVal : fieldVal.toString()
       });
     }
   };

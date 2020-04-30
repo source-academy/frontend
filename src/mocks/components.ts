@@ -9,11 +9,11 @@ export function mockRouterProps<P>(path: string, params: P): RouteComponentProps
       isExact: true,
       params,
       path,
-      url: location.host + path,
+      url: location.host + path
     },
     location: history.location,
     history,
-    staticContext: {},
+    staticContext: {}
   };
   return props;
 }

@@ -9,7 +9,7 @@ type DialogProps = {
   onClose: () => void;
 };
 
-const Help: React.SFC<DialogProps> = (props) => (
+const Help: React.SFC<DialogProps> = props => (
   <Dialog
     className="help"
     icon={IconNames.ERROR}

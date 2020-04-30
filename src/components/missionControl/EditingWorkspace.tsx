@@ -13,7 +13,7 @@ import {
   IQuestion,
   ITestcase,
   Library,
-  QuestionTypes,
+  QuestionTypes
 } from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
@@ -28,7 +28,7 @@ import {
   ResetButton,
   RunButton,
   SaveButton,
-  ToggleEditModeButton,
+  ToggleEditModeButton
 } from '../workspace/controlBar/index';
 import { IPosition } from '../workspace/Editor';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
@@ -40,12 +40,12 @@ import {
   ManageQuestionTab,
   MCQQuestionTemplateTab,
   ProgrammingQuestionTemplateTab,
-  TextareaContentTab,
+  TextareaContentTab
 } from './editingWorkspaceSideContent';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
-  storeLocalAssessmentOverview,
+  storeLocalAssessmentOverview
 } from './xmlParseHelper';
 
 export type AssessmentWorkspaceProps = DispatchProps & OwnProps & StateProps;
@@ -125,7 +125,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       hasUnsavedChanges: false,
       showResetTemplateOverlay: false,
       originalMaxGrade: 0,
-      originalMaxXp: 0,
+      originalMaxXp: 0
     };
   }
 
@@ -139,7 +139,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       this.resetWorkspaceValues();
       this.setState({
         originalMaxGrade: this.getMaxMarks('maxGrade'),
-        originalMaxXp: this.getMaxMarks('maxXp'),
+        originalMaxXp: this.getMaxMarks('maxXp')
       });
     }
   }
@@ -184,7 +184,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false,
+              isEditorAutorun: false
             }
           : undefined,
       editorHeight: this.props.editorHeight,
@@ -196,7 +196,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
-          this.props.handleSave(this.state.assessment!.questions[questionId].id, option),
+          this.props.handleSave(this.state.assessment!.questions[questionId].id, option)
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -206,8 +206,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
         output: this.props.output,
-        replValue: this.props.replValue,
-      },
+        replValue: this.props.replValue
+      }
     };
     return (
       <div className={classNames('WorkspaceParent', Classes.DARK)}>
@@ -245,7 +245,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
           {controlButton('Cancel', null, () => this.setState({ showResetTemplateOverlay: false }), {
-            minimal: false,
+            minimal: false
           })}
           {controlButton(
             'Confirm',
@@ -257,7 +257,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
                 hasUnsavedChanges: false,
                 showResetTemplateOverlay: false,
                 originalMaxGrade: this.getMaxMarks('maxGrade'),
-                originalMaxXp: this.getMaxMarks('maxXp'),
+                originalMaxXp: this.getMaxMarks('maxXp')
               });
               this.handleRefreshLibrary();
               this.resetWorkspaceValues();
@@ -293,7 +293,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       if (this.state.hasUnsavedChanges) {
         this.setState({
           assessment: retrieveLocalAssessment(),
-          hasUnsavedChanges: false,
+          hasUnsavedChanges: false
         });
       }
       this.handleRefreshLibrary();
@@ -315,8 +315,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
         ...library,
         external: {
           name: library.external.name,
-          symbols: uniq(symbolsVal),
-        },
+          symbols: uniq(symbolsVal)
+        }
       };
     }
     this.props.handleClearContext(library);
@@ -342,7 +342,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     this.props.handleResetWorkspace({
       editorPrepend,
       editorValue,
-      editorPostpend,
+      editorPostpend
     });
     this.props.handleEditorValueChange(editorValue);
   };
@@ -358,7 +358,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     assessment.questions[this.formatedQuestionId()].editorValue = this.props.editorValue;
     this.setState({
       assessment,
-      hasUnsavedChanges: false,
+      hasUnsavedChanges: false
     });
     storeLocalAssessment(assessment);
     // this.handleRefreshLibrary();
@@ -380,7 +380,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       }
       this.setState({
         originalMaxGrade: curGrade,
-        originalMaxXp: curXp,
+        originalMaxXp: curXp
       });
       this.props.updateAssessmentOverview(overview);
       storeLocalAssessmentOverview(overview);
@@ -398,13 +398,13 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
   private updateEditAssessmentState = (assessmentVal: IAssessment) => {
     this.setState({
       assessment: assessmentVal,
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     });
   };
 
   private updateAndSaveAssessment = (assessmentVal: IAssessment) => {
     this.setState({
-      assessment: assessmentVal,
+      assessment: assessmentVal
     });
     this.handleRefreshLibrary();
     this.handleSave();
@@ -413,13 +413,13 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
 
   private handleActiveTabChange = (tab: SideContentType) => {
     this.setState({
-      activeTab: tab,
+      activeTab: tab
     });
   };
   private toggleEditingMode = () => {
     const toggle = this.state.editingMode === 'question' ? 'global' : 'question';
     this.setState({
-      editingMode: toggle,
+      editingMode: toggle
     });
   };
 
@@ -461,13 +461,13 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorQuestionOverview,
+          id: SideContentType.editorQuestionOverview
         },
         {
           label: `Question Template`,
           iconName: IconNames.DOCUMENT,
           body: questionTemplateTab,
-          id: SideContentType.editorQuestionTemplate,
+          id: SideContentType.editorQuestionTemplate
         },
         {
           label: `Manage Local Deployment`,
@@ -482,7 +482,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalDeployment,
+          id: SideContentType.editorLocalDeployment
         },
         {
           label: `Manage Local Grader Deployment`,
@@ -498,7 +498,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalGraderDeployment,
+          id: SideContentType.editorLocalGraderDeployment
         },
         {
           label: `Grading`,
@@ -510,8 +510,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorGrading,
-        },
+          id: SideContentType.editorGrading
+        }
       ];
       if (qnType === 'programming') {
         tabs.push({
@@ -525,7 +525,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorAutograder,
+          id: SideContentType.editorAutograder
         });
       }
       const functionsAttached = assessment!.globalDeployment!.external.symbols;
@@ -534,7 +534,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
           label: `Tone Matrix`,
           iconName: IconNames.GRID_VIEW,
           body: <ToneMatrix />,
-          id: SideContentType.toneMatrix,
+          id: SideContentType.toneMatrix
         });
       }
     } else {
@@ -549,7 +549,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorBriefing,
+          id: SideContentType.editorBriefing
         },
         {
           label: `Manage Question`,
@@ -562,7 +562,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               updateAssessment={this.updateAndSaveAssessment}
             />
           ),
-          id: SideContentType.editorManageQuestion,
+          id: SideContentType.editorManageQuestion
         },
         {
           label: `Manage Global Deployment`,
@@ -577,7 +577,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               isOptionalDeployment={false}
             />
           ),
-          id: SideContentType.editorGlobalDeployment,
+          id: SideContentType.editorGlobalDeployment
         },
         {
           label: `Manage Global Grader Deployment`,
@@ -592,8 +592,8 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorGlobalGraderDeployment,
-        },
+          id: SideContentType.editorGlobalGraderDeployment
+        }
       ];
     }
 
@@ -606,7 +606,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
     const questionProgress: [number, number] = [
       questionId + 1,
-      this.state.assessment!.questions.length,
+      this.state.assessment!.questions.length
     ];
 
     const onClickPrevious = () =>
@@ -619,7 +619,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
       this.setState((currentState: IState) => {
         return {
           ...currentState,
-          showResetTemplateOverlay: currentState.hasUnsavedChanges,
+          showResetTemplateOverlay: currentState.hasUnsavedChanges
         };
       });
     };
@@ -678,14 +678,14 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     return {
       editorButtons: [runButton, saveButton, resetButton],
       flowButtons: [previousButton, questionView, nextButton],
-      replButtons: [evalButton, clearButton, toggleEditModeButton],
+      replButtons: [evalButton, clearButton, toggleEditModeButton]
     };
   };
 }
 
 function uniq(a: string[]) {
   const seen = {};
-  return a.filter((item) => (seen.hasOwnProperty(item) ? false : (seen[item] = true)));
+  return a.filter(item => (seen.hasOwnProperty(item) ? false : (seen[item] = true)));
 }
 
 export default AssessmentWorkspace;

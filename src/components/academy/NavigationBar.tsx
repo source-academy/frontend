@@ -15,7 +15,7 @@ type OwnProps = {
   role: Role;
 };
 
-const NavigationBar: React.SFC<OwnProps> = (props) => (
+const NavigationBar: React.SFC<OwnProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink

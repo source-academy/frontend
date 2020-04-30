@@ -22,10 +22,7 @@ class EnvVisualizer extends React.Component<{}, IEnvVisualizerState> {
 
   public render() {
     return (
-      <div
-        ref={(r) => (this.$parent = r)}
-        className={classNames('sa-env-visualizer', Classes.DARK)}
-      >
+      <div ref={r => (this.$parent = r)} className={classNames('sa-env-visualizer', Classes.DARK)}>
         <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
           The environmental visualizer generates the environmental model diagram based on
           breakpoints set in the editor.

@@ -34,14 +34,14 @@ import {
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
-  WorkspaceLocation,
+  WorkspaceLocation
 } from '../../actions';
 import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
 import { Input, IPlaybackData, IPosition } from '../../components/sourcecast/sourcecastShape';
 import Sourcereel, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcereel';
 import { IState, SideContentType } from '../../reducers/states';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state) => ({
+const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   breakpoints: state.workspaces.sourcereel.breakpoints,
   editorReadonly: state.workspaces.sourcereel.editorReadonly,
   editorValue: state.workspaces.sourcereel.editorValue!,
@@ -62,7 +62,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state) => ({
   sourceChapter: state.workspaces.sourcereel.context.chapter,
   sourceVariant: state.workspaces.sourcereel.context.variant,
   timeElapsedBeforePause: state.workspaces.sourcereel.timeElapsedBeforePause,
-  timeResumed: state.workspaces.sourcereel.timeResumed,
+  timeResumed: state.workspaces.sourcereel.timeResumed
 });
 
 const location: WorkspaceLocation = 'sourcereel';
@@ -112,9 +112,12 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleDebuggerResume: () => debuggerResume(location),
       handleDebuggerReset: () => debuggerReset(location),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(location, row, col, callback),
+        promptAutocomplete(location, row, col, callback)
     },
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sourcereel);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Sourcereel);

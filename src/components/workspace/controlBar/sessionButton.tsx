@@ -110,7 +110,7 @@ export class SessionButtons extends React.PureComponent<SessionButtonsProps, Ses
               ? undefined
               : this.props.websocketStatus === 0
               ? Colors.RED3
-              : Colors.GREEN3,
+              : Colors.GREEN3
         })}
       </Popover>
     );

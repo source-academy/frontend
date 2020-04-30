@@ -7,7 +7,7 @@ import {
   ensureLibrariesLoaded,
   externalLibrarySelect,
   promptAutocomplete,
-  WorkspaceLocations,
+  WorkspaceLocations
 } from '../actions/workspaces';
 import Application, { IDispatchProps, IStateProps } from '../components/Application';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
@@ -23,14 +23,14 @@ import { Variant } from 'js-slang/dist/types';
  * as the routing properties of @type {RouteComponentProps} are
  * provided using the withRouter() method below.
  */
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state) => ({
+const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   title: state.application.title,
   accessToken: state.session.accessToken,
   role: state.session.role,
   name: state.session.name,
   currentPlaygroundChapter: state.workspaces.playground.context.chapter,
   currentPlaygroundVariant: state.workspaces.playground.context.variant,
-  currentExternalLibrary: state.workspaces.playground.externalLibrary,
+  currentExternalLibrary: state.workspaces.playground.externalLibrary
 });
 
 const workspaceLocation = WorkspaceLocations.playground;
@@ -49,9 +49,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
             variant,
             external: {
               name: externalLibraryName,
-              symbols: externalLibraries.get(externalLibraryName)!,
+              symbols: externalLibraries.get(externalLibraryName)!
             },
-            globals: [],
+            globals: []
           },
           workspaceLocation
         ),
@@ -64,9 +64,14 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleLogOut: logOut,
       handleExternalLibrarySelect: (externalLibraryName: ExternalLibraryName) =>
         externalLibrarySelect(externalLibraryName, workspaceLocation),
-      handleSetExecTime: (execTime: string) => changeExecTime(execTime, workspaceLocation),
+      handleSetExecTime: (execTime: string) => changeExecTime(execTime, workspaceLocation)
     },
     dispatch
   );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Application));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Application)
+);

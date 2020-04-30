@@ -7,7 +7,7 @@ import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import {
   AssessmentCategories,
   AssessmentCategory,
-  IAssessmentOverview,
+  IAssessmentOverview
 } from '../assessment/assessmentShape';
 
 type ProfileCardProps = {

@@ -10,12 +10,12 @@ export interface IInputTypeShape {
 }
 
 export enum KeyboardCommand {
-  run = 'run',
+  run = 'run'
 }
 
 export enum PlaybackStatus {
   playing = 'playing',
-  paused = 'paused',
+  paused = 'paused'
 }
 
 export interface ICodeDelta {
@@ -74,5 +74,5 @@ export enum RecordingStatus {
   notStarted = 'notStarted',
   recording = 'recording',
   paused = 'paused',
-  finished = 'finished',
+  finished = 'finished'
 }

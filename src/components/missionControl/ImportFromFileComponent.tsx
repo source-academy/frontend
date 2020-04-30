@@ -9,7 +9,7 @@ import {
   makeEntireAssessment,
   retrieveLocalAssessment,
   storeLocalAssessment,
-  storeLocalAssessmentOverview,
+  storeLocalAssessmentOverview
 } from './xmlParseHelper';
 
 type Props = {
@@ -29,7 +29,7 @@ export class ImportFromFileComponent extends React.Component<Props, State> {
     this.handleChangeFile = this.handleChangeFile.bind(this);
     this.makeMission = this.makeMission.bind(this);
     this.state = {
-      fileInputText: 'Import XML',
+      fileInputText: 'Import XML'
     };
   }
 
@@ -71,13 +71,13 @@ export class ImportFromFileComponent extends React.Component<Props, State> {
           storeLocalAssessment(entireAssessment[1]);
           this.props.newAssessment(entireAssessment[1]);
           this.setState({
-            fileInputText: 'Success!',
+            fileInputText: 'Success!'
           });
         } catch (err) {
           // tslint:disable-next-line:no-console
           console.log(err);
           this.setState({
-            fileInputText: 'Invalid XML!',
+            fileInputText: 'Invalid XML!'
           });
         }
       });

@@ -13,12 +13,12 @@ export const reducer: Reducer<IPlaygroundState> = (
     case CHANGE_QUERY_STRING:
       return {
         ...state,
-        queryString: action.payload,
+        queryString: action.payload
       };
     case TOGGLE_USING_SUBST:
       return {
         ...state,
-        usingSubst: action.payload,
+        usingSubst: action.payload
       };
     default:
       return state;

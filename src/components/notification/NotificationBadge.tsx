@@ -5,7 +5,7 @@ import {
   Notification,
   NotificationFilterFunction,
   NotificationType,
-  NotificationTypes,
+  NotificationTypes
 } from './notificationShape';
 
 type OwnProps = {
@@ -23,7 +23,7 @@ export type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
 };
 
-const NotificationBadge: React.SFC<OwnProps & StateProps & DispatchProps> = (props) => {
+const NotificationBadge: React.SFC<OwnProps & StateProps & DispatchProps> = props => {
   const notifications = props.notificationFilter
     ? props.notificationFilter(props.notifications)
     : props.notifications;

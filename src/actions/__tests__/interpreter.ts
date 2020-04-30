@@ -10,7 +10,7 @@ import {
   evalInterpreterError,
   evalInterpreterSuccess,
   evalTestcaseSuccess,
-  handleConsoleLog,
+  handleConsoleLog
 } from '../interpreter';
 
 const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
@@ -24,8 +24,8 @@ test('handleConsoleLog generates correct action object', () => {
     type: actionTypes.HANDLE_CONSOLE_LOG,
     payload: {
       logString,
-      workspaceLocation: assessmentWorkspace,
-    },
+      workspaceLocation: assessmentWorkspace
+    }
   });
 });
 
@@ -37,8 +37,8 @@ test('evalInterpreterSuccess generates correct action object', () => {
     payload: {
       type: 'result',
       value,
-      workspaceLocation: gradingWorkspace,
-    },
+      workspaceLocation: gradingWorkspace
+    }
   });
 });
 
@@ -52,8 +52,8 @@ test('evalTestcaseSuccess generates correct action object', () => {
       type: 'result',
       value,
       workspaceLocation: playgroundWorkspace,
-      index,
-    },
+      index
+    }
   });
 });
 
@@ -65,8 +65,8 @@ test('evalInterpreterError generates correct action object', () => {
     payload: {
       type: 'errors',
       errors,
-      workspaceLocation: assessmentWorkspace,
-    },
+      workspaceLocation: assessmentWorkspace
+    }
   });
 });
 
@@ -75,8 +75,8 @@ test('beginInterruptExecution generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.BEGIN_INTERRUPT_EXECUTION,
     payload: {
-      workspaceLocation: gradingWorkspace,
-    },
+      workspaceLocation: gradingWorkspace
+    }
   });
 });
 
@@ -85,8 +85,8 @@ test('endInterruptExecution generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.END_INTERRUPT_EXECUTION,
     payload: {
-      workspaceLocation: playgroundWorkspace,
-    },
+      workspaceLocation: playgroundWorkspace
+    }
   });
 });
 
@@ -95,8 +95,8 @@ test('beginDebuggerPause generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.BEGIN_DEBUG_PAUSE,
     payload: {
-      workspaceLocation: assessmentWorkspace,
-    },
+      workspaceLocation: assessmentWorkspace
+    }
   });
 });
 
@@ -105,8 +105,8 @@ test('endDebuggerPause generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.END_DEBUG_PAUSE,
     payload: {
-      workspaceLocation: gradingWorkspace,
-    },
+      workspaceLocation: gradingWorkspace
+    }
   });
 });
 
@@ -115,8 +115,8 @@ test('debuggerResume generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.DEBUG_RESUME,
     payload: {
-      workspaceLocation: playgroundWorkspace,
-    },
+      workspaceLocation: playgroundWorkspace
+    }
   });
 });
 
@@ -125,7 +125,7 @@ test('debuggerReset generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.DEBUG_RESET,
     payload: {
-      workspaceLocation: assessmentWorkspace,
-    },
+      workspaceLocation: assessmentWorkspace
+    }
   });
 });

@@ -62,7 +62,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
         this.props.handleRecordInput!({
           type: 'codeDelta',
           time: this.props.getTimerDuration!(),
-          data: delta,
+          data: delta
         });
       }
     };
@@ -79,7 +79,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
       this.props.handleRecordInput!({
         type: 'cursorPositionChange',
         time: this.props.getTimerDuration!(),
-        data: editorCursorPositionToBeApplied,
+        data: editorCursorPositionToBeApplied
       });
     };
     this.onSelectionChange = (selection: any) => {
@@ -92,7 +92,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
         this.props.handleRecordInput!({
           type: 'selectionRangeData',
           time: this.props.getTimerDuration!(),
-          data: { range, isBackwards },
+          data: { range, isBackwards }
         });
       }
     };
@@ -178,7 +178,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
         endRow: lineNum[1],
         endCol: 1,
         className: 'myMarker',
-        type: 'fullLine',
+        type: 'fullLine'
       });
     }
     return markerProps;
@@ -195,21 +195,21 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
                 name: 'evaluate',
                 bindKey: {
                   win: 'Shift-Enter',
-                  mac: 'Shift-Enter',
+                  mac: 'Shift-Enter'
                 },
-                exec: this.handleEvaluate,
+                exec: this.handleEvaluate
               },
               {
                 name: 'navigate',
                 bindKey: {
                   win: 'Ctrl-B',
-                  mac: 'Command-B',
+                  mac: 'Command-B'
                 },
-                exec: this.handleDeclarationNavigate,
-              },
+                exec: this.handleDeclarationNavigate
+              }
             ]}
             editorProps={{
-              $blockScrolling: Infinity,
+              $blockScrolling: Infinity
             }}
             ref={this.AceEditor}
             markers={this.getMarkers()}
@@ -226,7 +226,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
             value={this.props.editorValue}
             width="100%"
             setOptions={{
-              fontFamily: "'Inconsolata', 'Consolas', monospace",
+              fontFamily: "'Inconsolata', 'Consolas', monospace"
             }}
           />
         </div>
@@ -284,7 +284,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
     this.props.handleRecordInput!({
       type: 'keyboardCommand',
       time: this.props.getTimerDuration!(),
-      data: KeyboardCommand.run,
+      data: KeyboardCommand.run
     });
   };
 
@@ -305,7 +305,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
-  goGreen: () => {},
+  goGreen: () => {}
 };
 
 export default SourcecastEditor;

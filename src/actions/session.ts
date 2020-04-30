@@ -4,7 +4,7 @@ import { Grading, GradingOverview } from '../components/academy/grading/gradingS
 import { IAssessment, IAssessmentOverview } from '../components/assessment/assessmentShape';
 import {
   Notification,
-  NotificationFilterFunction,
+  NotificationFilterFunction
 } from '../components/notification/notificationShape';
 import { Story } from '../reducers/states';
 import * as actionTypes from './actionTypes';
@@ -33,14 +33,14 @@ export const login = () => action(actionTypes.LOGIN);
 
 export const setTokens = ({
   accessToken,
-  refreshToken,
+  refreshToken
 }: {
   accessToken: string;
   refreshToken: string;
 }) =>
   action(actionTypes.SET_TOKENS, {
     accessToken,
-    refreshToken,
+    refreshToken
   });
 
 export const setUser = (user: { name: string; role: Role; grade: number; story: Story }) =>
@@ -49,7 +49,7 @@ export const setUser = (user: { name: string; role: Role; grade: number; story: 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(actionTypes.SUBMIT_ANSWER, {
     id,
-    answer,
+    answer
   });
 
 export const submitAssessment = (id: number) => action(actionTypes.SUBMIT_ASSESSMENT, id);
@@ -66,7 +66,7 @@ export const submitGrading = (
     questionId,
     gradeAdjustment,
     xpAdjustment,
-    comments,
+    comments
   });
 
 export const submitGradingAndContinue = (
@@ -81,7 +81,7 @@ export const submitGradingAndContinue = (
     questionId,
     gradeAdjustment,
     xpAdjustment,
-    comments,
+    comments
   });
 
 export const updateHistoryHelpers = (loc: string) =>
@@ -103,12 +103,12 @@ export const updateGradingOverviews = (overviews: GradingOverview[]) =>
 export const updateGrading = (submissionId: number, grading: Grading) =>
   action(actionTypes.UPDATE_GRADING, {
     submissionId,
-    grading,
+    grading
   });
 
 export const unsubmitSubmission = (submissionId: number) =>
   action(actionTypes.UNSUBMIT_SUBMISSION, {
-    submissionId,
+    submissionId
   });
 
 /**
@@ -119,7 +119,7 @@ export const fetchNotifications = () => action(actionTypes.FETCH_NOTIFICATIONS);
 
 export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction) =>
   action(actionTypes.ACKNOWLEDGE_NOTIFICATIONS, {
-    withFilter,
+    withFilter
   });
 
 export const updateNotifications = (notifications: Notification[]) =>
@@ -128,5 +128,5 @@ export const updateNotifications = (notifications: Notification[]) =>
 export const notifyChatUsers = (assessmentId?: number, submissionId?: number) =>
   action(actionTypes.NOTIFY_CHATKIT_USERS, {
     assessmentId,
-    submissionId,
+    submissionId
   });

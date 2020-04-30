@@ -9,6 +9,6 @@ export type ReturnToAcademyButtonProps = {
 
 export function ReturnToAcademyButton(props: ReturnToAcademyButtonProps) {
   return controlButton('Return to Academy', IconNames.ARROW_RIGHT, props.onClick, {
-    iconOnRight: true,
+    iconOnRight: true
   });
 }

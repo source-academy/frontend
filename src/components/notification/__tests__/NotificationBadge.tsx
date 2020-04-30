@@ -6,7 +6,7 @@ import NotificationBadge from '../NotificationBadge';
 import {
   filterNotificationsByAssessment,
   filterNotificationsBySubmission,
-  filterNotificationsByType,
+  filterNotificationsByType
 } from '../NotificationHelpers';
 import { Notification } from '../notificationShape';
 
@@ -16,29 +16,29 @@ const notifications: Notification[] = [
     type: 'new',
     assessment_id: 1,
     assessment_type: 'Mission',
-    assessment_title: 'The Secret to Streams',
+    assessment_title: 'The Secret to Streams'
   },
   {
     id: 2,
     type: 'graded',
     assessment_id: 1,
     assessment_type: 'Mission',
-    assessment_title: 'The Secret to Streams',
+    assessment_title: 'The Secret to Streams'
   },
   {
     id: 3,
     type: 'autograded',
     assessment_id: 1,
     assessment_type: 'Mission',
-    assessment_title: 'The Secret to Streams',
+    assessment_title: 'The Secret to Streams'
   },
   {
     id: 4,
     type: 'unsubmitted',
     assessment_id: 1,
     assessment_type: 'Mission',
-    assessment_title: 'The Secret to Streams',
-  },
+    assessment_title: 'The Secret to Streams'
+  }
 ];
 
 const handleAcknowledgeNotifications = () => {};

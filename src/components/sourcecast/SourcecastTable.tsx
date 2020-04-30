@@ -47,15 +47,15 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
           field: 'title',
           cellRendererFramework: SelectCell,
           cellRendererParams: {
-            handleSetSourcecastData: this.props.handleSetSourcecastData,
+            handleSetSourcecastData: this.props.handleSetSourcecastData
           },
           width: 400,
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
-            'text-align': 'left',
+            'text-align': 'left'
           },
-          hide: !this.props.handleSetSourcecastData,
+          hide: !this.props.handleSetSourcecastData
         },
         {
           headerName: 'Title',
@@ -63,7 +63,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
           width: 200,
           suppressMovable: true,
           suppressMenu: true,
-          hide: !!this.props.handleSetSourcecastData,
+          hide: !!this.props.handleSetSourcecastData
         },
         {
           headerName: 'Uploader',
@@ -72,22 +72,22 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
-            'text-align': 'center',
-          },
+            'text-align': 'center'
+          }
         },
         {
           headerName: 'Date',
-          valueGetter: (params) => getStandardDate(params.data.inserted_at),
+          valueGetter: params => getStandardDate(params.data.inserted_at),
           maxWidth: 200,
           suppressMovable: true,
-          suppressMenu: true,
+          suppressMenu: true
         },
         {
           headerName: 'Delete',
           field: '',
           cellRendererFramework: DeleteCell,
           cellRendererParams: {
-            handleDeleteSourcecastEntry: this.props.handleDeleteSourcecastEntry,
+            handleDeleteSourcecastEntry: this.props.handleDeleteSourcecastEntry
           },
           width: 100,
           maxWidth: 100,
@@ -95,19 +95,19 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
-            'text-align': 'center',
+            'text-align': 'center'
           },
-          hide: !this.props.handleDeleteSourcecastEntry,
+          hide: !this.props.handleDeleteSourcecastEntry
         },
         { headerName: 'description', field: 'description', hide: true },
         { headerName: 'inserted_at', field: 'inserted_at', hide: true },
         { headerName: 'updated_at', field: 'updated_at', hide: true },
         { headerName: 'audio', field: 'audio', hide: true },
         { headerName: 'playbackData', field: 'playbackData', hide: true },
-        { headerName: 'url', field: 'url', hide: true },
+        { headerName: 'url', field: 'url', hide: true }
       ],
       filterValue: '',
-      groupFilterEnabled: false,
+      groupFilterEnabled: false
     };
   }
 

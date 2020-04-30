@@ -5,12 +5,12 @@ enum XMLHttpReadyState {
   OPENED = 1,
   HEADERS_RECEIVED = 2,
   LOADING = 3,
-  DONE = 4,
+  DONE = 4
 }
 
 enum XMLHttpStatus {
   OK = 200,
-  PAGE_NOT_FOUND = 404,
+  PAGE_NOT_FOUND = 404
 }
 
 export function checkSessionIdExists(

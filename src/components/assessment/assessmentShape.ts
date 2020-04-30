@@ -33,7 +33,7 @@ export enum AssessmentStatuses {
   not_attempted = 'not_attempted',
   attempting = 'attempting',
   attempted = 'attempted',
-  submitted = 'submitted',
+  submitted = 'submitted'
 }
 
 export type AssessmentStatus = keyof typeof AssessmentStatuses;
@@ -42,7 +42,7 @@ export enum GradingStatuses {
   none = 'none',
   grading = 'grading',
   graded = 'graded',
-  excluded = 'excluded',
+  excluded = 'excluded'
 }
 
 export type GradingStatus = keyof typeof GradingStatuses;
@@ -67,7 +67,7 @@ export enum AssessmentCategories {
   Mission = 'Mission',
   Path = 'Path',
   Sidequest = 'Sidequest',
-  Practical = 'Practical',
+  Practical = 'Practical'
 }
 
 export type AssessmentCategory = keyof typeof AssessmentCategories;
@@ -91,7 +91,7 @@ export enum TestcaseTypes {
   // These are rendered with a placeholder by the Autograder
   hidden = 'hidden',
   // These should only exist in the grading workspace for submissions
-  private = 'private',
+  private = 'private'
 }
 
 export type TestcaseType = keyof typeof TestcaseTypes;
@@ -141,7 +141,7 @@ export type MCQChoice = {
 /* The two kinds of Questions available */
 export enum QuestionTypes {
   programming = 'programming',
-  mcq = 'mcq',
+  mcq = 'mcq'
 }
 export type QuestionType = keyof typeof QuestionTypes;
 
@@ -154,7 +154,7 @@ export enum ExternalLibraryNames {
   BINARYTREES = 'BINARYTREES',
   PIXNFLIX = 'PIX&FLIX',
   MACHINELEARNING = 'MACHINELEARNING',
-  ALL = 'ALL',
+  ALL = 'ALL'
 }
 
 export type ExternalLibraryName = typeof ExternalLibraryNames[keyof typeof ExternalLibraryNames];
@@ -168,11 +168,11 @@ export type Library = {
   chapter: number;
   variant?: Variant;
   external: ExternalLibrary;
-  globals: {
+  globals: Array<{
     0: string;
     1: any;
     2?: string; // For mission control
-  }[];
+  }>;
 };
 
 export type AutogradingResult = {

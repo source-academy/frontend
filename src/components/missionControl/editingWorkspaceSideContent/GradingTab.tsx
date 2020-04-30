@@ -6,7 +6,7 @@ import TextareaContent from './TextareaContent';
 
 interface IProps {
   assessment: IAssessment;
-  path: (string | number)[];
+  path: Array<string | number>;
   updateAssessment: (assessment: IAssessment) => void;
 }
 
@@ -19,7 +19,7 @@ export class GradingTab extends React.Component<IProps, {}> {
     return this.gradingTab();
   }
 
-  private textareaContent = (path: (string | number)[]) => {
+  private textareaContent = (path: Array<string | number>) => {
     return (
       <TextareaContent
         assessment={this.props.assessment}

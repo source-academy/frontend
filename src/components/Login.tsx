@@ -6,7 +6,7 @@ import {
   H4,
   Icon,
   NonIdealState,
-  Spinner,
+  Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
@@ -24,7 +24,7 @@ export type OwnProps = {
   luminusCode?: string;
 };
 
-const Login: React.SFC<LoginProps> = (props) => {
+const Login: React.SFC<LoginProps> = props => {
   if (props.luminusCode) {
     startFetchAuth(props.luminusCode, props.handleFetchAuth);
     return (

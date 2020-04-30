@@ -34,14 +34,14 @@ import {
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation,
-  WorkspaceLocations,
+  WorkspaceLocations
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
 import { IPosition } from '../components/workspace/Editor';
 import { IState, SideContentType } from '../reducers/states';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state) => ({
+const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorSessionId: state.workspaces.playground.editorSessionId,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
@@ -63,7 +63,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state) => ({
   sourceVariant: state.workspaces.playground.context.variant,
   websocketStatus: state.workspaces.playground.websocketStatus,
   externalLibraryName: state.workspaces.playground.externalLibrary,
-  usingSubst: state.playground.usingSubst,
+  usingSubst: state.playground.usingSubst
 });
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
@@ -110,9 +110,14 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback),
+        promptAutocomplete(workspaceLocation, row, col, callback)
     },
     dispatch
   );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Playground)
+);

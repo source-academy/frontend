@@ -26,7 +26,7 @@ import {
   updateGrading,
   updateGradingOverviews,
   updateHistoryHelpers,
-  updateNotifications,
+  updateNotifications
 } from '../session';
 
 test('acknowledgeNotifications generates correct action object', () => {
@@ -35,8 +35,8 @@ test('acknowledgeNotifications generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
     payload: {
-      withFilter: undefined,
-    },
+      withFilter: undefined
+    }
   });
 });
 
@@ -45,14 +45,14 @@ test('fetchAuth generates correct action object', () => {
   const action = fetchAuth(luminusCode);
   expect(action).toEqual({
     type: actionTypes.FETCH_AUTH,
-    payload: luminusCode,
+    payload: luminusCode
   });
 });
 
 test('fetchAnnouncements generates correct action object', () => {
   const action = fetchAnnouncements();
   expect(action).toEqual({
-    type: actionTypes.FETCH_ANNOUNCEMENTS,
+    type: actionTypes.FETCH_ANNOUNCEMENTS
   });
 });
 
@@ -61,14 +61,14 @@ test('fetchAssessment generates correct action object', () => {
   const action = fetchAssessment(id);
   expect(action).toEqual({
     type: actionTypes.FETCH_ASSESSMENT,
-    payload: id,
+    payload: id
   });
 });
 
 test('fetchAssessmentOverviews generates correct action object', () => {
   const action = fetchAssessmentOverviews();
   expect(action).toEqual({
-    type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS,
+    type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS
   });
 });
 
@@ -77,7 +77,7 @@ test('fetchGrading generates correct action object', () => {
   const action = fetchGrading(submissionId);
   expect(action).toEqual({
     type: actionTypes.FETCH_GRADING,
-    payload: submissionId,
+    payload: submissionId
   });
 });
 
@@ -85,7 +85,7 @@ test('fetchGradingOverviews generates correct default action object', () => {
   const action = fetchGradingOverviews();
   expect(action).toEqual({
     type: actionTypes.FETCH_GRADING_OVERVIEWS,
-    payload: true,
+    payload: true
   });
 });
 
@@ -94,7 +94,7 @@ test('fetchGradingOverviews generates correct action object', () => {
   const action = fetchGradingOverviews(filterToGroup);
   expect(action).toEqual({
     type: actionTypes.FETCH_GRADING_OVERVIEWS,
-    payload: filterToGroup,
+    payload: filterToGroup
   });
 });
 
@@ -102,14 +102,14 @@ test('fetchNotifications generates correct action object', () => {
   const action = fetchNotifications();
 
   expect(action).toEqual({
-    type: actionTypes.FETCH_NOTIFICATIONS,
+    type: actionTypes.FETCH_NOTIFICATIONS
   });
 });
 
 test('login action generates correct action object', () => {
   const action = login();
   expect(action).toEqual({
-    type: actionTypes.LOGIN,
+    type: actionTypes.LOGIN
   });
 });
 
@@ -120,8 +120,8 @@ test('notifyChatUsers generates correct action object with undefined submission 
     type: actionTypes.NOTIFY_CHATKIT_USERS,
     payload: {
       assessmentId: 1,
-      submissionId: undefined,
-    },
+      submissionId: undefined
+    }
   });
 });
 
@@ -132,8 +132,8 @@ test('notifyChatUsers generates correct action object with undefined assessment 
     type: actionTypes.NOTIFY_CHATKIT_USERS,
     payload: {
       assessmentId: undefined,
-      submissionId: 1,
-    },
+      submissionId: 1
+    }
   });
 });
 
@@ -145,8 +145,8 @@ test('setTokens generates correct action object', () => {
     type: actionTypes.SET_TOKENS,
     payload: {
       accessToken,
-      refreshToken,
-    },
+      refreshToken
+    }
   });
 });
 
@@ -155,12 +155,12 @@ test('setUser generates correct action object', () => {
     name: 'test student',
     role: 'student' as Role,
     grade: 150,
-    story: {} as Story,
+    story: {} as Story
   };
   const action = setUser(user);
   expect(action).toEqual({
     type: actionTypes.SET_USER,
-    payload: user,
+    payload: user
   });
 });
 
@@ -172,8 +172,8 @@ test('submitAnswer generates correct action object', () => {
     type: actionTypes.SUBMIT_ANSWER,
     payload: {
       id,
-      answer,
-    },
+      answer
+    }
   });
 });
 
@@ -182,7 +182,7 @@ test('submitAssessment generates correct action object', () => {
   const action = submitAssessment(id);
   expect(action).toEqual({
     type: actionTypes.SUBMIT_ASSESSMENT,
-    payload: id,
+    payload: id
   });
 });
 
@@ -198,8 +198,8 @@ test('submitGrading generates correct action object with default values', () => 
       questionId,
       gradeAdjustment: 0,
       xpAdjustment: 0,
-      comments: undefined,
-    },
+      comments: undefined
+    }
   });
 });
 
@@ -215,8 +215,8 @@ test('submitGradingAndContinue generates correct action object with default valu
       questionId,
       gradeAdjustment: 0,
       xpAdjustment: 0,
-      comments: undefined,
-    },
+      comments: undefined
+    }
   });
 });
 
@@ -234,8 +234,8 @@ test('submitGrading generates correct action object', () => {
       questionId,
       gradeAdjustment,
       xpAdjustment,
-      comments,
-    },
+      comments
+    }
   });
 });
 
@@ -259,8 +259,8 @@ test('submitGradingAndContinue generates correct action object', () => {
       questionId,
       gradeAdjustment,
       xpAdjustment,
-      comments,
-    },
+      comments
+    }
   });
 });
 
@@ -270,8 +270,8 @@ test('unsubmitSubmission generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.UNSUBMIT_SUBMISSION,
     payload: {
-      submissionId,
-    },
+      submissionId
+    }
   });
 });
 
@@ -280,7 +280,7 @@ test('updateHistoryHelpers generates correct action object', () => {
   const action = updateHistoryHelpers(loc);
   expect(action).toEqual({
     type: actionTypes.UPDATE_HISTORY_HELPERS,
-    payload: loc,
+    payload: loc
   });
 });
 
@@ -300,13 +300,13 @@ test('updateAssessmentOverviews generates correct action object', () => {
       status: 'not_attempted',
       story: null,
       xp: 0,
-      gradingStatus: 'none',
-    },
+      gradingStatus: 'none'
+    }
   ];
   const action = updateAssessmentOverviews(overviews);
   expect(action).toEqual({
     type: actionTypes.UPDATE_ASSESSMENT_OVERVIEWS,
-    payload: overviews,
+    payload: overviews
   });
 });
 
@@ -319,13 +319,13 @@ test('updateAssessment generates correct action object', () => {
     longSummary: 'long summary here',
     missionPDF: 'www.google.com',
     questions: [],
-    title: 'first assessment',
+    title: 'first assessment'
   };
 
   const action = updateAssessment(assessment);
   expect(action).toEqual({
     type: actionTypes.UPDATE_ASSESSMENT,
-    payload: assessment,
+    payload: assessment
   });
 });
 
@@ -351,14 +351,14 @@ test('updateGradingOverviews generates correct action object', () => {
       groupName: 'group',
       gradingStatus: 'excluded',
       questionCount: 6,
-      gradedCount: 0,
-    },
+      gradedCount: 0
+    }
   ];
 
   const action = updateGradingOverviews(overviews);
   expect(action).toEqual({
     type: actionTypes.UPDATE_GRADING_OVERVIEWS,
-    payload: overviews,
+    payload: overviews
   });
 });
 
@@ -369,7 +369,7 @@ test('updateGrading generates correct action object', () => {
       question: jest.genMockFromModule('../../components/academy/grading/gradingShape'),
       student: {
         name: 'test student',
-        id: 234,
+        id: 234
       },
       grade: {
         roomId: 'test roomId',
@@ -380,11 +380,11 @@ test('updateGrading generates correct action object', () => {
         comments: 'Well done.',
         grader: {
           name: 'HARTIN MENZ',
-          id: 100,
+          id: 100
         },
-        gradedAt: '2019-08-16T13:26:32+00:00',
-      },
-    },
+        gradedAt: '2019-08-16T13:26:32+00:00'
+      }
+    }
   ];
 
   const action = updateGrading(submissionId, grading);
@@ -392,8 +392,8 @@ test('updateGrading generates correct action object', () => {
     type: actionTypes.UPDATE_GRADING,
     payload: {
       submissionId,
-      grading,
-    },
+      grading
+    }
   });
 });
 
@@ -404,21 +404,21 @@ test('updateNotifications generates correct action object', () => {
       type: 'new',
       assessment_id: 1,
       assessment_type: 'Mission',
-      assessment_title: 'The Secret to Streams',
+      assessment_title: 'The Secret to Streams'
     },
     {
       id: 2,
       type: 'new',
       assessment_id: 2,
       assessment_type: 'Sidequest',
-      assessment_title: 'A sample Sidequest',
-    },
+      assessment_title: 'A sample Sidequest'
+    }
   ];
 
   const action = updateNotifications(notifications);
 
   expect(action).toEqual({
     type: actionTypes.UPDATE_NOTIFICATIONS,
-    payload: notifications,
+    payload: notifications
   });
 });

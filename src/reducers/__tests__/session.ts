@@ -7,7 +7,7 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_NOTIFICATIONS,
+  UPDATE_NOTIFICATIONS
 } from '../../actions/actionTypes';
 import { Grading, GradingOverview } from '../../components/academy/grading/gradingShape';
 import {
@@ -15,7 +15,7 @@ import {
   AssessmentStatuses,
   GradingStatuses,
   IAssessment,
-  IAssessmentOverview,
+  IAssessmentOverview
 } from '../../components/assessment/assessmentShape';
 import { Notification } from '../../components/notification/notificationShape';
 import { HistoryHelper } from '../../utils/history';
@@ -25,7 +25,7 @@ import { defaultSession, ISessionState, Role, Story } from '../states';
 test('LOG_OUT works correctly on default session', () => {
   const action = {
     type: LOG_OUT,
-    payload: {},
+    payload: {}
   };
   const result: ISessionState = reducer(defaultSession, action);
 
@@ -40,38 +40,38 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
     type: SET_TOKENS,
     payload: {
       accessToken,
-      refreshToken,
-    },
+      refreshToken
+    }
   };
   const result: ISessionState = reducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    ...action.payload,
+    ...action.payload
   });
 });
 
 test('SET_USER works correctly', () => {
   const story: Story = {
     story: 'test story',
-    playStory: true,
+    playStory: true
   };
   const payload = {
     name: 'test student',
     role: Role.Student,
     grade: 150,
-    story,
+    story
   };
 
   const action = {
     type: SET_USER,
-    payload,
+    payload
   };
   const result: ISessionState = reducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    ...payload,
+    ...payload
   });
 });
 
@@ -79,22 +79,22 @@ test('UPDATE_HISTORY_HELPERS works on non-academy location', () => {
   const payload = '/playground';
   const historyHelper: HistoryHelper = {
     lastAcademyLocations: ['/academy/1', '/academy/2'],
-    lastGeneralLocations: ['/academy/1', '/academy/2'],
+    lastGeneralLocations: ['/academy/1', '/academy/2']
   };
 
   const newDefaultSession = {
     ...defaultSession,
-    historyHelper,
+    historyHelper
   };
   const action = {
     type: UPDATE_HISTORY_HELPERS,
-    payload,
+    payload
   };
   const resultHistory: HistoryHelper = reducer(newDefaultSession, action).historyHelper;
 
   expect(resultHistory.lastGeneralLocations).toEqual([
     historyHelper.lastGeneralLocations[1],
-    payload,
+    payload
   ]);
   expect(resultHistory.lastAcademyLocations).toEqual(historyHelper.lastAcademyLocations);
 });
@@ -103,26 +103,26 @@ test('UPDATE_HISTORY_HELPERS works on academy location', () => {
   const payload = '/academy/3';
   const historyHelper: HistoryHelper = {
     lastAcademyLocations: ['/academy/1', '/academy/2'],
-    lastGeneralLocations: ['/academy/1', '/academy/2'],
+    lastGeneralLocations: ['/academy/1', '/academy/2']
   };
 
   const newDefaultSession: ISessionState = {
     ...defaultSession,
-    historyHelper,
+    historyHelper
   };
   const action = {
     type: UPDATE_HISTORY_HELPERS,
-    payload,
+    payload
   };
   const resultHistory: HistoryHelper = reducer(newDefaultSession, action).historyHelper;
 
   expect(resultHistory.lastGeneralLocations).toEqual([
     historyHelper.lastAcademyLocations[1],
-    payload,
+    payload
   ]);
   expect(resultHistory.lastAcademyLocations).toEqual([
     historyHelper.lastAcademyLocations[1],
-    payload,
+    payload
   ]);
 });
 
@@ -135,7 +135,7 @@ const assessmentTest1: IAssessment = {
   longSummary: 'long summary here',
   missionPDF: 'www.google.com',
   questions: [],
-  title: 'first assessment',
+  title: 'first assessment'
 };
 
 const assessmentTest2: IAssessment = {
@@ -146,7 +146,7 @@ const assessmentTest2: IAssessment = {
   longSummary: 'another long summary',
   missionPDF: 'www.comp.nus.edu.sg',
   questions: [],
-  title: 'updated first assessment',
+  title: 'updated first assessment'
 };
 
 const assessmentTest3: IAssessment = {
@@ -157,13 +157,13 @@ const assessmentTest3: IAssessment = {
   longSummary: 'another long summary here',
   missionPDF: 'www.yahoo.com',
   questions: [],
-  title: 'path',
+  title: 'path'
 };
 
 test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
   const action = {
     type: UPDATE_ASSESSMENT,
-    payload: assessmentTest1,
+    payload: assessmentTest1
   };
   const resultMap: Map<number, IAssessment> = reducer(defaultSession, action).assessments;
 
@@ -176,12 +176,12 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old 
 
   const newDefaultSession: ISessionState = {
     ...defaultSession,
-    assessments,
+    assessments
   };
 
   const action = {
     type: UPDATE_ASSESSMENT,
-    payload: assessmentTest2,
+    payload: assessmentTest2
   };
   const resultMap: Map<number, IAssessment> = reducer(newDefaultSession, action).assessments;
 
@@ -195,11 +195,11 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
 
   const newDefaultSession = {
     ...defaultSession,
-    assessments,
+    assessments
   };
   const action = {
     type: UPDATE_ASSESSMENT,
-    payload: assessmentTest2,
+    payload: assessmentTest2
   };
   const resultMap: Map<number, IAssessment> = reducer(newDefaultSession, action).assessments;
 
@@ -222,8 +222,8 @@ const assessmentOverviewsTest1: IAssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.none,
-  },
+    gradingStatus: GradingStatuses.none
+  }
 ];
 
 const assessmentOverviewsTest2: IAssessmentOverview[] = [
@@ -242,40 +242,40 @@ const assessmentOverviewsTest2: IAssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: GradingStatuses.grading,
-  },
+    gradingStatus: GradingStatuses.grading
+  }
 ];
 
 test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in inserting assessment overviews', () => {
   const action = {
     type: UPDATE_ASSESSMENT_OVERVIEWS,
-    payload: assessmentOverviewsTest1,
+    payload: assessmentOverviewsTest1
   };
 
   const result: ISessionState = reducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    assessmentOverviews: assessmentOverviewsTest1,
+    assessmentOverviews: assessmentOverviewsTest1
   });
 });
 
 test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overviews', () => {
   const newDefaultSession = {
     ...defaultSession,
-    assessmentOverviews: assessmentOverviewsTest1,
+    assessmentOverviews: assessmentOverviewsTest1
   };
   const assessmentOverviewsPayload = [...assessmentOverviewsTest2, ...assessmentOverviewsTest1];
   const action = {
     type: UPDATE_ASSESSMENT_OVERVIEWS,
-    payload: assessmentOverviewsPayload,
+    payload: assessmentOverviewsPayload
   };
 
   const result: ISessionState = reducer(newDefaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    assessmentOverviews: assessmentOverviewsPayload,
+    assessmentOverviews: assessmentOverviewsPayload
   });
 });
 
@@ -285,7 +285,7 @@ const gradingTest1: Grading = [
     question: jest.genMockFromModule('../../components/academy/grading/gradingShape'),
     student: {
       name: 'test student',
-      id: 234,
+      id: 234
     },
     grade: {
       roomId: '19422030',
@@ -293,9 +293,9 @@ const gradingTest1: Grading = [
       gradeAdjustment: 0,
       xp: 100,
       xpAdjustment: 0,
-      comments: 'Well done. Please try the quest!',
-    },
-  },
+      comments: 'Well done. Please try the quest!'
+    }
+  }
 ];
 
 const gradingTest2: Grading = [
@@ -303,7 +303,7 @@ const gradingTest2: Grading = [
     question: jest.genMockFromModule('../../components/academy/grading/gradingShape'),
     student: {
       name: 'another test student',
-      id: 345,
+      id: 345
     },
     grade: {
       roomId: '19422030',
@@ -311,9 +311,9 @@ const gradingTest2: Grading = [
       gradeAdjustment: 10,
       xp: 500,
       xpAdjustment: 20,
-      comments: 'Good job! All the best for the finals.',
-    },
-  },
+      comments: 'Good job! All the best for the finals.'
+    }
+  }
 ];
 
 test('UPDATE_GRADING works correctly in inserting gradings', () => {
@@ -322,8 +322,8 @@ test('UPDATE_GRADING works correctly in inserting gradings', () => {
     type: UPDATE_GRADING,
     payload: {
       submissionId,
-      grading: gradingTest1,
-    },
+      grading: gradingTest1
+    }
   };
 
   const gradingMap: Map<number, Grading> = reducer(defaultSession, action).gradings;
@@ -338,15 +338,15 @@ test('UPDATE_GRADING works correctly in inserting gradings and retains old data'
 
   const newDefaultSession = {
     ...defaultSession,
-    gradings,
+    gradings
   };
 
   const action = {
     type: UPDATE_GRADING,
     payload: {
       submissionId: submissionId2,
-      grading: gradingTest2,
-    },
+      grading: gradingTest2
+    }
   };
 
   const gradingMap: Map<number, Grading> = reducer(newDefaultSession, action).gradings;
@@ -360,15 +360,15 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
   gradings.set(submissionId, gradingTest1);
   const newDefaultSession = {
     ...defaultSession,
-    gradings,
+    gradings
   };
 
   const action = {
     type: UPDATE_GRADING,
     payload: {
       submissionId,
-      grading: gradingTest2,
-    },
+      grading: gradingTest2
+    }
   };
 
   const gradingMap: Map<number, Grading> = reducer(newDefaultSession, action).gradings;
@@ -397,8 +397,8 @@ const gradingOverviewTest1: GradingOverview[] = [
     groupName: 'group',
     gradingStatus: 'excluded',
     questionCount: 0,
-    gradedCount: 6,
-  },
+    gradedCount: 6
+  }
 ];
 
 const gradingOverviewTest2: GradingOverview[] = [
@@ -422,14 +422,14 @@ const gradingOverviewTest2: GradingOverview[] = [
     groupName: 'another group',
     gradingStatus: 'excluded',
     questionCount: 6,
-    gradedCount: 0,
-  },
+    gradedCount: 0
+  }
 ];
 
 test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', () => {
   const action = {
     type: UPDATE_GRADING_OVERVIEWS,
-    payload: gradingOverviewTest1,
+    payload: gradingOverviewTest1
   };
   const result: ISessionState = reducer(defaultSession, action);
 
@@ -439,12 +439,12 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', 
 test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', () => {
   const newDefaultSession = {
     ...defaultSession,
-    gradingOverviews: gradingOverviewTest1,
+    gradingOverviews: gradingOverviewTest1
   };
   const gradingOverviewsPayload = [...gradingOverviewTest2, ...gradingOverviewTest1];
   const action = {
     type: UPDATE_GRADING_OVERVIEWS,
-    payload: gradingOverviewsPayload,
+    payload: gradingOverviewsPayload
   };
   const result: ISessionState = reducer(newDefaultSession, action);
 
@@ -458,20 +458,20 @@ test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {
       type: 'new',
       assessment_id: 1,
       assessment_type: 'Mission',
-      assessment_title: 'The Secret to Streams',
+      assessment_title: 'The Secret to Streams'
     },
     {
       id: 2,
       type: 'new',
       assessment_id: 2,
       assessment_type: 'Sidequest',
-      assessment_title: 'A sample Sidequest',
-    },
+      assessment_title: 'A sample Sidequest'
+    }
   ];
 
   const action = {
     type: UPDATE_NOTIFICATIONS,
-    payload: notifications,
+    payload: notifications
   };
 
   const result: ISessionState = reducer(defaultSession, action);

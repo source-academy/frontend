@@ -9,5 +9,5 @@ export default {
   application,
   playground,
   session,
-  workspaces,
+  workspaces
 };

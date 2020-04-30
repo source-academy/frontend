@@ -7,13 +7,13 @@ import * as actionTypes from '../../actions/actionTypes';
 import { WorkspaceLocations } from '../../actions/workspaces';
 import {
   ExternalLibraryName,
-  ExternalLibraryNames,
+  ExternalLibraryNames
 } from '../../components/assessment/assessmentShape';
 import {
   createDefaultWorkspace,
   defaultState,
   defaultWorkspaceManager,
-  IState,
+  IState
 } from '../../reducers/states';
 import playgroundSaga from '../playground';
 
@@ -23,7 +23,7 @@ describe('Playground saga tests', () => {
       .withState(defaultState)
       .put(actions.changeQueryString(''))
       .dispatch({
-        type: actionTypes.GENERATE_LZ_STRING,
+        type: actionTypes.GENERATE_LZ_STRING
       })
       .silentRun();
   });
@@ -38,15 +38,15 @@ describe('Playground saga tests', () => {
           ...createDefaultWorkspace(WorkspaceLocations.playground),
           externalLibrary: ExternalLibraryNames.NONE,
           editorValue: dummyEditorValue,
-          usingSubst: false,
-        },
-      },
+          usingSubst: false
+        }
+      }
     };
     return expectSaga(playgroundSaga)
       .withState(dummyState)
       .put(actions.changeQueryString(''))
       .dispatch({
-        type: actionTypes.GENERATE_LZ_STRING,
+        type: actionTypes.GENERATE_LZ_STRING
       })
       .silentRun();
   });
@@ -61,16 +61,16 @@ describe('Playground saga tests', () => {
           ...createDefaultWorkspace(WorkspaceLocations.playground),
           externalLibrary: ExternalLibraryNames.NONE,
           editorValue: dummyEditorValue,
-          usingSubst: false,
-        },
-      },
+          usingSubst: false
+        }
+      }
     };
     const expectedString: string = createQueryString(dummyEditorValue, dummyState);
     return expectSaga(playgroundSaga)
       .withState(dummyState)
       .put(actions.changeQueryString(expectedString))
       .dispatch({
-        type: actionTypes.GENERATE_LZ_STRING,
+        type: actionTypes.GENERATE_LZ_STRING
       })
       .silentRun();
   });
@@ -86,7 +86,7 @@ function createQueryString(code: string, state: IState): string {
     chap: chapter,
     variant,
     ext: external,
-    exec: execTime,
+    exec: execTime
   });
   return newQueryString;
 }

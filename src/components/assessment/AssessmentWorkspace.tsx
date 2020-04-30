@@ -6,7 +6,7 @@ import {
   Dialog,
   Intent,
   NonIdealState,
-  Spinner,
+  Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
@@ -31,7 +31,7 @@ import {
   QuestionView,
   ResetButton,
   RunButton,
-  SaveButton,
+  SaveButton
 } from '../workspace/controlBar/index';
 import { IPosition } from '../workspace/Editor';
 import { SideContentProps, SideContentTab } from '../workspace/side-content';
@@ -46,7 +46,7 @@ import {
   IQuestion,
   ITestcase,
   Library,
-  QuestionTypes,
+  QuestionTypes
 } from './assessmentShape';
 import GradingResult from './GradingResult';
 
@@ -119,7 +119,7 @@ class AssessmentWorkspace extends React.Component<
     super(props);
     this.state = {
       showOverlay: false,
-      showResetTemplateOverlay: false,
+      showResetTemplateOverlay: false
     };
     this.props.handleEditorValueChange('');
   }
@@ -208,7 +208,7 @@ class AssessmentWorkspace extends React.Component<
               null,
               () => this.setState({ showResetTemplateOverlay: false }),
               {
-                minimal: false,
+                minimal: false
               }
             )}
             {controlButton(
@@ -250,7 +250,7 @@ class AssessmentWorkspace extends React.Component<
               newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false,
+              isEditorAutorun: false
             }
           : undefined,
       editorHeight: this.props.editorHeight,
@@ -262,7 +262,7 @@ class AssessmentWorkspace extends React.Component<
       mcqProps: {
         mcq: question as IMCQQuestion,
         handleMCQSubmit: (option: number) =>
-          this.props.handleSave(this.props.assessment!.questions[questionId].id, option),
+          this.props.handleSave(this.props.assessment!.questions[questionId].id, option)
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -272,8 +272,8 @@ class AssessmentWorkspace extends React.Component<
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
         output: this.props.output,
-        replValue: this.props.replValue,
-      },
+        replValue: this.props.replValue
+      }
     };
     return (
       <div className={classNames('WorkspaceParent', Classes.DARK)}>
@@ -333,7 +333,7 @@ class AssessmentWorkspace extends React.Component<
       editorPrepend,
       editorValue,
       editorPostpend,
-      editorTestcases,
+      editorTestcases
     });
     this.props.handleClearContext(question.library);
     this.props.handleUpdateHasUnsavedChanges(false);
@@ -352,13 +352,13 @@ class AssessmentWorkspace extends React.Component<
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.assessment!.questions[questionId].content} />,
-        id: SideContentType.questionOverview,
+        id: SideContentType.questionOverview
       },
       {
         label: `${props.assessment!.category} Briefing`,
         iconName: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />,
-        id: SideContentType.briefing,
+        id: SideContentType.briefing
       },
       {
         label: `${props.assessment!.category} Autograder`,
@@ -370,8 +370,8 @@ class AssessmentWorkspace extends React.Component<
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
-        id: SideContentType.autograder,
-      },
+        id: SideContentType.autograder
+      }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     if (isGraded) {
@@ -390,7 +390,7 @@ class AssessmentWorkspace extends React.Component<
               comments={props.assessment!.questions[questionId].comments}
             />
           ),
-          id: SideContentType.grading,
+          id: SideContentType.grading
         },
         {
           label: `Chat`,
@@ -404,7 +404,7 @@ class AssessmentWorkspace extends React.Component<
             <span>Chatkit disabled.</span>
           ),
           id: SideContentType.chat,
-          disabled: !USE_CHATKIT,
+          disabled: !USE_CHATKIT
         }
       );
     }
@@ -415,13 +415,13 @@ class AssessmentWorkspace extends React.Component<
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <ToneMatrix />,
-        id: SideContentType.toneMatrix,
+        id: SideContentType.toneMatrix
       });
     }
     return {
       handleActiveTabChange: props.handleActiveTabChange,
       defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
-      tabs,
+      tabs
     };
   };
 
@@ -431,7 +431,7 @@ class AssessmentWorkspace extends React.Component<
     const assessmentWorkspacePath = listingPath + `/${this.props.assessment!.id.toString()}`;
     const questionProgress: [number, number] = [
       questionId + 1,
-      this.props.assessment!.questions.length,
+      this.props.assessment!.questions.length
     ];
 
     const onClickPrevious = () =>
@@ -447,7 +447,7 @@ class AssessmentWorkspace extends React.Component<
         // Perform question blocking - determine the highest question number previously accessed
         // by counting the number of questions that have a non-null answer
         const blockedQuestionId =
-          this.props.assessment!.questions.filter((qn) => qn.answer !== null).length - 1;
+          this.props.assessment!.questions.filter(qn => qn.answer !== null).length - 1;
 
         // If the current question does not block the next question, proceed as usual
         if (questionId < blockedQuestionId) {
@@ -539,7 +539,7 @@ class AssessmentWorkspace extends React.Component<
     return {
       editorButtons: [runButton, saveButton, resetButton],
       flowButtons: [previousButton, questionView, nextButton],
-      replButtons: [evalButton, clearButton],
+      replButtons: [evalButton, clearButton]
     };
   };
 }

@@ -53,7 +53,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     const resizableSideContent = (
       <Resizable {...this.sideContentResizableProps()}>
         {sideContent}
-        <div className="side-content-divider" ref={(e) => (this.sideDividerDiv = e!)} />
+        <div className="side-content-divider" ref={e => (this.sideDividerDiv = e!)} />
       </Resizable>
     );
 
@@ -66,7 +66,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         ) : null}
         <ControlBar {...this.controlBarProps()} />
         <div className="row workspace-parent">
-          <div className="editor-divider" ref={(e) => (this.editorDividerDiv = e!)} />
+          <div className="editor-divider" ref={e => (this.editorDividerDiv = e!)} />
           <Resizable {...this.editorResizableProps()}>
             {this.createWorkspaceInput(this.props)}
           </Resizable>
@@ -96,7 +96,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       onResize: this.toggleEditorDividerDisplay,
       onResizeStop,
       ref,
-      size: { width: this.props.editorWidth, height: '100%' },
+      size: { width: this.props.editorWidth, height: '100%' }
     } as ResizableProps;
   }
 
@@ -117,8 +117,8 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
           ? undefined
           : {
               height: this.props.sideContentHeight,
-              width: '100%',
-            },
+              width: '100%'
+            }
     } as ResizableProps;
   }
 
@@ -193,7 +193,7 @@ const rightResizeOnly = {
   topRight: false,
   bottomRight: false,
   bottomLeft: false,
-  topLeft: false,
+  topLeft: false
 };
 
 const bottomResizeOnly = {
@@ -204,7 +204,7 @@ const bottomResizeOnly = {
   topRight: false,
   bottomRight: false,
   bottomLeft: false,
-  topLeft: false,
+  topLeft: false
 };
 
 export default Workspace;

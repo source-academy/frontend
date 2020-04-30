@@ -8,9 +8,12 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators<DispatchProps>(
     {
       handleGradingSave: submitGrading,
-      handleGradingSaveAndContinue: submitGradingAndContinue,
+      handleGradingSaveAndContinue: submitGradingAndContinue
     },
     dispatch
   );
 
-export default connect(null, mapDispatchToProps)(GradingEditor);
+export default connect(
+  null,
+  mapDispatchToProps
+)(GradingEditor);

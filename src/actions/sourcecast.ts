@@ -5,26 +5,26 @@ import {
   Input,
   IPlaybackData,
   ISourcecastData,
-  PlaybackStatus,
+  PlaybackStatus
 } from '../components/sourcecast/sourcecastShape';
 import * as actionTypes from './actionTypes';
 import { WorkspaceLocation } from './workspaces';
 
 export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.FETCH_SOURCECAST_INDEX, {
-    workspaceLocation,
+    workspaceLocation
   });
 
 export const setCodeDeltasToApply = (deltas: ICodeDelta[], workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.SET_CODE_DELTAS_TO_APPLY, {
     deltas,
-    workspaceLocation,
+    workspaceLocation
   });
 
 export const setInputToApply = (inputToApply: Input, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.SET_INPUT_TO_APPLY, {
     inputToApply,
-    workspaceLocation,
+    workspaceLocation
   });
 
 export const setSourcecastData = (
@@ -39,13 +39,13 @@ export const setSourcecastData = (
     description,
     audioUrl,
     playbackData,
-    workspaceLocation,
+    workspaceLocation
   });
 
 export const setSourcecastDuration = (duration: number, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.SET_SOURCECAST_PLAYBACK_DURATION, {
     duration,
-    workspaceLocation,
+    workspaceLocation
   });
 
 export const setSourcecastStatus = (
@@ -54,7 +54,7 @@ export const setSourcecastStatus = (
 ) =>
   action(actionTypes.SET_SOURCECAST_PLAYBACK_STATUS, {
     playbackStatus,
-    workspaceLocation,
+    workspaceLocation
   });
 
 export const updateSourcecastIndex = (
@@ -63,5 +63,5 @@ export const updateSourcecastIndex = (
 ) =>
   action(actionTypes.UPDATE_SOURCECAST_INDEX, {
     index,
-    workspaceLocation,
+    workspaceLocation
   });

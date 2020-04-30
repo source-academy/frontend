@@ -9,7 +9,7 @@ import {
   timerReset,
   timerResume,
   timerStart,
-  timerStop,
+  timerStop
 } from '../sourcereel';
 import { WorkspaceLocation, WorkspaceLocations } from '../workspaces';
 
@@ -23,15 +23,15 @@ test('recordInit generates correct action object', () => {
   const initData: IPlaybackData['init'] = {
     editorValue: 'Init Value',
     chapter: 1,
-    externalLibrary: ExternalLibraryNames.NONE,
+    externalLibrary: ExternalLibraryNames.NONE
   };
   const action = recordInit(initData, sourcereelWorkspace);
   expect(action).toEqual({
     type: actionTypes.RECORD_INIT,
     payload: {
       initData,
-      workspaceLocation: sourcereelWorkspace,
-    },
+      workspaceLocation: sourcereelWorkspace
+    }
   });
 });
 
@@ -39,27 +39,27 @@ test('recordInput generates correct action object', () => {
   const codeDelta: ICodeDelta = {
     start: {
       row: 0,
-      column: 1,
+      column: 1
     },
     end: {
       row: 0,
-      column: 2,
+      column: 2
     },
     action: 'insert',
-    lines: ['a'],
+    lines: ['a']
   };
   const input: Input = {
     time: 1,
     type: 'codeDelta',
-    data: codeDelta,
+    data: codeDelta
   };
   const action = recordInput(input, sourcereelWorkspace);
   expect(action).toEqual({
     type: actionTypes.RECORD_INPUT,
     payload: {
       input,
-      workspaceLocation: sourcereelWorkspace,
-    },
+      workspaceLocation: sourcereelWorkspace
+    }
   });
 });
 
@@ -74,9 +74,9 @@ test('saveSourcecastData generates correct action object', () => {
     init: {
       editorValue: 'Editor Init Value',
       chapter: 1,
-      externalLibrary: ExternalLibraryNames.NONE,
+      externalLibrary: ExternalLibraryNames.NONE
     },
-    inputs: [],
+    inputs: []
   };
   const action = saveSourcecastData(title, description, audio, playbackData, sourcereelWorkspace);
   expect(action).toEqual({
@@ -87,8 +87,8 @@ test('saveSourcecastData generates correct action object', () => {
       audio,
       audioUrl: fakeUrl,
       playbackData,
-      workspaceLocation: sourcereelWorkspace,
-    },
+      workspaceLocation: sourcereelWorkspace
+    }
   });
 });
 
@@ -104,7 +104,7 @@ test('timerReset generates correct action object', () => {
   const action = timerReset(sourcereelWorkspace);
   expect(action).toEqual({
     type: actionTypes.TIMER_RESET,
-    payload: { workspaceLocation: sourcereelWorkspace },
+    payload: { workspaceLocation: sourcereelWorkspace }
   });
 });
 

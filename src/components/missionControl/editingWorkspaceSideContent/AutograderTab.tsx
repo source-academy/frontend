@@ -59,7 +59,7 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
     this.props.updateAssessment(this.props.assessment);
   };
 
-  private autograderCard = (testcasePath: (string | number)[], index: number) => {
+  private autograderCard = (testcasePath: Array<string | number>, index: number) => {
     // testcasePath = ["questions", questionId, "testcases"]
     const testcases = getValueFromPath(testcasePath, this.props.assessment) as ITestcase[];
     const testcase = testcases[index];

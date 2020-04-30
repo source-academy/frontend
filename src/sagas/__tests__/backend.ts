@@ -7,13 +7,13 @@ import { WorkspaceLocation } from '../../actions/workspaces';
 import {
   AssessmentStatuses,
   IAssessment,
-  IQuestion,
+  IQuestion
 } from '../../components/assessment/assessmentShape';
 import { Notification } from '../../components/notification/notificationShape';
 import {
   mockAssessmentOverviews,
   mockAssessmentQuestions,
-  mockAssessments,
+  mockAssessments
 } from '../../mocks/assessmentAPI';
 import { mockNotifications } from '../../mocks/userAPI';
 import { Role, Story } from '../../reducers/states';
@@ -28,7 +28,7 @@ import {
   postAnswer,
   postAssessment,
   postAuth,
-  postNotify,
+  postNotify
 } from '../requests';
 
 // ----------------------------------------
@@ -36,7 +36,7 @@ import {
 
 const mockAssessment: IAssessment = mockAssessments[0];
 
-const mockMapAssessments = new Map<number, IAssessment>(mockAssessments.map((a) => [a.id, a]));
+const mockMapAssessments = new Map<number, IAssessment>(mockAssessments.map(a => [a.id, a]));
 
 const mockAssessmentQuestion = mockAssessmentQuestions[0];
 
@@ -50,11 +50,11 @@ const mockStates = {
     assessments: mockMapAssessments,
     notifications: mockNotifications,
     refreshToken: 'refresherOrb',
-    role: Role.Student,
+    role: Role.Student
   },
   workspaces: {
-    assessment: { currentAssessment: mockAssessment.id },
-  },
+    assessment: { currentAssessment: mockAssessment.id }
+  }
 };
 
 const okResp = { ok: true };
@@ -68,17 +68,14 @@ describe('Test FETCH_AUTH Action', () => {
       name: 'user',
       role: 'student' as Role,
       story: {} as Story,
-      grade: 1,
+      grade: 1
     };
     return expectSaga(backendSaga)
       .call(postAuth, luminusCode)
       .call(getUser, mockTokens)
       .put(actions.setTokens(mockTokens))
       .put(actions.setUser(user))
-      .provide([
-        [call(postAuth, luminusCode), mockTokens],
-        [call(getUser, mockTokens), user],
-      ])
+      .provide([[call(postAuth, luminusCode), mockTokens], [call(getUser, mockTokens), user]])
       .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminusCode })
       .silentRun();
   });
@@ -89,13 +86,10 @@ describe('Test FETCH_AUTH Action', () => {
       name: 'user',
       role: 'student' as Role,
       story: {} as Story,
-      grade: 1,
+      grade: 1
     };
     return expectSaga(backendSaga)
-      .provide([
-        [call(postAuth, luminusCode), null],
-        [call(getUser, mockTokens), user],
-      ])
+      .provide([[call(postAuth, luminusCode), null], [call(getUser, mockTokens), user]])
       .call(postAuth, luminusCode)
       .not.call.fn(getUser)
       .not.put.actionType(actionTypes.SET_TOKENS)
@@ -108,10 +102,7 @@ describe('Test FETCH_AUTH Action', () => {
     const luminusCode = 'luminusCode';
     const nullUser = null;
     return expectSaga(backendSaga)
-      .provide([
-        [call(postAuth, luminusCode), mockTokens],
-        [call(getUser, mockTokens), nullUser],
-      ])
+      .provide([[call(postAuth, luminusCode), mockTokens], [call(getUser, mockTokens), nullUser]])
       .call(postAuth, luminusCode)
       .call(getUser, mockTokens)
       .not.put.actionType(actionTypes.SET_TOKENS)
@@ -181,7 +172,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
     });
     const mockNewAssessment = {
       ...mockAssessment,
-      questions: mockNewQuestions,
+      questions: mockNewQuestions
     };
     expectSaga(backendSaga)
       .withState(mockStates)
@@ -193,8 +184,8 @@ describe('Test SUBMIT_ANSWER Action', () => {
             mockAnsweredAssessmentQuestion.answer,
             mockTokens
           ),
-          okResp,
-        ],
+          okResp
+        ]
       ])
       .not.call.fn(showWarningMessage)
       .call(showSuccessMessage, 'Saved!', 1000)
@@ -233,8 +224,8 @@ describe('Test SUBMIT_ANSWER Action', () => {
             mockAnsweredAssessmentQuestion.answer,
             mockTokens
           ),
-          null,
-        ],
+          null
+        ]
       ])
       .call(
         postAnswer,
@@ -263,8 +254,8 @@ describe('Test SUBMIT_ANSWER Action', () => {
             mockAnsweredAssessmentQuestion.answer,
             mockTokens
           ),
-          { ...errorResp, status: 403 },
-        ],
+          { ...errorResp, status: 403 }
+        ]
       ])
       .call(showWarningMessage, 'Answer rejected - assessment not open or already finalised.')
       .not.call.fn(showSuccessMessage)
@@ -279,7 +270,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
 describe('Test SUBMIT_ASSESSMENT Action', () => {
   test('when response is ok', () => {
     const mockAssessmentId = mockAssessment.id;
-    const mockNewOverviews = mockAssessmentOverviews.map((overview) => {
+    const mockNewOverviews = mockAssessmentOverviews.map(overview => {
       if (overview.id === mockAssessmentId) {
         return { ...overview, status: AssessmentStatuses.submitted };
       }
@@ -352,7 +343,7 @@ describe('Test FETCH_NOTIFICATIONS Action', () => {
 describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
   test('when response is ok', () => {
     const ids = [1, 2, 3];
-    const mockNewNotifications = mockNotifications.filter((n) => !ids.includes(n.id));
+    const mockNewNotifications = mockNotifications.filter(n => !ids.includes(n.id));
     return expectSaga(backendSaga)
       .withState(mockStates)
       .provide([[call(postAcknowledgeNotifications, mockTokens, ids), okResp]])
@@ -362,18 +353,18 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
         type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
         payload: {
           withFilter: (notifications: Notification[]) =>
-            notifications.filter((notification) => ids.includes(notification.id)),
-        },
+            notifications.filter(notification => ids.includes(notification.id))
+        }
       })
       .silentRun();
   });
 
   test('when response has HTTP status code 404 (Not Found)', () => {
-    const ids = mockNotifications.map((n) => n.id);
+    const ids = mockNotifications.map(n => n.id);
     return expectSaga(backendSaga)
       .withState(mockStates)
       .provide([
-        [call(postAcknowledgeNotifications, mockTokens, ids), { ...errorResp, status: 404 }],
+        [call(postAcknowledgeNotifications, mockTokens, ids), { ...errorResp, status: 404 }]
       ])
       .call(showWarningMessage, 'Something went wrong (got 404 response)')
       .dispatch({ type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS, payload: {} })

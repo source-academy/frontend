@@ -44,7 +44,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     super(props);
     this.state = {
       editOverview: '',
-      editingOverview: retrieveLocalAssessmentOverview(),
+      editingOverview: retrieveLocalAssessmentOverview()
     };
   }
 
@@ -63,7 +63,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
           assessmentOverview: overview,
           updateAssessmentOverview: this.updateEditingOverview,
           notAttempted: overview.status === AssessmentStatuses.not_attempted,
-          closeDate: overview.closeAt,
+          closeDate: overview.closeAt
         };
         return (
           <div className="Academy">
@@ -102,7 +102,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
 
   private updateEditingOverview = (overview: IAssessmentOverview) => {
     this.setState({
-      editingOverview: overview,
+      editingOverview: overview
     });
   };
 }

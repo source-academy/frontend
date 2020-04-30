@@ -16,8 +16,8 @@ import { Variant } from 'js-slang/dist/types';
 interface IProps {
   assessment: IAssessment;
   label: string;
-  pathToLibrary: (string | number)[];
-  pathToCopy?: (string | number)[];
+  pathToLibrary: Array<string | number>;
+  pathToCopy?: Array<string | number>;
   updateAssessment: (assessment: IAssessment) => void;
   handleRefreshLibrary: (library: Library) => void;
   isOptionalDeployment: boolean;
@@ -131,7 +131,7 @@ export class DeploymentTab extends React.Component<IProps, {}> {
     );
   };
 
-  private textareaContent = (path: (string | number)[]) => {
+  private textareaContent = (path: Array<string | number>) => {
     return (
       <TextareaContent
         assessment={this.props.assessment}
@@ -229,7 +229,7 @@ export class DeploymentTab extends React.Component<IProps, {}> {
     this.props.updateAssessment(assessment);
   };
 
-  private isEmptyLibrary = (path: (string | number)[] = this.props.pathToLibrary) => {
+  private isEmptyLibrary = (path: Array<string | number> = this.props.pathToLibrary) => {
     return getValueFromPath(path.concat(['chapter']), this.props.assessment) === -1;
   };
 }
@@ -242,10 +242,10 @@ const altEval = (str: string): any => {
   return Function('"use strict";return (' + str + ')')();
 };
 
-const chapters = sourceLanguages.map((lang) => ({
+const chapters = sourceLanguages.map(lang => ({
   chapter: lang.chapter,
   variant: lang.variant,
-  displayName: styliseChapter(lang.chapter, lang.variant),
+  displayName: styliseChapter(lang.chapter, lang.variant)
 }));
 
 const chapterSelect = (
@@ -277,7 +277,7 @@ const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers,
 const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
   name: entry[0] as ExternalLibraryName,
   key: index,
-  symbols: entry[1],
+  symbols: entry[1]
 }));
 
 const externalSelect = (

@@ -10,7 +10,7 @@ import {
   SET_SOURCECAST_DATA,
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_STATUS,
-  UPDATE_SOURCECAST_INDEX,
+  UPDATE_SOURCECAST_INDEX
 } from '../actions/actionTypes';
 
 export const reducer: Reducer<ISourcecastWorkspace> = (
@@ -24,17 +24,17 @@ export const reducer: Reducer<ISourcecastWorkspace> = (
         title: action.payload.title,
         description: action.payload.description,
         audioUrl: action.payload.audioUrl,
-        playbackData: action.payload.playbackData,
+        playbackData: action.payload.playbackData
       };
     case SET_CODE_DELTAS_TO_APPLY:
       return {
         ...state,
-        codeDeltasToApply: action.payload.deltas,
+        codeDeltasToApply: action.payload.deltas
       };
     case SET_INPUT_TO_APPLY:
       return {
         ...state,
-        inputToApply: action.payload.inputToApply,
+        inputToApply: action.payload.inputToApply
       };
     case SET_SOURCECAST_DATA:
       return {
@@ -42,22 +42,22 @@ export const reducer: Reducer<ISourcecastWorkspace> = (
         title: action.payload.title,
         description: action.payload.description,
         audioUrl: action.payload.audioUrl,
-        playbackData: action.payload.playbackData,
+        playbackData: action.payload.playbackData
       };
     case SET_SOURCECAST_PLAYBACK_DURATION:
       return {
         ...state,
-        playbackDuration: action.payload.duration,
+        playbackDuration: action.payload.duration
       };
     case SET_SOURCECAST_PLAYBACK_STATUS:
       return {
         ...state,
-        playbackStatus: action.payload.playbackStatus,
+        playbackStatus: action.payload.playbackStatus
       };
     case UPDATE_SOURCECAST_INDEX:
       return {
         ...state,
-        sourcecastIndex: action.payload.index,
+        sourcecastIndex: action.payload.index
       };
     default:
       return state;

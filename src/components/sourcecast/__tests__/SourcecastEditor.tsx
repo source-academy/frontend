@@ -28,12 +28,12 @@ test('SourcecastEditor renders correctly', () => {
     getTimerDuration: () => 1,
     handleDeclarationNavigate: (cursorPosition: IPosition) => {},
     handleEditorEval: () => {},
-    handleEditorValueChange: (newCode) => {},
-    handleEditorUpdateBreakpoints: (breakpoints) => {},
+    handleEditorValueChange: newCode => {},
+    handleEditorUpdateBreakpoints: breakpoints => {},
     handleFinishInvite: () => {},
-    handleRecordInput: (input) => {},
-    handleSetWebsocketStatus: (websocketStatus) => {},
-    handleUpdateHasUnsavedChanges: (hasUnsavedChanges) => {},
+    handleRecordInput: input => {},
+    handleSetWebsocketStatus: websocketStatus => {},
+    handleUpdateHasUnsavedChanges: hasUnsavedChanges => {}
   };
   const app = <SourcecastEditor {...props} />;
   const tree = shallow(app);

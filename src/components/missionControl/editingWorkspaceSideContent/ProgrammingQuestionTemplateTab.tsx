@@ -40,23 +40,23 @@ const questionEditors: QuestionEditor[] = [
   {
     label: 'Prepend',
     icon: IconNames.CHEVRON_UP,
-    id: 'prepend',
+    id: 'prepend'
   },
   {
     label: 'Postpend',
     icon: IconNames.CHEVRON_DOWN,
-    id: 'postpend',
+    id: 'postpend'
   },
   {
     label: 'Solution Template',
     icon: IconNames.MANUAL,
-    id: 'solutionTemplate',
+    id: 'solutionTemplate'
   },
   {
     label: 'Suggested Answer',
     icon: IconNames.TICK,
-    id: 'answer',
-  },
+    id: 'answer'
+  }
 ];
 
 /*
@@ -71,7 +71,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
     this.state = {
       activeEditor: questionEditors[0],
       templateValue: '',
-      templateFocused: false,
+      templateFocused: false
     };
   }
 
@@ -145,7 +145,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
     );
   };
 
-  private editor = (path: (string | number)[]) => {
+  private editor = (path: Array<string | number>) => {
     const value = this.state.templateFocused
       ? this.state.templateValue
       : getValueFromPath(path, this.props.assessment);
@@ -155,7 +155,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
         <AceEditor
           className="react-ace"
           editorProps={{
-            $blockScrolling: Infinity,
+            $blockScrolling: Infinity
           }}
           fontSize={14}
           highlightActiveLine={false}
@@ -171,26 +171,26 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
 
   private handleChangeActiveEditor = (editor: QuestionEditor) => {
     this.setState({
-      activeEditor: editor,
+      activeEditor: editor
     });
   };
 
   private handleTemplateChange = (newCode: string) => {
     this.setState({
-      templateValue: newCode,
+      templateValue: newCode
     });
   };
 
-  private focusEditor = (path: (string | number)[]) => (e: any): void => {
+  private focusEditor = (path: Array<string | number>) => (e: any): void => {
     if (!this.state.templateFocused) {
       this.setState({
         templateValue: getValueFromPath(path, this.props.assessment),
-        templateFocused: true,
+        templateFocused: true
       });
     }
   };
 
-  private unFocusEditor = (path: (string | number)[]) => (e: any): void => {
+  private unFocusEditor = (path: Array<string | number>) => (e: any): void => {
     if (this.state.templateFocused) {
       const value = getValueFromPath(path, this.props.assessment);
       if (value !== this.state.templateValue) {
@@ -209,18 +209,18 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
 
       this.setState({
         templateValue: '',
-        templateFocused: false,
+        templateFocused: false
       });
     }
   };
 
-  private handleCopyFromEditor = (path: (string | number)[]) => (): void => {
+  private handleCopyFromEditor = (path: Array<string | number>) => (): void => {
     const assessment = this.props.assessment;
     assignToPath(path, this.props.editorValue, assessment);
     this.props.updateAssessment(assessment);
   };
 
-  private handleCopyToEditor = (path: (string | number)[]) => (): void => {
+  private handleCopyToEditor = (path: Array<string | number>) => (): void => {
     const value = getValueFromPath(path, this.props.assessment);
     this.props.handleEditorValueChange(value);
   };

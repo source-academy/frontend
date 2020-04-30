@@ -19,7 +19,7 @@ class SourcereelControlbar extends React.PureComponent<
       duration: 0,
       updater: undefined,
       saveTitle: 'Title',
-      saveDescription: 'Description',
+      saveDescription: 'Description'
     };
   }
 
@@ -150,7 +150,7 @@ class SourcereelControlbar extends React.PureComponent<
     this.recorder.stop();
     this.recorder.exportWAV((blob: any) => {
       this.setState({
-        fileDataBlob: blob,
+        fileDataBlob: blob
       });
     });
     this.recorder.clear();

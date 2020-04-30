@@ -8,7 +8,7 @@ type filterByTypeOptions = AssessmentCategories | 'Grading';
  */
 export function filterNotificationsByAssessment(assessmentId: number): NotificationFilterFunction {
   return (notifications: Notification[]) =>
-    notifications.filter((n) => !n.submission_id && n.assessment_id === assessmentId);
+    notifications.filter(n => !n.submission_id && n.assessment_id === assessmentId);
 }
 
 /**
@@ -16,7 +16,7 @@ export function filterNotificationsByAssessment(assessmentId: number): Notificat
  */
 export function filterNotificationsBySubmission(submissionId: number): NotificationFilterFunction {
   return (notifications: Notification[]) =>
-    notifications.filter((n) => n.submission_id === submissionId);
+    notifications.filter(n => n.submission_id === submissionId);
 }
 
 /**
@@ -30,7 +30,7 @@ export function filterNotificationsByType(
   assessmentType: filterByTypeOptions
 ): NotificationFilterFunction {
   return (notifications: Notification[]) =>
-    notifications.filter((n) => {
+    notifications.filter(n => {
       if (assessmentType === 'Grading') {
         return n.submission_id !== undefined;
       }
@@ -42,5 +42,5 @@ export function filterNotificationsByType(
  * @return A function that takes in an array of notification and filters it by notification id.
  */
 export function filterNotificationsById(id: number): NotificationFilterFunction {
-  return (notifications: Notification[]) => notifications.filter((n) => n.id === id);
+  return (notifications: Notification[]) => notifications.filter(n => n.id === id);
 }

@@ -16,28 +16,28 @@ const defaultProps: IAssessmentProps = {
   handleAssessmentOverviewFetch: () => {},
   handleSubmitAssessment: (id: number) => {},
   isStudent: false,
-  ...mockRouterProps('/academy/missions', {}),
+  ...mockRouterProps('/academy/missions', {})
 };
 
 const mockUndefinedAssessment: IAssessmentProps = {
   ...defaultProps,
-  assessmentOverviews: undefined,
+  assessmentOverviews: undefined
 };
 
 const mockEmptyAssessment: IAssessmentProps = {
   ...defaultProps,
-  assessmentOverviews: [],
+  assessmentOverviews: []
 };
 
 const mockPresentAssessment: IAssessmentProps = {
   ...defaultProps,
-  assessmentOverviews: mockAssessmentOverviews,
+  assessmentOverviews: mockAssessmentOverviews
 };
 
 const mockPresentAssessmentForStudent: IAssessmentProps = {
   ...defaultProps,
   assessmentOverviews: mockAssessmentOverviews,
-  isStudent: true,
+  isStudent: true
 };
 
 test('Assessment page "loading" content renders correctly', () => {

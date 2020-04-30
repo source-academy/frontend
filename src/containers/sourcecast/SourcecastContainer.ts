@@ -30,7 +30,7 @@ import {
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
-  WorkspaceLocation,
+  WorkspaceLocation
 } from '../../actions';
 import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
 import Sourcecast, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcecast';
@@ -39,11 +39,11 @@ import {
   Input,
   IPlaybackData,
   IPosition,
-  PlaybackStatus,
+  PlaybackStatus
 } from '../../components/sourcecast/sourcecastShape';
 import { IState, SideContentType } from '../../reducers/states';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state) => ({
+const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   audioUrl: state.workspaces.sourcecast.audioUrl,
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   title: state.workspaces.sourcecast.title,
@@ -68,7 +68,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state) => ({
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcecast.context.chapter,
-  sourceVariant: state.workspaces.sourcecast.context.variant,
+  sourceVariant: state.workspaces.sourcecast.context.variant
 });
 
 const location: WorkspaceLocation = 'sourcecast';
@@ -116,9 +116,12 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleDebuggerResume: () => debuggerResume(location),
       handleDebuggerReset: () => debuggerReset(location),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(location, row, col, callback),
+        promptAutocomplete(location, row, col, callback)
     },
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sourcecast);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Sourcecast);

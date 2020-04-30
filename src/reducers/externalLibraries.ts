@@ -1,6 +1,6 @@
 import {
   ExternalLibraryName,
-  ExternalLibraryNames,
+  ExternalLibraryNames
 } from '../components/assessment/assessmentShape';
 
 const runesLibrary = [
@@ -47,7 +47,7 @@ const runesLibrary = [
   'anaglyph',
   'overlay_frac',
   'overlay',
-  'hollusion', // currently not documented; animation not working
+  'hollusion' // currently not documented; animation not working
 ];
 
 const curvesLibrary = [
@@ -83,7 +83,7 @@ const curvesLibrary = [
   'alternative_unit_circle', // undocumented
   'full_view_proportional', // undocumented
   'squeeze_full_view', // undocumented
-  'squeeze_rectangular_portion', // undocumented
+  'squeeze_rectangular_portion' // undocumented
 ];
 
 const soundsLibrary = [
@@ -116,7 +116,7 @@ const soundsLibrary = [
   'piano',
   'bell',
   'violin',
-  'cello',
+  'cello'
 ];
 
 const binaryTreesLibrary = [
@@ -126,7 +126,7 @@ const binaryTreesLibrary = [
   'is_empty_tree',
   'entry',
   'left_branch',
-  'right_branch',
+  'right_branch'
 ];
 
 const videoLibrary = [
@@ -144,7 +144,7 @@ const videoLibrary = [
   'get_video_width',
   'get_video_height',
   'apply_filter',
-  'reset_filter',
+  'reset_filter'
 ];
 
 const machineLearningLibrary = [
@@ -153,7 +153,7 @@ const machineLearningLibrary = [
   'load_faceapi',
   'change_label',
   'array_push',
-  'normalise_data',
+  'normalise_data'
 ];
 
 /**
@@ -161,7 +161,7 @@ const machineLearningLibrary = [
  * external symbols (exposed functions) are under them.
  */
 
-const libEntries: [ExternalLibraryName, string[]][] = [
+const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryNames.NONE, []],
   [ExternalLibraryNames.RUNES, runesLibrary],
   [ExternalLibraryNames.CURVES, curvesLibrary],
@@ -171,8 +171,8 @@ const libEntries: [ExternalLibraryName, string[]][] = [
   [ExternalLibraryNames.MACHINELEARNING, machineLearningLibrary],
   [
     ExternalLibraryNames.ALL,
-    runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary),
-  ],
+    runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary)
+  ]
 ];
 
 export const externalLibraries: Map<string, string[]> = new Map(libEntries);

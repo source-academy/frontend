@@ -12,7 +12,7 @@ class FaceapiDisplay extends React.Component<{}, FaceapiDisplayState> {
     super(props);
     this.state = {
       width: (window as any)._WIDTH,
-      height: (window as any)._HEIGHT,
+      height: (window as any)._HEIGHT
     };
   }
 
