@@ -87,7 +87,7 @@
   function callGetShiftInfo(d2){
     let x = getShiftInfo(callGetShiftInfoData, d2).y;
     let y = dataObjectWrappers[dataObjects.indexOf(callGetShiftInfoData)].y + 3/4 * DATA_UNIT_HEIGHT;
-    return x - y;
+    return x - y - PAIR_SPACING;
   }
 
   function getShiftInfo(d1, d2) {
@@ -658,7 +658,6 @@
           // console.log(shiftY)
           // console.log("Correct calc? " + (shiftY == newShiftY))
           // shiftY = newShiftY;
-
 
 
           if (is_Array(dataObject[0])) {
