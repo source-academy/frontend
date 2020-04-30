@@ -30,7 +30,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChatApp);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatApp);

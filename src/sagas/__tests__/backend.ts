@@ -75,7 +75,10 @@ describe('Test FETCH_AUTH Action', () => {
       .call(getUser, mockTokens)
       .put(actions.setTokens(mockTokens))
       .put(actions.setUser(user))
-      .provide([[call(postAuth, luminusCode), mockTokens], [call(getUser, mockTokens), user]])
+      .provide([
+        [call(postAuth, luminusCode), mockTokens],
+        [call(getUser, mockTokens), user]
+      ])
       .dispatch({ type: actionTypes.FETCH_AUTH, payload: luminusCode })
       .silentRun();
   });
@@ -89,7 +92,10 @@ describe('Test FETCH_AUTH Action', () => {
       grade: 1
     };
     return expectSaga(backendSaga)
-      .provide([[call(postAuth, luminusCode), null], [call(getUser, mockTokens), user]])
+      .provide([
+        [call(postAuth, luminusCode), null],
+        [call(getUser, mockTokens), user]
+      ])
       .call(postAuth, luminusCode)
       .not.call.fn(getUser)
       .not.put.actionType(actionTypes.SET_TOKENS)
@@ -102,7 +108,10 @@ describe('Test FETCH_AUTH Action', () => {
     const luminusCode = 'luminusCode';
     const nullUser = null;
     return expectSaga(backendSaga)
-      .provide([[call(postAuth, luminusCode), mockTokens], [call(getUser, mockTokens), nullUser]])
+      .provide([
+        [call(postAuth, luminusCode), mockTokens],
+        [call(getUser, mockTokens), nullUser]
+      ])
       .call(postAuth, luminusCode)
       .call(getUser, mockTokens)
       .not.put.actionType(actionTypes.SET_TOKENS)

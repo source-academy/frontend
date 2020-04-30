@@ -121,7 +121,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Sourcecast);
+export default connect(mapStateToProps, mapDispatchToProps)(Sourcecast);

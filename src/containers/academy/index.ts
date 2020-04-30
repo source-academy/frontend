@@ -18,9 +18,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = dispatch =>
     dispatch
   );
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Academy)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Academy));

@@ -32,7 +32,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MaterialUpload);
+export default connect(mapStateToProps, mapDispatchToProps)(MaterialUpload);
