@@ -7,7 +7,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import ApplicationContainer from './containers/ApplicationContainer';
 import { store } from './createStore';
-import { LINKS, SOURCE_ACADEMY_VERSION, MODULES_BACKEND_URL } from './utils/constants';
+import { LINKS, MODULES_BACKEND_URL, SOURCE_ACADEMY_VERSION } from './utils/constants';
 import { history } from './utils/history';
 import registerServiceWorker from './utils/registerServiceWorker';
 
