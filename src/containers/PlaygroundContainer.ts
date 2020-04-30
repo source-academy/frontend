@@ -35,7 +35,7 @@ import {
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation,
-  WorkspaceLocations,
+  WorkspaceLocations
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
