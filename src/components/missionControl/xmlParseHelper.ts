@@ -130,9 +130,7 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
     const nameVal = external ? external[0].$.name : 'NONE';
     const symbolsVal = external ? external[0].SYMBOL || [] : [];
     const globalsVal = deployment.GLOBAL
-      ? (deployment.GLOBAL.map(x => [x.IDENTIFIER[0], altEval(x.VALUE[0]), x.VALUE[0]]) as Array<
-          [string, any, string]
-        >)
+      ? (deployment.GLOBAL.map(x => [x.IDENTIFIER[0], altEval(x.VALUE[0]), x.VALUE[0]]) as [string, any, string][])
       : [];
     return {
       chapter: parseInt(deployment.$.interpreter, 10),
@@ -148,7 +146,7 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
 const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] => {
   let maxGrade = 0;
   let maxXp = 0;
-  const questions: Array<IProgrammingQuestion | IMCQQuestion> = [];
+  const questions: (IProgrammingQuestion | IMCQQuestion)[] = [];
   task.PROBLEMS[0].PROBLEM.forEach((problem: IXmlParseStrProblem, curId: number) => {
     const localMaxXp = problem.$.maxxp ? parseInt(problem.$.maxxp, 10) : 0;
     const question: IQuestion = {

@@ -120,7 +120,7 @@ export interface IWorkspaceState {
   readonly sideContentActiveTab: SideContentType;
   readonly sideContentHeight?: number;
   readonly websocketStatus: number;
-  readonly globals: Array<[string, any]>;
+  readonly globals: [string, any][];
 }
 
 export interface ISessionState {

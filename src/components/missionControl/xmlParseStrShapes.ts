@@ -4,7 +4,7 @@ export interface IXmlParseStrTask {
   $: IXmlParseStrOverview;
   DEPLOYMENT: IXmlParseStrDeployment[];
   GRADERDEPLOYMENT: IXmlParseStrDeployment[];
-  PROBLEMS: Array<{ PROBLEM: IXmlParseStrProblem[] }>;
+  PROBLEMS: { PROBLEM: IXmlParseStrProblem[] }[];
   READING: string[];
   TEXT: string[];
   WEBSUMMARY?: string[];
@@ -14,23 +14,23 @@ export interface IXmlParseStrDeployment {
   $: {
     interpreter: string;
   };
-  GLOBAL?: Array<{
+  GLOBAL?: {
     IDENTIFIER: string[];
     VALUE: string[];
-  }>;
-  IMPORT?: Array<{
+  }[];
+  IMPORT?: {
     $: {
       name: ExternalLibraryName;
     };
     SYMBOL: string[];
-  }>;
+  }[];
   // deprecated EXTERNAL in DEPLOYMENT and GRADERDEPLOYMENT, use IMPORT instead
-  EXTERNAL?: Array<{
+  EXTERNAL?: {
     $: {
       name: ExternalLibraryName;
     };
     SYMBOL: string[];
-  }>;
+  }[];
 }
 
 export interface IXmlParseStrOverview {
@@ -55,17 +55,17 @@ export interface IXmlParseStrProblem {
 }
 
 export interface IXmlParseStrPProblem extends IXmlParseStrProblem {
-  SNIPPET: Array<{
+  SNIPPET: {
     TEMPLATE: string[];
     PREPEND: string;
     SOLUTION: string[];
     POSTPEND: string;
-    TESTCASES: Array<{
+    TESTCASES: {
       PUBLIC?: IXmlParseStrTestcase[];
       PRIVATE?: IXmlParseStrTestcase[];
-    }>;
+    }[];
     GRADER: string[];
-  }>;
+  }[];
   TEXT: string[];
 }
 

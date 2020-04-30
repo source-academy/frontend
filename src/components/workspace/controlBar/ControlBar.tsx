@@ -3,9 +3,9 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 export type ControlBarProps = {
-  editorButtons: Array<JSX.Element | null>;
-  flowButtons?: Array<JSX.Element | null>;
-  replButtons: Array<JSX.Element | null>;
+  editorButtons: (JSX.Element | null)[];
+  flowButtons?: (JSX.Element | null)[];
+  replButtons: (JSX.Element | null)[];
 };
 
 function ControlBar(props: ControlBarProps) {

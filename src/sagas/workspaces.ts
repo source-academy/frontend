@@ -77,7 +77,7 @@ export default function* workspaceSaga(): SagaIterator {
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
     );
-    const globals: Array<[string, any]> = yield select(
+    const globals: [string, any][] = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
     const variant: Variant = yield select(
@@ -356,7 +356,7 @@ export default function* workspaceSaga(): SagaIterator {
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
     );
-    const globals: Array<[string, any]> = yield select(
+    const globals: [string, any][] = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
     if (newChapter !== oldChapter || newVariant !== oldVariant) {
@@ -394,7 +394,7 @@ export default function* workspaceSaga(): SagaIterator {
     const chapter = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
-    const globals: Array<[string, any]> = yield select(
+    const globals: [string, any][] = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
     const newExternalLibraryName = action.payload.externalLibraryName;
@@ -493,7 +493,7 @@ export default function* workspaceSaga(): SagaIterator {
         (window as any).loadLib('MACHINELEARNING');
         break;
     }
-    const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
+    const globals: [string, any][] = action.payload.library.globals as [string, any][];
     for (const [key, value] of globals) {
       window[key] = value;
     }

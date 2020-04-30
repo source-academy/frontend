@@ -145,7 +145,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
     );
   };
 
-  private editor = (path: Array<string | number>) => {
+  private editor = (path: (string | number)[]) => {
     const value = this.state.templateFocused
       ? this.state.templateValue
       : getValueFromPath(path, this.props.assessment);
@@ -181,7 +181,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
     });
   };
 
-  private focusEditor = (path: Array<string | number>) => (e: any): void => {
+  private focusEditor = (path: (string | number)[]) => (e: any): void => {
     if (!this.state.templateFocused) {
       this.setState({
         templateValue: getValueFromPath(path, this.props.assessment),
@@ -190,7 +190,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
     }
   };
 
-  private unFocusEditor = (path: Array<string | number>) => (e: any): void => {
+  private unFocusEditor = (path: (string | number)[]) => (e: any): void => {
     if (this.state.templateFocused) {
       const value = getValueFromPath(path, this.props.assessment);
       if (value !== this.state.templateValue) {
@@ -214,13 +214,13 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
     }
   };
 
-  private handleCopyFromEditor = (path: Array<string | number>) => (): void => {
+  private handleCopyFromEditor = (path: (string | number)[]) => (): void => {
     const assessment = this.props.assessment;
     assignToPath(path, this.props.editorValue, assessment);
     this.props.updateAssessment(assessment);
   };
 
-  private handleCopyToEditor = (path: Array<string | number>) => (): void => {
+  private handleCopyToEditor = (path: (string | number)[]) => (): void => {
     const value = getValueFromPath(path, this.props.assessment);
     this.props.handleEditorValueChange(value);
   };

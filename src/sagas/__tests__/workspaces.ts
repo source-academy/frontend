@@ -52,7 +52,7 @@ describe('EVAL_EDITOR', () => {
     const execTime = 1000;
     const context = createContext();
     const variant: Variant = 'default';
-    const globals: Array<[string, any]> = [
+    const globals: [string, any][] = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
       ['testArray', [1, 2, 'a', 'b']]
@@ -284,7 +284,7 @@ describe('EVAL_TESTCASE', () => {
     ];
 
     const context = createContext();
-    const globals: Array<[string, any]> = [
+    const globals: [string, any][] = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
       ['testArray', [1, 2, 'a', 'b']]
@@ -363,7 +363,7 @@ describe('EVAL_TESTCASE', () => {
 
 describe('CHAPTER_SELECT', () => {
   let workspaceLocation: WorkspaceLocation;
-  let globals: Array<[string, any]>;
+  let globals: [string, any][];
   let context: Context;
 
   beforeEach(() => {
@@ -435,7 +435,7 @@ describe('CHAPTER_SELECT', () => {
 
 describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   let workspaceLocation: WorkspaceLocation;
-  let globals: Array<[string, any]>;
+  let globals: [string, any][];
   let chapter: number;
   let context: Context;
 
@@ -558,7 +558,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
   let loadLib: any;
   let getReadyWebGLForCanvas: any;
   let chapter: number;
-  let globals: Array<[string, any]>;
+  let globals: [string, any][];
   let workspaceLocation: WorkspaceLocation;
 
   beforeEach(() => {

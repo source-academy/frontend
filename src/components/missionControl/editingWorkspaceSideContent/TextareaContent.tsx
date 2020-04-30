@@ -8,7 +8,7 @@ import { assignToPath, getValueFromPath } from './';
 interface IProps {
   assessment: IAssessment;
   isNumber?: boolean;
-  path: Array<string | number>;
+  path: (string | number)[];
   useRawValue?: boolean;
   processResults?: (newVal: string | number) => string | number;
   updateAssessment: (assessment: IAssessment) => void;

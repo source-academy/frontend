@@ -16,8 +16,8 @@ import { Variant } from 'js-slang/dist/types';
 interface IProps {
   assessment: IAssessment;
   label: string;
-  pathToLibrary: Array<string | number>;
-  pathToCopy?: Array<string | number>;
+  pathToLibrary: (string | number)[];
+  pathToCopy?: (string | number)[];
   updateAssessment: (assessment: IAssessment) => void;
   handleRefreshLibrary: (library: Library) => void;
   isOptionalDeployment: boolean;
@@ -131,7 +131,7 @@ export class DeploymentTab extends React.Component<IProps, {}> {
     );
   };
 
-  private textareaContent = (path: Array<string | number>) => {
+  private textareaContent = (path: (string | number)[]) => {
     return (
       <TextareaContent
         assessment={this.props.assessment}
@@ -229,7 +229,7 @@ export class DeploymentTab extends React.Component<IProps, {}> {
     this.props.updateAssessment(assessment);
   };
 
-  private isEmptyLibrary = (path: Array<string | number> = this.props.pathToLibrary) => {
+  private isEmptyLibrary = (path: (string | number)[] = this.props.pathToLibrary) => {
     return getValueFromPath(path.concat(['chapter']), this.props.assessment) === -1;
   };
 }

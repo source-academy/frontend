@@ -10,7 +10,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { controlButton } from '../../commons';
 
 export interface ISubstVisualizerProps {
-  content: Array<[string, string, string]>;
+  content: [string, string, string][];
 }
 
 export interface ISubstVisualizerState {

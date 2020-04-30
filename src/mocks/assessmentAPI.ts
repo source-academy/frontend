@@ -210,7 +210,7 @@ export const mockAssessmentOverviews = [
   ...mockClosedAssessmentOverviews
 ];
 
-const mockGlobals: Array<[string, any]> = [
+const mockGlobals: [string, any][] = [
   ['testNumber', 3.141592653589793],
   ['testString', 'who dat boi'],
   ['testBooleanTrue', true],
@@ -257,7 +257,7 @@ const mockToneMatrixLibrary: Library = {
   globals: mockGlobals
 };
 
-export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+export const mockAssessmentQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
   {
     autogradingResults: [],
     answer: null,
@@ -432,7 +432,7 @@ function volumeOfSphere(x) {
   }
 ];
 
-export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+export const mockClosedAssessmentQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
   {
     answer: `function fibonacci(n) {
     if (n <= 2) {
@@ -592,7 +592,7 @@ _italics_
   }
 ];
 
-export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+export const mockPathQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
   {
     answer: null,
     roomId: null,

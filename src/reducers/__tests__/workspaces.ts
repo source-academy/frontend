@@ -465,7 +465,7 @@ describe('DEBUG_RESUME', () => {
 
 describe('END_CLEAR_CONTEXT', () => {
   test('sets context and globals correctly', () => {
-    const mockGlobals: Array<[string, any]> = [
+    const mockGlobals: [string, any][] = [
       ['testNumber', 3.141592653589793],
       ['testString', 'who dat boi'],
       ['testBooleanTrue', true],

@@ -161,7 +161,7 @@ const machineLearningLibrary = [
  * external symbols (exposed functions) are under them.
  */
 
-const libEntries: Array<[ExternalLibraryName, string[]]> = [
+const libEntries: [ExternalLibraryName, string[]][] = [
   [ExternalLibraryNames.NONE, []],
   [ExternalLibraryNames.RUNES, runesLibrary],
   [ExternalLibraryNames.CURVES, curvesLibrary],

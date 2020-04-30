@@ -168,11 +168,11 @@ export type Library = {
   chapter: number;
   variant?: Variant;
   external: ExternalLibrary;
-  globals: Array<{
+  globals: {
     0: string;
     1: any;
     2?: string; // For mission control
-  }>;
+  }[];
 };
 
 export type AutogradingResult = {

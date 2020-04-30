@@ -80,7 +80,7 @@ export class MCQQuestionTemplateTab extends React.Component<IProps, {}> {
   };
 
   private textareaContent = (
-    path: Array<string | number>,
+    path: (string | number)[],
     isNumber: boolean = false,
     range: number[] = [0]
   ) => {
