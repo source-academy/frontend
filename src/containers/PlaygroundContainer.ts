@@ -35,7 +35,7 @@ import {
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation,
-  WorkspaceLocations,
+  WorkspaceLocations
 } from '../actions';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import Playground, { IDispatchProps, IStateProps } from '../components/Playground';
@@ -101,8 +101,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(workspaceLocation, editorSessionId),
-      handleSendReplInputToOutput: (code : string) =>
-        sendReplInputToOutput(code, workspaceLocation),
+      handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(workspaceLocation, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
