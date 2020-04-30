@@ -24,7 +24,7 @@ export function ChapterSelect(props: ChapterSelectProps) {
     return {
       chapter: lang.chapter,
       variant: lang.variant,
-      displayName: styliseChapter(lang.chapter, lang.variant)
+      displayName: styliseChapter(lang.chapter, lang.variant),
     };
   });
 

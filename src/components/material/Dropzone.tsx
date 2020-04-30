@@ -27,23 +27,23 @@ const dropZoneStyle = {
     backgroundColor: '#fafafa',
     color: '#bdbdbd',
     outline: 'none',
-    transition: 'border .24s ease-in-out'
+    transition: 'border .24s ease-in-out',
   },
 
   activeStyle: {
-    borderColor: '#2196f3'
+    borderColor: '#2196f3',
   },
 
   acceptStyle: {
-    borderColor: '#00e676'
+    borderColor: '#00e676',
   },
 
   rejectStyle: {
-    borderColor: '#ff1744'
-  }
+    borderColor: '#ff1744',
+  },
 };
 
-const MaterialDropzone: React.FC<IDropzoneType> = props => {
+const MaterialDropzone: React.FC<IDropzoneType> = (props) => {
   const [file, setFile] = React.useState<File>();
   const [title, setTitle] = React.useState<string>();
   const [description, setDescription] = React.useState<string>('');
@@ -61,12 +61,12 @@ const MaterialDropzone: React.FC<IDropzoneType> = props => {
     isDragActive,
     isDragAccept,
     isDragReject,
-    isFocused
+    isFocused,
   } = useDropzone({
-    onDrop: acceptedFiles => {
+    onDrop: (acceptedFiles) => {
       setFile(acceptedFiles[0]);
       setTitle(acceptedFiles[0].name);
-    }
+    },
   });
   const style = React.useMemo(
     () => ({
@@ -74,7 +74,7 @@ const MaterialDropzone: React.FC<IDropzoneType> = props => {
       ...(isDragActive ? dropZoneStyle.activeStyle : {}),
       ...(isDragAccept ? dropZoneStyle.acceptStyle : {}),
       ...(isDragReject ? dropZoneStyle.rejectStyle : {}),
-      ...(isFocused ? dropZoneStyle.activeStyle : {})
+      ...(isFocused ? dropZoneStyle.activeStyle : {}),
     }),
     [isDragActive, isDragAccept, isDragReject, isFocused]
   );

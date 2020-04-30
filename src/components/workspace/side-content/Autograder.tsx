@@ -23,7 +23,7 @@ class Autograder extends React.Component<AutograderProps, State> {
 
     this.state = {
       showTestcases: true,
-      showResults: true
+      showResults: true,
     };
   }
 
@@ -98,7 +98,7 @@ class Autograder extends React.Component<AutograderProps, State> {
     const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
       controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
         minimal: true,
-        className: 'collapse-button'
+        className: 'collapse-button',
       });
 
     return (
@@ -114,13 +114,13 @@ class Autograder extends React.Component<AutograderProps, State> {
   private toggleTestcases = () =>
     this.setState({
       ...this.state,
-      showTestcases: !this.state.showTestcases
+      showTestcases: !this.state.showTestcases,
     });
 
   private toggleResults = () =>
     this.setState({
       ...this.state,
-      showResults: !this.state.showResults
+      showResults: !this.state.showResults,
     });
 }
 

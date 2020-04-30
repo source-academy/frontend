@@ -5,7 +5,7 @@ import {
   initInvite,
   invalidEditorSessionId,
   setEditorSessionId,
-  setWebsocketStatus
+  setWebsocketStatus,
 } from '../collabEditing';
 
 const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
@@ -16,8 +16,8 @@ test('finishInvite generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.FINISH_INVITE,
     payload: {
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -27,15 +27,15 @@ test('initInvte generates correct action object', () => {
     type: actionTypes.INIT_INVITE,
     payload: {
       editorValue: '// Collaboration Editing!!!',
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
 test('invalidEditorSessionId generates correct action object', () => {
   const action = invalidEditorSessionId();
   expect(action).toEqual({
-    type: actionTypes.INVALID_EDITOR_SESSION_ID
+    type: actionTypes.INVALID_EDITOR_SESSION_ID,
   });
 });
 
@@ -46,8 +46,8 @@ test('setEditorSessionId generates correct action object', () => {
     type: actionTypes.SET_EDITOR_SESSION_ID,
     payload: {
       workspaceLocation: gradingWorkspace,
-      editorSessionId
-    }
+      editorSessionId,
+    },
   });
 });
 
@@ -58,7 +58,7 @@ test('setWebsocketStatus generates correct action object', () => {
     type: actionTypes.SET_WEBSOCKET_STATUS,
     payload: {
       workspaceLocation: playgroundWorkspace,
-      websocketStatus
-    }
+      websocketStatus,
+    },
   });
 });

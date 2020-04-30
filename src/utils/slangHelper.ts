@@ -115,7 +115,7 @@ export const externalBuiltIns = {
   rawDisplay,
   prompt: cadetPrompt,
   alert: cadetAlert,
-  visualiseList
+  visualiseList,
 };
 
 /**
@@ -159,7 +159,7 @@ export function makeElevatedContext(context: Context) {
         return fakeFrame;
       }
       return target[prop];
-    }
+    },
   });
 
   const proxyEnvs = new Proxy(context.runtime.environments, {
@@ -168,7 +168,7 @@ export function makeElevatedContext(context: Context) {
         return proxyGlobalEnv;
       }
       return target[prop];
-    }
+    },
   });
 
   const proxyRuntime = new Proxy(context.runtime, {
@@ -177,7 +177,7 @@ export function makeElevatedContext(context: Context) {
         return proxyEnvs;
       }
       return target[prop];
-    }
+    },
   });
 
   const elevatedContext = new Proxy(context, {
@@ -190,7 +190,7 @@ export function makeElevatedContext(context: Context) {
         default:
           return target[prop];
       }
-    }
+    },
   });
 
   loadStandardLibraries(elevatedContext, externalBuiltIns);
@@ -216,7 +216,7 @@ export function getRestoreExtraMethodsString(removed: string[], unblockKey: stri
 
 export function getBlockExtraMethodsString(toRemove: String[]) {
   return toRemove
-    .map(x =>
+    .map((x) =>
       x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = makeUndefinedErrorFunction('${x}');`
     )
     .join('\n');

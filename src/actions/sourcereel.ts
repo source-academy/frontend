@@ -7,19 +7,19 @@ import { WorkspaceLocation } from './workspaces';
 export const deleteSourcecastEntry = (id: number, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.DELETE_SOURCECAST_ENTRY, {
     id,
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const recordInit = (initData: IPlaybackData['init'], workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.RECORD_INIT, {
     initData,
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const recordInput = (input: Input, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.RECORD_INPUT, {
     input,
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const saveSourcecastData = (
@@ -35,34 +35,34 @@ export const saveSourcecastData = (
     audio,
     audioUrl: window.URL.createObjectURL(audio),
     playbackData,
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const timerPause = (workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.TIMER_PAUSE, {
     timeNow: Date.now(),
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const timerReset = (workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.TIMER_RESET, {
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const timerResume = (workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.TIMER_RESUME, {
     timeNow: Date.now(),
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const timerStart = (workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.TIMER_START, {
     timeNow: Date.now(),
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const timerStop = (workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.TIMER_STOP, {
     timeNow: Date.now(),
-    workspaceLocation
+    workspaceLocation,
   });

@@ -4,7 +4,7 @@ import {
   Input,
   IPlaybackData,
   ISourcecastData,
-  PlaybackStatus
+  PlaybackStatus,
 } from '../../components/sourcecast/sourcecastShape';
 import * as actionTypes from '../actionTypes';
 import {
@@ -14,7 +14,7 @@ import {
   setSourcecastData,
   setSourcecastDuration,
   setSourcecastStatus,
-  updateSourcecastIndex
+  updateSourcecastIndex,
 } from '../sourcecast';
 import { WorkspaceLocation, WorkspaceLocations } from '../workspaces';
 
@@ -25,8 +25,8 @@ test('fetchSourcecastIndex generates correct action object', () => {
   expect(action).toEqual({
     type: actionTypes.FETCH_SOURCECAST_INDEX,
     payload: {
-      workspaceLocation: sourcecastWorkspace
-    }
+      workspaceLocation: sourcecastWorkspace,
+    },
   });
 });
 
@@ -35,23 +35,23 @@ test('setCodeDeltasToApply generates correct action object', () => {
     {
       start: {
         row: 0,
-        column: 1
+        column: 1,
       },
       end: {
         row: 0,
-        column: 2
+        column: 2,
       },
       action: 'insert',
-      lines: ['a']
-    }
+      lines: ['a'],
+    },
   ];
   const action = setCodeDeltasToApply(codeDeltas, sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.SET_CODE_DELTAS_TO_APPLY,
     payload: {
       deltas: codeDeltas,
-      workspaceLocation: sourcecastWorkspace
-    }
+      workspaceLocation: sourcecastWorkspace,
+    },
   });
 });
 
@@ -59,27 +59,27 @@ test('setInputToApply generates correct action object', () => {
   const codeDelta: ICodeDelta = {
     start: {
       row: 0,
-      column: 1
+      column: 1,
     },
     end: {
       row: 0,
-      column: 2
+      column: 2,
     },
     action: 'insert',
-    lines: ['a']
+    lines: ['a'],
   };
   const input: Input = {
     time: 1,
     type: 'codeDelta',
-    data: codeDelta
+    data: codeDelta,
   };
   const action = setInputToApply(input, sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.SET_INPUT_TO_APPLY,
     payload: {
       inputToApply: input,
-      workspaceLocation: sourcecastWorkspace
-    }
+      workspaceLocation: sourcecastWorkspace,
+    },
   });
 });
 
@@ -87,27 +87,27 @@ test('setSourcecastData generates correct action object', () => {
   const codeDelta: ICodeDelta = {
     start: {
       row: 0,
-      column: 1
+      column: 1,
     },
     end: {
       row: 0,
-      column: 2
+      column: 2,
     },
     action: 'insert',
-    lines: ['a']
+    lines: ['a'],
   };
   const input: Input = {
     time: 1,
     type: 'codeDelta',
-    data: codeDelta
+    data: codeDelta,
   };
   const playbackData: IPlaybackData = {
     init: {
       chapter: 1,
       externalLibrary: ExternalLibraryNames.NONE,
-      editorValue: ''
+      editorValue: '',
     },
-    inputs: [input]
+    inputs: [input],
   };
   const action = setSourcecastData(
     'Test Title',
@@ -123,8 +123,8 @@ test('setSourcecastData generates correct action object', () => {
       description: 'Test Description',
       audioUrl: 'fakeAudioUrl.com/audio.mp3',
       playbackData,
-      workspaceLocation: sourcecastWorkspace
-    }
+      workspaceLocation: sourcecastWorkspace,
+    },
   });
 });
 
@@ -133,7 +133,7 @@ test('setSourcecastDuration generates correct action object', () => {
   const action = setSourcecastDuration(duration, sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
-    payload: { duration, workspaceLocation: sourcecastWorkspace }
+    payload: { duration, workspaceLocation: sourcecastWorkspace },
   });
 });
 
@@ -142,7 +142,7 @@ test('setSourcecastStatus generates correct action object', () => {
   const action = setSourcecastStatus(status, sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,
-    payload: { playbackStatus: status, workspaceLocation: sourcecastWorkspace }
+    payload: { playbackStatus: status, workspaceLocation: sourcecastWorkspace },
   });
 });
 
@@ -156,13 +156,13 @@ test('updateSourcecastIndex generates correct action object', () => {
     id: 1,
     uploader: {
       id: 2,
-      name: 'Tester'
+      name: 'Tester',
     },
-    url: 'testurl.com'
+    url: 'testurl.com',
   };
   const action = updateSourcecastIndex([sourcecastData], sourcecastWorkspace);
   expect(action).toEqual({
     type: actionTypes.UPDATE_SOURCECAST_INDEX,
-    payload: { index: [sourcecastData], workspaceLocation: sourcecastWorkspace }
+    payload: { index: [sourcecastData], workspaceLocation: sourcecastWorkspace },
   });
 });

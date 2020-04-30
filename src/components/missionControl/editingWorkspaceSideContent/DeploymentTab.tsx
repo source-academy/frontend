@@ -242,10 +242,10 @@ const altEval = (str: string): any => {
   return Function('"use strict";return (' + str + ')')();
 };
 
-const chapters = sourceLanguages.map(lang => ({
+const chapters = sourceLanguages.map((lang) => ({
   chapter: lang.chapter,
   variant: lang.variant,
-  displayName: styliseChapter(lang.chapter, lang.variant)
+  displayName: styliseChapter(lang.chapter, lang.variant),
 }));
 
 const chapterSelect = (
@@ -277,7 +277,7 @@ const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers,
 const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
   name: entry[0] as ExternalLibraryName,
   key: index,
-  symbols: entry[1]
+  symbols: entry[1],
 }));
 
 const externalSelect = (

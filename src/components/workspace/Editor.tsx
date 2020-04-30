@@ -98,7 +98,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         }
         // console.log(pos); // Cursor col is insertion location i.e. last char col + 1
         this.props.handlePromptAutocomplete(pos.row + 1, pos.column, callback);
-      }
+      },
     };
   }
 
@@ -184,7 +184,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
         endRow: lineNum[1],
         endCol: 1,
         className: 'myMarker',
-        type: 'fullLine'
+        type: 'fullLine',
       });
     }
     return markerProps;
@@ -221,45 +221,45 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                 name: 'evaluate',
                 bindKey: {
                   win: 'Shift-Enter',
-                  mac: 'Shift-Enter'
+                  mac: 'Shift-Enter',
                 },
-                exec: this.props.handleEditorEval
+                exec: this.props.handleEditorEval,
               },
               {
                 name: 'navigate',
                 bindKey: {
                   win: 'Ctrl-B',
-                  mac: 'Command-B'
+                  mac: 'Command-B',
                 },
-                exec: this.handleNavigate
+                exec: this.handleNavigate,
               },
               {
                 name: 'refactor',
                 bindKey: {
                   win: 'Ctrl-M',
-                  mac: 'Command-M'
+                  mac: 'Command-M',
                 },
-                exec: this.handleRefactor
+                exec: this.handleRefactor,
               },
               {
                 name: 'highlightScope',
                 bindKey: {
                   win: 'Ctrl-Shift-H',
-                  mac: 'Command-Shift-H'
+                  mac: 'Command-Shift-H',
                 },
-                exec: this.handleHighlightScope
+                exec: this.handleHighlightScope,
               },
               {
                 name: 'TypeInferenceDisplay',
                 bindKey: {
                   win: 'Ctrl-Shift-M',
-                  mac: 'Command-Shift-M'
+                  mac: 'Command-Shift-M',
                 },
-                exec: this.handleTypeInferenceDisplay
-              }
+                exec: this.handleTypeInferenceDisplay,
+              },
             ]}
             editorProps={{
-              $blockScrolling: Infinity
+              $blockScrolling: Infinity,
             }}
             ref={this.AceEditor}
             markers={this.getMarkers()}
@@ -276,7 +276,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             setOptions={{
               enableBasicAutocompletion: true,
               enableLiveAutocompletion: true,
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
+              fontFamily: "'Inconsolata', 'Consolas', monospace",
             }}
           />
         </div>
@@ -339,14 +339,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     const sourceLocations = getAllOccurrencesInScope(code, createContext(chapter), {
       line: position.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
-      column: position.column
+      column: position.column,
     });
 
     const selection = editor.getSelection();
     const ranges = sourceLocations.map(
-      loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
+      (loc) => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
     );
-    ranges.forEach(range => selection.addRange(range));
+    ranges.forEach((range) => selection.addRange(range));
   };
 
   private handleHighlightScope = () => {
@@ -360,11 +360,11 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     const ranges = getScope(code, createContext(chapter), {
       line: position.row + 1,
-      column: position.column
+      column: position.column,
     });
 
     if (ranges.length !== 0) {
-      ranges.map(range => {
+      ranges.map((range) => {
         // Highlight the scope ranges
         this.markerIds.push(
           editor.session.addMarker(
@@ -395,18 +395,19 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       if (!session || !session.bgTokenizer) {
         return;
       }
-      this.markerIds.forEach(id => {
+      this.markerIds.forEach((id) => {
         session.removeMarker(id);
       });
       const ranges = getAllOccurrencesInScope(code, createContext(chapterNumber), {
         line: position.row + 1,
-        column: position.column
+        column: position.column,
       }).map(
-        loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
+        (loc) =>
+          new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
       );
 
       const markerType = 'ace_variable_highlighting';
-      const markerIds = ranges.map(range => {
+      const markerIds = ranges.map((range) => {
         // returns the marker ID for removal later
         return session.addMarker(range, markerType, 'text');
       });
@@ -426,8 +427,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const commentEveryLine = (str: string) => {
       const arr = str.split('\n');
       return arr
-        .filter(st => st !== '')
-        .map(st => '// ' + st)
+        .filter((st) => st !== '')
+        .map((st) => '// ' + st)
         .join('\n');
     };
 
@@ -504,7 +505,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const ShareAce = new sharedbAce(this.props.editorSessionId!, {
       WsUrl: 'wss://' + LINKS.SHAREDB_SERVER + 'ws/',
       pluginWsUrl: null,
-      namespace: 'codepad'
+      namespace: 'codepad',
     });
     this.ShareAce = ShareAce;
     ShareAce.on('ready', () => {
@@ -557,7 +558,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
-  goGreen: () => {}
+  goGreen: () => {},
 };
 
 export default Editor;

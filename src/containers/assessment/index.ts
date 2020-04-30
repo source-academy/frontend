@@ -5,7 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import {
   acknowledgeNotifications,
   fetchAssessmentOverviews,
-  submitAssessment
+  submitAssessment,
 } from '../../actions/session';
 import Assessment, { IDispatchProps, IOwnProps, IStateProps } from '../../components/assessment';
 import { IAssessmentOverview } from '../../components/assessment/assessmentShape';
@@ -18,7 +18,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state,
     assessmentOverviews: state.session.assessmentOverviews
       ? state.session.assessmentOverviews.filter(categoryFilter)
       : undefined,
-    isStudent: state.session.role ? state.session.role === Role.Student : true
+    isStudent: state.session.role ? state.session.role === Role.Student : true,
   };
   return stateProps;
 };
@@ -28,14 +28,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     {
       handleAcknowledgeNotifications: acknowledgeNotifications,
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
-      handleSubmitAssessment: submitAssessment
+      handleSubmitAssessment: submitAssessment,
     },
     dispatch
   );
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Assessment)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Assessment));

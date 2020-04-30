@@ -37,7 +37,7 @@ class ToneMatrix extends React.Component<{}, {}> {
           </div>
         </div>
         <div className="row">
-          <div className="col-xs-12" ref={r => (this.$container = r)} />
+          <div className="col-xs-12" ref={(r) => (this.$container = r)} />
         </div>
       </div>
     );

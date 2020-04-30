@@ -9,7 +9,7 @@ test('Dropdown does not mount Profile component when a user is not logged in', (
     handleLogOut: () => {},
     isAboutOpen: false,
     isHelpOpen: false,
-    isProfileOpen: false
+    isProfileOpen: false,
   };
   const app = <Dropdown {...props} />;
   const tree = shallow(app);
@@ -24,7 +24,7 @@ test('Dropdown correctly mounts Profile component when a user is logged in', () 
     isAboutOpen: false,
     isHelpOpen: false,
     isProfileOpen: false,
-    name: 'Some user'
+    name: 'Some user',
   };
   const app = <Dropdown {...props} />;
   const tree = shallow(app);

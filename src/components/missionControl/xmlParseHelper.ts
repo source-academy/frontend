@@ -12,7 +12,7 @@ import {
   ITestcase,
   Library,
   MCQChoice,
-  TestcaseTypes
+  TestcaseTypes,
 } from '../assessment/assessmentShape';
 import {
   IXmlParseStrCProblem,
@@ -22,7 +22,7 @@ import {
   IXmlParseStrProblem,
   IXmlParseStrProblemChoice,
   IXmlParseStrTask,
-  IXmlParseStrTestcase
+  IXmlParseStrTestcase,
 } from './xmlParseStrShapes';
 
 const editingId = -1;
@@ -86,7 +86,7 @@ const makeAssessmentOverview = (
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
     xp: 0,
-    gradingStatus: 'none' as GradingStatuses
+    gradingStatus: 'none' as GradingStatuses,
   };
 };
 
@@ -103,10 +103,10 @@ const makeAssessment = (result: any): [IAssessment, number, number] => {
       longSummary: task.TEXT[0],
       missionPDF: 'google.com',
       questions: questionArr[0],
-      title: rawOverview.title
+      title: rawOverview.title,
     },
     questionArr[1],
-    questionArr[2]
+    questionArr[2],
   ];
 };
 
@@ -120,9 +120,9 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
       chapter: -1,
       external: {
         name: 'NONE' as ExternalLibraryName,
-        symbols: []
+        symbols: [],
       },
-      globals: []
+      globals: [],
     };
   } else {
     const deployment = deploymentArr[0];
@@ -130,15 +130,19 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
     const nameVal = external ? external[0].$.name : 'NONE';
     const symbolsVal = external ? external[0].SYMBOL || [] : [];
     const globalsVal = deployment.GLOBAL
-      ? (deployment.GLOBAL.map(x => [x.IDENTIFIER[0], altEval(x.VALUE[0]), x.VALUE[0]]) as [string, any, string][])
+      ? (deployment.GLOBAL.map((x) => [x.IDENTIFIER[0], altEval(x.VALUE[0]), x.VALUE[0]]) as [
+          string,
+          any,
+          string
+        ][])
       : [];
     return {
       chapter: parseInt(deployment.$.interpreter, 10),
       external: {
         name: nameVal as ExternalLibraryName,
-        symbols: symbolsVal
+        symbols: symbolsVal,
       },
-      globals: globalsVal
+      globals: globalsVal,
     };
   }
 };
@@ -160,7 +164,7 @@ const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] =>
       xp: 0,
       grade: 0,
       maxGrade: parseInt(problem.$.maxgrade, 10),
-      maxXp: localMaxXp
+      maxXp: localMaxXp,
     };
     maxGrade += parseInt(problem.$.maxgrade, 10);
     maxXp += localMaxXp;
@@ -181,7 +185,7 @@ const makeMCQ = (problem: IXmlParseStrCProblem, question: IQuestion): IMCQQuesti
   problem.CHOICE.forEach((choice: IXmlParseStrProblemChoice, i: number) => {
     choicesVal.push({
       content: choice.TEXT[0],
-      hint: null
+      hint: null,
     });
     solutionVal = choice.$.correct === 'true' ? i : solutionVal;
   });
@@ -190,7 +194,7 @@ const makeMCQ = (problem: IXmlParseStrCProblem, question: IQuestion): IMCQQuesti
     type: 'mcq',
     answer: solution ? parseInt(solution[0], 10) : 0,
     choices: choicesVal,
-    solution: solutionVal
+    solution: solutionVal,
   };
 };
 
@@ -211,10 +215,10 @@ const makeProgramming = (
     prepend: prepend ? (prepend[0] as string).trim() : '',
     solutionTemplate: problem.SNIPPET[0].TEMPLATE[0].trim() as string,
     postpend: postpend ? (postpend[0] as string).trim() : '',
-    testcases: publicTestcases.map(testcase => makeTestcase(testcase)),
-    testcasesPrivate: privateTestcases.map(testcase => makeTestcase(testcase)),
+    testcases: publicTestcases.map((testcase) => makeTestcase(testcase)),
+    testcasesPrivate: privateTestcases.map((testcase) => makeTestcase(testcase)),
     answer: solution ? (solution[0] as string).trim() : '',
-    type: 'programming'
+    type: 'programming',
   };
   if (problem.SNIPPET[0].GRADER) {
     result.graderTemplate = problem.SNIPPET[0].GRADER[0];
@@ -227,7 +231,7 @@ const makeTestcase = (testcase: IXmlParseStrTestcase): ITestcase => {
     type: TestcaseTypes.public,
     answer: testcase.$.answer,
     score: parseInt(testcase.$.score, 10),
-    program: testcase._
+    program: testcase._,
   };
 };
 
@@ -243,10 +247,10 @@ export const exportXml = () => {
     const xml = {
       CONTENT: {
         $: {
-          'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance'
+          'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
         },
-        TASK: xmlTask
-      }
+        TASK: xmlTask,
+      },
     };
     let xmlStr = builder.buildObject(xml);
     xmlStr = xmlStr.replace(/(&#xD;)+/g, '');
@@ -270,13 +274,13 @@ const download = (filename: string, text: string) => {
 const exportLibrary = (library: Library) => {
   const deployment = {
     $: {
-      interpreter: library.chapter.toString()
+      interpreter: library.chapter.toString(),
     },
     EXTERNAL: {
       $: {
-        name: library.external.name
-      }
-    }
+        name: library.external.name,
+      },
+    },
   };
 
   if (library.external.symbols.length !== 0) {
@@ -285,10 +289,10 @@ const exportLibrary = (library: Library) => {
   }
   if (library.globals.length !== 0) {
     /* tslint:disable:no-string-literal */
-    deployment['GLOBAL'] = library.globals.map(x => {
+    deployment['GLOBAL'] = library.globals.map((x) => {
       return {
         IDENTIFIER: x[0],
-        VALUE: x[2]
+        VALUE: x[2],
       };
     });
   }
@@ -307,7 +311,7 @@ export const assessmentToXml = (
     number: overview.number || '',
     startdate: overview.openAt,
     story: overview.story,
-    title: overview.title
+    title: overview.title,
   };
   task.$ = rawOverview;
 
@@ -329,13 +333,13 @@ export const assessmentToXml = (
     const problem = {
       $: {
         type: question.type,
-        maxgrade: question.maxGrade
+        maxgrade: question.maxGrade,
       },
       SNIPPET: {
-        SOLUTION: question.answer
+        SOLUTION: question.answer,
       },
       TEXT: question.content,
-      CHOICE: [] as any[]
+      CHOICE: [] as any[],
     };
 
     if (question.library.chapter !== -1) {
@@ -363,33 +367,33 @@ export const assessmentToXml = (
         TEMPLATE: question.solutionTemplate,
         PREPEND: question.prepend,
         POSTPEND: question.postpend,
-        TESTCASES: '' as any
+        TESTCASES: '' as any,
       };
 
       if (question.testcases.length || question.testcasesPrivate!.length) {
         /* tslint:disable:no-string-literal */
         snippet.TESTCASES = {};
         if (question.testcases.length) {
-          const publicTests = question.testcases.map(testcase => {
+          const publicTests = question.testcases.map((testcase) => {
             return {
               $: {
                 answer: testcase.answer,
-                score: testcase.score
+                score: testcase.score,
               },
-              _: testcase.program
+              _: testcase.program,
             };
           });
           snippet.TESTCASES['PUBLIC'] = publicTests;
         }
 
         if (question.testcasesPrivate && question.testcasesPrivate.length) {
-          const privateTests = question.testcasesPrivate.map(testcase => {
+          const privateTests = question.testcasesPrivate.map((testcase) => {
             return {
               $: {
                 answer: testcase.answer,
-                score: testcase.score
+                score: testcase.score,
               },
-              _: testcase.program
+              _: testcase.program,
             };
           });
           snippet.TESTCASES['PRIVATE'] = privateTests;
@@ -403,9 +407,9 @@ export const assessmentToXml = (
       question.choices.forEach((choice: MCQChoice, i: number) => {
         problem.CHOICE.push({
           $: {
-            correct: question.solution === i ? 'true' : 'false'
+            correct: question.solution === i ? 'true' : 'false',
           },
-          TEXT: choice.content
+          TEXT: choice.content,
         });
       });
     }

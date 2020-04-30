@@ -25,17 +25,17 @@ import {
   updateHasUnsavedChanges,
   updateReplValue,
   WorkspaceLocation,
-  WorkspaceLocations
+  WorkspaceLocations,
 } from '../../../actions';
 import {
   beginClearContext,
   resetWorkspace,
-  updateCurrentSubmissionId
+  updateCurrentSubmissionId,
 } from '../../../actions/workspaces';
 import GradingWorkspace, {
   DispatchProps,
   OwnProps,
-  StateProps
+  StateProps,
 } from '../../../components/academy/grading/GradingWorkspace';
 import { Library } from '../../../components/assessment/assessmentShape';
 import { IPosition } from '../../../components/workspace/Editor';
@@ -64,7 +64,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     replValue: state.workspaces.grading.replValue,
     sideContentHeight: state.workspaces.grading.sideContentHeight,
     storedSubmissionId: state.workspaces.grading.currentSubmission,
-    storedQuestionId: state.workspaces.grading.currentQuestion
+    storedQuestionId: state.workspaces.grading.currentQuestion,
   };
 };
 
@@ -104,12 +104,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback)
+        promptAutocomplete(workspaceLocation, row, col, callback),
     },
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GradingWorkspace);
+export default connect(mapStateToProps, mapDispatchToProps)(GradingWorkspace);

@@ -6,7 +6,7 @@ import { Notification } from '../components/notification/notificationShape';
 export enum Roles {
   student = 'student',
   trainer = 'trainer',
-  admin = 'admin'
+  admin = 'admin',
 }
 export type Role = keyof typeof Roles;
 
@@ -34,12 +34,12 @@ export type StudentInfo = {
 const mockStudentInfo = [
   {
     id: 0,
-    totalXP: 69
+    totalXP: 69,
   },
   {
     id: 1,
-    totalXP: 1000
-  }
+    totalXP: 1000,
+  },
 ];
 
 /**
@@ -65,48 +65,48 @@ export const mockNotifications: Notification[] = [
     type: 'new',
     assessment_id: 2,
     assessment_type: 'Mission',
-    assessment_title: 'The Secret to Streams'
+    assessment_title: 'The Secret to Streams',
   },
   {
     id: 2,
     type: 'new',
     assessment_id: 3,
     assessment_type: 'Sidequest',
-    assessment_title: 'A sample Sidequest'
+    assessment_title: 'A sample Sidequest',
   },
   {
     id: 3,
     type: 'autograded',
     assessment_id: 4,
     assessment_type: 'Mission',
-    assessment_title: 'A Closed Mission'
+    assessment_title: 'A Closed Mission',
   },
   {
     id: 4,
     type: 'graded',
     assessment_id: 4,
     assessment_type: 'Mission',
-    assessment_title: 'A Closed Mission'
+    assessment_title: 'A Closed Mission',
   },
   {
     id: 5,
     type: 'submitted',
     submission_id: 1,
     assessment_type: 'Mission',
-    assessment_title: 'Mission 0'
+    assessment_title: 'Mission 0',
   },
   {
     id: 6,
     type: 'submitted',
     submission_id: 2,
     assessment_type: 'Mission',
-    assessment_title: 'Mission 1'
+    assessment_title: 'Mission 1',
   },
   {
     id: 7,
     type: 'submitted',
     submission_id: 3,
     assessment_type: 'Mission',
-    assessment_title: 'Mission 0'
-  }
+    assessment_title: 'Mission 0',
+  },
 ];

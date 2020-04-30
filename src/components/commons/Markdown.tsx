@@ -12,13 +12,13 @@ type MarkdownProps = {
   tasklists?: boolean;
 };
 
-const Markdown: React.SFC<MarkdownProps> = props => {
+const Markdown: React.SFC<MarkdownProps> = (props) => {
   const converter = new Converter({
     tables: true,
     simplifiedAutoLink: props.simplifiedAutoLink,
     strikethrough: props.strikethrough,
     tasklists: props.tasklists,
-    openLinksInNewWindow: props.openLinksInNewWindow
+    openLinksInNewWindow: props.openLinksInNewWindow,
   });
 
   return (

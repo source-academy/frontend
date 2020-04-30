@@ -7,10 +7,10 @@ const mockShortDefaultState: ISavedState = {
     accessToken: defaultState.session.accessToken,
     refreshToken: defaultState.session.refreshToken,
     role: defaultState.session.role,
-    name: defaultState.session.name
+    name: defaultState.session.name,
   },
   playgroundEditorValue: defaultState.workspaces.playground.editorValue,
-  playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun
+  playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun,
 };
 
 describe('loadStoredState() function', () => {

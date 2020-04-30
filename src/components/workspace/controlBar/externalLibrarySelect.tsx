@@ -27,7 +27,7 @@ export function ExternalLibrarySelect(props: ExternalLibrarySelectProps) {
   const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
     name: entry[0] as ExternalLibraryName,
     key: index,
-    symbols: entry[1]
+    symbols: entry[1],
   }));
 
   const ExternalSelectComponent = Select.ofType<IExternal>();

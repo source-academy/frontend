@@ -14,7 +14,7 @@ import {
   IQuestion,
   ITestcase,
   Library,
-  QuestionTypes
+  QuestionTypes,
 } from '../../assessment/assessmentShape';
 import Markdown from '../../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../../workspace';
@@ -25,7 +25,7 @@ import {
   NextButton,
   PreviousButton,
   QuestionView,
-  RunButton
+  RunButton,
 } from '../../workspace/controlBar/index';
 import { IPosition } from '../../workspace/Editor';
 import { SideContentProps, SideContentTab } from '../../workspace/side-content';
@@ -181,7 +181,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
               newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
+              isEditorAutorun: false,
             }
           : undefined,
       editorHeight: this.props.editorHeight,
@@ -191,7 +191,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcqProps: {
         mcq: question as IMCQQuestion,
-        handleMCQSubmit: (i: number) => {}
+        handleMCQSubmit: (i: number) => {},
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -201,8 +201,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
         output: this.props.output,
-        replValue: this.props.replValue
-      }
+        replValue: this.props.replValue,
+      },
     };
     return (
       <div className={classNames('WorkspaceParent', Classes.DARK)}>
@@ -253,7 +253,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorPrepend,
       editorValue,
       editorPostpend,
-      editorTestcases
+      editorTestcases,
     });
     props.handleClearContext(question.library);
     props.handleUpdateHasUnsavedChanges(false);
@@ -297,13 +297,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             }
           />
         ),
-        id: SideContentType.grading
+        id: SideContentType.grading,
       },
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
-        id: SideContentType.questionOverview
+        id: SideContentType.questionOverview,
       },
       {
         label: `Chat`,
@@ -317,7 +317,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           <span>Chatkit disabled.</span>
         ),
         id: SideContentType.chat,
-        disabled: !USE_CHATKIT
+        disabled: !USE_CHATKIT,
       },
       {
         label: `Autograder`,
@@ -329,8 +329,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
-        id: SideContentType.autograder
-      }
+        id: SideContentType.autograder,
+      },
     ];
 
     const functionsAttached = props.grading![questionId].question.library.external.symbols;
@@ -339,13 +339,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <ToneMatrix />,
-        id: SideContentType.toneMatrix
+        id: SideContentType.toneMatrix,
       });
     }
 
     const sideContentProps: SideContentProps = {
       handleActiveTabChange: props.handleActiveTabChange,
-      tabs
+      tabs,
     };
 
     return sideContentProps;
@@ -399,7 +399,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     return {
       editorButtons: [runButton],
       flowButtons: [previousButton, questionView, nextButton],
-      replButtons: [evalButton, clearButton]
+      replButtons: [evalButton, clearButton],
     };
   };
 }

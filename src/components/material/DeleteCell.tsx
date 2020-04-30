@@ -19,7 +19,7 @@ class DeleteCell extends React.Component<IDeleteCellProps, IDeleteCellState> {
   public constructor(props: IDeleteCellProps) {
     super(props);
     this.state = {
-      dialogOpen: false
+      dialogOpen: false,
     };
   }
 

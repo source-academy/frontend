@@ -5,7 +5,7 @@ import ContentDisplay, { IContentDisplayProps } from '../ContentDisplay';
 
 const mockProps: IContentDisplayProps = {
   display: <div> Test Content </div>,
-  loadContentDispatch: () => {}
+  loadContentDispatch: () => {},
 };
 
 test('ContentDisplay page renders correctly', () => {

@@ -54,7 +54,7 @@ const SubstDefaultText = () => {
 
 const substKeyMap = {
   FIRST_STEP: ',',
-  LAST_STEP: '.'
+  LAST_STEP: '.',
 };
 
 const SubstCodeDisplay = (props: { content: string }) => {
@@ -69,7 +69,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
   constructor(props: ISubstVisualizerProps) {
     super(props);
     this.state = {
-      value: 1
+      value: 1,
     };
 
     // set source mode as 2
@@ -84,11 +84,11 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     const substHandlers = hasRunCode
       ? {
           FIRST_STEP: this.stepFirst,
-          LAST_STEP: this.stepLast(lastStepValue)
+          LAST_STEP: this.stepLast(lastStepValue),
         }
       : {
           FIRST_STEP: () => {},
-          LAST_STEP: () => {}
+          LAST_STEP: () => {},
         };
 
     return (
@@ -118,7 +118,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
                 value={this.getText(this.state.value)}
                 markers={this.getDiffMarkers(this.state.value)}
                 setOptions={{
-                  fontFamily: "'Inconsolata', 'Consolas', monospace"
+                  fontFamily: "'Inconsolata', 'Consolas', monospace",
                 }}
               />
             ) : (
@@ -168,7 +168,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
           endRow: endR,
           endCol: endC,
           className: value % 2 === 0 ? 'beforeMarker' : 'afterMarker',
-          type: 'background'
+          type: 'background',
         });
 
         text = text + redex + mainprog[i + 1];

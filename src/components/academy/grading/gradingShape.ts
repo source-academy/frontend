@@ -5,7 +5,7 @@ import {
   GradingStatus,
   IQuestion,
   ITestcase,
-  MCQChoice
+  MCQChoice,
 } from '../../assessment/assessmentShape';
 
 /**

@@ -43,7 +43,7 @@ export class MCQQuestionTemplateTab extends React.Component<IProps, {}> {
             Solution:
             {this.textareaContent(['questions', questionId, 'solution'], true, [
               0,
-              question.choices.length
+              question.choices.length,
             ])}
             <br />
             {controlButton('Add Option', IconNames.CONFIRM, this.addOption)}
@@ -61,8 +61,8 @@ export class MCQQuestionTemplateTab extends React.Component<IProps, {}> {
     const choices = question.choices.concat([
       {
         content: 'A',
-        hint: null
-      }
+        hint: null,
+      },
     ]);
     question.choices = choices;
     assessment!.questions[questionId] = question;

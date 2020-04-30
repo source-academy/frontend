@@ -9,7 +9,7 @@ import {
   Input,
   IPlaybackData,
   ISourcecastData,
-  PlaybackStatus
+  PlaybackStatus,
 } from './sourcecastShape';
 
 class SourcecastControlbar extends React.PureComponent<
@@ -26,7 +26,7 @@ class SourcecastControlbar extends React.PureComponent<
       currentPlayerTime: 0,
       currentPlayerProgress: 0,
       currentSourcecastItem: null,
-      duration: 0
+      duration: 0,
     };
   }
 
@@ -91,14 +91,14 @@ class SourcecastControlbar extends React.PureComponent<
   private stopPreviousPlaybackAndApplyFromStart = (playbackData: IPlaybackData) => {
     this.setState(
       {
-        currentDeltaRevision: this.state.currentDeltaRevision + 1
+        currentDeltaRevision: this.state.currentDeltaRevision + 1,
       },
       () => this.applyPlaybackDataFromStart(playbackData)
     );
   };
 
   private applyPlaybackDataFromStart = async (playbackData: IPlaybackData) => {
-    const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
     const currentRevision = this.state.currentDeltaRevision;
     let currentTime = this.audio.current!.currentTime * 1000;
     this.props.handleEditorValueChange(playbackData.init.editorValue);
@@ -106,13 +106,13 @@ class SourcecastControlbar extends React.PureComponent<
     this.props.handleChapterSelect(playbackData.init.chapter);
     const codeDeltasToApply = playbackData.inputs
       .filter(
-        deltaWithTime => deltaWithTime.time <= currentTime && deltaWithTime.type === 'codeDelta'
+        (deltaWithTime) => deltaWithTime.time <= currentTime && deltaWithTime.type === 'codeDelta'
       )
-      .map(deltaWithTime => deltaWithTime.data as ICodeDelta);
+      .map((deltaWithTime) => deltaWithTime.data as ICodeDelta);
     this.applyDeltas(codeDeltasToApply);
 
     const futureData = playbackData.inputs.filter(
-      deltaWithTime => deltaWithTime.time > currentTime
+      (deltaWithTime) => deltaWithTime.time > currentTime
     );
     const len = futureData.length;
     let i = 0;
@@ -129,7 +129,7 @@ class SourcecastControlbar extends React.PureComponent<
 
   private stopCurrentPlayback() {
     this.setState({
-      currentDeltaRevision: this.state.currentDeltaRevision + 1
+      currentDeltaRevision: this.state.currentDeltaRevision + 1,
     });
   }
 
@@ -154,15 +154,15 @@ class SourcecastControlbar extends React.PureComponent<
     this.props.handleSetSourcecastStatus(PlaybackStatus.paused);
     this.setState({
       currentPlayerTime: 0,
-      currentPlayerProgress: 0
+      currentPlayerProgress: 0,
     });
   };
 
-  private updatePlayerTime: React.ReactEventHandler<HTMLAudioElement> = e => {
+  private updatePlayerTime: React.ReactEventHandler<HTMLAudioElement> = (e) => {
     const { currentTime }: { currentTime: number } = e.target as HTMLMediaElement;
     this.setState({
       currentPlayerTime: currentTime,
-      currentPlayerProgress: currentTime / this.props.duration
+      currentPlayerProgress: currentTime / this.props.duration,
     });
   };
 
@@ -172,7 +172,7 @@ class SourcecastControlbar extends React.PureComponent<
       this.audio.current.currentTime = currentTime;
       this.setState({
         currentPlayerTime: currentTime,
-        currentPlayerProgress: value
+        currentPlayerProgress: value,
       });
     }
   };

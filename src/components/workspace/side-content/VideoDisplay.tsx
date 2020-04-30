@@ -18,7 +18,7 @@ class VideoDisplay extends React.Component<{}, VideoDisplayState> {
     this.state = {
       width: (window as any)._WIDTH,
       height: (window as any)._HEIGHT,
-      mode: 'video' as VideoDisplayMode
+      mode: 'video' as VideoDisplayMode,
     };
     this.handleWidthChange = this.handleWidthChange.bind(this);
     this.handleHeightChange = this.handleHeightChange.bind(this);
@@ -44,7 +44,7 @@ class VideoDisplay extends React.Component<{}, VideoDisplayState> {
     if (n > 0) {
       this.setState({
         width: n,
-        height: this.state.height
+        height: this.state.height,
       });
       this.handleUpdateDimensions(n, this.state.height);
     }
@@ -53,7 +53,7 @@ class VideoDisplay extends React.Component<{}, VideoDisplayState> {
     if (m > 0) {
       this.setState({
         width: this.state.width,
-        height: m
+        height: m,
       });
       this.handleUpdateDimensions(this.state.width, m);
     }
@@ -64,7 +64,7 @@ class VideoDisplay extends React.Component<{}, VideoDisplayState> {
   // UI can be improved
   public render() {
     const hideVideo = {
-      display: 'none'
+      display: 'none',
     };
 
     const videoIsActive = this.state.mode === ('video' as VideoDisplayMode);
@@ -123,14 +123,14 @@ class VideoDisplay extends React.Component<{}, VideoDisplayState> {
         </div>
         <div className="sa-video-element">
           <video
-            ref={r => (this.$video = r)}
+            ref={(r) => (this.$video = r)}
             style={hideVideo}
             autoPlay={true}
             width={(window as any)._WIDTH}
             height={(window as any)._HEIGHT}
           />
           <canvas
-            ref={r => (this.$canvas = r)}
+            ref={(r) => (this.$canvas = r)}
             width={(window as any)._WIDTH}
             height={(window as any)._HEIGHT}
           />

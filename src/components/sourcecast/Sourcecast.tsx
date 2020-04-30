@@ -12,7 +12,7 @@ import {
   ChapterSelect,
   ClearButton,
   EvalButton,
-  ExternalLibrarySelect
+  ExternalLibrarySelect,
 } from '../workspace/controlBar/index';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
@@ -26,7 +26,7 @@ import {
   IPlaybackData,
   IPosition,
   ISourcecastData,
-  PlaybackStatus
+  PlaybackStatus,
 } from './sourcecastShape';
 import SourcecastTable from './SourcecastTable';
 
@@ -184,12 +184,12 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       breakpoints: this.props.breakpoints,
       highlightedLines: this.props.highlightedLines,
       newCursorPosition: this.props.newCursorPosition,
-      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
+      handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
     };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
-        replButtons: [evalButton, clearButton]
+        replButtons: [evalButton, clearButton],
       },
       customEditor: <SourcecastEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
@@ -203,7 +203,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        handleReplValueChange: this.props.handleReplValueChange,
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
@@ -228,13 +228,13 @@ class Sourcecast extends React.Component<ISourcecastProps> {
                 />
               </div>
             ),
-            id: SideContentType.introduction
+            id: SideContentType.introduction,
           },
           listVisualizerTab,
           inspectorTab,
-          envVisualizerTab
-        ]
-      }
+          envVisualizerTab,
+        ],
+      },
     };
     const sourcecastControlbarProps: ISourcecastControlbarProps = {
       handleEditorValueChange: this.props.handleEditorValueChange,
@@ -249,7 +249,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       playbackData: this.props.playbackData,
       playbackStatus: this.props.playbackStatus,
       handleChapterSelect: this.props.handleChapterSelect,
-      handleExternalSelect: this.props.handleExternalSelect
+      handleExternalSelect: this.props.handleExternalSelect,
     };
     return (
       <div className={classNames('Sourcecast', Classes.DARK)}>
@@ -266,21 +266,21 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <ListVisualizer />,
-  id: SideContentType.dataVisualiser
+  id: SideContentType.dataVisualiser,
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <Inspector />,
-  id: SideContentType.inspector
+  id: SideContentType.inspector,
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
-  id: SideContentType.envVisualiser
+  id: SideContentType.envVisualiser,
 };
 
 export default Sourcecast;

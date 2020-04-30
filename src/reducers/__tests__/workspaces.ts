@@ -36,14 +36,14 @@ import {
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
-  UPDATE_REPL_VALUE
+  UPDATE_REPL_VALUE,
 } from '../../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../actions/workspaces';
 import {
   ExternalLibraryName,
   ITestcase,
   Library,
-  TestcaseTypes
+  TestcaseTypes,
 } from '../../components/assessment/assessmentShape';
 import { createContext } from '../../utils/slangHelper';
 import {
@@ -55,7 +55,7 @@ import {
   IWorkspaceManagerState,
   maxBrowseIndex,
   RunningOutput,
-  SideContentType
+  SideContentType,
 } from '../states';
 import { reducer } from '../workspaces';
 
@@ -71,37 +71,37 @@ function generateActions(type: string, payload: any = {}): any[] {
       type,
       payload: {
         ...payload,
-        workspaceLocation: assessmentWorkspace
-      }
+        workspaceLocation: assessmentWorkspace,
+      },
     },
     {
       type,
       payload: {
         ...payload,
-        workspaceLocation: gradingWorkspace
-      }
+        workspaceLocation: gradingWorkspace,
+      },
     },
     {
       type,
       payload: {
         ...payload,
-        workspaceLocation: playgroundWorkspace
-      }
+        workspaceLocation: playgroundWorkspace,
+      },
     },
     {
       type,
       payload: {
         ...payload,
-        workspaceLocation: sourcecastWorkspace
-      }
+        workspaceLocation: sourcecastWorkspace,
+      },
     },
     {
       type,
       payload: {
         ...payload,
-        workspaceLocation: sourcereelWorkspace
-      }
-    }
+        workspaceLocation: sourcereelWorkspace,
+      },
+    },
   ];
 }
 
@@ -109,24 +109,24 @@ function generateDefaultWorkspace(payload: any = {}): IWorkspaceManagerState {
   return {
     assessment: {
       ...defaultWorkspaceManager.assessment,
-      ...payload
+      ...payload,
     },
     grading: {
       ...defaultWorkspaceManager.grading,
-      ...payload
+      ...payload,
     },
     playground: {
       ...defaultWorkspaceManager.playground,
-      ...payload
+      ...payload,
     },
     sourcecast: {
       ...defaultWorkspaceManager.sourcecast,
-      ...payload
+      ...payload,
     },
     sourcereel: {
       ...defaultWorkspaceManager.sourcereel,
-      ...payload
-    }
+      ...payload,
+    },
   };
 }
 
@@ -138,13 +138,13 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
     const replHistory = {
       browseIndex: 1,
       records,
-      originalValue
+      originalValue,
     };
 
     const replDownDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replHistory });
     const actions = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       let result = reducer(replDownDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -154,9 +154,9 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
           replValue: replHistory.records[0],
           replHistory: {
             ...replHistory,
-            browseIndex: 0
-          }
-        }
+            browseIndex: 0,
+          },
+        },
       });
 
       // no earlier records left, should set replValue to last value before browsing
@@ -169,9 +169,9 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
           replHistory: {
             browseIndex: null,
             records,
-            originalValue: ''
-          }
-        }
+            originalValue: '',
+          },
+        },
       });
     });
   });
@@ -182,13 +182,13 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
     const replHistory = {
       browseIndex: null,
       records,
-      originalValue
+      originalValue,
     };
 
     const replDownDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replHistory });
     const actions = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(replDownDefaultState, action);
       expect(result).toEqual(replDownDefaultState);
     });
@@ -202,16 +202,16 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
 
     const replHistory = {
       browseIndex: null,
-      records
+      records,
     };
 
     const replUpDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
       replHistory,
-      replValue
+      replValue,
     });
     const actions = generateActions(BROWSE_REPL_HISTORY_UP, { replHistory });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       let result = reducer(replUpDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -222,9 +222,9 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
           replHistory: {
             records,
             browseIndex: 0,
-            originalValue: replValue
-          }
-        }
+            originalValue: replValue,
+          },
+        },
       });
 
       // should advance browseIndex and update replValue
@@ -237,9 +237,9 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
           replHistory: {
             records,
             browseIndex: 1,
-            originalValue: replValue
-          }
-        }
+            originalValue: replValue,
+          },
+        },
       });
 
       // Should return unchanged state as we are at end of array
@@ -252,9 +252,9 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
           replHistory: {
             records,
             browseIndex: 1,
-            originalValue: replValue
-          }
-        }
+            originalValue: replValue,
+          },
+        },
       });
     });
   });
@@ -265,15 +265,15 @@ describe('CHANGE_EDITOR_HEIGHT', () => {
     const height = 200;
     const actions = generateActions(CHANGE_EDITOR_HEIGHT, { height });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          editorHeight: height
-        }
+          editorHeight: height,
+        },
       });
     });
   });
@@ -284,15 +284,15 @@ describe('CHANGE_EDITOR_WIDTH', () => {
     const widthChange = 20.5;
     const actions = generateActions(CHANGE_EDITOR_WIDTH, { widthChange });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          editorWidth: '70.5%'
-        }
+          editorWidth: '70.5%',
+        },
       });
     });
   });
@@ -305,8 +305,8 @@ describe('CHANGE_EXTERNAL_LIBRARY', () => {
       type: CHANGE_EXTERNAL_LIBRARY,
       payload: {
         newExternal,
-        workspaceLocation: playgroundWorkspace
-      }
+        workspaceLocation: playgroundWorkspace,
+      },
     };
 
     const result = reducer(defaultWorkspaceManager, playgroundAction);
@@ -314,8 +314,8 @@ describe('CHANGE_EXTERNAL_LIBRARY', () => {
       ...defaultWorkspaceManager,
       playground: {
         ...defaultWorkspaceManager.playground,
-        externalLibrary: newExternal
-      }
+        externalLibrary: newExternal,
+      },
     });
   });
 });
@@ -325,15 +325,15 @@ describe('CHANGE_SIDE_CONTENT_HEIGHT', () => {
     const height = 100;
     const actions = generateActions(CHANGE_SIDE_CONTENT_HEIGHT, { height });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          sideContentHeight: height
-        }
+          sideContentHeight: height,
+        },
       });
     });
   });
@@ -345,15 +345,15 @@ describe('CLEAR_REPL_INPUT', () => {
     const clearReplDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replValue });
     const actions = generateActions(CLEAR_REPL_INPUT);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(clearReplDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...clearReplDefaultState,
         [location]: {
           ...clearReplDefaultState[location],
-          replValue: ''
-        }
+          replValue: '',
+        },
       });
     });
   });
@@ -364,21 +364,21 @@ describe('CLEAR_REPL_OUTPUT', () => {
     const output: InterpreterOutput[] = [
       {
         type: 'code',
-        value: 'test repl input'
-      }
+        value: 'test repl input',
+      },
     ];
     const clearReplDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ output });
     const actions = generateActions(CLEAR_REPL_OUTPUT);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(clearReplDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...clearReplDefaultState,
         [location]: {
           ...clearReplDefaultState[location],
-          output: []
-        }
+          output: [],
+        },
       });
     });
   });
@@ -390,26 +390,26 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
       {
         type: 'result',
         value: 'undefined',
-        consoleLogs: ['hello', 'world']
+        consoleLogs: ['hello', 'world'],
       },
       {
         type: 'result',
         value: 420,
-        consoleLogs: ['these', 'are', 'display', 'calls']
-      }
+        consoleLogs: ['these', 'are', 'display', 'calls'],
+      },
     ];
     const clearReplLastPriorState: IWorkspaceManagerState = generateDefaultWorkspace({ output });
     const actions = generateActions(CLEAR_REPL_OUTPUT_LAST);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(clearReplLastPriorState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...clearReplLastPriorState,
         [location]: {
           ...clearReplLastPriorState[location],
-          output: [output[0]]
-        }
+          output: [output[0]],
+        },
       });
     });
   });
@@ -421,11 +421,11 @@ describe('DEBUG_RESET', () => {
     const isDebugging = true;
     const debugResetDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
       isRunning,
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(DEBUG_RESET);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(debugResetDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -433,8 +433,8 @@ describe('DEBUG_RESET', () => {
         [location]: {
           ...debugResetDefaultState[location],
           isRunning: false,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       });
     });
   });
@@ -444,11 +444,11 @@ describe('DEBUG_RESUME', () => {
   test('sets isRunning to true and isDebugging to false', () => {
     const isDebugging = true;
     const debugResumeDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(DEBUG_RESUME);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(debugResumeDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -456,8 +456,8 @@ describe('DEBUG_RESUME', () => {
         [location]: {
           ...debugResumeDefaultState[location],
           isRunning: true,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       });
     });
   });
@@ -473,20 +473,20 @@ describe('END_CLEAR_CONTEXT', () => {
       ['testBooleanUndefined', undefined],
       ['testBooleanNull', null],
       ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']]
+      ['testArray', [1, 2, 'a', 'b']],
     ];
     const library: Library = {
       chapter: 4,
       external: {
         name: 'SOUNDS' as ExternalLibraryName,
-        symbols: []
+        symbols: [],
       },
-      globals: mockGlobals
+      globals: mockGlobals,
     };
 
     const actions = generateActions(END_CLEAR_CONTEXT, { library });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       const context = createContext<WorkspaceLocation>(
@@ -503,10 +503,10 @@ describe('END_CLEAR_CONTEXT', () => {
           context: {
             ...context,
             runtime: expect.anything(),
-            contextId: expect.any(Number)
+            contextId: expect.any(Number),
           },
-          globals: mockGlobals
-        }
+          globals: mockGlobals,
+        },
       });
     });
   });
@@ -518,7 +518,7 @@ describe('END_DEBUG_PAUSE', () => {
     const debugPauseDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ isRunning });
     const actions = generateActions(END_DEBUG_PAUSE);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(debugPauseDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -526,8 +526,8 @@ describe('END_DEBUG_PAUSE', () => {
         [location]: {
           ...debugPauseDefaultState[location],
           isRunning: false,
-          isDebugging: true
-        }
+          isDebugging: true,
+        },
       });
     });
   });
@@ -539,11 +539,11 @@ describe('END_INTERRUPT_EXECUTION', () => {
     const isDebugging = true;
     const interruptExecutionDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
       isRunning,
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(END_INTERRUPT_EXECUTION);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(interruptExecutionDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -551,8 +551,8 @@ describe('END_INTERRUPT_EXECUTION', () => {
         [location]: {
           ...interruptExecutionDefaultState[location],
           isRunning: false,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       });
     });
   });
@@ -562,11 +562,11 @@ describe('EVAL_EDITOR', () => {
   test('sets isRunning to true and isDebugging to false', () => {
     const isDebugging = true;
     const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(EVAL_EDITOR);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(evalEditorDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -574,8 +574,8 @@ describe('EVAL_EDITOR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: true,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       });
     });
   });
@@ -585,23 +585,23 @@ describe('EVAL_EDITOR', () => {
 const outputWithRunningOutput: RunningOutput[] = [
   {
     type: 'running',
-    consoleLogs: ['console-log-test']
+    consoleLogs: ['console-log-test'],
   },
   {
     type: 'running',
-    consoleLogs: ['console-log-test-2']
-  }
+    consoleLogs: ['console-log-test-2'],
+  },
 ];
 
 const outputWithRunningAndCodeOutput: InterpreterOutput[] = [
   {
     type: 'running',
-    consoleLogs: ['console-log-test']
+    consoleLogs: ['console-log-test'],
   },
   {
     type: 'code',
-    value: 'sample code'
-  }
+    value: 'sample code',
+  },
 ];
 
 describe('EVAL_INTERPRETER_ERROR', () => {
@@ -612,11 +612,11 @@ describe('EVAL_INTERPRETER_ERROR', () => {
     const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(EVAL_INTERPRETER_ERROR);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(evalEditorDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -627,13 +627,13 @@ describe('EVAL_INTERPRETER_ERROR', () => {
           isDebugging: false,
           output: [
             {
-              ...outputWithRunningOutput[0]
+              ...outputWithRunningOutput[0],
             },
             {
-              consoleLogs: ['console-log-test-2']
-            }
-          ]
-        }
+              consoleLogs: ['console-log-test-2'],
+            },
+          ],
+        },
       });
     });
   });
@@ -644,12 +644,12 @@ describe('EVAL_INTERPRETER_ERROR', () => {
     const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
-      isDebugging
+      isDebugging,
     });
 
     const actions = generateActions(EVAL_INTERPRETER_ERROR);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(evalEditorDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -660,16 +660,16 @@ describe('EVAL_INTERPRETER_ERROR', () => {
           isDebugging: false,
           output: [
             {
-              ...outputWithRunningAndCodeOutput[0]
+              ...outputWithRunningAndCodeOutput[0],
             },
             {
-              ...outputWithRunningAndCodeOutput[1]
+              ...outputWithRunningAndCodeOutput[1],
             },
             {
-              consoleLogs: []
-            }
-          ]
-        }
+              consoleLogs: [],
+            },
+          ],
+        },
       });
     });
   });
@@ -685,12 +685,12 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
       output: outputWithRunningOutput,
       isRunning,
       breakpoints,
-      highlightedLines
+      highlightedLines,
     });
 
     const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(evalEditorDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -702,13 +702,13 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
           highlightedLines: [],
           output: [
             {
-              ...outputWithRunningOutput[0]
+              ...outputWithRunningOutput[0],
             },
             {
-              consoleLogs: ['console-log-test-2']
-            }
-          ]
-        }
+              consoleLogs: ['console-log-test-2'],
+            },
+          ],
+        },
       });
     });
   });
@@ -722,12 +722,12 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
       output: outputWithRunningAndCodeOutput,
       isRunning,
       breakpoints,
-      highlightedLines
+      highlightedLines,
     });
 
     const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(evalEditorDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -739,16 +739,16 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
           highlightedLines: [],
           output: [
             {
-              ...outputWithRunningAndCodeOutput[0]
+              ...outputWithRunningAndCodeOutput[0],
             },
             {
-              ...outputWithRunningAndCodeOutput[1]
+              ...outputWithRunningAndCodeOutput[1],
             },
             {
-              consoleLogs: []
-            }
-          ]
-        }
+              consoleLogs: [],
+            },
+          ],
+        },
       });
     });
   });
@@ -758,15 +758,15 @@ describe('EVAL_REPL', () => {
   test('sets isRunning to true', () => {
     const actions = generateActions(EVAL_REPL);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          isRunning: true
-        }
+          isRunning: true,
+        },
       });
     });
   });
@@ -776,23 +776,23 @@ describe('EVAL_REPL', () => {
 const outputWithCodeAndRunningOutput: InterpreterOutput[] = [
   {
     type: 'code',
-    value: 'sample code'
+    value: 'sample code',
   },
   {
     type: 'running',
-    consoleLogs: ['console-log-test']
-  }
+    consoleLogs: ['console-log-test'],
+  },
 ];
 
 const outputWithCodeOutput: CodeOutput[] = [
   {
     type: 'code',
-    value: 'code 1'
+    value: 'code 1',
   },
   {
     type: 'code',
-    value: 'code 2'
-  }
+    value: 'code 2',
+  },
 ];
 
 const editorTestcases: ITestcase[] = [
@@ -800,28 +800,28 @@ const editorTestcases: ITestcase[] = [
     type: TestcaseTypes.public,
     answer: 'abc',
     score: 10,
-    program: 'test program'
+    program: 'test program',
   },
   {
     type: TestcaseTypes.public,
     answer: 'def',
     score: 20,
-    program: 'another program'
-  }
+    program: 'another program',
+  },
 ];
 
 describe('EVAL_TESTCASE_FAILURE', () => {
   test('sets editorTestcases correctly', () => {
     const value = 'test-value-failure';
     const evalFailureDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-      editorTestcases
+      editorTestcases,
     });
     const actions = generateActions(EVAL_TESTCASE_FAILURE, {
       value,
-      index: 1
+      index: 1,
     });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(evalFailureDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -830,15 +830,15 @@ describe('EVAL_TESTCASE_FAILURE', () => {
           ...evalFailureDefaultState[location],
           editorTestcases: [
             {
-              ...editorTestcases[0]
+              ...editorTestcases[0],
             },
             {
               ...editorTestcases[1],
               result: undefined,
-              errors: value
-            }
-          ]
-        }
+              errors: value,
+            },
+          ],
+        },
       });
     });
   });
@@ -851,15 +851,15 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeAndRunningOutput,
       isRunning,
-      editorTestcases
+      editorTestcases,
     });
 
     const actions = generateActions(EVAL_TESTCASE_SUCCESS, {
       value,
-      index: 1
+      index: 1,
     });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(testcaseSuccessDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -870,15 +870,15 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
           output: outputWithCodeAndRunningOutput,
           editorTestcases: [
             {
-              ...editorTestcases[0]
+              ...editorTestcases[0],
             },
             {
               ...editorTestcases[1],
               result: value,
-              errors: undefined
-            }
-          ]
-        }
+              errors: undefined,
+            },
+          ],
+        },
       });
     });
   });
@@ -889,15 +889,15 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeOutput,
       isRunning,
-      editorTestcases
+      editorTestcases,
     });
 
     const actions = generateActions(EVAL_TESTCASE_SUCCESS, {
       value,
-      index: 0
+      index: 0,
     });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(testcaseSuccessDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -910,13 +910,13 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
             {
               ...editorTestcases[0],
               result: value,
-              errors: undefined
+              errors: undefined,
             },
             {
-              ...editorTestcases[1]
-            }
-          ]
-        }
+              ...editorTestcases[1],
+            },
+          ],
+        },
       });
     });
   });
@@ -926,10 +926,10 @@ describe('INIT_INVITE', () => {
   test('sets sharedbAceInitValue and sharedbAceIsInviting correctly', () => {
     const sharedbAceInitValue = 'test sharedbAce init value';
     const actions = generateActions(INIT_INVITE, {
-      editorValue: sharedbAceInitValue
+      editorValue: sharedbAceInitValue,
     });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -937,8 +937,8 @@ describe('INIT_INVITE', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           sharedbAceInitValue,
-          sharedbAceIsInviting: true
-        }
+          sharedbAceIsInviting: true,
+        },
       });
     });
   });
@@ -950,7 +950,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningOutput });
     const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(consoleLogDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -959,14 +959,14 @@ describe('HANDLE_CONSOLE_LOG', () => {
           ...consoleLogDefaultState[location],
           output: [
             {
-              ...outputWithRunningOutput[0]
+              ...outputWithRunningOutput[0],
             },
             {
               ...outputWithRunningOutput[1],
-              consoleLogs: outputWithRunningOutput[1].consoleLogs.concat(logString)
-            }
-          ]
-        }
+              consoleLogs: outputWithRunningOutput[1].consoleLogs.concat(logString),
+            },
+          ],
+        },
       });
     });
   });
@@ -974,11 +974,11 @@ describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with other output', () => {
     const logString = 'test-log-string-2';
     const consoleLogDefaultState = generateDefaultWorkspace({
-      output: outputWithRunningAndCodeOutput
+      output: outputWithRunningAndCodeOutput,
     });
     const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(consoleLogDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -987,9 +987,9 @@ describe('HANDLE_CONSOLE_LOG', () => {
           ...consoleLogDefaultState[location],
           output: outputWithRunningAndCodeOutput.concat({
             type: 'running',
-            consoleLogs: [logString]
-          })
-        }
+            consoleLogs: [logString],
+          }),
+        },
       });
     });
   });
@@ -1000,7 +1000,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
 
     const actions = generateActions(HANDLE_CONSOLE_LOG, { logString });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(consoleLogDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -1010,10 +1010,10 @@ describe('HANDLE_CONSOLE_LOG', () => {
           output: [
             {
               type: 'running',
-              consoleLogs: [logString]
-            }
-          ]
-        }
+              consoleLogs: [logString],
+            },
+          ],
+        },
       });
     });
   });
@@ -1024,15 +1024,15 @@ describe('HIGHLIGHT_LINE', () => {
     const highlightedLines = [12, 34, 56];
     const actions = generateActions(HIGHLIGHT_LINE, { highlightedLines });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          highlightedLines
-        }
+          highlightedLines,
+        },
       });
     });
   });
@@ -1042,15 +1042,15 @@ describe('FINISH_INVITE', () => {
   test('sets sharedbAceIsInviting to false', () => {
     const actions = generateActions(FINISH_INVITE);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          sharedbAceIsInviting: false
-        }
+          sharedbAceIsInviting: false,
+        },
       });
     });
   });
@@ -1062,27 +1062,30 @@ describe('LOG_OUT', () => {
       ...createDefaultWorkspace(WorkspaceLocations.playground),
       editorHeight: 200,
       editorValue: 'test program here',
-      highlightedLines: [[1, 2], [3, 4]],
+      highlightedLines: [
+        [1, 2],
+        [3, 4],
+      ],
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
       websocketStatus: 0,
-      usingSubst: false
+      usingSubst: false,
     };
 
     const logoutDefaultState: IWorkspaceManagerState = {
       ...defaultWorkspaceManager,
-      playground: newPlayground
+      playground: newPlayground,
     };
 
     const playgroundAction = {
       type: LOG_OUT,
-      payload: {}
+      payload: {},
     };
 
     const result = reducer(logoutDefaultState, playgroundAction);
     expect(result).toEqual({
       ...defaultWorkspaceManager,
-      playground: newPlayground
+      playground: newPlayground,
     });
   });
 });
@@ -1090,14 +1093,14 @@ describe('LOG_OUT', () => {
 describe('RESET_TESTCASE', () => {
   test('correctly resets the targeted testcase to its default state', () => {
     const resetTestcaseDefaultState = generateDefaultWorkspace({
-      editorTestcases
+      editorTestcases,
     });
 
     const actions = generateActions(RESET_TESTCASE, {
-      index: 1
+      index: 1,
     });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(resetTestcaseDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -1106,15 +1109,15 @@ describe('RESET_TESTCASE', () => {
           ...resetTestcaseDefaultState[location],
           editorTestcases: [
             {
-              ...editorTestcases[0]
+              ...editorTestcases[0],
             },
             {
               ...editorTestcases[1],
               result: undefined,
-              errors: undefined
-            }
-          ]
-        }
+              errors: undefined,
+            },
+          ],
+        },
       });
     });
   });
@@ -1126,18 +1129,18 @@ describe('RESET_WORKSPACE', () => {
     const editorWidth = '70%';
     const resetWorkspaceDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
       editorHeight,
-      editorWidth
+      editorWidth,
     });
 
     const workspaceOptions = {
       breakpoints: ['1', '3'],
       highlightedLines: [[1], [10]],
-      replValue: 'test repl value'
+      replValue: 'test repl value',
     };
 
     const actions = generateActions(RESET_WORKSPACE, { workspaceOptions });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(resetWorkspaceDefaultState, action);
       const location = action.payload.workspaceLocation;
       const newContext = createDefaultWorkspace(location);
@@ -1150,9 +1153,9 @@ describe('RESET_WORKSPACE', () => {
           context: {
             ...newContext.context,
             runtime: expect.anything(),
-            contextId: expect.any(Number)
-          }
-        }
+            contextId: expect.any(Number),
+          },
+        },
       });
     });
   });
@@ -1162,23 +1165,23 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
   test('works correctly and pops replHistory when exceeding maxBrowseIndex', () => {
     const replHistory = {
       browseIndex: null,
-      records: Array.from(Array(maxBrowseIndex), (x, index) => index + '') // Create an array with size maxBrowseIndex
+      records: Array.from(Array(maxBrowseIndex), (x, index) => index + ''), // Create an array with size maxBrowseIndex
     };
 
     const inputToOutputDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-      replHistory
+      replHistory,
     });
     const newOutput = 'new-output-test';
 
     const actions = generateActions(SEND_REPL_INPUT_TO_OUTPUT, {
       type: 'code',
-      value: newOutput
+      value: newOutput,
     });
 
     const newArray = [newOutput].concat(replHistory.records);
     newArray.pop();
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(inputToOutputDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -1189,14 +1192,14 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
             {
               type: 'code',
               workspaceLocation: location,
-              value: newOutput
-            }
+              value: newOutput,
+            },
           ],
           replHistory: {
             ...replHistory,
-            records: newArray
-          }
-        }
+            records: newArray,
+          },
+        },
       });
     });
   });
@@ -1204,19 +1207,19 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
   test('works correctly with empty newOutput value', () => {
     const replHistory = {
       browseIndex: null,
-      records: ['record-1', 'record-2']
+      records: ['record-1', 'record-2'],
     };
     const inputToOutputDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
-      replHistory
+      replHistory,
     });
     const newOutput = '';
 
     const actions = generateActions(SEND_REPL_INPUT_TO_OUTPUT, {
       type: 'code',
-      value: newOutput
+      value: newOutput,
     });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(inputToOutputDefaultState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
@@ -1227,11 +1230,11 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
             {
               type: 'code',
               workspaceLocation: location,
-              value: newOutput
-            }
+              value: newOutput,
+            },
           ],
-          replHistory
-        }
+          replHistory,
+        },
       });
     });
   });
@@ -1242,15 +1245,15 @@ describe('SET_EDITOR_SESSION_ID', () => {
     const editorSessionId = 'test_editor_session_id';
     const actions = generateActions(SET_EDITOR_SESSION_ID, { editorSessionId });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          editorSessionId
-        }
+          editorSessionId,
+        },
       });
     });
   });
@@ -1261,15 +1264,15 @@ describe('SET_WEBSOCKET_STATUS', () => {
     const websocketStatus = 1;
     const actions = generateActions(SET_WEBSOCKET_STATUS, { websocketStatus });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          websocketStatus: 1
-        }
+          websocketStatus: 1,
+        },
       });
     });
   });
@@ -1279,15 +1282,15 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
   test('toggles isEditorAutorun correctly', () => {
     const actions = generateActions(TOGGLE_EDITOR_AUTORUN);
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       let result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          isEditorAutorun: true
-        }
+          isEditorAutorun: true,
+        },
       });
 
       result = reducer(result, action);
@@ -1295,8 +1298,8 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          isEditorAutorun: false
-        }
+          isEditorAutorun: false,
+        },
       });
     });
   });
@@ -1307,15 +1310,15 @@ describe('UPDATE_ACTIVE_TAB', () => {
     const activeTab = SideContentType.questionOverview;
     const actions = generateActions(UPDATE_ACTIVE_TAB, { activeTab });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          sideContentActiveTab: activeTab
-        }
+          sideContentActiveTab: activeTab,
+        },
       });
     });
   });
@@ -1329,8 +1332,8 @@ describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
       type: UPDATE_CURRENT_ASSESSMENT_ID,
       payload: {
         assessmentId,
-        questionId
-      }
+        questionId,
+      },
     };
 
     const result = reducer(defaultWorkspaceManager, assessmentAction);
@@ -1339,8 +1342,8 @@ describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
       assessment: {
         ...defaultWorkspaceManager.assessment,
         currentAssessment: assessmentId,
-        currentQuestion: questionId
-      }
+        currentQuestion: questionId,
+      },
     });
   });
 });
@@ -1353,8 +1356,8 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
       type: UPDATE_CURRENT_SUBMISSION_ID,
       payload: {
         submissionId,
-        questionId
-      }
+        questionId,
+      },
     };
 
     const result = reducer(defaultWorkspaceManager, assessmentAction);
@@ -1363,8 +1366,8 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
       grading: {
         ...defaultWorkspaceManager.grading,
         currentSubmission: submissionId,
-        currentQuestion: questionId
-      }
+        currentQuestion: questionId,
+      },
     });
   });
 });
@@ -1374,15 +1377,15 @@ describe('UPDATE_EDITOR_VALUE', () => {
     const newEditorValue = 'test new editor value';
     const actions = generateActions(UPDATE_EDITOR_VALUE, { newEditorValue });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          editorValue: newEditorValue
-        }
+          editorValue: newEditorValue,
+        },
       });
     });
   });
@@ -1393,15 +1396,15 @@ describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
     const hasUnsavedChanges = true;
     const actions = generateActions(UPDATE_HAS_UNSAVED_CHANGES, { hasUnsavedChanges });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          hasUnsavedChanges: true
-        }
+          hasUnsavedChanges: true,
+        },
       });
     });
   });
@@ -1412,15 +1415,15 @@ describe('UPDATE_REPL_VALUE', () => {
     const newReplValue = 'test new repl value';
     const actions = generateActions(UPDATE_REPL_VALUE, { newReplValue });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          replValue: newReplValue
-        }
+          replValue: newReplValue,
+        },
       });
     });
   });
@@ -1431,7 +1434,7 @@ describe('MOVE_CURSOR', () => {
     const newCursorPosition = { row: 0, column: 0 };
     const actions = generateActions(MOVE_CURSOR, { newCursorPosition });
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const result = reducer(defaultWorkspaceManager, action);
       const location = action.payload.workspaceLocation;
       const cursorPosition = action.payload.cursorPosition;
@@ -1439,8 +1442,8 @@ describe('MOVE_CURSOR', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          newCursorPosition: cursorPosition
-        }
+          newCursorPosition: cursorPosition,
+        },
       });
     });
   });

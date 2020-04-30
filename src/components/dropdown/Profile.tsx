@@ -8,7 +8,7 @@ import {
   AssessmentCategory,
   AssessmentStatuses,
   GradingStatuses,
-  IAssessmentOverview
+  IAssessmentOverview,
 } from '../assessment/assessmentShape';
 import ProfileCard from './ProfileCard';
 
@@ -46,7 +46,7 @@ class Profile extends React.Component<ProfileProps, {}> {
     } else {
       // Check if there are any closed assessments, else render a placeholder <div>
       const numClosed = this.props.assessmentOverviews!.filter(
-        item => item.status === AssessmentStatuses.submitted
+        (item) => item.status === AssessmentStatuses.submitted
       ).length;
 
       const userDetails = (
@@ -78,7 +78,7 @@ class Profile extends React.Component<ProfileProps, {}> {
                     acc[0] + item.grade / item.maxGrade,
                     acc[1] + item.xp,
                     acc[2] + 1,
-                    acc[3] + item.maxXp
+                    acc[3] + item.maxXp,
                   ]
                 : [acc[0], acc[1] + item.xp, acc[2], acc[3] + item.maxXp]
               : acc,
@@ -121,7 +121,7 @@ class Profile extends React.Component<ProfileProps, {}> {
 
         // Build condensed assessment cards from an array of assessments
         const summaryCallouts = this.props
-          .assessmentOverviews!.filter(item => item.status === AssessmentStatuses.submitted)
+          .assessmentOverviews!.filter((item) => item.status === AssessmentStatuses.submitted)
           .map((assessment, index) => {
             return (
               <ProfileCard

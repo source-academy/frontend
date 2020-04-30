@@ -19,12 +19,12 @@ test('Editor renders correctly', () => {
     sharedbAceIsInviting: false,
     handleDeclarationNavigate: (cursorPosition: IPosition) => {},
     handleEditorEval: () => {},
-    handleEditorValueChange: newCode => {},
-    handleEditorUpdateBreakpoints: breakpoints => {},
+    handleEditorValueChange: (newCode) => {},
+    handleEditorUpdateBreakpoints: (breakpoints) => {},
     handleFinishInvite: () => {},
-    handleSetWebsocketStatus: websocketStatus => {},
-    handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
-    handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
+    handleSetWebsocketStatus: (websocketStatus) => {},
+    handleUpdateHasUnsavedChanges: (hasUnsavedChanges) => {},
+    handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
   };
   const app = <Editor {...props} />;
   const tree = shallow(app);

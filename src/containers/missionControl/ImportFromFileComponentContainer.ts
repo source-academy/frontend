@@ -13,12 +13,9 @@ const mapStateToProps: MapStateToProps<{}, any, {}> = (state, ownProps) => ownPr
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      newAssessment: updateAssessment
+      newAssessment: updateAssessment,
     },
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ImportFromFileComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ImportFromFileComponent);

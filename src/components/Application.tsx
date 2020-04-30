@@ -121,7 +121,9 @@ const parsePrgrm = (props: RouteComponentProps<{}>) => {
 const parseChapter = (props: RouteComponentProps<{}>) => {
   const chapQuery = qs.parse(props.location.hash).chap;
   // find a language with this chapter (if any)
-  const langWithMatchingChapter = sourceLanguages.find(language => language.chapter === chapQuery);
+  const langWithMatchingChapter = sourceLanguages.find(
+    (language) => language.chapter === chapQuery
+  );
 
   const chap: number = langWithMatchingChapter
     ? langWithMatchingChapter.chapter
@@ -136,7 +138,7 @@ const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
   const variantQuery = qs.parse(props.location.hash).variant;
   // find a language with this variant and chapter (if any)
   const matchingLang = sourceLanguages.find(
-    language => language.chapter === chap && language.variant === variantQuery
+    (language) => language.chapter === chap && language.variant === variantQuery
   );
 
   const variant: Variant = matchingLang ? matchingLang.variant : 'default';

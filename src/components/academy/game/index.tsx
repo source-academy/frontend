@@ -50,8 +50,8 @@ export class Game extends React.Component<GameProps, {}> {
 
   public render() {
     return (
-      <div id="game-display" className="sa-game" ref={e => (this.div = e!)}>
-        <canvas ref={e => (this.canvas = e!)} />
+      <div id="game-display" className="sa-game" ref={(e) => (this.div = e!)}>
+        <canvas ref={(e) => (this.canvas = e!)} />
       </div>
     );
   }

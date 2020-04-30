@@ -18,7 +18,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
   constructor(props: IMCQChooserProps) {
     super(props);
     this.state = {
-      mcqOption: props.mcq.answer
+      mcqOption: props.mcq.answer,
     };
   }
   public render() {
@@ -57,7 +57,7 @@ class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
     if (i !== this.state.mcqOption) {
       this.props.handleMCQSubmit(i);
       this.setState({
-        mcqOption: i
+        mcqOption: i,
       });
     }
     const shouldDisplayMessage = this.props.mcq.solution !== null && this.props.mcq.choices[i].hint;

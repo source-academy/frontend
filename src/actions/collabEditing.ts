@@ -9,7 +9,7 @@ export const finishInvite = (workspaceLocation: WorkspaceLocation) =>
 export const initInvite = (editorValue: string, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.INIT_INVITE, {
     editorValue,
-    workspaceLocation
+    workspaceLocation,
   });
 
 export const invalidEditorSessionId = () => action(actionTypes.INVALID_EDITOR_SESSION_ID);
@@ -17,7 +17,7 @@ export const invalidEditorSessionId = () => action(actionTypes.INVALID_EDITOR_SE
 export const setEditorSessionId = (workspaceLocation: WorkspaceLocation, editorSessionId: string) =>
   action(actionTypes.SET_EDITOR_SESSION_ID, {
     workspaceLocation,
-    editorSessionId
+    editorSessionId,
   });
 
 /**
@@ -29,5 +29,5 @@ export const setEditorSessionId = (workspaceLocation: WorkspaceLocation, editorS
 export const setWebsocketStatus = (workspaceLocation: WorkspaceLocation, websocketStatus: number) =>
   action(actionTypes.SET_WEBSOCKET_STATUS, {
     workspaceLocation,
-    websocketStatus
+    websocketStatus,
   });

@@ -51,37 +51,37 @@ const defaultProps: AssessmentWorkspaceProps = {
   enableDebugging: false,
   output: [],
   questionId: 0,
-  replValue: ''
+  replValue: '',
 };
 
 const mockUndefinedAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
-  ...defaultProps
+  ...defaultProps,
 };
 
 const mockProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessment: mockAssessments[0],
   assessmentId: 0,
-  questionId: 0
+  questionId: 0,
 };
 
 const mockClosedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...mockProgrammingAssessmentWorkspaceProps,
-  closeDate: '2008-06-18T05:24:26.026Z'
+  closeDate: '2008-06-18T05:24:26.026Z',
 };
 
 const mockGradedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessment: mockAssessments[3],
   assessmentId: 4,
-  questionId: 0
+  questionId: 0,
 };
 
 const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessment: mockAssessments[0],
   assessmentId: 0,
-  questionId: 2
+  questionId: 2,
 };
 
 test('AssessmentWorkspace page "loading" content renders correctly', () => {

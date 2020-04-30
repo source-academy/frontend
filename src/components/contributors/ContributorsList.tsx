@@ -11,7 +11,7 @@ class ContributorsList extends React.Component<{}, ContributorsState> {
 
     this.state = {
       repos: [],
-      contributors: []
+      contributors: [],
     };
   }
 
@@ -19,14 +19,14 @@ class ContributorsList extends React.Component<{}, ContributorsState> {
     fetchRepos()
       .then((repos: Repo[]) => {
         this.setState({
-          repos
+          repos,
         });
         return repos;
       })
       .then((repos: Repo[]) => {
         fetchContributors(repos).then((contributors: Contributor[][]) => {
           this.setState({
-            contributors
+            contributors,
           });
         });
       });

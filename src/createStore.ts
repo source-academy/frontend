@@ -7,7 +7,7 @@ import {
   compose,
   createStore as _createStore,
   Store,
-  StoreEnhancer
+  StoreEnhancer,
 } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
@@ -30,7 +30,7 @@ export function createStore(history: History): Store<IState> {
 
   const rootReducer = combineReducers<IState>({
     ...reducers,
-    router: routerReducer
+    router: routerReducer,
   });
   const enchancers = composeEnhancers(applyMiddleware(...middleware));
   const loadedStore = loadStoredState();
@@ -40,7 +40,7 @@ export function createStore(history: History): Store<IState> {
       ...defaultState,
       session: {
         ...defaultState.session,
-        ...(loadedStore.session ? loadedStore.session : {})
+        ...(loadedStore.session ? loadedStore.session : {}),
       },
       workspaces: {
         ...defaultState.workspaces,
@@ -51,9 +51,9 @@ export function createStore(history: History): Store<IState> {
             : defaultState.workspaces.playground.editorValue,
           isEditorAutorun: loadedStore.playgroundIsEditorAutorun
             ? loadedStore.playgroundIsEditorAutorun
-            : defaultState.workspaces.playground.isEditorAutorun
-        }
-      }
+            : defaultState.workspaces.playground.isEditorAutorun,
+        },
+      },
     };
   }
   const createdStore = _createStore<IState>(rootReducer, initialStore, enchancers);

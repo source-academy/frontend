@@ -24,7 +24,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     groupName: '1D',
     gradingStatus: 'graded',
     questionCount: 6,
-    gradedCount: 6
+    gradedCount: 6,
   },
   {
     gradeAdjustment: -2,
@@ -46,7 +46,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     groupName: '1F',
     gradingStatus: 'grading',
     questionCount: 6,
-    gradedCount: 2
+    gradedCount: 2,
   },
   {
     gradeAdjustment: 4,
@@ -68,8 +68,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     groupName: '1F',
     gradingStatus: 'none',
     questionCount: 6,
-    gradedCount: 0
-  }
+    gradedCount: 0,
+  },
 ];
 
 /**
@@ -103,7 +103,7 @@ export const mockTestcases: ITestcase[] = [
   { type: TestcaseTypes.public, program: `remainder(12, 7);`, score: 1, answer: `5` },
   { type: TestcaseTypes.public, program: `remainder(6, 1);`, score: 2, answer: `0` },
   { type: TestcaseTypes.private, program: `remainder(-15, 6);`, score: 2, answer: `-3` },
-  { type: TestcaseTypes.private, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
+  { type: TestcaseTypes.private, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` },
 ];
 
 const mockGrading: Grading = [
@@ -136,36 +136,36 @@ function remainder(n, d) {
       maxXp: 1000,
       grader: {
         name: 'avenger',
-        id: 1
+        id: 1,
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
       grade: 1,
       autogradingResults: [
         {
-          resultType: 'pass'
+          resultType: 'pass',
         },
         {
           resultType: 'fail',
           expected: '8',
-          actual: '5'
+          actual: '5',
         },
         {
           resultType: 'error',
           errors: [
             {
-              errorType: 'timeout'
+              errorType: 'timeout',
             },
             {
               errorType: 'syntax',
               line: 1,
               location: 'student',
               errorLine: 'function fibonacci(n) {',
-              errorExplanation: 'Just kidding!'
-            }
-          ]
-        }
-      ]
+              errorExplanation: 'Just kidding!',
+            },
+          ],
+        },
+      ],
     },
     grade: {
       gradeAdjustment: 0,
@@ -200,14 +200,14 @@ _italics_
       `,
       grader: {
         name: 'HARTIN MENZ',
-        id: 100
+        id: 100,
       },
-      gradedAt: '2019-08-16T13:26:32+00:00'
+      gradedAt: '2019-08-16T13:26:32+00:00',
     },
     student: {
       name: 'Al Gorithm',
-      id: 0
-    }
+      id: 0,
+    },
   },
   {
     question: {
@@ -226,36 +226,36 @@ _italics_
       maxXp: 200,
       grader: {
         name: 'avenger',
-        id: 1
+        id: 1,
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
       grade: 1,
       autogradingResults: [
         {
-          resultType: 'pass'
+          resultType: 'pass',
         },
         {
           resultType: 'fail',
           expected: '8',
-          actual: '5'
+          actual: '5',
         },
         {
           resultType: 'error',
           errors: [
             {
-              errorType: 'timeout'
+              errorType: 'timeout',
             },
             {
               errorType: 'syntax',
               line: 1,
               location: 'student',
               errorLine: 'function fibonacci(n) {',
-              errorExplanation: 'Just kidding!'
-            }
-          ]
-        }
-      ]
+              errorExplanation: 'Just kidding!',
+            },
+          ],
+        },
+      ],
     },
     grade: {
       gradeAdjustment: 0,
@@ -297,12 +297,12 @@ New message from **Avenger**!
 #### Upcoming Tasks
 - [] Meet Avenger Avenger at Level X-05
 - [] Open the Pod Bay Doors
-      `
+      `,
     },
     student: {
       name: 'Al Gorithm',
-      id: 0
-    }
+      id: 0,
+    },
   },
   {
     question: {
@@ -318,20 +318,20 @@ New message from **Avenger**!
       choices: [
         {
           content: 'A',
-          hint: 'hint A'
+          hint: 'hint A',
         },
         {
           content: 'B',
-          hint: 'hint B'
+          hint: 'hint B',
         },
         {
           content: 'C',
-          hint: 'hint C'
+          hint: 'hint C',
         },
         {
           content: 'D',
-          hint: 'hint D'
-        }
+          hint: 'hint D',
+        },
       ],
       id: 2,
       library: mockLibrary,
@@ -340,49 +340,49 @@ New message from **Avenger**!
       maxXp: 100,
       grader: {
         name: 'avenger',
-        id: 1
+        id: 1,
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
       grade: 1,
       autogradingResults: [
         {
-          resultType: 'pass'
+          resultType: 'pass',
         },
         {
           resultType: 'fail',
           expected: '8',
-          actual: '5'
+          actual: '5',
         },
         {
           resultType: 'error',
           errors: [
             {
-              errorType: 'timeout'
+              errorType: 'timeout',
             },
             {
               errorType: 'syntax',
               line: 1,
               location: 'student',
               errorLine: 'function fibonacci(n) {',
-              errorExplanation: 'Just kidding!'
-            }
-          ]
-        }
-      ]
+              errorExplanation: 'Just kidding!',
+            },
+          ],
+        },
+      ],
     },
     grade: {
       gradeAdjustment: 0,
       xpAdjustment: 0,
       grade: 50,
       xp: 50,
-      roomId: '19422030'
+      roomId: '19422030',
     },
     student: {
       name: 'Al Gorithm',
-      id: 0
-    }
-  }
+      id: 0,
+    },
+  },
 ];
 
 /**

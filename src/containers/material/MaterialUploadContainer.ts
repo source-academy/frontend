@@ -6,17 +6,17 @@ import {
   deleteMaterial,
   deleteMaterialFolder,
   fetchMaterialIndex,
-  uploadMaterial
+  uploadMaterial,
 } from '../../actions';
 import MaterialUpload, {
   IDispatchProps,
-  IStateProps
+  IStateProps,
 } from '../../components/material/MaterialUpload';
 import { IState } from '../../reducers/states';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state) => ({
   materialDirectoryTree: state.session.materialDirectoryTree,
-  materialIndex: state.session.materialIndex
+  materialIndex: state.session.materialIndex,
 });
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
@@ -27,12 +27,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleDeleteMaterialFolder: (id: number) => deleteMaterialFolder(id),
       handleFetchMaterialIndex: (id?: number) => fetchMaterialIndex(id),
       handleUploadMaterial: (file: File, title: string, description: string) =>
-        uploadMaterial(file, title, description)
+        uploadMaterial(file, title, description),
     },
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MaterialUpload);
+export default connect(mapStateToProps, mapDispatchToProps)(MaterialUpload);

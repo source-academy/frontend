@@ -11,7 +11,7 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
   public render() {
     const buildErrorString = (errors: AutogradingError[]) => {
       return errors
-        .map(error =>
+        .map((error) =>
           error.errorType === 'timeout'
             ? 'Timeout: Submission exceeded time limit for this test case.'
             : `Line ${error.line}: Error: ${error.errorExplanation}`

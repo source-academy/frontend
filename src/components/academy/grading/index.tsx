@@ -6,7 +6,7 @@ import {
   InputGroup,
   Intent,
   NonIdealState,
-  Spinner
+  Spinner,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
@@ -105,7 +105,7 @@ class Grading extends React.Component<IGradingProps, State> {
         suppressResize: true,
         suppressMovable: true,
         suppressMenu: true,
-        suppressSizeToFit: true
+        suppressSizeToFit: true,
       },
       { headerName: 'Assessment Name', field: 'assessmentName' },
       { headerName: 'Category', field: 'assessmentCategory', maxWidth: 100 },
@@ -113,7 +113,7 @@ class Grading extends React.Component<IGradingProps, State> {
       {
         headerName: 'Group',
         field: 'groupName',
-        maxWidth: 100
+        maxWidth: 100,
       },
       {
         headerName: 'Status',
@@ -128,13 +128,13 @@ class Grading extends React.Component<IGradingProps, State> {
             return { backgroundColor: Colors.GREEN5 };
           }
           return { backgroundColor: Colors.RED5 };
-        }
+        },
       },
       {
         headerName: 'Grading',
         field: 'gradingStatus',
         cellRendererFramework: GradingStatus,
-        maxWidth: 110
+        maxWidth: 110,
       },
       {
         headerName: 'Grade',
@@ -152,7 +152,7 @@ class Grading extends React.Component<IGradingProps, State> {
             return nodeA.data.currentGrade - nodeB.data.currentGrade;
           }
           return valueA - valueB;
-        }
+        },
       },
       {
         headerName: 'XP',
@@ -164,13 +164,13 @@ class Grading extends React.Component<IGradingProps, State> {
             return nodeA.data.currentXp - nodeB.data.currentXp;
           }
           return valueA - valueB;
-        }
+        },
       },
       {
         headerName: 'Edit',
         cellRendererFramework: EditGradingCell,
         cellRendererParams: {
-          handleAcknowledgeNotifications: this.props.handleAcknowledgeNotifications
+          handleAcknowledgeNotifications: this.props.handleAcknowledgeNotifications,
         },
         width: 65,
         suppressFilter: true,
@@ -178,8 +178,8 @@ class Grading extends React.Component<IGradingProps, State> {
         suppressSizeToFit: true,
         suppressResize: true,
         cellStyle: {
-          padding: 0
-        }
+          padding: 0,
+        },
       },
       {
         headerName: 'Unsubmit',
@@ -188,15 +188,15 @@ class Grading extends React.Component<IGradingProps, State> {
         field: '',
         cellRendererFramework: UnsubmitCell,
         cellRendererParams: {
-          handleUnsubmitSubmission: this.props.handleUnsubmitSubmission
+          handleUnsubmitSubmission: this.props.handleUnsubmitSubmission,
         },
         suppressFilter: true,
         suppressSorting: true,
         suppressSizeToFit: true,
         suppressResize: true,
         cellStyle: {
-          padding: 0
-        }
+          padding: 0,
+        },
       },
       { headerName: 'Question Count', field: 'questionCount', hide: true },
       { headerName: 'Questions Graded', field: 'gradedCount', hide: true },
@@ -208,7 +208,7 @@ class Grading extends React.Component<IGradingProps, State> {
       { headerName: 'Max Grade', field: 'maxGrade', hide: true },
       { headerName: 'Current XP (excl. bonus)', field: 'currentXp', hide: true },
       { headerName: 'Max XP', field: 'maxXp', hide: true },
-      { headerName: 'Bonus XP', field: 'xpBonus', hide: true }
+      { headerName: 'Bonus XP', field: 'xpBonus', hide: true },
     ];
 
     this.state = {
@@ -218,7 +218,7 @@ class Grading extends React.Component<IGradingProps, State> {
       maxPages: 1,
       rowCountString: '(none)',
       isBackDisabled: true,
-      isForwardDisabled: true
+      isForwardDisabled: true,
     };
   }
 
@@ -231,7 +231,7 @@ class Grading extends React.Component<IGradingProps, State> {
     if (submissionId !== null) {
       const props: GradingWorkspaceProps = {
         submissionId,
-        questionId
+        questionId,
       };
       return <GradingWorkspaceContainer {...props} />;
     }
@@ -376,7 +376,7 @@ class Grading extends React.Component<IGradingProps, State> {
           this.gridApi.paginationGetRowCount()
         ),
         isBackDisabled: newTotalPages === 0 || newCurrPage === 1,
-        isForwardDisabled: newTotalPages === 0 || newCurrPage === newTotalPages
+        isForwardDisabled: newTotalPages === 0 || newCurrPage === newTotalPages,
       });
     }
   };
@@ -446,8 +446,8 @@ class Grading extends React.Component<IGradingProps, State> {
           'xpAdjustment',
           'currentXp',
           'maxXp',
-          'xpBonus'
-        ]
+          'xpBonus',
+        ],
       });
     }
   };
@@ -481,11 +481,11 @@ class Grading extends React.Component<IGradingProps, State> {
     }
 
     return (this.props.gradingOverviews as GradingOverviewWithNotifications[])
-      .map(overview => ({
+      .map((overview) => ({
         ...overview,
         notifications: filterNotificationsBySubmission(overview.submissionId)(
           this.props.notifications
-        )
+        ),
       }))
       .sort((subX, subY) => subY.notifications.length - subX.notifications.length);
   };

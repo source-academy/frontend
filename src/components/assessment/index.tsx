@@ -15,7 +15,7 @@ import {
   Position,
   Spinner,
   Text,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
@@ -32,7 +32,7 @@ import {
   AssessmentCategory,
   AssessmentStatuses,
   GradingStatuses,
-  IAssessmentOverview
+  IAssessmentOverview,
 } from '../assessment/assessmentShape';
 import { OwnProps as AssessmentProps } from '../assessment/AssessmentWorkspace';
 import { controlButton } from '../commons';
@@ -86,7 +86,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       betchaAssessment: null,
       showClosedAssessments: false,
       showOpenedAssessments: true,
-      showUpcomingAssessments: true
+      showUpcomingAssessments: true,
     };
   }
 
@@ -98,12 +98,12 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     // If there is an assessment to render, create a workspace. The assessment
     // overviews must still be loaded for this, to send the due date.
     if (assessmentId !== null && this.props.assessmentOverviews !== undefined) {
-      const overview = this.props.assessmentOverviews.filter(a => a.id === assessmentId)[0];
+      const overview = this.props.assessmentOverviews.filter((a) => a.id === assessmentId)[0];
       const assessmentProps: AssessmentProps = {
         assessmentId,
         questionId,
         notAttempted: overview.status === AssessmentStatuses.not_attempted,
-        closeDate: overview.closeAt
+        closeDate: overview.closeAt,
       };
       return <AssessmentWorkspaceContainer {...assessmentProps} />;
     }
@@ -131,13 +131,13 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         beforeNow(overview.openAt) &&
         overview.status !== AssessmentStatuses.submitted;
       const openedCards = this.sortAssessments(
-        this.props.assessmentOverviews.filter(overview => isOverviewOpened(overview))
+        this.props.assessmentOverviews.filter((overview) => isOverviewOpened(overview))
       ).map((overview, index) => this.makeOverviewCard(overview, index, true, false));
 
       /** Closed assessments, that are past the due date or cannot be attempted further. */
       const closedCards = this.sortAssessments(
         this.props.assessmentOverviews.filter(
-          overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
+          (overview) => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
         )
       ).map((overview, index) => this.makeOverviewCard(overview, index, true, true));
 
@@ -223,7 +223,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
             {controlButton('Cancel', null, this.setBetchaAssessmentNull, { minimal: false })}
             {controlButton('Finalise Submission', null, this.submitAssessment, {
               minimal: false,
-              intent: Intent.DANGER
+              intent: Intent.DANGER,
             })}
           </ButtonGroup>
         </div>
@@ -245,25 +245,25 @@ class Assessment extends React.Component<IAssessmentProps, State> {
   private toggleClosedAssessments = () =>
     this.setState({
       ...this.state,
-      showClosedAssessments: !this.state.showClosedAssessments
+      showClosedAssessments: !this.state.showClosedAssessments,
     });
 
   private toggleOpenAssessments = () =>
     this.setState({
       ...this.state,
-      showOpenedAssessments: !this.state.showOpenedAssessments
+      showOpenedAssessments: !this.state.showOpenedAssessments,
     });
 
   private toggleUpcomingAssessments = () =>
     this.setState({
       ...this.state,
-      showUpcomingAssessments: !this.state.showUpcomingAssessments
+      showUpcomingAssessments: !this.state.showUpcomingAssessments,
     });
 
   private setBetchaAssessment = (assessment: IAssessmentOverview | null) =>
     this.setState({
       ...this.state,
-      betchaAssessment: assessment
+      betchaAssessment: assessment,
     });
 
   private setBetchaAssessmentNull = () => this.setBetchaAssessment(null);
@@ -276,7 +276,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
   };
 
   private sortAssessments = (assessments: IAssessmentOverview[]) =>
-    sortBy(assessments, [a => -a.id]);
+    sortBy(assessments, [(a) => -a.id]);
 
   private makeSubmissionButton = (overview: IAssessmentOverview, index: number) => (
     <Button
@@ -473,7 +473,7 @@ const makeGradingStatus = (gradingStatus: string) => {
 const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
   controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
     minimal: true,
-    className: 'collapse-button'
+    className: 'collapse-button',
   });
 
 export default Assessment;

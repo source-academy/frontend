@@ -24,7 +24,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
     this.state = {
       isAboutOpen: false,
       isHelpOpen: false,
-      isProfileOpen: false
+      isProfileOpen: false,
     };
   }
 
@@ -82,6 +82,6 @@ class Dropdown extends React.Component<DropdownProps, DropdownState> {
 }
 
 const titleCase = (str: string) =>
-  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase());
+  str.replace(/\w\S*/g, (wrd) => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase());
 
 export default Dropdown;

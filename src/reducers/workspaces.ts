@@ -43,7 +43,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  UPDATE_WORKSPACE
+  UPDATE_WORKSPACE,
 } from '../actions/actionTypes';
 import * as collabActions from '../actions/collabEditing';
 import { logOut } from '../actions/commons';
@@ -63,7 +63,7 @@ import {
   InterpreterOutput,
   IWorkspaceManagerState,
   maxBrowseIndex,
-  ResultOutput
+  ResultOutput,
 } from './states';
 
 const actions = {
@@ -72,7 +72,7 @@ const actions = {
   ...sourcecastActions,
   ...sourcereelActions,
   ...interpreterActions,
-  ...collabActions
+  ...collabActions,
 };
 
 /**
@@ -101,7 +101,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
       return {
         ...state,
-        sourcecast: sourcecastState
+        sourcecast: sourcecastState,
       };
     case WorkspaceLocations.sourcereel:
       const sourcereelState = sourcereelReducer(state.sourcereel, action);
@@ -110,7 +110,7 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       }
       return {
         ...state,
-        sourcereel: sourcereelState
+        sourcereel: sourcereelState,
       };
     default:
       break;
@@ -132,9 +132,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replValue: newReplValue,
             replHistory: {
               ...state[workspaceLocation].replHistory,
-              browseIndex: newIndex
-            }
-          }
+              browseIndex: newIndex,
+            },
+          },
         };
       } else {
         // Browsing history, no earlier records to show; return replValue to
@@ -150,9 +150,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replHistory: {
               browseIndex: newIndex,
               records: newRecords,
-              originalValue: ''
-            }
-          }
+              originalValue: '',
+            },
+          },
         };
       }
     case BROWSE_REPL_HISTORY_UP:
@@ -179,9 +179,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
               ...state[workspaceLocation].replHistory,
               browseIndex: newIndex,
               records: newRecords,
-              originalValue
-            }
-          }
+              originalValue,
+            },
+          },
         };
       } else {
         // Browsing history, and still have later history to show
@@ -194,9 +194,9 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             replValue: newReplValue,
             replHistory: {
               ...state[workspaceLocation].replHistory,
-              browseIndex: newIndex
-            }
-          }
+              browseIndex: newIndex,
+            },
+          },
         };
       }
 
@@ -205,8 +205,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorHeight: action.payload.height
-        }
+          editorHeight: action.payload.height,
+        },
       };
     case CHANGE_EDITOR_WIDTH:
       return {
@@ -217,48 +217,48 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             (
               parseFloat(state[workspaceLocation].editorWidth.slice(0, -1)) +
               parseFloat(action.payload.widthChange)
-            ).toString() + '%'
-        }
+            ).toString() + '%',
+        },
       };
     case CHANGE_EXEC_TIME:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          execTime: action.payload.execTime
-        }
+          execTime: action.payload.execTime,
+        },
       };
     case CHANGE_SIDE_CONTENT_HEIGHT:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          sideContentHeight: action.payload.height
-        }
+          sideContentHeight: action.payload.height,
+        },
       };
     case CLEAR_REPL_INPUT:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          replValue: ''
-        }
+          replValue: '',
+        },
       };
     case CLEAR_REPL_OUTPUT_LAST:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          output: state[workspaceLocation].output.slice(0, -1)
-        }
+          output: state[workspaceLocation].output.slice(0, -1),
+        },
       };
     case CLEAR_REPL_OUTPUT:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          output: []
-        }
+          output: [],
+        },
       };
     case END_CLEAR_CONTEXT:
       return {
@@ -271,8 +271,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
             workspaceLocation,
             action.payload.library.variant
           ),
-          globals: action.payload.library.globals
-        }
+          globals: action.payload.library.globals,
+        },
       };
     case SEND_REPL_INPUT_TO_OUTPUT:
       // CodeOutput properties exist in parallel with workspaceLocation
@@ -295,17 +295,17 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           output: newOutput,
           replHistory: {
             ...state[workspaceLocation].replHistory,
-            records: newReplHistoryRecords
-          }
-        }
+            records: newReplHistoryRecords,
+          },
+        },
       };
     case CHANGE_EXTERNAL_LIBRARY:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          externalLibrary: action.payload.newExternal
-        }
+          externalLibrary: action.payload.newExternal,
+        },
       };
     case HANDLE_CONSOLE_LOG:
       /* Possible cases:
@@ -316,12 +316,12 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
       if (lastOutput === undefined || lastOutput.type !== 'running') {
         newOutput = state[workspaceLocation].output.concat({
           type: 'running',
-          consoleLogs: [action.payload.logString]
+          consoleLogs: [action.payload.logString],
         });
       } else {
         const updatedLastOutput = {
           type: lastOutput.type,
-          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString),
         };
         newOutput = state[workspaceLocation].output.slice(0, -1).concat(updatedLastOutput);
       }
@@ -329,15 +329,15 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          output: newOutput
-        }
+          output: newOutput,
+        },
       };
     case LOG_OUT:
       // Preserve the playground workspace even after log out
       const playgroundWorkspace = state.playground;
       return {
         ...defaultWorkspaceManager,
-        playground: playgroundWorkspace
+        playground: playgroundWorkspace,
       };
     case EVAL_EDITOR:
       return {
@@ -345,16 +345,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           isRunning: true,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       };
     case EVAL_REPL:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          isRunning: true
-        }
+          isRunning: true,
+        },
       };
     case EVAL_INTERPRETER_SUCCESS:
       lastOutput = state[workspaceLocation].output.slice(-1)[0];
@@ -362,13 +362,13 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         newOutput = state[workspaceLocation].output.slice(0, -1).concat({
           type: action.payload.type,
           value: action.payload.value,
-          consoleLogs: lastOutput.consoleLogs
+          consoleLogs: lastOutput.consoleLogs,
         } as ResultOutput);
       } else {
         newOutput = state[workspaceLocation].output.concat({
           type: action.payload.type,
           value: action.payload.value,
-          consoleLogs: []
+          consoleLogs: [],
         } as ResultOutput);
       }
       return {
@@ -378,8 +378,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           output: newOutput,
           isRunning: false,
           breakpoints: [],
-          highlightedLines: []
-        }
+          highlightedLines: [],
+        },
       };
     case EVAL_TESTCASE_SUCCESS:
       return {
@@ -392,15 +392,15 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
                 return {
                   ...testcase,
                   result: action.payload.value,
-                  errors: undefined
+                  errors: undefined,
                 };
               } else {
                 return testcase;
               }
             }
           ),
-          isRunning: false
-        }
+          isRunning: false,
+        },
       };
     case EVAL_TESTCASE_FAILURE:
       return {
@@ -413,13 +413,13 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
                 return {
                   ...testcase,
                   result: undefined,
-                  errors: action.payload.value
+                  errors: action.payload.value,
                 };
               }
               return testcase;
             }
-          )
-        }
+          ),
+        },
       };
     case EVAL_INTERPRETER_ERROR:
       lastOutput = state[workspaceLocation].output.slice(-1)[0];
@@ -427,13 +427,13 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         newOutput = state[workspaceLocation].output.slice(0, -1).concat({
           type: action.payload.type,
           errors: action.payload.errors,
-          consoleLogs: lastOutput.consoleLogs
+          consoleLogs: lastOutput.consoleLogs,
         } as ErrorOutput);
       } else {
         newOutput = state[workspaceLocation].output.concat({
           type: action.payload.type,
           errors: action.payload.errors,
-          consoleLogs: []
+          consoleLogs: [],
         } as ErrorOutput);
       }
       return {
@@ -442,8 +442,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           ...state[workspaceLocation],
           output: newOutput,
           isRunning: false,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       };
     /**
      * Called to signal the end of an interruption,
@@ -463,8 +463,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           isRunning: false,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       };
     case END_DEBUG_PAUSE:
       return {
@@ -472,8 +472,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           isRunning: false,
-          isDebugging: true
-        }
+          isDebugging: true,
+        },
       };
     case DEBUG_RESUME:
       return {
@@ -481,8 +481,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           isRunning: true,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       };
     case DEBUG_RESET:
       return {
@@ -490,8 +490,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           isRunning: false,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       };
     case RESET_TESTCASE:
       return {
@@ -504,14 +504,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
                 return {
                   ...testcase,
                   result: undefined,
-                  errors: undefined
+                  errors: undefined,
                 };
               } else {
                 return testcase;
               }
             }
-          )
-        }
+          ),
+        },
       };
 
     /**
@@ -525,8 +525,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           ...createDefaultWorkspace(workspaceLocation),
-          ...action.payload.workspaceOptions
-        }
+          ...action.payload.workspaceOptions,
+        },
       };
     case INIT_INVITE:
       return {
@@ -534,16 +534,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           sharedbAceInitValue: action.payload.editorValue,
-          sharedbAceIsInviting: true
-        }
+          sharedbAceIsInviting: true,
+        },
       };
     case FINISH_INVITE:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          sharedbAceIsInviting: false
-        }
+          sharedbAceIsInviting: false,
+        },
       };
     /**
      * Updates workspace without changing anything
@@ -554,16 +554,16 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          ...action.payload.workspaceOptions
-        }
+          ...action.payload.workspaceOptions,
+        },
       };
     case SET_EDITOR_SESSION_ID:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorSessionId: action.payload.editorSessionId
-        }
+          editorSessionId: action.payload.editorSessionId,
+        },
       };
 
     case SET_EDITOR_READONLY:
@@ -571,32 +571,32 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorReadonly: action.payload.editorReadonly
-        }
+          editorReadonly: action.payload.editorReadonly,
+        },
       };
     case SET_WEBSOCKET_STATUS:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          websocketStatus: action.payload.websocketStatus
-        }
+          websocketStatus: action.payload.websocketStatus,
+        },
       };
     case TOGGLE_EDITOR_AUTORUN:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          isEditorAutorun: !state[workspaceLocation].isEditorAutorun
-        }
+          isEditorAutorun: !state[workspaceLocation].isEditorAutorun,
+        },
       };
     case UPDATE_ACTIVE_TAB:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          sideContentActiveTab: action.payload.activeTab
-        }
+          sideContentActiveTab: action.payload.activeTab,
+        },
       };
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
@@ -604,8 +604,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         assessment: {
           ...state.assessment,
           currentAssessment: action.payload.assessmentId,
-          currentQuestion: action.payload.questionId
-        }
+          currentQuestion: action.payload.questionId,
+        },
       };
     case UPDATE_CURRENT_SUBMISSION_ID:
       return {
@@ -613,48 +613,48 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
         grading: {
           ...state.grading,
           currentSubmission: action.payload.submissionId,
-          currentQuestion: action.payload.questionId
-        }
+          currentQuestion: action.payload.questionId,
+        },
       };
     case UPDATE_EDITOR_VALUE:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorValue: action.payload.newEditorValue
-        }
+          editorValue: action.payload.newEditorValue,
+        },
       };
     case HIGHLIGHT_LINE:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          highlightedLines: action.payload.highlightedLines
-        }
+          highlightedLines: action.payload.highlightedLines,
+        },
       };
     case MOVE_CURSOR:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          newCursorPosition: action.payload.cursorPosition
-        }
+          newCursorPosition: action.payload.cursorPosition,
+        },
       };
     case UPDATE_REPL_VALUE:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          replValue: action.payload.newReplValue
-        }
+          replValue: action.payload.newReplValue,
+        },
       };
     case UPDATE_HAS_UNSAVED_CHANGES:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          hasUnsavedChanges: action.payload.hasUnsavedChanges
-        }
+          hasUnsavedChanges: action.payload.hasUnsavedChanges,
+        },
       };
     default:
       return state;

@@ -24,18 +24,18 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
-  updateWorkspace
+  updateWorkspace,
 } from '../../actions';
 import {
   resetWorkspace,
   updateCurrentAssessmentId,
-  WorkspaceLocation
+  WorkspaceLocation,
 } from '../../actions/workspaces';
 import { Library } from '../../components/assessment/assessmentShape';
 import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
-  StateProps
+  StateProps,
 } from '../../components/missionControl/EditingWorkspace';
 import { IPosition } from '../../components/workspace/Editor';
 import { IState, IWorkspaceState } from '../../reducers/states';
@@ -56,7 +56,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     storedAssessmentId: state.workspaces.assessment.currentAssessment,
-    storedQuestionId: state.workspaces.assessment.currentQuestion
+    storedQuestionId: state.workspaces.assessment.currentQuestion,
   };
 };
 
@@ -98,12 +98,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback)
+        promptAutocomplete(workspaceLocation, row, col, callback),
     },
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AssessmentWorkspace);
+export default connect(mapStateToProps, mapDispatchToProps)(AssessmentWorkspace);

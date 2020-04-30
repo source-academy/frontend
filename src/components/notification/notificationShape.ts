@@ -16,7 +16,7 @@ export enum NotificationTypes {
   graded = 'graded',
   submitted = 'submitted',
   unsubmitted = 'unsubmitted',
-  new_message = 'new_message'
+  new_message = 'new_message',
 }
 
 export type NotificationType = keyof typeof NotificationTypes;

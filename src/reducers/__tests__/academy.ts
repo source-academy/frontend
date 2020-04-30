@@ -12,7 +12,7 @@ function createContext(width: number, height: number): HTMLCanvasElement {
 test('LOG_OUT works correctly on default academy', () => {
   const action = {
     type: LOG_OUT,
-    payload: {}
+    payload: {},
   };
   const result: IAcademyState = reducer(defaultAcademy, action);
 
@@ -24,12 +24,12 @@ test('SAVE_CANVAS works correctly on default academy', () => {
 
   const action = {
     type: SAVE_CANVAS,
-    payload: payloadCanvas
+    payload: payloadCanvas,
   };
   const result: IAcademyState = reducer(defaultAcademy, action);
 
   expect(result).toEqual({
     ...defaultAcademy,
-    gameCanvas: payloadCanvas
+    gameCanvas: payloadCanvas,
   });
 });

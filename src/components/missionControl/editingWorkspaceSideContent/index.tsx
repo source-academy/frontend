@@ -13,7 +13,7 @@ export {
   ManageQuestionTab,
   MCQQuestionTemplateTab,
   ProgrammingQuestionTemplateTab,
-  TextareaContentTab
+  TextareaContentTab,
 };
 
 export const getValueFromPath = (path: (string | number)[], obj: any): any => {

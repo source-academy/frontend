@@ -40,23 +40,23 @@ const questionEditors: QuestionEditor[] = [
   {
     label: 'Prepend',
     icon: IconNames.CHEVRON_UP,
-    id: 'prepend'
+    id: 'prepend',
   },
   {
     label: 'Postpend',
     icon: IconNames.CHEVRON_DOWN,
-    id: 'postpend'
+    id: 'postpend',
   },
   {
     label: 'Solution Template',
     icon: IconNames.MANUAL,
-    id: 'solutionTemplate'
+    id: 'solutionTemplate',
   },
   {
     label: 'Suggested Answer',
     icon: IconNames.TICK,
-    id: 'answer'
-  }
+    id: 'answer',
+  },
 ];
 
 /*
@@ -71,7 +71,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
     this.state = {
       activeEditor: questionEditors[0],
       templateValue: '',
-      templateFocused: false
+      templateFocused: false,
     };
   }
 
@@ -155,7 +155,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
         <AceEditor
           className="react-ace"
           editorProps={{
-            $blockScrolling: Infinity
+            $blockScrolling: Infinity,
           }}
           fontSize={14}
           highlightActiveLine={false}
@@ -171,13 +171,13 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
 
   private handleChangeActiveEditor = (editor: QuestionEditor) => {
     this.setState({
-      activeEditor: editor
+      activeEditor: editor,
     });
   };
 
   private handleTemplateChange = (newCode: string) => {
     this.setState({
-      templateValue: newCode
+      templateValue: newCode,
     });
   };
 
@@ -185,7 +185,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
     if (!this.state.templateFocused) {
       this.setState({
         templateValue: getValueFromPath(path, this.props.assessment),
-        templateFocused: true
+        templateFocused: true,
       });
     }
   };
@@ -209,7 +209,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<
 
       this.setState({
         templateValue: '',
-        templateFocused: false
+        templateFocused: false,
       });
     }
   };

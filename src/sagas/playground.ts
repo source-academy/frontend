@@ -37,7 +37,7 @@ function* updateQueryString() {
     chap: chapter,
     variant,
     ext: external,
-    exec: execTime
+    exec: execTime,
   });
   yield put(actions.changeQueryString(newQueryString));
 }

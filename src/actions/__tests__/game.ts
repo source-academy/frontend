@@ -6,6 +6,6 @@ test('saveCanvas generates correct action object', () => {
   const action = saveCanvas(canvas);
   expect(action).toEqual({
     type: actionTypes.SAVE_CANVAS,
-    payload: canvas
+    payload: canvas,
   });
 });

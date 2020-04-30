@@ -9,7 +9,7 @@ test('Grading NavLink does NOT renders for Role.Student', () => {
   const tree = shallow(<NavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: 'academy/grading' }).exists())
+    tree.filterWhere((shallowTree) => shallowTree.find({ to: 'academy/grading' }).exists())
   ).toHaveLength(0);
 });
 
@@ -18,7 +18,7 @@ test('Grading NavLink renders for Role.Staff', () => {
   const tree = shallow(<NavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/grading' }).exists())
+    tree.filterWhere((shallowTree) => shallowTree.find({ to: '/academy/grading' }).exists())
   ).toHaveLength(1);
 });
 
@@ -27,6 +27,6 @@ test('Grading NavLink renders for Role.Admin', () => {
   const tree = shallow(<NavigationBar {...props} />);
   expect(tree.debug()).toMatchSnapshot();
   expect(
-    tree.filterWhere(shallowTree => shallowTree.find({ to: '/academy/grading' }).exists())
+    tree.filterWhere((shallowTree) => shallowTree.find({ to: '/academy/grading' }).exists())
   ).toHaveLength(1);
 });

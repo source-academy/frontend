@@ -6,21 +6,16 @@ import { fetchNotifications } from '../../actions';
 import Academy, { IDispatchProps, IStateProps } from '../../components/academy';
 import { IState } from '../../reducers/states';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  historyHelper: state.session.historyHelper
+const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state) => ({
+  historyHelper: state.session.historyHelper,
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = dispatch =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch) =>
   bindActionCreators(
     {
-      handleFetchNotifications: fetchNotifications
+      handleFetchNotifications: fetchNotifications,
     },
     dispatch
   );
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Academy)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Academy));

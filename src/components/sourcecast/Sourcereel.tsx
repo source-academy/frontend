@@ -12,7 +12,7 @@ import {
   ChapterSelect,
   ClearButton,
   EvalButton,
-  ExternalLibrarySelect
+  ExternalLibrarySelect,
 } from '../workspace/controlBar/index';
 import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
@@ -25,7 +25,7 @@ import {
   IPosition,
   ISourcecastData,
   KeyboardCommand,
-  RecordingStatus
+  RecordingStatus,
 } from './sourcecastShape';
 import SourcecastTable from './SourcecastTable';
 import SourcereelControlbar from './SourcereelControlbar';
@@ -110,7 +110,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       this.props.handleRecordInput({
         time: this.getTimerDuration(),
         type: 'keyboardCommand',
-        data: KeyboardCommand.run
+        data: KeyboardCommand.run,
       });
     };
     const autorunButtons = (
@@ -136,7 +136,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       this.props.handleRecordInput({
         time: this.getTimerDuration(),
         type: 'chapterSelect',
-        data: chapter
+        data: chapter,
       });
     };
 
@@ -169,7 +169,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       this.props.handleRecordInput({
         time: this.getTimerDuration(),
         type: 'externalLibrarySelect',
-        data: name
+        data: name,
       });
     };
 
@@ -195,12 +195,12 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       highlightedLines: this.props.highlightedLines,
       newCursorPosition: this.props.newCursorPosition,
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-      handleRecordInput: this.props.handleRecordInput
+      handleRecordInput: this.props.handleRecordInput,
     };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
-        replButtons: [evalButton, clearButton]
+        replButtons: [evalButton, clearButton],
       },
       customEditor: <SourcecastEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
@@ -214,7 +214,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        handleReplValueChange: this.props.handleReplValueChange,
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
@@ -243,7 +243,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
                   recordingStatus={this.props.recordingStatus}
                 />
               </div>
-            )
+            ),
           },
           {
             label: 'Management',
@@ -257,13 +257,13 @@ class Sourcereel extends React.Component<ISourcereelProps> {
                 />
               </div>
             ),
-            id: SideContentType.introduction
+            id: SideContentType.introduction,
           },
           listVisualizerTab,
           inspectorTab,
-          envVisualizerTab
-        ]
-      }
+          envVisualizerTab,
+        ],
+      },
     };
     return (
       <div className={classNames('Sourcereel', Classes.DARK)}>
@@ -279,7 +279,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
     this.props.handleRecordInit({
       chapter: this.props.sourceChapter,
       externalLibrary: this.props.externalLibraryName as ExternalLibraryName,
-      editorValue: this.props.editorValue
+      editorValue: this.props.editorValue,
     });
 }
 
@@ -289,21 +289,21 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <ListVisualizer />,
-  id: SideContentType.dataVisualiser
+  id: SideContentType.dataVisualiser,
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <Inspector />,
-  id: SideContentType.inspector
+  id: SideContentType.inspector,
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <EnvVisualizer />,
-  id: SideContentType.envVisualiser
+  id: SideContentType.envVisualiser,
 };
 
 export default Sourcereel;

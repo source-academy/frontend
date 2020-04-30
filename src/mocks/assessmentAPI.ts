@@ -8,7 +8,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
-  TestcaseTypes
+  TestcaseTypes,
 } from '../components/assessment/assessmentShape';
 import { externalLibraries } from '../reducers/externalLibraries';
 
@@ -28,8 +28,8 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: GradingStatuses.none
-  }
+    gradingStatus: GradingStatuses.none,
+  },
 ];
 
 const mockOpenedAssessmentsOverviews: IAssessmentOverview[] = [
@@ -60,7 +60,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
   },
   {
     category: AssessmentCategories.Mission,
@@ -77,7 +77,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -94,7 +94,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
   },
   {
     category: AssessmentCategories.Path,
@@ -111,7 +111,7 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.excluded
+    gradingStatus: GradingStatuses.excluded,
   },
   {
     category: AssessmentCategories.Practical,
@@ -129,8 +129,8 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     story: 'sidequest-2.1',
     xp: 3,
     gradingStatus: GradingStatuses.none,
-    private: true
-  }
+    private: true,
+  },
 ];
 
 const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
@@ -149,7 +149,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    gradingStatus: GradingStatuses.grading
+    gradingStatus: GradingStatuses.grading,
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -166,7 +166,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -183,7 +183,7 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    gradingStatus: GradingStatuses.graded
+    gradingStatus: GradingStatuses.graded,
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -200,14 +200,14 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    gradingStatus: GradingStatuses.excluded
-  }
+    gradingStatus: GradingStatuses.excluded,
+  },
 ];
 
 export const mockAssessmentOverviews = [
   ...mockUnopenedAssessmentsOverviews,
   ...mockOpenedAssessmentsOverviews,
-  ...mockClosedAssessmentOverviews
+  ...mockClosedAssessmentOverviews,
 ];
 
 const mockGlobals: [string, any][] = [
@@ -218,43 +218,43 @@ const mockGlobals: [string, any][] = [
   ['testBooleanUndefined', undefined],
   ['testBooleanNull', null],
   ['testObject', { a: 1, b: 2 }],
-  ['testArray', [1, 2, 'a', 'b']]
+  ['testArray', [1, 2, 'a', 'b']],
 ];
 
 const mockSoundLibrary: Library = {
   chapter: 4,
   external: {
     name: ExternalLibraryNames.SOUNDS,
-    symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
+    symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!,
   },
-  globals: mockGlobals
+  globals: mockGlobals,
 };
 
 export const mockRuneLibrary: Library = {
   chapter: 1,
   external: {
     name: ExternalLibraryNames.RUNES,
-    symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
+    symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!,
   },
-  globals: mockGlobals
+  globals: mockGlobals,
 };
 
 const mockCurveLibrary: Library = {
   chapter: 4,
   external: {
     name: ExternalLibraryNames.CURVES,
-    symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
+    symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!,
   },
-  globals: mockGlobals
+  globals: mockGlobals,
 };
 
 const mockToneMatrixLibrary: Library = {
   chapter: 4,
   external: {
     name: ExternalLibraryNames.SOUNDS,
-    symbols: ['get_matrix']
+    symbols: ['get_matrix'],
   },
-  globals: mockGlobals
+  globals: mockGlobals,
 };
 
 export const mockAssessmentQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
@@ -280,20 +280,20 @@ const chickenrice = "chicken rice";`,
         type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
-        answer: `"pizza"`
+        answer: `"pizza"`,
       },
       {
         type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
-        answer: `"sushi"`
+        answer: `"sushi"`,
       },
       {
         type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
-        answer: `"chicken rice"`
-      }
+        answer: `"chicken rice"`,
+      },
     ],
     solutionTemplate: `function answer() {
     // Write something here!
@@ -303,7 +303,7 @@ const chickenrice = "chicken rice";`,
     xp: 0,
     grade: 0,
     maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
   },
   {
     autogradingResults: [],
@@ -327,14 +327,14 @@ const pi = 3.1415928;`,
         type: TestcaseTypes.public,
         program: `areaOfCircle(5);`,
         score: 1,
-        answer: `78.53982`
+        answer: `78.53982`,
       },
       {
         type: TestcaseTypes.public,
         program: `volumeOfSphere(5);`,
         score: 1,
-        answer: `523.5988`
-      }
+        answer: `523.5988`,
+      },
     ],
     solutionTemplate: `function areaOfCircle(x) {
     // return area of circle
@@ -347,7 +347,7 @@ function volumeOfSphere(x) {
     xp: 0,
     grade: 0,
     maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
   },
   {
     answer: 3,
@@ -357,20 +357,20 @@ function volumeOfSphere(x) {
     choices: [
       {
         content: '**Option** `A`',
-        hint: '_hint_ A is `here`'
+        hint: '_hint_ A is `here`',
       },
       {
         content: '### B',
-        hint: 'hint B'
+        hint: 'hint B',
       },
       {
         content: 'C',
-        hint: null
+        hint: null,
       },
       {
         content: 'D',
-        hint: 'hint D'
-      }
+        hint: 'hint D',
+      },
     ],
     id: 2,
     library: mockCurveLibrary,
@@ -379,7 +379,7 @@ function volumeOfSphere(x) {
     xp: 0,
     grade: 0,
     maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
   },
   {
     answer: 3,
@@ -389,20 +389,20 @@ function volumeOfSphere(x) {
     choices: [
       {
         content: 'A',
-        hint: null
+        hint: null,
       },
       {
         content: 'B',
-        hint: null
+        hint: null,
       },
       {
         content: 'C',
-        hint: null
+        hint: null,
       },
       {
         content: 'D',
-        hint: null
-      }
+        hint: null,
+      },
     ],
     id: 3,
     library: mockCurveLibrary,
@@ -411,7 +411,7 @@ function volumeOfSphere(x) {
     xp: 0,
     grade: 0,
     maxGrade: 2,
-    maxXp: 2
+    maxXp: 2,
   },
   {
     autogradingResults: [],
@@ -428,8 +428,8 @@ function volumeOfSphere(x) {
     xp: 0,
     grade: 0,
     maxGrade: 2,
-    maxXp: 2
-  }
+    maxXp: 2,
+  },
 ];
 
 export const mockClosedAssessmentQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
@@ -452,20 +452,20 @@ export const mockClosedAssessmentQuestions: (IProgrammingQuestion | IMCQQuestion
         type: TestcaseTypes.public,
         program: `fibonacci(3);`,
         score: 1,
-        answer: `2`
+        answer: `2`,
       },
       {
         type: TestcaseTypes.public,
         program: `fibonacci(4);`,
         score: 1,
-        answer: `3`
+        answer: `3`,
       },
       {
         type: TestcaseTypes.public,
         program: `fibonacci(5);`,
         score: 1,
-        answer: `5`
-      }
+        answer: `5`,
+      },
     ],
     solutionTemplate: `function fibonacci(n) {
     // Your answer here
@@ -473,7 +473,7 @@ export const mockClosedAssessmentQuestions: (IProgrammingQuestion | IMCQQuestion
     type: 'programming',
     grader: {
       name: 'avenger',
-      id: 1
+      id: 1,
     },
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
@@ -506,29 +506,29 @@ _italics_
 ![](image-url-goes-here)`,
     autogradingResults: [
       {
-        resultType: 'pass'
+        resultType: 'pass',
       },
       {
         resultType: 'fail',
         expected: '8',
-        actual: '5'
+        actual: '5',
       },
       {
         resultType: 'error',
         errors: [
           {
-            errorType: 'timeout'
+            errorType: 'timeout',
           },
           {
             errorType: 'syntax',
             line: 1,
             location: 'student',
             errorLine: 'function fibonacci(n) {',
-            errorExplanation: 'Just kidding!'
-          }
-        ]
-      }
-    ]
+            errorExplanation: 'Just kidding!',
+          },
+        ],
+      },
+    ],
   },
   {
     answer: `function recurse(rune, n) {
@@ -547,7 +547,7 @@ _italics_
     type: 'programming',
     grader: {
       name: 'some avenger',
-      id: 1
+      id: 1,
     },
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
@@ -588,8 +588,8 @@ _italics_
     #### Upcoming Tasks
     - [] Meet Avenger Avenger at Level X-05
     - [] Open the Pod Bay Doors`,
-    autogradingResults: []
-  }
+    autogradingResults: [],
+  },
 ];
 
 export const mockPathQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
@@ -600,20 +600,20 @@ export const mockPathQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
     choices: [
       {
         content: 'XOR gate',
-        hint: 'This is the exclusive-OR gate!'
+        hint: 'This is the exclusive-OR gate!',
       },
       {
         content: 'IF gate',
-        hint: 'Correct!'
+        hint: 'Correct!',
       },
       {
         content: 'AND gate',
-        hint: 'This logic gate exists!'
+        hint: 'This logic gate exists!',
       },
       {
         content: 'OR gate',
-        hint: 'This logic gate exists!'
-      }
+        hint: 'This logic gate exists!',
+      },
     ],
     id: 0,
     library: mockRuneLibrary,
@@ -622,7 +622,7 @@ export const mockPathQuestions: (IProgrammingQuestion | IMCQQuestion)[] = [
     xp: 0,
     grade: 0,
     maxGrade: 0,
-    maxXp: 0
+    maxXp: 0,
   },
   {
     autogradingResults: [],
@@ -667,32 +667,32 @@ const __AND = (xs) => {
         type: TestcaseTypes.public,
         program: `__AND(list(true, false));`,
         score: 0,
-        answer: `false`
+        answer: `false`,
       },
       {
         type: TestcaseTypes.public,
         program: `__AND(list(true, true, false));`,
         score: 0,
-        answer: `false`
+        answer: `false`,
       },
       {
         type: TestcaseTypes.public,
         program: `__AND(list(true, OR(true, false), OR(true, true)));`,
         score: 0,
-        answer: `true`
+        answer: `true`,
       },
       {
         type: TestcaseTypes.hidden,
         program: `__AND(list(true, OR(false, true), AND(list(true, false)), false));`,
         score: 0,
-        answer: `false`
+        answer: `false`,
       },
       {
         type: TestcaseTypes.hidden,
         program: `__AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
         score: 0,
-        answer: `true`
-      }
+        answer: `true`,
+      },
     ],
     solutionTemplate: `function AND(inputs) {
     // Your answer here!
@@ -701,7 +701,7 @@ const __AND = (xs) => {
     xp: 0,
     grade: 0,
     maxGrade: 0,
-    maxXp: 0
+    maxXp: 0,
   },
   {
     autogradingResults: [],
@@ -740,20 +740,20 @@ const __XOR = (x, y) => {
         type: TestcaseTypes.public,
         program: `__XOR(true, false);`,
         score: 0,
-        answer: `true`
+        answer: `true`,
       },
       {
         type: TestcaseTypes.public,
         program: `__XOR(false, true);`,
         score: 0,
-        answer: `true`
+        answer: `true`,
       },
       {
         type: TestcaseTypes.hidden,
         program: `__XOR(true, XOR(true, false));`,
         score: 0,
-        answer: `false`
-      }
+        answer: `false`,
+      },
     ],
     solutionTemplate: `function XOR(x, y) {
     // Your answer here!
@@ -762,7 +762,7 @@ const __XOR = (x, y) => {
     xp: 0,
     grade: 0,
     maxGrade: 0,
-    maxXp: 0
+    maxXp: 0,
   },
   {
     autogradingResults: [],
@@ -813,20 +813,20 @@ const __NOR_AND = (x, y) => {
         type: TestcaseTypes.public,
         program: `__NOR_AND(false, true);`,
         score: 0,
-        answer: `false`
+        answer: `false`,
       },
       {
         type: TestcaseTypes.public,
         program: `__NOR_AND(true, true);`,
         score: 0,
-        answer: `true`
+        answer: `true`,
       },
       {
         type: TestcaseTypes.hidden,
         program: `__NOR_AND(true, NOR_AND(false, true));`,
         score: 0,
-        answer: `false`
-      }
+        answer: `false`,
+      },
     ],
     solutionTemplate: `function NOR_AND(x, y) {
     // Your answer here!
@@ -835,8 +835,8 @@ const __NOR_AND = (x, y) => {
     xp: 0,
     grade: 0,
     maxGrade: 0,
-    maxXp: 0
-  }
+    maxXp: 0,
+  },
 ];
 
 /*
@@ -850,7 +850,7 @@ export const mockAssessments: IAssessment[] = [
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'An Odessey to Runes'
+    title: 'An Odessey to Runes',
   },
   {
     category: 'Mission',
@@ -859,7 +859,7 @@ export const mockAssessments: IAssessment[] = [
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'The Secret to Streams'
+    title: 'The Secret to Streams',
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -885,7 +885,7 @@ sapien
 \`\`\``,
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'A sample Sidequest'
+    title: 'A sample Sidequest',
   },
   {
     category: AssessmentCategories.Mission,
@@ -894,7 +894,7 @@ sapien
       'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
-    title: 'A Closed Mission'
+    title: 'A Closed Mission',
   },
   {
     category: AssessmentCategories.Sidequest,
@@ -903,7 +903,7 @@ sapien
       'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
-    title: 'A Closed Sidequest'
+    title: 'A Closed Sidequest',
   },
   {
     category: AssessmentCategories.Path,
@@ -915,6 +915,6 @@ This path is intended to demonstrate concepts from the lecture **Logic Circuits*
 The path comprises 4 questions and is fully autograded and guided, and there are **no private test cases** - there will be no manual review by default. Please consult your Avenger if you require assistance!</TEXT>`,
     missionPDF: 'www.google.com',
     questions: mockPathQuestions,
-    title: 'A sample guided path'
-  }
+    title: 'A sample guided path',
+  },
 ];

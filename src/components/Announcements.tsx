@@ -28,13 +28,13 @@ class Announcements extends React.Component<IAnnouncementsProps, {}> {
   public render() {
     const props: IContentDisplayProps = {
       display: <AnnouncementCard announcements={this.props.announcements} />,
-      loadContentDispatch: this.props.handleAnnouncementsFetch
+      loadContentDispatch: this.props.handleAnnouncementsFetch,
     };
     return <ContentDisplay {...props} />;
   }
 }
 
-export const AnnouncementCard: React.SFC<IAnnouncementCardProps> = props => {
+export const AnnouncementCard: React.SFC<IAnnouncementCardProps> = (props) => {
   if (props.announcements === undefined) {
     return <NonIdealState description="Fetching announcements..." icon={<Spinner />} />;
   } else if (props.announcements.length === 0) {

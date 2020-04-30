@@ -8,7 +8,7 @@ import {
   NumericInput,
   Position,
   Pre,
-  Text
+  Text,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
@@ -101,7 +101,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       xpAdjustmentInput: props.xpAdjustment.toString(),
       editorValue: props.comments,
       selectedTab: 'write',
-      currentlySaving: false
+      currentlySaving: false,
     };
   }
 
@@ -110,22 +110,22 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     const saveButtonOpts = {
       intent: hasUnsavedChanges ? Intent.WARNING : Intent.NONE,
       minimal: !hasUnsavedChanges,
-      className: gradingEditorButtonClass
+      className: gradingEditorButtonClass,
     };
     const discardButtonOpts = {
       intent: hasUnsavedChanges ? Intent.DANGER : Intent.NONE,
       minimal: !hasUnsavedChanges,
-      className: gradingEditorButtonClass
+      className: gradingEditorButtonClass,
     };
     const saveAndContinueButtonOpts = {
       intent: hasUnsavedChanges ? Intent.SUCCESS : Intent.NONE,
       minimal: !hasUnsavedChanges,
-      className: classNames(gradingEditorButtonClass, 'grading-editor-save-and-continue')
+      className: classNames(gradingEditorButtonClass, 'grading-editor-save-and-continue'),
     };
     const onTabChange = (tab: ReactMdeProps['selectedTab']) =>
       this.setState({
         ...this.state,
-        selectedTab: tab
+        selectedTab: tab,
       });
 
     return (
@@ -354,7 +354,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           ...this.state,
           gradeAdjustmentInput: this.props.gradeAdjustment!.toString(),
           xpAdjustmentInput: this.props.xpAdjustment!.toString(),
-          editorValue: this.props.comments || ''
+          editorValue: this.props.comments || '',
         },
         () => {
           showSuccessMessage('Discarded!', 1000);
@@ -375,7 +375,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       gradeAdjustmentInput: valueAsString,
       xpAdjustmentInput: String(
         Math.round((valueAsNumber / this.props.maxGrade) * this.props.maxXp) || 0
-      )
+      ),
     });
   };
 
@@ -388,14 +388,14 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
   private onXpAdjustmentInputChange = (valueAsNumber: number, valueAsString: string | null) => {
     this.setState({
       ...this.state,
-      xpAdjustmentInput: valueAsString
+      xpAdjustmentInput: valueAsString,
     });
   };
 
   private handleEditorValueChange = (editorValue: string) => {
     this.setState({
       ...this.state,
-      editorValue
+      editorValue,
     });
   };
 
@@ -436,62 +436,62 @@ const mdeToBlueprintIconMapping = (name: string): { iconName: IconName; title?: 
     case 'header':
       return {
         iconName: IconNames.HEADER,
-        title: 'Header Styles'
+        title: 'Header Styles',
       };
     case 'bold':
       return {
         iconName: IconNames.BOLD,
-        title: 'Bold'
+        title: 'Bold',
       };
     case 'italic':
       return {
         iconName: IconNames.ITALIC,
-        title: 'Italic'
+        title: 'Italic',
       };
     case 'strikethrough':
       return {
         iconName: IconNames.STRIKETHROUGH,
-        title: 'Strikethrough'
+        title: 'Strikethrough',
       };
     case 'link':
       return {
         iconName: IconNames.LINK,
-        title: 'Link'
+        title: 'Link',
       };
     case 'quote':
       return {
         iconName: IconNames.CITATION,
-        title: 'Quote'
+        title: 'Quote',
       };
     case 'code':
       return {
         iconName: IconNames.CODE,
-        title: 'Monospaced'
+        title: 'Monospaced',
       };
     case 'image':
       return {
         iconName: IconNames.MEDIA,
-        title: 'Image'
+        title: 'Image',
       };
     case 'unordered-list':
       return {
         iconName: IconNames.UNGROUP_OBJECTS,
-        title: 'Bullets'
+        title: 'Bullets',
       };
     case 'ordered-list':
       return {
         iconName: IconNames.NUMBERED_LIST,
-        title: 'Numbering'
+        title: 'Numbering',
       };
     case 'checked-list':
       return {
         iconName: IconNames.SQUARE,
-        title: 'Checkboxes'
+        title: 'Checkboxes',
       };
     default:
       // For unknown icons, a question mark icon is returned
       return {
-        iconName: IconNames.HELP
+        iconName: IconNames.HELP,
       };
   }
 };

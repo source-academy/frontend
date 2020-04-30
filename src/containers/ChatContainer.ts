@@ -19,18 +19,15 @@ const mapStateToProps: MapStateToProps<{}, OwnProps, IState> = (state, props) =>
   accessToken: state.session.accessToken,
   assessmentId: props.assessmentId,
   roomId: props.roomId,
-  submissionId: props.submissionId
+  submissionId: props.submissionId,
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleNotifyUsers: notifyChatUsers
+      handleNotifyUsers: notifyChatUsers,
     },
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChatApp);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatApp);

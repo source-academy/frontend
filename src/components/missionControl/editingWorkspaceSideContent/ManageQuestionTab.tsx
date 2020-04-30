@@ -25,7 +25,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       showSaveOverlay: false,
-      modifyAssessment: () => {}
+      modifyAssessment: () => {},
     };
   }
 
@@ -129,7 +129,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     if (this.props.hasUnsavedChanges) {
       this.setState({
         showSaveOverlay: true,
-        modifyAssessment
+        modifyAssessment,
       });
     } else {
       modifyAssessment();
@@ -153,7 +153,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
           {controlButton('Cancel', null, () => this.setState({ showSaveOverlay: false }), {
-            minimal: false
+            minimal: false,
           })}
           {controlButton(
             'Confirm',
@@ -161,7 +161,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
             () => {
               this.state.modifyAssessment();
               this.setState({
-                showSaveOverlay: false
+                showSaveOverlay: false,
               });
             },
             { minimal: false, intent: Intent.DANGER }

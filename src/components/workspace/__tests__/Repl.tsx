@@ -7,30 +7,30 @@ import {
   ErrorOutput,
   InterpreterOutput,
   ResultOutput,
-  RunningOutput
+  RunningOutput,
 } from '../../../reducers/states';
 import Repl, { Output } from '../Repl';
 
 const mockRunningOutput: RunningOutput = {
   type: 'running',
-  consoleLogs: ['a', 'bb', 'cccccccccccccccccccccccccccccccc', 'd']
+  consoleLogs: ['a', 'bb', 'cccccccccccccccccccccccccccccccc', 'd'],
 };
 
 const mockCodeOutput: CodeOutput = {
   type: 'code',
-  value: "display('');"
+  value: "display('');",
 };
 
 const mockResultOutput: ResultOutput = {
   type: 'result',
   value: 42,
-  consoleLogs: []
+  consoleLogs: [],
 };
 
 const mockErrorOutput: ErrorOutput = {
   type: 'errors',
   errors: [mockTypeError()],
-  consoleLogs: []
+  consoleLogs: [],
 };
 
 test('Repl renders correctly', () => {
@@ -41,7 +41,7 @@ test('Repl renders correctly', () => {
     handleReplEval: () => {},
     handleReplOutputClear: () => {},
     output: [mockResultOutput, mockCodeOutput, mockErrorOutput, mockRunningOutput],
-    replValue: ''
+    replValue: '',
   };
   const app = <Repl {...props} />;
   const tree = shallow(app);
@@ -69,7 +69,7 @@ test('Result output (no consoleLogs) renders correctly', () => {
 test('Result output (with consoleLogs) renders correctly', () => {
   const props = {
     ...mockResultOutput,
-    consoleLogs: mockRunningOutput.consoleLogs
+    consoleLogs: mockRunningOutput.consoleLogs,
   };
   const app = <Output {...{ output: props }} />;
   const tree = shallow(app);
@@ -85,7 +85,7 @@ test('Error output (no consoleLogs) renders correctly', () => {
 test('Error output (with consoleLogs) renders correctly', () => {
   const props = {
     ...mockErrorOutput,
-    consoleLogs: mockRunningOutput.consoleLogs
+    consoleLogs: mockRunningOutput.consoleLogs,
   };
   const app = <Output {...{ output: props }} />;
   const tree = shallow(app);

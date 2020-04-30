@@ -10,7 +10,7 @@ import {
   Icon,
   Intent,
   MenuItem,
-  Text
+  Text,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
@@ -26,7 +26,7 @@ import { exportXml, storeLocalAssessmentOverview } from './xmlParseHelper';
 import {
   AssessmentCategories,
   AssessmentCategory,
-  IAssessmentOverview
+  IAssessmentOverview,
 } from '../assessment/assessmentShape';
 import { controlButton } from '../commons';
 import Markdown from '../commons/Markdown';
@@ -51,7 +51,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     this.state = {
       editingOverviewField: '',
       fieldValue: '',
-      showOptionsOverlay: false
+      showOptionsOverlay: false,
     };
   }
 
@@ -67,11 +67,11 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
   private saveEditOverview = (field: keyof IAssessmentOverview) => (e: any) => {
     const overview = {
       ...this.props.overview,
-      [field]: this.state.fieldValue
+      [field]: this.state.fieldValue,
     };
     this.setState({
       editingOverviewField: '',
-      fieldValue: ''
+      fieldValue: '',
     });
     storeLocalAssessmentOverview(overview);
     this.props.updateEditingOverview(overview);
@@ -79,7 +79,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
 
   private handleEditOverview = () => (e: any) => {
     this.setState({
-      fieldValue: e.target.value
+      fieldValue: e.target.value,
     });
   };
 
@@ -87,14 +87,14 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     if (this.state.editingOverviewField !== field) {
       this.setState({
         editingOverviewField: field,
-        fieldValue: this.props.overview[field]
+        fieldValue: this.props.overview[field],
       });
     }
   };
 
   private toggleOptionsOverlay = () => {
     this.setState({
-      showOptionsOverlay: !this.state.showOptionsOverlay
+      showOptionsOverlay: !this.state.showOptionsOverlay,
     });
   };
 
@@ -201,7 +201,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
   private saveCategory = (i: AssessmentCategory, e: any) => {
     const overview = {
       ...this.props.overview,
-      category: i
+      category: i,
     };
     storeLocalAssessmentOverview(overview);
     this.props.updateEditingOverview(overview);
@@ -266,7 +266,7 @@ const assessmentCategoriesArr = [
   AssessmentCategories.Mission,
   AssessmentCategories.Path,
   AssessmentCategories.Sidequest,
-  AssessmentCategories.Contest
+  AssessmentCategories.Contest,
 ];
 
 const categorySelect = (
