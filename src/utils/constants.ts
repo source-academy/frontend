@@ -16,6 +16,11 @@ export const INSTANCE_LOCATOR = process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR;
 export const DEFAULT_SOURCE_CHAPTER = 4;
 export const DEFAULT_SOURCE_VARIANT = 'default';
 
+export const MODULES_BACKEND_URL =
+  process.env.MODULES_BACKEND_URL === undefined || process.env.MODULES_BACKEND_URL === ''
+    ? 'modules'
+    : process.env.MODULES_BACKEND_URL;
+
 export enum LINKS {
   GITHUB_ISSUES = 'https://github.com/source-academy/cadet-frontend/issues',
   GITHUB_ORG = 'https://github.com/source-academy',

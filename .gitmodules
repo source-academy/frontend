@@ -1,3 +1,3 @@
-[submodule "modules"]
-	path = modules
+[submodule "public/modules"]
+	path = public/modules
 	url = https://github.com/source-academy/modules.git

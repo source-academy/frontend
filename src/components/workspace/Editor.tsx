@@ -3,6 +3,8 @@ import AceEditor, { IAnnotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
+import { Documentation } from '../../reducers/documentation';
+
 import { require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
@@ -202,7 +204,8 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     if (external === undefined) {
       external = 'NONE';
     }
-    HighlightRulesSelector(chapter, variant, external);
+
+    HighlightRulesSelector(chapter, variant, external, Documentation.externalLibraries[external]);
     ModeSelector(chapter, variant, external);
     return 'source' + chapter.toString() + variant + external;
   };
@@ -293,16 +296,30 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const chapter = this.props.sourceChapter;
     const variantString =
       this.props.sourceVariant === 'default' ? '' : `_${this.props.sourceVariant}`;
-    const external =
-      this.props.externalLibraryName === undefined ? 'NONE' : this.props.externalLibraryName;
-    const domain =
-      external === 'NONE' ? `source_${chapter}${variantString}` : `External%20libraries`;
     const pos = (this.AceEditor.current as any).editor.selection.getCursor();
     const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
     const url = LINKS.TEXTBOOK;
-    if (token !== null && /\bsupport.function\b/.test(token.type)) {
-      window.open(`${url}source/${domain}/global.html#${token.value}`); // opens the link
-    } else if (token !== null && /\bstorage.type\b/.test(token.type)) {
+
+    const external =
+      this.props.externalLibraryName === undefined ? 'NONE' : this.props.externalLibraryName;
+    const externalUrl =
+      this.props.externalLibraryName === 'ALL' ? `External%20libraries` : external;
+    const ext = Documentation.externalLibraries[external];
+
+    if (ext.some((node: { caption: string }) => node.caption === token.value)) {
+      if (
+        token !== null &&
+        (/\bsupport.function\b/.test(token.type) || /\bconstant.language\b/.test(token.type))
+      ) {
+        window.open(`${url}source/${externalUrl}/global.html#${token.value}`); // opens external library link
+      }
+    } else if (
+      token !== null &&
+      (/\bsupport.function\b/.test(token.type) || /\bconstant.language\b/.test(token.type))
+    ) {
+      window.open(`${url}source/source_${chapter}${variantString}/global.html#${token.value}`); // opens builtn library link
+    }
+    if (token !== null && /\bstorage.type\b/.test(token.type)) {
       window.open(`${url}source/source_${chapter}.pdf`);
     } else {
       this.props.handleDeclarationNavigate(
