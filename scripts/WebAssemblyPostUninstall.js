@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-var fs = require('fs');
-
-fs.unlink('./sample.txt', function (err) {
-    if (err) throw err;
+var fs = require('fs-extra');
+fs.rmdir('./public/externalLibs/sourceror', function (err) {
     console.log('File deleted!');
 });  
