@@ -230,6 +230,7 @@ export const sourceLanguages: ISourceLanguage[] = [
   { chapter: 1, variant: 'lazy' },
   { chapter: 2, variant: 'default' },
   { chapter: 2, variant: 'lazy' },
+  { chapter: 2, variant: 'nondet' },
   { chapter: 3, variant: 'default' },
   { chapter: 3, variant: 'concurrent' },
   { chapter: 3, variant: 'non-det' },
@@ -240,6 +241,7 @@ export const sourceLanguages: ISourceLanguage[] = [
 const variantDisplay: Map<Variant, string> = new Map([
   ['wasm', 'wasm'],
   ['non-det', 'Non-Det'],
+  ['nondet', 'Non Det'],
   ['concurrent', 'Concurrent'],
   ['lazy', 'Lazy'],
   ['gpu', 'GPU']
