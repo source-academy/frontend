@@ -492,11 +492,11 @@
           drawLine(context, newStartX, newStartY, newStartX, startY);
           drawLine(arrowContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
           drawLine(arrowContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT);
+          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2); 
 
           drawLine(hoverContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
           drawLine(hoverContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT);
+          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2);
         } else if (yCoord - 22 > newStartY) {
           // arrow points down
           const boxEdgeCoord = inBoxCoordinates(newStartX, newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT, false);
@@ -628,11 +628,11 @@
           drawLine(context, newStartX, newStartY, newStartX, startY);
           drawLine(arrowContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
           drawLine(arrowContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT);
+          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2);
 
           drawLine(hoverContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
           drawLine(hoverContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT);
+          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2);
         } else if (yCoord - 22 > newStartY) {
           // arrow points down
           const boxEdgeCoord = inBoxCoordinates(newStartX, newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT, true);
@@ -666,7 +666,7 @@
             drawScenePairs(dataObject[0], scene, wrapper, wrapperData[0], startX, wrapper.y + shiftY);
           }
           drawArrow(context, startX + DATA_UNIT_WIDTH / 4, startY + DATA_UNIT_HEIGHT / 2,
-            startX + DATA_UNIT_WIDTH / 4, wrapper.y + shiftY);
+            startX + DATA_UNIT_WIDTH / 4, wrapper.y + shiftY - 2);
 
         } else {
           if (is_Array(dataObject[0])) {
@@ -762,7 +762,6 @@
     context.strokeStyle = '#999999';
     //context.lineWidth = 2;
     context.stroke();
-    
   }
 
   function drawHitPairs(dataObject, hit, wrapper, x0, y0) {
@@ -774,12 +773,17 @@
     context.save();
     context.fill();
     context.restore();
+    hitCycleDetector.push(dataObject)
 
-    if (Array.isArray(dataObject[0]) && drawnDataObjects.includes(dataObject[0])) {
+    if (Array.isArray(dataObject[0]) 
+      && drawnDataObjects.includes(dataObject[0]) 
+      && !hitCycleDetector.includes(dataObject[0])) {
       drawHitPairs(dataObject[0], hit, wrapper, x0, y0 + DATA_UNIT_HEIGHT + PAIR_SPACING);
     }
 
-    if (Array.isArray(dataObject[1]) && drawnDataObjects.includes(dataObject[1])) {
+    if (Array.isArray(dataObject[1]) 
+      && drawnDataObjects.includes(dataObject[1])
+      && !hitCycleDetector.includes(dataObject[1])) {
       drawHitPairs(dataObject[1], hit, wrapper, x0 + DATA_UNIT_WIDTH + PAIR_SPACING, y0);
     }
     context.stroke();
@@ -861,6 +865,7 @@
       // initialiseBasicUnitHeight
     // initialisePairShift(dataObject);
     // initialiseCallGetShiftInfo(dataObject)
+    hitCycleDetector = [];
     drawHitPairs(dataObject, hit, wrapper, x0, y0);
   }
 
@@ -934,19 +939,19 @@
     }
 
     context.rect(x, y, config.width, config.height);
-    context.lineWidth = 2;
+    //context.lineWidth = 2;
     context.strokeStyle = 'white';
     context.stroke();
 
     if (config.selected) {
       context.strokeStyle = 'white';
-      context.lineWidth = 6;
+      //context.lineWidth = 6;
       context.stroke();
     }
 
     if (config.hovered) {
       context.strokeStyle = 'green';
-      context.lineWidth = 2;
+      //context.lineWidth = 2;
       context.stroke();
     }
   }
@@ -982,6 +987,7 @@
    * the frame.
    */
   function drawSceneFrameDataArrow(frame, name, dataObject) {
+    
     const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
     var scene = arrowLayer.scene,
       context = scene.context;
@@ -1269,6 +1275,7 @@
   
   let drawnDataObjects = [];
   let cycleDetector = [];
+  let hitCycleDetector = [];
   var frames = [];
   
   /**
