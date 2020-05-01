@@ -105,7 +105,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
             {hasRunCode ? (
               <AceEditor
                 className="react-ace"
-                mode="source2"
+                mode="source2defaultNONE"
                 theme="source"
                 fontSize={17}
                 highlightActiveLine={false}
@@ -143,8 +143,9 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
     const pathified = this.props.content[contIndex];
-    const redexed = pathified[0];
-    const redex = pathified[1].split('\n');
+    const redexed = pathified[0] + '';
+    const unsplitRedex = pathified[1] + '';
+    const redex = unsplitRedex.split('\n');
 
     const diffMarkers = [] as any[];
     if (redex.length > 0) {
@@ -184,7 +185,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
     const pathified = this.props.content[contIndex];
-    const redexed = pathified[0];
+    const redexed = pathified[0] + '';
     const redex = pathified[1];
     const split = redexed.split('$');
     if (split.length > 1) {

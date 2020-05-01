@@ -418,7 +418,13 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
 
   private processArrayOutput = (output: InterpreterOutput[]) => {
     const editorOutput = output[0];
-    if (editorOutput && editorOutput.type === 'result' && editorOutput.value instanceof Array) {
+    if (
+      editorOutput &&
+      editorOutput.type === 'result' &&
+      editorOutput.value instanceof Array &&
+      editorOutput.value[0] instanceof Array &&
+      typeof editorOutput.value[0][0] === 'string'
+    ) {
       return editorOutput.value;
     } else {
       return [];
