@@ -78,7 +78,7 @@
     "redux-saga": "^1.0.0",
     "sharedb-ace": "^1.0.9",
     "showdown": "^1.9.0",
-    "sourceror-driver": "^1.0.4",
+    "sourceror-driver": "^1.0.5",
     "typesafe-actions": "^4.4.2",
     "utility-types": "^3.7.0",
     "xml2js": "^0.4.19"
