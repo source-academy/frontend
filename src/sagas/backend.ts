@@ -605,9 +605,8 @@ function* backendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const id = action.payload.id;
-    const togglePublishTo = action.payload.togglePublishTo;
-    const resp: Response = yield request.publishAssessment(id, togglePublishTo, tokens);
+    const id = action.payload;
+    const resp: Response = yield request.publishAssessment(id, tokens);
 
     if (!resp || !resp.ok) {
       yield request.handleResponseError(resp);
@@ -616,11 +615,7 @@ function* backendSaga(): SagaIterator {
 
     yield put(actions.fetchAssessmentOverviews());
 
-    if (togglePublishTo) {
-      yield call(showSuccessMessage, 'Published successfully!', 1000);
-    } else {
-      yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
-    }
+    yield call(showSuccessMessage, 'Toggled Publish successfully!', 1000);
   });
 
   yield takeEvery(actionTypes.UPLOAD_ASSESSMENT, function*(

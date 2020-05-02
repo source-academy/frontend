@@ -7,7 +7,7 @@ import { controlButton } from '../commons';
 
 interface IPublishCellProps {
   data: IAssessmentOverview;
-  handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
+  handlePublishAssessment: (id: number) => void;
 }
 
 interface IPublishCellState {
@@ -49,7 +49,7 @@ class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> 
           </div>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              {controlButton('Confirm ' + text, IconNames.CONFIRM, this.handleDelete)}
+              {controlButton('Confirm ' + text, IconNames.CONFIRM, this.handlePublish)}
               {controlButton('Cancel', IconNames.CROSS, this.handleCloseDialog)}
             </div>
           </div>
@@ -60,9 +60,9 @@ class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> 
 
   private handleCloseDialog = () => this.setState({ dialogOpen: false });
   private handleOpenDialog = () => this.setState({ dialogOpen: true });
-  private handleDelete = () => {
+  private handlePublish = () => {
     const { data } = this.props;
-    this.props.handlePublishAssessment(!data.isPublished, data.id);
+    this.props.handlePublishAssessment(data.id);
     this.handleCloseDialog();
   };
 }

@@ -7,8 +7,7 @@ export const changeDateAssessment = (id: number, openAt: string, closeAt: string
 
 export const deleteAssessment = (id: number) => action(actionTypes.DELETE_ASSESSMENT, id);
 
-export const publishAssessment = (togglePublishTo: boolean, id: number) =>
-  action(actionTypes.PUBLISH_ASSESSMENT, { id, togglePublishTo });
+export const publishAssessment = (id: number) => action(actionTypes.PUBLISH_ASSESSMENT, id);
 
 export const uploadAssessment = (file: File, forceUpdate: boolean) =>
   action(actionTypes.UPLOAD_ASSESSMENT, { file, forceUpdate });

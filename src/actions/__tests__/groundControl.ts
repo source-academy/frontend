@@ -32,14 +32,10 @@ test('deleteAssessment generates correct action object', () => {
 
 test('publishAssessment generates correct action object', () => {
   const id = 54;
-  const togglePublishTo = false;
-  const action = publishAssessment(togglePublishTo, id);
+  const action = publishAssessment(id);
   expect(action).toEqual({
     type: actionTypes.PUBLISH_ASSESSMENT,
-    payload: {
-      togglePublishTo,
-      id
-    }
+    payload: id
   });
 });
 
