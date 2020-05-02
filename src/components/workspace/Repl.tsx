@@ -121,6 +121,8 @@ const renderResult = (value: any) => {
   }
 };
 
+(window as any).renderResultHook = renderResult;
+
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
   goGreen: () => {}
