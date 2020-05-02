@@ -442,6 +442,7 @@
     //context.closePath();
     //context.restore();
     context.font = '14px Roboto Mono Light, Courier New';
+    // cycleDetector is an array used to detected dataobjects that connect to themselves
     cycleDetector.push(dataObject);
 
     // repeat the same process for the tail of the pair
@@ -473,11 +474,11 @@
           drawLine(context, newStartX, newStartY, newStartX, startY);
           drawLine(arrowContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
           drawLine(arrowContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2); 
+          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2); // -2 accounts for buffer
 
           drawLine(hoverContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
           drawLine(hoverContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2);
+          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2); // -2 accounts for buffer
         } else if (yCoord - 22 > newStartY) {
           // arrow points down
           const boxEdgeCoord = inBoxCoordinates(newStartX, newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT, false);
@@ -609,11 +610,11 @@
           drawLine(context, newStartX, newStartY, newStartX, startY);
           drawLine(arrowContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
           drawLine(arrowContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2);
+          drawArrow(arrowContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2); // -2 accounts for buffer
 
           drawLine(hoverContext, newStartX, newStartY, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10);
           drawLine(hoverContext, newStartX , newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10);
-          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2);
+          drawArrow(hoverContext, xCoord, newStartY - DATA_UNIT_HEIGHT/2 - 10, xCoord, yCoord - DATA_UNIT_HEIGHT - 2); // -2 accounts for buffer
         } else if (yCoord - 22 > newStartY) {
           // arrow points down
           const boxEdgeCoord = inBoxCoordinates(newStartX, newStartY, xCoord, yCoord - DATA_UNIT_HEIGHT, true);
@@ -747,8 +748,11 @@
     context.save();
     context.fill();
     context.restore();
+    // hitCycleDetector is used to prevent this function from entering an infinite loop
+    // when data structures connect to themselves
     hitCycleDetector.push(dataObject)
 
+    // not a perfect tracing over the original dataObject but good enough
     if (Array.isArray(dataObject[0]) 
       && drawnDataObjects.includes(dataObject[0]) 
       && !hitCycleDetector.includes(dataObject[0])) {
