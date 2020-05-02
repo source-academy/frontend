@@ -79,15 +79,22 @@
     return helper(d1, d2);
   }
 
+  /**
+   * Initialise callGetShiftInfo by storing the parent data structure 
+   * When callGetShiftInfo is called, callGetShiftInfoData is the parent data structure that d2 is supposed to be found in
+   */ 
   let callGetShiftInfoData;
   function initialiseCallGetShiftInfo(dataStructure){
     callGetShiftInfoData = dataStructure;
   }
 
+  /**
+   * Returns the y coordinate of d2 with respect to its parent data structure
+   */
   function callGetShiftInfo(d2){
-    let x = getShiftInfo(callGetShiftInfoData, d2).y;
-    let y = dataObjectWrappers[dataObjects.indexOf(callGetShiftInfoData)].y + 3/4 * DATA_UNIT_HEIGHT;
-    return x - y - PAIR_SPACING;
+    return getShiftInfo(callGetShiftInfoData, d2).y
+              - (dataObjectWrappers[dataObjects.indexOf(callGetShiftInfoData)].y + 3/4 * DATA_UNIT_HEIGHT)
+              - PAIR_SPACING;
   }
 
   function getShiftInfo(d1, d2) {
@@ -97,27 +104,32 @@
       x: dataObjectWrappers[dataObjects.indexOf(d1)].x,
       y: dataObjectWrappers[dataObjects.indexOf(d1)].y + 3/4 * DATA_UNIT_HEIGHT
     }
-    // console.log(result);
 
     // If parent object is array, point to placeholder object rather than within object
     if(d1.length != 2) {
       return result;
     }
 
+    // Save the parent data structure
     let orig = d1;
+    // Save all traversed pairs in this array, ensures cyclic data structures are dealt with without infinite loops
     let searchedPairs = [];
 
+    // Initialise basicUnitHeight with the parent data structure
     initialiseBasicUnitHeight(d1);
 
     while (d2 !== d1) {
       if(searchedPairs.includes(d1)){
+        // Indicates that the data structure is cyclic. 
+        // Find the coordinates of the current pair using getShiftInfo
+        // Reset result.x and result.y
         let currCoords = getShiftInfo(orig, d1);
-        // console.log(currCoords)
         result.x = currCoords.x;
         result.y = currCoords.y;
-        // Means that the data structure is cyclic
+
+        // Since the tail has been searched already, search the head now
+        // Increment x and y coordinates as necessary
         if(checkSubStructure(d1[0], d2)){
-          // If the head contains d2
           rightHeight = getBasicUnitHeight(d1[1]);
           result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
           d1 = d1[0];
@@ -128,47 +140,19 @@
 
       } else {
         searchedPairs.push(d1)
+
+        // Check the tail first
+        // Increment x coordinate if found in tail, and y coordinate if found in head
         if (checkSubStructure(d1[1], d2)) {
           d1 = d1[1];
           result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
         } else {
-          // console.log("______________________")
-          // console.log(d1[1])
           rightHeight = getBasicUnitHeight(d1[1]);
-          // console.log(rightHeight)
-          // console.log("______________________")
           result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
           d1 = d1[0];
         }
       }
     }
-
-    // Second iteration
-    // if (checkSubStructure(d1[1], d2)) {        
-    //   d1 = d1[1];
-    //   result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
-    // } else {
-    //   // console.log("______________________")
-    //   // console.log(d1[1])
-    //   rightHeight = getBasicUnitHeight(d1[1]);
-    //   // console.log(rightHeight)
-    //   // console.log("______________________")
-    //   result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
-    //   d1 = d1[0];
-    // }
-    
-    // First iteration
-    // while (d2 !== d1) {
-    //   if (checkSubStructure(d1[0], d2)) {
-    //     // Add the height of the tail of d1 to the y-coordinate
-    //     rightHeight = getBasicUnitHeight(d1[1]);
-    //     d1 = d1[0];
-    //     result.y += (rightHeight + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
-    //   } else {
-    //     d1 = d1[1];
-    //     result.x += DATA_UNIT_WIDTH + PAIR_SPACING;
-    //   }
-    // }
     return result;
   }
 
@@ -459,9 +443,6 @@
     //context.restore();
     context.font = '14px Roboto Mono Light, Courier New';
     cycleDetector.push(dataObject);
-    
-    // console.log(dataObject)
-    // console.log("context initialised")
 
     // repeat the same process for the tail of the pair
     if (Array.isArray(dataObject[1])) {
@@ -651,14 +632,7 @@
         const draw = result.draw;
         // check if need to draw the data object or it has already been drawn
         if (draw) {
-          // const newShiftY = callGetShiftInfo(dataObject[0])
-          // console.log(newShiftY)
-          // let shiftY = calculatePairShift(dataObject[1]);
-          let shiftY = callGetShiftInfo(dataObject[0])
-          // console.log(shiftY)
-          // console.log("Correct calc? " + (shiftY == newShiftY))
-          // shiftY = newShiftY;
-
+          let shiftY = callGetShiftInfo(dataObject[0]);      
 
           if (is_Array(dataObject[0])) {
             drawNestedArrayObject(startX, wrapper.y + shiftY);
@@ -843,7 +817,6 @@
     const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
     cycleDetector = [];
-    initialisePairShift(dataObject);
     initialiseCallGetShiftInfo(dataObject)
     drawScenePairs(dataObject, scene, wrapper, wrapper.data, x0, y0);
     //reorder layers
@@ -862,9 +835,6 @@
     
     const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
-      // initialiseBasicUnitHeight
-    // initialisePairShift(dataObject);
-    // initialiseCallGetShiftInfo(dataObject)
     hitCycleDetector = [];
     drawHitPairs(dataObject, hit, wrapper, x0, y0);
   }
@@ -1164,10 +1134,6 @@
     context.strokeStyle = '#999999';
     context.beginPath();
     
-    //  Previous condition:
-    // fnObject.source == null || fnObject.source == fnObject.parent
-    // By right, the arrow should always point left to the frame directly adjacent
-    // There is no other way for the arrow to point.
     // Currently, if fnObject is defined in an array, do not draw the arrow (remove after arrays are implemented)
     if (!(Array.isArray(fnObject.parent) && fnObject.parent[0].length != 2)) {
       frame = fnObject.parent;
@@ -1188,33 +1154,6 @@
       // draw arrow headClone
       drawArrowHead(context, x1, y1, x2, y2);
       context.stroke();
-    } else {
-      // Kept here just in case
-      /**
-       * startOffset: index of fnObject in its parent (starting) frame
-       * destOffset: index of fnObject in source (destination) frame
-       * frameOffset: index of source frame within its level
-       */
-      // const startOffset = findElementPosition(fnObject, fnObject.parent);
-      // const destOffset = findElementPosition(fnObject, fnObject.source);
-      // const frameOffset = findFrameIndexInLevel(fnObject.source);
-      // const x0 = startCoord[0],
-      //   y0 = startCoord[1],
-      //   x1 = x0 + FNOBJECT_RADIUS + (startOffset + 1) * 5;
-      //   y1 = y0,
-      //   x2 = x1,
-      //   y2 = fnObject.source.y - 40 + frameOffset * 2,
-      //   x3 = fnObject.source.x + fnObject.source.width / 2 + 10,
-      //   y3 = y2
-      //   x4 = x3,
-      //   y4 = fnObject.source.y - 3;
-      // context.moveTo(x0, y0);
-      // context.lineTo(x1, y1);
-      // context.lineTo(x2, y2);
-      // context.lineTo(x3, y3);
-      // context.lineTo(x4, y4);
-      // drawArrowHead(context, x3, y3, x4, y4);
-      // context.stroke();
     }
   }
 
@@ -1602,7 +1541,7 @@
        */      
 
       // dataPairsSeachedForFnObj array is used in findFnInDataObject
-      // Helps to terminate search in recursive functions;
+      // Helps to terminate search in recursive data structures;
       let dataPairsSeachedForFnObj = [];
 
       frames.forEach(function(frame) {
@@ -1624,8 +1563,7 @@
             if(!is_Array(elements[e])) {
               initialiseFindFnInDataObject();
               findFnInDataObject(elements[e], elements[e], elements[e])
-            }
-            
+            }           
           }
         }
       });
@@ -1657,8 +1595,6 @@
         frame.width = getFrameWidth(frame);
         frame.fullwidth = getFrameAndObjectWidth(frame);
       }
-
-
 
       /**
        * Some functions may have been generated via anonymous functions, whose
@@ -1741,7 +1677,6 @@
     drawSceneFrames();
     drawSceneFnObjects();
     drawHitFnObjects();
-    // Error appears here (draw scene data objects)
     drawSceneDataObjects();
     drawHitDataObjects();
     drawSceneFrameArrows();
@@ -1908,9 +1843,9 @@
     return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
   }
 
-  // Needs to be updated. However is_pair does not work as expected
+  // Current check to check if data structure is an array
+  // Howeverm does not work with arrays of size 2
   function is_Array(dataObject) {
-    // return !is_pair(dataObject) && Array.isArray(dataObject);
     return dataObject.length != 2
   }
 
@@ -1977,6 +1912,9 @@
      * otherObjects contains all data objects initialised before parentlist
      * This is to check if any part of parentlist is a substructure of any
      * previously defined data structure, and omit that part from the height calculations
+     * 
+     * dataPairs contains all previously traversed pairs in the data structure
+     * This is to avoid infinite loops when it comes to recursive data structures
      */
     let otherObjects = [];
     let dataPairs = [];
@@ -1990,7 +1928,7 @@
     })
 
     function recursiveHelper(list){
-      // Check if list is simply a substructure of any previously defined data structure
+      // Check if list is simply a substructure of any previously defined data structure, or a previously traversed pair
       let substructureExists = false;
       otherObjects.forEach(x => {
         if(checkSubStructure(x, list)){
@@ -2023,9 +1961,12 @@
               substructureExistsHead = true;
             }
           });
+
+          // Calculate and store height of tail first (order of operation is important)
           const tail_height = recursiveHelper(list[1]);
 
           if (substructureExistsHead || dataPairs.includes(list[0])) {
+            // If the head is a substructure, height of head = 0 -> return height of tail
             if(tailIsFn) {
               return 1;
             } else {
@@ -2033,6 +1974,8 @@
             }
           } else {
             if(tailIsFn){
+              // Height of tail = 1 (as it is a function)
+              // Height of head = 1 + recursiveHelper(list[0])
               return 1 + (1 + recursiveHelper(list[0]));
             } else {
               return (1 + recursiveHelper(list[0])) + tail_height;
@@ -2049,14 +1992,18 @@
           }
 
           if (parenttype == "frame" || tail_height > 0) {
+            // Need to check if function is defined in current data structure or frame
+            // If tail_height > 0, tail_height >= height of current pair, so return tail_height
             return tail_height;
           } else if (fnObject.parent[0] == parentlist && fnObject.parent[1] == list) {
+            // Means height of tail = 0 and function belongs to current data structure --> height = 1
             return 1;
           } else {
             return 0;
           }
         }
 
+        // At this point, head must be a primitive --> height(head) = 0
         if(tailIsFn) {
           return 1;
         } else {
@@ -2067,7 +2014,7 @@
       }
     }
 
-    // Array height = 1 (which is added on earlier in getFrameHeight)
+    // Array height = 1 (which is added on in getFrameHeight)
     return recursiveHelper(parentlist)    
   }
 
@@ -2101,10 +2048,11 @@
       }
     }
 
-    // THE LINE BELOW IS NOT SUPERFLOUS AND IS VERY IMPT
+    // Need to push currentObj into dataPairs, might not be added in fillDataPairs if currentObj = sublist
     dataPairs.push(currentObj)
     fillDataPairs(currentObj)
 
+    // Similar as (getUnitHeight)
     function recursiveHelper(list){
       let substructureExists = false;
       otherObjects.forEach(x => {
@@ -2190,124 +2138,6 @@
       return 1;
     }
     return (recursiveHelper(sublist));
-  }
-
-// Initialise parent data structure before using calculatePairShift
-  let currentObject = null;
-  function initialisePairShift(dataObject) {
-    currentObject = dataObject;
-  }
-
-// Determines the height positioning of pairs in the same data structure 
-  function calculatePairShift(sublist){
-    let otherObjects = [];
-    let dataPairs = [];
-    let objectStored = false;
-    dataObjects.forEach(x => {
-      if(x == currentObject){
-        objectStored = true;
-      }
-      if(objectStored){
-      } else if(x !== currentObject) {
-        otherObjects.push(x)
-      }
-    })
-
-    // Need to add every pair before sublist into the data structure
-    function fillDataPairs(currPair) {
-      if(currPair == sublist || !Array.isArray(currPair) || currPair.length != 2){
-        // Do nothing, stop recursing
-      } else if(!dataPairs.includes(currPair)){
-        dataPairs.push(currPair);
-        fillDataPairs(dataPairs[0]);
-        fillDataPairs(dataPairs[1]);
-      }
-    }
-
-    fillDataPairs(currentObject)
-
-    dataPairs.push(currentObject)
-    function recursiveHelper(list){
-      let substructureExists = false;
-      otherObjects.forEach(x => {
-        if(checkSubStructure(x, list)){
-          substructureExists = true;
-        }
-      })
-      if(substructureExists || dataPairs.includes(list)){
-        return 0;
-      } 
-
-      dataPairs.push(list);
-      
-      if(Array.isArray(list) && list.length != 2){
-        return 0;
-      } else if(Array.isArray(list)) {
-        let tailIsFn = false;
-
-        if(isFunction(list[1])){
-          let fnObject = fnObjects[fnObjects.indexOf(list[1])]
-          if(fnObject.parent[1] == list) {
-            tailIsFn = true;
-          }
-        }
-
-        if(Array.isArray(list[0])){
-          let substructureExistsHead = false;
-          otherObjects.forEach(x => {
-            if (checkSubStructure(x, list[0])) {
-              substructureExistsHead = true;
-            }
-          });
-          if (substructureExistsHead || dataPairs.includes(list[0])) {
-            if(tailIsFn) {
-              return 1;
-            } else {              
-              return recursiveHelper(list[1]);
-            }
-          } else {
-            if(tailIsFn){
-              return 1 + (1 + recursiveHelper(list[0]));
-            } else {
-              return (1 + recursiveHelper(list[0])) + recursiveHelper(list[1]);
-            }           
-          } 
-        }
-        
-        if(isFunction(list[0])){
-          let fnObject = fnObjects[fnObjects.indexOf(list[0])]
-          let parenttype = fnObject.parenttype;
-          let tail_height = 0;
-          if(tailIsFn){
-            tail_height = 1;
-          } else {
-            tail_height = recursiveHelper(list[1])
-          }
-
-          if (parenttype == "frame" || tail_height > 0) {
-            return tail_height;
-          } else if (fnObject.parent[1] == list) {
-            return 1;
-          } else {
-            return 0;
-          }
-        }
-
-        if(tailIsFn) {
-          return 1;
-        } else {
-          return recursiveHelper(list[1]);
-        }
-      } else {
-        return 0;
-      }
-    
-    }
-
-    if(isFunction(sublist)) {
-      return (2) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
-    }
-    return (recursiveHelper(sublist) + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
   }
 
   // Calculates list/array height 
