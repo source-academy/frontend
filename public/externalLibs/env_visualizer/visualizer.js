@@ -2180,11 +2180,12 @@
     let maxLength = 0;
     const elements = frame.elements;
     for (e in elements) {
-      if(true) {
+      if (true) {
         let currLength;
         const literals = ["number", "string", "boolean"];
         if (literals.includes(typeof elements[e])) {
-          currLength = e.length + elements[e].toString().length;
+          currLength = e.length + elements[e].toString().length + 
+            (typeof elements[e] == 'string' ? 2 : 0);;
         } else if (typeof elements[e] == "undefined") {
           currLength = e.length + 9;
         } else {

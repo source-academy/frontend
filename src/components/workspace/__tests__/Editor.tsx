@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { shallow } from 'enzyme';
 
-import Editor, { IEditorProps } from '../Editor';
+import Editor, { IEditorProps, IPosition } from '../Editor';
 
 const componentDidMountSpy = jest.fn();
 
@@ -17,12 +17,14 @@ test('Editor renders correctly', () => {
     isEditorAutorun: false,
     sharedbAceInitValue: '',
     sharedbAceIsInviting: false,
+    handleDeclarationNavigate: (cursorPosition: IPosition) => {},
     handleEditorEval: () => {},
     handleEditorValueChange: newCode => {},
     handleEditorUpdateBreakpoints: breakpoints => {},
     handleFinishInvite: () => {},
     handleSetWebsocketStatus: websocketStatus => {},
-    handleUpdateHasUnsavedChanges: hasUnsavedChanges => {}
+    handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
+    handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
   };
   const app = <Editor {...props} />;
   const tree = shallow(app);

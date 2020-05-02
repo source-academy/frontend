@@ -1,9 +1,20 @@
-import { Context, interrupt, resume, runInContext } from 'js-slang';
-import { InterruptedError } from 'js-slang/dist/interpreter-errors';
+import {
+  Context,
+  findDeclaration,
+  getNames,
+  interrupt,
+  Result,
+  resume,
+  runInContext
+} from 'js-slang';
+import { TRY_AGAIN } from 'js-slang/dist/constants';
+import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
+import { Variant } from 'js-slang/dist/types';
 import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
+import * as Sourceror from 'sourceror-driver';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
@@ -13,8 +24,15 @@ import {
   TestcaseType,
   TestcaseTypes
 } from '../components/assessment/assessmentShape';
+import { Documentation } from '../reducers/documentation';
 import { externalLibraries } from '../reducers/externalLibraries';
-import { IPlaygroundState, IState, IWorkspaceState, SideContentType } from '../reducers/states';
+import {
+  IPlaygroundState,
+  IState,
+  IWorkspaceState,
+  SideContentType,
+  styliseChapter
+} from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import {
   getBlockExtraMethodsString,
@@ -62,8 +80,12 @@ export default function* workspaceSaga(): SagaIterator {
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
+    const variant: Variant = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.variant
+    );
     const library = {
       chapter,
+      variant,
       external: {
         name: ExternalLibraryNames.NONE,
         symbols
@@ -94,6 +116,72 @@ export default function* workspaceSaga(): SagaIterator {
     }
 
     yield* evalCode(value, context, execTime, workspaceLocation, actionTypes.EVAL_EDITOR);
+  });
+
+  yield takeEvery(actionTypes.PROMPT_AUTOCOMPLETE, function*(
+    action: ReturnType<typeof actions.promptAutocomplete>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
+
+    context = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
+    );
+
+    const code: string = yield select((state: IState) => {
+      const prependCode = (state.workspaces[workspaceLocation] as IWorkspaceState).editorPrepend;
+      const editorCode = (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue!;
+      return [prependCode, editorCode] as [string, string];
+    });
+    const [prepend, editorValue] = code;
+
+    // Deal with prepended code
+    let autocompleteCode;
+    let prependLength = 0;
+    if (!prepend) {
+      autocompleteCode = editorValue;
+    } else {
+      prependLength = prepend.split('\n').length;
+      autocompleteCode = prepend + '\n' + editorValue;
+    }
+
+    const [editorNames, displaySuggestions] = yield call(
+      getNames,
+      autocompleteCode,
+      action.payload.row + prependLength,
+      action.payload.column,
+      context
+    );
+
+    if (!displaySuggestions) {
+      yield call(action.payload.callback);
+      return;
+    }
+
+    const editorSuggestions = editorNames.map((name: any) => ({
+      caption: name.name,
+      value: name.name,
+      meta: name.meta,
+      score: name.score ? name.score + 1000 : 1000 // Prioritize suggestions from code
+    }));
+
+    let chapterName = context.chapter.toString();
+    if (context.variant !== 'default') {
+      chapterName += '_' + context.variant;
+    }
+
+    const builtinSuggestions = Documentation.builtins[chapterName] || [];
+
+    const extLib = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).externalLibrary
+    );
+
+    const extLibSuggestions = Documentation.externalLibraries[extLib] || [];
+
+    yield call(
+      action.payload.callback,
+      null,
+      editorSuggestions.concat(builtinSuggestions, extLibSuggestions)
+    );
   });
 
   yield takeEvery(actionTypes.TOGGLE_EDITOR_AUTORUN, function*(
@@ -256,9 +344,14 @@ export default function* workspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const newChapter = action.payload.chapter;
+    const oldVariant = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.variant
+    );
+    const newVariant = action.payload.variant;
     const oldChapter = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context.chapter
     );
+
     const symbols: string[] = yield select(
       (state: IState) =>
         (state.workspaces[workspaceLocation] as IWorkspaceState).context.externalSymbols
@@ -266,9 +359,10 @@ export default function* workspaceSaga(): SagaIterator {
     const globals: Array<[string, any]> = yield select(
       (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).globals
     );
-    if (newChapter !== oldChapter) {
+    if (newChapter !== oldChapter || newVariant !== oldVariant) {
       const library = {
         chapter: newChapter,
+        variant: newVariant,
         external: {
           name: ExternalLibraryNames.NONE,
           symbols
@@ -278,7 +372,7 @@ export default function* workspaceSaga(): SagaIterator {
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
-      yield call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000);
+      yield call(showSuccessMessage, `Switched to ${styliseChapter(newChapter, newVariant)}`, 1000);
     }
   });
 
@@ -406,9 +500,35 @@ export default function* workspaceSaga(): SagaIterator {
     yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
     yield undefined;
   });
+
+  yield takeEvery(actionTypes.NAV_DECLARATION, function*(
+    action: ReturnType<typeof actions.navigateToDeclaration>
+  ) {
+    const workspaceLocation = action.payload.workspaceLocation;
+    const code: string = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).editorValue
+    );
+    context = yield select(
+      (state: IState) => (state.workspaces[workspaceLocation] as IWorkspaceState).context
+    );
+
+    const result = findDeclaration(code, context, {
+      line: action.payload.cursorPosition.row + 1,
+      column: action.payload.cursorPosition.column
+    });
+    if (result) {
+      yield put(
+        actions.moveCursor(action.payload.workspaceLocation, {
+          row: result.start.line - 1,
+          column: result.start.column
+        })
+      );
+    }
+  });
 }
 
 let lastDebuggerResult: any;
+let lastNonDetResult: Result;
 function* updateInspector(workspaceLocation: WorkspaceLocation) {
   try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
@@ -494,15 +614,51 @@ export function* evalCode(
     }
   }
 
+  function call_variant(variant: Variant) {
+    if (variant === 'non-det') {
+      return code.trim() === TRY_AGAIN
+        ? call(resume, lastNonDetResult)
+        : call(runInContext, code, context, {
+            executionMethod: 'interpreter',
+            originalMaxExecTime: execTime,
+            useSubst: substActiveAndCorrectChapter
+          });
+    } else if (variant === 'lazy') {
+      return call(runInContext, code, context, {
+        scheduler: 'preemptive',
+        originalMaxExecTime: execTime,
+        useSubst: substActiveAndCorrectChapter
+      });
+    } else if (variant === 'wasm') {
+      return call(wasm_compile_and_run, code, context);
+    } else {
+      throw new Error('Unknown variant: ' + variant);
+    }
+  }
+  async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
+    return Sourceror.compile(wasmCode, wasmContext)
+      .then((wasmModule: WebAssembly.Module) => Sourceror.run(wasmModule, wasmContext))
+      .then(
+        (returnedValue: any) => ({ status: 'finished', context, value: returnedValue }),
+        _ => ({ status: 'error' })
+      );
+  }
+
+  const isNonDet: boolean = context.variant === 'non-det';
+  const isLazy: boolean = context.variant === 'lazy';
+
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
+        : isNonDet || isLazy
+        ? call_variant(context.variant)
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
             useSubst: substActiveAndCorrectChapter
           }),
+
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
@@ -534,14 +690,24 @@ export function* evalCode(
   }
   yield updateInspector(workspaceLocation);
 
-  if (result.status !== 'suspended' && result.status !== 'finished') {
+  if (
+    result.status !== 'suspended' &&
+    result.status !== 'finished' &&
+    result.status !== 'suspended-non-det'
+  ) {
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
     return;
   } else if (result.status === 'suspended') {
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
+  } else if (isNonDet) {
+    if (result.value === 'cut') {
+      result.value = undefined;
+    }
+    lastNonDetResult = result;
   }
+
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== actionTypes.EVAL_SILENT) {
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
