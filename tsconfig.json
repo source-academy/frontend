@@ -21,6 +21,7 @@
   "exclude": [
     "node_modules",
     "public/externalLibs",
+    "public/modules",
     "build",
     "scripts",
     "acceptance-tests",
