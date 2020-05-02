@@ -26,8 +26,8 @@
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "tslint": "tslint -p . -c ./tslint.prod.json",
     "cors-proxy": "lcp --proxyUrl http://localhost:4000 --port 4001 --proxyPartial \"\"",
-    "postinstall": "node ./scripts/WebAssemblyPostInstall.js",
-    "postuninstall": "node ./scripts/WebAssemblyPostUninstall.js"
+    "postinstall": "node ./scripts/SourcerorPostInstall.js",
+    "preuninstall": "node ./scripts/SourcerorPreUninstall.js"
   },
   "husky": {
     "hooks": {
