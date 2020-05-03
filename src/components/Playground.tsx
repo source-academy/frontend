@@ -5,6 +5,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
 
+import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
@@ -143,7 +144,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     const substVisualizerTab: SideContentTab = {
       label: 'Substituter',
       iconName: IconNames.FLOW_REVIEW,
-      body: <SubstVisualizer content={this.processArrayOutput(this.props.output)} />,
+      body: <SubstVisualizer content={this.processStepperOutput(this.props.output)} />,
       id: SideContentType.substVisualizer
     };
 
@@ -284,7 +285,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       tabs.push(envVisualizerTab);
     }
 
-    if (this.props.sourceChapter <= 2) {
+    if (this.props.sourceChapter <= 2 && this.props.sourceVariant !== 'wasm') {
       tabs.push(substVisualizerTab);
     }
 
@@ -416,9 +417,14 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     });
   };
 
-  private processArrayOutput = (output: InterpreterOutput[]) => {
+  private processStepperOutput = (output: InterpreterOutput[]) => {
     const editorOutput = output[0];
-    if (editorOutput && editorOutput.type === 'result' && editorOutput.value instanceof Array) {
+    if (
+      editorOutput &&
+      editorOutput.type === 'result' &&
+      editorOutput.value instanceof Array &&
+      isStepperOutput(editorOutput.value[0])
+    ) {
       return editorOutput.value;
     } else {
       return [];

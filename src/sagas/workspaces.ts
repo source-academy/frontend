@@ -658,12 +658,12 @@ export function* evalCode(
 
   const isNonDet: boolean = context.variant === 'non-det';
   const isLazy: boolean = context.variant === 'lazy';
-
+  const isWasm: boolean = context.variant === 'wasm';
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
-        : isNonDet || isLazy
+        : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
         : context.variant === 'nondet'
         ? call_nondet()

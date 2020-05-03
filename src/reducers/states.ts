@@ -239,7 +239,7 @@ export const sourceLanguages: ISourceLanguage[] = [
 ];
 
 const variantDisplay: Map<Variant, string> = new Map([
-  ['wasm', 'wasm'],
+  ['wasm', 'WebAssembly'],
   ['non-det', 'Non-Det'],
   ['nondet', 'Non Det'],
   ['concurrent', 'Concurrent'],
