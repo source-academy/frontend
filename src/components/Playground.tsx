@@ -285,7 +285,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       tabs.push(envVisualizerTab);
     }
 
-    if (this.props.sourceChapter <= 2) {
+    if (this.props.sourceChapter <= 2 && this.props.sourceVariant !== 'wasm') {
       tabs.push(substVisualizerTab);
     }
 
