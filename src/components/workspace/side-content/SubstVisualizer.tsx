@@ -6,11 +6,12 @@ import { HotKeys } from 'react-hotkeys';
 
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
+import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
 
 import { controlButton } from '../../commons';
 
 export interface ISubstVisualizerProps {
-  content: Array<[string, string, string]>;
+  content: IStepperPropContents[];
 }
 
 export interface ISubstVisualizerState {
@@ -105,7 +106,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
             {hasRunCode ? (
               <AceEditor
                 className="react-ace"
-                mode="source2"
+                mode="source2defaultNONE"
                 theme="source"
                 fontSize={17}
                 highlightActiveLine={false}
@@ -127,9 +128,9 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
             {hasRunCode ? (
               <SubstCodeDisplay
                 content={
-                  this.state.value <= lastStepValue && this.props.content.length > 1
-                    ? this.props.content[this.state.value - 1][2]
-                    : ''
+                  this.state.value <= lastStepValue
+                    ? this.props.content[this.state.value - 1].explanation
+                    : this.props.content[0].explanation
                 }
               />
             ) : null}
@@ -143,8 +144,8 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
     const pathified = this.props.content[contIndex];
-    const redexed = pathified[0];
-    const redex = pathified[1].split('\n');
+    const redexed = pathified.code;
+    const redex = pathified.redex.split('\n');
 
     const diffMarkers = [] as any[];
     if (redex.length > 0) {
@@ -184,9 +185,9 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
     const lastStepValue = this.props.content.length;
     const contIndex = value <= lastStepValue ? value - 1 : 0;
     const pathified = this.props.content[contIndex];
-    const redexed = pathified[0];
-    const redex = pathified[1];
-    const split = redexed.split('$');
+    const redexed = pathified.code;
+    const redex = pathified.redex;
+    const split = pathified.code.split('$');
     if (split.length > 1) {
       let text = split[0];
       for (let i = 1; i < split.length; i++) {
