@@ -10,7 +10,7 @@
     "update-ui-snapshots": "Update UI test snapshots"
   },
   "scripts": {
-    "build": "node-sass-chokidar src/ -o src/ && react-scripts-ts build",
+    "build": "./scripts/modules-fix.sh && node-sass-chokidar src/ -o src/ && react-scripts-ts build",
     "build-css": "node-sass-chokidar src/ -o src/",
     "build-js": "react-scripts-ts build",
     "coverage": "./scripts/coverage-fix.sh do && react-scripts-ts test --env=jsdom --coverage && ./scripts/coverage-fix.sh undo",
