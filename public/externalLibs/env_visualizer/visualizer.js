@@ -192,7 +192,7 @@
     const trueCoordinates = getShiftInfo(d1, d2);
     const wrapper = dataObjectWrappers[dataObjects.indexOf(d2)];
     wrapper.x = trueCoordinates.x;
-    wrapper.y = trueCoordinates.y;
+    wrapper.y = trueCoordinates.y - 5;
   }
 
   function drawSceneFnObjects() {
@@ -972,7 +972,10 @@
     // simply draw straight arrow from frame to function
     const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
     const y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 35,
-      xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; //adjustment
+      //xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; //adjustment
+      xf = wrapper.x < x0 
+        ? wrapper.x - FNOBJECT_RADIUS * 2 - 3 + DATA_UNIT_WIDTH 
+        : wrapper.x - FNOBJECT_RADIUS * 2 - 3;
       const yf = wrapper.y;
     
     drawArrow(context, x0, y0, xf, yf);
