@@ -204,6 +204,5 @@ function getMissionPointer(missions, callback) {
   if (missionPointer === undefined) {
     missionPointer = missions[0];
   }
-  console.log("Now loading story " + missionPointer.story); // debug statement
   callback(missionPointer.story);
 }
