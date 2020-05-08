@@ -23,20 +23,22 @@ let sessionData = undefined;
 export function fetchGameData(story, gameStates, missions, callback) {
   // fetch only needs to be called once; if there are additional calls somehow then ignore them
   // only for students
-  if(!hasBeenFetched() && isStudent()) {
-    let data = {
-      "story":story, "gameStates":gameStates, "currentDate":Date()
-    }
-    setSessionData(data);
-  } else if (isStudent()) {
+  if(hasBeenFetched() && isStudent()) {
     callback(getSessionData().story.story);
     return;
+  }
+  const data = {
+    "story":story,
+    "gameStates":gameStates,
+    "currentDate": Date()
+  }
+  if (!getSessionData()) {
+    setSessionData(data);
   } 
   if (!isStudent()) {
-    // resets current progress for testers
+    // resets current progress (local storage) for testers
     SaveManager.resetLocalSaveData();
   }
-  printSessionData();
   missions = organiseMissions(missions);
   getMissionPointer(missions, callback);
 }
@@ -63,8 +65,6 @@ function removeSessionStorage() {
   sessionStorage.removeItem(OVERRIDE_PUBLISH_KEY);
   sessionStorage.removeItem(OVERRIDE_DATES_KEY);
 }
-
-
 
 // override student session data
 export function overrideSessionData(data) {
@@ -120,6 +120,7 @@ export function hasCompletedQuest(questId) {
 function getStudentStory() {
   //tries to retrieve local version of story
   //if unable to find, use backend's version.
+  //this is to prevent any jumps in story after student completes a mission
   if (SaveManager.hasLocalSave()) {
     let actionSequence = SaveManager.getLocalSaveData().actionSequence;
     let story = actionSequence[actionSequence.length - 1].storyID;
@@ -149,7 +150,6 @@ function organiseMissions(missions) {
   }
   let predicate;
   const now = new Date(getSessionData().currentDate);
-  
   if (isStudent()) {
     predicate = (mission) =>
       mission.isPublished && isWithinDates(mission, now);
@@ -169,9 +169,12 @@ function organiseMissions(missions) {
       return toPass;
     }
   }
-  missions = missions.filter(predicate);
-  missions = missions.sort(compareMissions);
-  return missions;
+  const sorted_missions = missions.sort(compareMissions);
+  const remaining_missions = sorted_missions.filter(predicate);
+  //if no more remaining missions, use the last remaining mission.
+  return remaining_missions.length > 0 
+    ? remaining_missions
+    : [sorted_missions[sorted_missions.length - 1]];
 }
 
 /**
@@ -180,6 +183,10 @@ function organiseMissions(missions) {
  * global list of open missions, then the corresponding upper (or lower) bound will be used.
  */
 function getMissionPointer(missions, callback) {
+  // in the scenario with no missions
+  if (missions == undefined) {
+    return;
+  }
   //finds the mission id's mission pointer
   let studentStory = getStudentStory();
   const isStoryEmpty = story => story === undefined || story.length === 0;
