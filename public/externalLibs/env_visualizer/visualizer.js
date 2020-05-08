@@ -877,7 +877,7 @@
     if (frameName.length * 9 < config.width / 2 || frameName == 'global') {
       context.fillText(frameName, x, y - 10);
     } else {
-      context.fillText(frameName, x - (frameName.length * 9 - config.width / 2), y - 10);
+      context.fillText(frameName, x, y - 10);
     }
 
     // render text in frame
@@ -1489,7 +1489,7 @@
           // do nothing (this environment contains library functions)
         } else {
           // copy everything (possibly including redeclared built-ins) over
-          const envElements = environment.head;
+          const envElements = environment.head;          
           for (e in envElements) {
             frame.elements[e] = envElements[e];
             if (typeof envElements[e] == "function"
@@ -1498,8 +1498,8 @@
               // this is a built-in function referenced to in a later frame,
               // e.g. "const a = pair". In this case, add it to the global frame
               // to be drawn and subsequently referenced.
-              frames[0].elements[getFnName(envElements[e])] = envElements[e];
-            }
+              // frames[0].elements[getFnName(envElements[e])] = envElements[e];
+            } 
           }
         } 
       }
@@ -1550,7 +1550,6 @@
       // dataPairsSeachedForFnObj array is used in findFnInDataObject
       // Helps to terminate search in recursive data structures;
       let dataPairsSeachedForFnObj = [];
-
       frames.forEach(function(frame) {
         const elements = frame.elements;
         for (e in elements) {
@@ -1790,7 +1789,7 @@
   }
 
   function getFnName(fn) {
-    if (fn.node.type == "FunctionDeclaration" && !fn.functionName) {
+    if (fn.node == undefined || fn.node.type == "FunctionDeclaration" && !fn.functionName) {
       return undefined;
     } else if (fn.node.type == "FunctionDeclaration") {
       return fn.functionName;
@@ -1853,7 +1852,9 @@
   // Current check to check if data structure is an array
   // Howeverm does not work with arrays of size 2
   function is_Array(dataObject) {
-    return dataObject.length != 2
+    return Array.isArray(dataObject)
+      ? dataObject.length != 2
+      : false
   }
 
   // Space Calculation Functions
