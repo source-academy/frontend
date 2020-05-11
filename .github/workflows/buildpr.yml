@@ -12,19 +12,21 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@master
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: npm install and build
+      run: |
+        npm install
+        npm run build
     - name: Checkout site
       uses: actions/checkout@v2
       with:
         repository: source-academy/source-academy.github.io
         path: site
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
-    - name: npm install and build, then update site folder
+    - name: Move built files into site
       run: |
-        npm install
-        npm run build
         PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
         mv build pr$PR_NUMBER
         rm -rf site/pr$PR_NUMBER
