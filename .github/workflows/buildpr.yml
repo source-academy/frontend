@@ -12,22 +12,27 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@master
+    - name: Checkout site
+      uses: actions/checkout@v2
+      with:
+        repository: source-academy/source-academy.github.io
+        path: site
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: npm install and build
+    - name: npm install and build, then update site folder
       run: |
         npm install
         npm run build
         PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
         mv build pr$PR_NUMBER
-        mkdir build
-        mv pr$PR_NUMBER build
-    - name: Deploy
+        rm -rf site/pr$PR_NUMBER
+        mv pr$PR_NUMBER site
+    - name: Deploy site
       uses: s0/git-publish-subdir-action@master
       env:
         REPO: git@github.com:source-academy/source-academy.github.io.git
         BRANCH: master
-        FOLDER: build
+        FOLDER: site
         SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
