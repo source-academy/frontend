@@ -3,14 +3,18 @@ import {
   findDeclaration,
   getNames,
   interrupt,
+  parseError,
   Result,
   resume,
   runInContext
 } from 'js-slang';
 import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
+import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
+import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
+import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
@@ -587,6 +591,9 @@ export function* evalCode(
   workspaceLocation: WorkspaceLocation,
   actionType: string
 ) {
+  // we check for type errors, but don't print them unless there's an error.
+  const parsed = parse(code, context);
+  const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context))[1];
   context.runtime.debuggerOn =
     (actionType === actionTypes.EVAL_EDITOR || actionType === actionTypes.DEBUG_RESUME) &&
     context.chapter > 2;
@@ -696,6 +703,11 @@ export function* evalCode(
     result.status !== 'suspended-non-det'
   ) {
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+    if (typeErrors) {
+      yield put(
+        actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
+      );
+    }
     return;
   } else if (result.status === 'suspended') {
     yield put(actions.endDebuggerPause(workspaceLocation));
