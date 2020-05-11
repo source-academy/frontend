@@ -591,9 +591,6 @@ export function* evalCode(
   workspaceLocation: WorkspaceLocation,
   actionType: string
 ) {
-  // we check for type errors, but don't print them unless there's an error.
-  const parsed = parse(code, context);
-  const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context))[1];
   context.runtime.debuggerOn =
     (actionType === actionTypes.EVAL_EDITOR || actionType === actionTypes.DEBUG_RESUME) &&
     context.chapter > 2;
@@ -703,6 +700,13 @@ export function* evalCode(
     result.status !== 'suspended-non-det'
   ) {
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+
+    // we need to parse again, but preserve the errors in context
+    const oldErrors = context.errors;
+    context.errors = [];
+    const parsed = parse(code, context);
+    context.errors = oldErrors;
+    const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context))[1];
     if (typeErrors) {
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
