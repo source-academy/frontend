@@ -8,6 +8,8 @@ import { IState } from '../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 
 let initialized = false;
+let currId = '';
+let currName = '';
 
 const CLIENT_ID = '352013967309-qmhsu2ddofc79hpa0r3fe4q2djl16d7m.apps.googleusercontent.com';
 const API_KEY = 'AIzaSyCCZ2ips3cvuHLLvNiDC6NDzJoGE-WAxHA';
@@ -140,6 +142,67 @@ ${contents}
   });
 }
 
+function updateFile(
+  parent: null,
+  mimeType: string,
+  contents: string = '',
+  config: IPlaygroundConfig | {}
+): Promise<null> {
+  const boundary = 'N1UTGHFPQ1M9FB455CRN';
+  const name = currName;
+  const meta = {
+    name,
+    mimeType,
+    parents: null,
+    appProperties: {
+      source: true,
+      ...config
+    }
+  };
+  const body = `
+--${boundary}
+Content-Type: application/json; charset=UTF-8
+
+${JSON.stringify(meta)}
+
+--${boundary}
+Content-Type: ${mimeType}
+
+${contents}
+
+--${boundary}--
+`;
+
+  // tslint:disable-next-line:no-console
+  console.log('@updateFile', meta, body);
+
+  return new Promise((resolve, reject) => {
+    gapi.client
+      .request({
+        path: 'https://www.googleapis.com/upload/drive/v3/files/' + currId,
+        method: 'PATCH',
+        params: {
+          uploadType: 'multipart'
+        },
+        headers: {
+          'Content-Type': `multipart/related; boundary=${boundary}`
+        },
+        body
+      })
+      .then(response => {
+        if (response.status !== 200) {
+          reject(response);
+        } else {
+          resolve();
+        }
+      })
+      .catch(reason => {
+        // tslint:disable-next-line:no-console
+        console.error(reason);
+      });
+  });
+}
+
 export function* storageSaga(): SagaIterator {
   yield takeLatest(actionTypes.HANDLE_ACCESS_TOKEN, function*(
     action: ActionType<typeof actions.handleAccessToken>
@@ -160,8 +223,9 @@ export function* storageSaga(): SagaIterator {
   yield takeEvery(actionTypes.OPEN_FILE, function*(action: ActionType<typeof actions.openFile>) {
     const token = yield select((state: IState) => state.session.storageToken);
     const filename = action.payload.filename;
-
     const fileId = action.payload.fileId;
+    currName = filename;
+    currId = fileId;
     yield ensureInitialized(token);
 
     const meta = yield gapi.client.drive.files
@@ -217,15 +281,36 @@ export function* storageSaga(): SagaIterator {
     const external = yield select((state: IState) => state.workspaces.playground.externalLibrary);
     const token = yield select((state: IState) => state.session.storageToken);
     const defaultFileName = 'Untitled.source';
-    const filename =
-      prompt('What would you like to save our file as?', defaultFileName) || defaultFileName;
+    const filename = prompt('What would you like to save our file as?', defaultFileName);
+
+    if (filename !== null) {
+      yield ensureInitialized(token);
+
+      const file: IFile = {
+        path: [filename],
+        type: 'file'
+      };
+
+      const config: IPlaygroundConfig = {
+        chapter,
+        variant,
+        external
+      };
+
+      yield createFile(file, null, MIME_SOURCE, code, config);
+      yield call(showSuccessMessage, `File successfully uploaded to Google Drive!`, 1000);
+    }
+  });
+
+  // todo
+  yield takeEvery(actionTypes.UPDATE_TO_DRIVE, function*() {
+    const code = yield select((state: IState) => state.workspaces.playground.editorValue);
+    const chapter = yield select((state: IState) => state.workspaces.playground.context.chapter);
+    const variant = yield select((state: IState) => state.workspaces.playground.context.variant);
+    const external = yield select((state: IState) => state.workspaces.playground.externalLibrary);
+    const token = yield select((state: IState) => state.session.storageToken);
 
     yield ensureInitialized(token);
-
-    const file: IFile = {
-      path: [filename],
-      type: 'file'
-    };
 
     const config: IPlaygroundConfig = {
       chapter,
@@ -233,8 +318,12 @@ export function* storageSaga(): SagaIterator {
       external
     };
 
-    yield createFile(file, null, MIME_SOURCE, code, config);
-    yield call(showSuccessMessage, `File successfully uploaded to Google Drive!`, 1000);
+    if (currId !== '') {
+      yield updateFile(null, MIME_SOURCE, code, config);
+      yield call(showSuccessMessage, `File successfully updated to Google Drive!`, 1000);
+    } else {
+      yield call(showWarningMessage, `Please open a file first`, 1000);
+    }
   });
 }
 

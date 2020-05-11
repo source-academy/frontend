@@ -122,6 +122,7 @@ export interface IDispatchProps {
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleOpenPicker: () => void;
   handleSavePicker: () => void;
+  handleUpdatePicker: () => void;
 }
 
 type PlaygroundState = {
@@ -213,6 +214,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
           key="googledrive"
           onClickSave={this.props.handleSavePicker}
           onClickOpen={this.props.handleOpenPicker}
+          onClickUpdate={this.props.handleUpdatePicker}
         />
       );
 

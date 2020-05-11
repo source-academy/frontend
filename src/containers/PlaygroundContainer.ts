@@ -35,6 +35,7 @@ import {
   toggleUsingSubst,
   updateActiveTab,
   updateEditorValue,
+  updatePicker,
   updateReplValue,
   WorkspaceLocation,
   WorkspaceLocations
@@ -111,6 +112,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleAccessToken,
       handleOpenPicker: openPicker,
       handleSavePicker: savePicker,
+      handleUpdatePicker: updatePicker,
       handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst),
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),

@@ -16,3 +16,5 @@ export const handleAccessToken = (accessToken: string) =>
 export const openPicker = () => action(actionTypes.OPEN_PICKER);
 
 export const savePicker = () => action(actionTypes.SAVE_TO_DRIVE);
+
+export const updatePicker = () => action(actionTypes.UPDATE_TO_DRIVE);

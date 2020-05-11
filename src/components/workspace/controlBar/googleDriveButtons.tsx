@@ -7,6 +7,7 @@ export type GoogleDriveButtonsProps = {
   key: string;
   onClickSave?(): any;
   onClickOpen?(): any;
+  onClickUpdate?(): any;
 };
 
 export class GoogleDriveButtons extends React.PureComponent<GoogleDriveButtonsProps> {
@@ -15,20 +16,23 @@ export class GoogleDriveButtons extends React.PureComponent<GoogleDriveButtonsPr
   }
 
   public render() {
-    const saveAsButton = controlButton('Save As', IconNames.FLOPPY_DISK, this.props.onClickSave);
+    const saveAsButton = controlButton('Save As', IconNames.SEND_TO, this.props.onClickSave);
 
     const openButton = controlButton('Open', IconNames.DOCUMENT_OPEN, this.props.onClickOpen);
+
+    const saveButton = controlButton('Save', IconNames.FLOPPY_DISK, this.props.onClickUpdate);
 
     return (
       <Popover
         content={
           <Menu large={true}>
             {saveAsButton}
+            {saveButton}
             {openButton}
           </Menu>
         }
       >
-        {controlButton('GoogleDive', IconNames.CLOUD)}
+        {controlButton('GoogleDrive', IconNames.CLOUD)}
       </Popover>
     );
   }

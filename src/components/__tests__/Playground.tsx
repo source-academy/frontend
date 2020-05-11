@@ -61,7 +61,8 @@ const baseProps = {
   handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
   handleAccessToken: () => {},
   handleOpenPicker: () => {},
-  handleSavePicker: () => {}
+  handleSavePicker: () => {},
+  handleUpdatePicker: () => {}
 };
 
 const testValueProps: IPlaygroundProps = {
