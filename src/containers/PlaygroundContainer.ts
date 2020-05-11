@@ -28,6 +28,7 @@ import {
   openPicker,
   promptAutocomplete,
   savePicker,
+  sendReplInputToOutput,
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
@@ -105,6 +106,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(workspaceLocation, editorSessionId),
+      handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(workspaceLocation, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
