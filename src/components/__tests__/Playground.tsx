@@ -49,6 +49,7 @@ const baseProps = {
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
+  handleSendReplInputToOutput: (code: string) => {},
   handleSetEditorSessionId: (editorSessionId: string) => {},
   handleInitInvite: (value: string) => {},
   handleSetWebsocketStatus: (websocketStatus: number) => {},

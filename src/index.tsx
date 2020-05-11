@@ -1,3 +1,5 @@
+import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
+
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
@@ -5,7 +7,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import ApplicationContainer from './containers/ApplicationContainer';
 import { store } from './createStore';
-import { LINKS, SOURCE_ACADEMY_VERSION } from './utils/constants';
+import { LINKS, MODULE_BACKEND_URL, SOURCE_ACADEMY_VERSION } from './utils/constants';
 import { history } from './utils/history';
 import registerServiceWorker from './utils/registerServiceWorker';
 
@@ -19,6 +21,10 @@ console.log(
     `Please visit ${LINKS.GITHUB_ISSUES} to report bugs or issues.`,
   'font-weight: bold;'
 );
+
+setBackendStaticURL(MODULE_BACKEND_URL);
+// tslint:disable-next-line
+console.log(`Using module backend: ${MODULE_BACKEND_URL}`);
 
 render(
   <Provider store={store}>

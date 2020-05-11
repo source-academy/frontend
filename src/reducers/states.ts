@@ -229,19 +229,23 @@ export interface ISourceLanguage {
 
 export const sourceLanguages: ISourceLanguage[] = [
   { chapter: 1, variant: 'default' },
+  { chapter: 1, variant: 'wasm' },
   { chapter: 1, variant: 'lazy' },
   { chapter: 2, variant: 'default' },
   { chapter: 2, variant: 'lazy' },
   { chapter: 3, variant: 'default' },
   { chapter: 3, variant: 'concurrent' },
   { chapter: 3, variant: 'non-det' },
-  { chapter: 4, variant: 'default' }
+  { chapter: 4, variant: 'default' },
+  { chapter: 4, variant: 'gpu' }
 ];
 
 const variantDisplay: Map<Variant, string> = new Map([
+  ['wasm', 'WebAssembly'],
   ['non-det', 'Non-Det'],
   ['concurrent', 'Concurrent'],
-  ['lazy', 'Lazy']
+  ['lazy', 'Lazy'],
+  ['gpu', 'GPU']
 ]);
 
 export const styliseChapter = (chap: number, variant: Variant = 'default') => {

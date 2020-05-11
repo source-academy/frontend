@@ -14,6 +14,7 @@ import { Variant } from 'js-slang/dist/types';
 import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
+import * as Sourceror from 'sourceror-driver';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
@@ -628,19 +629,29 @@ export function* evalCode(
         originalMaxExecTime: execTime,
         useSubst: substActiveAndCorrectChapter
       });
+    } else if (variant === 'wasm') {
+      return call(wasm_compile_and_run, code, context);
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
   }
+  async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
+    return Sourceror.compile(wasmCode, wasmContext)
+      .then((wasmModule: WebAssembly.Module) => Sourceror.run(wasmModule, wasmContext))
+      .then(
+        (returnedValue: any) => ({ status: 'finished', context, value: returnedValue }),
+        _ => ({ status: 'error' })
+      );
+  }
 
   const isNonDet: boolean = context.variant === 'non-det';
   const isLazy: boolean = context.variant === 'lazy';
-
+  const isWasm: boolean = context.variant === 'wasm';
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
-        : isNonDet || isLazy
+        : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
