@@ -141,13 +141,6 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 
   public render() {
-    const substVisualizerTab: SideContentTab = {
-      label: 'Substituter',
-      iconName: IconNames.FLOW_REVIEW,
-      body: <SubstVisualizer content={this.processStepperOutput(this.props.output)} />,
-      id: SideContentType.substVisualizer
-    };
-
     const autorunButtons = (
       <AutorunButtons
         handleDebuggerPause={this.props.handleDebuggerPause}
@@ -285,8 +278,14 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       tabs.push(envVisualizerTab);
     }
 
-    if (this.props.sourceChapter <= 2) {
-      tabs.push(substVisualizerTab);
+    if (this.props.sourceChapter <= 2 && this.props.sourceVariant !== 'wasm') {
+      // Enable Subst Visualizer for Source 1 & 2
+      tabs.push({
+        label: 'Substituter',
+        iconName: IconNames.FLOW_REVIEW,
+        body: <SubstVisualizer content={this.processStepperOutput(this.props.output)} />,
+        id: SideContentType.substVisualizer
+      });
     }
 
     const workspaceProps: WorkspaceProps = {
@@ -423,6 +422,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       editorOutput &&
       editorOutput.type === 'result' &&
       editorOutput.value instanceof Array &&
+      editorOutput.value[0] === Object(editorOutput.value[0]) &&
       isStepperOutput(editorOutput.value[0])
     ) {
       return editorOutput.value;
