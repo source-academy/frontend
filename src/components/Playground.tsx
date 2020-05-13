@@ -8,7 +8,7 @@ import { RouteComponentProps } from 'react-router';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput, SideContentType } from '../reducers/states';
-import { LINKS } from '../utils/constants';
+import { generateSourceIntroduction } from '../utils/introductionHelper';
 import { ExternalLibraryName, ExternalLibraryNames } from './assessment/assessmentShape';
 import Markdown from './commons/Markdown';
 import Workspace, { WorkspaceProps } from './workspace';
@@ -30,33 +30,6 @@ import Inspector from './workspace/side-content/Inspector';
 import ListVisualizer from './workspace/side-content/ListVisualizer';
 import SubstVisualizer from './workspace/side-content/SubstVisualizer';
 import VideoDisplay from './workspace/side-content/VideoDisplay';
-
-const CHAP = '\xa7';
-
-const INTRODUCTION = `
-Welcome to the Source Academy playground!
-
-The language _Source_ is the official language of the textbook [_Structure and
-Interpretation of Computer Programs, JavaScript Adaptation_](${LINKS.TEXTBOOK}).
-You have never heard of Source? No worries! It was invented just for the purpose
-of the book. Source is a sublanguage of ECMAScript 2016 (7th edition) and defined
-in [the documents titled _"Source ${CHAP}x"_](${LINKS.SOURCE_DOCS}), where x
-refers to the respective textbook chapter. For example, Source ${CHAP}3 is
-suitable for textbook chapter 3 and the preceeding chapters.
-
-The playground comes with an editor and a REPL, on the left and right of the
-screen, respectively. You may customise the layout of the playground by
-clicking and dragging on the right border of the editor, or the top border of
-the REPL.
-`;
-
-const CONCURRENT_SOURCE_INTRODUCTION = `
-
-In Source ${CHAP}3 Concurrent, all programs are concurrent programs. Hence, they do not return any
-result, and can only reflect trace through calls to the \`display\` function. This includes
-programs that only use one thread and do not make any calls to \`concurrent_execute\`. To
-run programs concurrently, use the \`concurrent_execute\` function. You may refer to Source
-${CHAP}3 Concurrent specifications for more details.`;
 
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
@@ -241,8 +214,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       body: (
         <Markdown
           content={
-            INTRODUCTION +
-            (this.props.sourceVariant === 'concurrent' ? CONCURRENT_SOURCE_INTRODUCTION : '')
+            generateSourceIntroduction(this.props.sourceChapter, this.props.sourceVariant)
           }
           openLinksInNewWindow={true}
         />
