@@ -5,6 +5,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
 
+import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput, SideContentType } from '../reducers/states';
 import { LINKS } from '../utils/constants';
@@ -106,6 +107,7 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSendReplInputToOutput: (code: string) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
   handleSetWebsocketStatus: (websocketStatus: number) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -141,13 +143,6 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
   }
 
   public render() {
-    const substVisualizerTab: SideContentTab = {
-      label: 'Substituter',
-      iconName: IconNames.FLOW_REVIEW,
-      body: <SubstVisualizer content={this.processArrayOutput(this.props.output)} />,
-      id: SideContentType.substVisualizer
-    };
-
     const autorunButtons = (
       <AutorunButtons
         handleDebuggerPause={this.props.handleDebuggerPause}
@@ -275,14 +270,24 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(listVisualizerTab);
     }
-    if (this.props.sourceChapter >= 3 && this.props.sourceVariant !== 'concurrent') {
+    if (
+      this.props.sourceChapter >= 3 &&
+      this.props.sourceVariant !== 'concurrent' &&
+      this.props.sourceVariant !== 'non-det'
+    ) {
       // Enable Inspector, Env Visualizer for Source Chapter 3 and above
       tabs.push(inspectorTab);
       tabs.push(envVisualizerTab);
     }
 
-    if (this.props.sourceChapter <= 2) {
-      tabs.push(substVisualizerTab);
+    if (this.props.sourceChapter <= 2 && this.props.sourceVariant !== 'wasm') {
+      // Enable Subst Visualizer for Source 1 & 2
+      tabs.push({
+        label: 'Substituter',
+        iconName: IconNames.FLOW_REVIEW,
+        body: <SubstVisualizer content={this.processStepperOutput(this.props.output)} />,
+        id: SideContentType.substVisualizer
+      });
     }
 
     const workspaceProps: WorkspaceProps = {
@@ -306,8 +311,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleDeclarationNavigate: this.props.handleDeclarationNavigate,
         handleEditorEval: this.props.handleEditorEval,
         handleEditorValueChange: this.props.handleEditorValueChange,
-        handleReplValueChange: this.props.handleReplValueChange,
-        handleReplEval: this.props.handleReplEval,
+        handleSendReplInputToOutput: this.props.handleSendReplInputToOutput,
         handlePromptAutocomplete: this.props.handlePromptAutocomplete,
         handleFinishInvite: this.props.handleFinishInvite,
         sharedbAceInitValue: this.props.sharedbAceInitValue,
@@ -414,9 +418,15 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     });
   };
 
-  private processArrayOutput = (output: InterpreterOutput[]) => {
+  private processStepperOutput = (output: InterpreterOutput[]) => {
     const editorOutput = output[0];
-    if (editorOutput && editorOutput.type === 'result' && editorOutput.value instanceof Array) {
+    if (
+      editorOutput &&
+      editorOutput.type === 'result' &&
+      editorOutput.value instanceof Array &&
+      editorOutput.value[0] === Object(editorOutput.value[0]) &&
+      isStepperOutput(editorOutput.value[0])
+    ) {
       return editorOutput.value;
     } else {
       return [];
