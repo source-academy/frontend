@@ -1,9 +1,9 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { ActionType } from 'typesafe-actions';
+import * as actions from '../actions';
 import { GOOGLE_CLIENT_ID } from '../utils/constants';
 import { GOOGLE_API_KEY } from '../utils/constants';
-import * as actions from '../actions';
 
 import * as actionTypes from '../actions/actionTypes';
 import { IState } from '../reducers/states';
@@ -239,38 +239,38 @@ export function* storageSaga(): SagaIterator {
   });
 
   yield takeLatest(actionTypes.OPEN_PICKER, function*() {
-    if(GOOGLE_API_KEY != undefined) {
-    const key = GOOGLE_API_KEY;
-    const token = yield select((state: IState) => state.session.storageToken);
+    if (GOOGLE_API_KEY !== undefined) {
+      const key = GOOGLE_API_KEY;
+      const token = yield select((state: IState) => state.session.storageToken);
 
-    yield new Promise((res, rej) => {
-      gapi.load('picker', res);
-    });
+      yield new Promise((res, rej) => {
+        gapi.load('picker', res);
+      });
 
-    const { fileId, filename } = yield new Promise((res, rej) => {
-      const view = new google.picker.DocsView(google.picker.ViewId.DOCS);
-      view.setOwnedByMe(true);
-      view.setIncludeFolders(true);
-      view.setMode(google.picker.DocsViewMode.LIST);
+      const { fileId, filename } = yield new Promise((res, rej) => {
+        const view = new google.picker.DocsView(google.picker.ViewId.DOCS);
+        view.setOwnedByMe(true);
+        view.setIncludeFolders(true);
+        view.setMode(google.picker.DocsViewMode.LIST);
 
-      // @ts-ignore
-      view.setMimeTypes(MIME_SOURCE);
+        // @ts-ignore
+        view.setMimeTypes(MIME_SOURCE);
 
-      const picker = new google.picker.PickerBuilder()
-        .setTitle('Source Academy')
-        .addView(view)
-        .setSelectableMimeTypes(MIME_SOURCE)
-        .setOAuthToken(token)
-        .setDeveloperKey(key)
-        .setCallback((data: any) => {
-          if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
-            res({ fileId: data.docs[0].id, filename: data.docs[0].name });
-          }
-        })
-        .build();
-      picker.setVisible(true);
-    });
-    yield put(actions.openFile(fileId, filename));
+        const picker = new google.picker.PickerBuilder()
+          .setTitle('Source Academy')
+          .addView(view)
+          .setSelectableMimeTypes(MIME_SOURCE)
+          .setOAuthToken(token)
+          .setDeveloperKey(key)
+          .setCallback((data: any) => {
+            if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
+              res({ fileId: data.docs[0].id, filename: data.docs[0].name });
+            }
+          })
+          .build();
+        picker.setVisible(true);
+      });
+      yield put(actions.openFile(fileId, filename));
     }
   });
 
