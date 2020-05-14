@@ -1488,7 +1488,7 @@
           // do nothing (this environment contains library functions)
         } else {
           // copy everything (possibly including redeclared built-ins) over
-          const envElements = environment.head;
+          const envElements = environment.head         
           for (e in envElements) {
             frame.elements[e] = envElements[e];
             if (typeof envElements[e] == "function"
@@ -1497,6 +1497,7 @@
               // this is a built-in function referenced to in a later frame,
               // e.g. "const a = pair". In this case, add it to the global frame
               // to be drawn and subsequently referenced.
+              frames[0].elements[getFnName(envElements[e])] = envElements[e];
             } 
           }
         } 
