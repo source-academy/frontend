@@ -972,7 +972,6 @@
     // simply draw straight arrow from frame to function
     const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
     const y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 35,
-      //xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; //adjustment
       xf = wrapper.x < x0 
         ? wrapper.x - FNOBJECT_RADIUS * 2 - 3 + DATA_UNIT_WIDTH 
         : wrapper.x - FNOBJECT_RADIUS * 2 - 3;
@@ -1489,7 +1488,7 @@
           // do nothing (this environment contains library functions)
         } else {
           // copy everything (possibly including redeclared built-ins) over
-          const envElements = environment.head;          
+          const envElements = environment.head;
           for (e in envElements) {
             frame.elements[e] = envElements[e];
             if (typeof envElements[e] == "function"
@@ -1498,7 +1497,6 @@
               // this is a built-in function referenced to in a later frame,
               // e.g. "const a = pair". In this case, add it to the global frame
               // to be drawn and subsequently referenced.
-              // frames[0].elements[getFnName(envElements[e])] = envElements[e];
             } 
           }
         } 
