@@ -43,7 +43,7 @@ You are allowed to use the SOUNDS and BINARYTREES external libraries in Source $
 You may refer to [_Source ${CHAP}2 specifications_](${LINKS.SOURCE_2}) for more details. `;
 
 const S2_LAZY_INTRODUCTION = `
-In Source ${CHAP}2 Lazy argument expressions of functions are passed un-evaluated to the function
+In Source ${CHAP}2 Lazy, argument expressions of functions are passed un-evaluated to the function
 to which they are applied. 
 You may refer to [_Source ${CHAP}2 Lazy specifications_](${LINKS.SOURCE_2_LAZY}) for more details. `;
 
@@ -73,7 +73,7 @@ In Source ${CHAP}4, you are introduced to the 2 functions for MCE: \`parse\` \&
 You may refer to [_Source ${CHAP}4 specifications_](${LINKS.SOURCE_4}) for more details. `;
 
 const S4_GPU_INTRODUCTION = `
-In Source ${CHAP}4 GPU , it allows for Source programs to be accelerated on the GPU if certain conditions
+In Source ${CHAP}4 GPU, it allows for Source programs to be accelerated on the GPU if certain conditions
 are met. Experimentation has shown
 that Source ${CHAP}4 GPU is orders of magnitude faster than Source ${CHAP}4 for heavy CPU bound tasks 
 You may refer to [_Source ${CHAP}4 GPU specifications_](${LINKS.SOURCE_4_GPU}) for more details. `;
