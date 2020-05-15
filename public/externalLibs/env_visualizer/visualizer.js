@@ -28,7 +28,7 @@
   const PAIR_SPACING = 15; // spacing between pairs
   const INNER_RADIUS = 2; // radius of inner dot within a fn object
 
-  // TEXT SPACING 
+  // TEXT SPACING
   const HORIZONTAL_TEXT_MARGIN = 10
   const VERITCAL_TEXT_MARGIN = 39
 
@@ -37,7 +37,7 @@
   const DATA_UNIT_HEIGHT = 40;
 
 
-  
+
   /**
    * Keys (unique IDs) for data objects, user-defined function objects,
    * and built-in function objects must all be differentiated.
@@ -50,10 +50,10 @@
    */
   let dataObjectKey = Math.pow(2, 24) - 1;
   let fnObjectKey = Math.pow(2, 22) - 1;
-  
+
   // Initialise list of built-in functions to ignore (i.e. not draw)
   var builtins = [];
-  
+
   /**
    * Helper functions for drawing different types of elements on the canvas.
    */
@@ -80,9 +80,9 @@
   }
 
   /**
-   * Initialise callGetShiftInfo by storing the parent data structure 
+   * Initialise callGetShiftInfo by storing the parent data structure
    * When callGetShiftInfo is called, callGetShiftInfoData is the parent data structure that d2 is supposed to be found in
-   */ 
+   */
   let callGetShiftInfoData;
   function initialiseCallGetShiftInfo(dataStructure){
     callGetShiftInfoData = dataStructure;
@@ -120,7 +120,7 @@
 
     while (d2 !== d1) {
       if(searchedPairs.includes(d1)){
-        // Indicates that the data structure is cyclic. 
+        // Indicates that the data structure is cyclic.
         // Find the coordinates of the current pair using getShiftInfo
         // Reset result.x and result.y
         let currCoords = getShiftInfo(orig, d1);
@@ -157,7 +157,7 @@
   }
 
   function drawThis(dataObject) {
-    // returns a structure that contains a boolean to indicate whether 
+    // returns a structure that contains a boolean to indicate whether
     // or not to draw dataObject. If boolean is false, also returns the main
     // and substructure that is involved
     const result = {
@@ -187,12 +187,12 @@
   }
 
   function reassignCoordinates(d1, d2) {
-    // if we do not need to draw d2, reassign x and y coordinates to 
+    // if we do not need to draw d2, reassign x and y coordinates to
     // be the corresponding coordinates of d1
     const trueCoordinates = getShiftInfo(d1, d2);
     const wrapper = dataObjectWrappers[dataObjects.indexOf(d2)];
     wrapper.x = trueCoordinates.x;
-    wrapper.y = trueCoordinates.y;
+    wrapper.y = trueCoordinates.y - 5;
   }
 
   function drawSceneFnObjects() {
@@ -215,7 +215,7 @@
   }
 
   function drawSceneDataObjects() {
-    // drawDataObjects array is declared as a global array below but must 
+    // drawDataObjects array is declared as a global array below but must
     // be reset whenever this fn is called
     drawnDataObjects = [];
     dataObjectLayer.scene.clear();
@@ -233,7 +233,7 @@
         } else {
           reassignCoordinates(result.mainStructure, result.subStructure);
         }
-      } 
+      }
     });
     viewport.render();
   }
@@ -353,7 +353,7 @@
     context.fill();
     context.moveTo(x + 2 * FNOBJECT_RADIUS, y);
     context.arc(x + FNOBJECT_RADIUS, y, FNOBJECT_RADIUS, 0, Math.PI * 2, false);
-    
+
     context.moveTo(x + FNOBJECT_RADIUS, y);
     context.lineTo(x + FNOBJECT_RADIUS, y - FNOBJECT_RADIUS);
     context.stroke();
@@ -397,14 +397,14 @@
     context.lineTo(endX, endY);
     context.stroke();
   }
-  
+
   // since arrows across data structures will now be drawn in the arrow Layer
   // need a function calculate the coordinates the small portion of the arrow from
   // center of box to edge of box
   function inBoxCoordinates(x0, y0, xf, yf, head) {
     const distX = Math.abs(x0 - xf);
     const distY = Math.abs(y0 - yf);
-    const half_width = ((xf > x0 && head) || (x0 >= xf && !head)) 
+    const half_width = ((xf > x0 && head) || (x0 >= xf && !head))
       ? (3/4) * DATA_UNIT_WIDTH
       : (1/4) * DATA_UNIT_WIDTH;
     const half_height = DATA_UNIT_HEIGHT/2;
@@ -425,9 +425,9 @@
 
   function drawScenePairs(dataObject, scene, wrapper, wrapperData, startX, startY) {
     // wrapperData is only relevant for tracing the origin of function objects in lists
-    // not useful for anything else 
+    // not useful for anything else
     var context = scene.context,
-      parent = wrapper.parent;    
+      parent = wrapper.parent;
     // makes an opaque rectangle of the same colour as the background
     context.fillStyle = '#2c3e50';
     context.fillRect(startX, startY, DATA_UNIT_WIDTH, DATA_UNIT_HEIGHT);
@@ -500,11 +500,11 @@
             drawNestedArrayObject(startX + DATA_UNIT_WIDTH + PAIR_SPACING, startY);
           } else {
             drawScenePairs(dataObject[1], scene, wrapper, wrapperData[1], startX + DATA_UNIT_WIDTH + PAIR_SPACING, startY);
-          }   
-          drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          }
+          drawLine(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
             startX + DATA_UNIT_WIDTH + PAIR_SPACING, startY + DATA_UNIT_HEIGHT/2);
           context.moveTo(startX + DATA_UNIT_WIDTH + PAIR_SPACING, startY + DATA_UNIT_HEIGHT/2);
-          drawArrowHead(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+          drawArrowHead(context, startX + 3 * DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
             startX + DATA_UNIT_WIDTH + PAIR_SPACING, startY + DATA_UNIT_HEIGHT/2);
           context.stroke();
         } else {
@@ -532,48 +532,48 @@
       // draw line in box
       if((startY + DATA_UNIT_HEIGHT/2) > wrapperData[1].y) {
         // draw line upwards
-        drawLine(context, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(context, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2,
           startX + 3/4 * DATA_UNIT_WIDTH, startY);
       } else {
         // draw line downwards
-        drawLine(context, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT, 
+        drawLine(context, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT,
           startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2);
       }
       // draw arrow layer
       const arrowContext = arrowLayer.scene.context;
       if (startX + 3/4 * DATA_UNIT_WIDTH <= wrapperData[1].x + 4 * FNOBJECT_RADIUS) {
-        drawLine(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2,
           startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS);
-        drawLine(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS, 
+        drawLine(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS,
           wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS);
-        drawLine(arrowContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS, 
+        drawLine(arrowContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS,
           wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y);
-        drawArrow(arrowContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y, 
+        drawArrow(arrowContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y,
           wrapperData[1].x + 2 * FNOBJECT_RADIUS, wrapperData[1].y);
         // duplicate arrow in hoveredLayer
         var hoverContext = hoveredLayer.scene.context;
         hoverContext.strokeStyle = 'white';
-        drawLine(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2,
           startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS);
-        drawLine(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS, 
+        drawLine(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y + 2 * FNOBJECT_RADIUS,
           wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS);
-        drawLine(hoverContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS, 
+        drawLine(hoverContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y + 2 * FNOBJECT_RADIUS,
           wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y);
-        drawArrow(hoverContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y, 
+        drawArrow(hoverContext, wrapperData[1].x + 4 * FNOBJECT_RADIUS, wrapperData[1].y,
           wrapperData[1].x + 2 * FNOBJECT_RADIUS, wrapperData[1].y);
       } else {
-        drawLine(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2,
           startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y);
       // draw arrow left/right to fn area
-        drawArrow(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y, 
+        drawArrow(arrowContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y,
           wrapperData[1].x + 2 * FNOBJECT_RADIUS, wrapperData[1].y);
         // duplicate arrow in hoveredLayer
         var hoverContext = hoveredLayer.scene.context;
         hoverContext.strokeStyle = 'white';
-        drawLine(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, startY + DATA_UNIT_HEIGHT/2,
           startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y);
         // draw arrow left/right to fn area
-        drawArrow(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y, 
+        drawArrow(hoverContext, startX + 3/4 * DATA_UNIT_WIDTH, wrapperData[1].y,
           wrapperData[1].x + 2 * FNOBJECT_RADIUS, wrapperData[1].y);
       }
     } else {
@@ -593,7 +593,7 @@
           subStructure = x;
         }
       });
-      
+
       if (cycleDetected) {
         const arrowContext = arrowLayer.scene.context;
         arrowContext.strokeStyle = '#999999';
@@ -633,7 +633,7 @@
         const draw = result.draw;
         // check if need to draw the data object or it has already been drawn
         if (draw) {
-          let shiftY = callGetShiftInfo(dataObject[0]);      
+          let shiftY = callGetShiftInfo(dataObject[0]);
 
           if (is_Array(dataObject[0])) {
             drawNestedArrayObject(startX, wrapper.y + shiftY);
@@ -687,48 +687,48 @@
       // draw line in box
       if((startY + DATA_UNIT_HEIGHT/2) > wrapperData[0].y) {
         // draw line upwards
-        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
           startX + DATA_UNIT_WIDTH/4, startY);
       } else {
         // draw line downwards
-        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT, 
+        drawLine(context, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT,
           startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2);
       }
       // draw line up to fn height
       const arrowContext = arrowLayer.scene.context;
       if (startX + DATA_UNIT_WIDTH/4 <= wrapperData[0].x + 4 * FNOBJECT_RADIUS) {
-        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
           startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
-        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS,
           wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
-        drawLine(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+        drawLine(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS,
           wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y);
-        drawArrow(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y, 
+        drawArrow(arrowContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y,
           wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
         // duplicate arrow in hoveredLayer
         var hoverContext = hoveredLayer.scene.context;
         hoverContext.strokeStyle = 'white';
-        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
           startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
-        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y + 2 * FNOBJECT_RADIUS,
           wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS);
-        drawLine(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS, 
+        drawLine(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y + 2 * FNOBJECT_RADIUS,
           wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y);
-        drawArrow(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y, 
+        drawArrow(hoverContext, wrapperData[0].x + 4 * FNOBJECT_RADIUS, wrapperData[0].y,
           wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
       } else {
-        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(arrowContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
           startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
       // draw arrow left/right to fn area
-        drawArrow(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
+        drawArrow(arrowContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y,
           wrapperData[0].x + 2 * FNOBJECT_RADIUS, wrapperData[0].y);
         // duplicate arrow in hoveredLayer
         var hoverContext = hoveredLayer.scene.context;
         hoverContext.strokeStyle = 'white';
-        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2, 
+        drawLine(hoverContext, startX + DATA_UNIT_WIDTH/4, startY + DATA_UNIT_HEIGHT/2,
           startX + DATA_UNIT_WIDTH/4, wrapperData[0].y);
         // draw arrow left/right to fn area
-        drawArrow(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y, 
+        drawArrow(hoverContext, startX + DATA_UNIT_WIDTH/4, wrapperData[0].y,
           wrapperData[0].x + 2 *FNOBJECT_RADIUS, wrapperData[0].y);
       }
     } else {
@@ -753,13 +753,13 @@
     hitCycleDetector.push(dataObject)
 
     // not a perfect tracing over the original dataObject but good enough
-    if (Array.isArray(dataObject[0]) 
-      && drawnDataObjects.includes(dataObject[0]) 
+    if (Array.isArray(dataObject[0])
+      && drawnDataObjects.includes(dataObject[0])
       && !hitCycleDetector.includes(dataObject[0])) {
       drawHitPairs(dataObject[0], hit, wrapper, x0, y0 + DATA_UNIT_HEIGHT + PAIR_SPACING);
     }
 
-    if (Array.isArray(dataObject[1]) 
+    if (Array.isArray(dataObject[1])
       && drawnDataObjects.includes(dataObject[1])
       && !hitCycleDetector.includes(dataObject[1])) {
       drawHitPairs(dataObject[1], hit, wrapper, x0 + DATA_UNIT_WIDTH + PAIR_SPACING, y0);
@@ -776,7 +776,7 @@
   function drawNestedArrayObject(xcoord, ycoord) {
     var scene = dataObjectLayer.scene,
       context = scene.context;
-    // define points for drawing data object 
+    // define points for drawing data object
     const x0 = xcoord,
       y0 = ycoord;
     const x1 = x0 + DATA_UNIT_WIDTH,
@@ -836,7 +836,7 @@
     var config = dataObject;
     var hit = dataObjectLayer.hit,
       context = hit.context;
-    
+
     const x0 = wrapper.x - DATA_OBJECT_SIDE,
       y0 = wrapper.y - DATA_OBJECT_SIDE / 2;
     hitCycleDetector = [];
@@ -873,11 +873,11 @@
       default:
         frameName = config.name;
     }
-    
+
     if (frameName.length * 9 < config.width / 2 || frameName == 'global') {
       context.fillText(frameName, x, y - 10);
     } else {
-      context.fillText(frameName, x - (frameName.length * 9 - config.width / 2), y - 10);
+      context.fillText(frameName, x, y - 10);
     }
 
     // render text in frame
@@ -961,27 +961,29 @@
    * the frame.
    */
   function drawSceneFrameDataArrow(frame, name, dataObject) {
-    
+
     const wrapper = dataObjectWrappers[dataObjects.indexOf(dataObject)];
     var scene = arrowLayer.scene,
       context = scene.context;
-    
-    
+
+
     context.strokeStyle = '#999999';
-  
+
     // simply draw straight arrow from frame to function
     const x0 = frame.x + name.length * FRAME_WIDTH_CHAR + 25;
     const y0 = frame.y + findElementNamePosition(name, frame) * FRAME_HEIGHT_LINE + 35,
-      xf = wrapper.x - FNOBJECT_RADIUS * 2 - 3; //adjustment
+      xf = wrapper.x < x0
+        ? wrapper.x - FNOBJECT_RADIUS * 2 - 3 + DATA_UNIT_WIDTH
+        : wrapper.x - FNOBJECT_RADIUS * 2 - 3;
       const yf = wrapper.y;
-    
+
     drawArrow(context, x0, y0, xf, yf);
     // duplicate the exact same arrow but in the hovered layer so it only
     // comes into view once you hover over it
     var hoverContext = hoveredLayer.scene.context;
     hoverContext.strokeStyle = 'white';
     drawArrow(hoverContext, x0, y0, xf, yf);
-    
+
       /**
        * dataObject belongs to different frame.
        * Two "offset" factors are used: frameOffset, the index position of
@@ -989,7 +991,7 @@
        * of the target dataObject in the destination frame. Offsetting the line
        * by these factors prevents overlaps between arrows that are pointing to
        * different objects.
-       
+
       const frameOffset = findElementPosition(dataObject, frame);
       const fnOffset = findElementPosition(dataObject, wrapper.parent);
       const x0 = frame.x + name.length * 8 + 22;
@@ -1025,7 +1027,7 @@
       });
       const x4 = x3,
         y4 = yf;
-      
+
       context.moveTo(x0, y0);
       context.lineTo(x1, y1);
       context.lineTo(x2, y2);
@@ -1035,13 +1037,13 @@
       // draw arrow headClone
       drawArrowHead(context, x4, y4, xf, yf);
       context.stroke();
-      
+
       drawLine(context, x0, y0, xf, y0);
       drawArrow(context, xf, y0, xf, yf);
       // duplicate the exact same arrow but in the hovered layer so it only
       // comes into view once you hover over it
       */
-    
+
   }
 
   /**
@@ -1137,14 +1139,14 @@
     context.save();
     context.strokeStyle = '#999999';
     context.beginPath();
-    
+
     // Currently, if fnObject is defined in an array, do not draw the arrow (remove after arrays are implemented)
     if (!(Array.isArray(fnObject.parent) && fnObject.parent[0].length != 2)) {
       frame = fnObject.parent;
-      if(fnObject.parenttype == "data"){ 
+      if(fnObject.parenttype == "data"){
         parentobj = dataObjects.indexOf(fnObject.parent[0])
         frame = dataObjectWrappers[parentobj].parent
-      } 
+      }
 
       const x0 = fnObject.x + FNOBJECT_RADIUS,
         y0 = startCoord[1],
@@ -1172,7 +1174,7 @@
       context = scene.context;
     context.save();
     context.strokeStyle = 'white';
-    
+
     if (config.parent == null) return null;
     const parent = config.parent;
     const offset = levels[parent.level].frames.indexOf(frame.parent);
@@ -1215,12 +1217,12 @@
   levels = {};
   builtinsToDraw = [];
   envKeyCounter = 0;
-  
+
   let drawnDataObjects = [];
   let cycleDetector = [];
   let hitCycleDetector = [];
   var frames = [];
-  
+
   /**
    * Assigns an x- and a y-coordinate to every frame and object.
    */
@@ -1245,7 +1247,7 @@
 
     /**
      * Calculate x- and y-coordinates for each frame
-     */ 
+     */
     const drawingWidth = getDrawingWidth(levels) + 2 * DRAWING_LEFT_PADDING;
     frames.forEach(function(frame) {
       let currLevel = frame.level;
@@ -1260,14 +1262,14 @@
         y += levels[i].height + LEVEL_SPACING;
       }
       frame.y = y;
-      
+
     });
-        
+
      /**
      * x-coordinate
      * All frames are left-aligned. Iterate through each level, assigning the x-coordinate
      * depending on how much space the frames on the left are taking up
-     * Potential future improvement: Group frames together in a tree structure, and assign space recurisvely 
+     * Potential future improvement: Group frames together in a tree structure, and assign space recurisvely
      * to each frame. However, need to fix max drawing size, which is currently limited.
      */
     for (let l in levels) {
@@ -1288,12 +1290,12 @@
 
     /**
      * Calculate coordinates for each fnObject and dataObject.
-     */    
+     */
     for (d in dataObjects) {
       const wrapper = dataObjectWrappers[d];
       const parent = wrapper.parent;
-      wrapper.x = parent.x 
-                  + parent.width 
+      wrapper.x = parent.x
+                  + parent.width
                   + OBJECT_FRAME_RIGHT_SPACING;
       wrapper.y = parent.y
                   + findElementPosition(dataObjects[d], parent) * FRAME_HEIGHT_LINE
@@ -1308,7 +1310,7 @@
         // Otherwise use getShiftInfo to calculate
         if(parent[0] === parent[1]){
           parentWrapper = getWrapperFromDataObject(parent[1])
-          fnObject.x = parentWrapper.x 
+          fnObject.x = parentWrapper.x
           fnObject.y = parentWrapper.y + FRAME_HEIGHT_LINE
           // If function resides in tail, shift it rightward
           if(parent[0].length > 1 && parent[0][1] == fnObject){
@@ -1323,8 +1325,8 @@
           }
         }
       } else {
-        fnObject.x = parent.x 
-                   + parent.width 
+        fnObject.x = parent.x
+                   + parent.width
                    + OBJECT_FRAME_RIGHT_SPACING;
         fnObject.y = parent.y +
                     findElementPosition(fnObject, parent) * FRAME_HEIGHT_LINE
@@ -1393,7 +1395,7 @@
     dataObjectWrappers = [];
     levels = {};
     builtinsToDraw = [];
-    
+
     // parse input from interpreter
     function parseInput(allFrames, envs) {
       let environments = envs;
@@ -1406,7 +1408,7 @@
        */
 
       /**
-       * For some reason, some environments are not present in the top level 
+       * For some reason, some environments are not present in the top level
        * array of environments in the input context. Here, we extract those
        * missing environments.
        */
@@ -1435,7 +1437,7 @@
       /**
        * Refactor start
        */
-      
+
       // Assign the same id to each environment and its corresponding frame
       environments.forEach(function(e) {
         e.envKeyCounter = envKeyCounter;
@@ -1448,9 +1450,9 @@
        */
       // Process backwards such that global frame comes first
       for (let i = environments.length - 1; i >= 0; i--) {
-        let environment = environments[i];      
+        let environment = environments[i];
         let frame;
-              
+
         /**
          * There are two environments named programEnvironment. We only want one
          * corresponding "Program" frame.
@@ -1475,7 +1477,7 @@
           frames.push(frame);
           allFrames.push(frame);
         }
-        
+
         // extract elements from environment into frame
         frame.elements = {};
         if (frame.name == "global") {
@@ -1498,12 +1500,12 @@
               frames[0].elements[getFnName(envElements[e])] = envElements[e];
             }
           }
-        } 
+        }
       }
 
       /**
        * - Assign parent frame of each frame (except global frame)
-       * - Assign level of each frame. Frames are organised into distinct 
+       * - Assign level of each frame. Frames are organised into distinct
        *   vertical bands. Global frame is at the top (level 0). Every
        *   other frame is 1 level below its parent.
        */
@@ -1524,10 +1526,10 @@
           // For loops do not have frame.parent, only while loops and functions do
           if(frame.parent) {
             frame.parent.children.push(frame.key);
-            frame.level = frame.parent.level + 1;            
+            frame.level = frame.parent.level + 1;
           }
         }
-        
+
         // update total number of frames in the current level
         if (levels[frame.level]) {
           levels[frame.level].count++;
@@ -1537,17 +1539,16 @@
           levels[frame.level].frames = [frame];
         }
       });
-      
+
       /**
        * Extract function and data objects from frames. Each distinct object is
        * drawn next to the first frame where it is referenced; subsequent
        * references point back to the object.
-       */      
+       */
 
       // dataPairsSeachedForFnObj array is used in findFnInDataObject
       // Helps to terminate search in recursive data structures;
       let dataPairsSeachedForFnObj = [];
-
       frames.forEach(function(frame) {
         const elements = frame.elements;
         for (e in elements) {
@@ -1561,35 +1562,35 @@
             dataObjectWrappers.push(
               initialiseDataObjectWrapper(e, elements[e], frame)
             );
-            // Iterate through elements[e], check if function exists in fnObjects	
-            // If no, instantiate and add to fnObjects array	
+            // Iterate through elements[e], check if function exists in fnObjects
+            // If no, instantiate and add to fnObjects array
             // Currently, do not add function objects belonging to arrays (as arrays are not supported yet)
             if(!is_Array(elements[e])) {
               initialiseFindFnInDataObject();
               findFnInDataObject(elements[e], elements[e], elements[e])
-            }           
+            }
           }
         }
       });
-      
+
       function initialiseFindFnInDataObject(){
         dataPairsSeachedForFnObj = [];
       }
 
-      function findFnInDataObject(list, parent, dataObject){		
+      function findFnInDataObject(list, parent, dataObject){
         if(dataPairsSeachedForFnObj.includes(list)){
           return false;
-        } else if (Array.isArray(list)) {	
+        } else if (Array.isArray(list)) {
           dataPairsSeachedForFnObj.push(list)
-          findFnInDataObject(list[1], list, dataObject)		
-          findFnInDataObject(list[0], list, dataObject)		
+          findFnInDataObject(list[1], list, dataObject)
+          findFnInDataObject(list[0], list, dataObject)
         } else if(isFunction(list) && !fnObjects.includes(list)) {
-          initialiseDataFnObject(list, [dataObject, parent])		
-          fnObjects.push(list);		
-        }		
-      }	
+          initialiseDataFnObject(list, [dataObject, parent])
+          fnObjects.push(list);
+        }
+      }
 
-      /** 
+      /**
        * - Find width and height of each frame
        */
 
@@ -1620,7 +1621,7 @@
           missing.push(otherEnv);
           allEnvs.push(otherEnv);
           // find function definition expression to use as frame name
-          
+
           if(!otherEnv.callExpression) {
             // When the environment is a loop, it doesn't have a call expression
             break;
@@ -1654,7 +1655,7 @@
       });
       if (missing.length > 0) {
         frames = (parseInput(allFrames, missing));
-      } 
+      }
 
       return allFrames;
     }
@@ -1677,7 +1678,7 @@
     let drawingWidth = Math.max(getDrawingWidth(levels)* 1.6, 300)
     viewport.setSize(drawingWidth, getDrawingHeight(levels));
     // "* 1.6" is a partial workaround for drawing being cut off on the right
-    
+
     drawSceneFrames();
     drawSceneFnObjects();
     drawHitFnObjects();
@@ -1686,7 +1687,7 @@
     drawSceneFrameArrows();
     drawSceneFrameObjectArrows();
     drawSceneFnFrameArrows();
-    
+
     // add concrete container handlers
     container.addEventListener('mousemove', function(evt) {
       var boundingRect = container.getBoundingClientRect(),
@@ -1705,7 +1706,7 @@
       }
 
       if (key >= 0) {
-        hoveredLayer.visible = true; 
+        hoveredLayer.visible = true;
         viewport.render();
       }
       else {
@@ -1787,7 +1788,7 @@
   }
 
   function getFnName(fn) {
-    if (fn.node.type == "FunctionDeclaration" && !fn.functionName) {
+    if (fn.node == undefined || fn.node.type == "FunctionDeclaration" && !fn.functionName) {
       return undefined;
     } else if (fn.node.type == "FunctionDeclaration") {
       return fn.functionName;
@@ -1802,7 +1803,7 @@
   function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
   }
-  
+
   function isArrowFunction(fn) {
     return fn.node.type == "ArrowFunctionExpression";
   }
@@ -1815,7 +1816,7 @@
     frame.children = [];
     return frame;
   }
-  
+
   function getFrameByKey(frames, key) {
     for (let i in frames) {
       if (frames[i].key == key) {
@@ -1824,7 +1825,7 @@
     }
     return null;
   }
-  
+
   function getEnvByKeyCounter(frames, key) {
     for (let i in frames) {
       if (frames[i].envKeyCounter == key) {
@@ -1833,7 +1834,7 @@
     }
     return null;
   }
-  
+
   function getFrameByName(frames, name) {
     for (let i in frames) {
       if (frames[i].name == name) {
@@ -1850,11 +1851,13 @@
   // Current check to check if data structure is an array
   // Howeverm does not work with arrays of size 2
   function is_Array(dataObject) {
-    return dataObject.length != 2
+    return Array.isArray(dataObject)
+      ? dataObject.length != 2
+      : false
   }
 
   // Space Calculation Functions
-  
+
   // Calculates width of a list/array
   function getListWidth(parentlist) {
     let otherObjects = [];
@@ -1916,7 +1919,7 @@
      * otherObjects contains all data objects initialised before parentlist
      * This is to check if any part of parentlist is a substructure of any
      * previously defined data structure, and omit that part from the height calculations
-     * 
+     *
      * dataPairs contains all previously traversed pairs in the data structure
      * This is to avoid infinite loops when it comes to recursive data structures
      */
@@ -1928,7 +1931,7 @@
         objectStored = true;
       } else if(!objectStored) {
         otherObjects.push(x)
-      }    
+      }
     })
 
     function recursiveHelper(list){
@@ -1939,13 +1942,13 @@
           substructureExists = true;
         }
       })
-      
+
       if(substructureExists || dataPairs.includes(list)){
         return 0;
-      } 
+      }
 
       dataPairs.push(list);
-      
+
       if(Array.isArray(list) && list.length != 2){
         return 0;
       } else if(Array.isArray(list)) {
@@ -1983,8 +1986,8 @@
               return 1 + (1 + recursiveHelper(list[0]));
             } else {
               return (1 + recursiveHelper(list[0])) + tail_height;
-            }           
-          } 
+            }
+          }
         } else if(isFunction(list[0])){
           let fnObject = fnObjects[fnObjects.indexOf(list[0])]
           let parenttype = fnObject.parenttype;
@@ -2019,7 +2022,7 @@
     }
 
     // Array height = 1 (which is added on in getFrameHeight)
-    return recursiveHelper(parentlist)    
+    return recursiveHelper(parentlist)
   }
 
   // Calculates unit height of a list
@@ -2067,10 +2070,10 @@
 
       if(substructureExists || dataPairs.includes(list)){
         return 0;
-      } 
+      }
 
       dataPairs.push(list);
-      
+
       if(Array.isArray(list) && list.length != 2){
         return 0;
       } else if(Array.isArray(list)) {
@@ -2104,10 +2107,10 @@
               return 1 + (1 + head_height);
             } else {
               return  (1 + head_height) + tail_height;
-            }           
-          } 
+            }
+          }
         }
-        
+
         if(isFunction(list[0])){
           let fnObject = fnObjects[fnObjects.indexOf(list[0])]
           let parenttype = fnObject.parenttype;
@@ -2135,7 +2138,7 @@
       } else {
         return 0;
       }
-    
+
     }
 
     if(isFunction(sublist)) {
@@ -2144,7 +2147,7 @@
     return (recursiveHelper(sublist));
   }
 
-  // Calculates list/array height 
+  // Calculates list/array height
   // Used in frame height calculations
   function getListHeight(list) {
     let x = (getUnitHeight(list) + 1) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
@@ -2159,22 +2162,22 @@
     for(elem in frame.elements){
       if(isFunction(frame.elements[elem])) {
         elem_lines += 1;
-      } 
+      }
       else if(Array.isArray(frame.elements[elem])) {
         const parent = dataObjectWrappers[dataObjects.indexOf(frame.elements[elem])].parent;
         if(parent == frame) {
           data_space += getListHeight(frame.elements[elem]);
         } else {
           data_space += FRAME_HEIGHT_LINE;
-        }        
+        }
       } else {
         elem_lines += 1;
       }
     }
-    
+
     return data_space + elem_lines * FRAME_HEIGHT_LINE + FRAME_HEIGHT_PADDING;
   }
-  
+
   // Calculates width of frame only
   function getFrameWidth(frame) {
     let maxLength = 0;
@@ -2184,7 +2187,7 @@
         let currLength;
         const literals = ["number", "string", "boolean"];
         if (literals.includes(typeof elements[e])) {
-          currLength = e.length + elements[e].toString().length + 
+          currLength = e.length + elements[e].toString().length +
             (typeof elements[e] == 'string' ? 2 : 0);;
         } else if (typeof elements[e] == "undefined") {
           currLength = e.length + 9;
@@ -2192,9 +2195,9 @@
           currLength = e.length;
         }
         maxLength = Math.max(maxLength, currLength);
-      } 
+      }
     }
-    return maxLength * FRAME_WIDTH_CHAR + FRAME_WIDTH_PADDING;    
+    return maxLength * FRAME_WIDTH_CHAR + FRAME_WIDTH_PADDING;
   }
 
   // Calculates width of objects + frame
@@ -2209,26 +2212,26 @@
         if(isFunction(frame.elements[e])) {
           if(frame.elements[e].parent == frame) {
             maxWidth = Math.max(maxWidth, DATA_UNIT_WIDTH);
-          }          
+          }
         } else if(Array.isArray(frame.elements[e])) {
           const parent = dataObjectWrappers[dataObjects.indexOf(frame.elements[e])].parent;
           if(parent == frame) {
             maxWidth = Math.max(maxWidth, getListWidth(frame.elements[e]))
           }
-        } 
+        }
       }
-      return getFrameWidth(frame) + OBJECT_FRAME_RIGHT_SPACING + maxWidth; 
+      return getFrameWidth(frame) + OBJECT_FRAME_RIGHT_SPACING + maxWidth;
     }
   }
-  
-  function getDrawingWidth(levels) { 
+
+  function getDrawingWidth(levels) {
     function getTotalWidth(frame){
       // Compare fullwidth + width of children
-          
+
       const children_level = frame.level + 1
       let children = levels[children_level]
       let children_length = 0;
-  
+
       if (children != undefined) {
         children = levels[children_level].frames.filter((f) => f.parent == frame);
         if(children == undefined) {
@@ -2237,17 +2240,17 @@
         for (c in children) {
           children_length += getTotalWidth(children[c]);
         }
-  
+
         children_length += (children.length - 1) * FRAME_SPACING;
       } else {
         return frame.fullwidth;
       }
-  
+
       return Math.max(frame.fullwidth, children_length);
-    }  
+    }
     return getTotalWidth(levels[1].frames[0])
   }
-  
+
   function getDrawingHeight(levels) {
     let y = 30;
     for (l in levels) {
@@ -2255,7 +2258,7 @@
     }
     return y;
   }
-  
+
   function getWrapperFromDataObject(dataObject) {
     return dataObjectWrappers[dataObjects.indexOf(dataObject)];
   }
@@ -2278,7 +2281,7 @@
     initialiseFnObject(fnObject, parent)
     fnObject.parenttype = "frame"
   }
-  
+
   function initialiseDataObjectWrapper(objectName, objectData, parent) {
     const dataObjectWrapper = {
       hovered: false,
@@ -2292,7 +2295,7 @@
     };
     return dataObjectWrapper;
   }
-  
+
   // Calculates the unit position of an element (data/primitive/function)
   function findElementPosition(element, frame) {
     let index = 0;
@@ -2302,14 +2305,14 @@
       }
       if(isFunction(frame.elements[elem])) {
         index += 1;
-      } 
+      }
       else if(Array.isArray(frame.elements[elem])) {
         const parent = dataObjectWrappers[dataObjects.indexOf(frame.elements[elem])].parent;
         if(parent == frame) {
           index += getUnitHeight(frame.elements[elem]) + 1
         } else {
           index += 1;
-        }        
+        }
       } else {
         index += 1
       }
@@ -2324,26 +2327,26 @@
     for(let i = 0; i < lineNo; i++){
       if(isFunction(Object.values(frame.elements)[i])) {
         index += 1;
-      } 
+      }
       else if(Array.isArray(Object.values(frame.elements)[i])) {
         const parent = dataObjectWrappers[dataObjects.indexOf(Object.values(frame.elements)[i])].parent;
         if(parent == frame) {
           index += getUnitHeight(Object.values(frame.elements)[i]) + 1;
         } else {
           index += 1;
-        }        
+        }
       } else {
         index += 1
       }
     }
     return index;
   }
-  
+
   function findFrameIndexInLevel(frame) {
     const level = frame.level;
     return levels[level].frames.indexOf(frame);
   }
-  
+
   function isEmptyFrame(frame) {
     let hasObject = false;
     fnObjects.forEach(function(f) {
@@ -2356,11 +2359,11 @@
         hasObject = true;
       }
     });
-    return !hasObject 
-            && frame.children.length == 0 
+    return !hasObject
+            && frame.children.length == 0
             && Object.keys(frame.elements).length == 0;
   }
-  
+
   exports.EnvVisualizer = {
     draw_env: draw_env,
     init: function(parent) {

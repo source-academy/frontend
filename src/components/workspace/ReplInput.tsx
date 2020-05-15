@@ -43,17 +43,12 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
     }
   }
 
-  public getChapterMode() {
-    const chapter = this.props.sourceChapter;
-    return chapter === undefined ? 'source1' : 'source' + chapter.toString() + 'default' + 'NONE';
-  }
-
   public render() {
     return (
       <>
         <AceEditor
           className="repl-react-ace react-ace"
-          mode={this.getChapterMode()}
+          mode={`source${this.props.sourceChapter || 1}defaultNONE`}
           theme="source"
           height="1px"
           width="100%"
