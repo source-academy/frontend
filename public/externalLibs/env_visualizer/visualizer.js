@@ -898,7 +898,7 @@
             context.fillText(`${'' + k}: ${'' + elements[k]}`, textX, textY + i * FRAME_HEIGHT_LINE);
             break;
           case 'string':
-            if (k == '(other predclr. names)') {
+            if (k == '(predeclared names)') {
               context.fillText(`${'' + k}`, textX, textY + i * FRAME_HEIGHT_LINE);
             } else {
               context.fillText(`${'' + k}: "${'' + elements[k]}"`, textX, textY + i * FRAME_HEIGHT_LINE);
@@ -1481,7 +1481,7 @@
         // extract elements from environment into frame
         frame.elements = {};
         if (frame.name == "global") {
-          frame.elements['(other predclr. names)'] = '';
+          frame.elements['(predeclared names)'] = '';
           // don't copy over built-in functions
         } else if (environment.name == "programEnvironment"
                     && environment.tail.name == "global") {
