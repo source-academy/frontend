@@ -1,3 +1,5 @@
+import { Variant } from 'js-slang/dist/types';
+
 import { compressToUTF16 } from 'lz-string';
 import { createStore } from './createStore';
 import { ISavedState } from './localStorage';
@@ -12,7 +14,9 @@ const mockChangedStoredState: ISavedState = {
     name: 'Jeff'
   },
   playgroundEditorValue: 'Nihao everybody',
-  playgroundIsEditorAutorun: true
+  playgroundIsEditorAutorun: true, 
+  playgroundSourceChapter: 4,
+  playgroundSourceVariant: 'default' as Variant
 };
 
 const mockChangedState: IState = {

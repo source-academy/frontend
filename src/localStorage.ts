@@ -1,3 +1,5 @@
+import { Variant } from 'js-slang/dist/types';
+
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
 import { ISessionState, IState } from './reducers/states';
@@ -7,6 +9,8 @@ export type ISavedState = {
   session: Partial<ISessionState>;
   playgroundEditorValue: string | null;
   playgroundIsEditorAutorun: boolean;
+  playgroundSourceChapter: number;
+  playgroundSourceVariant: Variant;
 };
 
 export const loadStoredState = (): ISavedState | undefined => {
@@ -32,7 +36,9 @@ export const saveState = (state: IState) => {
         name: state.session.name
       },
       playgroundEditorValue: state.workspaces.playground.editorValue,
-      playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun
+      playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
+      playgroundSourceChapter: state.workspaces.playground.context.chapter,
+      playgroundSourceVariant: state.workspaces.playground.context.variant
     };
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));
     localStorage.setItem('storedState', serialized);
