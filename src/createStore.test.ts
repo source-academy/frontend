@@ -1,6 +1,7 @@
 import { Variant } from 'js-slang/dist/types';
 
 import { compressToUTF16 } from 'lz-string';
+import { ExternalLibraryName } from './components/assessment/assessmentShape';
 import { createStore } from './createStore';
 import { ISavedState } from './localStorage';
 import { defaultState, IState } from './reducers/states';
@@ -16,7 +17,8 @@ const mockChangedStoredState: ISavedState = {
   playgroundEditorValue: 'Nihao everybody',
   playgroundIsEditorAutorun: true, 
   playgroundSourceChapter: 4,
-  playgroundSourceVariant: 'default' as Variant
+  playgroundSourceVariant: 'default' as Variant, 
+  playgroundExternalLibrary: 'NONE' as ExternalLibraryName
 };
 
 const mockChangedState: IState = {
