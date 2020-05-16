@@ -17,6 +17,7 @@ const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/r
 const SCOPES = 'https://www.googleapis.com/auth/drive.appdata';
 const MIME_SOURCE = 'text/plain';
 const APP_ROOT_FOLDER_NAME = 'Source_Academy';
+const UPLOAD_PATH = 'https://www.googleapis.com/upload/drive/v3/files';
 
 type FilePath = string[];
 interface IFile {
@@ -110,13 +111,10 @@ ${contents}
 --${boundary}--
 `;
 
-  // tslint:disable-next-line:no-console
-  console.log('@createFile', meta, body);
-
   return new Promise((resolve, reject) => {
     gapi.client
       .request({
-        path: 'https://www.googleapis.com/upload/drive/v3/files',
+        path: UPLOAD_PATH,
         method: 'POST',
         params: {
           uploadType: 'multipart'
@@ -171,13 +169,10 @@ ${contents}
 --${boundary}--
 `;
 
-  // tslint:disable-next-line:no-console
-  console.log('@updateFile', meta, body);
-
   return new Promise((resolve, reject) => {
     gapi.client
       .request({
-        path: 'https://www.googleapis.com/upload/drive/v3/files/' + currId,
+        path: UPLOAD_PATH + '/' + currId,
         method: 'PATCH',
         params: {
           uploadType: 'multipart'
