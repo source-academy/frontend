@@ -56,14 +56,14 @@ export function createStore(history: History): Store<IState> {
             ? loadedStore.playgroundExternalLibrary
             : defaultState.workspaces.playground.externalLibrary,
           context: {
-            ...defaultState.workspaces.playground.context, 
+            ...defaultState.workspaces.playground.context,
             chapter: loadedStore.playgroundSourceChapter
               ? loadedStore.playgroundSourceChapter
               : defaultState.workspaces.playground.context.chapter,
             variant: loadedStore.playgroundSourceVariant
               ? loadedStore.playgroundSourceVariant
               : defaultState.workspaces.playground.context.variant
-          }, 
+          }
         }
       }
     };

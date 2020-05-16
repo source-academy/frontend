@@ -15,9 +15,9 @@ const mockChangedStoredState: ISavedState = {
     name: 'Jeff'
   },
   playgroundEditorValue: 'Nihao everybody',
-  playgroundIsEditorAutorun: true, 
+  playgroundIsEditorAutorun: true,
   playgroundSourceChapter: 4,
-  playgroundSourceVariant: 'default' as Variant, 
+  playgroundSourceVariant: 'default' as Variant,
   playgroundExternalLibrary: 'NONE' as ExternalLibraryName
 };
 

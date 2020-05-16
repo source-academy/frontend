@@ -40,7 +40,7 @@ export const saveState = (state: IState) => {
       playgroundEditorValue: state.workspaces.playground.editorValue,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
-      playgroundSourceVariant: state.workspaces.playground.context.variant, 
+      playgroundSourceVariant: state.workspaces.playground.context.variant,
       playgroundExternalLibrary: state.workspaces.playground.externalLibrary
     };
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));
