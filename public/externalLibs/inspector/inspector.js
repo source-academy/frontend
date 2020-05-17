@@ -163,7 +163,7 @@
     function drawOutput() {
       var frames = context.context.runtime.environments;
       container.innerHTML = '';
-      for (var frame = frames[0]; frame != null; frame = frame.tail) {
+      for (var frame = frames[0]; frame !== undefined; frame = frame.tail) {
         var envtoString = dumpTable(frame.head);
         if (envtoString == undefined) {
           // skipping either empty frame or perhaps the global
@@ -183,20 +183,15 @@
     // icon to blink
     const icon = document.getElementById('inspector-icon');
 
-    if (!context && icon) {
-      document.getElementById('inspector-default-text').hidden = false;
-      icon.classList.remove('side-content-tab-alert');
-      container.innerHTML = '';
-      return;
-    }
-
-    try {
+    if (context) {
       drawOutput();
       if (icon) {
         icon.classList.add('side-content-tab-alert');
       }
-    } catch (e) {
-      container.innerHTML = e;
+    } else if (icon) {
+      document.getElementById('inspector-default-text').hidden = false;
+      icon.classList.remove('side-content-tab-alert');
+      container.innerHTML = '';
     }
   }
 
