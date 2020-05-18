@@ -47,4 +47,7 @@ test('Markdown page renders correct Source information', () => {
 
   const source4GPU = <Markdown {...mockProps(4, 'gpu')} />;
   expect(source4GPU.props.content).toContain('Source \xa74 GPU');
+
+  const invalidSource = <Markdown {...mockProps(5, 'default')} />;
+  expect(invalidSource.props.content).toContain('You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead');
 });
