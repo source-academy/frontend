@@ -18,7 +18,7 @@ and also the [_Source Academy keyboard shortcuts_](${LINKS.SOURCE_HOTKEYS}).
 const generateSourceDocsLink = (sourceType: string) => {
   switch (sourceType) {
     case '1 default':
-      return `You have chosen the sublanguage [_Source ${CHAP}1](${LINKS.SOURCE_1}),`;
+      return `You have chosen the sublanguage [_Source ${CHAP}1_](${LINKS.SOURCE_1}),`;
     case '1 wasm':
       return `You have chosen the sublanguage [_Source ${CHAP}1 WebAssembly_](${LINKS.SOURCE_1_WASM}),`;
     case '1 lazy':
