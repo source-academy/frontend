@@ -34,6 +34,7 @@ export enum LINKS {
   SOURCE_DOCS_CHAPTER_3_2 = 'https://sicp.comp.nus.edu.sg/chapters/52',
   TECH_SVC = 'mailto:techsvc@comp.nus.edu.sg',
   TEXTBOOK = 'https://sicp.comp.nus.edu.sg/', 
+  HOTKEYS = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts', 
 
   SOURCE_1 = 'https://sicp.comp.nus.edu.sg/source/source_1/', 
   SOURCE_1_LAZY = 'https://sicp.comp.nus.edu.sg/source/source_1_lazy/', 
