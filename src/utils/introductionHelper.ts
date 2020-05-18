@@ -6,7 +6,7 @@ const MAIN_INTRODUCTION = `
 Welcome to the Source Academy playground!
 
 The language [_Source_](${LINKS.SOURCE_DOCS}) is the official language of the textbook [_Structure and
-Interpretation of Computer Programs, JavaScript Adaptation_](${LINKS.TEXTBOOK}).`;
+Interpretation of Computer Programs, JavaScript Adaptation_](${LINKS.TEXTBOOK}). `;
 
 const HOTKEYS_INTRODUCTION = `
 
@@ -18,11 +18,11 @@ and also the [_Source Academy keyboard shortcuts_](${LINKS.SOURCE_HOTKEYS}).
 const generateSourceDocsLink = (sourceType: string) => {
   switch (sourceType) {
     case '1 default':
-      return `You have chosen the sublanguage [_Source ${CHAP}1_](${LINKS.SOURCE_1}),`;
+      return `You have chosen the sublanguage [_Source ${CHAP}1_](${LINKS.SOURCE_1}).`;
     case '1 wasm':
-      return `You have chosen the sublanguage [_Source ${CHAP}1 WebAssembly_](${LINKS.SOURCE_1_WASM}),`;
+      return `You have chosen the sublanguage [_Source ${CHAP}1 WebAssembly_](${LINKS.SOURCE_1_WASM}).`;
     case '1 lazy':
-      return `You have chosen the sublanguage [_Source ${CHAP}1 Lazy_](${LINKS.SOURCE_1_LAZY}),`;
+      return `You have chosen the sublanguage [_Source ${CHAP}1 Lazy_](${LINKS.SOURCE_1_LAZY}).`;
     case '2 default':
       return `You have chosen the sublanguage [_Source ${CHAP}2_](${LINKS.SOURCE_2}).`;
     case '2 lazy':
@@ -36,7 +36,7 @@ const generateSourceDocsLink = (sourceType: string) => {
     case '4 default':
       return `You have chosen the sublanguage [_Source ${CHAP}4_](${LINKS.SOURCE_4}).`;
     case '4 gpu':
-      return `You have chosen the sublanguage [_Source ${CHAP}4 GPU_](${LINKS.SOURCE_4_GPU})`;
+      return `You have chosen the sublanguage [_Source ${CHAP}4 GPU_](${LINKS.SOURCE_4_GPU}).`;
     default:
       return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';
   }
