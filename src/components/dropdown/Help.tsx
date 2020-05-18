@@ -13,7 +13,7 @@ const Help: React.SFC<DialogProps> = props => (
   <Dialog
     className="help"
     icon={IconNames.ERROR}
-    isCloseButtonShown={false}
+    isCloseButtonShown={true}
     isOpen={props.isOpen}
     onClose={props.onClose}
     title="Help"
