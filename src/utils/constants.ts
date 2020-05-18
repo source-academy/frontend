@@ -33,18 +33,19 @@ export enum LINKS {
   SOURCE_DOCS_CHAPTER_2_2 = 'https://sicp.comp.nus.edu.sg/chapters/29',
   SOURCE_DOCS_CHAPTER_3_2 = 'https://sicp.comp.nus.edu.sg/chapters/52',
   TECH_SVC = 'mailto:techsvc@comp.nus.edu.sg',
-  TEXTBOOK = 'https://sicp.comp.nus.edu.sg/', 
-  HOTKEYS = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts', 
+  TEXTBOOK = 'https://sicp.comp.nus.edu.sg/',
 
-  SOURCE_1 = 'https://sicp.comp.nus.edu.sg/source/source_1/', 
-  SOURCE_1_LAZY = 'https://sicp.comp.nus.edu.sg/source/source_1_lazy/', 
-  SOURCE_1_WASM = 'https://sicp.comp.nus.edu.sg/source/source_1_wasm/', 
-  SOURCE_2 = 'https://sicp.comp.nus.edu.sg/source/source_2/', 
-  SOURCE_2_LAZY = 'https://sicp.comp.nus.edu.sg/source/source_2_lazy/', 
-  SOURCE_3 = 'https://sicp.comp.nus.edu.sg/source/source_1/', 
-  SOURCE_3_CONCURRENT = 'https://sicp.comp.nus.edu.sg/source/source_3_concurrent/', 
-  SOURCE_3_NONDET = 'https://sicp.comp.nus.edu.sg/source/source_3_non-det/', 
-  SOURCE_4 = 'https://sicp.comp.nus.edu.sg/source/source_4/', 
+  ACE_HOTKEYS = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
+  SOURCE_HOTKEYS = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts',
+
+  SOURCE_1 = 'https://sicp.comp.nus.edu.sg/source/source_1/',
+  SOURCE_1_LAZY = 'https://sicp.comp.nus.edu.sg/source/source_1_lazy/',
+  SOURCE_1_WASM = 'https://sicp.comp.nus.edu.sg/source/source_1_wasm/',
+  SOURCE_2 = 'https://sicp.comp.nus.edu.sg/source/source_2/',
+  SOURCE_2_LAZY = 'https://sicp.comp.nus.edu.sg/source/source_2_lazy/',
+  SOURCE_3 = 'https://sicp.comp.nus.edu.sg/source/source_1/',
+  SOURCE_3_CONCURRENT = 'https://sicp.comp.nus.edu.sg/source/source_3_concurrent/',
+  SOURCE_3_NONDET = 'https://sicp.comp.nus.edu.sg/source/source_3_non-det/',
+  SOURCE_4 = 'https://sicp.comp.nus.edu.sg/source/source_4/',
   SOURCE_4_GPU = 'https://sicp.comp.nus.edu.sg/source/source_4_gpu/'
-
 }

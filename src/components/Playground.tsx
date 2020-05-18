@@ -213,9 +213,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       iconName: IconNames.COMPASS,
       body: (
         <Markdown
-          content={
-            generateSourceIntroduction(this.props.sourceChapter, this.props.sourceVariant)
-          }
+          content={generateSourceIntroduction(this.props.sourceChapter, this.props.sourceVariant)}
           openLinksInNewWindow={true}
         />
       ),
