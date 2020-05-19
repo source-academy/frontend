@@ -67,7 +67,9 @@ export default function* workspaceSaga(): SagaIterator {
     for (const i in breakpoints) {
       if (typeof i === 'string') {
         const index: number = +i;
-        exploded[index] = 'debugger;' + exploded[index];
+        if (exploded[index]) {
+          exploded[index] = 'debugger;' + exploded[index];
+        }
       }
     }
     const value = exploded.join('\n');
