@@ -17,6 +17,7 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { Role } from 'src/reducers/states';
 import GradingWorkspaceContainer from '../../../containers/academy/grading/GradingWorkspaceContainer';
 import NotificationBadge from '../../../containers/notification/NotificationBadge';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
@@ -62,8 +63,10 @@ export interface IDispatchProps {
 }
 
 export interface IStateProps {
+  group: string | null;
   gradingOverviews?: GradingOverview[];
   notifications: Notification[];
+  role?: Role;
 }
 
 /** Component to render in table - grading status */
@@ -188,7 +191,9 @@ class Grading extends React.Component<IGradingProps, State> {
         field: '',
         cellRendererFramework: UnsubmitCell,
         cellRendererParams: {
-          handleUnsubmitSubmission: this.props.handleUnsubmitSubmission
+          group: this.props.group,
+          handleUnsubmitSubmission: this.props.handleUnsubmitSubmission,
+          role: this.props.role
         },
         suppressFilter: true,
         suppressSorting: true,
