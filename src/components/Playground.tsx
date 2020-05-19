@@ -150,6 +150,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
         sourceVariant={this.props.sourceVariant}
+        isClickable={true}
         key="chapter"
       />
     );
