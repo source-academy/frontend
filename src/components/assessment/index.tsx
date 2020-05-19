@@ -211,7 +211,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       <Dialog
         className="betcha-dialog"
         icon={IconNames.ERROR}
-        isCloseButtonShown={false}
+        isCloseButtonShown={true}
         isOpen={this.state.betchaAssessment !== null}
         title="Betcha: Early Submission"
       >
