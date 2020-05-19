@@ -143,7 +143,7 @@ export class ManageQuestionTab extends React.Component<IProps, IState> {
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
-      isCloseButtonShown={false}
+      isCloseButtonShown={true}
       isOpen={this.state.showSaveOverlay}
       title="Confirmation: Save unsaved changes?"
     >

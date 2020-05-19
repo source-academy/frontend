@@ -85,6 +85,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
           fontSize={17}
           highlightActiveLine={false}
           showGutter={false}
+          showPrintMargin={false}
           setOptions={{
             fontFamily: "'Inconsolata', 'Consolas', monospace"
           }}
