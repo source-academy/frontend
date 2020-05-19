@@ -131,6 +131,7 @@ export interface ISessionState {
   readonly grade: number;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
+  readonly group: string | null;
   readonly historyHelper: HistoryHelper;
   readonly materialDirectoryTree: DirectoryData[] | null;
   readonly materialIndex: MaterialData[] | null;
@@ -412,6 +413,7 @@ export const defaultSession: ISessionState = {
   grade: 0,
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
+  group: null,
   historyHelper: {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]

@@ -43,8 +43,13 @@ export const setTokens = ({
     refreshToken
   });
 
-export const setUser = (user: { name: string; role: Role; grade: number; story: Story }) =>
-  action(actionTypes.SET_USER, user);
+export const setUser = (user: {
+  name: string;
+  role: Role;
+  group: string | null;
+  grade: number;
+  story: Story;
+}) => action(actionTypes.SET_USER, user);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(actionTypes.SUBMIT_ANSWER, {
