@@ -45,30 +45,28 @@ export function ChapterSelect(props: ChapterSelectProps) {
     };
 
     return isClickable ? (
-      <div> 
-      <Button
-      className={Classes.MINIMAL}
-      text={styliseChapter(currentChap, currentVariant)}
-      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
-      />
-      </div> 
+      <div>
+        <Button
+          className={Classes.MINIMAL}
+          text={styliseChapter(currentChap, currentVariant)}
+          rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+        />
+      </div>
     ) : (
-      <div
-          onClick={stopPopup}
-      >
-      <Button
-        className={Classes.MINIMAL}
-        text={styliseChapter(currentChap, currentVariant)}
-        rightIcon={null}
-      />
-    </div>
+      <div onClick={stopPopup}>
+        <Button
+          className={Classes.MINIMAL}
+          text={styliseChapter(currentChap, currentVariant)}
+          rightIcon={null}
+        />
+      </div>
     );
   };
 
   const chapSelect = (
     currentChap: number,
     currentVariant: Variant,
-    handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}, 
+    handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {},
     isClickable: boolean
   ) => (
     <ChapterSelectComponent
@@ -78,9 +76,14 @@ export function ChapterSelect(props: ChapterSelectProps) {
       itemRenderer={chapterRenderer}
       filterable={false}
     >
-      { chapterSelector(currentChap, currentVariant, isClickable) }
+      {chapterSelector(currentChap, currentVariant, isClickable)}
     </ChapterSelectComponent>
   );
 
-  return chapSelect(props.sourceChapter, props.sourceVariant, props.handleChapterSelect, props.isClickable);
+  return chapSelect(
+    props.sourceChapter,
+    props.sourceVariant,
+    props.handleChapterSelect,
+    props.isClickable
+  );
 }

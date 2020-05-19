@@ -24,7 +24,7 @@ import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/controlBar/ControlBar';
 import {
-  ChapterSelect, 
+  ChapterSelect,
   ClearButton,
   EvalButton,
   NextButton,
@@ -539,15 +539,15 @@ class AssessmentWorkspace extends React.Component<
 
     const handleChapterSelect = () => {};
 
-      const chapterSelect = (
-        <ChapterSelect
-          handleChapterSelect={handleChapterSelect}
-          sourceChapter={this.props.assessment!.questions[questionId].library.chapter}
-          sourceVariant={DEFAULT_SOURCE_VARIANT}
-          isClickable={false}
-          key="chapter"
-        />
-      );
+    const chapterSelect = (
+      <ChapterSelect
+        handleChapterSelect={handleChapterSelect}
+        sourceChapter={this.props.assessment!.questions[questionId].library.chapter}
+        sourceVariant={DEFAULT_SOURCE_VARIANT}
+        isClickable={false}
+        key="chapter"
+      />
+    );
 
     return {
       editorButtons: [runButton, saveButton, resetButton, chapterSelect],
