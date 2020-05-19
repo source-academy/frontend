@@ -31,6 +31,7 @@ export function* mockBackendSaga(): SagaIterator {
     const user = {
       name: 'DevStaff',
       role: 'staff' as Role,
+      group: '1F',
       story: {
         story: 'mission-1',
         playStory: true
