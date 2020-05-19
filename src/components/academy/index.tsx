@@ -3,6 +3,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import Grading from '../../containers/academy/grading';
 import AssessmentContainer from '../../containers/assessment';
+import Dashboard from '../../containers/dashboard/DashboardContainer';
 import Game from '../../containers/GameContainer';
 import MaterialUpload from '../../containers/material/MaterialUploadContainer';
 import Sourcereel from '../../containers/sourcecast/SourcereelContainer';
@@ -77,6 +78,7 @@ class Academy extends React.Component<IAcademyProps> {
             render={assessmentRenderFactory(AssessmentCategories.Practical)}
           />
 
+          <Route path="/academy/dashboard" component={Dashboard} />
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
           <Route path={'/academy/material'} component={MaterialUpload} />
           <Route path="/academy/sourcereel" component={Sourcereel} />
