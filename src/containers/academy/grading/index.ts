@@ -11,7 +11,9 @@ import { IState } from '../../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   gradingOverviews: state.session.gradingOverviews,
-  notifications: state.session.notifications
+  group: state.session.group,
+  notifications: state.session.notifications,
+  role: state.session.role
 });
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>

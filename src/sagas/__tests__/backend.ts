@@ -15,6 +15,7 @@ import {
   mockAssessmentQuestions,
   mockAssessments
 } from '../../mocks/assessmentAPI';
+import { mockGroupOverviews } from '../../mocks/groupAPI';
 import { mockNotifications } from '../../mocks/userAPI';
 import { Role, Story } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
@@ -22,6 +23,7 @@ import backendSaga from '../backend';
 import {
   getAssessment,
   getAssessmentOverviews,
+  getGroupOverviews,
   getNotifications,
   getUser,
   postAcknowledgeNotifications,
@@ -67,6 +69,7 @@ describe('Test FETCH_AUTH Action', () => {
     const user = {
       name: 'user',
       role: 'student' as Role,
+      group: '42D',
       story: {} as Story,
       grade: 1
     };
@@ -85,6 +88,7 @@ describe('Test FETCH_AUTH Action', () => {
     const user = {
       name: 'user',
       role: 'student' as Role,
+      group: '42D',
       story: {} as Story,
       grade: 1
     };
@@ -378,6 +382,29 @@ describe('Test NOTIFY_CHATKIT_USERS Action', () => {
       .withState(mockStates)
       .call(postNotify, mockTokens, 1, undefined)
       .dispatch({ type: actionTypes.NOTIFY_CHATKIT_USERS, payload: { assessmentId: 1 } })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_GROUP_OVERVIEWS Action', () => {
+  test('when group overviews are obtained', () => {
+    return expectSaga(backendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(getGroupOverviews, mockTokens), mockGroupOverviews]])
+      .put(actions.updateGroupOverviews(mockGroupOverviews))
+      .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
+      .dispatch({ type: actionTypes.FETCH_GROUP_OVERVIEWS })
+      .silentRun();
+  });
+
+  test('when response is null', () => {
+    return expectSaga(backendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(getGroupOverviews, mockTokens), null]])
+      .call(getGroupOverviews, mockTokens)
+      .not.put.actionType(actionTypes.UPDATE_GROUP_OVERVIEWS)
+      .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
+      .dispatch({ type: actionTypes.FETCH_GROUP_OVERVIEWS })
       .silentRun();
   });
 });
