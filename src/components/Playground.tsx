@@ -48,6 +48,7 @@ export interface IStateProps {
   newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   queryString?: string;
+  shortURL?: string;
   replValue: string;
   sideContentHeight?: number;
   sharedbAceInitValue: string;
@@ -73,6 +74,8 @@ export interface IDispatchProps {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite: () => void;
   handleGenerateLz: () => void;
+  handleShortenURL: (s: string) => void;
+  handleUpdateShortURL: (s: string) => void;
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
@@ -205,7 +208,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     const shareButton = (
       <ShareButton
         handleGenerateLz={this.props.handleGenerateLz}
+        handleShortenURL={this.props.handleShortenURL}
+        handleUpdateShortURL={this.props.handleUpdateShortURL}
         queryString={this.props.queryString}
+        shortURL={this.props.shortURL}
         key="share"
       />
     );
