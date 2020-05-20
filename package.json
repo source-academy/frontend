@@ -21,7 +21,7 @@
     "start-js": "cross-env BROWSER=none PORT=8075 react-scripts-ts start",
     "start": "npm-run-all -p watch-css start-js",
     "test": "react-scripts-ts test --env=jsdom",
-    "test-coveralls": "./scripts/coverage-fix.sh do && react-scripts-ts test --env=jsdom --coverage --coverageReporters=text-lcov | coveralls",
+    "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "tslint": "tslint -p . -c ./tslint.prod.json",
