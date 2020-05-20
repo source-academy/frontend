@@ -556,6 +556,34 @@ function* backendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
+  yield takeEvery(actionTypes.FETCH_CHAPTER, function*() {
+    const chapter = yield call(request.fetchChapter);
+
+    if (chapter) {
+      yield put(actions.updateChapter(chapter.chapter.chapterno, chapter.chapter.variant));
+    }
+  });
+
+  yield takeEvery(actionTypes.CHANGE_CHAPTER, function*(
+    action: ReturnType<typeof actions.changeChapter>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const chapter = action.payload;
+    const resp: Response = yield request.changeChapter(chapter.chapter, chapter.variant, tokens);
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
+    }
+
+    yield put(actions.updateChapter(chapter.chapter, chapter.variant));
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  });
+
   yield takeEvery(actionTypes.FETCH_GROUP_OVERVIEWS, function*(
     action: ReturnType<typeof actions.fetchGroupOverviews>
   ) {
