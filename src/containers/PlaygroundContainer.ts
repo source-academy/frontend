@@ -19,12 +19,14 @@ import {
   evalEditor,
   evalRepl,
   externalLibrarySelect,
+  fetchChapter,
   finishInvite,
   generateLzString,
   initInvite,
   invalidEditorSessionId,
   navigateToDeclaration,
   promptAutocomplete,
+  sendReplInputToOutput,
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
@@ -100,6 +102,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(workspaceLocation, editorSessionId),
+      handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
       handleSetWebsocketStatus: (websocketStatus: number) =>
         setWebsocketStatus(workspaceLocation, websocketStatus),
       handleSideContentHeightChange: (heightChange: number) =>
@@ -109,6 +112,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
+      handleFetchChapter: () => fetchChapter(),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback)
     },

@@ -51,7 +51,19 @@ export function createStore(history: History): Store<IState> {
             : defaultState.workspaces.playground.editorValue,
           isEditorAutorun: loadedStore.playgroundIsEditorAutorun
             ? loadedStore.playgroundIsEditorAutorun
-            : defaultState.workspaces.playground.isEditorAutorun
+            : defaultState.workspaces.playground.isEditorAutorun,
+          externalLibrary: loadedStore.playgroundExternalLibrary
+            ? loadedStore.playgroundExternalLibrary
+            : defaultState.workspaces.playground.externalLibrary,
+          context: {
+            ...defaultState.workspaces.playground.context,
+            chapter: loadedStore.playgroundSourceChapter
+              ? loadedStore.playgroundSourceChapter
+              : defaultState.workspaces.playground.context.chapter,
+            variant: loadedStore.playgroundSourceVariant
+              ? loadedStore.playgroundSourceVariant
+              : defaultState.workspaces.playground.context.variant
+          }
         }
       }
     };

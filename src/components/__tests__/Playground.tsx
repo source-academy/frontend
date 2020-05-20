@@ -48,6 +48,7 @@ const baseProps = {
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (code: string) => {},
+  handleSendReplInputToOutput: (code: string) => {},
   handleSetEditorSessionId: (editorSessionId: string) => {},
   handleInitInvite: (value: string) => {},
   handleSetWebsocketStatus: (websocketStatus: number) => {},
@@ -57,6 +58,7 @@ const baseProps = {
   handleDebuggerPause: () => {},
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
+  handleFetchChapter: () => {},
   handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
 };
 
