@@ -11,6 +11,8 @@ import { AssessmentCategories } from '../assessment/assessmentShape';
 import NotificationBadge from '../../containers/notification/NotificationBadge';
 import { filterNotificationsByType } from '../notification/NotificationHelpers';
 
+import DefaultChapter from '../../containers/DefaultChapterContainer';
+
 type OwnProps = {
   role: Role;
 };
@@ -81,6 +83,8 @@ const NavigationBar: React.SFC<OwnProps> = props => (
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>
+        <DefaultChapter />
+
         <NavLink
           to={'/academy/dashboard'}
           activeClassName={Classes.ACTIVE}

@@ -386,6 +386,23 @@ describe('Test NOTIFY_CHATKIT_USERS Action', () => {
   });
 });
 
+describe('Test FETCH_CHAPTER Action', () => {
+  test('when chapter is obtained', () => {
+    return expectSaga(backendSaga)
+      .dispatch({ type: actionTypes.FETCH_CHAPTER })
+      .silentRun();
+  });
+});
+
+describe('Test CHANGE_CHAPTER Action', () => {
+  test('when chapter is changed', () => {
+    return expectSaga(backendSaga)
+      .withState({ session: { role: Role.Staff } })
+      .dispatch({ type: actionTypes.CHANGE_CHAPTER, payload: { chapterNo: 1, variant: 'default' } })
+      .silentRun();
+  });
+});
+
 describe('Test FETCH_GROUP_OVERVIEWS Action', () => {
   test('when group overviews are obtained', () => {
     return expectSaga(backendSaga)
