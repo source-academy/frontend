@@ -689,6 +689,38 @@ export async function getGroupOverviews(tokens: Tokens): Promise<IGroupOverview[
 
 
 /**
+ * GET /chapter
+ */
+export async function fetchChapter(): Promise<Response | null> {
+  const resp = await request('chapter', 'GET', {
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+}
+
+/**
+ * POST /chapter/update/1
+ */
+export async function changeChapter(chapterno: number, variant: string, tokens: Tokens) {
+  const resp = await request(`chapter/update/1`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { chapterno, variant },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+}
+
+/**
  * @returns {(Response|null)} Response if successful, otherwise null.
  *
  * @see @type{RequestOptions} for options to this function.

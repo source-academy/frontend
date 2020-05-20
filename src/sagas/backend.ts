@@ -17,12 +17,11 @@ import {
   IAssessmentOverview,
   IQuestion
 } from '../components/assessment/assessmentShape';
-import { MaterialData } from '../components/material/materialShape';
 import {
   Notification,
   NotificationFilterFunction
 } from '../components/notification/notificationShape';
-import { GameState, IState, Role } from '../reducers/states';
+import { IState, Role } from '../reducers/states';
 import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import * as request from './requests';
@@ -557,6 +556,48 @@ function* backendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
+  yield takeEvery(actionTypes.FETCH_CHAPTER, function*() {
+    const chapter = yield call(request.fetchChapter);
+
+    if (chapter) {
+      yield put(actions.updateChapter(chapter.chapter.chapterno, chapter.chapter.variant));
+    }
+  });
+
+  yield takeEvery(actionTypes.CHANGE_CHAPTER, function*(
+    action: ReturnType<typeof actions.changeChapter>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const chapter = action.payload;
+    const resp: Response = yield request.changeChapter(chapter.chapter, chapter.variant, tokens);
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
+    }
+
+    yield put(actions.updateChapter(chapter.chapter, chapter.variant));
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  });
+
+  yield takeEvery(actionTypes.FETCH_GROUP_OVERVIEWS, function*(
+    action: ReturnType<typeof actions.fetchGroupOverviews>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const groupOverviews = yield call(request.getGroupOverviews, tokens);
+    if (groupOverviews) {
+      yield put(actions.updateGroupOverviews(groupOverviews));
+    }
+  });
+}
+
   yield takeEvery(actionTypes.CHANGE_DATE_ASSESSMENT, function*(
     action: ReturnType<typeof actions.changeDateAssessment>
   ) {
@@ -699,19 +740,6 @@ function* backendSaga(): SagaIterator {
       return;
     }
     yield put(actions.setGameState(gameState));
-  });
-
-  yield takeEvery(actionTypes.FETCH_GROUP_OVERVIEWS, function*(
-    action: ReturnType<typeof actions.fetchGroupOverviews>
-  ) {
-    const tokens = yield select((state: IState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-    const groupOverviews = yield call(request.getGroupOverviews, tokens);
-    if (groupOverviews) {
-      yield put(actions.updateGroupOverviews(groupOverviews));
-    }
   });
 }
 
