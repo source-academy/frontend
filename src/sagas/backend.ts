@@ -556,6 +556,7 @@ function* backendSaga(): SagaIterator {
     yield put(actions.fetchMaterialIndex(parentId));
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
+
   yield takeEvery(actionTypes.CHANGE_DATE_ASSESSMENT, function*(
     action: ReturnType<typeof actions.changeDateAssessment>
   ) {
@@ -698,6 +699,19 @@ function* backendSaga(): SagaIterator {
       return;
     }
     yield put(actions.setGameState(gameState));
+  });
+
+  yield takeEvery(actionTypes.FETCH_GROUP_OVERVIEWS, function*(
+    action: ReturnType<typeof actions.fetchGroupOverviews>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const groupOverviews = yield call(request.getGroupOverviews, tokens);
+    if (groupOverviews) {
+      yield put(actions.updateGroupOverviews(groupOverviews));
+    }
   });
 }
 

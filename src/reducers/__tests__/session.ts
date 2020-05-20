@@ -63,6 +63,7 @@ test('SET_USER works correctly', () => {
   const payload = {
     name: 'test student',
     role: Role.Student,
+    group: '42D',
     grade: 150,
     story,
     gameState

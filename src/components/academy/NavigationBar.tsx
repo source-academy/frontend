@@ -89,6 +89,15 @@ const NavigationBar: React.SFC<OwnProps> = props => (
           <Icon icon="satellite" />
           <div className="navbar-button-text hidden-xs">Ground Control</div>
         </NavLink>
+        
+        <NavLink
+          to={'/academy/dashboard'}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon="globe" />
+          <div className="navbar-button-text hidden-xs">Dashboard</div>
+        </NavLink>
 
         <NavLink
           to={'/academy/sourcereel'}

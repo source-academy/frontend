@@ -47,7 +47,8 @@ export const setTokens = ({
 
 export const setUser = (user: {
   name: string;
-  role: Role;
+  role: Role;     
+  group: string | null;
   grade: number;
   story?: Story;
   gameState?: GameState;

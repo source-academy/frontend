@@ -154,6 +154,7 @@ test('setUser generates correct action object', () => {
   const user = {
     name: 'test student',
     role: 'student' as Role,
+    group: '42D',
     grade: 150,
     story: {} as Story,
     gameState: {} as GameState

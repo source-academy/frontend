@@ -18,6 +18,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import { IGroupOverview } from '../components/dashboard/groupShape';
 import { MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
 import { IPlaybackData, ISourcecastData } from '../components/sourcecast/sourcecastShape';
@@ -611,6 +612,7 @@ export const postMaterialFolder = async (title: string, parentId: number, tokens
   return resp;
 };
 
+
 export async function changeDateAssessment(
   id: number,
   closeAt: string,
@@ -666,6 +668,25 @@ export const uploadAssessment = async (file: File, tokens: Tokens, forceUpdate: 
   });
   return resp ? await resp.text() : null;
 };
+
+
+export async function getGroupOverviews(tokens: Tokens): Promise<IGroupOverview[] | null> {
+  const resp = await request('groups', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  const groupOverviews = await resp.json();
+
+  return groupOverviews.map((overview: any) => {
+    return overview as IGroupOverview;
+  });
+}
+
 
 /**
  * @returns {(Response|null)} Response if successful, otherwise null.
