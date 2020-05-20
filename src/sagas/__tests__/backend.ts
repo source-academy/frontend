@@ -15,13 +15,15 @@ import {
   mockAssessmentQuestions,
   mockAssessments
 } from '../../mocks/assessmentAPI';
+import { mockGroupOverviews } from '../../mocks/groupAPI';
 import { mockNotifications } from '../../mocks/userAPI';
-import { Role, Story } from '../../reducers/states';
+import { GameState, Role, Story } from '../../reducers/states';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import backendSaga from '../backend';
 import {
   getAssessment,
   getAssessmentOverviews,
+  getGroupOverviews,
   getNotifications,
   getUser,
   postAcknowledgeNotifications,
@@ -67,8 +69,16 @@ describe('Test FETCH_AUTH Action', () => {
     const user = {
       name: 'user',
       role: 'student' as Role,
-      story: {} as Story,
-      grade: 1
+      group: '42D',
+      story: {
+        story: '',
+        playStory: false
+      } as Story,
+      grade: 1,
+      gameState: {
+        collectibles: {},
+        completed_quests: []
+      } as GameState
     };
     return expectSaga(backendSaga)
       .call(postAuth, luminusCode)
@@ -85,8 +95,16 @@ describe('Test FETCH_AUTH Action', () => {
     const user = {
       name: 'user',
       role: 'student' as Role,
-      story: {} as Story,
-      grade: 1
+      group: '42D',
+      story: {
+        story: '',
+        playStory: false
+      } as Story,
+      grade: 1,
+      gameState: {
+        collectibles: {},
+        completed_quests: []
+      } as GameState
     };
     return expectSaga(backendSaga)
       .provide([[call(postAuth, luminusCode), null], [call(getUser, mockTokens), user]])
@@ -378,6 +396,46 @@ describe('Test NOTIFY_CHATKIT_USERS Action', () => {
       .withState(mockStates)
       .call(postNotify, mockTokens, 1, undefined)
       .dispatch({ type: actionTypes.NOTIFY_CHATKIT_USERS, payload: { assessmentId: 1 } })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_CHAPTER Action', () => {
+  test('when chapter is obtained', () => {
+    return expectSaga(backendSaga)
+      .dispatch({ type: actionTypes.FETCH_CHAPTER })
+      .silentRun();
+  });
+});
+
+describe('Test CHANGE_CHAPTER Action', () => {
+  test('when chapter is changed', () => {
+    return expectSaga(backendSaga)
+      .withState({ session: { role: Role.Staff } })
+      .dispatch({ type: actionTypes.CHANGE_CHAPTER, payload: { chapterNo: 1, variant: 'default' } })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_GROUP_OVERVIEWS Action', () => {
+  test('when group overviews are obtained', () => {
+    return expectSaga(backendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(getGroupOverviews, mockTokens), mockGroupOverviews]])
+      .put(actions.updateGroupOverviews(mockGroupOverviews))
+      .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
+      .dispatch({ type: actionTypes.FETCH_GROUP_OVERVIEWS })
+      .silentRun();
+  });
+
+  test('when response is null', () => {
+    return expectSaga(backendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(getGroupOverviews, mockTokens), null]])
+      .call(getGroupOverviews, mockTokens)
+      .not.put.actionType(actionTypes.UPDATE_GROUP_OVERVIEWS)
+      .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
+      .dispatch({ type: actionTypes.FETCH_GROUP_OVERVIEWS })
       .silentRun();
   });
 });

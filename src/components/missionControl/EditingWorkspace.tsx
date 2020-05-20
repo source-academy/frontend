@@ -235,7 +235,7 @@ class AssessmentWorkspace extends React.Component<AssessmentWorkspaceProps, ISta
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
-      isCloseButtonShown={false}
+      isCloseButtonShown={true}
       isOpen={this.state.showResetTemplateOverlay}
       title="Confirmation: Reset editor?"
     >

@@ -1,12 +1,9 @@
 import {LINKS} from '../../../utils/constants'
 import {history} from '../../../utils/history'
+import {soundPath, LOCATION_KEY} from './constants/constants'
+import {fetchGameData, getMissionPointer, getStudentData, saveCollectible, saveQuest} from './backend/game-state'
 
-export default function (StoryXMLPlayer, story, username, attemptedAll) {
-    function saveToServer() {
-    }
-
-    function loadFromServer() {
-    }
+export default function (StoryXMLPlayer, username, userStory, gameState, missions) {
 
     var hookHandlers = {
         startMission: function () {
@@ -39,50 +36,39 @@ export default function (StoryXMLPlayer, story, username, attemptedAll) {
                     return window.open(LINKS.LUMINUS);
             }
         },
-        pickUpCollectible: function (collectible) {
-            if (typeof Storage !== 'undefined') {
-                localStorage.setItem(collectible, 'collected');
-            }
-        },
+        pickUpCollectible: saveCollectible,
         playSound: function (name) {
-            var sound = new Audio(ASSETS_HOST + 'sounds/' + name + '.mp3');
+            var sound = new Audio(soundPath + name + '.mp3');
             if (sound) {
                 sound.play();
             }
         },
-        saveCompletedQuest: function (questId) {
-            if (typeof Storage !== 'undefined') {
-                localStorage.setItem(questId, 'completed');
-            }
-        }
+        saveCompletedQuest: saveQuest
     };
 
     function openWristDevice() {
         window.open(LINKS.LUMINUS);
     }
 
-    function startGame(div, canvas, saveData) {
-        saveData = saveData || loadFromServer();
+    function startGame(div, canvas) {
         StoryXMLPlayer.init(div, canvas, {
-            saveData: saveData,
             hookHandlers: hookHandlers,
-            saveFunc: saveToServer,
             wristDeviceFunc: openWristDevice,
             playerName: username,
             playerImageCanvas: $('<canvas />'),
             changeLocationHook: function (newLocation) {
                 if (typeof Storage !== 'undefined') {
                     // Code for localStorage/sessionStorage.
-                    localStorage.cs1101s_source_academy_location = newLocation;
+                    localStorage.setItem(LOCATION_KEY, newLocation);
                 }
             }
         });
     }
 
-    function initialize(div, canvas) {
+    function initialize(story, div, canvas) {
         startGame(div, canvas);
-        StoryXMLPlayer.loadStory('master', function () {});
+        StoryXMLPlayer.loadStory(story, function () {});
     }
 
-    return initialize;
+    return (div, canvas) => fetchGameData(userStory, gameState, missions, (story) => initialize(story, div, canvas));
 };

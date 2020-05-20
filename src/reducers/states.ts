@@ -12,6 +12,7 @@ import {
   IAssessmentOverview,
   ITestcase
 } from '../components/assessment/assessmentShape';
+import { IGroupOverview } from '../components/dashboard/groupShape';
 import { DirectoryData, MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
 import {
@@ -33,6 +34,7 @@ export interface IState {
   readonly playground: IPlaygroundState;
   readonly session: ISessionState;
   readonly workspaces: IWorkspaceManagerState;
+  readonly dashboard: IDashBoardState;
 }
 
 export interface IAcademyState {
@@ -42,6 +44,10 @@ export interface IAcademyState {
 export interface IApplicationState {
   readonly title: string;
   readonly environment: ApplicationEnvironment;
+}
+
+export interface IDashBoardState {
+  readonly groupOverviews: IGroupOverview[];
 }
 
 export interface IPlaygroundState {
@@ -131,6 +137,7 @@ export interface ISessionState {
   readonly grade: number;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
+  readonly group: string | null;
   readonly historyHelper: HistoryHelper;
   readonly materialDirectoryTree: DirectoryData[] | null;
   readonly materialIndex: MaterialData[] | null;
@@ -138,7 +145,8 @@ export interface ISessionState {
   readonly maxXp: number;
   readonly refreshToken?: string;
   readonly role?: Role;
-  readonly story?: Story;
+  readonly story: Story;
+  readonly gameState: GameState;
   readonly name?: string;
   readonly xp: number;
   readonly notifications: Notification[];
@@ -155,6 +163,11 @@ export const maxBrowseIndex = 50;
 export type Story = {
   story: string;
   playStory: boolean;
+};
+
+export type GameState = {
+  collectibles: { [id: string]: string };
+  completed_quests: string[];
 };
 
 /**
@@ -273,6 +286,10 @@ export const defaultAcademy: IAcademyState = {
 export const defaultApplication: IApplicationState = {
   title: 'Cadet',
   environment: currentEnvironment()
+};
+
+export const defaultDashBoard: IDashBoardState = {
+  groupOverviews: []
 };
 
 export const defaultPlayground: IPlaygroundState = {
@@ -414,6 +431,7 @@ export const defaultSession: ISessionState = {
   grade: 0,
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
+  group: null,
   historyHelper: {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
@@ -425,6 +443,14 @@ export const defaultSession: ISessionState = {
   refreshToken: undefined,
   role: undefined,
   name: undefined,
+  story: {
+    story: '',
+    playStory: false
+  },
+  gameState: {
+    completed_quests: [],
+    collectibles: {}
+  },
   xp: 0,
   notifications: []
 };
@@ -432,6 +458,7 @@ export const defaultSession: ISessionState = {
 export const defaultState: IState = {
   academy: defaultAcademy,
   application: defaultApplication,
+  dashboard: defaultDashBoard,
   playground: defaultPlayground,
   session: defaultSession,
   workspaces: defaultWorkspaceManager

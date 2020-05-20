@@ -1,7 +1,11 @@
+import { Variant } from 'js-slang/dist/types';
+
 import { compressToUTF16 } from 'lz-string';
+import { ExternalLibraryName } from './components/assessment/assessmentShape';
 import { createStore } from './createStore';
 import { ISavedState } from './localStorage';
 import { defaultState, IState } from './reducers/states';
+import { DEFAULT_SOURCE_CHAPTER } from './utils/constants';
 import { history } from './utils/history';
 
 const mockChangedStoredState: ISavedState = {
@@ -12,7 +16,10 @@ const mockChangedStoredState: ISavedState = {
     name: 'Jeff'
   },
   playgroundEditorValue: 'Nihao everybody',
-  playgroundIsEditorAutorun: true
+  playgroundIsEditorAutorun: true,
+  playgroundSourceChapter: DEFAULT_SOURCE_CHAPTER,
+  playgroundSourceVariant: 'default' as Variant,
+  playgroundExternalLibrary: 'NONE' as ExternalLibraryName
 };
 
 const mockChangedState: IState = {
