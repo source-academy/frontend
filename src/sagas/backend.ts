@@ -596,7 +596,6 @@ function* backendSaga(): SagaIterator {
       yield put(actions.updateGroupOverviews(groupOverviews));
     }
   });
-}
 
   yield takeEvery(actionTypes.CHANGE_DATE_ASSESSMENT, function*(
     action: ReturnType<typeof actions.changeDateAssessment>
