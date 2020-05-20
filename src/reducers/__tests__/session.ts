@@ -20,7 +20,7 @@ import {
 import { Notification } from '../../components/notification/notificationShape';
 import { HistoryHelper } from '../../utils/history';
 import { reducer } from '../session';
-import { defaultSession, ISessionState, Role, Story } from '../states';
+import { defaultSession, GameState, ISessionState, Role, Story } from '../states';
 
 test('LOG_OUT works correctly on default session', () => {
   const action = {
@@ -56,12 +56,17 @@ test('SET_USER works correctly', () => {
     story: 'test story',
     playStory: true
   };
+  const gameState: GameState = {
+    collectibles: {},
+    completed_quests: []
+  };
   const payload = {
     name: 'test student',
     role: Role.Student,
     group: '42D',
     grade: 150,
-    story
+    story,
+    gameState
   };
 
   const action = {

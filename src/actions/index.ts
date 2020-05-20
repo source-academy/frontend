@@ -2,6 +2,7 @@ export * from './collabEditing';
 export * from './commons';
 export * from './dashboard';
 export * from './game';
+export * from './groundControl';
 export * from './interpreter';
 export * from './material';
 export * from './playground';

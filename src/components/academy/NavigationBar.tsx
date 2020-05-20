@@ -86,6 +86,15 @@ const NavigationBar: React.SFC<OwnProps> = props => (
         <DefaultChapter />
 
         <NavLink
+          to={'/academy/groundcontrol'}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon="satellite" />
+          <div className="navbar-button-text hidden-xs">Ground Control</div>
+        </NavLink>
+
+        <NavLink
           to={'/academy/dashboard'}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
@@ -123,6 +132,15 @@ const NavigationBar: React.SFC<OwnProps> = props => (
             notificationFilter={filterNotificationsByType('Grading')}
             disableHover={true}
           />
+        </NavLink>
+
+        <NavLink
+          to={'/academy/gamedev'}
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        >
+          <Icon icon={IconNames.CROWN} />
+          <div className="navbar-button-text hidden-xs">Game Dev</div>
         </NavLink>
       </NavbarGroup>
     ) : null}
