@@ -612,7 +612,6 @@ export const postMaterialFolder = async (title: string, parentId: number, tokens
   return resp;
 };
 
-
 export async function changeDateAssessment(
   id: number,
   closeAt: string,
@@ -669,7 +668,6 @@ export const uploadAssessment = async (file: File, tokens: Tokens, forceUpdate: 
   return resp ? await resp.text() : null;
 };
 
-
 export async function getGroupOverviews(tokens: Tokens): Promise<IGroupOverview[] | null> {
   const resp = await request('groups', 'GET', {
     accessToken: tokens.accessToken,
@@ -686,7 +684,6 @@ export async function getGroupOverviews(tokens: Tokens): Promise<IGroupOverview[
     return overview as IGroupOverview;
   });
 }
-
 
 /**
  * GET /chapter
