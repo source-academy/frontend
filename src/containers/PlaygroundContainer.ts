@@ -19,6 +19,7 @@ import {
   evalEditor,
   evalRepl,
   externalLibrarySelect,
+  fetchChapter,
   finishInvite,
   generateLzString,
   initInvite,
@@ -111,6 +112,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
+      handleFetchChapter: () => fetchChapter(),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback)
     },
