@@ -583,6 +583,19 @@ function* backendSaga(): SagaIterator {
     yield put(actions.updateChapter(chapter.chapter, chapter.variant));
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   });
+
+  yield takeEvery(actionTypes.FETCH_GROUP_OVERVIEWS, function*(
+    action: ReturnType<typeof actions.fetchGroupOverviews>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const groupOverviews = yield call(request.getGroupOverviews, tokens);
+    if (groupOverviews) {
+      yield put(actions.updateGroupOverviews(groupOverviews));
+    }
+  });
 }
 
 export default backendSaga;

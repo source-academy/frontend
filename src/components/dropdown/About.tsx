@@ -13,7 +13,7 @@ const About: React.SFC<DialogProps> = props => (
   <Dialog
     className="about"
     icon={IconNames.HELP}
-    isCloseButtonShown={false}
+    isCloseButtonShown={true}
     isOpen={props.isOpen}
     onClose={props.onClose}
     title="About"
