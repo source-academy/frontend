@@ -3,17 +3,22 @@ import {
   findDeclaration,
   getNames,
   interrupt,
+  parseError,
   Result,
   resume,
   runInContext
 } from 'js-slang';
 import { TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
+import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
+import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
+import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
+import * as Sourceror from 'sourceror-driver';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
@@ -147,7 +152,8 @@ export default function* workspaceSaga(): SagaIterator {
       getNames,
       autocompleteCode,
       action.payload.row + prependLength,
-      action.payload.column
+      action.payload.column,
+      context
     );
 
     if (!displaySuggestions) {
@@ -159,7 +165,7 @@ export default function* workspaceSaga(): SagaIterator {
       caption: name.name,
       value: name.name,
       meta: name.meta,
-      score: 1000 // Prioritize suggestions from code
+      score: name.score ? name.score + 1000 : 1000 // Prioritize suggestions from code
     }));
 
     let chapterName = context.chapter.toString();
@@ -627,19 +633,29 @@ export function* evalCode(
         originalMaxExecTime: execTime,
         useSubst: substActiveAndCorrectChapter
       });
+    } else if (variant === 'wasm') {
+      return call(wasm_compile_and_run, code, context);
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
   }
+  async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
+    return Sourceror.compile(wasmCode, wasmContext)
+      .then((wasmModule: WebAssembly.Module) => Sourceror.run(wasmModule, wasmContext))
+      .then(
+        (returnedValue: any) => ({ status: 'finished', context, value: returnedValue }),
+        _ => ({ status: 'error' })
+      );
+  }
 
   const isNonDet: boolean = context.variant === 'non-det';
   const isLazy: boolean = context.variant === 'lazy';
-
+  const isWasm: boolean = context.variant === 'wasm';
   const { result, interrupted, paused } = yield race({
     result:
       actionType === actionTypes.DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
-        : isNonDet || isLazy
+        : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
@@ -684,6 +700,18 @@ export function* evalCode(
     result.status !== 'suspended-non-det'
   ) {
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+
+    // we need to parse again, but preserve the errors in context
+    const oldErrors = context.errors;
+    context.errors = [];
+    const parsed = parse(code, context);
+    context.errors = oldErrors;
+    const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context))[1];
+    if (typeErrors && typeErrors.length > 0) {
+      yield put(
+        actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
+      );
+    }
     return;
   } else if (result.status === 'suspended') {
     yield put(actions.endDebuggerPause(workspaceLocation));

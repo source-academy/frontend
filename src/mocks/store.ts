@@ -4,6 +4,7 @@ import mockStore from 'redux-mock-store';
 import {
   defaultAcademy,
   defaultApplication,
+  defaultDashBoard,
   defaultPlayground,
   defaultSession,
   defaultWorkspaceManager,
@@ -15,6 +16,7 @@ export function mockInitialStore<P>(): Store<IState> {
   const state: IState = {
     academy: defaultAcademy,
     application: defaultApplication,
+    dashboard: defaultDashBoard,
     playground: defaultPlayground,
     workspaces: defaultWorkspaceManager,
     session: defaultSession

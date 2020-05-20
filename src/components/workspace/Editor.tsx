@@ -3,10 +3,18 @@ import AceEditor, { IAnnotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
+import { Documentation } from '../../reducers/documentation';
+
 import { require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
-import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
+import {
+  createContext,
+  getAllOccurrencesInScope,
+  getScope,
+  getTypeInformation,
+  hasDeclaration
+} from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { Variant } from 'js-slang/dist/types';
@@ -32,13 +40,17 @@ export interface IEditorProps {
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
+  externalLibraryName?: string;
   sourceVariant?: Variant;
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
+  handleReplValueChange?: (newCode: string) => void;
+  handleReplEval?: () => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleSendReplInputToOutput?: (newOutput: string) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
@@ -86,6 +98,11 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
     this.completer = {
       getCompletions: (editor: any, session: any, pos: any, prefix: any, callback: any) => {
+        // Don't prompt if prefix starts with number
+        if (prefix && /\d/.test(prefix.charAt(0))) {
+          callback();
+          return;
+        }
         // console.log(pos); // Cursor col is insertion location i.e. last char col + 1
         this.props.handlePromptAutocomplete(pos.row + 1, pos.column, callback);
       }
@@ -184,15 +201,20 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   public chapterNo = () => {
     let chapter = this.props.sourceChapter;
     let variant = this.props.sourceVariant;
+    let external = this.props.externalLibraryName;
     if (chapter === undefined) {
       chapter = 1;
     }
     if (variant === undefined) {
       variant = 'default';
     }
-    HighlightRulesSelector(chapter, variant);
-    ModeSelector(chapter);
-    return 'source' + chapter.toString();
+    if (external === undefined) {
+      external = 'NONE';
+    }
+
+    HighlightRulesSelector(chapter, variant, external, Documentation.externalLibraries[external]);
+    ModeSelector(chapter, variant, external);
+    return 'source' + chapter.toString() + variant + external;
   };
 
   public render() {
@@ -233,6 +255,14 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
                   mac: 'Command-Shift-H'
                 },
                 exec: this.handleHighlightScope
+              },
+              {
+                name: 'TypeInferenceDisplay',
+                bindKey: {
+                  win: 'Ctrl-Shift-M',
+                  mac: 'Command-Shift-M'
+                },
+                exec: this.handleTypeInferenceDisplay
               }
             ]}
             editorProps={{
@@ -276,14 +306,46 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     const pos = (this.AceEditor.current as any).editor.selection.getCursor();
     const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
     const url = LINKS.TEXTBOOK;
-    if (token !== null && /\bsupport.function\b/.test(token.type)) {
-      window.open(`${url}source/source_${chapter}${variantString}/global.html#${token.value}`); // opens the link
-    } else if (token !== null && /\bstorage.type\b/.test(token.type)) {
+
+    const external =
+      this.props.externalLibraryName === undefined ? 'NONE' : this.props.externalLibraryName;
+    const externalUrl =
+      this.props.externalLibraryName === 'ALL' ? `External%20libraries` : external;
+    const ext = Documentation.externalLibraries[external];
+
+    this.props.handleDeclarationNavigate(
+      (this.AceEditor.current as any).editor.getCursorPosition()
+    );
+
+    const newPos = (this.AceEditor.current as any).editor.selection.getCursor();
+    if (newPos.row !== pos.row || newPos.column !== pos.column) {
+      return;
+    }
+
+    if (
+      hasDeclaration(this.props.editorValue, createContext(chapter), {
+        line: newPos.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
+        column: newPos.column
+      })
+    ) {
+      return;
+    }
+
+    if (ext.some((node: { caption: string }) => node.caption === token.value)) {
+      if (
+        token !== null &&
+        (/\bsupport.function\b/.test(token.type) || /\bbuiltinConsts\b/.test(token.type))
+      ) {
+        window.open(`${url}source/${externalUrl}/global.html#${token.value}`); // opens external library link
+      }
+    } else if (
+      token !== null &&
+      (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
+    ) {
+      window.open(`${url}source/source_${chapter}${variantString}/global.html#${token.value}`); // opens builtn library link
+    }
+    if (token !== null && /\bstorage.type\b/.test(token.type)) {
       window.open(`${url}source/source_${chapter}.pdf`);
-    } else {
-      this.props.handleDeclarationNavigate(
-        (this.AceEditor.current as any).editor.getCursorPosition()
-      );
     }
   };
 
@@ -371,6 +433,49 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       });
       this.markerIds = markerIds;
     }, 10);
+  };
+
+  private handleTypeInferenceDisplay = (): void => {
+    // declare constants
+    const chapter = this.props.sourceChapter;
+    const code = this.props.editorValue;
+    const editor = (this.AceEditor.current as any).editor;
+    const pos = editor.getCursorPosition();
+    const token = editor.session.getTokenAt(pos.row, pos.column);
+
+    // comment out everyline of the inference string returned by getTypeInformation
+    const commentEveryLine = (str: string) => {
+      const arr = str.split('\n');
+      return arr
+        .filter(st => st !== '')
+        .map(st => '// ' + st)
+        .join('\n');
+    };
+
+    let output;
+
+    // display the information
+    if (this.props.handleSendReplInputToOutput) {
+      if (pos && token) {
+        // if the token is a comment, ignore it
+        if (token.type === 'comment') {
+          return;
+        }
+        const str = getTypeInformation(
+          code,
+          createContext(chapter),
+          { line: pos.row + 1, column: pos.column },
+          token.value
+        );
+        output = commentEveryLine(str);
+        if (str.length === 0) {
+          output = '// type information not found';
+        }
+      } else {
+        output = '// invalid token. Please put cursor on an identifier.';
+      }
+      this.props.handleSendReplInputToOutput(output);
+    }
   };
 
   private handleGutterClick = (e: any) => {

@@ -15,11 +15,12 @@ import {
   NotificationFilterFunction
 } from '../components/notification/notificationShape';
 import { store } from '../createStore';
-import { IState, Role } from '../reducers/states';
+import { GameState, IState, Role } from '../reducers/states';
 import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import { mockAssessmentOverviews, mockAssessments } from './assessmentAPI';
 import { mockFetchGrading, mockFetchGradingOverview } from './gradingAPI';
+import { mockGroupOverviews } from './groupAPI';
 import { mockNotifications } from './userAPI';
 
 export function* mockBackendSaga(): SagaIterator {
@@ -31,11 +32,13 @@ export function* mockBackendSaga(): SagaIterator {
     const user = {
       name: 'DevStaff',
       role: 'staff' as Role,
+      group: '1F',
       story: {
         story: 'mission-1',
         playStory: true
       },
-      grade: 0
+      grade: 0,
+      gameState: {} as GameState
     };
     store.dispatch(actions.setTokens(tokens));
     store.dispatch(actions.setUser(user));
@@ -207,5 +210,9 @@ export function* mockBackendSaga(): SagaIterator {
     action: ReturnType<typeof actions.fetchNotifications>
   ) {
     yield put(actions.updateNotifications(mockNotifications));
+  });
+
+  yield takeEvery(actionTypes.FETCH_GROUP_OVERVIEWS, function*() {
+    yield put(actions.updateGroupOverviews([...mockGroupOverviews]));
   });
 }
