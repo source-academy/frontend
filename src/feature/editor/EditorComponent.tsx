@@ -50,6 +50,8 @@ interface IEditorDispatchProps {
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
+  handleReplValueChange?: (newCode: string) => void;
+  handleReplEval?: () => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;

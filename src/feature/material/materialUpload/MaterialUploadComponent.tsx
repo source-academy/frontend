@@ -5,7 +5,7 @@ import Dropzone from './Dropzone';
 import { DirectoryData, MaterialData } from '../materialTypes';
 import MaterialTable from '../materialTable/MaterialTableComponent';
 
-interface IMaterialUploadProps extends IMaterialUploadDispatchProps, IMaterialUploadStateProps {}
+export interface IMaterialUploadProps extends IMaterialUploadDispatchProps, IMaterialUploadStateProps {}
 
 export interface IMaterialUploadDispatchProps {
   handleCreateMaterialFolder: (title: string) => void;

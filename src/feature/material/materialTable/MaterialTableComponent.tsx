@@ -26,7 +26,7 @@ import DeleteCell from './DeleteCell';
 import DownloadCell from './DownloadCell';
 import { DirectoryData, MaterialData } from '../materialTypes';
 
-interface IMaterialTableProps extends IMaterialTableDispatchProps, IMaterialTableStateProps { }
+export interface IMaterialTableProps extends IMaterialTableDispatchProps, IMaterialTableStateProps { }
 
 interface IMaterialTableDispatchProps {
     materialDirectoryTree: DirectoryData[] | null;

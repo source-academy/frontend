@@ -61,6 +61,7 @@ export interface IAssessmentOverview {
     grade: number;
     gradingStatus: GradingStatus;
     id: number;
+    isPublished?: boolean;
     maxGrade: number;
     maxXp: number;
     number?: string; // For mission control

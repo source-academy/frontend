@@ -3,7 +3,7 @@ import * as React from 'react';
 import { DirectoryData, MaterialData } from '../materialTypes';
 import MaterialTable from '../materialTable/MaterialTableComponent';
 
-interface IMaterialProps extends IMaterialFetchDispatchProps, IMaterialFetchStateProps {}
+export interface IMaterialFetchProps extends IMaterialFetchDispatchProps, IMaterialFetchStateProps {}
 
 export interface IMaterialFetchDispatchProps {
   handleFetchMaterialIndex: (id?: number) => void;
@@ -14,7 +14,7 @@ export interface IMaterialFetchStateProps {
   materialIndex: MaterialData[] | null;
 }
 
-class MaterialFetch extends React.Component<IMaterialProps, {}> {
+class MaterialFetch extends React.Component<IMaterialFetchProps, {}> {
   public render() {
     return (
       <div className="ContentDisplay row center-xs">
