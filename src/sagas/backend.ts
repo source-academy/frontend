@@ -3,6 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
+import { MaterialData } from 'src/components/game-dev/storyShape';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
@@ -21,7 +22,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../components/notification/notificationShape';
-import { IState, Role } from '../reducers/states';
+import { GameState, IState, Role } from '../reducers/states';
 import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import * as request from './requests';
