@@ -6,9 +6,10 @@ import NotificationBadge, {
   INotificationBadgeDispatchProps,
   INotificationBadgeStateProps
 } from './NotificationBadgeComponent';
-import { INotificationBadgeState } from './NotificationBadgeReducer';
+// TODO: Import from commons
+import { IState } from '../../reducers/states'; 
 
-const mapStateToProps: MapStateToProps<INotificationBadgeStateProps, {}, INotificationBadgeState> = state => ({
+const mapStateToProps: MapStateToProps<INotificationBadgeStateProps, {}, IState> = state => ({
   notifications: state.session.notifications
 });
 

@@ -4,20 +4,21 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 // TODO: Import from commons
 import { Role } from '../../reducers/states';
-import { acknowledgeNotifications } from '../notificationBadge/NotificationBadgeAction';
+// TODO: Import from commons
 import {
+    acknowledgeNotifications,
     fetchAssessmentOverviews,
     submitAssessment
-} from './AssessmentAction';
-import Assessment, { 
-    IAssessmentDispatchProps, 
-    IAssessmentOwnProps, 
-    IAssessmentStateProps 
+} from '../../actions/session';
+import Assessment, {
+    IAssessmentDispatchProps,
+    IAssessmentOwnProps,
+    IAssessmentStateProps
 } from './AssessmentComponent';
 import { IAssessmentOverview } from './AssessmentTypes';
-import { IAssessmentState } from './AssessmentReducer';
+import { IState } from '../../reducers/states';
 
-const mapStateToProps: MapStateToProps<IAssessmentStateProps, IAssessmentOwnProps, IAssessmentState> = (state, props) => {
+const mapStateToProps: MapStateToProps<IAssessmentStateProps, IAssessmentOwnProps, IState> = (state, props) => {
     const categoryFilter = (overview: IAssessmentOverview) =>
         overview.category === props.assessmentCategory;
     const stateProps: IAssessmentStateProps = {

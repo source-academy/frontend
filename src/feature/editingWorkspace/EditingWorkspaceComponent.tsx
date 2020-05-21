@@ -112,7 +112,7 @@ type State = {
   showResetTemplateOverlay: boolean;
   originalMaxGrade: number;
   originalMaxXp: number;
-}
+};
 
 class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
   public constructor(props: EditingWorkspaceProps) {

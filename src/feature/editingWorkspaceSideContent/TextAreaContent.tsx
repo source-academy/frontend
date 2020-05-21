@@ -24,7 +24,7 @@ type State = {
   isNumber: boolean;
   fieldValue: string;
   useRawValue: boolean;
-}
+};
 
 export class TextAreaContent extends React.Component<ITextAreaContentProps, State> {
   public constructor(props: ITextAreaContentProps) {

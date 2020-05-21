@@ -9,9 +9,10 @@ import {
   uploadMaterial
 } from '../../../actions';
 import MaterialUpload, { IMaterialUploadDispatchProps, IMaterialUploadStateProps } from './MaterialUploadComponent';
-import { IMaterialState } from '../materialReducer';
+// TODO: Import from commons
+import { IState } from '../../../reducers/states'; 
 
-const mapStateToProps: MapStateToProps<IMaterialUploadStateProps, {}, IMaterialState> = state => ({
+const mapStateToProps: MapStateToProps<IMaterialUploadStateProps, {}, IState> = state => ({
   materialDirectoryTree: state.session.materialDirectoryTree,
   materialIndex: state.session.materialIndex
 });

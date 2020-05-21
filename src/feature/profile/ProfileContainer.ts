@@ -1,11 +1,12 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAssessmentOverviews } from './ProfileAction';
+// TODO: Import from commons
+import { fetchAssessmentOverviews } from '../../actions/session';
 import Profile, { IProfileDispatchProps, IProfileStateProps } from './ProfileComponent';
-import { IProfileState } from './ProfileReducer';
+import { IState } from '../../reducers/states'; 
 
-const mapStateToProps: MapStateToProps<IProfileStateProps, {}, IProfileState> = state => ({
+const mapStateToProps: MapStateToProps<IProfileStateProps, {}, IState> = state => ({
   assessmentOverviews: state.session.assessmentOverviews,
   name: state.session.name,
   role: state.session.role

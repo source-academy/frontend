@@ -44,6 +44,6 @@ const controlButton = (
   }
 
   return <Button {...props}>{label}</Button>;
-}
+};
 
 export default controlButton;
