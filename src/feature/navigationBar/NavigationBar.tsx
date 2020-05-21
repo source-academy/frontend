@@ -1,12 +1,10 @@
 import {
   Alignment,
-  // Button,
   Classes,
   Icon,
   Navbar,
   NavbarDivider,
   NavbarGroup
-  // NavbarHeading
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
@@ -14,7 +12,6 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { Role } from '../../reducers/states';
-// import { LINKS } from '../utils/constants';
 import Dropdown from '../dropdown/DropdownComponent';
 
 export interface INavigationBarProps {
