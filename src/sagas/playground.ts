@@ -6,6 +6,7 @@ import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import { defaultEditorValue, IState } from '../reducers/states';
+import { showWarningMessage } from '../utils/notification';
 
 import { Variant } from 'js-slang/dist/types';
 import { URL_SHORTENER } from '../utils/constants';
@@ -21,7 +22,14 @@ export default function* playgroundSaga(): SagaIterator {
 
     const resp = yield call(shortenURLRequest, queryString, keyword);
     if (!resp) {
-      yield put(actions.updateShortURL('ERROR'));
+      return;
+    }
+
+    if (resp.status !== 'success') {
+      showWarningMessage(resp.message);
+    }
+
+    if (!resp.shorturl) {
       return;
     }
 
@@ -86,6 +94,11 @@ async function shortenURLRequest(queryString: string, keyword: string): Promise<
     .join('&');
 
   const resp = await fetch(URL_SHORTENER + '?' + query, fetchOpts);
+  if (!resp || !resp.ok) {
+    showWarningMessage('Something went wrong trying to shorten the url. Please try again');
+    return null;
+  }
+
   const res = await resp.json();
   return res;
 }
