@@ -5,12 +5,9 @@ import { stringParamToInt } from '../../utils/paramParseHelpers';
 import { AssessmentStatuses, IAssessmentOverview } from '../assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
 import MissionCreator from '../missionCreator/MissionCreatorContainer';
-
-// TODO: Fix
-import EditingWorkspaceContainer from '../../containers/missionControl/EditingWorkspaceContainer';
-import { EditingOverviewCard } from './EditingOverviewCard';
-import { OwnProps as AssessmentProps } from './EditingWorkspace';
-
+import { EditingOverviewCard } from '../editingOverviewCard/EditingOverviewCardComponent';
+import EditingWorkspaceContainer from '../editingWorkspace/EditingWorkspaceContainer';
+import { EditingWorkspaceOwnProps } from '../editingWorkspace/EditingWorkspaceComponent';
 import { retrieveLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
 
 const DEFAULT_QUESTION_ID: number = 0;
@@ -60,7 +57,7 @@ class MissionControl extends React.Component<IMissionControlProps, State> {
     if (assessmentId === -1) {
       if (this.state.editingOverview) {
         const overview = this.state.editingOverview;
-        const assessmentProps: AssessmentProps = {
+        const assessmentProps: EditingWorkspaceOwnProps = {
           assessmentId,
           questionId,
           assessmentOverview: overview,

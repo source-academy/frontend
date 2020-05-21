@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 // TODO: Import from commons
 import { updateAssessment } from '../../actions/session';
 import { IAssessment } from '../assessment/AssessmentTypes';
-import MissionCreator from './missionCreatorComponent';
+import MissionCreator from './MissionCreatorComponent';
 
 interface IXMLReaderDispatchProps {
   newAssessment: (assessment: IAssessment) => void;

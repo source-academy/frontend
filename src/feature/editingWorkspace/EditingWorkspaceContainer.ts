@@ -1,9 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-// TODO: Import from commons
-import { IState, IWorkspaceState, SideContentType } from '../../reducers/states';
-// TODO: Import from commons
+// TODO: Import form commons
 import {
   beginClearContext,
   beginDebuggerPause,
@@ -20,38 +18,34 @@ import {
   evalEditor,
   evalRepl,
   evalTestcase,
-  fetchAssessment,
   navigateToDeclaration,
   promptAutocomplete,
   setEditorBreakpoint,
   submitAnswer,
-  updateActiveTab,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
+  updateReplValue,
+  updateWorkspace
 } from '../../actions';
-// TODO: Import from commons
+// TODO: Import form commons
 import {
   resetWorkspace,
   updateCurrentAssessmentId,
   WorkspaceLocation
 } from '../../actions/workspaces';
+// TODO: Import from commons
+import { IState, IWorkspaceState } from '../../reducers/states';
 import { Library } from '../assessment/AssessmentTypes';
-import AssessmentWorkspace, {
-  IAssessmentWorkspaceDispatchProps,
-  IAssessmentWorkspaceOwnProps,
-  IAssessmentWorkspaceStateProps
-} from './AssessmentWorkspaceComponent';
+import EditingWorkspace, {
+  EditingWorkspaceDispatchProps,
+  EditingWorkspaceOwnProps,
+  EditingWorkspaceStateProps
+} from './EditingWorkspaceComponent';
 import { IPosition } from '../editor/EditorComponent';
 
-const mapStateToProps: MapStateToProps<IAssessmentWorkspaceStateProps, IAssessmentWorkspaceOwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<EditingWorkspaceStateProps, EditingWorkspaceOwnProps, IState> = (state, props) => {
   return {
-    assessment: state.session.assessments.get(props.assessmentId),
-    autogradingResults: state.workspaces.assessment.autogradingResults,
-    editorPrepend: state.workspaces.assessment.editorPrepend,
     editorValue: state.workspaces.assessment.editorValue,
-    editorPostpend: state.workspaces.assessment.editorPostpend,
-    editorTestcases: state.workspaces.assessment.editorTestcases,
     editorHeight: state.workspaces.assessment.editorHeight,
     editorWidth: state.workspaces.assessment.editorWidth,
     breakpoints: state.workspaces.assessment.breakpoints,
@@ -71,12 +65,9 @@ const mapStateToProps: MapStateToProps<IAssessmentWorkspaceStateProps, IAssessme
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
-const mapDispatchToProps: MapDispatchToProps<IAssessmentWorkspaceDispatchProps, {}> = (dispatch: Dispatch<any>) =>
-  bindActionCreators(
+const mapDispatchToProps: MapDispatchToProps<EditingWorkspaceDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+  bindActionCreators<EditingWorkspaceDispatchProps>(
     {
-      handleActiveTabChange: (activeTab: SideContentType) =>
-        updateActiveTab(activeTab, workspaceLocation),
-      handleAssessmentFetch: fetchAssessment,
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChapterSelect: (chapter: any, changeEvent: any) =>
@@ -97,6 +88,8 @@ const mapDispatchToProps: MapDispatchToProps<IAssessmentWorkspaceDispatchProps, 
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleResetWorkspace: (options: Partial<IWorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
+      handleUpdateWorkspace: (options: Partial<IWorkspaceState>) =>
+        updateWorkspace(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
@@ -116,4 +109,4 @@ const mapDispatchToProps: MapDispatchToProps<IAssessmentWorkspaceDispatchProps, 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AssessmentWorkspace);
+)(EditingWorkspace);
