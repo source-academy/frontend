@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { IAssessment, IProgrammingQuestion, ITestcase, testcaseTemplate } from '../assessment/AssessmentTypes';
 import controlButton from '../../commons/ControlButton';
-import { getValueFromPath } from './editingWorkspaceSideContentHelper';
+import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
 
 type AutograderProps = {
@@ -14,7 +14,7 @@ type AutograderProps = {
   updateAssessment: (assessment: IAssessment) => void;
 };
 
-class AutograderTab extends React.Component<AutograderProps, {}> {
+export class AutograderTab extends React.Component<AutograderProps, {}> {
   public render() {
     const question = this.props.assessment.questions[this.props.questionId] as IProgrammingQuestion;
     const publicTestPath = ['questions', this.props.questionId, 'testcases'];
@@ -114,5 +114,3 @@ class AutograderTab extends React.Component<AutograderProps, {}> {
     );
   };
 }
-
-export default AutograderTab;
