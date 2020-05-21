@@ -9,7 +9,7 @@ import { defaultEditorValue, IState } from '../reducers/states';
 import { showWarningMessage } from '../utils/notification';
 
 import { Variant } from 'js-slang/dist/types';
-import { URL_SHORTENER } from '../utils/constants';
+import { URL_SHORTENER, URL_SHORTENER_SIGNATURE } from '../utils/constants';
 
 export default function* playgroundSaga(): SagaIterator {
   yield takeEvery(actionTypes.GENERATE_LZ_STRING, updateQueryString);
@@ -81,8 +81,7 @@ async function shortenURLRequest(queryString: string, keyword: string): Promise<
     method
   };
   const params = {
-    username: 'username',
-    password: 'password',
+    signature: URL_SHORTENER_SIGNATURE,
     action: 'shorturl',
     format: 'json',
     keyword,

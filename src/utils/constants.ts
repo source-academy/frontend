@@ -15,8 +15,8 @@ export const USE_CHATKIT =
 export const INSTANCE_LOCATOR = process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR;
 export const DEFAULT_SOURCE_CHAPTER = 4;
 export const DEFAULT_SOURCE_VARIANT = 'default';
-export const URL_SHORTENER =
-  'http://ec2-18-140-69-106.ap-southeast-1.compute.amazonaws.com/yourls-api.php';
+export const URL_SHORTENER = process.env.REACT_APP_URL_SHORTENER_DOMAIN;
+export const URL_SHORTENER_SIGNATURE = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 
 export const MODULE_BACKEND_URL =
   process.env.MODULE_BACKEND_URL === undefined || process.env.MODULE_BACKEND_URL === ''
