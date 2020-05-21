@@ -15,12 +15,14 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true
   },
   "exclude": [
     "node_modules",
     "public/externalLibs",
+    "public/modules",
     "build",
     "scripts",
     "acceptance-tests",

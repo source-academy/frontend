@@ -1,11 +1,10 @@
 import * as React from 'react';
 import AceEditor from 'react-ace';
-
-import 'brace/mode/javascript';
-import './editorTheme/source';
+// source mode and chapter imported in Editor.tsx
 
 export interface IReplInputProps {
   replValue: string;
+  sourceChapter: number;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplValueChange: (newCode: string) => void;
@@ -49,7 +48,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
       <>
         <AceEditor
           className="repl-react-ace react-ace"
-          mode="javascript"
+          mode={`source${this.props.sourceChapter || 1}defaultNONE`}
           theme="source"
           height="1px"
           width="100%"
@@ -86,6 +85,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
           fontSize={17}
           highlightActiveLine={false}
           showGutter={false}
+          showPrintMargin={false}
           setOptions={{
             fontFamily: "'Inconsolata', 'Consolas', monospace"
           }}

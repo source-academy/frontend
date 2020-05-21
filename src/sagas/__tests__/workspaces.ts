@@ -1,6 +1,5 @@
 import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
-import { InterruptedError } from 'js-slang/dist/interpreter-errors';
-import { ErrorSeverity, ErrorType, Finished, SourceError } from 'js-slang/dist/types';
+import { ErrorSeverity, ErrorType, Finished, SourceError, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
 
@@ -52,6 +51,7 @@ describe('EVAL_EDITOR', () => {
     const editorPostpend = '42;';
     const execTime = 1000;
     const context = createContext();
+    const variant: Variant = 'default';
     const globals: Array<[string, any]> = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
@@ -60,6 +60,7 @@ describe('EVAL_EDITOR', () => {
 
     const library = {
       chapter: context.chapter,
+      variant,
       external: {
         name: ExternalLibraryNames.NONE,
         symbols: context.externalSymbols
@@ -382,6 +383,7 @@ describe('CHAPTER_SELECT', () => {
     const newChapter = 3;
     const library: Library = {
       chapter: newChapter,
+      variant: 'default',
       external: {
         name: 'NONE' as ExternalLibraryName,
         symbols: context.externalSymbols
@@ -398,15 +400,17 @@ describe('CHAPTER_SELECT', () => {
       .call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
       .dispatch({
         type: actionTypes.CHAPTER_SELECT,
-        payload: { chapter: newChapter, workspaceLocation }
+        payload: { chapter: newChapter, variant: 'default', workspaceLocation }
       })
       .silentRun();
   });
 
-  test('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter', () => {
+  test('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter and oldVariant === newVariant', () => {
     const newChapter = 4;
+    const newVariant: Variant = 'default';
     const library: Library = {
       chapter: newChapter,
+      variant: newVariant,
       external: {
         name: 'NONE' as ExternalLibraryName,
         symbols: context.externalSymbols
@@ -423,7 +427,7 @@ describe('CHAPTER_SELECT', () => {
       .not.call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
       .dispatch({
         type: actionTypes.CHAPTER_SELECT,
-        payload: { chapter: newChapter, workspaceLocation }
+        payload: { chapter: newChapter, variant: newVariant, workspaceLocation }
       })
       .silentRun();
   });
@@ -909,7 +913,7 @@ describe('evalCode', () => {
         .call(showWarningMessage, 'Execution aborted', 750)
         .silentRun()
         .then(result => {
-          expect(context.errors[0]).toBeInstanceOf(InterruptedError);
+          expect(context.errors[0]).toHaveProperty(['type'], 'Runtime');
         });
     });
   });
@@ -1021,8 +1025,64 @@ describe('evalTestCode', () => {
         .call(showWarningMessage, `Execution of testcase ${index} aborted`, 750)
         .silentRun()
         .then(() => {
-          expect(context.errors[0]).toBeInstanceOf(InterruptedError);
+          expect(context.errors[0]).toHaveProperty(['type'], 'Runtime');
         });
     });
+  });
+});
+
+describe('NAV_DECLARATION', () => {
+  let workspaceLocation: WorkspaceLocation;
+  let context: Context;
+  let editorValue: string;
+  let state: IState;
+
+  beforeEach(() => {
+    workspaceLocation = WorkspaceLocations.playground;
+    editorValue = 'const foo = (x) => -1; foo(2);';
+    context = {
+      ...mockRuntimeContext(),
+      chapter: 4
+    };
+    state = generateDefaultState(workspaceLocation, { editorValue, context });
+  });
+
+  test('moves cursor to declaration correctly', () => {
+    const loc = { row: 0, column: 24 };
+    const resultLoc = { row: 0, column: 6 };
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .dispatch({
+        type: actionTypes.NAV_DECLARATION,
+        payload: { workspaceLocation, cursorPosition: loc }
+      })
+      .put(actions.moveCursor(workspaceLocation, resultLoc))
+      .silentRun();
+  });
+
+  test('does not move cursor if node is not an identifier', () => {
+    const pos = { row: 0, column: 27 };
+    const resultPos = { row: 0, column: 6 };
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .dispatch({
+        type: actionTypes.NAV_DECLARATION,
+        payload: { workspaceLocation, cursorPosition: pos }
+      })
+      .not.put(actions.moveCursor(workspaceLocation, resultPos))
+      .silentRun();
+  });
+
+  test('does not move cursor if node is same as declaration', () => {
+    const pos = { row: 0, column: 7 };
+    const resultPos = { row: 0, column: 6 };
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .dispatch({
+        type: actionTypes.NAV_DECLARATION,
+        payload: { workspaceLocation, cursorPosition: pos }
+      })
+      .not.put(actions.moveCursor(workspaceLocation, resultPos))
+      .silentRun();
   });
 });

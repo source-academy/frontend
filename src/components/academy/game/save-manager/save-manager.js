@@ -1,3 +1,6 @@
+import {saveStudentData} from '../backend/game-state';
+import {SAVE_DATA_KEY, LOCATION_KEY} from "../constants/constants";
+
 var LocationManager = require('../location-manager/location-manager.js');
 var QuestManager = require('../quest-manager/quest-manager.js');
 var StoryManager = require('../story-manager/story-manager.js');
@@ -7,21 +10,22 @@ var ObjectManager = require('../object-manager/object-manager.js');
 var Utils = require('../utils/utils.js');
 
 var actionSequence = [];
-var saveFunction;
 
-export function init(saveFunc, saveData, callback) {
-  saveFunction = saveFunc;
+// finds existing save data, which consists of action sequence and starting location
+export function init() {
+  let saveData = getLocalSaveData();
   if (saveData) {
-    saveData = JSON.parse(saveData);
     actionSequence = saveData.actionSequence;
     var storyXMLs = [];
-    // TODO: this is assuming that all 'loadStory' appear at the start
-    // This may not be the case. Need to improve
     for (var i = 0; i < actionSequence.length; i++) {
       if (actionSequence[i].type == 'loadStory') {
         storyXMLs.push(actionSequence[i].storyId);
       }
     }
+
+    //callback wasn't being used, but was required in location manager
+    // Made it an empty function
+    let callback = () => {};
 
     StoryManager.loadStoryXML(storyXMLs, false, function() {
       LocationManager.changeStartLocation(saveData.startLocation);
@@ -109,8 +113,24 @@ export function saveLoadStories(stories) {
   saveGame();
 }
 
+export function hasLocalSave() {
+  return localStorage.hasOwnProperty(SAVE_DATA_KEY);
+}
+
+
+export function getLocalSaveData() {
+  const jsonString = localStorage.getItem(SAVE_DATA_KEY);
+  return jsonString ? JSON.parse(jsonString) : undefined;
+}
+
+export function resetLocalSaveData() {
+  localStorage.removeItem(SAVE_DATA_KEY);
+  localStorage.removeItem(LOCATION_KEY);
+}
+
+// saves actionsequence and start location into local storage
 function saveGame() {
-  saveFunction(
+  localStorage.setItem(SAVE_DATA_KEY,
     JSON.stringify({
       actionSequence: actionSequence,
       startLocation: LocationManager.getStartLocation()

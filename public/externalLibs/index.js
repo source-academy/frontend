@@ -76,6 +76,13 @@ function loadLib(externalLibraryName) {
         '/externalLibs/graphics/webGLcurve.js'
       ]
       break
+      case 'MACHINELEARNING':
+      files = [
+        // faceAPI
+        '/externalLibs/faceapi/face-api_last_version.min.js',
+        '/externalLibs/faceapi/faceapi.js',
+      ]
+      break
     default:
       break
   }

@@ -29,6 +29,7 @@ import {
   HIGHLIGHT_LINE,
   INIT_INVITE,
   LOG_OUT,
+  MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -37,6 +38,7 @@ import {
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
+  UPDATE_CHAPTER,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -267,7 +269,8 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           context: createContext<WorkspaceLocation>(
             action.payload.library.chapter,
             action.payload.library.external.symbols,
-            workspaceLocation
+            workspaceLocation,
+            action.payload.library.variant
           ),
           globals: action.payload.library.globals
         }
@@ -630,6 +633,14 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           highlightedLines: action.payload.highlightedLines
         }
       };
+    case MOVE_CURSOR:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          newCursorPosition: action.payload.cursorPosition
+        }
+      };
     case UPDATE_REPL_VALUE:
       return {
         ...state,
@@ -646,6 +657,19 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           hasUnsavedChanges: action.payload.hasUnsavedChanges
         }
       };
+    case UPDATE_CHAPTER:
+      return {
+        ...state,
+        playground: {
+          ...state.playground,
+          context: {
+            ...state.playground.context,
+            chapter: action.payload.chapter,
+            variant: action.payload.variant
+          }
+        }
+      };
+
     default:
       return state;
   }
