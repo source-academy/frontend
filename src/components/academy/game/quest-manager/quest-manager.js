@@ -6,6 +6,7 @@ var StoryManager = require('../story-manager/story-manager.js');
 var SaveManager = require('../save-manager/save-manager.js');
 var Utils = require('../utils/utils.js');
 var ExternalManager = require('../external-manager/external-manager.js');
+var GameState = require('../backend/game-state');
 
 var loadedQuests = {};
 var activeQuests = {};
@@ -65,7 +66,7 @@ export function unlockQuest(storyId, questId, callback) {
     if (!activeQuests[storyId]) {
         activeQuests[storyId] = {};
     }
-    if (typeof Storage !== 'undefined' && localStorage.hasOwnProperty(questId)) {
+    if (typeof Storage !== 'undefined' && GameState.hasCompletedQuest(questId)) {
         // skip sequence
         skipEffects(quest.children[0]);
         SaveManager.saveUnlockQuest(storyId, questId);

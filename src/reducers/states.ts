@@ -1,5 +1,5 @@
 import { Context } from 'js-slang';
-import { SourceError } from 'js-slang/dist/types';
+import { SourceError, Variant } from 'js-slang/dist/types';
 
 import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
 import { Grading, GradingOverview } from '../components/academy/grading/gradingShape';
@@ -12,6 +12,7 @@ import {
   IAssessmentOverview,
   ITestcase
 } from '../components/assessment/assessmentShape';
+import { IGroupOverview } from '../components/dashboard/groupShape';
 import { DirectoryData, MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
 import {
@@ -22,7 +23,8 @@ import {
   PlaybackStatus,
   RecordingStatus
 } from '../components/sourcecast/sourcecastShape';
-import { DEFAULT_SOURCE_CHAPTER } from '../utils/constants';
+import { IPosition } from '../components/workspace/Editor';
+import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../utils/constants';
 import { HistoryHelper } from '../utils/history';
 import { createContext } from '../utils/slangHelper';
 
@@ -32,6 +34,7 @@ export interface IState {
   readonly playground: IPlaygroundState;
   readonly session: ISessionState;
   readonly workspaces: IWorkspaceManagerState;
+  readonly dashboard: IDashBoardState;
 }
 
 export interface IAcademyState {
@@ -41,6 +44,10 @@ export interface IAcademyState {
 export interface IApplicationState {
   readonly title: string;
   readonly environment: ApplicationEnvironment;
+}
+
+export interface IDashBoardState {
+  readonly groupOverviews: IGroupOverview[];
 }
 
 export interface IPlaygroundState {
@@ -105,6 +112,7 @@ export interface IWorkspaceState {
   readonly editorWidth: string;
   readonly execTime: number;
   readonly highlightedLines: number[][];
+  readonly newCursorPosition?: IPosition;
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
@@ -129,6 +137,7 @@ export interface ISessionState {
   readonly grade: number;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
+  readonly group: string | null;
   readonly historyHelper: HistoryHelper;
   readonly materialDirectoryTree: DirectoryData[] | null;
   readonly materialIndex: MaterialData[] | null;
@@ -136,7 +145,8 @@ export interface ISessionState {
   readonly maxXp: number;
   readonly refreshToken?: string;
   readonly role?: Role;
-  readonly story?: Story;
+  readonly story: Story;
+  readonly gameState: GameState;
   readonly name?: string;
   readonly xp: number;
   readonly notifications: Notification[];
@@ -153,6 +163,11 @@ export const maxBrowseIndex = 50;
 export type Story = {
   story: string;
   playStory: boolean;
+};
+
+export type GameState = {
+  collectibles: { [id: string]: string };
+  completed_quests: string[];
 };
 
 /**
@@ -217,7 +232,39 @@ export enum Role {
  * Defines what chapters are available for usage.
  * For external libraries, see externalLibraries.ts
  */
-export const sourceChapters = [1, 2, 3, 4];
+export interface ISourceLanguage {
+  chapter: number;
+  variant: Variant;
+}
+
+export const sourceLanguages: ISourceLanguage[] = [
+  { chapter: 1, variant: 'default' },
+  { chapter: 1, variant: 'wasm' },
+  { chapter: 1, variant: 'lazy' },
+  { chapter: 2, variant: 'default' },
+  { chapter: 2, variant: 'lazy' },
+  { chapter: 3, variant: 'default' },
+  { chapter: 3, variant: 'concurrent' },
+  { chapter: 3, variant: 'non-det' },
+  { chapter: 4, variant: 'default' },
+  { chapter: 4, variant: 'gpu' }
+];
+
+const variantDisplay: Map<Variant, string> = new Map([
+  ['wasm', 'WebAssembly'],
+  ['non-det', 'Non-Det'],
+  ['concurrent', 'Concurrent'],
+  ['lazy', 'Lazy'],
+  ['gpu', 'GPU']
+]);
+
+export const styliseChapter = (chap: number, variant: Variant = 'default') => {
+  let res = `Source \xa7${chap}`;
+  if (variantDisplay.has(variant)) {
+    res += ' ' + variantDisplay.get(variant);
+  }
+  return res;
+};
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
@@ -239,6 +286,10 @@ export const defaultApplication: IApplicationState = {
   environment: currentEnvironment()
 };
 
+export const defaultDashBoard: IDashBoardState = {
+  groupOverviews: []
+};
+
 export const defaultPlayground: IPlaygroundState = {
   usingSubst: false
 };
@@ -254,7 +305,12 @@ export const defaultEditorValue = '// Type your program in here!';
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
   autogradingResults: [],
   breakpoints: [],
-  context: createContext<WorkspaceLocation>(DEFAULT_SOURCE_CHAPTER, [], workspaceLocation),
+  context: createContext<WorkspaceLocation>(
+    DEFAULT_SOURCE_CHAPTER,
+    [],
+    workspaceLocation,
+    DEFAULT_SOURCE_VARIANT
+  ),
   editorPrepend: '',
   editorSessionId: '',
   editorValue:
@@ -373,6 +429,7 @@ export const defaultSession: ISessionState = {
   grade: 0,
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
+  group: null,
   historyHelper: {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
@@ -384,6 +441,14 @@ export const defaultSession: ISessionState = {
   refreshToken: undefined,
   role: undefined,
   name: undefined,
+  story: {
+    story: '',
+    playStory: false
+  },
+  gameState: {
+    completed_quests: [],
+    collectibles: {}
+  },
   xp: 0,
   notifications: []
 };
@@ -391,6 +456,7 @@ export const defaultSession: ISessionState = {
 export const defaultState: IState = {
   academy: defaultAcademy,
   application: defaultApplication,
+  dashboard: defaultDashBoard,
   playground: defaultPlayground,
   session: defaultSession,
   workspaces: defaultWorkspaceManager

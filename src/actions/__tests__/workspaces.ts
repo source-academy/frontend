@@ -6,6 +6,7 @@ import {
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
+  changeChapter,
   changeEditorHeight,
   changeEditorWidth,
   changeExternalLibrary,
@@ -20,13 +21,17 @@ import {
   evalRepl,
   evalTestcase,
   externalLibrarySelect,
+  fetchChapter,
   highlightEditorLine,
+  moveCursor,
+  navigateToDeclaration,
   resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
   setEditorBreakpoint,
   toggleEditorAutorun,
   updateActiveTab,
+  updateChapter,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
@@ -104,11 +109,13 @@ test('changeSideContentHeight generates correct action object', () => {
 
 test('chapterSelect generates correct action object', () => {
   const chapter = 3;
-  const action = chapterSelect(chapter, playgroundWorkspace);
+  const variant = 'default';
+  const action = chapterSelect(chapter, variant, playgroundWorkspace);
   expect(action).toEqual({
     type: actionTypes.CHAPTER_SELECT,
     payload: {
       chapter,
+      variant,
       workspaceLocation: playgroundWorkspace
     }
   });
@@ -386,6 +393,63 @@ test('updateHasUnsavedChanges generates correct action object', () => {
     payload: {
       workspaceLocation: assessmentWorkspace,
       hasUnsavedChanges
+    }
+  });
+});
+
+test('navigateToDeclaration generates correct action object', () => {
+  const cursorPosition = { row: 0, column: 0 };
+  const action = navigateToDeclaration(playgroundWorkspace, cursorPosition);
+  expect(action).toEqual({
+    type: actionTypes.NAV_DECLARATION,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      cursorPosition
+    }
+  });
+});
+
+test('moveCursor generates correct action object', () => {
+  const cursorPosition = { row: 0, column: 0 };
+  const action = moveCursor(playgroundWorkspace, cursorPosition);
+  expect(action).toEqual({
+    type: actionTypes.MOVE_CURSOR,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      cursorPosition
+    }
+  });
+});
+
+test('fetchChapter generates correct action object', () => {
+  const action = fetchChapter();
+  expect(action).toEqual({
+    type: actionTypes.FETCH_CHAPTER
+  });
+});
+
+test('changeChapter generates correct action object', () => {
+  const chapter = 1;
+  const variant = 'default';
+  const action = changeChapter(chapter, variant);
+  expect(action).toEqual({
+    type: actionTypes.CHANGE_CHAPTER,
+    payload: {
+      chapter,
+      variant
+    }
+  });
+});
+
+test('updateChapter generates correct action object', () => {
+  const chapter = 1;
+  const variant = 'default';
+  const action = updateChapter(chapter, variant);
+  expect(action).toEqual({
+    type: actionTypes.UPDATE_CHAPTER,
+    payload: {
+      chapter,
+      variant
     }
   });
 });

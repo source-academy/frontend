@@ -31,7 +31,7 @@ function square(x) {
 // SOME CURVES
 
 function unit_circle(t) {
-  return make_point(Math.sin(2 * Math.PI * t), Math.cos(2 * Math.PI * t))
+  return make_point(Math.cos(2 * Math.PI * t), Math.sin(2 * Math.PI * t))
 }
 
 function unit_line(t) {

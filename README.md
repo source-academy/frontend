@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/source-academy/cadet-frontend.svg?branch=master)](https://travis-ci.org/source-academy/cadet-frontend)
 [![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/cadet-frontend?branch=master)
+[![License](https://img.shields.io/github/license/source-academy/cadet-frontend)](https://github.com/source-academy/cadet-frontend/blob/master/LICENSE)
 
 The Source Academy is a gamified platform designed to teach students coding while having fun! This repository in particular houses the source code for the frontend written in ReactJS with Redux.
 
@@ -17,7 +18,7 @@ The Source Academy is a gamified platform designed to teach students coding whil
 ### Installation 
 1. Install a stable version of NodeJS (tested: Node 10.15.0).
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
-3. Run `npm install` to install dependencies.
+3. Run `npm install` to install dependencies. (Running `audit fix` may prevent server from starting)
 4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
 5. Run `npm start` to start the server at `localhost:8075`.
 
@@ -25,16 +26,28 @@ The Source Academy is a gamified platform designed to teach students coding whil
 
 The project requires some environment variables to be set to work properly. In the `.env` file a few things need to be set-up:
 
-1. **REACT_APP_LUMINUS_CLIENT_ID** : This is needed for the login to work at the moment. Contact the team to obtain one!
+1. **REACT_APP_LUMINUS_CLIENT_ID** : This is needed for the login to work at the moment.*
 2. **REACT_APP_USE_BACKEND**: Set to false if not running together with the [backend](https://github.com/source-academy/cadet). Take note that CORs has to be handled if running with the backend
 3. **REACT_APP_CHATKIT_INSTANCE_LOCATOR**: Set this up if running with chatkit. Its documentation can be found [here](https://pusher.com/docs/chatkit).
 
+ \*If you require access to Luminus keys please email Prof Henz at henz@comp.nus.edu.sg to request for a with the email subject heading "Request for Luminus API Keys".
+ 
+## Development
+  
 ### Running the tests 
 
 Before pushing to Github, ensure that your code is formatted and your tests are passing. These two commands should help with that:
 
 - `npm run format` : formats your code
 - `npm run test`: runs the tests and prints the output
+
+### Running your own js-slang
+
+See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the cadet-frontend.
+
+### Development of Source Academy 2021
+
+The development of Source Academy 2021 is on-going. Use the branch `sa_2021` in this repository for your pull requests. The tip of branch `sa_2021` in `cadet-frontend` is automatically deployed as [https://source-academy.github.io/](https://source-academy.github.io/).
 
 ### Contribution Guidelines
 
