@@ -2,13 +2,13 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { stringParamToInt } from '../../utils/paramParseHelpers';
-import { AssessmentStatuses, IAssessmentOverview } from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, IAssessmentOverview } from '../../feature/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
-import MissionCreator from '../missionCreator/MissionCreatorContainer';
-import { EditingOverviewCard } from '../editingOverviewCard/EditingOverviewCardComponent';
-import EditingWorkspaceContainer from '../editingWorkspace/EditingWorkspaceContainer';
-import { EditingWorkspaceOwnProps } from '../editingWorkspace/EditingWorkspaceComponent';
-import { retrieveLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
+import MissionCreator from '../../feature/missionCreator/MissionCreatorContainer';
+import { EditingOverviewCard } from '../../feature/editingOverviewCard/EditingOverviewCardComponent';
+import EditingWorkspaceContainer from '../../feature/editingWorkspace/EditingWorkspaceContainer';
+import { EditingWorkspaceOwnProps } from '../../feature/editingWorkspace/EditingWorkspaceComponent';
+import { retrieveLocalAssessmentOverview } from '../../feature/XMLParser/XMLParserHelper';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
