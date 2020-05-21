@@ -17,7 +17,7 @@ export interface IDispatchProps {
   handleAssessmentOverviewFetch: () => void;
   handleDeleteAssessment: (id: number) => void;
   handleUploadAssessment: (file: File, forceUpdate: boolean) => void;
-  handlePublishAssessment: (id: number) => void;
+  handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
 }
 

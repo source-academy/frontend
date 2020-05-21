@@ -45,7 +45,7 @@ Before pushing to Github, ensure that your code is formatted and your tests are 
 
 See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the cadet-frontend.
 
-### Development of Source Acacademy 2021
+### Development of Source Academy 2021
 
 The development of Source Academy 2021 is on-going. Use the branch `sa_2021` in this repository for your pull requests. The tip of branch `sa_2021` in `cadet-frontend` is automatically deployed as [https://source-academy.github.io/](https://source-academy.github.io/).
 

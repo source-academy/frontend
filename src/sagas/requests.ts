@@ -2,6 +2,7 @@
 /*eslint-env browser*/
 import { call } from 'redux-saga/effects';
 
+import { GameState } from 'src/reducers/states';
 import * as actions from '../actions';
 import {
   Grading,
@@ -17,6 +18,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../components/assessment/assessmentShape';
+import { IGroupOverview } from '../components/dashboard/groupShape';
 import { MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
 import { IPlaybackData, ISourcecastData } from '../components/sourcecast/sourcecastShape';
@@ -99,6 +101,23 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
     return null;
   }
   return await resp.json();
+}
+
+/**
+ * PUT /user/game_states/
+ */
+export async function putUserGameState(
+  gameStates: GameState,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request('user/game_states/save', 'PUT', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: {
+      gameStates: JSON.stringify(gameStates)
+    }
+  });
+  return resp;
 }
 
 /**
@@ -621,9 +640,10 @@ export async function deleteAssessment(id: number, tokens: Tokens) {
   return resp;
 }
 
-export async function publishAssessment(id: number, tokens: Tokens) {
+export async function publishAssessment(id: number, togglePublishTo: boolean, tokens: Tokens) {
   const resp = await request(`assessments/publish/${id}`, 'POST', {
     accessToken: tokens.accessToken,
+    body: { togglePublishTo },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
@@ -647,6 +667,55 @@ export const uploadAssessment = async (file: File, tokens: Tokens, forceUpdate: 
   });
   return resp ? await resp.text() : null;
 };
+
+export async function getGroupOverviews(tokens: Tokens): Promise<IGroupOverview[] | null> {
+  const resp = await request('groups', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  const groupOverviews = await resp.json();
+
+  return groupOverviews.map((overview: any) => {
+    return overview as IGroupOverview;
+  });
+}
+
+/**
+ * GET /chapter
+ */
+export async function fetchChapter(): Promise<Response | null> {
+  const resp = await request('chapter', 'GET', {
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+}
+
+/**
+ * POST /chapter/update/1
+ */
+export async function changeChapter(chapterno: number, variant: string, tokens: Tokens) {
+  const resp = await request(`chapter/update/1`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { chapterno, variant },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+}
 
 /**
  * @returns {(Response|null)} Response if successful, otherwise null.

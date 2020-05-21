@@ -40,7 +40,7 @@ type State = {
 
 type IMaterialTableProps = IOwnProps;
 
-interface IOwnProps {
+export interface IOwnProps {
   handleCreateMaterialFolder?: (title: string) => void;
   handleDeleteMaterial?: (id: number) => void;
   handleDeleteMaterialFolder?: (id: number) => void;
