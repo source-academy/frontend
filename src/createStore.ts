@@ -13,9 +13,9 @@ import { history as appHistory } from './utils/history';
 
 export const store = createStore(appHistory);
 
-export function createStore(appHistory: History) {
+export function createStore(history: History) {
   const sagaMiddleware = createSagaMiddleware();
-  const middleware = [sagaMiddleware, routerMiddleware(appHistory)];
+  const middleware = [sagaMiddleware, routerMiddleware(history)];
 
   const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
@@ -28,7 +28,7 @@ export function createStore(appHistory: History) {
 
   const enhancers = composeEnhancers(applyMiddleware(...middleware));
 
-  const createdStore = _createStore(createRootReducer(appHistory), initialStore, enhancers);
+  const createdStore = _createStore(createRootReducer(history), initialStore, enhancers);
   sagaMiddleware.run(mainSaga);
 
   createdStore.subscribe(
