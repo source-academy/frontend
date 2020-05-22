@@ -1,4 +1,4 @@
-import { Popover, Text, Tooltip } from '@blueprintjs/core';
+import { NonIdealState, Popover, Spinner, Text, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
@@ -7,6 +7,7 @@ import { controlButton } from '../../commons';
 
 type ShareButtonState = {
   keyword: string;
+  isLoading: boolean;
 };
 
 export type ShareButtonProps = {
@@ -25,15 +26,16 @@ export class ShareButton extends React.PureComponent<ShareButtonProps, ShareButt
     super(props);
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.toggleButton = this.toggleButton.bind(this);
     this.shareInputElem = React.createRef();
-    this.state = { keyword: '' };
+    this.state = { keyword: '', isLoading: false };
   }
 
   public render() {
     return (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         <Tooltip content="Get shareable link">
-          {controlButton('Share', IconNames.SHARE, this.props.handleGenerateLz)}
+          {controlButton('Share', IconNames.SHARE, () => this.toggleButton())}
         </Tooltip>
         {this.props.queryString === undefined ? (
           <Text>
@@ -43,12 +45,22 @@ export class ShareButton extends React.PureComponent<ShareButtonProps, ShareButt
         ) : (
           <>
             {!this.props.shortURL ? (
-              <div>
-                <input placeholder={'Custom URL (optional)'} onChange={this.handleChange} />
-                {controlButton('Get Link', IconNames.SHARE, () =>
-                  this.props.handleShortenURL(this.state.keyword)
-                )}
-              </div>
+              !this.state.isLoading ? (
+                <div>
+                  <input placeholder={'Custom URL (optional)'} onChange={this.handleChange} />
+                  {controlButton('Get Link', IconNames.SHARE, () => {
+                    this.props.handleShortenURL(this.state.keyword);
+                    this.setState({ isLoading: true });
+                  })}
+                </div>
+              ) : (
+                <div>
+                  <NonIdealState
+                    description="Shortening URL..."
+                    icon={<Spinner size={Spinner.SIZE_SMALL} />}
+                  />
+                </div>
+              )
             ) : (
               <div key={this.props.shortURL}>
                 <input
@@ -61,15 +73,22 @@ export class ShareButton extends React.PureComponent<ShareButtonProps, ShareButt
                     {controlButton('', IconNames.DUPLICATE, this.selectShareInputText)}
                   </CopyToClipboard>
                 </Tooltip>
-                {controlButton('Regen Link', IconNames.SHARE, () =>
-                  this.props.handleUpdateShortURL('')
-                )}
               </div>
             )}
           </>
         )}
       </Popover>
     );
+  }
+
+  private toggleButton() {
+    if (this.props.handleGenerateLz) {
+      this.props.handleGenerateLz();
+    }
+
+    // reset state
+    this.props.handleUpdateShortURL('');
+    this.setState({ isLoading: false });
   }
 
   private handleChange(event: React.FormEvent<HTMLInputElement>) {
