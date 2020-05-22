@@ -1,5 +1,6 @@
+import { History } from 'history';
 import { throttle } from 'lodash';
-import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware } from 'connected-react-router';
 import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
@@ -9,9 +10,9 @@ import { defaultState } from './reducers/states';
 import mainSaga from './sagas';
 import { history as appHistory } from './utils/history';
 
-export const store = createStore(defaultState);
+export const store = createStore(appHistory);
 
-export function createStore(preloadedState: any) {
+export function createStore(appHistory: History) {
   const sagaMiddleware = createSagaMiddleware();
   const middleware = [sagaMiddleware, routerMiddleware(appHistory)];
 
@@ -22,7 +23,7 @@ export function createStore(preloadedState: any) {
       }) || compose
     : compose;
 
-  const initialStore = loadStore(loadStoredState()) || preloadedState;
+  const initialStore = loadStore(loadStoredState()) || defaultState;
 
   const enhancers = composeEnhancers(applyMiddleware(...middleware));
 

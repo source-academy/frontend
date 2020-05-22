@@ -10,8 +10,8 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/playground\\" component={[Function: C]} />
       <Route path=\\"/login\\" render={[Function]} />
       <Route path=\\"/contributors\\" component={[function]} />
-      <Route path=\\"/material\\" component={[Function: Connect]} />
-      <Route path=\\"/sourcecast\\" component={[Function: Connect]} />
+      <Route path=\\"/material\\" component={[Function: C]} />
+      <Route path=\\"/sourcecast\\" component={[Function: C]} />
       <Route exact={true} path=\\"/\\" render={[Function]} />
       <Route component={[Function: NotFound]} />
     </Switch>

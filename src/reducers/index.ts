@@ -19,4 +19,5 @@ const createRootReducer = (history: History) =>
     session,
     workspaces
   });
+
 export default createRootReducer;
