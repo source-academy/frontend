@@ -47,7 +47,7 @@ export class ShareButton extends React.PureComponent<ShareButtonProps, ShareButt
             {!this.props.shortURL || this.props.shortURL === 'ERROR' ? (
               !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
                 <div>
-                  <input placeholder={'Custom URL (optional)'} onChange={this.handleChange} />
+                  <input placeholder={'Custom Alias (optional)'} onChange={this.handleChange} />
                   {controlButton('Get Link', IconNames.SHARE, () => {
                     this.props.handleShortenURL(this.state.keyword);
                     this.setState({ isLoading: true });
