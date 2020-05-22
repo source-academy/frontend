@@ -10,7 +10,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   materialIndex: state.session.materialIndex
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleFetchMaterialIndex: (id?: number) => fetchMaterialIndex(id)

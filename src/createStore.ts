@@ -4,24 +4,25 @@ import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import { ISavedState, loadStoredState, saveState } from './localStorage';
+import createRootReducer from './reducers';
 import { defaultState } from './reducers/states';
 import mainSaga from './sagas';
 import { history as appHistory } from './utils/history';
-import createRootReducer from './reducers';
 
-const initialStore = loadStore(loadStoredState()) || defaultState;
-export const store = createdStore(initialStore);
+export const store = createStore(defaultState);
 
-const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-  ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      serialize: true,
-      maxAge: 300
-    }) || compose
-  : compose;
-
-export default function createdStore(initialStore: any) {
+export function createStore(preloadedState: any) {
   const sagaMiddleware = createSagaMiddleware();
   const middleware = [sagaMiddleware, routerMiddleware(appHistory)];
+
+  const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        serialize: true,
+        maxAge: 300
+      }) || compose
+    : compose;
+
+  const initialStore = loadStore(loadStoredState()) || preloadedState;
 
   const enhancers = composeEnhancers(applyMiddleware(...middleware));
 
@@ -38,7 +39,9 @@ export default function createdStore(initialStore: any) {
 }
 
 function loadStore(loadedStore: ISavedState | undefined) {
-  if (!loadedStore) return { undefined };
+  if (!loadedStore) {
+    return undefined;
+  }
   return {
     ...defaultState,
     session: {

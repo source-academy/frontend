@@ -28,7 +28,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IState> = (state,
   return stateProps;
 };
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAcknowledgeNotifications: acknowledgeNotifications,

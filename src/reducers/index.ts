@@ -1,6 +1,6 @@
-import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
+import { combineReducers } from 'redux';
 
 import { reducer as academy } from './academy';
 import { reducer as application } from './application';
