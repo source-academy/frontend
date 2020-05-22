@@ -2,8 +2,8 @@ import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import Profile from '../profile/ProfileContainer';
 import controlButton from '../../commons/ControlButton';
+import Profile from '../profile/ProfileContainer';
 import About from './About';
 import Help from './Help';
 

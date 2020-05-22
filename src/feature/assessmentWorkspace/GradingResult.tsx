@@ -1,7 +1,7 @@
 import { Divider, HTMLTable, Text } from '@blueprintjs/core';
 import * as React from 'react';
-import { getPrettyDate } from '../../utils/dateHelpers';
 import Markdown from '../../commons/Markdown';
+import { getPrettyDate } from '../../utils/dateHelpers';
 
 interface IGradingResultProps {
   graderName: string;
