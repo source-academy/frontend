@@ -7,7 +7,7 @@ import { IState } from '../../reducers/states';
 
 // TODO: implement when stories backend is implemented
 
-const emptyAction = { type: "STORY_NOT_IMPLEMENTED" };
+const emptyAction = { type: 'STORY_NOT_IMPLEMENTED' };
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   materialDirectoryTree: [],
