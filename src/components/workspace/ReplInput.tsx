@@ -87,7 +87,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
           showGutter={false}
           showPrintMargin={false}
           setOptions={{
-            fontFamily: "'Inconsolata', 'Consolas', monospace"
+            fontFamily: "'Inconsolata', monospace"
           }}
         />
         <div className="replInputBottom" ref={e => (this.replInputBottom = e!)} />

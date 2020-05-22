@@ -255,7 +255,7 @@ $code-color-error: #ff4444;
         }
       }
       .grading-editor-input-parent {
-        /** Center the text for numeric input and showing grades. */
+        /* Center the text for numeric input and showing grades. */
         table.#{$ns}-html-table {
           border-spacing: 5px;
           width: 100%;
@@ -268,7 +268,7 @@ $code-color-error: #ff4444;
 
             tr:first-child td,
             th {
-              /** Aligns the numeric input */
+              /* Aligns the numeric input */
               text-align: -webkit-center;
               // Hide grey line
               -webkit-box-shadow: inset 0 0 0 0;
@@ -328,7 +328,6 @@ $code-color-error: #ff4444;
     /*
       Fixes an innate issue with bp3's Tabs component where the active tab underline
       fails to re-compute its position when the browser window changes size
-
       Also fixes an innate issue where the position of the active tab underline
       decouples when the central divider is resized
     */
@@ -419,18 +418,18 @@ $code-color-error: #ff4444;
               margin: 0px;
               text-align: left;
               /**
-              * white-space, word-wrap and word-break
-              * are specified to allow all output to wrap.
-              */
+                * white-space, word-wrap and word-break
+                * are specified to allow all output to wrap.
+                */
               white-space: pre-wrap;
               word-wrap: break-word;
               word-break: break-word;
               /**
-              * Use same fonts as ace-editor for
-              * output. Taken from react-ace
-              * sourcecode, font size modified.
-              */
-              font: 16px / normal 'Inconsolata', 'Consolas', monospace;
+                * Use same fonts as ace-editor for
+                * output. Taken from react-ace
+                * sourcecode, font size modified.
+                */
+              font: 16px / normal 'Inconsolata', monospace;
 
               .canvas-container {
                 display: -webkit-box;
@@ -688,11 +687,11 @@ $code-color-error: #ff4444;
         word-wrap: break-word;
         word-break: break-word;
         /**
- * Use same fonts as ace-editor for
- * output. Taken from react-ace
- * sourcecode, font size modified.
- */
-        font: 16px / normal 'Inconsolata', 'Consolas', monospace;
+          * Use same fonts as ace-editor for
+          * output. Taken from react-ace
+          * sourcecode, font size modified.
+          */
+        font: 16px / normal 'Inconsolata', monospace;
       }
 
       .codeOutput {
