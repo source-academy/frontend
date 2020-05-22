@@ -27,7 +27,7 @@ export interface INavigationBarProps {
 const NavigationBar: React.SFC<INavigationBarProps> = props => (
   <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
     <NavbarGroup align={Alignment.LEFT}>
-      {/* 
+      {/*
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
@@ -65,15 +65,6 @@ const NavigationBar: React.SFC<INavigationBarProps> = props => (
      */}
 
       {/*
-      <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-      to="/material"
-      >
-      <Icon icon={IconNames.BOOK} />
-      <div className="navbar-button-text hidden-xs hidden-sm">Material</div>
-      </NavLink>
-
       <NavLink
       activeClassName={Classes.ACTIVE}
       className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}

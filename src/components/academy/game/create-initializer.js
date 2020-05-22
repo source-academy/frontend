@@ -22,8 +22,6 @@ export default function (StoryXMLPlayer, username, userStory, gameState, mission
                     return history.push('/academy/missions');
                 case 'forum':
                     return window.open(LINKS.PIAZZA);
-                case 'materials':
-                    return history.push('/material');
                 case 'IDE':
                     return history.push('/playground');
                 case 'path':

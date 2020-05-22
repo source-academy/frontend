@@ -4,7 +4,6 @@ export * from './dashboard';
 export * from './game';
 export * from './groundControl';
 export * from './interpreter';
-export * from './material';
 export * from './playground';
 export * from './session';
 export * from './workspaces';

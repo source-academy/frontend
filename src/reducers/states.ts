@@ -13,7 +13,6 @@ import {
   ITestcase
 } from '../components/assessment/assessmentShape';
 import { IGroupOverview } from '../components/dashboard/groupShape';
-import { DirectoryData, MaterialData } from '../components/material/materialShape';
 import { Notification } from '../components/notification/notificationShape';
 import {
   ICodeDelta,
@@ -140,8 +139,6 @@ export interface ISessionState {
   readonly gradings: Map<number, Grading>;
   readonly group: string | null;
   readonly historyHelper: HistoryHelper;
-  readonly materialDirectoryTree: DirectoryData[] | null;
-  readonly materialIndex: MaterialData[] | null;
   readonly maxGrade: number;
   readonly maxXp: number;
   readonly refreshToken?: string;
@@ -435,8 +432,6 @@ export const defaultSession: ISessionState = {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
   },
-  materialDirectoryTree: null,
-  materialIndex: null,
   maxGrade: 0,
   maxXp: 0,
   refreshToken: undefined,

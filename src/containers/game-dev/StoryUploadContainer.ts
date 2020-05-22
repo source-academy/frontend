@@ -1,32 +1,28 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  // createMaterialFolder,
-  deleteMaterial,
-  deleteMaterialFolder,
-  fetchMaterialIndex,
-  fetchTestStories,
-  uploadMaterial
-} from '../../actions';
+import { fetchTestStories } from '../../actions';
 import StoryUpload, { IDispatchProps, IStateProps } from '../../components/game-dev/StoryUpload';
 import { IState } from '../../reducers/states';
 
+// TODO: implement when stories backend is implemented
+
+const emptyAction = { type: "STORY_NOT_IMPLEMENTED" };
+
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
-  materialDirectoryTree: state.session.materialDirectoryTree,
-  materialIndex: state.session.materialIndex
+  materialDirectoryTree: [],
+  materialIndex: []
 });
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators(
     {
-      handleCreateMaterialFolder: (title: string) => null,
-      handleDeleteMaterial: (id: number) => deleteMaterial(id),
-      handleDeleteMaterialFolder: (id: number) => deleteMaterialFolder(id),
+      handleCreateMaterialFolder: (title: string) => emptyAction,
+      handleDeleteMaterial: (id: number) => emptyAction,
+      handleDeleteMaterialFolder: (id: number) => emptyAction,
       handleFetchTestStories: () => fetchTestStories(),
-      handleFetchMaterialIndex: (id?: number) => fetchMaterialIndex(id),
-      handleUploadMaterial: (file: File, title: string, description: string) =>
-        uploadMaterial(file, title, description)
+      handleFetchMaterialIndex: (id?: number) => emptyAction,
+      handleUploadMaterial: (file: File, title: string, description: string) => emptyAction
     },
     dispatch
   );

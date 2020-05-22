@@ -5,7 +5,6 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import Academy from '../containers/academy';
 import Login from '../containers/LoginContainer';
-import Material from '../containers/material/MaterialContainer';
 import MissionControlContainer from '../containers/missionControl';
 import Playground from '../containers/PlaygroundContainer';
 import Sourcecast from '../containers/sourcecast/SourcecastContainer';
@@ -67,7 +66,6 @@ class Application extends React.Component<IApplicationProps, {}> {
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
             <Route path="/contributors" component={Contributors} />
-            <Route path="/material" component={Material} />
             <Route path="/sourcecast" component={Sourcecast} />
             <Route exact={true} path="/" render={this.redirectToPlayground} />
             <Route component={NotFound} />
