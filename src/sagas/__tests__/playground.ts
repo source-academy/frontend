@@ -16,7 +16,7 @@ import {
   defaultWorkspaceManager,
   IState
 } from '../../reducers/states';
-import { showWarningMessage } from '../../utils/notification';
+import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import playgroundSaga from '../playground';
 import { shortenURLRequest } from '../playground';
 
@@ -124,6 +124,11 @@ describe('Playground saga tests', () => {
         payload: ''
       })
       .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
+      .not.call(
+        showWarningMessage,
+        'Something went wrong trying to shorten the url. Please try again'
+      )
+      .not.call(showSuccessMessage, mockResp.message)
       .put(actions.updateShortURL(mockResp.shorturl))
       .silentRun();
   });
@@ -174,6 +179,11 @@ describe('Playground saga tests', () => {
         payload: 'tester'
       })
       .provide([[call(shortenURLRequest, queryString, 'tester'), mockResp]])
+      .not.call(
+        showWarningMessage,
+        'Something went wrong trying to shorten the url. Please try again'
+      )
+      .not.call(showSuccessMessage, mockResp.message)
       .put(actions.updateShortURL(mockResp.shorturl))
       .silentRun();
   });
@@ -209,10 +219,11 @@ describe('Playground saga tests', () => {
       })
       .provide([[call(shortenURLRequest, queryString, ''), null]])
       .call(showWarningMessage, 'Something went wrong trying to shorten the url. Please try again')
+      .put(actions.updateShortURL('ERROR'))
       .silentRun();
   });
 
-  test('shows warning but still gives url when shorten request returns duplicate error', () => {
+  test('shows message and gives url when shorten request returns duplicate error', () => {
     const dummyEditorValue: string = '1 + 1;';
     const dummyState: IState = {
       ...defaultState,
@@ -260,12 +271,16 @@ describe('Playground saga tests', () => {
         payload: ''
       })
       .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
-      .call(showWarningMessage, mockResp.message)
+      .call(showSuccessMessage, mockResp.message)
+      .not.call(
+        showWarningMessage,
+        'Something went wrong trying to shorten the url. Please try again'
+      )
       .put(actions.updateShortURL(mockResp.shorturl))
       .silentRun();
   });
 
-  test('shows warning shorten request returns some error without url', () => {
+  test('shows warning when shorten request returns some error without url', () => {
     const dummyEditorValue: string = '1 + 1;';
     const dummyState: IState = {
       ...defaultState,
@@ -304,6 +319,7 @@ describe('Playground saga tests', () => {
       })
       .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
       .call(showWarningMessage, mockResp.message)
+      .put(actions.updateShortURL('ERROR'))
       .silentRun();
   });
 });
