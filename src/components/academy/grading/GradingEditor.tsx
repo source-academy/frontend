@@ -1,17 +1,14 @@
 import {
   Divider,
   H3,
-  HTMLTable,
   Icon,
   IconName,
   Intent,
   NumericInput,
   Position,
-  Pre,
-  Text
+  Pre
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as classNames from 'classnames';
 import * as React from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { Prompt } from 'react-router';
@@ -120,7 +117,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     const saveAndContinueButtonOpts = {
       intent: hasUnsavedChanges ? Intent.SUCCESS : Intent.NONE,
       minimal: !hasUnsavedChanges,
-      className: classNames(gradingEditorButtonClass, 'grading-editor-save-and-continue')
+      className: gradingEditorButtonClass
     };
     const onTabChange = (tab: ReactMdeProps['selectedTab']) =>
       this.setState({
@@ -128,94 +125,98 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         selectedTab: tab
       });
 
+    // Derived values
+    const totalGrade =
+      this.props.initialGrade +
+      (stringParamToInt(this.state.gradeAdjustmentInput || undefined) || 0);
+    const totalXp =
+      this.props.initialXp + (stringParamToInt(this.state.xpAdjustmentInput || undefined) || 0);
+    const gradePlaceholder = `${this.props.initialGrade > 0 ? '-' : ''}${
+      this.props.initialGrade
+    } to ${this.props.maxGrade - this.props.initialGrade}`;
+    const xpPlaceholder = `${this.props.initialXp > 0 ? '-' : ''}${this.props.initialXp} to ${this
+      .props.maxXp - this.props.initialXp}`;
+
     return (
       <div className="GradingEditor">
         {!this.state.currentlySaving && hasUnsavedChanges ? (
           <Prompt message={'You have unsaved changes. Are you sure you want to leave?'} />
         ) : null}
 
-        <div className="grading-editor-student-name">
+        <div className="grading-editor-header">
           <H3>Currently Grading: {this.props.studentName}</H3>
         </div>
         {this.props.solution !== null ? (
-          <div className="grading-editor-solution">
+          <div className="grading-editor-marking-scheme">
             <Pre>{this.props.solution.toString()} </Pre>
           </div>
         ) : null}
-        <div className="grading-editor-input-parent">
-          <HTMLTable>
-            <tbody>
-              <tr>
-                <th> {`Auto-grader's grade:`} </th>
-                <td>
-                  <Text>
-                    {this.props.initialGrade} / {this.props.maxGrade}
-                  </Text>
-                </td>
-                <th> {`Auto-grader's XP:`} </th>
-                <td>
-                  <Text>
-                    {this.props.initialXp} / {this.props.maxXp}
-                  </Text>
-                </td>
-              </tr>
-              <tr>
-                <th> {`Your adjustment:`} </th>
-                <td>
-                  <NumericInput
-                    className="grading-adjustment-input"
-                    onValueChange={this.onGradeAdjustmentInputChange}
-                    value={this.state.gradeAdjustmentInput || ''}
-                    buttonPosition={Position.RIGHT}
-                    fill={true}
-                    placeholder="Adjust grades relatively here"
-                    min={0 - this.props.initialGrade}
-                    max={
-                      this.props.maxGrade > this.props.initialGrade
-                        ? this.props.maxGrade - this.props.initialGrade
-                        : undefined
-                    }
-                  />
-                </td>
-                <th> {`Your adjustment:`} </th>
-                <td>
-                  <NumericInput
-                    className="grading-adjustment-input"
-                    onValueChange={this.onXpAdjustmentInputChange}
-                    value={this.state.xpAdjustmentInput || ''}
-                    buttonPosition={Position.RIGHT}
-                    fill={true}
-                    placeholder="Adjust XP relatively here"
-                    min={0 - this.props.initialXp}
-                    max={
-                      this.props.maxXp > this.props.initialXp
-                        ? this.props.maxXp - this.props.initialXp
-                        : undefined
-                    }
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th> {`Final grade:`} </th>
-                <td>
-                  <Text>
-                    {this.props.initialGrade +
-                      (stringParamToInt(this.state.gradeAdjustmentInput || undefined) || 0)}{' '}
-                    / {this.props.maxGrade}
-                  </Text>
-                </td>
-                <th> {`Final XP:`} </th>
-                <td>
-                  <Text>
-                    {this.props.initialXp +
-                      (stringParamToInt(this.state.xpAdjustmentInput || undefined) || 0)}{' '}
-                    / {this.props.maxXp}
-                  </Text>
-                </td>
-              </tr>
-            </tbody>
-          </HTMLTable>
+
+        <div className="grading-editor-container">
+          <div className="grading-editor-grades">
+            <div className="autograder-grade">
+              <div>Autograder grade:</div>
+              <div>{`${this.props.initialGrade} / ${this.props.maxGrade}`}</div>
+            </div>
+            <div className="grade-adjustment">
+              <div>Grade adjustment:</div>
+              <div>
+                <NumericInput
+                  className="adjustment-input"
+                  onValueChange={this.onGradeAdjustmentInputChange}
+                  value={this.state.gradeAdjustmentInput || ''}
+                  buttonPosition={Position.RIGHT}
+                  fill={true}
+                  placeholder={gradePlaceholder}
+                  intent={
+                    totalGrade < 0 || totalGrade > this.props.maxGrade ? Intent.DANGER : Intent.NONE
+                  }
+                  min={0 - this.props.initialGrade}
+                  max={
+                    this.props.maxGrade > this.props.initialGrade
+                      ? this.props.maxGrade - this.props.initialGrade
+                      : undefined
+                  }
+                />
+              </div>
+            </div>
+            <div className="final-grade">
+              <div>Final grade:</div>
+              <div>{`${totalGrade} / ${this.props.maxGrade}`}</div>
+            </div>
+          </div>
+          <div className="grading-editor-xp">
+            <div className="autograder-grade">
+              <div>Autograder XP:</div>
+              <div>{`${this.props.initialXp} / ${this.props.maxXp}`}</div>
+            </div>
+            <div className="grade-adjustment">
+              <div>XP adjustment:</div>
+              <div>
+                <NumericInput
+                  className="adjustment-input"
+                  onValueChange={this.onXpAdjustmentInputChange}
+                  value={this.state.xpAdjustmentInput || ''}
+                  buttonPosition={Position.RIGHT}
+                  fill={true}
+                  placeholder={xpPlaceholder}
+                  intent={totalXp < 0 || totalXp > this.props.maxXp ? Intent.DANGER : Intent.NONE}
+                  min={0 - this.props.initialXp}
+                  max={
+                    this.props.maxXp > this.props.initialXp
+                      ? this.props.maxXp - this.props.initialXp
+                      : undefined
+                  }
+                />
+              </div>
+            </div>
+            <div className="final-grade">
+              <div>Final XP:</div>
+              <div>{`${totalXp} / ${this.props.maxXp}`}</div>
+            </div>
+          </div>
         </div>
+
         <div className="react-mde-parent">
           <ReactMde
             value={this.state.editorValue || ''}
@@ -229,46 +230,40 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
             getIcon={this.blueprintIconProvider}
           />
         </div>
+
         {this.state.selectedTab === 'write' && (
           <div className="grading-editor-draft-buttons">
-            <HTMLTable>
-              <tbody>
-                <tr>
-                  <td>
-                    {controlButton(
-                      'Save Changes',
-                      IconNames.FLOPPY_DISK,
-                      this.validateGradesBeforeSave(this.props.handleGradingSave),
-                      saveButtonOpts
-                    )}
-                  </td>
-                  <td>
-                    {controlButton(
-                      'Discard Changes',
-                      IconNames.TRASH,
-                      this.discardChanges,
-                      discardButtonOpts
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            </HTMLTable>
+            <div className="grading-editor-save-button">
+              {controlButton(
+                'Save Changes',
+                IconNames.FLOPPY_DISK,
+                this.validateGradesBeforeSave(this.props.handleGradingSave),
+                saveButtonOpts
+              )}
+            </div>
+            <div className="grading-editor-discard-button">
+              {controlButton(
+                'Discard Changes',
+                IconNames.TRASH,
+                this.discardChanges,
+                discardButtonOpts
+              )}
+            </div>
           </div>
         )}
-        {controlButton(
-          'Save and Continue',
-          IconNames.UPDATED,
-          this.validateGradesBeforeSave(this.onClickSaveAndContinue),
-          saveAndContinueButtonOpts
-        )}
+        <div className="grading-editor-save-continue-button">
+          {controlButton(
+            'Save and Continue',
+            IconNames.UPDATED,
+            this.validateGradesBeforeSave(this.onClickSaveAndContinue),
+            saveAndContinueButtonOpts
+          )}
+        </div>
         {this.props.graderName && this.props.gradedAt && (
           <>
             <Divider />
-            <div>
-              <Text>
-                Last edited by <b>{this.props.graderName}</b> on{' '}
-                {getPrettyDate(this.props.gradedAt)}
-              </Text>
+            <div className="grading-editor-last-graded-details">
+              Last edited by <b>{this.props.graderName}</b> on {getPrettyDate(this.props.gradedAt)}
             </div>
           </>
         )}
