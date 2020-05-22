@@ -1,84 +1,73 @@
-import { History } from 'history';
 import { throttle } from 'lodash';
-import { routerMiddleware, routerReducer } from 'react-router-redux';
-import {
-  applyMiddleware,
-  combineReducers,
-  compose,
-  createStore as _createStore,
-  Store,
-  StoreEnhancer
-} from 'redux';
+import { routerMiddleware } from 'react-router-redux';
+import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import { loadStoredState, saveState } from './localStorage';
-import reducers from './reducers';
-import { defaultState, IState } from './reducers/states';
+import { ISavedState, loadStoredState, saveState } from './localStorage';
+import { defaultState } from './reducers/states';
 import mainSaga from './sagas';
 import { history as appHistory } from './utils/history';
+import createRootReducer from './reducers';
 
-declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>;
+const initialStore = loadStore(loadStoredState()) || defaultState;
+export const store = createdStore(initialStore);
 
-export function createStore(history: History): Store<IState> {
-  let composeEnhancers: any = compose;
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      serialize: true,
+      maxAge: 300
+    }) || compose
+  : compose;
+
+export default function createdStore(initialStore: any) {
   const sagaMiddleware = createSagaMiddleware();
-  const middleware = [sagaMiddleware, routerMiddleware(history)];
+  const middleware = [sagaMiddleware, routerMiddleware(appHistory)];
 
-  if (typeof __REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function') {
-    composeEnhancers = __REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-  }
+  const enhancers = composeEnhancers(applyMiddleware(...middleware));
 
-  const rootReducer = combineReducers<IState>({
-    ...reducers,
-    router: routerReducer
-  });
-  const enchancers = composeEnhancers(applyMiddleware(...middleware));
-  const loadedStore = loadStoredState();
-  let initialStore: IState = defaultState;
-  if (loadedStore) {
-    initialStore = {
-      ...defaultState,
-      session: {
-        ...defaultState.session,
-        ...(loadedStore.session ? loadedStore.session : {})
-      },
-      workspaces: {
-        ...defaultState.workspaces,
-        playground: {
-          ...defaultState.workspaces.playground,
-          editorValue: loadedStore.playgroundEditorValue
-            ? loadedStore.playgroundEditorValue
-            : defaultState.workspaces.playground.editorValue,
-          isEditorAutorun: loadedStore.playgroundIsEditorAutorun
-            ? loadedStore.playgroundIsEditorAutorun
-            : defaultState.workspaces.playground.isEditorAutorun,
-          externalLibrary: loadedStore.playgroundExternalLibrary
-            ? loadedStore.playgroundExternalLibrary
-            : defaultState.workspaces.playground.externalLibrary,
-          context: {
-            ...defaultState.workspaces.playground.context,
-            chapter: loadedStore.playgroundSourceChapter
-              ? loadedStore.playgroundSourceChapter
-              : defaultState.workspaces.playground.context.chapter,
-            variant: loadedStore.playgroundSourceVariant
-              ? loadedStore.playgroundSourceVariant
-              : defaultState.workspaces.playground.context.variant
-          }
-        }
-      }
-    };
-  }
-  const createdStore = _createStore<IState>(rootReducer, initialStore, enchancers);
-
+  const createdStore = _createStore(createRootReducer(appHistory), initialStore, enhancers);
   sagaMiddleware.run(mainSaga);
 
   createdStore.subscribe(
     throttle(() => {
-      saveState(store.getState());
+      saveState(createdStore.getState());
     }, 1000)
   );
 
   return createdStore;
 }
 
-export const store = createStore(appHistory) as Store<IState>;
+function loadStore(loadedStore: ISavedState | undefined) {
+  if (!loadedStore) return { undefined };
+  return {
+    ...defaultState,
+    session: {
+      ...defaultState.session,
+      ...(loadedStore.session ? loadedStore.session : {})
+    },
+    workspaces: {
+      ...defaultState.workspaces,
+      playground: {
+        ...defaultState.workspaces.playground,
+        editorValue: loadedStore.playgroundEditorValue
+          ? loadedStore.playgroundEditorValue
+          : defaultState.workspaces.playground.editorValue,
+        isEditorAutorun: loadedStore.playgroundIsEditorAutorun
+          ? loadedStore.playgroundIsEditorAutorun
+          : defaultState.workspaces.playground.isEditorAutorun,
+        externalLibrary: loadedStore.playgroundExternalLibrary
+          ? loadedStore.playgroundExternalLibrary
+          : defaultState.workspaces.playground.externalLibrary,
+        context: {
+          ...defaultState.workspaces.playground.context,
+          chapter: loadedStore.playgroundSourceChapter
+            ? loadedStore.playgroundSourceChapter
+            : defaultState.workspaces.playground.context.chapter,
+          variant: loadedStore.playgroundSourceVariant
+            ? loadedStore.playgroundSourceVariant
+            : defaultState.workspaces.playground.context.variant
+        }
+      }
+    }
+  };
+}
