@@ -52,6 +52,7 @@ export interface IDashBoardState {
 
 export interface IPlaygroundState {
   readonly queryString?: string;
+  readonly shortURL?: string;
   readonly usingSubst: boolean;
 }
 
