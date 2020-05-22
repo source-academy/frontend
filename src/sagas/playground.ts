@@ -6,7 +6,7 @@ import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { ExternalLibraryName } from '../components/assessment/assessmentShape';
 import { defaultEditorValue, IState } from '../reducers/states';
-import { showWarningMessage } from '../utils/notification';
+import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 
 import { Variant } from 'js-slang/dist/types';
 import { URL_SHORTENER, URL_SHORTENER_SIGNATURE } from '../utils/constants';
@@ -19,23 +19,25 @@ export default function* playgroundSaga(): SagaIterator {
   ) {
     const queryString = yield select((state: IState) => state.playground.queryString);
     const keyword = action.payload;
+    const errorMsg = 'ERROR';
 
     const resp = yield call(shortenURLRequest, queryString, keyword);
     if (!resp) {
+      yield put(actions.updateShortURL(errorMsg));
       return yield call(
         showWarningMessage,
         'Something went wrong trying to shorten the url. Please try again'
       );
     }
 
+    if (resp.status !== 'success' && !resp.shorturl) {
+      yield put(actions.updateShortURL(errorMsg));
+      return yield call(showWarningMessage, resp.message);
+    }
+
     if (resp.status !== 'success') {
-      yield call(showWarningMessage, resp.message);
+      yield call(showSuccessMessage, resp.message);
     }
-
-    if (!resp.shorturl) {
-      return;
-    }
-
     yield put(actions.updateShortURL(resp.shorturl));
   });
 }
