@@ -22,11 +22,14 @@ export default function* playgroundSaga(): SagaIterator {
 
     const resp = yield call(shortenURLRequest, queryString, keyword);
     if (!resp) {
-      return;
+      return yield call(
+        showWarningMessage,
+        'Something went wrong trying to shorten the url. Please try again'
+      );
     }
 
     if (resp.status !== 'success') {
-      showWarningMessage(resp.message);
+      yield call(showWarningMessage, resp.message);
     }
 
     if (!resp.shorturl) {
@@ -70,7 +73,10 @@ function* updateQueryString() {
  * Gets short url from microservice
  * @returns {(Response|null)} Response if successful, otherwise null.
  */
-async function shortenURLRequest(queryString: string, keyword: string): Promise<Response | null> {
+export async function shortenURLRequest(
+  queryString: string,
+  keyword: string
+): Promise<Response | null> {
   let url = `${window.location.protocol}//${window.location.hostname}/playground#${queryString}`;
   if (window.location.port !== '') {
     url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/playground#${queryString}`;
@@ -94,7 +100,6 @@ async function shortenURLRequest(queryString: string, keyword: string): Promise<
 
   const resp = await fetch(URL_SHORTENER + '?' + query, fetchOpts);
   if (!resp || !resp.ok) {
-    showWarningMessage('Something went wrong trying to shorten the url. Please try again');
     return null;
   }
 
