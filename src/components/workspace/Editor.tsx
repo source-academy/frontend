@@ -283,7 +283,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             setOptions={{
               enableBasicAutocompletion: true,
               enableLiveAutocompletion: true,
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
+              fontFamily: "'Inconsolata', monospace"
             }}
           />
         </div>
