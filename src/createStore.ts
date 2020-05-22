@@ -1,6 +1,7 @@
+import { routerMiddleware } from 'connected-react-router';
 import { History } from 'history';
 import { throttle } from 'lodash';
-import { routerMiddleware } from 'connected-react-router';
+
 import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
