@@ -8,6 +8,7 @@ import ChatApp from 'src/containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
 import { USE_CHATKIT } from 'src/utils/constants';
 import { history } from 'src/utils/history';
+import Markdown from '../../../commons/Markdown';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -16,9 +17,6 @@ import {
   Library,
   QuestionTypes
 } from '../../../feature/assessment/AssessmentTypes';
-import Markdown from '../../../commons/Markdown';
-import Workspace, { IWorkspaceProps } from '../../../feature/workspace/WorkspaceComponent';
-import { ControlBarProps } from '../../../feature/controlBar/ControlBarComponent';
 import {
   ClearButton,
   EvalButton,
@@ -27,11 +25,16 @@ import {
   QuestionViewButton,
   RunButton
 } from '../../../feature/controlBar';
+import { ControlBarProps } from '../../../feature/controlBar/ControlBarComponent';
 import { IPosition } from '../../../feature/editor/EditorComponent';
-import { SideContentProps, SideContentTab } from '../../../feature/sideContent/SideContentComponent';
-import Autograder from'../../../feature/sideContent/Autograder';
-import ToneMatrix from'../../../feature/sideContent/ToneMatrix';
-import { Grading, IAnsweredQuestion } from  '../../../feature/grading/gradingTypes';
+import { Grading, IAnsweredQuestion } from '../../../feature/grading/gradingTypes';
+import Autograder from '../../../feature/sideContent/Autograder';
+import {
+  SideContentProps,
+  SideContentTab
+} from '../../../feature/sideContent/SideContentComponent';
+import ToneMatrix from '../../../feature/sideContent/ToneMatrix';
+import Workspace, { IWorkspaceProps } from '../../../feature/workspace/WorkspaceComponent';
 
 export type GradingIWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
@@ -392,7 +395,9 @@ class GradingWorkspace extends React.Component<GradingIWorkspaceProps> {
       />
     );
 
-    const questionView = <QuestionViewButton questionProgress={questionProgress} key="question_view" />;
+    const questionView = (
+      <QuestionViewButton questionProgress={questionProgress} key="question_view" />
+    );
 
     const runButton = <RunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
 

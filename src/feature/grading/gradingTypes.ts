@@ -1,12 +1,12 @@
-import {
-    AssessmentCategory,
-    AutogradingResult,
-    GradingStatus,
-    IQuestion,
-    ITestcase,
-    MCQChoice
-  } from '../assessment/AssessmentTypes';
 import { Notification } from 'src/components/notification/notificationShape';
+import {
+  AssessmentCategory,
+  AutogradingResult,
+  GradingStatus,
+  IQuestion,
+  ITestcase,
+  MCQChoice
+} from '../assessment/AssessmentTypes';
 
 /**
  * Information on a Grading, for a particular student submission
