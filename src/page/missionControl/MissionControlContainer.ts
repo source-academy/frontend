@@ -6,7 +6,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { fetchAssessmentOverviews, submitAssessment } from '../../actions/session';
 // TODO: Import from commons
 import { IState, Role } from '../../reducers/states';
-import MissionControl, { IMissionControlDispatchProps, IMissionControlStateProps } from './MissionControlComponent';
+import MissionControl, {
+  IMissionControlDispatchProps,
+  IMissionControlStateProps
+} from './MissionControlComponent';
 
 const mapStateToProps: MapStateToProps<IMissionControlStateProps, {}, IState> = (state, props) => {
   const stateProps: IMissionControlStateProps = {
@@ -15,7 +18,9 @@ const mapStateToProps: MapStateToProps<IMissionControlStateProps, {}, IState> = 
   return stateProps;
 };
 
-const mapDispatchToProps: MapDispatchToProps<IMissionControlDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IMissionControlDispatchProps, {}> = (
+  dispatch: Dispatch<any>
+) =>
   bindActionCreators(
     {
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,

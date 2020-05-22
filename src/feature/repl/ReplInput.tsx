@@ -2,7 +2,7 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 // source mode and chapter imported in Editor.tsx
 
-export interface IReplInputProps extends IReplInputDispatchProps, IReplInputStateProps { }
+export interface IReplInputProps extends IReplInputDispatchProps, IReplInputStateProps {}
 
 interface IReplInputStateProps {
   replValue: string;

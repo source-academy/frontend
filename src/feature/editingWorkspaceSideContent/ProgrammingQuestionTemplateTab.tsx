@@ -5,9 +5,9 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 // TODO: Import from commons
+import controlButton from '../../commons/ControlButton';
 import { IWorkspaceState } from '../../reducers/states';
 import { IAssessment } from '../assessment/AssessmentTypes';
-import controlButton from '../../commons/ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 interface IQuestionEditorProps {

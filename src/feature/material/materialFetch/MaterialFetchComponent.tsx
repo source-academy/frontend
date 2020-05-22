@@ -1,9 +1,11 @@
 import * as React from 'react';
 
-import { DirectoryData, MaterialData } from '../materialTypes';
 import MaterialTable from '../materialTable/MaterialTableComponent';
+import { DirectoryData, MaterialData } from '../materialTypes';
 
-export interface IMaterialFetchProps extends IMaterialFetchDispatchProps, IMaterialFetchStateProps {}
+export interface IMaterialFetchProps
+  extends IMaterialFetchDispatchProps,
+    IMaterialFetchStateProps {}
 
 export interface IMaterialFetchDispatchProps {
   handleFetchMaterialIndex: (id?: number) => void;

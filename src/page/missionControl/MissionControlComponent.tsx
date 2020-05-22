@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { stringParamToInt } from '../../utils/paramParseHelpers';
-import { AssessmentStatuses, IAssessmentOverview } from '../../feature/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
-import MissionCreator from '../../feature/missionCreator/MissionCreatorContainer';
+import { AssessmentStatuses, IAssessmentOverview } from '../../feature/assessment/AssessmentTypes';
 import { EditingOverviewCard } from '../../feature/editingOverviewCard/EditingOverviewCardComponent';
-import EditingWorkspaceContainer from '../../feature/editingWorkspace/EditingWorkspaceContainer';
 import { EditingWorkspaceOwnProps } from '../../feature/editingWorkspace/EditingWorkspaceComponent';
+import EditingWorkspaceContainer from '../../feature/editingWorkspace/EditingWorkspaceContainer';
+import MissionCreator from '../../feature/missionCreator/MissionCreatorContainer';
 import { retrieveLocalAssessmentOverview } from '../../feature/XMLParser/XMLParserHelper';
+import { stringParamToInt } from '../../utils/paramParseHelpers';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
@@ -18,9 +18,10 @@ export interface IMissionControlParams {
   questionId?: string;
 }
 
-export interface IMissionControlProps extends IMissionControlDispatchProps,
-  RouteComponentProps<IMissionControlParams>,
-  IMissionControlStateProps { }
+export interface IMissionControlProps
+  extends IMissionControlDispatchProps,
+    RouteComponentProps<IMissionControlParams>,
+    IMissionControlStateProps {}
 
 export interface IMissionControlDispatchProps {
   handleAssessmentOverviewFetch: () => void;

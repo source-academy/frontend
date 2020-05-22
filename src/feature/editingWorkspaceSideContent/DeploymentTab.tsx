@@ -4,11 +4,16 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
 // TODO: import from commons
+import controlButton from '../../commons/ControlButton';
 import { externalLibraries } from '../../reducers/externalLibraries';
 // TODO: import from commons
 import { sourceLanguages, styliseChapter } from '../../reducers/states';
-import { ExternalLibraryName, IAssessment, Library, emptyLibrary } from '../assessment/AssessmentTypes';
-import controlButton from '../../commons/ControlButton';
+import {
+  emptyLibrary,
+  ExternalLibraryName,
+  IAssessment,
+  Library
+} from '../assessment/AssessmentTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
 

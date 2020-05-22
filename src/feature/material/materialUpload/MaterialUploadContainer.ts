@@ -8,16 +8,21 @@ import {
   fetchMaterialIndex,
   uploadMaterial
 } from '../../../actions';
-import MaterialUpload, { IMaterialUploadDispatchProps, IMaterialUploadStateProps } from './MaterialUploadComponent';
 // TODO: Import from commons
-import { IState } from '../../../reducers/states'; 
+import { IState } from '../../../reducers/states';
+import MaterialUpload, {
+  IMaterialUploadDispatchProps,
+  IMaterialUploadStateProps
+} from './MaterialUploadComponent';
 
 const mapStateToProps: MapStateToProps<IMaterialUploadStateProps, {}, IState> = state => ({
   materialDirectoryTree: state.session.materialDirectoryTree,
   materialIndex: state.session.materialIndex
 });
 
-const mapDispatchToProps: MapDispatchToProps<IMaterialUploadDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IMaterialUploadDispatchProps, {}> = (
+  dispatch: Dispatch<any>
+) =>
   bindActionCreators(
     {
       handleCreateMaterialFolder: (title: string) => createMaterialFolder(title),

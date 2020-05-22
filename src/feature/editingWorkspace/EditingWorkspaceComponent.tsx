@@ -3,9 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { history } from '../../utils/history';
+import controlButton from '../../commons/ControlButton';
+import Markdown from '../../commons/Markdown';
 // TODO: Import from commons
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
+import { history } from '../../utils/history';
 import {
   IAssessment,
   IAssessmentOverview,
@@ -16,9 +18,6 @@ import {
   Library,
   QuestionTypes
 } from '../assessment/AssessmentTypes';
-import controlButton from '../../commons/ControlButton';
-import Markdown from '../../commons/Markdown';
-import Workspace, { IWorkspaceProps } from '../workspace/WorkspaceComponent';
 import { ControlBarProps } from '../controlBar/ControlBarComponent';
 import {
   ClearButton,
@@ -31,9 +30,6 @@ import {
   SaveButton,
   ToggleEditModeButton
 } from '../controlBar/index';
-import { IPosition } from '../editor/EditorComponent';
-import { SideContentProps, SideContentTab } from '../sideContent/SideContentComponent';
-import ToneMatrix from '../sideContent/ToneMatrix';
 import { AutograderTab } from '../editingWorkspaceSideContent/AutograderTab';
 import { DeploymentTab } from '../editingWorkspaceSideContent/DeploymentTab';
 import { GradingTab } from '../editingWorkspaceSideContent/GradingTab';
@@ -41,13 +37,19 @@ import { ManageQuestionTab } from '../editingWorkspaceSideContent/ManageQuestion
 import { MCQQuestionTemplateTab } from '../editingWorkspaceSideContent/MCQQuestionTemplateTab';
 import { ProgrammingQuestionTemplateTab } from '../editingWorkspaceSideContent/ProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/TextAreaContent';
+import { IPosition } from '../editor/EditorComponent';
+import { SideContentProps, SideContentTab } from '../sideContent/SideContentComponent';
+import ToneMatrix from '../sideContent/ToneMatrix';
+import Workspace, { IWorkspaceProps } from '../workspace/WorkspaceComponent';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
   storeLocalAssessmentOverview
 } from '../XMLParser/XMLParserHelper';
 
-export type EditingWorkspaceProps = EditingWorkspaceDispatchProps & EditingWorkspaceOwnProps & EditingWorkspaceStateProps;
+export type EditingWorkspaceProps = EditingWorkspaceDispatchProps &
+  EditingWorkspaceOwnProps &
+  EditingWorkspaceStateProps;
 
 export type EditingWorkspaceStateProps = {
   editorHeight?: number;
@@ -652,7 +654,9 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       />
     );
 
-    const questionView = <QuestionViewButton questionProgress={questionProgress} key="question_view" />;
+    const questionView = (
+      <QuestionViewButton questionProgress={questionProgress} key="question_view" />
+    );
 
     const resetButton = <ResetButton onClick={onClickResetTemplate} key="reset_template" />;
 

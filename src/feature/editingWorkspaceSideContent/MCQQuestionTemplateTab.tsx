@@ -2,10 +2,10 @@ import { Card } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { IAssessment, IMCQQuestion } from '../assessment/AssessmentTypes';
 import controlButton from '../../commons/ControlButton';
-import TextAreaContent from './TextAreaContent';
+import { IAssessment, IMCQQuestion } from '../assessment/AssessmentTypes';
 import { limitNumberRange } from './EditingWorkspaceSideContentHelper';
+import TextAreaContent from './TextAreaContent';
 
 interface IMCQQuestionTemplateTabProps {
   assessment: IAssessment;

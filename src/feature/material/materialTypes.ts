@@ -7,19 +7,19 @@ export const UPDATE_MATERIAL_INDEX = 'UPDATE_MATERIAL_INDEX';
 export const UPLOAD_MATERIAL = 'UPLOAD_MATERIAL';
 
 export type MaterialData = {
-    title: string;
-    description: string;
-    inserted_at: string;
-    updated_at: string;
+  title: string;
+  description: string;
+  inserted_at: string;
+  updated_at: string;
+  id: number;
+  uploader: {
     id: number;
-    uploader: {
-        id: number;
-        name: string;
-    };
-    url: string;
+    name: string;
+  };
+  url: string;
 };
 
 export type DirectoryData = {
-    id: number;
-    title: string;
+  id: number;
+  title: string;
 };

@@ -8,7 +8,7 @@ import MCQChooser, { IMCQChooserProps } from '../MCQChooser/MCQChooserComponent'
 import Repl, { IReplProps } from '../repl/ReplComponent';
 import SideContent, { SideContentProps } from '../sideContent/SideContentComponent';
 
-export interface IWorkspaceProps extends IWorkspaceDispatchProps, IWorkspaceStateProps { }
+export interface IWorkspaceProps extends IWorkspaceDispatchProps, IWorkspaceStateProps {}
 
 interface IWorkspaceStateProps {
   // Either editorProps or mcqProps must be provided

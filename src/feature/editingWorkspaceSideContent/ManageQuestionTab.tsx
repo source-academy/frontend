@@ -2,10 +2,10 @@ import { Button, ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { history } from '../../utils/history';
-import { IAssessment } from '../assessment/AssessmentTypes';
 import controlButton from '../../commons/ControlButton';
 import Markdown from '../../commons/Markdown';
+import { history } from '../../utils/history';
+import { IAssessment } from '../assessment/AssessmentTypes';
 import { mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
 
 interface IProps {

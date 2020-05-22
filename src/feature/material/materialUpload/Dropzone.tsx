@@ -68,7 +68,7 @@ const MaterialDropzone: React.FC<IDropzoneType> = props => {
       setTitle(acceptedFiles[0].name);
     }
   });
-  
+
   const style = React.useMemo(
     () => ({
       ...dropZoneStyle.baseStyle,

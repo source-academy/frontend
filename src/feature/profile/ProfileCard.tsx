@@ -10,7 +10,7 @@ import {
   IAssessmentOverview
 } from '../assessment/AssessmentTypes';
 
-interface IProfileCardProps extends IProfileCardDispatchProps, IProfileCardStateProps { }
+interface IProfileCardProps extends IProfileCardDispatchProps, IProfileCardStateProps {}
 
 interface IProfileCardStateProps {
   item: IAssessmentOverview;
@@ -25,11 +25,11 @@ interface IProfileCardDispatchProps {
 class ProfileCard extends React.Component<IProfileCardProps, {}> {
   public render() {
     const { item } = this.props;
-    
-    const isInvalidMission = item.category !== AssessmentCategories.Mission ||
-      (item.maxGrade <= 0 && item.grade === 0);
+
+    const isInvalidMission =
+      item.category !== AssessmentCategories.Mission || (item.maxGrade <= 0 && item.grade === 0);
     const isInvalidXP = item.maxXp <= 0 && item.xp === 0;
-    
+
     const missionDetail = (
       <div className="grade-details">
         <div className="title">Grade</div>
@@ -39,16 +39,14 @@ class ProfileCard extends React.Component<IProfileCardProps, {}> {
         <ProgressBar
           animate={false}
           className={
-            'value-bar' +
-            this.props.parseColour(
-              this.props.getFrac(item.grade, item.maxGrade)
-            )
+            'value-bar' + this.props.parseColour(this.props.getFrac(item.grade, item.maxGrade))
           }
           stripes={false}
           value={this.props.getFrac(item.grade, item.maxGrade)}
         />
-      </div>);
-    
+      </div>
+    );
+
     const xpDetails = (
       <div className="xp-details">
         <div className="title">XP</div>
@@ -57,17 +55,13 @@ class ProfileCard extends React.Component<IProfileCardProps, {}> {
         </div>
         <ProgressBar
           animate={false}
-          className={
-            'value-bar' +
-            this.props.parseColour(
-              this.props.getFrac(item.xp, item.maxXp)
-            )
-          }
+          className={'value-bar' + this.props.parseColour(this.props.getFrac(item.xp, item.maxXp))}
           stripes={false}
           value={this.props.getFrac(item.xp, item.maxXp)}
         />
-      </div>);
-    
+      </div>
+    );
+
     return (
       // Make each card navigate the user to the respective assessment
       <NavLink
@@ -83,8 +77,8 @@ class ProfileCard extends React.Component<IProfileCardProps, {}> {
           icon={this.props.renderIcon(item.category)}
           title={item.title}
         >
-          { isInvalidMission ? '' : missionDetail }
-          { isInvalidXP ? '' : xpDetails }
+          {isInvalidMission ? '' : missionDetail}
+          {isInvalidXP ? '' : xpDetails}
         </Callout>
       </NavLink>
     );

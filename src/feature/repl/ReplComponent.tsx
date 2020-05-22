@@ -11,7 +11,7 @@ import { InterpreterOutput } from '../../reducers/states';
 import CanvasOutput from '../sideContent/CanvasOutput';
 import ReplInput, { IReplInputProps } from './ReplInput';
 
-export interface IReplProps extends IReplDispatchProps, IReplStateProps { }
+export interface IReplProps extends IReplDispatchProps, IReplStateProps {}
 
 interface IReplStateProps {
   output: InterpreterOutput[];

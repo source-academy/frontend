@@ -12,7 +12,9 @@ interface IXMLReaderDispatchProps {
 
 const mapStateToProps: MapStateToProps<{}, any, {}> = (state, ownProps) => ownProps;
 
-const mapDispatchToProps: MapDispatchToProps<IXMLReaderDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IXMLReaderDispatchProps, {}> = (
+  dispatch: Dispatch<any>
+) =>
   bindActionCreators(
     {
       newAssessment: updateAssessment

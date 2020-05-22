@@ -1,11 +1,4 @@
-import {
-  Alignment,
-  Classes,
-  Icon,
-  Navbar,
-  NavbarDivider,
-  NavbarGroup
-} from '@blueprintjs/core';
+import { Alignment, Classes, Icon, Navbar, NavbarDivider, NavbarGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';

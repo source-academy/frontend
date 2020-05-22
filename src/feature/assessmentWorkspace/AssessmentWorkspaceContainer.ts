@@ -2,7 +2,6 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 // TODO: Import from commons
-import { IState, IWorkspaceState, SideContentType } from '../../reducers/states';
 // TODO: Import from commons
 import {
   beginClearContext,
@@ -36,15 +35,20 @@ import {
   updateCurrentAssessmentId,
   WorkspaceLocation
 } from '../../actions/workspaces';
+import { IState, IWorkspaceState, SideContentType } from '../../reducers/states';
 import { Library } from '../assessment/AssessmentTypes';
+import { IPosition } from '../editor/EditorComponent';
 import AssessmentWorkspace, {
   IAssessmentWorkspaceDispatchProps,
   IAssessmentWorkspaceOwnProps,
   IAssessmentWorkspaceStateProps
 } from './AssessmentWorkspaceComponent';
-import { IPosition } from '../editor/EditorComponent';
 
-const mapStateToProps: MapStateToProps<IAssessmentWorkspaceStateProps, IAssessmentWorkspaceOwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<
+  IAssessmentWorkspaceStateProps,
+  IAssessmentWorkspaceOwnProps,
+  IState
+> = (state, props) => {
   return {
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
@@ -71,7 +75,9 @@ const mapStateToProps: MapStateToProps<IAssessmentWorkspaceStateProps, IAssessme
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
-const mapDispatchToProps: MapDispatchToProps<IAssessmentWorkspaceDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IAssessmentWorkspaceDispatchProps, {}> = (
+  dispatch: Dispatch<any>
+) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>

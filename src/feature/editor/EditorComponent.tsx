@@ -1,10 +1,10 @@
+import { require as acequire } from 'ace-builds';
+import 'ace-builds/src-noconflict/ext-language_tools';
+import 'ace-builds/src-noconflict/ext-searchbox';
 import * as React from 'react';
 import AceEditor, { IAnnotation } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
-import { require as acequire } from 'ace-builds';
-import 'ace-builds/src-noconflict/ext-language_tools';
-import 'ace-builds/src-noconflict/ext-searchbox';
 
 import {
   createContext,
@@ -20,8 +20,8 @@ import { Variant } from 'js-slang/dist/types';
 // TODO: Import from commons
 import { Documentation } from '../../reducers/documentation';
 import { LINKS } from '../../utils/constants';
-import AceRange from './AceRange';
 import { checkSessionIdExists } from '../collabEditing/CollabEditingHelper';
+import AceRange from './AceRange';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -30,7 +30,7 @@ import { checkSessionIdExists } from '../collabEditing/CollabEditingHelper';
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
  */
-export interface IEditorProps extends IEditorDispatchProps, IEditorStateProps { }
+export interface IEditorProps extends IEditorDispatchProps, IEditorStateProps {}
 
 interface IEditorStateProps {
   breakpoints: string[];
@@ -556,7 +556,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
       checkSessionIdExists(
         this.props.editorSessionId,
-        () => { },
+        () => {},
         sessionIdNotFound,
         cannotReachServer
       );
@@ -575,7 +575,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
-  goGreen: () => { }
+  goGreen: () => {}
 };
 
 // TODO: Removal

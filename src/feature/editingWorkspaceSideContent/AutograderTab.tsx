@@ -2,8 +2,13 @@ import { Card, Elevation, H6 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { IAssessment, IProgrammingQuestion, ITestcase, testcaseTemplate } from '../assessment/AssessmentTypes';
 import controlButton from '../../commons/ControlButton';
+import {
+  IAssessment,
+  IProgrammingQuestion,
+  ITestcase,
+  testcaseTemplate
+} from '../assessment/AssessmentTypes';
 import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
 

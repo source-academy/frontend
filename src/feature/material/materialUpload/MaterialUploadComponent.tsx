@@ -1,11 +1,13 @@
 import { Divider } from '@blueprintjs/core';
 import * as React from 'react';
 
-import Dropzone from './Dropzone';
-import { DirectoryData, MaterialData } from '../materialTypes';
 import MaterialTable from '../materialTable/MaterialTableComponent';
+import { DirectoryData, MaterialData } from '../materialTypes';
+import Dropzone from './Dropzone';
 
-export interface IMaterialUploadProps extends IMaterialUploadDispatchProps, IMaterialUploadStateProps {}
+export interface IMaterialUploadProps
+  extends IMaterialUploadDispatchProps,
+    IMaterialUploadStateProps {}
 
 export interface IMaterialUploadDispatchProps {
   handleCreateMaterialFolder: (title: string) => void;

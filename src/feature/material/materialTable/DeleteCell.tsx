@@ -24,9 +24,11 @@ class DeleteCell extends React.Component<IDeleteCellProps, IDeleteCellState> {
   }
 
   public render() {
-    const deleteDialog = this.props.data.url
-    ? <p>Are you sure to delete this material file?</p>
-    : <p>Are you sure to delete this material folder?</p>;
+    const deleteDialog = this.props.data.url ? (
+      <p>Are you sure to delete this material file?</p>
+    ) : (
+      <p>Are you sure to delete this material folder?</p>
+    );
 
     return (
       <div>
@@ -38,9 +40,7 @@ class DeleteCell extends React.Component<IDeleteCellProps, IDeleteCellState> {
           title="Delete Material"
           canOutsideClickClose={true}
         >
-          <div className={Classes.DIALOG_BODY}>
-            {deleteDialog}
-          </div>
+          <div className={Classes.DIALOG_BODY}>{deleteDialog}</div>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               {controlButton('Confirm Delete', IconNames.TRASH, this.handleDelete)}

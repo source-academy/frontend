@@ -36,14 +36,18 @@ import {
 // TODO: Import from commons
 import { IState, IWorkspaceState } from '../../reducers/states';
 import { Library } from '../assessment/AssessmentTypes';
+import { IPosition } from '../editor/EditorComponent';
 import EditingWorkspace, {
   EditingWorkspaceDispatchProps,
   EditingWorkspaceOwnProps,
   EditingWorkspaceStateProps
 } from './EditingWorkspaceComponent';
-import { IPosition } from '../editor/EditorComponent';
 
-const mapStateToProps: MapStateToProps<EditingWorkspaceStateProps, EditingWorkspaceOwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<
+  EditingWorkspaceStateProps,
+  EditingWorkspaceOwnProps,
+  IState
+> = (state, props) => {
   return {
     editorValue: state.workspaces.assessment.editorValue,
     editorHeight: state.workspaces.assessment.editorHeight,
@@ -65,7 +69,9 @@ const mapStateToProps: MapStateToProps<EditingWorkspaceStateProps, EditingWorksp
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
-const mapDispatchToProps: MapDispatchToProps<EditingWorkspaceDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<EditingWorkspaceDispatchProps, {}> = (
+  dispatch: Dispatch<any>
+) =>
   bindActionCreators<EditingWorkspaceDispatchProps>(
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),

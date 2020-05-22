@@ -1,11 +1,11 @@
 import * as React from 'react';
 import Textarea from 'react-textarea-autosize';
 
-import { IAssessment } from '../assessment/AssessmentTypes';
 import Markdown from '../../commons/Markdown';
+import { IAssessment } from '../assessment/AssessmentTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
-interface ITextAreaContentProps extends ITextAreaContentDispatchProps, ITextAreaContentStateProps { }
+interface ITextAreaContentProps extends ITextAreaContentDispatchProps, ITextAreaContentStateProps {}
 
 interface ITextAreaContentDispatchProps {
   processResults?: (newVal: string | number) => string | number;
