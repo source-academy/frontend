@@ -6,7 +6,7 @@ import * as React from 'react';
 
 // TODO: Fix
 import ContentDisplay from '../../commons/ContentDisplay';
-import { GradingOverview } from '../academy/grading/gradingShape';
+import { GradingOverview } from '../../feature/grading/gradingTypes';
 import { IGroupOverview, LeaderBoardInfo } from './DashboardTypes';
 
 type State = {
