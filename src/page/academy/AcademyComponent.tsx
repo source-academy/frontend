@@ -2,25 +2,23 @@ import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 // TODO: Fix
-import Grading from '../../containers/academy/grading';
+import StoryUpload from 'src/containers/game-dev/StoryUploadContainer';
 // TODO: Fix
-import StoryUpload from '../../containers/game-dev/StoryUploadContainer';
+import Game from 'src/containers/GameContainer';
 // TODO: Fix
-import Game from '../../containers/GameContainer';
-// TODO: Fix
-import GroundControl from '../../containers/groundControl/GroundControlContainer';
-// TODO: Fix
-import Sourcereel from '../../containers/sourcecast/SourcereelContainer';
+import GroundControl from 'src/containers/groundControl/GroundControlContainer';
+import Sourcereel from 'src/page/academy/sourcereel/SourcereelComponent';
+import Grading from 'src/page/academy/grading/GradingContainer';
 // TODO: Import from commons
-import { isAcademyRe } from '../../reducers/session';
+import { isAcademyRe } from 'src/reducers/session';
 // TODO: Import from commons
-import { Role } from '../../reducers/states';
-import DashboardContainer from '../dashboard/DashboardContainer';
-import AssessmentContainer from '../../feature/assessment/AssessmentContainer';
-import MaterialUploadContainer from '../../feature/material/materialUpload/MaterialUploadContainer';
-import { HistoryHelper } from '../../utils/history';
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
-import { AssessmentCategories, AssessmentCategory } from '../../feature/assessment/AssessmentTypes';
+import { Role } from 'src/reducers/states';
+import DashboardContainer from 'src/page/dashboard/DashboardContainer';
+import AssessmentContainer from 'src/feature/assessment/AssessmentContainer';
+import MaterialUploadContainer from 'src/feature/material/materialUpload/MaterialUploadContainer';
+import { HistoryHelper } from 'src/utils/history';
+import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
+import { AssessmentCategories, AssessmentCategory } from 'src/feature/assessment/AssessmentTypes';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBarComponent';
 
 interface IAcademyProps extends IAcademyOwnProps,

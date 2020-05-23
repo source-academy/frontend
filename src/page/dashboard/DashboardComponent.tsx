@@ -4,7 +4,6 @@ import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 
-// TODO: Fix
 import ContentDisplay from '../../commons/ContentDisplay';
 import { GradingOverview } from '../../feature/grading/gradingTypes';
 import { IGroupOverview, LeaderBoardInfo } from './DashboardTypes';
