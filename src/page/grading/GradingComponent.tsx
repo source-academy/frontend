@@ -16,14 +16,14 @@ import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { OwnProps as GradingWorkspaceProps } from 'src/components/academy/grading/GradingWorkspace';
-import { filterNotificationsBySubmission } from 'src/components/notification/NotificationHelpers';
+import NotificationBadge from '../../feature/notificationBadge/NotificationBadgeContainer';
+import { filterNotificationsBySubmission } from '../../feature/notificationBadge/notificationBadgeHelper';
 import {
   Notification,
   NotificationFilterFunction
-} from 'src/components/notification/notificationShape';
-import GradingWorkspaceContainer from 'src/containers/academy/grading/GradingWorkspaceContainer';
-import NotificationBadge from 'src/containers/notification/NotificationBadge';
+} from '../../feature/notificationBadge/NotificationBadgeTypes';
+import { GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspaceComponent';
+import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
 
 import { Role } from 'src/reducers/states';
 import { stringParamToInt } from 'src/utils/paramParseHelpers';
@@ -240,7 +240,7 @@ class Grading extends React.Component<IGradingProps, State> {
 
     /* Create a workspace to grade a submission. */
     if (submissionId !== null) {
-      const props: GradingWorkspaceProps = {
+      const props: GradingWorkspaceOwnProps = {
         submissionId,
         questionId
       };

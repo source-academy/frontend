@@ -5,9 +5,8 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 
 // TODO: Fix
-// import { GradingOverview } from '../academy/grading/gradingShape';
-import { GradingOverview } from 'src/components/academy/grading/gradingShape';
 import ContentDisplay from '../../commons/ContentDisplay';
+import { GradingOverview } from '../../feature/grading/gradingTypes';
 import { IGroupOverview, LeaderBoardInfo } from './DashboardTypes';
 
 type State = {

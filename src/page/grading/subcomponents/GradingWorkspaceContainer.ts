@@ -35,7 +35,7 @@ import {
 import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
 import { Library } from '../../../feature/assessment/AssessmentTypes';
 import { IPosition } from '../../../feature/editor/EditorComponent';
-import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspace';
+import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 

@@ -3,8 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import GradingEditor from 'src/containers/academy/grading/GradingEditorContainer';
-import ChatApp from 'src/containers/ChatContainer';
+import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
 import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
 import { USE_CHATKIT } from 'src/utils/constants';
 import { history } from 'src/utils/history';
@@ -35,10 +34,13 @@ import {
 } from '../../../feature/sideContent/SideContentComponent';
 import ToneMatrix from '../../../feature/sideContent/ToneMatrix';
 import Workspace, { IWorkspaceProps } from '../../../feature/workspace/WorkspaceComponent';
+import GradingEditor from './GradingEditorContainer';
 
-export type GradingIWorkspaceProps = DispatchProps & OwnProps & StateProps;
+export type GradingIWorkspaceProps = GradingWorkspaceDispatchProps &
+  GradingWorkspaceOwnProps &
+  GradingWorkspaceStateProps;
 
-export type StateProps = {
+export type GradingWorkspaceStateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
   editorPrepend: string;
@@ -61,12 +63,12 @@ export type StateProps = {
   storedQuestionId?: number;
 };
 
-export type OwnProps = {
+export type GradingWorkspaceOwnProps = {
   submissionId: number;
   questionId: number;
 };
 
-export type DispatchProps = {
+export type GradingWorkspaceDispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;

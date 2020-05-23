@@ -12,8 +12,8 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { Prompt } from 'react-router';
-import { controlButton } from 'src/components/commons';
-import Markdown from 'src/components/commons/Markdown';
+import controlButton from '../../../commons/ControlButton';
+import Markdown from '../../../commons/Markdown';
 
 import { getPrettyDate } from 'src/utils/dateHelpers';
 import { showSuccessMessage, showWarningMessage } from 'src/utils/notification';
