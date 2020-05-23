@@ -204,5 +204,5 @@ function getMissionPointer(missions, callback) {
   if (missionPointer === undefined) {
     missionPointer = missions[0];
   }
-  callback(missionPointer.story);
+  callback(missionPointer && missionPointer.story);
 }

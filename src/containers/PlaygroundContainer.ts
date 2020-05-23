@@ -30,11 +30,13 @@ import {
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
+  shortenURL,
   toggleEditorAutorun,
   toggleUsingSubst,
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
+  updateShortURL,
   WorkspaceLocation,
   WorkspaceLocations
 } from '../actions';
@@ -57,6 +59,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   newCursorPosition: state.workspaces.playground.newCursorPosition,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
+  shortURL: state.playground.shortURL,
   replValue: state.workspaces.playground.replValue,
   sharedbAceIsInviting: state.workspaces.playground.sharedbAceIsInviting,
   sharedbAceInitValue: state.workspaces.playground.sharedbAceInitValue,
@@ -92,6 +95,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setEditorBreakpoint(breakpoints, workspaceLocation),
       handleFinishInvite: () => finishInvite(workspaceLocation),
       handleGenerateLz: generateLzString,
+      handleShortenURL: (s: string) => shortenURL(s),
+      handleUpdateShortURL: (s: string) => updateShortURL(s),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
