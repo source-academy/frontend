@@ -5,7 +5,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import Academy from 'src/pages/academy/AcademyContainer';
 import Login from 'src/pages/login/LoginContainer';
-import Material from '../containers/material/MaterialContainer';
+import Material from '../../containers/material/MaterialContainer';
 import MissionControlContainer from 'src/pages/missionControl/MissionControlContainer';
 import Playground from 'src/pages/playground/PlaygroundContainer';
 import SourcecastContainer from 'src/pages/sourcecast/SourcecastContainer';
