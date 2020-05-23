@@ -417,7 +417,10 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
 };
 
 export const defaultSession: ISessionState = {
-  accessToken: undefined,
+  accessToken:
+    process.env.NODE_ENV === 'development' && process.env.REACT_APP_ACCESS_TOKEN
+      ? process.env.REACT_APP_ACCESS_TOKEN
+      : undefined,
   announcements: [
     {
       author: 'Aministrator',
@@ -441,8 +444,18 @@ export const defaultSession: ISessionState = {
   materialIndex: null,
   maxGrade: 0,
   maxXp: 0,
-  refreshToken: undefined,
-  role: undefined,
+  refreshToken:
+    process.env.NODE_ENV === 'development' && process.env.REACT_APP_REFRESH_TOKEN
+      ? process.env.REACT_APP_REFRESH_TOKEN
+      : undefined,
+  role:
+    process.env.NODE_ENV === 'development' && process.env.REACT_APP_USER_ROLE
+      ? process.env.REACT_APP_USER_ROLE === 'admin'
+        ? Role.Admin
+        : process.env.REACT_APP_USER_ROLE === 'staff'
+        ? Role.Staff
+        : Role.Student
+      : undefined,
   name: undefined,
   story: {
     story: '',
