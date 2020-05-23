@@ -7,7 +7,7 @@ import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
 import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
 import { USE_CHATKIT } from 'src/utils/constants';
 import { history } from 'src/utils/history';
-import Markdown from '../../../commons/Markdown';
+import Markdown from 'src/commons/Markdown';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -15,7 +15,7 @@ import {
   ITestcase,
   Library,
   QuestionTypes
-} from '../../../feature/assessment/AssessmentTypes';
+} from 'src/feature/assessment/AssessmentTypes';
 import {
   ClearButton,
   EvalButton,
@@ -23,17 +23,17 @@ import {
   PreviousButton,
   QuestionViewButton,
   RunButton
-} from '../../../feature/controlBar';
-import { ControlBarProps } from '../../../feature/controlBar/ControlBarComponent';
-import { IPosition } from '../../../feature/editor/EditorComponent';
-import { Grading, IAnsweredQuestion } from '../../../feature/grading/gradingTypes';
-import Autograder from '../../../feature/sideContent/Autograder';
+} from 'src/feature/controlBar';
+import { ControlBarProps } from 'src/feature/controlBar/ControlBarComponent';
+import { IPosition } from 'src/feature/editor/EditorComponent';
+import { Grading, IAnsweredQuestion } from 'src/feature/grading/gradingTypes';
+import Autograder from 'src/feature/sideContent/Autograder';
 import {
   SideContentProps,
   SideContentTab
-} from '../../../feature/sideContent/SideContentComponent';
-import ToneMatrix from '../../../feature/sideContent/ToneMatrix';
-import Workspace, { IWorkspaceProps } from '../../../feature/workspace/WorkspaceComponent';
+} from 'src/feature/sideContent/SideContentComponent';
+import ToneMatrix from 'src/feature/sideContent/ToneMatrix';
+import Workspace, { IWorkspaceProps } from 'src/feature/workspace/WorkspaceComponent';
 import GradingEditor from './GradingEditorContainer';
 
 export type GradingIWorkspaceProps = GradingWorkspaceDispatchProps &

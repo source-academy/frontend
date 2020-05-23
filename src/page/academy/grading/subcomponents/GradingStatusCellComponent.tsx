@@ -2,8 +2,8 @@ import { Icon, IconName, Intent, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { GradingStatuses } from '../../../feature/assessment/AssessmentTypes';
-import { GradingOverview } from '../../../feature/grading/gradingTypes';
+import { GradingStatuses } from 'src/feature/assessment/AssessmentTypes';
+import { GradingOverview } from 'src/feature/grading/gradingTypes';
 
 type GradingStatusCellProps = {
   data: GradingOverview;

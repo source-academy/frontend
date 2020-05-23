@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { submitGrading, submitGradingAndContinue } from 'src/actions';
-import GradingEditor, { DispatchProps } from 'src/components/academy/grading/GradingEditor';
+import GradingEditor, { DispatchProps } from './GradingEditorComponent';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
   bindActionCreators<DispatchProps>(

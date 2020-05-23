@@ -33,13 +33,17 @@ import {
   updateCurrentSubmissionId
 } from 'src/actions/workspaces';
 import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
-import { Library } from '../../../feature/assessment/AssessmentTypes';
-import { IPosition } from '../../../feature/editor/EditorComponent';
-import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';
+import { Library } from 'src/feature/assessment/AssessmentTypes';
+import { IPosition } from 'src/feature/editor/EditorComponent';
+import GradingWorkspace, { 
+  GradingWorkspaceDispatchProps, 
+  GradingWorkspaceOwnProps, 
+  GradingWorkspaceStateProps 
+} from './GradingWorkspaceComponent';
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<GradingWorkspaceStateProps, GradingWorkspaceOwnProps, IState> = (state, props) => {
   return {
     autogradingResults: state.workspaces.grading.autogradingResults,
     editorPrepend: state.workspaces.grading.editorPrepend,
@@ -64,8 +68,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
   };
 };
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
-  bindActionCreators<DispatchProps>(
+const mapDispatchToProps: MapDispatchToProps<GradingWorkspaceDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+  bindActionCreators<GradingWorkspaceDispatchProps>(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>
         updateActiveTab(activeTab, workspaceLocation),

@@ -2,9 +2,9 @@ import { Alert, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import controlButton from '../../../commons/ControlButton';
-import { GradingOverview } from '../../../feature/grading/gradingTypes';
-import { Role } from '../../../reducers/states';
+import controlButton from 'src/commons/ControlButton';
+import { GradingOverview } from 'src/feature/grading/gradingTypes';
+import { Role } from 'src/reducers/states';
 
 export interface IUnsubmitCellProps {
   data: GradingOverview;

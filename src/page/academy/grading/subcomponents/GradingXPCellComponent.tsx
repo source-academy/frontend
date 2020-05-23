@@ -1,6 +1,6 @@
 import { Position, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
-import { GradingOverview } from '../../../feature/grading/gradingTypes';
+import { GradingOverview } from 'src/feature/grading/gradingTypes';
 
 type XPCellProps = {
   data: GradingOverview;
