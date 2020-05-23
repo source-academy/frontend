@@ -5,7 +5,7 @@ import { fetchAssessmentOverviews, saveCanvas, saveUserData } from '../actions';
 import Game, { DispatchProps, StateProps } from '../components/academy/game';
 import { IState } from '../reducers/states';
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleSaveCanvas: saveCanvas,

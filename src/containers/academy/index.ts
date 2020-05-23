@@ -1,9 +1,9 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { withRouter } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router';
 
 import { bindActionCreators } from 'redux';
 import { fetchNotifications } from '../../actions';
-import Academy, { IDispatchProps, IStateProps } from '../../components/academy';
+import Academy, { IDispatchProps, IOwnProps, IStateProps } from '../../components/academy';
 import { IState } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
@@ -18,7 +18,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = dispatch =>
     dispatch
   );
 
-export default withRouter(
+interface IPropType extends IOwnProps, RouteComponentProps<any> {}
+
+export default withRouter<IPropType>(
   connect(
     mapStateToProps,
     mapDispatchToProps

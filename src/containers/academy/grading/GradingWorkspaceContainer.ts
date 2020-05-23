@@ -68,8 +68,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
   };
 };
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
-  bindActionCreators<DispatchProps>(
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
+  bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>
         updateActiveTab(activeTab, workspaceLocation),

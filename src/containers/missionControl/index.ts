@@ -13,7 +13,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = (state, props)
   return stateProps;
 };
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,

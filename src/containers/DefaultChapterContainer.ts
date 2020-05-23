@@ -13,7 +13,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sourceVariant: state.workspaces.playground.context.variant
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleFetchChapter: () => fetchChapter(),

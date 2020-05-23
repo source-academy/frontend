@@ -1,4 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { fetchMaterialIndex } from '../../actions';
@@ -10,7 +11,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   materialIndex: state.session.materialIndex
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleFetchMaterialIndex: (id?: number) => fetchMaterialIndex(id)
@@ -18,7 +19,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Material);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Material)
+);
