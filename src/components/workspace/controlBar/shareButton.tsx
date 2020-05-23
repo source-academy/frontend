@@ -81,6 +81,12 @@ export class ShareButton extends React.PureComponent<ShareButtonProps, ShareButt
     );
   }
 
+  public componentDidUpdate(prevProps: ShareButtonProps) {
+    if (this.props.shortURL !== prevProps.shortURL) {
+      this.setState({ keyword: '', isLoading: false });
+    }
+  }
+
   private toggleButton() {
     if (this.props.handleGenerateLz) {
       this.props.handleGenerateLz();
