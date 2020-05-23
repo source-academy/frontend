@@ -8,7 +8,7 @@ import * as React from 'react';
 import { getStandardDate } from 'src/utils/dateHelpers';
 import SourcastDeleteCell from './SourcecastDeleteCell';
 import SourcecastSelectCell from './SourcecastSelectCell';
-import { IPlaybackData, ISourcecastData } from 'src/feature/sourcecast/SourcecastTypes';
+import { IPlaybackData, ISourcecastData } from 'src/features/sourcecast/SourcecastTypes';
 
 /**
  * Column Definitions are defined within the state, so that data

@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
-import { ISourcecastData } from 'src/feature/sourcecast/SourcecastTypes';
+import { ISourcecastData } from 'src/features/sourcecast/SourcecastTypes';
 
 interface IDeleteCellProps {
   data: ISourcecastData;

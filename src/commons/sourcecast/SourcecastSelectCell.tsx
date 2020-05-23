@@ -2,7 +2,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
-import { IPlaybackData, ISourcecastData } from 'src/feature/sourcecast/SourcecastTypes';
+import { IPlaybackData, ISourcecastData } from 'src/features/sourcecast/SourcecastTypes';
 
 interface ISelectCellProps {
   data: ISourcecastData;

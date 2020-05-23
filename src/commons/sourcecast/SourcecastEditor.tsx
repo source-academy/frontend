@@ -12,7 +12,7 @@ import { ICodeDelta,
   IPosition, 
   ISelectionRange, 
   KeyboardCommand 
-} from 'src/feature/sourcecast/SourcecastTypes';
+} from 'src/features/sourcecast/SourcecastTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor
