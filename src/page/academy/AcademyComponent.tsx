@@ -21,7 +21,7 @@ import MaterialUploadContainer from '../../feature/material/materialUpload/Mater
 import { HistoryHelper } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories, AssessmentCategory } from '../../feature/assessment/AssessmentTypes';
-import AcademyNavigationBar from './subcomponent/AcademyNavigationBarComponent';
+import AcademyNavigationBar from './subcomponents/AcademyNavigationBarComponent';
 
 interface IAcademyProps extends IAcademyOwnProps,
   IAcademyStateProps, IAcademyDispatchProps, RouteComponentProps<{}> { }
