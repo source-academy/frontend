@@ -5,11 +5,11 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
 // TODO: Import from commons
-import { Role } from '../../../reducers/states';
-import { assessmentCategoryLink } from '../../../utils/paramParseHelpers';
-import { AssessmentCategories } from '../../../commons/assessment/AssessmentTypes';
-import NotificationBadgeContainer from '../../../commons/notificationBadge/NotificationBadgeContainer';
-import { filterNotificationsByType } from '../../../commons/notificationBadge/NotificationBadgeHelper';
+import { Role } from 'src/reducers/states';
+import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
+import { AssessmentCategories } from 'src/commons/assessment/AssessmentTypes';
+import NotificationBadgeContainer from 'src/commons/notificationBadge/NotificationBadgeContainer';
+import { filterNotificationsByType } from 'src/commons/notificationBadge/NotificationBadgeHelper';
 import DefaultChapterContainer from './AcademyDefaultChapterContainer';
 
 type OwnProps = {
