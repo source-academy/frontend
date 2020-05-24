@@ -84,7 +84,7 @@
     "typesafe-actions": "^4.4.2",
     "utility-types": "^3.7.0",
     "xml2js": "^0.4.19",
-    "yareco": "^0.1.4"
+    "yareco": "^0.1.5"
   },
   "devDependencies": {
     "@blueprintjs/core": "^3.24.0",

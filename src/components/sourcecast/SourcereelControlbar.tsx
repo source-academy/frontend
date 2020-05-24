@@ -136,7 +136,7 @@ class SourcereelControlbar extends React.PureComponent<
     handleTimerResume();
     const updater = setInterval(this.updateTimerDuration, 100);
     this.setState({ updater });
-    this.recorder.resume();
+    this.recorder.resume(5);
   };
 
   private handleRecorderStopping = () => {
@@ -157,8 +157,10 @@ class SourcereelControlbar extends React.PureComponent<
     handleTimerReset();
     clearInterval(this.state.updater!);
     this.setState({ duration: 0 });
-    this.recorder.stop();
-    this.recorder.clear();
+    if (this.recorder) {
+      this.recorder.stop();
+      this.recorder.clear();
+    }
   };
 
   private handleRecorderSaving = () => {
