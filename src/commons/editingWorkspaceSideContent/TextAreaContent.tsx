@@ -1,8 +1,9 @@
 import * as React from 'react';
 import Textarea from 'react-textarea-autosize';
 
-import Markdown from 'src/commons/Markdown';
 import { IAssessment } from 'src/commons/assessment/AssessmentTypes';
+import Markdown from 'src/commons/Markdown';
+
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 interface ITextAreaContentProps extends ITextAreaContentDispatchProps, ITextAreaContentStateProps {}

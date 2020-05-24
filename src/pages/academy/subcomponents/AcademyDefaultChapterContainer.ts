@@ -2,13 +2,11 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { changeChapter, fetchChapter } from 'src/actions'; 
+import { IChapter } from 'src/commons/controlBar/ChapterSelect';
+import { IState } from 'src/reducers/states';
 
 import { DefaultChapter, IDispatchProps, IStateProps } from './AcademyDefaultChapterComponent';
-import { IChapter } from 'src/commons/controlBar/ChapterSelect';
-// TODO: Import from commons
-import { changeChapter, fetchChapter } from 'src/actions';
-// TODO: Import from commons
-import { IState } from 'src/reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   sourceChapter: state.workspaces.playground.context.chapter,

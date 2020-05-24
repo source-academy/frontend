@@ -5,10 +5,11 @@ import 'ag-grid/dist/styles/ag-grid.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
+import { IPlaybackData, ISourcecastData } from 'src/features/sourcecast/SourcecastTypes';
 import { getStandardDate } from 'src/utils/dateHelpers';
+
 import SourcastDeleteCell from './SourcecastDeleteCell';
 import SourcecastSelectCell from './SourcecastSelectCell';
-import { IPlaybackData, ISourcecastData } from 'src/features/sourcecast/SourcecastTypes';
 
 /**
  * Column Definitions are defined within the state, so that data

@@ -4,9 +4,9 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import controlButton from 'src/commons/ControlButton';
-import { GradingOverviewWithNotifications } from 'src/features/grading/GradingTypes';
 import { filterNotificationsBySubmission } from 'src/commons/notificationBadge/NotificationBadgeHelper';
 import { NotificationFilterFunction } from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { GradingOverviewWithNotifications } from 'src/features/grading/GradingTypes';
 
 type EditGradingCellProps = {
   data: GradingOverviewWithNotifications;

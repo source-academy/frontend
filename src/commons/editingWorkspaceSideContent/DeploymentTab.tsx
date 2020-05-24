@@ -3,21 +3,20 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
-import controlButton from 'src/commons/ControlButton';
-// TODO: import from commons
-import { externalLibraries } from 'src/reducers/externalLibraries';
-// TODO: import from commons
-import { sourceLanguages, styliseChapter } from 'src/reducers/states';
+import { Variant } from 'js-slang/dist/types';
+
 import {
   emptyLibrary,
   ExternalLibraryName,
   IAssessment,
   Library
 } from 'src/commons/assessment/AssessmentTypes';
+import controlButton from 'src/commons/ControlButton';
+import { externalLibraries } from 'src/reducers/externalLibraries'; // TODO: Import from commons
+import { sourceLanguages, styliseChapter } from 'src/reducers/states'; // TODO: Import from commons
+
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
-
-import { Variant } from 'js-slang/dist/types';
 
 interface IProps {
   assessment: IAssessment;

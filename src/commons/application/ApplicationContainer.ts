@@ -2,6 +2,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Variant } from 'js-slang/dist/types';
+
 import { beginClearContext, logOut, setEditorBreakpoint, updateEditorValue } from 'src/actions';
 import {
   changeExecTime,
@@ -10,12 +12,11 @@ import {
   promptAutocomplete,
   WorkspaceLocations
 } from 'src/actions/workspaces';
-import Application, { IDispatchProps, IStateProps } from './ApplicationComponent';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import { externalLibraries } from 'src/reducers/externalLibraries';
 import { IState } from 'src/reducers/states';
 
-import { Variant } from 'js-slang/dist/types';
+import Application, { IDispatchProps, IStateProps } from './ApplicationComponent';
 
 /**
  * Provides the title of the application for display.

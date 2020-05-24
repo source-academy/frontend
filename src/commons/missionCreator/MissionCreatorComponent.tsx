@@ -3,13 +3,13 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { parseString } from 'xml2js';
 
-import controlButton from 'src/commons/ControlButton';
 import {
   assessmentTemplate,
   IAssessment,
   IAssessmentOverview,
   overviewTemplate
 } from 'src/commons/assessment/AssessmentTypes';
+import controlButton from 'src/commons/ControlButton';
 import {
   makeEntireAssessment,
   retrieveLocalAssessment,

@@ -1,14 +1,15 @@
 import { Card, Classes, Pre } from '@blueprintjs/core';
 import * as classNames from 'classnames';
-import { parseError } from 'js-slang';
-import { Variant } from 'js-slang/dist/types';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
-// TODO: Import from commons
-import { InterpreterOutput } from 'src/reducers/states';
+import { parseError } from 'js-slang';
+import { Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
+
 import CanvasOutput from 'src/commons/sideContent/CanvasOutput';
+import { InterpreterOutput } from 'src/reducers/states'; // TODO: Import from commons
+
 import ReplInput, { IReplInputProps } from './ReplInput';
 
 export interface IReplProps extends IReplDispatchProps, IReplStateProps {}

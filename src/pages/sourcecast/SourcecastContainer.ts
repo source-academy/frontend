@@ -34,7 +34,6 @@ import {
   WorkspaceLocation
 } from 'src/actions';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
-import Sourcecast, { IDispatchProps, IStateProps } from './SourcecastComponent';
 import {
   ICodeDelta,
   Input,
@@ -43,6 +42,7 @@ import {
   PlaybackStatus
 } from 'src/features/sourcecast/SourcecastTypes';
 import { IState, SideContentType } from 'src/reducers/states';
+import Sourcecast, { IDispatchProps, IStateProps } from './SourcecastComponent';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   audioUrl: state.workspaces.sourcecast.audioUrl,

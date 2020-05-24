@@ -1,7 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-// TODO: Import form commons
 import {
   beginClearContext,
   beginDebuggerPause,
@@ -26,17 +25,16 @@ import {
   updateHasUnsavedChanges,
   updateReplValue,
   updateWorkspace
-} from 'src/actions';
-// TODO: Import form commons
+} from 'src/actions'; // TODO: Import from commons
 import {
   resetWorkspace,
   updateCurrentAssessmentId,
   WorkspaceLocation
-} from 'src/actions/workspaces';
-// TODO: Import from commons
-import { IState, IWorkspaceState } from 'src/reducers/states';
+} from 'src/actions/workspaces'; // TODO: Import form commons
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { IPosition } from 'src/commons/editor/EditorComponent';
+import { IState, IWorkspaceState } from 'src/reducers/states'; // TODO: Import from commons
+
 import EditingWorkspace, {
   EditingWorkspaceDispatchProps,
   EditingWorkspaceOwnProps,

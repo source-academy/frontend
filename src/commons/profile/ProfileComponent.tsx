@@ -2,8 +2,6 @@ import { Drawer, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-// TODO: Import from commons
-import { Role } from 'src/reducers/states';
 import {
   AssessmentCategories,
   AssessmentCategory,
@@ -11,6 +9,8 @@ import {
   GradingStatuses,
   IAssessmentOverview
 } from 'src/commons/assessment/AssessmentTypes';
+import { Role } from 'src/reducers/states'; // TODO: Import from commons
+
 import ProfileCard from './ProfileCard';
 
 export interface IProfileProps

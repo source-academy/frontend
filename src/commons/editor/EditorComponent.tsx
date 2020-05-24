@@ -17,10 +17,10 @@ import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/
 import 'js-slang/dist/editors/ace/theme/source';
 import { Variant } from 'js-slang/dist/types';
 
-// TODO: Import from commons
-import { Documentation } from 'src/reducers/documentation';
-import { LINKS } from 'src/utils/constants';
 import { checkSessionIdExists } from 'src/commons/collabEditing/CollabEditingHelper';
+import { Documentation } from 'src/reducers/documentation'; // TODO: Import from commons
+import { LINKS } from 'src/utils/constants';
+
 import AceRange from './AceRange';
 
 /**

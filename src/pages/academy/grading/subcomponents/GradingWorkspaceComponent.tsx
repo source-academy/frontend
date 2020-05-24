@@ -3,11 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
-import { USE_CHATKIT } from 'src/utils/constants';
-import { history } from 'src/utils/history';
-import Markdown from 'src/commons/Markdown';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -26,7 +21,7 @@ import {
 } from 'src/commons/controlBar';
 import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
 import { IPosition } from 'src/commons/editor/EditorComponent';
-import { Grading, IAnsweredQuestion } from 'src/features/grading/GradingTypes';
+import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
 import {
   SideContentProps,
@@ -34,6 +29,12 @@ import {
 } from 'src/commons/sideContent/SideContentComponent';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
+import { Grading, IAnsweredQuestion } from 'src/features/grading/GradingTypes';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
+import { USE_CHATKIT } from 'src/utils/constants';
+import { history } from 'src/utils/history';
+
 import GradingEditor from './GradingEditorContainer';
 
 export type GradingIWorkspaceProps = GradingWorkspaceDispatchProps &
@@ -176,18 +177,18 @@ class GradingWorkspace extends React.Component<GradingIWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorSessionId: '',
-              editorValue: this.props.editorValue!,
-              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-              handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange,
-              breakpoints: this.props.breakpoints,
-              highlightedLines: this.props.highlightedLines,
-              newCursorPosition: this.props.newCursorPosition,
-              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
-            }
+            editorSessionId: '',
+            editorValue: this.props.editorValue!,
+            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
+            handleEditorEval: this.props.handleEditorEval,
+            handleEditorValueChange: this.props.handleEditorValueChange,
+            breakpoints: this.props.breakpoints,
+            highlightedLines: this.props.highlightedLines,
+            newCursorPosition: this.props.newCursorPosition,
+            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+            isEditorAutorun: false
+          }
           : undefined,
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
@@ -196,7 +197,7 @@ class GradingWorkspace extends React.Component<GradingIWorkspaceProps> {
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcqProps: {
         mcq: question as IMCQQuestion,
-        handleMCQSubmit: (i: number) => {}
+        handleMCQSubmit: (i: number) => { }
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -319,8 +320,8 @@ class GradingWorkspace extends React.Component<GradingIWorkspaceProps> {
             submissionId={this.props.submissionId}
           />
         ) : (
-          <span>Chatkit disabled.</span>
-        ),
+            <span>Chatkit disabled.</span>
+          ),
         id: SideContentType.chat,
         disabled: !USE_CHATKIT
       },

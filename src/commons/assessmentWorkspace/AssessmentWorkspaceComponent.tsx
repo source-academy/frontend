@@ -10,19 +10,10 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 
-// TODO: Remove Chat Code
-import controlButton from 'src/commons/ControlButton';
-import Markdown from 'src/commons/Markdown';
-import ChatApp from 'src/containers/ChatContainer';
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
-import { USE_CHATKIT } from 'src/utils/constants';
-import { beforeNow } from 'src/utils/dateHelpers';
-import { history } from 'src/utils/history';
-import { showWarningMessage } from 'src/utils/notification';
-import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
+import { stringify } from 'js-slang/dist/utils/stringify';
+
 import {
   AssessmentCategories,
   AutogradingResult,
@@ -45,17 +36,27 @@ import {
   RunButton,
   SaveButton
 } from 'src/commons/controlBar/index';
+import controlButton from 'src/commons/ControlButton';
 import { IPosition } from 'src/commons/editor/EditorComponent';
+import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
 import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
+import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
+import { USE_CHATKIT } from 'src/utils/constants';
+import { beforeNow } from 'src/utils/dateHelpers';
+import { history } from 'src/utils/history';
+import { showWarningMessage } from 'src/utils/notification';
+import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
+
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export interface IAssessmentWorkspaceProps
-  extends IAssessmentWorkspaceDispatchProps,
-    IAssessmentWorkspaceStateProps,
-    IAssessmentWorkspaceOwnProps {}
+extends IAssessmentWorkspaceDispatchProps,
+IAssessmentWorkspaceStateProps,
+IAssessmentWorkspaceOwnProps {}
 
 export interface IAssessmentWorkspaceStateProps {
   assessment?: IAssessment;

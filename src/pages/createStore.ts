@@ -1,15 +1,15 @@
 import { routerMiddleware } from 'connected-react-router';
 import { History } from 'history';
 import { throttle } from 'lodash';
-
 import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import { ISavedState, loadStoredState, saveState } from './localStorage';
 import createRootReducer from 'src/reducers';
 import { defaultState } from 'src/reducers/states';
 import mainSaga from 'src/sagas';
 import { history as appHistory } from 'src/utils/history';
+
+import { ISavedState, loadStoredState, saveState } from './localStorage';
 
 export const store = createStore(appHistory);
 

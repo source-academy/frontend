@@ -24,16 +24,17 @@ import { RouteComponentProps } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import defaultCoverImage from 'src/assets/default_cover_image.jpg';
+import { IAssessmentWorkspaceOwnProps } from 'src/commons/assessmentWorkspace/AssessmentWorkspaceComponent';
+import AssessmentWorkspaceContainer from 'src/commons/assessmentWorkspace/AssessmentWorkspaceContainer';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import controlButton from 'src/commons/ControlButton';
 import Markdown from 'src/commons/Markdown';
 import NotificationBadge from 'src/commons/notificationBadge/NotificationBadgeContainer';
-import { beforeNow, getPrettyDate } from 'src/utils/dateHelpers';
-import { assessmentCategoryLink, stringParamToInt } from 'src/utils/paramParseHelpers';
-import { IAssessmentWorkspaceOwnProps } from 'src/commons/assessmentWorkspace/AssessmentWorkspaceComponent';
-import AssessmentWorkspaceContainer from 'src/commons/assessmentWorkspace/AssessmentWorkspaceContainer';
 import { filterNotificationsByAssessment } from 'src/commons/notificationBadge/NotificationBadgeHelper';
 import { NotificationFilterFunction } from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { beforeNow, getPrettyDate } from 'src/utils/dateHelpers';
+import { assessmentCategoryLink, stringParamToInt } from 'src/utils/paramParseHelpers';
+
 import {
   AssessmentCategory,
   AssessmentStatuses,

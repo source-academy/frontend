@@ -1,24 +1,20 @@
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
-// TODO: Fix
-import StoryUpload from 'src/containers/game-dev/StoryUploadContainer';
-// TODO: Fix
-import Game from 'src/containers/GameContainer';
-// TODO: Fix
-import GroundControl from 'src/containers/groundControl/GroundControlContainer';
-import Sourcereel from 'src/pages/academy/sourcereel/SourcereelComponent';
-import Grading from 'src/pages/academy/grading/GradingContainer';
-// TODO: Import from commons
-import { isAcademyRe } from 'src/reducers/session';
-// TODO: Import from commons
-import { Role } from 'src/reducers/states';
-import DashboardContainer from 'src/pages/academy/dashboard/DashboardContainer';
 import AssessmentContainer from 'src/commons/assessment/AssessmentContainer';
-import MaterialUploadContainer from 'src/archive/material/materialUpload/MaterialUploadContainer';
+import { AssessmentCategories, AssessmentCategory } from 'src/commons/assessment/AssessmentTypes';
+import StoryUpload from 'src/containers/game-dev/StoryUploadContainer'; // TODO: Fix
+import Game from 'src/containers/GameContainer'; // TODO: Fix
+import GroundControl from 'src/containers/groundControl/GroundControlContainer'; // TODO: Fix
+import MaterialUploadContainer from 'src/containers/material/MaterialUploadContainer'; // TODO: Remove
+import DashboardContainer from 'src/pages/academy/dashboard/DashboardContainer';
+import Grading from 'src/pages/academy/grading/GradingContainer';
+import Sourcereel from 'src/pages/academy/sourcereel/SourcereelComponent';
+import { isAcademyRe } from 'src/reducers/session'; // TODO: Import from commons
+import { Role } from 'src/reducers/states'; // TODO: Import from commons
 import { HistoryHelper } from 'src/utils/history';
 import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
-import { AssessmentCategories, AssessmentCategory } from 'src/commons/assessment/AssessmentTypes';
+
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBarComponent';
 
 interface IAcademyProps extends IAcademyOwnProps,

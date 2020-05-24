@@ -38,8 +38,9 @@ import {
 } from 'src/actions';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import { Input, IPlaybackData, IPosition } from 'src/features/sourcecast/SourcecastTypes';
-import Sourcereel, { IDispatchProps, IStateProps } from './SourcereelComponent';
 import { IState, SideContentType } from 'src/reducers/states';
+
+import Sourcereel, { IDispatchProps, IStateProps } from './SourcereelComponent';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   breakpoints: state.workspaces.sourcereel.breakpoints,

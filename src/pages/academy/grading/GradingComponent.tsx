@@ -16,26 +16,27 @@ import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+
+import ContentDisplay from 'src/commons/ContentDisplay';
 import NotificationBadge from 'src/commons/notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsBySubmission } from 'src/commons/notificationBadge/NotificationBadgeHelper';
 import {
   Notification,
   NotificationFilterFunction
 } from 'src/commons/notificationBadge/NotificationBadgeTypes';
-import { GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspaceComponent';
-import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
-
-import { Role } from 'src/reducers/states';
-import { stringParamToInt } from 'src/utils/paramParseHelpers';
-import ContentDisplay from 'src/commons/ContentDisplay';
 import {
   GradingOverview,
   GradingOverviewWithNotifications
 } from 'src/features/grading/GradingTypes';
+import { Role } from 'src/reducers/states';
+import { stringParamToInt } from 'src/utils/paramParseHelpers';
+
 import EditGradingCell from './subcomponents/GradingEditGradingCellComponent';
 import GradeCell from './subcomponents/GradingGradeCellComponent';
 import GradingStatusCell from './subcomponents/GradingStatusCellComponent';
 import UnsubmitCell from './subcomponents/GradingUnsubmitCellComponent';
+import { GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspaceComponent';
+import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
 import XPCell from './subcomponents/GradingXPCellComponent';
 
 type State = {

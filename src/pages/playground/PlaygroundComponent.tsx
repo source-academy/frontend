@@ -7,13 +7,8 @@ import { RouteComponentProps } from 'react-router';
 
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
-// TODO: Import from commons
-import { InterpreterOutput, SideContentType } from 'src/reducers/states';
-// TODO: Import from commons
-import { generateSourceIntroduction } from 'src/utils/introductionHelper';
+
 import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/assessment/AssessmentTypes';
-import Markdown from 'src/commons/Markdown';
-import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {
   AutorunButtons,
   ChapterSelect,
@@ -25,13 +20,17 @@ import {
   ShareButton
 } from 'src/commons/controlBar/index';
 import { IPosition } from 'src/commons/editor/EditorComponent';
-import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
+import Markdown from 'src/commons/Markdown';
 import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import FaceapiDisplay from 'src/commons/sideContent/FaceapiDisplay';
 import Inspector from 'src/commons/sideContent/Inspector';
 import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
+import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import SubstVisualizer from 'src/commons/sideContent/SubstVisualizer';
 import VideoDisplay from 'src/commons/sideContent/VideoDisplay';
+import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import { InterpreterOutput, SideContentType } from 'src/reducers/states';
+import { generateSourceIntroduction } from 'src/utils/introductionHelper';
 
 export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
