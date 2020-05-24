@@ -26,7 +26,6 @@ import {
   ToggleEditModeButton
 } from 'src/commons/controlBar/index';
 import controlButton from 'src/commons/ControlButton';
-import Markdown from 'src/commons/Markdown';
 import { AutograderTab } from 'src/commons/editingWorkspaceSideContent/AutograderTab';
 import { DeploymentTab } from 'src/commons/editingWorkspaceSideContent/DeploymentTab';
 import { GradingTab } from 'src/commons/editingWorkspaceSideContent/GradingTab';
@@ -35,6 +34,7 @@ import { MCQQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/
 import { ProgrammingQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/ProgrammingQuestionTemplateTab';
 import { TextAreaContent } from 'src/commons/editingWorkspaceSideContent/TextAreaContent';
 import { IPosition } from 'src/commons/editor/EditorComponent';
+import Markdown from 'src/commons/Markdown';
 import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
