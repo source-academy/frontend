@@ -1,9 +1,9 @@
 import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
 
+import { ConnectedRouter } from 'connected-react-router';
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
 
 import ApplicationContainer from './containers/ApplicationContainer';
 import { store } from './createStore';

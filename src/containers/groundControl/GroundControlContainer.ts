@@ -18,7 +18,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   assessmentOverviews: state.session.assessmentOverviews ? state.session.assessmentOverviews : []
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAssessmentChangeDate: changeDateAssessment,
