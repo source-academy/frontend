@@ -2,8 +2,6 @@
  * would otherwise throw an error. See: https://stackoverflow.com/a/42611909/6910451
  */
 import { createBrowserHistory } from 'history';
-import { updateHistoryHelpers } from '../actions/session';
-import { store } from '../createStore';
 
 /**
  * HistoryHelper is a slice of the session property of the application redux
@@ -20,7 +18,3 @@ export type HistoryHelper = {
 type lastLocation = string | null;
 
 export const history = createBrowserHistory();
-
-history.listen((location, action) => {
-  store.dispatch(updateHistoryHelpers(location.pathname));
-});
