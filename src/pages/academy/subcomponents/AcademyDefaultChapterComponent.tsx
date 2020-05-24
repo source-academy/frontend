@@ -3,10 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+
 import { Variant } from 'js-slang/dist/types';
 
-// TODO: Import from commons
-import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/reducers/states';
+import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/reducers/states'; // TODO: Import from commons
 
 export interface IChapterProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 

@@ -1,16 +1,16 @@
-import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
-
 import { ConnectedRouter } from 'connected-react-router';
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
+import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
+
 import ApplicationContainer from 'src/commons/application/ApplicationContainer';
-import { store } from './createStore';
 import { LINKS, MODULE_BACKEND_URL, SOURCE_ACADEMY_VERSION } from 'src/utils/constants';
 import { history } from 'src/utils/history';
 import registerServiceWorker from 'src/utils/registerServiceWorker';
 
+import { store } from './createStore';
 import './styles/index.css';
 
 const rootContainer = document.getElementById('root') as HTMLElement;

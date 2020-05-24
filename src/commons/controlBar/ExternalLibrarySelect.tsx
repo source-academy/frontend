@@ -3,9 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
-// TODO: Import from commons
-import { externalLibraries } from 'src/reducers/externalLibraries';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
+import { externalLibraries } from 'src/reducers/externalLibraries'; // TODO: Import from commons
 
 /**
  * Defined for displaying an external library.

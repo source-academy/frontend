@@ -2,11 +2,10 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
+
 import { Variant } from 'js-slang/dist/types';
 
-import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
-import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {
   AutorunButtons,
   ChapterSelect,
@@ -14,12 +13,13 @@ import {
   EvalButton,
   ExternalLibrarySelect
 } from 'src/commons/controlBar/index';
-import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import Inspector from 'src/commons/sideContent/Inspector';
 import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
-import SourcecastControlbar, { ISourcecastControlbarProps } from './subcomponents/SourcecastControlbar';
+import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import SourcecastEditor, { ISourcecastEditorProps } from 'src/commons/sourcecast/SourcecastEditor';
+import SourcecastTable from 'src/commons/sourcecast/SourcecastTable';
+import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {
   ICodeDelta,
   Input,
@@ -28,7 +28,9 @@ import {
   ISourcecastData,
   PlaybackStatus
 } from 'src/features/sourcecast/SourcecastTypes';
-import SourcecastTable from 'src/commons/sourcecast/SourcecastTable';
+import { InterpreterOutput, SideContentType } from 'src/reducers/states';
+
+import SourcecastControlbar, { ISourcecastControlbarProps } from './subcomponents/SourcecastControlbar';
 
 export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 

@@ -32,9 +32,10 @@ import {
   resetWorkspace,
   updateCurrentSubmissionId
 } from 'src/actions/workspaces';
-import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { IPosition } from 'src/commons/editor/EditorComponent';
+import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
+
 import GradingWorkspace, { 
   GradingWorkspaceDispatchProps, 
   GradingWorkspaceOwnProps, 

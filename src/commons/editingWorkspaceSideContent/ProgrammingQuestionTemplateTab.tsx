@@ -4,10 +4,10 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
-// TODO: Import from commons
-import controlButton from 'src/commons/ControlButton';
-import { IWorkspaceState } from 'src/reducers/states';
 import { IAssessment } from 'src/commons/assessment/AssessmentTypes';
+import controlButton from 'src/commons/ControlButton';
+import { IWorkspaceState } from 'src/reducers/states'; // TODO: Import from commons
+
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 interface IQuestionEditorProps {

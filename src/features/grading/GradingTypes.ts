@@ -1,4 +1,3 @@
-import { Notification } from 'src/components/notification/notificationShape';
 import {
   AssessmentCategory,
   AutogradingResult,
@@ -7,6 +6,7 @@ import {
   ITestcase,
   MCQChoice
 } from 'src/commons/assessment/AssessmentTypes';
+import { Notification } from 'src/components/notification/notificationShape';
 
 /**
  * Information on a Grading, for a particular student submission

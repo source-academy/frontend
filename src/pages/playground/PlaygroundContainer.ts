@@ -1,6 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { Variant } from 'js-slang/dist/types';
 
 import {
@@ -41,9 +42,10 @@ import {
   WorkspaceLocations
 } from 'src/actions';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
-import Playground, { IDispatchProps, IStateProps } from './PlaygroundComponent';
 import { IPosition } from 'src/commons/editor/EditorComponent';
 import { IState, SideContentType } from 'src/reducers/states';
+
+import Playground, { IDispatchProps, IStateProps } from './PlaygroundComponent';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   editorSessionId: state.workspaces.playground.editorSessionId,

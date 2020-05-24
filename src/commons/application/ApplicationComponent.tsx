@@ -3,20 +3,20 @@ import * as qs from 'query-string';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
+import { Variant } from 'js-slang/dist/types';
+
+import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/assessment/AssessmentTypes';
+import NavigationBar from 'src/commons/navigationBar/NavigationBar';
+import Material from 'src/containers/material/MaterialContainer'; // TODO: Remove
 import Academy from 'src/pages/academy/AcademyContainer';
+import Contributors from 'src/pages/contributors/ContributorsComponent';
 import Login from 'src/pages/login/LoginContainer';
-import Material from '../../containers/material/MaterialContainer';
 import MissionControlContainer from 'src/pages/missionControl/MissionControlContainer';
+import NotFound from 'src/pages/notFound/NotFoundComponent';
 import Playground from 'src/pages/playground/PlaygroundContainer';
 import SourcecastContainer from 'src/pages/sourcecast/SourcecastContainer';
 import { Role, sourceLanguages } from 'src/reducers/states';
 import { stringParamToInt } from 'src/utils/paramParseHelpers';
-import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/assessment/AssessmentTypes';
-import Contributors from 'src/pages/contributors/ContributorsComponent';
-import NavigationBar from 'src/commons/navigationBar/NavigationBar';
-import NotFound from 'src/pages/notFound/NotFoundComponent';
-
-import { Variant } from 'js-slang/dist/types';
 
 export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 

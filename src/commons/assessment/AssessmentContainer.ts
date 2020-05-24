@@ -2,21 +2,19 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-// TODO: Import from commons
 import {
   acknowledgeNotifications,
   fetchAssessmentOverviews,
   submitAssessment
-} from 'src/actions/session';
-// TODO: Import from commons
-import { Role } from 'src/reducers/states';
-// TODO: Import from commons
-import { IState } from 'src/reducers/states';
+} from 'src/actions/session'; // TODO: Import from commons
+import { Role } from 'src/reducers/states'; // TODO: Import from commons
+import { IState } from 'src/reducers/states'; // TODO: Import from commons
+
 import Assessment, {
-  IAssessmentWorkspaceParams,
   IAssessmentDispatchProps,
   IAssessmentOwnProps,
-  IAssessmentStateProps
+  IAssessmentStateProps,
+  IAssessmentWorkspaceParams
 } from './AssessmentComponent';
 import { IAssessmentOverview } from './AssessmentTypes';
 

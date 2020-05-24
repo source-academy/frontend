@@ -3,11 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import controlButton from 'src/commons/ControlButton';
-import Markdown from 'src/commons/Markdown';
-// TODO: Import from commons
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
-import { history } from 'src/utils/history';
 import {
   IAssessment,
   IAssessmentOverview,
@@ -30,6 +25,8 @@ import {
   SaveButton,
   ToggleEditModeButton
 } from 'src/commons/controlBar/index';
+import controlButton from 'src/commons/ControlButton';
+import Markdown from 'src/commons/Markdown';
 import { AutograderTab } from 'src/commons/editingWorkspaceSideContent/AutograderTab';
 import { DeploymentTab } from 'src/commons/editingWorkspaceSideContent/DeploymentTab';
 import { GradingTab } from 'src/commons/editingWorkspaceSideContent/GradingTab';
@@ -46,10 +43,12 @@ import {
   storeLocalAssessment,
   storeLocalAssessmentOverview
 } from 'src/commons/XMLParser/XMLParserHelper';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states'; // TODO: Import from commons
+import { history } from 'src/utils/history';
 
 export type EditingWorkspaceProps = EditingWorkspaceDispatchProps &
-  EditingWorkspaceOwnProps &
-  EditingWorkspaceStateProps;
+EditingWorkspaceOwnProps &
+EditingWorkspaceStateProps;
 
 export type EditingWorkspaceStateProps = {
   editorHeight?: number;

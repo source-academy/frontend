@@ -1,8 +1,10 @@
 import { Collapse, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import controlButton from 'src/commons/ControlButton';
+
 import { AutogradingResult, ITestcase } from 'src/commons/assessment/AssessmentTypes';
+import controlButton from 'src/commons/ControlButton';
+
 import AutograderCard from './AutograderCard';
 import ResultCard from './ResultCard';
 

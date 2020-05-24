@@ -19,16 +19,16 @@ import { NavLink } from 'react-router-dom';
 import Textarea from 'react-textarea-autosize';
 
 import defaultCoverImage from 'src/assets/default_cover_image.jpg';
-import controlButton from 'src/commons/ControlButton';
-import Markdown from 'src/commons/Markdown';
-import { getPrettyDate } from 'src/utils/dateHelpers';
-import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 import {
   AssessmentCategories,
   AssessmentCategory,
   IAssessmentOverview
 } from 'src/commons/assessment/AssessmentTypes';
+import controlButton from 'src/commons/ControlButton';
+import Markdown from 'src/commons/Markdown';
 import { exportXml, storeLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
+import { getPrettyDate } from 'src/utils/dateHelpers';
+import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 
 const DEFAULT_QUESTION_ID: number = 0;
 

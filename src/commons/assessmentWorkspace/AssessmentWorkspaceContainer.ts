@@ -26,16 +26,16 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue
-} from 'src/actions';
-// TODO: Import from commons
+} from 'src/actions'; // TODO: Import from commons
 import {
   resetWorkspace,
   updateCurrentAssessmentId,
   WorkspaceLocation
-} from 'src/actions/workspaces';
-import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
+} from 'src/actions/workspaces'; // TODO: Import from commons
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { IPosition } from 'src/commons/editor/EditorComponent';
+import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
+
 import AssessmentWorkspace, {
   IAssessmentWorkspaceDispatchProps,
   IAssessmentWorkspaceOwnProps,
@@ -73,7 +73,7 @@ const mapStateToProps: MapStateToProps<
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<IAssessmentWorkspaceDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>

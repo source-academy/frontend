@@ -5,8 +5,8 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 
 import ContentDisplay from 'src/commons/ContentDisplay';
-import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { IGroupOverview, LeaderBoardInfo } from 'src/features/dashboard/DashboardTypes';
+import { GradingOverview } from 'src/features/grading/GradingTypes';
 
 type State = {
   filterValue: string;
