@@ -1,5 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { withRouter } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 // TODO: Import from commons
@@ -13,6 +13,7 @@ import { Role } from 'src/reducers/states';
 // TODO: Import from commons
 import { IState } from 'src/reducers/states';
 import Assessment, {
+  IAssessmentWorkspaceParams,
   IAssessmentDispatchProps,
   IAssessmentOwnProps,
   IAssessmentStateProps
@@ -34,9 +35,7 @@ const mapStateToProps: MapStateToProps<IAssessmentStateProps, IAssessmentOwnProp
   return stateProps;
 };
 
-const mapDispatchToProps: MapDispatchToProps<IAssessmentDispatchProps, {}> = (
-  dispatch: Dispatch<any>
-) =>
+const mapDispatchToProps: MapDispatchToProps<IAssessmentDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAcknowledgeNotifications: acknowledgeNotifications,
@@ -46,7 +45,9 @@ const mapDispatchToProps: MapDispatchToProps<IAssessmentDispatchProps, {}> = (
     dispatch
   );
 
-export default withRouter(
+interface IPropType extends IAssessmentOwnProps, RouteComponentProps<IAssessmentWorkspaceParams> { }
+
+export default withRouter<IPropType>(
   connect(
     mapStateToProps,
     mapDispatchToProps

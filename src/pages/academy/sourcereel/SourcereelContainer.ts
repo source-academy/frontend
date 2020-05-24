@@ -67,7 +67,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 
 const location: WorkspaceLocation = 'sourcereel';
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),

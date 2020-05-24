@@ -12,9 +12,7 @@ const mapStateToProps: MapStateToProps<IProfileStateProps, {}, IState> = state =
   role: state.session.role
 });
 
-const mapDispatchToProps: MapDispatchToProps<IProfileDispatchProps, {}> = (
-  dispatch: Dispatch<any>
-) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAssessmentOverviewFetch: fetchAssessmentOverviews

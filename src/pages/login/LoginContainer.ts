@@ -7,7 +7,7 @@ import Login, { DispatchProps, OwnProps } from './LoginComponent';
 
 const mapStateToProps: MapStateToProps<{}, OwnProps, {}> = (_, ownProps) => ownProps;
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleFetchAuth: fetchAuth,

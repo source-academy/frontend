@@ -68,8 +68,8 @@ const mapStateToProps: MapStateToProps<GradingWorkspaceStateProps, GradingWorksp
   };
 };
 
-const mapDispatchToProps: MapDispatchToProps<GradingWorkspaceDispatchProps, {}> = (dispatch: Dispatch<any>) =>
-  bindActionCreators<GradingWorkspaceDispatchProps>(
+const mapDispatchToProps: MapDispatchToProps<GradingWorkspaceDispatchProps, {}> = (dispatch: Dispatch) =>
+  bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>
         updateActiveTab(activeTab, workspaceLocation),

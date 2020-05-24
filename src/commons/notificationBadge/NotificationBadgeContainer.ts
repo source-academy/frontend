@@ -1,6 +1,6 @@
-import { connect, Dispatch, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { acknowledgeNotifications } from 'src/actions';
 // TODO: Import from commons
 import { IState } from 'src/reducers/states';
@@ -13,9 +13,7 @@ const mapStateToProps: MapStateToProps<INotificationBadgeStateProps, {}, IState>
   notifications: state.session.notifications
 });
 
-const mapDispatchToProps: MapDispatchToProps<INotificationBadgeDispatchProps, {}> = (
-  dispatch: Dispatch<any>
-) =>
+const mapDispatchToProps: MapDispatchToProps<INotificationBadgeDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAcknowledgeNotifications: acknowledgeNotifications

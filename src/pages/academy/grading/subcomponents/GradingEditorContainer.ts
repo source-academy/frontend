@@ -4,8 +4,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { submitGrading, submitGradingAndContinue } from 'src/actions';
 import GradingEditor, { DispatchProps } from './GradingEditorComponent';
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
-  bindActionCreators<DispatchProps>(
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
+  bindActionCreators(
     {
       handleGradingSave: submitGrading,
       handleGradingSaveAndContinue: submitGradingAndContinue
