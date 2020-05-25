@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 // TODO: Import from commons
-import { fetchAssessmentOverviews, submitAssessment } from 'src/actions/session';
+import { fetchAssessmentOverviews, submitAssessment } from 'src/commons/actions/SessionActions';
 // TODO: Import from commons
 import { IState, Role } from 'src/reducers/states';
 import MissionControl, {

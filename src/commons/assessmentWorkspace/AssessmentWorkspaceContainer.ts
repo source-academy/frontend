@@ -2,9 +2,19 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
-  beginClearContext,
+  fetchAssessment,
+  submitAnswer
+} from 'src/commons/actions/SessionActions'; 
+
+import {
   beginDebuggerPause,
   beginInterruptExecution,
+  debuggerReset,
+  debuggerResume
+} from 'src/commons/actions/InterpreterActions';
+
+import {
+  beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeEditorHeight,
@@ -12,26 +22,21 @@ import {
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
-  debuggerReset,
-  debuggerResume,
   evalEditor,
   evalRepl,
   evalTestcase,
-  fetchAssessment,
   navigateToDeclaration,
   promptAutocomplete,
+  resetWorkspace,
   setEditorBreakpoint,
-  submitAnswer,
   updateActiveTab,
+  updateCurrentAssessmentId,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
-} from 'src/actions'; // TODO: Import from commons
-import {
-  resetWorkspace,
-  updateCurrentAssessmentId,
+  updateReplValue,
   WorkspaceLocation
-} from 'src/actions/workspaces'; // TODO: Import from commons
+} from 'src/commons/workspace/WorkspaceActions';
+
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { IPosition } from 'src/commons/editor/EditorComponent';
 import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';

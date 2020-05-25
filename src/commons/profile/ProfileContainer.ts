@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 // TODO: Import from commons
-import { fetchAssessmentOverviews } from 'src/actions/session';
+import { fetchAssessmentOverviews } from 'src/commons/actions/SessionActions';
 import { IState } from 'src/reducers/states';
 import Profile, { IProfileDispatchProps, IProfileStateProps } from './ProfileComponent';
 

@@ -2,8 +2,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 // TODO: Import from commons
-import { fetchGroupOverviews } from 'src/actions/dashboard';
-import { fetchGradingOverviews } from 'src/actions/session';
+import { fetchGradingOverviews } from 'src/commons/actions/SessionActions';
+import { fetchGroupOverviews } from 'src/features/dashboard/DashboardActions';
 import { IState } from 'src/reducers/states';
 import Dashboard, { IDashboardDispatchProps, IDashboardStateProps } from './DashboardComponent';
 

@@ -5,42 +5,52 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Variant } from 'js-slang/dist/types';
 
 import {
+  finishInvite,
+  initInvite,
+  invalidEditorSessionId,
+  setEditorSessionId,
+  setWebsocketStatus,
+} from 'src/commons/collabEditing/CollabEditingActions';
+
+import {
+  generateLzString,
+  shortenURL,
+  toggleUsingSubst,
+  updateShortURL,
+} from 'src/features/playground/PlaygroundActions';
+
+import {
   beginDebuggerPause,
   beginInterruptExecution,
+  debuggerReset,
+  debuggerResume
+} from 'src/commons/actions/InterpreterActions';
+
+import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeEditorHeight,
   changeEditorWidth,
-  changeExecTime,
   changeSideContentHeight,
+  changeExecTime,
   chapterSelect,
   clearReplOutput,
-  debuggerReset,
-  debuggerResume,
   evalEditor,
   evalRepl,
   externalLibrarySelect,
   fetchChapter,
-  finishInvite,
-  generateLzString,
-  initInvite,
-  invalidEditorSessionId,
   navigateToDeclaration,
   promptAutocomplete,
-  sendReplInputToOutput,
   setEditorBreakpoint,
-  setEditorSessionId,
-  setWebsocketStatus,
-  shortenURL,
+  sendReplInputToOutput,
   toggleEditorAutorun,
-  toggleUsingSubst,
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
-  updateShortURL,
-  WorkspaceLocation,
+  WorkspaceLocation, 
   WorkspaceLocations
-} from 'src/actions';
+} from 'src/commons/workspace/WorkspaceActions';
+
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import { IPosition } from 'src/commons/editor/EditorComponent';
 import { IState, SideContentType } from 'src/reducers/states';

@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 // TODO: Import from commons
-import { updateAssessment } from 'src/actions/session';
+import { updateAssessment } from 'src/commons/actions/SessionActions';
 import { IAssessment } from 'src/commons/assessment/AssessmentTypes';
 import MissionCreator from './MissionCreatorComponent';
 

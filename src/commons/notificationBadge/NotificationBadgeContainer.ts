@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 
 import { bindActionCreators, Dispatch } from 'redux';
-import { acknowledgeNotifications } from 'src/actions';
+import { acknowledgeNotifications } from 'src/commons/actions/SessionActions';
 // TODO: Import from commons
 import { IState } from 'src/reducers/states';
 import NotificationBadge, {
