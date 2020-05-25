@@ -137,14 +137,15 @@ class SourcereelControlbar extends React.PureComponent<
   private handleRecorderStarting = () => {
     this.recorder = new Recorder();
     const { handleRecordInit, handleSetEditorReadonly, handleTimerStart } = this.props;
-    handleRecordInit();
-    handleSetEditorReadonly(false);
-    handleTimerStart();
-    const updater = setInterval(this.updateTimerDuration, 100);
-    this.setState({ updater });
-    // this.recorder.onRecord = (duration: number) => console.log(duration);
     this.recorder.start().then(
-      () => {},
+      () => {
+        handleRecordInit();
+        handleSetEditorReadonly(false);
+        handleTimerStart();
+        const updater = setInterval(this.updateTimerDuration, 100);
+        this.setState({ updater });
+        // this.recorder.onRecord = (duration: number) => console.log(duration);
+      },
       (error: any) => {
         alert('Microphone not found: ' + error);
       }
