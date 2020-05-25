@@ -9,7 +9,7 @@ import GroundControl from 'src/containers/groundControl/GroundControlContainer';
 import MaterialUploadContainer from 'src/containers/material/MaterialUploadContainer'; // TODO: Remove
 import DashboardContainer from 'src/pages/academy/dashboard/DashboardContainer';
 import Grading from 'src/pages/academy/grading/GradingContainer';
-import Sourcereel from 'src/pages/academy/sourcereel/SourcereelComponent';
+import Sourcereel from 'src/pages/academy/sourcereel/SourcereelContainer';
 import { isAcademyRe } from 'src/reducers/session'; // TODO: Import from commons
 import { Role } from 'src/reducers/states'; // TODO: Import from commons
 import { HistoryHelper } from 'src/utils/history';
