@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { logOut } from 'src/commons/actions/CommonsActions';
+import { logOut } from 'src/commons/application/actions/CommonsActions';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import {
   beginClearContext,

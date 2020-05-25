@@ -6,9 +6,9 @@ import {
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
-} from 'src/commons/actions/InterpreterActions';
+} from 'src/commons/application/actions/InterpreterActions';
 
-import { fetchGrading } from 'src/commons/actions/SessionActions';
+import { fetchGrading } from 'src/commons/application/actions/SessionActions';
 
 import {
   beginClearContext,

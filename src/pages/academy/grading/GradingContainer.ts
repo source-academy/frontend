@@ -5,7 +5,7 @@ import {
   acknowledgeNotifications,
   fetchGradingOverviews,
   unsubmitSubmission
-} from 'src/commons/actions/SessionActions';
+} from 'src/commons/application/actions/SessionActions';
 import { IState } from 'src/reducers/states';
 import Grading, { IDispatchProps, IStateProps } from './GradingComponent';
 

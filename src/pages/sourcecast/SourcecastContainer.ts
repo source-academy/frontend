@@ -16,7 +16,7 @@ import {
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
-} from 'src/commons/actions/InterpreterActions';
+} from 'src/commons/application/actions/InterpreterActions';
 
 import {
   browseReplHistoryDown,

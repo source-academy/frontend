@@ -1,14 +1,14 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { submitAnswer } from 'src/commons/actions/SessionActions';
+import { submitAnswer } from 'src/commons/application/actions/SessionActions';
 
 import {
   beginDebuggerPause,
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
-} from 'src/commons/actions/InterpreterActions';
+} from 'src/commons/application/actions/InterpreterActions';
 
 import {
   beginClearContext,
