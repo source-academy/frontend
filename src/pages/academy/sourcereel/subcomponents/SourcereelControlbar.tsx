@@ -4,7 +4,8 @@ import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
 import { IPlaybackData, RecordingStatus } from 'src/features/sourcecast/SourcecastTypes';
-import { Recorder } from 'src/features/sourcereel/util/index';
+// TODO: Test SourceReel
+import { Recorder } from 'src/features/sourcereel/util/index.js';
 
 class SourcereelControlbar extends React.PureComponent<
   ISourcereelControlbarProps,
