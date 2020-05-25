@@ -11,10 +11,10 @@ import { Role } from 'src/reducers/states'; // TODO: Import from commons
 import { IState } from 'src/reducers/states'; // TODO: Import from commons
 
 import Assessment, {
+  AssessmentWorkspaceParams,
   DispatchProps,
   OwnProps,
   StateProps,
-  AssessmentWorkspaceParams
 } from './AssessmentComponent';
 import { AssessmentOverview } from './AssessmentTypes';
 

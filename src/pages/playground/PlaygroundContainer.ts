@@ -42,7 +42,7 @@ import {
   WorkspaceLocations
 } from 'src/actions';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import { IState, SideContentType } from 'src/reducers/states';
 
 import Playground, { DispatchProps, StateProps } from './PlaygroundComponent';
@@ -86,7 +86,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         changeExecTime(execTime.toString(), workspaceLocation),
       handleChapterSelect: (chapter: number, variant: Variant) =>
         chapterSelect(chapter, variant, workspaceLocation),
-      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+      handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),

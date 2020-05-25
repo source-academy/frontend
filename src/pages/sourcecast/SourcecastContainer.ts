@@ -38,8 +38,8 @@ import {
   CodeDelta,
   Input,
   PlaybackData,
-  Position,
-  PlaybackStatus
+  PlaybackStatus,
+  Position
 } from 'src/features/sourcecast/SourcecastTypes';
 import { IState, SideContentType } from 'src/reducers/states';
 import Sourcecast, { DispatchProps, StateProps } from './SourcecastComponent';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { AssessmentStatuses, AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import { AssessmentOverview, AssessmentStatuses } from 'src/commons/assessment/AssessmentTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { EditingOverviewCard } from 'src/commons/editingOverviewCard/EditingOverviewCardComponent';
 import { OwnProps as EditingWorkspaceOwnProps } from 'src/commons/editingWorkspace/EditingWorkspaceComponent';

@@ -53,7 +53,7 @@ W* Used to display information regarding an assessment in the UI.
  * @property openAt an ISO 8601 compliant date string specifiying when
  *   the assessment opens
  */
-export interface AssessmentOverview {
+export type AssessmentOverview = {
   category: AssessmentCategory;
   closeAt: string;
   coverImage: string;
@@ -73,7 +73,7 @@ export interface AssessmentOverview {
   story: string | null;
   title: string;
   xp: number;
-}
+};
 
 /*
  * Used when an assessment is being actively attempted/graded.
@@ -129,14 +129,14 @@ export type Question = {
   xp: number;
 };
 
-export interface Testcase {
+export type Testcase = {
   answer: string; // the correct answer to the testcase
   errors?: SourceError[]; // errors raised by interpreter during execution
   program: string; // the program to be appended to the student's code
   result?: any; // the result from the execution of the testcase
   score: number;
   type: TestcaseType;
-}
+};
 
 
 export type MCQChoice = {

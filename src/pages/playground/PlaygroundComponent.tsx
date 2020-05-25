@@ -19,7 +19,7 @@ import {
   SessionButtons,
   ShareButton
 } from 'src/commons/controlBar/index';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
 import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import FaceapiDisplay from 'src/commons/sideContent/FaceapiDisplay';
@@ -32,15 +32,15 @@ import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceCompon
 import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 import { generateSourceIntroduction } from 'src/utils/introductionHelper';
 
-export interface IPlaygroundProps extends DispatchProps, StateProps, RouteComponentProps<{}> {}
+export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
-export interface DispatchProps {
+export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
   handleChapterSelect: (chapter: number, variant: Variant) => void;
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
@@ -68,9 +68,9 @@ export interface DispatchProps {
   handleToggleEditorAutorun: () => void;
   handleFetchChapter: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-}
+};
 
-export interface StateProps {
+export type StateProps = {
   editorSessionId: string;
   editorValue: string;
   editorHeight?: number;
@@ -82,7 +82,7 @@ export interface StateProps {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: IPosition;
+  newCursorPosition?: Position;
   output: InterpreterOutput[];
   queryString?: string;
   shortURL?: string;
@@ -95,7 +95,7 @@ export interface StateProps {
   websocketStatus: number;
   externalLibraryName: string;
   usingSubst: boolean;
-}
+};
 
 type State = {
   isGreen: boolean;
@@ -103,11 +103,11 @@ type State = {
   hasBreakpoints: boolean;
 };
 
-class Playground extends React.Component<IPlaygroundProps, State> {
+class Playground extends React.Component<PlaygroundProps, State> {
   private keyMap = { goGreen: 'h u l k' };
   private handlers = { goGreen: () => {} };
 
-  constructor(props: IPlaygroundProps) {
+  constructor(props: PlaygroundProps) {
     super(props);
     this.state = {
       isGreen: false,

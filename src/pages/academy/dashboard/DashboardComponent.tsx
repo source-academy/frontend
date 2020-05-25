@@ -19,7 +19,7 @@ export type DispatchProps = {
 export type StateProps = {
   gradingOverviews: GradingOverview[];
   groupOverviews: GroupOverview[];
-}
+};
 
 type State = {
   filterValue: string;

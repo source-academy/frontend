@@ -8,10 +8,10 @@ import {
   AssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
-  Question,
-  Testcase,
   Library,
-  QuestionTypes
+  Question,
+  QuestionTypes,
+  Testcase
 } from 'src/commons/assessment/AssessmentTypes';
 import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
 import {
@@ -33,7 +33,7 @@ import { ManageQuestionTab } from 'src/commons/editingWorkspaceSideContent/Manag
 import { MCQQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/MCQQuestionTemplateTab';
 import { ProgrammingQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/ProgrammingQuestionTemplateTab';
 import { TextAreaContent } from 'src/commons/editingWorkspaceSideContent/TextAreaContent';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
 import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
@@ -53,7 +53,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorHeightChange: (height: number) => void;
@@ -95,7 +95,7 @@ export type StateProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: IPosition;
+  newCursorPosition?: Position;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;

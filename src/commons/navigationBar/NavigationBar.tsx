@@ -17,7 +17,7 @@ type StateProps = {
   role?: Role;
   title: string;
   name?: string;
-}
+};
 
 const NavigationBar: React.SFC<NavigationBarProps> = props => (
   <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>

@@ -2,9 +2,9 @@ import {
   AssessmentCategory,
   AutogradingResult,
   GradingStatus,
+  MCQChoice,
   Question,
-  Testcase,
-  MCQChoice
+  Testcase
 } from 'src/commons/assessment/AssessmentTypes';
 import { Notification } from 'src/components/notification/notificationShape';
 
@@ -95,4 +95,4 @@ type Answer = {
   maxXp: number;
   solutionTemplate?: string;
   choices?: MCQChoice[];
-}
+};

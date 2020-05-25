@@ -8,7 +8,7 @@ type GradingTabProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   updateAssessment: (assessment: Assessment) => void;
-}
+};
 
 type StateProps = {
   assessment: Assessment;

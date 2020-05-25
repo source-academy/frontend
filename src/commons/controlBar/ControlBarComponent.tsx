@@ -8,7 +8,7 @@ type OwnProps = {
   editorButtons: Array<JSX.Element | null>;
   flowButtons?: Array<JSX.Element | null>;
   replButtons: Array<JSX.Element | null>;
-}
+};
 
 function ControlBar(props: ControlBarProps) {
   const editorControl = () => {

@@ -32,8 +32,8 @@ import AceRange from './AceRange';
  */
 export type EditorProps = DispatchProps & StateProps;
 
-interface DispatchProps {
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
+type DispatchProps = {
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
   handleReplValueChange?: (newCode: string) => void;
@@ -44,26 +44,26 @@ interface DispatchProps {
   handleSendReplInputToOutput?: (newOutput: string) => void;
   handleSetWebsocketStatus?: (websocketStatus: number) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
-}
+};
 
-interface StateProps {
+type StateProps = {
   breakpoints: string[];
   editorSessionId: string;
   editorValue: string;
   highlightedLines: number[][];
   isEditorAutorun: boolean;
-  newCursorPosition?: IPosition;
+  newCursorPosition?: Position;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
   externalLibraryName?: string;
   sourceVariant?: Variant;
-}
+};
 
-export interface IPosition {
+export type Position = {
   row: number;
   column: number;
-}
+};
 
 class Editor extends React.PureComponent<EditorProps, {}> {
   public ShareAce: any;
@@ -288,7 +288,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
   }
 
   // Used in navigating from occurence to navigation
-  private moveCursor = (position: IPosition) => {
+  private moveCursor = (position: Position) => {
     (this.AceEditor.current as any).editor.selection.clearSelection();
     (this.AceEditor.current as any).editor.moveCursorToPosition(position);
     (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();

@@ -24,9 +24,9 @@ import {
   CodeDelta,
   Input,
   PlaybackData,
+  PlaybackStatus,
   Position,
-  SourcecastData,
-  PlaybackStatus
+  SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
 import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 
@@ -68,7 +68,7 @@ export type DispatchProps = {
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
-}
+};
 
 export type StateProps = {
   audioUrl: string;
@@ -97,7 +97,7 @@ export type StateProps = {
   sourcecastIndex: SourcecastData[] | null;
   sourceChapter: number;
   sourceVariant: Variant;
-}
+};
 
 class Sourcecast extends React.Component<SourcecastProps> {
   constructor(props: SourcecastProps) {

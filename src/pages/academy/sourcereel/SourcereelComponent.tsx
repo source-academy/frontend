@@ -22,11 +22,11 @@ import SourcecastTable from 'src/commons/sourcecast/SourcecastTable';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {
   Input,
+  KeyboardCommand,
   PlaybackData,
   Position,
-  SourcecastData,
-  KeyboardCommand,
-  RecordingStatus
+  RecordingStatus,
+  SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
 import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 

@@ -12,13 +12,13 @@ type ChapterSelectProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleChapterSelect?: (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
-}
+};
 
 type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
   key: string;
-}
+};
 
 // TODO: Duplicate from EditingWorkspaceContent/DeploymentTab, AcademyDefaultChapterComponent, and ChapterSelect
 export type Chapter = {

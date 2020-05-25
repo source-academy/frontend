@@ -9,9 +9,9 @@ import 'js-slang/dist/editors/ace/theme/source';
 
 import { CodeDelta, 
   Input, 
+  KeyboardCommand, 
   Position, 
   SelectionRange, 
-  KeyboardCommand 
 } from 'src/features/sourcecast/SourcecastTypes';
 
 /**

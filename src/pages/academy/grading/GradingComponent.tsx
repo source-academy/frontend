@@ -61,7 +61,7 @@ export type StateProps = {
   gradingOverviews?: GradingOverview[];
   notifications: Notification[];
   role?: Role;
-}
+};
 
 /** Component to render in table - grading status */
 const GradingStatus = (props: GradingNavLinkProps) => {

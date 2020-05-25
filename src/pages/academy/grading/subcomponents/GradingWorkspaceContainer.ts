@@ -33,7 +33,7 @@ import {
   updateCurrentSubmissionId
 } from 'src/actions/workspaces';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
 
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';
@@ -75,7 +75,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, 'default', workspaceLocation),
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
-      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+      handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),

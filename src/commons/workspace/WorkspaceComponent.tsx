@@ -10,13 +10,13 @@ import SideContent, { SideContentProps } from 'src/commons/sideContent/SideConte
 
 export type WorkspaceProps = DispatchProps & StateProps;
 
-interface DispatchProps {
+type DispatchProps = {
   handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleSideContentHeightChange: (height: number) => void;
-}
+};
 
-interface StateProps {
+type StateProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
   customEditor?: JSX.Element;
@@ -29,7 +29,7 @@ interface StateProps {
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
   sideContentIsResizeable?: boolean;
-}
+};
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
   private editorDividerDiv: HTMLDivElement;

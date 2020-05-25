@@ -6,9 +6,9 @@ import * as React from 'react';
 import { Variant } from 'js-slang/dist/types';
 
 import {
+  Assessment,
   emptyLibrary,
   ExternalLibraryName,
-  Assessment,
   Library
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';

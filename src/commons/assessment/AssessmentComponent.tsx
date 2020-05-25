@@ -37,10 +37,10 @@ import { assessmentCategoryLink, stringParamToInt } from 'src/utils/paramParseHe
 
 import {
   AssessmentCategory,
+  AssessmentOverview,
   AssessmentStatuses,
   DEFAULT_QUESTION_ID,
-  GradingStatuses,
-  AssessmentOverview
+  GradingStatuses
 } from './AssessmentTypes';
 
 export type AssessmentProps = DispatchProps

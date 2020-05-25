@@ -4,9 +4,9 @@ import * as React from 'react';
 import { parseString } from 'xml2js';
 
 import {
-  assessmentTemplate,
   Assessment,
   AssessmentOverview,
+  assessmentTemplate,
   overviewTemplate
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';

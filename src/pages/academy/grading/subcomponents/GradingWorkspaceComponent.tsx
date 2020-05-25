@@ -6,10 +6,10 @@ import * as React from 'react';
 import {
   AutogradingResult,
   IMCQQuestion,
-  Question,
-  Testcase,
   Library,
-  QuestionTypes
+  Question,
+  QuestionTypes,
+  Testcase
 } from 'src/commons/assessment/AssessmentTypes';
 import {
   ClearButton,
@@ -20,7 +20,7 @@ import {
   RunButton
 } from 'src/commons/controlBar';
 import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
 import {
@@ -30,7 +30,7 @@ import {
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
-import { Grading, AnsweredQuestion } from 'src/features/grading/GradingTypes';
+import { AnsweredQuestion, Grading } from 'src/features/grading/GradingTypes';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
 import { USE_CHATKIT } from 'src/utils/constants';
 import { history } from 'src/utils/history';
@@ -45,7 +45,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorHeightChange: (height: number) => void;
@@ -87,7 +87,7 @@ export type StateProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: IPosition;
+  newCursorPosition?: Position;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;

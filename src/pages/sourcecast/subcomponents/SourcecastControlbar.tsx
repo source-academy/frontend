@@ -8,8 +8,8 @@ import {
   CodeDelta,
   Input,
   PlaybackData,
-  SourcecastData,
-  PlaybackStatus
+  PlaybackStatus,
+  SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
 
 export type SourcecastControlbarProps = DispatchProps & StateProps;

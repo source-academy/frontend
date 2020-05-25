@@ -25,7 +25,7 @@ export type DispatchProps = {
 
 export type StateProps = {
   historyHelper: HistoryHelper;
-}
+};
 
 export type OwnProps = {
   accessToken?: string;

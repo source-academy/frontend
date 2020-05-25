@@ -5,9 +5,9 @@ import * as React from 'react';
 import {
   AssessmentCategories,
   AssessmentCategory,
+  AssessmentOverview,
   AssessmentStatuses,
-  GradingStatuses,
-  AssessmentOverview
+  GradingStatuses
 } from 'src/commons/assessment/AssessmentTypes';
 import { Role } from 'src/reducers/states'; // TODO: Import from commons
 

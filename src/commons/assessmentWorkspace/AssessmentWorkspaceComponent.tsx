@@ -15,15 +15,15 @@ import * as React from 'react';
 import { stringify } from 'js-slang/dist/utils/stringify';
 
 import {
+  Assessment,
   AssessmentCategories,
   AutogradingResult,
-  Assessment,
   IMCQQuestion,
   IProgrammingQuestion,
-  Question,
-  Testcase,
   Library,
-  QuestionTypes
+  Question,
+  QuestionTypes,
+  Testcase
 } from 'src/commons/assessment/AssessmentTypes';
 import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
 import {
@@ -37,7 +37,7 @@ import {
   SaveButton
 } from 'src/commons/controlBar/index';
 import controlButton from 'src/commons/ControlButton';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
 import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
@@ -62,7 +62,7 @@ export type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorHeightChange: (height: number) => void;
@@ -106,7 +106,7 @@ export type StateProps = {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: IPosition;
+  newCursorPosition?: Position;
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
