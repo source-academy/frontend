@@ -22,6 +22,12 @@ export const recordInput = (input: Input, workspaceLocation: WorkspaceLocation) 
     workspaceLocation
   });
 
+export const resetInputs = (inputs: Input[], workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.RESET_INPUTS, {
+    inputs,
+    workspaceLocation
+  });
+
 export const saveSourcecastData = (
   title: string,
   description: string,

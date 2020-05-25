@@ -6,6 +6,7 @@ import * as actions from '../actions';
 import {
   SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
+  SET_CURRENT_PLAYER_TIME,
   SET_INPUT_TO_APPLY,
   SET_SOURCECAST_DATA,
   SET_SOURCECAST_PLAYBACK_DURATION,
@@ -25,6 +26,11 @@ export const reducer: Reducer<ISourcecastWorkspace> = (
         description: action.payload.description,
         audioUrl: action.payload.audioUrl,
         playbackData: action.payload.playbackData
+      };
+    case SET_CURRENT_PLAYER_TIME:
+      return {
+        ...state,
+        currentPlayerTime: action.payload.playerTime
       };
     case SET_CODE_DELTAS_TO_APPLY:
       return {

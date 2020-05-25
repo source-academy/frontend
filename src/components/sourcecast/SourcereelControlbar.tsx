@@ -4,7 +4,7 @@ import * as React from 'react';
 import Recorder from 'yareco';
 
 import { controlButton } from '../commons';
-import { IPlaybackData, RecordingStatus } from './sourcecastShape';
+import { Input, IPlaybackData, RecordingStatus } from './sourcecastShape';
 
 class SourcereelControlbar extends React.PureComponent<
   ISourcereelControlbarProps,
@@ -37,6 +37,11 @@ class SourcereelControlbar extends React.PureComponent<
       'Resume',
       IconNames.PLAY,
       this.handleRecorderResuming
+    );
+    const RecorderResumeFromCurrentButton = controlButton(
+      'Resume Here',
+      IconNames.PLAY,
+      this.handleRecorderResumingFromCurrent
     );
     const RecorderStartButton = controlButton(
       'Record',
@@ -83,13 +88,20 @@ class SourcereelControlbar extends React.PureComponent<
         <br />
         <div className="Timer">
           <Card elevation={2} style={{ background: '#24323F' }}>
-            <H1>{this.renderLabel(this.state.duration)}</H1>
+            <H1>
+              {this.renderLabel(
+                this.props.recordingStatus !== RecordingStatus.paused
+                  ? this.state.duration / 1000
+                  : this.props.currentPlayerTime
+              )}
+            </H1>
           </Card>
         </div>
         <br />
         <div className="RecorderControl">
           {this.props.recordingStatus === RecordingStatus.notStarted && RecorderStartButton}
           {this.props.recordingStatus === RecordingStatus.paused && RecorderResumeButton}
+          {this.props.recordingStatus === RecordingStatus.paused && RecorderResumeFromCurrentButton}
           {this.props.recordingStatus === RecordingStatus.recording && RecorderPauseButton}
           {this.props.recordingStatus === RecordingStatus.paused && RecorderStopButton}
           {/* {this.props.recordingStatus === RecordingStatus.finished && RecorderDownloadButton} */}
@@ -105,12 +117,21 @@ class SourcereelControlbar extends React.PureComponent<
     this.setState({ duration: this.props.getTimerDuration() });
   };
 
+  private handleTruncatePlaybackData = () => {
+    const truncatedInputs = this.props.playbackData.inputs.filter(
+      deltaWithTime => deltaWithTime.time <= this.props.currentPlayerTime * 1000
+    );
+    this.props.handleResetInputs(truncatedInputs);
+  };
+
   private handleRecorderPausing = () => {
-    const { handleSetEditorReadonly, handleTimerPause } = this.props;
+    const { handleSetEditorReadonly, handleSetSourcecastData, handleTimerPause } = this.props;
     clearInterval(this.state.updater!);
     handleSetEditorReadonly(true);
     handleTimerPause();
     this.recorder.pause();
+    const audioUrl = window.URL.createObjectURL(this.recorder.exportWAV());
+    handleSetSourcecastData('', '', audioUrl, this.props.playbackData);
   };
 
   private handleRecorderStarting = () => {
@@ -133,10 +154,20 @@ class SourcereelControlbar extends React.PureComponent<
   private handleRecorderResuming = () => {
     const { handleSetEditorReadonly, handleTimerResume } = this.props;
     handleSetEditorReadonly(false);
-    handleTimerResume(5000);
+    handleTimerResume(-1);
     const updater = setInterval(this.updateTimerDuration, 100);
     this.setState({ updater });
-    this.recorder.resume(5);
+    this.recorder.resume(-1);
+  };
+
+  private handleRecorderResumingFromCurrent = () => {
+    const { currentPlayerTime, handleSetEditorReadonly, handleTimerResume } = this.props;
+    this.handleTruncatePlaybackData();
+    handleSetEditorReadonly(false);
+    handleTimerResume(currentPlayerTime * 1000);
+    const updater = setInterval(this.updateTimerDuration, 100);
+    this.setState({ updater });
+    this.recorder.resume(currentPlayerTime);
   };
 
   private handleRecorderStopping = () => {
@@ -194,9 +225,8 @@ class SourcereelControlbar extends React.PureComponent<
   // };
 
   private renderLabel = (value: number) => {
-    const totalTime = value / 1000;
-    const min = Math.floor(totalTime / 60);
-    const sec = Math.floor(totalTime - min * 60);
+    const min = Math.floor(value / 60);
+    const sec = Math.floor(value - min * 60);
     const minString = min < 10 ? '0' + min : min;
     const secString = sec < 10 ? '0' + sec : sec;
     return minString + ':' + secString;
@@ -213,10 +243,17 @@ class SourcereelControlbar extends React.PureComponent<
 
 export interface ISourcereelControlbarProps {
   handleRecordInit: () => void;
+  handleResetInputs: (inputs: Input[]) => void;
   handleSaveSourcecastData: (
     title: string,
     description: string,
     audio: Blob,
+    playbackData: IPlaybackData
+  ) => void;
+  handleSetSourcecastData: (
+    title: string,
+    description: string,
+    audioUrl: string,
     playbackData: IPlaybackData
   ) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
@@ -225,8 +262,9 @@ export interface ISourcereelControlbarProps {
   handleTimerResume: (timeBefore: number) => void;
   handleTimerStart: () => void;
   handleTimerStop: () => void;
-  editorValue: string;
   getTimerDuration: () => number;
+  currentPlayerTime: number;
+  editorValue: string;
   playbackData: IPlaybackData;
   recordingStatus: RecordingStatus;
 }
