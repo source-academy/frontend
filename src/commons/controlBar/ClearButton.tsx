@@ -2,8 +2,13 @@ import { IconNames } from '@blueprintjs/icons';
 
 import controlButton from 'src/commons/ControlButton';
 
-export type ClearButtonProps = {
+type ClearButtonProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleReplOutputClear: () => void;
+};
+
+type StateProps = {
   key: string;
 };
 

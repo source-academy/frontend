@@ -8,26 +8,27 @@ import { Variant } from 'js-slang/dist/types';
 
 import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/reducers/states'; // TODO: Import from commons
 
-export interface IChapterProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
+export type DefaultChapterProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
-export type IDispatchProps = {
+export type DispatchProps = {
   handleFetchChapter: () => void;
-  handleUpdateChapter: (chapter: IChapter) => void;
-  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleUpdateChapter: (chapter: Chapter) => void;
+  handleChapterSelect?: (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-export interface IStateProps {
+export type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
-}
+};
 
-export interface IChapter {
+// TODO: Duplicate from EditingWorkspaceContent/DeploymentTab, AcademyDefaultChapterComponent, and ChapterSelect
+type Chapter = {
   chapter: number;
   variant: Variant;
   displayName: string;
-}
+};
 
-export function DefaultChapter(props: IChapterProps) {
+export function DefaultChapter(props: DefaultChapterProps) {
   props.handleFetchChapter();
 
   const chapters = sourceLanguages.map((lang: ISourceLanguage) => {
@@ -38,7 +39,7 @@ export function DefaultChapter(props: IChapterProps) {
     };
   });
 
-  const chapterRenderer: ItemRenderer<IChapter> = (lang, { handleClick }) => (
+  const chapterRenderer: ItemRenderer<Chapter> = (lang, { handleClick }) => (
     <MenuItem
       active={false}
       key={lang.chapter + lang.variant}
@@ -47,12 +48,12 @@ export function DefaultChapter(props: IChapterProps) {
     />
   );
 
-  const ChapterSelectComponent = Select.ofType<IChapter>();
+  const ChapterSelectComponent = Select.ofType<Chapter>();
 
   const chapSelect = (
     currentChap: number,
     currentVariant: Variant,
-    handleSelect = (i: IChapter) => {}
+    handleSelect = (i: Chapter) => {}
   ) => (
     <ChapterSelectComponent
       className={Classes.MINIMAL}

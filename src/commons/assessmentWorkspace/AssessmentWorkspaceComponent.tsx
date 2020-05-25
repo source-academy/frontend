@@ -17,11 +17,11 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import {
   AssessmentCategories,
   AutogradingResult,
-  IAssessment,
+  Assessment,
   IMCQQuestion,
   IProgrammingQuestion,
-  IQuestion,
-  ITestcase,
+  Question,
+  Testcase,
   Library,
   QuestionTypes
 } from 'src/commons/assessment/AssessmentTypes';
@@ -42,7 +42,7 @@ import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
 import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
-import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
 import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
 import { USE_CHATKIT } from 'src/utils/constants';
@@ -53,35 +53,9 @@ import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
-export interface IAssessmentWorkspaceProps
-extends IAssessmentWorkspaceDispatchProps,
-IAssessmentWorkspaceStateProps,
-IAssessmentWorkspaceOwnProps {}
+export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
-export interface IAssessmentWorkspaceStateProps {
-  assessment?: IAssessment;
-  autogradingResults: AutogradingResult[];
-  editorPrepend: string;
-  editorValue: string | null;
-  editorPostpend: string;
-  editorTestcases: ITestcase[];
-  editorHeight?: number;
-  editorWidth: string;
-  breakpoints: string[];
-  highlightedLines: number[][];
-  hasUnsavedChanges: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  newCursorPosition?: IPosition;
-  output: InterpreterOutput[];
-  replValue: string;
-  sideContentHeight?: number;
-  storedAssessmentId?: number;
-  storedQuestionId?: number;
-}
-
-export interface IAssessmentWorkspaceDispatchProps {
+export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
@@ -108,20 +82,43 @@ export interface IAssessmentWorkspaceDispatchProps {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-}
+};
 
-export interface IAssessmentWorkspaceOwnProps {
+export type OwnProps = {
   assessmentId: number;
   questionId: number;
   notAttempted: boolean;
   closeDate: string;
-}
+};
+
+export type StateProps = {
+  assessment?: Assessment;
+  autogradingResults: AutogradingResult[];
+  editorPrepend: string;
+  editorValue: string | null;
+  editorPostpend: string;
+  editorTestcases: Testcase[];
+  editorHeight?: number;
+  editorWidth: string;
+  breakpoints: string[];
+  highlightedLines: number[][];
+  hasUnsavedChanges: boolean;
+  isRunning: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
+  newCursorPosition?: IPosition;
+  output: InterpreterOutput[];
+  replValue: string;
+  sideContentHeight?: number;
+  storedAssessmentId?: number;
+  storedQuestionId?: number;
+};
 
 class AssessmentWorkspace extends React.Component<
-  IAssessmentWorkspaceProps,
+  AssessmentWorkspaceProps,
   { showOverlay: boolean; showResetTemplateOverlay: boolean }
 > {
-  public constructor(props: IAssessmentWorkspaceProps) {
+  public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
@@ -149,7 +146,7 @@ class AssessmentWorkspace extends React.Component<
       questionId = this.props.assessment.questions.length - 1;
     }
 
-    const question: IQuestion = this.props.assessment.questions[questionId];
+    const question: Question = this.props.assessment.questions[questionId];
 
     let answer = '';
     if (question.type === QuestionTypes.programming) {
@@ -239,8 +236,8 @@ class AssessmentWorkspace extends React.Component<
       this.props.questionId >= this.props.assessment.questions.length
         ? this.props.assessment.questions.length - 1
         : this.props.questionId;
-    const question: IQuestion = this.props.assessment.questions[questionId];
-    const workspaceProps: IWorkspaceProps = {
+    const question: Question = this.props.assessment.questions[questionId];
+    const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(questionId),
       editorProps:
         question.type === QuestionTypes.programming
@@ -294,7 +291,7 @@ class AssessmentWorkspace extends React.Component<
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
    */
-  private checkWorkspaceReset(props: IAssessmentWorkspaceProps) {
+  private checkWorkspaceReset(props: AssessmentWorkspaceProps) {
     /* Don't reset workspace if assessment not fetched yet. */
     if (this.props.assessment === undefined) {
       return;
@@ -317,7 +314,7 @@ class AssessmentWorkspace extends React.Component<
     let editorValue: string = '';
     let editorPrepend: string = '';
     let editorPostpend: string = '';
-    let editorTestcases: ITestcase[] = [];
+    let editorTestcases: Testcase[] = [];
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as IProgrammingQuestion;
@@ -349,8 +346,8 @@ class AssessmentWorkspace extends React.Component<
   }
 
   /** Pre-condition: IAssessment has been loaded */
-  private sideContentProps: (p: IAssessmentWorkspaceProps, q: number) => SideContentProps = (
-    props: IAssessmentWorkspaceProps,
+  private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
+    props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
     const tabs: SideContentTab[] = [
@@ -461,7 +458,7 @@ class AssessmentWorkspace extends React.Component<
           return deferredNavigate();
         }
         // Else evaluate its correctness - proceed iff the answer to the current question is correct
-        const question: IQuestion = this.props.assessment!.questions[questionId];
+        const question: Question = this.props.assessment!.questions[questionId];
         if (question.type === QuestionTypes.mcq) {
           if (question.answer !== (question as IMCQQuestion).solution) {
             return showWarningMessage('Your MCQ solution is incorrect!', 750);

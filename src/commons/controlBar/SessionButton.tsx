@@ -6,21 +6,26 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { checkSessionIdExists, createNewSession } from 'src/commons/collabEditing/CollabEditingHelper';
 import controlButton from 'src/commons/ControlButton';
 
-export type SessionButtonsProps = {
-  editorSessionId?: string;
-  editorValue?: string | null;
+type SessionButtonsProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleInitInvite?: (value: string) => void;
   handleInvalidEditorSessionId?: () => void;
   handleSetEditorSessionId?: (editorSessionId: string) => void;
+};
+
+type StateProps = {
+  editorSessionId?: string;
+  editorValue?: string | null;
   websocketStatus?: number;
   key: string;
 };
 
-export type SessionButtonsState = {
+type State = {
   joinElemValue: string;
 };
 
-export class SessionButtons extends React.PureComponent<SessionButtonsProps, SessionButtonsState> {
+export class SessionButtons extends React.PureComponent<SessionButtonsProps, State> {
   private inviteInputElem: React.RefObject<HTMLInputElement>;
 
   constructor(props: SessionButtonsProps) {

@@ -4,8 +4,13 @@ import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
 
-export type EvalButtonProps = {
+type EvalButtonProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleReplEval: () => void;
+};
+
+type StateProps = {
   isRunning: boolean;
   key: string;
 };

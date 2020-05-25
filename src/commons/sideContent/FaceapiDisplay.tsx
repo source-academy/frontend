@@ -2,12 +2,12 @@ import { Button, Divider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-type FaceapiDisplayState = {
+type State = {
   width: number;
   height: number;
 };
 
-class FaceapiDisplay extends React.Component<{}, FaceapiDisplayState> {
+class FaceapiDisplay extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
     this.state = {

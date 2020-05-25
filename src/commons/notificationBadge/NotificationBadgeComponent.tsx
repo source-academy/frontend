@@ -9,27 +9,24 @@ import {
   NotificationTypes
 } from './NotificationBadgeTypes';
 
-export interface INotificationBadgeProps
-  extends INotificationBadgeDispatchProps,
-    INotificationBadgeStateProps,
-    INotificationBadgeOwnProps {}
+type NotificationBadgeProps = DispatchProps & StateProps & OwnProps;
 
-export interface INotificationBadgeStateProps {
-  notifications: Notification[];
-}
-
-export interface INotificationBadgeDispatchProps {
+export type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
-}
+};
 
-export interface INotificationBadgeOwnProps {
+type OwnProps = {
   className?: string;
   disableHover?: boolean; // Set to true to disable popover content
   large?: boolean; // Set to true to use large style
   notificationFilter?: (notifications: Notification[]) => Notification[];
-}
+};
 
-const NotificationBadge: React.SFC<INotificationBadgeProps> = props => {
+export type StateProps = {
+  notifications: Notification[];
+};
+
+const NotificationBadge: React.SFC<NotificationBadgeProps> = props => {
   const notifications = props.notificationFilter
     ? props.notificationFilter(props.notifications)
     : props.notifications;

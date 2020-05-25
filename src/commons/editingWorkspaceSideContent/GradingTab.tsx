@@ -1,17 +1,22 @@
 import * as React from 'react';
 
-import { IAssessment } from 'src/commons/assessment/AssessmentTypes';
+import { Assessment } from 'src/commons/assessment/AssessmentTypes';
 import { limitNumberRange } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
 
-interface IProps {
-  assessment: IAssessment;
-  path: Array<string | number>;
-  updateAssessment: (assessment: IAssessment) => void;
+type GradingTabProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  updateAssessment: (assessment: Assessment) => void;
 }
 
-export class GradingTab extends React.Component<IProps, {}> {
-  public constructor(props: IProps) {
+type StateProps = {
+  assessment: Assessment;
+  path: Array<string | number>;
+};
+
+export class GradingTab extends React.Component<GradingTabProps, {}> {
+  public constructor(props: GradingTabProps) {
     super(props);
   }
 

@@ -8,7 +8,7 @@ import { Variant } from 'js-slang/dist/types';
 import {
   emptyLibrary,
   ExternalLibraryName,
-  IAssessment,
+  Assessment,
   Library
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
@@ -18,28 +18,34 @@ import { sourceLanguages, styliseChapter } from 'src/reducers/states'; // TODO: 
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
 
-interface IProps {
-  assessment: IAssessment;
+type DeploymentTabProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  updateAssessment: (assessment: Assessment) => void;
+  handleRefreshLibrary: (library: Library) => void;
+};
+
+type StateProps = {
+  assessment: Assessment;
   label: string;
   pathToLibrary: Array<string | number>;
   pathToCopy?: Array<string | number>;
-  updateAssessment: (assessment: IAssessment) => void;
-  handleRefreshLibrary: (library: Library) => void;
   isOptionalDeployment: boolean;
-}
+};
 
-interface IChapter {
+// TODO: Duplicate from EditingWorkspaceContent/DeploymentTab, AcademyDefaultChapterComponent, and ChapterSelect
+type Chapter = {
   chapter: number;
   displayName: string;
-}
+};
 
-interface IExternal {
+type External = {
   key: number;
   name: ExternalLibraryName;
   symbols: string[];
-}
+};
 
-export class DeploymentTab extends React.Component<IProps, {}> {
+export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
   public render() {
     if (!this.props.isOptionalDeployment) {
       return (
@@ -160,7 +166,7 @@ export class DeploymentTab extends React.Component<IProps, {}> {
     );
   };
 
-  private handleGlobalValueUpdate = (i: number) => (assessment: IAssessment) => {
+  private handleGlobalValueUpdate = (i: number) => (assessment: Assessment) => {
     const deployment = getValueFromPath(this.props.pathToLibrary, this.props.assessment) as Library;
     const global = deployment.globals[i];
     try {
@@ -201,14 +207,14 @@ export class DeploymentTab extends React.Component<IProps, {}> {
     this.props.updateAssessment(assessment);
   };
 
-  private handleChapterSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {
+  private handleChapterSelect = (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => {
     const assessment = this.props.assessment;
     const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
     deployment.chapter = i.chapter;
     this.props.updateAssessment(assessment);
   };
 
-  private handleExternalSelect = (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => {
+  private handleExternalSelect = (i: External, e: React.ChangeEvent<HTMLSelectElement>) => {
     const assessment = this.props.assessment;
     const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
     deployment.external.name = i.name;
@@ -256,7 +262,7 @@ const chapters = sourceLanguages.map(lang => ({
 const chapterSelect = (
   currentChap: number,
   variant: Variant = 'default',
-  handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
+  handleSelect = (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
 ) => (
   <ChapterSelectComponent
     className={Classes.MINIMAL}
@@ -273,9 +279,9 @@ const chapterSelect = (
   </ChapterSelectComponent>
 );
 
-const ChapterSelectComponent = Select.ofType<IChapter>();
+const ChapterSelectComponent = Select.ofType<Chapter>();
 
-const chapterRenderer: ItemRenderer<IChapter> = (chap, { handleClick, modifiers, query }) => (
+const chapterRenderer: ItemRenderer<Chapter> = (chap, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={chap.chapter} onClick={handleClick} text={chap.displayName} />
 );
 
@@ -287,7 +293,7 @@ const iExternals = Array.from(externalLibraries.entries()).map((entry, index) =>
 
 const externalSelect = (
   currentExternal: string,
-  handleSelect: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleSelect: (i: External, e: React.ChangeEvent<HTMLSelectElement>) => void
 ) => (
   <ExternalSelectComponent
     className={Classes.MINIMAL}
@@ -304,9 +310,9 @@ const externalSelect = (
   </ExternalSelectComponent>
 );
 
-const ExternalSelectComponent = Select.ofType<IExternal>();
+const ExternalSelectComponent = Select.ofType<External>();
 
-const externalRenderer: ItemRenderer<IExternal> = (external, { handleClick, modifiers, query }) => (
+const externalRenderer: ItemRenderer<External> = (external, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />
 );
 

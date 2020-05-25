@@ -28,40 +28,13 @@ import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
 import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import SubstVisualizer from 'src/commons/sideContent/SubstVisualizer';
 import VideoDisplay from 'src/commons/sideContent/VideoDisplay';
-import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 import { generateSourceIntroduction } from 'src/utils/introductionHelper';
 
-export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
+export interface IPlaygroundProps extends DispatchProps, StateProps, RouteComponentProps<{}> {}
 
-export interface IStateProps {
-  editorSessionId: string;
-  editorValue: string;
-  editorHeight?: number;
-  editorWidth: string;
-  execTime: number;
-  breakpoints: string[];
-  highlightedLines: number[][];
-  isEditorAutorun: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  newCursorPosition?: IPosition;
-  output: InterpreterOutput[];
-  queryString?: string;
-  shortURL?: string;
-  replValue: string;
-  sideContentHeight?: number;
-  sharedbAceInitValue: string;
-  sharedbAceIsInviting: boolean;
-  sourceChapter: number;
-  sourceVariant: Variant;
-  websocketStatus: number;
-  externalLibraryName: string;
-  usingSubst: boolean;
-}
-
-export interface IDispatchProps {
+export interface DispatchProps {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
@@ -97,13 +70,40 @@ export interface IDispatchProps {
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 }
 
-type PlaygroundState = {
+export interface StateProps {
+  editorSessionId: string;
+  editorValue: string;
+  editorHeight?: number;
+  editorWidth: string;
+  execTime: number;
+  breakpoints: string[];
+  highlightedLines: number[][];
+  isEditorAutorun: boolean;
+  isRunning: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
+  newCursorPosition?: IPosition;
+  output: InterpreterOutput[];
+  queryString?: string;
+  shortURL?: string;
+  replValue: string;
+  sideContentHeight?: number;
+  sharedbAceInitValue: string;
+  sharedbAceIsInviting: boolean;
+  sourceChapter: number;
+  sourceVariant: Variant;
+  websocketStatus: number;
+  externalLibraryName: string;
+  usingSubst: boolean;
+}
+
+type State = {
   isGreen: boolean;
   selectedTab: SideContentType;
   hasBreakpoints: boolean;
 };
 
-class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
+class Playground extends React.Component<IPlaygroundProps, State> {
   private keyMap = { goGreen: 'h u l k' };
   private handlers = { goGreen: () => {} };
 
@@ -267,7 +267,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       });
     }
 
-    const workspaceProps: IWorkspaceProps = {
+    const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorButtons: [
           autorunButtons,

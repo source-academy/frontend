@@ -9,7 +9,7 @@ import { defaultState } from 'src/reducers/states';
 import mainSaga from 'src/sagas';
 import { history as appHistory } from 'src/utils/history';
 
-import { ISavedState, loadStoredState, saveState } from './localStorage';
+import { SavedState, loadStoredState, saveState } from './localStorage';
 
 export const store = createStore(appHistory);
 
@@ -40,7 +40,7 @@ export function createStore(history: History) {
   return createdStore;
 }
 
-function loadStore(loadedStore: ISavedState | undefined) {
+function loadStore(loadedStore: SavedState | undefined) {
   if (!loadedStore) {
     return undefined;
   }

@@ -4,7 +4,9 @@ import controlButton from 'src/commons/ControlButton';
  * @prop questionProgress a tuple of (current question number, question length) where
  *   the current question number is 1-based.
  */
-export type QuestionViewButtonProps = {
+type QuestionViewButtonProps = StateProps;
+
+type StateProps = {
   questionProgress: [number, number] | null;
   key: string;
 };

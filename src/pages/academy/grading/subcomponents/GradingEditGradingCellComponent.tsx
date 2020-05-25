@@ -8,9 +8,14 @@ import { filterNotificationsBySubmission } from 'src/commons/notificationBadge/N
 import { NotificationFilterFunction } from 'src/commons/notificationBadge/NotificationBadgeTypes';
 import { GradingOverviewWithNotifications } from 'src/features/grading/GradingTypes';
 
-type EditGradingCellProps = {
-  data: GradingOverviewWithNotifications;
+type EditGradingCellProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
+};
+
+type StateProps = {
+  data: GradingOverviewWithNotifications;
 };
 
 /**

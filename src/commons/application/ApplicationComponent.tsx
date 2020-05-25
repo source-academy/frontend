@@ -18,19 +18,9 @@ import SourcecastContainer from 'src/pages/sourcecast/SourcecastContainer';
 import { Role, sourceLanguages } from 'src/reducers/states';
 import { stringParamToInt } from 'src/utils/paramParseHelpers';
 
-export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
+export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
-export interface IStateProps {
-  accessToken?: string;
-  currentPlaygroundChapter: number;
-  currentPlaygroundVariant: Variant;
-  role?: Role;
-  title: string;
-  name?: string;
-  currentExternalLibrary: ExternalLibraryName;
-}
-
-export interface IDispatchProps {
+export type DispatchProps = {
   handleClearContext: (
     chapter: number,
     variant: Variant,
@@ -42,11 +32,22 @@ export interface IDispatchProps {
   handleLogOut: () => void;
   handleExternalLibrarySelect: (external: ExternalLibraryName) => void;
   handleSetExecTime: (execTime: string) => void;
-}
+};
+
+export type StateProps = {
+  accessToken?: string;
+  currentPlaygroundChapter: number;
+  currentPlaygroundVariant: Variant;
+  role?: Role;
+  title: string;
+  name?: string;
+  currentExternalLibrary: ExternalLibraryName;
+};
+
 
 const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
 
-class Application extends React.Component<IApplicationProps, {}> {
+class Application extends React.Component<ApplicationProps, {}> {
   public componentDidMount() {
     parsePlayground(this.props);
   }
@@ -85,16 +86,16 @@ class Application extends React.Component<IApplicationProps, {}> {
  *  1. If the user is logged in, render the Academy component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAcademy = (props: IApplicationProps) =>
+const toAcademy = (props: ApplicationProps) =>
   props.accessToken === undefined || props.role === undefined
     ? () => <Redirect to="/login" />
     : () => <Academy accessToken={props.accessToken} role={props.role!} />;
 
-const toLogin = (props: IApplicationProps) => () => (
+const toLogin = (props: ApplicationProps) => () => (
   <Login luminusCode={qs.parse(props.location.search).code} />
 );
 
-const parsePlayground = (props: IApplicationProps) => {
+const parsePlayground = (props: ApplicationProps) => {
   const prgrm = parsePrgrm(props);
   const chapter = parseChapter(props) || props.currentPlaygroundChapter;
   const variant = parseVariant(props, chapter) || props.currentPlaygroundVariant;

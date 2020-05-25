@@ -5,26 +5,26 @@ import {
   AssessmentStatuses,
   ExternalLibraryName,
   GradingStatuses,
-  IAssessment,
-  IAssessmentOverview,
+  Assessment,
+  AssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
-  IQuestion,
-  ITestcase,
+  Question,
+  Testcase,
   Library,
   MCQChoice,
   TestcaseTypes
 } from 'src/commons/assessment/AssessmentTypes';
 
 import {
-  IXmlParseStrCProblem,
-  IXmlParseStrDeployment,
-  IXmlParseStrOverview,
-  IXmlParseStrPProblem,
-  IXmlParseStrProblem,
-  IXmlParseStrProblemChoice,
-  IXmlParseStrTask,
-  IXmlParseStrTestcase
+  XmlParseStrCProblem,
+  XmlParseStrDeployment,
+  XmlParseStrOverview,
+  XmlParseStrPProblem,
+  XmlParseStrProblem,
+  XmlParseStrProblemChoice,
+  XmlParseStrTask,
+  XmlParseStrTestcase
 } from './XMLParserTypes';
 
 const editingId = -1;
@@ -33,7 +33,7 @@ const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const retrieveLocalAssessment = (): IAssessment | null => {
+export const retrieveLocalAssessment = (): Assessment | null => {
   const assessment = localStorage.getItem('MissionEditingAssessmentSA');
   if (assessment) {
     return JSON.parse(assessment);
@@ -42,7 +42,7 @@ export const retrieveLocalAssessment = (): IAssessment | null => {
   }
 };
 
-export const retrieveLocalAssessmentOverview = (): IAssessmentOverview | null => {
+export const retrieveLocalAssessmentOverview = (): AssessmentOverview | null => {
   const assessment = localStorage.getItem('MissionEditingOverviewSA');
   if (assessment) {
     return JSON.parse(assessment);
@@ -51,15 +51,15 @@ export const retrieveLocalAssessmentOverview = (): IAssessmentOverview | null =>
   }
 };
 
-export const storeLocalAssessment = (assessment: IAssessment): void => {
+export const storeLocalAssessment = (assessment: Assessment): void => {
   localStorage.setItem('MissionEditingAssessmentSA', JSON.stringify(assessment));
 };
 
-export const storeLocalAssessmentOverview = (overview: IAssessmentOverview): void => {
+export const storeLocalAssessmentOverview = (overview: AssessmentOverview): void => {
   localStorage.setItem('MissionEditingOverviewSA', JSON.stringify(overview));
 };
 
-export const makeEntireAssessment = (result: any): [IAssessmentOverview, IAssessment] => {
+export const makeEntireAssessment = (result: any): [AssessmentOverview, Assessment] => {
   const assessmentArr = makeAssessment(result);
   const overview = makeAssessmentOverview(result, assessmentArr[1], assessmentArr[2]);
   return [overview, assessmentArr[0]];
@@ -69,9 +69,9 @@ const makeAssessmentOverview = (
   result: any,
   maxGradeVal: number,
   maxXpVal: number
-): IAssessmentOverview => {
-  const task: IXmlParseStrTask = result.CONTENT.TASK[0];
-  const rawOverview: IXmlParseStrOverview = task.$;
+): AssessmentOverview => {
+  const task: XmlParseStrTask = result.CONTENT.TASK[0];
+  const rawOverview: XmlParseStrOverview = task.$;
   return {
     category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
     closeAt: rawOverview.duedate,
@@ -92,9 +92,9 @@ const makeAssessmentOverview = (
   };
 };
 
-const makeAssessment = (result: any): [IAssessment, number, number] => {
-  const task: IXmlParseStrTask = result.CONTENT.TASK[0];
-  const rawOverview: IXmlParseStrOverview = task.$;
+const makeAssessment = (result: any): [Assessment, number, number] => {
+  const task: XmlParseStrTask = result.CONTENT.TASK[0];
+  const rawOverview: XmlParseStrOverview = task.$;
   const questionArr = makeQuestions(task);
   return [
     {
@@ -116,7 +116,7 @@ const altEval = (str: string): any => {
   return Function('"use strict";return (' + str + ')')();
 };
 
-const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Library => {
+const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Library => {
   if (deploymentArr === undefined) {
     return {
       chapter: -1,
@@ -147,13 +147,13 @@ const makeLibrary = (deploymentArr: IXmlParseStrDeployment[] | undefined): Libra
   }
 };
 
-const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] => {
+const makeQuestions = (task: XmlParseStrTask): [Question[], number, number] => {
   let maxGrade = 0;
   let maxXp = 0;
   const questions: Array<IProgrammingQuestion | IMCQQuestion> = [];
-  task.PROBLEMS[0].PROBLEM.forEach((problem: IXmlParseStrProblem, curId: number) => {
+  task.PROBLEMS[0].PROBLEM.forEach((problem: XmlParseStrProblem, curId: number) => {
     const localMaxXp = problem.$.maxxp ? parseInt(problem.$.maxxp, 10) : 0;
-    const question: IQuestion = {
+    const question: Question = {
       answer: null,
       roomId: null,
       content: problem.TEXT[0],
@@ -169,20 +169,20 @@ const makeQuestions = (task: IXmlParseStrTask): [IQuestion[], number, number] =>
     maxGrade += parseInt(problem.$.maxgrade, 10);
     maxXp += localMaxXp;
     if (question.type === 'programming') {
-      questions.push(makeProgramming(problem as IXmlParseStrPProblem, question));
+      questions.push(makeProgramming(problem as XmlParseStrPProblem, question));
     }
     if (question.type === 'mcq') {
-      questions.push(makeMCQ(problem as IXmlParseStrCProblem, question));
+      questions.push(makeMCQ(problem as XmlParseStrCProblem, question));
     }
   });
   return [questions, maxGrade, maxXp];
 };
 
-const makeMCQ = (problem: IXmlParseStrCProblem, question: IQuestion): IMCQQuestion => {
+const makeMCQ = (problem: XmlParseStrCProblem, question: Question): IMCQQuestion => {
   const choicesVal: MCQChoice[] = [];
   const solution = problem.SNIPPET ? problem.SNIPPET[0].SOLUTION : undefined;
   let solutionVal = 0;
-  problem.CHOICE.forEach((choice: IXmlParseStrProblemChoice, i: number) => {
+  problem.CHOICE.forEach((choice: XmlParseStrProblemChoice, i: number) => {
     choicesVal.push({
       content: choice.TEXT[0],
       hint: null
@@ -199,8 +199,8 @@ const makeMCQ = (problem: IXmlParseStrCProblem, question: IQuestion): IMCQQuesti
 };
 
 const makeProgramming = (
-  problem: IXmlParseStrPProblem,
-  question: IQuestion
+  problem: XmlParseStrPProblem,
+  question: Question
 ): IProgrammingQuestion => {
   const testcases = problem.SNIPPET[0].TESTCASES;
   const publicTestcases = testcases ? testcases[0].PUBLIC || [] : [];
@@ -226,7 +226,7 @@ const makeProgramming = (
   return result;
 };
 
-const makeTestcase = (testcase: IXmlParseStrTestcase): ITestcase => {
+const makeTestcase = (testcase: XmlParseStrTestcase): Testcase => {
   return {
     type: TestcaseTypes.public,
     answer: testcase.$.answer,
@@ -239,11 +239,11 @@ export const exportXml = () => {
   const assessmentStr = localStorage.getItem('MissionEditingAssessmentSA');
   const overviewStr = localStorage.getItem('MissionEditingOverviewSA');
   if (assessmentStr && overviewStr) {
-    const assessment: IAssessment = JSON.parse(assessmentStr);
-    const overview: IAssessmentOverview = JSON.parse(overviewStr);
+    const assessment: Assessment = JSON.parse(assessmentStr);
+    const overview: AssessmentOverview = JSON.parse(overviewStr);
     const filename = overview.fileName || overview.title;
     const builder = new Builder();
-    const xmlTask: IXmlParseStrTask = assessmentToXml(assessment, overview);
+    const xmlTask: XmlParseStrTask = assessmentToXml(assessment, overview);
     const xml = {
       CONTENT: {
         $: {
@@ -300,11 +300,11 @@ const exportLibrary = (library: Library) => {
 };
 
 export const assessmentToXml = (
-  assessment: IAssessment,
-  overview: IAssessmentOverview
-): IXmlParseStrTask => {
+  assessment: Assessment,
+  overview: AssessmentOverview
+): XmlParseStrTask => {
   const task: any = {};
-  const rawOverview: IXmlParseStrOverview = {
+  const rawOverview: XmlParseStrOverview = {
     coverimage: overview.coverImage,
     duedate: overview.closeAt,
     kind: overview.category.toLowerCase(),

@@ -35,41 +35,28 @@ import EditGradingCell from './subcomponents/GradingEditGradingCellComponent';
 import GradeCell from './subcomponents/GradingGradeCellComponent';
 import GradingStatusCell from './subcomponents/GradingStatusCellComponent';
 import UnsubmitCell from './subcomponents/GradingUnsubmitCellComponent';
-import { GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspaceComponent';
+import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspaceComponent';
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
 import XPCell from './subcomponents/GradingXPCellComponent';
-
-type State = {
-  filterValue: string;
-  groupFilterEnabled: boolean;
-  currPage: number;
-  maxPages: number;
-  rowCountString: string;
-  isBackDisabled: boolean;
-  isForwardDisabled: boolean;
-};
 
 type GradingNavLinkProps = {
   data: GradingOverviewWithNotifications;
 };
 
-interface IGradingProps
-  extends IDispatchProps,
-    IStateProps,
-    RouteComponentProps<IGradingWorkspaceParams> {}
+type GradingProps = DispatchProps & StateProps & RouteComponentProps<GradingWorkspaceParams>;
 
-export interface IGradingWorkspaceParams {
+type GradingWorkspaceParams = {
   submissionId?: string;
   questionId?: string;
-}
+};
 
-export interface IDispatchProps {
+export type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
   handleUnsubmitSubmission: (submissionId: number) => void;
-}
+};
 
-export interface IStateProps {
+export type StateProps = {
   group: string | null;
   gradingOverviews?: GradingOverview[];
   notifications: Notification[];
@@ -99,11 +86,21 @@ const NotificationBadgeCell = (props: GradingNavLinkProps) => {
   );
 };
 
-class Grading extends React.Component<IGradingProps, State> {
+type State = {
+  filterValue: string;
+  groupFilterEnabled: boolean;
+  currPage: number;
+  maxPages: number;
+  rowCountString: string;
+  isBackDisabled: boolean;
+  isForwardDisabled: boolean;
+};
+
+class Grading extends React.Component<GradingProps, State> {
   private columnDefs: ColDef[];
   private gridApi?: GridApi;
 
-  public constructor(props: IGradingProps) {
+  public constructor(props: GradingProps) {
     super(props);
 
     this.columnDefs = [
@@ -358,7 +355,7 @@ class Grading extends React.Component<IGradingProps, State> {
     );
   }
 
-  public componentDidUpdate(prevProps: IGradingProps, prevState: State) {
+  public componentDidUpdate(prevProps: GradingProps, prevState: State) {
     // Only update grid data when a notification is acknowledged
     if (this.gridApi && this.props.notifications.length !== prevProps.notifications.length) {
       // Pass the new reconstructed row data to the grid after fetching the updated notifs
@@ -402,8 +399,8 @@ class Grading extends React.Component<IGradingProps, State> {
     return maxPages === 0
       ? '(none)'
       : currPage !== maxPages
-      ? `(#${pageSize * currPage - 24} - #${pageSize * currPage})`
-      : `(#${pageSize * currPage - 24} - #${totalRows})`;
+        ? `(#${pageSize * currPage - 24} - #${pageSize * currPage})`
+        : `(#${pageSize * currPage - 24} - #${totalRows})`;
   };
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {

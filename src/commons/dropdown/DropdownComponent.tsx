@@ -7,18 +7,23 @@ import Profile from 'src/commons/profile/ProfileContainer';
 import DropdownAbout from './DropdownAbout';
 import DropdownHelp from './DropdownHelp';
 
-type DropdownProps = {
+type DropdownProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleLogOut: () => void;
+};
+
+type StateProps = {
   name?: string;
 };
 
-type DropdownState = {
+type State = {
   isAboutOpen: boolean;
   isHelpOpen: boolean;
   isProfileOpen: boolean;
 };
 
-class Dropdown extends React.Component<DropdownProps, DropdownState> {
+class Dropdown extends React.Component<DropdownProps, State> {
   constructor(props: DropdownProps) {
     super(props);
     this.state = {

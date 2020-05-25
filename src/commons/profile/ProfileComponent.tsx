@@ -7,33 +7,30 @@ import {
   AssessmentCategory,
   AssessmentStatuses,
   GradingStatuses,
-  IAssessmentOverview
+  AssessmentOverview
 } from 'src/commons/assessment/AssessmentTypes';
 import { Role } from 'src/reducers/states'; // TODO: Import from commons
 
 import ProfileCard from './ProfileCard';
 
-export interface IProfileProps
-  extends IProfileDispatchProps,
-    IProfileStateProps,
-    IProfileOwnProps {}
+type ProfileProps = DispatchProps & StateProps & OwnProps;
 
-export interface IProfileStateProps {
+export type DispatchProps = {
+  handleAssessmentOverviewFetch: () => void;
+};
+
+export type StateProps = {
   name?: string;
   role?: Role;
-  assessmentOverviews?: IAssessmentOverview[];
-}
+  assessmentOverviews?: AssessmentOverview[];
+};
 
-export interface IProfileDispatchProps {
-  handleAssessmentOverviewFetch: () => void;
-}
-
-export interface IProfileOwnProps {
+type OwnProps = {
   isOpen: boolean;
   onClose: () => void;
-}
+};
 
-class Profile extends React.Component<IProfileProps, {}> {
+class Profile extends React.Component<ProfileProps, {}> {
   public componentDidMount() {
     if (this.props.name && this.props.role && !this.props.assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them

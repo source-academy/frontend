@@ -34,7 +34,7 @@ export type DispatchProps = {
   handleGradingSaveAndContinue: GradingSaveFunction;
 };
 
-export type OwnProps = {
+type OwnProps = {
   solution: number | string | null;
   questionId: number;
   submissionId: number;

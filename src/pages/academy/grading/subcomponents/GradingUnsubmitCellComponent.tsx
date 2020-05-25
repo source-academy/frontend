@@ -6,19 +6,24 @@ import controlButton from 'src/commons/ControlButton';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { Role } from 'src/reducers/states';
 
-export interface IUnsubmitCellProps {
-  data: GradingOverview;
+export type UnsubmitCellProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleUnsubmitSubmission: (submissionId: number) => void;
+};
+
+type StateProps = {
+  data: GradingOverview;
   group: string | null;
   role?: Role;
-}
+};
 
-type UnsubmitCellState = {
+type State = {
   isAlertOpen: boolean;
 };
 
-class UnsubmitCell extends React.Component<IUnsubmitCellProps, UnsubmitCellState> {
-  public constructor(props: IUnsubmitCellProps) {
+class UnsubmitCell extends React.Component<UnsubmitCellProps, State> {
+  public constructor(props: UnsubmitCellProps) {
     super(props);
 
     this.state = {

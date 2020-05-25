@@ -35,16 +35,16 @@ import {
 } from 'src/actions';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import {
-  ICodeDelta,
+  CodeDelta,
   Input,
-  IPlaybackData,
-  IPosition,
+  PlaybackData,
+  Position,
   PlaybackStatus
 } from 'src/features/sourcecast/SourcecastTypes';
 import { IState, SideContentType } from 'src/reducers/states';
-import Sourcecast, { IDispatchProps, IStateProps } from './SourcecastComponent';
+import Sourcecast, { DispatchProps, StateProps } from './SourcecastComponent';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   audioUrl: state.workspaces.sourcecast.audioUrl,
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   title: state.workspaces.sourcecast.title,
@@ -74,14 +74,14 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 
 const location: WorkspaceLocation = 'sourcecast';
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, 'default', location),
-      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+      handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(location, cursorPosition),
       handleEditorEval: () => evalEditor(location),
       handleEditorValueChange: (val: string) => updateEditorValue(val, location),
@@ -97,7 +97,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
-      handleSetCodeDeltasToApply: (deltas: ICodeDelta[]) => setCodeDeltasToApply(deltas, location),
+      handleSetCodeDeltasToApply: (deltas: CodeDelta[]) => setCodeDeltasToApply(deltas, location),
       handleSetEditorReadonly: (editorReadonly: boolean) =>
         setEditorReadonly(location, editorReadonly),
       handleSetInputToApply: (inputToApply: Input) => setInputToApply(inputToApply, location),
@@ -105,7 +105,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         title: string,
         description: string,
         audioUrl: string,
-        playbackData: IPlaybackData
+        playbackData: PlaybackData
       ) => setSourcecastData(title, description, audioUrl, playbackData, location),
       handleSetSourcecastDuration: (duration: number) => setSourcecastDuration(duration, location),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>

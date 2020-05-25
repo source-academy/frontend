@@ -3,42 +3,42 @@ import * as React from 'react';
 import { Prompt } from 'react-router';
 
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
-import Editor, { IEditorProps } from 'src/commons/editor/EditorComponent';
-import MCQChooser, { IMCQChooserProps } from 'src/commons/MCQChooser/MCQChooserComponent';
-import Repl, { IReplProps } from 'src/commons/repl/ReplComponent';
+import Editor, { EditorProps } from 'src/commons/editor/EditorComponent';
+import MCQChooser, { MCQChooserProps } from 'src/commons/MCQChooser/MCQChooserComponent';
+import Repl, { ReplProps } from 'src/commons/repl/ReplComponent';
 import SideContent, { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
 
-export interface IWorkspaceProps extends IWorkspaceDispatchProps, IWorkspaceStateProps {}
+export type WorkspaceProps = DispatchProps & StateProps;
 
-interface IWorkspaceStateProps {
-  // Either editorProps or mcqProps must be provided
-  controlBarProps: ControlBarProps;
-  customEditor?: JSX.Element;
-  editorProps?: IEditorProps;
-  editorHeight?: string | number;
-  editorWidth: string;
-  hasUnsavedChanges?: boolean;
-  mcqProps?: IMCQChooserProps;
-  replProps: IReplProps;
-  sideContentHeight?: number;
-  sideContentProps: SideContentProps;
-  sideContentIsResizeable?: boolean;
-}
-
-interface IWorkspaceDispatchProps {
+interface DispatchProps {
   handleEditorHeightChange: (height: number) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleSideContentHeightChange: (height: number) => void;
 }
 
-class Workspace extends React.Component<IWorkspaceProps, {}> {
+interface StateProps {
+  // Either editorProps or mcqProps must be provided
+  controlBarProps: ControlBarProps;
+  customEditor?: JSX.Element;
+  editorProps?: EditorProps;
+  editorHeight?: string | number;
+  editorWidth: string;
+  hasUnsavedChanges?: boolean;
+  mcqProps?: MCQChooserProps;
+  replProps: ReplProps;
+  sideContentHeight?: number;
+  sideContentProps: SideContentProps;
+  sideContentIsResizeable?: boolean;
+}
+
+class Workspace extends React.Component<WorkspaceProps, {}> {
   private editorDividerDiv: HTMLDivElement;
   private leftParentResizable: Resizable;
   private maxDividerHeight: number;
   private sideDividerDiv: HTMLDivElement;
   private editorRef: React.RefObject<Editor>;
 
-  public constructor(props: IWorkspaceProps) {
+  public constructor(props: WorkspaceProps) {
     super(props);
     this.editorRef = React.createRef();
   }
@@ -173,7 +173,7 @@ class Workspace extends React.Component<IWorkspaceProps, {}> {
    * Pre-condition: `this.props.editorProps`
    * XOR `this.props.mcq` are defined.
    */
-  private createWorkspaceInput = (props: IWorkspaceProps) => {
+  private createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.customEditor) {
       return props.customEditor;
     } else if (props.editorProps) {

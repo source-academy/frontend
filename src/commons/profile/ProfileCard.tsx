@@ -6,23 +6,23 @@ import { NavLink } from 'react-router-dom';
 import {
   AssessmentCategories,
   AssessmentCategory,
-  IAssessmentOverview
+  AssessmentOverview
 } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 
-interface IProfileCardProps extends IProfileCardDispatchProps, IProfileCardStateProps {}
+type ProfileCardProps = DispatchProps & StateProps;
 
-interface IProfileCardStateProps {
-  item: IAssessmentOverview;
-}
+type StateProps = {
+  item: AssessmentOverview;
+};
 
-interface IProfileCardDispatchProps {
+type DispatchProps = {
   getFrac: (num: number, den: number) => number;
   parseColour: (frac: number) => string;
   renderIcon: (category: AssessmentCategory) => IconName;
-}
+};
 
-class ProfileCard extends React.Component<IProfileCardProps, {}> {
+class ProfileCard extends React.Component<ProfileCardProps, {}> {
   public render() {
     const { item } = this.props;
 

@@ -5,14 +5,14 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { fetchGroupOverviews } from 'src/actions/dashboard';
 import { fetchGradingOverviews } from 'src/actions/session';
 import { IState } from 'src/reducers/states';
-import Dashboard, { IDashboardDispatchProps, IDashboardStateProps } from './DashboardComponent';
+import Dashboard, { DispatchProps, StateProps } from './DashboardComponent';
 
-const mapStateToProps: MapStateToProps<IDashboardStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   gradingOverviews: state.session.gradingOverviews ? state.session.gradingOverviews : [],
   groupOverviews: state.dashboard.groupOverviews
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDashboardDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleFetchGradingOverviews: fetchGradingOverviews,

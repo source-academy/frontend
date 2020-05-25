@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { AssessmentStatuses, IAssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import { AssessmentStatuses, AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { EditingOverviewCard } from 'src/commons/editingOverviewCard/EditingOverviewCardComponent';
-import { EditingWorkspaceOwnProps } from 'src/commons/editingWorkspace/EditingWorkspaceComponent';
+import { OwnProps as EditingWorkspaceOwnProps } from 'src/commons/editingWorkspace/EditingWorkspaceComponent';
 import EditingWorkspaceContainer from 'src/commons/editingWorkspace/EditingWorkspaceContainer';
 import MissionCreator from 'src/commons/missionCreator/MissionCreatorContainer';
 import { retrieveLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
@@ -12,36 +12,30 @@ import { stringParamToInt } from 'src/utils/paramParseHelpers';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
-// TODO: Inspect this, same as IAssessmentWorkspaceParams
-export interface IMissionControlParams {
+// TODO: Duplicate with AssessmentComponent
+type MissionControlParams = {
   assessmentId?: string;
   questionId?: string;
-}
+};
 
-export interface IMissionControlProps
-  extends IMissionControlDispatchProps,
-    RouteComponentProps<IMissionControlParams>,
-    IMissionControlStateProps {}
+export type MissionControlProps = DispatchProps & StateProps & RouteComponentProps<MissionControlParams>;
 
-export interface IMissionControlDispatchProps {
+export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
   handleSubmitAssessment: (id: number) => void;
-}
+};
 
-export interface IMissionControlStateProps {
+export type StateProps = {
   isStudent: boolean;
-}
+};
 
 type State = {
   editOverview: string;
-  editingOverview: IAssessmentOverview | null;
+  editingOverview: AssessmentOverview | null;
 };
 
-class MissionControl extends React.Component<IMissionControlProps, State> {
-  /**
-   * Initialize state
-   */
-  public constructor(props: IMissionControlProps) {
+class MissionControl extends React.Component<MissionControlProps, State> {
+  public constructor(props: MissionControlProps) {
     super(props);
     this.state = {
       editOverview: '',
@@ -101,7 +95,7 @@ class MissionControl extends React.Component<IMissionControlProps, State> {
     );
   }
 
-  private updateEditingOverview = (overview: IAssessmentOverview) => {
+  private updateEditingOverview = (overview: AssessmentOverview) => {
     this.setState({
       editingOverview: overview
     });

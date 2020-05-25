@@ -4,26 +4,31 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
-import { IAssessment } from 'src/commons/assessment/AssessmentTypes';
+import { Assessment } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
 import { IWorkspaceState } from 'src/reducers/states'; // TODO: Import from commons
 
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
-interface IQuestionEditorProps {
-  assessment: IAssessment;
-  editorValue: string | null;
-  questionId: number;
-  updateAssessment: (assessment: IAssessment) => void;
+type QuestionEditorProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  updateAssessment: (assessment: Assessment) => void;
   handleEditorValueChange: (val: string) => void;
   handleUpdateWorkspace: (options: Partial<IWorkspaceState>) => void;
-}
+};
 
-interface IQuestionEditorState {
+type StateProps = {
+  assessment: Assessment;
+  editorValue: string | null;
+  questionId: number;
+};
+
+type OwnProps = {
   activeEditor: QuestionEditor;
   templateValue: string;
   templateFocused: boolean;
-}
+};
 
 const questionEditorPaths = ['prepend', 'postpend', 'solutionTemplate', 'answer'] as const;
 
@@ -64,10 +69,10 @@ const questionEditors: QuestionEditor[] = [
  * activeEditor is the default editor to show initially
  */
 export class ProgrammingQuestionTemplateTab extends React.Component<
-  IQuestionEditorProps,
-  IQuestionEditorState
+  QuestionEditorProps,
+  OwnProps
 > {
-  public constructor(props: IQuestionEditorProps) {
+  public constructor(props: QuestionEditorProps) {
     super(props);
     this.state = {
       activeEditor: questionEditors[0],

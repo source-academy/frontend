@@ -2,13 +2,13 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { LINKS } from '../../utils/constants';
+import { LINKS } from 'src/utils/constants';
 
-interface IEnvVisualizerState {
+type State = {
   loading: boolean;
-}
+};
 
-class EnvVisualizer extends React.Component<{}, IEnvVisualizerState> {
+class EnvVisualizer extends React.Component<{}, State> {
   private $parent: HTMLElement | null;
 
   constructor(props: any) {

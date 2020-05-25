@@ -5,20 +5,46 @@ import * as React from 'react';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
 import {
-  ICodeDelta,
+  CodeDelta,
   Input,
-  IPlaybackData,
-  ISourcecastData,
+  PlaybackData,
+  SourcecastData,
   PlaybackStatus
 } from 'src/features/sourcecast/SourcecastTypes';
 
-class SourcecastControlbar extends React.PureComponent<
-  ISourcecastControlbarProps,
-  ISourcecastControlbarState
-> {
+export type SourcecastControlbarProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  handleEditorValueChange: (newCode: string) => void;
+  handleSetCodeDeltasToApply: (deltas: CodeDelta[]) => void;
+  handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetInputToApply: (inputToApply: Input) => void;
+  handleSetSourcecastDuration: (duration: number) => void;
+  handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
+  handleChapterSelect: (chapter: number) => void;
+  handleExternalSelect: (name: ExternalLibraryName) => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+};
+
+type StateProps = {
+  audioUrl: string;
+  duration: number;
+  playbackData: PlaybackData;
+  playbackStatus: PlaybackStatus;
+};
+
+type State = {
+  currentDeltaRevision: number;
+  currentPlayerTime: number;
+  currentPlayerProgress: number;
+  currentSourcecastItem: SourcecastData | null;
+  duration: number;
+};
+
+class SourcecastControlbar extends React.PureComponent<SourcecastControlbarProps, State> {
   private audio: React.RefObject<HTMLAudioElement>;
 
-  constructor(props: ISourcecastControlbarProps) {
+  constructor(props: SourcecastControlbarProps) {
     super(props);
     this.audio = React.createRef();
     this.state = {
@@ -84,11 +110,11 @@ class SourcecastControlbar extends React.PureComponent<
     this.props.handleSetSourcecastDuration(this.audio.current!.duration);
   };
 
-  private applyDeltas = (deltas: ICodeDelta[]) => {
+  private applyDeltas = (deltas: CodeDelta[]) => {
     this.props.handleSetCodeDeltasToApply(deltas);
   };
 
-  private stopPreviousPlaybackAndApplyFromStart = (playbackData: IPlaybackData) => {
+  private stopPreviousPlaybackAndApplyFromStart = (playbackData: PlaybackData) => {
     this.setState(
       {
         currentDeltaRevision: this.state.currentDeltaRevision + 1
@@ -97,7 +123,7 @@ class SourcecastControlbar extends React.PureComponent<
     );
   };
 
-  private applyPlaybackDataFromStart = async (playbackData: IPlaybackData) => {
+  private applyPlaybackDataFromStart = async (playbackData: PlaybackData) => {
     const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
     const currentRevision = this.state.currentDeltaRevision;
     let currentTime = this.audio.current!.currentTime * 1000;
@@ -108,7 +134,7 @@ class SourcecastControlbar extends React.PureComponent<
       .filter(
         deltaWithTime => deltaWithTime.time <= currentTime && deltaWithTime.type === 'codeDelta'
       )
-      .map(deltaWithTime => deltaWithTime.data as ICodeDelta);
+      .map(deltaWithTime => deltaWithTime.data as CodeDelta);
     this.applyDeltas(codeDeltasToApply);
 
     const futureData = playbackData.inputs.filter(
@@ -189,30 +215,6 @@ class SourcecastControlbar extends React.PureComponent<
       return '00:00';
     }
   };
-}
-
-export interface ISourcecastControlbarProps {
-  handleEditorValueChange: (newCode: string) => void;
-  handleSetCodeDeltasToApply: (deltas: ICodeDelta[]) => void;
-  handleSetEditorReadonly: (editorReadonly: boolean) => void;
-  handleSetInputToApply: (inputToApply: Input) => void;
-  handleSetSourcecastDuration: (duration: number) => void;
-  handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
-  audioUrl: string;
-  duration: number;
-  playbackData: IPlaybackData;
-  playbackStatus: PlaybackStatus;
-  handleChapterSelect: (chapter: number) => void;
-  handleExternalSelect: (name: ExternalLibraryName) => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-}
-
-export interface ISourcecastControlbarState {
-  currentDeltaRevision: number;
-  currentPlayerTime: number;
-  currentPlayerProgress: number;
-  currentSourcecastItem: ISourcecastData | null;
-  duration: number;
 }
 
 export default SourcecastControlbar;

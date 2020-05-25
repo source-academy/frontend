@@ -4,13 +4,13 @@ import * as React from 'react';
 
 export type VideoDisplayMode = 'video' | 'still';
 
-type VideoDisplayState = {
+type State = {
   width: number;
   height: number;
   mode: VideoDisplayMode;
 };
 
-class VideoDisplay extends React.Component<{}, VideoDisplayState> {
+class VideoDisplay extends React.Component<{}, State> {
   private $video: HTMLElement | null;
   private $canvas: HTMLElement | null;
   constructor(props: any) {
@@ -142,13 +142,13 @@ class VideoDisplay extends React.Component<{}, VideoDisplayState> {
   private swapModes = (mode: VideoDisplayMode) => () => {
     switch (mode) {
       case 'video':
-        this.setState((state: VideoDisplayState) => {
+        this.setState((state: State) => {
           return { ...state, mode: 'still' as VideoDisplayMode };
         }, this.handleSnapPicture);
         break;
 
       case 'still':
-        this.setState((state: VideoDisplayState) => {
+        this.setState((state: State) => {
           return { ...state, mode: 'video' as VideoDisplayMode };
         }, this.handleStartVideo);
         break;

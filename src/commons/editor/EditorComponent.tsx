@@ -30,23 +30,9 @@ import AceRange from './AceRange';
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
  */
-export interface IEditorProps extends IEditorDispatchProps, IEditorStateProps {}
+export type EditorProps = DispatchProps & StateProps;
 
-interface IEditorStateProps {
-  breakpoints: string[];
-  editorSessionId: string;
-  editorValue: string;
-  highlightedLines: number[][];
-  isEditorAutorun: boolean;
-  newCursorPosition?: IPosition;
-  sharedbAceInitValue?: string;
-  sharedbAceIsInviting?: boolean;
-  sourceChapter?: number;
-  externalLibraryName?: string;
-  sourceVariant?: Variant;
-}
-
-interface IEditorDispatchProps {
+interface DispatchProps {
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
@@ -60,12 +46,26 @@ interface IEditorDispatchProps {
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 }
 
+interface StateProps {
+  breakpoints: string[];
+  editorSessionId: string;
+  editorValue: string;
+  highlightedLines: number[][];
+  isEditorAutorun: boolean;
+  newCursorPosition?: IPosition;
+  sharedbAceInitValue?: string;
+  sharedbAceIsInviting?: boolean;
+  sourceChapter?: number;
+  externalLibraryName?: string;
+  sourceVariant?: Variant;
+}
+
 export interface IPosition {
   row: number;
   column: number;
 }
 
-class Editor extends React.PureComponent<IEditorProps, {}> {
+class Editor extends React.PureComponent<EditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
   private markerIds: number[];
@@ -73,7 +73,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   private onValidateMethod: (annotations: IAnnotation[]) => void;
   private completer: {};
 
-  constructor(props: IEditorProps) {
+  constructor(props: EditorProps) {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
@@ -171,7 +171,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     this.ShareAce = null;
   }
 
-  public componentDidUpdate(prevProps: IEditorProps) {
+  public componentDidUpdate(prevProps: EditorProps) {
     const newCursorPosition = this.props.newCursorPosition;
     if (newCursorPosition && newCursorPosition !== prevProps.newCursorPosition) {
       this.moveCursor(newCursorPosition);

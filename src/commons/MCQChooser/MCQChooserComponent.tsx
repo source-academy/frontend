@@ -5,17 +5,17 @@ import { IMCQQuestion } from 'src/commons/assessment/AssessmentTypes';
 import Markdown from 'src/commons/Markdown';
 import { showSuccessMessage, showWarningMessage } from 'src/utils/notification';
 
-export interface IMCQChooserProps {
+export type MCQChooserProps = {
   mcq: IMCQQuestion;
   handleMCQSubmit: (choiceId: number) => void;
-}
+};
 
 type State = {
   mcqOption: number | null;
 };
 
-class MCQChooser extends React.PureComponent<IMCQChooserProps, State> {
-  constructor(props: IMCQChooserProps) {
+class MCQChooser extends React.PureComponent<MCQChooserProps, State> {
+  constructor(props: MCQChooserProps) {
     super(props);
     this.state = {
       mcqOption: props.mcq.answer

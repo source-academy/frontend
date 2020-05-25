@@ -2,8 +2,8 @@ import {
   AssessmentCategory,
   AutogradingResult,
   GradingStatus,
-  IQuestion,
-  ITestcase,
+  Question,
+  Testcase,
   MCQChoice
 } from 'src/commons/assessment/AssessmentTypes';
 import { Notification } from 'src/components/notification/notificationShape';
@@ -50,7 +50,7 @@ export type Grading = GradingQuestion[];
  * particular question in a submission.
  */
 export type GradingQuestion = {
-  question: IAnsweredQuestion;
+  question: AnsweredQuestion;
   student: {
     name: string;
     id: number;
@@ -81,12 +81,14 @@ export type GradingQuestion = {
  * @property solution this can be either the answer to the MCQ, the solution to
  *   a programming question, or null.
  */
-export interface IAnsweredQuestion extends IQuestion {
+export type AnsweredQuestion = Question & Answer;
+
+type Answer = {
   roomId: null;
   autogradingResults: AutogradingResult[];
   prepend: string;
   postpend: string;
-  testcases: ITestcase[];
+  testcases: Testcase[];
   solution: number | string | null;
   answer: string | number | null;
   maxGrade: number;

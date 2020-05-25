@@ -10,33 +10,33 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import CanvasOutput from 'src/commons/sideContent/CanvasOutput';
 import { InterpreterOutput } from 'src/reducers/states'; // TODO: Import from commons
 
-import ReplInput, { IReplInputProps } from './ReplInput';
+import ReplInput, { ReplInputProps } from './ReplInput';
 
-export interface IReplProps extends IReplDispatchProps, IReplStateProps {}
+export type ReplProps = DispatchProps & StateProps;
 
-interface IReplStateProps {
+type StateProps = {
   output: InterpreterOutput[];
   replValue: string;
   hidden?: boolean;
   usingSubst?: boolean;
   sourceChapter?: number;
   sourceVariant?: Variant;
-}
+};
 
-interface IReplDispatchProps {
+type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
-}
+};
 
-interface IOutputProps {
+type OutputProps = {
   output: InterpreterOutput;
   usingSubst?: boolean;
-}
+};
 
-class Repl extends React.PureComponent<IReplProps, {}> {
-  public constructor(props: IReplProps) {
+class Repl extends React.PureComponent<ReplProps, {}> {
+  public constructor(props: ReplProps) {
     super(props);
   }
 
@@ -44,7 +44,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
     const cards = this.props.output.map((slice, index) => (
       <Output output={slice} key={index} usingSubst={this.props.usingSubst || false} />
     ));
-    const inputProps: IReplInputProps = this.props as IReplInputProps;
+    const inputProps: ReplInputProps = this.props as ReplInputProps;
     return (
       <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
         <div className="repl-output-parent">
@@ -61,7 +61,7 @@ class Repl extends React.PureComponent<IReplProps, {}> {
   }
 }
 
-export const Output: React.SFC<IOutputProps> = (props: IOutputProps) => {
+export const Output: React.SFC<OutputProps> = (props: OutputProps) => {
   switch (props.output.type) {
     case 'code':
       return (

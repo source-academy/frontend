@@ -2,20 +2,25 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
-import { IPlaybackData, ISourcecastData } from 'src/features/sourcecast/SourcecastTypes';
+import { PlaybackData, SourcecastData } from 'src/features/sourcecast/SourcecastTypes';
 
-interface ISelectCellProps {
-  data: ISourcecastData;
+type SelectCellProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleSetSourcecastData: (
     title: string,
     description: string,
     audioUrl: string,
-    playbackData: IPlaybackData
+    playbackData: PlaybackData
   ) => void;
-}
+};
 
-class SelectCell extends React.Component<ISelectCellProps, {}> {
-  public constructor(props: ISelectCellProps) {
+type StateProps = {
+  data: SourcecastData;
+};
+
+class SourcecastSelectCell extends React.Component<SelectCellProps, {}> {
+  public constructor(props: SelectCellProps) {
     super(props);
   }
 
@@ -33,4 +38,4 @@ class SelectCell extends React.Component<ISelectCellProps, {}> {
   };
 }
 
-export default SelectCell;
+export default SourcecastSelectCell;

@@ -53,7 +53,7 @@ W* Used to display information regarding an assessment in the UI.
  * @property openAt an ISO 8601 compliant date string specifiying when
  *   the assessment opens
  */
-export interface IAssessmentOverview {
+export interface AssessmentOverview {
   category: AssessmentCategory;
   closeAt: string;
   coverImage: string;
@@ -78,7 +78,7 @@ export interface IAssessmentOverview {
 /*
  * Used when an assessment is being actively attempted/graded.
  */
-export interface IAssessment {
+export type Assessment = {
   category: AssessmentCategory;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
@@ -86,38 +86,29 @@ export interface IAssessment {
   longSummary: string;
   missionPDF: string;
   title: string;
-  questions: IQuestion[];
-}
+  questions: Question[];
+};
 
-export interface IProgrammingQuestion extends IQuestion {
+export interface IProgrammingQuestion extends Question {
   answer: string | null;
   autogradingResults: AutogradingResult[];
   graderTemplate?: string;
   prepend: string;
   postpend: string;
   solutionTemplate: string;
-  testcases: ITestcase[];
-  testcasesPrivate?: ITestcase[]; // For mission control
+  testcases: Testcase[];
+  testcasesPrivate?: Testcase[]; // For mission control
   type: 'programming';
 }
 
-export interface ITestcase {
-  answer: string; // the correct answer to the testcase
-  errors?: SourceError[]; // errors raised by interpreter during execution
-  program: string; // the program to be appended to the student's code
-  result?: any; // the result from the execution of the testcase
-  score: number;
-  type: TestcaseType;
-}
-
-export interface IMCQQuestion extends IQuestion {
+export interface IMCQQuestion extends Question {
   answer: number | null;
   choices: MCQChoice[];
   solution: number | null;
   type: 'mcq';
 }
 
-export interface IQuestion {
+export type Question = {
   answer: string | number | null;
   comments?: string;
   content: string;
@@ -136,7 +127,17 @@ export interface IQuestion {
   roomId: string | null;
   type: QuestionType;
   xp: number;
+};
+
+export interface Testcase {
+  answer: string; // the correct answer to the testcase
+  errors?: SourceError[]; // errors raised by interpreter during execution
+  program: string; // the program to be appended to the student's code
+  result?: any; // the result from the execution of the testcase
+  score: number;
+  type: TestcaseType;
 }
+
 
 export type MCQChoice = {
   content: string;
@@ -210,7 +211,7 @@ export const normalLibrary = (): Library => {
   };
 };
 
-export const overviewTemplate = (): IAssessmentOverview => {
+export const overviewTemplate = (): AssessmentOverview => {
   return {
     category: AssessmentCategories.Mission,
     closeAt: '2100-12-01T00:00+08',
@@ -252,7 +253,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
   };
 };
 
-export const testcaseTemplate = (): ITestcase => {
+export const testcaseTemplate = (): Testcase => {
   return {
     type: TestcaseTypes.public,
     answer: '',
@@ -296,7 +297,7 @@ export const mcqTemplate = (): IMCQQuestion => {
   };
 };
 
-export const assessmentTemplate = (): IAssessment => {
+export const assessmentTemplate = (): Assessment => {
   return {
     category: 'Mission',
     globalDeployment: normalLibrary(),

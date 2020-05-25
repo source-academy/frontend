@@ -36,17 +36,9 @@ import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { IPosition } from 'src/commons/editor/EditorComponent';
 import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
 
-import AssessmentWorkspace, {
-  IAssessmentWorkspaceDispatchProps,
-  IAssessmentWorkspaceOwnProps,
-  IAssessmentWorkspaceStateProps
-} from './AssessmentWorkspaceComponent';
+import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from './AssessmentWorkspaceComponent';
 
-const mapStateToProps: MapStateToProps<
-  IAssessmentWorkspaceStateProps,
-  IAssessmentWorkspaceOwnProps,
-  IState
-> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
@@ -73,7 +65,7 @@ const mapStateToProps: MapStateToProps<
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
-const mapDispatchToProps: MapDispatchToProps<IAssessmentWorkspaceDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>

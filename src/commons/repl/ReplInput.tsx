@@ -2,27 +2,27 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 // source mode and chapter imported in Editor.tsx
 
-export interface IReplInputProps extends IReplInputDispatchProps, IReplInputStateProps {}
+export type ReplInputProps = DispatchProps & StateProps;
 
-interface IReplInputStateProps {
-  replValue: string;
-  sourceChapter: number;
-}
-
-interface IReplInputDispatchProps {
+type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplValueChange: (newCode: string) => void;
   handleReplEval: () => void;
-}
+};
 
-class ReplInput extends React.PureComponent<IReplInputProps, {}> {
+type StateProps = {
+  replValue: string;
+  sourceChapter: number;
+};
+
+class ReplInput extends React.PureComponent<ReplInputProps, {}> {
   private replInputBottom: HTMLDivElement;
   private execBrowseHistoryDown: () => void;
   private execBrowseHistoryUp: () => void;
   private execEvaluate: () => void;
 
-  constructor(props: IReplInputProps) {
+  constructor(props: ReplInputProps) {
     super(props);
     this.execBrowseHistoryDown = props.handleBrowseHistoryDown;
     this.execBrowseHistoryUp = props.handleBrowseHistoryUp;
