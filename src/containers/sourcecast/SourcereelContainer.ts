@@ -104,7 +104,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         changeSideContentHeight(heightChange, location),
       handleTimerPause: () => timerPause(location),
       handleTimerReset: () => timerReset(location),
-      handleTimerResume: () => timerResume(location),
+      handleTimerResume: (timeBefore: number) => timerResume(timeBefore, location),
       handleTimerStart: () => timerStart(location),
       handleTimerStop: () => timerStop(location),
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),

@@ -53,6 +53,7 @@ export const reducer: Reducer<ISourcereelWorkspace> = (
       return {
         ...state,
         recordingStatus: RecordingStatus.recording,
+        timeElapsedBeforePause: action.payload.timeBefore >= 0 ? action.payload.timeBefore : state.timeElapsedBeforePause,
         timeResumed: action.payload.timeNow
       };
     case TIMER_START:

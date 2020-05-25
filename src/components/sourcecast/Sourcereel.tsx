@@ -90,7 +90,7 @@ export interface IDispatchProps {
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
-  handleTimerResume: () => void;
+  handleTimerResume: (timeBefore: number) => void;
   handleTimerStart: () => void;
   handleTimerStop: () => void;
   handleToggleEditorAutorun: () => void;
