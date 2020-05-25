@@ -12,7 +12,9 @@ interface IMissionCreatorDispatchProps {
 
 const mapStateToProps: MapStateToProps<{}, any, {}> = (state, ownProps) => ownProps;
 
-const mapDispatchToProps: MapDispatchToProps<IMissionCreatorDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<IMissionCreatorDispatchProps, {}> = (
+  dispatch: Dispatch
+) =>
   bindActionCreators(
     {
       newAssessment: updateAssessment

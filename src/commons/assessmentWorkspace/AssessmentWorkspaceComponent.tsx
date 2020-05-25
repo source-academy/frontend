@@ -54,9 +54,9 @@ import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export interface IAssessmentWorkspaceProps
-extends IAssessmentWorkspaceDispatchProps,
-IAssessmentWorkspaceStateProps,
-IAssessmentWorkspaceOwnProps {}
+  extends IAssessmentWorkspaceDispatchProps,
+    IAssessmentWorkspaceStateProps,
+    IAssessmentWorkspaceOwnProps {}
 
 export interface IAssessmentWorkspaceStateProps {
   assessment?: IAssessment;

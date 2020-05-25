@@ -6,7 +6,11 @@ import { bindActionCreators } from 'redux';
 import { fetchNotifications } from 'src/commons/actions/SessionActions';
 // TODO: Import from commons
 import { IState } from 'src/reducers/states';
-import Academy, { IAcademyDispatchProps, IAcademyOwnProps, IAcademyStateProps } from './AcademyComponent';
+import Academy, {
+  IAcademyDispatchProps,
+  IAcademyOwnProps,
+  IAcademyStateProps
+} from './AcademyComponent';
 
 const mapStateToProps: MapStateToProps<IAcademyStateProps, {}, IState> = state => ({
   historyHelper: state.session.historyHelper

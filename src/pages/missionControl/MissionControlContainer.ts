@@ -18,7 +18,9 @@ const mapStateToProps: MapStateToProps<IMissionControlStateProps, {}, IState> = 
   return stateProps;
 };
 
-const mapDispatchToProps: MapDispatchToProps<IMissionControlDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<IMissionControlDispatchProps, {}> = (
+  dispatch: Dispatch
+) =>
   bindActionCreators(
     {
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,

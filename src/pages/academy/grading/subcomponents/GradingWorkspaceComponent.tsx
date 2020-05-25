@@ -23,10 +23,7 @@ import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
 import { IPosition } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
-import {
-  SideContentProps,
-  SideContentTab
-} from 'src/commons/sideContent/SideContentComponent';
+import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
@@ -177,18 +174,18 @@ class GradingWorkspace extends React.Component<GradingIWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-            editorSessionId: '',
-            editorValue: this.props.editorValue!,
-            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-            handleEditorEval: this.props.handleEditorEval,
-            handleEditorValueChange: this.props.handleEditorValueChange,
-            breakpoints: this.props.breakpoints,
-            highlightedLines: this.props.highlightedLines,
-            newCursorPosition: this.props.newCursorPosition,
-            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-            isEditorAutorun: false
-          }
+              editorSessionId: '',
+              editorValue: this.props.editorValue!,
+              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
+              handleEditorEval: this.props.handleEditorEval,
+              handleEditorValueChange: this.props.handleEditorValueChange,
+              breakpoints: this.props.breakpoints,
+              highlightedLines: this.props.highlightedLines,
+              newCursorPosition: this.props.newCursorPosition,
+              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+              isEditorAutorun: false
+            }
           : undefined,
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
@@ -197,7 +194,7 @@ class GradingWorkspace extends React.Component<GradingIWorkspaceProps> {
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcqProps: {
         mcq: question as IMCQQuestion,
-        handleMCQSubmit: (i: number) => { }
+        handleMCQSubmit: (i: number) => {}
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -320,8 +317,8 @@ class GradingWorkspace extends React.Component<GradingIWorkspaceProps> {
             submissionId={this.props.submissionId}
           />
         ) : (
-            <span>Chatkit disabled.</span>
-          ),
+          <span>Chatkit disabled.</span>
+        ),
         id: SideContentType.chat,
         disabled: !USE_CHATKIT
       },

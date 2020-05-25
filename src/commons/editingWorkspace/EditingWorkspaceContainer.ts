@@ -1,9 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  submitAnswer
-} from 'src/commons/actions/SessionActions'; 
+import { submitAnswer } from 'src/commons/actions/SessionActions';
 
 import {
   beginDebuggerPause,
@@ -33,7 +31,7 @@ import {
   updateHasUnsavedChanges,
   updateReplValue,
   updateWorkspace,
-  WorkspaceLocation, 
+  WorkspaceLocation
 } from 'src/commons/workspace/WorkspaceActions';
 
 import { Library } from 'src/commons/assessment/AssessmentTypes';
@@ -72,7 +70,9 @@ const mapStateToProps: MapStateToProps<
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
-const mapDispatchToProps: MapDispatchToProps<EditingWorkspaceDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<EditingWorkspaceDispatchProps, {}> = (
+  dispatch: Dispatch
+) =>
   bindActionCreators(
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),

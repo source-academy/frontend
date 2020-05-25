@@ -30,7 +30,9 @@ import {
 } from 'src/features/sourcecast/SourcecastTypes';
 import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 
-import SourcecastControlbar, { ISourcecastControlbarProps } from './subcomponents/SourcecastControlbar';
+import SourcecastControlbar, {
+  ISourcecastControlbarProps
+} from './subcomponents/SourcecastControlbar';
 
 export interface ISourcecastProps extends IDispatchProps, IStateProps {}
 

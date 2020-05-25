@@ -7,11 +7,12 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { ICodeDelta, 
-  Input, 
-  IPosition, 
-  ISelectionRange, 
-  KeyboardCommand 
+import {
+  ICodeDelta,
+  Input,
+  IPosition,
+  ISelectionRange,
+  KeyboardCommand
 } from 'src/features/sourcecast/SourcecastTypes';
 
 /**

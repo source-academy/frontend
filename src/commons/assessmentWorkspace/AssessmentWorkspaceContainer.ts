@@ -1,10 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  fetchAssessment,
-  submitAnswer
-} from 'src/commons/actions/SessionActions'; 
+import { fetchAssessment, submitAnswer } from 'src/commons/actions/SessionActions';
 
 import {
   beginDebuggerPause,
@@ -78,7 +75,9 @@ const mapStateToProps: MapStateToProps<
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
-const mapDispatchToProps: MapDispatchToProps<IAssessmentWorkspaceDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<IAssessmentWorkspaceDispatchProps, {}> = (
+  dispatch: Dispatch
+) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>

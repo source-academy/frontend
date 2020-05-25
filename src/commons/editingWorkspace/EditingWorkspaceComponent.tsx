@@ -47,8 +47,8 @@ import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducer
 import { history } from 'src/utils/history';
 
 export type EditingWorkspaceProps = EditingWorkspaceDispatchProps &
-EditingWorkspaceOwnProps &
-EditingWorkspaceStateProps;
+  EditingWorkspaceOwnProps &
+  EditingWorkspaceStateProps;
 
 export type EditingWorkspaceStateProps = {
   editorHeight?: number;

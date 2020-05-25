@@ -10,12 +10,10 @@ import {
   timerReset,
   timerResume,
   timerStart,
-  timerStop,
+  timerStop
 } from 'src/features/sourcereel/SourcereelActions';
 
-import {
-  fetchSourcecastIndex,
-} from 'src/features/sourcecast/SourcecastActions';
+import { fetchSourcecastIndex } from 'src/features/sourcecast/SourcecastActions';
 
 import {
   beginDebuggerPause,

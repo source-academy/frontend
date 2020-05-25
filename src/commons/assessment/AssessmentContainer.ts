@@ -43,7 +43,7 @@ const mapDispatchToProps: MapDispatchToProps<IAssessmentDispatchProps, {}> = (di
     dispatch
   );
 
-interface IPropType extends IAssessmentOwnProps, RouteComponentProps<IAssessmentWorkspaceParams> { }
+interface IPropType extends IAssessmentOwnProps, RouteComponentProps<IAssessmentWorkspaceParams> {}
 
 export default withRouter<IPropType>(
   connect(

@@ -13,7 +13,9 @@ const mapStateToProps: MapStateToProps<INotificationBadgeStateProps, {}, IState>
   notifications: state.session.notifications
 });
 
-const mapDispatchToProps: MapDispatchToProps<INotificationBadgeDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<INotificationBadgeDispatchProps, {}> = (
+  dispatch: Dispatch
+) =>
   bindActionCreators(
     {
       handleAcknowledgeNotifications: acknowledgeNotifications

@@ -17,8 +17,11 @@ import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBarComponent';
 
-interface IAcademyProps extends IAcademyOwnProps,
-  IAcademyStateProps, IAcademyDispatchProps, RouteComponentProps<{}> { }
+interface IAcademyProps
+  extends IAcademyOwnProps,
+    IAcademyStateProps,
+    IAcademyDispatchProps,
+    RouteComponentProps<{}> {}
 
 export interface IAcademyOwnProps {
   accessToken?: string;

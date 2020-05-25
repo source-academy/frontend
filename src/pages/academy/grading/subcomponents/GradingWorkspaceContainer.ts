@@ -5,10 +5,10 @@ import {
   beginDebuggerPause,
   beginInterruptExecution,
   debuggerReset,
-  debuggerResume,
+  debuggerResume
 } from 'src/commons/actions/InterpreterActions';
 
-import { fetchGrading } from 'src/commons/actions/SessionActions'; 
+import { fetchGrading } from 'src/commons/actions/SessionActions';
 
 import {
   beginClearContext,
@@ -31,7 +31,7 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
-  WorkspaceLocation, 
+  WorkspaceLocation,
   WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
 
@@ -39,15 +39,19 @@ import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { IPosition } from 'src/commons/editor/EditorComponent';
 import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
 
-import GradingWorkspace, { 
-  GradingWorkspaceDispatchProps, 
-  GradingWorkspaceOwnProps, 
-  GradingWorkspaceStateProps 
+import GradingWorkspace, {
+  GradingWorkspaceDispatchProps,
+  GradingWorkspaceOwnProps,
+  GradingWorkspaceStateProps
 } from './GradingWorkspaceComponent';
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 
-const mapStateToProps: MapStateToProps<GradingWorkspaceStateProps, GradingWorkspaceOwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<
+  GradingWorkspaceStateProps,
+  GradingWorkspaceOwnProps,
+  IState
+> = (state, props) => {
   return {
     autogradingResults: state.workspaces.grading.autogradingResults,
     editorPrepend: state.workspaces.grading.editorPrepend,
@@ -72,7 +76,9 @@ const mapStateToProps: MapStateToProps<GradingWorkspaceStateProps, GradingWorksp
   };
 };
 
-const mapDispatchToProps: MapDispatchToProps<GradingWorkspaceDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<GradingWorkspaceDispatchProps, {}> = (
+  dispatch: Dispatch
+) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>

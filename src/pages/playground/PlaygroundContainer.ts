@@ -9,14 +9,14 @@ import {
   initInvite,
   invalidEditorSessionId,
   setEditorSessionId,
-  setWebsocketStatus,
+  setWebsocketStatus
 } from 'src/commons/collabEditing/CollabEditingActions';
 
 import {
   generateLzString,
   shortenURL,
   toggleUsingSubst,
-  updateShortURL,
+  updateShortURL
 } from 'src/features/playground/PlaygroundActions';
 
 import {
@@ -31,8 +31,8 @@ import {
   browseReplHistoryUp,
   changeEditorHeight,
   changeEditorWidth,
-  changeSideContentHeight,
   changeExecTime,
+  changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
   evalEditor,
@@ -41,13 +41,13 @@ import {
   fetchChapter,
   navigateToDeclaration,
   promptAutocomplete,
-  setEditorBreakpoint,
   sendReplInputToOutput,
+  setEditorBreakpoint,
   toggleEditorAutorun,
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
-  WorkspaceLocation, 
+  WorkspaceLocation,
   WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
 

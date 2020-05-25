@@ -1,4 +1,4 @@
-import { action } from 'typesafe-actions'; 
+import { action } from 'typesafe-actions';
 
 import * as actionTypes from 'src/commons/types/ActionTypes';
 
