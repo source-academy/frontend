@@ -405,6 +405,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     // We use async blocks so we don't block the browser during editing
 
     setTimeout(() => {
+      if (!this.AceEditor || !this.AceEditor.current || !this.AceEditor.current.editor) {
+        return;
+      }
       const editor = (this.AceEditor.current as any).editor;
       const session = editor.session;
       const code = this.props.editorValue;
