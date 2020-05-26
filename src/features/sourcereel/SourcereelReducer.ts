@@ -1,8 +1,7 @@
 import { Reducer } from 'redux'; 
-import { ActionType } from 'typesafe-actions';
 import { ISourcereelWorkspace } from 'src/reducers/states';
 
-import { actions } from 'src/utils/actionsHelper';
+import { SourceActionType } from 'src/utils/actionsHelper';
 import {
   RECORD_INIT,
   RECORD_INPUT,
@@ -16,7 +15,7 @@ import { RecordingStatus } from 'src/features/sourcecast/SourcecastTypes';
 
 export const SourcereelReducer: Reducer<ISourcereelWorkspace> = (
   state: ISourcereelWorkspace,
-  action: ActionType<typeof actions>
+  action: SourceActionType
 ) => {
   switch (action.type) {
     case RECORD_INIT:

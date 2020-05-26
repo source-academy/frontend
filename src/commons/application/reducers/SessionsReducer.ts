@@ -1,7 +1,6 @@
 import { Reducer } from 'redux';
-import { ActionType } from 'typesafe-actions';
 
-import { actions } from 'src/utils/actionsHelper';
+import { SourceActionType } from 'src/utils/actionsHelper';
 import {
   LOG_OUT,
   SET_GAME_STATE,
@@ -20,7 +19,7 @@ import { defaultSession, ISessionState } from 'src/commons/states/ApplicationSta
 
 export const SessionsReducer: Reducer<ISessionState> = (
   state = defaultSession,
-  action: ActionType<typeof actions>
+  action: SourceActionType
 ) => {
   switch (action.type) {
     case LOG_OUT:

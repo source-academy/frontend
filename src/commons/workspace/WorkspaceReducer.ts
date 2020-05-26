@@ -1,5 +1,4 @@
 import { Reducer } from 'redux';
-import { ActionType } from 'typesafe-actions';
 import { Testcase } from 'src/commons/assessment/AssessmentTypes';
 
 import {
@@ -61,7 +60,7 @@ import {
   ResultOutput
 } from 'src/reducers/states';
 
-import { actions } from 'src/utils/actionsHelper';
+import { SourceActionType } from 'src/utils/actionsHelper';
 
 /**
  * Takes in a IWorkspaceManagerState and maps it to a new state. The
@@ -73,7 +72,7 @@ import { actions } from 'src/utils/actionsHelper';
  */
 export const WorkspaceReducer: Reducer<IWorkspaceManagerState> = (
   state = defaultWorkspaceManager,
-  action: ActionType<typeof actions>
+  action: SourceActionType
 ) => {
   const workspaceLocation: WorkspaceLocation = (action as any).payload
     ? (action as any).payload.workspaceLocation

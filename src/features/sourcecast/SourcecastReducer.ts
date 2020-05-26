@@ -1,8 +1,7 @@
 import { Reducer } from 'redux';
-import { ActionType } from 'typesafe-actions';
 import { ISourcecastWorkspace } from 'src/reducers/states';
 
-import { actions } from 'src/utils/actionsHelper';
+import { SourceActionType } from 'src/utils/actionsHelper';
 import {
   SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
@@ -15,7 +14,7 @@ import {
 
 export const SourcecastReducer: Reducer<ISourcecastWorkspace> = (
   state: ISourcecastWorkspace,
-  action: ActionType<typeof actions>
+  action: SourceActionType
 ) => {
   switch (action.type) {
     case SAVE_SOURCECAST_DATA:

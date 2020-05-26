@@ -1,3 +1,5 @@
+import { ActionType } from 'typesafe-actions';
+
 import * as CommonsActions from 'src/commons/application/actions/CommonsActions';
 import * as InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import * as SessionActions from 'src/commons/application/actions/SessionActions';
@@ -11,7 +13,7 @@ import * as SourcecastActions from 'src/features/sourcecast/SourcecastActions';
 import * as MaterialActions from 'src/actions/material';
 import * as GameActions from 'src/actions/game';
 
-export const actions = {
+const actions = {
     ...CommonsActions, 
     ...CollabEditingActions, 
     ...DashboardActions, 
@@ -25,3 +27,5 @@ export const actions = {
     ...MaterialActions, 
     ...GameActions
 };
+
+export type SourceActionType = ActionType<typeof actions>;

@@ -1,13 +1,12 @@
 import { Reducer } from 'redux';
-import { ActionType } from 'typesafe-actions';
 
-import * as actions from 'src/utils/actionsHelper';
+import { SourceActionType } from 'src/utils/actionsHelper';
 import { LOG_OUT, SAVE_CANVAS } from 'src/commons/types/ActionTypes';
 import { defaultAcademy, IAcademyState } from 'src/commons/states/ApplicationStates';
 
 export const AcademyReducer: Reducer<IAcademyState> = (
   state = defaultAcademy,
-  action: ActionType<typeof actions>
+  action: SourceActionType
 ) => {
   switch (action.type) {
     case LOG_OUT:

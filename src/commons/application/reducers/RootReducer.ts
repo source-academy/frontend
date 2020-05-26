@@ -2,7 +2,7 @@ import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
 import { combineReducers } from 'redux';
 
-import { AcademyReducer } from 'src/commons/application/reducers/AcademyReducer';
+import { AcademyReducer } from 'src/features/academy/AcademyReducer';
 import { ApplicationReducer } from 'src/commons/application/ApplicationReducer';
 import { DashboardReducer } from 'src/features/dashboard/DashboardReducer';
 import { PlaygroundReducer } from 'src/features/playground/PlaygroundReducer';
