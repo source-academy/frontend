@@ -45,6 +45,7 @@ import {
 } from 'src/features/sourcereel/SourcereelActions';
 
 import Sourcereel, { DispatchProps, StateProps } from './SourcereelComponent';
+import { WorkspaceLocations } from 'src/actions';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   breakpoints: state.workspaces.sourcereel.breakpoints,
@@ -70,7 +71,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   timeResumed: state.workspaces.sourcereel.timeResumed
 });
 
-const location: WorkspaceLocation = 'sourcereel';
+const location: WorkspaceLocation = WorkspaceLocations.sourcereel;
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(

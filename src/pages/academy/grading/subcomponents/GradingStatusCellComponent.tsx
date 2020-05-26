@@ -3,11 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
-import { GradingOverview } from 'src/features/grading/GradingTypes';
-
-type GradingStatusCellProps = {
-  data: GradingOverview;
-};
+import { GradingCellProps } from 'src/features/grading/GradingTypes';
 
 /**
  * Used to render the submission grading status details in the table that displays GradingOverviews.
@@ -16,8 +12,8 @@ type GradingStatusCellProps = {
  *
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
-class GradingStatusCell extends React.Component<GradingStatusCellProps, {}> {
-  constructor(props: GradingStatusCellProps) {
+class GradingStatusCell extends React.Component<GradingCellProps, {}> {
+  constructor(props: GradingCellProps) {
     super(props);
   }
 
