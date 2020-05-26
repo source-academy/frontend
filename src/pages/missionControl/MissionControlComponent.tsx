@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { AssessmentOverview, AssessmentStatuses } from 'src/commons/assessment/AssessmentTypes';
+import { 
+  AssessmentOverview, 
+  AssessmentStatuses,
+  AssessmentWorkspaceParams
+} from 'src/commons/assessment/AssessmentTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { EditingOverviewCard } from 'src/commons/editingOverviewCard/EditingOverviewCardComponent';
 import { OwnProps as EditingWorkspaceOwnProps } from 'src/commons/editingWorkspace/EditingWorkspaceComponent';
@@ -11,13 +15,7 @@ import { retrieveLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParser
 import { DEFAULT_QUESTION_ID } from 'src/utils/constants';
 import { stringParamToInt } from 'src/utils/paramParseHelpers';
 
-// TODO: Duplicate with AssessmentComponent
-type MissionControlParams = {
-  assessmentId?: string;
-  questionId?: string;
-};
-
-export type MissionControlProps = DispatchProps & StateProps & RouteComponentProps<MissionControlParams>;
+export type MissionControlProps = DispatchProps & StateProps & RouteComponentProps<AssessmentWorkspaceParams>;
 
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;

@@ -11,6 +11,11 @@ export enum AssessmentStatuses {
 }
 export type AssessmentStatus = keyof typeof AssessmentStatuses;
 
+export type AssessmentWorkspaceParams = {
+  assessmentId?: string;
+  questionId?: string;
+};
+
 export enum GradingStatuses {
   excluded = 'excluded',
   graded = 'graded',

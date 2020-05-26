@@ -40,6 +40,7 @@ import {
   AssessmentCategory,
   AssessmentOverview,
   AssessmentStatuses,
+  AssessmentWorkspaceParams,
   GradingStatuses
 } from './AssessmentTypes';
 
@@ -61,12 +62,6 @@ export type OwnProps = {
 export type StateProps = {
   assessmentOverviews?: AssessmentOverview[];
   isStudent: boolean;
-};
-
-// TODO: Duplicate with MissionControl
-export type AssessmentWorkspaceParams = {
-  assessmentId?: string;
-  questionId?: string;
 };
 
 type State = {
