@@ -8,7 +8,7 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import { IState, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
+import { IWorkspaceState, OverallState } from 'src/commons/application/ApplicationTypes';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
@@ -40,7 +40,7 @@ import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './Grading
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
     autogradingResults: state.workspaces.grading.autogradingResults,
     editorPrepend: state.workspaces.grading.editorPrepend,

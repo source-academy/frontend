@@ -5,7 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Variant } from 'js-slang/dist/types';
 
 import { logOut } from 'src/commons/application/actions/CommonsActions';
-import { IState } from 'src/commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import {
   externalLibraries,
   ExternalLibraryName
@@ -30,7 +30,7 @@ import Application, { DispatchProps, StateProps } from './ApplicationComponent';
  * as the routing properties of @type {RouteComponentProps} are
  * provided using the withRouter() method below.
  */
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   title: state.application.title,
   accessToken: state.session.accessToken,
   role: state.session.role,

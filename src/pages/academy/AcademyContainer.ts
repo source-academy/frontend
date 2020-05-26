@@ -3,11 +3,11 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 
 import { fetchNotifications } from 'src/commons/application/actions/SessionActions';
-import { IState } from 'src/commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 
 import Academy, { DispatchProps, OwnProps, StateProps } from './AcademyComponent';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   historyHelper: state.session.historyHelper
 });
 

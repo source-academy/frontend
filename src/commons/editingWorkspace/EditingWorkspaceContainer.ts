@@ -8,7 +8,7 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { submitAnswer } from 'src/commons/application/actions/SessionActions';
-import { IState, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
+import { IWorkspaceState, OverallState } from 'src/commons/application/ApplicationTypes';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
 import {
@@ -37,7 +37,7 @@ import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspaceComponent';
 
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
     editorValue: state.workspaces.assessment.editorValue,
     editorHeight: state.workspaces.assessment.editorHeight,

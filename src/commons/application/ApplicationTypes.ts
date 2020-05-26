@@ -31,14 +31,14 @@ import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from 'src/utils/consta
 import { HistoryHelper } from 'src/utils/history';
 import { createContext } from 'src/utils/slangHelper';
 
-export interface IState {
+export type OverallState = {
   readonly academy: IAcademyState;
   readonly application: IApplicationState;
   readonly playground: IPlaygroundState;
   readonly session: ISessionState;
   readonly workspaces: IWorkspaceManagerState;
   readonly dashboard: IDashBoardState;
-}
+};
 
 export interface IAcademyState {
   readonly gameCanvas?: HTMLCanvasElement;
@@ -433,7 +433,7 @@ export const defaultSession: ISessionState = {
   notifications: []
 };
 
-export const defaultState: IState = {
+export const defaultState: OverallState = {
   academy: defaultAcademy,
   application: defaultApplication,
   dashboard: defaultDashBoard,
