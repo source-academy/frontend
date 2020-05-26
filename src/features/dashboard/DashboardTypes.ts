@@ -11,3 +11,7 @@ export type LeaderBoardInfo = {
   numOfUngradedQuests: number;
   totalNumOfQuests: number;
 };
+
+export type DashBoardState = {
+  readonly groupOverviews: GroupOverview[];
+};

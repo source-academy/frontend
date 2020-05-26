@@ -17,7 +17,6 @@ import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 import { Announcement } from 'src/components/Announcements'; // TODO: Remove
 import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
-import { GroupOverview } from 'src/features/dashboard/DashboardTypes';
 import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
 import {
   CodeDelta,
@@ -31,6 +30,10 @@ import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from 'src/utils/consta
 import { HistoryHelper } from 'src/utils/history';
 import { createContext } from 'src/utils/slangHelper';
 
+import { AcademyState } from 'src/features/academy/AcademyTypes';
+import { DashBoardState } from 'src/features/dashboard/DashboardTypes';
+import { PlaygroundState } from 'src/features/playground/PlaygroundTypes';
+
 export type OverallState = {
   readonly academy: AcademyState;
   readonly application: ApplicationState;
@@ -40,23 +43,9 @@ export type OverallState = {
   readonly dashboard: DashBoardState;
 };
 
-export type AcademyState = {
-  readonly gameCanvas?: HTMLCanvasElement;
-};
-
 export type ApplicationState = {
   readonly title: string;
   readonly environment: ApplicationEnvironment;
-};
-
-export type DashBoardState = {
-  readonly groupOverviews: GroupOverview[];
-};
-
-export type PlaygroundState = {
-  readonly queryString?: string;
-  readonly shortURL?: string;
-  readonly usingSubst: boolean;
 };
 
 type AssessmentWorkspaceAttr = {
