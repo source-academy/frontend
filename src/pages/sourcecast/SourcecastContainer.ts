@@ -8,8 +8,10 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { IState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { Position } from 'src/commons/editor/EditorTypes';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -29,8 +31,8 @@ import {
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
-  WorkspaceLocation
 } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   fetchSourcecastIndex,
   setCodeDeltasToApply,
@@ -43,9 +45,9 @@ import {
   CodeDelta,
   Input,
   PlaybackData,
-  PlaybackStatus,
-  Position
+  PlaybackStatus
 } from 'src/features/sourcecast/SourcecastTypes';
+
 import Sourcecast, { DispatchProps, StateProps } from './SourcecastComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({

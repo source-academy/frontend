@@ -7,8 +7,10 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { IState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { Position } from 'src/commons/editor/EditorTypes';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -28,10 +30,10 @@ import {
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
-  WorkspaceLocation
 } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 import { fetchSourcecastIndex } from 'src/features/sourcecast/SourcecastActions';
-import { Input, PlaybackData, Position } from 'src/features/sourcecast/SourcecastTypes';
+import { Input, PlaybackData } from 'src/features/sourcecast/SourcecastTypes';
 import {
   deleteSourcecastEntry,
   recordInit,
@@ -70,7 +72,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   timeResumed: state.workspaces.sourcereel.timeResumed
 });
 
-const location: WorkspaceLocation = 'sourcereel';
+const location: WorkspaceLocation = WorkspaceLocations.sourcereel;
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(

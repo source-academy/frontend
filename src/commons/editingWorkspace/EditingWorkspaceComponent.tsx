@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -14,18 +14,16 @@ import {
   QuestionTypes,
   Testcase
 } from 'src/commons/assessment/AssessmentTypes';
+import { ClearButton } from 'src/commons/controlBar/ClearButton'; 
 import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
-import {
-  ClearButton,
-  EvalButton,
-  NextButton,
-  PreviousButton,
-  QuestionViewButton,
-  ResetButton,
-  RunButton,
-  SaveButton,
-  ToggleEditModeButton
-} from 'src/commons/controlBar/index';
+import { EvalButton } from 'src/commons/controlBar/EvalButton'; 
+import { NextButton } from 'src/commons/controlBar/NextButton'; 
+import { PreviousButton } from 'src/commons/controlBar/PreviousButton'; 
+import { QuestionViewButton } from 'src/commons/controlBar/QuestionViewButton'; 
+import { ResetButton } from 'src/commons/controlBar/ResetButton'; 
+import { RunButton } from 'src/commons/controlBar/RunButton'; 
+import { SaveButton } from 'src/commons/controlBar/SaveButton';
+import { ToggleEditModeButton } from 'src/commons/controlBar/ToggleEditModeButton';
 import controlButton from 'src/commons/ControlButton';
 import { AutograderTab } from 'src/commons/editingWorkspaceSideContent/AutograderTab';
 import { DeploymentTab } from 'src/commons/editingWorkspaceSideContent/DeploymentTab';
@@ -34,9 +32,10 @@ import { ManageQuestionTab } from 'src/commons/editingWorkspaceSideContent/Manag
 import { MCQQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/MCQQuestionTemplateTab';
 import { ProgrammingQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/ProgrammingQuestionTemplateTab';
 import { TextAreaContent } from 'src/commons/editingWorkspaceSideContent/TextAreaContent';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
 import Markdown from 'src/commons/Markdown';
-import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {

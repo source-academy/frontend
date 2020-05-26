@@ -1,10 +1,6 @@
 import { Position, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
-import { GradingOverview } from 'src/features/grading/GradingTypes';
-
-type XPCellProps = {
-  data: GradingOverview;
-};
+import { GradingCellProps } from 'src/features/grading/GradingTypes';
 
 /**
  * Used to render the submission XP details in the table that displays GradingOverviews.
@@ -13,8 +9,8 @@ type XPCellProps = {
  *
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
-class XPCell extends React.Component<XPCellProps, {}> {
-  constructor(props: XPCellProps) {
+class XPCell extends React.Component<GradingCellProps, {}> {
+  constructor(props: GradingCellProps) {
     super(props);
   }
 

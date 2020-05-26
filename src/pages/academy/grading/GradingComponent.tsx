@@ -39,16 +39,9 @@ import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWor
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
 import XPCell from './subcomponents/GradingXPCellComponent';
 
-type GradingNavLinkProps = {
-  data: GradingOverviewWithNotifications;
-};
+import { GradingNavLinkProps, GradingWorkspaceParams } from 'src/features/grading/GradingTypes';
 
 type GradingProps = DispatchProps & StateProps & RouteComponentProps<GradingWorkspaceParams>;
-
-type GradingWorkspaceParams = {
-  submissionId?: string;
-  questionId?: string;
-};
 
 export type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
@@ -61,29 +54,6 @@ export type StateProps = {
   gradingOverviews?: GradingOverview[];
   notifications: Notification[];
   role?: Role;
-};
-
-/** Component to render in table - grading status */
-const GradingStatus = (props: GradingNavLinkProps) => {
-  return <GradingStatusCell data={props.data} />;
-};
-
-/** Component to render in table - marks */
-const GradingMarks = (props: GradingNavLinkProps) => {
-  return <GradeCell data={props.data} />;
-};
-
-/** Component to render in table - XP */
-const GradingExp = (props: GradingNavLinkProps) => {
-  return <XPCell data={props.data} />;
-};
-
-const NotificationBadgeCell = (props: GradingNavLinkProps) => {
-  return (
-    <NotificationBadge
-      notificationFilter={filterNotificationsBySubmission(props.data.submissionId)}
-    />
-  );
 };
 
 type State = {
@@ -107,7 +77,7 @@ class Grading extends React.Component<GradingProps, State> {
       {
         headerName: '',
         field: 'notifications',
-        cellRendererFramework: NotificationBadgeCell,
+        cellRendererFramework: this.NotificationBadgeCell,
         width: 30,
         suppressResize: true,
         suppressMovable: true,
@@ -140,13 +110,13 @@ class Grading extends React.Component<GradingProps, State> {
       {
         headerName: 'Grading',
         field: 'gradingStatus',
-        cellRendererFramework: GradingStatus,
+        cellRendererFramework: this.GradingStatus,
         maxWidth: 110
       },
       {
         headerName: 'Grade',
         field: '',
-        cellRendererFramework: GradingMarks,
+        cellRendererFramework: this.GradingMarks,
         maxWidth: 100,
         cellStyle: (params: GradingNavLinkProps) => {
           if (params.data.currentGrade < params.data.maxGrade) {
@@ -164,7 +134,7 @@ class Grading extends React.Component<GradingProps, State> {
       {
         headerName: 'XP',
         field: '',
-        cellRendererFramework: GradingExp,
+        cellRendererFramework: this.GradingExp,
         maxWidth: 100,
         comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
           if (nodeA && nodeB) {
@@ -362,6 +332,30 @@ class Grading extends React.Component<GradingProps, State> {
       this.gridApi.setRowData(this.sortSubmissionsByNotifications());
     }
   }
+
+  /** Component to render in table - grading status */
+  private GradingStatus = (props: GradingNavLinkProps) => {
+    return <GradingStatusCell data={props.data} />;
+  };
+
+  /** Component to render in table - marks */
+  private GradingMarks = (props: GradingNavLinkProps) => {
+    return <GradeCell data={props.data} />;
+  };
+
+  private NotificationBadgeCell = (props: GradingNavLinkProps) => {
+    return (
+      <NotificationBadge
+        notificationFilter={filterNotificationsBySubmission(props.data.submissionId)}
+      />
+    );
+  };
+
+  /** Component to render in table - XP */
+  private GradingExp = (props: GradingNavLinkProps) => {
+    return <XPCell data={props.data} />;
+  };
+
 
   // Forcibly resizes columns to fit the width of the datagrid - prevents datagrid
   // from needing to render a horizontal scrollbar when columns overflow grid width

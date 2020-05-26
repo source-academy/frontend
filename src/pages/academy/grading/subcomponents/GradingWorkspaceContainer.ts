@@ -8,9 +8,10 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import { IState, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { IState, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -32,9 +33,8 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
-  WorkspaceLocation,
-  WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';
 

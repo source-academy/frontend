@@ -8,7 +8,6 @@ import ContentDisplay from 'src/commons/ContentDisplay';
 import { GroupOverview, LeaderBoardInfo } from 'src/features/dashboard/DashboardTypes';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 
-
 type DashboardProps = DispatchProps & StateProps;
 
 export type DispatchProps = {

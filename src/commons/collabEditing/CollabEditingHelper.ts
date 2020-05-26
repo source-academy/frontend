@@ -1,17 +1,5 @@
 import { LINKS } from 'src/utils/constants';
-
-enum XMLHttpReadyState {
-  UNSENT = 0,
-  OPENED = 1,
-  HEADERS_RECEIVED = 2,
-  LOADING = 3,
-  DONE = 4
-}
-
-enum XMLHttpStatus {
-  OK = 200,
-  PAGE_NOT_FOUND = 404
-}
+import { XMLHttpReadyState, XMLHttpStatus } from './CollabEditingTypes';
 
 export function checkSessionIdExists(
   editorSessionId: string,

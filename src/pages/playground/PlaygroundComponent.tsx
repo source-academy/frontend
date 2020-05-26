@@ -8,25 +8,23 @@ import { RouteComponentProps } from 'react-router';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 
-import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
-import {
-  AutorunButtons,
-  ChapterSelect,
-  ClearButton,
-  EvalButton,
-  ExecutionTime,
-  ExternalLibrarySelect,
-  SessionButtons,
-  ShareButton
-} from 'src/commons/controlBar/index';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { AutorunButtons } from 'src/commons/controlBar/AutorunButtons';
+import { ChapterSelect } from 'src/commons/controlBar/ChapterSelect';
+import { ClearButton } from 'src/commons/controlBar/ClearButton';
+import { EvalButton } from 'src/commons/controlBar/EvalButton';
+import { ExecutionTime } from 'src/commons/controlBar/ExecutionTime';
+import { ExternalLibrarySelect } from 'src/commons/controlBar/ExternalLibrarySelect';
+import { SessionButtons } from 'src/commons/controlBar/SessionButton';
+import { ShareButton } from 'src/commons/controlBar/ShareButton';
+import { Position } from 'src/commons/editor/EditorTypes';
 import Markdown from 'src/commons/Markdown';
 import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import FaceapiDisplay from 'src/commons/sideContent/FaceapiDisplay';
 import Inspector from 'src/commons/sideContent/Inspector';
 import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
-import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import SubstVisualizer from 'src/commons/sideContent/SubstVisualizer';
 import VideoDisplay from 'src/commons/sideContent/VideoDisplay';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';

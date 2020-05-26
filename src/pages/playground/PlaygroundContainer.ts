@@ -10,7 +10,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { IState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   finishInvite,
@@ -19,7 +19,8 @@ import {
   setEditorSessionId,
   setWebsocketStatus
 } from 'src/commons/collabEditing/CollabEditingActions';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -41,9 +42,9 @@ import {
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
-  WorkspaceLocation,
-  WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
+
 import {
   generateLzString,
   shortenURL,

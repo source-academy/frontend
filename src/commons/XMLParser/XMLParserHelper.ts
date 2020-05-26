@@ -17,6 +17,7 @@ import {
 } from 'src/commons/assessment/AssessmentTypes';
 
 import {
+  EDITING_ID,
   XmlParseStrCProblem,
   XmlParseStrDeployment,
   XmlParseStrOverview,
@@ -26,8 +27,6 @@ import {
   XmlParseStrTask,
   XmlParseStrTestcase
 } from './XMLParserTypes';
-
-const editingId = -1;
 
 const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -77,7 +76,7 @@ const makeAssessmentOverview = (
     closeAt: rawOverview.duedate,
     coverImage: rawOverview.coverimage,
     grade: 1,
-    id: editingId,
+    id: EDITING_ID,
     maxGrade: maxGradeVal,
     maxXp: maxXpVal,
     number: rawOverview.number || '',
@@ -99,7 +98,7 @@ const makeAssessment = (result: any): [Assessment, number, number] => {
   return [
     {
       category: capitalizeFirstLetter(rawOverview.kind) as AssessmentCategories,
-      id: editingId,
+      id: EDITING_ID,
       globalDeployment: makeLibrary(task.DEPLOYMENT),
       graderDeployment: makeLibrary(task.GRADERDEPLOYMENT),
       longSummary: task.TEXT[0],

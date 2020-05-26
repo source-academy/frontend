@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -12,19 +12,18 @@ import {
   QuestionTypes,
   Testcase
 } from 'src/commons/assessment/AssessmentTypes';
-import {
-  ClearButton,
-  EvalButton,
-  NextButton,
-  PreviousButton,
-  QuestionViewButton,
-  RunButton
-} from 'src/commons/controlBar';
+import { ClearButton } from 'src/commons/controlBar/ClearButton';
 import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { EvalButton } from 'src/commons/controlBar/EvalButton';
+import { NextButton } from 'src/commons/controlBar/NextButton';
+import { PreviousButton } from 'src/commons/controlBar/PreviousButton';
+import { QuestionViewButton } from 'src/commons/controlBar/QuestionViewButton';
+import { RunButton } from 'src/commons/controlBar/RunButton';
+import { Position } from 'src/commons/editor/EditorTypes';
 import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
-import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove

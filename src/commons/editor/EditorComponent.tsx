@@ -22,6 +22,7 @@ import { Documentation } from 'src/commons/documentation/Documentation';
 import { LINKS } from 'src/utils/constants';
 
 import AceRange from './AceRange';
+import { Position } from './EditorTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -58,11 +59,6 @@ type StateProps = {
   sourceChapter?: number;
   externalLibraryName?: string;
   sourceVariant?: Variant;
-};
-
-export type Position = {
-  row: number;
-  column: number;
 };
 
 class Editor extends React.PureComponent<EditorProps, {}> {
