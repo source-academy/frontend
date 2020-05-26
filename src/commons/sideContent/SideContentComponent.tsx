@@ -1,6 +1,6 @@
 import { Card, Icon, IconName, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
-import { SideContentType } from 'src/commons/types/ApplicationTypes';
+import { SideContentType } from 'src/commons/application/ApplicationTypes';
 
 /**
  * @property animate Set this to false to disable the movement

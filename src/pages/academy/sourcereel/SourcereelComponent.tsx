@@ -28,7 +28,7 @@ import {
   RecordingStatus,
   SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
-import { InterpreterOutput, SideContentType } from 'src/commons/types/ApplicationTypes';
+import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
 
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 

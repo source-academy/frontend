@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import * as actionTypes from 'src/commons/types/ActionTypes';
+import * as actionTypes from 'src/commons/application/types/ActionTypes';
 
 export const generateLzString = () => action(actionTypes.GENERATE_LZ_STRING);
 

@@ -53,7 +53,7 @@ import {
 
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorComponent';
-import { IState, SideContentType } from 'src/commons/types/ApplicationTypes';
+import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
 
 import Playground, { DispatchProps, StateProps } from './PlaygroundComponent';
 

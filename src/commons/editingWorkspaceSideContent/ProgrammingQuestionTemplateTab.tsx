@@ -6,7 +6,7 @@ import AceEditor from 'react-ace';
 
 import { Assessment } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
-import { IWorkspaceState } from 'src/commons/types/ApplicationTypes'; 
+import { IWorkspaceState } from 'src/commons/application/ApplicationTypes'; 
 
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 

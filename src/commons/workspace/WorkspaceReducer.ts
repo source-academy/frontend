@@ -44,7 +44,7 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
-} from 'src/commons/types/ActionTypes';
+} from 'src/commons/application/types/ActionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceActions';
 import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
@@ -57,7 +57,7 @@ import {
   IWorkspaceManagerState,
   maxBrowseIndex,
   ResultOutput
-} from 'src/commons/types/ApplicationTypes';
+} from 'src/commons/application/ApplicationTypes';
 import { createContext } from 'src/utils/slangHelper';
 
 import { SourceActionType } from 'src/utils/actionsHelper';

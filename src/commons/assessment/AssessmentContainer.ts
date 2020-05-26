@@ -7,7 +7,7 @@ import {
   fetchAssessmentOverviews,
   submitAssessment
 } from 'src/commons/application/actions/SessionActions';
-import { IState, Role } from 'src/commons/types/ApplicationTypes'; 
+import { IState, Role } from 'src/commons/application/ApplicationTypes'; 
 
 import Assessment, {
   AssessmentWorkspaceParams,

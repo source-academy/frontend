@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { ISourcecastWorkspace } from 'src/commons/types/ApplicationTypes';
+import { ISourcecastWorkspace } from 'src/commons/application/ApplicationTypes';
 
 import { SourceActionType } from 'src/utils/actionsHelper';
 import {
@@ -10,7 +10,7 @@ import {
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_STATUS,
   UPDATE_SOURCECAST_INDEX
-} from 'src/commons/types/ActionTypes';
+} from 'src/commons/application/types/ActionTypes';
 
 export const SourcecastReducer: Reducer<ISourcecastWorkspace> = (
   state: ISourcecastWorkspace,

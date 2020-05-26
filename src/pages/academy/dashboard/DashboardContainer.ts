@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { fetchGroupOverviews } from 'src/features/dashboard/DashboardActions';
-import { IState } from 'src/commons/types/ApplicationTypes';
+import { IState } from 'src/commons/application/ApplicationTypes';
 import Dashboard, { DispatchProps, StateProps } from './DashboardComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({

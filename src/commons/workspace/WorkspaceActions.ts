@@ -3,8 +3,8 @@ import { action } from 'typesafe-actions';
 import { Variant } from 'js-slang/dist/types';
 import { ExternalLibraryName, Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorComponent';
-import * as actionTypes from 'src/commons/types/ActionTypes';
-import { IWorkspaceState, SideContentType } from 'src/commons/types/ApplicationTypes';
+import * as actionTypes from 'src/commons/application/types/ActionTypes';
+import { IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
 
 /**
  * Used to differenciate between the sources of actions, as

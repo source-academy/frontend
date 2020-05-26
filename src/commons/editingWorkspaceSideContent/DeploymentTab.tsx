@@ -13,7 +13,7 @@ import {
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
 import { externalLibraries } from 'src/commons/externalLibraries/ExternalLibraries';
-import { sourceLanguages, styliseChapter } from 'src/commons/types/ApplicationTypes';  
+import { sourceLanguages, styliseChapter } from 'src/commons/application/ApplicationTypes';  
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
 

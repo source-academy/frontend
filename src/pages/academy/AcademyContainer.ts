@@ -3,7 +3,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 
 import { fetchNotifications } from 'src/commons/application/actions/SessionActions';
-import { IState } from 'src/commons/types/ApplicationTypes';
+import { IState } from 'src/commons/application/ApplicationTypes';
 
 import Academy, { DispatchProps, OwnProps, StateProps } from './AcademyComponent';
 

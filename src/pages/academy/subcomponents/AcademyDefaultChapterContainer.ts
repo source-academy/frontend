@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { Chapter } from 'src/commons/controlBar/ChapterSelect';
 import { changeChapter, fetchChapter } from 'src/commons/workspace/WorkspaceActions';
-import { IState } from 'src/commons/types/ApplicationTypes';
+import { IState } from 'src/commons/application/ApplicationTypes';
 
 import { DefaultChapter, DispatchProps, StateProps } from './AcademyDefaultChapterComponent';
 

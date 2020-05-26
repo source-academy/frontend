@@ -11,7 +11,7 @@ import DashboardContainer from 'src/pages/academy/dashboard/DashboardContainer';
 import Grading from 'src/pages/academy/grading/GradingContainer';
 import Sourcereel from 'src/pages/academy/sourcereel/SourcereelContainer';
 import { isAcademyRe } from 'src/commons/application/reducers/SessionsReducer'; 
-import { Role } from 'src/commons/types/ApplicationTypes';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import { HistoryHelper } from 'src/utils/history';
 import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 
