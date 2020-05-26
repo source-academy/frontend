@@ -6,12 +6,12 @@ export const LUMINUS_CLIENT_ID = process.env.REACT_APP_LUMINUS_CLIENT_ID;
 export const SOURCE_ACADEMY_VERSION = process.env.REACT_APP_VERSION;
 export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const USE_BACKEND =
-process.env.REACT_APP_USE_BACKEND !== undefined &&
-process.env.REACT_APP_USE_BACKEND !== '' &&
-process.env.REACT_APP_USE_BACKEND!.toUpperCase() === 'TRUE';
+  process.env.REACT_APP_USE_BACKEND !== undefined &&
+  process.env.REACT_APP_USE_BACKEND !== '' &&
+  process.env.REACT_APP_USE_BACKEND!.toUpperCase() === 'TRUE';
 export const USE_CHATKIT =
-process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== undefined &&
-process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== '';
+  process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== undefined &&
+  process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== '';
 export const INSTANCE_LOCATOR = process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR;
 export const DEFAULT_SOURCE_CHAPTER = 4;
 export const DEFAULT_SOURCE_VARIANT = 'default';
