@@ -32,8 +32,8 @@ import {
   updateHasUnsavedChanges,
   updateReplValue,
   updateWorkspace,
-  WorkspaceLocation
 } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspaceComponent';
 

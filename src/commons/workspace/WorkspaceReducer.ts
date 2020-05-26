@@ -55,7 +55,7 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
 } from 'src/commons/application/types/ActionTypes';
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
 import { SourceActionType } from 'src/utils/actionsHelper';

@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions';
 
 import * as actionTypes from 'src/commons/application/types/ActionTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,

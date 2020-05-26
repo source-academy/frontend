@@ -1,6 +1,8 @@
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { Question } from 'src/commons/assessment/AssessmentTypes';
 
+export const EDITING_ID = -1;
+
 export type XmlParseStrTask = {
   $: XmlParseStrOverview;
   DEPLOYMENT: XmlParseStrDeployment[];

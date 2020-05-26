@@ -2,7 +2,7 @@ import { SourceError, Value } from 'js-slang/dist/types';
 import { action } from 'typesafe-actions';
 
 import * as actionTypes from 'src/commons/application/types/ActionTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
 export const handleConsoleLog = (logString: string, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.HANDLE_CONSOLE_LOG, { logString, workspaceLocation });

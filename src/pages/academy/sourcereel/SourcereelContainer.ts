@@ -28,8 +28,9 @@ import {
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
-  WorkspaceLocation
 } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+
 import { fetchSourcecastIndex } from 'src/features/sourcecast/SourcecastActions';
 import { Input, PlaybackData, Position } from 'src/features/sourcecast/SourcecastTypes';
 import {

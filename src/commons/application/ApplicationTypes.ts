@@ -10,7 +10,7 @@ import {
 } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorComponent';
 import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 import { Announcement } from 'src/components/Announcements'; // TODO: Remove
 import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
 import { GroupOverview } from 'src/features/dashboard/DashboardTypes';

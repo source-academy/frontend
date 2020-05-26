@@ -15,8 +15,8 @@ import {
   promptAutocomplete,
   setEditorBreakpoint,
   updateEditorValue, 
-  WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 
 import Application, { DispatchProps, StateProps } from './ApplicationComponent';
 
