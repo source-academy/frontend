@@ -1,6 +1,5 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
 
-export const DEFAULT_QUESTION_ID: number = 0;
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
 export const SUBMIT_ASSESSMENT = 'SUBMIT_ASSESSMENT';
 

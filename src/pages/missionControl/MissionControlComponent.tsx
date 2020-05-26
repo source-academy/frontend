@@ -8,9 +8,8 @@ import { OwnProps as EditingWorkspaceOwnProps } from 'src/commons/editingWorkspa
 import EditingWorkspaceContainer from 'src/commons/editingWorkspace/EditingWorkspaceContainer';
 import MissionCreator from 'src/commons/missionCreator/MissionCreatorContainer';
 import { retrieveLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
+import { DEFAULT_QUESTION_ID } from 'src/utils/constants';
 import { stringParamToInt } from 'src/utils/paramParseHelpers';
-
-const DEFAULT_QUESTION_ID: number = 0;
 
 // TODO: Duplicate with AssessmentComponent
 type MissionControlParams = {
