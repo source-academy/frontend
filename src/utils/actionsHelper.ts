@@ -7,25 +7,25 @@ import * as CollabEditingActions from 'src/commons/collabEditing/CollabEditingAc
 import * as WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import * as DashboardActions from 'src/features/dashboard/DashboardActions';
 import * as PlaygroundActions from 'src/features/playground/PlaygroundActions';
-import * as SourcereelActions from 'src/features/sourcereel/SourcereelActions';
 import * as SourcecastActions from 'src/features/sourcecast/SourcecastActions';
+import * as SourcereelActions from 'src/features/sourcereel/SourcereelActions';
 
-import * as MaterialActions from 'src/actions/material';
 import * as GameActions from 'src/actions/game';
+import * as MaterialActions from 'src/actions/material';
 
 const actions = {
-    ...CommonsActions, 
-    ...CollabEditingActions, 
-    ...DashboardActions, 
-    ...InterpreterActions, 
-    ...PlaygroundActions, 
-    ...SessionActions, 
-    ...SourcecastActions, 
-    ...SourcereelActions, 
-    ...WorkspaceActions, 
+  ...CommonsActions,
+  ...CollabEditingActions,
+  ...DashboardActions,
+  ...InterpreterActions,
+  ...PlaygroundActions,
+  ...SessionActions,
+  ...SourcecastActions,
+  ...SourcereelActions,
+  ...WorkspaceActions,
 
-    ...MaterialActions, 
-    ...GameActions
+  ...MaterialActions,
+  ...GameActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;

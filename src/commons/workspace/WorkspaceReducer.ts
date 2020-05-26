@@ -46,7 +46,6 @@ import {
   UPDATE_WORKSPACE
 } from 'src/commons/types/ActionTypes';
 import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceActions';
-import { createContext } from 'src/utils/slangHelper';
 import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
 import {
@@ -59,6 +58,7 @@ import {
   maxBrowseIndex,
   ResultOutput
 } from 'src/reducers/states';
+import { createContext } from 'src/utils/slangHelper';
 
 import { SourceActionType } from 'src/utils/actionsHelper';
 
@@ -373,19 +373,17 @@ export const WorkspaceReducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map(
-            (testcase: Testcase, i) => {
-              if (i === action.payload.index) {
-                return {
-                  ...testcase,
-                  result: action.payload.value,
-                  errors: undefined
-                };
-              } else {
-                return testcase;
-              }
+          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i) => {
+            if (i === action.payload.index) {
+              return {
+                ...testcase,
+                result: action.payload.value,
+                errors: undefined
+              };
+            } else {
+              return testcase;
             }
-          ),
+          }),
           isRunning: false
         }
       };
@@ -485,19 +483,17 @@ export const WorkspaceReducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map(
-            (testcase: Testcase, i) => {
-              if (i === action.payload.index) {
-                return {
-                  ...testcase,
-                  result: undefined,
-                  errors: undefined
-                };
-              } else {
-                return testcase;
-              }
+          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i) => {
+            if (i === action.payload.index) {
+              return {
+                ...testcase,
+                result: undefined,
+                errors: undefined
+              };
+            } else {
+              return testcase;
             }
-          )
+          })
         }
       };
 

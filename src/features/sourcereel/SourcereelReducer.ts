@@ -1,7 +1,6 @@
-import { Reducer } from 'redux'; 
+import { Reducer } from 'redux';
 import { ISourcereelWorkspace } from 'src/reducers/states';
 
-import { SourceActionType } from 'src/utils/actionsHelper';
 import {
   RECORD_INIT,
   RECORD_INPUT,
@@ -12,6 +11,7 @@ import {
   TIMER_STOP
 } from 'src/commons/types/ActionTypes';
 import { RecordingStatus } from 'src/features/sourcecast/SourcecastTypes';
+import { SourceActionType } from 'src/utils/actionsHelper';
 
 export const SourcereelReducer: Reducer<ISourcereelWorkspace> = (
   state: ISourcereelWorkspace,
