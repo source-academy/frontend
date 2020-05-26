@@ -2,12 +2,12 @@ import { Variant } from 'js-slang/dist/types';
 
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import { ISessionState, OverallState } from 'src/commons/application/ApplicationTypes';
+import {  OverallState, SessionState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { showWarningMessage } from 'src/utils/notification';
 
 export type SavedState = {
-  session: Partial<ISessionState>;
+  session: Partial<SessionState>;
   playgroundEditorValue: string | null;
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: number;

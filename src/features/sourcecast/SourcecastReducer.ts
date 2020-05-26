@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { ISourcecastWorkspace } from 'src/commons/application/ApplicationTypes';
+import { SourcecastWorkspaceState } from 'src/commons/application/ApplicationTypes';
 
 import {
   SAVE_SOURCECAST_DATA,
@@ -12,8 +12,8 @@ import {
 } from 'src/commons/application/types/ActionTypes';
 import { SourceActionType } from 'src/utils/actionsHelper';
 
-export const SourcecastReducer: Reducer<ISourcecastWorkspace> = (
-  state: ISourcecastWorkspace,
+export const SourcecastReducer: Reducer<SourcecastWorkspaceState> = (
+  state: SourcecastWorkspaceState,
   action: SourceActionType
 ) => {
   switch (action.type) {

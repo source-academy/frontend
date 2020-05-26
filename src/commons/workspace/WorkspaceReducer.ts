@@ -7,9 +7,9 @@ import {
   defaultWorkspaceManager,
   ErrorOutput,
   InterpreterOutput,
-  IWorkspaceManagerState,
   maxBrowseIndex,
-  ResultOutput
+  ResultOutput,
+  WorkspaceManagerState
 } from 'src/commons/application/ApplicationTypes';
 import {
   BROWSE_REPL_HISTORY_DOWN,
@@ -69,7 +69,7 @@ import { createContext } from 'src/utils/slangHelper';
  *   - `location` is defined (and exists) as a property 'workspaceLocation' in
  *     the action's payload.
  */
-export const WorkspaceReducer: Reducer<IWorkspaceManagerState> = (
+export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   state = defaultWorkspaceManager,
   action: SourceActionType
 ) => {

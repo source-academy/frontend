@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput, WorkspaceState } from 'src/commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -52,7 +52,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
+  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
   handleDebuggerPause: () => void;

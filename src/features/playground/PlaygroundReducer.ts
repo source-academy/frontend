@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { defaultPlayground, IPlaygroundState } from 'src/commons/application/ApplicationTypes';
+import { defaultPlayground, PlaygroundState } from 'src/commons/application/ApplicationTypes';
 import {
   CHANGE_QUERY_STRING,
   TOGGLE_USING_SUBST,
@@ -8,7 +8,7 @@ import {
 } from 'src/commons/application/types/ActionTypes';
 import { SourceActionType } from 'src/utils/actionsHelper';
 
-export const PlaygroundReducer: Reducer<IPlaygroundState> = (
+export const PlaygroundReducer: Reducer<PlaygroundState> = (
   state = defaultPlayground,
   action: SourceActionType
 ) => {

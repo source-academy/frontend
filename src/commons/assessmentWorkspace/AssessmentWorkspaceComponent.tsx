@@ -14,7 +14,7 @@ import * as React from 'react';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
-import { InterpreterOutput, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput, WorkspaceState } from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -71,7 +71,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
+  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
