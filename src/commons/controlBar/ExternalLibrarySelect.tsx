@@ -4,7 +4,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
 import { External, ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { externalLibraries } from 'src/reducers/externalLibraries'; // TODO: Import from commons
+import { externalLibraries } from 'src/commons/externalLibraries/ExternalLibraries';
 
 type ExternalLibrarySelectProps = DispatchProps & StateProps;
 

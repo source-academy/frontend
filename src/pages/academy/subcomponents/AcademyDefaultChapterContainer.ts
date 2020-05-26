@@ -2,9 +2,9 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { IState } from 'src/commons/application/ApplicationTypes';
 import { Chapter } from 'src/commons/application/types/ChapterTypes';
 import { changeChapter, fetchChapter } from 'src/commons/workspace/WorkspaceActions';
-import { IState } from 'src/reducers/states';
 
 import { DefaultChapter, DispatchProps, StateProps } from './AcademyDefaultChapterComponent';
 

@@ -4,10 +4,10 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { Role } from 'src/commons/application/ApplicationTypes'; 
 import { AssessmentCategories } from 'src/commons/assessment/AssessmentTypes';
 import NotificationBadgeContainer from 'src/commons/notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from 'src/commons/notificationBadge/NotificationBadgeHelper';
-import { Role } from 'src/reducers/states'; // TODO: Import from commons
 import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 
 import DefaultChapterContainer from './AcademyDefaultChapterContainer';

@@ -10,6 +10,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
+import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   finishInvite,
@@ -49,7 +50,6 @@ import {
   toggleUsingSubst,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
-import { IState, SideContentType } from 'src/reducers/states';
 
 import Playground, { DispatchProps, StateProps } from './PlaygroundComponent';
 

@@ -2,8 +2,8 @@ import { Variant } from 'js-slang/dist/types';
 
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
+import { ISessionState, IState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { ISessionState, IState } from 'src/reducers/states';
 import { showWarningMessage } from 'src/utils/notification';
 
 export type SavedState = {

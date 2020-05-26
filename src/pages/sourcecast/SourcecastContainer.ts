@@ -8,6 +8,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
+import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   browseReplHistoryDown,
@@ -45,8 +46,6 @@ import {
   PlaybackStatus,
   Position
 } from 'src/features/sourcecast/SourcecastTypes';
-import { IState, SideContentType } from 'src/reducers/states';
-
 import Sourcecast, { DispatchProps, StateProps } from './SourcecastComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({

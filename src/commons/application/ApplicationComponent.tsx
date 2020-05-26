@@ -5,6 +5,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import { Variant } from 'js-slang/dist/types';
 
+import { Role, sourceLanguages } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
 import NavigationBar from 'src/commons/navigationBar/NavigationBar';
 import Material from 'src/containers/material/MaterialContainer'; // TODO: Remove
@@ -15,7 +16,6 @@ import MissionControlContainer from 'src/pages/missionControl/MissionControlCont
 import NotFound from 'src/pages/notFound/NotFoundComponent';
 import Playground from 'src/pages/playground/PlaygroundContainer';
 import SourcecastContainer from 'src/pages/sourcecast/SourcecastContainer';
-import { Role, sourceLanguages } from 'src/reducers/states';
 import { stringParamToInt } from 'src/utils/paramParseHelpers';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;

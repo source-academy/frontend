@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
+import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -43,7 +44,6 @@ import {
   storeLocalAssessment,
   storeLocalAssessmentOverview
 } from 'src/commons/XMLParser/XMLParserHelper';
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states'; // TODO: Import from commons
 import { history } from 'src/utils/history';
 
 export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;

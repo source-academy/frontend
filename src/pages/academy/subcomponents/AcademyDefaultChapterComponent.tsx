@@ -6,8 +6,8 @@ import { RouteComponentProps } from 'react-router';
 
 import { Variant } from 'js-slang/dist/types';
 
+import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/commons/application/ApplicationTypes'; 
 import { Chapter } from 'src/commons/application/types/ChapterTypes';
-import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/reducers/states'; // TODO: Import from commons
 
 export type DefaultChapterProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 

@@ -5,6 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Variant } from 'js-slang/dist/types';
 
 import { logOut } from 'src/commons/application/actions/CommonsActions';
+import { IState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   beginClearContext,
@@ -17,7 +18,6 @@ import {
   WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
 import { externalLibraries } from 'src/reducers/externalLibraries';
-import { IState } from 'src/reducers/states';
 
 import Application, { DispatchProps, StateProps } from './ApplicationComponent';
 

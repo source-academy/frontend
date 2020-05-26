@@ -1,15 +1,16 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { submitAnswer } from 'src/commons/application/actions/SessionActions';
-
 import {
   beginDebuggerPause,
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-
+import { submitAnswer } from 'src/commons/application/actions/SessionActions';
+import { IState, IWorkspaceState } from 'src/commons/application/ApplicationTypes'; 
+import { Library } from 'src/commons/assessment/AssessmentTypes';
+import { Position } from 'src/commons/editor/EditorComponent';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -33,10 +34,6 @@ import {
   updateWorkspace,
   WorkspaceLocation
 } from 'src/commons/workspace/WorkspaceActions';
-
-import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorComponent';
-import { IState, IWorkspaceState } from 'src/reducers/states'; // TODO: Import from commons
 
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspaceComponent';
 

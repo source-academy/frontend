@@ -5,10 +5,8 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
+import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/commons/application/ApplicationTypes';
 import { Chapter } from 'src/commons/application/types/ChapterTypes';
-
-// TODO: Import from commons
-import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/reducers/states';
 
 type ChapterSelectProps = DispatchProps & StateProps;
 

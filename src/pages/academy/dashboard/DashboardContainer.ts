@@ -1,10 +1,9 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-// TODO: Import from commons
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
+import { IState } from 'src/commons/application/ApplicationTypes';
 import { fetchGroupOverviews } from 'src/features/dashboard/DashboardActions';
-import { IState } from 'src/reducers/states';
 import Dashboard, { DispatchProps, StateProps } from './DashboardComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({

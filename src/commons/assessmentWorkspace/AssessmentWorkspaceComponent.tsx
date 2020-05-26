@@ -14,6 +14,7 @@ import * as React from 'react';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
+import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -44,7 +45,6 @@ import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideCo
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
 import { USE_CHATKIT } from 'src/utils/constants';
 import { beforeNow } from 'src/utils/dateHelpers';
 import { history } from 'src/utils/history';

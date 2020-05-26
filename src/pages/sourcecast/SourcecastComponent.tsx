@@ -5,6 +5,7 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
+import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   AutorunButtons,
@@ -28,7 +29,6 @@ import {
   Position,
   SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
-import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 
 import SourcecastControlbar, { SourcecastControlbarProps } from './subcomponents/SourcecastControlbar';
 

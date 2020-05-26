@@ -4,8 +4,8 @@ import { throttle } from 'lodash';
 import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
+import { defaultState } from 'src/commons/application/ApplicationTypes';
 import createRootReducer from 'src/reducers';
-import { defaultState } from 'src/reducers/states';
 import mainSaga from 'src/sagas';
 import { history as appHistory } from 'src/utils/history';
 

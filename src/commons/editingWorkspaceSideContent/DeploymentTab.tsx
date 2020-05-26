@@ -5,6 +5,7 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
+import { sourceLanguages, styliseChapter } from 'src/commons/application/ApplicationTypes';  
 import { Chapter } from 'src/commons/application/types/ChapterTypes';
 import { External, ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
@@ -13,9 +14,7 @@ import {
   Library
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
-import { externalLibraries } from 'src/reducers/externalLibraries'; // TODO: Import from commons
-import { sourceLanguages, styliseChapter } from 'src/reducers/states'; // TODO: Import from commons
-
+import { externalLibraries } from 'src/commons/externalLibraries/ExternalLibraries';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
 

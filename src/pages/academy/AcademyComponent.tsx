@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
+import { Role } from 'src/commons/application/ApplicationTypes';
+import { isAcademyRe } from 'src/commons/application/reducers/SessionsReducer'; 
 import AssessmentContainer from 'src/commons/assessment/AssessmentContainer';
 import { AssessmentCategories, AssessmentCategory } from 'src/commons/assessment/AssessmentTypes';
 import StoryUpload from 'src/containers/game-dev/StoryUploadContainer'; // TODO: Fix
@@ -10,8 +12,6 @@ import MaterialUploadContainer from 'src/containers/material/MaterialUploadConta
 import DashboardContainer from 'src/pages/academy/dashboard/DashboardContainer';
 import Grading from 'src/pages/academy/grading/GradingContainer';
 import Sourcereel from 'src/pages/academy/sourcereel/SourcereelContainer';
-import { isAcademyRe } from 'src/reducers/session'; // TODO: Import from commons
-import { Role } from 'src/reducers/states'; // TODO: Import from commons
 import { HistoryHelper } from 'src/utils/history';
 import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 
