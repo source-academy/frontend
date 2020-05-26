@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import { IAssessment, IAssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import { Assessment, AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
@@ -95,10 +95,10 @@ export const submitGradingAndContinue = (
 export const updateHistoryHelpers = (loc: string) =>
   action(actionTypes.UPDATE_HISTORY_HELPERS, loc);
 
-export const updateAssessmentOverviews = (overviews: IAssessmentOverview[]) =>
+export const updateAssessmentOverviews = (overviews: AssessmentOverview[]) =>
   action(actionTypes.UPDATE_ASSESSMENT_OVERVIEWS, overviews);
 
-export const updateAssessment = (assessment: IAssessment) =>
+export const updateAssessment = (assessment: Assessment) =>
   action(actionTypes.UPDATE_ASSESSMENT, assessment);
 
 export const updateGradingOverviews = (overviews: GradingOverview[]) =>

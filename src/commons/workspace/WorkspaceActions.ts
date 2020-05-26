@@ -2,7 +2,7 @@ import { action } from 'typesafe-actions';
 
 import { Variant } from 'js-slang/dist/types';
 import { ExternalLibraryName, Library } from 'src/commons/assessment/AssessmentTypes';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import * as actionTypes from 'src/commons/types/ActionTypes';
 import { IWorkspaceState, SideContentType } from 'src/reducers/states';
 
@@ -156,10 +156,10 @@ export const resetTestcase = (workspaceLocation: WorkspaceLocation, index: numbe
 
 export const navigateToDeclaration = (
   workspaceLocation: WorkspaceLocation,
-  cursorPosition: IPosition
+  cursorPosition: Position
 ) => action(actionTypes.NAV_DECLARATION, { workspaceLocation, cursorPosition });
 
-export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition: IPosition) =>
+export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition: Position) =>
   action(actionTypes.MOVE_CURSOR, { workspaceLocation, cursorPosition });
 
 /**

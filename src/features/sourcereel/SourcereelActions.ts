@@ -2,7 +2,7 @@ import { action } from 'typesafe-actions';
 
 import * as actionTypes from 'src/commons/types/ActionTypes';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceActions';
-import { Input, IPlaybackData } from 'src/features/sourcecast/SourcecastTypes';
+import { Input, PlaybackData } from 'src/features/sourcecast/SourcecastTypes';
 
 export const deleteSourcecastEntry = (id: number, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.DELETE_SOURCECAST_ENTRY, {
@@ -10,7 +10,7 @@ export const deleteSourcecastEntry = (id: number, workspaceLocation: WorkspaceLo
     workspaceLocation
   });
 
-export const recordInit = (initData: IPlaybackData['init'], workspaceLocation: WorkspaceLocation) =>
+export const recordInit = (initData: PlaybackData['init'], workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.RECORD_INIT, {
     initData,
     workspaceLocation
@@ -26,7 +26,7 @@ export const saveSourcecastData = (
   title: string,
   description: string,
   audio: Blob,
-  playbackData: IPlaybackData,
+  playbackData: PlaybackData,
   workspaceLocation: WorkspaceLocation
 ) =>
   action(actionTypes.SAVE_SOURCECAST_DATA, {

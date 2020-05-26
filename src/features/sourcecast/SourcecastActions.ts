@@ -3,11 +3,11 @@ import { action } from 'typesafe-actions';
 import * as actionTypes from 'src/commons/types/ActionTypes';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceActions';
 import {
-  ICodeDelta,
+  CodeDelta,
   Input,
-  IPlaybackData,
-  ISourcecastData,
-  PlaybackStatus
+  PlaybackData,
+  PlaybackStatus,
+  SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
 
 export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) =>
@@ -15,7 +15,7 @@ export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) =>
     workspaceLocation
   });
 
-export const setCodeDeltasToApply = (deltas: ICodeDelta[], workspaceLocation: WorkspaceLocation) =>
+export const setCodeDeltasToApply = (deltas: CodeDelta[], workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.SET_CODE_DELTAS_TO_APPLY, {
     deltas,
     workspaceLocation
@@ -31,7 +31,7 @@ export const setSourcecastData = (
   title: string,
   description: string,
   audioUrl: string,
-  playbackData: IPlaybackData,
+  playbackData: PlaybackData,
   workspaceLocation: WorkspaceLocation
 ) =>
   action(actionTypes.SET_SOURCECAST_DATA, {
@@ -58,7 +58,7 @@ export const setSourcecastStatus = (
   });
 
 export const updateSourcecastIndex = (
-  index: ISourcecastData[],
+  index: SourcecastData[],
   workspaceLocation: WorkspaceLocation
 ) =>
   action(actionTypes.UPDATE_SOURCECAST_INDEX, {
