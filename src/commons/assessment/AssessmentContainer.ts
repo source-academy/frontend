@@ -34,9 +34,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-interface IPropType extends OwnProps, RouteComponentProps<AssessmentWorkspaceParams> {}
+type PropType = OwnProps & RouteComponentProps<AssessmentWorkspaceParams>;
 
-export default withRouter<IPropType>(
+export default withRouter<PropType>(
   connect(
     mapStateToProps,
     mapDispatchToProps

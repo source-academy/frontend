@@ -1,14 +1,14 @@
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
 
-export interface IInputTypeShape {
+export type InputTypeShape = {
   chapterSelect: number;
   cursorPositionChange: Position;
   codeDelta: CodeDelta;
   externalLibrarySelect: ExternalLibraryName;
   keyboardCommand: KeyboardCommand;
   selectionRangeData: SelectionData;
-}
+};
 
 export enum KeyboardCommand {
   run = 'run'
@@ -37,9 +37,9 @@ export type SelectionData = {
 };
 
 // Refer: https://stackoverflow.com/questions/55758713/match-pair-for-keyof-and-valueof-an-interface
-export type Input = keyof IInputTypeShape extends infer K
-  ? K extends keyof IInputTypeShape
-    ? { time: number; type: K; data: IInputTypeShape[K] }
+export type Input = keyof InputTypeShape extends infer K
+  ? K extends keyof InputTypeShape
+    ? { time: number; type: K; data: InputTypeShape[K] }
     : never
   : never;
 

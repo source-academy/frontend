@@ -19,9 +19,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = dispatch =>
     dispatch
   );
 
-interface IAcademyPropType extends OwnProps, RouteComponentProps<any> {}
+type AcademyPropType = OwnProps & RouteComponentProps<any>;
 
-export default withRouter<IAcademyPropType>(
+export default withRouter<AcademyPropType>(
   connect(
     mapStateToProps,
     mapDispatchToProps
