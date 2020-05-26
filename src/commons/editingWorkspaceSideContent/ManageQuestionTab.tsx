@@ -2,10 +2,10 @@ import { Button, ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { 
-  Assessment, 
-  mcqTemplate, 
-  programmingTemplate 
+import {
+  Assessment,
+  mcqTemplate,
+  programmingTemplate
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
 import Markdown from 'src/commons/Markdown';

@@ -40,8 +40,7 @@ type State = {
   saveDescription: string;
 };
 
-class SourcereelControlbar extends React.PureComponent<
-SourcereelControlbarProps, State> {
+class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps, State> {
   private recorder: any;
   private audioContext: AudioContext;
 
@@ -245,6 +244,5 @@ SourcereelControlbarProps, State> {
     this.setState({ saveDescription: event.target.value });
   };
 }
-
 
 export default SourcereelControlbar;

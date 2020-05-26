@@ -2,8 +2,11 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAssessmentOverviews, submitAssessment } from 'src/commons/application/actions/SessionActions';
-import { IState, Role } from 'src/commons/application/ApplicationTypes'; 
+import {
+  fetchAssessmentOverviews,
+  submitAssessment
+} from 'src/commons/application/actions/SessionActions';
+import { IState, Role } from 'src/commons/application/ApplicationTypes';
 import MissionControl, { DispatchProps, StateProps } from './MissionControlComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = (state, props) => {

@@ -2,7 +2,7 @@ import { Drawer, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { Role } from 'src/commons/application/ApplicationTypes'; 
+import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   AssessmentCategories,
   AssessmentCategory,

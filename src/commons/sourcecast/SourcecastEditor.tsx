@@ -8,10 +8,11 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
 import { Position } from 'src/commons/editor/EditorTypes';
-import { CodeDelta, 
-  Input, 
-  KeyboardCommand, 
-  SelectionRange, 
+import {
+  CodeDelta,
+  Input,
+  KeyboardCommand,
+  SelectionRange
 } from 'src/features/sourcecast/SourcecastTypes';
 
 /**

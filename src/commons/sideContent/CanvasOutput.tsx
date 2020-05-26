@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-type CanvasOutputProps = StateProps; 
+type CanvasOutputProps = StateProps;
 
 type StateProps = {
   canvas: HTMLCanvasElement;

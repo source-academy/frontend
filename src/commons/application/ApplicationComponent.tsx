@@ -6,7 +6,10 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import { Variant } from 'js-slang/dist/types';
 
 import { Role, sourceLanguages } from 'src/commons/application/ApplicationTypes';
-import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
+import {
+  ExternalLibraryName,
+  ExternalLibraryNames
+} from 'src/commons/application/types/ExternalTypes';
 import NavigationBar from 'src/commons/navigationBar/NavigationBar';
 import Material from 'src/containers/material/MaterialContainer'; // TODO: Remove
 import Academy from 'src/pages/academy/AcademyContainer';
@@ -43,7 +46,6 @@ export type StateProps = {
   name?: string;
   currentExternalLibrary: ExternalLibraryName;
 };
-
 
 const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
 

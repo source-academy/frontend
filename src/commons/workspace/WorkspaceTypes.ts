@@ -9,11 +9,11 @@
  * object in IWorkspaceManagerState.
  */
 export enum WorkspaceLocations {
-    assessment = 'assessment',
-    playground = 'playground',
-    grading = 'grading',
-    sourcecast = 'sourcecast',
-    sourcereel = 'sourcereel'
-  }
-  
+  assessment = 'assessment',
+  playground = 'playground',
+  grading = 'grading',
+  sourcecast = 'sourcecast',
+  sourcereel = 'sourcereel'
+}
+
 export type WorkspaceLocation = keyof typeof WorkspaceLocations;

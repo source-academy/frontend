@@ -6,7 +6,10 @@ import { Variant } from 'js-slang/dist/types';
 
 import { logOut } from 'src/commons/application/actions/CommonsActions';
 import { IState } from 'src/commons/application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import {
+  externalLibraries,
+  ExternalLibraryName
+} from 'src/commons/application/types/ExternalTypes';
 import {
   beginClearContext,
   changeExecTime,
@@ -14,7 +17,7 @@ import {
   externalLibrarySelect,
   promptAutocomplete,
   setEditorBreakpoint,
-  updateEditorValue, 
+  updateEditorValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 

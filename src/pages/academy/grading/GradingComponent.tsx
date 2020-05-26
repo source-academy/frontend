@@ -356,7 +356,6 @@ class Grading extends React.Component<GradingProps, State> {
     return <XPCell data={props.data} />;
   };
 
-
   // Forcibly resizes columns to fit the width of the datagrid - prevents datagrid
   // from needing to render a horizontal scrollbar when columns overflow grid width
   private resizeGrid = () => {
@@ -393,8 +392,8 @@ class Grading extends React.Component<GradingProps, State> {
     return maxPages === 0
       ? '(none)'
       : currPage !== maxPages
-        ? `(#${pageSize * currPage - 24} - #${pageSize * currPage})`
-        : `(#${pageSize * currPage - 24} - #${totalRows})`;
+      ? `(#${pageSize * currPage - 24} - #${pageSize * currPage})`
+      : `(#${pageSize * currPage - 24} - #${totalRows})`;
   };
 
   private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {

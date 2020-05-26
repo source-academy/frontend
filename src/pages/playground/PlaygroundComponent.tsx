@@ -9,7 +9,10 @@ import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 
 import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
-import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
+import {
+  ExternalLibraryName,
+  ExternalLibraryNames
+} from 'src/commons/application/types/ExternalTypes';
 import { AutorunButtons } from 'src/commons/controlBar/AutorunButtons';
 import { ChapterSelect } from 'src/commons/controlBar/ChapterSelect';
 import { ClearButton } from 'src/commons/controlBar/ClearButton';
