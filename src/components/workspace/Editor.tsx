@@ -403,7 +403,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     // We use async blocks so we don't block the browser during editing
 
     setTimeout(() => {
-      const editor = this.AceEditor.current!.editor;
+      if (!this.AceEditor.current) {
+        return;
+      }
+      const editor = this.AceEditor.current.editor;
       const session = editor.session;
       const code = this.props.editorValue;
       const chapterNumber = this.props.sourceChapter;
