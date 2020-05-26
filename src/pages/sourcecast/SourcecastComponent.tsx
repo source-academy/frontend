@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   AutorunButtons,
   ChapterSelect,

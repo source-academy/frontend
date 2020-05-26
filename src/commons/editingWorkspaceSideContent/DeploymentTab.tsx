@@ -5,10 +5,11 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
+import { Chapter } from 'src/commons/application/types/ChapterTypes';
+import { External, ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   Assessment,
   emptyLibrary,
-  ExternalLibraryName,
   Library
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
@@ -31,18 +32,6 @@ type StateProps = {
   pathToLibrary: Array<string | number>;
   pathToCopy?: Array<string | number>;
   isOptionalDeployment: boolean;
-};
-
-// TODO: Duplicate from EditingWorkspaceContent/DeploymentTab, AcademyDefaultChapterComponent, and ChapterSelect
-type Chapter = {
-  chapter: number;
-  displayName: string;
-};
-
-type External = {
-  key: number;
-  name: ExternalLibraryName;
-  symbols: string[];
 };
 
 export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {

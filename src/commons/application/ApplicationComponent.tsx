@@ -5,7 +5,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/assessment/AssessmentTypes';
+import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
 import NavigationBar from 'src/commons/navigationBar/NavigationBar';
 import Material from 'src/containers/material/MaterialContainer'; // TODO: Remove
 import Academy from 'src/pages/academy/AcademyContainer';

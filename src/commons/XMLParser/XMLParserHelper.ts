@@ -1,11 +1,11 @@
 import { Builder } from 'xml2js';
 
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentCategories,
   AssessmentOverview,
   AssessmentStatuses,
-  ExternalLibraryName,
   GradingStatuses,
   IMCQQuestion,
   IProgrammingQuestion,

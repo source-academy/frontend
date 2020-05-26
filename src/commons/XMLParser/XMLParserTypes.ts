@@ -1,4 +1,5 @@
-import { ExternalLibraryName, Question } from 'src/commons/assessment/AssessmentTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { Question } from 'src/commons/assessment/AssessmentTypes';
 
 export type XmlParseStrTask = {
   $: XmlParseStrOverview;

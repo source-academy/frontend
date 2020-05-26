@@ -8,7 +8,7 @@ import { RouteComponentProps } from 'react-router';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 
-import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/assessment/AssessmentTypes';
+import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
 import {
   AutorunButtons,
   ChapterSelect,

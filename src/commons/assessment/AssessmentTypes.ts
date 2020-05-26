@@ -1,4 +1,5 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
+import { ExternalLibrary, ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
 export const SUBMIT_ASSESSMENT = 'SUBMIT_ASSESSMENT';
@@ -133,6 +134,17 @@ export type Question = {
   xp: number;
 };
 
+export type Library = {
+  chapter: number;
+  variant?: Variant;
+  external: ExternalLibrary;
+  globals: Array<{
+      0: string;
+      1: any;
+      2?: string; // For mission control
+  }>;
+};
+
 export type Testcase = {
   answer: string; // the correct answer to the testcase
   errors?: SourceError[]; // errors raised by interpreter during execution
@@ -142,40 +154,9 @@ export type Testcase = {
   type: TestcaseType;
 };
 
-
 export type MCQChoice = {
   content: string;
   hint: string | null;
-};
-
-/** Constants for external library names */
-export enum ExternalLibraryNames {
-  NONE = 'NONE',
-  RUNES = 'RUNES',
-  CURVES = 'CURVES',
-  SOUNDS = 'SOUNDS',
-  BINARYTREES = 'BINARYTREES',
-  PIXNFLIX = 'PIX&FLIX',
-  MACHINELEARNING = 'MACHINELEARNING',
-  ALL = 'ALL'
-}
-
-export type ExternalLibraryName = (typeof ExternalLibraryNames)[keyof typeof ExternalLibraryNames];
-
-type ExternalLibrary = {
-  name: ExternalLibraryName;
-  symbols: string[];
-};
-
-export type Library = {
-  chapter: number;
-  variant?: Variant;
-  external: ExternalLibrary;
-  globals: Array<{
-    0: string;
-    1: any;
-    2?: string; // For mission control
-  }>;
 };
 
 export type AutogradingResult = {
