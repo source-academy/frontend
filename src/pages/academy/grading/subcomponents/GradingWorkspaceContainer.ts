@@ -32,7 +32,7 @@ import {
   updateCurrentSubmissionId,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue,
+  updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 

@@ -4,7 +4,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
-import { IWorkspaceState } from 'src/commons/application/ApplicationTypes'; 
+import { IWorkspaceState } from 'src/commons/application/ApplicationTypes';
 import { Assessment } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
 
@@ -68,10 +68,7 @@ const questionEditors: QuestionEditor[] = [
 /*
  * activeEditor is the default editor to show initially
  */
-export class ProgrammingQuestionTemplateTab extends React.Component<
-  QuestionEditorProps,
-  OwnProps
-> {
+export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps, OwnProps> {
   public constructor(props: QuestionEditorProps) {
     super(props);
     this.state = {

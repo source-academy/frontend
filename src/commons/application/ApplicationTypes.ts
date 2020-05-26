@@ -1,7 +1,10 @@
 import { Context } from 'js-slang';
 import { SourceError, Variant } from 'js-slang/dist/types';
 
-import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
+import {
+  ExternalLibraryName,
+  ExternalLibraryNames
+} from 'src/commons/application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentOverview,

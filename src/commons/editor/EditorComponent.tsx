@@ -18,7 +18,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { Variant } from 'js-slang/dist/types';
 
 import { checkSessionIdExists } from 'src/commons/collabEditing/CollabEditingHelper';
-import { Documentation } from 'src/commons/documentation/Documentation'; 
+import { Documentation } from 'src/commons/documentation/Documentation';
 import { LINKS } from 'src/utils/constants';
 
 import AceRange from './AceRange';

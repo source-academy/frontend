@@ -7,19 +7,12 @@ import {
   fetchAssessmentOverviews,
   submitAssessment
 } from 'src/commons/application/actions/SessionActions';
-import { IState, Role } from 'src/commons/application/ApplicationTypes'; 
+import { IState, Role } from 'src/commons/application/ApplicationTypes';
 
-import Assessment, {
-  DispatchProps,
-  OwnProps,
-  StateProps,
-} from './AssessmentComponent';
+import Assessment, { DispatchProps, OwnProps, StateProps } from './AssessmentComponent';
 import { AssessmentOverview, AssessmentWorkspaceParams } from './AssessmentTypes';
 
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (
-  state,
-  props
-) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   const categoryFilter = (overview: AssessmentOverview) =>
     overview.category === props.assessmentCategory;
   const stateProps: StateProps = {
@@ -41,7 +34,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-interface IPropType extends OwnProps, RouteComponentProps<AssessmentWorkspaceParams> { }
+interface IPropType extends OwnProps, RouteComponentProps<AssessmentWorkspaceParams> {}
 
 export default withRouter<IPropType>(
   connect(

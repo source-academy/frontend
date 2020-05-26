@@ -28,7 +28,9 @@ import {
   SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
 
-import SourcecastControlbar, { SourcecastControlbarProps } from './subcomponents/SourcecastControlbar';
+import SourcecastControlbar, {
+  SourcecastControlbarProps
+} from './subcomponents/SourcecastControlbar';
 
 export type SourcecastProps = DispatchProps & StateProps;
 

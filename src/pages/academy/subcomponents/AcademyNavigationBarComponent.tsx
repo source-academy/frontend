@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { Role } from 'src/commons/application/ApplicationTypes'; 
+import { Role } from 'src/commons/application/ApplicationTypes';
 import { AssessmentCategories } from 'src/commons/assessment/AssessmentTypes';
 import NotificationBadgeContainer from 'src/commons/notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from 'src/commons/notificationBadge/NotificationBadgeHelper';

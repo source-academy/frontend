@@ -1,4 +1,4 @@
 export type Position = {
-    row: number;
-    column: number;
+  row: number;
+  column: number;
 };

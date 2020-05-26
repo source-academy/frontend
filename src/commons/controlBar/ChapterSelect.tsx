@@ -5,7 +5,11 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/commons/application/ApplicationTypes';
+import {
+  ISourceLanguage,
+  sourceLanguages,
+  styliseChapter
+} from 'src/commons/application/ApplicationTypes';
 import { Chapter } from 'src/commons/application/types/ChapterTypes';
 
 type ChapterSelectProps = DispatchProps & StateProps;

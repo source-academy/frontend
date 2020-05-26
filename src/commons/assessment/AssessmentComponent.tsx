@@ -44,10 +44,10 @@ import {
   GradingStatuses
 } from './AssessmentTypes';
 
-export type AssessmentProps = DispatchProps
-  & OwnProps
-  & RouteComponentProps<AssessmentWorkspaceParams>
-  & StateProps;
+export type AssessmentProps = DispatchProps &
+  OwnProps &
+  RouteComponentProps<AssessmentWorkspaceParams> &
+  StateProps;
 
 export type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
@@ -175,8 +175,8 @@ class Assessment extends React.Component<AssessmentProps, State> {
         <i>&quot;{this.state.betchaAssessment.title}&quot;</i>.
       </p>
     ) : (
-        <p>You are about to finalise your submission.</p>
-      );
+      <p>You are about to finalise your submission.</p>
+    );
     const betchaText = (
       <>
         {submissionText}
@@ -340,77 +340,77 @@ class Assessment extends React.Component<AssessmentProps, State> {
     renderAttemptButton: boolean,
     renderGradingStatus: boolean
   ) => (
-      <div key={index}>
-        <Card className="row listing" elevation={Elevation.ONE}>
-          <div className="col-xs-3 listing-picture">
-            <NotificationBadge
-              className="badge"
-              notificationFilter={filterNotificationsByAssessment(overview.id)}
-              large={true}
-            />
-            <img
-              className={`cover-image-${overview.status}`}
-              src={overview.coverImage ? overview.coverImage : defaultCoverImage}
-            />
+    <div key={index}>
+      <Card className="row listing" elevation={Elevation.ONE}>
+        <div className="col-xs-3 listing-picture">
+          <NotificationBadge
+            className="badge"
+            notificationFilter={filterNotificationsByAssessment(overview.id)}
+            large={true}
+          />
+          <img
+            className={`cover-image-${overview.status}`}
+            src={overview.coverImage ? overview.coverImage : defaultCoverImage}
+          />
+        </div>
+        <div className="col-xs-9 listing-text">
+          {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
+          <div className="listing-grade">
+            <H6>
+              {beforeNow(overview.openAt)
+                ? `Grade: ${overview.grade} / ${overview.maxGrade}`
+                : `Max Grade: ${overview.maxGrade}`}
+            </H6>
           </div>
-          <div className="col-xs-9 listing-text">
-            {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
-            <div className="listing-grade">
-              <H6>
-                {beforeNow(overview.openAt)
-                  ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                  : `Max Grade: ${overview.maxGrade}`}
-              </H6>
-            </div>
-            <div className="listing-xp">
-              <H6>
-                {beforeNow(overview.openAt)
-                  ? `XP: ${overview.xp} / ${overview.maxXp}`
-                  : `Max XP: ${overview.maxXp}`}
-              </H6>
-            </div>
-            <div className="listing-description">
-              <Markdown content={overview.shortSummary} />
-            </div>
-            <div className="listing-footer">
-              <Text className="listing-due-date">
-                <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-                {beforeNow(overview.openAt)
-                  ? `Due: ${getPrettyDate(overview.closeAt)}`
-                  : `Opens at: ${getPrettyDate(overview.openAt)}`}
-              </Text>
-              <div className="listing-button">
-                {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
-              </div>
+          <div className="listing-xp">
+            <H6>
+              {beforeNow(overview.openAt)
+                ? `XP: ${overview.xp} / ${overview.maxXp}`
+                : `Max XP: ${overview.maxXp}`}
+            </H6>
+          </div>
+          <div className="listing-description">
+            <Markdown content={overview.shortSummary} />
+          </div>
+          <div className="listing-footer">
+            <Text className="listing-due-date">
+              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+              {beforeNow(overview.openAt)
+                ? `Due: ${getPrettyDate(overview.closeAt)}`
+                : `Opens at: ${getPrettyDate(overview.openAt)}`}
+            </Text>
+            <div className="listing-button">
+              {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
             </div>
           </div>
-        </Card>
-      </div>
-    );
+        </div>
+      </Card>
+    </div>
+  );
 
   private makeOverviewCardTitle = (
     overview: AssessmentOverview,
     index: number,
     renderGradingStatus: boolean
   ) => (
-      <div className="listing-header">
-        <Text ellipsize={true}>
-          <H4 className="listing-title">
-            {overview.title}
-            {overview.private ? (
-              <Tooltip
-                className="listing-title-tooltip"
-                content="This assessment is password-protected."
-              >
-                <Icon icon="lock" />
-              </Tooltip>
-            ) : null}
-            {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
-          </H4>
-        </Text>
-        <div className="listing-button">{this.makeSubmissionButton(overview, index)}</div>
-      </div>
-    );
+    <div className="listing-header">
+      <Text ellipsize={true}>
+        <H4 className="listing-title">
+          {overview.title}
+          {overview.private ? (
+            <Tooltip
+              className="listing-title-tooltip"
+              content="This assessment is password-protected."
+            >
+              <Icon icon="lock" />
+            </Tooltip>
+          ) : null}
+          {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
+        </H4>
+      </Text>
+      <div className="listing-button">{this.makeSubmissionButton(overview, index)}</div>
+    </div>
+  );
 }
 
 const makeGradingStatus = (gradingStatus: string) => {

@@ -5,18 +5,14 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { sourceLanguages, styliseChapter } from 'src/commons/application/ApplicationTypes';  
+import { sourceLanguages, styliseChapter } from 'src/commons/application/ApplicationTypes';
 import { Chapter } from 'src/commons/application/types/ChapterTypes';
-import { 
-  External, 
-  externalLibraries, 
-  ExternalLibraryName 
-} from 'src/commons/application/types/ExternalTypes';
 import {
-  Assessment,
-  emptyLibrary,
-  Library
-} from 'src/commons/assessment/AssessmentTypes';
+  External,
+  externalLibraries,
+  ExternalLibraryName
+} from 'src/commons/application/types/ExternalTypes';
+import { Assessment, emptyLibrary, Library } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';

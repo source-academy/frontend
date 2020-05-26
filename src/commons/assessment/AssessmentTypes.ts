@@ -139,9 +139,9 @@ export type Library = {
   variant?: Variant;
   external: ExternalLibrary;
   globals: Array<{
-      0: string;
-      1: any;
-      2?: string; // For mission control
+    0: string;
+    1: any;
+    2?: string; // For mission control
   }>;
 };
 

@@ -32,11 +32,15 @@ import {
   updateCurrentAssessmentId,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue,
+  updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from './AssessmentWorkspaceComponent';
+import AssessmentWorkspace, {
+  DispatchProps,
+  OwnProps,
+  StateProps
+} from './AssessmentWorkspaceComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
