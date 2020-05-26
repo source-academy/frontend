@@ -7,8 +7,8 @@ import { parseError } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 
-import CanvasOutput from 'src/commons/sideContent/CanvasOutput';
 import { InterpreterOutput } from 'src/commons/application/ApplicationTypes'; 
+import CanvasOutput from 'src/commons/sideContent/CanvasOutput';
 
 import ReplInput, { ReplInputProps } from './ReplInput';
 

@@ -32,6 +32,7 @@ import Markdown from 'src/commons/Markdown';
 import NotificationBadge from 'src/commons/notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByAssessment } from 'src/commons/notificationBadge/NotificationBadgeHelper';
 import { NotificationFilterFunction } from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { DEFAULT_QUESTION_ID } from 'src/utils/constants';
 import { beforeNow, getPrettyDate } from 'src/utils/dateHelpers';
 import { assessmentCategoryLink, stringParamToInt } from 'src/utils/paramParseHelpers';
 
@@ -39,7 +40,7 @@ import {
   AssessmentCategory,
   AssessmentOverview,
   AssessmentStatuses,
-  DEFAULT_QUESTION_ID,
+  AssessmentWorkspaceParams,
   GradingStatuses
 } from './AssessmentTypes';
 
@@ -61,12 +62,6 @@ export type OwnProps = {
 export type StateProps = {
   assessmentOverviews?: AssessmentOverview[];
   isStudent: boolean;
-};
-
-// TODO: Duplicate with MissionControl
-export type AssessmentWorkspaceParams = {
-  assessmentId?: string;
-  questionId?: string;
 };
 
 type State = {

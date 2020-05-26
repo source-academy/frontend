@@ -1,4 +1,4 @@
-import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
 export interface IInputTypeShape {
   chapterSelect: number;

@@ -2,7 +2,7 @@ import { Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import controlButton from 'src/commons/ControlButton';
 import {
   CodeDelta,

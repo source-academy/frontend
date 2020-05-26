@@ -7,9 +7,10 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-
+import { IState, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { Library } from 'src/commons/assessment/AssessmentTypes';
+import { Position } from 'src/commons/editor/EditorComponent';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -34,10 +35,6 @@ import {
   WorkspaceLocation,
   WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
-
-import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorComponent';
-import { IState, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
 
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';
 

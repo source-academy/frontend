@@ -17,6 +17,7 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { Role } from 'src/commons/application/ApplicationTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import NotificationBadge from 'src/commons/notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsBySubmission } from 'src/commons/notificationBadge/NotificationBadgeHelper';
@@ -28,7 +29,6 @@ import {
   GradingOverview,
   GradingOverviewWithNotifications
 } from 'src/features/grading/GradingTypes';
-import { Role } from 'src/commons/application/ApplicationTypes';
 import { stringParamToInt } from 'src/utils/paramParseHelpers';
 
 import EditGradingCell from './subcomponents/GradingEditGradingCellComponent';

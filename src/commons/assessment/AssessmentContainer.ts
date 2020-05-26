@@ -10,12 +10,11 @@ import {
 import { IState, Role } from 'src/commons/application/ApplicationTypes'; 
 
 import Assessment, {
-  AssessmentWorkspaceParams,
   DispatchProps,
   OwnProps,
   StateProps,
 } from './AssessmentComponent';
-import { AssessmentOverview } from './AssessmentTypes';
+import { AssessmentOverview, AssessmentWorkspaceParams } from './AssessmentTypes';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (
   state,

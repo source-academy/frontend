@@ -3,21 +3,13 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
-  fetchSourcecastIndex,
-  setCodeDeltasToApply,
-  setInputToApply,
-  setSourcecastData,
-  setSourcecastDuration,
-  setSourcecastStatus
-} from 'src/features/sourcecast/SourcecastActions';
-
-import {
   beginDebuggerPause,
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-
+import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -39,8 +31,14 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from 'src/commons/workspace/WorkspaceActions';
-
-import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
+import {
+  fetchSourcecastIndex,
+  setCodeDeltasToApply,
+  setInputToApply,
+  setSourcecastData,
+  setSourcecastDuration,
+  setSourcecastStatus
+} from 'src/features/sourcecast/SourcecastActions';
 import {
   CodeDelta,
   Input,
@@ -48,7 +46,6 @@ import {
   PlaybackStatus,
   Position
 } from 'src/features/sourcecast/SourcecastTypes';
-import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
 import Sourcecast, { DispatchProps, StateProps } from './SourcecastComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({

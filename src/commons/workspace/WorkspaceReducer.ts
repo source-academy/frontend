@@ -2,6 +2,16 @@ import { Reducer } from 'redux';
 import { Testcase } from 'src/commons/assessment/AssessmentTypes';
 
 import {
+  CodeOutput,
+  createDefaultWorkspace,
+  defaultWorkspaceManager,
+  ErrorOutput,
+  InterpreterOutput,
+  IWorkspaceManagerState,
+  maxBrowseIndex,
+  ResultOutput
+} from 'src/commons/application/ApplicationTypes';
+import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EDITOR_HEIGHT,
@@ -48,19 +58,8 @@ import {
 import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceActions';
 import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
-import {
-  CodeOutput,
-  createDefaultWorkspace,
-  defaultWorkspaceManager,
-  ErrorOutput,
-  InterpreterOutput,
-  IWorkspaceManagerState,
-  maxBrowseIndex,
-  ResultOutput
-} from 'src/commons/application/ApplicationTypes';
-import { createContext } from 'src/utils/slangHelper';
-
 import { SourceActionType } from 'src/utils/actionsHelper';
+import { createContext } from 'src/utils/slangHelper';
 
 /**
  * Takes in a IWorkspaceManagerState and maps it to a new state. The

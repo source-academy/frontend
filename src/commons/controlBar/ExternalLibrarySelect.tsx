@@ -3,20 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
-import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
+import { External, ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { externalLibraries } from 'src/commons/externalLibraries/ExternalLibraries';
-
-// TODO: There is duplicate on EditingWorkspaceSideContent\DeploymentTab
-/**
- * Defined for displaying an external library.
- * @see Library under assessmentShape.ts for
- *   the definition of a Library in an assessment.
- */
-type External = {
-  key: number;
-  name: ExternalLibraryName;
-  symbols: string[];
-};
 
 type ExternalLibrarySelectProps = DispatchProps & StateProps;
 

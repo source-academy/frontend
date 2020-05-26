@@ -8,7 +8,8 @@ import { RouteComponentProps } from 'react-router';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 
-import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/assessment/AssessmentTypes';
+import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
 import {
   AutorunButtons,
   ChapterSelect,
@@ -29,7 +30,6 @@ import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import SubstVisualizer from 'src/commons/sideContent/SubstVisualizer';
 import VideoDisplay from 'src/commons/sideContent/VideoDisplay';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
-import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
 import { generateSourceIntroduction } from 'src/utils/introductionHelper';
 
 export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;

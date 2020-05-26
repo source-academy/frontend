@@ -5,7 +5,8 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
+import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   AutorunButtons,
   ChapterSelect,
@@ -28,7 +29,6 @@ import {
   RecordingStatus,
   SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
-import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
 
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 

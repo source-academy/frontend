@@ -1,7 +1,6 @@
 import { Reducer } from 'redux';
 import { ISourcecastWorkspace } from 'src/commons/application/ApplicationTypes';
 
-import { SourceActionType } from 'src/utils/actionsHelper';
 import {
   SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
@@ -11,6 +10,7 @@ import {
   SET_SOURCECAST_PLAYBACK_STATUS,
   UPDATE_SOURCECAST_INDEX
 } from 'src/commons/application/types/ActionTypes';
+import { SourceActionType } from 'src/utils/actionsHelper';
 
 export const SourcecastReducer: Reducer<ISourcecastWorkspace> = (
   state: ISourcecastWorkspace,

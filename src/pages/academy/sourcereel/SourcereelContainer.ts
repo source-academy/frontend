@@ -2,26 +2,13 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
-  deleteSourcecastEntry,
-  recordInit,
-  recordInput,
-  saveSourcecastData,
-  timerPause,
-  timerReset,
-  timerResume,
-  timerStart,
-  timerStop
-} from 'src/features/sourcereel/SourcereelActions';
-
-import { fetchSourcecastIndex } from 'src/features/sourcecast/SourcecastActions';
-
-import {
   beginDebuggerPause,
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-
+import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -43,10 +30,19 @@ import {
   updateReplValue,
   WorkspaceLocation
 } from 'src/commons/workspace/WorkspaceActions';
-
-import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
+import { fetchSourcecastIndex } from 'src/features/sourcecast/SourcecastActions';
 import { Input, PlaybackData, Position } from 'src/features/sourcecast/SourcecastTypes';
-import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import {
+  deleteSourcecastEntry,
+  recordInit,
+  recordInput,
+  saveSourcecastData,
+  timerPause,
+  timerReset,
+  timerResume,
+  timerStart,
+  timerStop
+} from 'src/features/sourcereel/SourcereelActions';
 
 import Sourcereel, { DispatchProps, StateProps } from './SourcereelComponent';
 

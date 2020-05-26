@@ -1,8 +1,8 @@
 import { Reducer } from 'redux';
 
-import { SourceActionType } from 'src/utils/actionsHelper';
-import { UPDATE_GROUP_OVERVIEWS } from 'src/commons/application/types/ActionTypes';
 import { defaultDashBoard, IDashBoardState } from 'src/commons/application/ApplicationTypes';
+import { UPDATE_GROUP_OVERVIEWS } from 'src/commons/application/types/ActionTypes';
+import { SourceActionType } from 'src/utils/actionsHelper';
 
 export const DashboardReducer: Reducer<IDashBoardState> = (
   state = defaultDashBoard,

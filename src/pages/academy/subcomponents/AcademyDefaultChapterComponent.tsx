@@ -7,6 +7,7 @@ import { RouteComponentProps } from 'react-router';
 import { Variant } from 'js-slang/dist/types';
 
 import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/commons/application/ApplicationTypes'; 
+import { Chapter } from 'src/commons/application/types/ChapterTypes';
 
 export type DefaultChapterProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -19,13 +20,6 @@ export type DispatchProps = {
 export type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
-};
-
-// TODO: Duplicate from EditingWorkspaceContent/DeploymentTab, AcademyDefaultChapterComponent, and ChapterSelect
-type Chapter = {
-  chapter: number;
-  variant: Variant;
-  displayName: string;
 };
 
 export function DefaultChapter(props: DefaultChapterProps) {

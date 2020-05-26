@@ -1,29 +1,28 @@
 import { Context } from 'js-slang';
 import { SourceError, Variant } from 'js-slang/dist/types';
 
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceActions';
-import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
-import { Announcement } from 'src/components/Announcements';
+import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
 import {
-  AutogradingResult,
-  ExternalLibraryName,
-  ExternalLibraryNames,
   Assessment,
   AssessmentOverview,
+  AutogradingResult,
   Testcase
 } from 'src/commons/assessment/AssessmentTypes';
-import { GroupOverview } from 'src/features/dashboard/DashboardTypes';
-import { DirectoryData, MaterialData } from 'src/components/material/materialShape';
+import { Position } from 'src/commons/editor/EditorComponent';
 import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceActions';
+import { Announcement } from 'src/components/Announcements'; // TODO: Remove
+import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
+import { GroupOverview } from 'src/features/dashboard/DashboardTypes';
+import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
 import {
   CodeDelta,
   Input,
   PlaybackData,
-  SourcecastData,
   PlaybackStatus,
-  RecordingStatus
+  RecordingStatus,
+  SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
-import { Position } from 'src/commons/editor/EditorComponent';
 import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from 'src/utils/constants';
 import { HistoryHelper } from 'src/utils/history';
 import { createContext } from 'src/utils/slangHelper';

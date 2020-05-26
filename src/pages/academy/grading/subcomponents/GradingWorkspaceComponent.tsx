@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
+import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -28,7 +29,6 @@ import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
 import { AnsweredQuestion, Grading } from 'src/features/grading/GradingTypes';
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
 import { USE_CHATKIT } from 'src/utils/constants';
 import { history } from 'src/utils/history';
 

@@ -6,6 +6,7 @@ import * as React from 'react';
 import { Variant } from 'js-slang/dist/types';
 
 import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/commons/application/ApplicationTypes';
+import { Chapter } from 'src/commons/application/types/ChapterTypes';
 
 type ChapterSelectProps = DispatchProps & StateProps;
 
@@ -17,13 +18,6 @@ type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
   key: string;
-};
-
-// TODO: Duplicate from EditingWorkspaceContent/DeploymentTab, AcademyDefaultChapterComponent, and ChapterSelect
-export type Chapter = {
-  chapter: number;
-  variant: Variant;
-  displayName: string;
 };
 
 export function ChapterSelect(props: ChapterSelectProps) {

@@ -27,10 +27,9 @@ import {
 import controlButton from 'src/commons/ControlButton';
 import Markdown from 'src/commons/Markdown';
 import { exportXml, storeLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
+import { DEFAULT_QUESTION_ID } from 'src/utils/constants';
 import { getPrettyDate } from 'src/utils/dateHelpers';
 import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
-
-const DEFAULT_QUESTION_ID: number = 0;
 
 type EditingOverviewCardProps = DispatchProps & StateProps;
 

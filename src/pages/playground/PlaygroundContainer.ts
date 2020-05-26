@@ -5,27 +5,21 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Variant } from 'js-slang/dist/types';
 
 import {
+  beginDebuggerPause,
+  beginInterruptExecution,
+  debuggerReset,
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
+import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import {
   finishInvite,
   initInvite,
   invalidEditorSessionId,
   setEditorSessionId,
   setWebsocketStatus
 } from 'src/commons/collabEditing/CollabEditingActions';
-
-import {
-  generateLzString,
-  shortenURL,
-  toggleUsingSubst,
-  updateShortURL
-} from 'src/features/playground/PlaygroundActions';
-
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
-
+import { Position } from 'src/commons/editor/EditorComponent';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -50,10 +44,12 @@ import {
   WorkspaceLocation,
   WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
-
-import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorComponent';
-import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import {
+  generateLzString,
+  shortenURL,
+  toggleUsingSubst,
+  updateShortURL
+} from 'src/features/playground/PlaygroundActions';
 
 import Playground, { DispatchProps, StateProps } from './PlaygroundComponent';
 
