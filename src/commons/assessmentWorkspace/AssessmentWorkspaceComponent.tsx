@@ -14,7 +14,7 @@ import * as React from 'react';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -39,7 +39,8 @@ import controlButton from 'src/commons/ControlButton';
 import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
-import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove

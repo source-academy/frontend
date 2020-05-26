@@ -10,7 +10,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { IState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   finishInvite,
@@ -20,6 +20,7 @@ import {
   setWebsocketStatus
 } from 'src/commons/collabEditing/CollabEditingActions';
 import { Position } from 'src/commons/editor/EditorComponent';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,

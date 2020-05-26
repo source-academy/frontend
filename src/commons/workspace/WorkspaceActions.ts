@@ -2,11 +2,12 @@ import { action } from 'typesafe-actions';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { IWorkspaceState } from 'src/commons/application/ApplicationTypes';
 import * as actionTypes from 'src/commons/application/types/ActionTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes'; 
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorComponent';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 
 import { WorkspaceLocation } from './WorkspaceTypes';
 

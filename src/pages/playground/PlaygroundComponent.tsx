@@ -8,7 +8,7 @@ import { RouteComponentProps } from 'react-router';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 
-import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName, ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
 import { AutorunButtons } from 'src/commons/controlBar/AutorunButtons';
 import { ChapterSelect } from 'src/commons/controlBar/ChapterSelect';
@@ -24,7 +24,7 @@ import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import FaceapiDisplay from 'src/commons/sideContent/FaceapiDisplay';
 import Inspector from 'src/commons/sideContent/Inspector';
 import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
-import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import SubstVisualizer from 'src/commons/sideContent/SubstVisualizer';
 import VideoDisplay from 'src/commons/sideContent/VideoDisplay';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';

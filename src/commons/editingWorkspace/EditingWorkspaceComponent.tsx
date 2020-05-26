@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -34,7 +34,8 @@ import { ProgrammingQuestionTemplateTab } from 'src/commons/editingWorkspaceSide
 import { TextAreaContent } from 'src/commons/editingWorkspaceSideContent/TextAreaContent';
 import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
-import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {

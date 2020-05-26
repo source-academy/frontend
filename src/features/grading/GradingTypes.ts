@@ -108,4 +108,4 @@ export type GradingNavLinkProps = {
 
 export type GradingCellProps = {
   data: GradingOverview;
-}
+};

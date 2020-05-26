@@ -8,8 +8,9 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { IState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { IState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,

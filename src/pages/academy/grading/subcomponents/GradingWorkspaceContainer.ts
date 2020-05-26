@@ -8,9 +8,10 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import { IState, IWorkspaceState, SideContentType } from 'src/commons/application/ApplicationTypes';
+import { IState, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorComponent';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,

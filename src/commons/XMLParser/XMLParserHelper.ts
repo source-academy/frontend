@@ -17,6 +17,7 @@ import {
 } from 'src/commons/assessment/AssessmentTypes';
 
 import {
+  EDITING_ID,
   XmlParseStrCProblem,
   XmlParseStrDeployment,
   XmlParseStrOverview,
@@ -24,8 +25,7 @@ import {
   XmlParseStrProblem,
   XmlParseStrProblemChoice,
   XmlParseStrTask,
-  XmlParseStrTestcase,
-  EDITING_ID
+  XmlParseStrTestcase
 } from './XMLParserTypes';
 
 const capitalizeFirstLetter = (str: string) => {
