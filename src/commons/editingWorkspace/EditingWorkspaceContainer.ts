@@ -32,20 +32,12 @@ import {
   WorkspaceLocation
 } from 'src/actions/workspaces'; // TODO: Import form commons
 import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import { IState, IWorkspaceState } from 'src/reducers/states'; // TODO: Import from commons
 
-import EditingWorkspace, {
-  EditingWorkspaceDispatchProps,
-  EditingWorkspaceOwnProps,
-  EditingWorkspaceStateProps
-} from './EditingWorkspaceComponent';
+import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspaceComponent';
 
-const mapStateToProps: MapStateToProps<
-  EditingWorkspaceStateProps,
-  EditingWorkspaceOwnProps,
-  IState
-> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
   return {
     editorValue: state.workspaces.assessment.editorValue,
     editorHeight: state.workspaces.assessment.editorHeight,
@@ -67,7 +59,7 @@ const mapStateToProps: MapStateToProps<
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
-const mapDispatchToProps: MapDispatchToProps<EditingWorkspaceDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
@@ -75,7 +67,7 @@ const mapDispatchToProps: MapDispatchToProps<EditingWorkspaceDispatchProps, {}> 
       handleChapterSelect: (chapter: any, changeEvent: any) =>
         chapterSelect(chapter, 'default', workspaceLocation),
       handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
-      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+      handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),

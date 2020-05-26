@@ -24,7 +24,7 @@ import { RouteComponentProps } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import defaultCoverImage from 'src/assets/default_cover_image.jpg';
-import { IAssessmentWorkspaceOwnProps } from 'src/commons/assessmentWorkspace/AssessmentWorkspaceComponent';
+import { OwnProps as AssessmentWorkspaceOwnProps } from 'src/commons/assessmentWorkspace/AssessmentWorkspaceComponent';
 import AssessmentWorkspaceContainer from 'src/commons/assessmentWorkspace/AssessmentWorkspaceContainer';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import controlButton from 'src/commons/ControlButton';
@@ -37,47 +37,47 @@ import { assessmentCategoryLink, stringParamToInt } from 'src/utils/paramParseHe
 
 import {
   AssessmentCategory,
+  AssessmentOverview,
   AssessmentStatuses,
   DEFAULT_QUESTION_ID,
-  GradingStatuses,
-  IAssessmentOverview
+  GradingStatuses
 } from './AssessmentTypes';
 
-export interface IAssessmentProps
-  extends IAssessmentDispatchProps,
-    IAssessmentOwnProps,
-    RouteComponentProps<IAssessmentWorkspaceParams>,
-    IAssessmentStateProps {}
+export type AssessmentProps = DispatchProps
+  & OwnProps
+  & RouteComponentProps<AssessmentWorkspaceParams>
+  & StateProps;
 
-export interface IAssessmentDispatchProps {
+export type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
   handleAssessmentOverviewFetch: () => void;
   handleSubmitAssessment: (id: number) => void;
-}
+};
 
-export interface IAssessmentOwnProps {
+export type OwnProps = {
   assessmentCategory: AssessmentCategory;
-}
+};
 
-export interface IAssessmentStateProps {
-  assessmentOverviews?: IAssessmentOverview[];
+export type StateProps = {
+  assessmentOverviews?: AssessmentOverview[];
   isStudent: boolean;
-}
+};
 
-export interface IAssessmentWorkspaceParams {
+// TODO: Duplicate with MissionControl
+export type AssessmentWorkspaceParams = {
   assessmentId?: string;
   questionId?: string;
-}
+};
 
 type State = {
-  betchaAssessment: IAssessmentOverview | null;
+  betchaAssessment: AssessmentOverview | null;
   showClosedAssessments: boolean;
   showOpenedAssessments: boolean;
   showUpcomingAssessments: boolean;
 };
 
-class Assessment extends React.Component<IAssessmentProps, State> {
-  public constructor(props: IAssessmentProps) {
+class Assessment extends React.Component<AssessmentProps, State> {
+  public constructor(props: AssessmentProps) {
     super(props);
     this.state = {
       betchaAssessment: null,
@@ -97,7 +97,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     // overviews must still be loaded for this, to send the due date.
     if (assessmentId !== null && assessmentOverviews !== undefined) {
       const overview = assessmentOverviews.filter(a => a.id === assessmentId)[0];
-      const assessmentWorkspaceProps: IAssessmentWorkspaceOwnProps = {
+      const assessmentWorkspaceProps: AssessmentWorkspaceOwnProps = {
         assessmentId,
         questionId,
         notAttempted: overview.status === AssessmentStatuses.not_attempted,
@@ -106,7 +106,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       return <AssessmentWorkspaceContainer {...assessmentWorkspaceProps} />;
     }
 
-    // Otherwise, render a list of assessments to the user.
+    // Otherwise, render a list of assOwnProps
     let display: JSX.Element;
     if (assessmentOverviews === undefined) {
       display = <NonIdealState description="Fetching assessment..." icon={<Spinner />} />;
@@ -114,7 +114,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       display = <NonIdealState title="There are no assessments." icon={IconNames.FLAME} />;
     } else {
       /** Upcoming assessments, that are not released yet. */
-      const isOverviewUpcoming = (overview: IAssessmentOverview) =>
+      const isOverviewUpcoming = (overview: AssessmentOverview) =>
         !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
 
       const upcomingCards = this.sortAssessments(
@@ -122,7 +122,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       ).map((overview, index) => this.makeOverviewCard(overview, index, !isStudent, false));
 
       /** Opened assessments, that are released and can be attempted. */
-      const isOverviewOpened = (overview: IAssessmentOverview) =>
+      const isOverviewOpened = (overview: AssessmentOverview) =>
         !beforeNow(overview.closeAt) &&
         beforeNow(overview.openAt) &&
         overview.status !== AssessmentStatuses.submitted;
@@ -180,8 +180,8 @@ class Assessment extends React.Component<IAssessmentProps, State> {
         <i>&quot;{this.state.betchaAssessment.title}&quot;</i>.
       </p>
     ) : (
-      <p>You are about to finalise your submission.</p>
-    );
+        <p>You are about to finalise your submission.</p>
+      );
     const betchaText = (
       <>
         {submissionText}
@@ -244,7 +244,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
       showUpcomingAssessments: !this.state.showUpcomingAssessments
     });
 
-  private setBetchaAssessment = (assessment: IAssessmentOverview | null) =>
+  private setBetchaAssessment = (assessment: AssessmentOverview | null) =>
     this.setState({
       ...this.state,
       betchaAssessment: assessment
@@ -259,10 +259,10 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     }
   };
 
-  private sortAssessments = (assessments: IAssessmentOverview[]) =>
+  private sortAssessments = (assessments: AssessmentOverview[]) =>
     sortBy(assessments, [a => -a.id]);
 
-  private makeSubmissionButton = (overview: IAssessmentOverview, index: number) => (
+  private makeSubmissionButton = (overview: AssessmentOverview, index: number) => (
     <Button
       disabled={overview.status !== AssessmentStatuses.attempted}
       icon={IconNames.CONFIRM}
@@ -277,7 +277,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
     </Button>
   );
 
-  private makeAssessmentInteractButton = (overview: IAssessmentOverview) => {
+  private makeAssessmentInteractButton = (overview: AssessmentOverview) => {
     let icon: IconName;
     let label: string;
     let optionalLabel: string = '';
@@ -332,7 +332,7 @@ class Assessment extends React.Component<IAssessmentProps, State> {
 
   /**
    * Create a series of cards to display IAssessmentOverviews.
-   * @param {IAssessmentOverview} overview the assessment overview to display
+   * @param {AssessmentOverview} overview the assessment overview to display
    * @param {number} index a unique number for this card (required for sequential rendering).
    *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
    * @param renderAttemptButton will only render the attempt button if true, regardless
@@ -340,82 +340,82 @@ class Assessment extends React.Component<IAssessmentProps, State> {
    * @param notifications the notifications to be passed in.
    */
   private makeOverviewCard = (
-    overview: IAssessmentOverview,
+    overview: AssessmentOverview,
     index: number,
     renderAttemptButton: boolean,
     renderGradingStatus: boolean
   ) => (
-    <div key={index}>
-      <Card className="row listing" elevation={Elevation.ONE}>
-        <div className="col-xs-3 listing-picture">
-          <NotificationBadge
-            className="badge"
-            notificationFilter={filterNotificationsByAssessment(overview.id)}
-            large={true}
-          />
-          <img
-            className={`cover-image-${overview.status}`}
-            src={overview.coverImage ? overview.coverImage : defaultCoverImage}
-          />
-        </div>
-        <div className="col-xs-9 listing-text">
-          {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
-          <div className="listing-grade">
-            <H6>
-              {beforeNow(overview.openAt)
-                ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                : `Max Grade: ${overview.maxGrade}`}
-            </H6>
+      <div key={index}>
+        <Card className="row listing" elevation={Elevation.ONE}>
+          <div className="col-xs-3 listing-picture">
+            <NotificationBadge
+              className="badge"
+              notificationFilter={filterNotificationsByAssessment(overview.id)}
+              large={true}
+            />
+            <img
+              className={`cover-image-${overview.status}`}
+              src={overview.coverImage ? overview.coverImage : defaultCoverImage}
+            />
           </div>
-          <div className="listing-xp">
-            <H6>
-              {beforeNow(overview.openAt)
-                ? `XP: ${overview.xp} / ${overview.maxXp}`
-                : `Max XP: ${overview.maxXp}`}
-            </H6>
-          </div>
-          <div className="listing-description">
-            <Markdown content={overview.shortSummary} />
-          </div>
-          <div className="listing-footer">
-            <Text className="listing-due-date">
-              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-              {beforeNow(overview.openAt)
-                ? `Due: ${getPrettyDate(overview.closeAt)}`
-                : `Opens at: ${getPrettyDate(overview.openAt)}`}
-            </Text>
-            <div className="listing-button">
-              {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
+          <div className="col-xs-9 listing-text">
+            {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
+            <div className="listing-grade">
+              <H6>
+                {beforeNow(overview.openAt)
+                  ? `Grade: ${overview.grade} / ${overview.maxGrade}`
+                  : `Max Grade: ${overview.maxGrade}`}
+              </H6>
+            </div>
+            <div className="listing-xp">
+              <H6>
+                {beforeNow(overview.openAt)
+                  ? `XP: ${overview.xp} / ${overview.maxXp}`
+                  : `Max XP: ${overview.maxXp}`}
+              </H6>
+            </div>
+            <div className="listing-description">
+              <Markdown content={overview.shortSummary} />
+            </div>
+            <div className="listing-footer">
+              <Text className="listing-due-date">
+                <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+                {beforeNow(overview.openAt)
+                  ? `Due: ${getPrettyDate(overview.closeAt)}`
+                  : `Opens at: ${getPrettyDate(overview.openAt)}`}
+              </Text>
+              <div className="listing-button">
+                {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
+              </div>
             </div>
           </div>
-        </div>
-      </Card>
-    </div>
-  );
+        </Card>
+      </div>
+    );
 
   private makeOverviewCardTitle = (
-    overview: IAssessmentOverview,
+    overview: AssessmentOverview,
     index: number,
     renderGradingStatus: boolean
   ) => (
-    <div className="listing-header">
-      <Text ellipsize={true}>
-        <H4 className="listing-title">
-          {overview.title}
-          {overview.private ? (
-            <Tooltip
-              className="listing-title-tooltip"
-              content="This assessment is password-protected."
-            >
-              <Icon icon="lock" />
-            </Tooltip>
-          ) : null}
-          {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
-        </H4>
-      </Text>
-      <div className="listing-button">{this.makeSubmissionButton(overview, index)}</div>
-    </div>
-  );
+      <div className="listing-header">
+        <Text ellipsize={true}>
+          <H4 className="listing-title">
+            {overview.title}
+            {overview.private ? (
+              <Tooltip
+                className="listing-title-tooltip"
+                content="This assessment is password-protected."
+              >
+                <Icon icon="lock" />
+              </Tooltip>
+            ) : null}
+            {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
+          </H4>
+        </Text>
+        <div className="listing-button">{this.makeSubmissionButton(overview, index)}</div>
+      </div>
+    );
 }
 
 const makeGradingStatus = (gradingStatus: string) => {

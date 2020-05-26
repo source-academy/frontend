@@ -1,16 +1,16 @@
-import { ExternalLibraryName, IQuestion } from 'src/commons/assessment/AssessmentTypes';
+import { ExternalLibraryName, Question } from 'src/commons/assessment/AssessmentTypes';
 
-export interface IXmlParseStrTask {
-  $: IXmlParseStrOverview;
-  DEPLOYMENT: IXmlParseStrDeployment[];
-  GRADERDEPLOYMENT: IXmlParseStrDeployment[];
-  PROBLEMS: Array<{ PROBLEM: IXmlParseStrProblem[] }>;
+export type XmlParseStrTask = {
+  $: XmlParseStrOverview;
+  DEPLOYMENT: XmlParseStrDeployment[];
+  GRADERDEPLOYMENT: XmlParseStrDeployment[];
+  PROBLEMS: Array<{ PROBLEM: XmlParseStrProblem[] }>;
   READING: string[];
   TEXT: string[];
   WEBSUMMARY?: string[];
-}
+};
 
-export interface IXmlParseStrDeployment {
+export type XmlParseStrDeployment = {
   $: {
     interpreter: string;
   };
@@ -31,9 +31,9 @@ export interface IXmlParseStrDeployment {
     };
     SYMBOL: string[];
   }>;
-}
+};
 
-export interface IXmlParseStrOverview {
+export type XmlParseStrOverview = {
   coverimage: string;
   duedate: string;
   kind: string;
@@ -41,52 +41,56 @@ export interface IXmlParseStrOverview {
   title: string;
   startdate: string;
   story: string | null;
-}
+};
 
-export interface IXmlParseStrProblem {
+export type XmlParseStrProblem = {
   $: {
-    type: IQuestion['type'];
+    type: Question['type'];
     maxgrade: string;
     maxxp: string;
   };
-  DEPLOYMENT?: IXmlParseStrDeployment[];
-  GRADERDEPLOYMENT?: IXmlParseStrDeployment[];
+  DEPLOYMENT?: XmlParseStrDeployment[];
+  GRADERDEPLOYMENT?: XmlParseStrDeployment[];
   TEXT: string[];
-}
+};
 
-export interface IXmlParseStrPProblem extends IXmlParseStrProblem {
+type PProblem = {
   SNIPPET: Array<{
     TEMPLATE: string[];
     PREPEND: string;
     SOLUTION: string[];
     POSTPEND: string;
     TESTCASES: Array<{
-      PUBLIC?: IXmlParseStrTestcase[];
-      PRIVATE?: IXmlParseStrTestcase[];
+      PUBLIC?: XmlParseStrTestcase[];
+      PRIVATE?: XmlParseStrTestcase[];
     }>;
     GRADER: string[];
   }>;
   TEXT: string[];
-}
+};
 
-export interface IXmlParseStrCProblem extends IXmlParseStrProblem {
-  CHOICE: IXmlParseStrProblemChoice[];
+export type XmlParseStrPProblem = PProblem & XmlParseStrProblem;
+
+type CProblem = {
+  CHOICE: XmlParseStrProblemChoice[];
   SNIPPET: {
     SOLUTION: string[];
   };
-}
+};
 
-export interface IXmlParseStrProblemChoice {
+export type XmlParseStrCProblem = CProblem & XmlParseStrProblem;
+
+export type XmlParseStrProblemChoice = {
   $: {
     correct: string;
   };
   TEXT: string[];
-}
+};
 
-export interface IXmlParseStrTestcase {
+export type XmlParseStrTestcase = {
   $: {
     answer: string;
     score: string;
   };
   _: string;
-}
+};

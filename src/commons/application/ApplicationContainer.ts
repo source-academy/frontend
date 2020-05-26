@@ -16,7 +16,7 @@ import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import { externalLibraries } from 'src/reducers/externalLibraries';
 import { IState } from 'src/reducers/states';
 
-import Application, { IDispatchProps, IStateProps } from './ApplicationComponent';
+import Application, { DispatchProps, StateProps } from './ApplicationComponent';
 
 /**
  * Provides the title of the application for display.
@@ -25,7 +25,7 @@ import Application, { IDispatchProps, IStateProps } from './ApplicationComponent
  * as the routing properties of @type {RouteComponentProps} are
  * provided using the withRouter() method below.
  */
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   title: state.application.title,
   accessToken: state.session.accessToken,
   role: state.session.role,
@@ -37,7 +37,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 
 const workspaceLocation = WorkspaceLocations.playground;
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleClearContext: (

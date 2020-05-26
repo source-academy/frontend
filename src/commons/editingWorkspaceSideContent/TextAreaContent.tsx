@@ -1,24 +1,24 @@
 import * as React from 'react';
 import Textarea from 'react-textarea-autosize';
 
-import { IAssessment } from 'src/commons/assessment/AssessmentTypes';
+import { Assessment } from 'src/commons/assessment/AssessmentTypes';
 import Markdown from 'src/commons/Markdown';
 
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
-interface ITextAreaContentProps extends ITextAreaContentDispatchProps, ITextAreaContentStateProps {}
+type TextAreaContentProps = DispatchProps & StateProps;
 
-interface ITextAreaContentDispatchProps {
+type DispatchProps = {
   processResults?: (newVal: string | number) => string | number;
-  updateAssessment: (assessment: IAssessment) => void;
-}
+  updateAssessment: (assessment: Assessment) => void;
+};
 
-interface ITextAreaContentStateProps {
-  assessment: IAssessment;
+type StateProps = {
+  assessment: Assessment;
   isNumber?: boolean;
   path: Array<string | number>;
   useRawValue?: boolean;
-}
+};
 
 type State = {
   isEditing: boolean;
@@ -27,8 +27,8 @@ type State = {
   useRawValue: boolean;
 };
 
-export class TextAreaContent extends React.Component<ITextAreaContentProps, State> {
-  public constructor(props: ITextAreaContentProps) {
+export class TextAreaContent extends React.Component<TextAreaContentProps, State> {
+  public constructor(props: TextAreaContentProps) {
     super(props);
     const isNumberVal = this.props.isNumber || false;
     this.state = {

@@ -10,14 +10,6 @@ import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
 
 import controlButton from 'src/commons/ControlButton';
 
-export interface ISubstVisualizerProps {
-  content: IStepperPropContents[];
-}
-
-export interface ISubstVisualizerState {
-  value: number;
-}
-
 const SubstDefaultText = () => {
   return (
     <div>
@@ -66,8 +58,18 @@ const SubstCodeDisplay = (props: { content: string }) => {
   );
 };
 
-class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisualizerState> {
-  constructor(props: ISubstVisualizerProps) {
+type SubstVisualizerProps = StateProps;
+
+type StateProps = {
+  content: IStepperPropContents[];
+};
+
+type State = {
+  value: number;
+};
+
+class SubstVisualizer extends React.Component<SubstVisualizerProps, State> {
+  constructor(props: SubstVisualizerProps) {
     super(props);
     this.state = {
       value: 1
@@ -200,7 +202,7 @@ class SubstVisualizer extends React.Component<ISubstVisualizerProps, ISubstVisua
   }
 
   private sliderShift = (newValue: number) => {
-    this.setState((state: ISubstVisualizerState) => {
+    this.setState((state: State) => {
       return { value: newValue };
     });
   };

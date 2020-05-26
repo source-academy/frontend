@@ -3,13 +3,20 @@ import { parseError } from 'js-slang';
 import { SourceError } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
-import { ITestcase, TestcaseTypes } from 'src/commons/assessment/AssessmentTypes';
+
+import { Testcase, TestcaseTypes } from 'src/commons/assessment/AssessmentTypes';
+
 import CanvasOutput from './CanvasOutput';
 
-type AutograderCardProps = {
-  testcase: ITestcase;
-  index: number;
+type AutograderCardProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
+};
+
+type StateProps = {
+  testcase: Testcase;
+  index: number;
 };
 
 class AutograderCard extends React.Component<AutograderCardProps, {}> {

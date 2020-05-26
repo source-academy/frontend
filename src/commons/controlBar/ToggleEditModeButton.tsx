@@ -4,10 +4,15 @@ import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
 
-export type ToggleEditModeButtonProps = {
+type ToggleEditModeButtonProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  toggleEditMode?(): void;
+};
+
+type StateProps = {
   key: string;
   editingMode?: string;
-  toggleEditMode?(): void;
 };
 
 export function ToggleEditModeButton(props: ToggleEditModeButtonProps) {

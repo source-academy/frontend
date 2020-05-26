@@ -2,9 +2,14 @@ import { IconNames } from '@blueprintjs/icons';
 
 import controlButton from 'src/commons/ControlButton';
 
-export type ResetButtonProps = {
-  key: string;
+type ResetButtonProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   onClick?(): any;
+};
+
+type StateProps = {
+  key: string;
 };
 
 export function ResetButton(props: ResetButtonProps) {

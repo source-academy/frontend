@@ -5,11 +5,25 @@ import 'ag-grid/dist/styles/ag-grid.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import { IPlaybackData, ISourcecastData } from 'src/features/sourcecast/SourcecastTypes';
+import { PlaybackData, SourcecastData } from 'src/features/sourcecast/SourcecastTypes';
 import { getStandardDate } from 'src/utils/dateHelpers';
 
 import SourcastDeleteCell from './SourcecastDeleteCell';
 import SourcecastSelectCell from './SourcecastSelectCell';
+
+type SourcecastTableProps = OwnProps;
+
+type OwnProps = {
+  handleDeleteSourcecastEntry?: (id: number) => void;
+  handleFetchSourcecastIndex: () => void;
+  handleSetSourcecastData?: (
+    title: string,
+    description: string,
+    audioUrl: string,
+    playbackData: PlaybackData
+  ) => void;
+  sourcecastIndex: SourcecastData[] | null;
+};
 
 /**
  * Column Definitions are defined within the state, so that data
@@ -21,24 +35,10 @@ type State = {
   groupFilterEnabled: boolean;
 };
 
-type ISourcecastTableProps = IOwnProps;
-
-interface IOwnProps {
-  handleDeleteSourcecastEntry?: (id: number) => void;
-  handleFetchSourcecastIndex: () => void;
-  handleSetSourcecastData?: (
-    title: string,
-    description: string,
-    audioUrl: string,
-    playbackData: IPlaybackData
-  ) => void;
-  sourcecastIndex: ISourcecastData[] | null;
-}
-
-class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
+class SourcecastTable extends React.Component<SourcecastTableProps, State> {
   private gridApi?: GridApi;
 
-  public constructor(props: ISourcecastTableProps) {
+  public constructor(props: SourcecastTableProps) {
     super(props);
 
     this.state = {
@@ -125,7 +125,7 @@ class SourcecastTable extends React.Component<ISourcecastTableProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
-    const data = sortBy(this.props.sourcecastIndex, [(a: ISourcecastData) => -a.id]);
+    const data = sortBy(this.props.sourcecastIndex, [(a: SourcecastData) => -a.id]);
 
     const grid = (
       <div className="SourcecastContainer">

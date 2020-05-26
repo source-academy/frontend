@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { 
-  IAssessment, 
+  Assessment, 
   mcqTemplate, 
   programmingTemplate 
 } from 'src/commons/assessment/AssessmentTypes';
@@ -11,20 +11,25 @@ import controlButton from 'src/commons/ControlButton';
 import Markdown from 'src/commons/Markdown';
 import { history } from 'src/utils/history';
 
-interface IProps {
-  assessment: IAssessment;
+type ManageQuestionTabProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  updateAssessment: (assessment: Assessment) => void;
+};
+
+type StateProps = {
+  assessment: Assessment;
   hasUnsavedChanges: boolean;
   questionId: number;
-  updateAssessment: (assessment: IAssessment) => void;
-}
+};
 
-interface IState {
+type State = {
   showSaveOverlay: boolean;
   modifyAssessment: () => void;
-}
+};
 
-export class ManageQuestionTab extends React.Component<IProps, IState> {
-  public constructor(props: IProps) {
+export class ManageQuestionTab extends React.Component<ManageQuestionTabProps, State> {
+  public constructor(props: ManageQuestionTabProps) {
     super(props);
     this.state = {
       showSaveOverlay: false,

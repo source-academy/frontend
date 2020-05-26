@@ -4,16 +4,13 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { acknowledgeNotifications } from 'src/actions';
 // TODO: Import from commons
 import { IState } from 'src/reducers/states';
-import NotificationBadge, {
-  INotificationBadgeDispatchProps,
-  INotificationBadgeStateProps
-} from './NotificationBadgeComponent';
+import NotificationBadge, { DispatchProps, StateProps } from './NotificationBadgeComponent';
 
-const mapStateToProps: MapStateToProps<INotificationBadgeStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   notifications: state.session.notifications
 });
 
-const mapDispatchToProps: MapDispatchToProps<INotificationBadgeDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAcknowledgeNotifications: acknowledgeNotifications

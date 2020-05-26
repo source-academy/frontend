@@ -1,11 +1,11 @@
 import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import * as React from 'react';
 
-interface IInspectorState {
+type State = {
   loading: boolean;
-}
+};
 
-class Inspector extends React.Component<{}, IInspectorState> {
+class Inspector extends React.Component<{}, State> {
   private $parent: HTMLElement | null;
 
   constructor(props: any) {

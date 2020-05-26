@@ -2,7 +2,9 @@ import { Classes } from '@blueprintjs/core';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-export type ControlBarProps = {
+export type ControlBarProps = OwnProps;
+
+type OwnProps = {
   editorButtons: Array<JSX.Element | null>;
   flowButtons?: Array<JSX.Element | null>;
   replButtons: Array<JSX.Element | null>;

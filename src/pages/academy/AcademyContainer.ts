@@ -6,13 +6,13 @@ import { bindActionCreators } from 'redux';
 import { fetchNotifications } from 'src/actions/session';
 // TODO: Import from commons
 import { IState } from 'src/reducers/states';
-import Academy, { IAcademyDispatchProps, IAcademyOwnProps, IAcademyStateProps } from './AcademyComponent';
+import Academy, { DispatchProps, OwnProps, StateProps } from './AcademyComponent';
 
-const mapStateToProps: MapStateToProps<IAcademyStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   historyHelper: state.session.historyHelper
 });
 
-const mapDispatchToProps: MapDispatchToProps<IAcademyDispatchProps, {}> = dispatch =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = dispatch =>
   bindActionCreators(
     {
       handleFetchNotifications: fetchNotifications
@@ -20,7 +20,7 @@ const mapDispatchToProps: MapDispatchToProps<IAcademyDispatchProps, {}> = dispat
     dispatch
   );
 
-interface IAcademyPropType extends IAcademyOwnProps, RouteComponentProps<any> {}
+interface IAcademyPropType extends OwnProps, RouteComponentProps<any> {}
 
 export default withRouter<IAcademyPropType>(
   connect(

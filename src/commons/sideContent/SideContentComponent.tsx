@@ -27,15 +27,20 @@ import { SideContentType } from 'src/reducers/states';
  * mounting of the SideContent component. Switching tabs
  * will merely hide them from view.
  */
-export type SideContentProps = {
-  animate?: boolean;
-  defaultSelectedTabId?: SideContentType;
+export type SideContentProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   onChange?: (
     newTabId: SideContentType,
     prevTabId: SideContentType,
     event: React.MouseEvent<HTMLElement>
   ) => void;
+};
+
+type StateProps = {
+  animate?: boolean;
+  defaultSelectedTabId?: SideContentType;
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
 };

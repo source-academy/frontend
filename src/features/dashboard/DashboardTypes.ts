@@ -1,8 +1,8 @@
-export interface IGroupOverview {
+export type GroupOverview = {
   id: number;
   groupName: string;
   avengerName: string;
-}
+};
 
 export type LeaderBoardInfo = {
   avengerName: string;

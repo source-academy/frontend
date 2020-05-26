@@ -2,16 +2,21 @@ import { Collapse, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { AutogradingResult, ITestcase } from 'src/commons/assessment/AssessmentTypes';
+import { AutogradingResult, Testcase } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
 
 import AutograderCard from './AutograderCard';
 import ResultCard from './ResultCard';
 
-export type AutograderProps = {
-  autogradingResults: AutogradingResult[];
-  testcases: ITestcase[];
+export type AutograderProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
+};
+
+type StateProps = {
+  autogradingResults: AutogradingResult[];
+  testcases: Testcase[];
 };
 
 type State = {

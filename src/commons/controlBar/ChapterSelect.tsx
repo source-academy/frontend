@@ -8,18 +8,24 @@ import { Variant } from 'js-slang/dist/types';
 // TODO: Import from commons
 import { ISourceLanguage, sourceLanguages, styliseChapter } from 'src/reducers/states';
 
-export type ChapterSelectProps = {
-  handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
+type ChapterSelectProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  handleChapterSelect?: (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
+};
+
+type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
   key: string;
 };
 
-export interface IChapter {
+// TODO: Duplicate from EditingWorkspaceContent/DeploymentTab, AcademyDefaultChapterComponent, and ChapterSelect
+export type Chapter = {
   chapter: number;
   variant: Variant;
   displayName: string;
-}
+};
 
 export function ChapterSelect(props: ChapterSelectProps) {
   const chapters = sourceLanguages.map((lang: ISourceLanguage) => {
@@ -30,7 +36,7 @@ export function ChapterSelect(props: ChapterSelectProps) {
     };
   });
 
-  const chapterRenderer: ItemRenderer<IChapter> = (lang, { handleClick }) => (
+  const chapterRenderer: ItemRenderer<Chapter> = (lang, { handleClick }) => (
     <MenuItem
       active={false}
       key={lang.chapter + lang.variant}
@@ -38,12 +44,12 @@ export function ChapterSelect(props: ChapterSelectProps) {
       text={lang.displayName}
     />
   );
-  const ChapterSelectComponent = Select.ofType<IChapter>();
+  const ChapterSelectComponent = Select.ofType<Chapter>();
 
   const chapSelect = (
     currentChap: number,
     currentVariant: Variant,
-    handleSelect = (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
+    handleSelect = (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
   ) => (
     <ChapterSelectComponent
       className={Classes.MINIMAL}

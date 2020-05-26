@@ -3,18 +3,49 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
-import { IPlaybackData, RecordingStatus } from 'src/features/sourcecast/SourcecastTypes';
+import { PlaybackData, RecordingStatus } from 'src/features/sourcecast/SourcecastTypes';
 // TODO: Test SourceReel
 import { Recorder } from 'src/features/sourcereel/util/index.js';
 
+type SourcereelControlbarProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  handleRecordInit: () => void;
+  handleSaveSourcecastData: (
+    title: string,
+    description: string,
+    audio: Blob,
+    playbackData: PlaybackData
+  ) => void;
+  handleSetEditorReadonly: (readonly: boolean) => void;
+  handleTimerPause: () => void;
+  handleTimerReset: () => void;
+  handleTimerResume: () => void;
+  handleTimerStart: () => void;
+  handleTimerStop: () => void;
+  getTimerDuration: () => number;
+};
+
+type StateProps = {
+  editorValue: string;
+  playbackData: PlaybackData;
+  recordingStatus: RecordingStatus;
+};
+
+type State = {
+  duration: number;
+  fileDataBlob?: Blob;
+  updater?: NodeJS.Timeout;
+  saveTitle: string;
+  saveDescription: string;
+};
+
 class SourcereelControlbar extends React.PureComponent<
-  ISourcereelControlbarProps,
-  ISourcereelControlbarState
-> {
+SourcereelControlbarProps, State> {
   private recorder: any;
   private audioContext: AudioContext;
 
-  constructor(props: ISourcereelControlbarProps) {
+  constructor(props: SourcereelControlbarProps) {
     super(props);
     this.state = {
       duration: 0,
@@ -215,32 +246,5 @@ class SourcereelControlbar extends React.PureComponent<
   };
 }
 
-export interface ISourcereelControlbarProps {
-  handleRecordInit: () => void;
-  handleSaveSourcecastData: (
-    title: string,
-    description: string,
-    audio: Blob,
-    playbackData: IPlaybackData
-  ) => void;
-  handleSetEditorReadonly: (readonly: boolean) => void;
-  handleTimerPause: () => void;
-  handleTimerReset: () => void;
-  handleTimerResume: () => void;
-  handleTimerStart: () => void;
-  handleTimerStop: () => void;
-  editorValue: string;
-  getTimerDuration: () => number;
-  playbackData: IPlaybackData;
-  recordingStatus: RecordingStatus;
-}
-
-export interface ISourcereelControlbarState {
-  duration: number;
-  fileDataBlob?: Blob;
-  updater?: NodeJS.Timeout;
-  saveTitle: string;
-  saveDescription: string;
-}
 
 export default SourcereelControlbar;

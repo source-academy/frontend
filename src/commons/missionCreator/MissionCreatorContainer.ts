@@ -3,16 +3,11 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 // TODO: Import from commons
 import { updateAssessment } from 'src/actions/session';
-import { IAssessment } from 'src/commons/assessment/AssessmentTypes';
-import MissionCreator from './MissionCreatorComponent';
-
-interface IMissionCreatorDispatchProps {
-  newAssessment: (assessment: IAssessment) => void;
-}
+import MissionCreator, { DispatchProps } from './MissionCreatorComponent';
 
 const mapStateToProps: MapStateToProps<{}, any, {}> = (state, ownProps) => ownProps;
 
-const mapDispatchToProps: MapDispatchToProps<IMissionCreatorDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       newAssessment: updateAssessment

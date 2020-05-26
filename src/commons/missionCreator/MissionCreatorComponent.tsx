@@ -4,9 +4,9 @@ import * as React from 'react';
 import { parseString } from 'xml2js';
 
 import {
+  Assessment,
+  AssessmentOverview,
   assessmentTemplate,
-  IAssessment,
-  IAssessmentOverview,
   overviewTemplate
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
@@ -17,9 +17,14 @@ import {
   storeLocalAssessmentOverview
 } from 'src/commons/XMLParser/XMLParserHelper';
 
-type MissionCreatorProps = {
-  newAssessment: (assessment: IAssessment) => void;
-  updateEditingOverview: (overview: IAssessmentOverview) => void;
+type MissionCreatorProps = DispatchProps & OwnProps;
+
+export type DispatchProps = {
+  newAssessment: (assessment: Assessment) => void;
+};
+
+type OwnProps = {
+  updateEditingOverview: (overview: AssessmentOverview) => void;
 };
 
 type State = {
@@ -68,7 +73,7 @@ class MissionCreator extends React.Component<MissionCreatorProps, State> {
         // tslint:disable-next-line:no-console
         console.dir(file);
         try {
-          const entireAssessment: [IAssessmentOverview, IAssessment] = makeEntireAssessment(result);
+          const entireAssessment: [AssessmentOverview, Assessment] = makeEntireAssessment(result);
           entireAssessment[0].fileName = file.name.slice(0, -4);
           storeLocalAssessmentOverview(entireAssessment[0]);
           this.props.updateEditingOverview(entireAssessment[0]);

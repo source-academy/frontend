@@ -17,21 +17,20 @@ import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBarComponent';
 
-interface IAcademyProps extends IAcademyOwnProps,
-  IAcademyStateProps, IAcademyDispatchProps, RouteComponentProps<{}> { }
+type IAcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
 
-export interface IAcademyOwnProps {
+export type DispatchProps = {
+  handleFetchNotifications: () => void;
+};
+
+export type StateProps = {
+  historyHelper: HistoryHelper;
+};
+
+export type OwnProps = {
   accessToken?: string;
   role: Role;
-}
-
-export interface IAcademyStateProps {
-  historyHelper: HistoryHelper;
-}
-
-export interface IAcademyDispatchProps {
-  handleFetchNotifications: () => void;
-}
+};
 
 const assessmentRenderFactory = (cat: AssessmentCategory) => (
   routerProps: RouteComponentProps<any>
@@ -100,7 +99,7 @@ class Academy extends React.Component<IAcademyProps> {
  * 2. If not, redirect to the last /acdaemy.* route the user was in
  * See src/utils/history.ts for more details
  */
-const dynamicRedirect = (props: IAcademyStateProps) => {
+const dynamicRedirect = (props: StateProps) => {
   const clickedFrom = props.historyHelper.lastGeneralLocations[0];
   const lastAcademy = props.historyHelper.lastAcademyLocations[0];
   if (clickedFrom != null && isAcademyRe.exec(clickedFrom!) == null && lastAcademy != null) {
