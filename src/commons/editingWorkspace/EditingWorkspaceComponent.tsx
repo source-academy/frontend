@@ -32,7 +32,7 @@ import { ManageQuestionTab } from 'src/commons/editingWorkspaceSideContent/Manag
 import { MCQQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/MCQQuestionTemplateTab';
 import { ProgrammingQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/ProgrammingQuestionTemplateTab';
 import { TextAreaContent } from 'src/commons/editingWorkspaceSideContent/TextAreaContent';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
 import Markdown from 'src/commons/Markdown';
 import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';

@@ -1,7 +1,5 @@
 import { AssessmentCategory } from 'src/commons/assessment/AssessmentTypes';
 
-export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
-
 export type Notification = {
   assessment_id?: number;
   assessment_type?: AssessmentCategory;

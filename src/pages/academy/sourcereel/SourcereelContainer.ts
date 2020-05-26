@@ -9,6 +9,7 @@ import {
 } from 'src/commons/application/actions/InterpreterActions';
 import { IState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { Position } from 'src/commons/editor/EditorTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
@@ -32,7 +33,7 @@ import {
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 import { fetchSourcecastIndex } from 'src/features/sourcecast/SourcecastActions';
-import { Input, PlaybackData, Position } from 'src/features/sourcecast/SourcecastTypes';
+import { Input, PlaybackData } from 'src/features/sourcecast/SourcecastTypes';
 import {
   deleteSourcecastEntry,
   recordInit,

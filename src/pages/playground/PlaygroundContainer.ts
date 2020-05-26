@@ -19,7 +19,7 @@ import {
   setEditorSessionId,
   setWebsocketStatus
 } from 'src/commons/collabEditing/CollabEditingActions';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,

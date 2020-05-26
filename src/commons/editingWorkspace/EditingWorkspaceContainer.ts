@@ -10,7 +10,7 @@ import {
 import { submitAnswer } from 'src/commons/application/actions/SessionActions';
 import { IState, IWorkspaceState } from 'src/commons/application/ApplicationTypes'; 
 import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,

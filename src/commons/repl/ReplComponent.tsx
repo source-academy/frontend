@@ -11,6 +11,7 @@ import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import CanvasOutput from 'src/commons/sideContent/CanvasOutput';
 
 import ReplInput, { ReplInputProps } from './ReplInput';
+import { OutputProps } from './ReplTypes';
 
 export type ReplProps = DispatchProps & StateProps;
 
@@ -28,11 +29,6 @@ type DispatchProps = {
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
-};
-
-type OutputProps = {
-  output: InterpreterOutput;
-  usingSubst?: boolean;
 };
 
 class Repl extends React.PureComponent<ReplProps, {}> {

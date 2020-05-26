@@ -8,7 +8,7 @@ import {
   AutogradingResult,
   Testcase
 } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
 import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';

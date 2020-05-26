@@ -18,7 +18,7 @@ import { ExecutionTime } from 'src/commons/controlBar/ExecutionTime';
 import { ExternalLibrarySelect } from 'src/commons/controlBar/ExternalLibrarySelect';
 import { SessionButtons } from 'src/commons/controlBar/SessionButton';
 import { ShareButton } from 'src/commons/controlBar/ShareButton';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
 import Markdown from 'src/commons/Markdown';
 import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import FaceapiDisplay from 'src/commons/sideContent/FaceapiDisplay';

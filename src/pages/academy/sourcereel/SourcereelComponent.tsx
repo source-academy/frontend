@@ -12,6 +12,7 @@ import { ChapterSelect } from 'src/commons/controlBar/ChapterSelect';
 import { ClearButton } from 'src/commons/controlBar/ClearButton';
 import { EvalButton } from 'src/commons/controlBar/EvalButton';
 import { ExternalLibrarySelect } from 'src/commons/controlBar/ExternalLibrarySelect';
+import { Position } from 'src/commons/editor/EditorTypes';
 import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import Inspector from 'src/commons/sideContent/Inspector';
 import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
@@ -23,7 +24,6 @@ import {
   Input,
   KeyboardCommand,
   PlaybackData,
-  Position,
   RecordingStatus,
   SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';

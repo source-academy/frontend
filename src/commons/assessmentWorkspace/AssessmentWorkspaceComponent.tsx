@@ -36,7 +36,7 @@ import { ResetButton } from 'src/commons/controlBar/ResetButton';
 import { RunButton } from 'src/commons/controlBar/RunButton'; 
 import { SaveButton } from 'src/commons/controlBar/SaveButton';
 import controlButton from 'src/commons/ControlButton';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
 import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
 import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';

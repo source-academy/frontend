@@ -19,7 +19,7 @@ import { NextButton } from 'src/commons/controlBar/NextButton';
 import { PreviousButton } from 'src/commons/controlBar/PreviousButton';
 import { QuestionViewButton } from 'src/commons/controlBar/QuestionViewButton';
 import { RunButton } from 'src/commons/controlBar/RunButton';
-import { Position } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorTypes';
 import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
 import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';

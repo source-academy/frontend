@@ -1,4 +1,5 @@
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { Position } from 'src/commons/editor/EditorTypes';
 
 export interface IInputTypeShape {
   chapterSelect: number;
@@ -33,11 +34,6 @@ export type SelectionRange = {
 export type SelectionData = {
   range: SelectionRange;
   isBackwards: boolean;
-};
-
-export type Position = {
-  row: number;
-  column: number;
 };
 
 // Refer: https://stackoverflow.com/questions/55758713/match-pair-for-keyof-and-valueof-an-interface
