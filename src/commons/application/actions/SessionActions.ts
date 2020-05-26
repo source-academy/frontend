@@ -5,11 +5,9 @@ import {
   Notification,
   NotificationFilterFunction
 } from 'src/commons/notificationBadge/NotificationBadgeTypes';
-import * as actionTypes from 'src/commons/types/ActionTypes';
+import * as actionTypes from 'src/commons/application/types/ActionTypes';
 import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
-import { GameState, Story } from 'src/reducers/states';
-
-import { Role } from 'src/reducers/states';
+import { GameState, Story, Role } from 'src/commons/application/ApplicationTypes';
 
 export const fetchAuth = (luminusCode: string) => action(actionTypes.FETCH_AUTH, luminusCode);
 

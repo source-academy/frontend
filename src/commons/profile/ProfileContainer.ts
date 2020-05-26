@@ -1,9 +1,8 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-// TODO: Import from commons
 import { fetchAssessmentOverviews } from 'src/commons/application/actions/SessionActions';
-import { IState } from 'src/reducers/states';
+import { IState } from 'src/commons/application/ApplicationTypes';
 import Profile, { DispatchProps, StateProps } from './ProfileComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({

@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { Role } from '../../reducers/states';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import Dropdown from '../dropdown/DropdownComponent';
 
 type NavigationBarProps = DispatchProps & StateProps;

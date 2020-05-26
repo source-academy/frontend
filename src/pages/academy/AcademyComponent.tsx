@@ -10,8 +10,8 @@ import MaterialUploadContainer from 'src/containers/material/MaterialUploadConta
 import DashboardContainer from 'src/pages/academy/dashboard/DashboardContainer';
 import Grading from 'src/pages/academy/grading/GradingContainer';
 import Sourcereel from 'src/pages/academy/sourcereel/SourcereelContainer';
-import { isAcademyRe } from 'src/reducers/session'; // TODO: Import from commons
-import { Role } from 'src/reducers/states'; // TODO: Import from commons
+import { isAcademyRe } from 'src/commons/application/reducers/SessionsReducer'; 
+import { Role } from 'src/commons/application/ApplicationTypes';
 import { HistoryHelper } from 'src/utils/history';
 import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 

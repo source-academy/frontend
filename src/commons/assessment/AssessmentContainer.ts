@@ -7,8 +7,7 @@ import {
   fetchAssessmentOverviews,
   submitAssessment
 } from 'src/commons/application/actions/SessionActions';
-import { Role } from 'src/reducers/states'; // TODO: Import from commons
-import { IState } from 'src/reducers/states'; // TODO: Import from commons
+import { IState, Role } from 'src/commons/application/ApplicationTypes'; 
 
 import Assessment, {
   AssessmentWorkspaceParams,

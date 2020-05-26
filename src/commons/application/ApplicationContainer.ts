@@ -17,7 +17,7 @@ import {
   WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
 import { externalLibraries } from 'src/reducers/externalLibraries';
-import { IState } from 'src/reducers/states';
+import { IState } from 'src/commons/application/ApplicationTypes';
 
 import Application, { DispatchProps, StateProps } from './ApplicationComponent';
 

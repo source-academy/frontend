@@ -1,7 +1,7 @@
 import { SourceError, Value } from 'js-slang/dist/types';
 import { action } from 'typesafe-actions';
 
-import * as actionTypes from 'src/commons/types/ActionTypes';
+import * as actionTypes from 'src/commons/application/types/ActionTypes';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceActions';
 
 export const handleConsoleLog = (logString: string, workspaceLocation: WorkspaceLocation) =>

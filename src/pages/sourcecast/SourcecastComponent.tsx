@@ -28,7 +28,7 @@ import {
   Position,
   SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
-import { InterpreterOutput, SideContentType } from 'src/reducers/states';
+import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
 
 import SourcecastControlbar, { SourcecastControlbarProps } from './subcomponents/SourcecastControlbar';
 
