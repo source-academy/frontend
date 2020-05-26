@@ -1,13 +1,7 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
 
-import {
-  ExternalLibraryNames
-} from 'src/commons/application/types/ExternalTypes';
-import {
-  Assessment,
-  AssessmentOverview,
-} from 'src/commons/assessment/AssessmentTypes';
-import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
+import { Assessment } from 'src/commons/assessment/AssessmentTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { 
   WorkspaceLocation, 
@@ -15,17 +9,15 @@ import {
   WorkspaceManagerState,
   WorkspaceState 
 } from 'src/commons/workspace/WorkspaceTypes';
-import { Announcement } from 'src/components/Announcements'; // TODO: Remove
-import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
-import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
+import { Grading } from 'src/features/grading/GradingTypes';
 import {
   PlaybackStatus,
   RecordingStatus,
 } from 'src/features/sourcecast/SourcecastTypes';
 import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from 'src/utils/constants';
-import { HistoryHelper } from 'src/utils/history';
 import { createContext } from 'src/utils/slangHelper';
 
+import { SessionState } from 'src/commons/application/types/SessionTypes';
 import { AcademyState } from 'src/features/academy/AcademyTypes';
 import { DashBoardState } from 'src/features/dashboard/DashboardTypes';
 import { PlaygroundState } from 'src/features/playground/PlaygroundTypes';
@@ -43,35 +35,6 @@ export type ApplicationState = {
   readonly title: string;
   readonly environment: ApplicationEnvironment;
 };
-
-export type SessionState = {
-  readonly accessToken?: string;
-  readonly assessmentOverviews?: AssessmentOverview[];
-  readonly assessments: Map<number, Assessment>;
-  readonly announcements?: Announcement[];
-  readonly grade: number;
-  readonly gradingOverviews?: GradingOverview[];
-  readonly gradings: Map<number, Grading>;
-  readonly group: string | null;
-  readonly historyHelper: HistoryHelper;
-  readonly materialDirectoryTree: DirectoryData[] | null;
-  readonly materialIndex: MaterialData[] | null;
-  readonly maxGrade: number;
-  readonly maxXp: number;
-  readonly refreshToken?: string;
-  readonly role?: Role;
-  readonly story: Story;
-  readonly gameState: GameState;
-  readonly name?: string;
-  readonly xp: number;
-  readonly notifications: Notification[];
-};
-
-// type ReplHistory = {
-//   browseIndex: null | number; // [0, 49] if browsing, else null
-//   records: string[];
-//   originalValue: string;
-// };
 
 export const maxBrowseIndex = 50;
 

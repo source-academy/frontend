@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { defaultSession, SessionState } from 'src/commons/application/ApplicationTypes';
+import { defaultSession } from 'src/commons/application/ApplicationTypes';
 import {
   LOG_OUT,
   SET_GAME_STATE,
@@ -15,6 +15,7 @@ import {
   UPDATE_MATERIAL_INDEX,
   UPDATE_NOTIFICATIONS
 } from 'src/commons/application/types/ActionTypes';
+import { SessionState } from 'src/commons/application/types/SessionTypes';
 import { SourceActionType } from 'src/utils/actionsHelper';
 
 export const SessionsReducer: Reducer<SessionState> = (
