@@ -1,13 +1,13 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import { GameState, Role, Story } from 'src/commons/application/ApplicationTypes';
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
-import { Assessment, AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
-} from 'src/commons/notificationBadge/NotificationBadgeTypes';
-import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
+} from '../../notificationBadge/NotificationBadgeTypes';
+import { GameState, Role, Story } from '../ApplicationTypes';
+import * as actionTypes from '../types/ActionTypes';
 
 export const fetchAuth = (luminusCode: string) => action(actionTypes.FETCH_AUTH, luminusCode);
 

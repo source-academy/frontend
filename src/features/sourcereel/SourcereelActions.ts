@@ -1,8 +1,8 @@
 import { action } from 'typesafe-actions';
 
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import { Input, PlaybackData } from 'src/features/sourcecast/SourcecastTypes';
+import * as actionTypes from '../../commons/application/types/ActionTypes';
+import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import { Input, PlaybackData } from '../sourcecast/SourcecastTypes';
 
 export const deleteSourcecastEntry = (id: number, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.DELETE_SOURCECAST_ENTRY, {

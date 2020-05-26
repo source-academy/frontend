@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions'; // EDITING
 
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import * as actionTypes from '../application/types/ActionTypes';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export const finishInvite = (workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.FINISH_INVITE, { workspaceLocation });

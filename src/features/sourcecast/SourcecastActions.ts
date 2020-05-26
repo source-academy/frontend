@@ -1,14 +1,8 @@
 import { action } from 'typesafe-actions';
 
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import {
-  CodeDelta,
-  Input,
-  PlaybackData,
-  PlaybackStatus,
-  SourcecastData
-} from 'src/features/sourcecast/SourcecastTypes';
+import * as actionTypes from '../../commons/application/types/ActionTypes';
+import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import { CodeDelta, Input, PlaybackData, PlaybackStatus, SourcecastData } from './SourcecastTypes';
 
 export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.FETCH_SOURCECAST_INDEX, {

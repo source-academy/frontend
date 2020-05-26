@@ -1,8 +1,8 @@
-import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
-import { Assessment, AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
-import { Notification } from 'src/components/notification/notificationShape';
-import { GameState, Role, Story } from 'src/commons/application/ApplicationTypes';
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
+import { Notification } from '../../../../components/notification/notificationShape';
+import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
+import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
+import { GameState, Role, Story } from '../../ApplicationTypes';
+import * as actionTypes from '../../types/ActionTypes';
 import {
   acknowledgeNotifications,
   fetchAnnouncements,
@@ -27,7 +27,7 @@ import {
   updateGradingOverviews,
   updateHistoryHelpers,
   updateNotifications
-} from 'src/commons/application/actions/SessionActions';
+} from '../SessionActions';
 
 test('acknowledgeNotifications generates correct action object', () => {
   const action = acknowledgeNotifications();
@@ -368,7 +368,7 @@ test('updateGrading generates correct action object', () => {
   const submissionId = 3;
   const grading: Grading = [
     {
-      question: jest.genMockFromModule('../../components/academy/grading/gradingShape'),
+      question: jest.genMockFromModule('../../../../components/academy/grading/gradingShape'),
       student: {
         name: 'test student',
         id: 234

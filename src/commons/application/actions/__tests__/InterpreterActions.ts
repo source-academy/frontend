@@ -1,5 +1,5 @@
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
+import { WorkspaceLocation, WorkspaceLocations } from '../../../workspace/WorkspaceTypes';
+import * as actionTypes from '../../types/ActionTypes';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -11,7 +11,7 @@ import {
   evalInterpreterSuccess,
   evalTestcaseSuccess,
   handleConsoleLog
-} from 'src/commons/application/actions/InterpreterActions';
+} from '../InterpreterActions';
 
 const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
 const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;

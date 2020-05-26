@@ -1,5 +1,5 @@
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
-import { logOut } from 'src/commons/application/actions/CommonsActions';
+import * as actionTypes from '../../types/ActionTypes';
+import { logOut } from '../CommonsActions';
 
 test('logOut generates correct action object', () => {
   const action = logOut();
