@@ -57,7 +57,7 @@ import {
   IWorkspaceManagerState,
   maxBrowseIndex,
   ResultOutput
-} from 'src/reducers/states';
+} from 'src/commons/types/ApplicationTypes';
 import { createContext } from 'src/utils/slangHelper';
 
 import { SourceActionType } from 'src/utils/actionsHelper';

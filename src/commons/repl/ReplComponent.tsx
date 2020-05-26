@@ -8,7 +8,7 @@ import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 
 import CanvasOutput from 'src/commons/sideContent/CanvasOutput';
-import { InterpreterOutput } from 'src/reducers/states'; // TODO: Import from commons
+import { InterpreterOutput } from 'src/commons/types/ApplicationTypes'; 
 
 import ReplInput, { ReplInputProps } from './ReplInput';
 

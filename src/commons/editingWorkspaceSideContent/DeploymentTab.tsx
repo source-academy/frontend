@@ -12,9 +12,8 @@ import {
   Library
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
-import { externalLibraries } from 'src/reducers/externalLibraries'; // TODO: Import from commons
-import { sourceLanguages, styliseChapter } from 'src/reducers/states'; // TODO: Import from commons
-
+import { externalLibraries } from 'src/commons/externalLibraries/ExternalLibraries';
+import { sourceLanguages, styliseChapter } from 'src/commons/types/ApplicationTypes';  
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
 

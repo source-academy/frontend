@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { ISourcereelWorkspace } from 'src/reducers/states';
+import { ISourcereelWorkspace } from 'src/commons/types/ApplicationTypes';
 
 import {
   RECORD_INIT,

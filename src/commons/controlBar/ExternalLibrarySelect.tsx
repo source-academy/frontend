@@ -4,7 +4,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
-import { externalLibraries } from 'src/reducers/externalLibraries'; // TODO: Import from commons
+import { externalLibraries } from 'src/commons/externalLibraries/ExternalLibraries';
 
 // TODO: There is duplicate on EditingWorkspaceSideContent\DeploymentTab
 /**

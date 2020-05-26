@@ -6,7 +6,7 @@ import {
   fetchGradingOverviews,
   unsubmitSubmission
 } from 'src/commons/application/actions/SessionActions';
-import { IState } from 'src/reducers/states';
+import { IState } from 'src/commons/types/ApplicationTypes';
 import Grading, { DispatchProps, StateProps } from './GradingComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({

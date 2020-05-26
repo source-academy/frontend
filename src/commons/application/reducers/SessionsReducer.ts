@@ -15,7 +15,7 @@ import {
   UPDATE_MATERIAL_INDEX,
   UPDATE_NOTIFICATIONS
 } from 'src/commons/types/ActionTypes';
-import { defaultSession, ISessionState } from 'src/commons/states/ApplicationStates';
+import { defaultSession, ISessionState } from 'src/commons/types/ApplicationTypes';
 
 export const SessionsReducer: Reducer<ISessionState> = (
   state = defaultSession,

@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 
 import { SourceActionType } from 'src/utils/actionsHelper';
 import { LOG_OUT, SAVE_CANVAS } from 'src/commons/types/ActionTypes';
-import { defaultAcademy, IAcademyState } from 'src/commons/states/ApplicationStates';
+import { defaultAcademy, IAcademyState } from 'src/commons/types/ApplicationTypes';
 
 export const AcademyReducer: Reducer<IAcademyState> = (
   state = defaultAcademy,

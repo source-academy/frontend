@@ -43,7 +43,7 @@ import {
   storeLocalAssessment,
   storeLocalAssessmentOverview
 } from 'src/commons/XMLParser/XMLParserHelper';
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states'; // TODO: Import from commons
+import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/types/ApplicationTypes';
 import { history } from 'src/utils/history';
 
 export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;

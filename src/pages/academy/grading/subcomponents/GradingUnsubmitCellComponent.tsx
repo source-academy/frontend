@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
-import { Role } from 'src/reducers/states';
+import { Role } from 'src/commons/types/ApplicationTypes';
 
 export type UnsubmitCellProps = DispatchProps & StateProps;
 

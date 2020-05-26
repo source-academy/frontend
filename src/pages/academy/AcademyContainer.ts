@@ -2,10 +2,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 
-// TODO: Import from commons
 import { fetchNotifications } from 'src/commons/application/actions/SessionActions';
-// TODO: Import from commons
-import { IState } from 'src/reducers/states';
+import { IState } from 'src/commons/types/ApplicationTypes';
 
 import Academy, { DispatchProps, OwnProps, StateProps } from './AcademyComponent';
 

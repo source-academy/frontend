@@ -9,7 +9,7 @@ import {
   AssessmentStatuses,
   GradingStatuses
 } from 'src/commons/assessment/AssessmentTypes';
-import { Role } from 'src/reducers/states'; // TODO: Import from commons
+import { Role } from 'src/commons/types/ApplicationTypes'; 
 
 import ProfileCard from './ProfileCard';
 

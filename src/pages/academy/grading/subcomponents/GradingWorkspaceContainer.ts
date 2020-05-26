@@ -37,7 +37,7 @@ import {
 
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorComponent';
-import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';
+import { IState, IWorkspaceState, SideContentType } from 'src/commons/types/ApplicationTypes';
 
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';
 

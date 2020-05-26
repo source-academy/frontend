@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { defaultPlayground, IPlaygroundState } from 'src/commons/states/ApplicationStates';
+import { defaultPlayground, IPlaygroundState } from 'src/commons/types/ApplicationTypes';
 import {
   CHANGE_QUERY_STRING,
   TOGGLE_USING_SUBST,

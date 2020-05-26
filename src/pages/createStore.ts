@@ -5,7 +5,7 @@ import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import createRootReducer from 'src/reducers';
-import { defaultState } from 'src/reducers/states';
+import { defaultState } from 'src/commons/types/ApplicationTypes';
 import mainSaga from 'src/sagas';
 import { history as appHistory } from 'src/utils/history';
 

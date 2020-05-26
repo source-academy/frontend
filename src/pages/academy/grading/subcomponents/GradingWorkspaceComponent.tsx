@@ -28,7 +28,7 @@ import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
 import { AnsweredQuestion, Grading } from 'src/features/grading/GradingTypes';
-import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states';
+import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/commons/types/ApplicationTypes';
 import { USE_CHATKIT } from 'src/utils/constants';
 import { history } from 'src/utils/history';
 

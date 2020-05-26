@@ -28,7 +28,7 @@ import {
   GradingOverview,
   GradingOverviewWithNotifications
 } from 'src/features/grading/GradingTypes';
-import { Role } from 'src/reducers/states';
+import { Role } from 'src/commons/types/ApplicationTypes';
 import { stringParamToInt } from 'src/utils/paramParseHelpers';
 
 import EditGradingCell from './subcomponents/GradingEditGradingCellComponent';

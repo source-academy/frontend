@@ -46,7 +46,7 @@ import {
 
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import { Input, PlaybackData, Position } from 'src/features/sourcecast/SourcecastTypes';
-import { IState, SideContentType } from 'src/reducers/states';
+import { IState, SideContentType } from 'src/commons/types/ApplicationTypes';
 
 import Sourcereel, { DispatchProps, StateProps } from './SourcereelComponent';
 

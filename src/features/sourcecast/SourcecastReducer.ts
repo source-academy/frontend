@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { ISourcecastWorkspace } from 'src/reducers/states';
+import { ISourcecastWorkspace } from 'src/commons/types/ApplicationTypes';
 
 import { SourceActionType } from 'src/utils/actionsHelper';
 import {

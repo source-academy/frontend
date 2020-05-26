@@ -36,7 +36,7 @@ import {
 
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorComponent';
-import { IState, IWorkspaceState } from 'src/reducers/states'; // TODO: Import from commons
+import { IState, IWorkspaceState } from 'src/commons/types/ApplicationTypes'; 
 
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspaceComponent';
 
