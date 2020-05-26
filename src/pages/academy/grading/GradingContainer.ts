@@ -7,16 +7,16 @@ import {
   unsubmitSubmission
 } from 'src/commons/application/actions/SessionActions';
 import { IState } from 'src/reducers/states';
-import Grading, { IDispatchProps, IStateProps } from './GradingComponent';
+import Grading, { DispatchProps, StateProps } from './GradingComponent';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   gradingOverviews: state.session.gradingOverviews,
   group: state.session.group,
   notifications: state.session.notifications,
   role: state.session.role
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAcknowledgeNotifications: acknowledgeNotifications,

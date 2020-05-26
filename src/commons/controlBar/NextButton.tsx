@@ -4,11 +4,16 @@ import * as React from 'react';
 import controlButton from 'src/commons/ControlButton';
 import { ReturnToAcademyButton } from './ReturnToAcademyButton';
 
-export type NextButtonProps = {
-  key: string;
-  questionProgress: [number, number] | null;
+type NextButtonProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   onClickNext?(): any;
   onClickReturn?(): any;
+};
+
+type StateProps = {
+  key: string;
+  questionProgress: [number, number] | null;
 };
 
 export function NextButton(props: NextButtonProps) {

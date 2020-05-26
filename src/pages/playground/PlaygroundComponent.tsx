@@ -19,7 +19,7 @@ import {
   SessionButtons,
   ShareButton
 } from 'src/commons/controlBar/index';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
 import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import FaceapiDisplay from 'src/commons/sideContent/FaceapiDisplay';
@@ -28,46 +28,19 @@ import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
 import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import SubstVisualizer from 'src/commons/sideContent/SubstVisualizer';
 import VideoDisplay from 'src/commons/sideContent/VideoDisplay';
-import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 import { generateSourceIntroduction } from 'src/utils/introductionHelper';
 
-export interface IPlaygroundProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
+export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
-export interface IStateProps {
-  editorSessionId: string;
-  editorValue: string;
-  editorHeight?: number;
-  editorWidth: string;
-  execTime: number;
-  breakpoints: string[];
-  highlightedLines: number[][];
-  isEditorAutorun: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  newCursorPosition?: IPosition;
-  output: InterpreterOutput[];
-  queryString?: string;
-  shortURL?: string;
-  replValue: string;
-  sideContentHeight?: number;
-  sharedbAceInitValue: string;
-  sharedbAceIsInviting: boolean;
-  sourceChapter: number;
-  sourceVariant: Variant;
-  websocketStatus: number;
-  externalLibraryName: string;
-  usingSubst: boolean;
-}
-
-export interface IDispatchProps {
+export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
   handleChapterSelect: (chapter: number, variant: Variant) => void;
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
   handleEditorValueChange: (val: string) => void;
@@ -95,19 +68,46 @@ export interface IDispatchProps {
   handleToggleEditorAutorun: () => void;
   handleFetchChapter: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-}
+};
 
-type PlaygroundState = {
+export type StateProps = {
+  editorSessionId: string;
+  editorValue: string;
+  editorHeight?: number;
+  editorWidth: string;
+  execTime: number;
+  breakpoints: string[];
+  highlightedLines: number[][];
+  isEditorAutorun: boolean;
+  isRunning: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
+  newCursorPosition?: Position;
+  output: InterpreterOutput[];
+  queryString?: string;
+  shortURL?: string;
+  replValue: string;
+  sideContentHeight?: number;
+  sharedbAceInitValue: string;
+  sharedbAceIsInviting: boolean;
+  sourceChapter: number;
+  sourceVariant: Variant;
+  websocketStatus: number;
+  externalLibraryName: string;
+  usingSubst: boolean;
+};
+
+type State = {
   isGreen: boolean;
   selectedTab: SideContentType;
   hasBreakpoints: boolean;
 };
 
-class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
+class Playground extends React.Component<PlaygroundProps, State> {
   private keyMap = { goGreen: 'h u l k' };
   private handlers = { goGreen: () => {} };
 
-  constructor(props: IPlaygroundProps) {
+  constructor(props: PlaygroundProps) {
     super(props);
     this.state = {
       isGreen: false,
@@ -267,7 +267,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       });
     }
 
-    const workspaceProps: IWorkspaceProps = {
+    const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorButtons: [
           autorunButtons,

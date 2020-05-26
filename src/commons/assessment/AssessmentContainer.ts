@@ -11,20 +11,20 @@ import { Role } from 'src/reducers/states'; // TODO: Import from commons
 import { IState } from 'src/reducers/states'; // TODO: Import from commons
 
 import Assessment, {
-  IAssessmentDispatchProps,
-  IAssessmentOwnProps,
-  IAssessmentStateProps,
-  IAssessmentWorkspaceParams
+  AssessmentWorkspaceParams,
+  DispatchProps,
+  OwnProps,
+  StateProps,
 } from './AssessmentComponent';
-import { IAssessmentOverview } from './AssessmentTypes';
+import { AssessmentOverview } from './AssessmentTypes';
 
-const mapStateToProps: MapStateToProps<IAssessmentStateProps, IAssessmentOwnProps, IState> = (
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (
   state,
   props
 ) => {
-  const categoryFilter = (overview: IAssessmentOverview) =>
+  const categoryFilter = (overview: AssessmentOverview) =>
     overview.category === props.assessmentCategory;
-  const stateProps: IAssessmentStateProps = {
+  const stateProps: StateProps = {
     assessmentOverviews: state.session.assessmentOverviews
       ? state.session.assessmentOverviews.filter(categoryFilter)
       : undefined,
@@ -33,7 +33,7 @@ const mapStateToProps: MapStateToProps<IAssessmentStateProps, IAssessmentOwnProp
   return stateProps;
 };
 
-const mapDispatchToProps: MapDispatchToProps<IAssessmentDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAcknowledgeNotifications: acknowledgeNotifications,
@@ -43,7 +43,7 @@ const mapDispatchToProps: MapDispatchToProps<IAssessmentDispatchProps, {}> = (di
     dispatch
   );
 
-interface IPropType extends IAssessmentOwnProps, RouteComponentProps<IAssessmentWorkspaceParams> {}
+interface IPropType extends OwnProps, RouteComponentProps<AssessmentWorkspaceParams> { }
 
 export default withRouter<IPropType>(
   connect(

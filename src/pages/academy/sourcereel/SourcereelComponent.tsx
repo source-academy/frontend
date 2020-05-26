@@ -17,49 +17,24 @@ import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import Inspector from 'src/commons/sideContent/Inspector';
 import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
 import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
-import SourcecastEditor, { ISourcecastEditorProps } from 'src/commons/sourcecast/SourcecastEditor';
+import SourcecastEditor, { SourcecastEditorProps } from 'src/commons/sourcecast/SourcecastEditor';
 import SourcecastTable from 'src/commons/sourcecast/SourcecastTable';
-import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {
   Input,
-  IPlaybackData,
-  IPosition,
-  ISourcecastData,
   KeyboardCommand,
-  RecordingStatus
+  PlaybackData,
+  Position,
+  RecordingStatus,
+  SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
 import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
-export interface ISourcereelProps extends IDispatchProps, IStateProps {}
+type SourcereelProps = DispatchProps & StateProps;
 
-export interface IStateProps {
-  breakpoints: string[];
-  editorHeight?: string;
-  editorReadonly: boolean;
-  editorValue: string;
-  editorWidth: string;
-  enableDebugging: boolean;
-  externalLibraryName: string;
-  highlightedLines: number[][];
-  isDebugging: boolean;
-  isEditorAutorun: boolean;
-  isRunning: boolean;
-  newCursorPosition?: IPosition;
-  output: InterpreterOutput[];
-  playbackData: IPlaybackData;
-  recordingStatus: RecordingStatus;
-  replValue: string;
-  timeElapsedBeforePause: number;
-  sideContentHeight?: number;
-  sourcecastIndex: ISourcecastData[] | null;
-  sourceChapter: number;
-  sourceVariant: Variant;
-  timeResumed: number;
-}
-
-export interface IDispatchProps {
+export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
@@ -67,7 +42,7 @@ export interface IDispatchProps {
   handleDebuggerPause: () => void;
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleDeleteSourcecastEntry: (id: number) => void;
   handleEditorEval: () => void;
   handleEditorHeightChange: (height: number) => void;
@@ -81,12 +56,12 @@ export interface IDispatchProps {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleRecordInit: (initData: IPlaybackData['init']) => void;
+  handleRecordInit: (initData: PlaybackData['init']) => void;
   handleSaveSourcecastData: (
     title: string,
     description: string,
     audio: Blob,
-    playbackData: IPlaybackData
+    playbackData: PlaybackData
   ) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -96,10 +71,35 @@ export interface IDispatchProps {
   handleTimerStart: () => void;
   handleTimerStop: () => void;
   handleToggleEditorAutorun: () => void;
-}
+};
 
-class Sourcereel extends React.Component<ISourcereelProps> {
-  constructor(props: ISourcereelProps) {
+export type StateProps = {
+  breakpoints: string[];
+  editorHeight?: string;
+  editorReadonly: boolean;
+  editorValue: string;
+  editorWidth: string;
+  enableDebugging: boolean;
+  externalLibraryName: string;
+  highlightedLines: number[][];
+  isDebugging: boolean;
+  isEditorAutorun: boolean;
+  isRunning: boolean;
+  newCursorPosition?: Position;
+  output: InterpreterOutput[];
+  playbackData: PlaybackData;
+  recordingStatus: RecordingStatus;
+  replValue: string;
+  timeElapsedBeforePause: number;
+  sideContentHeight?: number;
+  sourcecastIndex: SourcecastData[] | null;
+  sourceChapter: number;
+  sourceVariant: Variant;
+  timeResumed: number;
+};
+
+class Sourcereel extends React.Component<SourcereelProps> {
+  constructor(props: SourcereelProps) {
     super(props);
   }
 
@@ -183,7 +183,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       />
     );
 
-    const editorProps: ISourcecastEditorProps = {
+    const editorProps: SourcecastEditorProps = {
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,
       editorSessionId: '',
@@ -199,7 +199,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
       handleRecordInput: this.props.handleRecordInput
     };
-    const workspaceProps: IWorkspaceProps = {
+    const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
         replButtons: [evalButton, clearButton]

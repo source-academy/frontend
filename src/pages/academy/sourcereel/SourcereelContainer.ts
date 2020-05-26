@@ -45,12 +45,12 @@ import {
 } from 'src/commons/workspace/WorkspaceActions';
 
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
-import { Input, IPlaybackData, IPosition } from 'src/features/sourcecast/SourcecastTypes';
+import { Input, PlaybackData, Position } from 'src/features/sourcecast/SourcecastTypes';
 import { IState, SideContentType } from 'src/reducers/states';
 
-import Sourcereel, { IDispatchProps, IStateProps } from './SourcereelComponent';
+import Sourcereel, { DispatchProps, StateProps } from './SourcereelComponent';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   breakpoints: state.workspaces.sourcereel.breakpoints,
   editorReadonly: state.workspaces.sourcereel.editorReadonly,
   editorValue: state.workspaces.sourcereel.editorValue!,
@@ -76,14 +76,14 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 
 const location: WorkspaceLocation = 'sourcereel';
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) => updateActiveTab(activeTab, location),
       handleBrowseHistoryDown: () => browseReplHistoryDown(location),
       handleBrowseHistoryUp: () => browseReplHistoryUp(location),
       handleChapterSelect: (chapter: number) => chapterSelect(chapter, 'default', location),
-      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+      handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(location, cursorPosition),
       handleDeleteSourcecastEntry: (id: number) => deleteSourcecastEntry(id, 'sourcecast'),
       handleEditorEval: () => evalEditor(location),
@@ -105,10 +105,10 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         title: string,
         description: string,
         audio: Blob,
-        playbackData: IPlaybackData
+        playbackData: PlaybackData
       ) => saveSourcecastData(title, description, audio, playbackData, 'sourcecast'),
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
-      handleRecordInit: (initData: IPlaybackData['init']) => recordInit(initData, location),
+      handleRecordInit: (initData: PlaybackData['init']) => recordInit(initData, location),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleTimerPause: () => timerPause(location),

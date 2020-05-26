@@ -4,7 +4,9 @@ import * as React from 'react';
 import Markdown from 'src/commons/Markdown';
 import { getPrettyDate } from 'src/utils/dateHelpers';
 
-interface IGradingResultProps {
+type GradingResultProps = StateProps;
+
+type StateProps = {
   graderName: string;
   gradedAt: string;
   xp: number;
@@ -12,10 +14,10 @@ interface IGradingResultProps {
   maxGrade: number;
   maxXp: number;
   comments?: string;
-}
+};
 
-class AssessmentWorkspaceGradingResult extends React.Component<IGradingResultProps, {}> {
-  constructor(props: IGradingResultProps) {
+class AssessmentWorkspaceGradingResult extends React.Component<GradingResultProps, {}> {
+  constructor(props: GradingResultProps) {
     super(props);
   }
 

@@ -2,10 +2,15 @@ import { IconNames } from '@blueprintjs/icons';
 
 import controlButton from 'src/commons/ControlButton';
 
-export type PreviousButtonProps = {
+type PreviousButtonProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  onClick?(): any;
+};
+
+type StateProps = {
   key: string;
   questionProgress: [number, number] | null;
-  onClick?(): any;
 };
 
 export function PreviousButton(props: PreviousButtonProps) {

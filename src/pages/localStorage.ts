@@ -6,7 +6,7 @@ import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import { ISessionState, IState } from 'src/reducers/states';
 import { showWarningMessage } from 'src/utils/notification';
 
-export type ISavedState = {
+export type SavedState = {
   session: Partial<ISessionState>;
   playgroundEditorValue: string | null;
   playgroundIsEditorAutorun: boolean;
@@ -15,13 +15,13 @@ export type ISavedState = {
   playgroundExternalLibrary: ExternalLibraryName;
 };
 
-export const loadStoredState = (): ISavedState | undefined => {
+export const loadStoredState = (): SavedState | undefined => {
   try {
     const serializedState = localStorage.getItem('storedState');
     if (!serializedState) {
       return undefined;
     }
-    return JSON.parse(decompressFromUTF16(serializedState)) as ISavedState;
+    return JSON.parse(decompressFromUTF16(serializedState)) as SavedState;
   } catch (err) {
     showWarningMessage('Error loading from local storage');
     return undefined;
@@ -30,7 +30,7 @@ export const loadStoredState = (): ISavedState | undefined => {
 
 export const saveState = (state: IState) => {
   try {
-    const stateToBeSaved: ISavedState = {
+    const stateToBeSaved: SavedState = {
       session: {
         accessToken: state.session.accessToken,
         refreshToken: state.session.refreshToken,

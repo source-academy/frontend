@@ -6,20 +6,26 @@ import * as React from 'react';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import { externalLibraries } from 'src/reducers/externalLibraries'; // TODO: Import from commons
 
+// TODO: There is duplicate on EditingWorkspaceSideContent\DeploymentTab
 /**
  * Defined for displaying an external library.
  * @see Library under assessmentShape.ts for
  *   the definition of a Library in an assessment.
  */
-export interface IExternal {
+type External = {
   key: number;
   name: ExternalLibraryName;
   symbols: string[];
-}
+};
 
-export type ExternalLibrarySelectProps = {
+type ExternalLibrarySelectProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  handleExternalSelect?: (i: External, e: React.ChangeEvent<HTMLSelectElement>) => void;
+};
+
+type StateProps = {
   externalLibraryName?: string;
-  handleExternalSelect?: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void;
   key: string;
 };
 
@@ -30,16 +36,16 @@ export function ExternalLibrarySelect(props: ExternalLibrarySelectProps) {
     symbols: entry[1]
   }));
 
-  const ExternalSelectComponent = Select.ofType<IExternal>();
+  const ExternalSelectComponent = Select.ofType<External>();
 
-  const externalRenderer: ItemRenderer<IExternal> = (
+  const externalRenderer: ItemRenderer<External> = (
     external,
     { handleClick, modifiers, query }
   ) => <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />;
 
   const externalSelect = (
     currentExternal: string,
-    handleSelect: (i: IExternal, e: React.ChangeEvent<HTMLSelectElement>) => void
+    handleSelect: (i: External, e: React.ChangeEvent<HTMLSelectElement>) => void
   ) => (
     <ExternalSelectComponent
       className={Classes.MINIMAL}

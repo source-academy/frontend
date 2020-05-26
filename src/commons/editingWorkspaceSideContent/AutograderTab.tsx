@@ -3,9 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import {
-  IAssessment,
+  Assessment,
   IProgrammingQuestion,
-  ITestcase,
+  Testcase,
   testcaseTemplate
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
@@ -13,11 +13,16 @@ import controlButton from 'src/commons/ControlButton';
 import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';
 
-type AutograderProps = {
-  assessment: IAssessment;
+type AutograderProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  handleTestcaseEval: (testcase: Testcase) => void;
+  updateAssessment: (assessment: Assessment) => void;
+};
+
+type StateProps = {
+  assessment: Assessment;
   questionId: number;
-  handleTestcaseEval: (testcase: ITestcase) => void;
-  updateAssessment: (assessment: IAssessment) => void;
 };
 
 export class AutograderTab extends React.Component<AutograderProps, {}> {
@@ -52,18 +57,18 @@ export class AutograderTab extends React.Component<AutograderProps, {}> {
     );
   }
 
-  private addTestcase = (testcases: ITestcase[]) => () => {
+  private addTestcase = (testcases: Testcase[]) => () => {
     testcases.push(testcaseTemplate());
     this.props.updateAssessment(this.props.assessment);
   };
 
-  private removeTestcase = (testcases: ITestcase[], id: number) => {
+  private removeTestcase = (testcases: Testcase[], id: number) => {
     testcases.splice(id, 1);
     this.props.updateAssessment(this.props.assessment);
   };
 
   private autograderCard = (testcasePath: Array<string | number>, index: number) => {
-    const testcases = getValueFromPath(testcasePath, this.props.assessment) as ITestcase[];
+    const testcases = getValueFromPath(testcasePath, this.props.assessment) as Testcase[];
     const testcase = testcases[index];
 
     return (

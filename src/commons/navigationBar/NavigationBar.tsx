@@ -7,14 +7,19 @@ import { NavLink } from 'react-router-dom';
 import { Role } from '../../reducers/states';
 import Dropdown from '../dropdown/DropdownComponent';
 
-export interface INavigationBarProps {
+type NavigationBarProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleLogOut: () => void;
+};
+
+type StateProps = {
   role?: Role;
   title: string;
   name?: string;
-}
+};
 
-const NavigationBar: React.SFC<INavigationBarProps> = props => (
+const NavigationBar: React.SFC<NavigationBarProps> = props => (
   <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink

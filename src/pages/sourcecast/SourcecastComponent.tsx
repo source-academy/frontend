@@ -17,28 +17,62 @@ import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import Inspector from 'src/commons/sideContent/Inspector';
 import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
 import { SideContentTab } from 'src/commons/sideContent/SideContentComponent';
-import SourcecastEditor, { ISourcecastEditorProps } from 'src/commons/sourcecast/SourcecastEditor';
+import SourcecastEditor, { SourcecastEditorProps } from 'src/commons/sourcecast/SourcecastEditor';
 import SourcecastTable from 'src/commons/sourcecast/SourcecastTable';
-import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {
-  ICodeDelta,
+  CodeDelta,
   Input,
-  IPlaybackData,
-  IPosition,
-  ISourcecastData,
-  PlaybackStatus
+  PlaybackData,
+  PlaybackStatus,
+  Position,
+  SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
 import { InterpreterOutput, SideContentType } from 'src/reducers/states';
 
-import SourcecastControlbar, {
-  ISourcecastControlbarProps
-} from './subcomponents/SourcecastControlbar';
+import SourcecastControlbar, { SourcecastControlbarProps } from './subcomponents/SourcecastControlbar';
 
-export interface ISourcecastProps extends IDispatchProps, IStateProps {}
+export type SourcecastProps = DispatchProps & StateProps;
 
-export interface IStateProps {
+export type DispatchProps = {
+  handleActiveTabChange: (activeTab: SideContentType) => void;
+  handleBrowseHistoryDown: () => void;
+  handleBrowseHistoryUp: () => void;
+  handleChapterSelect: (chapter: number) => void;
+  handleDebuggerPause: () => void;
+  handleDebuggerResume: () => void;
+  handleDebuggerReset: () => void;
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
+  handleEditorEval: () => void;
+  handleEditorHeightChange: (height: number) => void;
+  handleEditorValueChange: (val: string) => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleEditorWidthChange: (widthChange: number) => void;
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleFetchSourcecastIndex: () => void;
+  handleInterruptEval: () => void;
+  handleReplEval: () => void;
+  handleReplOutputClear: () => void;
+  handleReplValueChange: (newValue: string) => void;
+  handleSetCodeDeltasToApply: (delta: CodeDelta[]) => void;
+  handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetInputToApply: (inputToApply: Input) => void;
+  handleSetSourcecastData: (
+    title: string,
+    description: string,
+    audioUrl: string,
+    playbackData: PlaybackData
+  ) => void;
+  handleSetSourcecastDuration: (duration: number) => void;
+  handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
+  handleSideContentHeightChange: (heightChange: number) => void;
+  handleToggleEditorAutorun: () => void;
+};
+
+export type StateProps = {
   audioUrl: string;
-  codeDeltasToApply: ICodeDelta[] | null;
+  codeDeltasToApply: CodeDelta[] | null;
   title: string | null;
   description: string | null;
   editorReadonly: boolean;
@@ -53,60 +87,24 @@ export interface IStateProps {
   isRunning: boolean;
   isDebugging: boolean;
   enableDebugging: boolean;
-  newCursorPosition?: IPosition;
+  newCursorPosition?: Position;
   output: InterpreterOutput[];
   playbackDuration: number;
-  playbackData: IPlaybackData;
+  playbackData: PlaybackData;
   playbackStatus: PlaybackStatus;
   replValue: string;
   sideContentHeight?: number;
-  sourcecastIndex: ISourcecastData[] | null;
+  sourcecastIndex: SourcecastData[] | null;
   sourceChapter: number;
   sourceVariant: Variant;
-}
+};
 
-export interface IDispatchProps {
-  handleActiveTabChange: (activeTab: SideContentType) => void;
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: number) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
-  handleEditorEval: () => void;
-  handleEditorHeightChange: (height: number) => void;
-  handleEditorValueChange: (val: string) => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleEditorWidthChange: (widthChange: number) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
-  handleFetchSourcecastIndex: () => void;
-  handleInterruptEval: () => void;
-  handleReplEval: () => void;
-  handleReplOutputClear: () => void;
-  handleReplValueChange: (newValue: string) => void;
-  handleSetCodeDeltasToApply: (delta: ICodeDelta[]) => void;
-  handleSetEditorReadonly: (editorReadonly: boolean) => void;
-  handleSetInputToApply: (inputToApply: Input) => void;
-  handleSetSourcecastData: (
-    title: string,
-    description: string,
-    audioUrl: string,
-    playbackData: IPlaybackData
-  ) => void;
-  handleSetSourcecastDuration: (duration: number) => void;
-  handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
-  handleSideContentHeightChange: (heightChange: number) => void;
-  handleToggleEditorAutorun: () => void;
-}
-
-class Sourcecast extends React.Component<ISourcecastProps> {
-  constructor(props: ISourcecastProps) {
+class Sourcecast extends React.Component<SourcecastProps> {
+  constructor(props: SourcecastProps) {
     super(props);
   }
 
-  public componentDidUpdate(prevProps: ISourcecastProps) {
+  public componentDidUpdate(prevProps: SourcecastProps) {
     const { inputToApply } = this.props;
 
     if (!inputToApply || inputToApply === prevProps.inputToApply) {
@@ -174,7 +172,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       />
     );
 
-    const editorProps: ISourcecastEditorProps = {
+    const editorProps: SourcecastEditorProps = {
       codeDeltasToApply: this.props.codeDeltasToApply,
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,
@@ -190,7 +188,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
       newCursorPosition: this.props.newCursorPosition,
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints
     };
-    const workspaceProps: IWorkspaceProps = {
+    const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
         replButtons: [evalButton, clearButton]
@@ -240,7 +238,7 @@ class Sourcecast extends React.Component<ISourcecastProps> {
         ]
       }
     };
-    const sourcecastControlbarProps: ISourcecastControlbarProps = {
+    const sourcecastControlbarProps: SourcecastControlbarProps = {
       handleEditorValueChange: this.props.handleEditorValueChange,
       handlePromptAutocomplete: this.props.handlePromptAutocomplete,
       handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,

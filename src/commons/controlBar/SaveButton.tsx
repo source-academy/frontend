@@ -3,10 +3,15 @@ import { IconNames } from '@blueprintjs/icons';
 
 import controlButton from 'src/commons/ControlButton';
 
-export type SaveButtonProps = {
+type SaveButtonProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  onClickSave?(): any;
+};
+
+type StateProps = {
   key: string;
   hasUnsavedChanges?: boolean;
-  onClickSave?(): any;
 };
 
 export function SaveButton(props: SaveButtonProps) {

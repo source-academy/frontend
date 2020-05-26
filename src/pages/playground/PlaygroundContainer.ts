@@ -52,12 +52,12 @@ import {
 } from 'src/commons/workspace/WorkspaceActions';
 
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import { IState, SideContentType } from 'src/reducers/states';
 
-import Playground, { IDispatchProps, IStateProps } from './PlaygroundComponent';
+import Playground, { DispatchProps, StateProps } from './PlaygroundComponent';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   editorSessionId: state.workspaces.playground.editorSessionId,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
@@ -85,7 +85,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>
@@ -96,7 +96,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         changeExecTime(execTime.toString(), workspaceLocation),
       handleChapterSelect: (chapter: number, variant: Variant) =>
         chapterSelect(chapter, variant, workspaceLocation),
-      handleDeclarationNavigate: (cursorPosition: IPosition) =>
+      handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),

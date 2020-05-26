@@ -22,7 +22,7 @@ import defaultCoverImage from 'src/assets/default_cover_image.jpg';
 import {
   AssessmentCategories,
   AssessmentCategory,
-  IAssessmentOverview
+  AssessmentOverview
 } from 'src/commons/assessment/AssessmentTypes';
 import controlButton from 'src/commons/ControlButton';
 import Markdown from 'src/commons/Markdown';
@@ -32,20 +32,25 @@ import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
 
 const DEFAULT_QUESTION_ID: number = 0;
 
-type Props = {
-  listingPath?: string;
-  overview: IAssessmentOverview;
-  updateEditingOverview: (overview: IAssessmentOverview) => void;
+type EditingOverviewCardProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  updateEditingOverview: (overview: AssessmentOverview) => void;
 };
 
-interface IState {
+type StateProps = {
+  listingPath?: string;
+  overview: AssessmentOverview;
+};
+
+type State = {
   editingOverviewField: string;
   fieldValue: any;
   showOptionsOverlay: boolean;
-}
+};
 
-export class EditingOverviewCard extends React.Component<Props, IState> {
-  public constructor(props: Props) {
+export class EditingOverviewCard extends React.Component<EditingOverviewCardProps, State> {
+  public constructor(props: EditingOverviewCardProps) {
     super(props);
     this.state = {
       editingOverviewField: '',
@@ -63,7 +68,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     );
   }
 
-  private saveEditOverview = (field: keyof IAssessmentOverview) => (e: any) => {
+  private saveEditOverview = (field: keyof AssessmentOverview) => (e: any) => {
     const overview = {
       ...this.props.overview,
       [field]: this.state.fieldValue
@@ -82,7 +87,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     });
   };
 
-  private toggleEditField = (field: keyof IAssessmentOverview) => (e: any) => {
+  private toggleEditField = (field: keyof AssessmentOverview) => (e: any) => {
     if (this.state.editingOverviewField !== field) {
       this.setState({
         editingOverviewField: field,
@@ -101,7 +106,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     exportXml();
   };
 
-  private makeEditingOverviewTextarea = (field: keyof IAssessmentOverview) => (
+  private makeEditingOverviewTextarea = (field: keyof AssessmentOverview) => (
     <Textarea
       autoFocus={true}
       className={'editing-textarea'}
@@ -111,7 +116,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     />
   );
 
-  private makeEditingOverviewCard = (overview: IAssessmentOverview) => (
+  private makeEditingOverviewCard = (overview: AssessmentOverview) => (
     <div>
       <Card className="row listing" elevation={Elevation.ONE}>
         <div className="col-xs-3 listing-picture" onClick={this.toggleEditField('coverImage')}>
@@ -165,7 +170,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     </div>
   );
 
-  private makeEditingOverviewCardTitle = (overview: IAssessmentOverview, title: string) => (
+  private makeEditingOverviewCardTitle = (overview: AssessmentOverview, title: string) => (
     <div className="row listing-title">
       <Text ellipsize={true} className={'col-xs-10'}>
         <H4 onClick={this.toggleEditField('title')}>
@@ -178,7 +183,7 @@ export class EditingOverviewCard extends React.Component<Props, IState> {
     </div>
   );
 
-  private makeExportButton = (overview: IAssessmentOverview) => (
+  private makeExportButton = (overview: AssessmentOverview) => (
     <Button
       icon={IconNames.EXPORT}
       intent={Intent.DANGER}
@@ -251,7 +256,7 @@ const createPlaceholder = (str: string): string => {
   }
 };
 
-const makeOverviewCardButton = (overview: IAssessmentOverview, listingPath: string | undefined) => {
+const makeOverviewCardButton = (overview: AssessmentOverview, listingPath: string | undefined) => {
   const label: string = 'Edit mission';
   listingPath = listingPath || '/academy/' + assessmentCategoryLink(overview.category);
   return (

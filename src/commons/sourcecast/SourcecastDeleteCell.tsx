@@ -3,19 +3,24 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
-import { ISourcecastData } from 'src/features/sourcecast/SourcecastTypes';
+import { SourcecastData } from 'src/features/sourcecast/SourcecastTypes';
 
-interface IDeleteCellProps {
-  data: ISourcecastData;
+type DeleteCellProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleDeleteSourcecastEntry: (id: number) => void;
-}
+};
 
-interface IDeleteCellState {
+type StateProps = {
+  data: SourcecastData;
+};
+
+type State = {
   dialogOpen: boolean;
-}
+};
 
-class DeleteCell extends React.Component<IDeleteCellProps, IDeleteCellState> {
-  public constructor(props: IDeleteCellProps) {
+class DeleteCell extends React.Component<DeleteCellProps, State> {
+  public constructor(props: DeleteCellProps) {
     super(props);
     this.state = {
       dialogOpen: false

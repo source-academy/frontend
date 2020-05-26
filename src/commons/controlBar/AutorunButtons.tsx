@@ -5,13 +5,18 @@ import * as React from 'react';
 import controlButton from 'src/commons/ControlButton';
 import { RunButton } from './RunButton';
 
-export type AutorunButtonProps = {
+type AutorunButtonProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleDebuggerPause: () => void;
   handleDebuggerReset: () => void;
   handleDebuggerResume: () => void;
   handleEditorEval: () => void;
   handleInterruptEval: () => void;
   handleToggleEditorAutorun?: () => void;
+};
+
+type StateProps = {
   isDebugging: boolean;
   isEditorAutorun?: boolean;
   isRunning: boolean;

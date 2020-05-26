@@ -2,11 +2,11 @@ import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 
 export interface IInputTypeShape {
   chapterSelect: number;
-  cursorPositionChange: IPosition;
-  codeDelta: ICodeDelta;
+  cursorPositionChange: Position;
+  codeDelta: CodeDelta;
   externalLibrarySelect: ExternalLibraryName;
   keyboardCommand: KeyboardCommand;
-  selectionRangeData: ISelectionData;
+  selectionRangeData: SelectionData;
 }
 
 export enum KeyboardCommand {
@@ -18,27 +18,27 @@ export enum PlaybackStatus {
   paused = 'paused'
 }
 
-export interface ICodeDelta {
-  start: IPosition;
-  end: IPosition;
+export type CodeDelta = {
+  start: Position;
+  end: Position;
   action: string;
   lines: string[];
-}
+};
 
-export interface ISelectionRange {
-  start: IPosition;
-  end: IPosition;
-}
+export type SelectionRange = {
+  start: Position;
+  end: Position;
+};
 
-export interface ISelectionData {
-  range: ISelectionRange;
+export type SelectionData = {
+  range: SelectionRange;
   isBackwards: boolean;
-}
+};
 
-export interface IPosition {
+export type Position = {
   row: number;
   column: number;
-}
+};
 
 // Refer: https://stackoverflow.com/questions/55758713/match-pair-for-keyof-and-valueof-an-interface
 export type Input = keyof IInputTypeShape extends infer K
@@ -47,16 +47,16 @@ export type Input = keyof IInputTypeShape extends infer K
     : never
   : never;
 
-export interface IPlaybackData {
+export type PlaybackData = {
   init: {
     chapter: number;
     externalLibrary: ExternalLibraryName;
     editorValue: string;
   };
   inputs: Input[];
-}
+};
 
-export interface ISourcecastData {
+export type SourcecastData = {
   title: string;
   description: string;
   inserted_at: string;
@@ -68,7 +68,7 @@ export interface ISourcecastData {
     name: string;
   };
   url: string;
-}
+};
 
 export enum RecordingStatus {
   notStarted = 'notStarted',

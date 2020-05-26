@@ -5,21 +5,26 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import controlButton from 'src/commons/ControlButton';
 
-type ShareButtonState = {
-  keyword: string;
-  isLoading: boolean;
-};
+type ShareButtonProps = DispatchProps & StateProps;
 
-export type ShareButtonProps = {
+type DispatchProps = {
   handleGenerateLz?: () => void;
   handleShortenURL: (s: string) => void;
   handleUpdateShortURL: (s: string) => void;
+};
+
+type StateProps = {
   queryString?: string;
   shortURL?: string;
   key: string;
 };
 
-export class ShareButton extends React.PureComponent<ShareButtonProps, ShareButtonState> {
+type State = {
+  keyword: string;
+  isLoading: boolean;
+};
+
+export class ShareButton extends React.PureComponent<ShareButtonProps, State> {
   private shareInputElem: React.RefObject<HTMLInputElement>;
 
   constructor(props: ShareButtonProps) {

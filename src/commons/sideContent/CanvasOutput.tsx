@@ -1,13 +1,16 @@
 import * as React from 'react';
 
-interface IProps {
+type CanvasOutputProps = StateProps; 
+
+type StateProps = {
   canvas: HTMLCanvasElement;
-}
+};
+
 /**
  * Takes the output of the rendered graphics (in a hidden canvas tag under <body>)
  * and makes it into a new <canvas> output for viewing.
  */
-class CanvasOutput extends React.Component<IProps, {}> {
+class CanvasOutput extends React.Component<CanvasOutputProps, {}> {
   private $parent: HTMLElement | null;
 
   public componentDidMount() {

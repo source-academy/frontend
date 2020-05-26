@@ -4,14 +4,14 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 import {
-  IAssessment,
-  IAssessmentOverview,
+  Assessment,
+  AssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
-  IQuestion,
-  ITestcase,
   Library,
-  QuestionTypes
+  Question,
+  QuestionTypes,
+  Testcase
 } from 'src/commons/assessment/AssessmentTypes';
 import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
 import {
@@ -33,11 +33,11 @@ import { ManageQuestionTab } from 'src/commons/editingWorkspaceSideContent/Manag
 import { MCQQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/MCQQuestionTemplateTab';
 import { ProgrammingQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/ProgrammingQuestionTemplateTab';
 import { TextAreaContent } from 'src/commons/editingWorkspaceSideContent/TextAreaContent';
-import { IPosition } from 'src/commons/editor/EditorComponent';
+import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
 import { SideContentProps, SideContentTab } from 'src/commons/sideContent/SideContentComponent';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
-import Workspace, { IWorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
@@ -46,43 +46,14 @@ import {
 import { InterpreterOutput, IWorkspaceState, SideContentType } from 'src/reducers/states'; // TODO: Import from commons
 import { history } from 'src/utils/history';
 
-export type EditingWorkspaceProps = EditingWorkspaceDispatchProps &
-  EditingWorkspaceOwnProps &
-  EditingWorkspaceStateProps;
+export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
-export type EditingWorkspaceStateProps = {
-  editorHeight?: number;
-  editorValue: string | null;
-  editorWidth: string;
-  breakpoints: string[];
-  highlightedLines: number[][];
-  hasUnsavedChanges: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  newCursorPosition?: IPosition;
-  output: InterpreterOutput[];
-  replValue: string;
-  sideContentHeight?: number;
-  storedAssessmentId?: number;
-  storedQuestionId?: number;
-};
-
-export type EditingWorkspaceOwnProps = {
-  assessmentId: number;
-  questionId: number;
-  assessmentOverview: IAssessmentOverview;
-  updateAssessmentOverview: (overview: IAssessmentOverview) => void;
-  notAttempted: boolean;
-  closeDate: string;
-};
-
-export type EditingWorkspaceDispatchProps = {
+export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
   handleClearContext: (library: Library) => void;
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorHeightChange: (height: number) => void;
@@ -105,8 +76,35 @@ export type EditingWorkspaceDispatchProps = {
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 };
 
+export type OwnProps = {
+  assessmentId: number;
+  questionId: number;
+  assessmentOverview: AssessmentOverview;
+  updateAssessmentOverview: (overview: AssessmentOverview) => void;
+  notAttempted: boolean;
+  closeDate: string;
+};
+
+export type StateProps = {
+  editorHeight?: number;
+  editorValue: string | null;
+  editorWidth: string;
+  breakpoints: string[];
+  highlightedLines: number[][];
+  hasUnsavedChanges: boolean;
+  isRunning: boolean;
+  isDebugging: boolean;
+  enableDebugging: boolean;
+  newCursorPosition?: Position;
+  output: InterpreterOutput[];
+  replValue: string;
+  sideContentHeight?: number;
+  storedAssessmentId?: number;
+  storedQuestionId?: number;
+};
+
 type State = {
-  assessment: IAssessment | null;
+  assessment: Assessment | null;
   activeTab: SideContentType;
   editingMode: string;
   hasUnsavedChanges: boolean;
@@ -164,8 +162,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     }
 
     const questionId = this.formatedQuestionId();
-    const question: IQuestion = this.state.assessment.questions[questionId];
-    const workspaceProps: IWorkspaceProps = {
+    const question: Question = this.state.assessment.questions[questionId];
+    const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(questionId),
       editorProps:
         question.type === QuestionTypes.programming
@@ -323,7 +321,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
   };
 
   private resetWorkspaceValues = () => {
-    const question: IQuestion = this.state.assessment!.questions[this.formatedQuestionId()];
+    const question: Question = this.state.assessment!.questions[this.formatedQuestionId()];
     let editorValue: string;
     let editorPrepend = '';
     let editorPostpend = '';
@@ -347,7 +345,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     this.props.handleEditorValueChange(editorValue);
   };
 
-  private handleTestcaseEval = (testcase: ITestcase) => {
+  private handleTestcaseEval = (testcase: Testcase) => {
     const editorTestcases = [testcase];
     this.props.handleUpdateWorkspace({ editorTestcases });
     this.props.handleTestcaseEval(0);
@@ -395,14 +393,14 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     }
     return result as number;
   };
-  private updateEditAssessmentState = (assessmentVal: IAssessment) => {
+  private updateEditAssessmentState = (assessmentVal: Assessment) => {
     this.setState({
       assessment: assessmentVal,
       hasUnsavedChanges: true
     });
   };
 
-  private updateAndSaveAssessment = (assessmentVal: IAssessment) => {
+  private updateAndSaveAssessment = (assessmentVal: Assessment) => {
     this.setState({
       assessment: assessmentVal
     });

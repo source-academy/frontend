@@ -2,22 +2,22 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { IChapter } from 'src/commons/controlBar/ChapterSelect';
 import { changeChapter, fetchChapter } from 'src/commons/workspace/WorkspaceActions';
+import { Chapter } from 'src/commons/controlBar/ChapterSelect';
 import { IState } from 'src/reducers/states';
 
-import { DefaultChapter, IDispatchProps, IStateProps } from './AcademyDefaultChapterComponent';
+import { DefaultChapter, DispatchProps, StateProps } from './AcademyDefaultChapterComponent';
 
-const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   sourceChapter: state.workspaces.playground.context.chapter,
   sourceVariant: state.workspaces.playground.context.variant
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleFetchChapter: () => fetchChapter(),
-      handleUpdateChapter: (chapter: IChapter) => changeChapter(chapter.chapter, chapter.variant)
+      handleUpdateChapter: (chapter: Chapter) => changeChapter(chapter.chapter, chapter.variant)
     },
     dispatch
   );

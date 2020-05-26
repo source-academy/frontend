@@ -5,8 +5,21 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 
 import ContentDisplay from 'src/commons/ContentDisplay';
-import { IGroupOverview, LeaderBoardInfo } from 'src/features/dashboard/DashboardTypes';
+import { GroupOverview, LeaderBoardInfo } from 'src/features/dashboard/DashboardTypes';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
+
+
+type DashboardProps = DispatchProps & StateProps;
+
+export type DispatchProps = {
+  handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
+  handleFetchGroupOverviews: () => void;
+};
+
+export type StateProps = {
+  gradingOverviews: GradingOverview[];
+  groupOverviews: GroupOverview[];
+};
 
 type State = {
   filterValue: string;
@@ -18,23 +31,11 @@ type State = {
   isForwardDisabled: boolean;
 };
 
-interface IDashboardProps extends IDashboardDispatchProps, IDashboardStateProps {}
-
-export interface IDashboardDispatchProps {
-  handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
-  handleFetchGroupOverviews: () => void;
-}
-
-export interface IDashboardStateProps {
-  gradingOverviews: GradingOverview[];
-  groupOverviews: IGroupOverview[];
-}
-
-class Dashboard extends React.Component<IDashboardProps, State> {
+class Dashboard extends React.Component<DashboardProps, State> {
   private columnDefs: ColDef[];
   private gridApi?: GridApi;
 
-  public constructor(props: IDashboardProps) {
+  public constructor(props: DashboardProps) {
     super(props);
     this.columnDefs = [
       {
@@ -65,7 +66,7 @@ class Dashboard extends React.Component<IDashboardProps, State> {
     this.props.handleFetchGroupOverviews();
   }
 
-  public componentDidUpdate(prevProps: IDashboardProps, prevState: State) {
+  public componentDidUpdate(prevProps: DashboardProps, prevState: State) {
     if (this.gridApi && this.props.gradingOverviews.length !== prevProps.gradingOverviews.length) {
       this.gridApi.setRowData(this.updateLeaderBoard());
     }

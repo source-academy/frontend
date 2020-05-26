@@ -2,9 +2,14 @@ import { NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-export type ExecutionTimeProps = {
-  execTime?: number;
+type ExecutionTimeProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleChangeExecTime?: (execTime: number) => void;
+};
+
+type StateProps = {
+  execTime?: number;
   key: string;
 };
 

@@ -4,15 +4,15 @@ import { bindActionCreators, Dispatch } from 'redux';
 // TODO: Import from commons
 import { fetchAssessmentOverviews } from 'src/commons/application/actions/SessionActions';
 import { IState } from 'src/reducers/states';
-import Profile, { IProfileDispatchProps, IProfileStateProps } from './ProfileComponent';
+import Profile, { DispatchProps, StateProps } from './ProfileComponent';
 
-const mapStateToProps: MapStateToProps<IProfileStateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   assessmentOverviews: state.session.assessmentOverviews,
   name: state.session.name,
   role: state.session.role
 });
 
-const mapDispatchToProps: MapDispatchToProps<IProfileDispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAssessmentOverviewFetch: fetchAssessmentOverviews

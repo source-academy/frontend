@@ -7,12 +7,11 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
-import {
-  ICodeDelta,
-  Input,
-  IPosition,
-  ISelectionRange,
-  KeyboardCommand
+import { CodeDelta, 
+  Input, 
+  KeyboardCommand, 
+  Position, 
+  SelectionRange, 
 } from 'src/features/sourcecast/SourcecastTypes';
 
 /**
@@ -23,9 +22,23 @@ import {
  *           of the editor's content, using `slang`
  * @property editorReadonly - Used for sourcecast only
  */
-export interface ISourcecastEditorProps {
+export type SourcecastEditorProps = DispatchProps & StateProps;
+
+type DispatchProps = {
+  getTimerDuration?: () => number;
+  handleDeclarationNavigate: (cursorPosition: Position) => void;
+  handleEditorEval: () => void;
+  handleEditorValueChange: (newCode: string) => void;
+  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleFinishInvite?: () => void;
+  handleRecordInput?: (input: Input) => void;
+  handleSetWebsocketStatus?: (websocketStatus: number) => void;
+  handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
+};
+
+type StateProps = {
   breakpoints: string[];
-  codeDeltasToApply?: ICodeDelta[] | null;
+  codeDeltasToApply?: CodeDelta[] | null;
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
@@ -34,33 +47,24 @@ export interface ISourcecastEditorProps {
   inputToApply?: Input | null;
   isPlaying?: boolean;
   isRecording?: boolean;
-  newCursorPosition?: IPosition;
+  newCursorPosition?: Position;
   sharedbAceInitValue?: string;
   sharedbAceIsInviting?: boolean;
-  getTimerDuration?: () => number;
-  handleDeclarationNavigate: (cursorPosition: IPosition) => void;
-  handleEditorEval: () => void;
-  handleEditorValueChange: (newCode: string) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleFinishInvite?: () => void;
-  handleRecordInput?: (input: Input) => void;
-  handleSetWebsocketStatus?: (websocketStatus: number) => void;
-  handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
-}
+};
 
-class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
+class SourcecastEditor extends React.PureComponent<SourcecastEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
-  private onChangeMethod: (newCode: string, delta: ICodeDelta) => void;
+  private onChangeMethod: (newCode: string, delta: CodeDelta) => void;
   private onValidateMethod: (annotations: IAnnotation[]) => void;
   private onCursorChange: (selecction: any) => void;
   private onSelectionChange: (selection: any) => void;
 
-  constructor(props: ISourcecastEditorProps) {
+  constructor(props: SourcecastEditorProps) {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
-    this.onChangeMethod = (newCode: string, delta: ICodeDelta) => {
+    this.onChangeMethod = (newCode: string, delta: CodeDelta) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
         this.props.handleUpdateHasUnsavedChanges(true);
       }
@@ -82,7 +86,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
       if (!this.props.isRecording) {
         return;
       }
-      const editorCursorPositionToBeApplied: IPosition = selection.getCursor();
+      const editorCursorPositionToBeApplied: Position = selection.getCursor();
       this.props.handleRecordInput!({
         type: 'cursorPositionChange',
         time: this.props.getTimerDuration!(),
@@ -93,7 +97,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
       if (!this.props.isRecording) {
         return;
       }
-      const range: ISelectionRange = selection.getRange();
+      const range: SelectionRange = selection.getRange();
       const isBackwards: boolean = selection.isBackwards();
       if (!isEqual(range.start, range.end)) {
         this.props.handleRecordInput!({
@@ -105,7 +109,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
     };
   }
 
-  public componentDidUpdate(prevProps: ISourcecastEditorProps) {
+  public componentDidUpdate(prevProps: SourcecastEditorProps) {
     const { codeDeltasToApply, inputToApply, newCursorPosition } = this.props;
 
     if (codeDeltasToApply && codeDeltasToApply !== prevProps.codeDeltasToApply) {
@@ -296,7 +300,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
   };
 
   // Used in navigating from occurence to navigation
-  private moveCursor = (position: IPosition) => {
+  private moveCursor = (position: Position) => {
     (this.AceEditor.current as any).editor.selection.clearSelection();
     (this.AceEditor.current as any).editor.moveCursorToPosition(position);
     (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();

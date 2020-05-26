@@ -4,9 +4,14 @@ import * as React from 'react';
 
 import controlButton from 'src/commons/ControlButton';
 
-export type RunButtonProps = {
-  key: string;
+type RunButtonProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleEditorEval: () => void;
+};
+
+type StateProps = {
+  key: string;
 };
 
 export function RunButton(props: RunButtonProps) {
