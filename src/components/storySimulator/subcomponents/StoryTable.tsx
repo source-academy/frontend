@@ -19,8 +19,8 @@ import * as classNames from 'classnames';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import { getStandardDateTime } from '../../utils/dateHelpers';
-import { controlButton } from '../commons';
+import { getStandardDateTime } from '../../../utils/dateHelpers';
+import { controlButton } from '../../commons';
 import DeleteCell from './DeleteCell';
 import DownloadCell from './DownloadCell';
 import JsonUpload from './JsonUpload';

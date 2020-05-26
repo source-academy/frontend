@@ -60,3 +60,21 @@
     background-color: unset;
   }
 }
+
+.WhiteBackground {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.Horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.VerticalStack {
+  > * + * {
+    margin-top: 10px;
+  }
+}

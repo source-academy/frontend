@@ -1,7 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { controlButton } from '../commons';
+import { controlButton } from '../../commons';
 import { MaterialData } from './storyShape';
 
 interface ISelectCellProps {
