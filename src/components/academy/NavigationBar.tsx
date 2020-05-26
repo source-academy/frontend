@@ -140,7 +140,7 @@ const NavigationBar: React.SFC<OwnProps> = props => (
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.CROWN} />
-          <div className="navbar-button-text hidden-xs">Game Dev</div>
+          <div className="navbar-button-text hidden-xs">Story Simulator</div>
         </NavLink>
       </NavbarGroup>
     ) : null}

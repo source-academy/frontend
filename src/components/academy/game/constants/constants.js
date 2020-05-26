@@ -1,7 +1,6 @@
-import { ASSETS_HOST, LIVE_STORIES_HOST, TEST_STORIES_HOST } from '../backend/hosting'
+import { ASSETS_HOST, LIVE_STORIES_HOST, TEST_STORIES_HOST } from '../backend/hosting';
 
-export const 
-  screenWidth = 1920,
+export const screenWidth = 1920,
   screenHeight = 1080,
   dialogBoxHeight = 260,
   dialogBoxWidth = 1720,
@@ -15,7 +14,7 @@ export const
   playerAvatarLineWidth = 10,
   playerAvatarOffset = 40,
   glowDistance = 30,
-  textSpeed = 0.02,
+  textSpeed = 0.002,
   storyXMLPathLive = LIVE_STORIES_HOST,
   storyXMLPathTest = TEST_STORIES_HOST,
   locationPath = ASSETS_HOST + 'locations/',
@@ -24,7 +23,7 @@ export const
   avatarPath = ASSETS_HOST + 'avatars/',
   uiPath = ASSETS_HOST + 'UI/',
   soundPath = ASSETS_HOST + 'sounds/',
-  SAVE_DATA_KEY = "source_academy_save_data",
-  LOCATION_KEY = "source_academy_location",
+  SAVE_DATA_KEY = 'source_academy_save_data',
+  LOCATION_KEY = 'source_academy_location',
   fadeTime = 0.3,
   nullFunction = function() {};
