@@ -56,13 +56,6 @@ export const FETCH_CHAPTER = 'FETCH_CHAPTER';
 export const UPDATE_CHAPTER = 'UPDATE_CHAPTER';
 export const CHANGE_CHAPTER = 'CHANGE_CHAPTER';
 
-// Collab Editing Action Types
-export const INIT_INVITE = 'INIT_INVITE';
-export const INVALID_EDITOR_SESSION_ID = 'INVALID_EDITOR_SESSION_ID';
-export const FINISH_INVITE = 'FINISH_INVITE';
-export const SET_EDITOR_SESSION_ID = 'SET_EDITOR_SESSION_ID';
-export const SET_WEBSOCKET_STATUS = 'SET_WEBSOCKET_STATUS';
-
 // TODO: Remove
 // Material Action Types
 export const CREATE_MATERIAL_FOLDER = 'CREATE_MATERIAL_FOLDER';

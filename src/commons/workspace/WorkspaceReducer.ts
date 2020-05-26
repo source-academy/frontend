@@ -31,18 +31,14 @@ import {
   EVAL_REPL,
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
-  FINISH_INVITE,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE,
-  INIT_INVITE,
   LOG_OUT,
   MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_READONLY,
-  SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
   UPDATE_CHAPTER,
@@ -53,6 +49,12 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
 } from 'src/commons/application/types/ActionTypes';
+import {
+  FINISH_INVITE,
+  INIT_INVITE,
+  SET_EDITOR_SESSION_ID,
+  SET_WEBSOCKET_STATUS
+} from 'src/commons/collabEditing/CollabEditingTypes';
 import { WorkspaceLocation, WorkspaceLocations, WorkspaceManagerState } from 'src/commons/workspace/WorkspaceTypes';
 import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
