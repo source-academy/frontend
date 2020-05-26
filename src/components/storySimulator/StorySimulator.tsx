@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import * as React from 'react';
 
 import JsonUpload from './subcomponents/JsonUpload';
 import StoryXmlUpload from './subcomponents/StoryXmlUpload';
