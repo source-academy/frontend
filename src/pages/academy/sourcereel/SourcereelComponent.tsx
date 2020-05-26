@@ -7,13 +7,11 @@ import { Variant } from 'js-slang/dist/types';
 
 import { InterpreterOutput, SideContentType } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import {
-  AutorunButtons,
-  ChapterSelect,
-  ClearButton,
-  EvalButton,
-  ExternalLibrarySelect
-} from 'src/commons/controlBar/index';
+import { AutorunButtons } from 'src/commons/controlBar/AutorunButtons';
+import { ChapterSelect } from 'src/commons/controlBar/ChapterSelect';
+import { ClearButton } from 'src/commons/controlBar/ClearButton';
+import { EvalButton } from 'src/commons/controlBar/EvalButton';
+import { ExternalLibrarySelect } from 'src/commons/controlBar/ExternalLibrarySelect';
 import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
 import Inspector from 'src/commons/sideContent/Inspector';
 import ListVisualizer from 'src/commons/sideContent/ListVisualizer';

@@ -26,17 +26,15 @@ import {
   QuestionTypes,
   Testcase
 } from 'src/commons/assessment/AssessmentTypes';
+import { ClearButton } from 'src/commons/controlBar/ClearButton'; 
 import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
-import {
-  ClearButton,
-  EvalButton,
-  NextButton,
-  PreviousButton,
-  QuestionViewButton,
-  ResetButton,
-  RunButton,
-  SaveButton
-} from 'src/commons/controlBar/index';
+import { EvalButton } from 'src/commons/controlBar/EvalButton'; 
+import { NextButton } from 'src/commons/controlBar/NextButton'; 
+import { PreviousButton } from 'src/commons/controlBar/PreviousButton'; 
+import { QuestionViewButton } from 'src/commons/controlBar/QuestionViewButton'; 
+import { ResetButton } from 'src/commons/controlBar/ResetButton'; 
+import { RunButton } from 'src/commons/controlBar/RunButton'; 
+import { SaveButton } from 'src/commons/controlBar/SaveButton';
 import controlButton from 'src/commons/ControlButton';
 import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';

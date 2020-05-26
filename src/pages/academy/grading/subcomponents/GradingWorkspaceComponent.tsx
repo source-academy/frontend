@@ -12,15 +12,13 @@ import {
   QuestionTypes,
   Testcase
 } from 'src/commons/assessment/AssessmentTypes';
-import {
-  ClearButton,
-  EvalButton,
-  NextButton,
-  PreviousButton,
-  QuestionViewButton,
-  RunButton
-} from 'src/commons/controlBar';
+import { ClearButton } from 'src/commons/controlBar/ClearButton';
 import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
+import { EvalButton } from 'src/commons/controlBar/EvalButton';
+import { NextButton } from 'src/commons/controlBar/NextButton';
+import { PreviousButton } from 'src/commons/controlBar/PreviousButton';
+import { QuestionViewButton } from 'src/commons/controlBar/QuestionViewButton';
+import { RunButton } from 'src/commons/controlBar/RunButton';
 import { Position } from 'src/commons/editor/EditorComponent';
 import Markdown from 'src/commons/Markdown';
 import Autograder from 'src/commons/sideContent/Autograder';
