@@ -7,8 +7,7 @@ import {
   defaultWorkspaceManager,
   ErrorOutput,
   InterpreterOutput,
-  maxBrowseIndex,
-  ResultOutput,
+  ResultOutput
 } from 'src/commons/application/ApplicationTypes';
 import {
   BROWSE_REPL_HISTORY_DOWN,
@@ -58,6 +57,7 @@ import { WorkspaceLocation, WorkspaceLocations, WorkspaceManagerState } from 'sr
 import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
 import { SourceActionType } from 'src/utils/actionsHelper';
+import { MAX_BROWSE_INDEX } from 'src/utils/constants';
 import { createContext } from 'src/utils/slangHelper';
 
 /**
@@ -270,7 +270,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         newReplHistoryRecords = state[workspaceLocation].replHistory.records;
       }
-      if (newReplHistoryRecords.length > maxBrowseIndex) {
+      if (newReplHistoryRecords.length > MAX_BROWSE_INDEX) {
         newReplHistoryRecords.pop();
       }
       return {

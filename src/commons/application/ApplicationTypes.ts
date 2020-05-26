@@ -36,8 +36,6 @@ export type ApplicationState = {
   readonly environment: ApplicationEnvironment;
 };
 
-export const maxBrowseIndex = 50;
-
 export type Story = {
   story: string;
   playStory: boolean;

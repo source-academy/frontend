@@ -1,16 +1,7 @@
 // TODO: Further breakdown into corresponding featureTypes.ts
-// Academy Action Types
-export const SAVE_CANVAS = 'SAVE_CANVAS';
 
 // Commons Action Types
 export const LOG_OUT = 'LOG_OUT';
-
-// Playground Action Types
-export const CHANGE_QUERY_STRING = 'CHANGE_QUERY_STRING';
-export const GENERATE_LZ_STRING = 'GENERATE_LZ_STRING';
-export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
-export const SHORTEN_URL = 'SHORTEN_URL';
-export const UPDATE_SHORT_URL = 'UPDATE_SHORT_URL';
 
 // Interpreter Action Types
 export const BEGIN_INTERRUPT_EXECUTION = 'BEGIN_INTERRUPT_EXECUTION';
@@ -72,6 +63,7 @@ export const FINISH_INVITE = 'FINISH_INVITE';
 export const SET_EDITOR_SESSION_ID = 'SET_EDITOR_SESSION_ID';
 export const SET_WEBSOCKET_STATUS = 'SET_WEBSOCKET_STATUS';
 
+// TODO: Remove
 // Material Action Types
 export const CREATE_MATERIAL_FOLDER = 'CREATE_MATERIAL_FOLDER';
 export const DELETE_MATERIAL = 'DELETE_MATERIAL';
@@ -137,7 +129,3 @@ export const CHANGE_DATE_ASSESSMENT = 'CHANGE_DATE_ASSESSMENT';
 export const DELETE_ASSESSMENT = 'DELETE_ASSESSMENT';
 export const PUBLISH_ASSESSMENT = 'PUBLISH_ASSESSMENT';
 export const UPLOAD_ASSESSMENT = 'UPLOAD_ASSESSMENT';
-
-// Dashboard Action Types
-export const FETCH_GROUP_OVERVIEWS = 'FETCH_GROUP_OVERVIEWS';
-export const UPDATE_GROUP_OVERVIEWS = 'UPDATE_GROUP_OVERVIEWS';

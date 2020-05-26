@@ -1,15 +1,21 @@
 import { action } from 'typesafe-actions';
 
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
+import { 
+  CHANGE_QUERY_STRING,
+  GENERATE_LZ_STRING, 
+  SHORTEN_URL, 
+  TOGGLE_USING_SUBST,
+  UPDATE_SHORT_URL
+} from './PlaygroundTypes';
 
-export const generateLzString = () => action(actionTypes.GENERATE_LZ_STRING);
+export const generateLzString = () => action(GENERATE_LZ_STRING);
 
-export const shortenURL = (keyword: string) => action(actionTypes.SHORTEN_URL, keyword);
+export const shortenURL = (keyword: string) => action(SHORTEN_URL, keyword);
 
-export const updateShortURL = (shortURL: string) => action(actionTypes.UPDATE_SHORT_URL, shortURL);
+export const updateShortURL = (shortURL: string) => action(UPDATE_SHORT_URL, shortURL);
 
 export const toggleUsingSubst = (usingSubst: boolean) =>
-  action(actionTypes.TOGGLE_USING_SUBST, usingSubst);
+  action(TOGGLE_USING_SUBST, usingSubst);
 
 export const changeQueryString = (queryString: string) =>
-  action(actionTypes.CHANGE_QUERY_STRING, queryString);
+  action(CHANGE_QUERY_STRING, queryString);

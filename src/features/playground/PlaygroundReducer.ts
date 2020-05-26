@@ -1,14 +1,14 @@
 import { Reducer } from 'redux';
 
 import { defaultPlayground } from 'src/commons/application/ApplicationTypes';
-import {
-  CHANGE_QUERY_STRING,
-  TOGGLE_USING_SUBST,
-  UPDATE_SHORT_URL
-} from 'src/commons/application/types/ActionTypes';
 import { SourceActionType } from 'src/utils/actionsHelper';
 
-import { PlaygroundState } from './PlaygroundTypes';
+import {
+  CHANGE_QUERY_STRING,
+  PlaygroundState,
+  TOGGLE_USING_SUBST,
+  UPDATE_SHORT_URL
+} from './PlaygroundTypes';
 
 export const PlaygroundReducer: Reducer<PlaygroundState> = (
   state = defaultPlayground,
