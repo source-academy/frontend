@@ -3,8 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 
-import { External, ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { externalLibraries } from 'src/commons/externalLibraries/ExternalLibraries';
+import { 
+  External, 
+  externalLibraries,
+  ExternalLibraryName 
+} from 'src/commons/application/types/ExternalTypes';
 
 type ExternalLibrarySelectProps = DispatchProps & StateProps;
 

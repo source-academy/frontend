@@ -230,7 +230,7 @@ export enum Role {
 
 /**
  * Defines what chapters are available for usage.
- * For external libraries, see externalLibraries.ts
+ * For external libraries, see ExternalLibrariesTypes.ts
  */
 export interface ISourceLanguage {
   chapter: number;

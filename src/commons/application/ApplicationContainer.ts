@@ -6,7 +6,7 @@ import { Variant } from 'js-slang/dist/types';
 
 import { logOut } from 'src/commons/application/actions/CommonsActions';
 import { IState } from 'src/commons/application/ApplicationTypes';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { externalLibraries, ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   beginClearContext,
   changeExecTime,
@@ -17,7 +17,6 @@ import {
   updateEditorValue, 
   WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
-import { externalLibraries } from 'src/reducers/externalLibraries';
 
 import Application, { DispatchProps, StateProps } from './ApplicationComponent';
 
