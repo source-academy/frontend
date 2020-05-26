@@ -1,24 +1,10 @@
 import { Context } from 'js-slang';
 import { SourceError, Variant } from 'js-slang/dist/types';
 
-import {
-  ExternalLibraryName,
-  ExternalLibraryNames
-} from 'src/commons/application/types/ExternalTypes';
-import {
-  Assessment,
-  AssessmentOverview,
-  AutogradingResult,
-  Testcase
-} from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
-import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
-import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
-import { Announcement } from 'src/components/Announcements'; // TODO: Remove
-import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
-import { GroupOverview } from 'src/features/dashboard/DashboardTypes';
-import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
+import { Announcement } from '../../components/Announcements'; // TODO: Remove
+import { DirectoryData, MaterialData } from '../../components/material/materialShape'; // TODO: Remove
+import { GroupOverview } from '../../features/dashboard/DashboardTypes';
+import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
 import {
   CodeDelta,
   Input,
@@ -26,10 +12,21 @@ import {
   PlaybackStatus,
   RecordingStatus,
   SourcecastData
-} from 'src/features/sourcecast/SourcecastTypes';
-import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from 'src/utils/constants';
-import { HistoryHelper } from 'src/utils/history';
-import { createContext } from 'src/utils/slangHelper';
+} from '../../features/sourcecast/SourcecastTypes';
+import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../../utils/constants';
+import { HistoryHelper } from '../../utils/history';
+import { createContext } from '../../utils/slangHelper';
+import {
+  Assessment,
+  AssessmentOverview,
+  AutogradingResult,
+  Testcase
+} from '../assessment/AssessmentTypes';
+import { Position } from '../editor/EditorTypes';
+import { Notification } from '../notificationBadge/NotificationBadgeTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
+import { WorkspaceLocation, WorkspaceLocations } from '../workspace/WorkspaceTypes';
+import { ExternalLibraryName, ExternalLibraryNames } from './types/ExternalTypes';
 
 export interface IState {
   readonly academy: IAcademyState;
