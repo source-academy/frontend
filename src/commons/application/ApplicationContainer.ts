@@ -4,15 +4,18 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { beginClearContext, logOut, setEditorBreakpoint, updateEditorValue } from 'src/actions';
+import { logOut } from 'src/commons/application/actions/CommonsActions';
+import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import {
+  beginClearContext,
   changeExecTime,
   ensureLibrariesLoaded,
   externalLibrarySelect,
   promptAutocomplete,
+  setEditorBreakpoint,
+  updateEditorValue, 
   WorkspaceLocations
-} from 'src/actions/workspaces';
-import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
+} from 'src/commons/workspace/WorkspaceActions';
 import { externalLibraries } from 'src/reducers/externalLibraries';
 import { IState } from 'src/reducers/states';
 

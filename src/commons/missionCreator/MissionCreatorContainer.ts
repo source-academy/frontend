@@ -1,8 +1,8 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-// TODO: Import from commons
-import { updateAssessment } from 'src/actions/session';
+import { updateAssessment } from 'src/commons/application/actions/SessionActions';
+
 import MissionCreator, { DispatchProps } from './MissionCreatorComponent';
 
 const mapStateToProps: MapStateToProps<{}, any, {}> = (state, ownProps) => ownProps;

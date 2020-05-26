@@ -3,7 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
-import { checkSessionIdExists, createNewSession } from 'src/commons/collabEditing/CollabEditingHelper';
+import {
+  checkSessionIdExists,
+  createNewSession
+} from 'src/commons/collabEditing/CollabEditingHelper';
 import controlButton from 'src/commons/ControlButton';
 
 type SessionButtonsProps = DispatchProps & StateProps;

@@ -3,9 +3,10 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 
 // TODO: Import from commons
-import { fetchNotifications } from 'src/actions/session';
+import { fetchNotifications } from 'src/commons/application/actions/SessionActions';
 // TODO: Import from commons
 import { IState } from 'src/reducers/states';
+
 import Academy, { DispatchProps, OwnProps, StateProps } from './AcademyComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({

@@ -4,6 +4,14 @@ import { bindActionCreators, Dispatch } from 'redux';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
+  debuggerReset,
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
+
+import { fetchGrading } from 'src/commons/application/actions/SessionActions';
+
+import {
+  beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeEditorHeight,
@@ -11,27 +19,22 @@ import {
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
-  debuggerReset,
-  debuggerResume,
   evalEditor,
   evalRepl,
   evalTestcase,
-  fetchGrading,
   navigateToDeclaration,
   promptAutocomplete,
+  resetWorkspace,
   setEditorBreakpoint,
   updateActiveTab,
+  updateCurrentSubmissionId,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
   WorkspaceLocation,
   WorkspaceLocations
-} from 'src/actions';
-import {
-  beginClearContext,
-  resetWorkspace,
-  updateCurrentSubmissionId
-} from 'src/actions/workspaces';
+} from 'src/commons/workspace/WorkspaceActions';
+
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorComponent';
 import { IState, IWorkspaceState, SideContentType } from 'src/reducers/states';

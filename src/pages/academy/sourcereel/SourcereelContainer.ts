@@ -2,8 +2,27 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
+  deleteSourcecastEntry,
+  recordInit,
+  recordInput,
+  saveSourcecastData,
+  timerPause,
+  timerReset,
+  timerResume,
+  timerStart,
+  timerStop
+} from 'src/features/sourcereel/SourcereelActions';
+
+import { fetchSourcecastIndex } from 'src/features/sourcecast/SourcecastActions';
+
+import {
   beginDebuggerPause,
   beginInterruptExecution,
+  debuggerReset,
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
+
+import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeEditorHeight,
@@ -11,31 +30,20 @@ import {
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
-  debuggerReset,
-  debuggerResume,
-  deleteSourcecastEntry,
   evalEditor,
   evalRepl,
   externalLibrarySelect,
-  fetchSourcecastIndex,
   navigateToDeclaration,
   promptAutocomplete,
-  recordInit,
-  recordInput,
-  saveSourcecastData,
   setEditorBreakpoint,
   setEditorReadonly,
-  timerPause,
-  timerReset,
-  timerResume,
-  timerStart,
-  timerStop,
   toggleEditorAutorun,
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
-} from 'src/actions';
+} from 'src/commons/workspace/WorkspaceActions';
+
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import { Input, PlaybackData, Position } from 'src/features/sourcecast/SourcecastTypes';
 import { IState, SideContentType } from 'src/reducers/states';

@@ -3,8 +3,22 @@ import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
+  fetchSourcecastIndex,
+  setCodeDeltasToApply,
+  setInputToApply,
+  setSourcecastData,
+  setSourcecastDuration,
+  setSourcecastStatus
+} from 'src/features/sourcecast/SourcecastActions';
+
+import {
   beginDebuggerPause,
   beginInterruptExecution,
+  debuggerReset,
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
+
+import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeEditorHeight,
@@ -12,27 +26,20 @@ import {
   changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
-  debuggerReset,
-  debuggerResume,
   evalEditor,
   evalRepl,
   externalLibrarySelect,
-  fetchSourcecastIndex,
   navigateToDeclaration,
   promptAutocomplete,
-  setCodeDeltasToApply,
   setEditorBreakpoint,
   setEditorReadonly,
-  setInputToApply,
-  setSourcecastData,
-  setSourcecastDuration,
-  setSourcecastStatus,
   toggleEditorAutorun,
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
   WorkspaceLocation
-} from 'src/actions';
+} from 'src/commons/workspace/WorkspaceActions';
+
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import {
   CodeDelta,
@@ -128,4 +135,3 @@ export default withRouter(
     mapDispatchToProps
   )(Sourcecast)
 );
-

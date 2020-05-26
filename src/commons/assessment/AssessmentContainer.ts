@@ -6,7 +6,7 @@ import {
   acknowledgeNotifications,
   fetchAssessmentOverviews,
   submitAssessment
-} from 'src/actions/session'; // TODO: Import from commons
+} from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/reducers/states'; // TODO: Import from commons
 import { IState } from 'src/reducers/states'; // TODO: Import from commons
 

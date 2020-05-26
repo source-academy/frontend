@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAssessmentOverviews, submitAssessment } from 'src/actions/session'; // TODO: Import from commons
+import { fetchAssessmentOverviews, submitAssessment } from 'src/commons/application/actions/SessionActions';
 import { IState, Role } from 'src/reducers/states'; // TODO: Import from commons
 import MissionControl, { DispatchProps, StateProps } from './MissionControlComponent';
 
