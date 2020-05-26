@@ -1,6 +1,6 @@
-import { WorkspaceState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
+import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 
 export type InputTypeShape = {
   chapterSelect: number;

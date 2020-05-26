@@ -1,20 +1,20 @@
-import { Context } from 'js-slang';
 import { SourceError, Variant } from 'js-slang/dist/types';
 
 import {
-  ExternalLibraryName,
   ExternalLibraryNames
 } from 'src/commons/application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentOverview,
-  AutogradingResult,
-  Testcase
 } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
 import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
+import { 
+  WorkspaceLocation, 
+  WorkspaceLocations,
+  WorkspaceManagerState,
+  WorkspaceState 
+} from 'src/commons/workspace/WorkspaceTypes';
 import { Announcement } from 'src/components/Announcements'; // TODO: Remove
 import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
 import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
@@ -29,8 +29,6 @@ import { createContext } from 'src/utils/slangHelper';
 import { AcademyState } from 'src/features/academy/AcademyTypes';
 import { DashBoardState } from 'src/features/dashboard/DashboardTypes';
 import { PlaygroundState } from 'src/features/playground/PlaygroundTypes';
-import { SourcecastWorkspaceState } from 'src/features/sourcecast/SourcecastTypes';
-import { SourcereelWorkspaceState } from 'src/features/sourcereel/SourcereelTypes';
 
 export type OverallState = {
   readonly academy: AcademyState;
@@ -44,64 +42,6 @@ export type OverallState = {
 export type ApplicationState = {
   readonly title: string;
   readonly environment: ApplicationEnvironment;
-};
-
-type AssessmentWorkspaceAttr = {
-  readonly currentAssessment?: number;
-  readonly currentQuestion?: number;
-  readonly hasUnsavedChanges: boolean;
-};
-type AssessmentWorkspaceState = AssessmentWorkspaceAttr & WorkspaceState;
-
-type GradingWorkspaceAttr = {
-  readonly currentSubmission?: number;
-  readonly currentQuestion?: number;
-  readonly hasUnsavedChanges: boolean;
-};
-type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
-
-type PlaygroundWorkspaceAttr = {
-  readonly usingSubst: boolean;
-};
-type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
-
-export type WorkspaceManagerState = {
-  readonly assessment: AssessmentWorkspaceState;
-  readonly grading: GradingWorkspaceState;
-  readonly playground: PlaygroundWorkspaceState;
-  readonly sourcecast: SourcecastWorkspaceState;
-  readonly sourcereel: SourcereelWorkspaceState;
-};
-
-export type WorkspaceState = {
-  readonly autogradingResults: AutogradingResult[];
-  readonly breakpoints: string[];
-  readonly context: Context;
-  readonly editorPrepend: string;
-  readonly editorReadonly: boolean;
-  readonly editorSessionId: string;
-  readonly editorValue: string | null;
-  readonly editorPostpend: string;
-  readonly editorTestcases: Testcase[];
-  readonly editorHeight: number;
-  readonly editorWidth: string;
-  readonly execTime: number;
-  readonly highlightedLines: number[][];
-  readonly newCursorPosition?: Position;
-  readonly isRunning: boolean;
-  readonly isDebugging: boolean;
-  readonly enableDebugging: boolean;
-  readonly isEditorAutorun: boolean;
-  readonly output: InterpreterOutput[];
-  readonly externalLibrary: ExternalLibraryName;
-  readonly replHistory: ReplHistory;
-  readonly replValue: string;
-  readonly sharedbAceInitValue: string;
-  readonly sharedbAceIsInviting: boolean;
-  readonly sideContentActiveTab: SideContentType;
-  readonly sideContentHeight?: number;
-  readonly websocketStatus: number;
-  readonly globals: Array<[string, any]>;
 };
 
 export type SessionState = {
@@ -127,11 +67,11 @@ export type SessionState = {
   readonly notifications: Notification[];
 };
 
-type ReplHistory = {
-  browseIndex: null | number; // [0, 49] if browsing, else null
-  records: string[];
-  originalValue: string;
-};
+// type ReplHistory = {
+//   browseIndex: null | number; // [0, 49] if browsing, else null
+//   records: string[];
+//   originalValue: string;
+// };
 
 export const maxBrowseIndex = 50;
 

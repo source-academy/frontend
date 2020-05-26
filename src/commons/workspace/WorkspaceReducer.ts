@@ -9,7 +9,6 @@ import {
   InterpreterOutput,
   maxBrowseIndex,
   ResultOutput,
-  WorkspaceManagerState
 } from 'src/commons/application/ApplicationTypes';
 import {
   BROWSE_REPL_HISTORY_DOWN,
@@ -55,7 +54,7 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
 } from 'src/commons/application/types/ActionTypes';
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceLocations, WorkspaceManagerState } from 'src/commons/workspace/WorkspaceTypes';
 import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
 import { SourceActionType } from 'src/utils/actionsHelper';
@@ -372,7 +371,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i) => {
+          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i: any) => {
             if (i === action.payload.index) {
               return {
                 ...testcase,
@@ -482,7 +481,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i) => {
+          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i: any) => {
             if (i === action.payload.index) {
               return {
                 ...testcase,

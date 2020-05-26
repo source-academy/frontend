@@ -1,4 +1,4 @@
-import { WorkspaceState } from 'src/commons/application/ApplicationTypes';
+import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import {
     PlaybackData,
     RecordingStatus,
