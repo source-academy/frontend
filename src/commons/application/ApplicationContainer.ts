@@ -8,14 +8,12 @@ import { logOut } from 'src/commons/application/actions/CommonsActions';
 import { ExternalLibraryName } from 'src/commons/assessment/AssessmentTypes';
 import {
   beginClearContext,
-  setEditorBreakpoint,
-  updateEditorValue
-} from 'src/commons/workspace/WorkspaceActions';
-import {
   changeExecTime,
   ensureLibrariesLoaded,
   externalLibrarySelect,
   promptAutocomplete,
+  setEditorBreakpoint,
+  updateEditorValue, 
   WorkspaceLocations
 } from 'src/commons/workspace/WorkspaceActions';
 import { externalLibraries } from 'src/reducers/externalLibraries';

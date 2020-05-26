@@ -1,3 +1,4 @@
+// TODO: Further breakdown into corresponding featureTypes.ts
 // Academy Action Types
 export const SAVE_CANVAS = 'SAVE_CANVAS';
 
