@@ -4,6 +4,7 @@ import { Variant } from 'js-slang/dist/types';
 
 import * as actionTypes from 'src/commons/application/types/ActionTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { HIGHLIGHT_LINE } from 'src/commons/application/types/InterpreterTypes';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
@@ -124,7 +125,7 @@ export const setEditorBreakpoint = (breakpoints: string[], workspaceLocation: Wo
 export const highlightEditorLine = (
   highlightedLines: number[],
   workspaceLocation: WorkspaceLocation
-) => action(actionTypes.HIGHLIGHT_LINE, { highlightedLines, workspaceLocation });
+) => action(HIGHLIGHT_LINE, { highlightedLines, workspaceLocation });
 
 export const updateReplValue = (newReplValue: string, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.UPDATE_REPL_VALUE, { newReplValue, workspaceLocation });
