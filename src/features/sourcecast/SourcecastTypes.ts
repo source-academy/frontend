@@ -1,3 +1,4 @@
+import { WorkspaceState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
 
@@ -72,3 +73,16 @@ export enum RecordingStatus {
   paused = 'paused',
   finished = 'finished'
 }
+
+type SourcecastWorkspaceAttr = {
+  readonly audioUrl: string;
+  readonly codeDeltasToApply: CodeDelta[] | null;
+  readonly description: string | null;
+  readonly inputToApply: Input | null;
+  readonly playbackData: PlaybackData;
+  readonly playbackDuration: number;
+  readonly playbackStatus: PlaybackStatus;
+  readonly sourcecastIndex: SourcecastData[] | null;
+  readonly title: string | null;
+};
+export type SourcecastWorkspaceState = SourcecastWorkspaceAttr & WorkspaceState;

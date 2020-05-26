@@ -1,5 +1,4 @@
 import { Reducer } from 'redux';
-import { SourcecastWorkspaceState } from 'src/commons/application/ApplicationTypes';
 
 import {
   SAVE_SOURCECAST_DATA,
@@ -11,6 +10,8 @@ import {
   UPDATE_SOURCECAST_INDEX
 } from 'src/commons/application/types/ActionTypes';
 import { SourceActionType } from 'src/utils/actionsHelper';
+
+import { SourcecastWorkspaceState } from './SourcecastTypes';
 
 export const SourcecastReducer: Reducer<SourcecastWorkspaceState> = (
   state: SourcecastWorkspaceState,

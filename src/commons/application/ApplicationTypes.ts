@@ -19,12 +19,8 @@ import { Announcement } from 'src/components/Announcements'; // TODO: Remove
 import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
 import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
 import {
-  CodeDelta,
-  Input,
-  PlaybackData,
   PlaybackStatus,
   RecordingStatus,
-  SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
 import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from 'src/utils/constants';
 import { HistoryHelper } from 'src/utils/history';
@@ -33,6 +29,8 @@ import { createContext } from 'src/utils/slangHelper';
 import { AcademyState } from 'src/features/academy/AcademyTypes';
 import { DashBoardState } from 'src/features/dashboard/DashboardTypes';
 import { PlaygroundState } from 'src/features/playground/PlaygroundTypes';
+import { SourcecastWorkspaceState } from 'src/features/sourcecast/SourcecastTypes';
+import { SourcereelWorkspaceState } from 'src/features/sourcereel/SourcereelTypes';
 
 export type OverallState = {
   readonly academy: AcademyState;
@@ -66,27 +64,6 @@ type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
 };
 type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
-
-type SourcecastWorkspaceAttr = {
-  readonly audioUrl: string;
-  readonly codeDeltasToApply: CodeDelta[] | null;
-  readonly description: string | null;
-  readonly inputToApply: Input | null;
-  readonly playbackData: PlaybackData;
-  readonly playbackDuration: number;
-  readonly playbackStatus: PlaybackStatus;
-  readonly sourcecastIndex: SourcecastData[] | null;
-  readonly title: string | null;
-};
-export type SourcecastWorkspaceState = SourcecastWorkspaceAttr & WorkspaceState;
-
-type SourcereelWorkspaceAttr = {
-  readonly playbackData: PlaybackData;
-  readonly recordingStatus: RecordingStatus;
-  readonly timeElapsedBeforePause: number;
-  readonly timeResumed: number;
-};
-export type SourcereelWorkspaceState = SourcereelWorkspaceAttr & WorkspaceState;
 
 export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;
