@@ -155,10 +155,11 @@ class SourcereelControlbar extends React.PureComponent<
   private handleRecorderResuming = () => {
     const { handleSetEditorReadonly, handleTimerResume } = this.props;
     handleSetEditorReadonly(false);
+    // -1 means resume from the end
     handleTimerResume(-1);
     const updater = setInterval(this.updateTimerDuration, 100);
     this.setState({ updater });
-    this.recorder.resume(-1);
+    this.recorder.resume();
   };
 
   private handleRecorderResumingFromCurrent = () => {
