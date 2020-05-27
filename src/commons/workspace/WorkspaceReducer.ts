@@ -15,6 +15,25 @@ import {
   InterpreterOutput,
   ResultOutput
 } from '../application/ApplicationTypes';
+import { LOG_OUT } from '../application/types/CommonsTypes';
+import {
+  DEBUG_RESET,
+  DEBUG_RESUME,
+  END_DEBUG_PAUSE,
+  END_INTERRUPT_EXECUTION,
+  EVAL_INTERPRETER_ERROR,
+  EVAL_INTERPRETER_SUCCESS,
+  EVAL_TESTCASE_FAILURE,
+  EVAL_TESTCASE_SUCCESS,
+  HANDLE_CONSOLE_LOG,
+  HIGHLIGHT_LINE
+} from '../application/types/InterpreterTypes';
+import {
+  FINISH_INVITE,
+  INIT_INVITE,
+  SET_EDITOR_SESSION_ID,
+  SET_WEBSOCKET_STATUS
+} from '../collabEditing/CollabEditingTypes';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -41,28 +60,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  UPDATE_WORKSPACE
-} from '../application/types/ActionTypes';
-import { LOG_OUT } from '../application/types/CommonsTypes';
-import {
-  DEBUG_RESET,
-  DEBUG_RESUME,
-  END_DEBUG_PAUSE,
-  END_INTERRUPT_EXECUTION,
-  EVAL_INTERPRETER_ERROR,
-  EVAL_INTERPRETER_SUCCESS,
-  EVAL_TESTCASE_FAILURE,
-  EVAL_TESTCASE_SUCCESS,
-  HANDLE_CONSOLE_LOG,
-  HIGHLIGHT_LINE
-} from '../application/types/InterpreterTypes';
-import {
-  FINISH_INVITE,
-  INIT_INVITE,
-  SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS
-} from '../collabEditing/CollabEditingTypes';
-import {
+  UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceLocations,
   WorkspaceManagerState
