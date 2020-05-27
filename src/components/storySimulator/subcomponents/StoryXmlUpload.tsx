@@ -4,7 +4,7 @@ function StoryXmlUpload() {
   return (
     <div className="Vertical">
       <h3>Story Xml Loader</h3>
-      <input multiple type="file" onChange={onChange} style={{ width: '250px' }} />
+      <input multiple={true} type="file" onChange={onChange} style={{ width: '250px' }} />
     </div>
   );
 }
@@ -17,7 +17,10 @@ function onChange(e: { target: any }) {
     const reader = new FileReader();
     reader.readAsText(files[i]);
     reader.onloadend = _ => {
-      reader.result && localStorage.setItem(`storyXml${i}`, reader.result.toString());
+      if (!reader.result) {
+        return;
+      }
+      localStorage.setItem(`storyXml${i}`, reader.result.toString());
     };
   }
 }
