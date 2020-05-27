@@ -1,10 +1,12 @@
 import { action } from 'typesafe-actions';
 
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
+import { 
+  FETCH_GROUP_OVERVIEWS, 
+  GroupOverview, 
+  UPDATE_GROUP_OVERVIEWS 
+} from './DashboardTypes';
 
-import { GroupOverview } from 'src/features/dashboard/DashboardTypes';
-
-export const fetchGroupOverviews = () => action(actionTypes.FETCH_GROUP_OVERVIEWS);
+export const fetchGroupOverviews = () => action(FETCH_GROUP_OVERVIEWS);
 
 export const updateGroupOverviews = (groupOverviews: GroupOverview[]) =>
-  action(actionTypes.UPDATE_GROUP_OVERVIEWS, groupOverviews);
+  action(UPDATE_GROUP_OVERVIEWS, groupOverviews);

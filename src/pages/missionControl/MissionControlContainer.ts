@@ -6,10 +6,10 @@ import {
   fetchAssessmentOverviews,
   submitAssessment
 } from 'src/commons/application/actions/SessionActions';
-import { IState, Role } from 'src/commons/application/ApplicationTypes';
+import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import MissionControl, { DispatchProps, StateProps } from './MissionControlComponent';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = (state, props) => {
   const stateProps: StateProps = {
     isStudent: state.session.role ? state.session.role === Role.Student : true
   };

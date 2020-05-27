@@ -8,7 +8,7 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { fetchAssessment, submitAnswer } from 'src/commons/application/actions/SessionActions';
-import { IState, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
@@ -34,7 +34,7 @@ import {
   updateHasUnsavedChanges,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 
 import AssessmentWorkspace, {
   DispatchProps,
@@ -42,7 +42,7 @@ import AssessmentWorkspace, {
   StateProps
 } from './AssessmentWorkspaceComponent';
 
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
@@ -93,7 +93,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleResetWorkspace: (options: Partial<IWorkspaceState>) =>
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>

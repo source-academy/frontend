@@ -2,10 +2,10 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 
 import { bindActionCreators, Dispatch } from 'redux';
 import { acknowledgeNotifications } from 'src/commons/application/actions/SessionActions';
-import { IState } from 'src/commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import NotificationBadge, { DispatchProps, StateProps } from './NotificationBadgeComponent';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   notifications: state.session.notifications
 });
 

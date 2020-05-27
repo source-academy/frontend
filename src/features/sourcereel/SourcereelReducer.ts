@@ -1,5 +1,4 @@
 import { Reducer } from 'redux';
-import { ISourcereelWorkspace } from 'src/commons/application/ApplicationTypes';
 
 import {
   RECORD_INIT,
@@ -13,8 +12,10 @@ import {
 import { RecordingStatus } from 'src/features/sourcecast/SourcecastTypes';
 import { SourceActionType } from 'src/utils/actionsHelper';
 
-export const SourcereelReducer: Reducer<ISourcereelWorkspace> = (
-  state: ISourcereelWorkspace,
+import { SourcereelWorkspaceState } from './SourcereelTypes';
+
+export const SourcereelReducer: Reducer<SourcereelWorkspaceState> = (
+  state: SourcereelWorkspaceState,
   action: SourceActionType
 ) => {
   switch (action.type) {

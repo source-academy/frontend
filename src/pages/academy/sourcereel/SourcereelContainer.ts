@@ -7,7 +7,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { IState } from 'src/commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
@@ -48,7 +48,7 @@ import {
 
 import Sourcereel, { DispatchProps, StateProps } from './SourcereelComponent';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   breakpoints: state.workspaces.sourcereel.breakpoints,
   editorReadonly: state.workspaces.sourcereel.editorReadonly,
   editorValue: state.workspaces.sourcereel.editorValue!,

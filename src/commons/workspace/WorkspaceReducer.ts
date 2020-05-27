@@ -7,8 +7,6 @@ import {
   defaultWorkspaceManager,
   ErrorOutput,
   InterpreterOutput,
-  IWorkspaceManagerState,
-  maxBrowseIndex,
   ResultOutput
 } from 'src/commons/application/ApplicationTypes';
 import {
@@ -22,29 +20,15 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
-  DEBUG_RESET,
-  DEBUG_RESUME,
   END_CLEAR_CONTEXT,
-  END_DEBUG_PAUSE,
-  END_INTERRUPT_EXECUTION,
   EVAL_EDITOR,
-  EVAL_INTERPRETER_ERROR,
-  EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
-  EVAL_TESTCASE_FAILURE,
-  EVAL_TESTCASE_SUCCESS,
-  FINISH_INVITE,
-  HANDLE_CONSOLE_LOG,
-  HIGHLIGHT_LINE,
-  INIT_INVITE,
   LOG_OUT,
   MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_EDITOR_READONLY,
-  SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
   UPDATE_CHAPTER,
@@ -55,10 +39,29 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
 } from 'src/commons/application/types/ActionTypes';
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
+import {
+  DEBUG_RESET,
+  DEBUG_RESUME,
+  END_DEBUG_PAUSE,
+  END_INTERRUPT_EXECUTION,
+  EVAL_INTERPRETER_ERROR,
+  EVAL_INTERPRETER_SUCCESS,
+  EVAL_TESTCASE_FAILURE,
+  EVAL_TESTCASE_SUCCESS,
+  HANDLE_CONSOLE_LOG,
+  HIGHLIGHT_LINE
+} from 'src/commons/application/types/InterpreterTypes';
+import {
+  FINISH_INVITE,
+  INIT_INVITE,
+  SET_EDITOR_SESSION_ID,
+  SET_WEBSOCKET_STATUS
+} from 'src/commons/collabEditing/CollabEditingTypes';
+import { WorkspaceLocation, WorkspaceLocations, WorkspaceManagerState } from 'src/commons/workspace/WorkspaceTypes';
 import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
 import { SourceActionType } from 'src/utils/actionsHelper';
+import { MAX_BROWSE_INDEX } from 'src/utils/constants';
 import { createContext } from 'src/utils/slangHelper';
 
 /**
@@ -69,7 +72,7 @@ import { createContext } from 'src/utils/slangHelper';
  *   - `location` is defined (and exists) as a property 'workspaceLocation' in
  *     the action's payload.
  */
-export const WorkspaceReducer: Reducer<IWorkspaceManagerState> = (
+export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   state = defaultWorkspaceManager,
   action: SourceActionType
 ) => {
@@ -271,7 +274,7 @@ export const WorkspaceReducer: Reducer<IWorkspaceManagerState> = (
       } else {
         newReplHistoryRecords = state[workspaceLocation].replHistory.records;
       }
-      if (newReplHistoryRecords.length > maxBrowseIndex) {
+      if (newReplHistoryRecords.length > MAX_BROWSE_INDEX) {
         newReplHistoryRecords.pop();
       }
       return {
@@ -372,7 +375,7 @@ export const WorkspaceReducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i) => {
+          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i: any) => {
             if (i === action.payload.index) {
               return {
                 ...testcase,
@@ -482,7 +485,7 @@ export const WorkspaceReducer: Reducer<IWorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i) => {
+          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i: any) => {
             if (i === action.payload.index) {
               return {
                 ...testcase,
