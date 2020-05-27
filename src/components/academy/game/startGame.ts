@@ -2,10 +2,10 @@ import { IAssessmentOverview } from 'src/components/assessment/assessmentShape';
 import { Story } from 'src/reducers/states';
 import { LINKS } from 'src/utils/constants';
 import { fetchGameData } from './backend/gameState';
+import { getMissionPointer } from './backend/missionPointer';
 import Constants from './constants/constants';
 import { initStage, loadStory } from './storyXmlPlayer';
 import hookHandlers from './utils/hookHandlers';
-import { getMissionPointer } from './backend/missionPointer';
 
 const config = {
   hookHandlers,
