@@ -1,17 +1,16 @@
 import { Card, H1, Popover } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
+import Recorder from 'yareco';
 
 import { controlButton } from '../commons';
-import { IPlaybackData, RecordingStatus } from './sourcecastShape';
-import { Recorder } from './util';
+import { Input, IPlaybackData, RecordingStatus } from './sourcecastShape';
 
 class SourcereelControlbar extends React.PureComponent<
   ISourcereelControlbarProps,
   ISourcereelControlbarState
 > {
-  private recorder: any;
-  private audioContext: AudioContext;
+  private recorder: Recorder;
 
   constructor(props: ISourcereelControlbarProps) {
     super(props);
@@ -24,15 +23,12 @@ class SourcereelControlbar extends React.PureComponent<
   }
 
   public async componentDidMount() {
-    const constraints = { audio: true, video: false };
-    let getUserMediaNow: MediaStream;
-
-    try {
-      getUserMediaNow = await navigator.mediaDevices.getUserMedia(constraints);
-      this.startUserMedia(getUserMediaNow);
-    } catch (error) {
-      alert('Microphone not found: ' + error);
-    }
+    Recorder.getPermission().then(
+      () => {},
+      (error: any) => {
+        alert('Microphone not found: ' + error);
+      }
+    );
   }
 
   public render() {
@@ -41,6 +37,11 @@ class SourcereelControlbar extends React.PureComponent<
       'Resume',
       IconNames.PLAY,
       this.handleRecorderResuming
+    );
+    const RecorderResumeFromCurrentButton = controlButton(
+      'Resume Here',
+      IconNames.PLAY,
+      this.handleRecorderResumingFromCurrent
     );
     const RecorderStartButton = controlButton(
       'Record',
@@ -87,13 +88,20 @@ class SourcereelControlbar extends React.PureComponent<
         <br />
         <div className="Timer">
           <Card elevation={2} style={{ background: '#24323F' }}>
-            <H1>{this.renderLabel(this.state.duration)}</H1>
+            <H1>
+              {this.renderLabel(
+                this.props.recordingStatus !== RecordingStatus.paused
+                  ? this.state.duration / 1000
+                  : this.props.currentPlayerTime
+              )}
+            </H1>
           </Card>
         </div>
         <br />
         <div className="RecorderControl">
           {this.props.recordingStatus === RecordingStatus.notStarted && RecorderStartButton}
           {this.props.recordingStatus === RecordingStatus.paused && RecorderResumeButton}
+          {this.props.recordingStatus === RecordingStatus.paused && RecorderResumeFromCurrentButton}
           {this.props.recordingStatus === RecordingStatus.recording && RecorderPauseButton}
           {this.props.recordingStatus === RecordingStatus.paused && RecorderStopButton}
           {/* {this.props.recordingStatus === RecordingStatus.finished && RecorderDownloadButton} */}
@@ -109,37 +117,59 @@ class SourcereelControlbar extends React.PureComponent<
     this.setState({ duration: this.props.getTimerDuration() });
   };
 
-  private startUserMedia = (stream: MediaStream) => {
-    this.audioContext = new AudioContext();
-    const input = this.audioContext.createMediaStreamSource(stream);
-    this.recorder = new Recorder(input);
+  private handleTruncatePlaybackData = () => {
+    const truncatedInputs = this.props.playbackData.inputs.filter(
+      deltaWithTime => deltaWithTime.time <= this.props.currentPlayerTime * 1000
+    );
+    this.props.handleResetInputs(truncatedInputs);
   };
 
   private handleRecorderPausing = () => {
-    const { handleSetEditorReadonly, handleTimerPause } = this.props;
+    const { handleSetEditorReadonly, handleSetSourcecastData, handleTimerPause } = this.props;
     clearInterval(this.state.updater!);
     handleSetEditorReadonly(true);
     handleTimerPause();
-    this.recorder.stop();
+    this.recorder.pause();
+    const audioUrl = window.URL.createObjectURL(this.recorder.exportWAV());
+    handleSetSourcecastData('', '', audioUrl, this.props.playbackData);
   };
 
   private handleRecorderStarting = () => {
+    this.recorder = new Recorder();
     const { handleRecordInit, handleSetEditorReadonly, handleTimerStart } = this.props;
-    handleRecordInit();
-    handleSetEditorReadonly(false);
-    handleTimerStart();
-    const updater = setInterval(this.updateTimerDuration, 100);
-    this.setState({ updater });
-    this.recorder.record();
+    this.recorder.start().then(
+      () => {
+        handleRecordInit();
+        handleSetEditorReadonly(false);
+        handleTimerStart();
+        const updater = setInterval(this.updateTimerDuration, 100);
+        this.setState({ updater });
+        // this.recorder.onRecord = (duration: number) => console.log(duration);
+      },
+      (error: any) => {
+        alert('Microphone not found: ' + error);
+      }
+    );
   };
 
   private handleRecorderResuming = () => {
     const { handleSetEditorReadonly, handleTimerResume } = this.props;
     handleSetEditorReadonly(false);
-    handleTimerResume();
+    // -1 means resume from the end
+    handleTimerResume(-1);
     const updater = setInterval(this.updateTimerDuration, 100);
     this.setState({ updater });
-    this.recorder.record();
+    this.recorder.resume();
+  };
+
+  private handleRecorderResumingFromCurrent = () => {
+    const { currentPlayerTime, handleSetEditorReadonly, handleTimerResume } = this.props;
+    this.handleTruncatePlaybackData();
+    handleSetEditorReadonly(false);
+    handleTimerResume(currentPlayerTime * 1000);
+    const updater = setInterval(this.updateTimerDuration, 100);
+    this.setState({ updater });
+    this.recorder.resume(currentPlayerTime);
   };
 
   private handleRecorderStopping = () => {
@@ -148,10 +178,8 @@ class SourcereelControlbar extends React.PureComponent<
     handleTimerStop();
     clearInterval(this.state.updater!);
     this.recorder.stop();
-    this.recorder.exportWAV((blob: any) => {
-      this.setState({
-        fileDataBlob: blob
-      });
+    this.setState({
+      fileDataBlob: this.recorder.exportWAV()
     });
     this.recorder.clear();
   };
@@ -162,8 +190,10 @@ class SourcereelControlbar extends React.PureComponent<
     handleTimerReset();
     clearInterval(this.state.updater!);
     this.setState({ duration: 0 });
-    this.recorder.stop();
-    this.recorder.clear();
+    if (this.recorder) {
+      this.recorder.stop();
+      this.recorder.clear();
+    }
   };
 
   private handleRecorderSaving = () => {
@@ -197,9 +227,8 @@ class SourcereelControlbar extends React.PureComponent<
   // };
 
   private renderLabel = (value: number) => {
-    const totalTime = value / 1000;
-    const min = Math.floor(totalTime / 60);
-    const sec = Math.floor(totalTime - min * 60);
+    const min = Math.floor(value / 60);
+    const sec = Math.floor(value - min * 60);
     const minString = min < 10 ? '0' + min : min;
     const secString = sec < 10 ? '0' + sec : sec;
     return minString + ':' + secString;
@@ -216,20 +245,28 @@ class SourcereelControlbar extends React.PureComponent<
 
 export interface ISourcereelControlbarProps {
   handleRecordInit: () => void;
+  handleResetInputs: (inputs: Input[]) => void;
   handleSaveSourcecastData: (
     title: string,
     description: string,
     audio: Blob,
     playbackData: IPlaybackData
   ) => void;
+  handleSetSourcecastData: (
+    title: string,
+    description: string,
+    audioUrl: string,
+    playbackData: IPlaybackData
+  ) => void;
   handleSetEditorReadonly: (readonly: boolean) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
-  handleTimerResume: () => void;
+  handleTimerResume: (timeBefore: number) => void;
   handleTimerStart: () => void;
   handleTimerStop: () => void;
-  editorValue: string;
   getTimerDuration: () => number;
+  currentPlayerTime: number;
+  editorValue: string;
   playbackData: IPlaybackData;
   recordingStatus: RecordingStatus;
 }

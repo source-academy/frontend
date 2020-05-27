@@ -75,6 +75,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 export interface ISourcecastWorkspace extends IWorkspaceState {
   readonly audioUrl: string;
   readonly codeDeltasToApply: ICodeDelta[] | null;
+  readonly currentPlayerTime: number;
   readonly description: string | null;
   readonly inputToApply: Input | null;
   readonly playbackData: IPlaybackData;
@@ -391,6 +392,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
     audioUrl: '',
     codeDeltasToApply: null,
+    currentPlayerTime: 0,
     description: null,
     inputToApply: null,
     playbackData: {
