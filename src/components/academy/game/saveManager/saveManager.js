@@ -192,3 +192,8 @@ export function saveClickTempObject(node, storyId) {
   actionSequence.push(action);
   saveGame();
 }
+
+export default {
+  resetLocalSaveData,
+  hasLocalSave
+};

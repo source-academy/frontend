@@ -1,14 +1,14 @@
-import hookHandlers from './utils/hookHandlers';
-import { fetchGameData } from './backend/gameState';
-import Constants from './constants/constants';
 import { IAssessmentOverview } from 'src/components/assessment/assessmentShape';
 import { Story } from 'src/reducers/states';
 import { LINKS } from 'src/utils/constants';
-import { GameData } from './gameTypes';
+import { fetchGameData } from './backend/gameState';
+import Constants from './constants/constants';
 import { initStage, loadStory } from './storyXmlPlayer';
+import hookHandlers from './utils/hookHandlers';
+import { getMissionPointer } from './backend/missionPointer';
 
 const config = {
-  hookHandlers: hookHandlers,
+  hookHandlers,
   wristDeviceFunc: () => window.open(LINKS.LUMINUS),
   playerImageCanvas: $('<canvas />'),
   changeLocationHook: (newLocation: string) =>
@@ -20,12 +20,13 @@ async function startGame(
   canvas: HTMLCanvasElement,
   username: string | undefined,
   userStory: Story | undefined,
-  gameState: Object,
+  gameState: object,
   missions: IAssessmentOverview[] | undefined
 ) {
-  const gameData: GameData = await fetchGameData(userStory, gameState, missions);
+  await fetchGameData(userStory, gameState, missions);
+  const xmlFileName: string = getMissionPointer(missions);
   initStage(div, canvas, { ...config, playerName: username });
-  loadStory(gameData);
+  loadStory(xmlFileName);
 }
 
 export default startGame;

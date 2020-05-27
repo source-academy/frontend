@@ -1,7 +1,7 @@
+import { LINKS } from 'src/utils/constants';
+import { history } from 'src/utils/history';
 import { saveCollectible, saveQuest } from '../backend/gameState';
 import { playSound } from '../soundManager/soundManager';
-import { history } from 'src/utils/history';
-import { LINKS } from 'src/utils/constants';
 
 const hookHandlers = {
   startMission: () => history.push('/academy/missions'),
@@ -31,7 +31,7 @@ const hookHandlers = {
     }
   },
   pickUpCollectible: saveCollectible,
-  playSound: playSound,
+  playSound,
   saveCompletedQuest: saveQuest
 };
 
