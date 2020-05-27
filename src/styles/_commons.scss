@@ -73,6 +73,12 @@
   justify-content: space-evenly;
 }
 
+.Vertical {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
 .VerticalStack {
   > * + * {
     margin-top: 10px;
