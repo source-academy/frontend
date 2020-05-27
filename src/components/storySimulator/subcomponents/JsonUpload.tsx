@@ -16,7 +16,7 @@ class JsonUpload extends React.Component {
   public render() {
     return (
       <form onSubmit={JsonUpload.onFormSubmit} id="json-upload">
-        <h3>Game State Override</h3>
+        <h3>Game State Loader</h3>
         <input type="file" onChange={this.onChange} style={{ width: '250px' }} />
       </form>
     );

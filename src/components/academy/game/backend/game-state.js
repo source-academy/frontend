@@ -25,7 +25,7 @@ const OVERRIDE_KEY = 'source_academy_override',
 
 let sessionData = undefined;
 
-export function fetchGameData(story, gameStates, missions, callback) {
+export async function fetchGameData(story, gameStates, missions, callback) {
   // fetch only needs to be called once; if there are additional calls somehow then ignore them
   // only for students
   if (hasBeenFetched() && isStudent()) {

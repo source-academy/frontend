@@ -32,3 +32,10 @@ export function playAsyncSound(name) {
     soundAssets[name].play();
   }
 }
+
+export function playSound(name) {
+  var sound = new Audio(soundPath + name + '.mp3');
+  if (sound) {
+    sound.play();
+  }
+}

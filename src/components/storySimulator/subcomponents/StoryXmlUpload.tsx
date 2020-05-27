@@ -3,21 +3,23 @@ import * as React from 'react';
 function StoryXmlUpload() {
   return (
     <div className="Vertical">
-      <h3>Story Xml Upload</h3>
-      <input type="file" onChange={onChange} style={{ width: '250px' }} />
+      <h3>Story Xml Loader</h3>
+      <input multiple type="file" onChange={onChange} style={{ width: '250px' }} />
     </div>
   );
 }
 
 function onChange(e: { target: any }) {
-  const reader = new FileReader();
-  reader.readAsText(e.target.files[0]);
-  reader.onloadend = (event: Event) => {
-    if (!reader.result) {
-      return;
-    }
-    localStorage.setItem('storyXml', reader.result.toString());
-  };
+  const files = e.target.files;
+  localStorage.setItem(`storyXmlLength`, files.length);
+
+  for (let i = 0; i < files.length; i++) {
+    const reader = new FileReader();
+    reader.readAsText(files[i]);
+    reader.onloadend = _ => {
+      reader.result && localStorage.setItem(`storyXml${i}`, reader.result.toString());
+    };
+  }
 }
 
 export function strToXml(str: string) {

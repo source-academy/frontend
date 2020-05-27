@@ -1,8 +1,8 @@
 import { ASSETS_HOST, LIVE_STORIES_HOST, TEST_STORIES_HOST } from '../backend/hosting';
 
 const Constants = {
-  screenWidth: 1680,
-  screenHeight: 840,
+  screenWidth: 1920,
+  screenHeight: 1080,
   dialogBoxHeight: 260,
   dialogBoxWidth: 1720,
   dialogBoxPadding: 25,
@@ -19,6 +19,7 @@ const Constants = {
 };
 
 export default Constants;
+
 export const storyXMLPathLive = LIVE_STORIES_HOST,
   storyXMLPathTest = TEST_STORIES_HOST,
   locationPath = ASSETS_HOST + 'locations/',
