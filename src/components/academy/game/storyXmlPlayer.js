@@ -1,16 +1,16 @@
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js';
 
 // CommonJS Imports
 var Constants = require('./constants/constants.js');
-var LocationManager = require('./location-manager/location-manager.js');
-var ObjectManager = require('./object-manager/object-manager.js');
-var DialogManager = require('./dialog-manager/dialog-manager.js');
-var QuestManager = require('./quest-manager/quest-manager.js');
-var StoryManager = require('./story-manager/story-manager.js');
-var SaveManager = require('./save-manager/save-manager.js');
-var ExternalManager = require('./external-manager/external-manager.js');
-var BlackOverlay = require('./black-overlay/black-overlay.js');
-var MapOverlay = require('./map-overlay/map-overlay.js');
+var LocationManager = require('./locationManager/locationManager.js');
+var ObjectManager = require('./objectManager/objectManager.js');
+var DialogManager = require('./dialogManager/dialogManager.js');
+var QuestManager = require('./questManager/questManager.js');
+var StoryManager = require('./storyManager/storyManager.js');
+var SaveManager = require('./saveManager/saveManager.js');
+var ExternalManager = require('./externalManager/externalManager.js');
+var BlackOverlay = require('./blackOverlay/blackOverlay.js');
+var MapOverlay = require('./mapOverlay/mapOverlay.js');
 var Utils = require('./utils/utils.js');
 
 //-----GLOBAL-----
@@ -21,11 +21,10 @@ var stage;
 // saveData, hookHandlers, wristDeviceFunc
 // changeLocationHook, playerImageCanvas, playerName
 export function init(div, canvas, options) {
-  renderer = PIXI.autoDetectRenderer(
-    Constants.screenWidth,
-    Constants.screenHeight,
-    { backgroundColor: 0x000000, view: canvas }
-  );
+  renderer = PIXI.autoDetectRenderer(Constants.screenWidth, Constants.screenHeight, {
+    backgroundColor: 0x000000,
+    view: canvas
+  });
   div.append(renderer.view);
   Utils.saveRenderer(renderer);
 
@@ -37,10 +36,7 @@ export function init(div, canvas, options) {
   var objectLayers = ObjectManager.init();
   stage.addChild(objectLayers);
   stage.addChild(MapOverlay.init(options.wristDeviceFunc));
-  var dialogLayers = DialogManager.init(
-    options.playerName,
-    options.playerImageCanvas
-  );
+  var dialogLayers = DialogManager.init(options.playerName, options.playerImageCanvas);
   stage.addChild(dialogLayers);
   stage.addChild(BlackOverlay.init());
   stage.addChild(StoryManager.init());
@@ -52,17 +48,16 @@ export function init(div, canvas, options) {
   animate();
 
   SaveManager.init();
-  
+
   // a pixi.container on top of everything that is exported
   stage.addChild(ExternalManager.init(options.hookHandlers));
-};
+}
 
 export function loadingScreen(div, canvas) {
-  renderer = PIXI.autoDetectRenderer(
-    Constants.screenWidth,
-    Constants.screenHeight,
-    { backgroundColor: 0x000000, view: canvas }
-  );
+  renderer = PIXI.autoDetectRenderer(Constants.screenWidth, Constants.screenHeight, {
+    backgroundColor: 0x000000,
+    view: canvas
+  });
   div.append(renderer.view);
   Utils.saveRenderer(renderer);
   // create the root of the scene graph
@@ -77,10 +72,14 @@ export function loadingScreen(div, canvas) {
     renderer.render(stage);
   }
   animate();
-};
+}
 
-export { getExternalOverlay } from './external-manager/external-manager.js'
-export { changeStartLocation, gotoStartLocation, gotoLocation } from './location-manager/location-manager.js'
-export { loadStory, loadStoryWithoutFirstQuest } from './story-manager/story-manager.js'
-export { unlockQuest, completeQuest, unlockLastQuest } from './quest-manager/quest-manager.js'
-export { sendNotification, changeWristDeviceFunction } from './map-overlay/map-overlay.js'
+export { getExternalOverlay } from './externalManager/externalManager.js';
+export {
+  changeStartLocation,
+  gotoStartLocation,
+  gotoLocation
+} from './locationManager/locationManager.js';
+export { loadStory, loadStoryWithoutFirstQuest } from './storyManager/storyManager.js';
+export { unlockQuest, completeQuest, unlockLastQuest } from './questManager/questManager.js';
+export { sendNotification, changeWristDeviceFunction } from './mapOverlay/mapOverlay.js';

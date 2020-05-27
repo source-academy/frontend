@@ -2,11 +2,11 @@ import * as PIXI from 'pixi.js';
 import { isStudent } from '../backend/user.js';
 
 var Constants = require('../constants/constants.js');
-var QuestManager = require('../quest-manager/quest-manager.js');
-var LocationManager = require('../location-manager/location-manager.js');
-var SaveManager = require('../save-manager/save-manager.js');
-var BlackOverlay = require('../black-overlay/black-overlay.js');
-var SoundManager = require('../sound-manager/sound-manager.js');
+var QuestManager = require('../questManager/questManager.js');
+var LocationManager = require('../locationManager/locationManager.js');
+var SaveManager = require('../saveManager/saveManager.js');
+var BlackOverlay = require('../blackOverlay/blackOverlay.js');
+var SoundManager = require('../soundManager/soundManager.js');
 
 var loadedStories = {};
 

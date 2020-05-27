@@ -1,12 +1,12 @@
-import {saveStudentData} from '../backend/game-state';
-import {SAVE_DATA_KEY, LOCATION_KEY} from "../constants/constants";
+import { saveStudentData } from '../backend/game-state';
+import { SAVE_DATA_KEY, LOCATION_KEY } from '../constants/constants';
 
-var LocationManager = require('../location-manager/location-manager.js');
-var QuestManager = require('../quest-manager/quest-manager.js');
-var StoryManager = require('../story-manager/story-manager.js');
-var MapManager = require('../map-manager/map-manager.js');
-var QuestManager = require('../quest-manager/quest-manager.js');
-var ObjectManager = require('../object-manager/object-manager.js');
+var LocationManager = require('../locationManager/locationManager.js');
+var QuestManager = require('../questManager/questManager.js');
+var StoryManager = require('../storyManager/storyManager.js');
+var MapManager = require('../mapManager/mapManager.js');
+var QuestManager = require('../questManager/questManager.js');
+var ObjectManager = require('../objectManager/objectManager.js');
 var Utils = require('../utils/utils.js');
 
 var actionSequence = [];
@@ -52,7 +52,7 @@ export function init() {
       }
     });
   }
-};
+}
 
 // pending means a story is loaded but the opening quest is not unlocked yet
 // or a quest is unlocked but the opening sequence hasn't been played
@@ -117,7 +117,6 @@ export function hasLocalSave() {
   return localStorage.hasOwnProperty(SAVE_DATA_KEY);
 }
 
-
 export function getLocalSaveData() {
   const jsonString = localStorage.getItem(SAVE_DATA_KEY);
   return jsonString ? JSON.parse(jsonString) : undefined;
@@ -130,7 +129,8 @@ export function resetLocalSaveData() {
 
 // saves actionsequence and start location into local storage
 function saveGame() {
-  localStorage.setItem(SAVE_DATA_KEY,
+  localStorage.setItem(
+    SAVE_DATA_KEY,
     JSON.stringify({
       actionSequence: actionSequence,
       startLocation: LocationManager.getStartLocation()

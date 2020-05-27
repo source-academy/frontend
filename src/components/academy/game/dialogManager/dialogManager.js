@@ -1,13 +1,13 @@
-import * as PIXI from 'pixi.js'
-import Text from './Text'
+import * as PIXI from 'pixi.js';
+import Text from './Text';
 
 var Constants = require('../constants/constants.js');
-var LocationManager = require('../location-manager/location-manager.js');
-var ObjectManager = require('../object-manager/object-manager.js');
-var FilterEffects = require('../filter-effects/filter-effects.js');
+var LocationManager = require('../locationManager/locationManager.js');
+var ObjectManager = require('../objectManager/objectManager.js');
+var FilterEffects = require('../filterEffects/filterEffects.js');
 var Avatar = require('./avatar/avatar.js');
 var Utils = require('../utils/utils.js');
-var SoundManager = require('../sound-manager/sound-manager.js');
+var SoundManager = require('../soundManager/soundManager.js');
 
 var advancePlaceHolder;
 var pauseOverlayAction;
@@ -27,10 +27,9 @@ var rightAvatar;
 var dialogOverlay;
 
 export function init(playerName_parameter, playerImageCanvas) {
-  const renderer = Utils.getRenderer()
+  const renderer = Utils.getRenderer();
   playerName = playerName_parameter;
-  var avatarTotalSize =
-    Constants.playerAvatarSize + Constants.playerAvatarLineWidth;
+  var avatarTotalSize = Constants.playerAvatarSize + Constants.playerAvatarLineWidth;
   playerAvatar = PIXI.RenderTexture.create(
     avatarTotalSize + Constants.playerAvatarOffset,
     avatarTotalSize
@@ -45,9 +44,7 @@ export function init(playerName_parameter, playerImageCanvas) {
     );
 
     var avatar = new PIXI.Sprite(PIXI.Texture.fromCanvas(playerImageCanvas));
-    avatar.scale.set(
-      Constants.playerAvatarSize / Math.min(avatar.width, avatar.height)
-    );
+    avatar.scale.set(Constants.playerAvatarSize / Math.min(avatar.width, avatar.height));
     avatar.position.x = Constants.playerAvatarOffset;
     var circleMask = new PIXI.Graphics();
     circleMask.beginFill();
@@ -73,12 +70,7 @@ export function init(playerName_parameter, playerImageCanvas) {
   // pause overlay to detect click during pause
   pauseOverlay = new PIXI.Graphics();
   pauseOverlay.interactive = true;
-  pauseOverlay.hitArea = new PIXI.Rectangle(
-    0,
-    0,
-    Constants.screenWidth,
-    Constants.screenHeight
-  );
+  pauseOverlay.hitArea = new PIXI.Rectangle(0, 0, Constants.screenWidth, Constants.screenHeight);
   pauseOverlay.visible = false;
   function onClickPause() {
     pauseOverlay.visible = false;
@@ -89,12 +81,9 @@ export function init(playerName_parameter, playerImageCanvas) {
   container.addChild(pauseOverlay);
   // dialog container
   dialogContainer = new PIXI.Container();
-  dialogContainer.position.x =
-    (Constants.screenWidth - Constants.dialogBoxWidth) / 2;
+  dialogContainer.position.x = (Constants.screenWidth - Constants.dialogBoxWidth) / 2;
   dialogContainer.position.y =
-    Constants.screenHeight -
-    Constants.dialogBoxHeight -
-    Constants.dialogBoxPadding;
+    Constants.screenHeight - Constants.dialogBoxHeight - Constants.dialogBoxPadding;
   dialogContainer.visible = false;
   container.addChild(dialogContainer);
   // black overlay to darken the background
@@ -118,13 +107,7 @@ export function init(playerName_parameter, playerImageCanvas) {
   // dialog box
   var dialogBox = new PIXI.Graphics();
   dialogBox.beginFill(0xffffff);
-  dialogBox.drawRoundedRect(
-    0,
-    0,
-    Constants.dialogBoxWidth,
-    Constants.dialogBoxHeight,
-    10
-  );
+  dialogBox.drawRoundedRect(0, 0, Constants.dialogBoxWidth, Constants.dialogBoxHeight, 10);
   dialogBox.endFill();
   dialogBox.alpha = 0.87;
   dialogContainer.addChild(dialogBox);
@@ -137,9 +120,7 @@ export function init(playerName_parameter, playerImageCanvas) {
   });
   dialogText.position.x = Constants.innerDialogPadding;
   dialogText.position.y = Constants.innerDialogPadding;
-  numLines = Math.round(
-    (dialogBox.height - 2 * Constants.innerDialogPadding) / dialogText.height
-  );
+  numLines = Math.round((dialogBox.height - 2 * Constants.innerDialogPadding) / dialogText.height);
   dialogContainer.addChild(dialogText);
   // left and right avatars, note that they are children of dialogContainer
   leftAvatar = new Avatar();
@@ -147,10 +128,7 @@ export function init(playerName_parameter, playerImageCanvas) {
   dialogContainer.addChild(leftAvatar.container);
 
   rightAvatar = new Avatar();
-  rightAvatar.container.position.set(
-    dialogBox.width - Constants.avatarOffset,
-    0
-  );
+  rightAvatar.container.position.set(dialogBox.width - Constants.avatarOffset, 0);
   rightAvatar.container.scale.x = -1;
   rightAvatar.nameText.scale.x = -1;
   rightAvatar.nameText.anchor.set(1, 1);
@@ -158,12 +136,7 @@ export function init(playerName_parameter, playerImageCanvas) {
 
   dialogOverlay = new PIXI.Graphics();
   dialogOverlay.interactive = true;
-  dialogOverlay.hitArea = new PIXI.Rectangle(
-    0,
-    0,
-    Constants.screenWidth,
-    Constants.screenHeight
-  );
+  dialogOverlay.hitArea = new PIXI.Rectangle(0, 0, Constants.screenWidth, Constants.screenHeight);
   dialogOverlay.position.x = -dialogContainer.position.x;
   dialogOverlay.position.y = -dialogContainer.position.y;
   function onClick() {
@@ -175,7 +148,7 @@ export function init(playerName_parameter, playerImageCanvas) {
   dialogContainer.addChild(dialogOverlay);
 
   return container;
-};
+}
 
 function playNarration(node, callback) {
   if (node.tagName != 'NARRATION') {
@@ -425,9 +398,7 @@ export function playSequence(node, callback) {
   imageGlowTextures = {};
   var images = node.getElementsByTagName('IMAGE');
   for (var i = 0; i < images.length; i++) {
-    var rawImage = new PIXI.Sprite.fromImage(
-      Constants.imgPath + images[i].textContent
-    );
+    var rawImage = new PIXI.Sprite.fromImage(Constants.imgPath + images[i].textContent);
     rawImage.anchor.set(0.5, 0.5);
     var glowTexture = FilterEffects.createGlowTexture(rawImage);
     imageGlowTextures[images[i].textContent] = glowTexture;

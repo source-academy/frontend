@@ -45,7 +45,7 @@ export class Game extends React.Component<GameProps, {}> {
     if (this.props.name && this.props.role && !this.props.assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
       this.props.handleAssessmentOverviewFetch();
-      const loadingScreen: any = (await import('./story-xml-player.js')).loadingScreen;
+      const loadingScreen: any = (await import('./storyXmlPlayer.js')).loadingScreen;
       loadingScreen(this.div, this.canvas);
       this.props.handleSaveCanvas(this.canvas);
     }

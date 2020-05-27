@@ -1,16 +1,16 @@
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js';
 
 var Constants = require('../constants/constants.js');
-var LocationManager = require('../location-manager/location-manager.js');
-var MapManager = require('../map-manager/map-manager.js');
-var DialogManager = require('../dialog-manager/dialog-manager.js');
-var QuestManager = require('../quest-manager/quest-manager.js');
-var SaveManager = require('../save-manager/save-manager.js');
-var ExternalManager = require('../external-manager/external-manager.js');
-var MapOverlay = require('../map-overlay/map-overlay.js');
+var LocationManager = require('../locationManager/locationManager.js');
+var MapManager = require('../mapManager/mapManager.js');
+var DialogManager = require('../dialogManager/dialogManager.js');
+var QuestManager = require('../questManager/questManager.js');
+var SaveManager = require('../saveManager/saveManager.js');
+var ExternalManager = require('../externalManager/externalManager.js');
+var MapOverlay = require('../mapOverlay/mapOverlay.js');
 var Utils = require('../utils/utils.js');
-var FilterEffects = require('../filter-effects/filter-effects.js');
-var GameState = require('../backend/game-state')
+var FilterEffects = require('../filterEffects/filterEffects.js');
+var GameState = require('../backend/game-state');
 
 var mapObjects;
 var sequenceObjects;
@@ -33,17 +33,12 @@ export function init() {
   objectOverlay.beginFill(0, 0);
   objectOverlay.drawRect(0, 0, Constants.screenWidth, Constants.screenHeight);
   objectOverlay.endFill();
-  objectOverlay.hitArea = new PIXI.Rectangle(
-    0,
-    0,
-    Constants.screenWidth,
-    Constants.screenHeight
-  );
+  objectOverlay.hitArea = new PIXI.Rectangle(0, 0, Constants.screenWidth, Constants.screenHeight);
   objectOverlay.visible = false; // hide it first
   container.addChild(objectOverlay);
 
   return container;
-};
+}
 
 function createGlowTexture(node) {
   var glowObject = parseStaticObject(node);
@@ -127,9 +122,7 @@ function createGameObject(texture, x, y, scale) {
 export function parseStaticObject(node) {
   const name = node.getAttribute('name');
   const skin = node.getAttribute('skin') || 'normal';
-  const texture = PIXI.Texture.fromImage(
-    Constants.objectPath + name + '/' + skin + '.png'
-  );
+  const texture = PIXI.Texture.fromImage(Constants.objectPath + name + '/' + skin + '.png');
   const x = parseInt(node.getAttribute('x'));
   const y = parseInt(node.getAttribute('y'));
   const scale = parseInt(node.getAttribute('scale')) || 1;
@@ -165,8 +158,10 @@ export function processTempObject(gameLocation, node) {
   }
   var collectible = node.getAttribute('name');
   var isInDorm = gameLocation.name == 'yourRoom';
-  if ((isInDorm && !GameState.hasCollectible(collectible))||
-      (!isInDorm && GameState.hasCollectible(collectible))) {
+  if (
+    (isInDorm && !GameState.hasCollectible(collectible)) ||
+    (!isInDorm && GameState.hasCollectible(collectible))
+  ) {
     return; //don't load the collectible in dorm if it's not collected || don't load if in hidden location and collected
   }
   if (isInDorm) {
@@ -181,10 +176,10 @@ export function processTempObject(gameLocation, node) {
       gameLocation.objects.removeChild(object);
     };
     gameLocation.objects.addChild(
-        parseInteractivity(node, object, function() {
-          removeTempObjFuncs[storyId][node.id]();
-          SaveManager.saveClickTempObject(node, storyId);
-        })
+      parseInteractivity(node, object, function() {
+        removeTempObjFuncs[storyId][node.id]();
+        SaveManager.saveClickTempObject(node, storyId);
+      })
     );
   }
 }

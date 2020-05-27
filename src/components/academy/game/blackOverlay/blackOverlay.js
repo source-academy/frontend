@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js';
 
 var Constants = require('../constants/constants.js');
 
@@ -12,7 +12,7 @@ export function init() {
   blackOverlay.endFill();
 
   return blackOverlay;
-};
+}
 
 function fadeOut(displayObject, cb) {
   if (tween) tween.progress(1).kill();

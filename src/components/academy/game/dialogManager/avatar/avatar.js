@@ -1,5 +1,5 @@
 var Constants = require('../../constants/constants.js');
-var FilterEffects = require('../../filter-effects/filter-effects.js');
+var FilterEffects = require('../../filterEffects/filterEffects.js');
 
 var playerName;
 var playerAvatar;
@@ -76,14 +76,10 @@ Avatar.prototype.setCharacter = function(name, expression, isFocused) {
     if (name == 'you') {
       this.image.texture = playerAvatar;
     } else {
-      this.image.texture = PIXI.Texture.fromFrame(
-        name + '.' + expression + '.png'
-      );
+      this.image.texture = PIXI.Texture.fromFrame(name + '.' + expression + '.png');
     }
     if (!isFocused) {
-      this.image.texture = FilterEffects.createDarkenedTexture(
-        this.image.texture
-      );
+      this.image.texture = FilterEffects.createDarkenedTexture(this.image.texture);
     }
     this.image.visible = true;
   } catch (e) {
@@ -108,9 +104,7 @@ Avatar.prototype.setCharacter = function(name, expression, isFocused) {
 Avatar.prototype.unfocus = function() {
   if (this.isFocused) {
     this.isFocused = false;
-    this.image.texture = FilterEffects.createDarkenedTexture(
-      this.image.texture
-    );
+    this.image.texture = FilterEffects.createDarkenedTexture(this.image.texture);
     this.image.visible = true;
     this.nameBack.clear();
     this.nameBack.beginFill(0x546e6a);

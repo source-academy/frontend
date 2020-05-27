@@ -1,7 +1,7 @@
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js';
 
-var ObjectManager = require('../object-manager/object-manager.js');
-var LocationManager = require('../location-manager/location-manager.js');
+var ObjectManager = require('../objectManager/objectManager.js');
+var LocationManager = require('../locationManager/locationManager.js');
 
 var gameMap = {};
 

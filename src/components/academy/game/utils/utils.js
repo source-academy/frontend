@@ -10,8 +10,8 @@ var renderer;
 
 export function saveRenderer(aRenderer) {
   renderer = aRenderer;
-};
+}
 
 export function getRenderer() {
   return renderer;
-};
+}

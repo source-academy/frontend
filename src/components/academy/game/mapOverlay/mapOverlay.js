@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js';
 
 var Constants = require('../constants/constants.js');
 
@@ -11,9 +11,7 @@ var wristDeviceButton;
 export function init(wristDeviceFunc) {
   // map overlay, always appear in roaming mode
   mapOverlay = new PIXI.Container();
-  wristDeviceButton = new PIXI.Sprite.fromImage(
-    Constants.uiPath + 'wristDeviceButton.png'
-  );
+  wristDeviceButton = new PIXI.Sprite.fromImage(Constants.uiPath + 'wristDeviceButton.png');
   wristDeviceButton.position.set(50, 50);
   wristDeviceButton.interactive = true;
   wristDeviceButton.buttonMode = true;
@@ -27,7 +25,7 @@ export function init(wristDeviceFunc) {
   mapOverlay.visible = false;
 
   return mapOverlay;
-};
+}
 
 export function sendNotification(callback) {
   var oldFunction = wristDeviceFunction;

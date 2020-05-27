@@ -1,14 +1,14 @@
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js';
 
 var Constants = require('../constants/constants.js');
-var MapManager = require('../map-manager/map-manager.js');
-var ObjectManager = require('../object-manager/object-manager.js');
-var DialogManager = require('../dialog-manager/dialog-manager.js');
-var SaveManager = require('../save-manager/save-manager.js');
-var QuestManager = require('../quest-manager/quest-manager.js');
-var ExternalManager = require('../external-manager/external-manager.js');
-var BlackOverlay = require('../black-overlay/black-overlay.js');
-var MapOverlay = require('../map-overlay/map-overlay.js');
+var MapManager = require('../mapManager/mapManager.js');
+var ObjectManager = require('../objectManager/objectManager.js');
+var DialogManager = require('../dialogManager/dialogManager.js');
+var SaveManager = require('../saveManager/saveManager.js');
+var QuestManager = require('../questManager/questManager.js');
+var ExternalManager = require('../externalManager/externalManager.js');
+var BlackOverlay = require('../blackOverlay/blackOverlay.js');
+var MapOverlay = require('../mapOverlay/mapOverlay.js');
 
 var gameBackground;
 
@@ -26,7 +26,7 @@ export function init(changeLocationHook) {
   gameBackground.height = Constants.screenHeight;
 
   return gameBackground;
-};
+}
 
 // change the location when playing a sequence
 export function changeSeqLocation(node, callback) {
@@ -64,11 +64,7 @@ function changeMapLocation(name, callback, middleSynchronous) {
     middleSynchronous();
     var newLocation = MapManager.getGameLocation(name);
     gameBackground.texture = PIXI.Texture.fromImage(
-      Constants.locationPath +
-        newLocation.name +
-        '/' +
-        newLocation.skin +
-        '.png'
+      Constants.locationPath + newLocation.name + '/' + newLocation.skin + '.png'
     );
     ObjectManager.clearMapObjects();
     ObjectManager.changeMapObjects(name, false);
@@ -132,7 +128,7 @@ export function gotoLocation(name, callback, middleSynchronous) {
 export function goBackToCurCamLocation(callback, middleSynchronous) {
   verifyCurCamLocation();
   gotoLocation(curCameraLocation, callback, middleSynchronous);
-};
+}
 
 // close a story, need to verify whether curCameraLocation is still valid
 // return whether current camera location is valid
@@ -144,7 +140,7 @@ export function verifyCurCamLocation() {
     location.reload();
   }
   return valid;
-};
+}
 
 export function changeStartLocation(loc) {
   if (loc && MapManager.locationExist(loc)) {
@@ -158,7 +154,7 @@ export function getStartLocation(loc) {
 
 export function gotoStartLocation(callback, middleSynchronous) {
   gotoLocation(startLocation, callback, middleSynchronous);
-};
+}
 
 // return a callback function that check ensure valid current location before proceeding
 export function verifyGotoStart(callback) {
