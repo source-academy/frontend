@@ -1,8 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-// TODO: Refactor
-import { fetchAuth, login } from 'src/commons/application/actions/SessionActions';
+import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
 import Login, { DispatchProps, OwnProps } from './LoginComponent';
 
 const mapStateToProps: MapStateToProps<{}, OwnProps, {}> = (_, ownProps) => ownProps;
@@ -16,7 +15,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(
+const LoginContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Login);
+
+export default LoginContainer;

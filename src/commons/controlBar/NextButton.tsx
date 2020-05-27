@@ -1,7 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import controlButton from 'src/commons/ControlButton';
+import controlButton from '../ControlButton';
 import { ReturnToAcademyButton } from './ReturnToAcademyButton';
 
 type NextButtonProps = DispatchProps & StateProps;

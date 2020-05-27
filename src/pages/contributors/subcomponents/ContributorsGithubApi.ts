@@ -1,4 +1,4 @@
-import { ContributorsInApi, Repo, ReposInApi } from 'src/features/contributors/ContributorsTypes';
+import { ContributorsInApi, Repo, ReposInApi } from '../../../features/contributors/ContributorsTypes';
 
 const apiRepoDetails: string = 'https://api.github.com/orgs/source-academy/repos';
 const ignoreRepos: string[] = ['assessments', 'tools', 'source-academy2'];

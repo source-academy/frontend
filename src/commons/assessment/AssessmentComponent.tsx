@@ -23,19 +23,18 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
-import defaultCoverImage from 'src/assets/default_cover_image.jpg';
-import { OwnProps as AssessmentWorkspaceOwnProps } from 'src/commons/assessmentWorkspace/AssessmentWorkspaceComponent';
-import AssessmentWorkspaceContainer from 'src/commons/assessmentWorkspace/AssessmentWorkspaceContainer';
-import ContentDisplay from 'src/commons/ContentDisplay';
-import controlButton from 'src/commons/ControlButton';
-import Markdown from 'src/commons/Markdown';
-import NotificationBadge from 'src/commons/notificationBadge/NotificationBadgeContainer';
-import { filterNotificationsByAssessment } from 'src/commons/notificationBadge/NotificationBadgeHelper';
-import { NotificationFilterFunction } from 'src/commons/notificationBadge/NotificationBadgeTypes';
-import { DEFAULT_QUESTION_ID } from 'src/utils/constants';
-import { beforeNow, getPrettyDate } from 'src/utils/dateHelpers';
-import { assessmentCategoryLink, stringParamToInt } from 'src/utils/paramParseHelpers';
-
+import defaultCoverImage from '../../assets/default_cover_image.jpg';
+import { DEFAULT_QUESTION_ID } from '../../utils/constants';
+import { beforeNow, getPrettyDate } from '../../utils/dateHelpers';
+import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers';
+import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspaceComponent';
+import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorkspaceContainer';
+import ContentDisplay from '../ContentDisplay';
+import controlButton from '../ControlButton';
+import Markdown from '../Markdown';
+import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
+import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
+import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
 import {
   AssessmentCategory,
   AssessmentOverview,

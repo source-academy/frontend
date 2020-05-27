@@ -6,8 +6,8 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 import {
   checkSessionIdExists,
   createNewSession
-} from 'src/commons/collabEditing/CollabEditingHelper';
-import controlButton from 'src/commons/ControlButton';
+} from '../collabEditing/CollabEditingHelper';
+import controlButton from '../ControlButton';
 
 type SessionButtonsProps = DispatchProps & StateProps;
 

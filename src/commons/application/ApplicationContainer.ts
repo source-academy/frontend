@@ -4,12 +4,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { logOut } from 'src/commons/application/actions/CommonsActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import {
-  externalLibraries,
-  ExternalLibraryName
-} from 'src/commons/application/types/ExternalTypes';
 import {
   beginClearContext,
   changeExecTime,
@@ -18,10 +12,15 @@ import {
   promptAutocomplete,
   setEditorBreakpoint,
   updateEditorValue
-} from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
-
+} from '../workspace/WorkspaceActions';
+import { WorkspaceLocations } from '../workspace/WorkspaceTypes';
+import { logOut } from './actions/CommonsActions';
 import Application, { DispatchProps, StateProps } from './ApplicationComponent';
+import { OverallState } from './ApplicationTypes';
+import {
+  externalLibraries,
+  ExternalLibraryName
+} from './types/ExternalTypes';
 
 /**
  * Provides the title of the application for display.
@@ -76,9 +75,11 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default withRouter(
+const ApplicationContainer = withRouter(
   connect(
     mapStateToProps,
     mapDispatchToProps
   )(Application)
 );
+
+export default ApplicationContainer;

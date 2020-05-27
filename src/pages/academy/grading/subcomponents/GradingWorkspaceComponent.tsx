@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput } from '../../../../commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -11,28 +11,28 @@ import {
   Question,
   QuestionTypes,
   Testcase
-} from 'src/commons/assessment/AssessmentTypes';
-import { ClearButton } from 'src/commons/controlBar/ClearButton';
-import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
-import { EvalButton } from 'src/commons/controlBar/EvalButton';
-import { NextButton } from 'src/commons/controlBar/NextButton';
-import { PreviousButton } from 'src/commons/controlBar/PreviousButton';
-import { QuestionViewButton } from 'src/commons/controlBar/QuestionViewButton';
-import { RunButton } from 'src/commons/controlBar/RunButton';
-import { Position } from 'src/commons/editor/EditorTypes';
-import Markdown from 'src/commons/Markdown';
-import Autograder from 'src/commons/sideContent/Autograder';
-import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
-import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
-import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
-import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
-import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
-import { AnsweredQuestion, Grading } from 'src/features/grading/GradingTypes';
-import { USE_CHATKIT } from 'src/utils/constants';
-import { history } from 'src/utils/history';
-
+} from '../../../../commons/assessment/AssessmentTypes';
+import { ClearButton } from '../../../../commons/controlBar/ClearButton';
+import { ControlBarProps } from '../../../../commons/controlBar/ControlBarComponent';
+import { EvalButton } from '../../../../commons/controlBar/EvalButton';
+import { NextButton } from '../../../../commons/controlBar/NextButton';
+import { PreviousButton } from '../../../../commons/controlBar/PreviousButton';
+import { QuestionViewButton } from '../../../../commons/controlBar/QuestionViewButton';
+import { RunButton } from '../../../../commons/controlBar/RunButton';
+import { Position } from '../../../../commons/editor/EditorTypes';
+import Markdown from '../../../../commons/Markdown';
+import Autograder from '../../../../commons/sideContent/Autograder';
+import { SideContentProps } from '../../../../commons/sideContent/SideContentComponent';
+import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
+import ToneMatrix from '../../../../commons/sideContent/ToneMatrix';
+import Workspace, { WorkspaceProps } from '../../../../commons/workspace/WorkspaceComponent';
+import { WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
+import { history } from '../../../../utils/history';
 import GradingEditor from './GradingEditorContainer';
+
+import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
+import { USE_CHATKIT } from 'src/utils/constants'; // TODO: Remove
 
 type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 

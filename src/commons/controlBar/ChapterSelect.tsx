@@ -9,8 +9,8 @@ import {
   SourceLanguage,
   sourceLanguages,
   styliseChapter
-} from 'src/commons/application/ApplicationTypes';
-import { Chapter } from 'src/commons/application/types/ChapterTypes';
+} from '../application/ApplicationTypes';
+import { Chapter } from '../application/types/ChapterTypes';
 
 type ChapterSelectProps = DispatchProps & StateProps;
 

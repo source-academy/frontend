@@ -2,15 +2,15 @@ import { Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import controlButton from 'src/commons/ControlButton';
+import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
+import controlButton from '../../../commons/ControlButton';
 import {
   CodeDelta,
   Input,
   PlaybackData,
   PlaybackStatus,
   SourcecastData
-} from 'src/features/sourcecast/SourcecastTypes';
+} from '../../../features/sourcecast/SourcecastTypes';
 
 export type SourcecastControlbarProps = DispatchProps & StateProps;
 

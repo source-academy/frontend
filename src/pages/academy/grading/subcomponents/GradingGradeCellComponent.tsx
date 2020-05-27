@@ -1,6 +1,6 @@
 import { Position, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
-import { GradingCellProps } from 'src/features/grading/GradingTypes';
+import { GradingCellProps } from '../../../../features/grading/GradingTypes';
 
 /**
  * Used to render the submission grade details in the table that displays GradingOverviews.

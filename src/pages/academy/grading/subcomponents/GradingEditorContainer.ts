@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import {
   submitGrading,
   submitGradingAndContinue
-} from 'src/commons/application/actions/SessionActions';
+} from '../../../../commons/application/actions/SessionActions';
 import GradingEditor, { DispatchProps } from './GradingEditorComponent';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

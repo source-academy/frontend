@@ -5,9 +5,8 @@ import 'ag-grid/dist/styles/ag-grid.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import { PlaybackData, SourcecastData } from 'src/features/sourcecast/SourcecastTypes';
-import { getStandardDate } from 'src/utils/dateHelpers';
-
+import { PlaybackData, SourcecastData } from '../../features/sourcecast/SourcecastTypes';
+import { getStandardDate } from '../../utils/dateHelpers';
 import SourcastDeleteCell from './SourcecastDeleteCell';
 import SourcecastSelectCell from './SourcecastSelectCell';
 

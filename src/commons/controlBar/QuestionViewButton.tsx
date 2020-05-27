@@ -1,4 +1,4 @@
-import controlButton from 'src/commons/ControlButton';
+import controlButton from '../ControlButton';
 
 /**
  * @prop questionProgress a tuple of (current question number, question length) where

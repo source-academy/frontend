@@ -2,9 +2,9 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { Chapter } from 'src/commons/application/types/ChapterTypes';
-import { changeChapter, fetchChapter } from 'src/commons/workspace/WorkspaceActions';
+import { OverallState } from '../../../commons/application/ApplicationTypes';
+import { Chapter } from '../../../commons/application/types/ChapterTypes';
+import { changeChapter, fetchChapter } from '../../../commons/workspace/WorkspaceActions';
 
 import { DefaultChapter, DispatchProps, StateProps } from './AcademyDefaultChapterComponent';
 
@@ -22,9 +22,11 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default withRouter(
+const AcademyDefaultChapterContainer = withRouter(
   connect(
     mapStateToProps,
     mapDispatchToProps
   )(DefaultChapter)
 );
+
+export default AcademyDefaultChapterContainer;

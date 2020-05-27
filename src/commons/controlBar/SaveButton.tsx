@@ -1,7 +1,7 @@
 import { Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from 'src/commons/ControlButton';
+import controlButton from '../ControlButton';
 
 type SaveButtonProps = DispatchProps & StateProps;
 

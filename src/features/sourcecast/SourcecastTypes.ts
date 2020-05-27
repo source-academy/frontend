@@ -1,6 +1,6 @@
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
-import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
+import { Position } from '../../commons/editor/EditorTypes';
+import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 
 export const FETCH_SOURCECAST_INDEX = 'FETCH_SOURCECAST_INDEX';
 export const SET_CURRENT_PLAYER_TIME = 'SET_CURRENT_PLAYER_TIME';

@@ -2,12 +2,12 @@ import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
 import { combineReducers } from 'redux';
 
-import { ApplicationReducer } from 'src/commons/application/ApplicationReducer';
-import { SessionsReducer } from 'src/commons/application/reducers/SessionsReducer';
-import { WorkspaceReducer } from 'src/commons/workspace/WorkspaceReducer';
-import { AcademyReducer } from 'src/features/academy/AcademyReducer';
-import { DashboardReducer } from 'src/features/dashboard/DashboardReducer';
-import { PlaygroundReducer } from 'src/features/playground/PlaygroundReducer';
+import { AcademyReducer } from '../../../features/academy/AcademyReducer';
+import { DashboardReducer } from '../../../features/dashboard/DashboardReducer';
+import { PlaygroundReducer } from '../../../features/playground/PlaygroundReducer';
+import { WorkspaceReducer } from '../../workspace/WorkspaceReducer';
+import { ApplicationReducer } from '../ApplicationReducer';
+import { SessionsReducer } from './SessionsReducer';
 
 const createRootReducer = (history: History) =>
   combineReducers({

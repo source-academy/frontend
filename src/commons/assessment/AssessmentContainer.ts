@@ -6,9 +6,8 @@ import {
   acknowledgeNotifications,
   fetchAssessmentOverviews,
   submitAssessment
-} from 'src/commons/application/actions/SessionActions';
-import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
-
+} from '../application/actions/SessionActions';
+import { OverallState, Role } from '../application/ApplicationTypes';
 import Assessment, { DispatchProps, OwnProps, StateProps } from './AssessmentComponent';
 import { AssessmentOverview, AssessmentWorkspaceParams } from './AssessmentTypes';
 
@@ -36,9 +35,11 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
 
 type PropType = OwnProps & RouteComponentProps<AssessmentWorkspaceParams>;
 
-export default withRouter<PropType>(
+const AssessmentContainer = withRouter<PropType>(
   connect(
     mapStateToProps,
     mapDispatchToProps
   )(Assessment)
 );
+
+export default AssessmentContainer;

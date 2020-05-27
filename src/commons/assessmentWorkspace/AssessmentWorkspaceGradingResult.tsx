@@ -1,8 +1,8 @@
 import { Divider, HTMLTable, Text } from '@blueprintjs/core';
 import * as React from 'react';
 
-import Markdown from 'src/commons/Markdown';
-import { getPrettyDate } from 'src/utils/dateHelpers';
+import { getPrettyDate } from '../../utils/dateHelpers';
+import Markdown from '../Markdown';
 
 type GradingResultProps = StateProps;
 

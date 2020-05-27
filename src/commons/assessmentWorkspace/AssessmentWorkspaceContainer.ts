@@ -6,12 +6,12 @@ import {
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
-import { fetchAssessment, submitAnswer } from 'src/commons/application/actions/SessionActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
-import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
+} from '../application/actions/InterpreterActions';
+import { fetchAssessment, submitAnswer } from '../application/actions/SessionActions';
+import { OverallState } from '../application/ApplicationTypes';
+import { Library } from '../assessment/AssessmentTypes';
+import { Position } from '../editor/EditorTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -33,9 +33,8 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue
-} from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
-
+} from '../workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
@@ -111,7 +110,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(
+const AssessmentWorkspaceContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(AssessmentWorkspace);
+
+export default AssessmentWorkspaceContainer;

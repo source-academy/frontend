@@ -1,10 +1,11 @@
-import { GameState, Role, Story } from 'src/commons/application/ApplicationTypes';
-import { Assessment, AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
-import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { HistoryHelper } from '../../../utils/history';
+import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
+import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
+import { GameState, Role, Story } from '../ApplicationTypes';
+
 import { Announcement } from 'src/components/Announcements'; // TODO: Remove
 import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
-import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
-import { HistoryHelper } from 'src/utils/history';
 
 export const FETCH_ANNOUNCEMENTS = 'FETCH_ANNOUNCEMENTS';
 export const FETCH_AUTH = 'FETCH_AUTH';

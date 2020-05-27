@@ -6,11 +6,11 @@ import {
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
-import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
+} from '../../../commons/application/actions/InterpreterActions';
+import { OverallState } from '../../../commons/application/ApplicationTypes';
+import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
+import { Position } from '../../../commons/editor/EditorTypes';
+import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -30,9 +30,9 @@ import {
   updateActiveTab,
   updateEditorValue,
   updateReplValue
-} from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
-import { fetchSourcecastIndex } from 'src/features/sourcecast/SourcecastActions';
+} from '../../../commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
+import { fetchSourcecastIndex } from '../../../features/sourcecast/SourcecastActions';
 import {
   setCodeDeltasToApply,
   setCurrentPlayerTime,
@@ -40,13 +40,13 @@ import {
   setSourcecastData,
   setSourcecastDuration,
   setSourcecastStatus
-} from 'src/features/sourcecast/SourcecastActions';
+} from '../../../features/sourcecast/SourcecastActions';
 import {
   CodeDelta,
   Input,
   PlaybackData,
   PlaybackStatus
-} from 'src/features/sourcecast/SourcecastTypes';
+} from '../../../features/sourcecast/SourcecastTypes';
 import {
   deleteSourcecastEntry,
   recordInit,
@@ -58,7 +58,7 @@ import {
   timerResume,
   timerStart,
   timerStop
-} from 'src/features/sourcereel/SourcereelActions';
+} from '../../../features/sourcereel/SourcereelActions';
 
 import Sourcereel, { DispatchProps, StateProps } from './SourcereelComponent';
 
@@ -160,7 +160,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(
+const SourcereelContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Sourcereel);
+
+export default SourcereelContainer; 

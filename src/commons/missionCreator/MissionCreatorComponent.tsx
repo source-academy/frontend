@@ -8,14 +8,14 @@ import {
   AssessmentOverview,
   assessmentTemplate,
   overviewTemplate
-} from 'src/commons/assessment/AssessmentTypes';
-import controlButton from 'src/commons/ControlButton';
+} from '../assessment/AssessmentTypes';
+import controlButton from '../ControlButton';
 import {
   makeEntireAssessment,
   retrieveLocalAssessment,
   storeLocalAssessment,
   storeLocalAssessmentOverview
-} from 'src/commons/XMLParser/XMLParserHelper';
+} from '../XMLParser/XMLParserHelper';
 
 type MissionCreatorProps = DispatchProps & OwnProps;
 

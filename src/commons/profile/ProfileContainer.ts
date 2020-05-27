@@ -1,8 +1,8 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAssessmentOverviews } from 'src/commons/application/actions/SessionActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { fetchAssessmentOverviews } from '../application/actions/SessionActions';
+import { OverallState } from '../application/ApplicationTypes';
 import Profile, { DispatchProps, StateProps } from './ProfileComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
@@ -19,7 +19,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(
+const ProfileContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Profile);
+
+export default ProfileContainer;

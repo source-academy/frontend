@@ -5,8 +5,8 @@ import {
   MCQChoice,
   Question,
   Testcase
-} from 'src/commons/assessment/AssessmentTypes';
-import { Notification } from 'src/components/notification/notificationShape';
+} from '../../commons/assessment/AssessmentTypes';
+import { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
 
 /**
  * Information on a Grading, for a particular student submission

@@ -5,21 +5,22 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { Role, sourceLanguages } from 'src/commons/application/ApplicationTypes';
+import Academy from '../../pages/academy/AcademyContainer';
+import Contributors from '../../pages/contributors/ContributorsComponent';
+import Login from '../../pages/login/LoginContainer';
+import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
+import NotFound from '../../pages/notFound/NotFoundComponent';
+import Playground from '../../pages/playground/PlaygroundContainer';
+import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
+import { stringParamToInt } from '../../utils/paramParseHelpers';
+import NavigationBar from '../navigationBar/NavigationBar';
+import { Role, sourceLanguages } from './ApplicationTypes';
 import {
   ExternalLibraryName,
   ExternalLibraryNames
-} from 'src/commons/application/types/ExternalTypes';
-import NavigationBar from 'src/commons/navigationBar/NavigationBar';
+} from './types/ExternalTypes';
+
 import Material from 'src/containers/material/MaterialContainer'; // TODO: Remove
-import Academy from 'src/pages/academy/AcademyContainer';
-import Contributors from 'src/pages/contributors/ContributorsComponent';
-import Login from 'src/pages/login/LoginContainer';
-import MissionControlContainer from 'src/pages/missionControl/MissionControlContainer';
-import NotFound from 'src/pages/notFound/NotFoundComponent';
-import Playground from 'src/pages/playground/PlaygroundContainer';
-import SourcecastContainer from 'src/pages/sourcecast/SourcecastContainer';
-import { stringParamToInt } from 'src/utils/paramParseHelpers';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 

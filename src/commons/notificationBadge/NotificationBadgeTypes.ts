@@ -1,4 +1,4 @@
-import { AssessmentCategory } from 'src/commons/assessment/AssessmentTypes';
+import { AssessmentCategories, AssessmentCategory } from '../assessment/AssessmentTypes';
 
 export type Notification = {
   assessment_id?: number;
@@ -22,3 +22,5 @@ export enum NotificationTypes {
 export type NotificationType = keyof typeof NotificationTypes;
 
 export type NotificationFilterFunction = (notifications: Notification[]) => Notification[];
+
+export type filterByTypeOptions = AssessmentCategories | 'Grading';

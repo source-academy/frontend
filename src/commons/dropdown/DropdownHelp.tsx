@@ -2,7 +2,7 @@ import { Classes, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { LINKS } from 'src/utils/constants';
+import { LINKS } from '../../utils/constants';
 
 type DialogProps = {
   isOpen: boolean;

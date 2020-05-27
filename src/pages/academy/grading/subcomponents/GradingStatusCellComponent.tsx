@@ -2,8 +2,8 @@ import { Icon, IconName, Intent, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
-import { GradingCellProps } from 'src/features/grading/GradingTypes';
+import { GradingStatuses } from '../../../../commons/assessment/AssessmentTypes';
+import { GradingCellProps } from '../../../../features/grading/GradingTypes';
 
 /**
  * Used to render the submission grading status details in the table that displays GradingOverviews.
