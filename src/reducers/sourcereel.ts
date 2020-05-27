@@ -6,6 +6,7 @@ import * as actions from '../actions';
 import {
   RECORD_INIT,
   RECORD_INPUT,
+  RESET_INPUTS,
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,
@@ -35,6 +36,14 @@ export const reducer: Reducer<ISourcereelWorkspace> = (
           inputs: [...state.playbackData.inputs, action.payload.input]
         }
       };
+    case RESET_INPUTS:
+      return {
+        ...state,
+        playbackData: {
+          ...state.playbackData,
+          inputs: action.payload.inputs
+        }
+      };
     case TIMER_PAUSE:
       return {
         ...state,
@@ -53,6 +62,8 @@ export const reducer: Reducer<ISourcereelWorkspace> = (
       return {
         ...state,
         recordingStatus: RecordingStatus.recording,
+        timeElapsedBeforePause:
+          action.payload.timeBefore >= 0 ? action.payload.timeBefore : state.timeElapsedBeforePause,
         timeResumed: action.payload.timeNow
       };
     case TIMER_START:
