@@ -6,7 +6,7 @@ var StoryManager = require('../storyManager/storyManager.js');
 var SaveManager = require('../saveManager/saveManager.js');
 var Utils = require('../utils/utils.js');
 var ExternalManager = require('../externalManager/externalManager.js');
-var GameState = require('../backend/game-state');
+var GameState = require('../backend/gameState');
 
 var loadedQuests = {};
 var activeQuests = {};

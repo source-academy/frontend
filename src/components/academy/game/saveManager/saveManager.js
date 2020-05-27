@@ -1,4 +1,4 @@
-import { saveStudentData } from '../backend/game-state';
+import { saveStudentData } from '../backend/gameState';
 import { SAVE_DATA_KEY, LOCATION_KEY } from '../constants/constants';
 
 var LocationManager = require('../locationManager/locationManager.js');

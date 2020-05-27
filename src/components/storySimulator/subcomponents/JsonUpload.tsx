@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { overrideSessionData } from '../../academy/game/backend/game-state.js';
+import { overrideSessionData } from '../../academy/game/backend/gameState';
 
 class JsonUpload extends React.Component {
   private static onFormSubmit(e: { preventDefault: () => void }) {

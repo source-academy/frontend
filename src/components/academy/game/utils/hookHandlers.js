@@ -1,4 +1,4 @@
-import { saveCollectible, saveQuest } from '../backend/game-state';
+import { saveCollectible, saveQuest } from '../backend/gameState';
 import { playSound } from '../soundManager/soundManager';
 import { history } from 'src/utils/history';
 

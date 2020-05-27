@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IAssessmentOverview } from 'src/components/assessment/assessmentShape';
 import { GameState, Role, Story } from '../../../reducers/states';
-import { setSaveHandler } from './backend/game-state';
+import { setSaveHandler } from './backend/gameState';
 import { setUserRole } from './backend/user';
 
 type GameProps = DispatchProps & StateProps;

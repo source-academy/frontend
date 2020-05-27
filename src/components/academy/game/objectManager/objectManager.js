@@ -10,7 +10,7 @@ var ExternalManager = require('../externalManager/externalManager.js');
 var MapOverlay = require('../mapOverlay/mapOverlay.js');
 var Utils = require('../utils/utils.js');
 var FilterEffects = require('../effects/filterEffects.js');
-var GameState = require('../backend/game-state');
+var GameState = require('../backend/gameState');
 
 var mapObjects;
 var sequenceObjects;

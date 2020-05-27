@@ -1,5 +1,5 @@
 import hookHandlers from './utils/hookHandlers';
-import { fetchGameData } from './backend/game-state';
+import { fetchGameData } from './backend/gameState';
 import Constants, { nullFunction, LOCATION_KEY } from './constants/constants2';
 const StoryXMLPlayer = require('./storyXmlPlayer');
 
